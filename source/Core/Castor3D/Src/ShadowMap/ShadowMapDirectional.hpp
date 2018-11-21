@@ -52,7 +52,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait )override;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
@@ -79,6 +80,14 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
+		 */
+		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
 		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
@@ -101,6 +110,7 @@ namespace castor3d
 			ashes::TextureViewPtr linearView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
+		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
 		ashes::TexturePtr m_depthTexture;
 		std::vector< FrameBuffer > m_frameBuffers;

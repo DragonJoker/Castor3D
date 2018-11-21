@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LegacyPassBuffer_H___
@@ -48,12 +48,19 @@ namespace castor3d
 		C3D_API void visit( LegacyPass const & pass )override;
 
 	public:
-		/*!
-		\~english
-		\brief		Holds a Legacy pass data.
-		\~french
-		\brief		Contient les données d'une passe Legacy.
-		*/
+#if C3D_MaterialsStructOfArrays
+
+		struct PassesData
+		{
+			castor::ArrayView< RgbaColour > diffAmb;
+			castor::ArrayView< RgbaColour > specShin;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
+		};
+
+#else
+
 		struct PassData
 		{
 			RgbaColour diffAmb;
@@ -64,7 +71,8 @@ namespace castor3d
 		};
 		using PassesData = castor::ArrayView< PassData >;
 
-	private:
+#endif
+
 		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )
 			+ ( PassBuffer::ExtendedDataSize );
 

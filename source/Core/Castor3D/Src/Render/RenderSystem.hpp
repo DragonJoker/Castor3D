@@ -198,7 +198,7 @@ namespace castor3d
 		*\param[in] zFar
 		*	La position de l'arrière plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4r getPerspective( float radiansFovY
+		C3D_API castor::Matrix4x4r getPerspective( castor::Angle const & fovy
 			, float aspect
 			, float zNear
 			, float zFar )const;

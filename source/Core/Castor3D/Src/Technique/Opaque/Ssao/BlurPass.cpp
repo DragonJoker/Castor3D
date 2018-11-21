@@ -294,8 +294,10 @@ namespace castor3d
 								, ssCenter + c3d_axis * writer.paren( r * c3d_blurStepSize ) );
 
 							// spatial domain: offset gaussian tap
+							auto absR = writer.declLocale( cuT( "absR" )
+								, writer.cast< UInt >( abs( r ) ) );
 							auto weight = writer.declLocale( cuT( "weight" )
-								, 0.3_f + c3d_gaussian[abs( r ) % 2][abs( r ) / 2] );
+								, 0.3_f + c3d_gaussian[absR % 2_ui][absR / 2_ui] );
 
 							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
 							auto value = writer.declLocale< Float >( cuT( "value" ) );

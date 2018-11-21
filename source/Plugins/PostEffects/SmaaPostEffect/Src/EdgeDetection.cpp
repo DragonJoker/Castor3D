@@ -85,7 +85,7 @@ namespace smaa
 		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
-		renderPass.attachments[1].format = ashes::Format::eS8_UINT;
+		renderPass.attachments[1].format = ashes::Format::eD24_UNORM_S8_UINT;
 		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eClear;
@@ -121,7 +121,7 @@ namespace smaa
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()
 			, ashes::Format::eR8G8B8A8_UNORM
-			, ashes::Format::eS8_UINT );
+			, ashes::Format::eD24_UNORM_S8_UINT );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader = doGetEdgeDetectionVP( m_renderSystem

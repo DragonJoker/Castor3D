@@ -77,7 +77,7 @@ namespace castor3d
 			cuT( "front" ),
 		};
 
-		bool result = true;
+		auto result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "// Skybox\n" ) ) > 0;
 
 		if ( !obj.getEquiTexturePath().empty()
 			&& castor::File::fileExists( obj.getEquiTexturePath() ) )
@@ -336,13 +336,12 @@ namespace castor3d
 			m_texture = std::make_shared< TextureLayout >( renderSystem
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
 				, ashes::MemoryPropertyFlag::eDeviceLocal );
-
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+			m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
+			m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
+			m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
@@ -372,12 +371,12 @@ namespace castor3d
 		m_texture = std::make_shared< TextureLayout >( renderSystem
 			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+		m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
+		m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
+		m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
 		m_texture->initialise();
 
 		ashes::ImageSubresourceLayers srcSubresource

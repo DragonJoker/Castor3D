@@ -318,7 +318,7 @@ namespace castor3d
 				vtx_instance = gl_InstanceID;
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
-				prvPosition = c3d_prvView * vec4( prvPosition, 1.0 );
+				prvPosition = c3d_prvView * prvPosition;
 				curPosition = c3d_projection * curPosition;
 				prvPosition = c3d_projection * prvPosition;
 

@@ -22,7 +22,8 @@ namespace smaa
 		virtual void doInitialisePipeline()override;
 
 	private:
-		ashes::TextureView const & m_depthView;
+		ashes::TextureViewPtr m_depthView;
+		ashes::TextureView const & m_sourceView;
 	};
 }
 

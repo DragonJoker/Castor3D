@@ -30,10 +30,17 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
+			static std::map< uint32_t, String > vendors
+			{
+				{ 0x1002, cuT( "AMD" ) },
+				{ 0x10DE, cuT( "NVIDIA" ) },
+				{ 0x8086, cuT( "INTEL" ) },
+				{ 0x13B5, cuT( "ARM" ) },
+			};
 			auto & device = *getMainDevice();
 			StringStream stream( makeStringStream() );
 			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
-
+			m_gpuInformations.setVendor( vendors[device.getProperties().vendorID] );
 			m_gpuInformations.setRenderer( device.getProperties().deviceName );
 			m_gpuInformations.setVersion( stream.str() );
 			m_gpuInformations.setShaderLanguageVersion( device.getShaderVersion() );
@@ -136,12 +143,12 @@ namespace castor3d
 		return convert( m_renderer->frustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getPerspective( float radiansFovY
+	castor::Matrix4x4r RenderSystem::getPerspective( castor::Angle const & fovy
 		, float aspect
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_renderer->perspective( radiansFovY, aspect, zNear, zFar ) );
+		return convert( m_renderer->perspective( fovy.radians(), aspect, zNear, zFar ) );
 	}
 
 	castor::Matrix4x4r RenderSystem::getOrtho( float left

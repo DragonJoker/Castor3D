@@ -78,16 +78,26 @@ namespace castor3d
 			, RenderQueueArray & queues )
 		{
 			auto lights = doSortLights( cache, type, camera );
+			size_t count = std::min( shadowMap->getCount(), uint32_t( lights.size() ) );
 
-			if ( !lights.empty() )
+			if ( count > 0 )
 			{
-				auto it = lights.begin();
-				it->second->setShadowMap( shadowMap.get() );
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( *shadowMap ) );
-				shadowMap->update( camera
-					, queues
-					, *( it->second )
-					, 0u );
+				uint32_t index = 0u;
+				auto lightIt = lights.begin();
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( *shadowMap ), UInt32Array{} );
+				auto & active = activeShadowMaps[size_t( type )].back();
+
+				for ( auto i = 0u; i < count; ++i )
+				{
+					lightIt->second->setShadowMap( shadowMap.get(), index );
+					active.second.push_back( index );
+					shadowMap->update( camera
+						, queues
+						, *( lightIt->second )
+						, index );
+					++index;
+					++lightIt;
+				}
 			}
 		}
 
@@ -106,7 +116,7 @@ namespace castor3d
 			{
 				auto & shadowMap = *shadowMaps[i];
 				it->second->setShadowMap( &shadowMap );
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ) );
+				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), 0u );
 				shadowMap.update( camera
 					, queues
 					, *( it->second )
@@ -182,27 +192,16 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 		, m_hdrConfigUbo{ *renderSystem.getEngine() }
 	{
-		m_pointShadowMaps.resize( shader::PointShadowMapCount );
-		m_spotShadowMaps.resize( shader::SpotShadowMapCount );
-
 		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
 			, *renderTarget.getScene()
 			, renderTarget.getScene()->getDirectionalShadowCascades() );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ) );
-
-		for ( auto & shadowMap : m_pointShadowMaps )
-		{
-			shadowMap = std::make_unique< ShadowMapPoint >( *renderTarget.getEngine()
-				, *renderTarget.getScene() );
-			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *shadowMap ) );
-		}
-
-		for ( auto & shadowMap : m_spotShadowMaps )
-		{
-			shadowMap = std::make_unique< ShadowMapSpot >( *renderTarget.getEngine()
-				, *renderTarget.getScene() );
-			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *shadowMap ) );
-		}
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_spotShadowMap = std::make_unique< ShadowMapSpot >( *renderTarget.getEngine()
+			, *renderTarget.getScene() );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_pointShadowMap = std::make_unique< ShadowMapPoint >( *renderTarget.getEngine()
+			, *renderTarget.getScene() );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -221,8 +220,8 @@ namespace castor3d
 		}
 
 		m_directionalShadowMap.reset();
-		m_pointShadowMaps.clear();
-		m_spotShadowMaps.clear();
+		m_pointShadowMap.reset();
+		m_spotShadowMap.reset();
 		m_deferredRendering.reset();
 		m_weightedBlendRendering.reset();
 		m_transparentPass.reset();
@@ -442,16 +441,8 @@ namespace castor3d
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
 		m_directionalShadowMap->initialise();
-
-		for ( auto & shadowMap : m_pointShadowMaps )
-		{
-			shadowMap->initialise();
-		}
-
-		for ( auto & shadowMap : m_spotShadowMaps )
-		{
-			shadowMap->initialise();
-		}
+		m_spotShadowMap->initialise();
+		m_pointShadowMap->initialise();
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()
@@ -629,16 +620,8 @@ namespace castor3d
 	void RenderTechnique::doCleanupShadowMaps()
 	{
 		m_directionalShadowMap->cleanup();
-
-		for ( auto & shadowMap : m_pointShadowMaps )
-		{
-			shadowMap->cleanup();
-		}
-
-		for ( auto & shadowMap : m_spotShadowMaps )
-		{
-			shadowMap->cleanup();
-		}
+		m_spotShadowMap->cleanup();
+		m_pointShadowMap->cleanup();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
@@ -658,16 +641,16 @@ namespace castor3d
 			, m_directionalShadowMap
 			, m_activeShadowMaps
 			, queues );
-		doPrepareShadowMaps( cache
+		doPrepareShadowMap( cache
 			, LightType::ePoint
 			, camera
-			, m_pointShadowMaps
+			, m_pointShadowMap
 			, m_activeShadowMaps
 			, queues );
-		doPrepareShadowMaps( cache
+		doPrepareShadowMap( cache
 			, LightType::eSpot
 			, camera
-			, m_spotShadowMaps
+			, m_spotShadowMap
 			, m_activeShadowMaps
 			, queues );
 	}
@@ -706,7 +689,10 @@ namespace castor3d
 		{
 			for ( auto & shadowMap : array )
 			{
-				result = &shadowMap.get().render( *result );
+				for ( auto & index : shadowMap.second )
+				{
+					result = &shadowMap.first.get().render( *result, index );
+				}
 			}
 		}
 

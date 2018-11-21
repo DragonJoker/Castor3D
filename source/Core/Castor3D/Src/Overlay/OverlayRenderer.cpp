@@ -602,12 +602,12 @@ namespace castor3d
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target.getFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eLoad;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
 		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
 		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );

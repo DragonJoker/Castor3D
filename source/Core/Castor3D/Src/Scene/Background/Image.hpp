@@ -25,6 +25,47 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	ImageBackground loader.
+		*\~english
+		*\brief
+		*	Loader de ImageBackground.
+		*/
+		class TextWriter
+			: public castor::TextWriter< ImageBackground >
+		{
+		public:
+			/**
+			*\~english
+			*\brief
+			*	Constructor.
+			*\~french
+			*\brief
+			*	Constructeur.
+			*/
+			C3D_API explicit TextWriter( castor::String const & tabs );
+			/**
+			*\~english
+			*\brief
+			*	Writes a Skybox into a text file.
+			*\param[in] obj
+			*	The Skybox to save.
+			*\param[in] file
+			*	The file to write the ImageBackground in.
+			*\~french
+			*\brief
+			*	Ecrit une ImageBackground dans un fichier texte.
+			*\param[in] obj
+			*	La Skybox.
+			*\param[in] file
+			*	Le fichier.
+			*/
+			C3D_API bool operator()( ImageBackground const & obj, castor::TextFile & file )override;
+		};
+
+	public:
+		/**
+		*\~english
+		*\brief
 		*	Constructor.
 		*\param[in] engine
 		*	The engine.
@@ -45,15 +86,16 @@ namespace castor3d
 		*	Destructeur.
 		*/
 		C3D_API virtual ~ImageBackground();
+		/**
+		*\~english
+		*\return
+		*	Sets the texture image.
+		*\~french
+		*\return
+		*	Définit l'image de la texture.
+		*/
 		C3D_API bool loadImage( castor::Path const & folder
 			, castor::Path const & relative );
-		/**
-		*\copydoc	castor3d::SceneBackground::initialiseDescriptorSet
-		*/
-		void initialiseDescriptorSet( MatrixUbo const & matrixUbo
-			, ModelMatrixUbo const & modelMatrixUbo
-			, HdrConfigUbo const & hdrConfigUbo
-			, ashes::DescriptorSet & descriptorSet )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
@@ -64,10 +106,6 @@ namespace castor3d
 		*\copydoc	castor3d::SceneBackground::doInitialiseShader
 		*/
 		ashes::ShaderStageStateArray doInitialiseShader()override;
-		/**
-		*\copydoc	castor3d::SceneBackground::doInitialiseDescriptorLayout
-		*/
-		void doInitialiseDescriptorLayout()override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
@@ -82,7 +120,13 @@ namespace castor3d
 		void doUpdate( Camera const & camera )override;
 
 	private:
-		ashes::UniformBufferPtr< castor::Point2f > m_sizeUbo;
+		void doInitialise2DTexture();
+
+	private:
+		TextureLayoutSPtr m_2dTexture;
+		castor::Path m_2dTexturePath;
+		Viewport m_viewport;
+		float m_ratio;
 	};
 }
 

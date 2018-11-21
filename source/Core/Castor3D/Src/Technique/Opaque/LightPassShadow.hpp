@@ -344,10 +344,11 @@ namespace castor3d
 		 */
 		ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait
-			, TextureUnit * shadowMapOpt )override
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex )override
 		{
-			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, !index );
-			return my_pass_type::render( index, toWait, nullptr );
+			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMap, shadowMapIndex, !index );
+			return my_pass_type::render( index, toWait, nullptr, 0u );
 		}
 
 	private:

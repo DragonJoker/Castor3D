@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #include "Material/Pass.hpp"
 #include "Shader/ShaderBuffer.hpp"
 
+#include <Design/ArrayView.hpp>
+
+#define C3D_MaterialsStructOfArrays 1
+
 namespace castor3d
 {
 	/*!
@@ -142,6 +146,25 @@ namespace castor3d
 			float b;
 			float a;
 		};
+
+#if C3D_MaterialsStructOfArrays
+		/*!
+		\~english
+		\brief		Common passes extended data.
+		\~french
+		\brief		Données étendues communes aux passes.
+		*/
+		struct ExtendedData
+		{
+			//!\~english	The Subsurface Scattering informations.
+			//!\~french		Les informations de Subsurface Scattering.
+			castor::ArrayView< RgbaColour > sssInfo;
+			//!\~english	The luminosity transmittance profile data.
+			//!\~french		Les données du profil de transmission de luminosité.
+			castor::ArrayView< std::array< RgbaColour, 10u > > transmittanceProfile;
+		};
+
+#else
 		/*!
 		\~english
 		\brief		Common passes extended data.
@@ -157,8 +180,9 @@ namespace castor3d
 			//!\~french		Les données du profil de transmission de luminosité.
 			std::array< RgbaColour, 10u > transmittanceProfile;
 		};
-		//!\~english	Extended data size.
-		//!\~french		La taille des données étendues.
+
+#endif
+
 		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 11;
 
 	protected:

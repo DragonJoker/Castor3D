@@ -14,6 +14,9 @@ namespace glsl
 	castor::String const TypeTraits< IVec2 >::Name = cuT( "ivec2" );
 	castor::String const TypeTraits< IVec3 >::Name = cuT( "ivec3" );
 	castor::String const TypeTraits< IVec4 >::Name = cuT( "ivec4" );
+	castor::String const TypeTraits< UVec2 >::Name = cuT( "uvec2" );
+	castor::String const TypeTraits< UVec3 >::Name = cuT( "uvec3" );
+	castor::String const TypeTraits< UVec4 >::Name = cuT( "uvec4" );
 	castor::String const TypeTraits< Vec2 >::Name = cuT( "vec2" );
 	castor::String const TypeTraits< Vec3 >::Name = cuT( "vec3" );
 	castor::String const TypeTraits< Vec4 >::Name = cuT( "vec4" );

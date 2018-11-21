@@ -237,11 +237,12 @@ namespace castor3d
 
 	ashes::Semaphore const & MeshLightPass::render( uint32_t index
 		, ashes::Semaphore const & toWait
-		, TextureUnit * shadowMapOpt )
+		, ShadowMap const * shadowMap
+		, uint32_t shadowMapIndex )
 	{
 		auto * result = &toWait;
 		result = &m_stencilPass.render( *result );
-		result = &LightPass::render( index, *result, shadowMapOpt );
+		result = &LightPass::render( index, *result, shadowMap, shadowMapIndex );
 		return *result;
 	}
 

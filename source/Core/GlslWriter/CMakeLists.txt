@@ -26,8 +26,8 @@ add_target(
 	api_dll
 	"CastorUtils"
 	"${CastorMinLibraries}"
-	"GlslWriterPch.hpp"
-	"GlslWriterPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GlslWriterPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GlslWriterPch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )

@@ -18,12 +18,15 @@ namespace castor3d
 	namespace
 	{
 		ashes::BufferBasePtr doCreateBuffer( Engine & engine
-			, uint32_t size )
+			, uint32_t size
+			, bool forceTbo )
 		{
 			ashes::BufferBasePtr result;
-			ashes::BufferTarget target = engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
-				? ashes::BufferTarget::eStorageBuffer
-				: ashes::BufferTarget::eUniformTexelBuffer;
+			ashes::BufferTarget target = forceTbo
+				? ashes::BufferTarget::eUniformTexelBuffer
+				: ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+					? ashes::BufferTarget::eStorageBuffer
+					: ashes::BufferTarget::eUniformTexelBuffer );
 			result = getCurrentDevice( engine ).createBuffer( size
 				, target | ashes::BufferTarget::eTransferDst
 				, ashes::MemoryPropertyFlag::eHostVisible );
@@ -32,11 +35,12 @@ namespace castor3d
 
 		ashes::BufferViewPtr doCreateView( Engine & engine
 			, uint32_t size
+			, bool forceTbo
 			, ashes::BufferBase const & buffer )
 		{
 			ashes::BufferViewPtr result;
 
-			if ( !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
+			if ( forceTbo || !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
 				result = getCurrentDevice( engine ).createBufferView( buffer
 					, ashes::Format::eR32G32B32A32_SFLOAT
@@ -51,9 +55,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
-		, uint32_t size )
-		: m_buffer{ doCreateBuffer( engine, size ) }
-		, m_bufferView{ doCreateView( engine, size, *m_buffer ) }
+		, uint32_t size
+		, bool forceTbo )
+		: m_buffer{ doCreateBuffer( engine, size, forceTbo ) }
+		, m_bufferView{ doCreateView( engine, size, forceTbo, *m_buffer ) }
 		, m_data( size_t( size ), uint8_t( 0 ) )
 	{
 	}

@@ -9,7 +9,8 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
-#include "Technique/Opaque//GeometryPassResult.hpp"
+#include "ShadowMap/ShadowMap.hpp"
+#include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -442,7 +443,8 @@ namespace castor3d
 
 	ashes::Semaphore const & LightPass::render( uint32_t index
 		, ashes::Semaphore const & toWait
-		, TextureUnit * shadowMapOpt )
+		, ShadowMap const * shadowMap
+		, uint32_t shadowMapIndex )
 	{
 		static ashes::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static ashes::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
@@ -614,8 +616,8 @@ namespace castor3d
 			}
 			else
 			{
-				doPrepareCommandBuffer( pipeline, nullptr, true );
-				doPrepareCommandBuffer( pipeline, nullptr, false );
+				doPrepareCommandBuffer( pipeline, nullptr, 0u, true );
+				doPrepareCommandBuffer( pipeline, nullptr, 0u, false );
 			}
 
 			++pipelineIndex;
@@ -639,7 +641,8 @@ namespace castor3d
 	}
 
 	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
-		, TextureUnit const * shadowMap
+		, ShadowMap const * shadowMap
+		, uint32_t shadowMapIndex
 		, bool first )
 	{
 		auto & renderPass = first
@@ -653,8 +656,8 @@ namespace castor3d
 		if ( shadowMap )
 		{
 			ashes::WriteDescriptorSet & write = pipeline.textureDescriptorSet->getBinding( 6u );
-			write.imageInfo[0].imageView = std::ref( shadowMap->getTexture()->getDefaultView() );
-			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler()->getSampler() );
+			write.imageInfo[0].imageView = std::ref( shadowMap->getView( shadowMapIndex ) );
+			write.imageInfo[0].sampler = std::ref( shadowMap->getSampler() );
 			pipeline.textureDescriptorSet->update();
 		}
 
@@ -685,7 +688,6 @@ namespace castor3d
 		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
 
 		// Shader inputs
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 		auto index = MinBufferIndex;
@@ -766,7 +768,7 @@ namespace castor3d
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )
@@ -940,7 +942,7 @@ namespace castor3d
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto transmittance = writer.declLocale( cuT( "transmittance" )
@@ -1175,7 +1177,7 @@ namespace castor3d
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )

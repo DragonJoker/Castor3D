@@ -28,6 +28,16 @@ namespace glsl
 		};
 
 		template<>
+		struct Vec2Traits< UInt >
+		{
+			static xchar const * const getName()
+			{
+				static xchar const * const name{ "uvec2 " };
+				return name;
+			}
+		};
+
+		template<>
 		struct Vec2Traits< Boolean >
 		{
 			static xchar const * const getName()
@@ -63,6 +73,16 @@ namespace glsl
 		};
 
 		template<>
+		struct Vec3Traits< UInt >
+		{
+			static xchar const * const getName()
+			{
+				static xchar const * const name{ "uvec3 " };
+				return name;
+			}
+		};
+
+		template<>
 		struct Vec3Traits< Boolean >
 		{
 			static xchar const * const getName()
@@ -93,6 +113,16 @@ namespace glsl
 			static xchar const * const getName()
 			{
 				static xchar const * const name{ "ivec4 " };
+				return name;
+			}
+		};
+
+		template<>
+		struct Vec4Traits< UInt >
+		{
+			static xchar const * const getName()
+			{
+				static xchar const * const name{ "uvec4 " };
 				return name;
 			}
 		};

@@ -36,7 +36,9 @@ namespace castor3d
 					if ( checkFlag( flags, ashes::ImageCreateFlag::eCubeCompatible ) )
 					{
 						REQUIRE( ( arrayLayers % 6 ) == 0 );
-						return ashes::TextureViewType::eCube;
+						return arrayLayers == 6u
+							? ashes::TextureViewType::eCube
+							: ashes::TextureViewType::eCubeArray;
 					}
 
 					return ashes::TextureViewType::e2DArray;

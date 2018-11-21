@@ -61,6 +61,16 @@ namespace smaa
 				} );
 			return writer.finalise();
 		}
+
+		ashes::TextureViewPtr doCreateDepthView( ashes::TextureView const & depthView )
+		{
+			ashes::ImageViewCreateInfo view{};
+			view.format = depthView.getFormat();
+			view.viewType = ashes::TextureViewType::e2D;
+			auto & texture = depthView.getTexture();
+			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+			return texture.createView( view );
+		}
 	}
 
 	//*********************************************************************************************
@@ -69,10 +79,11 @@ namespace smaa
 		, ashes::TextureView const & depthView
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, config }
-		, m_depthView{ depthView }
+		, m_depthView{ doCreateDepthView( depthView ) }
+		, m_sourceView{ depthView }
 	{
-		ashes::Extent2D size{ m_depthView.getTexture().getDimensions().width
-			, m_depthView.getTexture().getDimensions().height };
+		ashes::Extent2D size{ m_depthView->getTexture().getDimensions().width
+			, m_depthView->getTexture().getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
@@ -96,7 +107,7 @@ namespace smaa
 		// Put source image in shader input layout.
 		edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
 			, ashes::PipelineStageFlag::eFragmentShader
-			, m_depthView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+			, m_sourceView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
@@ -112,8 +123,8 @@ namespace smaa
 
 	void DepthEdgeDetection::doInitialisePipeline()
 	{
-		ashes::Extent2D size{ m_depthView.getTexture().getDimensions().width
-			, m_depthView.getTexture().getDimensions().height };
+		ashes::Extent2D size{ m_depthView->getTexture().getDimensions().width
+			, m_depthView->getTexture().getDimensions().height };
 		auto & device = getCurrentDevice( m_renderSystem );
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
@@ -134,7 +145,7 @@ namespace smaa
 		createPipeline( size
 			, castor::Position{}
 			, stages
-			, m_depthView
+			, *m_depthView
 			, *m_renderPass
 			, setLayoutBindings
 			, {}

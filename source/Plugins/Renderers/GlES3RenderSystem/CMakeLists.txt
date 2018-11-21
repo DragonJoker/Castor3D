@@ -19,8 +19,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries};EGL;GLESv3"
-	"GlES3RenderSystemPch.hpp"
-	"GlES3RenderSystemPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GlES3RenderSystemPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GlES3RenderSystemPch.cpp
 )
 
 parse_subdir_files( Src/Buffer Buffer )

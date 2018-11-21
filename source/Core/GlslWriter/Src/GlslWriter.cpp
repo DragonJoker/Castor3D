@@ -26,6 +26,7 @@ namespace glsl
 			*this << "#extension GL_ARB_explicit_uniform_location : enable" << endl;
 			*this << "#extension GL_ARB_separate_shader_objects : enable" << endl;
 			*this << "#extension GL_ARB_shading_language_420pack : enable" << endl;
+			*this << "#extension GL_ARB_texture_cube_map_array : enable" << endl;
 		}
 	}
 

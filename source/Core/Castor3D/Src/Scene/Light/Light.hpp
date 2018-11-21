@@ -198,6 +198,11 @@ namespace castor3d
 		{
 			return m_shadowMap;
 		}
+
+		inline uint32_t getShadowMapIndex()const
+		{
+			return m_shadowMapIndex;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -288,9 +293,10 @@ namespace castor3d
 			m_shadowType = value;
 		}
 
-		inline void setShadowMap( ShadowMapRPtr value )
+		inline void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )
 		{
 			m_shadowMap = value;
+			m_shadowMapIndex = index;
 		}
 		/**@}*/
 
@@ -306,6 +312,7 @@ namespace castor3d
 		ShadowType m_shadowType{ ShadowType::eNone };
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
+		uint32_t m_shadowMapIndex{ 0u };
 	};
 }
 

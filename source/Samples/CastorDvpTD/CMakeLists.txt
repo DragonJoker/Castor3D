@@ -15,8 +15,8 @@ add_target(
 	bin
 	"${Castor3DBinsDependencies}"
 	"${CastorBinLibraries}"
-	"CastorDvpTDPch.hpp"
-	"CastorDvpTDPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorDvpTDPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorDvpTDPch.cpp
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )

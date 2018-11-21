@@ -974,6 +974,7 @@ float4 SMAADecodeDiagBilinearAccess(float4 e) {
  */
 float2 SMAASearchDiag1(SMAATexture2D(edgesTex), float2 texcoord, float2 dir, out float2 e) {
     float4 coord = float4(texcoord, -1.0, 1.0);
+    e = float2( 0.0 );
     float3 t = float3(SMAA_RT_METRICS.xy, 1.0);
     while (coord.z < float(SMAA_MAX_SEARCH_STEPS_DIAG - 1) &&
            coord.w > 0.9) {
@@ -986,6 +987,7 @@ float2 SMAASearchDiag1(SMAATexture2D(edgesTex), float2 texcoord, float2 dir, out
 
 float2 SMAASearchDiag2(SMAATexture2D(edgesTex), float2 texcoord, float2 dir, out float2 e) {
     float4 coord = float4(texcoord, -1.0, 1.0);
+    e = float2( 0.0 );
     coord.x += 0.25 * SMAA_RT_METRICS.x; // See @SearchDiag2Optimization
     float3 t = float3(SMAA_RT_METRICS.xy, 1.0);
     while (coord.z < float(SMAA_MAX_SEARCH_STEPS_DIAG - 1) &&
@@ -1368,7 +1370,8 @@ float4 SMAABlendingWeightCalculationPS(float2 texcoord,
 //-----------------------------------------------------------------------------
 // Neighborhood Blending Pixel Shader (Third Pass)
 
-float4 SMAANeighborhoodBlendingPS(float2 texcoord,
+float4 SMAANeighborhoodBlendingPS(float2 colourTexcoord,
+                                  float2 blendTexcoord,
                                   float4 offset,
                                   SMAATexture2D(colorTex),
                                   SMAATexture2D(blendTex)
@@ -1380,15 +1383,15 @@ float4 SMAANeighborhoodBlendingPS(float2 texcoord,
     float4 a;
     a.x = SMAASample(blendTex, offset.xy).a; // Right
     a.y = SMAASample(blendTex, offset.zw).g; // Top
-    a.wz = SMAASample(blendTex, texcoord).xz; // Bottom / Left
+    a.wz = SMAASample(blendTex, blendTexcoord).xz; // Bottom / Left
 
     // Is there any blending weight with a value greater than 0.0?
     SMAA_BRANCH
     if (dot(a, float4(1.0, 1.0, 1.0, 1.0)) < 1e-5) {
-        float4 color = SMAASampleLevelZero(colorTex, texcoord);
+        float4 color = SMAASampleLevelZero(colorTex, colourTexcoord);
 
         #if SMAA_REPROJECTION
-        float2 velocity = SMAA_DECODE_VELOCITY(SMAASampleLevelZero(velocityTex, texcoord));
+        float2 velocity = SMAA_DECODE_VELOCITY(SMAASampleLevelZero(velocityTex, colourTexcoord));
 
         // Pack velocity into the alpha channel:
         color.a = sqrt(5.0 * length(velocity));
@@ -1406,7 +1409,7 @@ float4 SMAANeighborhoodBlendingPS(float2 texcoord,
         blendingWeight /= dot(blendingWeight, float2(1.0, 1.0));
 
         // Calculate the texture coordinates:
-        float4 blendingCoord = mad(blendingOffset, float4(SMAA_RT_METRICS.xy, -SMAA_RT_METRICS.xy), texcoord.xyxy);
+        float4 blendingCoord = mad(blendingOffset, float4(SMAA_RT_METRICS.xy, -SMAA_RT_METRICS.xy), colourTexcoord.xyxy);
 
         // We exploit bilinear filtering to mix current pixel with the chosen
         // neighbor:
@@ -1513,7 +1516,9 @@ void SMAASeparatePS(float4 position,
 		writer.declConstant( cuT( "SMAA_CORNER_ROUNDING" ), Int( config.data.cornerRounding ) );
 		writer.declConstant( cuT( "SMAA_PIXEL_SIZE" ), vec2( Float( renderTargetMetrics[0] ), renderTargetMetrics[1] ) );
 		writer.declConstant( cuT( "SMAA_RT_METRICS" ), vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
-		writer.declConstant( cuT( "SMAA_DISABLE_DIAG_DETECTION" ), config.data.disableDiagonalDetection ? 1_i : 0_i, config.data.disableDiagonalDetection );
+		writer.declConstant( cuT( "SMAA_DISABLE_DIAG_DETECTION" ), 1_i );
 		writer.declConstant( cuT( "SMAA_DISABLE_CORNER_DETECTION" ), config.data.disableCornerDetection ? 1_i : 0_i, config.data.disableCornerDetection );
+		//writer.declConstant( cuT( "SMAA_DISABLE_DIAG_DETECTION" ), config.data.disableDiagonalDetection ? 1_i : 0_i, config.data.disableDiagonalDetection );
+		//writer.declConstant( cuT( "SMAA_DISABLE_CORNER_DETECTION" ), config.data.disableCornerDetection ? 1_i : 0_i, config.data.disableCornerDetection );
 	}
 }

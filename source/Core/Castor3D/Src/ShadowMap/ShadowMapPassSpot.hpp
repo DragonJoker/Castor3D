@@ -55,6 +55,20 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		inline ShadowType getShadowType()const
+		{
+			return m_shadowType;
+		}
+		/**@}*/
 
 	private:
 		/**
@@ -107,6 +121,7 @@ namespace castor3d
 
 	private:
 		ashes::UniformBufferPtr< Configuration > m_shadowConfig;
+		ShadowType m_shadowType;
 		castor::Matrix4x4r m_view;
 	};
 }

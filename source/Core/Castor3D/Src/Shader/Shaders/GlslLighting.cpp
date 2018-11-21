@@ -280,15 +280,19 @@ namespace castor3d
 						result.m_directionCount() = texelFetch( c3d_sLights, offset++ );
 						result.m_direction() = normalize( result.m_direction() );
 						result.m_splitDepths() = texelFetch( c3d_sLights, offset++ );
-						FOR( m_writer, UInt, i, 0u, "i < c3d_maxCascadeCount", "++i" )
+						auto col0 = m_writer.declLocale< Vec4 >( cuT( "col0" ) );
+						auto col1 = m_writer.declLocale< Vec4 >( cuT( "col1" ) );
+						auto col2 = m_writer.declLocale< Vec4 >( cuT( "col2" ) );
+						auto col3 = m_writer.declLocale< Vec4 >( cuT( "col3" ) );
+
+						for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
 						{
-							auto col0 = m_writer.declLocale( cuT( "col0" ), texelFetch( c3d_sLights, offset++ ) );
-							auto col1 = m_writer.declLocale( cuT( "col1" ), texelFetch( c3d_sLights, offset++ ) );
-							auto col2 = m_writer.declLocale( cuT( "col2" ), texelFetch( c3d_sLights, offset++ ) );
-							auto col3 = m_writer.declLocale( cuT( "col3" ), texelFetch( c3d_sLights, offset++ ) );
+							col0 = texelFetch( c3d_sLights, offset++ );
+							col1 = texelFetch( c3d_sLights, offset++ );
+							col2 = texelFetch( c3d_sLights, offset++ );
+							col3 = texelFetch( c3d_sLights, offset++ );
 							result.m_transform( i ) = mat4( col0, col1, col2, col3 );
 						}
-						ROF;
 					}
 					else
 					{

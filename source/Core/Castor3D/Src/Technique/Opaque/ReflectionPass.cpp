@@ -46,7 +46,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_environmentCount = 16u;
+		static uint32_t constexpr c_environmentCount = 2u;
 
 		ashes::VertexLayoutPtr doCreateVertexLayout()
 		{
@@ -221,31 +221,52 @@ namespace castor3d
 
 					IF( writer, reflection != 0_i && refraction != 0_i )
 					{
-						ambient = reflections.computeReflRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, material.m_refractionRatio()
-							, diffuse );
-						diffuse = vec3( 0.0_f );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								ambient = reflections.computeReflRefr( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, material.m_refractionRatio()
+									, diffuse );
+								diffuse = vec3( 0.0_f );
+							}
+							FI;
+						}
 					}
 					ELSEIF( writer, reflection != 0_i )
 					{
-						diffuse *= reflections.computeRefl( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex] );
-						ambient = vec3( 0.0_f );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								diffuse *= reflections.computeRefl( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )] );
+								ambient = vec3( 0.0_f );
+							}
+							FI;
+						}
 					}
 					ELSE
 					{
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, material.m_refractionRatio()
-							, diffuse );
-						diffuse = vec3( 0.0_f );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								ambient = reflections.computeRefr( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, material.m_refractionRatio()
+									, diffuse );
+								diffuse = vec3( 0.0_f );
+							}
+							FI;
+						}
 					}
 					FI;
 				}
@@ -403,13 +424,20 @@ namespace castor3d
 
 					IF( writer, reflection != 0_i )
 					{
-						// Reflection from environment map.
-						ambient = reflections.computeRefl( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, c3d_ambientLight.xyz()
-							, albedo );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								// Reflection from environment map.
+								ambient = reflections.computeRefl( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, c3d_ambientLight.xyz()
+									, albedo );
+							}
+							FI;
+						}
 					}
 					ELSE
 					{
@@ -430,15 +458,22 @@ namespace castor3d
 
 					IF ( writer, refraction != 0_i )
 					{
-						// Refraction from environment map.
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, material.m_refractionRatio()
-							, ambient
-							, albedo
-							, roughness );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								// Refraction from environment map.
+								ambient = reflections.computeRefr( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, material.m_refractionRatio()
+									, ambient
+									, albedo
+									, roughness );
+							}
+							FI;
+						}
 					}
 					ELSEIF( writer, ratio != 0.0_f )
 					{
@@ -636,13 +671,20 @@ namespace castor3d
 
 					IF( writer, reflection != 0_i )
 					{
-						// Reflection from environment map.
-						ambient = reflections.computeRefl( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, c3d_ambientLight.xyz()
-							, diffuse );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								// Reflection from environment map.
+								ambient = reflections.computeRefl( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, c3d_ambientLight.xyz()
+									, diffuse );
+							}
+							FI;
+						}
 					}
 					ELSE
 					{
@@ -663,15 +705,22 @@ namespace castor3d
 
 					IF ( writer, refraction != 0_i )
 					{
-						// Refraction from environment map.
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapEnvironment[envMapIndex]
-							, material.m_refractionRatio()
-							, ambient
-							, diffuse
-							, glossiness );
+						for ( auto i = 0; i < c_environmentCount; ++i )
+						{
+							IF( writer, envMapIndex == Int( i ) )
+							{
+								// Refraction from environment map.
+								ambient = reflections.computeRefr( incident
+									, normal
+									, occlusion
+									, c3d_mapEnvironment[Int( i )]
+									, material.m_refractionRatio()
+									, ambient
+									, diffuse
+									, glossiness );
+							}
+							FI;
+						}
 					}
 					ELSEIF( writer, ratio != 0.0_f )
 					{

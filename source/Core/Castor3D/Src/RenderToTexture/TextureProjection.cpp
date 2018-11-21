@@ -25,10 +25,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-	}
-
 	TextureProjection::TextureProjection( Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, m_matrixUbo{ engine }

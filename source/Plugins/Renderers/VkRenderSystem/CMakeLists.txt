@@ -21,8 +21,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries};VkRenderer"
-	"VkRenderSystemPch.hpp"
-	"VkRenderSystemPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.cpp
 	"-DVkRenderer_STATIC"
 	"-DVkRenderer_STATIC"
 )

@@ -18,7 +18,7 @@ namespace castor3d
 	PassBuffer::PassBuffer( Engine & engine
 		, uint32_t count
 		, uint32_t size )
-		: m_buffer{ engine, count * size }
+		: m_buffer{ engine, count * size, true }
 		, m_passCount{ count }
 	{
 	}
@@ -101,8 +101,26 @@ namespace castor3d
 	void PassBuffer::doVisitExtended( Pass const & pass
 		, ExtendedData & data )
 	{
-		auto index = pass.getId () - 1;
-		
+		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		if ( pass.hasSubsurfaceScattering() )
+		{
+			doVisit( pass.getSubsurfaceScattering()
+				, index
+				, data );
+		}
+		else
+		{
+			data.sssInfo[index].r = 0.0f;
+			data.sssInfo[index].g = 0.0f;
+			data.sssInfo[index].b = 0.0f;
+			data.sssInfo[index].a = 0.0f;
+		}
+
+#else
+
 		if ( pass.hasSubsurfaceScattering() )
 		{
 			doVisit( pass.getSubsurfaceScattering()
@@ -116,12 +134,34 @@ namespace castor3d
 			data.sssInfo.b = 0.0f;
 			data.sssInfo.a = 0.0f;
 		}
+
+#endif
 	}
 
 	void PassBuffer::doVisit( SubsurfaceScattering const & subsurfaceScattering
 		, uint32_t index
 		, ExtendedData & data )
 	{
+#if C3D_MaterialsStructOfArrays
+
+		data.sssInfo[index].r = 1.0f;
+		data.sssInfo[index].g = subsurfaceScattering.getGaussianWidth();
+		data.sssInfo[index].b = subsurfaceScattering.getStrength();
+		data.sssInfo[index].a = float( subsurfaceScattering.getProfileSize() );
+
+		auto i = 0u;
+
+		for ( auto & factor : subsurfaceScattering )
+		{
+			data.transmittanceProfile[index][i].r = factor[0];
+			data.transmittanceProfile[index][i].g = factor[1];
+			data.transmittanceProfile[index][i].b = factor[2];
+			data.transmittanceProfile[index][i].a = factor[3];
+			++i;
+		}
+
+#else
+
 		data.sssInfo.r = 1.0f;
 		data.sssInfo.g = subsurfaceScattering.getGaussianWidth();
 		data.sssInfo.b = subsurfaceScattering.getStrength();
@@ -137,5 +177,7 @@ namespace castor3d
 			data.transmittanceProfile[i].a = factor[3];
 			++i;
 		}
+
+#endif
 	}
 }

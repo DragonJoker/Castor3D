@@ -162,6 +162,32 @@ namespace castor3d
 		{
 			this->depthTexture = depthTexture;
 			this->depthTexture->initialise();
+			auto format = this->depthTexture->getPixelFormat();
+
+			ashes::ImageViewCreateInfo view{};
+			view.format = format;
+			view.viewType = ashes::TextureViewType::e2D;
+			auto & texture = this->depthTexture->getTexture();
+			view.subresourceRange.levelCount = texture.getMipmapLevels();
+
+			if ( isDepthStencilFormat( format ) )
+			{
+				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+				depthView = texture.createView( view );
+				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eStencil;
+				stencilView = texture.createView( view );
+			}
+			else if ( isDepthFormat( format ) )
+			{
+				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+				depthView = texture.createView( view );
+			}
+			else if ( isStencilFormat( format ) )
+			{
+				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eStencil;
+				stencilView = texture.createView( view );
+			}
+
 			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), depthTexture->getDefaultView() );
 		}
 

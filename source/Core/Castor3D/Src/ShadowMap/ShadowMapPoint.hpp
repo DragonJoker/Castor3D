@@ -51,13 +51,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait )override;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
 		void debugDisplay( ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
+		C3D_API ashes::TextureView const & getView( uint32_t index )const override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -96,6 +98,14 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
+		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
+		 */
+		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, bool invertNormals )const override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
 		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
@@ -116,10 +126,18 @@ namespace castor3d
 			ashes::TextureViewPtr varianceView;
 			ashes::TextureViewPtr linearView;
 		};
-		ashes::TexturePtr m_depthTexture;
-		ashes::TextureViewPtr m_depthView;
-		std::array< FrameBuffer, 6u > m_frameBuffers;
-		ShadowType m_shadowType;
+		struct PassData
+		{
+			ashes::CommandBufferPtr commandBuffer;
+			ashes::TexturePtr depthTexture;
+			ashes::TextureViewPtr depthView;
+			std::array< FrameBuffer, 6u > frameBuffers;
+			ashes::SemaphorePtr finished;
+			ShadowType shadowType;
+			ashes::TextureViewPtr varianceView;
+			ashes::TextureViewPtr linearView;
+		};
+		std::vector< PassData > m_passesData;
 	};
 }
 

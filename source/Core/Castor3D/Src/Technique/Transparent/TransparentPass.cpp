@@ -65,8 +65,8 @@ namespace castor3d
 			for ( auto & shadowMap : shadowMaps )
 			{
 				shadowMapWrites.push_back( {
-					shadowMap.get().getTexture().getSampler()->getSampler(),
-					shadowMap.get().getTexture().getTexture()->getDefaultView(),
+					shadowMap.first.get().getSampler(),
+					shadowMap.first.get().getView(),
 					ashes::ImageLayout::eShaderReadOnlyOptimal
 					} );
 			}
@@ -334,7 +334,7 @@ namespace castor3d
 				ashes::BlendFactor::eInvSrcColour,
 				ashes::BlendOp::eAdd,
 				ashes::BlendFactor::eZero,
-				ashes::BlendFactor::eInvSrcColour,
+				ashes::BlendFactor::eInvSrcAlpha,
 				ashes::BlendOp::eAdd,
 			} );
 		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
@@ -509,10 +509,8 @@ namespace castor3d
 		}
 
 		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
-		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );
-		index += shader::SpotShadowMapCount;
-		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::PointShadowMapCount );
-		index += shader::PointShadowMapCount;
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
 
 		return textureBindings;
 	}

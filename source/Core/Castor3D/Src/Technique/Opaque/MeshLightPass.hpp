@@ -131,7 +131,8 @@ namespace castor3d
 		 */
 		ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait
-			, TextureUnit * shadowMapOpt )override;
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex )override;
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.

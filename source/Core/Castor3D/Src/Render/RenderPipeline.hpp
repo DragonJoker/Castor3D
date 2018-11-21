@@ -144,10 +144,9 @@ namespace castor3d
 		inline void setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
 		{
 			REQUIRE( !m_pipeline );
-			for ( auto & layout : layouts )
-			{
-				m_vertexLayouts.push_back( layout.get() );
-			}
+			m_vertexLayouts.insert( m_vertexLayouts.end()
+				, layouts.begin()
+				, layouts.end() );
 		}
 
 		inline void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts )

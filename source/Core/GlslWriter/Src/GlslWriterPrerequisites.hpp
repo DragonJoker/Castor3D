@@ -58,6 +58,9 @@ namespace glsl
 		eVec2I,
 		eVec3I,
 		eVec4I,
+		eVec2UI,
+		eVec3UI,
+		eVec4UI,
 		eVec2F,
 		eVec3F,
 		eVec4F,
@@ -149,6 +152,9 @@ namespace glsl
 	using IVec2 = Vec2T< Int >;
 	using IVec3 = Vec3T< Int >;
 	using IVec4 = Vec4T< Int >;
+	using UVec2 = Vec2T< UInt >;
+	using UVec3 = Vec3T< UInt >;
+	using UVec4 = Vec4T< UInt >;
 	using BVec2 = Vec2T< Boolean >;
 	using BVec3 = Vec3T< Boolean >;
 	using BVec4 = Vec4T< Boolean >;
@@ -189,6 +195,9 @@ namespace glsl
 	DECLARE_GLSL_PARAMETER( IVec2 );
 	DECLARE_GLSL_PARAMETER( IVec3 );
 	DECLARE_GLSL_PARAMETER( IVec4 );
+	DECLARE_GLSL_PARAMETER( UVec2 );
+	DECLARE_GLSL_PARAMETER( UVec3 );
+	DECLARE_GLSL_PARAMETER( UVec4 );
 	DECLARE_GLSL_PARAMETER( BVec2 );
 	DECLARE_GLSL_PARAMETER( BVec3 );
 	DECLARE_GLSL_PARAMETER( BVec4 );

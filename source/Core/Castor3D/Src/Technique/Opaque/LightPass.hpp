@@ -443,7 +443,8 @@ namespace castor3d
 		 */
 		virtual ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait
-			, TextureUnit * shadowMapOpt );
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -565,7 +566,8 @@ namespace castor3d
 		 *\param[in]	first		Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
 		 */
 		void doPrepareCommandBuffer( Pipeline & pipeline
-			, TextureUnit const * shadowMap
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex
 			, bool first );
 		/**
 		 *\~english

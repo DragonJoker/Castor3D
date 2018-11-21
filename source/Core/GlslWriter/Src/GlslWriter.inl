@@ -1010,6 +1010,23 @@ namespace glsl
 		checkNameExists( name, TypeTraits< T >::TypeEnum );
 		return Optional< Array< T > >( this, name, 0xFFFFFFFF, enabled );
 	}
+
+	template< typename T >
+	inline Array< T > GlslWriter::getBuiltinArray( castor::String const & name
+		, uint32_t dimension )
+	{
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Array< T >( this, name, dimension );
+	}
+
+	template< typename T >
+	inline Optional< Array< T > > GlslWriter::getBuiltinArray( castor::String const & name
+		, uint32_t dimension
+		, bool enabled )
+	{
+		checkNameExists( name, TypeTraits< T >::TypeEnum );
+		return Optional< Array< T > >( this, name, dimension, enabled );
+	}
 	/**@}*/
 #pragma endregion
 }

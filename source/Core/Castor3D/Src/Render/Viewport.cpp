@@ -54,7 +54,12 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
+	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type
+	{
+		cuT( "ortho" ),
+		cuT( "perspective" ),
+		cuT( "frustum" )
+	};
 
 	Viewport::Viewport( Engine const & engine
 		, ViewportType type
@@ -114,7 +119,7 @@ namespace castor3d
 				break;
 
 			case castor3d::ViewportType::ePerspective:
-				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY.value().radians()
+				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY
 					, m_ratio
 					, m_near
 					, m_far );

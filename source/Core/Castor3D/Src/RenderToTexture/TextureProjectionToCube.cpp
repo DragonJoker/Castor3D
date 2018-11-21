@@ -1,4 +1,4 @@
-#include "EquirectangularToCube.hpp"
+#include "TextureProjectionToCube.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -151,7 +151,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	EquirectangularToCube::EquirectangularToCube( TextureLayout const & equiRectangular
+	TextureProjectionToCube::TextureProjectionToCube( TextureLayout const & equiRectangular
 		, RenderSystem & renderSystem
 		, TextureLayout const & target )
 		: RenderCube{ renderSystem, false }
@@ -186,7 +186,7 @@ namespace castor3d
 			, {} );
 	}
 
-	void EquirectangularToCube::render()
+	void TextureProjectionToCube::render()
 	{
 		uint32_t face = 0u;
 

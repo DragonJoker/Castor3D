@@ -141,11 +141,6 @@ namespace castor3d
 			, 0u
 			, ashes::MemoryPropertyFlag::eHostVisible );
 
-		//if ( device.getClipDirection() == ashes::ClipDirection::eTopDown )
-		//{
-		//	std::swap( dsState.front, dsState.back );
-		//}
-
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, ashes::MemoryMapFlag::eWrite ) )
 		{
 			std::copy( m_vertexData.begin(), m_vertexData.end(), buffer );

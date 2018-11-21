@@ -127,6 +127,7 @@ namespace castor3d
 	}
 
 	bool RenderTarget::TargetFbo::initialise( ashes::RenderPass & renderPass
+		, ashes::Format format
 		, Size const & size )
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
@@ -138,7 +139,7 @@ namespace castor3d
 		createInfo.extent.width = size.getWidth();
 		createInfo.extent.height = size.getHeight();
 		createInfo.extent.depth = 1u;
-		createInfo.format = renderTarget.getPixelFormat();
+		createInfo.format = format;
 		createInfo.imageType = ashes::TextureType::e2D;
 		createInfo.initialLayout = ashes::ImageLayout::eUndefined;
 		createInfo.mipLevels = 1u;
@@ -510,6 +511,7 @@ namespace castor3d
 	bool RenderTarget::doInitialiseFrameBuffer()
 	{
 		auto result = m_objectsFrameBuffer.initialise( *m_renderPass
+			, ashes::Format::eR8G8B8A8_UNORM
 			, m_size );
 		auto & dimensions = m_objectsFrameBuffer.colourTexture.getTexture()->getDimensions();
 		m_size.set( dimensions.width, dimensions.height );
@@ -517,12 +519,14 @@ namespace castor3d
 		if ( result )
 		{
 			result = m_overlaysFrameBuffer.initialise( *m_renderPass
+				, ashes::Format::eR8G8B8A8_UNORM
 				, m_size );
 		}
 
 		if ( result )
 		{
 			result = m_combinedFrameBuffer.initialise( *m_renderPass
+				, getPixelFormat()
 				, m_size );
 		}
 
@@ -701,7 +705,7 @@ namespace castor3d
 					auto objectsColor = writer.declLocale( cuT( "objectsColor" )
 						, texture( c3d_mapObjects, vtx_textureObjects ) );
 					objectsColor.rgb() *= 1.0_f - overlayColor.a();
-					overlayColor.rgb() *= overlayColor.a();
+					//overlayColor.rgb() *= overlayColor.a();
 					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
 				} );
 			pxl = writer.finalise();

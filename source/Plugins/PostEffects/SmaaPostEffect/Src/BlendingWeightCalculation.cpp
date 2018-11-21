@@ -58,7 +58,7 @@ namespace smaa
 				, [&]()
 				{
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = texcoord;
+					vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
 					writer << "SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset )" << endi;
 				} );
 			return writer.finalise();
@@ -163,6 +163,7 @@ namespace smaa
 			, PixelFormat::eA8L8
 			, areaTexBytes
 			, PixelFormat::eA8L8 );
+
 		m_areaTex = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, image
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
@@ -174,6 +175,7 @@ namespace smaa
 			, searchTexBytes
 			, PixelFormat::eL8 );
 		image.format = ashes::Format::eR8_UNORM;
+
 		m_searchTex = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, image
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
@@ -194,7 +196,7 @@ namespace smaa
 		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-		renderPass.attachments[1].format = ashes::Format::eS8_UINT;
+		renderPass.attachments[1].format = ashes::Format::eD24_UNORM_S8_UINT;
 		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eDontCare;
 		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eLoad;
@@ -212,7 +214,7 @@ namespace smaa
 		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
 		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;

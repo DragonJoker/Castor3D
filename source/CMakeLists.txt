@@ -171,11 +171,11 @@ macro( parse_subdir_files _FOLDER _GROUP )
 		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
 		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
- )
+	)
 	file( GLOB _FOLDER_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.c
 		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.cpp
- )
+	)
 	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
 endmacro()
@@ -219,7 +219,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( ${ASHES_DIR} )
 		set_property( TARGET Ashes PROPERTY FOLDER "External/Ashes" )
 		if ( CASTOR_BUILDGRP_RENDERER )
-			set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes" )
+			if ( WIN32 )
+				set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes" )
+			endif ()
 			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes" )
 			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes" )
 			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes" )

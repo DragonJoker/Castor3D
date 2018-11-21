@@ -50,7 +50,8 @@ namespace castor3d
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, std::vector< PassData > && passes );
+			, std::vector< PassData > && passes
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -98,7 +99,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait ) = 0;
+		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index/* = 0u*/ ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -151,6 +153,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API ashes::Sampler const & getSampler()const;
+		C3D_API ashes::TextureView const & getView()const;
+		C3D_API virtual ashes::TextureView const & getView( uint32_t index )const;
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
@@ -169,6 +174,11 @@ namespace castor3d
 		inline TextureUnit const & getLinearDepth()const
 		{
 			return m_linearMap;
+		}
+
+		inline uint32_t getCount()const
+		{
+			return m_count;
 		}
 		/**@}*/
 
@@ -203,7 +213,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, bool invertNormals )const;
+			, bool invertNormals )const = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
@@ -244,10 +254,10 @@ namespace castor3d
 			, shader::Materials const & materials )const;
 
 	protected:
-		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
+		uint32_t m_count;
 		ashes::SemaphorePtr m_finished;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;

@@ -133,7 +133,7 @@ namespace smaa
 		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
 		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;

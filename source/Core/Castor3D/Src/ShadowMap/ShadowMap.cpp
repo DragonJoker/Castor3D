@@ -33,11 +33,13 @@ namespace castor3d
 	ShadowMap::ShadowMap( Engine & engine
 		, TextureUnit && shadowMap
 		, TextureUnit && linearMap
-		, std::vector< PassData > && passes )
+		, std::vector< PassData > && passes
+		, uint32_t count )
 		: OwnedBy< Engine >{ engine }
 		, m_shadowMap{ std::move( shadowMap ) }
 		, m_linearMap{ std::move( linearMap ) }
 		, m_passes{ std::move( passes ) }
+		, m_count{ count }
 	{
 	}
 
@@ -144,127 +146,19 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMap::doGetVertexShaderSource( PassFlags const & passFlags
-		, TextureChannels const & textureFlags
-		, ProgramFlags const & programFlags
-		, SceneFlags const & sceneFlags
-		, bool invertNormals )const
+	ashes::Sampler const & ShadowMap::getSampler()const
 	{
-		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
-			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
-		using namespace glsl;
-		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		return m_shadowMap.getSampler()->getSampler();
+	}
 
-		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
-			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
-			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
-			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
-			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
-			, RenderPass::VertexInputs::BoneIds0Location
-			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
-			, RenderPass::VertexInputs::BoneIds1Location
-			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
-			, RenderPass::VertexInputs::Weights0Location
-			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
-			, RenderPass::VertexInputs::Weights1Location
-			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
-			, RenderPass::VertexInputs::TransformLocation
-			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( cuT( "material" )
-			, RenderPass::VertexInputs::MaterialLocation
-			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
-			, RenderPass::VertexInputs::Position2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
-			, RenderPass::VertexInputs::Normal2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
-			, RenderPass::VertexInputs::Tangent2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
-			, RenderPass::VertexInputs::Texture2Location
-			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+	ashes::TextureView const & ShadowMap::getView()const
+	{
+		return m_shadowMap.getTexture()->getDefaultView();
+	}
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
-		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
-
-		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
-			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" )
-			, RenderPass::VertexOutputs::ViewPositionLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
-			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
-			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
-			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = gl_PerVertex{ writer };
-
-		std::function< void() > main = [&]()
-		{
-			auto vertexPosition = writer.declLocale( cuT( "vertexPosition" )
-				, vec4( position.xyz(), 1.0 ) );
-			vtx_texture = texture;
-
-			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
-					, SkinningUbo::computeTransform( writer, programFlags ) );
-			}
-			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
-					, transform );
-			}
-			else
-			{
-				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
-					, c3d_curMtxModel );
-			}
-
-			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
-			{
-				vtx_material = material;
-			}
-			else
-			{
-				vtx_material = c3d_materialIndex;
-			}
-
-			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
-			{
-				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
-				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0 );
-				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
-			}
-
-			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
-			vertexPosition = mtxModel * vertexPosition;
-			vtx_worldPosition = vertexPosition.xyz();
-			vtx_instance = gl_InstanceID;
-			vertexPosition = c3d_curView * vertexPosition;
-			vtx_viewPosition = vertexPosition.xyz();
-			out.gl_Position() = c3d_projection * vertexPosition;
-		};
-
-		writer.implementFunction< void >( cuT( "main" ), main );
-		return writer.finalise();
+	ashes::TextureView const & ShadowMap::getView( uint32_t index )const
+	{
+		return m_shadowMap.getTexture()->getDefaultView();
 	}
 
 	glsl::Shader ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags

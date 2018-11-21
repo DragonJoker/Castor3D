@@ -7,11 +7,63 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+#if C3D_MaterialsStructOfArrays
+
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
+			, uint32_t count )
+		{
+			auto albRough = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto metDiv = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto common = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto reflRefr = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto sssInfo = makeArrayView( reinterpret_cast< PassBuffer::RgbaColour * >( data )
+				, reinterpret_cast< PassBuffer::RgbaColour * >( data ) + count );
+			data += sizeof( PassBuffer::RgbaColour ) * count;
+			auto transmittance = makeArrayView( reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( data )
+				, reinterpret_cast< std::array< PassBuffer::RgbaColour, 10u > * >( data ) + count );
+			return
+			{
+				albRough,
+				metDiv,
+				common,
+				reflRefr,
+				{
+					sssInfo,
+					transmittance,
+				},
+			};
+		}
+
+#else
+
+		MetallicRoughnessPassBuffer::PassesData doBindData( uint8_t * data
+			, uint32_t count )
+		{
+			return makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data )
+				, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( data ) + count );
+		}
+
+#endif
+	}
+
+	//*********************************************************************************************
+
 	MetallicRoughnessPassBuffer::MetallicRoughnessPassBuffer( Engine & engine
 		, uint32_t count )
 		: PassBuffer{ engine, count, DataSize }
-		, m_data{ makeArrayView( reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.getPtr() )
-			, reinterpret_cast< MetallicRoughnessPassBuffer::PassData * >( m_buffer.getPtr() ) + count ) }
+		, m_data{ doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
 
@@ -23,6 +75,25 @@ namespace castor3d
 	{
 		REQUIRE( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		m_data.albRough[index].r = pass.getDiffuse().red();
+		m_data.albRough[index].g = pass.getDiffuse().green();
+		m_data.albRough[index].b = pass.getDiffuse().blue();
+		m_data.albRough[index].a = ( 255.0f - pass.getShininess() ) / 255.0f;
+		m_data.metDiv[index].r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( Point3r{ 1, 1, 1 } ) );
+		m_data.common[index].r = pass.getOpacity();
+		m_data.common[index].g = pass.getEmissive();
+		m_data.common[index].b = pass.getAlphaValue();
+		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		m_data.reflRefr[index].r = pass.getRefractionRatio();
+		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].a = 1.0f;
+		doVisitExtended( pass, m_data.extended );
+
+#else
 
 		m_data[index].albRough.r = pass.getDiffuse().red();
 		m_data[index].albRough.g = pass.getDiffuse().green();
@@ -38,12 +109,33 @@ namespace castor3d
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
 		doVisitExtended( pass, m_data[index].extended );
+
+#endif
 	}
 
 	void MetallicRoughnessPassBuffer::visit( MetallicRoughnessPbrPass const & pass )
 	{
 		REQUIRE( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
+
+#if C3D_MaterialsStructOfArrays
+
+		m_data.albRough[index].r = pass.getAlbedo().red();
+		m_data.albRough[index].g = pass.getAlbedo().green();
+		m_data.albRough[index].b = pass.getAlbedo().blue();
+		m_data.albRough[index].a = pass.getRoughness();
+		m_data.metDiv[index].r = pass.getMetallic();
+		m_data.common[index].r = pass.getOpacity();
+		m_data.common[index].g = pass.getEmissive();
+		m_data.common[index].b = pass.getAlphaValue();
+		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		m_data.reflRefr[index].r = pass.getRefractionRatio();
+		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
+		m_data.reflRefr[index].a = 1.0f;
+		doVisitExtended( pass, m_data.extended );
+
+#else
 
 		m_data[index].albRough.r = pass.getAlbedo().red();
 		m_data[index].albRough.g = pass.getAlbedo().green();
@@ -59,5 +151,9 @@ namespace castor3d
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.a = 1.0f;
 		doVisitExtended( pass, m_data[index].extended );
+
+#endif
 	}
+
+	//*********************************************************************************************
 }

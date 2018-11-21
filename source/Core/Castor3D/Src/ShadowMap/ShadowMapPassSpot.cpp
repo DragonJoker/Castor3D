@@ -35,6 +35,7 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
+		m_shadowType = light.getShadowType();
 		auto & myCamera = getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
 			, index );

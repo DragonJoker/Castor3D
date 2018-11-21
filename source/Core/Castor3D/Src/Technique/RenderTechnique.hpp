@@ -236,8 +236,8 @@ namespace castor3d
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapUPtr m_directionalShadowMap;
-		ShadowMapArray m_pointShadowMaps;
-		ShadowMapArray m_spotShadowMaps;
+		ShadowMapUPtr m_pointShadowMap;
+		ShadowMapUPtr m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
 		ashes::SemaphorePtr m_signalFinished;

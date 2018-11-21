@@ -128,6 +128,16 @@ namespace castor3d
 			return *m_views[index];
 		}
 
+		inline TextureView const & getImage( CubeMapFace index )const
+		{
+			return getImage( size_t( index ) );
+		}
+
+		inline TextureView & getImage( CubeMapFace index )
+		{
+			return getImage( size_t( index ) );
+		}
+
 		inline TextureView const & getDefaultImage()const
 		{
 			REQUIRE( m_defaultView );

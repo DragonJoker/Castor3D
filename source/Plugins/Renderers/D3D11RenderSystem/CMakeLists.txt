@@ -21,8 +21,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries};D3D11Renderer"
-	"D3D11RenderSystemPch.hpp"
-	"D3D11RenderSystemPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/D3D11RenderSystemPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/D3D11RenderSystemPch.cpp
 	"-DD3D11Renderer_STATIC"
 	"-DD3D11Renderer_STATIC"
 )

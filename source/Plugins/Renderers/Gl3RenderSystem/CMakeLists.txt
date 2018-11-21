@@ -21,8 +21,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries};${OpenGlLibraries};Gl3Renderer"
-	"Gl3RenderSystemPch.hpp"
-	"Gl3RenderSystemPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl3RenderSystemPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl3RenderSystemPch.cpp
 	"-DGl3Renderer_STATIC"
 	"-DGl3Renderer_STATIC"
 )

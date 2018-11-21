@@ -26,11 +26,11 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			auto c3d_lightsCount = m_writer.getBuiltin< Vec3 >( cuT( "c3d_lightsCount" ) );
+			auto c3d_lightsCount = m_writer.getBuiltin< IVec4 >( cuT( "c3d_lightsCount" ) );
 			auto begin = m_writer.declLocale( cuT( "begin" )
 				, 0_i );
 			auto end = m_writer.declLocale( cuT( "end" )
-				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+				, c3d_lightsCount.x() );
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
@@ -47,7 +47,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.y() );
+			end += c3d_lightsCount.y();
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
@@ -64,7 +64,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< Int >( c3d_lightsCount.z() );
+			end += c3d_lightsCount.z();
 
 			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
 			{
@@ -180,7 +180,10 @@ namespace castor3d
 						IF ( m_writer, receivesShadows != 0_i )
 						{
 							// Get cascade index for the current fragment's view position
-							FOR( m_writer, UInt, i, 0u, cuT( "i < uint( max( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ), 1u ) - 1u )" ), cuT( "++i" ) )
+							auto c3d_maxCascadeCount = m_writer.getBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
+							auto maxCount = m_writer.declLocale( cuT( "maxCount" )
+								, m_writer.cast< UInt >( clamp( light.m_cascadeCount(), 1_ui, c3d_maxCascadeCount ) - 1_ui ) );
+							FOR( m_writer, UInt, i, 0u, cuT( "i < maxCount" ), cuT( "++i" ) )
 							{
 								IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
 								{
@@ -420,7 +423,10 @@ namespace castor3d
 						IF ( m_writer, receivesShadows != 0_i )
 						{
 							// Get cascade index for the current fragment's view position
-							FOR( m_writer, UInt, i, 0u, cuT( "i < uint( min( c3d_maxCascadeCount, uint( light.m_directionCount.w ) ) - 1u )" ), cuT( "++i" ) )
+							auto c3d_maxCascadeCount = m_writer.getBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
+							auto maxCount = m_writer.declLocale( cuT( "maxCount" )
+								, m_writer.cast< UInt >( clamp( light.m_cascadeCount(), 1_ui, c3d_maxCascadeCount ) - 1_ui ) );
+							FOR( m_writer, UInt, i, 0u, cuT( "i < maxCount" ), cuT( "++i" ) )
 							{
 								IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
 								{

@@ -71,6 +71,27 @@ namespace glsl
 	};
 
 	template<>
+	struct TypeTraits< UVec2 >
+	{
+		static TypeName const TypeEnum = TypeName::eVec2UI;
+		GlslWriter_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< UVec3 >
+	{
+		static TypeName const TypeEnum = TypeName::eVec3UI;
+		GlslWriter_API static castor::String const Name;
+	};
+
+	template<>
+	struct TypeTraits< UVec4 >
+	{
+		static TypeName const TypeEnum = TypeName::eVec4UI;
+		GlslWriter_API static castor::String const Name;
+	};
+
+	template<>
 	struct TypeTraits< Vec2 >
 	{
 		static TypeName const TypeEnum = TypeName::eVec2F;

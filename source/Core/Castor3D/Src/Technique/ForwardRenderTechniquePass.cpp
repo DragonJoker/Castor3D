@@ -63,8 +63,8 @@ namespace castor3d
 			for ( auto & shadowMap : shadowMaps )
 			{
 				shadowMapWrites.push_back( {
-					shadowMap.get().getTexture().getSampler()->getSampler(),
-					shadowMap.get().getTexture().getTexture()->getDefaultView(),
+					shadowMap.first.get().getSampler(),
+					shadowMap.first.get().getView(),
 					ashes::ImageLayout::eShaderReadOnlyOptimal
 					} );
 			}
@@ -386,10 +386,8 @@ namespace castor3d
 		}
 
 		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapShadowDirectional
-		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::SpotShadowMapCount );	// c3d_mapShadowSpot
-		index += shader::SpotShadowMapCount;
-		textureBindings.emplace_back( index, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, shader::PointShadowMapCount );	// c3d_mapShadowPoint
-		index += shader::PointShadowMapCount;
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapShadowSpot
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapShadowPoint
 		return textureBindings;
 	}
 

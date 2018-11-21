@@ -143,8 +143,8 @@ if ( MSVC )
 			dll
 			"CastorUtils;Castor3D"
 			"CastorUtils;Castor3D;${AtlLibraries}"
-			"ComCastor3DPch.hpp"
-			"ComCastor3DPch.cpp"
+			${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DPch.hpp
+			${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DPch.cpp
 			""
 			""
 			""

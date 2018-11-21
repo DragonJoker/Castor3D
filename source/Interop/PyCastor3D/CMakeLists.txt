@@ -25,8 +25,8 @@ add_target(
 	dll
 	"CastorUtils;Castor3D"
 	"CastorUtils;Castor3D;${PythonLibraries}"
-	"PyCastor3DPch.hpp"
-	"PyCastor3DPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/PyCastor3DPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/PyCastor3DPch.cpp
 )
 
 set_target_properties( PyCastor3D

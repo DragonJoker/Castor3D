@@ -420,6 +420,8 @@ namespace glsl
 		template< typename T > inline Optional< T > getBuiltin( castor::String const & name, bool enabled );
 		template< typename T > inline Array< T > getBuiltinArray( castor::String const & name );
 		template< typename T > inline Optional< Array< T > > getBuiltinArray( castor::String const & name, bool enabled );
+		template< typename T > inline Array< T > getBuiltinArray( castor::String const & name, uint32_t dimension );
+		template< typename T > inline Optional< Array< T > > getBuiltinArray( castor::String const & name, uint32_t dimension, bool enabled );
 		/**@}*/
 		/**
 		*name

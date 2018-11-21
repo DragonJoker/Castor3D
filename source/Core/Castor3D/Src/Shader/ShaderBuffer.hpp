@@ -35,7 +35,8 @@ namespace castor3d
 		 *\param[in]	size	La taille du tampon.
 		 */
 		C3D_API ShaderBuffer( Engine & engine
-			, uint32_t size );
+			, uint32_t size
+			, bool forceTbo = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.

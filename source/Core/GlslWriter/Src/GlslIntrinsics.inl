@@ -878,6 +878,24 @@ namespace glsl
 	}
 
 	template< typename ... Values >
+	inline UVec2 uvec2( Type const & value, Values const & ... values )
+	{
+		return writeFunctionCall< UVec2, Type, Values... >( findWriter( value, values... ), cuT( "uvec2" ), value, values... );
+	}
+
+	template< typename ... Values >
+	inline UVec3 uvec3( Type const & value, Values const & ... values )
+	{
+		return writeFunctionCall< UVec3, Type, Values... >( findWriter( value, values... ), cuT( "uvec3" ), value, values... );
+	}
+
+	template< typename ... Values >
+	inline UVec4 uvec4( Type const & value, Values const & ... values )
+	{
+		return writeFunctionCall< UVec4, Type, Values... >( findWriter( value, values... ), cuT( "uvec4" ), value, values... );
+	}
+
+	template< typename ... Values >
 	inline BVec2 bvec2( Type const & value, Values const & ... values )
 	{
 		return writeFunctionCall< BVec2, Type, Values... >( findWriter( value, values... ), cuT( "bvec2" ), value, values... );

@@ -91,6 +91,7 @@ namespace castor3d
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
 			bool initialise( ashes::RenderPass & renderPass
+				, ashes::Format format
 				, castor::Size const & size );
 			void cleanup();
 

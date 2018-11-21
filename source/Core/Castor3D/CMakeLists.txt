@@ -35,8 +35,8 @@ add_target(
 	api_dll
 	"CastorUtils;GlslWriter;Ashes"
 	"${CastorMinLibraries};Ashes;${GlslangLibraries}"
-	"Castor3DPch.hpp"
-	"Castor3DPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.cpp
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES

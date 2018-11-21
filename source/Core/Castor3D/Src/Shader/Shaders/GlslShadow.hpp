@@ -112,8 +112,18 @@ namespace castor3d
 				, glsl::Vec2 const & offset
 				, glsl::Sampler2D const & shadowMap
 				, glsl::Float const & bias );
+			glsl::Float textureProj( glsl::Vec4 const & lightSpacePosition
+				, glsl::Vec2 const & offset
+				, glsl::Sampler2DArray const & shadowMap
+				, glsl::Int const & index
+				, glsl::Float const & bias );
 			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
 				, glsl::Sampler2D const & shadowMap
+				, glsl::Vec2 const & invTexDim
+				, glsl::Float const & bias );
+			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
+				, glsl::Sampler2DArray const & shadowMap
+				, glsl::Int const & index
 				, glsl::Vec2 const & invTexDim
 				, glsl::Float const & bias );
 			glsl::Float textureProjCascade( glsl::Vec4 const & lightSpacePosition
@@ -135,6 +145,8 @@ namespace castor3d
 			void doDeclareChebyshevUpperBound();
 			void doDeclareTextureProj();
 			void doDeclareFilterPCF();
+			void doDeclareTextureOneProj();
+			void doDeclareFilterOnePCF();
 			void doDeclareTextureProjCascade();
 			void doDeclareFilterPCFCascade();
 			void doDeclareGetLightSpacePosition();
@@ -159,13 +171,25 @@ namespace castor3d
 			glsl::Function< glsl::Float
 				, glsl::InVec4
 				, glsl::InVec2
-				, glsl::InSampler2D
+				, glsl::InSampler2DArray
+				, glsl::InInt
 				, glsl::InFloat > m_textureProj;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InSampler2DArray
+				, glsl::InInt
+				, glsl::InVec2
+				, glsl::InFloat > m_filterPCF;
+			glsl::Function< glsl::Float
+				, glsl::InVec4
+				, glsl::InVec2
+				, glsl::InSampler2D
+				, glsl::InFloat > m_textureOneProj;
 			glsl::Function< glsl::Float
 				, glsl::InVec4
 				, glsl::InSampler2D
 				, glsl::InVec2
-				, glsl::InFloat > m_filterPCF;
+				, glsl::InFloat > m_filterOnePCF;
 			glsl::Function < glsl::Float
 				, glsl::InVec2
 				, glsl::InFloat

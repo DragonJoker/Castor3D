@@ -94,7 +94,7 @@ namespace Gl3Render
 
 	glsl::GlslWriter RenderSystem::createGlslWriter()
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ 450
+		return glsl::GlslWriter{ glsl::GlslWriterConfig{ 330
 			, true
 			, true
 			, m_gpuInformations.hasShaderStorageBuffers()

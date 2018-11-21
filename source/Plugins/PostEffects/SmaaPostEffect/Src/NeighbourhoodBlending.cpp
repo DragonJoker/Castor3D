@@ -44,16 +44,18 @@ namespace smaa
 			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto vtx_offset = writer.declOutput< Vec4 >( cuT( "vtx_offset" ), 1u );
+			auto vtx_colourTexture = writer.declOutput< Vec2 >( cuT( "vtx_colourTexture" ), 0u );
+			auto vtx_blendTexture = writer.declOutput< Vec2 >( cuT( "vtx_blendTexture" ), 1u );
+			auto vtx_offset = writer.declOutput< Vec4 >( cuT( "vtx_offset" ), 2u );
 			auto out = gl_PerVertex{ writer };
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
 					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = texcoord;
-					writer << "SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset )" << endi;
+					vtx_colourTexture = texcoord;
+					vtx_blendTexture = writer.ashesBottomUpToTopDown( texcoord );
+					writer << "SMAANeighborhoodBlendingVS( vtx_blendTexture, vtx_offset )" << endi;
 				} );
 			return writer.finalise();
 		}
@@ -73,8 +75,9 @@ namespace smaa
 			writer << getNeighborhoodBlendingPS();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 1u );
+			auto vtx_colourTexture = writer.declInput< Vec2 >( cuT( "vtx_colourTexture" ), 0u );
+			auto vtx_blendTexture = writer.declInput< Vec2 >( cuT( "vtx_blendTexture" ), 1u );
+			auto vtx_offset = writer.declInput< Vec4 >( cuT( "vtx_offset" ), 2u );
 			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), 0u, 0u );
 			auto c3d_blendTex = writer.declSampler< Sampler2D >( cuT( "c3d_blendTex" ), 1u, 0u );
 			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), 2u, 0u, reprojection );
@@ -87,11 +90,11 @@ namespace smaa
 				{
 					if ( reprojection )
 					{
-						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex, c3d_velocityTex )" << endi;
+						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_colourTexture, vtx_blendTexture, vtx_offset, c3d_colourTex, c3d_blendTex, c3d_velocityTex )" << endi;
 					}
 					else
 					{
-						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex )" << endi;
+						writer << "pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_colourTexture, vtx_blendTexture, vtx_offset, c3d_colourTex, c3d_blendTex )" << endi;
 					}
 				} );
 			return writer.finalise();
@@ -136,7 +139,7 @@ namespace smaa
 		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
 		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;

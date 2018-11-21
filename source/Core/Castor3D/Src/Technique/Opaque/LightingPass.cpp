@@ -231,7 +231,8 @@ namespace castor3d
 							, camera );
 						result = &lightPassShadow.render( index
 							, *result
-							, &light->getShadowMap()->getTexture() );
+							, light->getShadowMap()
+							, light->getShadowMapIndex() );
 					}
 					else
 					{
@@ -240,7 +241,8 @@ namespace castor3d
 							, camera );
 						result = &lightPass.render( index
 							, *result
-							, nullptr );
+							, nullptr
+							, 0u );
 					}
 
 					++index;

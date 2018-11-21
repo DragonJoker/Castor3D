@@ -54,7 +54,7 @@ namespace castor3d
 			}
 
 			ashes::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
+			image.arrayLayers = shader::SpotShadowMapCount;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
@@ -101,7 +101,7 @@ namespace castor3d
 			}
 
 			ashes::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
+			image.arrayLayers = shader::SpotShadowMapCount;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
@@ -126,29 +126,34 @@ namespace castor3d
 			return unit;
 		}
 
-		std::vector< ShadowMap::PassData > createPass( Engine & engine
+		std::vector< ShadowMap::PassData > createPasses( Engine & engine
 			, Scene & scene
 			, ShadowMap & shadowMap )
 		{
 			std::vector< ShadowMap::PassData > result;
 			Viewport viewport{ engine };
 			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
-			ShadowMap::PassData passData
+
+			for ( auto i = 0u; i < shader::SpotShadowMapCount; ++i )
 			{
-				std::make_unique< MatrixUbo >( engine ),
-				std::make_shared< Camera >( cuT( "ShadowMapSpot" )
-					, scene
-					, scene.getCameraRootNode()
-					, std::move( viewport ) ),
-				nullptr,
-				nullptr,
-			};
-			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
-			passData.pass = std::make_shared< ShadowMapPassSpot >( engine
-				, *passData.matrixUbo
-				, *passData.culler
-				, shadowMap );
-			result.emplace_back( std::move( passData ) );
+				ShadowMap::PassData passData
+				{
+					std::make_unique< MatrixUbo >( engine ),
+					std::make_shared< Camera >( cuT( "ShadowMapSpot" )
+						, scene
+						, scene.getCameraRootNode()
+						, std::move( viewport ) ),
+					nullptr,
+					nullptr,
+				};
+				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+				passData.pass = std::make_shared< ShadowMapPassSpot >( engine
+					, *passData.matrixUbo
+					, *passData.culler
+					, shadowMap );
+				result.emplace_back( std::move( passData ) );
+			}
+
 			return result;
 		}
 	}
@@ -158,7 +163,8 @@ namespace castor3d
 		: ShadowMap{ engine
 			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
-			, createPass( engine, scene, *this ) }
+			, createPasses( engine, scene, *this )
+			, shader::SpotShadowMapCount }
 	{
 	}
 
@@ -171,43 +177,49 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_shadowType = light.getShadowType();
-		m_passes[0].pass->update( camera, queues, light, index );
+		m_passes[index].pass->update( camera, queues, light, index );
 	}
 
-	ashes::Semaphore const & ShadowMapSpot::render( ashes::Semaphore const & toWait )
+	ashes::Semaphore const & ShadowMapSpot::render( ashes::Semaphore const & toWait
+		, uint32_t index )
 	{
 		static ashes::ClearColorValue const black{ 0.0f, 0.0f, 0.0f, 1.0f };
 		static ashes::DepthStencilClearValue const zero{ 1.0f, 0 };
-		m_passes[0].pass->updateDeviceDependent();
-		auto & pass = m_passes[0];
+
+		auto & pass = m_passes[index];
+		auto & commandBuffer = *m_passesData[index].commandBuffer;
+		auto & frameBuffer = *m_passesData[index].frameBuffer;
+		auto & finished = *m_passesData[index].finished;
+		auto & blur = *m_passesData[index].blur;
+
+		pass.pass->updateDeviceDependent();
 		auto & timer = pass.pass->getTimer();
 		auto timerBlock = timer.start();
 
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+		commandBuffer.begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
 		timer.notifyPassRender();
-		timer.beginPass( *m_commandBuffer );
-		m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
-			, *m_frameBuffer
+		timer.beginPass( commandBuffer );
+		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
+			, frameBuffer
 			, { zero, black, black }
 			, ashes::SubpassContents::eSecondaryCommandBuffers );
-		m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-		m_commandBuffer->endRenderPass();
-		timer.endPass( *m_commandBuffer );
-		m_commandBuffer->end();
+		commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
+		commandBuffer.endRenderPass();
+		timer.endPass( commandBuffer );
+		commandBuffer.end();
 
 		auto & device = getCurrentDevice( *this );
 		auto * result = &toWait;
-		device.getGraphicsQueue().submit( *m_commandBuffer
+		device.getGraphicsQueue().submit( commandBuffer
 			, *result
 			, ashes::PipelineStageFlag::eColourAttachmentOutput
-			, *m_finished
+			, finished
 			, nullptr );
-		result = m_finished.get();
+		result = &finished;
 
-		if ( m_shadowType == ShadowType::eVariance )
+		if ( static_cast< ShadowMapPassSpot const & >( *pass.pass ).getShadowType() == ShadowType::eVariance )
 		{
-			result = &m_blur->blur( *result );
+			result = &blur.blur( *result );
 		}
 
 		return *result;
@@ -215,7 +227,8 @@ namespace castor3d
 
 	void ShadowMapSpot::debugDisplay( ashes::RenderPass const & renderPass
 		, ashes::FrameBuffer const & frameBuffer
-		, castor::Size const & size, uint32_t index )
+		, castor::Size const & size
+		, uint32_t index )
 	{
 		Size displaySize{ 256u, 256u };
 		Position position{ int32_t( displaySize.getWidth() * ( 0 + index * 2 ) ), int32_t( displaySize.getHeight() * 2u ) };
@@ -232,11 +245,15 @@ namespace castor3d
 			, *m_linearMap.getTexture() );
 	}
 
+	ashes::TextureView const & ShadowMapSpot::getView( uint32_t index )const
+	{
+		return m_shadowMap.getTexture()->getImage( index ).getView();
+	}
+
 	void ShadowMapSpot::doInitialise()
 	{
 		ashes::Extent2D size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
 		auto & device = getCurrentDevice( *this );
-
 		ashes::ImageCreateInfo depth{};
 		depth.arrayLayers = 1u;
 		depth.extent.width = size.width;
@@ -247,40 +264,45 @@ namespace castor3d
 		depth.samples = ashes::SampleCountFlag::e1;
 		depth.usage = ashes::ImageUsageFlag::eDepthStencilAttachment;
 		depth.format = ShadowMapSpot::RawDepthFormat;
-		m_depthTexture = device.createTexture( depth, ashes::MemoryPropertyFlag::eDeviceLocal );
 
-		ashes::ImageViewCreateInfo depthView;
-		depthView.format = depth.format;
-		depthView.viewType = ashes::TextureViewType::e2D;
-		depthView.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
-		depthView.subresourceRange.baseArrayLayer = 0u;
-		depthView.subresourceRange.layerCount = 1u;
-		depthView.subresourceRange.baseMipLevel = 0u;
-		depthView.subresourceRange.levelCount = 1u;
-		m_depthView = m_depthTexture->createView( depthView );
+		ashes::ImageViewCreateInfo view;
+		view.format = depth.format;
+		view.viewType = ashes::TextureViewType::e2D;
+		view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+		view.subresourceRange.baseArrayLayer = 0u;
+		view.subresourceRange.layerCount = 1u;
+		view.subresourceRange.baseMipLevel = 0u;
+		view.subresourceRange.levelCount = 1u;
 
-		auto & renderPass = m_passes[0].pass->getRenderPass();
-		ashes::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *m_depthView );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getDefaultView() );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), m_shadowMap.getTexture()->getDefaultView() );
-		m_frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+		for ( auto i = 0u; i < m_passes.size(); ++i )
+		{
+			auto depthTexture = device.createTexture( depth, ashes::MemoryPropertyFlag::eDeviceLocal );
+			auto depthView = depthTexture->createView( view );
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-
-		m_blur = std::make_unique< GaussianBlur >( *getEngine()
-			, m_shadowMap.getTexture()->getDefaultView()
-			, size
-			, m_shadowMap.getTexture()->getPixelFormat()
-			, 5u );
+			auto & renderPass = m_passes[i].pass->getRenderPass();
+			ashes::FrameBufferAttachmentArray attaches;
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), *depthView );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), m_linearMap.getTexture()->getImage( i ).getView() );
+			attaches.emplace_back( *( renderPass.getAttachments().begin() + 2u ), m_shadowMap.getTexture()->getImage( i ).getView() );
+			m_passesData.push_back(
+				{
+					device.getGraphicsCommandPool().createCommandBuffer(),
+					renderPass.createFrameBuffer( size, std::move( attaches ) ),
+					device.createSemaphore(),
+					std::move( depthTexture ),
+					std::move( depthView ),
+					std::make_unique< GaussianBlur >( *getEngine()
+						, m_shadowMap.getTexture()->getImage( i ).getView()
+						, size
+						, m_shadowMap.getTexture()->getPixelFormat()
+						, 5u )
+				} );
+		}
 	}
 
 	void ShadowMapSpot::doCleanup()
 	{
-		m_blur.reset();
-		m_frameBuffer.reset();
-		m_depthView.reset();
-		m_depthTexture.reset();
+		m_passesData.clear();
 	}
 
 	void ShadowMapSpot::doUpdateFlags( PassFlags & passFlags
@@ -289,6 +311,123 @@ namespace castor3d
 		, SceneFlags & sceneFlags )const
 	{
 		addFlag( programFlags, ProgramFlag::eShadowMapSpot );
+	}
+
+	glsl::Shader ShadowMapSpot::doGetVertexShaderSource( PassFlags const & passFlags
+		, TextureChannels const & textureFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, bool invertNormals )const
+	{
+		// Since their vertex attribute locations overlap, we must not have both set at the same time.
+		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
+		using namespace glsl;
+		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+
+		// Vertex inputs
+		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+			, RenderPass::VertexInputs::PositionLocation );
+		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+			, RenderPass::VertexInputs::NormalLocation );
+		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+			, RenderPass::VertexInputs::TangentLocation );
+		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+			, RenderPass::VertexInputs::TextureLocation );
+		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+			, RenderPass::VertexInputs::BoneIds0Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+			, RenderPass::VertexInputs::BoneIds1Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+			, RenderPass::VertexInputs::Weights0Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+			, RenderPass::VertexInputs::Weights1Location
+			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
+		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+			, RenderPass::VertexInputs::TransformLocation
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto material = writer.declAttribute< Int >( cuT( "material" )
+			, RenderPass::VertexInputs::MaterialLocation
+			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+			, RenderPass::VertexInputs::Position2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+			, RenderPass::VertexInputs::Normal2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+			, RenderPass::VertexInputs::Tangent2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+			, RenderPass::VertexInputs::Texture2Location
+			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
+		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
+
+		// Outputs
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" )
+			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto out = gl_PerVertex{ writer };
+
+		std::function< void() > main = [&]()
+		{
+			auto vertexPosition = writer.declLocale( cuT( "vertexPosition" )
+				, vec4( position.xyz(), 1.0 ) );
+			vtx_texture = texture;
+
+			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
+			{
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, SkinningUbo::computeTransform( writer, programFlags ) );
+			}
+			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, transform );
+			}
+			else
+			{
+				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
+					, c3d_curMtxModel );
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+			{
+				vtx_material = material;
+			}
+			else
+			{
+				vtx_material = c3d_materialIndex;
+			}
+
+			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
+			{
+				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
+				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+			}
+
+			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			vertexPosition = mtxModel * vertexPosition;
+			vertexPosition = c3d_curView * vertexPosition;
+			vtx_viewPosition = vertexPosition.xyz();
+			out.gl_Position() = c3d_projection * vertexPosition;
+		};
+
+		writer.implementFunction< void >( cuT( "main" ), main );
+		return writer.finalise();
 	}
 
 	glsl::Shader ShadowMapSpot::doGetPixelShaderSource( PassFlags const & passFlags
@@ -305,10 +444,10 @@ namespace castor3d
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassSpot::FarPlane ) );
 		shadowMap.end();
 
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
-			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_viewPosition = writer.declInput< Vec3 >( cuT( "vtx_viewPosition" )
 			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
