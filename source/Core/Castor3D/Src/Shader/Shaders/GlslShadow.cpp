@@ -659,7 +659,8 @@ namespace castor3d
 						auto uv = m_writer.declLocale( cuT( "uv" )
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( cuT( "dist" )
-							, texture( shadowMap, vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ).r() );
+							, texture( shadowMap, vec3( uv
+								, m_writer.cast< Float >( cascadeIndex ) ) ).r() );
 
 						IF( m_writer, shadowCoord.w() > 0 )
 						{
@@ -731,8 +732,8 @@ namespace castor3d
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
 					auto projCoords = m_writer.declLocale( cuT( "projCoords" )
 						, lightSpacePosition );
-					projCoords.x() = glsl::fma( projCoords.x(), 0.5_f, 0.5_f );
-					projCoords.y() = glsl::fma( projCoords.y(), 0.5_f, 0.5_f );
+					//projCoords.x() = glsl::fma( projCoords.x(), 0.5_f, 0.5_f );
+					//projCoords.y() = glsl::fma( projCoords.y(), 0.5_f, 0.5_f );
 
 					if ( !m_writer.isZeroToOneDepth() )
 					{

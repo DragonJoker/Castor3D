@@ -14,7 +14,7 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 include_directories( ${Castor3DIncludeDirs} )
 include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/Gl4Renderer/Src )
 include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/Gl4Renderer/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/Gl4RenderSystem/Src )
 
 add_target(
 	${PROJECT_NAME}

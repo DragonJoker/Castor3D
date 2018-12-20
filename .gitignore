@@ -1,6 +1,7 @@
 /.vscode
 /binaries
 /build
+/build*
 /setup
 /doc/x86
 /doc/x64

@@ -28,7 +28,7 @@ function( RenderersBuild )
 				set( OglES3 ${Build} PARENT_SCOPE )
 			endif()
 		else ()
-			if ( ${CASTOR_BUILD_RENDERER_OGL} )
+			if ( ${CASTOR_BUILD_RENDERER_OGL4} )
 				set( Build ${Ogl4} )
 				add_subdirectory( Plugins/Renderers/Gl4RenderSystem )
 				set( Ogl4 ${Build} PARENT_SCOPE )
@@ -74,7 +74,7 @@ function( RenderersSummary msg_in msgtest_in )
 	set( msg_tmp "\n\nRenderers :" )
 
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
-		set( msg_tmp "${msg_tmp}\n    OpenGL 4.X           ${Ogl}" )
+		set( msg_tmp "${msg_tmp}\n    OpenGL 4.X           ${Ogl4}" )
 		set( msg_tmp "${msg_tmp}\n    OpenGL 3.X           ${Ogl3}" )
 		set( msg_tmp "${msg_tmp}\n    Vulkan               ${Vkn}" )
 		if ( WIN32 )
@@ -94,27 +94,27 @@ function( RenderersSetup )
 		PARENT_GROUP Plugins
 	)
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
-		if( ${CASTOR_BUILD_RENDERER_OGL} )
-			cpack_add_component( GlRenderSystem
-				DISPLAY_NAME "GlRenderSystem"
-				DESCRIPTION "Enables OpenGL rendering API in Castor3D."
+		if( ${CASTOR_BUILD_RENDERER_OGL4} )
+			cpack_add_component( Gl4RenderSystem
+				DISPLAY_NAME "Gl4RenderSystem"
+				DESCRIPTION "Enables OpenGL >= 4.3 rendering API in Castor3D."
 				REQUIRED
 				GROUP Renderers
 				DEPENDS CastorUtils Castor3D Ashes
 				INSTALL_TYPES Minimal Full
 			)
-			cpack_add_component( GlRenderSystem_dev
-				DISPLAY_NAME "GlRenderSystem SDK"
-				DESCRIPTION "Development files for GlRenderSystem."
+			cpack_add_component( Gl$RenderSystem_dev
+				DISPLAY_NAME "Gl4RenderSystem SDK"
+				DESCRIPTION "Development files for Gl4RenderSystem."
 				GROUP Development
-				DEPENDS GlRenderSystem CastorUtils_dev Castor3D_dev Ashes_dev
+				DEPENDS Gl4RenderSystem CastorUtils_dev Castor3D_dev Ashes_dev
 				INSTALL_TYPES Developer Full
 			)
 		endif ()
 		if( ${CASTOR_BUILD_RENDERER_OGL3} )
 			cpack_add_component( Gl3RenderSystem
 				DISPLAY_NAME "Gl3RenderSystem"
-				DESCRIPTION "Enables OpenGL 3.2 rendering API in Castor3D."
+				DESCRIPTION "Enables OpenGL >= 3.3 rendering API in Castor3D."
 				REQUIRED
 				GROUP Renderers
 				DEPENDS CastorUtils Castor3D Ashes

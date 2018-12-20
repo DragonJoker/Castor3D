@@ -26,7 +26,7 @@ namespace glsl
 			, castor::String const & name
 			, uint32_t bind
 			, uint32_t set = 0u
-			, Layout layout = Layout::eStd430 );
+			, Layout layout = Layout::eStd140 );
 		GlslWriter_API void end();
 
 		template< typename T >
