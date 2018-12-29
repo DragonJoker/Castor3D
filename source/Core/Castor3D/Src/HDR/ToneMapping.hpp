@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual glsl::Shader doCreate() = 0;
+		C3D_API virtual ShaderPtr doCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
@@ -152,8 +152,8 @@ namespace castor3d
 		HdrConfig & m_config;
 		HdrConfigUbo m_hdrConfigUbo;
 		ashes::SemaphorePtr m_signalFinished;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

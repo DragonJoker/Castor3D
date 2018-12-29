@@ -2,7 +2,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -10,11 +10,13 @@ namespace castor3d
 {
 	RenderSystem::RenderSystem( Engine & engine
 		, String const & name
-		, bool topDown )
+		, bool topDown
+		, bool zeroToOneDepth )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_initialised{ false }
 		, m_topDown{ topDown }
+		, m_zeroToOneDepth{ zeroToOneDepth }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{
@@ -94,15 +96,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	glsl::GlslWriter RenderSystem::createGlslWriter()
-	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, true
-			, true
-			, m_gpuInformations.hasShaderStorageBuffers()
-			, false } };
 	}
 
 	GpuBufferOffset RenderSystem::getBuffer( ashes::BufferTarget type

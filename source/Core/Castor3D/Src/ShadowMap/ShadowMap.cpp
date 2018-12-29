@@ -23,7 +23,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
@@ -109,7 +109,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMap::getVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -122,7 +122,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	glsl::Shader ShadowMap::getGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMap::getGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
@@ -133,7 +133,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMap::getPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMap::getPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -161,32 +161,32 @@ namespace castor3d
 		return m_shadowMap.getTexture()->getDefaultView();
 	}
 
-	glsl::Shader ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMap::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return glsl::Shader{};
+		return ShaderPtr{};
 	}
 
-	void ShadowMap::doDiscardAlpha( glsl::GlslWriter & writer
+	void ShadowMap::doDiscardAlpha( sdw::ShaderWriter & writer
 		, TextureChannels const & textureFlags
 		, ashes::CompareOp alphaFunc
-		, glsl::Int const & materialIndex
+		, sdw::Int const & materialIndex
 		, shader::Materials const & materials )const
 	{
-		using namespace glsl;
+		using namespace sdw;
 
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material->m_opacity() );
+				, material->m_opacity );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-				, material->m_alphaRef() );
+				, material->m_alphaRef );
 
-			auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( cuT( "c3d_mapOpacity" ) );
-			auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
+			auto c3d_mapOpacity = writer.getVariable< sdw::SampledImage2DRgba32 >( cuT( "c3d_mapOpacity" ) );
+			auto vtx_texture = writer.getVariable< sdw::Vec3 >( cuT( "vtx_texture" ) );
 			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			shader::applyAlphaFunc( writer
 				, alphaFunc
@@ -197,9 +197,9 @@ namespace castor3d
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
 			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material->m_opacity() );
+				, material->m_opacity );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-				, material->m_alphaRef() );
+				, material->m_alphaRef );
 
 			shader::applyAlphaFunc( writer
 				, alphaFunc

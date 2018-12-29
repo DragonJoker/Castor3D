@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslIntrinsics.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 #define C3D_DebugSSSTransmittance 0
 
@@ -14,65 +14,55 @@ namespace castor3d
 {
 	namespace shader
 	{
+		class Shadow;
+		class Utils;
+
 		class SssTransmittance
 		{
 		public:
-			static castor::String const TransmittanceProfile;
-			static castor::String const ProfileFactorsCount;
-
-		public:
-			C3D_API SssTransmittance( glsl::GlslWriter & writer
+			C3D_API SssTransmittance( sdw::ShaderWriter & writer
+				, Shadow const & shadow
+				, Utils const & utils
 				, bool shadowMap );
 			C3D_API void declare( LightType type );
 
-			C3D_API glsl::Vec3 compute( shader::BaseMaterial const & material
+			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::DirectionalLight const & light
-				, glsl::Vec2 const & uv
-				, glsl::Vec3 const & position
-				, glsl::Vec3 const & normal
-				, glsl::Float const & translucency )const;
-			C3D_API glsl::Vec3 compute( shader::BaseMaterial const & material
+				, sdw::Vec2 const & uv
+				, sdw::Vec3 const & position
+				, sdw::Vec3 const & normal
+				, sdw::Float const & translucency )const;
+			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::PointLight const & light
-				, glsl::Vec2 const & uv
-				, glsl::Vec3 const & position
-				, glsl::Vec3 const & normal
-				, glsl::Float const & translucency )const;
-			C3D_API glsl::Vec3 compute( shader::BaseMaterial const & material
+				, sdw::Vec2 const & uv
+				, sdw::Vec3 const & position
+				, sdw::Vec3 const & normal
+				, sdw::Float const & translucency )const;
+			C3D_API sdw::Vec3 compute( shader::BaseMaterial const & material
 				, shader::SpotLight const & light
-				, glsl::Vec2 const & uv
-				, glsl::Vec3 const & position
-				, glsl::Vec3 const & normal
-				, glsl::Float const & translucency )const;
+				, sdw::Vec2 const & uv
+				, sdw::Vec3 const & position
+				, sdw::Vec3 const & normal
+				, sdw::Float const & translucency )const;
 
 		private:
-			void doDeclareComputeTransmittance();
-			
-			glsl::Vec3 doCompute( glsl::Float const & lightSpaceDepth
-				, glsl::Int const & transmittanceProfileSize
-				, glsl::Array< glsl::Vec4 > const & transmittanceProfile
-				, glsl::Float const & sssWidth
-				, glsl::Vec3 const & lightSpacePosition
-				, glsl::Vec3 const & worldNormal
-				, glsl::Float const & transmittance
-				, glsl::Vec3 const & lightVector
-				, glsl::Float const & lightFarPlane
-				, glsl::Vec3 const & lightAttenuation )const;
+			sdw::ShaderWriter & m_writer;
+			Shadow const & m_shadow;
+			Utils const & m_utils;
 
-		private:
-			glsl::GlslWriter & m_writer;
 			bool m_shadowMap;
 
-			glsl::Function < glsl::Vec3
-				, glsl::InFloat
-				, glsl::InInt
-				, glsl::InArrayParam< glsl::Vec4 >
-				, glsl::InFloat
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InVec3 > m_compute;
+			sdw::Function < sdw::Vec3
+				, sdw::InFloat
+				, sdw::InInt
+				, sdw::InVec4Array
+				, sdw::InFloat
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InVec3 > m_compute;
 		};
 	}
 }

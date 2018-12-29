@@ -42,7 +42,7 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( castor::String const & name
 			, ashes::ShaderStageFlag type
-			, glsl::Shader const & shader ) = 0;
+			, sdw::Shader const & shader ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -289,7 +289,7 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( castor::String const & name
 			, ashes::ShaderStageFlag type
-			, glsl::Shader const & shader )override
+			, sdw::Shader const & shader )override
 		{
 		}
 		/**@}*/

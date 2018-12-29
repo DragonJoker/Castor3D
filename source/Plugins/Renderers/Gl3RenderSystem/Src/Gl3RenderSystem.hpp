@@ -25,9 +25,9 @@ namespace Gl3Render
 			, castor::String const & appName
 			, bool enableValidation );
 		/**
-		*\copydoc		castor3d::RenderSystem::createGlslWriter
+		*\copydoc		castor3d::RenderSystem::compileShader
 		*/
-		glsl::GlslWriter createGlslWriter()override;
+		castor3d::UInt32Array compileShader( castor3d::ShaderModule const & module )override;
 
 	public:
 		C3D_Gl3_API static castor::String Name;

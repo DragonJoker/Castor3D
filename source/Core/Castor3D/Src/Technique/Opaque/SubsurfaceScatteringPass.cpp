@@ -26,8 +26,8 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include <random>
 
@@ -38,35 +38,35 @@ namespace castor3d
 {
 	namespace
 	{
-		glsl::Shader doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texcoord;
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader doGetBlurProgram( Engine & engine
+		ShaderPtr doGetBlurProgram( Engine & engine
 			, bool isVertic )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer
@@ -75,39 +75,39 @@ namespace castor3d
 					: ( engine.getMaterialsType() == MaterialType::ePbrSpecularGlossiness
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) ) ) );
-			materials->declare();
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 			Ubo config{ writer, SubsurfaceScatteringPass::Config, 4u, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), 6u, 0u );
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 7u, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 8u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 9u, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), 6u, 0u );
+			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), 7u, 0u );
+			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), 8u, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), 9u, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
-			glsl::Utils utils{ writer };
+			shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
 			utils.declareCalcVSPosition();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
 				auto data4 = writer.declLocale( cuT( "data4" )
-					, texture( c3d_mapData4, vtx_texture ) );
+					, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
 				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, vtx_texture ) );
+					, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
 
-				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
+				IF( writer, material->m_subsurfaceScatteringEnabled == 0_i )
 				{
 					writer.discard();
 				}
@@ -115,9 +115,9 @@ namespace castor3d
 
 				// Fetch color and linear depth for current pixel:
 				auto colorM = writer.declLocale( cuT( "colorM" )
-					, texture( c3d_mapLightDiffuse, vtx_texture ) );
+					, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
 				auto depthM = writer.declLocale( cuT( "depthM" )
-					, texture( c3d_mapDepth, vtx_texture ).r() );
+					, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).r() );
 				depthM = utils.calcVSPosition( vtx_texture
 					, depthM
 					, c3d_mtxInvProj ).z();
@@ -137,7 +137,7 @@ namespace castor3d
 						, c3d_pixelSize * vec2( 1.0_f, 0.0_f ) );
 				}
 
-				auto step = writer.declBuiltin< Vec2 >( cuT( "step" ) );
+				auto step = writer.getVariable< Vec2 >( cuT( "step" ) );
 
 				// Calculate the step that we will use to fetch the surrounding pixels,
 				// where "step" is:
@@ -145,7 +145,7 @@ namespace castor3d
 				// The closer the pixel, the stronger the effect needs to be, hence
 				// the factor 1.0 / depthM.
 				auto finalStep = writer.declLocale( cuT( "finalStep" )
-					, translucency * step * material->m_subsurfaceScatteringStrength() * material->m_gaussianWidth() / depthM );
+					, translucency * step * material->m_subsurfaceScatteringStrength * material->m_gaussianWidth / depthM );
 
 				auto offset = writer.declLocale< Vec2 >( cuT( "offset" ) );
 				auto color = writer.declLocale< Vec3 >( cuT( "color" ) );
@@ -159,35 +159,35 @@ namespace castor3d
 					, std::vector< Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
 				auto o = writer.declLocaleArray( cuT( "o" )
 					, 6u
-					, std::vector< Float >{ { -1.0, -0.6667, -0.3333, 0.3333, 0.6667, 1.0 } } );
+					, std::vector< Float >{ { -1.0_f, -0.6667_f, -0.3333_f, 0.3333_f, 0.6667_f, 1.0_f } } );
 
 				// Accumulate the other samples:
 				for ( int i = 0; i < 6; i++ )
 				{
 					// Fetch color and depth for current sample:
-					offset = glsl::fma( vec2( o[i] ), finalStep, vtx_texture );
-					color = texture( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
-					depth = texture( c3d_mapDepth, offset, 0.0_f ).r();
+					offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
+					color = textureLod( c3d_mapLightDiffuse, offset, 0.0_f ).rgb();
+					depth = textureLod( c3d_mapDepth, offset, 0.0_f ).r();
 					depth = utils.calcVSPosition( vtx_texture
 						, depth
 						, c3d_mtxInvProj ).z();
 
 					// If the difference in depth is huge, we lerp color back to "colorM":
 					s = min( 0.0125_f * c3d_correction * abs( depthM - depth ), 1.0_f );
-					color = mix( color, colorM.rgb(), s );
+					color = mix( color, colorM.rgb(), vec3( s ) );
 
 					// Accumulate:
 					pxl_fragColor.rgb() += w[i] * color;
-					writer << glsl::endl;
 				}
 			} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
-		glsl::Shader doGetCombineProgram( Engine & engine )
+
+		ShaderPtr doGetCombineProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			auto materials = shader::createMaterials( writer
@@ -196,21 +196,21 @@ namespace castor3d
 					: ( engine.getMaterialsType() == MaterialType::ePbrSpecularGlossiness
 						? PassFlag::ePbrSpecularGlossiness
 						: PassFlag( 0u ) ) ) );
-			materials->declare();
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
-			auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), 2u, 0u );
-			auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), 3u, 0u );
-			auto c3d_mapBlur1 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur1" ), 4u, 0u );
-			auto c3d_mapBlur2 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur2" ), 5u, 0u );
-			auto c3d_mapBlur3 = writer.declSampler< Sampler2D >( cuT( "c3d_mapBlur3" ), 6u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapLightDiffuse" ), 7u, 0u );
+			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), 2u, 0u );
+			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), 3u, 0u );
+			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur1" ), 4u, 0u );
+			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur2" ), 5u, 0u );
+			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur3" ), 6u, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), 7u, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
 				auto originalWeight = writer.declLocale< Vec4 >( cuT( "originalWeight" )
 					, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
@@ -229,17 +229,17 @@ namespace castor3d
 						2.0062_f
 					} );
 				auto data4 = writer.declLocale( cuT( "data4" )
-					, texture( c3d_mapData4, vtx_texture ) );
+					, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
 				auto data5 = writer.declLocale( cuT( "data5" )
-					, texture( c3d_mapData5, vtx_texture ) );
+					, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
 				auto original = writer.declLocale( cuT( "original" )
-					, texture( c3d_mapLightDiffuse, vtx_texture ) );
+					, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
 				auto blur1 = writer.declLocale( cuT( "blur1" )
-					, texture( c3d_mapBlur1, vtx_texture ) );
+					, textureLod( c3d_mapBlur1, vtx_texture, 0.0_f ) );
 				auto blur2 = writer.declLocale( cuT( "blur2" )
-					, texture( c3d_mapBlur2, vtx_texture ) );
+					, textureLod( c3d_mapBlur2, vtx_texture, 0.0_f ) );
 				auto blur3 = writer.declLocale( cuT( "blur3" )
-					, texture( c3d_mapBlur3, vtx_texture ) );
+					, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
 					, writer.cast< Int >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
@@ -247,7 +247,7 @@ namespace castor3d
 				auto material = materials->getBaseMaterial( materialId );
 
 #if !C3D_DebugSSSTransmittance
-				IF( writer, material->m_subsurfaceScatteringEnabled() == 0_i )
+				IF( writer, material->m_subsurfaceScatteringEnabled == 0_i )
 				{
 					pxl_fragColor = original;
 				}
@@ -263,51 +263,43 @@ namespace castor3d
 				pxl_fragColor = original;
 #endif
 			} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ShaderStageStateArray doCreateBlurProgram( Engine & engine
 			, bool isVertic
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
 			auto & device = getCurrentDevice( engine );
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetBlurProgram( engine, isVertic );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetBlurProgram( engine, isVertic );
 
 			ashes::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return program;
 		}
 
 		ashes::ShaderStageStateArray doCreateCombineProgram( Engine & engine
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
 			auto & device = getCurrentDevice( engine );
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetCombineProgram( engine );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetCombineProgram( engine );
 
 			ashes::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return program;
 		}
 
@@ -653,8 +645,14 @@ namespace castor3d
 			, ashes::BufferTarget::eTransferDst
 			, ashes::MemoryPropertyFlag::eHostVisible ) }
 		, m_intermediate{ doCreateTexture( engine, textureSize ) }
+		, m_blurHorizVertexShader{ ashes::ShaderStageFlag::eVertex, "SssBlurX" }
+		, m_blurHorizPixelShader{ ashes::ShaderStageFlag::eFragment, "SssBlurX" }
 		, m_blurHorizProgram{ doCreateBlurProgram( engine, false, m_blurHorizVertexShader, m_blurHorizPixelShader ) }
+		, m_blurVerticVertexShader{ ashes::ShaderStageFlag::eVertex, "SssBlurY" }
+		, m_blurVerticPixelShader{ ashes::ShaderStageFlag::eFragment, "SssBlurY" }
 		, m_blurVerticProgram{ doCreateBlurProgram( engine, true, m_blurVerticVertexShader, m_blurVerticPixelShader ) }
+		, m_combineVertexShader{ ashes::ShaderStageFlag::eVertex, "SssCombine" }
+		, m_combinePixelShader{ ashes::ShaderStageFlag::eFragment, "SssCombine" }
 		, m_combineProgram{ doCreateCombineProgram( engine, m_combineVertexShader, m_combinePixelShader ) }
 		, m_blurResults
 		{
@@ -770,23 +768,23 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "SSSSS - Blur X" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_blurHorizVertexShader );
+			, *m_blurHorizVertexShader.shader );
 		visitor.visit( cuT( "SSSSS - Blur X" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_blurHorizPixelShader );
+			, *m_blurHorizPixelShader.shader );
 
 		visitor.visit( cuT( "SSSSS - Blur Y" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_blurVerticVertexShader );
+			, *m_blurVerticVertexShader.shader );
 		visitor.visit( cuT( "SSSSS - Blur Y" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_blurVerticPixelShader );
+			, *m_blurVerticPixelShader.shader );
 
 		visitor.visit( cuT( "SSSSS - Combine" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_combineVertexShader );
+			, *m_combineVertexShader.shader );
 		visitor.visit( cuT( "SSSSS - Combine" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_combinePixelShader );
+			, *m_combinePixelShader.shader );
 	}
 }

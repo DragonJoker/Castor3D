@@ -12,8 +12,8 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -38,7 +38,7 @@ namespace castor3d
 			auto & device = getCurrentDevice( engine );
 			ashes::ImageLayout layout = first
 				? ashes::ImageLayout::eUndefined
-				: ashes::ImageLayout::eColourAttachmentOptimal;
+				: ashes::ImageLayout::eShaderReadOnlyOptimal;
 			ashes::AttachmentLoadOp loadOp = first
 				? ashes::AttachmentLoadOp::eClear
 				: ashes::AttachmentLoadOp::eLoad;
@@ -53,7 +53,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.attachments[1].format = diffuseView.getFormat();
 			renderPass.attachments[1].loadOp = loadOp;
@@ -62,7 +62,7 @@ namespace castor3d
 			renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[1].initialLayout = layout;
-			renderPass.attachments[1].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.attachments[2].format = specularView.getFormat();
 			renderPass.attachments[2].loadOp = loadOp;
@@ -71,7 +71,7 @@ namespace castor3d
 			renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[2].initialLayout = layout;
-			renderPass.attachments[2].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
@@ -107,8 +107,8 @@ namespace castor3d
 
 	DirectionalLightPass::Program::Program( Engine & engine
 		, DirectionalLightPass & pass
-		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl
+		, ShaderModule const & vtx
+		, ShaderModule const & pxl
 		, bool hasShadows )
 		: LightPass::Program{ engine, vtx, pxl, hasShadows }
 		, m_lightPass{ pass }
@@ -278,7 +278,7 @@ namespace castor3d
 
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 
 	uint32_t DirectionalLightPass::getCount()const
@@ -295,25 +295,25 @@ namespace castor3d
 		m_pipeline->program->bind( light );
 	}
 
-	glsl::Shader DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	ShaderPtr DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+		auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
 
 		// Shader outputs
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
-			out.gl_Position() = c3d_projection * vec4( position, 0.0, 1.0 );
+			out.gl_out.gl_Position = c3d_projection * vec4( position, 0.0, 1.0 );
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram()

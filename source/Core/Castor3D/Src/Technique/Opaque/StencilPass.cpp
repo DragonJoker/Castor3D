@@ -18,7 +18,7 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
@@ -56,25 +56,25 @@ namespace castor3d
 			return device.createRenderPass( renderPass );
 		}
 
-		glsl::Shader doGetVertexShader( RenderSystem & renderSystem )
+		ShaderPtr doGetVertexShader( RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
 			UBO_MATRIX( writer, 0u, 0u );
 			UBO_MODEL_MATRIX( writer, 1u, 0u );
-			auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+			auto vertex = writer.declInput< Vec3 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				out.gl_Position() = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0 );
+				out.gl_out.gl_Position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0 );
 			} );
 
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -126,9 +126,7 @@ namespace castor3d
 		{
 			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 		};
-		m_program[0].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, doGetVertexShader( renderSystem ).getSource() ) );
+		m_program[0].module->loadShader( renderSystem.compileShader( { ashes::ShaderStageFlag::eVertex, "StencilPass", doGetVertexShader( renderSystem ) } ) );
 
 		ashes::DepthStencilState dsstate;
 		dsstate.depthTestEnable = true;

@@ -129,7 +129,7 @@ namespace castor
 		return uiReturn;
 	}
 
-	uint64_t TextFile::copytoString( String & p_strOut )
+	uint64_t TextFile::copyToString( String & p_strOut )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );

@@ -133,14 +133,14 @@ namespace castor3d
 }
 
 #define UBO_MODEL( writer, binding, set )\
-	glsl::Ubo model{ writer\
+	sdw::Ubo model{ writer\
 		, castor3d::ModelUbo::BufferModel\
 		, binding\
 		, set\
-		, glsl::Ubo::Layout::eStd140 };\
-	auto c3d_shadowReceiver = model.declMember< glsl::Int >( castor3d::ModelUbo::ShadowReceiver );\
-	auto c3d_materialIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::MaterialIndex );\
-	auto c3d_envMapIndex = model.declMember< glsl::Int >( castor3d::ModelUbo::EnvironmentIndex );\
+		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_shadowReceiver = model.declMember< sdw::Int >( castor3d::ModelUbo::ShadowReceiver );\
+	auto c3d_materialIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::MaterialIndex );\
+	auto c3d_envMapIndex = model.declMember< sdw::Int >( castor3d::ModelUbo::EnvironmentIndex );\
 	model.end()
 
 #endif

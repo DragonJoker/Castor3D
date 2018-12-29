@@ -8,7 +8,7 @@
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/Program.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -35,8 +35,8 @@ namespace castor3d
 
 	PointLightPass::Program::Program( Engine & engine
 		, PointLightPass & lightPass
-		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl
+		, ShaderModule const & vtx
+		, ShaderModule const & pxl
 		, bool hasShadows )
 		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
 		, m_lightPass{ lightPass }
@@ -98,7 +98,7 @@ namespace castor3d
 
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 
 	Point3fArray PointLightPass::doGenerateVertices()const

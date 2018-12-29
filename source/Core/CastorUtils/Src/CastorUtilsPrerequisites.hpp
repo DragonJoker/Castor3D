@@ -502,6 +502,7 @@ namespace castor
 	DECLARE_VECTOR( uint8_t, Byte );
 	DECLARE_VECTOR( SphericalVertexSPtr, SphericalVertexPtr );
 	DECLARE_VECTOR( int32_t, Int32 );
+	DECLARE_VECTOR( uint32_t, UInt32 );
 	DECLARE_VECTOR( String, String );
 	DECLARE_VECTOR( Path, Path );
 	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );

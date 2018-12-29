@@ -141,7 +141,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -149,7 +149,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -157,7 +157,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -165,7 +165,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags

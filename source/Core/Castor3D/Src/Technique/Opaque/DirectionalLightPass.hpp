@@ -48,8 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, DirectionalLightPass & pass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english
@@ -131,7 +131,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */

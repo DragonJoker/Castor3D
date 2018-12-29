@@ -50,7 +50,7 @@ namespace castor
 
 			if ( result )
 			{
-				file.copytoString( content );
+				file.copyToString( content );
 			}
 		}
 

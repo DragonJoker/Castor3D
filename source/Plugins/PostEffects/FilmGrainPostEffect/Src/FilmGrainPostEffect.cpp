@@ -28,10 +28,9 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
 
@@ -41,104 +40,106 @@ namespace film_grain
 {
 	namespace
 	{
-		static String const FilmGrainUbo = cuT( "FilmGrainUbo" );
-		static String const PixelSize = cuT( "c3d_pixelSize" );
-		static String const NoiseIntensity = cuT( "c3d_noiseIntensity" );
-		static String const Exposure = cuT( "c3d_exposure" );
-		static String const Time = cuT( "c3d_time" );
-		static String const SrcTex = cuT( "c3d_srcTex" );
-		static String const NoiseTex = cuT( "c3d_noiseTex" );
+		static std::string const FilmGrainUbo = "FilmGrainUbo";
+		static std::string const PixelSize = "c3d_pixelSize";
+		static std::string const NoiseIntensity = "c3d_noiseIntensity";
+		static std::string const Exposure = "c3d_exposure";
+		static std::string const Time = "c3d_time";
+		static std::string const SrcTex = "c3d_srcTex";
+		static std::string const NoiseTex = "c3d_noiseTex";
 		static uint32_t constexpr NoiseMapCount = 6u;
 
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
-				out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			glsl::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
+			sdw::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 1u, 0u );
-			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 2u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_noiseTex = writer.declSampledImage< FImg3DR32 >( NoiseTex, 1u, 0u );
+			auto c3d_srcTex = writer.declSampledImage< FImg2DRgba32 >( SrcTex, 2u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto plx_fragColor = writer.declFragData< Vec4 >( cuT( "plx_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 			
-			auto overlay = writer.implementFunction< Vec3 >( cuT( "overlay" )
+			auto overlay = writer.implementFunction< Vec3 >( "overlay"
 				, [&]( Vec3 const & a
 					, Vec3 const & b )
 				{
-					auto comp = writer.declLocale( cuT( "comp" )
+					auto comp = writer.declLocale( "comp"
 						, pow( abs( b ), vec3( 2.2_f ) ) );
 
-					IF( writer, cuT( "comp.x < 0.5 && comp.y < 0.5 && comp.z < 0.5" ) )
+					IF( writer, comp.x() < 0.5_f && comp.y() < 0.5_f && comp.z() < 0.5_f )
 					{
 						writer.returnStmt( 2.0_f * a * b );
 					}
 					FI;
 
-					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * writer.paren( 1.0_f - a ) * writer.paren( 1.0_f - b ) );
+					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
 				}
-				, InVec3{ &writer, cuT( "a" ) }
-				, InVec3{ &writer, cuT( "b" ) } );
+				, InVec3{ writer, "a" }
+				, InVec3{ writer, "b" } );
 
-			auto addNoise = writer.implementFunction< Vec3 >( cuT( "addNoise" )
+			auto addNoise = writer.implementFunction< Vec3 >( "addNoise"
 				, [&]( Vec3 const & color
 					, Vec2 const & texcoord )
 				{
-					auto coord = writer.declLocale( cuT( "coord" )
-						, texcoord * 2.0 );
+					auto coord = writer.declLocale( "coord"
+						, texcoord * 2.0_f );
 					coord.x() *= c3d_pixelSize.y() / c3d_pixelSize.x();
-					auto noise = writer.declLocale( cuT( "noise" )
-						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ).r() );
-					auto exposureFactor = writer.declLocale( cuT( "exposureFactor" )
+					auto noise = writer.declLocale( "noise"
+						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ) );
+					auto exposureFactor = writer.declLocale( "exposureFactor"
 						, c3d_exposure / 2.0 );
 					exposureFactor = sqrt( exposureFactor );
-					auto t = writer.declLocale( cuT( "t" )
+					auto t = writer.declLocale( "t"
 						, mix( 3.5_f * c3d_noiseIntensity
 							, 1.13_f * c3d_noiseIntensity
 							, exposureFactor ) );
 					writer.returnStmt( overlay( color
 						, vec3( mix( 0.5_f, noise, t ) ) ) );
 				}
-				, InVec3{ &writer, cuT( "color" ) }
-				, InVec2{ &writer, cuT( "texcoord" ) } );
+				, InVec3{ writer, "color" }
+				, InVec2{ writer, "texcoord" } );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, texture( c3d_srcTex, vtx_texture ).xyz() );
-				colour = addNoise( colour, vtx_texture );
-				plx_fragColor = vec4( colour, 1.0 );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					auto colour = writer.declLocale( "colour"
+						, texture( c3d_srcTex, vtx_texture ).xyz() );
+					colour = addNoise( colour, vtx_texture );
+					pxl_fragColor = vec4( colour, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		template< typename T, size_t N >
@@ -214,8 +215,10 @@ namespace film_grain
 		};
 
 		uint32_t maxSize = buffers[0]->size();
-		auto staging = device.createStagingTexture( m_noiseView->getFormat()
-			, { buffers[0]->dimensions().getWidth(), buffers[0]->dimensions().getHeight() } );
+		auto dim = buffers[0]->dimensions();
+		auto format = castor3d::convert( buffers[0]->format() );
+		auto staging = device.createStagingTexture( format
+			, ashes::Extent2D{ dim.getWidth(), dim.getHeight() } );
 		ashes::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
@@ -227,7 +230,7 @@ namespace film_grain
 					m_noiseView->getSubResourceRange().baseArrayLayer,
 					m_noiseView->getSubResourceRange().layerCount,
 				}
-				, m_noiseView->getFormat()
+				, format
 				, { 0, 0, int32_t( i ) }
 				, { image.extent.width, image.extent.height }
 				, buffers[i]->constPtr()
@@ -277,6 +280,8 @@ namespace film_grain
 			, params
 			, false }
 		, m_surface{ *renderSystem.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "FilmGrain" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "FilmGrain" }
 	{
 		String name = cuT( "FilmGrain2D" );
 
@@ -312,10 +317,10 @@ namespace film_grain
 	{
 		visitor.visit( cuT( "FilmGrain" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "FilmGrain" )
@@ -335,21 +340,18 @@ namespace film_grain
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
-		m_vertexShader = getVertexProgram( getRenderSystem() );
-		m_pixelShader = getFragmentProgram( getRenderSystem() );
+		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 		// Create the render pass.
 		ashes::RenderPassCreateInfo renderPass;

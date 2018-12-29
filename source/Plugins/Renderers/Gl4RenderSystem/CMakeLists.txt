@@ -20,7 +20,7 @@ add_target(
 	${PROJECT_NAME}
 	plugin
 	"Castor3D"
-	"${CastorMinLibraries};${OpenGlLibraries};Gl4Renderer"
+	"${CastorMinLibraries};${OpenGlLibraries};Gl4Renderer;CompilerGlsl"
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl4RenderSystemPch.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl4RenderSystemPch.cpp
 	"-DGl4Renderer_STATIC"

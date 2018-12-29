@@ -14,28 +14,28 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API PhongLightingModel( glsl::GlslWriter & writer );
-			C3D_API void computeCombined( glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
+			C3D_API PhongLightingModel( sdw::ShaderWriter & writer );
+			C3D_API void computeCombined( sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Float const & shininess
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Float const & shininess
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 
@@ -52,57 +52,57 @@ namespace castor3d
 				, bool volumetric )override;
 
 			void doComputeLight( Light const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & lightDirection
-				, glsl::Float const & shininess
-				, glsl::Float const & shadowFactor
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & lightDirection
+				, sdw::Float const & shininess
+				, sdw::Float const & shadowFactor
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 			void doDeclareComputeLight();
 
 		public:
 			C3D_API static const castor::String Name;
-			glsl::Function< glsl::Void
+			sdw::Function< sdw::Void
 				, InLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
-			glsl::Function< glsl::Void
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InDirectionalLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeDirectional;
-			glsl::Function< glsl::Void
-				, PointLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InPointLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computePoint;
-			glsl::Function< glsl::Void
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InSpotLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			glsl::Function< glsl::Void
-				, PointLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InPointLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOnePoint;
-			glsl::Function< glsl::Void
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InSpotLight
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOneSpot;
 		};

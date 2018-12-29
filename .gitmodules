@@ -16,3 +16,6 @@
 [submodule "source/external/glslang"]
 	path = source/external/glslang
 	url = https://github.com/KhronosGroup/glslang.git
+[submodule "source/external/ShaderWriter"]
+	path = source/external/ShaderWriter
+	url = https://github.com/DragonJoker/ShaderWriter.git

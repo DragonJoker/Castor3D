@@ -10,6 +10,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct SkinningData
+	{
+		std::unique_ptr < sdw::ArraySsboT< sdw::Mat4 > > ssbo;
+		std::unique_ptr < sdw::Ubo > ubo;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.10.0
@@ -91,7 +96,7 @@ namespace castor3d
 		 *\param[in]	set		L'index du descriptor set.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
-		C3D_API static void declare( glsl::GlslWriter & writer
+		C3D_API static SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t binding
 			, uint32_t set
 			, ProgramFlags const & flags );
@@ -119,7 +124,8 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */
-		C3D_API static glsl::Mat4 computeTransform( glsl::GlslWriter & writer
+		C3D_API static sdw::Mat4 computeTransform( SkinningData & data
+			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags );
 		/**
 		 *\~english

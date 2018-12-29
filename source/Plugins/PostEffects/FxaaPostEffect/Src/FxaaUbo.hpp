@@ -45,7 +45,7 @@ namespace fxaa
 }
 
 #define UBO_FXAA( writer, binding, set )\
-	glsl::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
+	sdw::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
 	auto c3d_pixelSize = fxaa.declMember< Vec2 >( FxaaUbo::PixelSize );\
 	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
 	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\

@@ -23,11 +23,11 @@
 
 #include <Graphics/Image.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 #define C3D_GenerateBRDFIntegration 0
 

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Texture/TextureUnit.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace film_grain
 {
@@ -98,8 +98,8 @@ namespace film_grain
 		castor::PreciseTimer m_timer;
 		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_quad;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

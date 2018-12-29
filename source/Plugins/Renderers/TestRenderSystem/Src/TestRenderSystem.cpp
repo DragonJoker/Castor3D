@@ -4,7 +4,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslWriter.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -20,7 +20,7 @@ namespace TestRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true )
+		: castor3d::RenderSystem( engine, Name, true, true )
 	{
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
@@ -92,17 +92,33 @@ namespace TestRender
 			, enableValidation );
 	}
 
-	glsl::GlslWriter RenderSystem::createGlslWriter()
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ 450
-			, true
-			, true
-			, true
-			, true
-			, true
-			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
-			, true
-			, true
-			, true } };
+		castor3d::UInt32Array result;
+		std::string glsl;
+
+		if ( module.shader )
+		{
+			glsl = glsl::compileGlsl( *module.shader
+				, ast::SpecialisationInfo{}
+				, glsl::GlslConfig
+				{
+					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					false,
+					false,
+					false,
+					false,
+					false,
+				} );
+		}
+		else
+		{
+			glsl = module.source;
+		}
+
+		auto size = glsl.size() + 1u;
+		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.data(), glsl.data(), glsl.size() );
+		return result;
 	}
 }

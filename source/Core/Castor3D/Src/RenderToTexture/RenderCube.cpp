@@ -17,7 +17,7 @@
 #include <Pipeline/Scissor.hpp>
 #include <Pipeline/Viewport.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -76,10 +76,10 @@ namespace castor3d
 					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
 				};
 
-				if ( device.getRenderer().getClipDirection() == ashes::ClipDirection::eBottomUp )
-				{
-					std::swap( result[2], result[3] );
-				}
+				//if ( device.getRenderer().getClipDirection() == ashes::ClipDirection::eBottomUp )
+				//{
+				//	std::swap( result[2], result[3] );
+				//}
 
 				return result;
 			}();

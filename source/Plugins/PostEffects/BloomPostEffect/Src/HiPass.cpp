@@ -20,14 +20,13 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -35,56 +34,59 @@ namespace Bloom
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					vtx_texture = texcoord;
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getPixelProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0f ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0 );
+					auto maxComponent = writer.declLocale( "maxComponent"
+						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
+					maxComponent = max( maxComponent, pxl_fragColor.b() );
 
-				IF( writer, maxComponent > 1.0_f )
-				{
-					pxl_fragColor.xyz() /= maxComponent;
-				}
-				ELSE
-				{
-					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
-				FI;
-			} );
-			return writer.finalise();
+					IF( writer, maxComponent > 1.0_f )
+					{
+						pxl_fragColor.xyz() /= maxComponent;
+					}
+					ELSE
+					{
+						pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
+					FI;
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
@@ -139,20 +141,16 @@ namespace Bloom
 		: castor3d::RenderQuad{ renderSystem, true }
 		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ getVertexProgram( renderSystem ) }
-		, m_pixelShader{ getPixelProgram( renderSystem ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "BloomHiPass", getVertexProgram( renderSystem ) }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "BloomHiPass", getPixelProgram( renderSystem ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_surface{ *renderSystem.getEngine() }
 	{
 		ashes::ShaderStageStateArray shaderStages;
 		shaderStages.push_back( { m_device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		shaderStages.push_back( { m_device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		shaderStages[0].module->loadShader( castor3d::compileGlslToSpv( m_device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		shaderStages[1].module->loadShader( castor3d::compileGlslToSpv( m_device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		shaderStages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		shaderStages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 #if !Bloom_DebugHiPass
 		size.width >>= 1;

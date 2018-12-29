@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -44,8 +44,8 @@ namespace smaa
 		ashes::UniformBufferPtr< castor::Point4i > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

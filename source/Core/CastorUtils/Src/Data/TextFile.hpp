@@ -106,7 +106,7 @@ namespace castor
 		 *\param[out]	p_strOut	Reçoit le contenu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t copytoString( String & p_strOut );
+		CU_API uint64_t copyToString( String & p_strOut );
 		/**
 		 *\~english
 		 *\brief		Writes a text into the file

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "GlslShadow.hpp"
 
-#include <GlslIntrinsics.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d
 {
@@ -14,24 +14,32 @@ namespace castor3d
 	{
 		struct FragmentInput
 		{
-			C3D_API explicit FragmentInput( glsl::GlslWriter & writer );
-			C3D_API FragmentInput( glsl::InVec3 const & viewVertex
-				, glsl::InVec3 const & worldVertex
-				, glsl::InVec3 const & worldNormal );
-			glsl::InVec3 m_viewVertex;
-			glsl::InVec3 m_worldVertex;
-			glsl::InVec3 m_worldNormal;
+			C3D_API FragmentInput( FragmentInput const & rhs );
+			C3D_API explicit FragmentInput( sdw::ShaderWriter & writer );
+			C3D_API FragmentInput( sdw::InVec2 const & clipVertex
+				, sdw::InVec3 const & viewVertex
+				, sdw::InVec3 const & worldVertex
+				, sdw::InVec3 const & worldNormal );
+
+			C3D_API ast::expr::Expr * getExpr()const;
+			C3D_API sdw::Shader * getShader()const;
+
+			sdw::InVec2 m_clipVertex;
+			sdw::InVec3 m_viewVertex;
+			sdw::InVec3 m_worldVertex;
+			sdw::InVec3 m_worldNormal;
+
+		private:
+			ast::expr::ExprPtr m_expr;
 		};
 
-		C3D_API castor::String paramToString( castor::String & sep
+		C3D_API ast::expr::ExprList makeFnArg( sdw::Shader & shader
 			, FragmentInput const & value );
-
-		C3D_API castor::String toString( FragmentInput const & value );
 
 		class LightingModel
 		{
 		public:
-			C3D_API LightingModel( glsl::GlslWriter & writer );
+			C3D_API LightingModel( sdw::ShaderWriter & writer );
 			C3D_API void declareModel( uint32_t & index
 				, uint32_t maxCascades );
 			C3D_API void declareDirectionalModel( ShadowType shadows
@@ -45,12 +53,17 @@ namespace castor3d
 				, bool volumetric
 				, uint32_t & index );
 			// Calls
-			C3D_API DirectionalLight getDirectionalLight( glsl::Int const & index )const;
-			C3D_API PointLight getPointLight( glsl::Int const & index )const;
-			C3D_API SpotLight getSpotLight( glsl::Int const & index )const;
+			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;
+			C3D_API PointLight getPointLight( sdw::Int const & index )const;
+			C3D_API SpotLight getSpotLight( sdw::Int const & index )const;
+
+			inline Shadow const & getShadowModel()const
+			{
+				return *m_shadowModel;
+			}
 
 		protected:
-			C3D_API Light getBaseLight( glsl::Type const & value )const;
+			C3D_API Light getBaseLight( sdw::Int const & value )const;
 			C3D_API void doDeclareLight();
 			C3D_API void doDeclareDirectionalLight();
 			C3D_API void doDeclarePointLight();
@@ -78,14 +91,20 @@ namespace castor3d
 			C3D_API static uint32_t const UboBindingPoint;
 
 		protected:
-			glsl::GlslWriter & m_writer;
+			sdw::ShaderWriter & m_writer;
 			std::shared_ptr< Shadow > m_shadowModel;
-			glsl::Function< shader::DirectionalLight
-				, glsl::InInt > m_getDirectionalLight;
-			glsl::Function< shader::PointLight
-				, glsl::InInt > m_getPointLight;
-			glsl::Function< shader::SpotLight
-				, glsl::InInt > m_getSpotLight;
+			sdw::Function< shader::Light
+				, sdw::InInt > m_getBaseLight;
+			sdw::Function< shader::DirectionalLight
+				, sdw::InInt > m_getDirectionalLight;
+			sdw::Function< shader::PointLight
+				, sdw::InInt > m_getPointLight;
+			sdw::Function< shader::SpotLight
+				, sdw::InInt > m_getSpotLight;
+			std::unique_ptr< sdw::Struct > m_lightType;
+			std::unique_ptr< sdw::Struct > m_directionalLightType;
+			std::unique_ptr< sdw::Struct > m_pointLightType;
+			std::unique_ptr< sdw::Struct > m_spotLightType;
 		};
 	}
 }

@@ -156,17 +156,17 @@ namespace castor3d
 }
 
 #define UBO_MATRIX( writer, binding, set )\
-	glsl::Ubo matrices{ writer\
+	sdw::Ubo matrices{ writer\
 		, castor3d::MatrixUbo::BufferMatrix\
 		, binding\
 		, set };\
-	auto c3d_projection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::Projection );\
-	auto c3d_invProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::InvProjection );\
-	auto c3d_curView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurView );\
-	auto c3d_prvView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvView );\
-	auto c3d_curViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
-	auto c3d_prvViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
-	auto c3d_jitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::Jitter );\
+	auto c3d_projection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::Projection );\
+	auto c3d_invProjection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::InvProjection );\
+	auto c3d_curView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurView );\
+	auto c3d_prvView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvView );\
+	auto c3d_curViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
+	auto c3d_prvViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
+	auto c3d_jitter = matrices.declMember< sdw::Vec2 >( castor3d::MatrixUbo::Jitter );\
 	matrices.end()
 
 #endif

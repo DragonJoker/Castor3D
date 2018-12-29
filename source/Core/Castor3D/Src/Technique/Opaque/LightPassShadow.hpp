@@ -304,8 +304,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, LightPassShadow & lightPass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl )
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl )
 				: my_program_type( engine, lightPass, vtx, pxl, true )
 			{
 			}

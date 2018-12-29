@@ -7,7 +7,7 @@
 #include <RenderPass/ClearValue.hpp>
 #include <Sync/Fence.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -17,50 +17,50 @@ namespace castor3d
 		: RenderQuad{ renderSystem, false, false }
 		, m_program{ renderSystem }
 	{
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RenderDepthQuad" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texcoord;
-					out.gl_Position() = vec4( position.x(), position.y(), 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
-			vtx = writer.finalise();
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RenderDepthQuad" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDepth, vtx_texture.xy() ).x() );
 					depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
 					pxl_fragColor = vec4( depth, depth, depth, 1.0 );
 				} );
-			pxl = writer.finalise();
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_program.setSource( ashes::ShaderStageFlag::eVertex, vtx );
-		m_program.setSource( ashes::ShaderStageFlag::eFragment, pxl );
+		m_program.setSource( ashes::ShaderStageFlag::eVertex, std::move( vtx.shader ) );
+		m_program.setSource( ashes::ShaderStageFlag::eFragment, std::move( pxl.shader ) );
 	}
 
 	RenderDepthQuad::~RenderDepthQuad()

@@ -41,8 +41,8 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -55,38 +55,38 @@ namespace castor3d
 {
 	namespace
 	{
-		glsl::Shader doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
 			writer.implementFunction< void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		glsl::Shader doGetLinearisePixelProgram( Engine & engine )
+		ShaderPtr doGetLinearisePixelProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			Pcb clipInfo{ writer, cuT( "ClipInfo" ), cuT( "clip" ) };
-			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ), 1u );
+			Ubo clipInfo{ writer, cuT( "ClipInfo" ), 1u, 0u, ast::type::MemoryLayout::eStd140 };
+			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ) );
 			clipInfo.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), 0u, 0u );
+			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
@@ -95,95 +95,87 @@ namespace castor3d
 				, [&]()
 				{
 					auto depth = writer.declLocale( cuT( "depth" )
-						, texelFetch( c3d_mapDepth, ivec2( gl_FragCoord.xy() ), 0 ).r() );
+						, texelFetch( c3d_mapDepth, ivec2( in.gl_FragCoord.xy() ), 0_i ).r() );
 					pxl_fragColor = c3d_clipInfo[0] / writer.paren( c3d_clipInfo[1] * depth + c3d_clipInfo[2] );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		glsl::Shader doGetMinifyPixelProgram( Engine & engine )
+		ShaderPtr doGetMinifyPixelProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			Pcb previousLevel{ writer, cuT( "PreviousLevel" ), cuT( "previous" ) };
-			auto c3d_textureSize = previousLevel.declMember< IVec2 >( cuT( "c3d_textureSize" ), 1u );
-			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ), 2u );
+			Ubo previousLevel{ writer, cuT( "PreviousLevel" ), 1u, 0u, ast::type::MemoryLayout::eStd140 };
+			auto c3d_textureSize = previousLevel.declMember< IVec2 >( cuT( "c3d_textureSize" ) );
+			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ) );
 			previousLevel.end();
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( cuT( "c3d_mapDepth" ), 0u, 0u );
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), 0u, 0u );
+			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
 					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
-						, ivec2( gl_FragCoord.xy() ) );
+						, ivec2( in.gl_FragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
 					if ( renderSystem.getCurrentDevice()->getRenderer().getFeatures().hasStorageBuffers )
 					{
 						pxl_fragColor = texelFetch( c3d_mapDepth
 							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
-								, ivec2( 0_i )
-								, c3d_textureSize - ivec2( 1_i ) )
+								, ivec2( 0_i, 0_i )
+								, c3d_textureSize - ivec2( 1_i, 1_i ) )
 							, 0_i ).r();
 					}
 					else
 					{
 						pxl_fragColor = texelFetch( c3d_mapDepth
 							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
-								, ivec2( 0_i )
-								, c3d_textureSize - ivec2( 1_i ) )
+								, ivec2( 0_i, 0_i )
+								, c3d_textureSize - ivec2( 1_i, 1_i ) )
 							, c3d_previousLevel ).r();
 					}
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ShaderStageStateArray doGetLineariseProgram( Engine & engine
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
 			auto & device = getCurrentDevice( engine );
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetLinearisePixelProgram( engine );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetLinearisePixelProgram( engine );
 			ashes::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return program;
 		}
 
 		ashes::ShaderStageStateArray doGetMinifyProgram( Engine & engine
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
 			auto & device = getCurrentDevice( engine );
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetMinifyPixelProgram( engine );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetMinifyPixelProgram( engine );
 			ashes::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return program;
 		}
 
@@ -357,9 +349,13 @@ namespace castor3d
 			, ashes::Filter::eNearest
 			, ashes::Filter::eNearest ) }
 		, m_commandBuffer{ getCurrentDevice( m_engine ).getGraphicsCommandPool().createCommandBuffer() }
-		, m_finished{ getCurrentDevice( engine ).createSemaphore() }
-		, m_clipInfo{ ashes::ShaderStageFlag::eFragment, { { 0u, ashes::ConstantFormat::eVec3f } } }
+		, m_finished{ getCurrentDevice( m_engine ).createSemaphore() }
+		, m_clipInfo{ ashes::makeUniformBuffer< Point3f >( getCurrentDevice( m_engine ), 1u, 0u, ashes::MemoryPropertyFlag::eHostVisible ) }
+		, m_lineariseVertexShader{ ashes::ShaderStageFlag::eVertex, "LineariseDepth" }
+		, m_linearisePixelShader{ ashes::ShaderStageFlag::eFragment, "LineariseDepth" }
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine, m_lineariseVertexShader, m_linearisePixelShader ) }
+		, m_minifyVertexShader{ ashes::ShaderStageFlag::eVertex, "Minify" }
+		, m_minifyPixelShader{ ashes::ShaderStageFlag::eFragment, "Minify" }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine, m_minifyVertexShader, m_minifyPixelShader ) }
 	{
 		doInitialiseLinearisePass();
@@ -389,7 +385,8 @@ namespace castor3d
 
 		if ( m_clipInfoValue.isDirty() )
 		{
-			*m_clipInfo.getData() = m_clipInfoValue;
+			m_clipInfo->getData() = m_clipInfoValue;
+			m_clipInfo->upload( 0u );
 			doPrepareFrame();
 		}
 	}
@@ -416,17 +413,17 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "SSAO - Linearise" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_lineariseVertexShader );
+			, *m_lineariseVertexShader.shader );
 		visitor.visit( cuT( "SSAO - Linearise" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_linearisePixelShader );
+			, *m_linearisePixelShader.shader );
 
 		visitor.visit( cuT( "SSAO - Minify" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_minifyVertexShader );
+			, *m_minifyVertexShader.shader );
 		visitor.visit( cuT( "SSAO - Minify" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_minifyPixelShader );
+			, *m_minifyPixelShader.shader );
 	}
 
 	void LineariseDepthPass::doInitialiseLinearisePass()
@@ -442,17 +439,20 @@ namespace castor3d
 		auto & device = getCurrentDevice( renderSystem );
 		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
+			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 		};
 		m_lineariseDescriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		ashes::PushConstantRange pushConstants{ ashes::ShaderStageFlag::eFragment, 0u, ashes::getSize( ashes::Format::eR32G32B32_SFLOAT ) };
-		m_linearisePipelineLayout = device.createPipelineLayout( *m_lineariseDescriptorLayout, pushConstants );
+		m_linearisePipelineLayout = device.createPipelineLayout( *m_lineariseDescriptorLayout );
 
 		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
 		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
 			, m_depthBuffer
 			, *m_lineariseSampler );
+		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 1u )
+			, *m_clipInfo
+			, 0u );
 		m_lineariseDescriptor->update();
 		m_linearisePipeline = m_linearisePipelineLayout->createPipeline( ashes::GraphicsPipelineCreateInfo
 		{
@@ -478,11 +478,11 @@ namespace castor3d
 		auto size = m_result.getTexture()->getDimensions();
 		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
+			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 		};
 		m_minifyDescriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		ashes::PushConstantRange pushConstants{ ashes::ShaderStageFlag::eFragment, 0u, uint32_t( sizeof( MinifyPipeline::Configuration ) ) };
-		m_minifyPipelineLayout = device.createPipelineLayout( *m_minifyDescriptorLayout, pushConstants );
+		m_minifyPipelineLayout = device.createPipelineLayout( *m_minifyDescriptorLayout );
 
 		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
 		uint32_t index = 1u;
@@ -496,6 +496,11 @@ namespace castor3d
 		viewInfo.subresourceRange.baseMipLevel = 0u;
 		viewInfo.subresourceRange.levelCount = 1u;
 
+		m_previousLevel = ashes::makeUniformBuffer< MinifyConfiguration >( device
+			, MaxMipLevel
+			, 0u
+			, ashes::MemoryPropertyFlag::eHostVisible );
+
 		for ( auto & pipeline : m_minifyPipelines )
 		{
 			size.width >>= 1;
@@ -507,18 +512,15 @@ namespace castor3d
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
 				, *pipeline.sourceView
 				, *m_minifySampler );
+			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 1u )
+				, *m_previousLevel
+				, index - 1u );
 			pipeline.descriptor->update();
 			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *pipeline.targetView );
 			pipeline.frameBuffer = m_renderPass->createFrameBuffer( ashes::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
-			pipeline.previousLevel = std::make_unique< ashes::PushConstantsBuffer< MinifyPipeline::Configuration > >( ashes::ShaderStageFlag::eFragment
-				, ashes::PushConstantArray
-				{
-					{ offsetof( MinifyPipeline::Configuration, textureSize ), ashes::ConstantFormat::eVec2i },
-					{ offsetof( MinifyPipeline::Configuration, previousLevel ), ashes::ConstantFormat::eInt },
-				} );
-			auto & data = *pipeline.previousLevel->getData();
+			auto & data = m_previousLevel->getData( index - 1u );
 			data.previousLevel = index - 1;
 			data.textureSize = Point2i{ size.width << 1, size.height << 1 };
 			pipeline.pipeline = m_minifyPipelineLayout->createPipeline( ashes::GraphicsPipelineCreateInfo
@@ -539,6 +541,8 @@ namespace castor3d
 			sourceView = pipeline.targetView.get();
 			++index;
 		}
+
+		m_previousLevel->upload( 0u, MaxMipLevel );
 	}
 
 	void LineariseDepthPass::doCleanupLinearisePass()
@@ -556,12 +560,12 @@ namespace castor3d
 		for ( auto & pipeline : m_minifyPipelines )
 		{
 			pipeline.pipeline.reset();
-			pipeline.previousLevel.reset();
 			pipeline.frameBuffer.reset();
 			pipeline.descriptor.reset();
 			pipeline.targetView.reset();
 		}
 
+		m_previousLevel.reset();
 		m_minifyDescriptorPool.reset();
 		m_minifyPipelineLayout.reset();
 		m_minifyDescriptorLayout.reset();
@@ -581,7 +585,6 @@ namespace castor3d
 			, ashes::SubpassContents::eInline );
 		m_commandBuffer->bindPipeline( *m_linearisePipeline );
 		m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
-		m_commandBuffer->pushConstants( *m_linearisePipelineLayout, m_clipInfo );
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
@@ -602,7 +605,6 @@ namespace castor3d
 				, ashes::SubpassContents::eInline );
 			m_commandBuffer->bindPipeline( *pipeline.pipeline );
 			m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
-			m_commandBuffer->pushConstants( *m_minifyPipelineLayout, *pipeline.previousLevel );
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();

@@ -177,7 +177,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -88,8 +88,8 @@ namespace motion_blur
 		std::unique_ptr< Quad > m_quad;
 		Configuration m_configuration;
 		ashes::UniformBufferPtr< Configuration > m_ubo;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		TimePoint m_saved;
 		bool m_fpsScale{ true };
 	};

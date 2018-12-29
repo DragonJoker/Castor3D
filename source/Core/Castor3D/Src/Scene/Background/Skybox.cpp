@@ -22,10 +22,10 @@
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslUtils.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {

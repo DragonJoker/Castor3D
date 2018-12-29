@@ -8,7 +8,7 @@
 
 #include <Descriptor/DescriptorSetLayoutBinding.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -55,26 +55,38 @@ namespace castor3d
 		m_ubo->upload();
 	}
 
-	void SkinningUbo::declare( glsl::GlslWriter & writer
+	SkinningData SkinningUbo::declare( sdw::ShaderWriter & writer
 		, uint32_t binding
 		, uint32_t set
 		, ProgramFlags const & flags )
 	{
+		SkinningData result;
+
 		if ( checkFlag( flags, ProgramFlag::eSkinning ) )
 		{
 			if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 			{
-				glsl::Ssbo skinning{ writer, SkinningUbo::BufferSkinning, binding, set };
-				auto c3d_mtxBones = skinning.declMemberArray< glsl::Mat4 >( SkinningUbo::Bones, checkFlag( flags, ProgramFlag::eSkinning ) );
-				skinning.end();
+				result.ssbo = std::make_unique< sdw::ArraySsboT< sdw::Mat4 > >( writer
+					, SkinningUbo::BufferSkinning
+					, writer.getTypesCache().getMat4x4F()
+					, ast::type::MemoryLayout::eStd140
+					, binding
+					, set );
 			}
 			else
 			{
-				glsl::Ubo skinning{ writer, SkinningUbo::BufferSkinning, binding, set };
-				auto c3d_mtxBones = skinning.declMember< glsl::Mat4 >( SkinningUbo::Bones, 400, checkFlag( flags, ProgramFlag::eSkinning ) );
-				skinning.end();
+				result.ubo = std::make_unique< sdw::Ubo >( writer
+					, SkinningUbo::BufferSkinning
+					, binding
+					, set );
+				result.ubo->declMember< sdw::Mat4 >( SkinningUbo::Bones
+					, 400
+					, checkFlag( flags, ProgramFlag::eSkinning ) );
+				result.ubo->end();
 			}
 		}
+
+		return result;
 	}
 
 	ashes::DescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
@@ -90,44 +102,47 @@ namespace castor3d
 		return ashes::DescriptorSetLayoutBinding{ binding, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex };
 	}
 
-	glsl::Mat4 SkinningUbo::computeTransform( glsl::GlslWriter & writer
+	sdw::Mat4 SkinningUbo::computeTransform( SkinningData & data
+		, sdw::ShaderWriter & writer
 		, ProgramFlags const & flags )
 	{
-		using namespace glsl;
-		auto bone_ids0 = writer.getBuiltin< IVec4 >( cuT( "bone_ids0" ) );
-		auto bone_ids1 = writer.getBuiltin< IVec4 >( cuT( "bone_ids1" ) );
-		auto weights0 = writer.getBuiltin< Vec4 >( cuT( "weights0" ) );
-		auto weights1 = writer.getBuiltin< Vec4 >( cuT( "weights1" ) );
-		auto c3d_curMtxModel = writer.getBuiltin< glsl::Mat4 >( ModelMatrixUbo::CurMtxModel );
-		auto c3d_mtxBones = writer.getBuiltinArray< glsl::Mat4 >( SkinningUbo::Bones );
+		using namespace sdw;
+		auto bone_ids0 = writer.getVariable< IVec4 >( cuT( "bone_ids0" ) );
+		auto bone_ids1 = writer.getVariable< IVec4 >( cuT( "bone_ids1" ) );
+		auto weights0 = writer.getVariable< Vec4 >( cuT( "weights0" ) );
+		auto weights1 = writer.getVariable< Vec4 >( cuT( "weights1" ) );
+		auto c3d_curMtxModel = writer.getVariable< sdw::Mat4 >( ModelMatrixUbo::CurMtxModel );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			auto gl_InstanceID = writer.getBuiltin< glsl::Int >( writer.getInstanceID() );
-			auto transform = writer.getBuiltin< glsl::Mat4 >( cuT( "transform" ) );
+			auto gl_InstanceID = writer.getVariable< sdw::Int >( cuT( "gl_InstanceID" ) );
+			auto transform = writer.getVariable< sdw::Mat4 >( cuT( "transform" ) );
 			auto mtxInstanceOffset = writer.declLocale< Int >( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
-			mtxBoneTransform = c3d_mtxBones[mtxInstanceOffset + bone_ids0[0_i]] * weights0[0_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[1_i]] * weights0[1_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[2_i]] * weights0[2_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids0[3_i]] * weights0[3_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[0_i]] * weights1[0_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[1_i]] * weights1[1_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[2_i]] * weights1[2_i];
-			mtxBoneTransform += c3d_mtxBones[mtxInstanceOffset + bone_ids1[3_i]] * weights1[3_i];
+
+			auto & ssbo = *data.ssbo;
+			mtxBoneTransform = ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids0[0_i] )] * weights0[0_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids0[1_i] )] * weights0[1_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids0[2_i] )] * weights0[2_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids0[3_i] )] * weights0[3_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids1[0_i] )] * weights1[0_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids1[1_i] )] * weights1[1_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids1[2_i] )] * weights1[2_i];
+			mtxBoneTransform += ssbo[writer.cast< UInt >( mtxInstanceOffset + bone_ids1[3_i] )] * weights1[3_i];
 			mtxBoneTransform = transform * mtxBoneTransform;
 		}
 		else
 		{
-			mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
-			mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
+			auto bones = data.ubo->getMemberArray< sdw::Mat4 >( SkinningUbo::Bones );
+			mtxBoneTransform = bones[bone_ids0[0_i]] * weights0[0_i];
+			mtxBoneTransform += bones[bone_ids0[1_i]] * weights0[1_i];
+			mtxBoneTransform += bones[bone_ids0[2_i]] * weights0[2_i];
+			mtxBoneTransform += bones[bone_ids0[3_i]] * weights0[3_i];
+			mtxBoneTransform += bones[bone_ids1[0_i]] * weights1[0_i];
+			mtxBoneTransform += bones[bone_ids1[1_i]] * weights1[1_i];
+			mtxBoneTransform += bones[bone_ids1[2_i]] * weights1[2_i];
+			mtxBoneTransform += bones[bone_ids1[3_i]] * weights1[3_i];
 			mtxBoneTransform = c3d_curMtxModel * mtxBoneTransform;
 		}
 

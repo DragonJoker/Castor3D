@@ -112,11 +112,11 @@ namespace castor3d
 }
 
 #define UBO_BILLBOARD( writer, binding, set )\
-	glsl::Ubo billboard{ writer\
+	sdw::Ubo billboard{ writer\
 		, castor3d::BillboardUbo::BufferBillboard\
 		, binding\
 		, set\
-		, glsl::Ubo::Layout::eStd140 };\
+		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_dimensions = billboard.declMember< Vec2 >( castor3d::BillboardUbo::Dimensions );\
 	billboard.end()
 

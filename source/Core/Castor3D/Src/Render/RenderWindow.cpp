@@ -15,7 +15,7 @@
 #include <RenderPass/RenderSubpassState.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Design/BlockGuard.hpp>
 
@@ -490,55 +490,53 @@ namespace castor3d
 	void RenderWindow::doCreateProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RenderWindow" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position, 0.0, 1.0 );
-			} );
-			vtx = writer.finalise();
+			writer.implementFunction< sdw::Void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+				} );
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RenderWindow" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
-			} );
-			pxl = writer.finalise();
+			writer.implementFunction< sdw::Void >( cuT( "main" )
+				, [&]()
+				{
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
+				} );
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		m_program.clear();
 		m_program.push_back( { m_device->createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		m_program.push_back( { m_device->createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		m_program[0].module->loadShader( compileGlslToSpv( *m_device
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		m_program[1].module->loadShader( compileGlslToSpv( *m_device
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		m_program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+		m_program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 	}
 
 	void RenderWindow::doCreateSwapChainDependent()

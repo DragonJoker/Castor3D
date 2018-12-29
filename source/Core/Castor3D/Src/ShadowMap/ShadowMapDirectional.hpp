@@ -82,7 +82,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -90,7 +90,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
-		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags

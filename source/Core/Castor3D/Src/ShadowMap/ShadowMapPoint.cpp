@@ -24,7 +24,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Graphics/Image.hpp>
 #include <Miscellaneous/BlockTracker.hpp>
@@ -348,7 +348,7 @@ namespace castor3d
 		addFlag( programFlags, ProgramFlag::eShadowMapPoint );
 	}
 
-	glsl::Shader ShadowMapPoint::doGetVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPoint::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -357,54 +357,54 @@ namespace castor3d
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
 		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
 			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
-		using namespace glsl;
-		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+		auto normal = writer.declInput< Vec3 >( cuT( "normal" )
 			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( cuT( "material" )
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+		auto normal2 = writer.declInput< Vec3 >( cuT( "normal2" )
 			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+		auto tangent2 = writer.declInput< Vec3 >( cuT( "tangent2" )
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
@@ -414,7 +414,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
 		{
@@ -425,7 +425,7 @@ namespace castor3d
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" )
-					, SkinningUbo::computeTransform( writer, programFlags ) );
+					, SkinningUbo::computeTransform( skinningData, writer, programFlags ) );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -454,28 +454,28 @@ namespace castor3d
 				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
-			auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+			auto mtxModel = writer.getVariable< Mat4 >( cuT( "mtxModel" ) );
 			vertexPosition = mtxModel * vertexPosition;
 			vtx_worldPosition = vertexPosition.xyz();
 			vertexPosition = c3d_curView * vertexPosition;
-			out.gl_Position() = c3d_projection * vertexPosition;
+			out.gl_out.gl_Position = c3d_projection * vertexPosition;
 		};
 
-		writer.implementFunction< void >( cuT( "main" ), main );
-		return writer.finalise();
+		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
-	glsl::Shader ShadowMapPoint::doGetPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPoint::doGetPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ashes::CompareOp alphaFunc )const
 	{
-		using namespace glsl;
-		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// Fragment Intputs
-		Ubo shadowMap{ writer, ShadowMapPassPoint::ShadowMapUbo, ShadowMapPassPoint::UboBindingPoint };
+		Ubo shadowMap{ writer, ShadowMapPassPoint::ShadowMapUbo, ShadowMapPassPoint::UboBindingPoint, 0u };
 		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( ShadowMapPassPoint::WorldLightPosition ) );
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
 		shadowMap.end();
@@ -486,17 +486,17 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+		auto c3d_mapOpacity( writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapOpacity" )
 			, MinBufferIndex
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		auto materials = shader::createMaterials( writer, passFlags );
-		materials->declare();
+		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 
 		// Fragment Outputs
-		auto pxl_linear = writer.declFragData< Float >( cuT( "pxl_linear" ), 0u );
-		auto pxl_variance = writer.declFragData< Vec2 >( cuT( "pxl_variance" ), 1u );
+		auto pxl_linear = writer.declOutput< Float >( cuT( "pxl_linear" ), 0u );
+		auto pxl_variance = writer.declOutput< Vec2 >( cuT( "pxl_variance" ), 1u );
 
 		auto main = [&]()
 		{
@@ -519,7 +519,7 @@ namespace castor3d
 			pxl_variance.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
 		};
 
-		writer.implementFunction< void >( cuT( "main" ), main );
-		return writer.finalise();
+		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 }

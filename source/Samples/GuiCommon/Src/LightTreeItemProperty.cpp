@@ -28,9 +28,9 @@ namespace GuiCommon
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
-	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, Light & p_light )
-		: TreeItemProperty( p_light.getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
-		, m_light( p_light )
+	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
+		: TreeItemProperty( light.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_LIGHT )
+		, m_light( light )
 	{
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
 		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
@@ -48,31 +48,31 @@ namespace GuiCommon
 	{
 	}
 
-	void LightTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void LightTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) ) );
-		p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( toBGRPacked( RgbColour::fromRGB( m_light.getColour() ) ) ) ) );
-		p_grid->Append( new Point2fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.getIntensity() ) );
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( m_light.getName() ) ) );
+		grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( toBGRPacked( RgbColour::fromRGB( m_light.getColour() ) ) ) ) );
+		grid->Append( new Point2fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( m_light.getIntensity() ) );
 
 		switch ( m_light.getLightType() )
 		{
 		case LightType::eDirectional:
-			doCreateDirectionalLightProperties( p_grid, m_light.getDirectionalLight() );
+			doCreateDirectionalLightProperties( grid, m_light.getDirectionalLight() );
 			break;
 
 		case LightType::ePoint:
-			doCreatePointLightProperties( p_grid, m_light.getPointLight() );
+			doCreatePointLightProperties( grid, m_light.getPointLight() );
 			break;
 
 		case LightType::eSpot:
-			doCreateSpotLightProperties( p_grid, m_light.getSpotLight() );
+			doCreateSpotLightProperties( grid, m_light.getSpotLight() );
 			break;
 		}
 	}
 
-	void LightTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	void LightTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
-		wxPGProperty * property = p_event.GetProperty();
+		wxPGProperty * property = event.GetProperty();
 
 		if ( property )
 		{
@@ -108,36 +108,36 @@ namespace GuiCommon
 		}
 	}
 
-	void LightTreeItemProperty::doCreateDirectionalLightProperties( wxPropertyGrid * p_grid, DirectionalLightSPtr p_light )
+	void LightTreeItemProperty::doCreateDirectionalLightProperties( wxPropertyGrid * grid, DirectionalLightSPtr light )
 	{
 	}
 
-	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * p_grid, PointLightSPtr p_light )
+	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, PointLightSPtr light )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POINT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->getAttenuation() ) );
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POINT_LIGHT ) );
+		grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
 	}
 
-	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * p_grid, SpotLightSPtr p_light )
+	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, SpotLightSPtr light )
 	{
-		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->getAttenuation() ) );
-		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->getCutOff().degrees() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->getExponent() );
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
+		grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
+		grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( light->getCutOff().degrees() );
+		grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( light->getExponent() );
 	}
 
-	void LightTreeItemProperty::OnColourChange( RgbColour const & p_value )
+	void LightTreeItemProperty::OnColourChange( RgbColour const & value )
 	{
-		doApplyChange( [p_value, this]()
+		doApplyChange( [value, this]()
 		{
-			m_light.setColour( p_value );
+			m_light.setColour( value );
 		} );
 	}
 
-	void LightTreeItemProperty::OnIntensityChange( Point2f const & p_value )
+	void LightTreeItemProperty::OnIntensityChange( Point2f const & value )
 	{
-		float d = p_value[0];
-		float s = p_value[1];
+		float d = value[0];
+		float s = value[1];
 
 		doApplyChange( [d, s, this]()
 		{
@@ -145,11 +145,11 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
+	void LightTreeItemProperty::OnAttenuationChange( Point3f const & value )
 	{
-		float x = p_value[0];
-		float y = p_value[1];
-		float z = p_value[2];
+		float x = value[0];
+		float y = value[1];
+		float z = value[2];
 
 		doApplyChange( [x, y, z, this]()
 		{
@@ -166,19 +166,19 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnCutOffChange( double p_value )
+	void LightTreeItemProperty::OnCutOffChange( double value )
 	{
-		doApplyChange( [p_value, this]()
+		doApplyChange( [value, this]()
 		{
-			m_light.getSpotLight()->setCutOff( Angle::fromDegrees( p_value ) );
+			m_light.getSpotLight()->setCutOff( Angle::fromDegrees( value ) );
 		} );
 	}
 
-	void LightTreeItemProperty::OnExponentChange( double p_value )
+	void LightTreeItemProperty::OnExponentChange( double value )
 	{
-		doApplyChange( [p_value, this]()
+		doApplyChange( [value, this]()
 		{
-			m_light.getSpotLight()->setExponent( float( p_value ) );
+			m_light.getSpotLight()->setExponent( float( value ) );
 		} );
 	}
 }

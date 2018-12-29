@@ -18,7 +18,7 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/Fence.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -153,39 +153,38 @@ namespace castor3d
 
 	ashes::ShaderStageStateArray BrdfPrefilter::doCreateProgram()
 	{
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "BRDFPrefilter" };
 		{
-			using namespace glsl;
-			GlslWriter writer{ m_renderSystem.createGlslWriter() };
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			std::function< void() > main = [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position, 0.0, 1.0 );
-			};
-
-			writer.implementFunction< void >( cuT( "main" ), main );
-			vtx = writer.finalise();
+			writer.implementFunction< sdw::Void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+				} );
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "BRDFPrefilter" };
 		{
-			using namespace glsl;
-			GlslWriter writer{ m_renderSystem.createGlslWriter() };
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Outputs
-			auto pxl_fragColor = writer.declFragData< Vec2 >( cuT( "pxl_FragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec2 >( "pxl_FragColor", 0u );
 
 			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
 				, [&]( UInt const & inBits )
@@ -193,22 +192,22 @@ namespace castor3d
 					auto bits = writer.declLocale( cuT( "bits" )
 						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_ui ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_ui ) >> 4u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
+					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1u );
+					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2u );
+					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4u );
+					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "inBits" ) } );
+				, InUInt{ writer, cuT( "inBits" ) } );
 
-			auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
+			auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
 				, [&]( UInt const & i
 					, UInt const & n )
 				{
 					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
 				}
-				, InUInt{ &writer, cuT( "i" ) }
-				, InUInt{ &writer, cuT( "n" ) } );
+				, InUInt{ writer, "i" }
+				, InUInt{ writer, "n" } );
 
 			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
 				, [&]( Vec2 const & xi
@@ -216,119 +215,120 @@ namespace castor3d
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.declLocale( cuT( "a" )
+					auto a = writer.declLocale( "a"
 						, roughness * roughness );
 
-					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * xi.x() );
-					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
+					auto phi = writer.declLocale( "phi"
+						, PiMult2< float > * xi.x() );
+					auto cosTheta = writer.declLocale( "cosTheta"
 						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * xi.y() ) ) );
-					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
+					auto sinTheta = writer.declLocale( "sinTheta"
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
 					// from spherical coordinates to cartesian coordinates
-					auto H = writer.declLocale< Vec3 >( cuT( "H" ) );
+					auto H = writer.declLocale< Vec3 >( "H" );
 					H.x() = cos( phi ) * sinTheta;
 					H.y() = sin( phi ) * sinTheta;
 					H.z() = cosTheta;
 
 					// from tangent-space vector to world-space sample vector
-					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
-					auto tangent = writer.declLocale( cuT( "tangent" )
+					auto up = writer.declLocale( "up"
+						, writer.ternary( sdw::abs( n.z() ) < 0.999_f
+							, vec3( 0.0_f, 0.0_f, 1.0_f )
+							, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
+					auto tangent = writer.declLocale( "tangent"
 						, normalize( cross( up, n ) ) );
-					auto bitangent = writer.declLocale( cuT( "bitangent" )
+					auto bitangent = writer.declLocale( "bitangent"
 						, cross( n, tangent ) );
 
-					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
+					auto sampleVec = writer.declLocale( "sampleVec"
 						, tangent * H.x() + bitangent * H.y() + n * H.z() );
 					writer.returnStmt( normalize( sampleVec ) );
 				}
-				, InVec2{ &writer, cuT( "xi" ) }
-				, InVec3{ &writer, cuT( "n" ) }
-				, InFloat{ &writer, cuT( "roughness" ) } );
+				, InVec2{ writer, "xi" }
+				, InVec3{ writer, "n" }
+				, InFloat{ writer, "roughness" } );
 
-			auto geometrySchlickGGX = writer.implementFunction< Float >( cuT( "GeometrySchlickGGX" )
+			auto geometrySchlickGGX = writer.implementFunction< Float >( "GeometrySchlickGGX"
 				, [&]( Float const & product
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto r = writer.declLocale( cuT( "r" )
+					auto r = writer.declLocale( "r"
 						, roughness );
-					auto k = writer.declLocale( cuT( "k" )
+					auto k = writer.declLocale( "k"
 						, writer.paren( r * r ) / 2.0_f );
 
-					auto nominator = writer.declLocale( cuT( "num" )
+					auto nominator = writer.declLocale( "num"
 						, product );
-					auto denominator = writer.declLocale( cuT( "denom" )
+					auto denominator = writer.declLocale( "denom"
 						, product * writer.paren( 1.0_f - k ) + k );
 
 					writer.returnStmt( nominator / denominator );
 				}
-				, InFloat( &writer, cuT( "product" ) )
-				, InFloat( &writer, cuT( "roughness" ) ) );
+				, InFloat( writer, "product" )
+				, InFloat( writer, "roughness" ) );
 
-			auto geometrySmith = writer.implementFunction< Float >( cuT( "GeometrySmith" )
+			auto geometrySmith = writer.implementFunction< Float >( "GeometrySmith"
 				, [&]( Float const & NdotV
 					, Float const & NdotL
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto ggx2 = writer.declLocale( cuT( "ggx2" )
+					auto ggx2 = writer.declLocale( "ggx2"
 						, geometrySchlickGGX( NdotV, roughness ) );
-					auto ggx1 = writer.declLocale( cuT( "ggx1" )
+					auto ggx1 = writer.declLocale( "ggx1"
 						, geometrySchlickGGX( NdotL, roughness ) );
 
 					writer.returnStmt( ggx1 * ggx2 );
 				}
-				, InFloat( &writer, cuT( "NdotV" ) )
-				, InFloat( &writer, cuT( "NdotL" ) )
-				, InFloat( &writer, cuT( "roughness" ) ) );
+				, InFloat( writer, "NdotV" )
+				, InFloat( writer, "NdotL" )
+				, InFloat( writer, "roughness" ) );
 
-			auto integrateBRDF = writer.implementFunction< Vec2 >( cuT( "IntegrateBRDF" )
+			auto integrateBRDF = writer.implementFunction< Vec2 >( "IntegrateBRDF"
 				, [&]( Float const & NdotV
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto V = writer.declLocale< Vec3 >( cuT( "V" ) );
+					auto V = writer.declLocale< Vec3 >( "V" );
 					V.x() = sqrt( 1.0 - NdotV * NdotV );
 					V.y() = 0.0_f;
 					V.z() = NdotV;
-					auto N = writer.declLocale( cuT( "N" )
+					auto N = writer.declLocale( "N"
 						, vec3( 0.0_f, 0.0, 1.0 ) );
 
-					auto A = writer.declLocale( cuT( "A" )
+					auto A = writer.declLocale( "A"
 						, 0.0_f );
-					auto B = writer.declLocale( cuT( "B" )
+					auto B = writer.declLocale( "B"
 						, 0.0_f );
 
-					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
-						, 1024_ui );
+					auto sampleCount = writer.declLocale( "sampleCount"
+						, 1024_u );
 
-					FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
+					FOR( writer, UInt, i, 0u, i < sampleCount, ++i )
 					{
-						auto xi = writer.declLocale( cuT( "xi" )
+						auto xi = writer.declLocale( "xi"
 							, hammersley( i, sampleCount ) );
-						auto H = writer.declLocale( cuT( "H" )
+						auto H = writer.declLocale( "H"
 							, importanceSample( xi, N, roughness ) );
-						auto L = writer.declLocale( cuT( "L" )
+						auto L = writer.declLocale( "L"
 							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
-						auto NdotL = writer.declLocale( cuT( "NdotL" )
-							, max( L.z(), 0.0 ) );
-						auto NdotH = writer.declLocale( cuT( "NdotH" )
-							, max( H.z(), 0.0 ) );
-						auto VdotH = writer.declLocale( cuT( "VdotH" )
-							, max( dot( V, H ), 0.0 ) );
+						auto NdotL = writer.declLocale( "NdotL"
+							, max( L.z(), 0.0_f ) );
+						auto NdotH = writer.declLocale( "NdotH"
+							, max( H.z(), 0.0_f ) );
+						auto VdotH = writer.declLocale( "VdotH"
+							, max( dot( V, H ), 0.0_f ) );
 
-						IF( writer, "NdotL > 0.0" )
+						IF( writer, NdotL > 0.0_f )
 						{
-							auto G = writer.declLocale( cuT( "G" )
-								, geometrySmith( NdotV, max( dot( N, L ), 0.0 ), roughness ) );
-							auto G_Vis = writer.declLocale( cuT( "G_Vis" )
+							auto G = writer.declLocale( "G"
+								, geometrySmith( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
+							auto G_Vis = writer.declLocale( "G_Vis"
 								, writer.paren( G * VdotH ) / writer.paren( NdotH * NdotV ) );
-							auto Fc = writer.declLocale( cuT( "Fc" )
+							auto Fc = writer.declLocale( "Fc"
 								, pow( 1.0 - VdotH, 5.0_f ) );
 
 							A += writer.paren( 1.0_f - Fc ) * G_Vis;
@@ -342,16 +342,16 @@ namespace castor3d
 					B /= writer.cast< Float >( sampleCount );
 					writer.returnStmt( vec2( A, B ) );
 				}
-				, InFloat( &writer, cuT( "NdotV" ) )
-				, InFloat( &writer, cuT( "roughness" ) ) );
+				, InFloat( writer, "NdotV" )
+				, InFloat( writer, "roughness" ) );
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), 1.0_f - vtx_texture.y() );
 				} );
 
-			pxl = writer.finalise();
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ShaderStageStateArray program
@@ -359,12 +359,8 @@ namespace castor3d
 			{ getCurrentDevice( m_renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 			{ getCurrentDevice( m_renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( compileGlslToSpv( getCurrentDevice( m_renderSystem )
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		program[1].module->loadShader( compileGlslToSpv( getCurrentDevice( m_renderSystem )
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		program[0].module->loadShader( m_renderSystem.compileShader( vtx ) );
+		program[1].module->loadShader( m_renderSystem.compileShader( pxl ) );
 		return program;
 	}
 }

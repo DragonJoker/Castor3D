@@ -29,7 +29,7 @@
 
 #include <Graphics/Font.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
@@ -608,7 +608,7 @@ namespace castor3d
 		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
@@ -730,54 +730,55 @@ namespace castor3d
 
 	ashes::ShaderStageStateArray OverlayRenderer::doCreateOverlayProgram( TextureChannels const & textureFlags )
 	{
-		using namespace glsl;
+		using namespace sdw;
 		using namespace shader;
 
 		// Vertex shader
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "Overlay" };
 		{
-			auto writer = getRenderSystem()->createGlslWriter();
+			VertexWriter writer;
 
 			UBO_MATRIX( writer, MatrixUboBinding, 0u );
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
 			uint32_t index = 0u;
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto text = writer.declAttribute< Vec2 >( cuT( "text" ), 2u, checkFlag( textureFlags, TextureChannel::eText ) );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texture = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto text = writer.declInput< Vec2 >( cuT( "text" ), 2u, checkFlag( textureFlags, TextureChannel::eText ) );
 
 			// Shader outputs
 			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), 0u, checkFlag( textureFlags, TextureChannel::eText ) );
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
-					vtx_text = text;
-				}
+					if ( checkFlag( textureFlags, TextureChannel::eText ) )
+					{
+						vtx_text = text;
+					}
 
-				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
-				{
-					vtx_texture = texture;
-				}
+					if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
+					{
+						vtx_texture = texture;
+					}
 
-				auto size = writer.declLocale( cuT( "size" )
-					, c3d_renderRatio * c3d_renderSize );
-				out.gl_Position() = c3d_projection * vec4( size * writer.paren( c3d_position + position )
-					, 0.0
-					, 1.0 );
-			} );
+					auto size = writer.declLocale( cuT( "size" )
+						, vec2( c3d_renderRatio.x() * writer.cast< Float >( c3d_renderSize.x() )
+							, c3d_renderRatio.y() * writer.cast< Float >( c3d_renderSize.y() ) ) );
+					out.gl_out.gl_Position = c3d_projection * vec4( size * writer.paren( c3d_position + position )
+						, 0.0_f
+						, 1.0_f );
+				} );
 
-			vtx = writer.finalise();
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		// Pixel shader
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "Overlay" };
 		{
-			auto writer = getRenderSystem()->createGlslWriter();
+			FragmentWriter writer;
 
 			std::unique_ptr< Materials > materials;
 
@@ -796,7 +797,7 @@ namespace castor3d
 				break;
 			}
 
-			materials->declare();
+			materials->declare( getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 
 			// Shader inputs
@@ -806,60 +807,56 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
 				, 1u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapText = writer.declSampler< Sampler2D >( cuT( "c3d_mapText" )
+			auto c3d_mapText = writer.declSampledImage< FImg2DR32 >( cuT( "c3d_mapText" )
 				, TextMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eText ) );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" )
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" )
 				, DiffuseMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
-			auto c3d_mapOpacity = writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+			auto c3d_mapOpacity = writer.declSampledImage< FImg2DR32 >( cuT( "c3d_mapOpacity" )
 				, OpacityMapBinding
 				, 0u
 				, checkFlag( textureFlags, TextureChannel::eOpacity ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto material = materials->getBaseMaterial( c3d_materialIndex );
-				auto diffuse = writer.declLocale( cuT( "diffuse" )
-					, material->m_diffuse() );
-				auto alpha = writer.declLocale( cuT( "alpha" )
-					, material->m_opacity() );
-
-				if ( checkFlag( textureFlags, TextureChannel::eText ) )
 				{
-					alpha *= texture( c3d_mapText, vtx_text, 0.0_f ).r();
-				}
+					auto material = materials->getBaseMaterial( c3d_materialIndex );
+					auto diffuse = writer.declLocale( cuT( "diffuse" )
+						, material->m_diffuse() );
+					auto alpha = writer.declLocale( cuT( "alpha" )
+						, material->m_opacity );
 
-				if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
-				{
-					diffuse = texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz();
-				}
+					if ( checkFlag( textureFlags, TextureChannel::eText ) )
+					{
+						alpha *= texture( c3d_mapText, vtx_text, 0.0_f );
+					}
 
-				if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
-				{
-					alpha *= texture( c3d_mapOpacity, vtx_texture, 0.0_f ).r();
-				}
+					if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
+					{
+						diffuse = texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz();
+					}
 
-				pxl_fragColor = vec4( diffuse.xyz(), alpha );
-			} );
+					if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
+					{
+						alpha *= texture( c3d_mapOpacity, vtx_texture, 0.0_f );
+					}
 
-			pxl = writer.finalise();
+					pxl_fragColor = vec4( diffuse.xyz(), alpha );
+				} );
+
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ShaderStageStateArray result;
 		result.push_back( { getCurrentDevice( *this ).createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		result.push_back( { getCurrentDevice( *this ).createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( compileGlslToSpv( getCurrentDevice( *this )
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		result[1].module->loadShader( compileGlslToSpv( getCurrentDevice( *this )
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		result[0].module->loadShader( getRenderSystem()->compileShader( vtx ) );
+		result[1].module->loadShader( getRenderSystem()->compileShader( pxl ) );
 		return result;
 	}
 

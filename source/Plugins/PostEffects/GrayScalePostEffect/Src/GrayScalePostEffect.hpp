@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -76,8 +76,8 @@ namespace GrayScale
 		ashes::UniformBufferPtr< castor::Point3f > m_configUbo;
 		std::unique_ptr< Quad > m_quad;
 		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

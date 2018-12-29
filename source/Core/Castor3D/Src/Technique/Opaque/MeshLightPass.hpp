@@ -49,8 +49,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english
@@ -151,7 +151,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\~english
 		 *\return		The vertices needed to draw the mesh.

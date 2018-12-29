@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 
 #include <Design/OwnedBy.hpp>
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -94,24 +94,28 @@ namespace castor3d
 			return m_blurYQuad.getCommandBuffer();
 		}
 
-		inline glsl::Shader const & getBlurXVertexShader()const
+		inline sdw::Shader const & getBlurXVertexShader()const
 		{
-			return m_blurXVertexShader;
+			REQUIRE( m_blurXVertexShader.shader );
+			return *m_blurXVertexShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurXPixelShader()const
+		inline sdw::Shader const & getBlurXPixelShader()const
 		{
-			return m_blurXPixelShader;
+			REQUIRE( m_blurXPixelShader.shader );
+			return *m_blurXPixelShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurYVertexShader()const
+		inline sdw::Shader const & getBlurYVertexShader()const
 		{
-			return m_blurYVertexShader;
+			REQUIRE( m_blurYVertexShader.shader );
+			return *m_blurYVertexShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurYPixelShader()const
+		inline sdw::Shader const & getBlurYPixelShader()const
 		{
-			return m_blurYPixelShader;
+			REQUIRE( m_blurYPixelShader.shader );
+			return *m_blurYPixelShader.shader;
 		}
 		/**@}*/
 
@@ -168,13 +172,13 @@ namespace castor3d
 		ashes::UniformBufferPtr< Configuration > m_blurUbo;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_blurXFbo;
-		glsl::Shader m_blurXVertexShader;
-		glsl::Shader m_blurXPixelShader;
+		ShaderModule m_blurXVertexShader;
+		ShaderModule m_blurXPixelShader;
 		RenderQuad m_blurXQuad;
 		ashes::RenderPassPtr m_blurYPass;
 		ashes::FrameBufferPtr m_blurYFbo;
-		glsl::Shader m_blurYVertexShader;
-		glsl::Shader m_blurYPixelShader;
+		ShaderModule m_blurYVertexShader;
+		ShaderModule m_blurYPixelShader;
 		RenderQuad m_blurYQuad;
 
 

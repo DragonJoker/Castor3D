@@ -51,6 +51,7 @@ namespace castor3d
 		, TextureLayoutSPtr resultTexture
 		, Size const & size
 		, Scene & scene
+		, HdrConfigUbo & hdrConfigUbo
 		, SsaoConfig & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
@@ -88,6 +89,7 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
+			, hdrConfigUbo
 			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
 			, scene
@@ -97,6 +99,7 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
+			, hdrConfigUbo
 			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 	}
 

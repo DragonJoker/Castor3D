@@ -20,7 +20,7 @@
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 

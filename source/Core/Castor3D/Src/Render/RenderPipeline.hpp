@@ -135,18 +135,12 @@ namespace castor3d
 		*	Ils doivent être appelés avant l'appel à initialise().
 		**/
 		/**@{*/
+		C3D_API void setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts );
+
 		inline void setVertexLayouts( std::vector< ashes::VertexLayout > layouts )
 		{
 			REQUIRE( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
-		}
-
-		inline void setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
-		{
-			REQUIRE( !m_pipeline );
-			m_vertexLayouts.insert( m_vertexLayouts.end()
-				, layouts.begin()
-				, layouts.end() );
 		}
 
 		inline void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts )

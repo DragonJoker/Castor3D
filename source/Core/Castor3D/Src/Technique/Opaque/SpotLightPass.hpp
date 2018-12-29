@@ -48,8 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, SpotLightPass & lightPass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english

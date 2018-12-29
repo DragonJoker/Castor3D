@@ -23,8 +23,8 @@
 #include <RenderPass/SubpassDependency.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
@@ -104,13 +104,15 @@ namespace castor3d
 			{
 				{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 				{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+				{ 2u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 			};
 			return device.createDescriptorSetLayout( std::move( bindings ) );
 		}
 
 		ashes::DescriptorSetPtr doCreateUboDescriptorSet( ashes::DescriptorSetPool & pool
 			, SceneUbo const & sceneUbo
-			, GpInfoUbo const & gpInfoUbo )
+			, GpInfoUbo const & gpInfoUbo
+			, HdrConfigUbo const & hdrConfigUbo )
 		{
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
@@ -120,6 +122,10 @@ namespace castor3d
 				, 1u );
 			result->createBinding( layout.getBinding( 1u )
 				, gpInfoUbo.getUbo()
+				, 0u
+				, 1u );
+			result->createBinding( layout.getBinding( 2u )
+				, hdrConfigUbo.getUbo()
 				, 0u
 				, 1u );
 			result->update();
@@ -160,49 +166,51 @@ namespace castor3d
 			return result;
 		}
 
-		glsl::Shader doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texture = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
 					vtx_texture = texture;
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		glsl::Shader doGetPixelProgram( Engine & engine
+		ShaderPtr doGetPixelProgram( Engine & engine
 			, FogType fogType )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			UBO_SCENE( writer, 0u, 0u );
 			UBO_GPINFO( writer, 1u, 0u );
-			auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eDepth ), 0u, 1u );
-			auto c3d_mapAccumulation = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eAccumulation ), 1u, 1u );
-			auto c3d_mapRevealage = writer.declSampler< Sampler2D >( getTextureName( WbTexture::eRevealage ), 2u, 1u );
+			UBO_HDR_CONFIG( writer, 2u, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), 0u, 1u );
+			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), 1u, 1u );
+			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), 2u, 1u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
-			glsl::Utils utils{ writer };
+			shader::Utils utils{ writer };
+			utils.declareRemoveGamma();
 			utils.declareCalcVSPosition();
 
 			shader::Fog fog{ fogType, writer };
@@ -212,15 +220,15 @@ namespace castor3d
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
-				, InVec3{ &writer, cuT( "v" ) } );
+				, InVec3{ writer, cuT( "v" ) } );
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
 					auto coord = writer.declLocale( cuT( "coord" )
-						, ivec2( gl_FragCoord.xy() ) );
+						, ivec2( in.gl_FragCoord.xy() ) );
 					auto revealage = writer.declLocale( cuT( "revealage" )
-						, texelFetch( c3d_mapRevealage, coord, 0 ).r() );
+						, texelFetch( c3d_mapRevealage, coord, 0_i ).r() );
 
 					IF( writer, revealage == 1.0_f )
 					{
@@ -230,10 +238,10 @@ namespace castor3d
 					FI;
 
 					auto accum = writer.declLocale( cuT( "accum" )
-						, texelFetch( c3d_mapAccumulation, coord, 0 ) );
+						, texelFetch( c3d_mapAccumulation, coord, 0_i ) );
 
 					// Suppress overflow
-					IF( writer, glsl::isinf( maxComponent( glsl::abs( accum.rgb() ) ) ) )
+					IF( writer, sdw::isinf( maxComponent( sdw::abs( accum.rgb() ) ) ) )
 					{
 						accum.rgb() = vec3( accum.a() );
 					}
@@ -252,31 +260,30 @@ namespace castor3d
 							, utils.calcVSPosition( vtx_texture
 								, texture( c3d_mapDepth, texCoord ).r()
 								, c3d_mtxInvProj ) );
-						fog.applyFog( pxl_fragColor, length( position ), position.z() );
+						fog.applyFog( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+							, length( position )
+							, position.z()
+							, pxl_fragColor );
 					}
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ashes::ShaderStageStateArray doCreateProgram( Engine & engine
 			, FogType fogType
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
 			auto & device = getCurrentDevice( engine );
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetPixelProgram( engine, fogType );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetPixelProgram( engine, fogType );
 			ashes::ShaderStageStateArray program
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return program;
 		}
 
@@ -405,6 +412,8 @@ namespace castor3d
 			, renderPass
 			, vtxLayout ) }
 		, m_commandBuffer{ getCurrentDevice( engine ).getGraphicsCommandPool().createCommandBuffer( true ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "FinalCombine" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "FinalCombine" }
 	{
 	}
 
@@ -439,10 +448,10 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 
 	//*********************************************************************************************
@@ -450,6 +459,7 @@ namespace castor3d
 	FinalCombinePass::FinalCombinePass( Engine & engine
 		, Size const & size
 		, SceneUbo & sceneUbo
+		, HdrConfigUbo & hdrConfigUbo
 		, WeightedBlendTextures const & wbResult
 		, ashes::TextureView const & colourView )
 		: m_size{ size }
@@ -461,7 +471,7 @@ namespace castor3d
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( m_engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
-		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, m_sceneUbo, m_gpInfo ) }
+		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, m_sceneUbo, m_gpInfo, hdrConfigUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( m_engine ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }

@@ -13,25 +13,25 @@ namespace castor3d
 		class PhongReflectionModel
 		{
 		public:
-			C3D_API explicit PhongReflectionModel( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 computeIncident( glsl::Vec3 const & wsPosition
-				, glsl::Vec3 const & wsCamera )const;
-			C3D_API glsl::Vec3 computeRefl( glsl::Vec3 const & wsIncident
-				, glsl::Vec3 const & wsNormal
-				, glsl::Float const & occlusion
-				, glsl::SamplerCube const & envMap )const;
-			C3D_API glsl::Vec3 computeRefr( glsl::Vec3 const & wsIncident
-				, glsl::Vec3 const & wsNormal
-				, glsl::Float const & occlusion
-				, glsl::SamplerCube const & envMap
-				, glsl::Float const & refractionRatio
-				, glsl::Vec3 const & diffuse )const;
-			C3D_API glsl::Vec3 computeReflRefr( glsl::Vec3 const & wsIncident
-				, glsl::Vec3 const & wsNormal
-				, glsl::Float const & occlusion
-				, glsl::SamplerCube const & envMap
-				, glsl::Float const & refractionRatio
-				, glsl::Vec3 const & diffuse )const;
+			C3D_API explicit PhongReflectionModel( sdw::ShaderWriter & writer );
+			C3D_API sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
+				, sdw::Vec3 const & wsCamera )const;
+			C3D_API sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::Float const & occlusion
+				, sdw::SampledImageCubeRgba32 const & envMap )const;
+			C3D_API sdw::Vec3 computeRefr( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::Float const & occlusion
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & diffuse )const;
+			C3D_API sdw::Vec3 computeReflRefr( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::Float const & occlusion
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & diffuse )const;
 
 		private:
 			void doDeclareComputeIncident();
@@ -40,29 +40,29 @@ namespace castor3d
 			void doDeclareComputeReflRefr();
 
 		public:
-			glsl::GlslWriter & m_writer;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3 > m_computeIncident;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InSamplerCube > m_computeRefl;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InSamplerCube
-				, glsl::InFloat
-				, glsl::InVec3 > m_computeRefr;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InSamplerCube
-				, glsl::InFloat
-				, glsl::InVec3 > m_computeReflRefr;
+			sdw::ShaderWriter & m_writer;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeIncident;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InSampledImageCubeRgba32 > m_computeRefl;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InSampledImageCubeRgba32
+				, sdw::InFloat
+				, sdw::InVec3 > m_computeRefr;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InSampledImageCubeRgba32
+				, sdw::InFloat
+				, sdw::InVec3 > m_computeReflRefr;
 		};
 	}
 }

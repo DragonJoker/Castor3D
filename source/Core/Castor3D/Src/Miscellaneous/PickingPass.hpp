@@ -178,14 +178,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		virtual ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -193,7 +193,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -201,7 +201,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -209,7 +209,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -217,7 +217,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags

@@ -5,7 +5,8 @@
 
 #include <HDR/ToneMapping.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -41,9 +42,19 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, ashes::ShaderStageFlag type
-				, glsl::Shader const & shader )override
+				, sdw::Shader const & shader )override
 			{
-				doGetSource( name ).sources[type] = shader.getSource();
+				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
+					, ast::SpecialisationInfo{}
+					, glsl::GlslConfig
+					{
+						430,
+						false,
+						true,
+						true,
+						true,
+						true,
+					} );
 			}
 
 			void visit( castor::String const & name

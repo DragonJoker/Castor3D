@@ -1,11 +1,10 @@
 #include "GlslMaterial.hpp"
 
-#include "Shader/PassBuffer/PassBuffer.hpp"
-
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -13,362 +12,204 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		BaseMaterial::BaseMaterial( castor::String const & type )
-			: Type( type )
+		BaseMaterial::BaseMaterial( sdw::Shader * shader
+			, ast::expr::ExprPtr expr )
+			: StructInstance{ shader, std::move( expr ) }
+			, m_common{ getMember< Vec4 >( "m_common" ) }
+			, m_reflRefr{ getMember< Vec4 >( "m_reflRefr" ) }
+			, m_sssInfo{ getMember< Vec4 >( "m_sssInfo" ) }
+			, m_opacity{ m_common.x() }
+			, m_emissive{ m_common.y() }
+			, m_alphaRef{ m_common.z() }
+			, m_gamma{ m_common.w() }
+			, m_refractionRatio{ m_reflRefr.x() }
+			, m_hasRefraction{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.y() ) ) }
+			, m_hasReflection{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.z() ) ) }
+			, m_exposure{ m_reflRefr.w() }
+			, m_subsurfaceScatteringEnabled{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_sssInfo.x() ) ) }
+			, m_gaussianWidth{ shader, makeExpr( *shader, m_sssInfo.y() ) }
+			, m_subsurfaceScatteringStrength{ shader, makeExpr( *shader, m_sssInfo.z() ) }
+			, m_transmittanceProfileSize{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_sssInfo.w() ) ) }
+			, m_transmittanceProfile{ getMemberArray< Vec4 >( "m_transmittanceProfile" ) }
 		{
-		}
-
-		BaseMaterial::BaseMaterial( GlslWriter * writer, castor::String const & name )
-			: BaseMaterial( cuT( "BaseMaterial " ), writer, name )
-		{
-		}
-
-		BaseMaterial::BaseMaterial( castor::String const & type
-			, GlslWriter * writer
-			, castor::String const & name )
-			: Type( type, writer, name )
-		{
-		}
-
-		Float BaseMaterial::m_opacity()const
-		{
-			return m_common().x();
-		}
-
-		Float BaseMaterial::m_emissive()const
-		{
-			return m_common().y();
-		}
-
-		Float BaseMaterial::m_alphaRef()const
-		{
-			return m_common().z();
-		}
-
-		Float BaseMaterial::m_gamma()const
-		{
-			return m_common().w();
-		}
-
-		Float BaseMaterial::m_refractionRatio()const
-		{
-			return m_reflRefr().x();
-		}
-
-		Int BaseMaterial::m_hasRefraction()const
-		{
-			return m_writer->cast< Int >( m_reflRefr().y() );
-		}
-
-		Int BaseMaterial::m_hasReflection()const
-		{
-			return m_writer->cast< Int >( m_reflRefr().z() );
-		}
-
-		Float BaseMaterial::m_exposure()const
-		{
-			return m_reflRefr().w();
-		}
-
-		Int BaseMaterial::m_subsurfaceScatteringEnabled()const
-		{
-			return m_writer->cast< Int >( m_sssInfo().r() );
-		}
-
-		Float BaseMaterial::m_gaussianWidth()const
-		{
-			return m_writer->cast< Int >( m_sssInfo().g() );
-		}
-
-		Float BaseMaterial::m_subsurfaceScatteringStrength()const
-		{
-			return m_writer->cast< Int >( m_sssInfo().b() );
-		}
-
-		Int BaseMaterial::m_transmittanceProfileSize()const
-		{
-			return m_writer->cast< Int >( m_sssInfo().a() );
-		}
-
-		glsl::Array< glsl::Vec4 > BaseMaterial::m_transmittanceProfile()const
-		{
-			return glsl::Array< Vec4 >( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_transmittanceProfile" ), 10u );
-		}
-		
-		Vec4 BaseMaterial::m_common()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_common" ) );
-		}
-
-		Vec4 BaseMaterial::m_reflRefr()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_reflRefr" ) );
-		}
-
-		Vec4 BaseMaterial::m_sssInfo()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_sssInfo" ) );
 		}
 
 		//*****************************************************************************************
 
-		LegacyMaterial::LegacyMaterial()
-			: BaseMaterial( cuT( "LegacyMaterial " ) )
+		LegacyMaterial::LegacyMaterial( sdw::Shader * shader
+			, ast::expr::ExprPtr expr )
+			: BaseMaterial{ shader, std::move( expr ) }
+			, m_diffAmb{ getMember< Vec4 >( "m_diffAmb" ) }
+			, m_specShin{ getMember< Vec4 >( "m_specShin" ) }
+			, m_ambient{ m_diffAmb.w() }
+			, m_specular{ m_specShin.xyz() }
+			, m_shininess{ m_specShin.w() }
 		{
-		}
-
-		LegacyMaterial::LegacyMaterial( GlslWriter * writer, castor::String const & name )
-			: BaseMaterial( cuT( "LegacyMaterial " ), writer, name )
-		{
-		}
-
-		LegacyMaterial & LegacyMaterial::operator=( LegacyMaterial const & rhs )
-		{
-			if ( m_writer )
-			{
-				m_writer->writeAssign( *this, rhs );
-			}
-			else
-			{
-				Type::operator=( rhs );
-				m_writer = rhs.m_writer;
-			}
-
-			return *this;
-		}
-
-		void LegacyMaterial::declare( GlslWriter & writer )
-		{
-			Struct material = writer.getStruct( cuT( "LegacyMaterial" ) );
-			material.declMember< Vec4 >( cuT( "m_diffAmb" ) );
-			material.declMember< Vec4 >( cuT( "m_specShin" ) );
-			material.declMember< Vec4 >( cuT( "m_common" ) );
-			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
-			material.declMember< Vec4 >( cuT( "m_transmittanceProfile" ), 10u );
-			material.end();
 		}
 
 		Vec3 LegacyMaterial::m_diffuse()const
 		{
-			return m_diffAmb().rgb();
+			return m_diffAmb.rgb();
 		}
 
-		Float LegacyMaterial::m_ambient()const
+		std::unique_ptr< sdw::Struct > LegacyMaterial::declare( ShaderWriter & writer )
 		{
-			return m_diffAmb().a();
+			return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 		}
 
-		Vec3 LegacyMaterial::m_specular()const
+		ast::type::StructPtr LegacyMaterial::makeType( ast::type::TypesCache & cache )
 		{
-			return m_specShin().rgb();
-		}
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "LegacyMaterial" );
 
-		Float LegacyMaterial::m_shininess()const
-		{
-			return m_specShin().a();
-		}
+			if ( result->empty() )
+			{
+				result->declMember( "m_diffAmb", ast::type::Kind::eVec4F );
+				result->declMember( "m_specShin", ast::type::Kind::eVec4F );
+				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
+				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
+				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
+			}
 
-		Vec4 LegacyMaterial::m_diffAmb()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffAmb" ) );
-		}
-
-		Vec4 LegacyMaterial::m_specShin()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specShin" ) );
+			return result;
 		}
 
 		//*****************************************************************************************
 
-		MetallicRoughnessMaterial::MetallicRoughnessMaterial()
-			: BaseMaterial( cuT( "MetallicRoughnessMaterial " ) )
+		MetallicRoughnessMaterial::MetallicRoughnessMaterial( sdw::Shader * shader
+			, ast::expr::ExprPtr expr )
+			: BaseMaterial{ shader, std::move( expr ) }
+			, m_albRough{ getMember< Vec4 >( "m_albRough" ) }
+			, m_metDiv{ getMember< Vec4 >( "m_metDiv" ) }
+			, m_albedo{ m_albRough.xyz() }
+			, m_roughness{ m_albRough.w() }
+			, m_metallic{ m_metDiv.x() }
 		{
 		}
 
-		MetallicRoughnessMaterial::MetallicRoughnessMaterial( GlslWriter * writer, castor::String const & name )
-			: BaseMaterial( cuT( "MetallicRoughnessMaterial " ), writer, name )
-		{
-		}
-
-		MetallicRoughnessMaterial & MetallicRoughnessMaterial::operator=( MetallicRoughnessMaterial const & rhs )
-		{
-			if ( m_writer )
-			{
-				m_writer->writeAssign( *this, rhs );
-			}
-			else
-			{
-				Type::operator=( rhs );
-				m_writer = rhs.m_writer;
-			}
-
-			return *this;
-		}
-
-		void MetallicRoughnessMaterial::declare( GlslWriter & writer )
-		{
-			Struct material = writer.getStruct( cuT( "MetallicRoughnessMaterial" ) );
-			material.declMember< Vec4 >( cuT( "m_albRough" ) );
-			material.declMember< Vec4 >( cuT( "m_metDiv" ) );
-			material.declMember< Vec4 >( cuT( "m_common" ) );
-			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
-			material.declMember< Vec4 >( cuT( "m_transmittanceProfile" ), 10u );
-			material.end();
-		}
-		
 		Vec3 MetallicRoughnessMaterial::m_diffuse()const
 		{
-			return m_albRough().rgb();
+			return m_albRough.rgb();
 		}
 
-		Vec3 MetallicRoughnessMaterial::m_albedo()const
+		std::unique_ptr< sdw::Struct > MetallicRoughnessMaterial::declare( ShaderWriter & writer )
 		{
-			return m_albRough().rgb();
+			return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 		}
 
-		Float MetallicRoughnessMaterial::m_roughness()const
+		ast::type::StructPtr MetallicRoughnessMaterial::makeType( ast::type::TypesCache & cache )
 		{
-			return m_albRough().a();
-		}
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "MetallicRoughnessMaterial" );
 
-		Float MetallicRoughnessMaterial::m_metallic()const
-		{
-			return m_metDiv().r();
-		}
+			if ( result->empty() )
+			{
+				result->declMember( "m_albRough", ast::type::Kind::eVec4F );
+				result->declMember( "m_metDiv", ast::type::Kind::eVec4F );
+				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
+				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
+				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
+			}
 
-		Vec4 MetallicRoughnessMaterial::m_albRough()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_albRough" ) );
-		}
-
-		Vec4 MetallicRoughnessMaterial::m_metDiv()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_metDiv" ) );
+			return result;
 		}
 
 		//*****************************************************************************************
 
-		SpecularGlossinessMaterial::SpecularGlossinessMaterial()
-			: BaseMaterial( cuT( "SpecularGlossinessMaterial " ) )
+		SpecularGlossinessMaterial::SpecularGlossinessMaterial( sdw::Shader * shader
+			, ast::expr::ExprPtr expr )
+			: BaseMaterial{ shader, std::move( expr ) }
+			, m_diffDiv{ getMember< Vec4 >( "m_diffDiv" ) }
+			, m_specGloss{ getMember< Vec4 >( "m_specGloss" ) }
+			, m_specular{ m_specGloss.xyz() }
+			, m_glossiness{ m_specGloss.w() }
 		{
-		}
-
-		SpecularGlossinessMaterial::SpecularGlossinessMaterial( GlslWriter * writer, castor::String const & name )
-			: BaseMaterial( cuT( "SpecularGlossinessMaterial " ), writer, name )
-		{
-		}
-
-		SpecularGlossinessMaterial & SpecularGlossinessMaterial::operator=( SpecularGlossinessMaterial const & rhs )
-		{
-			if ( m_writer )
-			{
-				m_writer->writeAssign( *this, rhs );
-			}
-			else
-			{
-				Type::operator=( rhs );
-				m_writer = rhs.m_writer;
-			}
-
-			return *this;
-		}
-
-		void SpecularGlossinessMaterial::declare( GlslWriter & writer )
-		{
-			Struct material = writer.getStruct( cuT( "SpecularGlossinessMaterial" ) );
-			material.declMember< Vec4 >( cuT( "m_diffDiv" ) );
-			material.declMember< Vec4 >( cuT( "m_specGloss" ) );
-			material.declMember< Vec4 >( cuT( "m_common" ) );
-			material.declMember< Vec4 >( cuT( "m_reflRefr" ) );
-			material.declMember< Vec4 >( cuT( "m_sssInfo" ) );
-			material.declMember< Vec4 >( cuT( "m_transmittanceProfile" ), 10u );
-			material.end();
 		}
 
 		Vec3 SpecularGlossinessMaterial::m_diffuse()const
 		{
-			return m_diffDiv().rgb();
+			return m_diffDiv.rgb();
 		}
 
-		Vec3 SpecularGlossinessMaterial::m_specular()const
+		std::unique_ptr< sdw::Struct > SpecularGlossinessMaterial::declare( ShaderWriter & writer )
 		{
-			return m_specGloss().rgb();
+			return std::make_unique< sdw::Struct >( writer, makeType( writer.getTypesCache() ) );
 		}
 
-		Float SpecularGlossinessMaterial::m_glossiness()const
+		ast::type::StructPtr SpecularGlossinessMaterial::makeType( ast::type::TypesCache & cache )
 		{
-			return m_specGloss().a();
-		}
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "SpecularGlossinessMaterial" );
 
-		Vec4 SpecularGlossinessMaterial::m_diffDiv()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_diffDiv" ) );
-		}
+			if ( result->empty() )
+			{
+				result->declMember( "m_diffDiv", ast::type::Kind::eVec4F );
+				result->declMember( "m_specGloss", ast::type::Kind::eVec4F );
+				result->declMember( "m_common", ast::type::Kind::eVec4F );
+				result->declMember( "m_reflRefr", ast::type::Kind::eVec4F );
+				result->declMember( "m_sssInfo", ast::type::Kind::eVec4F );
+				result->declMember( "m_transmittanceProfile", ast::type::Kind::eVec4F, MaxTransmittanceProfileSize );
+			}
 
-		Vec4 SpecularGlossinessMaterial::m_specGloss()const
-		{
-			return Vec4( m_writer, ( m_name.empty() ? m_value.str() : m_name ) + cuT( ".m_specGloss" ) );
+			return result;
 		}
-
-#if !C3D_MaterialsStructOfArrays
 
 		//*********************************************************************************************
 
-		Materials::Materials( GlslWriter & writer )
+		Materials::Materials( ShaderWriter & writer )
 			: m_writer{ writer }
 		{
 		}
 
 		//*********************************************************************************************
 
-		LegacyMaterials::LegacyMaterials( GlslWriter & writer )
+		LegacyMaterials::LegacyMaterials( ShaderWriter & writer )
 			: Materials{ writer }
 		{
 		}
 
-		void LegacyMaterials::declare()
+		void LegacyMaterials::declare( bool hasSsbo )
 		{
-			LegacyMaterial::declare( m_writer );
+			hasSsbo = false;
+			m_type = LegacyMaterial::declare( m_writer );
 
-			if ( false && m_writer.hasShaderStorageBuffers() )
+			if ( hasSsbo )
 			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				materials.declMemberArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				materials.end();
+				m_ssbo = std::make_unique< ArraySsboT< LegacyMaterial > >( m_writer
+					, PassBufferName
+					, m_type->getType()
+					, 0u
+					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
-						auto result = m_writer.declLocale< LegacyMaterial >( cuT( "result" ) );
+						auto result = m_writer.declLocale< LegacyMaterial >( "result", *m_type );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxMaterialComponentsCount ) );
-						result.m_diffAmb() = texelFetch( c3d_materials, offset++ );
-						result.m_specShin () = texelFetch( c3d_materials, offset++ );
-						result.m_common () = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr () = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo () = texelFetch( c3d_materials, offset++ );
+						result.m_diffAmb = texelFetch( c3d_materials, offset++ );
+						result.m_specShin = texelFetch( c3d_materials, offset++ );
+						result.m_common = texelFetch( c3d_materials, offset++ );
+						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
+						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
 
-						for ( uint32_t i = 0; i < 10u; ++i )
+						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
 						}
 
 						m_writer.returnStmt( result );
 					}
-					, InInt{ &m_writer, cuT( "index" ) } );
+					, InInt{ m_writer, cuT( "index" ) } );
 			}
 		}
 
 		LegacyMaterial LegacyMaterials::getMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
+			if ( m_ssbo )
 			{
-				auto tmp = m_writer.getBuiltinArray< LegacyMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index - 1];
+				return ( *m_ssbo )[( m_writer.cast< UInt >( index ) - 1_u )];
 			}
 			else
 			{
@@ -385,52 +226,54 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		PbrMRMaterials::PbrMRMaterials( GlslWriter & writer )
+		PbrMRMaterials::PbrMRMaterials( ShaderWriter & writer )
 			: Materials{ writer }
 		{
 		}
 
-		void PbrMRMaterials::declare()
+		void PbrMRMaterials::declare( bool hasSsbo )
 		{
-			MetallicRoughnessMaterial::declare( m_writer );
+			hasSsbo = false;
+			m_type = MetallicRoughnessMaterial::declare( m_writer );
 
-			if ( false && m_writer.hasShaderStorageBuffers() )
+			if ( hasSsbo )
 			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				auto c3d_materials = materials.declMemberArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
-				materials.end();
+				m_ssbo = std::make_unique< ArraySsboT< MetallicRoughnessMaterial > >( m_writer
+					, PassBufferName
+					, m_type->getType()
+					, 0u
+					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
-						auto result = m_writer.declLocale< MetallicRoughnessMaterial >( cuT( "result" ) );
+						auto result = m_writer.declLocale< MetallicRoughnessMaterial >( "result", *m_type );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxMaterialComponentsCount ) );
-						result.m_albRough() = texelFetch( c3d_materials, offset++ );
-						result.m_metDiv() = texelFetch( c3d_materials, offset++ );
-						result.m_common() = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr() = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo() = texelFetch( c3d_materials, offset++ );
+						result.m_albRough = texelFetch( c3d_materials, offset++ );
+						result.m_metDiv = texelFetch( c3d_materials, offset++ );
+						result.m_common = texelFetch( c3d_materials, offset++ );
+						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
+						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
 
-						for ( uint32_t i = 0; i < 10u; ++i )
+						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
 						}
 
 						m_writer.returnStmt( result );
 					}
-					, InInt{ &m_writer, cuT( "index" ) } );
+					, InInt{ m_writer, cuT( "index" ) } );
 			}
 		}
 		
 		MetallicRoughnessMaterial PbrMRMaterials::getMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
+			if ( m_ssbo )
 			{
-				auto tmp = m_writer.getBuiltinArray< MetallicRoughnessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index - 1];
+				return ( *m_ssbo )[( m_writer.cast< UInt >( index ) - 1_u )];
 			}
 			else
 			{
@@ -447,52 +290,54 @@ namespace castor3d
 
 		//*********************************************************************************************
 
-		PbrSGMaterials::PbrSGMaterials( GlslWriter & writer )
+		PbrSGMaterials::PbrSGMaterials( ShaderWriter & writer )
 			: Materials{ writer }
 		{
 		}
 
-		void PbrSGMaterials::declare()
+		void PbrSGMaterials::declare( bool hasSsbo )
 		{
-			SpecularGlossinessMaterial::declare( m_writer );
+			hasSsbo = false;
+			m_type = SpecularGlossinessMaterial::declare( m_writer );
 
-			if ( false && m_writer.hasShaderStorageBuffers() )
+			if ( hasSsbo )
 			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				materials.declMemberArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				materials.end();
+				m_ssbo = std::make_unique< ArraySsboT< SpecularGlossinessMaterial > >( m_writer
+					, PassBufferName
+					, m_type->getType()
+					, 0u
+					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), 0u, 0u );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( Int const & index )
 					{
-						auto result = m_writer.declLocale< SpecularGlossinessMaterial >( cuT( "result" ) );
+						auto result = m_writer.declLocale< SpecularGlossinessMaterial >( "result", *m_type );
 						auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxMaterialComponentsCount ) );
-						result.m_diffDiv() = texelFetch( c3d_materials, offset++ );
-						result.m_specGloss() = texelFetch( c3d_materials, offset++ );
-						result.m_common() = texelFetch( c3d_materials, offset++ );
-						result.m_reflRefr() = texelFetch( c3d_materials, offset++ );
-						result.m_sssInfo() = texelFetch( c3d_materials, offset++ );
+						result.m_diffDiv = texelFetch( c3d_materials, offset++ );
+						result.m_specGloss = texelFetch( c3d_materials, offset++ );
+						result.m_common = texelFetch( c3d_materials, offset++ );
+						result.m_reflRefr = texelFetch( c3d_materials, offset++ );
+						result.m_sssInfo = texelFetch( c3d_materials, offset++ );
 
-						for ( uint32_t i = 0; i < 10u; ++i )
+						for ( uint32_t i = 0; i < MaxTransmittanceProfileSize; ++i )
 						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset++ );
+							result.m_transmittanceProfile[i] = texelFetch( c3d_materials, offset++ );
 						}
 
 						m_writer.returnStmt( result );
 					}
-					, InInt{ &m_writer, cuT( "index" ) } );
+					, InInt{ m_writer, cuT( "index" ) } );
 			}
 		}
 
 		SpecularGlossinessMaterial PbrSGMaterials::getMaterial( Int const & index )const
 		{
-			if ( m_writer.hasShaderStorageBuffers() )
+			if ( m_ssbo )
 			{
-				auto tmp = m_writer.getBuiltinArray< SpecularGlossinessMaterial >( cuT( "c3d_materials" ) );
-				return tmp[index - 1];
+				return ( *m_ssbo )[( m_writer.cast< UInt >( index ) - 1_u )];
 			}
 			else
 			{
@@ -508,261 +353,5 @@ namespace castor3d
 		}
 
 		//*********************************************************************************************
-
-#else
-
-		//*********************************************************************************************
-
-		Materials::Materials( GlslWriter & writer )
-			: m_writer{ writer }
-		{
-		}
-
-		//*********************************************************************************************
-
-		LegacyMaterials::LegacyMaterials( GlslWriter & writer )
-			: Materials{ writer }
-		{
-		}
-
-		void shader::LegacyMaterials::declare()
-		{
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			m_writer.inlineComment( cuT( "// MATERIALS" ) );
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			LegacyMaterial::declare( m_writer );
-
-			if ( false && m_writer.hasShaderStorageBuffers() )
-			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				auto c3d_matDiffAmb = materials.declMember< Vec4 >( cuT( "c3d_matDiffAmb" ), MaxMaterialsCount );
-				auto c3d_matSpecShin = materials.declMember< Vec4 >( cuT( "c3d_matSpecShin" ), MaxMaterialsCount );
-				auto c3d_matCommon = materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-				auto c3d_matReflRefr = materials.declMember< Vec4 >( cuT( "c3d_matReflRefr" ), MaxMaterialsCount );
-				auto c3d_sssInfo = materials.declMember< Vec4 >( cuT( "c3d_sssInfo" ), MaxMaterialsCount );
-				auto c3d_transmittance = materials.declMember< Vec4 >( cuT( "c3d_transmittance" ), MaxMaterialsCount * 10u );
-				materials.end();
-
-				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
-					, [&]( Int const & index )
-					{
-						auto result = m_writer.declLocale< LegacyMaterial >( cuT( "result" ) );
-						result.m_diffAmb() = c3d_matDiffAmb[index];
-						result.m_specShin() = c3d_matSpecShin[index];
-						result.m_common() = c3d_matCommon[index];
-						result.m_reflRefr() = c3d_matReflRefr[index];
-						result.m_sssInfo() = c3d_sssInfo[index];
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = c3d_transmittance[index * 10 + i];
-						}
-
-						m_writer.returnStmt( result );
-					}
-					, InInt{ &m_writer, cuT( "index" ) } );
-			}
-			else
-			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
-				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
-					, [this, &c3d_materials]( Int const & index )
-					{
-						auto result = m_writer.declLocale< LegacyMaterial >( cuT( "result" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), Int( int( MaxMaterialsCount ) ) );
-						result.m_diffAmb() = texelFetch( c3d_materials, offset * 0 + index );
-						result.m_specShin() = texelFetch( c3d_materials, offset * 1 + index );
-						result.m_common() = texelFetch( c3d_materials, offset * 2 + index );
-						result.m_reflRefr() = texelFetch( c3d_materials, offset * 3 + index );
-						result.m_sssInfo() = texelFetch( c3d_materials, offset * 4 + index );
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset * ( i + 5 ) + index );
-						}
-
-						m_writer.returnStmt( result );
-					}
-					, InInt{ &m_writer, cuT( "index" ) } );
-			}
-		}
-
-		LegacyMaterial LegacyMaterials::getMaterial( Int const & index )const
-		{
-			return m_getMaterial( index - 1 );
-		}
-
-		BaseMaterialUPtr LegacyMaterials::getBaseMaterial( Int const & index )const
-		{
-			auto material = m_writer.declLocale( cuT( "material" )
-				, getMaterial( index ) );
-			return std::make_unique< LegacyMaterial >( material );
-		}
-
-		//*********************************************************************************************
-
-		PbrMRMaterials::PbrMRMaterials( GlslWriter & writer )
-			: Materials{ writer }
-		{
-		}
-
-		void PbrMRMaterials::declare()
-		{
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			m_writer.inlineComment( cuT( "// MATERIALS" ) );
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			MetallicRoughnessMaterial::declare( m_writer );
-
-			if ( false && m_writer.hasShaderStorageBuffers() )
-			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				auto c3d_matAlbRough = materials.declMember< Vec4 >( cuT( "c3d_matAlbRough" ), MaxMaterialsCount );
-				auto c3d_matMetDiv = materials.declMember< Vec4 >( cuT( "c3d_matMetDiv" ), MaxMaterialsCount );
-				auto c3d_matCommon = materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-				auto c3d_matReflRefr = materials.declMember< Vec4 >( cuT( "c3d_matReflRefr" ), MaxMaterialsCount );
-				auto c3d_sssInfo = materials.declMember< Vec4 >( cuT( "c3d_sssInfo" ), MaxMaterialsCount );
-				auto c3d_transmittance = materials.declMember< Vec4 >( cuT( "c3d_transmittance" ), MaxMaterialsCount * 10u );
-				materials.end();
-
-				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
-					, [&]( Int const & index )
-					{
-						auto result = m_writer.declLocale< MetallicRoughnessMaterial >( cuT( "result" ) );
-						result.m_albRough() = c3d_matAlbRough[index];
-						result.m_metDiv() = c3d_matMetDiv[index];
-						result.m_common() = c3d_matCommon[index];
-						result.m_reflRefr() = c3d_matReflRefr[index];
-						result.m_sssInfo() = c3d_sssInfo[index];
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = c3d_transmittance[index * 10 + i];
-						}
-
-						m_writer.returnStmt( result );
-					}
-				, InInt{ &m_writer, cuT( "index" ) } );
-			}
-			else
-			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
-				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
-					, [this, &c3d_materials]( Int const & index )
-					{
-						auto result = m_writer.declLocale< MetallicRoughnessMaterial >( cuT( "result" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), Int( int( MaxMaterialsCount ) ) );
-						result.m_albRough() = texelFetch( c3d_materials, offset * 0 + index );
-						result.m_metDiv() = texelFetch( c3d_materials, offset * 1 + index );
-						result.m_common() = texelFetch( c3d_materials, offset * 2 + index );
-						result.m_reflRefr() = texelFetch( c3d_materials, offset * 3 + index );
-						result.m_sssInfo() = texelFetch( c3d_materials, offset * 4 + index );
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset * ( i + 5 ) + index );
-						}
-
-						m_writer.returnStmt( result );
-					}
-				, InInt{ &m_writer, cuT( "index" ) } );
-			}
-		}
-
-		MetallicRoughnessMaterial PbrMRMaterials::getMaterial( Int const & index )const
-		{
-			return m_getMaterial( index - 1 );
-		}
-
-		BaseMaterialUPtr PbrMRMaterials::getBaseMaterial( Int const & index )const
-		{
-			auto material = m_writer.declLocale( cuT( "material" )
-				, getMaterial( index ) );
-			return std::make_unique< MetallicRoughnessMaterial >( material );
-		}
-
-		//*********************************************************************************************
-
-		PbrSGMaterials::PbrSGMaterials( GlslWriter & writer )
-			: Materials{ writer }
-		{
-		}
-
-		void PbrSGMaterials::declare()
-		{
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			m_writer.inlineComment( cuT( "// MATERIALS" ) );
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			SpecularGlossinessMaterial::declare( m_writer );
-
-			if ( false && m_writer.hasShaderStorageBuffers() )
-			{
-				Ssbo materials{ m_writer, PassBufferName, 0u };
-				auto c3d_matDiffDiv = materials.declMember< Vec4 >( cuT( "c3d_matDiffDiv" ), MaxMaterialsCount );
-				auto c3d_matSpecGloss = materials.declMember< Vec4 >( cuT( "c3d_matSpecGloss" ), MaxMaterialsCount );
-				auto c3d_matCommon = materials.declMember< Vec4 >( cuT( "c3d_matCommon" ), MaxMaterialsCount );
-				auto c3d_matReflRefr = materials.declMember< Vec4 >( cuT( "c3d_matReflRefr" ), MaxMaterialsCount );
-				auto c3d_sssInfo = materials.declMember< Vec4 >( cuT( "c3d_sssInfo" ), MaxMaterialsCount );
-				auto c3d_transmittance = materials.declMember< Vec4 >( cuT( "c3d_transmittance" ), MaxMaterialsCount * 10u );
-				materials.end();
-
-				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
-					, [&]( Int const & index )
-					{
-						auto result = m_writer.declLocale< SpecularGlossinessMaterial >( cuT( "result" ) );
-						result.m_diffDiv() = c3d_matDiffDiv[index];
-						result.m_specGloss() = c3d_matSpecGloss[index];
-						result.m_common() = c3d_matCommon[index];
-						result.m_reflRefr() = c3d_matReflRefr[index];
-						result.m_sssInfo() = c3d_sssInfo[index];
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = c3d_transmittance[index * 10 + i];
-						}
-
-						m_writer.returnStmt( result );
-					}
-				, InInt{ &m_writer, cuT( "index" ) } );
-			}
-			else
-			{
-				auto c3d_materials = m_writer.declSampler< SamplerBuffer >( cuT( "c3d_materials" ), 0u, 0u );
-				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
-					, [this, &c3d_materials]( Int const & index )
-					{
-						auto result = m_writer.declLocale< SpecularGlossinessMaterial >( cuT( "result" ) );
-						auto offset = m_writer.declLocale( cuT( "offset" ), Int( int( MaxMaterialsCount ) ) );
-						result.m_diffDiv() = texelFetch( c3d_materials, offset * 0 + index );
-						result.m_specGloss() = texelFetch( c3d_materials, offset * 1 + index );
-						result.m_common() = texelFetch( c3d_materials, offset * 2 + index );
-						result.m_reflRefr() = texelFetch( c3d_materials, offset * 3 + index );
-						result.m_sssInfo() = texelFetch( c3d_materials, offset * 4 + index );
-
-						for ( uint32_t i = 0; i < 10u; ++i )
-						{
-							result.m_transmittanceProfile()[i] = texelFetch( c3d_materials, offset * ( i + 5 ) + index );
-						}
-
-						m_writer.returnStmt( result );
-					}
-				, InInt{ &m_writer, cuT( "index" ) } );
-			}
-		}
-
-		SpecularGlossinessMaterial PbrSGMaterials::getMaterial( Int const & index )const
-		{
-			return m_getMaterial( index - 1 );
-		}
-
-		BaseMaterialUPtr PbrSGMaterials::getBaseMaterial( Int const & index )const
-		{
-			auto material = m_writer.declLocale( cuT( "material" )
-				, getMaterial( index ) );
-			return std::make_unique< SpecularGlossinessMaterial >( material );
-		}
-
-		//*********************************************************************************************
-
-#endif
 	}
 }

@@ -113,12 +113,12 @@ namespace castor3d
 }
 
 #define UBO_MORPHING( writer, binding, set, flags )\
-	glsl::Ubo morphing{ writer\
+	sdw::Ubo morphing{ writer\
 		, castor3d::MorphingUbo::BufferMorphing\
 		, binding\
 		, set\
-		, glsl::Ubo::Layout::eStd140 };\
-	auto c3d_time = morphing.declMember< glsl::Float >( castor3d::MorphingUbo::Time, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
+		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_time = morphing.declMember< sdw::Float >( castor3d::MorphingUbo::Time, checkFlag( flags, castor3d::ProgramFlag::eMorphing ) );\
 	morphing.end()
 
 #endif

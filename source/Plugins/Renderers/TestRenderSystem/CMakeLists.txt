@@ -20,7 +20,7 @@ add_target(
 	${PROJECT_NAME}
 	plugin
 	"Castor3D"
-	"${CastorMinLibraries};TestRenderer"
+	"${CastorMinLibraries};TestRenderer;CompilerGlsl"
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.cpp
 	"-DTestRenderer_STATIC"

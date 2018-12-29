@@ -54,7 +54,7 @@ namespace castor3d
 			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
 
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
+			real angleRotation = PiMult2< real > / m_nbFaces;
 			uint32_t i = 0;
 			real rCosRot = cos( angleRotation );
 			real rSinRot = sin( angleRotation );

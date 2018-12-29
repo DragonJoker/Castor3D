@@ -126,15 +126,15 @@ namespace castor3d
 }
 
 #define UBO_MODEL_MATRIX( writer, binding, set )\
-	glsl::Ubo modelMatrices{ writer\
+	sdw::Ubo modelMatrices{ writer\
 		, castor3d::ModelMatrixUbo::BufferModelMatrix\
 		, binding\
 		, set\
-		, glsl::Ubo::Layout::eStd140 };\
-	auto c3d_prvMtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxModel );\
-	auto c3d_prvMtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxNormal );\
-	auto c3d_curMtxModel = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::CurMtxModel );\
-	auto c3d_curMtxNormal = modelMatrices.declMember< glsl::Mat4 >( castor3d::ModelMatrixUbo::CurMtxNormal );\
+		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_prvMtxModel = modelMatrices.declMember< sdw::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxModel );\
+	auto c3d_prvMtxNormal = modelMatrices.declMember< sdw::Mat4 >( castor3d::ModelMatrixUbo::PrvMtxNormal );\
+	auto c3d_curMtxModel = modelMatrices.declMember< sdw::Mat4 >( castor3d::ModelMatrixUbo::CurMtxModel );\
+	auto c3d_curMtxNormal = modelMatrices.declMember< sdw::Mat4 >( castor3d::ModelMatrixUbo::CurMtxNormal );\
 	modelMatrices.end()
 
 #endif

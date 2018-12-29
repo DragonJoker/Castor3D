@@ -53,6 +53,7 @@ namespace castor3d
 			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
 			, Scene & scene
+			, HdrConfigUbo & hdrConfigUbo
 			, SsaoConfig & config );
 		/**
 		 *\~english

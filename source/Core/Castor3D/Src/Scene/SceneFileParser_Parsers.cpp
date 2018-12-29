@@ -4102,7 +4102,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		parsingContext->viewport = std::make_shared< Viewport >( *parsingContext->m_pParser->getEngine() );
-		parsingContext->viewport->setPerspective( Angle::fromDegrees( 0 ), 1, 0, 1 );
+		parsingContext->viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eViewport )
 

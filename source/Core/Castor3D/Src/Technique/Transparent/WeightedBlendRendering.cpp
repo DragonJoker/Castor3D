@@ -62,7 +62,8 @@ namespace castor3d
 		, ashes::TextureView const & colourView
 		, TextureLayoutSPtr velocityTexture
 		, castor::Size const & size
-		, Scene const & scene )
+		, Scene const & scene
+		, HdrConfigUbo & hdrConfigUbo )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
@@ -72,7 +73,7 @@ namespace castor3d
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
 		, m_revealageView{ m_revealage->createView( ashes::TextureViewType::e2D, m_revealage->getFormat() ) }
 		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
-		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, colourView }
+		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, m_weightedBlendPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );
 		m_transparentPass.initialise( m_size );

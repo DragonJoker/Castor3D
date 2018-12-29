@@ -91,6 +91,7 @@ find_package( Doxygen )
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
 set( ASHES_DIR external/Ashes/source/Ashes )
+set( SHADERWRITER_DIR external/ShaderWriter )
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src
@@ -99,8 +100,9 @@ include_directories(
 set( Castor3DIncludeDirs
 	${CMAKE_CURRENT_SOURCE_DIR}/${ASHES_DIR}/Ashes/Src
 	${CMAKE_CURRENT_BINARY_DIR}/${ASHES_DIR}/Ashes/Src
-	${CMAKE_CURRENT_SOURCE_DIR}/Core/GlslWriter/Src
-	${CMAKE_CURRENT_BINARY_DIR}/Core/GlslWriter/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/${SHADERWRITER_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/Core/ShaderWriter/Src
+	${CMAKE_CURRENT_BINARY_DIR}/Core/ShaderWriter/Src
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
 )
@@ -136,6 +138,8 @@ set( CastorBinsDependencies
 
 set( Castor3DBinsDependencies
 	${CastorBinsDependencies}
+	ShaderAST
+	ShaderWriter
 	Ashes
 	Castor3D
 )
@@ -156,9 +160,9 @@ if( MSVC )
 endif()
 
 add_definitions(
- -DVERSION_MAJOR=${VERSION_MAJOR}
- -DVERSION_MINOR=${VERSION_MINOR}
- -DVERSION_BUILD=${VERSION_BUILD}
+ -DC3D_VERSION_MAJOR=${VERSION_MAJOR}
+ -DC3D_VERSION_MINOR=${VERSION_MINOR}
+ -DC3D_VERSION_BUILD=${VERSION_BUILD}
 )
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
@@ -210,6 +214,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set_property( TARGET FreeImage PROPERTY FOLDER "External" )
 	
 	if ( ${CASTOR_BUILD_CASTOR3D} )
+		# Ashes external library
 		if ( NOT CASTOR_BUILDGRP_RENDERER )
 			set( ASHES_BUILD_RENDERER_PLUGINS FALSE )
 		else ()
@@ -220,12 +225,12 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		set_property( TARGET Ashes PROPERTY FOLDER "External/Ashes" )
 		if ( CASTOR_BUILDGRP_RENDERER )
 			if ( WIN32 )
-				set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes" )
+				set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
 			endif ()
-			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes" )
-			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes" )
-			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes" )
-			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes" )
+			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
+			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
+			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
+			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
 		endif ()
 
 		if ( MSVC )
@@ -289,6 +294,127 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
 		set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
 		set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
+
+		# ShaderWriter external library
+		if ( NOT CASTOR_BUILDGRP_RENDERER )
+			set( SDW_BUILD_EXPORTERS FALSE )
+		else ()
+			set( SDW_BUILD_EXPORTERS TRUE )
+		endif ()
+		set( SDW_BUILD_SDW FALSE )
+		add_subdirectory( ${SHADERWRITER_DIR} )
+		set_property( TARGET ShaderAST PROPERTY FOLDER "External/ShaderWriter" )
+		set_property( TARGET ShaderWriter PROPERTY FOLDER "External/ShaderWriter" )
+		if ( CASTOR_BUILDGRP_RENDERER )
+			set_property( TARGET CompilerGlsl PROPERTY FOLDER "External/ShaderWriter/Exporters" )
+			set_property( TARGET CompilerHlsl PROPERTY FOLDER "External/ShaderWriter/Exporters" )
+			set_property( TARGET CompilerSpirV PROPERTY FOLDER "External/ShaderWriter/Exporters" )
+		endif ()
+
+		if ( MSVC )
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/ShaderAST.lib
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/ShaderWriter.lib
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Release
+				EXPORT ShaderWriter
+				ARCHIVE DESTINATION lib
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/ShaderAST.lib
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/ShaderWriter.lib
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS RelWithDebInfo
+				ARCHIVE DESTINATION lib/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/ShaderASTd.lib
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/ShaderWriterd.lib
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Debug
+				ARCHIVE DESTINATION lib/Debug
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderAST.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderWriter.dll
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Release
+				EXPORT ShaderWriter
+				RUNTIME DESTINATION bin
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderAST.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderWriter.dll
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS RelWithDebInfo
+				RUNTIME DESTINATION bin/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderASTd.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderWriterd.dll
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Debug
+				RUNTIME DESTINATION bin/Debug
+			)
+		else ()
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.a
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.a
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Release
+				EXPORT Ashes
+				ARCHIVE DESTINATION lib
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.a
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.a
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS RelWithDebInfo
+				ARCHIVE DESTINATION lib/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.a
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.a
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Debug
+				ARCHIVE DESTINATION lib/Debug
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.so
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.so
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Release
+				EXPORT Ashes
+				LIBRARY DESTINATION lib
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.so
+					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.so
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS RelWithDebInfo
+				LIBRARY DESTINATION lib/RelWithDebInfo
+			)
+			install(
+				FILES
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.so
+					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.so
+				COMPONENT ShaderWriter_dev
+				CONFIGURATIONS Debug
+				LIBRARY DESTINATION lib/Debug
+			)
+		endif ()
+		target_install_headers( ShaderWriter ${ASHES_DIR}/include )
 	endif ()
 
 	CoreInit()

@@ -1,7 +1,7 @@
 ﻿#include "Shadow.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {

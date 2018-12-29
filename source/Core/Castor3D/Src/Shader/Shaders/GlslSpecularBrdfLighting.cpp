@@ -5,7 +5,7 @@
 #include "GlslLight.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -13,7 +13,7 @@ namespace castor3d
 	{
 		const String SpecularBrdfLightingModel::Name = cuT( "pbr_sg" );
 
-		SpecularBrdfLightingModel::SpecularBrdfLightingModel( GlslWriter & writer )
+		SpecularBrdfLightingModel::SpecularBrdfLightingModel( ShaderWriter & writer )
 			: LightingModel{ writer }
 		{
 		}
@@ -26,15 +26,15 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			auto c3d_lightsCount = m_writer.getBuiltin< IVec4 >( cuT( "c3d_lightsCount" ) );
-			auto begin = m_writer.declLocale( cuT( "begin" )
+			auto c3d_lightsCount = m_writer.getVariable< IVec4 >( "c3d_lightsCount" );
+			auto begin = m_writer.declLocale( "begin"
 				, 0_i );
-			auto end = m_writer.declLocale( cuT( "end" )
+			auto end = m_writer.declLocale( "end"
 				, c3d_lightsCount.x() );
 
-			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
+			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{
-				m_writer << m_computeDirectional( getDirectionalLight( i )
+				m_computeDirectional( getDirectionalLight( i )
 					, worldEye
 					, diffuse
 					, specular
@@ -42,16 +42,15 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				m_writer << endi;
 			}
 			ROF;
 
 			begin = end;
 			end += c3d_lightsCount.y();
 
-			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
+			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{
-				m_writer << m_computePoint( getPointLight( i )
+				m_computePoint( getPointLight( i )
 					, worldEye
 					, diffuse
 					, specular
@@ -59,16 +58,15 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				m_writer << endi;
 			}
 			ROF;
 
 			begin = end;
 			end += c3d_lightsCount.z();
 
-			FOR( m_writer, Int, i, begin, cuT( "i < end" ), cuT( "++i" ) )
+			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{
-				m_writer << m_computeSpot( getSpotLight( i )
+				m_computeSpot( getSpotLight( i )
 					, worldEye
 					, diffuse
 					, specular
@@ -76,7 +74,6 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				m_writer << endi;
 			}
 			ROF;
 		}
@@ -90,7 +87,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_writer << m_computeDirectional( DirectionalLight{ light }
+			m_computeDirectional( DirectionalLight{ light }
 				, worldEye
 				, diffuse
 				, specular
@@ -98,7 +95,6 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << endi;
 		}
 
 		void SpecularBrdfLightingModel::compute( PointLight const & light
@@ -110,7 +106,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_writer << m_computeOnePoint( PointLight{ light }
+			m_computeOnePoint( PointLight{ light }
 				, worldEye
 				, diffuse
 				, specular
@@ -118,7 +114,6 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << endi;
 		}
 
 		void SpecularBrdfLightingModel::compute( SpotLight const & light
@@ -130,7 +125,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_writer << m_computeOneSpot( SpotLight{ light }
+			m_computeOneSpot( SpotLight{ light }
 				, worldEye
 				, diffuse
 				, specular
@@ -138,7 +133,6 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << endi;
 		}
 
 		void SpecularBrdfLightingModel::doDeclareModel()
@@ -152,7 +146,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeDirectionalLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
+			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -164,38 +158,38 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( -light.m_direction ) );
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
-					auto cascadeIndex = m_writer.declLocale( cuT( "cascadeIndex" )
+					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, UInt( 0u ) );
 
-					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
 						IF ( m_writer, receivesShadows != 0_i )
 						{
 							// Get cascade index for the current fragment's view position
-							auto c3d_maxCascadeCount = m_writer.getBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
-							auto maxCount = m_writer.declLocale( cuT( "maxCount" )
-								, m_writer.cast< UInt >( clamp( light.m_cascadeCount(), 1_ui, c3d_maxCascadeCount ) - 1_ui ) );
-							FOR( m_writer, UInt, i, 0u, cuT( "i < maxCount" ), cuT( "++i" ) )
+							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
+							auto maxCount = m_writer.declLocale( "maxCount"
+								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
-								IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
+								IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
 								{
-									cascadeIndex = i + 1_ui;
+									cascadeIndex = i + 1_u;
 								}
 								FI;
 							}
 							ROF;
 
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeDirectionalShadow( light.m_lightBase().m_shadowType()
-									, light.m_transform( cascadeIndex )
+								, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
+									, light.m_transforms[cascadeIndex]
 									, fragmentIn.m_worldVertex
 									, -lightDirection
 									, cascadeIndex
@@ -205,7 +199,7 @@ namespace castor3d
 					}
 					FI;
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -215,19 +209,20 @@ namespace castor3d
 						, fragmentIn
 						, output );
 
-					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) )
-						&& light.m_lightBase().m_volumetricSteps() != 0_ui )
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) )
+						&& light.m_lightBase.m_volumetricSteps != 0_u )
 					{
-						m_shadowModel->computeVolumetric( light.m_lightBase().m_shadowType()
+						m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
+							, fragmentIn.m_clipVertex
 							, fragmentIn.m_worldVertex
 							, worldEye
-							, light.m_transform( cascadeIndex )
-							, light.m_direction()
+							, light.m_transforms[cascadeIndex]
+							, light.m_direction
 							, cascadeIndex
-							, light.m_lightBase().m_colour()
-							, light.m_lightBase().m_intensity()
-							, light.m_lightBase().m_volumetricSteps()
-							, light.m_lightBase().m_volumetricScattering()
+							, light.m_lightBase.m_colour
+							, light.m_lightBase.m_intensity
+							, light.m_lightBase.m_volumetricSteps
+							, light.m_lightBase.m_volumetricScattering
 							, output );
 					}
 					FI;
@@ -235,12 +230,12 @@ namespace castor3d
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
 				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InDirectionalLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -248,7 +243,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputePointLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
+			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -260,36 +255,36 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_worldVertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
 
-					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
 						IF( m_writer, receivesShadows != 0_i )
 						{
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computePointShadow( light.m_lightBase().m_shadowType()
+								, m_shadowModel->computePointShadow( light.m_lightBase.m_shadowType
 									, fragmentIn.m_worldVertex
-									, light.m_position().xyz()
+									, light.m_position.xyz()
 									, fragmentIn.m_worldNormal
-									, light.m_lightBase().m_farPlane()
-									, light.m_lightBase().m_index() ) );
+									, light.m_lightBase.m_farPlane
+									, light.m_lightBase.m_index ) );
 						}
 						FI;
 					}
 					FI;
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -298,21 +293,21 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, glsl::fma( light.m_attenuation().z()
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
 							, distance * distance
-							, glsl::fma( light.m_attenuation().y()
+							, sdw::fma( light.m_attenuation.y()
 								, distance
-								, light.m_attenuation().x() ) ) );
+								, light.m_attenuation.x() ) ) );
 					parentOutput.m_diffuse += output.m_diffuse / attenuation;
 					parentOutput.m_specular += output.m_specular / attenuation;
 				}
-				, PointLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InPointLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -320,7 +315,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeSpotLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
+			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -332,34 +327,34 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_worldVertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
-					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
-						, dot( lightDirection, -light.m_direction() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-						, 1.0_f - step( spotFactor, light.m_cutOff() ) );
+					auto spotFactor = m_writer.declLocale( "spotFactor"
+						, dot( lightDirection, -light.m_direction ) );
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 1.0_f - step( spotFactor, light.m_cutOff ) );
 
-					IF( m_writer, light.m_lightBase().m_shadowType() != Int( int( ShadowType::eNone ) ) )
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
 						shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeSpotShadow( light.m_lightBase().m_shadowType()
-								, light.m_transform()
+							, m_shadowModel->computeSpotShadow( light.m_lightBase.m_shadowType
+								, light.m_transform
 								, fragmentIn.m_worldVertex
 								, -lightToVertex
 								, fragmentIn.m_worldNormal
-								, light.m_lightBase().m_index() ) );
+								, light.m_lightBase.m_index ) );
 					}
 					FI;
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -368,24 +363,24 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, glsl::fma( light.m_attenuation().z()
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
 							, distance * distance
-							, glsl::fma( light.m_attenuation().y()
+							, sdw::fma( light.m_attenuation.y()
 								, distance
-								, light.m_attenuation().x() ) ) );
-					spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
-						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+								, light.m_attenuation.x() ) ) );
+					spotFactor = sdw::fma( m_writer.paren( spotFactor - 1.0_f )
+						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff )
 						, 1.0_f );
 					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 				}
-				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InSpotLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -394,7 +389,7 @@ namespace castor3d
 			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
-			m_computeDirectional = m_writer.implementFunction< Void >( cuT( "computeDirectionalLight" )
+			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this, shadowType, volumetric]( DirectionalLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -406,38 +401,38 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
-						, normalize( -light.m_direction() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
+						, normalize( -light.m_direction ) );
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
-					auto cascadeIndex = m_writer.declLocale( cuT( "cascadeIndex" )
-						, shadowType != ShadowType::eNone
-						, UInt( 0u ) );
+					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
+						, UInt( 0u )
+						, shadowType != ShadowType::eNone );
 
 					if ( shadowType != ShadowType::eNone )
 					{
 						IF ( m_writer, receivesShadows != 0_i )
 						{
 							// Get cascade index for the current fragment's view position
-							auto c3d_maxCascadeCount = m_writer.getBuiltin< UInt >( cuT( "c3d_maxCascadeCount" ) );
-							auto maxCount = m_writer.declLocale( cuT( "maxCount" )
-								, m_writer.cast< UInt >( clamp( light.m_cascadeCount(), 1_ui, c3d_maxCascadeCount ) - 1_ui ) );
-							FOR( m_writer, UInt, i, 0u, cuT( "i < maxCount" ), cuT( "++i" ) )
+							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
+							auto maxCount = m_writer.declLocale( "maxCount"
+								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
-								IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepth( i ) )
+								IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
 								{
-									cascadeIndex = i + 1_ui;
+									cascadeIndex = i + 1_u;
 								}
 								FI;
 							}
 							ROF;
 
 							shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-								, m_shadowModel->computeDirectionalShadow( light.m_transform( cascadeIndex )
+								, m_shadowModel->computeDirectionalShadow( light.m_transforms[cascadeIndex]
 									, fragmentIn.m_worldVertex
 									, -lightDirection
 									, cascadeIndex
@@ -446,7 +441,7 @@ namespace castor3d
 						FI;
 					}
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -458,27 +453,28 @@ namespace castor3d
 
 					if ( shadowType != ShadowType::eNone && volumetric )
 					{
-						m_shadowModel->computeVolumetric( fragmentIn.m_worldVertex
+						m_shadowModel->computeVolumetric( fragmentIn.m_clipVertex
+							, fragmentIn.m_worldVertex
 							, worldEye
-							, light.m_transform( cascadeIndex )
-							, light.m_direction()
+							, light.m_transforms[cascadeIndex]
+							, light.m_direction
 							, cascadeIndex
-							, light.m_lightBase().m_colour()
-							, light.m_lightBase().m_intensity()
-							, light.m_lightBase().m_volumetricSteps()
-							, light.m_lightBase().m_volumetricScattering()
+							, light.m_lightBase.m_colour
+							, light.m_lightBase.m_intensity
+							, light.m_lightBase.m_volumetricSteps
+							, light.m_lightBase.m_volumetricScattering
 							, output );
 					}
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
 				}
-				, DirectionalLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InDirectionalLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -487,7 +483,7 @@ namespace castor3d
 			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
-			m_computeOnePoint = m_writer.implementFunction< Void >( cuT( "computePointLight" )
+			m_computeOnePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this, shadowType]( PointLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -499,29 +495,29 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_worldVertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
 
 					if ( shadowType != ShadowType::eNone )
 					{
 						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
 							, m_shadowModel->computePointShadow( fragmentIn.m_worldVertex
-								, light.m_position().xyz()
+								, light.m_position.xyz()
 								, fragmentIn.m_worldNormal
-								, light.m_lightBase().m_farPlane() ) );
+								, light.m_lightBase.m_farPlane ) );
 					}
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -530,21 +526,21 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, glsl::fma( light.m_attenuation().z()
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
 							, distance * distance
-							, glsl::fma( light.m_attenuation().y()
+							, sdw::fma( light.m_attenuation.y()
 								, distance
-								, light.m_attenuation().x() ) ) );
+								, light.m_attenuation.x() ) ) );
 					parentOutput.m_diffuse += output.m_diffuse / attenuation;
 					parentOutput.m_specular += output.m_specular / attenuation;
 				}
-				, PointLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InPointLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -553,7 +549,7 @@ namespace castor3d
 			, bool volumetric )
 		{
 			OutputComponents output{ m_writer };
-			m_computeOneSpot = m_writer.implementFunction< Void >( cuT( "computeSpotLight" )
+			m_computeOneSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this, shadowType]( SpotLight const & light
 					, Vec3 const & worldEye
 					, Vec3 const & diffuse
@@ -565,31 +561,31 @@ namespace castor3d
 				{
 					OutputComponents output
 					{
-						m_writer.declLocale( cuT( "lightDiffuse" ), vec3( 0.0_f ) ),
-						m_writer.declLocale( cuT( "lightSpecular" ), vec3( 0.0_f ) )
+						m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ),
+						m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 					};
 					PbrMRMaterials materials{ m_writer };
-					auto lightToVertex = m_writer.declLocale( cuT( "lightToVertex" )
-						, light.m_position().xyz() - fragmentIn.m_worldVertex );
-					auto distance = m_writer.declLocale( cuT( "distance" )
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, light.m_position.xyz() - fragmentIn.m_worldVertex );
+					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto lightDirection = m_writer.declLocale( cuT( "lightDirection" )
+					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
-					auto spotFactor = m_writer.declLocale( cuT( "spotFactor" )
-						, dot( lightDirection, -light.m_direction() ) );
-					auto shadowFactor = m_writer.declLocale( cuT( "shadowFactor" )
-						, 1.0_f - step( spotFactor, light.m_cutOff() ) );
+					auto spotFactor = m_writer.declLocale( "spotFactor"
+						, dot( lightDirection, -light.m_direction ) );
+					auto shadowFactor = m_writer.declLocale( "shadowFactor"
+						, 1.0_f - step( spotFactor, light.m_cutOff ) );
 
 					if ( shadowType != ShadowType::eNone )
 					{
 						shadowFactor *= max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeSpotShadow( light.m_transform()
+							, m_shadowModel->computeSpotShadow( light.m_transform
 								, fragmentIn.m_worldVertex
 								, -lightToVertex
 								, fragmentIn.m_worldNormal ) );
 					}
 
-					doComputeLight( light.m_lightBase()
+					doComputeLight( light.m_lightBase
 						, worldEye
 						, lightDirection
 						, diffuse
@@ -598,24 +594,24 @@ namespace castor3d
 						, shadowFactor
 						, fragmentIn
 						, output );
-					auto attenuation = m_writer.declLocale( cuT( "attenuation" )
-						, glsl::fma( light.m_attenuation().z()
+					auto attenuation = m_writer.declLocale( "attenuation"
+						, sdw::fma( light.m_attenuation.z()
 							, distance * distance
-							, glsl::fma( light.m_attenuation().y()
+							, sdw::fma( light.m_attenuation.y()
 								, distance
-								, light.m_attenuation().x() ) ) );
-					spotFactor = glsl::fma( m_writer.paren( spotFactor - 1.0_f )
-						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff() )
+								, light.m_attenuation.x() ) ) );
+					spotFactor = sdw::fma( m_writer.paren( spotFactor - 1.0_f )
+						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff )
 						, 1.0_f );
 					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
 				}
-				, SpotLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InInt( &m_writer, cuT( "receivesShadows" ) )
+				, InSpotLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InInt( m_writer, "receivesShadows" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -623,7 +619,7 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareComputeLight()
 		{
 			OutputComponents output{ m_writer };
-			m_computeLight = m_writer.implementFunction< Void >( cuT( "doComputeLight" )
+			m_computeLight = m_writer.implementFunction< sdw::Void >( "doComputeLight"
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
@@ -634,67 +630,66 @@ namespace castor3d
 					, FragmentInput const & fragmentIn
 					, OutputComponents & output )
 				{
-					auto roughness = m_writer.declLocale( cuT( "roughness" )
+					auto roughness = m_writer.declLocale( "roughness"
 						, 1.0_f - glossiness );
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto L = m_writer.declLocale( cuT( "L" )
+					auto L = m_writer.declLocale( "L"
 						, normalize( direction ) );
-					auto V = m_writer.declLocale( cuT( "V" )
+					auto V = m_writer.declLocale( "V"
 						, normalize( normalize( worldEye - fragmentIn.m_worldVertex ) ) );
-					auto H = m_writer.declLocale( cuT( "H" )
+					auto H = m_writer.declLocale( "H"
 						, normalize( L + V ) );
-					auto N = m_writer.declLocale( cuT( "N" )
+					auto N = m_writer.declLocale( "N"
 						, normalize( fragmentIn.m_worldNormal ) );
-					auto radiance = m_writer.declLocale( cuT( "radiance" )
-						, light.m_colour() );
+					auto radiance = m_writer.declLocale( "radiance"
+						, light.m_colour );
 
-					auto NdotL = m_writer.declLocale( cuT( "NdotL" )
+					auto NdotL = m_writer.declLocale( "NdotL"
 						, max( 0.0_f, dot( N, L ) ) );
-					auto NdotV = m_writer.declLocale( cuT( "NdotV" )
+					auto NdotV = m_writer.declLocale( "NdotV"
 						, max( 0.0_f, dot( N, V ) ) );
-					auto NdotH = m_writer.declLocale( cuT( "NdotH" )
+					auto NdotH = m_writer.declLocale( "NdotH"
 						, max( 0.0_f, dot( N, H ) ) );
-					auto HdotV = m_writer.declLocale( cuT( "HdotV" )
+					auto HdotV = m_writer.declLocale( "HdotV"
 						, max( 0.0_f, dot( H, V ) ) );
-					auto LdotV = m_writer.declLocale( cuT( "LdotV" )
+					auto LdotV = m_writer.declLocale( "LdotV"
 						, max( 0.0_f, dot( L, V ) ) );
 
-					auto f0 = m_writer.declLocale( cuT( "f0" )
+					auto f0 = m_writer.declLocale( "f0"
 						, specular );
-					auto specfresnel = m_writer.declLocale( cuT( "specfresnel" )
+					auto specfresnel = m_writer.declLocale( "specfresnel"
 						, m_schlickFresnel( HdotV, f0 ) );
 			
-					auto NDF = m_writer.declLocale( cuT( "NDF" )
+					auto NDF = m_writer.declLocale( "NDF"
 						, m_distributionGGX( NdotH, roughness ) );
-					auto G = m_writer.declLocale( cuT( "G" )
+					auto G = m_writer.declLocale( "G"
 						, m_geometrySmith( NdotV, NdotL, roughness ) );
 
-					auto nominator = m_writer.declLocale( cuT( "nominator" )
+					auto nominator = m_writer.declLocale( "nominator"
 						, specfresnel * NDF * G );
-					auto denominator = m_writer.declLocale( cuT( "denominator" )
-						, glsl::fma( 4.0_f
+					auto denominator = m_writer.declLocale( "denominator"
+						, sdw::fma( 4.0_f
 							, NdotV * NdotL
 							, 0.001_f ) );
-					auto specReflectance = m_writer.declLocale( cuT( "specReflectance" )
+					auto specReflectance = m_writer.declLocale( "specReflectance"
 						, nominator / denominator );
-					auto kS = m_writer.declLocale( cuT( "kS" )
+					auto kS = m_writer.declLocale( "kS"
 						, specfresnel );
-					auto kD = m_writer.declLocale( cuT( "kD" )
+					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 
 					kD *= 1.0_f - length( specular );
 
-					output.m_diffuse = shadowFactor * m_writer.paren( radiance * NdotL * kD / PI );
+					output.m_diffuse = shadowFactor * m_writer.paren( radiance * NdotL * kD / Float{ Pi< float > } );
 					output.m_specular = shadowFactor * m_writer.paren( specReflectance * radiance * NdotL );
 				}
-				, InLight( &m_writer, cuT( "light" ) )
-				, InVec3( &m_writer, cuT( "worldEye" ) )
-				, InVec3( &m_writer, cuT( "direction" ) )
-				, InVec3( &m_writer, cuT( "diffuse" ) )
-				, InVec3( &m_writer, cuT( "specular" ) )
-				, InFloat( &m_writer, cuT( "glossiness" ) )
-				, InFloat( &m_writer, cuT( "shadowFactor" ) )
+				, InLight( m_writer, "light" )
+				, InVec3( m_writer, "worldEye" )
+				, InVec3( m_writer, "direction" )
+				, InVec3( m_writer, "diffuse" )
+				, InVec3( m_writer, "specular" )
+				, InFloat( m_writer, "glossiness" )
+				, InFloat( m_writer, "shadowFactor" )
 				, FragmentInput{ m_writer }
 				, output );
 		}
@@ -702,90 +697,89 @@ namespace castor3d
 		void SpecularBrdfLightingModel::doDeclareDistribution()
 		{
 			// Distribution Function
-			m_distributionGGX = m_writer.implementFunction< Float >( cuT( "Distribution" )
+			m_distributionGGX = m_writer.implementFunction< Float >( "Distribution"
 				, [this]( Float const & product
 				, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = m_writer.declLocale( cuT( "a" )
+					auto a = m_writer.declLocale( "a"
 						, roughness * roughness );
-					auto a2 = m_writer.declLocale( cuT( "a2" )
+					auto a2 = m_writer.declLocale( "a2"
 						, a * a );
-					auto NdotH2 = m_writer.declLocale( cuT( "NdotH2" )
+					auto NdotH2 = m_writer.declLocale( "NdotH2"
 						, product * product );
 
-					auto nominator = m_writer.declLocale( cuT( "num" )
+					auto nominator = m_writer.declLocale( "num"
 						, a2 );
-					auto denominator = m_writer.declLocale( cuT( "denom" )
-						, glsl::fma( NdotH2
+					auto denominator = m_writer.declLocale( "denom"
+						, sdw::fma( NdotH2
 							, a2 - 1.0
 							, 1.0_f ) );
-					denominator = Float( PI ) * denominator * denominator;
+					denominator = Float{ Pi< float > } * denominator * denominator;
 
 					m_writer.returnStmt( nominator / denominator );
 				}
-				, InFloat( &m_writer, cuT( "product" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) ) );
+				, InFloat( m_writer, "product" )
+				, InFloat( m_writer, "roughness" ) );
 		}
 	
 		void SpecularBrdfLightingModel::doDeclareGeometry()
 		{
 			// Geometry Functions
-			m_geometrySchlickGGX = m_writer.implementFunction< Float >( cuT( "GeometrySchlickGGX" )
+			m_geometrySchlickGGX = m_writer.implementFunction< Float >( "GeometrySchlickGGX"
 				, [this]( Float const & product
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto r = m_writer.declLocale( cuT( "r" )
+					auto r = m_writer.declLocale( "r"
 						, roughness + 1.0_f );
-					auto k = m_writer.declLocale( cuT( "k" )
+					auto k = m_writer.declLocale( "k"
 						, m_writer.paren( r * r ) / 8.0_f );
 
-					auto nominator = m_writer.declLocale( cuT( "num" )
+					auto nominator = m_writer.declLocale( "num"
 						, product );
-					auto denominator = m_writer.declLocale( cuT( "denom" )
-						, glsl::fma( product
+					auto denominator = m_writer.declLocale( "denom"
+						, sdw::fma( product
 							, 1.0_f - k
 							, k ) );
 
 					m_writer.returnStmt( nominator / denominator );
 				}
-				, InFloat( &m_writer, cuT( "product" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) ) );
+				, InFloat( m_writer, "product" )
+				, InFloat( m_writer, "roughness" ) );
 
-			m_geometrySmith = m_writer.implementFunction< Float >( cuT( "GeometrySmith" )
+			m_geometrySmith = m_writer.implementFunction< Float >( "GeometrySmith"
 				, [this]( Float const & NdotV
 					, Float const & NdotL
 					, Float const & roughness )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto ggx2 = m_writer.declLocale( cuT( "ggx2" )
+					auto ggx2 = m_writer.declLocale( "ggx2"
 						, m_geometrySchlickGGX( NdotV, roughness ) );
-					auto ggx1 = m_writer.declLocale( cuT( "ggx1" )
+					auto ggx1 = m_writer.declLocale( "ggx1"
 						, m_geometrySchlickGGX( NdotL, roughness ) );
 
 					m_writer.returnStmt( ggx1 * ggx2 );
 				}
-				, InFloat( &m_writer, cuT( "NdotV" ) )
-				, InFloat( &m_writer, cuT( "NdotL" ) )
-				, InFloat( &m_writer, cuT( "roughness" ) ) );
+				, InFloat( m_writer, "NdotV" )
+				, InFloat( m_writer, "NdotL" )
+				, InFloat( m_writer, "roughness" ) );
 		}
 	
 		void SpecularBrdfLightingModel::doDeclareFresnelShlick()
 		{
 			// Fresnel Function
-			m_schlickFresnel = m_writer.implementFunction< Vec3 >( cuT( "FresnelShlick" )
+			m_schlickFresnel = m_writer.implementFunction< Vec3 >( "FresnelShlick"
 				, [this]( Float const & product
 					, Vec3 const & f0 )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					m_writer.returnStmt( glsl::fma( vec3( 1.0_f ) - f0
+					m_writer.returnStmt( sdw::fma( vec3( 1.0_f ) - f0
 						, vec3( pow( 1.0_f - product, 5.0_f ) )
 						, f0 ) );
 				}
-				, InFloat( &m_writer, cuT( "product" ) )
-				, InVec3( &m_writer, cuT( "f0" ) ) );
+				, InFloat( m_writer, "product" )
+				, InVec3( m_writer, "f0" ) );
 		}
 
 		void SpecularBrdfLightingModel::doComputeLight( Light const & light
@@ -798,7 +792,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )
 		{
-			m_writer << m_computeLight( light
+			m_computeLight( light
 				, worldEye
 				, direction
 				, diffuse
@@ -807,7 +801,6 @@ namespace castor3d
 				, shadowFactor
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
-			m_writer << endi;
 		}
 
 		//***********************************************************************************************

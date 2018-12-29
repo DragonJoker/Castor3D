@@ -8,7 +8,7 @@
 #include "ShadowMap/ShadowMap.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 using namespace castor;
 
@@ -97,7 +97,7 @@ namespace castor3d
 	{
 	}
 
-	glsl::Shader ShadowMapPass::doGetVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -110,7 +110,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	glsl::Shader ShadowMapPass::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
@@ -121,7 +121,7 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	glsl::Shader ShadowMapPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -134,7 +134,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMapPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -147,7 +147,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader ShadowMapPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr ShadowMapPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags

@@ -27,8 +27,8 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslLight.hpp"
@@ -156,129 +156,11 @@ namespace castor3d
 		return std::min( max, getMaxDistance( light, attenuation ) );
 	}
 
-	uint32_t constexpr ReceiverMask		= 0x00000080u;
-	uint32_t constexpr RefractionMask	= 0x00000040u;
-	uint32_t constexpr ReflectionMask	= 0x00000020u;
-	uint32_t constexpr EnvMapIndexMask	= 0x0000001Fu;
-
-	uint32_t constexpr ReceiverOffset	= 7u;
-	uint32_t constexpr RefractionOffset	= 6u;
-	uint32_t constexpr ReflectionOffset = 5u;
-	uint32_t constexpr EnvMapIndexOffset= 0u;
-
-	void declareEncodeMaterial( glsl::GlslWriter & writer )
-	{
-		using namespace glsl;
-		using glsl::operator<<;
-		writer.implementFunction< Void >( cuT( "encodeMaterial" )
-			, [&]( Int const & receiver
-				, Int const & reflection
-				, Int const & refraction
-				, Int const & envMapIndex
-				, Float encoded )
-			{
-				auto flags = writer.declLocale( cuT( "flags" )
-					, 0_ui
-					+ writer.paren( writer.paren( writer.cast< UInt >( receiver )		<< UInt( ReceiverOffset ) )		& UInt( ReceiverMask ) )
-					+ writer.paren( writer.paren( writer.cast< UInt >( refraction )		<< UInt( RefractionOffset ) )	& UInt( RefractionMask ) )
-					+ writer.paren( writer.paren( writer.cast< UInt >( reflection )		<< UInt( ReflectionOffset ) )	& UInt( ReflectionMask ) )
-					+ writer.paren( writer.paren( writer.cast< UInt >( envMapIndex )	<< UInt( EnvMapIndexOffset ) )	& UInt( EnvMapIndexMask ) ) );
-				encoded = writer.cast< Float >( flags );
-			}, InInt{ &writer, cuT( "receiver" ) }
-			, InInt{ &writer, cuT( "reflection" ) }
-			, InInt{ &writer, cuT( "refraction" ) }
-			, InInt{ &writer, cuT( "envMapIndex" ) }
-			, OutFloat{ &writer, cuT( "encoded" ) } );
-	}
-	
-	void declareDecodeMaterial( glsl::GlslWriter & writer )
-	{
-		using namespace glsl;
-		writer.implementFunction< Void >( cuT( "decodeMaterial" )
-			, [&]( Float const & encoded
-				, Int receiver
-				, Int reflection
-				, Int refraction
-				, Int envMapIndex )
-			{
-				auto flags = writer.declLocale( cuT( "flags" )
-					, writer.cast< UInt >( encoded ) );
-				receiver	= writer.cast< Int >( writer.paren( flags & UInt( ReceiverMask ) )		>> UInt( ReceiverOffset ) );
-				refraction	= writer.cast< Int >( writer.paren( flags & UInt( RefractionMask ) )	>> UInt( RefractionOffset ) );
-				reflection	= writer.cast< Int >( writer.paren( flags & UInt( ReflectionMask ) )	>> UInt( ReflectionOffset ) );
-				envMapIndex	= writer.cast< Int >( writer.paren( flags & UInt( EnvMapIndexMask ) )	>> UInt( EnvMapIndexOffset ) );
-			}, InFloat{ &writer, cuT( "encoded" ) }
-			, OutInt{ &writer, cuT( "receiver" ) }
-			, OutInt{ &writer, cuT( "reflection" ) }
-			, OutInt{ &writer, cuT( "refraction" ) }
-			, OutInt{ &writer, cuT( "envMapIndex" ) } );
-	}
-
-	void declareDecodeReceiver( glsl::GlslWriter & writer )
-	{
-		using namespace glsl;
-		writer.implementFunction< Void >( cuT( "decodeReceiver" )
-			, [&]( Int const & encoded
-				, Int receiver )
-			{
-				receiver = writer.paren( encoded & ReceiverMask ) >> ReceiverOffset;
-			}, InInt{ &writer, cuT( "encoded" ) }
-			, OutInt{ &writer, cuT( "receiver" ) } );
-	}
-
-	void encodeMaterial( glsl::GlslWriter & writer
-		, glsl::Int const & receiver
-		, glsl::Int const & reflection
-		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex
-		, glsl::Float const & encoded )
-	{
-		using namespace glsl;
-		writer << writeFunctionCall< Void >( &writer
-			, cuT( "encodeMaterial" )
-			, InInt{ receiver }
-			, InInt{ reflection }
-			, InInt{ refraction }
-			, InInt{ envMapIndex }
-			, OutFloat{ encoded } );
-		writer << endi;
-	}
-
-	void decodeMaterial( glsl::GlslWriter & writer
-		, glsl::Float const & encoded
-		, glsl::Int const & receiver
-		, glsl::Int const & reflection
-		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex )
-	{
-		using namespace glsl;
-		writer << writeFunctionCall< Void >( &writer
-			, cuT( "decodeMaterial" )
-			, InFloat{ encoded }
-			, OutInt{ receiver }
-			, OutInt{ reflection }
-			, OutInt{ refraction }
-			, OutInt{ envMapIndex } );
-		writer << endi;
-	}
-
-	void decodeReceiver( glsl::GlslWriter & writer
-		, glsl::Int & encoded
-		, glsl::Int const & receiver )
-	{
-		using namespace glsl;
-		writer << writeFunctionCall< Void >( &writer
-			, cuT( "decodeReceiver" )
-			, InInt{ encoded }
-			, OutInt{ receiver } );
-		writer << endi;
-	}
-
 	namespace
 	{
 		ashes::ShaderStageStateArray doCreateProgram( Engine & engine
-			, glsl::Shader const & vtx
-			, glsl::Shader const & pxl )
+			, ShaderModule const & vtx
+			, ShaderModule const & pxl )
 		{
 			auto & device = getCurrentDevice( engine );
 			ashes::ShaderStageStateArray program
@@ -286,12 +168,8 @@ namespace castor3d
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			program[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vtx.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pxl.getSource() ) );
+			program[0].module->loadShader( engine.getRenderSystem()->compileShader( vtx ) );
+			program[1].module->loadShader( engine.getRenderSystem()->compileShader( pxl ) );
 			return program;
 		}
 	}
@@ -299,8 +177,8 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & engine
-		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl
+		, ShaderModule const & vtx
+		, ShaderModule const & pxl
 		, bool hasShadows )
 		: m_engine{ engine }
 		, m_program{ ::doCreateProgram( engine, vtx, pxl ) }
@@ -429,6 +307,8 @@ namespace castor3d
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalReady{ getCurrentDevice( engine ).createSemaphore() }
 		, m_fence{ getCurrentDevice( engine ).createFence( ashes::FenceCreateFlag::eSignaled ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "LightPass" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "LightPass" }
 	{
 	}
 
@@ -518,25 +398,25 @@ namespace castor3d
 		{
 			auto shadowType = ShadowType( pipelineIndex % uint32_t( ShadowType::eCount ) );
 			bool volumetric = pipelineIndex >= uint32_t( ShadowType::eCount );
-			m_vertexShader = doGetVertexShaderSource( sceneFlags );
+			m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
 
 			if ( scene.getMaterialsType() == MaterialType::ePbrMetallicRoughness )
 			{
-				m_pixelShader = doGetPbrMRPixelShaderSource( sceneFlags
+				m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
 					, volumetric );
 			}
 			else if ( scene.getMaterialsType() == MaterialType::ePbrSpecularGlossiness )
 			{
-				m_pixelShader = doGetPbrSGPixelShaderSource( sceneFlags
+				m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
 					, volumetric );
 			}
 			else
 			{
-				m_pixelShader = doGetLegacyPixelShaderSource( sceneFlags
+				m_pixelShader.shader = doGetLegacyPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
 					, volumetric );
@@ -679,33 +559,33 @@ namespace castor3d
 		commandBuffer.end();
 	}
 	
-	glsl::Shader LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
 		, bool volumetric )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 		auto index = MinBufferIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
+		auto in = writer.getIn();
 
 		shadowType = m_shadows
 			? shadowType
 			: ShadowType::eNone;
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declOutput< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = lightType == LightType::eDirectional
@@ -720,35 +600,40 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		glsl::Utils utils{ writer };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiver( writer );
+		utils.declareDecodeReceiver();
+		utils.declareInvertVec2Y();
 		shader::LegacyMaterials materials{ writer };
-		materials.declare();
-		shader::SssTransmittance sss{ writer, shadowType != ShadowType::eNone };
+		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		shader::SssTransmittance sss{ writer
+			, lighting->getShadowModel()
+			, utils
+			, m_shadows };
 		sss.declare( lightType );
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( c3d_renderSize ) );
+				, utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
-				, texture( c3d_mapData1, texCoord ) );
+				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
-				, texture( c3d_mapData2, texCoord ) );
+				, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
 			auto data3 = writer.declLocale( cuT( "data3" )
-				, texture( c3d_mapData3, texCoord ) );
+				, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
-				, texture( c3d_mapData4, texCoord ) );
+				, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
 			auto data5 = writer.declLocale( cuT( "data5" )
-				, texture( c3d_mapData5, texCoord ) );
+				, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
 			auto flags = writer.declLocale( cuT( "flags" )
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, shadowReceiver );
+			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
 				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
@@ -764,11 +649,11 @@ namespace castor3d
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
-				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )
@@ -782,13 +667,13 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::DirectionalLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -803,13 +688,13 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::PointLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -824,13 +709,13 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::SpotLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -848,37 +733,37 @@ namespace castor3d
 			pxl_specular = lightSpecular * specular;
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 	
-	glsl::Shader LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
 		, bool volumetric )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 		auto index = MinBufferIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
+		auto in = writer.getIn();
 
 		shadowType = m_shadows
 			? shadowType
 			: ShadowType::eNone;
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declOutput< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( cuT( "pxl_specular" ), 1 );
 
 		// Utility functions
 		auto lighting = lightType == LightType::eDirectional
@@ -893,31 +778,35 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		glsl::Utils utils{ writer };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
-		declareDecodeReceiver( writer );
-		shader::PbrMRMaterials materials{ writer };
-		materials.declare();
+		utils.declareDecodeReceiver();
+		utils.declareInvertVec2Y();
+		shader::LegacyMaterials materials{ writer };
+		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
+			, lighting->getShadowModel()
+			, utils
 			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( lightType );
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( c3d_renderSize ) );
+				, utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
-				, texture( c3d_mapData1, texCoord ) );
+				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
-				, texture( c3d_mapData2, texCoord ) );
+				, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
 			auto data3 = writer.declLocale( cuT( "data3" )
-				, texture( c3d_mapData3, texCoord ) );
+				, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
-				, texture( c3d_mapData4, texCoord ) );
+				, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
 			auto data5 = writer.declLocale( cuT( "data5" )
-				, texture( c3d_mapData5, texCoord ) );
+				, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
 			auto metallic = writer.declLocale( cuT( "metallic" )
 				, data3.r() );
 			auto roughness = writer.declLocale( cuT( "roughness" )
@@ -926,7 +815,7 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer, flags, shadowReceiver );
+			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
 				, writer.cast< Int >( data5.z() ) );
 			auto albedo = writer.declLocale( cuT( "albedo" )
@@ -938,11 +827,11 @@ namespace castor3d
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
-				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto transmittance = writer.declLocale( cuT( "transmittance" )
@@ -956,7 +845,7 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::DirectionalLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DisableSSSTransmittance
 #	if !C3D_DebugSSSTransmittance
@@ -966,7 +855,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -989,7 +878,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -997,7 +886,7 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::PointLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DisableSSSTransmittance
 #	if !C3D_DebugSSSTransmittance
@@ -1030,7 +919,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1038,7 +927,7 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::SpotLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 #if !C3D_DisableSSSTransmittance
 #	if !C3D_DebugSSSTransmittance
@@ -1048,7 +937,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -1071,7 +960,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1082,29 +971,29 @@ namespace castor3d
 			pxl_specular = lightSpecular;
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 	
-	glsl::Shader LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
 		, bool volumetric )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 		auto index = MinBufferIndex;
-		auto c3d_mapDepth = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eDepth ), index++, 1u );
-		auto c3d_mapData1 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData1 ), index++, 1u );
-		auto c3d_mapData2 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData2 ), index++, 1u );
-		auto c3d_mapData3 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData3 ), index++, 1u );
-		auto c3d_mapData4 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData4 ), index++, 1u );
-		auto c3d_mapData5 = writer.declSampler< Sampler2D >( getTextureName( DsTexture::eData5 ), index++, 1u );
-		auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
+		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
+		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
+		auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
+		auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
+		auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
+		auto in = writer.getIn();
 
 		shadowType = m_shadows
 			? shadowType
@@ -1123,34 +1012,39 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		glsl::Utils utils{ writer };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
-		shader::PbrSGMaterials materials{ writer };
-		materials.declare();
-		declareDecodeReceiver( writer );
-		shader::SssTransmittance sss{ writer, shadowType != ShadowType::eNone };
+		utils.declareDecodeReceiver();
+		utils.declareInvertVec2Y();
+		shader::LegacyMaterials materials{ writer };
+		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		shader::SssTransmittance sss{ writer
+			, lighting->getShadowModel()
+			, utils
+			, m_shadows && shadowType != ShadowType::eNone };
 		sss.declare( lightType );
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declFragData< Vec3 >( cuT( "pxl_diffuse" ), 0 );
-		auto pxl_specular = writer.declFragData< Vec3 >( cuT( "pxl_specular" ), 1 );
+		auto pxl_diffuse = writer.declOutput< Vec3 >( cuT( "pxl_diffuse" ), 0 );
+		auto pxl_specular = writer.declOutput< Vec3 >( cuT( "pxl_specular" ), 1 );
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( c3d_renderSize ) );
+				, utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
-				, texture( c3d_mapData1, texCoord ) );
+				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
-				, texture( c3d_mapData2, texCoord ) );
+				, textureLod( c3d_mapData2, texCoord, 0.0_f ) );
 			auto data3 = writer.declLocale( cuT( "data3" )
-				, texture( c3d_mapData3, texCoord ) );
+				, textureLod( c3d_mapData3, texCoord, 0.0_f ) );
 			auto data4 = writer.declLocale( cuT( "data4" )
-				, texture( c3d_mapData4, texCoord ) );
+				, textureLod( c3d_mapData4, texCoord, 0.0_f ) );
 			auto data5 = writer.declLocale( cuT( "data5" )
-				, texture( c3d_mapData5, texCoord ) );
+				, textureLod( c3d_mapData5, texCoord, 0.0_f ) );
 			auto specular = writer.declLocale( cuT( "specular" )
 				, data3.rgb() );
 			auto glossiness = writer.declLocale( cuT( "glossiness" )
@@ -1159,9 +1053,7 @@ namespace castor3d
 				, writer.cast< Int >( data1.w() ) );
 			auto shadowReceiver = writer.declLocale( cuT( "shadowReceiver" )
 				, 0_i );
-			decodeReceiver( writer
-				, flags
-				, shadowReceiver );
+			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
 				, writer.cast< Int >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
@@ -1173,11 +1065,11 @@ namespace castor3d
 			auto eye = writer.declLocale( cuT( "eye" )
 				, c3d_cameraPosition.xyz() );
 			auto depth = writer.declLocale( cuT( "depth" )
-				, texture( c3d_mapDepth, texCoord, 0.0_f ).x() );
+				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
 				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( writer.ashesBottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )
@@ -1191,7 +1083,7 @@ namespace castor3d
 			{
 			case LightType::eDirectional:
 				{
-					auto c3d_light = writer.getBuiltin< shader::DirectionalLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::DirectionalLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
@@ -1199,7 +1091,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1214,7 +1106,7 @@ namespace castor3d
 
 			case LightType::ePoint:
 				{
-					auto c3d_light = writer.getBuiltin< shader::PointLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::PointLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
@@ -1222,7 +1114,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1237,7 +1129,7 @@ namespace castor3d
 
 			case LightType::eSpot:
 				{
-					auto c3d_light = writer.getBuiltin< shader::SpotLight >( cuT( "c3d_light" ) );
+					auto c3d_light = writer.getVariable< shader::SpotLight >( cuT( "c3d_light" ) );
 					auto light = writer.declLocale( cuT( "light" ), c3d_light );
 					lighting->compute( light
 						, eye
@@ -1245,7 +1137,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1263,7 +1155,7 @@ namespace castor3d
 			pxl_specular = lightSpecular;
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	//************************************************************************************************

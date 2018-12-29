@@ -23,7 +23,7 @@
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -205,7 +205,7 @@ namespace castor3d
 
 	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
-		, LightType p_type
+		, LightType type
 		, GeometryPassResult const & gp
 		, ashes::Semaphore const & toWait
 		, uint32_t & index
@@ -214,12 +214,12 @@ namespace castor3d
 		auto result = &toWait;
 		auto & cache = scene.getLightCache();
 
-		if ( cache.getLightsCount( p_type ) )
+		if ( cache.getLightsCount( type ) )
 		{
-			auto & lightPass = *m_lightPass[size_t( p_type )];
-			auto & lightPassShadow = *m_lightPassShadow[size_t( p_type )];
+			auto & lightPass = *m_lightPass[size_t( type )];
+			auto & lightPassShadow = *m_lightPassShadow[size_t( type )];
 
-			for ( auto & light : cache.getLights( p_type ) )
+			for ( auto & light : cache.getLights( type ) )
 			{
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )

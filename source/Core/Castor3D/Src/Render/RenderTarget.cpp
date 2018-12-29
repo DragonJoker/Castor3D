@@ -10,6 +10,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -29,7 +30,7 @@
 #include <Graphics/Image.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #if !defined( NDEBUG )
 #	define DISPLAY_DEBUG 1
@@ -652,24 +653,27 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "Flip" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_textureObjects = writer.declOutput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
 			auto vtx_textureOverlays = writer.declOutput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_textureObjects = writer.ashesTopDownToBottomUp( texcoord );
+					vtx_textureObjects = utils.topDownToBottomUp( texcoord );
 					vtx_textureOverlays = texcoord;
 
 					if ( getTargetType() != TargetType::eWindow )
@@ -678,26 +682,26 @@ namespace castor3d
 						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
 					}
 
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			vtx = writer.finalise();
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "Flip" };
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapOverlays = writer.declSampler< Sampler2D >( cuT( "c3d_mapOverlays" ), 0u, 0u );
-			auto c3d_mapObjects = writer.declSampler< Sampler2D >( cuT( "c3d_mapObjects" ), 1u, 0u );
+			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapOverlays" ), 0u, 0u );
+			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapObjects" ), 1u, 0u );
 			auto vtx_textureObjects = writer.declInput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
 			auto vtx_textureOverlays = writer.declInput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
 					auto overlayColor = writer.declLocale( cuT( "overlayColor" )
@@ -708,18 +712,14 @@ namespace castor3d
 					//overlayColor.rgb() *= overlayColor.a();
 					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
 				} );
-			pxl = writer.finalise();
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ShaderStageStateArray program;
 		program.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		program.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		program[0].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		program[1].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+		program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 
 		m_combineCommands = device.getGraphicsCommandPool().createCommandBuffer();
 		m_combineFinished = device.createSemaphore();

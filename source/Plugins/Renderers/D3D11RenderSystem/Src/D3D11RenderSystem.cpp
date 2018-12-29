@@ -4,7 +4,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslWriter.hpp>
+#include <CompilerHlsl/compileHlsl.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -20,7 +20,7 @@ namespace D3D11Render
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true )
+		: castor3d::RenderSystem( engine, Name, true, true )
 	{
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
@@ -92,17 +92,24 @@ namespace D3D11Render
 			, enableValidation );
 	}
 
-	glsl::GlslWriter RenderSystem::createGlslWriter()
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, true
-			, true
-			, m_gpuInformations.hasShaderStorageBuffers()
-			, true
-			, true
-			, m_renderer->getClipDirection() == ashes::ClipDirection::eTopDown
-			, true
-			, true
-			, true } };
+		castor3d::UInt32Array result;
+		std::string hlsl;
+
+		if ( module.shader )
+		{
+			hlsl = hlsl::compileHlsl( *module.shader
+				, ast::SpecialisationInfo{} );
+		}
+		else
+		{
+			hlsl = module.source;
+		}
+
+		auto size = hlsl.size() + 1u;
+		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.data(), hlsl.data(), hlsl.size() );
+		return result;
 	}
 }

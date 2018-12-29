@@ -23,12 +23,12 @@ namespace Bloom
 		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 
-		inline glsl::Shader const & getVertexShader()const
+		inline castor3d::ShaderModule const & getVertexShader()const
 		{
 			return m_vertexShader;
 		}
 
-		inline glsl::Shader const & getPixelShader()const
+		inline castor3d::ShaderModule const & getPixelShader()const
 		{
 			return m_pixelShader;
 		}
@@ -38,7 +38,8 @@ namespace Bloom
 
 		struct Subpass
 		{
-			Subpass( ashes::Device const & device
+			Subpass( castor3d::RenderSystem & renderSystem
+				, ashes::Device const & device
 				, ashes::Format format
 				, ashes::TextureView const & srcView
 				, ashes::TextureView const & dstView
@@ -46,8 +47,8 @@ namespace Bloom
 				, ashes::DescriptorSetPool const & descriptorPool
 				, ashes::PipelineLayout const & pipelineLayout
 				, ashes::Extent2D dimensions
-				, glsl::Shader const & vertexShader
-				, glsl::Shader const & pixelShader
+				, castor3d::ShaderModule const & vertexShader
+				, castor3d::ShaderModule const & pixelShader
 				, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 				, uint32_t index );
 
@@ -65,8 +66,8 @@ namespace Bloom
 		ashes::RenderPassPtr m_renderPass;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::vector< Subpass > m_passes;
 		bool m_isVertical;

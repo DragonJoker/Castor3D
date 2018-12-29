@@ -25,7 +25,7 @@
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -81,32 +81,32 @@ namespace Bloom
 	{
 		visitor.visit( cuT( "HiPass" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_hiPass->getVertexShader() );
+			, *m_hiPass->getVertexShader().shader );
 		visitor.visit( cuT( "HiPass" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_hiPass->getPixelShader() );
+			, *m_hiPass->getPixelShader().shader );
 
 #if !Bloom_DebugHiPass
 		visitor.visit( cuT( "BlurX" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_blurXPass->getVertexShader() );
+			, *m_blurXPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurX" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_blurXPass->getPixelShader() );
+			, *m_blurXPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "BlurY" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_blurYPass->getVertexShader() );
+			, *m_blurYPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurY" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_blurYPass->getPixelShader() );
+			, *m_blurYPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_combinePass->getVertexShader() );
+			, *m_combinePass->getVertexShader().shader );
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_combinePass->getPixelShader() );
+			, *m_combinePass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );

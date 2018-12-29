@@ -19,7 +19,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -68,6 +68,7 @@ namespace castor3d
 			, ashes::TextureView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
+			, HdrConfigUbo & hdrConfigUbo
 			, ashes::TextureView const * ssao );
 		/**
 		 *\~english
@@ -115,8 +116,8 @@ namespace castor3d
 			void accept( RenderTechniqueVisitor & visitor );
 
 			ashes::RenderPass const * m_renderPass;
-			glsl::Shader m_vertexShader;
-			glsl::Shader m_pixelShader;
+			castor3d::ShaderModule m_vertexShader;
+			castor3d::ShaderModule m_pixelShader;
 			ashes::ShaderStageStateArray m_program;
 			ashes::PipelineLayoutPtr m_pipelineLayout;
 			ashes::PipelinePtr m_pipeline;
@@ -127,7 +128,6 @@ namespace castor3d
 	private:
 		ashes::Device const & m_device;
 		Scene const & m_scene;
-		GpInfoUbo & m_gpInfoUbo;
 		ashes::TextureView const * m_ssaoResult;
 		ashes::Extent2D m_size;
 		Viewport m_viewport;

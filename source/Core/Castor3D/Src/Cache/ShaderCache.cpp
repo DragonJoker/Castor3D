@@ -8,7 +8,7 @@
 #include "Render/RenderPass.hpp"
 #include "Shader/Program.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Core/Device.hpp>
 
@@ -185,16 +185,17 @@ namespace castor3d
 				, textureFlags
 				, programFlags
 				, sceneFlags
-				, alphaFunc ).getSource() );
+				, alphaFunc ) );
 		auto geometry = renderPass.getGeometryShaderSource( passFlags
 			, textureFlags
 			, programFlags
 			, sceneFlags );
 
-		if ( !geometry.getSource().empty() )
+		if ( geometry )
 		{
 			addFlag( matrixUboShaderMask, ashes::ShaderStageFlag::eGeometry );
-			result->setSource( ashes::ShaderStageFlag::eGeometry, geometry );
+			result->setSource( ashes::ShaderStageFlag::eGeometry
+				, std::move( geometry ) );
 		}
 
 		return result;
@@ -235,50 +236,48 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & renderSystem = *engine.getRenderSystem();
-		glsl::Shader vtxShader;
-		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 
-			// Shader inputs
-			auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
-			auto texture = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
-			auto center = writer.declAttribute< Vec3 >( cuT( "center" ), 2u );
-			auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
-			auto gl_VertexID( writer.declBuiltin< Int >( writer.getVertexID() ) );
-			UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
-			UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
-			UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
-			UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-			UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
+		// Shader inputs
+		auto position = writer.declInput< Vec4 >( cuT( "position" ), 0u );
+		auto texture = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
+		auto center = writer.declInput< Vec3 >( cuT( "center" ), 2u );
+		auto in = writer.getIn();
+		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
+		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
+		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
+		UBO_BILLBOARD( writer, BillboardUbo::BindingPoint, 0 );
 
-			// Shader outputs
-			auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
-				, RenderPass::VertexOutputs::WorldPositionLocation );
-			auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
-				, RenderPass::VertexOutputs::CurPositionLocation );
-			auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
-				, RenderPass::VertexOutputs::PrvPositionLocation );
-			auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
-				, RenderPass::VertexOutputs::NormalLocation );
-			auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
-				, RenderPass::VertexOutputs::TangentLocation );
-			auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
-				, RenderPass::VertexOutputs::BitangentLocation );
-			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
-				, RenderPass::VertexOutputs::TextureLocation );
-			auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
-				, RenderPass::VertexOutputs::InstanceLocation );
-			auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
-				, RenderPass::VertexOutputs::MaterialLocation );
-			auto out = gl_PerVertex{ writer };
+		// Shader outputs
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< Void >( cuT( "main" )
+			, [&]()
 			{
 				auto curBbcenter = writer.declLocale( cuT( "curBbcenter" )
-					, writer.paren( c3d_curMtxModel * vec4( center, 1.0 ) ).xyz() );
+					, writer.paren( c3d_curMtxModel * vec4( center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( cuT( "prvBbcenter" )
-					, writer.paren( c3d_prvMtxModel * vec4( center, 1.0 ) ).xyz() );
+					, writer.paren( c3d_prvMtxModel * vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( cuT( "curToCamera" )
 					, c3d_cameraPosition.xyz() - curBbcenter );
 				curToCamera.y() = 0.0_f;
@@ -304,8 +303,8 @@ namespace castor3d
 
 				if ( checkFlag( programFlags, ProgramFlag::eFixedSize ) )
 				{
-					width = c3d_dimensions.x() / c3d_windowSize.x();
-					height = c3d_dimensions.y() / c3d_windowSize.y();
+					width = c3d_dimensions.x() / writer.cast< Float >( c3d_windowSize.x() );
+					height = c3d_dimensions.y() / writer.cast< Float >( c3d_windowSize.y() );
 				}
 
 				vtx_worldPosition = curBbcenter
@@ -315,10 +314,10 @@ namespace castor3d
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
 
 				vtx_texture = vec3( texture, 0.0 );
-				vtx_instance = gl_InstanceID;
+				vtx_instance = in.gl_InstanceID;
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
-				prvPosition = c3d_prvView * prvPosition;
+				prvPosition = c3d_prvView * vec4( prvPosition, 1.0 );
 				curPosition = c3d_projection * curPosition;
 				prvPosition = c3d_projection * prvPosition;
 
@@ -329,29 +328,28 @@ namespace castor3d
 				//  code)
 				curPosition.xy() -= c3d_jitter * curPosition.w();
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
-				out.gl_Position() = curPosition;
+				out.gl_out.gl_Position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();
 				// Positions in projection space are in [-1, 1] range, while texture
 				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
-				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
 			} );
 
-			vtxShader = writer.finalise();
-		}
+		auto & vtxShader = writer.getShader();
 
-		glsl::Shader pxlShader = renderPass.getPixelShaderSource( passFlags
+		auto pxlShader = renderPass.getPixelShaderSource( passFlags
 			, textureFlags
 			, programFlags
 			, sceneFlags
 			, alphaFunc );
 
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
-		result->setSource( ashes::ShaderStageFlag::eVertex, vtxShader );
-		result->setSource( ashes::ShaderStageFlag::eFragment, pxlShader );
+		result->setSource( ashes::ShaderStageFlag::eVertex, std::make_unique< sdw::Shader >( std::move( vtxShader ) ) );
+		result->setSource( ashes::ShaderStageFlag::eFragment, std::move( pxlShader ) );
 		return result;
 	}
 

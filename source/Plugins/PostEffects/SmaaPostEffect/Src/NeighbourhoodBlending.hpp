@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -43,8 +43,8 @@ namespace smaa
 		ashes::TextureView const & m_sourceView;
 		ashes::TextureView const & m_blendView;
 		ashes::TextureView const * m_velocityView;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

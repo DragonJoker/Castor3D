@@ -14,36 +14,36 @@ namespace castor3d
 			: public LightingModel
 		{
 		public:
-			C3D_API SpecularBrdfLightingModel( glsl::GlslWriter & writer );
-			C3D_API void computeCombined( glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
+			C3D_API SpecularBrdfLightingModel( sdw::ShaderWriter & writer );
+			C3D_API void computeCombined( sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Int const & receivesShadows
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
 
@@ -60,12 +60,12 @@ namespace castor3d
 				, bool volumetric )override;
 
 			void doComputeLight( Light const & light
-				, glsl::Vec3 const & worldEye
-				, glsl::Vec3 const & direction
-				, glsl::Vec3 const & diffuse
-				, glsl::Vec3 const & specular
-				, glsl::Float const & glossiness
-				, glsl::Float const & shadowFactor
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, sdw::Vec3 const & diffuse
+				, sdw::Vec3 const & specular
+				, sdw::Float const & glossiness
+				, sdw::Float const & shadowFactor
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output );
 
@@ -76,83 +76,83 @@ namespace castor3d
 
 		public:
 			C3D_API static const castor::String Name;
-			glsl::Function< glsl::Float
-				, glsl::InFloat
-				, glsl::InFloat > m_distributionGGX;
-			glsl::Function< glsl::Float
-				, glsl::InFloat
-				, glsl::InFloat > m_geometrySchlickGGX;
-			glsl::Function< glsl::Float
-				, glsl::InFloat
-				, glsl::InFloat
-				, glsl::InFloat > m_geometrySmith;
-			glsl::Function< glsl::Float
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat > m_smith;
-			glsl::Function< glsl::Vec3
-				, glsl::InFloat
-				, glsl::InVec3 > m_schlickFresnel;
-			glsl::Function< glsl::Vec3
-				, glsl::InFloat
-				, glsl::InFloat
-				, glsl::InFloat
-				, glsl::InFloat
-				, glsl::InVec3 > m_cookTorrance;
-			glsl::Function< glsl::Void
-				, DirectionalLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Float
+				, sdw::InFloat
+				, sdw::InFloat > m_distributionGGX;
+			sdw::Function< sdw::Float
+				, sdw::InFloat
+				, sdw::InFloat > m_geometrySchlickGGX;
+			sdw::Function< sdw::Float
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InFloat > m_geometrySmith;
+			sdw::Function< sdw::Float
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat > m_smith;
+			sdw::Function< sdw::Vec3
+				, sdw::InFloat
+				, sdw::InVec3 > m_schlickFresnel;
+			sdw::Function< sdw::Vec3
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InVec3 > m_cookTorrance;
+			sdw::Function< sdw::Void
+				, InDirectionalLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeDirectional;
-			glsl::Function< glsl::Void
-				, PointLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InPointLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computePoint;
-			glsl::Function< glsl::Void
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InSpotLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeSpot;
-			glsl::Function< glsl::Void
-				, PointLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InPointLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOnePoint;
-			glsl::Function< glsl::Void
-				, SpotLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt
+			sdw::Function< sdw::Void
+				, InSpotLight
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOneSpot;
-			glsl::Function< glsl::Void
+			sdw::Function< sdw::Void
 				, InLight
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
 		};

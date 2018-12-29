@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
-#include <GlslWriterPrerequisites.hpp>
+#include <CastorUtilsPrerequisites.hpp>
 
 #if !defined( CASTOR_PLATFORM_WINDOWS )
 #	define C3D_API
@@ -29,8 +29,7 @@ See LICENSE file in root folder
 #include <Math/SquareMatrix.hpp>
 #include <Miscellaneous/StringUtils.hpp>
 
-#include <GlslWriterPrerequisites.hpp>
-
+#include <ShaderWriter/Source.hpp>
 #include <AshesPrerequisites.hpp>
 
 namespace castor3d
@@ -38,6 +37,7 @@ namespace castor3d
 	using castor::real;
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
+	using castor::UInt32Array;
 }
 
 #include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
@@ -290,9 +290,9 @@ namespace castor3d
 	DECLARE_SMART_PTR( RenderPassTimer );
 	DECLARE_SMART_PTR( GaussianBlur );
 
-	castor::Matrix4x4f convert( std::array< float, 16 > const & value );
-	ashes::ClearColorValue convert( castor::RgbaColour const & value );
-	castor::RgbaColour convert( ashes::ClearColorValue const & value );
+	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
+	C3D_API ashes::ClearColorValue convert( castor::RgbaColour const & value );
+	C3D_API castor::RgbaColour convert( ashes::ClearColorValue const & value );
 
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 

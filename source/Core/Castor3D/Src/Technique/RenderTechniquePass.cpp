@@ -9,7 +9,7 @@
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -174,12 +174,12 @@ namespace castor3d
 		}
 	}
 
-	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return glsl::Shader{};
+		return nullptr;
 	}
 
 	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const

@@ -18,7 +18,7 @@
 #include "Technique/Transparent/TransparentPass.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -162,6 +162,7 @@ namespace castor3d
 		, m_renderTarget{ renderTarget }
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
+		, m_hdrConfigUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
@@ -190,7 +191,6 @@ namespace castor3d
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ config }
-		, m_hdrConfigUbo{ *renderSystem.getEngine() }
 	{
 		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
 			, *renderTarget.getScene()
@@ -548,6 +548,7 @@ namespace castor3d
 			, m_colourTexture
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
+			, m_hdrConfigUbo
 			, m_ssaoConfig );
 
 #else
@@ -572,7 +573,8 @@ namespace castor3d
 			, m_colourTexture->getDefaultView()
 			, m_renderTarget.getVelocity().getTexture()
 			, m_renderTarget.getSize()
-			, *m_renderTarget.getScene() );
+			, *m_renderTarget.getScene()
+			, m_hdrConfigUbo );
 
 #else
 

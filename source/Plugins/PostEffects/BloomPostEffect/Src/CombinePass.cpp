@@ -9,6 +9,7 @@
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderPassTimer.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -20,14 +21,13 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -35,50 +35,65 @@ namespace Bloom
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				out.gl_Position() = vec4( position, 0.0, 1.0 );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getPixelProgram( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem
 			, uint32_t blurPassesCount )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapPasses = writer.declSampler< Sampler2D >( CombinePass::CombineMapPasses, 0u, 0u );
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( CombinePass::CombineMapScene, 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapPasses = writer.declSampledImage< FImg2DRgba32 >( CombinePass::CombineMapPasses, 0u, 0u );
+			auto c3d_mapScene = writer.declSampledImage< FImg2DRgba32 >( CombinePass::CombineMapScene, 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = texture( c3d_mapScene, writer.ashesBottomUpToTopDown( vtx_texture ) );
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
+			utils.declareInvertVec2Y();
 
-				for ( uint32_t i = 0; i < blurPassesCount; ++i )
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					pxl_fragColor += texture( c3d_mapPasses, vtx_texture, Float( float( i ) ) );
-				}
-			} );
-			return writer.finalise();
+					auto texcoords = writer.declLocale( cuT( "texcoords" )
+						, utils.bottomUpToTopDown( vtx_texture ) );
+
+					if ( renderSystem.isTopDown() )
+					{
+						pxl_fragColor = texture( c3d_mapScene, vtx_texture );
+					}
+					else
+					{
+						pxl_fragColor = texture( c3d_mapScene, texcoords );
+					}
+
+					for ( uint32_t i = 0; i < blurPassesCount; ++i )
+					{
+						pxl_fragColor += texture( c3d_mapPasses, texcoords, Float( float( i ) ) );
+					}
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		castor3d::TextureLayoutSPtr doCreateTexture( castor3d::RenderSystem & renderSystem
@@ -176,10 +191,11 @@ namespace Bloom
 			return device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		}
 
-		ashes::PipelinePtr doCreatePipeline( ashes::Device const & device
+		ashes::PipelinePtr doCreatePipeline( castor3d::RenderSystem & renderSystem
+			, ashes::Device const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, glsl::Shader const & vertexShader
-			, glsl::Shader const & pixelShader
+			, castor3d::ShaderModule const & vertexShader
+			, castor3d::ShaderModule const & pixelShader
 			, ashes::RenderPass const & renderPass
 			, ashes::Extent2D const & size )
 		{
@@ -190,12 +206,8 @@ namespace Bloom
 			ashes::ShaderStageStateArray stages;
 			stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 			stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-			stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			stages[0].module->loadShader( renderSystem.compileShader( vertexShader ) );
+			stages[1].module->loadShader( renderSystem.compileShader( pixelShader ) );
 
 			ashes::GraphicsPipelineCreateInfo pipeline
 			{
@@ -250,13 +262,13 @@ namespace Bloom
 		: m_device{ getCurrentDevice( renderSystem ) }
 		, m_image{ doCreateTexture( renderSystem, size, format ) }
 		, m_view{ doCreateView( m_image->getTexture() ) }
-		, m_vertexShader{ getVertexProgram( renderSystem ) }
-		, m_pixelShader{ getPixelProgram( renderSystem, blurPassesCount ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "BloomCombine", getVertexProgram( renderSystem ) }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "BloomCombine", getPixelProgram( renderSystem, blurPassesCount ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, *m_view, size ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ m_device.createPipelineLayout( *m_descriptorLayout ) }
-		, m_pipeline{ doCreatePipeline( m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
+		, m_pipeline{ doCreatePipeline( renderSystem, m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
 		, m_sceneSampler{ m_device.createSampler( ashes::WrapMode::eClampToEdge
 			, ashes::WrapMode::eClampToEdge
 			, ashes::WrapMode::eClampToEdge

@@ -12,8 +12,8 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/Fence.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 
@@ -81,89 +81,87 @@ namespace castor3d
 
 		ashes::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem )
 		{
-			glsl::Shader vtx;
+			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RadianceCompute" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
-				Ubo matrix{ writer, cuT( "Matrix" ), 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( cuT( "c3d_viewProjection" ) );
+				auto position = writer.declInput< Vec3 >( "position", 0u );
+				Ubo matrix{ writer, "Matrix", 0u, 0u };
+				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
 				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto out = gl_PerVertex{ writer };
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
+				auto out = writer.getOut();
 
-				std::function< void() > main = [&]()
-				{
-					vtx_worldPosition = position;
-					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
-				};
-
-				writer.implementFunction< void >( cuT( "main" ), main );
-				vtx = writer.finalise();
+				writer.implementFunction< Void >( "main"
+					, [&]()
+					{
+						vtx_worldPosition = position;
+						out.gl_out.gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
+					} );
+				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			glsl::Shader pxl;
+			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RadianceCompute" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				FragmentWriter writer;
 
 				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
+				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
 
 				// Outputs
-				auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				writer.implementFunction< void >( cuT( "main" ), [&]()
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					// the sample direction equals the hemisphere's orientation 
-					auto normal = writer.declLocale( cuT( "normal" )
-						, normalize( vtx_worldPosition ) );
-
-					auto irradiance = writer.declLocale( cuT( "irradiance" )
-						, vec3( 0.0_f ) );
-
-					auto up = writer.declLocale( cuT( "up" )
-						, vec3( 0.0_f, 1.0, 0.0 ) );
-					auto right = writer.declLocale( cuT( "right" )
-						, cross( up, normal ) );
-					up = cross( normal, right );
-
-					auto sampleDelta = writer.declLocale( cuT( "sampleDelta" )
-						, 0.025_f );
-					auto nrSamples = writer.declLocale( cuT( "nrSamples" )
-						, 0_i );
-					auto PI = writer.declLocale( cuT( "PI" )
-						, 3.14159265359_f );
-
-					FOR( writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += sampleDelta" )
+				writer.implementFunction< Void >( "main"
+					, [&]()
 					{
-						FOR( writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += sampleDelta" )
-						{
-							// spherical to cartesian (in tangent space)
-							auto tangentSample = writer.declLocale( cuT( "tangentSample" )
-								, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
-							// tangent space to world
-							auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-								, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+						// From https://learnopengl.com/#!PBR/Lighting
+						// the sample direction equals the hemisphere's orientation 
+						auto normal = writer.declLocale( "normal"
+							, normalize( vtx_worldPosition ) );
 
-							irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
-							nrSamples = nrSamples + 1;
+						auto irradiance = writer.declLocale( "irradiance"
+							, vec3( 0.0_f ) );
+
+						auto up = writer.declLocale( "up"
+							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+						auto right = writer.declLocale( "right"
+							, cross( up, normal ) );
+						up = cross( normal, right );
+
+						auto sampleDelta = writer.declLocale( "sampleDelta"
+							, 0.025_f );
+						auto nrSamples = writer.declLocale( "nrSamples"
+							, 0_i );
+
+						FOR( writer, Float, phi, 0.0_f, phi < Float{ PiMult2< float > }, phi += sampleDelta )
+						{
+							FOR( writer, Float, theta, 0.0_f, theta < Float{ PiDiv2< float > }, theta += sampleDelta )
+							{
+								// spherical to cartesian (in tangent space)
+								auto tangentSample = writer.declLocale( "tangentSample"
+									, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
+								// tangent space to world
+								auto sampleVec = writer.declLocale( "sampleVec"
+									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+
+								irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
+								nrSamples = nrSamples + 1;
+							}
+							ROF;
 						}
 						ROF;
-					}
-					ROF;
 
-					irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
-					pxl_fragColor = vec4( irradiance, 1.0 );
-				} );
+						irradiance = irradiance * Float{ Pi< float > } * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
+						pxl_fragColor = vec4( irradiance, 1.0_f );
+					} );
 
-				pxl = writer.finalise();
+				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
 			ashes::ShaderStageStateArray program
@@ -171,12 +169,8 @@ namespace castor3d
 				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 			};
-			program[0].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
-				, ashes::ShaderStageFlag::eVertex
-				, vtx.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
-				, ashes::ShaderStageFlag::eFragment
-				, pxl.getSource() ) );
+			program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+			program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 			return program;
 		}
 

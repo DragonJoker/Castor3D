@@ -49,7 +49,8 @@ namespace castor3d
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, castor::String const & name
-			, bool topDown );
+			, bool topDown
+			, bool zeroToOneDepth );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -96,11 +97,15 @@ namespace castor3d
 		C3D_API Scene * getTopScene()const;
 		/**
 		 *\~english
-		 *\return		A pre-configured GlslWriter instance.
+		 *\brief		Compiles a shader module to the necessary shader language.
+		 *\param[in]	module	The shader to compile.
+		 *\return		The compiled shader.
 		 *\~french
-		 *\brief		Une instance pré-configurée de GlslWriter.
+		 *\brief		Compile un shader dans le langage shader nécessaire.
+		 *\param[in]	module	Le shader à compiler.
+		 *\return		Le shader compilé.
 		 */
-		C3D_API virtual glsl::GlslWriter createGlslWriter();
+		C3D_API virtual UInt32Array compileShader( ShaderModule const & module ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -331,6 +336,11 @@ namespace castor3d
 		{
 			return m_topDown;
 		}
+
+		inline bool isZeroToOneDepth()const
+		{
+			return m_zeroToOneDepth;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -362,6 +372,7 @@ namespace castor3d
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
 		bool const m_topDown;
+		bool const m_zeroToOneDepth;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::RendererPtr m_renderer;

@@ -48,7 +48,7 @@ add_target(
 	"${CUT_CXX_FLAGS}"
 )
 
-set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tests/Castor" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/Src/mtx_ope.cl )
 

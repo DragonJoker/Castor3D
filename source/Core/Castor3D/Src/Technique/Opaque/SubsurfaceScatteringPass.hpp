@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Command/CommandBuffer.hpp>
 #include <Sync/Semaphore.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -196,16 +196,16 @@ namespace castor3d
 		TextureUnit m_intermediate;
 		std::array< TextureUnit, 3u > m_blurResults;
 		TextureUnit m_result;
-		glsl::Shader m_blurHorizVertexShader;
-		glsl::Shader m_blurHorizPixelShader;
+		ShaderModule m_blurHorizVertexShader;
+		ShaderModule m_blurHorizPixelShader;
 		ashes::ShaderStageStateArray m_blurHorizProgram;
 		Blur m_blurX[3];
-		glsl::Shader m_blurVerticVertexShader;
-		glsl::Shader m_blurVerticPixelShader;
+		ShaderModule m_blurVerticVertexShader;
+		ShaderModule m_blurVerticPixelShader;
 		ashes::ShaderStageStateArray m_blurVerticProgram;
 		Blur m_blurY[3];
-		glsl::Shader m_combineVertexShader;
-		glsl::Shader m_combinePixelShader;
+		ShaderModule m_combineVertexShader;
+		ShaderModule m_combinePixelShader;
 		ashes::ShaderStageStateArray m_combineProgram;
 		Combine m_combine;
 		ashes::CommandBufferPtr m_commandBuffer;

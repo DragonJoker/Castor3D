@@ -24,7 +24,7 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
 
@@ -41,42 +41,41 @@ namespace smaa
 
 	namespace
 	{
-		glsl::Shader doGetCopyVertexShader( castor3d::RenderSystem & renderSystem )
+		castor3d::ShaderPtr doGetCopyVertexShader()
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 					vtx_texture = texcoord;
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader doGetCopyPixelShader( castor3d::RenderSystem & renderSystem
-			, SmaaConfig const & config)
+		castor3d::ShaderPtr doGetCopyPixelShader( SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_map = writer.declSampler< Sampler2D >( cuT( "c3d_map" ), 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto c3d_map = writer.declSampledImage< FImg2DRgba32 >( "c3d_map", 0u, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					if ( config.data.mode == Mode::eT2X
@@ -90,7 +89,7 @@ namespace smaa
 						pxl_fragColour = texture( c3d_map, vtx_texture );
 					}
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
@@ -367,12 +366,8 @@ namespace smaa
 		auto & device = getCurrentDevice( *this );
 		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		m_copyProgram[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, doGetCopyVertexShader( *getRenderSystem() ).getSource() ) );
-		m_copyProgram[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, doGetCopyPixelShader( *getRenderSystem(), m_config ).getSource() ) );
+		m_copyProgram[0].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eVertex, "SmaaCopy", doGetCopyVertexShader() } ) );
+		m_copyProgram[1].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eFragment, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
 		m_copyRenderPass = doCreateRenderPass( device, m_target->getPixelFormat() );
 		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
 

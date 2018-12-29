@@ -15,7 +15,7 @@
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/ShaderStageState.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -120,6 +120,16 @@ namespace castor3d
 			{
 				m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSets ) );
 			}
+		}
+	}
+
+	void RenderPipeline::setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
+	{
+		REQUIRE( !m_pipeline );
+
+		for ( auto & layout : layouts )
+		{
+			m_vertexLayouts.emplace_back( layout.get() );
 		}
 	}
 }

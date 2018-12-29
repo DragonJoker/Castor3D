@@ -3,7 +3,7 @@
 
 #include <Graphics/PixelBuffer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 

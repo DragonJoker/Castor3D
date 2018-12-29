@@ -24,8 +24,8 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -38,32 +38,32 @@ namespace castor3d
 	{
 		static ashes::Format constexpr ColourFormat = ashes::Format::eR8G8B8A8_UNORM;
 
-		glsl::Shader doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		glsl::Shader doGetPixelProgram( Engine & engine
+		ShaderPtr doGetPixelProgram( Engine & engine
 			, SsaoConfig const & config )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			UBO_SSAO_CONFIG( writer, 0u, 0u );
 			/** (1, 0) or (0, 1)*/
@@ -72,14 +72,14 @@ namespace castor3d
 			auto c3d_dummy = configuration.declMember< IVec2 >( cuT( "c3d_dummy" ) );
 			auto c3d_gaussian = configuration.declMember< Vec4 >( cuT( "c3d_gaussian" ), 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
-			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), 3u, 0u );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
+			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapInput" ), 3u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant< Vec4 >( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
 			auto c3d_readAddSecond = writer.declConstant< Vec4 >( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
 
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
@@ -92,7 +92,7 @@ namespace castor3d
 				{
 					writer.returnStmt( p );
 				}
-				, InFloat{ &writer, cuT( "p" ) } );
+				, InFloat{ writer, cuT( "p" ) } );
 
 			// Reconstruct camera-space P.xyz from screen-space S = (x, y) in
 			// pixels and camera-space z < 0.  Assumes that the upper-left pixel center
@@ -104,11 +104,11 @@ namespace castor3d
 					, Float const & z
 					, Vec4 const & projInfo )
 				{
-					writer.returnStmt( vec3( glsl::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
+					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
-				, InVec2{ &writer, cuT( "S" ) }
-				, InFloat{ &writer, cuT( "z" ) }
-				, InVec4{ &writer, cuT( "projInfo" ) } );
+				, InVec2{ writer, cuT( "S" ) }
+				, InFloat{ writer, cuT( "z" ) }
+				, InVec4{ writer, cuT( "projInfo" ) } );
 
 			auto positionFromKey = writer.implementFunction< Vec3 >( cuT( "positionFromKey" )
 				, [&]( Float const & key
@@ -123,9 +123,9 @@ namespace castor3d
 							, projInfo ) );
 					writer.returnStmt( position );
 				}
-				, InFloat{ &writer, cuT( "key" ) }
-				, InIVec2{ &writer, cuT( "ssCenter" ) }
-				, InVec4{ &writer, cuT( "projInfo" ) } );
+				, InFloat{ writer, cuT( "key" ) }
+				, InIVec2{ writer, cuT( "ssCenter" ) }
+				, InVec4{ writer, cuT( "projInfo" ) } );
 
 			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
 				, [&]( IVec2 const & tapLoc
@@ -134,31 +134,31 @@ namespace castor3d
 					, Vec3 tapNormal )
 				{
 					auto temp = writer.declLocale( cuT( "temp" )
-						, texelFetch( c3d_mapInput, tapLoc, 0 ) );
+						, texelFetch( c3d_mapInput, tapLoc, 0_i ) );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
 					if ( config.m_useNormalsBuffer )
 					{
-						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0 ).xyz();
-						tapNormal = normalize( glsl::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0_i ).xyz();
+						tapNormal = normalize( sdw::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 					else
 					{
 						tapNormal = vec3( 0.0_f );
 					}
 				}
-				, InIVec2{ &writer, cuT( "tapLoc" ) }
-				, OutFloat{ &writer, cuT( "tapKey" ) }
-				, OutFloat{ &writer, cuT( "value" ) }
-				, OutVec3{ &writer, cuT( "tapNormal" ) } );
+				, InIVec2{ writer, cuT( "tapLoc" ) }
+				, OutFloat{ writer, cuT( "tapKey" ) }
+				, OutFloat{ writer, cuT( "value" ) }
+				, OutVec3{ writer, cuT( "tapNormal" ) } );
 
 			auto square = writer.implementFunction< Float >( cuT( "square" )
 				, [&]( Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
-				, InFloat{ &writer, cuT( "x") } );
+				, InFloat{ writer, cuT( "x") } );
 
 			auto calculateBilateralWeight = writer.implementFunction< Float >( cuT( "calculateBilateralWeight" )
 				, [&]( Float const & key
@@ -227,29 +227,29 @@ namespace castor3d
 							// Minimum distance threshold must be scale-invariant, so factor in the radius
 							planeWeight = writer.ternary( distance2 * square( scale ) < lowDistanceThreshold2
 								, 1.0_f
-								, pow( max( 0.0_f
+								, Float{ pow( max( 0.0_f
 										, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
-									, 2.0_f ) );
+									, 2.0_f ) } );
 						}
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
 				}
-				, InFloat{ &writer, cuT( "key" ) }
-				, InFloat{ &writer, cuT( "tapKey" ) }
-				, InIVec2{ &writer, cuT( "tapLoc" ) }
-				, InVec3{ &writer, cuT( "normal" ) }
-				, InVec3{ &writer, cuT( "tapNormal" ) }
-				, InVec3{ &writer, cuT( "position" ) } );
+				, InFloat{ writer, cuT( "key" ) }
+				, InFloat{ writer, cuT( "tapKey" ) }
+				, InIVec2{ writer, cuT( "tapLoc" ) }
+				, InVec3{ writer, cuT( "normal" ) }
+				, InVec3{ writer, cuT( "tapNormal" ) }
+				, InVec3{ writer, cuT( "position" ) } );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
 					auto ssCenter = writer.declLocale( cuT( "ssCenter" )
-						, ivec2( gl_FragCoord.xy() ) );
+						, ivec2( in.gl_FragCoord.xy() ) );
 
 					auto temp = writer.declLocale( cuT( "temp" )
-						, texelFetch( c3d_mapInput, ssCenter, 0 ) );
+						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );
 					auto sum = writer.declLocale( cuT( "sum" )
 						, temp.r() );
 
@@ -261,8 +261,8 @@ namespace castor3d
 
 					if ( config.m_useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ssCenter, 0 ).xyz();
-						normal = normalize( glsl::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+						normal = texelFetch( c3d_mapNormal, ssCenter, 0_i ).xyz();
+						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 
 					IF( writer, key == 1.0_f )
@@ -284,7 +284,7 @@ namespace castor3d
 					auto position = writer.declLocale( cuT( "position" )
 						, positionFromKey( key, ssCenter, c3d_projInfo ) );
 
-					FOR( writer, Int, r, -c3d_blurRadius, "r <= c3d_blurRadius", "++r" )
+					FOR( writer, Int, r, -c3d_blurRadius, r <= c3d_blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
@@ -297,12 +297,12 @@ namespace castor3d
 							auto absR = writer.declLocale( cuT( "absR" )
 								, writer.cast< UInt >( abs( r ) ) );
 							auto weight = writer.declLocale( cuT( "weight" )
-								, 0.3_f + c3d_gaussian[absR % 2_ui][absR / 2_ui] );
+								, 0.3_f + c3d_gaussian[absR % 2_u][absR / 2_u] );
 
 							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
 							auto value = writer.declLocale< Float >( cuT( "value" ) );
 							auto tapNormal = writer.declLocale< Vec3 >( cuT( "tapNormal" ) );
-							writer << getTapInformation( tapLoc, tapKey, value, tapNormal ) << endi;
+							getTapInformation( tapLoc, tapKey, value, tapNormal );
 
 							auto bilateralWeight = writer.declLocale( cuT( "bilateralWeight" )
 								, calculateBilateralWeight( key
@@ -324,7 +324,7 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / writer.paren( totalWeight + epsilon );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 
 #undef result
 #undef keyPassThrough
@@ -332,23 +332,19 @@ namespace castor3d
 
 		ashes::ShaderStageStateArray doGetProgram( Engine & engine
 			, SsaoConfig const & config
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetPixelProgram( engine, config );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetPixelProgram( engine, config );
 			auto & device = getCurrentDevice( engine );
 			ashes::ShaderStageStateArray result
 			{
 				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			result[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vertexShader.getSource() ) );
-			result[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pixelShader.getSource() ) );
+			result[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			result[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return result;
 		}
 
@@ -475,6 +471,8 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 		, m_finished{ getCurrentDevice( engine ).createSemaphore() }
 		, m_configurationUbo{ ashes::makeUniformBuffer< Configuration >( getCurrentDevice( engine ), 1u, 0u, ashes::MemoryPropertyFlag::eHostVisible ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SsaoBlur" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SsaoBlur" }
 	{
 		auto & configuration = m_configurationUbo->getData();
 		configuration.axis = axis;
@@ -606,10 +604,10 @@ namespace castor3d
 		auto name = stream.str();
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 		config.accept( name, visitor );
 	}
 

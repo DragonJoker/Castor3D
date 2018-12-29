@@ -12,6 +12,7 @@
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "RenderToTexture/TextureProjectionToCube.hpp"
 #include "Shader/Program.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -23,12 +24,10 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
 #include <Shader/ShaderModule.hpp>
-
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -136,41 +135,41 @@ namespace castor3d
 
 	ashes::ShaderStageStateArray ImageBackground::doInitialiseShader()
 	{
-		using namespace glsl;
+		using namespace sdw;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "ImageBackground" };
 		{
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			VertexWriter writer;
 
 			// Inputs
-			auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
 			UBO_MATRIX( writer, 0, 0 );
 			UBO_MODEL_MATRIX( writer, 1, 0 );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
 			std::function< void() > main = [&]()
 			{
-				out.gl_Position() = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0 ) ).xyww();
+				out.gl_out.gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0 ) ).xyww();
 				vtx_texture = position;
 			};
 
-			writer.implementFunction< void >( cuT( "main" ), main );
-			vtx = writer.finalise();
+			writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "ImageBackground" };
 		{
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			FragmentWriter writer;
 
 			// Inputs
 			UBO_HDR_CONFIG( writer, 2, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_mapSkybox = writer.declSampler< SamplerCube >( cuT( "c3d_mapSkybox" ), 3u, 0u );
-			glsl::Utils utils{ writer };
+			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), 3u, 0u );
+			shader::Utils utils{ writer };
 
 			if ( !m_hdr )
 			{
@@ -178,7 +177,7 @@ namespace castor3d
 			}
 
 			// Outputs
-			auto pxl_FragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
 			std::function< void() > main = [&]()
 			{
@@ -195,20 +194,16 @@ namespace castor3d
 				}
 			};
 
-			writer.implementFunction< void >( cuT( "main" ), main );
-			pxl = writer.finalise();
+			writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentDevice( renderSystem );
 		ashes::ShaderStageStateArray result;
 		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		result[1].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		result[0].module->loadShader( renderSystem.compileShader( vtx ) );
+		result[1].module->loadShader( renderSystem.compileShader( pxl ) );
 		return result;
 	}
 

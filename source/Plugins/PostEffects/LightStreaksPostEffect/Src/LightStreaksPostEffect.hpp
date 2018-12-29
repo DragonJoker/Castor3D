@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace light_streaks
 {
@@ -86,11 +86,11 @@ namespace light_streaks
 
 		struct Pipeline
 		{
+			castor3d::ShaderModule vertexShader;
+			castor3d::ShaderModule pixelShader;
 			Layout layout;
 			std::vector< Surface > surfaces;
 			ashes::PipelinePtr pipeline;
-			glsl::Shader vertexShader;
-			glsl::Shader pixelShader;
 		};
 
 		castor3d::SamplerSPtr m_linearSampler;

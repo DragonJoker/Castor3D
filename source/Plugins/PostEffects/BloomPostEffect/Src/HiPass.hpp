@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #define Bloom_DebugHiPass 0
 
@@ -25,12 +25,12 @@ namespace Bloom
 			, uint32_t blurPassesCount );
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer )const;
 
-		inline glsl::Shader const & getVertexShader()const
+		inline castor3d::ShaderModule const & getVertexShader()const
 		{
 			return m_vertexShader;
 		}
 
-		inline glsl::Shader const & getPixelShader()const
+		inline castor3d::ShaderModule const & getPixelShader()const
 		{
 			return m_pixelShader;
 		}
@@ -43,8 +43,8 @@ namespace Bloom
 	private:
 		ashes::Device const & m_device;
 		ashes::TextureView const & m_sceneView;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 	};

@@ -74,8 +74,8 @@ See LICENSE file in root folder
 #	include <Miscellaneous/StringUtils.hpp>
 #	include <Miscellaneous/Utils.hpp>
 
-// GlslWriter
-#	include <GlslSource.hpp>
+// ShaderWriter
+#	include <ShaderWriter/Source.hpp>
 
 // RendererLib
 #	include <Buffer/Buffer.hpp>

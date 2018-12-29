@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -119,8 +119,8 @@ namespace castor3d
 		*	Linearisation.
 		*/
 		/**@{*/
-		glsl::Shader m_lineariseVertexShader;
-		glsl::Shader m_linearisePixelShader;
+		ShaderModule m_lineariseVertexShader;
+		ShaderModule m_linearisePixelShader;
 		ashes::ShaderStageStateArray m_lineariseProgram;
 		ashes::TextureViewPtr m_linearisedView;
 		ashes::FrameBufferPtr m_lineariseFrameBuffer;
@@ -129,7 +129,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
 		ashes::PipelineLayoutPtr m_linearisePipelineLayout;
 		ashes::PipelinePtr m_linearisePipeline;
-		ashes::PushConstantsBuffer< castor::Point3f > m_clipInfo;
+		ashes::UniformBufferPtr< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**
@@ -137,25 +137,23 @@ namespace castor3d
 		*	Minification.
 		*/
 		/**@{*/
+		struct MinifyConfiguration
+		{
+			castor::Point2i textureSize;
+			int previousLevel;
+		};
 		struct MinifyPipeline
 		{
-			struct Configuration
-			{
-				castor::Point2i textureSize;
-				int previousLevel;
-			};
-
 			ashes::TextureView const * sourceView;
 			ashes::TextureViewPtr targetView;
 			ashes::DescriptorSetPtr descriptor;
 			ashes::FrameBufferPtr frameBuffer;
-			ashes::PushConstantsBufferTPtr< Configuration > previousLevel;
-			ashes::PushConstantRange pushConstants;
 			ashes::PipelinePtr pipeline;
 		};
 
-		glsl::Shader m_minifyVertexShader;
-		glsl::Shader m_minifyPixelShader;
+		ashes::UniformBufferPtr< MinifyConfiguration > m_previousLevel;
+		ShaderModule m_minifyVertexShader;
+		ShaderModule m_minifyPixelShader;
 		ashes::ShaderStageStateArray m_minifyProgram;
 		ashes::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
 		ashes::PipelineLayoutPtr m_minifyPipelineLayout;

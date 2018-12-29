@@ -52,7 +52,7 @@ namespace light_streaks
 }
 
 #define UBO_KAWASE( writer, binding, set )\
-	glsl::Ubo kawase{ writer, KawaseUbo::Name, binding, set };\
+	sdw::Ubo kawase{ writer, KawaseUbo::Name, binding, set };\
 	auto c3d_pixelSize = kawase.declMember< Vec2 >( KawaseUbo::PixelSize );\
 	auto c3d_direction = kawase.declMember< Vec2 >( KawaseUbo::Direction );\
 	auto c3d_samples = kawase.declMember< Int >( KawaseUbo::Samples );\

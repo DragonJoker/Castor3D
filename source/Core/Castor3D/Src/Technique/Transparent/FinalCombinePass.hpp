@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "TransparentPass.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -50,8 +50,8 @@ namespace castor3d
 	private:
 		RenderPassTimer & m_timer;
 		ashes::RenderPass const & m_renderPass;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		ShaderModule m_vertexShader;
+		ShaderModule m_pixelShader;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::PipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
@@ -86,6 +86,7 @@ namespace castor3d
 		FinalCombinePass( Engine & engine
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
+			, HdrConfigUbo & hdrConfigUbo
 			, WeightedBlendTextures const & wbResult
 			, ashes::TextureView const & colourView );
 		/**

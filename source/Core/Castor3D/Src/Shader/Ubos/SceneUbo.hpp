@@ -180,19 +180,19 @@ namespace castor3d
 }
 
 #define UBO_SCENE( writer, binding, set )\
-	glsl::Ubo scene{ writer\
+	sdw::Ubo scene{ writer\
 		, castor3d::SceneUbo::BufferScene\
 		, binding\
 		, set };\
-	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
-	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\
-	auto c3d_cameraPosition = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::CameraPos );\
-	auto c3d_windowSize = scene.declMember< glsl::IVec2 >( castor3d::SceneUbo::WindowSize );\
-	auto c3d_cameraNearPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraNearPlane ); \
-	auto c3d_cameraFarPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraFarPlane );\
-	auto c3d_fogType = scene.declMember< glsl::Int >( castor3d::SceneUbo::FogType );\
-	auto c3d_fogDensity = scene.declMember< glsl::Float >( castor3d::SceneUbo::FogDensity );\
+	auto c3d_ambientLight = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::AmbientLight );\
+	auto c3d_backgroundColour = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
+	auto c3d_lightsCount = scene.declMember< sdw::IVec4 >( castor3d::SceneUbo::LightsCount );\
+	auto c3d_cameraPosition = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_windowSize = scene.declMember< sdw::IVec2 >( castor3d::SceneUbo::WindowSize );\
+	auto c3d_cameraNearPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraNearPlane ); \
+	auto c3d_cameraFarPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraFarPlane );\
+	auto c3d_fogType = scene.declMember< sdw::Int >( castor3d::SceneUbo::FogType );\
+	auto c3d_fogDensity = scene.declMember< sdw::Float >( castor3d::SceneUbo::FogDensity );\
 	scene.end()
 
 #endif

@@ -5,36 +5,36 @@
 #include "GlslLight.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
 	namespace shader
 	{
-		MetallicPbrReflectionModel::MetallicPbrReflectionModel( GlslWriter & writer )
+		MetallicPbrReflectionModel::MetallicPbrReflectionModel( ShaderWriter & writer )
 			: m_writer{ writer }
 		{
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
-			m_writer.inlineComment( cuT( "// REFLECTIONS" ) );
-			m_writer.inlineComment( cuT( "//////////////////////////////////////////////////////////////////////////////" ) );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
+			m_writer.inlineComment( "// REFLECTIONS" );
+			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareComputeIncident();
 			doDeclareComputeRefl();
 			doDeclareComputeRefr();
 		}
 
-		glsl::Vec3 MetallicPbrReflectionModel::computeIncident( glsl::Vec3 const & wsPosition
-			, glsl::Vec3 const & wsCamera )const
+		sdw::Vec3 MetallicPbrReflectionModel::computeIncident( sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera )const
 		{
 			return m_computeIncident( wsPosition
 				, wsCamera );
 		}
 
-		glsl::Vec3 MetallicPbrReflectionModel::computeRefl( glsl::Vec3 const & wsIncident
-			, glsl::Vec3 const & wsNormal
-			, glsl::Float const & occlusion
-			, glsl::SamplerCube const & envMap
-			, Vec3 const & ambientLight
-			, Vec3 const & albedo )const
+		sdw::Vec3 MetallicPbrReflectionModel::computeRefl( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Float const & occlusion
+			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::Vec3 const & ambientLight
+			, sdw::Vec3 const & albedo )const
 		{
 			return m_computeRefl( wsIncident
 				, wsNormal
@@ -44,14 +44,14 @@ namespace castor3d
 				, albedo );
 		}
 
-		glsl::Vec3 MetallicPbrReflectionModel::computeRefr( glsl::Vec3 const & wsIncident
-			, glsl::Vec3 const & wsNormal
-			, glsl::Float const & occlusion
-			, glsl::SamplerCube const & envMap
-			, glsl::Float const & refractionRatio
-			, glsl::Vec3 const & reflection
-			, glsl::Vec3 const & albedo
-			, glsl::Float const & roughness )const
+		sdw::Vec3 MetallicPbrReflectionModel::computeRefr( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Float const & occlusion
+			, sdw::SampledImageCubeRgba32 const & envMap
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 const & reflection
+			, sdw::Vec3 const & albedo
+			, sdw::Float const & roughness )const
 		{
 			return m_computeRefr( wsIncident
 				, wsNormal
@@ -65,79 +65,79 @@ namespace castor3d
 
 		void MetallicPbrReflectionModel::doDeclareComputeIncident()
 		{
-			m_computeIncident = m_writer.implementFunction< Vec3 >( cuT( "computeIncident" )
+			m_computeIncident = m_writer.implementFunction< Vec3 >( "computeIncident"
 				, [&]( Vec3 const & wsPosition
 					, Vec3 const & wsCamera )
 				{
 					m_writer.returnStmt( normalize( wsPosition - wsCamera ) );
 				}
-				, InVec3{ &m_writer, cuT( "wsPosition" ) }
-				, InVec3{ &m_writer, cuT( "wsCamera" ) } );
+				, InVec3{ m_writer, "wsPosition" }
+				, InVec3{ m_writer, "wsCamera" } );
 		}
 
 		void MetallicPbrReflectionModel::doDeclareComputeRefl()
 		{
-			m_computeRefl = m_writer.implementFunction< Vec3 >( cuT( "computeRefl" )
+			m_computeRefl = m_writer.implementFunction< Vec3 >( "computeRefl"
 				, [&]( Vec3 const & wsIncident
 					, Vec3 const & wsNormal
 					, Float const & occlusion
-					, SamplerCube const & envMap
+					, SampledImageCubeRgba32 const & envMap
 					, Vec3 const & ambientLight
 					, Vec3 const & albedo )
 				{
-					auto reflected = m_writer.declLocale( cuT( "reflected" )
+					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
 					m_writer.returnStmt( ambientLight.xyz()
 						* occlusion
 						* texture( envMap, reflected ).xyz()
 						* albedo / length( albedo ) );
 				}
-				, InVec3{ &m_writer, cuT( "wsIncident" ) }
-				, InVec3{ &m_writer, cuT( "wsNormal" ) }
-				, InFloat{ &m_writer, cuT( "occlusion" ) }
-				, InSamplerCube{ &m_writer, cuT( "envMap" ) }
-				, InVec3{ &m_writer, cuT( "ambientLight" ) }
-				, InVec3{ &m_writer, cuT( "albedo" ) } );
+				, InVec3{ m_writer, "wsIncident" }
+				, InVec3{ m_writer, "wsNormal" }
+				, InFloat{ m_writer, "occlusion" }
+				, InSampledImageCubeRgba32{ m_writer, "envMap" }
+				, InVec3{ m_writer, "ambientLight" }
+				, InVec3{ m_writer, "albedo" } );
 		}
 
 		void MetallicPbrReflectionModel::doDeclareComputeRefr()
 		{
-			m_computeRefr = m_writer.implementFunction< Vec3 >( cuT( "computeRefr" )
+			m_computeRefr = m_writer.implementFunction< Vec3 >( "computeRefr"
 				, [&]( Vec3 const & wsIncident
 					, Vec3 const & wsNormal
 					, Float const & occlusion
-					, SamplerCube const & envMap
+					, SampledImageCubeRgba32 const & envMap
 					, Float const & refractionRatio
 					, Vec3 const & reflection
 					, Vec3 const & albedo
 					, Float const & roughness )
 				{
-					auto subRatio = m_writer.declLocale( cuT( "subRatio" )
+					auto subRatio = m_writer.declLocale( "subRatio"
 						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( cuT( "addRatio" )
+					auto addRatio = m_writer.declLocale( "addRatio"
 						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( cuT( "reflectance" )
+					auto reflectance = m_writer.declLocale( "reflectance"
 						, m_writer.paren( subRatio * subRatio ) / m_writer.paren( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( cuT( "product" )
+					auto product = m_writer.declLocale( "product"
 						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
-					auto fresnel = m_writer.declLocale( cuT( "fresnel" )
-						, glsl::fma( max( 1.0_f - roughness, reflectance ) - reflectance
+					auto fresnel = m_writer.declLocale( "fresnel"
+						, sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
 							, pow( 1.0_f - product, 5.0_f )
 							, reflectance ) );
-					auto refracted = m_writer.declLocale( cuT( "refracted" )
+					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );
 					m_writer.returnStmt( mix( texture( envMap, refracted ).xyz() * albedo / length( albedo )
 						, reflection
-						, fresnel ) );
+						, vec3( fresnel ) ) );
 				}
-				, InVec3{ &m_writer, cuT( "wsIncident" ) }
-				, InVec3{ &m_writer, cuT( "wsNormal" ) }
-				, InFloat{ &m_writer, cuT( "occlusion" ) }
-				, InSamplerCube{ &m_writer, cuT( "envMap" ) }
-				, InFloat{ &m_writer, cuT( "refractionRatio" ) }
-				, InVec3{ &m_writer, cuT( "reflection" ) }
-				, InVec3{ &m_writer, cuT( "albedo" ) }
-				, InFloat{ &m_writer, cuT( "roughness" ) } );
+				, InVec3{ m_writer, "wsIncident" }
+				, InVec3{ m_writer, "wsNormal" }
+				, InFloat{ m_writer, "occlusion" }
+				, InSampledImageCubeRgba32{ m_writer, "envMap" }
+				, InFloat{ m_writer, "refractionRatio" }
+				, InVec3{ m_writer, "reflection" }
+				, InVec3{ m_writer, "albedo" }
+				, InFloat{ m_writer, "roughness" } );
 		}
 	}
 }

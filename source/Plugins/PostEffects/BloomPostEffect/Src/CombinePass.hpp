@@ -22,12 +22,12 @@ namespace Bloom
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 
-		inline glsl::Shader const & getVertexShader()const
+		inline castor3d::ShaderModule const & getVertexShader()const
 		{
 			return m_vertexShader;
 		}
 
-		inline glsl::Shader const & getPixelShader()const
+		inline castor3d::ShaderModule const & getPixelShader()const
 		{
 			return m_pixelShader;
 		}
@@ -45,8 +45,8 @@ namespace Bloom
 		ashes::Device const & m_device;
 		castor3d::TextureLayoutSPtr m_image;
 		ashes::TextureViewPtr m_view;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

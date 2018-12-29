@@ -22,7 +22,7 @@
 #include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Command/CommandBufferInheritanceInfo.hpp>
 

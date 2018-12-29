@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include <Design/ArrayView.hpp>
 
-#define C3D_MaterialsStructOfArrays 1
+#define C3D_MaterialsStructOfArrays 0
 
 namespace castor3d
 {

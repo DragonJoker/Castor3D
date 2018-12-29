@@ -45,7 +45,8 @@ namespace castor3d
 			, ashes::TextureView const & colourView
 			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
-			, Scene const & scene );
+			, Scene const & scene
+			, HdrConfigUbo & hdrConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.

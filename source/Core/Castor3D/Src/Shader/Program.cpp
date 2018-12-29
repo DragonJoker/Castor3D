@@ -4,8 +4,6 @@
 
 #include <Stream/StreamPrefixManipulators.hpp>
 
-#include <Shader/GlslToSpv.hpp>
-
 using namespace castor;
 
 namespace castor3d
@@ -26,6 +24,20 @@ namespace castor3d
 
 			return stream;
 		}
+
+		auto doAddModule( ashes::ShaderStageFlag stage
+			, std::string const & name
+			, std::map< ashes::ShaderStageFlag, ShaderModule > & modules )
+		{
+			auto it = modules.find( stage );
+
+			if ( it == modules.end() )
+			{
+				it = modules.emplace( stage, ShaderModule{ stage, name } ).first;
+			}
+
+			return it;
+		}
 	}
 
 	//*************************************************************************************************
@@ -43,9 +55,9 @@ namespace castor3d
 		bool result = false;
 		bool hasFile = false;
 
-		for ( auto module : shaderProgram.m_modules )
+		for ( auto file : shaderProgram.m_files )
 		{
-			hasFile |= !module.second.file.empty();
+			hasFile |= !file.second.empty();
 		}
 
 		if ( hasFile )
@@ -55,7 +67,7 @@ namespace castor3d
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			checkError( result, "Shader program" );
 
-			for ( auto module : shaderProgram.m_modules )
+			for ( auto & module : shaderProgram.m_modules )
 			{
 				//result = ShaderObject::TextWriter( tabs )( *shaderProgram.m_shaders[i], file );
 			}
@@ -137,59 +149,49 @@ namespace castor3d
 
 	bool ShaderProgram::initialise()
 	{
-		auto & device = getCurrentDevice( *this );
-
-		auto hasStage = [this]( ashes::ShaderStageFlag stage )
+		if ( m_states.empty() )
 		{
-			return m_states.end() != std::find_if( m_states.begin()
-				, m_states.end()
-				, [&stage]( ashes::ShaderStageState const & lookup )
-				{
-					return lookup.module->getStage() == stage;
-				} );
-		};
+			auto & device = getCurrentDevice( *this );
 
-		auto loadShader = [this, &hasStage, &device]( ashes::ShaderStageFlag stage )
-		{
-			if ( !hasStage( stage ) )
+			auto loadShader = [this, &device]( ashes::ShaderStageFlag stage )
 			{
-				if ( hasSource( stage ) )
+				auto itModule = m_modules.find( stage );
+
+				if ( itModule != m_modules.end() )
 				{
-					m_states.push_back( { device.createShaderModule( stage ) } );
-					m_states.back().module->loadShader( compileGlslToSpv( device
-						, stage
-						, getSource( stage ) ) );
-				}
-				else if ( hasFile( stage ) )
-				{
-					m_states.push_back( { device.createShaderModule( stage ) } );
-					String source;
+					auto & module = itModule->second;
+					auto itFile = m_files.find( stage );
+
+					if ( !itFile->second.empty() )
 					{
 						TextFile file{ getFile( stage ), File::OpenMode::eRead };
-						file.copytoString( source );
+						file.copyToString( module.source );
 					}
-					m_states.back().module->loadShader( compileGlslToSpv( device
-						, stage
-						, source ) );
+
+					if ( module.shader || !module.source.empty() )
+					{
+						m_states.push_back( { device.createShaderModule( stage ) } );
+						m_states.back().module->loadShader( getRenderSystem()->compileShader( module ) );
+					}
 				}
+			};
+
+			if ( hasSource( ashes::ShaderStageFlag::eCompute )
+				|| hasFile( ashes::ShaderStageFlag::eCompute ) )
+			{
+				loadShader( ashes::ShaderStageFlag::eCompute );
 			}
-		};
-
-		if ( hasSource( ashes::ShaderStageFlag::eCompute )
-			|| hasFile( ashes::ShaderStageFlag::eCompute ) )
-		{
-			loadShader( ashes::ShaderStageFlag::eCompute );
-		}
-		else
-		{
-			loadShader( ashes::ShaderStageFlag::eVertex );
-			loadShader( ashes::ShaderStageFlag::eGeometry );
-			loadShader( ashes::ShaderStageFlag::eTessellationControl );
-			loadShader( ashes::ShaderStageFlag::eTessellationEvaluation );
-			loadShader( ashes::ShaderStageFlag::eFragment );
+			else
+			{
+				loadShader( ashes::ShaderStageFlag::eVertex );
+				loadShader( ashes::ShaderStageFlag::eGeometry );
+				loadShader( ashes::ShaderStageFlag::eTessellationControl );
+				loadShader( ashes::ShaderStageFlag::eTessellationEvaluation );
+				loadShader( ashes::ShaderStageFlag::eFragment );
+			}
 		}
 
-		return true;
+		return !m_states.size() == m_modules.size();
 	}
 
 	void ShaderProgram::cleanup()
@@ -199,43 +201,51 @@ namespace castor3d
 
 	void ShaderProgram::setFile( ashes::ShaderStageFlag target, Path const & pathFile )
 	{
-		m_modules[target].file = pathFile;
-		m_modules[target].source = glsl::Shader{};
+		m_files[target] = pathFile;
+		doAddModule( target, "", m_modules );
 	}
 
 	Path ShaderProgram::getFile( ashes::ShaderStageFlag target )const
 	{
-		REQUIRE( m_modules.find( target ) != m_modules.end() );
-		return m_modules.at( target ).file;
+		auto it = m_files.find( target );
+		REQUIRE( it != m_files.end() );
+		return it->second;
 	}
 
 	bool ShaderProgram::hasFile( ashes::ShaderStageFlag target )const
 	{
-		return m_modules.find( target ) != m_modules.end()
-			&& !getFile( target ).empty();
+		auto it = m_files.find( target );
+		return it != m_files.end()
+			&& !it->second.empty();
 	}
 
 	void ShaderProgram::setSource( ashes::ShaderStageFlag target, String const & source )
 	{
-		m_modules[target].file.clear();
-		m_modules[target].source.setSource( source );
+		m_files[target].clear();
+		auto it = doAddModule( target, "", m_modules );
+		it->second.source = source;
+		it->second.shader = nullptr;
 	}
 
-	void ShaderProgram::setSource( ashes::ShaderStageFlag target, glsl::Shader const & source )
+	void ShaderProgram::setSource( ashes::ShaderStageFlag target, ShaderPtr shader )
 	{
-		m_modules[target].file.clear();
-		m_modules[target].source = source;
+		m_files[target].clear();
+		auto it = doAddModule( target, "", m_modules );
+		it->second.source.clear();
+		it->second.shader = std::move( shader );
 	}
 
-	String ShaderProgram::getSource( ashes::ShaderStageFlag target )const
+	ShaderModule const & ShaderProgram::getSource( ashes::ShaderStageFlag target )const
 	{
-		REQUIRE( m_modules.find( target ) != m_modules.end() );
-		return m_modules.at( target ).source.getSource();
+		auto it = m_modules.find( target );
+		REQUIRE( it != m_modules.end() );
+		return it->second;
 	}
 
 	bool ShaderProgram::hasSource( ashes::ShaderStageFlag target )const
 	{
-		return m_modules.find( target ) != m_modules.end()
-			&& !getSource( target ).empty();
+		auto it = m_modules.find( target );
+		return it != m_modules.end()
+			&& ( !it->second.source.empty() || it->second.shader != nullptr );
 	}
 }

@@ -124,7 +124,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -132,14 +132,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -209,7 +209,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -217,14 +217,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -247,10 +247,10 @@ namespace castor3d
 		 *\param[in]	material		L'indice du matériau.
 		 *\param[in]	materials		Les matériaux.
 		 */
-		void doDiscardAlpha( glsl::GlslWriter & writer
+		void doDiscardAlpha( sdw::ShaderWriter & writer
 			, TextureChannels const & textureFlags
 			, ashes::CompareOp alphaFunc
-			, glsl::Int const & material
+			, sdw::Int const & material
 			, shader::Materials const & materials )const;
 
 	protected:

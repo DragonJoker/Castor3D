@@ -21,7 +21,7 @@
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -29,33 +29,48 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetEdgeDetectionVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
+
+			// Shader constants
+			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
 			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics );
-			writer << getEdgeDetectionVS();
-
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto vtx_offset = writer.declOutputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto vtx_offset = writer.declOutputArray< Vec4 >( "vtx_offset", 1u, 3u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			/**
+			 * Edge Detection Vertex Shader
+			 */
+			auto SMAAEdgeDetectionVS = writer.implementFunction< sdw::Void >( "SMAAEdgeDetectionVS"
+				, [&]( Vec2 const & texCoord
+					, Array< Vec4 > offset )
+				{
+					offset[0] = fma( c3d_rtMetrics.xyxy(), vec4( Float{ -1.0f }, 0.0_f, 0.0_f, Float{ -1.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[1] = fma( c3d_rtMetrics.xyxy(), vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[2] = fma( c3d_rtMetrics.xyxy(), vec4( Float{ -2.0f }, 0.0_f, 0.0_f, Float{ -2.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
+				}
+				, InVec2{ writer, "texCoord" }
+				, OutVec4Array{ writer, "offset", 3u } );
+
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = texcoord;
-					writer << "SMAAEdgeDetectionVS( vtx_texture, vtx_offset )" << endi;
+					SMAAEdgeDetectionVS( vtx_texture, vtx_offset );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -66,6 +81,8 @@ namespace smaa
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SmaaEdgeDetection" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SmaaEdgeDetection" }
 	{
 		ashes::Extent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
@@ -85,7 +102,7 @@ namespace smaa
 		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
 		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
-		renderPass.attachments[1].format = ashes::Format::eD24_UNORM_S8_UINT;
+		renderPass.attachments[1].format = ashes::Format::eS8_UINT;
 		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
 		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
 		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eClear;
@@ -121,10 +138,10 @@ namespace smaa
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()
 			, ashes::Format::eR8G8B8A8_UNORM
-			, ashes::Format::eD24_UNORM_S8_UINT );
+			, ashes::Format::eS8_UINT );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader = doGetEdgeDetectionVP( m_renderSystem
+		m_vertexShader.shader = doGetEdgeDetectionVP( m_renderSystem
 			, pixelSize
 			, m_config );
 	}
@@ -133,9 +150,9 @@ namespace smaa
 	{
 		visitor.visit( cuT( "EdgeDetection" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "EdgeDetection" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 }

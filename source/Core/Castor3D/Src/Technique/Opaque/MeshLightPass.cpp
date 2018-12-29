@@ -12,7 +12,7 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
@@ -34,7 +34,7 @@ namespace castor3d
 			auto & device = getCurrentDevice( engine );
 			ashes::ImageLayout layout = first
 				? ashes::ImageLayout::eUndefined
-				: ashes::ImageLayout::eColourAttachmentOptimal;
+				: ashes::ImageLayout::eShaderReadOnlyOptimal;
 			ashes::AttachmentLoadOp loadOp = first
 				? ashes::AttachmentLoadOp::eClear
 				: ashes::AttachmentLoadOp::eLoad;
@@ -48,8 +48,8 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eLoad;
 			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.attachments[1].format = diffuseView.getFormat();
 			renderPass.attachments[1].loadOp = loadOp;
@@ -58,7 +58,7 @@ namespace castor3d
 			renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[1].initialLayout = layout;
-			renderPass.attachments[1].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.attachments[2].format = specularView.getFormat();
 			renderPass.attachments[2].loadOp = loadOp;
@@ -67,7 +67,7 @@ namespace castor3d
 			renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[2].initialLayout = layout;
-			renderPass.attachments[2].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.dependencies.resize( 2u );
 			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
@@ -102,8 +102,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MeshLightPass::Program::Program( Engine & engine
-		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl
+		, ShaderModule const & vtx
+		, ShaderModule const & pxl
 		, bool hasShadows )
 		: LightPass::Program{ engine, vtx, pxl, hasShadows }
 	{
@@ -261,26 +261,26 @@ namespace castor3d
 		m_pipeline->program->bind( light );
 	}
 
-	glsl::Shader MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	ShaderPtr MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_engine.getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto vertex = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+		auto vertex = writer.declInput< Vec3 >( cuT( "position" ), 0u );
 
 		// Shader outputs
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
-			out.gl_Position() = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
+			out.gl_out.gl_Position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	//*********************************************************************************************

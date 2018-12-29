@@ -22,7 +22,7 @@
 #include <Pipeline/Scissor.hpp>
 #include <Pipeline/Viewport.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Technique/Opaque/LightPass.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -95,8 +95,8 @@ namespace castor3d
 		ashes::TextureView const & m_normals;
 		ashes::Extent2D m_size;
 		TextureUnit m_result;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		ashes::ShaderStageStateArray m_program;
 		ashes::SamplerPtr m_sampler;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;

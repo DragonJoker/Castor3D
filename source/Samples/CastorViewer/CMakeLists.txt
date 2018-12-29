@@ -14,7 +14,7 @@ add_target(
 	${PROJECT_NAME}
 	bin
 	"${Castor3DBinsDependencies}"
-	"${CastorBinLibraries}"
+	"${CastorBinLibraries};CompilerGlsl"
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/PrecompiledHeader.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/PrecompiledHeader.cpp
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"

@@ -19,7 +19,7 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Sync/BufferMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Graphics/Image.hpp>
 
@@ -607,15 +607,15 @@ namespace castor3d
 	{
 	}
 
-	glsl::Shader PickingPass::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return glsl::Shader{};
+		return ShaderPtr{};
 	}
 
-	glsl::Shader PickingPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -628,7 +628,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -641,7 +641,7 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -654,49 +654,49 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader PickingPass::doGetVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace glsl;
-		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( cuT( "material" )
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
@@ -706,7 +706,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
 		{
@@ -718,7 +718,7 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				mtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				mtxModel = SkinningUbo::computeTransform( skinningData, writer, programFlags );
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
@@ -742,81 +742,81 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" )
 					, vec3( 1.0_f - c3d_time ) );
-				v4Vertex = vec4( glsl::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
+				v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
 			}
 
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			v4Vertex = c3d_curView * v4Vertex;
-			vtx_instance = gl_InstanceID;
-			out.gl_Position() = c3d_projection * v4Vertex;
+			vtx_instance = in.gl_InstanceID;
+			out.gl_out.gl_Position = c3d_projection * v4Vertex;
 		};
 
-		writer.implementFunction< void >( cuT( "main" ), main );
-		return writer.finalise();
+		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
-	glsl::Shader PickingPass::doGetPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr PickingPass::doGetPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, ashes::CompareOp alphaFunc )const
 	{
-		using namespace glsl;
-		GlslWriter writer = m_renderSystem.createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// UBOs
 		auto materials = shader::createMaterials( writer
 			, passFlags );
-		materials->declare();
+		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
-		auto gl_PrimitiveID( writer.declBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
+		auto in = writer.getIn();
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+		auto c3d_mapOpacity( writer.declSampledImage< FImg2DR32 >( cuT( "c3d_mapOpacity" )
 			, MinBufferIndex
 			, 0u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
 
 		// Fragment Outputs
-		auto pxl_fragColor( writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
+		auto pxl_fragColor( writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 ) );
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto material = materials->getBaseMaterial( vtx_material );
 			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material->m_opacity() );
+				, material->m_opacity );
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
+				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() );
 				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, material->m_alphaRef() );
+					, material->m_alphaRef );
 			}
 			else if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
-					, material->m_alphaRef() );
+					, material->m_alphaRef );
 			}
 
-			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, gl_PrimitiveID );
+			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, in.gl_PrimitiveID );
 #if C3D_DebugPicking
 			pxl_fragColor /= 255.0_f;
 #endif
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void PickingPass::doUpdateFlags( PassFlags & passFlags

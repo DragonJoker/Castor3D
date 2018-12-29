@@ -6,6 +6,7 @@
 #include "Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -19,7 +20,7 @@
 #include <Shader/GlslToSpv.hpp>
 #include <Shader/ShaderModule.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -163,47 +164,52 @@ namespace castor3d
 	ashes::ShaderStageStateArray TextureProjection::doInitialiseShader()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		glsl::Shader vtx;
+		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "TextureProj" };
 		{
-			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Inputs
-			auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
 			UBO_MATRIX( writer, 0, 0 );
 			UBO_MODEL_MATRIX( writer, 1, 0 );
 
 			// Outputs
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				out.gl_Position() = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0 ) ).xyww();
+				out.gl_out.gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0 ) ).xyww();
 			} );
 
-			vtx = writer.finalise();
+			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader pxl;
+		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "TextureProj" };
 		{
-			using namespace glsl;
-			GlslWriter writer{ renderSystem.createGlslWriter() };
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
-			auto c3d_size = writer.declUniform< Vec2 >( cuT( "c3d_size" ), 0u );
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
+			Pcb pcb{ writer, "SizePCB", ast::type::MemoryLayout::eStd140 };
+			auto c3d_size = pcb.declMember< Vec2 >( cuT( "c3d_size" ) );
+			pcb.end();
+			auto in = writer.getIn();
+
+			shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
 
 			// Outputs
-			auto pxl_FragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ), 0u );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
 				pxl_FragColor = texture( c3d_mapDiffuse
-					, writer.ashesBottomUpToTopDown( gl_FragCoord.xy() / c3d_size ) );
+					, utils.bottomUpToTopDown( in.gl_FragCoord.xy() / c3d_size ) );
 			} );
 
-			pxl = writer.finalise();
+			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentDevice( renderSystem );
@@ -212,12 +218,8 @@ namespace castor3d
 			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, vtx.getSource() ) );
-		program[1].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, pxl.getSource() ) );
+		program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+		program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 		return program;
 	}
 

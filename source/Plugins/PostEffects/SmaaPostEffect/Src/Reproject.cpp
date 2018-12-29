@@ -17,12 +17,11 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -30,67 +29,98 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetReprojectVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					vtx_texture = texcoord;
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader doGetReprojectFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
-			writeConstants( writer, config, renderTargetMetrics );
-			writer.declConstant( constants::Reprojection
-				, 1_i
-				, reprojection );
-			writer.declConstant( constants::ReprojectionWeightScale
+			using namespace sdw;
+			FragmentWriter writer;
+			auto c3d_reprojectionWeightScale = writer.declConstant( constants::ReprojectionWeightScale
 				, Float( config.data.reprojectionWeightScale ) );
-			writer << getResolvePS();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_currentColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_currentColourTex" ), 0u, 0u );
-			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), 1u, 0u );
-			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), 2u, 0u, reprojection );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", 0u, 0u );
+			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", 1u, 0u );
+			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", 2u, 0u, reprojection );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
-				, [&]()
+			auto SMAAResolvePS = writer.implementFunction< Vec4 >( "SMAAResolvePS"
+				, [&]( Vec2 const & texcoord
+					, SampledImage2DRgba32 const & currentColorTex
+					, SampledImage2DRgba32 const & previousColorTex )
 				{
-					if ( reprojection )
+					if ( config.data.enableReprojection )
 					{
-						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex, c3d_velocityTex )" << endi;
+						// Velocity is assumed to be calculated for motion blur, so we need to
+						// inverse it for reprojection:
+						auto velocity = writer.declLocale( "velocity"
+							, -texture( c3d_velocityTex, texcoord ).rg() );
+
+						// Fetch current pixel:
+						auto current = writer.declLocale( "current"
+							, texture( currentColorTex, texcoord ) );
+
+						// Reproject current coordinates and fetch previous pixel:
+						auto previous = writer.declLocale( "previous"
+							, texture( previousColorTex, texcoord + velocity ) );
+
+						// Attenuate the previous pixel if the velocity is different:
+						auto delta = writer.declLocale( "delta"
+							, abs( current.a() * current.a() - previous.a() * previous.a() ) / 5.0_f );
+						auto weight = writer.declLocale( "weight"
+							, 0.5_f * clamp( 1.0_f - sqrt( delta ) * c3d_reprojectionWeightScale, 0.0_f, 1.0_f ) );
+
+						// Blend the pixels according to the calculated weight:
+						writer.returnStmt( mix( current, previous, vec4( weight ) ) );
 					}
 					else
 					{
-						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex )" << endi;
+						// Just blend the pixels:
+						auto current = writer.declLocale( "current"
+							, texture( currentColorTex, texcoord ) );
+						auto previous = writer.declLocale( "previous"
+							, texture( previousColorTex, texcoord ) );
+						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
+				}
+				, InVec2{ writer, "texcoord" }
+				, InSampledImage2DRgba32{ writer, "currentColorTex" }
+				, InSampledImage2DRgba32{ writer, "previousColorTex" } );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 	
@@ -106,6 +136,8 @@ namespace smaa
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
 		, m_surface{ *renderTarget.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SmaaReproject" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SmaaReproject" }
 	{
 		ashes::Extent2D size{ m_currentColourView.getTexture().getDimensions().width, m_currentColourView.getTexture().getDimensions().height };
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
@@ -133,7 +165,7 @@ namespace smaa
 		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
 		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
 		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
 		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
@@ -149,10 +181,10 @@ namespace smaa
 		m_renderPass = device.createRenderPass( renderPass );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader.shader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, config );
-		m_pixelShader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader.shader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, config
 			, velocityView != nullptr );
@@ -160,12 +192,8 @@ namespace smaa
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
@@ -226,10 +254,10 @@ namespace smaa
 	{
 		visitor.visit( cuT( "Reproject" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "Reproject" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 
 	void Reproject::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

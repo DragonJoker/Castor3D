@@ -15,7 +15,6 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 #include <Texture/Sampler.hpp>
@@ -38,37 +37,37 @@
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 namespace motion_blur
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			Vec2 texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texcoord;
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			Ubo configuration{ writer, cuT( "Configuration" ), 0u, 0u };
@@ -76,21 +75,21 @@ namespace motion_blur
 			auto c3d_vectorDivider = configuration.declMember< Float >( cuT( "c3d_vectorDivider" ) );
 			auto c3d_blurScale = configuration.declMember< Float >( cuT( "c3d_blurScale" ) );
 			configuration.end();
-			auto c3d_mapVelocity = writer.declSampler< Sampler2D >( cuT( "c3d_mapVelocity" ), 1u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
+			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapVelocity" ), 1u, 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					auto blurVector = writer.declLocale( cuT( "vector" )
 						, writer.paren( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
 					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture );
 
-					FOR( writer, UInt, i, 0u, "i < c3d_samplesCount", "++i" )
+					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( cuT( "offset" )
 							, blurVector * writer.paren( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1u ) - 0.5f ) );
@@ -109,7 +108,7 @@ namespace motion_blur
 					//}
 					//FI;
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -151,6 +150,8 @@ namespace motion_blur
 			, parameters
 			, false }
 		, m_surface{ *renderSystem.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "LinearMotionBlur" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "LinearMotionBlur" }
 	{
 		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
 		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
@@ -190,27 +191,23 @@ namespace motion_blur
 	{
 		visitor.visit( cuT( "MotionBlur" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "MotionBlur" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = getCurrentDevice( *this );
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		m_vertexShader = getVertexProgram( getRenderSystem() );
-		m_pixelShader = getFragmentProgram( getRenderSystem() );
+		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( m_target->getRenderSystem()->compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( m_target->getRenderSystem()->compileShader( m_pixelShader ) );
 
 		// Create the render pass.
 		ashes::RenderPassCreateInfo renderPass;

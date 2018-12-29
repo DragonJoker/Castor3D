@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -117,8 +117,8 @@ namespace castor3d
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
 		ashes::TextureView const & m_normals;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		SsaoConfig const & m_config;
 		ashes::ShaderStageStateArray m_program;
 		ashes::Extent2D m_size;

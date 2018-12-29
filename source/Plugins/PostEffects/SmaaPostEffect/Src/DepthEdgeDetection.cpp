@@ -3,13 +3,13 @@
 #include "SmaaUbo.hpp"
 #include "SMAA.hpp"
 
-#include <Engine.hpp>
-
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPassTimer.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Core/Renderer.hpp>
 #include <Image/Texture.hpp>
@@ -17,12 +17,11 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -30,36 +29,80 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
-			writer.enableExtension( cuT( "GL_ARB_texture_gather" ), 400u );
+			using namespace sdw;
+			FragmentWriter writer;
 
-			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics );
+			// Shader constants
 			auto c3d_threshold = writer.declConstant( constants::Threshold
 				, Float( config.data.threshold ) );
 			auto c3d_depthThreshold = writer.declConstant( constants::DepthThreshold
 				, c3d_threshold * 0.1_f );
-			writer << getDepthEdgeDetectionPS();
+			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
-			auto c3d_depthTex = writer.declSampler< Sampler2D >( cuT( "c3d_depthTex" ), 0u, 0u );
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
+			// Shader inputs
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
+			auto c3d_depthTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_depthTex", 0u, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
+			/**
+			 * Gathers current pixel, and the top-left neighbors.
+			 */
+			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset
+					, SampledImage2DRgba32 const & tex )
+				{
+					writer.returnStmt( textureGather( tex, texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u }
+				, InSampledImage2DRgba32{ writer, "tex" } );
+
+			/**
+			 * Depth Edge Detection
+			 */
+			auto SMAADepthEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAADepthEdgeDetectionPS"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset
+					, SampledImage2DRgba32 const & depthTex )
+				{
+					auto neighbours = writer.declLocale( "neighbours"
+						, SMAAGatherNeighbours( texcoord, offset, depthTex ) );
+					auto delta = writer.declLocale( "delta"
+						, abs( neighbours.xx() - neighbours.yz() ) );
+					auto edges = writer.declLocale( "edges"
+						, step( vec2( c3d_depthThreshold ), delta ) );
+
+					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
+					{
+						writer.discard();
+					}
+					FI;
+
+					writer.returnStmt( edges );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u }
+				, InSampledImage2DRgba32{ writer, "depthTex" } );
+
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					pxl_fragColour = vec4( 0.0_f );
-					writer << "pxl_fragColour.xy = SMAADepthEdgeDetectionPS( vtx_texture, vtx_offset, c3d_depthTex )" << endi;
+					pxl_fragColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::TextureViewPtr doCreateDepthView( ashes::TextureView const & depthView )
@@ -85,7 +128,7 @@ namespace smaa
 		ashes::Extent2D size{ m_depthView->getTexture().getDimensions().width
 			, m_depthView->getTexture().getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader.shader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, config );
 		doInitialisePipeline();
@@ -129,12 +172,8 @@ namespace smaa
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( m_renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( m_renderSystem.compileShader( m_pixelShader ) );
 
 		ashes::DepthStencilState dsstate{ 0u, false, false };
 		dsstate.stencilTestEnable = true;

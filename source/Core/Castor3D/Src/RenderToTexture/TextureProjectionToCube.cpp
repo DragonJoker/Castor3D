@@ -1,6 +1,7 @@
 #include "TextureProjectionToCube.hpp"
 
 #include "Render/RenderSystem.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Buffer/StagingBuffer.hpp>
@@ -21,12 +22,12 @@
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Math/TransformationMatrix.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -39,70 +40,69 @@ namespace castor3d
 		{
 			auto & device = getCurrentDevice( renderSystem );
 
-			glsl::Shader vtx;
+			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "TextureProjToCube" };
 			{
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declAttribute< Vec4 >( cuT( "position" ), 0u );
-				auto matrixUbo = glsl::Ubo{ writer, cuT( "Matrix" ), 0u, 0u };
+				auto position = writer.declInput< Vec4 >( cuT( "position" ), 0u );
+				auto matrixUbo = sdw::Ubo{ writer, cuT( "Matrix" ), 0u, 0u };
 				auto mtxViewProjection = matrixUbo.declMember< Mat4 >( cuT( "mtxViewProjection" ) );
 				matrixUbo.end();
 
 				// Outputs
 				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ), 0u );
-				auto out = gl_PerVertex{ writer };
+				auto out = writer.getOut();
 
 				std::function< void() > main = [&]()
 				{
 					vtx_position = position.xyz();
-					out.gl_Position() = mtxViewProjection * position;
+					out.gl_out.gl_Position = mtxViewProjection * position;
 				};
 
-				writer.implementFunction< void >( cuT( "main" ), main );
-				vtx = writer.finalise();
+				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			glsl::Shader pxl;
+			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "TextureProjToCube" };
 			{
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				FragmentWriter writer;
 
 				// Inputs
-				auto mapColour = writer.declSampler< Sampler2D >( cuT( "mapColour" ), 1u, 0u );
+				auto mapColour = writer.declSampledImage< FImg2DRgba32 >( cuT( "mapColour" ), 1u, 0u );
 				auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ), 0u );
 
 				// Outputs
-				auto pxl_colour = writer.declFragData< Vec4 >( cuT( "pxl_colour" ), 0u );
+				auto pxl_colour = writer.declOutput< Vec4 >( cuT( "pxl_colour" ), 0u );
+
+				shader::Utils utils{ writer, renderSystem.isTopDown() };
+				utils.declareInvertVec2Y();
 				
 				auto sampleSphericalMap = writer.implementFunction< Vec2 >( cuT( "sampleSphericalMap" )
 					, [&]( Vec3 const & v )
 					{
-						auto uv = writer.declLocale( cuT( "uv" ), vec2( atan( v.z(), v.x() ), asin( v.y() ) ) );
+						auto uv = writer.declLocale( cuT( "uv" ), vec2( atan( v.z() / v.x() ), asin( v.y() ) ) );
 						uv *= vec2( 0.1591_f, 0.3183_f );
 						uv += 0.5_f;
 						writer.returnStmt( uv );
 					}
-					, InVec3{ &writer, cuT( "v" ) } );
+					, InVec3{ writer, cuT( "v" ) } );
 
 				std::function< void() > main = [&]()
 				{
 					auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
-					pxl_colour = vec4( texture( mapColour, writer.ashesTopDownToBottomUp( uv ) ).rgb(), 1.0 );
+					pxl_colour = vec4( texture( mapColour, utils.bottomUpToTopDown( uv ) ).rgb(), 1.0 );
 				};
 
-				writer.implementFunction< void >( cuT( "main" ), main );
-				pxl = writer.finalise();
+				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
 			std::vector< ashes::ShaderStageState > shaderStages;
 			shaderStages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 			shaderStages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-			shaderStages[0].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eVertex
-				, vtx.getSource() ) );
-			shaderStages[1].module->loadShader( compileGlslToSpv( device
-				, ashes::ShaderStageFlag::eFragment
-				, pxl.getSource() ) );
+			shaderStages[0].module->loadShader( renderSystem.compileShader( vtx ) );
+			shaderStages[1].module->loadShader( renderSystem.compileShader( pxl ) );
 
 			return shaderStages;
 		}

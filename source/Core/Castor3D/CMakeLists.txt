@@ -33,8 +33,8 @@ include_directories( ${Castor3DIncludeDirs} )
 add_target(
 	${PROJECT_NAME}
 	api_dll
-	"CastorUtils;GlslWriter;Ashes"
-	"${CastorMinLibraries};Ashes;${GlslangLibraries}"
+	"CastorUtils;ShaderAST;ShaderWriter;Ashes"
+	"${CastorMinLibraries};ShaderWriter;Ashes;${GlslangLibraries}"
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.cpp
 )
@@ -108,6 +108,16 @@ parse_subdir_files( Src/Texture "Texture" )
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
+	ShaderWriter
+	Ashes
+	${PROJECT_NAME}
+	PARENT_SCOPE
+)
+
+set( CastorBinLibraries
+	${CastorBinLibraries}
+	ShaderWriter
+	Ashes
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )

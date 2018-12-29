@@ -14,7 +14,6 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -35,55 +34,57 @@
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 namespace GrayScale
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram()
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					vtx_texture = writer.ashesBottomUpToTopDown( texcoord );
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFragmentProgram()
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto configUbo = glsl::Ubo{ writer, cuT( "Configuration" ), 0u, 0u };
-			auto c3d_factors = configUbo.declMember< Vec3 >( cuT( "c3d_factors" ) );
+			auto configUbo = Ubo{ writer, "Configuration", 0u, 0u };
+			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
 			configUbo.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					auto colour = writer.declLocale( cuT( "colour" )
+					auto colour = writer.declLocale( "colour"
 						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
 					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -119,6 +120,8 @@ namespace GrayScale
 			, params
 			, false }
 		, m_surface{ *renderSystem.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "GrayScale" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "GrayScale" }
 	{
 	}
 
@@ -147,10 +150,10 @@ namespace GrayScale
 	{
 		visitor.visit( cuT( "GrayScale" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "GrayScale" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "GrayScale" )
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "Configuration" )
@@ -160,19 +163,16 @@ namespace GrayScale
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		m_vertexShader = getVertexProgram( getRenderSystem() );
-		m_pixelShader = getFragmentProgram( getRenderSystem() );
+		m_vertexShader.shader = getVertexProgram();
+		m_pixelShader.shader = getFragmentProgram();
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 		m_configUbo = ashes::makeUniformBuffer< castor::Point3f >( device
 			, 1u
@@ -224,7 +224,7 @@ namespace GrayScale
 		{
 			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment }
 		};
-		m_quad = std::make_unique< Quad >( *getRenderSystem(), *m_configUbo );
+		m_quad = std::make_unique< Quad >( renderSystem, *m_configUbo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages

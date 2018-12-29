@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -83,8 +83,8 @@ namespace fxaa
 		castor3d::PostEffectSurface m_surface;
 		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_fxaaQuad;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

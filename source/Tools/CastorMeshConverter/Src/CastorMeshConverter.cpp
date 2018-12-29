@@ -397,7 +397,14 @@ struct ObjectWriter< true, castor3d::Mesh >
 		{
 			if ( result )
 			{
-				auto name = options.output + cuT( "_" ) + castor::string::toString( index, std::locale{ "C" } );
+				castor::String name = options.output + cuT( "_" );
+
+				if ( srcSubmesh->getDefaultMaterial() )
+				{
+					name += srcSubmesh->getDefaultMaterial()->getName();
+				}
+
+				name += castor::string::toString( index, std::locale{ "C" } );
 				auto newPath = path / ( name + cuT( ".cmsh" ) );
 				auto mesh = std::make_unique< castor3d::Mesh >( name, *object.getScene() );
 

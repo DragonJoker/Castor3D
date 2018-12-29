@@ -17,12 +17,11 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/DepthStencilState.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -30,58 +29,267 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
-			, bool predicationEnabled
 			, SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
-			writer.enableExtension( cuT( "GL_ARB_texture_gather" ), 400u );
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			writeConstants( writer, config, renderTargetMetrics );
-			writer.declConstant( constants::Threshold
+			auto c3d_threshold = writer.declConstant( constants::Threshold
 				, Float( config.data.threshold ) );
-			writer.declConstant( constants::LocalContrastAdaptationFactor
+			auto c3d_localContrastAdaptationFactor = writer.declConstant( constants::LocalContrastAdaptationFactor
 				, Float( config.data.localContrastAdaptationFactor ) );
-			writer.declConstant( constants::Predication
-				, predicationEnabled ? 1_i : 0_i
-				, predicationEnabled );
-			writer.declConstant( constants::PredicationThreshold
-				, Float( config.data.predicationThreshold )
-				, predicationEnabled );
-			writer.declConstant( constants::PredicationScale
-				, Float( config.data.predicationScale )
-				, predicationEnabled );
-			writer.declConstant( constants::PredicationStrength
-				, Float( config.data.predicationStrength )
-				, predicationEnabled );
-			writer << getColorEdgeDetectionPS();
+			auto c3d_predicationThreshold = writer.declConstant( constants::PredicationThreshold
+				, Float( config.data.predicationThreshold ) );
+			auto c3d_predicationScale = writer.declConstant( constants::PredicationScale
+				, Float( config.data.predicationScale ) );
+			auto c3d_predicationStrength = writer.declConstant( constants::PredicationStrength
+				, Float( config.data.predicationStrength ) );
+			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( cuT( "vtx_offset" ), 1u, 3u );
-			auto c3d_colourTex = writer.declSampler< Sampler2D >( cuT( "c3d_colourTex" ), 0u, 0u );
-			auto c3d_predicationTex = writer.declSampler< Sampler2D >( cuT( "c3d_predicationTex" ), 1u, 0u, predicationEnabled );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
+			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", 0u, 0u );
+			auto c3d_predicationTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_predicationTex", 1u, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
+			/**
+			 * Gathers current pixel, and the top-left neighbors.
+			 */
+			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset
+					, SampledImage2DRgba32 const & predicationTex )
+				{
+					writer.returnStmt( textureGather( predicationTex, texcoord + c3d_rtMetrics.xy() * vec2( -0.5_f, -0.5_f ) ).grb() );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u }
+				, InSampledImage2DRgba32{ writer, "predicationTex" } );
+
+			/**
+			 * Adjusts the threshold by means of predication.
+			 */
+			auto SMAACalculatePredicatedThreshold = writer.implementFunction< Vec2 >( "SMAACalculatePredicatedThreshold"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset
+					, SampledImage2DRgba32 const & predicationTex )
+				{
+					auto neighbours = writer.declLocale( "neighbours"
+						, SMAAGatherNeighbours( texcoord, offset, predicationTex ) );
+					auto delta = writer.declLocale( "delta"
+						, abs( neighbours.xx() - neighbours.yz() ) );
+					auto edges = writer.declLocale( "edges"
+						, step( vec2( c3d_predicationThreshold ), delta ) );
+					writer.returnStmt( c3d_predicationScale * c3d_threshold * writer.paren( 1.0_f - c3d_predicationStrength * edges ) );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u }
+				, InSampledImage2DRgba32{ writer, "predicationTex" } );
+
+			/**
+			 * Color Edge Detection
+			 *
+			 * IMPORTANT NOTICE: color edge detection requires gamma-corrected colors, and
+			 * thus 'colorTex' should be a non-sRGB texture.
+			 */
+			auto SMAAColorEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAAColorEdgeDetectionPS"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset )
+				{
+					// Calculate the threshold:
+					auto threshold = writer.declLocale< Vec2 >( "threshold" );
+					threshold = SMAACalculatePredicatedThreshold( texcoord, offset, c3d_predicationTex );
+
+					// Calculate color deltas:
+					auto delta = writer.declLocale< Vec4 >( "delta" );
+					auto C = writer.declLocale( "C"
+						, texture( c3d_colourTex, texcoord ).rgb() );
+
+					auto Cleft = writer.declLocale( "Cleft"
+						, texture( c3d_colourTex, offset[0].xy() ).rgb() );
+					auto t = writer.declLocale( "t"
+						, abs( C - Cleft ) );
+					delta.x() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctop = writer.declLocale( "Ctop"
+						, texture( c3d_colourTex, offset[0].zw() ).rgb() );
+					t = abs( C - Ctop );
+					delta.y() = max( max( t.r(), t.g() ), t.b() );
+
+					// We do the usual threshold:
+					auto edges = writer.declLocale( "edges"
+						, step( threshold, delta.xy() ) );
+
+					// Then discard if there is no edge:
+					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
+					{
+						writer.discard();
+					}
+					FI;
+
+					// Calculate right and bottom deltas:
+					auto Cright = writer.declLocale( "Cright"
+						, texture( c3d_colourTex, offset[1].xy() ).rgb() );
+					t = abs( C - Cright );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Cbottom = writer.declLocale( "Cbottom"
+						, texture( c3d_colourTex, offset[1].zw() ).rgb() );
+					t = abs( C - Cbottom );
+					delta.w() = max( max( t.r(), t.g() ), t.b() );
+
+					// Calculate the maximum delta in the direct neighborhood:
+					auto maxDelta = writer.declLocale( "maxDelta"
+						, max( delta.xy(), delta.zw() ) );
+
+					// Calculate left-left and top-top deltas:
+					auto Cleftleft = writer.declLocale( "Cleftleft"
+						, texture( c3d_colourTex, offset[2].xy() ).rgb() );
+					t = abs( C - Cleftleft );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctoptop = writer.declLocale( "Ctoptop"
+						, texture( c3d_colourTex, offset[2].zw() ).rgb() );
+					t = abs( C - Ctoptop );
+					delta.w() = max( max( t.r(), t.g() ), t.b() );
+
+					// Calculate the final maximum delta:
+					maxDelta = max( maxDelta.xy(), delta.zw() );
+					auto finalDelta = writer.declLocale( "finalDelta"
+						, max( maxDelta.x(), maxDelta.y() ) );
+
+					// Local contrast adaptation:
+					edges.xy() *= step( vec2( finalDelta ), c3d_localContrastAdaptationFactor * delta.xy() );
+
+					writer.returnStmt( edges );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u } );
+
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					pxl_fragColour = vec4( 0.0_f );
-
-					if ( predicationEnabled )
-					{
-						writer << "pxl_fragColour.xy = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_predicationTex )" << endi;
-					}
-					else
-					{
-						writer << "pxl_fragColour.xy = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset, c3d_colourTex )" << endi;
-					}
+					pxl_fragColour.xy() = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		}
+
+		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderSystem & renderSystem
+			, Point4f const & renderTargetMetrics
+			, SmaaConfig const & config )
+		{
+			using namespace sdw;
+			FragmentWriter writer;
+
+			// Shader inputs
+			auto c3d_threshold = writer.declConstant( constants::Threshold
+				, Float( config.data.threshold ) );
+			auto c3d_localContrastAdaptationFactor = writer.declConstant( constants::LocalContrastAdaptationFactor
+				, Float( config.data.localContrastAdaptationFactor ) );
+			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
+				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
+
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
+			auto c3d_colourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_colourTex", 0u, 0u );
+
+			// Shader outputs
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+
+			/**
+			 * Color Edge Detection
+			 *
+			 * IMPORTANT NOTICE: color edge detection requires gamma-corrected colors, and
+			 * thus 'colorTex' should be a non-sRGB texture.
+			 */
+			auto SMAAColorEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAAColorEdgeDetectionPS"
+				, [&]( Vec2 const & texcoord
+					, Array< Vec4 > const & offset )
+				{
+					// Calculate the threshold:
+					auto threshold = writer.declLocale< Vec2 >( "threshold"
+						, vec2( c3d_threshold, c3d_threshold ) );
+
+					// Calculate color deltas:
+					auto delta = writer.declLocale< Vec4 >( "delta" );
+					auto C = writer.declLocale( "C"
+						, texture( c3d_colourTex, texcoord ).rgb() );
+
+					auto Cleft = writer.declLocale( "Cleft"
+						, texture( c3d_colourTex, offset[0].xy() ).rgb() );
+					auto t = writer.declLocale( "t"
+						, abs( C - Cleft ) );
+					delta.x() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctop = writer.declLocale( "Ctop"
+						, texture( c3d_colourTex, offset[0].zw() ).rgb() );
+					t = abs( C - Ctop );
+					delta.y() = max( max( t.r(), t.g() ), t.b() );
+
+					// We do the usual threshold:
+					auto edges = writer.declLocale( "edges"
+						, step( threshold, delta.xy() ) );
+
+					// Then discard if there is no edge:
+					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
+					{
+						writer.discard();
+					}
+					FI;
+
+					// Calculate right and bottom deltas:
+					auto Cright = writer.declLocale( "Cright"
+						, texture( c3d_colourTex, offset[1].xy() ).rgb() );
+					t = abs( C - Cright );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Cbottom = writer.declLocale( "Cbottom"
+						, texture( c3d_colourTex, offset[1].zw() ).rgb() );
+					t = abs( C - Cbottom );
+					delta.w() = max( max( t.r(), t.g() ), t.b() );
+
+					// Calculate the maximum delta in the direct neighborhood:
+					auto maxDelta = writer.declLocale( "maxDelta"
+						, max( delta.xy(), delta.zw() ) );
+
+					// Calculate left-left and top-top deltas:
+					auto Cleftleft = writer.declLocale( "Cleftleft"
+						, texture( c3d_colourTex, offset[2].xy() ).rgb() );
+					t = abs( C - Cleftleft );
+					delta.z() = max( max( t.r(), t.g() ), t.b() );
+
+					auto Ctoptop = writer.declLocale( "Ctoptop"
+						, texture( c3d_colourTex, offset[2].zw() ).rgb() );
+					t = abs( C - Ctoptop );
+					delta.w() = max( max( t.r(), t.g() ), t.b() );
+
+					// Calculate the final maximum delta:
+					maxDelta = max( maxDelta.xy(), delta.zw() );
+					auto finalDelta = writer.declLocale( "finalDelta"
+						, max( maxDelta.x(), maxDelta.y() ) );
+
+					// Local contrast adaptation:
+					edges.xy() *= step( vec2( finalDelta ), c3d_localContrastAdaptationFactor * delta.xy() );
+
+					writer.returnStmt( edges );
+				}
+				, InVec2{ writer, "texcoord" }
+				, InVec4Array{ writer, "offset", 3u } );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColour = vec4( 0.0_f );
+					pxl_fragColour.xy() = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::TextureViewPtr doCreatePredicationView( ashes::Texture const & texture )
@@ -111,10 +319,20 @@ namespace smaa
 		ashes::Extent2D size{ m_colourView.getTexture().getDimensions().width
 			, m_colourView.getTexture().getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_pixelShader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
-			, pixelSize
-			, m_predicationView != nullptr
-			, config );
+
+		if ( m_predicationView )
+		{
+			m_pixelShader.shader = doGetEdgeDetectionFPPredication( *renderTarget.getEngine()->getRenderSystem()
+				, pixelSize
+				, config );
+		}
+		else
+		{
+			m_pixelShader.shader = doGetEdgeDetectionFPNoPredication( *renderTarget.getEngine()->getRenderSystem()
+				, pixelSize
+				, config );
+		}
+
 		doInitialisePipeline();
 	}
 
@@ -138,9 +356,22 @@ namespace smaa
 
 		if ( m_predicationView )
 		{
+			auto subresource = m_predicationView->getSubResourceRange();
+			subresource.aspectMask = getAspectMask( m_predicationView->getFormat() );
+			ashes::ImageMemoryBarrier barrier
+			{
+				0u,
+				ashes::AccessFlag::eShaderRead,
+				ashes::ImageLayout::eUndefined,
+				ashes::ImageLayout::eShaderReadOnlyOptimal,
+				~( 0u ),
+				~( 0u ),
+				m_predicationView->getTexture(),
+				subresource
+			};
 			edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
 				, ashes::PipelineStageFlag::eFragmentShader
-				, m_predicationView->makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+				, barrier );
 		}
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
@@ -163,12 +394,8 @@ namespace smaa
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		stages[0].module->loadShader( m_renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( m_renderSystem.compileShader( m_pixelShader ) );
 
 		ashes::DepthStencilState dsstate{ 0u, false, false };
 		dsstate.stencilTestEnable = true;

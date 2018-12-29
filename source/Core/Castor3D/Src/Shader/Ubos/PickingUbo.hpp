@@ -120,13 +120,13 @@ namespace castor3d
 }
 
 #define UBO_PICKING( writer, binding, set )\
-	glsl::Ubo model{ writer\
+	sdw::Ubo model{ writer\
 		, castor3d::PickingUbo::BufferPicking\
 		, binding\
 		, set\
-		, glsl::Ubo::Layout::eStd140 };\
-	auto c3d_drawIndex = model.declMember< glsl::Int >( castor3d::PickingUbo::DrawIndex );\
-	auto c3d_nodeIndex = model.declMember< glsl::Int >( castor3d::PickingUbo::NodeIndex );\
+		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_drawIndex = model.declMember< sdw::Int >( castor3d::PickingUbo::DrawIndex );\
+	auto c3d_nodeIndex = model.declMember< sdw::Int >( castor3d::PickingUbo::NodeIndex );\
 	model.end()
 
 #endif

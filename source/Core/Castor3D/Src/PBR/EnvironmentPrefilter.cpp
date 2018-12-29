@@ -12,8 +12,8 @@
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 
@@ -36,7 +36,7 @@ namespace castor3d
 			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
 			image.imageType = ashes::TextureType::e2D;
 			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.mipLevels = glsl::Utils::MaxIblReflectionLod + 1;
+			image.mipLevels = shader::Utils::MaxIblReflectionLod + 1;
 			image.samples = ashes::SampleCountFlag::e1;
 			image.sharingMode = ashes::SharingMode::eExclusive;
 			image.tiling = ashes::ImageTiling::eOptimal;
@@ -79,199 +79,201 @@ namespace castor3d
 			, ashes::Extent2D const & size
 			, uint32_t mipLevel )
 		{
-			glsl::Shader vtx;
+			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "EnvironmentPrefilter" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
-				Ubo matrix{ writer, cuT( "Matrix" ), 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( cuT( "c3d_viewProjection" ) );
+				auto position = writer.declInput< Vec3 >( "position", 0u );
+				Ubo matrix{ writer, "Matrix", 0u, 0u };
+				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
 				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto out = gl_PerVertex{ writer };
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
+				auto out = writer.getOut();
 
-				std::function< void() > main = [&]()
-				{
-					vtx_worldPosition = position;
-					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
-				};
-
-				writer.implementFunction< void >( cuT( "main" ), main );
-				vtx = writer.finalise();
+				writer.implementFunction< Void >( "main"
+					, [&]()
+					{
+						vtx_worldPosition = position;
+						out.gl_out.gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
+					} );
+				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			glsl::Shader pxl;
+			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "EnvironmentPrefilter" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				FragmentWriter writer;
 
 				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-				auto c3d_roughness = writer.declConstant< Float >( cuT( "c3d_roughness" ), mipLevel / float( glsl::Utils::MaxIblReflectionLod ) );
+				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
+				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
+					, writer.cast< Float >( mipLevel ) / float( shader::Utils::MaxIblReflectionLod ) );
 
 				// Outputs
-				auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
+				auto distributionGGX = writer.implementFunction< Float >( "DistributionGGX"
 					, [&]( Vec3 const & N
 						, Vec3 const & H
 						, Float const & roughness )
-				{
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.declLocale( cuT( "a" )
-						, roughness * roughness );
-					auto a2 = writer.declLocale( cuT( "a2" )
-						, a * a );
-					auto NdotH = writer.declLocale( cuT( "NdotH" )
-						, max( dot( N, H ), 0.0 ) );
-					auto NdotH2 = writer.declLocale( cuT( "NdotH2" )
-						, NdotH * NdotH );
+					{
+						auto a = writer.declLocale( "a"
+							, roughness * roughness );
+						auto a2 = writer.declLocale( "a2"
+							, a * a );
+						auto NdotH = writer.declLocale( "NdotH"
+							, max( dot( N, H ), 0.0_f ) );
+						auto NdotH2 = writer.declLocale( "NdotH2"
+							, NdotH * NdotH );
 
-					auto nom = writer.declLocale( cuT( "nom" )
-						, a2 );
-					auto denom = writer.declLocale( cuT( "denom" )
-						, ( NdotH2 * writer.paren( a2 - 1.0 ) + 1.0 ) );
-					denom = denom * denom * PI;
+						auto nom = writer.declLocale( "nom"
+							, a2 );
+						auto denom = writer.declLocale( "denom"
+							, fma( NdotH2, writer.paren( a2 - 1.0_f ), 1.0_f ) );
+						denom = denom * denom * Float{ Pi< float > };
 
-					writer.returnStmt( nom / denom );
-				}
-					, InVec3{ &writer, cuT( "N" ) }
-					, InVec3{ &writer, cuT( "H" ) }
-				, InFloat{ &writer, cuT( "roughness" ) } );
+						writer.returnStmt( nom / denom );
+					}
+					, InVec3{ writer, "N" }
+					, InVec3{ writer, "H" }
+					, InFloat{ writer, "roughness" } );
 
-				auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
+				auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
 					, [&]( UInt const & inBits )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto bits = writer.declLocale( cuT( "bits" )
+					auto bits = writer.declLocale( "bits"
 						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_ui ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_ui ) >> 4u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
-					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
+					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1u );
+					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2u );
+					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4u );
+					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8u );
+					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "inBits" ) } );
+				, InUInt{ writer, "inBits" } );
 
-				auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
+				auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
 					, [&]( UInt const & i
 						, UInt const & n )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
-				}
-					, InUInt{ &writer, cuT( "i" ) }
-				, InUInt{ &writer, cuT( "n" ) } );
+					{
+						// From https://learnopengl.com/#!PBR/Lighting
+						writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
+					}
+					, InUInt{ writer, "i" }
+					, InUInt{ writer, "n" } );
 
-				auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
+				auto importanceSample = writer.implementFunction< Vec3 >( "ImportanceSampleGGX"
 					, [&]( Vec2 const & xi
 						, Vec3 const & n
 						, Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.declLocale( cuT( "a" )
-						, roughness * roughness );
-					auto a2 = writer.declLocale( cuT( "a2" )
-						, a * a );
-
-					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * xi.x() );
-					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
-						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a2 - 1.0 ) * xi.y() ) ) );
-					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
-						, sqrt( 1.0 - cosTheta * cosTheta ) );
-
-					// from spherical coordinates to cartesian coordinates
-					auto H = writer.declLocale< Vec3 >( cuT( "H" ) );
-					H.x() = cos( phi ) * sinTheta;
-					H.y() = sin( phi ) * sinTheta;
-					H.z() = cosTheta;
-
-					// from tangent-space vector to world-space sample vector
-					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
-					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( cross( up, n ) ) );
-					auto bitangent = writer.declLocale( cuT( "bitangent" )
-						, cross( n, tangent ) );
-
-					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-						, tangent * H.x() + bitangent * H.y() + n * H.z() );
-					writer.returnStmt( normalize( sampleVec ) );
-				}
-					, InVec2{ &writer, cuT( "xi" ) }
-					, InVec3{ &writer, cuT( "n" ) }
-				, InFloat{ &writer, cuT( "roughness" ) } );
-
-				writer.implementFunction< void >( cuT( "main" ), [&]()
-				{
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto N = writer.declLocale( cuT( "N" )
-						, normalize( vtx_worldPosition ) );
-					auto R = writer.declLocale( cuT( "R" )
-						, N );
-					auto V = writer.declLocale( cuT( "V" )
-						, R );
-
-					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
-						, 1024_ui );
-					auto totalWeight = writer.declLocale( cuT( "totalWeight" )
-						, 0.0_f );
-					auto prefilteredColor = writer.declLocale( cuT( "prefilteredColor" )
-						, vec3( 0.0_f ) );
-
-					FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
 					{
-						auto xi = writer.declLocale( cuT( "xi" )
-							, hammersley( i, sampleCount ) );
-						auto H = writer.declLocale( cuT( "H" )
-							, importanceSample( xi, N, c3d_roughness ) );
-						auto L = writer.declLocale( cuT( "L" )
-							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+						// From https://learnopengl.com/#!PBR/Lighting
+						auto a = writer.declLocale( "a"
+							, roughness * roughness );
+						auto a2 = writer.declLocale( "a2"
+							, a * a );
 
-						auto NdotL = writer.declLocale( cuT( "NdotL" )
-							, max( dot( N, L ), 0.0 ) );
+						auto phi = writer.declLocale( "phi"
+							, 2.0_f * Float{ Pi< float > } * xi.x() );
+						auto cosTheta = writer.declLocale( "cosTheta"
+							, sqrt( writer.paren( 1.0_f - xi.y() ) / writer.paren( 1.0_f + writer.paren( a2 - 1.0_f ) * xi.y() ) ) );
+						auto sinTheta = writer.declLocale( "sinTheta"
+							, sqrt( 1.0_f - cosTheta * cosTheta ) );
 
-						IF( writer, "NdotL > 0.0" )
-						{
-							auto D = writer.declLocale( cuT( "D" )
-								, distributionGGX( N, H, c3d_roughness ) );
-							auto NdotH = writer.declLocale( cuT( "NdotH" )
-								, max( dot( N, H ), 0.0 ) );
-							auto HdotV = writer.declLocale( cuT( "HdotV" )
-								, max( dot( H, V ), 0.0 ) );
-							auto pdf = writer.declLocale( cuT( "pdf" )
-								, D * NdotH / writer.paren( 4.0_f * HdotV ) + 0.0001 );
+						// from spherical coordinates to cartesian coordinates
+						auto H = writer.declLocale< Vec3 >( "H" );
+						H.x() = cos( phi ) * sinTheta;
+						H.y() = sin( phi ) * sinTheta;
+						H.z() = cosTheta;
 
-							auto resolution = writer.declLocale( cuT( "resolution" )
-								, Float( int( size.width ) ) ); // resolution of source cubemap (per face)
-							auto saTexel = writer.declLocale( cuT( "saTexel" )
-								, 4.0_f * PI / writer.paren( 6.0 * resolution * resolution ) );
-							auto saSample = writer.declLocale( cuT( "saSample" )
-								, 1.0_f / writer.paren( writer.cast< Float >( sampleCount ) * pdf + 0.0001 ) );
-							auto mipLevel = writer.declLocale( cuT( "mipLevel" )
-								, writer.ternary( c3d_roughness == 0.0_f, 0.0_f, 0.5_f * log2( saSample / saTexel ) ) );
+						// from tangent-space vector to world-space sample vector
+						auto up = writer.declLocale( "up"
+							, writer.ternary( sdw::abs( n.z() ) < 0.999_f
+								, vec3( 0.0_f, 0.0_f, 1.0_f )
+								, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
+						auto tangent = writer.declLocale( "tangent"
+							, normalize( cross( up, n ) ) );
+						auto bitangent = writer.declLocale( "bitangent"
+							, cross( n, tangent ) );
 
-							prefilteredColor += texture( c3d_mapDiffuse, L, mipLevel ).rgb() * NdotL;
-							totalWeight += NdotL;
-						}
-						FI;
+						auto sampleVec = writer.declLocale( "sampleVec"
+							, tangent * H.x() + bitangent * H.y() + n * H.z() );
+						writer.returnStmt( normalize( sampleVec ) );
 					}
-					ROF;
+					, InVec2{ writer, "xi" }
+					, InVec3{ writer, "n" }
+					, InFloat{ writer, "roughness" } );
 
-					prefilteredColor = prefilteredColor / totalWeight;
-					pxl_fragColor = vec4( prefilteredColor, 1.0 );
-				} );
+				writer.implementFunction< sdw::Void >( "main"
+					, [&]()
+					{
+						// From https://learnopengl.com/#!PBR/Lighting
+						auto N = writer.declLocale( "N"
+							, normalize( vtx_worldPosition ) );
+						auto R = writer.declLocale( "R"
+							, N );
+						auto V = writer.declLocale( "V"
+							, R );
 
-				pxl = writer.finalise();
+						auto sampleCount = writer.declLocale( "sampleCount"
+							, 1024_u );
+						auto totalWeight = writer.declLocale( "totalWeight"
+							, 0.0_f );
+						auto prefilteredColor = writer.declLocale( "prefilteredColor"
+							, vec3( 0.0_f ) );
+
+						FOR( writer, UInt, i, 0u, i < sampleCount, ++i )
+						{
+							auto xi = writer.declLocale( "xi"
+								, hammersley( i, sampleCount ) );
+							auto H = writer.declLocale( "H"
+								, importanceSample( xi, N, c3d_roughness ) );
+							auto L = writer.declLocale( "L"
+								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+
+							auto NdotL = writer.declLocale( "NdotL"
+								, max( dot( N, L ), 0.0_f ) );
+
+							IF( writer, NdotL > 0.0_f )
+							{
+								auto D = writer.declLocale( "D"
+									, distributionGGX( N, H, c3d_roughness ) );
+								auto NdotH = writer.declLocale( "NdotH"
+									, max( dot( N, H ), 0.0_f ) );
+								auto HdotV = writer.declLocale( "HdotV"
+									, max( dot( H, V ), 0.0_f ) );
+								auto pdf = writer.declLocale( "pdf"
+									, D * NdotH / writer.paren( 4.0_f * HdotV ) + 0.0001_f );
+
+								auto resolution = writer.declLocale( "resolution"
+									, Float( float( size.width ) ) ); // resolution of source cubemap (per face)
+								auto saTexel = writer.declLocale( "saTexel"
+									, 4.0_f * Float{ Pi< float > } / writer.paren( 6.0_f * resolution * resolution ) );
+								auto saSample = writer.declLocale( "saSample"
+									, 1.0_f / writer.paren( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
+								auto mipLevel = writer.declLocale( "mipLevel"
+									, writer.ternary( c3d_roughness == 0.0_f
+										, 0.0_f
+										, 0.5_f * log2( saSample / saTexel ) ) );
+
+								prefilteredColor += texture( c3d_mapDiffuse, L, mipLevel ).rgb() * NdotL;
+								totalWeight += NdotL;
+							}
+							FI;
+						}
+						ROF;
+
+						prefilteredColor = prefilteredColor / totalWeight;
+						pxl_fragColor = vec4( prefilteredColor, 1.0_f );
+					} );
+
+				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
 			ashes::ShaderStageStateArray program
@@ -279,12 +281,8 @@ namespace castor3d
 				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 			};
-			program[0].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
-				, ashes::ShaderStageFlag::eVertex
-				, vtx.getSource() ) );
-			program[1].module->loadShader( compileGlslToSpv( getCurrentDevice( renderSystem )
-				, ashes::ShaderStageFlag::eFragment
-				, pxl.getSource() ) );
+			program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+			program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 			return program;
 		}
 
@@ -409,7 +407,7 @@ namespace castor3d
 		auto & dstTexture = *m_result;
 		ashes::Extent2D originalSize{ size.getWidth(), size.getHeight() };
 
-		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
+		for ( auto mipLevel = 0u; mipLevel < shader::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
 			ashes::Extent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
 				, uint32_t( originalSize.height * std::pow( 0.5, mipLevel ) ) };

@@ -171,7 +171,7 @@
  *<li>Removed every GlXxxRenderer class, except for GlOverlayRenderer.</li>
  *<li>Support for OpenGL 1.x has been removed.</li>
  *<li>Support for OpenGL 3.x has been enforced, forcing UBOs, for example.</li>
- *<li>Implemented a GlslWriter, to write GLSL code from C++ source.</li>
+ *<li>Implemented a ShaderWriter, to write GLSL code from C++ source.</li>
  *</ul>
  *\subsubsection feat_0_8_0_sub Subdividers
  *<ul>
@@ -709,7 +709,7 @@
  *<li>Suppression des classes GlXxxRenderer.</li>
  *<li>Le support d'OpenGL 1.x a été supprimé.</li>
  *<li>Le support d'OpenGL 3.x a été renforcé, en forçant l'utilisation des UBOs, par exemple.</li>
- *<li>Implémentation de GlslWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
+ *<li>Implémentation de ShaderWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
  *</ul>
  *\subsubsection feat_0_8_0_sub Subdiviseurs
  *<ul>

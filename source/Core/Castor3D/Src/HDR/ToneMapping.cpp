@@ -14,10 +14,10 @@
 #include <Descriptor/DescriptorSetLayout.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -32,6 +32,8 @@ namespace castor3d
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "ToneMapping" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "ToneMapping" }
 	{
 	}
 
@@ -48,38 +50,35 @@ namespace castor3d
 		m_signalFinished = getCurrentDevice( renderSystem ).createSemaphore();
 
 		{
-			auto writer = renderSystem.createGlslWriter();
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position.x(), position.y(), 0.0, 1.0 );
-			} );
+			writer.implementFunction< sdw::Void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+				} );
 
-			m_vertexShader = writer.finalise();
+			m_vertexShader.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_pixelShader = doCreate();
+		m_pixelShader.shader = doCreate();
 		auto & device = getCurrentDevice( renderSystem );
 		ashes::ShaderStageStateArray program
 		{
 			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
 			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader.getSource() ) );
-		program[1].module->loadShader( compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader.getSource() ) );
+		program[0].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_vertexShader ) );
+		program[1].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_pixelShader ) );
 		ashes::DescriptorSetLayoutBindingArray bindings
 		{
 			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
@@ -110,10 +109,10 @@ namespace castor3d
 	{
 		visitor.visit( cuT( "ToneMapping" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
 			, ashes::ShaderStageFlag::eFragment
 			, m_config );

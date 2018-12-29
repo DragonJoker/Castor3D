@@ -18,141 +18,147 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 namespace light_streaks
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getHiPassProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getHiPassProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0f ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0 );
+					auto maxComponent = writer.declLocale( "maxComponent"
+						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
+					maxComponent = max( maxComponent, pxl_fragColor.b() );
 
-				IF( writer, maxComponent > 1.0_f )
-				{
-					pxl_fragColor.xyz() /= maxComponent;
-				}
-				ELSE
-				{
-					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
-				FI;
-			} );
-			return writer.finalise();
+					IF( writer, maxComponent > 1.0_f )
+					{
+						pxl_fragColor.xyz() /= maxComponent;
+					}
+					ELSE
+					{
+						pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
+					FI;
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getKawaseProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getKawaseProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			UBO_KAWASE( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, vec3( 0.0_f ) );
-				auto b = writer.declLocale( cuT( "b" )
-					, pow( writer.cast< Float >( c3d_samples ), writer.cast< Float >( c3d_pass ) ) );
-				auto texcoords = writer.declLocale( cuT( "texcoords" )
-					, vtx_texture );
-
-				if ( getCurrentDevice( *renderSystem ).getClipDirection() != ashes::ClipDirection::eTopDown )
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
-				}
+					auto colour = writer.declLocale( "colour"
+						, vec3( 0.0_f ) );
+					auto b = writer.declLocale( "b"
+						, pow( writer.cast< Float >( c3d_samples ), writer.cast< Float >( c3d_pass ) ) );
+					auto texcoords = writer.declLocale( "texcoords"
+						, vtx_texture );
 
-				FOR( writer, Int, s, 0, "s < c3d_samples", "s++" )
-				{
-					// Weight = a^(b*s)
-					auto weight = writer.declLocale( cuT( "weight" )
-						, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
-					// Streak direction is a 2D vector in image space
-					auto sampleCoord = writer.declLocale( cuT( "sampleCoord" )
-						, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
-					// Scale and accumulate
-					colour += texture( c3d_mapDiffuse, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
-				}
-				ROF;
+					if ( getCurrentDevice( *renderSystem ).getClipDirection() != ashes::ClipDirection::eTopDown )
+					{
+						texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
+					}
 
-				pxl_fragColor = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
-			} );
-			return writer.finalise();
+					FOR( writer, Int, s, 0, s < c3d_samples, ++s )
+					{
+						// Weight = a^(b*s)
+						auto weight = writer.declLocale( "weight"
+							, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
+						// Streak direction is a 2D vector in image space
+						auto sampleCoord = writer.declLocale( "sampleCoord"
+							, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
+						// Scale and accumulate
+						colour += texture( c3d_mapDiffuse, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
+					}
+					ROF;
+
+					pxl_fragColor = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getCombineProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getCombineProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			auto index = castor3d::MinBufferIndex;
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( PostEffect::CombineMapScene, 0u, 0u );
-			auto c3d_mapKawase1 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase1, 1u, 0u );
-			auto c3d_mapKawase2 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase2, 2u, 0u );
-			auto c3d_mapKawase3 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase3, 3u, 0u );
-			auto c3d_mapKawase4 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase4, 4u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapScene = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapScene, 0u, 0u );
+			auto c3d_mapKawase1 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase1, 1u, 0u );
+			auto c3d_mapKawase2 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase2, 2u, 0u );
+			auto c3d_mapKawase3 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase3, 3u, 0u );
+			auto c3d_mapKawase4 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase4, 4u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 			{
-				pxl_fragColor = texture( c3d_mapScene, writer.ashesBottomUpToTopDown( vtx_texture ) );
-				pxl_fragColor += texture( c3d_mapKawase1, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase2, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase3, vtx_texture );
-				pxl_fragColor += texture( c3d_mapKawase4, vtx_texture );
+				auto texcoordsKawase = writer.declLocale( "texcoordsKawase"
+					, vtx_texture );
+				pxl_fragColor = texture( c3d_mapScene, vec2( texcoordsKawase.x(), 1.0 - texcoordsKawase.y() ) );
+				pxl_fragColor += texture( c3d_mapKawase1, texcoordsKawase );
+				pxl_fragColor += texture( c3d_mapKawase2, texcoordsKawase );
+				pxl_fragColor += texture( c3d_mapKawase3, texcoordsKawase );
+				pxl_fragColor += texture( c3d_mapKawase4, texcoordsKawase );
 			} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -208,6 +214,21 @@ namespace light_streaks
 			, renderSystem
 			, params )
 		, m_kawaseUbo{ *renderSystem.getEngine() }
+		, m_pipelines
+		{
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksHiPass" },
+			},
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksKawase" },
+			},
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksCombine" },
+			},
+		}
 	{
 		m_linearSampler = doCreateSampler( true );
 		m_nearestSampler = doCreateSampler( false );
@@ -232,17 +253,17 @@ namespace light_streaks
 	{
 		visitor.visit( cuT( "HiPass" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.hiPass.vertexShader );
+			, *m_pipelines.hiPass.vertexShader.shader );
 		visitor.visit( cuT( "HiPass" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.hiPass.pixelShader );
+			, *m_pipelines.hiPass.pixelShader.shader );
 
 		visitor.visit( cuT( "Kawase" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.kawase.vertexShader );
+			, *m_pipelines.kawase.vertexShader.shader );
 		visitor.visit( cuT( "Kawase" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.kawase.pixelShader );
+			, *m_pipelines.kawase.pixelShader.shader );
 		visitor.visit( cuT( "Kawase" )
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "Kawase" )
@@ -256,10 +277,10 @@ namespace light_streaks
 
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.combine.vertexShader );
+			, *m_pipelines.combine.vertexShader.shader );
 		visitor.visit( cuT( "Combine" )
 			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.combine.pixelShader );
+			, *m_pipelines.combine.pixelShader.shader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -425,7 +446,21 @@ namespace light_streaks
 		m_kawaseUbo.cleanup();
 		m_vertexBuffer.reset();
 
-		Pipeline dummy1, dummy2, dummy3;
+		Pipeline dummy1
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+		};
+		Pipeline dummy2
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+		};
+		Pipeline dummy3
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+		};
 		std::swap( m_pipelines.combine, dummy1 );
 		std::swap( m_pipelines.kawase, dummy2 );
 		std::swap( m_pipelines.hiPass, dummy3 );
@@ -479,9 +514,10 @@ namespace light_streaks
 	bool PostEffect::doInitialiseHiPassProgram()
 	{
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.hiPass.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.hiPass.pixelShader = getHiPassProgram( getRenderSystem() );
+		m_pipelines.hiPass.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.hiPass.pixelShader.shader = getHiPassProgram( getRenderSystem() );
 
 		// Create pipeline
 		ashes::VertexInputState inputState;
@@ -491,12 +527,8 @@ namespace light_streaks
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.hiPass.vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.hiPass.pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.hiPass.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.hiPass.pixelShader ) );
 
 		ashes::GraphicsPipelineCreateInfo pipeline
 		{
@@ -530,9 +562,10 @@ namespace light_streaks
 	bool PostEffect::doInitialiseKawaseProgram()
 	{
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.kawase.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.kawase.pixelShader = getKawaseProgram( getRenderSystem() );
+		m_pipelines.kawase.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.kawase.pixelShader.shader = getKawaseProgram( getRenderSystem() );
 
 		// Create pipeline
 		ashes::VertexInputState inputState;
@@ -542,12 +575,8 @@ namespace light_streaks
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.kawase.vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.kawase.pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.kawase.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.kawase.pixelShader ) );
 
 		ashes::GraphicsPipelineCreateInfo pipeline
 		{
@@ -593,9 +622,10 @@ namespace light_streaks
 	bool PostEffect::doInitialiseCombineProgram()
 	{
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.combine.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.combine.pixelShader = getCombineProgram( getRenderSystem() );
+		m_pipelines.combine.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.combine.pixelShader.shader = getCombineProgram( getRenderSystem() );
 
 		// Create pipeline
 		ashes::VertexInputState inputState;
@@ -605,12 +635,8 @@ namespace light_streaks
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eVertex
-			, m_pipelines.combine.vertexShader.getSource() ) );
-		stages[1].module->loadShader( castor3d::compileGlslToSpv( device
-			, ashes::ShaderStageFlag::eFragment
-			, m_pipelines.combine.pixelShader.getSource() ) );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.combine.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.combine.pixelShader ) );
 
 		ashes::GraphicsPipelineCreateInfo pipeline
 		{
