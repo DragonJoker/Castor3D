@@ -80,11 +80,12 @@ Other applications
 - ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
 
-![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-small.png)
-![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-small.png)
-![Park, Legacy](http://DragonJoker.github.com/Castor3D/img/Park-Legacy-small.png)
-![Park, PBR](http://DragonJoker.github.com/Castor3D/img/Park-PBR-small.png)
-![Nyra, PBR](http://DragonJoker.github.com/Castor3D/img/Nyra-PBR-MR-small.png)
+![Sponza](http://dragonjoker.github.com/Castor3D/img/Sponza-PBR-Bloom-Small.png)
+![Cerberus](http://dragonjoker.github.com/Castor3D/img/Cerberus-PBR-Small.png)
+![Park, Legacy](http://dragonjoker.github.com/Castor3D/img/Park-Legacy-Small.png)
+![Park, PBR](http://dragonjoker.github.com/Castor3D/img/Park-PBR-Small.png)
+![Nyra, PBR](http://dragonjoker.github.com/Castor3D/img/Nyra-PBR-MR-Small.png)
+![SanMiguel, PBR](http://dragonjoker.github.com/Castor3D/img/SanMiguel-PBR-SG-Small.png)
 
 Links
 -----
