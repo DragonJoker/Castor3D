@@ -103,7 +103,9 @@ namespace TestRender
 				, ast::SpecialisationInfo{}
 				, glsl::GlslConfig
 				{
+					module.shader->getType(),
 					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					false,
 					false,
 					false,
 					false,

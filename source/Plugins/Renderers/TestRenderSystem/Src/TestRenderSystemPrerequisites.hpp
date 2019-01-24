@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <Castor3DPrerequisites.hpp>
 #include <TestRendererPrerequisites.hpp>
 
-#ifdef CASTOR_PLATFORM_WINDOWS
+#ifdef CU_PlatformWindows
 #	ifdef TestRenderSystem_EXPORTS
 #		define C3D_Test_API __declspec( dllexport )
 #	else

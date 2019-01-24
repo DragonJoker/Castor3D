@@ -30,10 +30,10 @@ namespace
 		{
 #if defined( NDEBUG )
 
-			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CU_SharedLibExt ) == String::npos )
 #else
 
-			if ( file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			if ( file.find( String( cuT( "d." ) ) + CU_SharedLibExt ) != String::npos )
 
 #endif
 			{
@@ -48,7 +48,7 @@ namespace
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.getExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
@@ -104,7 +104,7 @@ namespace
 
 		if ( renderers.empty() )
 		{
-			CASTOR_EXCEPTION( "No renderer plug-ins" );
+			CU_Exception( "No renderer plug-ins" );
 		}
 
 		if ( result->loadRenderer( TestRender::RenderSystem::Type ) )
@@ -113,7 +113,7 @@ namespace
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Couldn't load renderer." );
+			CU_Exception( "Couldn't load renderer." );
 		}
 
 		return result;
