@@ -273,7 +273,7 @@ namespace castor3d
 	void ParticleSystem::update( RenderPassTimer & timer
 		, uint32_t index )
 	{
-		REQUIRE( m_impl );
+		CU_Require( m_impl );
 		auto time = std::chrono::duration_cast< Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
@@ -324,7 +324,7 @@ namespace castor3d
 		}
 		else
 		{
-			CASTOR_EXCEPTION( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+			CU_Exception( cuT( "Particle type [" ) + value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 		}
 	}
 

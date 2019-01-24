@@ -88,6 +88,9 @@ namespace castor3d
 		}
 		/**@}*/
 
+	public:
+		static ashes::Format constexpr ResultFormat = ashes::Format::eR32G32B32A32_SFLOAT;
+
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
@@ -111,7 +114,6 @@ namespace castor3d
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
-
 	};
 }
 

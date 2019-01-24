@@ -74,8 +74,8 @@ namespace castor3d
 					maxSize = ( 1u << level ) * 96;
 				}
 
-				REQUIRE( maxSize < std::numeric_limits< uint32_t >::max() );
-				REQUIRE( maxSize >= size );
+				CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
+				CU_Require( maxSize >= size );
 
 				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
 				buffer->initialiseStorage( getCurrentDevice( *getRenderSystem() )
@@ -111,21 +111,21 @@ namespace castor3d
 				{
 					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
 				} );
-			REQUIRE( it != m_nonSharedBuffers.end() );
+			CU_Require( it != m_nonSharedBuffers.end() );
 			it->reset();
 		}
 		else
 		{
 			auto key = doMakeKey( target, bufferOffset.flags );
 			auto it = m_buffers.find( key );
-			REQUIRE( it != m_buffers.end() );
+			CU_Require( it != m_buffers.end() );
 			auto itB = std::find_if( it->second.begin()
 				, it->second.end()
 				, [&bufferOffset]( std::unique_ptr< GpuBuffer > const & lookup )
 				{
 					return &lookup->getBuffer().getBuffer() == bufferOffset.buffer;
 				} );
-			REQUIRE( itB != it->second.end() );
+			CU_Require( itB != it->second.end() );
 			( *itB )->deallocate( bufferOffset.offset );
 		}
 	}

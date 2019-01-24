@@ -35,7 +35,7 @@ namespace castor3d
 		//!\~french		Dit si l'API de rendu choisie supporte les tampons de stockage shader.
 		eShaderStorageBuffers = 0x00000002,
 	};
-	IMPLEMENT_FLAGS( GpuFeature )
+	CU_ImplementFlags( GpuFeature )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016
@@ -72,7 +72,7 @@ namespace castor3d
 		eViewportHeight,
 		eViewports,
 
-		CASTOR_SCOPED_ENUM_BOUNDS( eTexture3DSize )
+		CU_ScopedEnumBounds( eTexture3DSize )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

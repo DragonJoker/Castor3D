@@ -90,7 +90,7 @@ namespace Bloom
 
 					for ( uint32_t i = 0; i < blurPassesCount; ++i )
 					{
-						pxl_fragColor += texture( c3d_mapPasses, texcoords, Float( float( i ) ) );
+						pxl_fragColor += texture( c3d_mapPasses, vtx_texture, Float( float( i ) ) );
 					}
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

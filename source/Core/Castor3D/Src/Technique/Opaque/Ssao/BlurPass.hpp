@@ -105,6 +105,9 @@ namespace castor3d
 			, ashes::DescriptorSet & descriptorSet )override;
 		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
 
+	public:
+		static ashes::Format constexpr ResultFormat = ashes::Format::eR8G8B8A8_UNORM;
+
 	private:
 		struct Configuration
 		{

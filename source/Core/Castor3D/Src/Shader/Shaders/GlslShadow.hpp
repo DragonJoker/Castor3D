@@ -54,24 +54,32 @@ namespace castor3d
 			C3D_API void declareSpot( ShadowType type
 				, uint32_t & index );
 			C3D_API sdw::Float computeDirectionalShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::Vec3 const & normal )const;
 			C3D_API sdw::Float computeSpotShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal
 				, sdw::Int const & index )const;
 			C3D_API sdw::Float computePointShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal
 				, sdw::Float const & farPlane
 				, sdw::Int const & index )const;
 			C3D_API void computeVolumetric( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
 				, sdw::Vec2 const & clipSpacePosition
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & eyePosition
@@ -83,20 +91,28 @@ namespace castor3d
 				, sdw::UInt const & lightVolumetricSteps
 				, sdw::Float const & lightVolumetricScattering
 				, OutputComponents & parentOutput )const;
-			C3D_API sdw::Float computeDirectionalShadow( sdw::Mat4 const & lightMatrix
+			C3D_API sdw::Float computeDirectionalShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::Vec3 const & normal )const;
-			C3D_API sdw::Float computeSpotShadow( sdw::Mat4 const & lightMatrix
+			C3D_API sdw::Float computeSpotShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal )const;
-			C3D_API sdw::Float computePointShadow( sdw::Vec3 const & worldSpacePosition
+			C3D_API sdw::Float computePointShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::Vec3 const & normal
 				, sdw::Float const & farPlane )const;
-			C3D_API void computeVolumetric( sdw::Vec2 const & clipSpacePosition
+			C3D_API void computeVolumetric( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec2 const & clipSpacePosition
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & eyePosition
 				, sdw::Mat4 const & lightMatrix
@@ -121,29 +137,29 @@ namespace castor3d
 				, sdw::Float const & maxSlopeOffset )const;
 			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
 				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DRgba32 const & shadowMap
+				, sdw::SampledImage2DRg32 const & shadowMap
 				, sdw::Float const & bias )const;
 			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
 				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DArrayRgba32 const & shadowMap
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
 				, sdw::Int const & index
 				, sdw::Float const & bias )const;
 			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DRgba32 const & shadowMap
+				, sdw::SampledImage2DRg32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
 				, sdw::Float const & bias )const;
 			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DArrayRgba32 const & shadowMap
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
 				, sdw::Int const & index
 				, sdw::Vec2 const & invTexDim
 				, sdw::Float const & bias )const;
 			sdw::Float textureProjCascade( sdw::Vec4 const & lightSpacePosition
 				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DArrayRgba32 const & shadowMap
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
 				, sdw::UInt const & cascadeIndex
 				, sdw::Float const & bias )const;
 			sdw::Float filterPCFCascade( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DArrayRgba32 const & shadowMap
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
 				, sdw::UInt const & cascadeIndex
 				, sdw::Float const & bias )const;
@@ -181,23 +197,23 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DArrayRg32
 				, sdw::InInt
 				, sdw::InFloat > m_textureProj;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DArrayRg32
 				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InFloat > m_filterPCF;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DRgba32
+				, sdw::InSampledImage2DRg32
 				, sdw::InFloat > m_textureOneProj;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DRgba32
+				, sdw::InSampledImage2DRg32
 				, sdw::InVec2
 				, sdw::InFloat > m_filterOnePCF;
 			sdw::Function < sdw::Float
@@ -208,12 +224,12 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DArrayRg32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayRgba32
+				, sdw::InSampledImage2DArrayRg32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;
@@ -222,6 +238,8 @@ namespace castor3d
 				, sdw::InVec3 > m_getLightSpacePosition;
 			sdw::Function< sdw::Float
 				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InVec3
@@ -229,6 +247,8 @@ namespace castor3d
 				, sdw::InVec3 > m_computeDirectional;
 			sdw::Function< sdw::Float
 				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InVec3
@@ -236,6 +256,8 @@ namespace castor3d
 				, sdw::InInt > m_computeSpot;
 			sdw::Function< sdw::Float
 				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
@@ -243,6 +265,8 @@ namespace castor3d
 				, sdw::InInt > m_computePoint;
 			sdw::Function< sdw::Void
 				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec3
 				, sdw::InVec3
@@ -255,22 +279,30 @@ namespace castor3d
 				, sdw::InFloat
 				, OutputComponents & > m_computeVolumetric;
 			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InUInt
 				, sdw::InVec3 > m_computeOneDirectional;
 			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3 > m_computeOneSpot;
 			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat > m_computeOnePoint;
 			sdw::Function< sdw::Void
+				, sdw::InVec2
+				, sdw::InVec2
 				, sdw::InVec2
 				, sdw::InVec3
 				, sdw::InVec3

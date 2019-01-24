@@ -45,7 +45,7 @@ namespace castor3d
 
 	void BillboardUbo::update( Point2f const & dimensions )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).dimensions = dimensions;
 		m_ubo->upload();
 	}

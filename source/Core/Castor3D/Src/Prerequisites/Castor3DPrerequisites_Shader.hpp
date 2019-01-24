@@ -86,7 +86,7 @@ namespace castor3d
 		//\~french		Shader pour la pré-passe de profondeur.
 		eDepthPass = 0x1000,
 	};
-	IMPLEMENT_FLAGS( ProgramFlag )
+	CU_ImplementFlags( ProgramFlag )
 	/**
 	 *\~english
 	 *\brief		Tells if the given flags contain a shadow map flag.
@@ -110,8 +110,8 @@ namespace castor3d
 	class ShaderBuffer;
 	class ShaderProgram;
 
-	DECLARE_SMART_PTR( ShaderBuffer );
-	DECLARE_SMART_PTR( ShaderProgram );
+	CU_DeclareSmartPtr( ShaderBuffer );
+	CU_DeclareSmartPtr( ShaderProgram );
 
 	//@}
 
@@ -131,9 +131,12 @@ namespace castor3d
 
 		static constexpr uint32_t SpotShadowMapCount = 10u;
 		static constexpr uint32_t PointShadowMapCount = 6u;
+		static constexpr uint32_t BaseLightComponentsCount = 4u;
 		static constexpr uint32_t DirectionalMaxCascadesCount = 4u;
-		static constexpr int BaseLightComponentsCount = 3;
-		static constexpr int MaxLightComponentsCount = 21;
+		// DirectionalLight => BaseLightComponentsCount + 18
+		// PointLight => BaseLightComponentsCount + 2
+		// SpotLight => BaseLightComponentsCount + 8
+		static constexpr uint32_t MaxLightComponentsCount = 22u;
 
 		class Utils;
 		class Shadow;

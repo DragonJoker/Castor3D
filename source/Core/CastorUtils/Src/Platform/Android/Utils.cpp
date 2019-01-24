@@ -1,6 +1,6 @@
 ﻿#include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_ANDROID )
+#if defined( CU_PlatformAndroid )
 
 #include "Miscellaneous/Utils.hpp"
 #include "Graphics/Size.hpp"

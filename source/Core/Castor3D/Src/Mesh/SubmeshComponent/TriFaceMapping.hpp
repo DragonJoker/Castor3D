@@ -198,7 +198,7 @@ namespace castor3d
 		 */
 		inline Face const & operator[]( uint32_t index )const
 		{
-			REQUIRE( index < m_faces.size() );
+			CU_Require( index < m_faces.size() );
 			return m_faces[index];
 		}
 		/**

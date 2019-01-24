@@ -145,7 +145,7 @@ namespace castor3d
 			if ( parent )
 			{
 				auto it = find( *parent );
-				ENSURE( it != end() );
+				CU_Ensure( it != end() );
 				m_cumulative.emplace_back( transform.first, it->second * transform.second );
 			}
 			else

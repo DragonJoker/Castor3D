@@ -22,7 +22,7 @@ namespace castor3d
 		ePanel,
 		eBorderPanel,
 		eText,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePanel )
+		CU_ScopedEnumBounds( ePanel )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -43,7 +43,7 @@ namespace castor3d
 		//!\~english	The text jumps to next line without cutting words.
 		//!\~french		Le texte passe à la ligne suivante, sans découper les mots.
 		eBreakWords,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+		CU_ScopedEnumBounds( eNone )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -61,7 +61,7 @@ namespace castor3d
 		//!\~english	The texture is applied on the whole text.
 		//!\~french		La texture est appliquée sur tout le texte.
 		eText,
-		CASTOR_SCOPED_ENUM_BOUNDS( eLetter )
+		CU_ScopedEnumBounds( eLetter )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -82,7 +82,7 @@ namespace castor3d
 		//!\~english	The height of the lines is the maximum height from the font's characters.
 		//!\~french		La hauteur des lignes est la plus grande hauteur des caractères de la police.
 		eMaxFontHeight,
-		CASTOR_SCOPED_ENUM_BOUNDS( eOwnHeight )
+		CU_ScopedEnumBounds( eOwnHeight )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -104,7 +104,7 @@ namespace castor3d
 		//!\~english	Aligned on the right.
 		//!\~french		Aligné à droite.
 		eRight,
-		CASTOR_SCOPED_ENUM_BOUNDS( eLeft )
+		CU_ScopedEnumBounds( eLeft )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -126,7 +126,7 @@ namespace castor3d
 		//!\~english	Aligned on the bottom.
 		//!\~french		Aligné en bas.
 		eBottom,
-		CASTOR_SCOPED_ENUM_BOUNDS( eTop )
+		CU_ScopedEnumBounds( eTop )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -147,7 +147,7 @@ namespace castor3d
 		//!\~english	The border is outside the overlay.
 		//!\~french		La bordure est à l'extérieur de l'incrustation.
 		eExternal,
-		CASTOR_SCOPED_ENUM_BOUNDS( eInternal )
+		CU_ScopedEnumBounds( eInternal )
 	};
 
 	class Overlay;
@@ -159,18 +159,18 @@ namespace castor3d
 	class OverlayRenderer;
 	class FontTexture;
 
-	DECLARE_SMART_PTR( OverlayFactory );
-	DECLARE_SMART_PTR( OverlayRenderer );
-	DECLARE_SMART_PTR( FontTexture );
+	CU_DeclareSmartPtr( OverlayFactory );
+	CU_DeclareSmartPtr( OverlayRenderer );
+	CU_DeclareSmartPtr( FontTexture );
 
-	DECLARE_SMART_PTR( Overlay );
-	DECLARE_SMART_PTR( OverlayCategory );
-	DECLARE_SMART_PTR( PanelOverlay );
-	DECLARE_SMART_PTR( BorderPanelOverlay );
-	DECLARE_SMART_PTR( TextOverlay );
+	CU_DeclareSmartPtr( Overlay );
+	CU_DeclareSmartPtr( OverlayCategory );
+	CU_DeclareSmartPtr( PanelOverlay );
+	CU_DeclareSmartPtr( BorderPanelOverlay );
+	CU_DeclareSmartPtr( TextOverlay );
 
-	DECLARE_VECTOR( OverlaySPtr, OverlayPtr );
-	DECLARE_MAP( castor::String, OverlaySPtr, OverlayPtrStr );
+	CU_DeclareVector( OverlaySPtr, OverlayPtr );
+	CU_DeclareMap( castor::String, OverlaySPtr, OverlayPtrStr );
 
 	//@}
 }

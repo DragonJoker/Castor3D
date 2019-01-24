@@ -54,7 +54,7 @@ namespace castor3d
 	String const SsaoConfigUbo::BlurStepSize = cuT( "c3d_blurStepSize" );
 	String const SsaoConfigUbo::BlurRadius = cuT( "c3d_blurRadius" );
 	String const SsaoConfigUbo::ProjInfo = cuT( "c3d_projInfo" );
-	String const SsaoConfigUbo::InvViewMatrix = cuT( "c3d_worldToCamera" );
+	String const SsaoConfigUbo::ViewMatrix = cuT( "c3d_viewMatrix" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
@@ -93,9 +93,9 @@ namespace castor3d
 		auto & device = getCurrentDevice( m_engine );
 		int numSpiralTurns = 0;
 
-#define NUM_PRECOMPUTED 100
+		static constexpr uint32_t numPrecomputed = 100u;
 
-		static int const minDiscrepancyArray[NUM_PRECOMPUTED]
+		static int const minDiscrepancyArray[numPrecomputed]
 		{
 		//   0   1   2   3   4   5   6   7   8   9
 			 1,  1,  1,  2,  3,  2,  5,  2,  3,  2,  // 0
@@ -110,24 +110,21 @@ namespace castor3d
 			19, 27, 21, 25, 39, 29, 17, 21, 27, 29   // 9
 		};
 
-		if ( config.m_numSamples < NUM_PRECOMPUTED )
+		if ( config.numSamples < numPrecomputed )
 		{
-			numSpiralTurns =  minDiscrepancyArray[config.m_numSamples];
+			numSpiralTurns =  minDiscrepancyArray[config.numSamples];
 		}
 		else
 		{
 			numSpiralTurns = 5779; // Some large prime. Hope it does alright. It'll at least never degenerate into a perfect line until we have 5779 samples...
 		}
 
-#undef NUM_PRECOMPUTED
-
-		float const scale = std::abs( 2.0f * ( camera.getFovY() * 0.5f ).tan() );
-		float const radius = config.m_radius;
+		float const radius = config.radius;
 		float const invRadius = 1 / radius;
 		float const radius2 = radius * radius;
 		float const invRadius2 = 1.0f / radius2;
-		float const intersityDivR6 = config.m_intensity / std::pow( radius, 6.0f );
-		float const projScale = std::abs( camera.getHeight() / scale );
+		float const intersityDivR6 = config.intensity / std::pow( radius, 6.0f );
+		float const projScale = camera.getProjectionScale();
 		float const MIN_AO_SS_RADIUS = 1.0f;
 		// Second parameter of max is just solving for Z coordinate at which we hit MIN_AO_SS_RADIUS
 		float farZ = std::max( camera.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
@@ -136,20 +133,20 @@ namespace castor3d
 		auto const proj = getProjectUnitMatrix( device, camera );
 
 		auto & configuration = m_ubo->getData( 0u );
-		configuration.numSamples = config.m_numSamples;
+		configuration.numSamples = config.numSamples;
 		configuration.numSpiralTurns = numSpiralTurns;
 		configuration.projScale = projScale;
 		configuration.radius = radius;
 		configuration.invRadius = invRadius;
 		configuration.radius2 = radius2;
 		configuration.invRadius2 = invRadius2;
-		configuration.bias = config.m_bias;
-		configuration.intensity = config.m_intensity;
+		configuration.bias = config.bias;
+		configuration.intensity = config.intensity;
 		configuration.intensityDivR6 = intersityDivR6;
 		configuration.farPlaneZ = farZ;
-		configuration.edgeSharpness = config.m_edgeSharpness;
-		configuration.blurStepSize = config.m_blurStepSize;
-		configuration.blurRadius = config.m_blurRadius.value().value();
+		configuration.edgeSharpness = config.edgeSharpness;
+		configuration.blurStepSize = config.blurStepSize;
+		configuration.blurRadius = config.blurRadius.value().value();
 		configuration.projInfo = castor::Point4f
 		{
 			-2.0f / ( camera.getWidth() * proj[0][0] ),
@@ -157,7 +154,7 @@ namespace castor3d
 			( 1.0f - proj[0][2] ) / proj[0][0],
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};
-		configuration.invViewMatrix = camera.getView();
+		configuration.viewMatrix = camera.getView();
 
 		m_ubo->upload();
 	}

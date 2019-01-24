@@ -15,10 +15,10 @@ namespace castor
 	\date		24/04/2012
 	\~english
 	\brief		Helper class, used to time a block's execution time
-	\remark		Call the macro CASTOR_TIME() at the beginning of a block to have a console output when leaving that block
+	\remark		Call the macro CU_Time() at the beginning of a block to have a console output when leaving that block
 	\~french
 	\brief		Classe permettant de mesurer le temps d'exécution d'un bloc
-	\remark		Appelez la macro CASTOR_TIME() au début d'un bloc pour avoir une entrée dans la console en sortie du bloc
+	\remark		Appelez la macro CU_Time() au début d'un bloc pour avoir une entrée dans la console en sortie du bloc
 	*/
 	class BlockTimer
 	{
@@ -52,6 +52,6 @@ namespace castor
 	};
 }
 
-#	define CASTOR_TIME() castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CU_Time() castor::BlockTimer timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

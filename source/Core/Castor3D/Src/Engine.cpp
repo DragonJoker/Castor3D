@@ -264,7 +264,7 @@ namespace castor3d
 
 		if ( !m_renderSystem )
 		{
-			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
+			CU_Exception( C3D_NO_RENDERSYSTEM );
 		}
 
 		if ( m_lightsSampler )
@@ -428,7 +428,7 @@ namespace castor3d
 
 		if ( it != m_additionalParsers.end() )
 		{
-			CASTOR_EXCEPTION( "registerParsers - Duplicate entry for " + name );
+			CU_Exception( "registerParsers - Duplicate entry for " + name );
 		}
 
 		m_additionalParsers.emplace( name, parsers );
@@ -440,7 +440,7 @@ namespace castor3d
 
 		if ( it != m_additionalSections.end() )
 		{
-			CASTOR_EXCEPTION( "registerSections - Duplicate entry for " + name );
+			CU_Exception( "registerSections - Duplicate entry for " + name );
 		}
 
 		m_additionalSections.emplace( name, sections );
@@ -452,7 +452,7 @@ namespace castor3d
 
 		if ( it == m_additionalParsers.end() )
 		{
-			CASTOR_EXCEPTION( "unregisterParsers - Unregistered entry " + name );
+			CU_Exception( "unregisterParsers - Unregistered entry " + name );
 		}
 
 		m_additionalParsers.erase( it );
@@ -464,7 +464,7 @@ namespace castor3d
 
 		if ( it == m_additionalSections.end() )
 		{
-			CASTOR_EXCEPTION( "unregisterSections - Unregistered entry " + name );
+			CU_Exception( "unregisterSections - Unregistered entry " + name );
 		}
 
 		m_additionalSections.erase( it );

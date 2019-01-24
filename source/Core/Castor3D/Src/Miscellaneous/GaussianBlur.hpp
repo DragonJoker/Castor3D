@@ -68,19 +68,19 @@ namespace castor3d
 		/**@{*/
 		inline ashes::RenderPass const & getRenderPass()const
 		{
-			REQUIRE( m_renderPass );
+			CU_Require( m_renderPass );
 			return *m_renderPass;
 		}
 
 		inline ashes::FrameBuffer const & getBlurXFrameBuffer()const
 		{
-			REQUIRE( m_blurXFbo );
+			CU_Require( m_blurXFbo );
 			return *m_blurXFbo;
 		}
 
 		inline ashes::FrameBuffer const & getBlurYFrameBuffer()const
 		{
-			REQUIRE( m_blurYFbo );
+			CU_Require( m_blurYFbo );
 			return *m_blurYFbo;
 		}
 
@@ -96,25 +96,25 @@ namespace castor3d
 
 		inline sdw::Shader const & getBlurXVertexShader()const
 		{
-			REQUIRE( m_blurXVertexShader.shader );
+			CU_Require( m_blurXVertexShader.shader );
 			return *m_blurXVertexShader.shader;
 		}
 
 		inline sdw::Shader const & getBlurXPixelShader()const
 		{
-			REQUIRE( m_blurXPixelShader.shader );
+			CU_Require( m_blurXPixelShader.shader );
 			return *m_blurXPixelShader.shader;
 		}
 
 		inline sdw::Shader const & getBlurYVertexShader()const
 		{
-			REQUIRE( m_blurYVertexShader.shader );
+			CU_Require( m_blurYVertexShader.shader );
 			return *m_blurYVertexShader.shader;
 		}
 
 		inline sdw::Shader const & getBlurYPixelShader()const
 		{
-			REQUIRE( m_blurYPixelShader.shader );
+			CU_Require( m_blurYPixelShader.shader );
 			return *m_blurYPixelShader.shader;
 		}
 		/**@}*/

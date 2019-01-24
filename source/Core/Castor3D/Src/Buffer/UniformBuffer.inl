@@ -33,7 +33,7 @@ namespace castor3d
 	template< typename T >
 	inline void UniformBuffer< T >::initialise()
 	{
-		REQUIRE( m_renderSystem.hasCurrentDevice() );
+		CU_Require( m_renderSystem.hasCurrentDevice() );
 		m_buffer = ashes::makeUniformBuffer< T >( getCurrentDevice( m_renderSystem )
 			, m_count
 			, ashes::BufferTarget::eTransferDst
@@ -43,7 +43,7 @@ namespace castor3d
 	template< typename T >
 	inline void UniformBuffer< T >::cleanup()
 	{
-		REQUIRE( m_renderSystem.hasCurrentDevice() );
+		CU_Require( m_renderSystem.hasCurrentDevice() );
 		m_buffer.reset();
 	}
 
@@ -56,7 +56,7 @@ namespace castor3d
 	template< typename T >
 	inline uint32_t UniformBuffer< T >::allocate()
 	{
-		REQUIRE( hasAvailable() );
+		CU_Require( hasAvailable() );
 		uint32_t result = *m_available.begin();
 		m_available.erase( m_available.begin() );
 		return result;

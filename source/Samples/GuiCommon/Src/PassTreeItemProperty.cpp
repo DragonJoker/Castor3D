@@ -39,6 +39,7 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
 		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
+		static wxString PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		class PassShaderGatherer
@@ -105,7 +106,9 @@ namespace GuiCommon
 					, ast::SpecialisationInfo{}
 					, glsl::GlslConfig
 					{
+						convert( type ),
 						430,
+						false,
 						false,
 						true,
 						true,
@@ -520,6 +523,7 @@ namespace GuiCommon
 		PROPERTY_PASS_SHADER = _( "Shader" );
 		PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
 		PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
+		PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
 
 		CreateTreeItemMenu();
 	}
@@ -528,62 +532,63 @@ namespace GuiCommon
 	{
 	}
 
-	void PassTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		PassSPtr pass = getPass();
 
 		if ( pass )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) ) );
+			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) ) );
 
 			switch ( pass->getType() )
 			{
 			case MaterialType::eLegacy:
 				{
 					auto legacy = std::static_pointer_cast< LegacyPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getDiffuse() ) ) ) );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getSpecular() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( legacy->getAmbient() );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( legacy->getShininess() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getDiffuse() ) ) ) );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getSpecular() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( legacy->getAmbient() );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( legacy->getShininess() );
 				}
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:
 				{
 					auto pbr = std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getAlbedo() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( pbr->getRoughness() );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( pbr->getMetallic() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getAlbedo() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( pbr->getRoughness() );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( pbr->getMetallic() );
 				}
 				break;
 
 			case MaterialType::ePbrSpecularGlossiness:
 				{
 					auto pbr = std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getDiffuse() ) ) ) );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getSpecular() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getDiffuse() ) ) ) );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getSpecular() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
 				}
 				break;
 			}
 
-			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( pass->getEmissive() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
+			grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
+			grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( pass->getEmissive() );
+			grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
+			grid->Append( new wxUIntProperty( PROPERTY_PASS_BWACCUM ) )->SetValue( int( pass->getBWAccumulationOperator() ) );
 
 			if ( checkFlag( pass->getTextureFlags(), TextureChannel::eRefraction ) )
 			{
-				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
+				grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
 			}
 
-			p_grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
+			grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, editor ) );
 		}
 	}
 
-	void PassTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	void PassTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
 		PassSPtr pass = getPass();
-		wxPGProperty * property = p_event.GetProperty();
+		wxPGProperty * property = event.GetProperty();
 
 		if ( property && pass )
 		{
@@ -619,6 +624,10 @@ namespace GuiCommon
 			{
 				OnOpacityChange( property->GetValue() );
 			}
+			else if ( property->GetName() == PROPERTY_PASS_OPACITY )
+			{
+				OnBWAccumulatorChange( property->GetValue() );
+			}
 			else if ( property->GetName() == PROPERTY_PASS_REFRACTION )
 			{
 				OnRefractionRatioChange( property->GetValue() );
@@ -642,7 +651,7 @@ namespace GuiCommon
 		}
 	}
 
-	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & p_value )
+	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & value )
 	{
 		auto pass = m_pass.lock();
 
@@ -651,9 +660,9 @@ namespace GuiCommon
 		case MaterialType::eLegacy:
 			{
 				auto legacy = getTypedPass< MaterialType::eLegacy >();
-				doApplyChange( [p_value, legacy]()
+				doApplyChange( [value, legacy]()
 				{
-					legacy->setDiffuse( p_value );
+					legacy->setDiffuse( value );
 				} );
 			}
 			break;
@@ -661,16 +670,16 @@ namespace GuiCommon
 		case MaterialType::ePbrSpecularGlossiness:
 			{
 				auto pbr = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
-				doApplyChange( [p_value, pbr]()
+				doApplyChange( [value, pbr]()
 				{
-					pbr->setDiffuse( p_value );
+					pbr->setDiffuse( value );
 				} );
 			}
 			break;
 		}
 	}
 
-	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & p_value )
+	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & value )
 	{
 		auto pass = m_pass.lock();
 
@@ -679,9 +688,9 @@ namespace GuiCommon
 		case MaterialType::eLegacy:
 			{
 				auto legacy = getTypedPass< MaterialType::eLegacy >();
-				doApplyChange( [p_value, legacy]()
+				doApplyChange( [value, legacy]()
 				{
-					legacy->setSpecular( p_value );
+					legacy->setSpecular( value );
 				} );
 			}
 			break;
@@ -689,112 +698,122 @@ namespace GuiCommon
 		case MaterialType::ePbrSpecularGlossiness:
 			{
 				auto pbr = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
-				doApplyChange( [p_value, pbr]()
+				doApplyChange( [value, pbr]()
 				{
-					pbr->setSpecular( p_value );
+					pbr->setSpecular( value );
 				} );
 			}
 			break;
 		}
 	}
 
-	void PassTreeItemProperty::OnAmbientChange (double p_value)
+	void PassTreeItemProperty::OnAmbientChange (double value)
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setAmbient( float( p_value ) );
+			pass->setAmbient( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnEmissiveChange( double p_value )
+	void PassTreeItemProperty::OnEmissiveChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setEmissive( float( p_value ) );
+			pass->setEmissive( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnExponentChange( double p_value )
+	void PassTreeItemProperty::OnExponentChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setShininess( float( p_value ) );
+			pass->setShininess( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnTwoSidedChange( bool p_value )
+	void PassTreeItemProperty::OnTwoSidedChange( bool value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setTwoSided( p_value );
+			pass->setTwoSided( value );
 		} );
 	}
 
-	void PassTreeItemProperty::OnOpacityChange( double p_value )
+	void PassTreeItemProperty::OnOpacityChange( double value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setOpacity( float( p_value ) );
+			pass->setOpacity( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnRefractionRatioChange( double p_value )
+	void PassTreeItemProperty::OnBWAccumulatorChange( long value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setRefractionRatio( float( p_value ) );
+			pass->setBWAccumulationOperator( uint32_t( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & p_value )
+	void PassTreeItemProperty::OnRefractionRatioChange( double value )
+	{
+		PassSPtr pass = getPass();
+
+		doApplyChange( [value, pass]()
+		{
+			pass->setRefractionRatio( float( value ) );
+		} );
+	}
+
+	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setAlbedo( p_value );
+			pass->setAlbedo( value );
 		} );
 	}
 
-	void PassTreeItemProperty::OnRoughnessChange( double p_value )
+	void PassTreeItemProperty::OnRoughnessChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setRoughness( float( p_value ) );
+			pass->setRoughness( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnMetallicChange( double p_value )
+	void PassTreeItemProperty::OnMetallicChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setMetallic( float( p_value ) );
+			pass->setMetallic( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnGlossinessChange( double p_value )
+	void PassTreeItemProperty::OnGlossinessChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setGlossiness( float( p_value ) );
+			pass->setGlossiness( float( value ) );
 		} );
 	}
 

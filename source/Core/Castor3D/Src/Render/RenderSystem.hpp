@@ -282,7 +282,7 @@ namespace castor3d
 
 		inline ashes::Device const * getCurrentDevice()const
 		{
-			REQUIRE( m_currentDevice );
+			CU_Require( m_currentDevice );
 			return m_currentDevice;
 		}
 
@@ -318,7 +318,7 @@ namespace castor3d
 
 		inline ashes::DevicePtr getMainDevice()
 		{
-			REQUIRE( hasMainDevice() );
+			CU_Require( hasMainDevice() );
 			return m_mainDevice;
 		}
 

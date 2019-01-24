@@ -91,7 +91,7 @@ namespace castor3d
 
 					for ( uint32_t i = 0; i < size.getHeight(); ++i )
 					{
-						ENSURE( dstLineIndex + size.getWidth() <= bufsize );
+						CU_Ensure( dstLineIndex + size.getWidth() <= bufsize );
 						std::memcpy( dstLineBuffer, &buffer[i * size.getWidth()], size.getWidth() );
 						dstLineBuffer += uiTotalWidth;
 					}
@@ -126,7 +126,7 @@ namespace castor3d
 
 		if ( it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( glyphChar ) ) );
+			CU_Exception( std::string( "No loaded glyph for character " ) + string::stringCast< char >( string::toString( glyphChar ) ) );
 		}
 
 		return it->second;

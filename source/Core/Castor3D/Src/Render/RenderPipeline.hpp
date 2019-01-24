@@ -139,31 +139,31 @@ namespace castor3d
 
 		inline void setVertexLayouts( std::vector< ashes::VertexLayout > layouts )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
 		}
 
 		inline void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_descriptorLayouts = std::move( layouts );
 		}
 
 		inline void setPushConstantRanges( ashes::PushConstantRangeArray const & pushConstantRanges )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_pushConstantRanges = pushConstantRanges;
 		}
 
 		inline void setViewport( ashes::Viewport const & viewport )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_viewport = std::make_unique< ashes::Viewport >( viewport );
 		}
 
 		inline void setScissor( ashes::Scissor const & scissor )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_scissor = std::make_unique< ashes::Scissor >( scissor );
 		}
 		/**@}*/
@@ -183,19 +183,19 @@ namespace castor3d
 
 		inline ashes::Pipeline const & getPipeline()const
 		{
-			REQUIRE( m_pipeline );
+			CU_Require( m_pipeline );
 			return *m_pipeline;
 		}
 
 		inline ashes::PipelineLayout const & getPipelineLayout()const
 		{
-			REQUIRE( m_pipelineLayout );
+			CU_Require( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
 
 		inline ashes::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
 		{
-			REQUIRE( index < m_descriptorLayouts.size() );
+			CU_Require( index < m_descriptorLayouts.size() );
 			return *m_descriptorLayouts[index];
 		}
 
@@ -206,7 +206,7 @@ namespace castor3d
 
 		inline ashes::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
 		{
-			REQUIRE( index < m_descriptorPools.size() );
+			CU_Require( index < m_descriptorPools.size() );
 			return *m_descriptorPools[index];
 		}
 		/**@}*/

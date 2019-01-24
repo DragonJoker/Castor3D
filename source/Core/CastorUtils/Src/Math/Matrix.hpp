@@ -123,13 +123,20 @@ namespace castor
 		inline value_type const * constPtr()const;
 		/**
 		 *\~english
+		 *\brief		Initialises the matrix to 0.
+		 *\~french
+		 *\brief		Initialise la matrice à 0.
+		 */
+		void initialise();
+		/**
+		 *\~english
 		 *\brief		Initialises the matrix as a Jordan one, with the given value.
 		 *\param[in]	value	The value.
 		 *\~french
 		 *\brief		Initialise la matrice comme une matrice de Jordan, avec la valeur donnée.
 		 *\param[in]	value	La valeur.
 		 */
-		void initialise( value_type const & value = value_type{} );
+		void initialise( value_type const & value );
 		/**
 		 *\~english
 		 *\return		The transposed of this matrix.

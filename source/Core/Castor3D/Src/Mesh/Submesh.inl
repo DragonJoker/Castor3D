@@ -75,7 +75,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< IndexMapping > component
 			, Submesh & submesh )
 		{
-			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
 		}
 	};
 
@@ -87,7 +87,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< TriFaceMapping > component
 			, Submesh & submesh )
 		{
-			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
 		}
 	};
 
@@ -117,25 +117,25 @@ namespace castor3d
 
 	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex & Submesh::operator[]( uint32_t index )
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex const & Submesh::getPoint( uint32_t index )const
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex & Submesh::getPoint( uint32_t index )
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
@@ -279,25 +279,25 @@ namespace castor3d
 
 	inline InstantiationComponent & Submesh::getInstantiation()
 	{
-		REQUIRE( m_instantiation );
+		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
 	inline InstantiationComponent const & Submesh::getInstantiation()const
 	{
-		REQUIRE( m_instantiation );
+		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
 	inline BonesInstantiationComponent & Submesh::getInstantiatedBones()
 	{
-		REQUIRE( m_instantiatedBones );
+		CU_Require( m_instantiatedBones );
 		return *m_instantiatedBones;
 	}
 
 	inline BonesInstantiationComponent const & Submesh::getInstantiatedBones()const
 	{
-		REQUIRE( m_instantiatedBones );
+		CU_Require( m_instantiatedBones );
 		return *m_instantiatedBones;
 	}
 

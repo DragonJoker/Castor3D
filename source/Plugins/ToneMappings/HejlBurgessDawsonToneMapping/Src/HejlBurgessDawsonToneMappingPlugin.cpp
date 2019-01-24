@@ -9,7 +9,7 @@
 
 using namespace HejlBurgessDawson;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_HejlBurgessDawsonToneMapping_API
 #else
 #	ifdef HejlBurgessDawsonToneMapping_EXPORTS

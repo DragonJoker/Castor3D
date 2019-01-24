@@ -58,7 +58,7 @@ namespace GuiCommon
 	void LanguageInfo::setKeywords( uint32_t index
 		, castor::StringArray const & keywords )
 	{
-		REQUIRE( index < 9 );
+		CU_Require( index < 9 );
 		String & toAdd = m_keywords[index];
 		String sep;
 

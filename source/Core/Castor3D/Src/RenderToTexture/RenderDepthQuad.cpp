@@ -24,7 +24,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
+			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -32,7 +32,7 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
 				} );
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

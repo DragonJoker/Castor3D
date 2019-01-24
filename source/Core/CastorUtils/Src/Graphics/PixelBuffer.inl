@@ -106,28 +106,28 @@ namespace castor
 	template< PixelFormat FT >
 	typename PxBufferBase::pixel_data PxBuffer< FT >::getAt( uint32_t x, uint32_t y )
 	{
-		REQUIRE( x < getWidth() && y < getHeight() );
+		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin() + ( doConvert( x, y ) * PixelDefinitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
 	typename PxBufferBase::const_pixel_data PxBuffer< FT >::getAt( uint32_t x, uint32_t y )const
 	{
-		REQUIRE( x < getWidth() && y < getHeight() );
+		CU_Require( x < getWidth() && y < getHeight() );
 		return m_buffer.begin() + ( doConvert( x, y ) * PixelDefinitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
 	Pixel< FT > PxBuffer< FT >::at( uint32_t x, uint32_t y )
 	{
-		REQUIRE( x < getWidth() && y < getHeight() );
+		CU_Require( x < getWidth() && y < getHeight() );
 		return *( begin() + doConvert( x, y ) );
 	}
 
 	template< PixelFormat FT >
 	Pixel< FT > PxBuffer< FT >::at( uint32_t x, uint32_t y )const
 	{
-		REQUIRE( x < getWidth() && y < getHeight() );
+		CU_Require( x < getWidth() && y < getHeight() );
 		return *( begin() + doConvert( x, y ) );
 	}
 

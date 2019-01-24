@@ -307,7 +307,7 @@ namespace castor3d
 	template< typename VertexT, uint32_t CountT >
 	void OverlayRenderer::VertexBufferPool< VertexT, CountT >::deallocate( OverlayRenderer::VertexBufferIndex< VertexT, CountT > const & index )
 	{
-		REQUIRE( &index.pool == this );
+		CU_Require( &index.pool == this );
 		free.insert( index.index );
 	}
 
@@ -744,7 +744,7 @@ namespace castor3d
 			// Shader inputs
 			uint32_t index = 0u;
 			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto texture = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
+			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u, checkFlag( textureFlags, TextureChannel::eDiffuse ) );
 			auto text = writer.declInput< Vec2 >( cuT( "text" ), 2u, checkFlag( textureFlags, TextureChannel::eText ) );
 
 			// Shader outputs
@@ -761,7 +761,7 @@ namespace castor3d
 
 					if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
 					{
-						vtx_texture = texture;
+						vtx_texture = uv;
 					}
 
 					auto size = writer.declLocale( cuT( "size" )

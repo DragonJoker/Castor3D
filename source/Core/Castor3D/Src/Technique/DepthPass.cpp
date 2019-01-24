@@ -156,7 +156,7 @@ namespace castor3d
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
@@ -207,7 +207,7 @@ namespace castor3d
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, vec4( position.xyz(), 1.0 ) );
 				auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-					, texture );
+					, uv );
 
 				if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 				{

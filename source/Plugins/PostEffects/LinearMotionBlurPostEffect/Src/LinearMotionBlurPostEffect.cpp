@@ -50,7 +50,7 @@ namespace motion_blur
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -58,7 +58,7 @@ namespace motion_blur
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

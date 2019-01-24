@@ -238,7 +238,7 @@ namespace castor3d
 		std::map< Light *, OnLightChangedConnection > m_connections;
 	};
 	using LightCache = ObjectCache< Light, castor::String >;
-	DECLARE_SMART_PTR( LightCache );
+	CU_DeclareSmartPtr( LightCache );
 }
 
 #endif

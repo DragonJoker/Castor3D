@@ -97,10 +97,10 @@ bool doLoadRenderer( castor3d::Engine & engine )
 	{
 #if defined( NDEBUG )
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
 #else
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
 
 #endif
 		{
@@ -116,7 +116,7 @@ bool doLoadRenderer( castor3d::Engine & engine )
 
 		for ( auto file : arrayKept )
 		{
-			if ( file.getExtension() == CASTOR_DLL_EXT )
+			if ( file.getExtension() == CU_SharedLibExt )
 			{
 				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{

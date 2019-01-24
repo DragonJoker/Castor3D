@@ -25,21 +25,21 @@ namespace motion_blur
 		return *static_cast< ParserContext * >( context->getUserContext( PostEffect::Type ) );
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserMotionBlur )
+	CU_ImplementAttributeParser( parserMotionBlur )
 	{
 		ParserContext * context = new ParserContext;
 		context->engine = std::static_pointer_cast< castor3d::SceneFileContext >( p_context )->m_pParser->getEngine();
 		p_context->registerUserContext( PostEffect::Type, context );
 	}
-	END_ATTRIBUTE_PUSH( MotionBlurSection::eRoot )
+	CU_EndAttributePush( MotionBlurSection::eRoot )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserDivider )
+	CU_ImplementAttributeParser( parserDivider )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -48,15 +48,15 @@ namespace motion_blur
 			context.data.vectorDivider = value;
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSamples )
+	CU_ImplementAttributeParser( parserSamples )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -65,15 +65,15 @@ namespace motion_blur
 			context.data.samplesCount = value;
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserFpsScale )
+	CU_ImplementAttributeParser( parserFpsScale )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -82,9 +82,9 @@ namespace motion_blur
 			context.fpsScale = value;
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserMotionBlurEnd )
+	CU_ImplementAttributeParser( parserMotionBlurEnd )
 	{
 		auto & context = getParserContext( p_context );
 		auto engine = context.engine;
@@ -102,5 +102,5 @@ namespace motion_blur
 
 		delete reinterpret_cast< ParserContext * >( p_context->unregisterUserContext( PostEffect::Type ) );
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 }

@@ -206,4 +206,10 @@ namespace castor3d
 		m_viewport = ashes::Viewport{ m_size[0], m_size[1], 0, 0 };
 		m_scissor = ashes::Scissor{ 0, 0, m_size[0], m_size[1] };
 	}
+
+	float Viewport::getProjectionScale()const
+	{
+		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
+		return std::abs( getHeight() / scale );
+	}
 }

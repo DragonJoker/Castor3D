@@ -144,7 +144,7 @@ namespace castor
 			virtual Glyph loadGlyph( char32_t p_char ) = 0;
 		};
 
-		DECLARE_VECTOR( Glyph, Glyph );
+		CU_DeclareVector( Glyph, Glyph );
 
 	public:
 		/**
@@ -270,7 +270,7 @@ namespace castor
 		 */
 		inline Glyph const & operator[]( char32_t p_char )const
 		{
-			ENSURE( hasGlyphAt( p_char ) );
+			CU_Ensure( hasGlyphAt( p_char ) );
 
 			return *std::find_if( m_loadedGlyphs.begin()
 				, m_loadedGlyphs.end()
@@ -291,7 +291,7 @@ namespace castor
 		 */
 		inline Glyph & operator[]( char32_t p_char )
 		{
-			ENSURE( hasGlyphAt( p_char ) );
+			CU_Ensure( hasGlyphAt( p_char ) );
 
 			return *std::find_if( m_loadedGlyphs.begin()
 				, m_loadedGlyphs.end()

@@ -14,7 +14,7 @@ namespace Phong
 			, Point3r const & p3 )
 		{
 			real w = real( 1 - u - v );
-			ENSURE( std::abs( u + v + w - 1.0 ) < 0.0001 );
+			CU_Ensure( std::abs( u + v + w - 1.0 ) < 0.0001 );
 			return Point3r{ p1 * u + p2 * v + p3 * w };
 		}
 	}

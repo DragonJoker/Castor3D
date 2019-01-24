@@ -6,7 +6,7 @@ namespace castor
 {
 	namespace string
 	{
-		bool isInteger( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
+		bool isInteger( String const & p_strToTest, std::locale const & CU_UnusedParam( p_locale ) )
 		{
 			bool result = true;
 
@@ -23,7 +23,7 @@ namespace castor
 			return result;
 		}
 
-		bool isFloating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
+		bool isFloating( String const & p_strToTest, std::locale const & CU_UnusedParam( p_locale ) )
 		{
 			bool		result = false;
 			StringArray	arrayParts;

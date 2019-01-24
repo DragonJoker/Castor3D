@@ -79,7 +79,7 @@ namespace castor3d
 			else
 			{
 				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-				auto image = engine.getImageCache().add( cuT( "BRDF" ), imagePath );
+				auto image = engine.getImageCache().add( cuT( "BRDF" ), imagePath, true );
 				buffer = image->getPixels();
 			}
 

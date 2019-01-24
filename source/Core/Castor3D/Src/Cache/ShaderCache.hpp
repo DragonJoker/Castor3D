@@ -285,7 +285,7 @@ namespace castor3d
 			, ashes::CompareOp alphaFunc );
 
 	private:
-		DECLARE_MAP( uint64_t, ShaderProgramSPtr, ShaderProgramPtrUInt64 );
+		CU_DeclareMap( uint64_t, ShaderProgramSPtr, ShaderProgramPtrUInt64 );
 		mutable std::recursive_mutex m_mutex;
 		//!\~english	The loaded shader programs.
 		//!\~french		Les programmes chargés.

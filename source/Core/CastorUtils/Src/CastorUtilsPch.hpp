@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "config.hpp"
 
-#if CASTOR_USE_PCH
+#if CU_UsePCH
 #	include "CastorUtilsPrerequisites.hpp"
 
 #	include <algorithm>
@@ -53,33 +53,33 @@ FT_BEGIN_HEADER
 #	include FT_TYPES_H
 FT_END_HEADER
 
-#	if defined( CASTOR_PLATFORM_WINDOWS )
-#		if defined( CASTOR_COMPILER_MSVC )
+#	if defined( CU_PlatformWindows )
+#		if defined( CU_CompilerMSVC )
 #			include <tchar.h>
 #		endif
 #		include <windows.h>
 #		include <direct.h>
 #	else
 #		include <sys/time.h>
-#		if defined( CASTOR_PLATFORM_ANDROID ) || defined( CASTOR_PLATFORM_LINUX )
+#		if defined( CU_PlatformAndroid ) || defined( CU_PlatformLinux )
 #			include <dlfcn.h>
 #		endif
 #	endif
 
-#	if defined( CASTOR_COMPILER_GNUC )
+#	if defined( CU_CompilerGNUC )
 #		include <sys/time.h>
 #		include <errno.h>
 #		include <iostream>
 #		include <unistd.h>
 #		include <cerrno>
-#		if defined( CASTOR_PLATFORM_LINUX )
+#		if defined( CU_PlatformLinux )
 #			include <X11/Xlib.h>
 #		endif
 #	endif
 
 extern "C"
 {
-#	if !defined( CASTOR_PLATFORM_ANDROID )
+#	if !defined( CU_PlatformAndroid )
 #		include <FreeImage.h>
 #	endif
 }

@@ -27,7 +27,7 @@ namespace castor3d
 		eAccumulation,
 		eRevealage,
 		eVelocity,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
+		CU_ScopedEnumBounds( eDepth ),
 	};
 	//!\~english	The weighted blend pass result.
 	//!\~french		Le résultat de la passe de weighted blend.

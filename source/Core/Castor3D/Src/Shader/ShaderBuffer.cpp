@@ -76,7 +76,7 @@ namespace castor3d
 
 	void ShaderBuffer::update( uint32_t offset, uint32_t size )
 	{
-		REQUIRE( size + offset <= m_data.size() );
+		CU_Require( size + offset <= m_data.size() );
 		if ( uint8_t * buffer = m_buffer->lock( offset
 			, size
 			, ashes::MemoryMapFlag::eWrite ) )

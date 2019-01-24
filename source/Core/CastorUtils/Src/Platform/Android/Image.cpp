@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_ANDROID )
+#if defined( CU_PlatformAndroid )
 
 #include "Data/Path.hpp"
 #include "Graphics/Image.hpp"
@@ -15,13 +15,13 @@ namespace castor
 {
 	namespace
 	{
-		PxBufferBaseSPtr doLoad8BitsPerChannel( Path const & p_path )
+		PxBufferBaseSPtr doLoad8BitsPerChannel( Path const & path )
 		{
 			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			uint8_t * data = stbi_load( string::stringCast< char >( p_path ).c_str()
+			uint8_t * data = stbi_load( string::stringCast< char >( path ).c_str()
 				, &x
 				, &y
 				, &n
@@ -57,13 +57,13 @@ namespace castor
 			return result;
 		}
 
-		PxBufferBaseSPtr doLoad32BitsPerChannel( Path const & p_path )
+		PxBufferBaseSPtr doLoad32BitsPerChannel( Path const & path )
 		{
 			PxBufferBaseSPtr result;
 			int x = 0;
 			int y = 0;
 			int n = 0;
-			float * data = stbi_loadf( string::stringCast< char >( p_path ).c_str()
+			float * data = stbi_loadf( string::stringCast< char >( path ).c_str()
 				, &x
 				, &y
 				, &n
@@ -109,26 +109,28 @@ namespace castor
 	{
 	}
 
-	bool Image::BinaryLoader::operator()( Image & p_image, Path const & p_path )
+	bool Image::BinaryLoader::operator()( Image & image
+		, Path const & path
+		, bool dropAlpha )
 	{
-		if ( p_path.empty() )
+		if ( path.empty() )
 		{
-			LOADER_ERROR( "Can't load image : path is empty" );
+			CU_LoaderError( "Can't load image : path is empty" );
 		}
 
-		p_image.m_buffer.reset();
-		auto extension = string::upperCase( p_path.getExtension() );
+		image.m_buffer.reset();
+		auto extension = string::upperCase( path.getExtension() );
 
 		if ( extension.find( cuT( "hdr" ) ) != String::npos )
 		{
-			p_image.m_buffer = doLoad32BitsPerChannel( p_path );
+			image.m_buffer = doLoad32BitsPerChannel( path );
 		}
 		else
 		{
-			p_image.m_buffer = doLoad8BitsPerChannel( p_path );
+			image.m_buffer = doLoad8BitsPerChannel( path );
 		}
 
-		return p_image.m_buffer != nullptr;
+		return image.m_buffer != nullptr;
 	}
 
 	//************************************************************************************************
@@ -137,7 +139,7 @@ namespace castor
 	{
 	}
 
-	bool Image::BinaryWriter::operator()( Image const & p_image, Path const & p_path )
+	bool Image::BinaryWriter::operator()( Image const & image, Path const & path )
 	{
 		bool result = false;
 

@@ -122,14 +122,14 @@ namespace castor3d
 	{
 		auto key = uint32_t( bufferOffset.flags );
 		auto it = m_buffers.find( key );
-		REQUIRE( it != m_buffers.end() );
+		CU_Require( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
 			, [&bufferOffset]( std::unique_ptr< UniformBuffer< T > > const & lookup )
 			{
 				return lookup.get() == bufferOffset.buffer;
 			} );
-		REQUIRE( itB != it->second.end() );
+		CU_Require( itB != it->second.end() );
 		( *itB )->deallocate( bufferOffset.offset );
 	}
 

@@ -48,7 +48,9 @@ namespace GuiCommon
 					, ast::SpecialisationInfo{}
 					, glsl::GlslConfig
 					{
+						convert( type ),
 						430,
+						false,
 						false,
 						true,
 						true,

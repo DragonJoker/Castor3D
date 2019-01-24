@@ -67,7 +67,7 @@ namespace castor3d
 
 	PluginSPtr PluginCache::loadPlugin( String const & pluginName, Path const & pathFolder )throw( )
 	{
-		Path strFilePath{ CASTOR_DLL_PREFIX + pluginName + cuT( "." ) + CASTOR_DLL_EXT };
+		Path strFilePath{ CU_SharedLibPrefix + pluginName + cuT( "." ) + CU_SharedLibExt };
 		PluginSPtr result;
 
 		try
@@ -144,7 +144,7 @@ namespace castor3d
 		{
 			for ( auto file : files )
 			{
-				if ( file.getExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
 					try
 					{
@@ -169,7 +169,7 @@ namespace castor3d
 		{
 			if ( !File::fileExists( pathFile ) )
 			{
-				CASTOR_EXCEPTION( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
+				CU_Exception( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
 			}
 
 			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >( pathFile );
@@ -223,7 +223,7 @@ namespace castor3d
 				break;
 
 			default:
-				FAILURE( "Unknown plug-in type" );
+				CU_Failure( "Unknown plug-in type" );
 				{
 					String strError = cuT( "Error encountered while loading plug-in [" ) + pathFile.getFileName() + cuT( "] Unknown plug-in type" );
 					CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );

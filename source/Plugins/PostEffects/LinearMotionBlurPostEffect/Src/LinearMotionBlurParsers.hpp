@@ -14,14 +14,14 @@ namespace motion_blur
 	enum class MotionBlurSection
 		: uint32_t
 	{
-		eRoot = MAKE_SECTION_NAME( 'M', 'T', 'B', 'R' ),
+		eRoot = CU_MakeSectionName( 'M', 'T', 'B', 'R' ),
 	};
 
-	DECLARE_ATTRIBUTE_PARSER( parserMotionBlur )
-	DECLARE_ATTRIBUTE_PARSER( parserDivider )
-	DECLARE_ATTRIBUTE_PARSER( parserSamples )
-	DECLARE_ATTRIBUTE_PARSER( parserFpsScale )
-	DECLARE_ATTRIBUTE_PARSER( parserMotionBlurEnd )
+	CU_DeclareAttributeParser( parserMotionBlur )
+	CU_DeclareAttributeParser( parserDivider )
+	CU_DeclareAttributeParser( parserSamples )
+	CU_DeclareAttributeParser( parserFpsScale )
+	CU_DeclareAttributeParser( parserMotionBlurEnd )
 }
 
 #endif

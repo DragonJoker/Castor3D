@@ -114,7 +114,7 @@ namespace castor3d
 			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 				, image
 				, ashes::MemoryPropertyFlag::eDeviceLocal );
-			texture->setSource( folder, relative );
+			texture->setSource( folder, relative, ImageComponents::eRGB );
 			m_2dTexture = texture;
 			m_2dTexturePath = castor::Path( m_2dTexture->getDefaultImage().toString() );
 			notifyChanged();

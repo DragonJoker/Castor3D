@@ -45,7 +45,7 @@ namespace castor3d
 		}
 	}
 
-	void MeshGenerator::doGenerate( Mesh & CU_PARAM_UNUSED( mesh ), Parameters const &  CU_PARAM_UNUSED( parameters ) )
+	void MeshGenerator::doGenerate( Mesh & CU_UnusedParam( mesh ), Parameters const &  CU_UnusedParam( parameters ) )
 	{
 	}
 }

@@ -95,7 +95,7 @@ namespace test_launcher
 						for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
 						{
 							uint8_t const * line = buffer;
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 							wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -114,7 +114,7 @@ namespace test_launcher
 
 							buffer -= pitch;
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 							it = rowStart;
 							it.OffsetY( data, 1 );
 #endif
@@ -126,7 +126,7 @@ namespace test_launcher
 
 						for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
 						{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 							wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -143,7 +143,7 @@ namespace test_launcher
 								it++;
 							}
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 							it = rowStart;
 							it.OffsetY( data, 1 );
 #endif
@@ -184,12 +184,12 @@ namespace test_launcher
 
 		ashes::WindowHandle makeWindowHandle( wxWindow * window )
 		{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 			return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 				, window->GetHandle() ) );
 
-#elif defined( CASTOR_PLATFORM_LINUX )
+#elif defined( CU_PlatformLinux )
 
 			GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
 			GLXDrawable drawable = 0;

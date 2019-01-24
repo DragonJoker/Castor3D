@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include "Data/File.hpp"
 
@@ -27,7 +27,7 @@ namespace castor
 		template< typename DirectoryFuncType, typename FileFuncType >
 		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
 		{
-			REQUIRE( !p_folderPath.empty() );
+			CU_Require( !p_folderPath.empty() );
 			bool result = false;
 			WIN32_FIND_DATA findData;
 			HANDLE handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &findData );
@@ -77,7 +77,7 @@ namespace castor
 
 		bool DeleteEmptyDirectory( Path const & p_path )
 		{
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 			bool result = _trmdir( p_path.c_str() ) == 0;
 
@@ -116,7 +116,7 @@ namespace castor
 
 	}
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
@@ -223,7 +223,7 @@ namespace castor
 			directoryCreate( path, p_flags );
 		}
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 		return _tmkdir( p_path.c_str() ) == 0;
 

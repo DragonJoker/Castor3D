@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <config.hpp>
 
-#if CASTOR_USE_PCH
+#if CU_UsePCH
 #	include <Engine.hpp>
 #	include <Cache/GeometryCache.hpp>
 #	include <Cache/MaterialCache.hpp>

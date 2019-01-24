@@ -15,8 +15,8 @@ namespace castor
 
 	bool BinaryFile::write( String const & p_toWrite )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		bool result = write( uint32_t( p_toWrite.size() ) ) == sizeof( uint32_t );
 
 		if ( result && p_toWrite.size() > 0 )
@@ -24,14 +24,14 @@ namespace castor
 			result = writeArray< xchar >( p_toWrite.c_str(), p_toWrite.size() ) ==  p_toWrite.size() * sizeof( xchar );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return result;
 	}
 
 	bool BinaryFile::read( String & p_toRead )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
 		p_toRead.clear();
 		uint32_t uiSize = 0;
 		bool result = read( uiSize ) == sizeof( uint32_t );
@@ -47,7 +47,7 @@ namespace castor
 			}
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return result;
 	}
 }

@@ -71,7 +71,7 @@ namespace castor3d
 
 	Face Subdivider::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		REQUIRE( a < getPointsCount() && b < getPointsCount() && c < getPointsCount() );
+		CU_Require( a < getPointsCount() && b < getPointsCount() && c < getPointsCount() );
 		Face result{ a, b, c };
 		m_arrayFaces.push_back( result );
 		return result;

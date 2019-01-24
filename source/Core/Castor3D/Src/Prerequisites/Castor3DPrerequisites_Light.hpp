@@ -27,7 +27,7 @@ namespace castor3d
 		ePoint,
 		//!\~english Spot light type	\~french Lumière projecteur
 		eSpot,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDirectional )
+		CU_ScopedEnumBounds( eDirectional )
 	};
 
 	class Light;
@@ -36,21 +36,21 @@ namespace castor3d
 	class PointLight;
 	class SpotLight;
 
-	DECLARE_SMART_PTR( Light );
-	DECLARE_SMART_PTR( LightCategory );
-	DECLARE_SMART_PTR( DirectionalLight );
-	DECLARE_SMART_PTR( PointLight );
-	DECLARE_SMART_PTR( SpotLight );
+	CU_DeclareSmartPtr( Light );
+	CU_DeclareSmartPtr( LightCategory );
+	CU_DeclareSmartPtr( DirectionalLight );
+	CU_DeclareSmartPtr( PointLight );
+	CU_DeclareSmartPtr( SpotLight );
 
 	class LightFactory;
-	DECLARE_SMART_PTR( LightFactory );
+	CU_DeclareSmartPtr( LightFactory );
 
 	//! Array of lights
-	DECLARE_VECTOR( LightSPtr, LightPtr );
+	CU_DeclareVector( LightSPtr, LightPtr );
 	//! Map of lights, sorted by name
-	DECLARE_MAP( castor::String, LightSPtr, LightPtrStr );
+	CU_DeclareMap( castor::String, LightSPtr, LightPtrStr );
 	//! Map of lights, sorted by index
-	DECLARE_MAP( int, LightSPtr, LightPtrInt );
+	CU_DeclareMap( int, LightSPtr, LightPtrInt );
 
 	using OnLightChangedFunction = std::function< void( Light & ) >;
 	using OnLightChanged = castor::Signal< OnLightChangedFunction >;

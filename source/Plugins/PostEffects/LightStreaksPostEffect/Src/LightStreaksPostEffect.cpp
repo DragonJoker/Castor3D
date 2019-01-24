@@ -7,6 +7,7 @@
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderPassTimer.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -41,6 +42,9 @@ namespace light_streaks
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
+
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareNegateVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
@@ -147,12 +151,15 @@ namespace light_streaks
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareInvertVec2Y();
+
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 			{
 				auto texcoordsKawase = writer.declLocale( "texcoordsKawase"
 					, vtx_texture );
-				pxl_fragColor = texture( c3d_mapScene, vec2( texcoordsKawase.x(), 1.0 - texcoordsKawase.y() ) );
+				pxl_fragColor = texture( c3d_mapScene, utils.bottomUpToTopDown( texcoordsKawase ) );
 				pxl_fragColor += texture( c3d_mapKawase1, texcoordsKawase );
 				pxl_fragColor += texture( c3d_mapKawase2, texcoordsKawase );
 				pxl_fragColor += texture( c3d_mapKawase3, texcoordsKawase );

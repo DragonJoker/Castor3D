@@ -117,7 +117,7 @@ namespace castor3d
 		/**@{*/
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_finished );
+			CU_Require( m_finished );
 			return *m_finished;
 		}
 		/**@}*/

@@ -25,8 +25,8 @@ namespace castor3d
 
 	uint32_t PassBuffer::addPass( Pass & pass )
 	{
-		REQUIRE( pass.getId() == 0u );
-		REQUIRE( m_passes.size() < shader::MaxMaterialsCount );
+		CU_Require( pass.getId() == 0u );
+		CU_Require( m_passes.size() < shader::MaxMaterialsCount );
 		m_passes.emplace_back( &pass );
 		pass.setId( m_passID++ );
 		m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & pass )
@@ -40,8 +40,8 @@ namespace castor3d
 	void PassBuffer::removePass( Pass & pass )
 	{
 		auto id = pass.getId();
-		REQUIRE( id < m_passes.size() );
-		REQUIRE( &pass == m_passes[id] );
+		CU_Require( id < m_passes.size() );
+		CU_Require( &pass == m_passes[id] );
 		auto it = m_passes.erase( m_passes.begin() + id );
 
 		for ( it; it != m_passes.end(); ++it )
@@ -85,17 +85,17 @@ namespace castor3d
 
 	void PassBuffer::visit( LegacyPass const & pass )
 	{
-		CASTOR_EXCEPTION( "This pass buffer can't hold legacy pass data" );
+		CU_Exception( "This pass buffer can't hold legacy pass data" );
 	}
 
 	void PassBuffer::visit( MetallicRoughnessPbrPass const & pass )
 	{
-		CASTOR_EXCEPTION( "This pass buffer can't hold metallic/roughness pass data" );
+		CU_Exception( "This pass buffer can't hold metallic/roughness pass data" );
 	}
 
 	void PassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
-		CASTOR_EXCEPTION( "This pass buffer can't hold specular/glossiness pass data" );
+		CU_Exception( "This pass buffer can't hold specular/glossiness pass data" );
 	}
 
 	void PassBuffer::doVisitExtended( Pass const & pass

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <Castor3DPrerequisites.hpp>
 #include <GlRendererPrerequisites.hpp>
 
-#ifdef CASTOR_PLATFORM_WINDOWS
+#ifdef CU_PlatformWindows
 #	ifdef Gl4RenderSystem_EXPORTS
 #		define C3D_Gl4_API __declspec( dllexport )
 #	else

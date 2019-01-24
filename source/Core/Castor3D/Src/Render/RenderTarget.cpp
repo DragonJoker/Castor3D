@@ -361,7 +361,7 @@ namespace castor3d
 		camera.resize( m_size );
 		camera.update();
 
-		REQUIRE( m_culler );
+		CU_Require( m_culler );
 		m_culler->compute();
 	}
 
@@ -660,7 +660,7 @@ namespace castor3d
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
+			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
 
 			// Shader outputs
 			auto vtx_textureObjects = writer.declOutput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
@@ -673,8 +673,8 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					vtx_textureObjects = utils.topDownToBottomUp( texcoord );
-					vtx_textureOverlays = texcoord;
+					vtx_textureObjects = utils.topDownToBottomUp( uv );
+					vtx_textureOverlays = uv;
 
 					if ( getTargetType() != TargetType::eWindow )
 					{

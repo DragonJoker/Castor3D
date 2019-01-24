@@ -48,13 +48,13 @@ namespace castor3d
 
 	void AnimatedMesh::doStartAnimation( AnimationInstance & animation )
 	{
-		REQUIRE( m_playingAnimation == nullptr );
+		CU_Require( m_playingAnimation == nullptr );
 		m_playingAnimation = &static_cast< MeshAnimationInstance & >( animation );
 	}
 
 	void AnimatedMesh::doStopAnimation( AnimationInstance & animation )
 	{
-		REQUIRE( m_playingAnimation == &animation );
+		CU_Require( m_playingAnimation == &animation );
 		m_playingAnimation = nullptr;
 	}
 

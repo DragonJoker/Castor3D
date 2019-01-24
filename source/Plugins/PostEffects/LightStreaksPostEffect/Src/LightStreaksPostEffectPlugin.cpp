@@ -8,7 +8,7 @@
 
 #include "LightStreaksPostEffect.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_LightStreaks_API
 #else
 #	ifdef LightStreaksPostEffect_EXPORTS

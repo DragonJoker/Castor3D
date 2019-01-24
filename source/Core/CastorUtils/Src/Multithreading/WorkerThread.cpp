@@ -23,7 +23,7 @@ namespace castor
 
 	void WorkerThread::feed( Job p_job )
 	{
-		REQUIRE( m_start == false );
+		CU_Require( m_start == false );
 		{
 			m_currentJob = p_job;
 		}

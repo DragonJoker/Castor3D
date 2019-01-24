@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( disable:4503 )
 #endif
 

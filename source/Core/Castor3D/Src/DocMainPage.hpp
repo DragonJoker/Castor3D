@@ -337,7 +337,7 @@
  *<li>Removed Point::link, Point::copy/clopy/clone functions.</li>
  *<li>Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace castor.</li>
  *<li>Modified Colour class, it doesn't extend Point4f anymore.</li>
- *<li>Removed macro DECLARE_SHARED_PTR, now using  DECLARE_SMART_PTR, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
+ *<li>Removed macro DECLARE_SHARED_PTR, now using  CU_DeclareSmartPtr, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
  *</ul>
  *\subsubsection misc_0_7_0_c3d Castor3D
  *<ul>
@@ -787,7 +787,7 @@
  *<li>Remplacement de la classe String par une classe string.</li>
  *<li>Suppression des dépendances à boost, à part pour thread, et uniquement pour les compilateurs ne supportant pas std::thread.</li>
  *<li>Les macros cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek et cftell ont été remplacées par des fonctions dans Castor.</li>
- *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par DECLARE_SMART_PTR, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
+ *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par CU_DeclareSmartPtr, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
  *<li>Suppression de l'encodage Unicode pour les fichiers.</li>
  *<li>Ajout du support de l'indentation de flux.</li>
  *<li>Améliorations de castor::FileParser :

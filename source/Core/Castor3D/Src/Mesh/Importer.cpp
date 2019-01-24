@@ -172,7 +172,11 @@ namespace castor3d
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
 					, createInfo
 					, ashes::MemoryPropertyFlag::eDeviceLocal );
-				texture->setSource( folder, relative );
+				texture->setSource( folder
+					, relative
+					, ( channel == TextureChannel::eNormal
+						? ImageComponents::eRGB
+						: ImageComponents::eAll ) );
 				unit->setTexture( texture );
 				unit->setChannel( channel );
 				pass.addTextureUnit( unit );

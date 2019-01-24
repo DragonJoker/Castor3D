@@ -247,7 +247,7 @@ namespace castor3d
 		/**@{*/
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_semaphore );
+			CU_Require( m_semaphore );
 			return *m_semaphore;
 		}
 
@@ -268,25 +268,25 @@ namespace castor3d
 
 		inline TextureLayout const & getTexture()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline TextureLayout & getTexture()
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline ashes::Texture const & getImage()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
 		inline ashes::TextureView const & getView()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getDefaultView();
 		}
 
@@ -297,37 +297,37 @@ namespace castor3d
 
 		inline IblTextures const & getIbl()const
 		{
-			REQUIRE( m_ibl );
+			CU_Require( m_ibl );
 			return *m_ibl;
 		}
 
 		inline ashes::PipelineLayout const & getPipelineLayout()const
 		{
-			REQUIRE( m_pipelineLayout );
+			CU_Require( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
 
 		inline ashes::Pipeline const & getPipeline()const
 		{
-			REQUIRE( m_pipeline );
+			CU_Require( m_pipeline );
 			return *m_pipeline;
 		}
 
 		inline ashes::DescriptorSetLayout const & getDescriptorLayout()const
 		{
-			REQUIRE( m_descriptorLayout );
+			CU_Require( m_descriptorLayout );
 			return *m_descriptorLayout;
 		}
 
 		inline ashes::VertexBuffer< Cube > const & getVertexBuffer()const
 		{
-			REQUIRE( m_vertexBuffer );
+			CU_Require( m_vertexBuffer );
 			return *m_vertexBuffer;
 		}
 
 		inline ashes::Buffer< uint16_t > const & getIndexBuffer()const
 		{
-			REQUIRE( m_indexBuffer );
+			CU_Require( m_indexBuffer );
 			return *m_indexBuffer;
 		}
 		/**@}*/

@@ -4,9 +4,9 @@
 #include "Scene/Scene.hpp"
 #include "Shader/Program.hpp"
 
-IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Engine, Engine )
-IMPLEMENT_EXPORTED_OWNED_BY( castor3d::RenderSystem, RenderSystem )
-IMPLEMENT_EXPORTED_OWNED_BY( castor3d::Scene, Scene )
+CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
+CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
+CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
 
 using namespace castor;
 

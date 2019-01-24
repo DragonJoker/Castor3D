@@ -162,7 +162,7 @@ namespace C3dAssimp
 					prv--;
 				}
 
-				ENSURE( prv != cur );
+				CU_Ensure( prv != cur );
 			}
 		}
 
@@ -737,7 +737,7 @@ namespace C3dAssimp
 			{
 				index = m_mapBoneByID[name];
 				aiMatrix4x4 mtx{ aiBone.mOffsetMatrix };
-				ENSURE( m_arrayBones[index]->getOffsetMatrix() == Matrix4x4r( &mtx.Transpose().a1 ) );
+				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == Matrix4x4r( &mtx.Transpose().a1 ) );
 			}
 
 			for ( auto weight : makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
@@ -819,7 +819,7 @@ namespace C3dAssimp
 			for ( auto const & aiMesh : makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
 				auto submesh = mesh.getSubmesh( aiMesh );
-				REQUIRE( submesh != nullptr );
+				CU_Require( submesh != nullptr );
 
 				if ( !submesh->hasComponent( BonesComponent::Name ) )
 				{

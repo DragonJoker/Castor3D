@@ -27,15 +27,15 @@ namespace Loop
 	class Edge;
 	class FaceEdges;
 
-	DECLARE_SMART_PTR( Vertex );
-	DECLARE_SMART_PTR( Edge );
-	DECLARE_SMART_PTR( FaceEdges );
+	CU_DeclareSmartPtr( Vertex );
+	CU_DeclareSmartPtr( Edge );
+	CU_DeclareSmartPtr( FaceEdges );
 
-	DECLARE_VECTOR( FaceEdgesSPtr, FaceEdgesPtr );
+	CU_DeclareVector( FaceEdgesSPtr, FaceEdgesPtr );
 	//! Map of edges, ordered by index
-	DECLARE_MAP( uint32_t, EdgeSPtr, EdgePtrUInt );
-	DECLARE_MAP( uint32_t, EdgePtrUIntMap, EdgePtrUIntMapUInt );
-	DECLARE_MAP( uint32_t, VertexSPtr, VertexPtrUInt );
+	CU_DeclareMap( uint32_t, EdgeSPtr, EdgePtrUInt );
+	CU_DeclareMap( uint32_t, EdgePtrUIntMap, EdgePtrUIntMapUInt );
+	CU_DeclareMap( uint32_t, VertexSPtr, VertexPtrUInt );
 }
 
 #endif

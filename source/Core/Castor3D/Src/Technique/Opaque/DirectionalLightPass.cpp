@@ -52,8 +52,8 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
 			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 			renderPass.attachments[1].format = diffuseView.getFormat();
 			renderPass.attachments[1].loadOp = loadOp;
@@ -168,26 +168,7 @@ namespace castor3d
 	{
 		auto & directionalLight = *light.getDirectionalLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
-		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
-		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
-		data.direction = castor::Point4f{ directionalLight.getDirection()[0]
-			, directionalLight.getDirection()[1]
-			, directionalLight.getDirection()[2]
-			, float( light.getScene()->getDirectionalShadowCascades() ) };
-
-		for ( auto i = 0u; i < light.getScene()->getDirectionalShadowCascades(); ++i )
-		{
-			data.transform[i] = directionalLight.getLightSpaceTransform( i );
-			data.splitDepths[i] = directionalLight.getSplitDepth( i );
-		}
-
-		for ( auto i = light.getScene()->getDirectionalShadowCascades(); i < shader::DirectionalMaxCascadesCount; ++i )
-		{
-			data.transform[i] = Matrix4x4f{ 1.0f };
-			data.splitDepths[i] = 0.0f;
-		}
-
+		light.bind( &data.base.colourIndex );
 		m_lightPass.m_ubo->upload();
 	}
 
@@ -286,9 +267,12 @@ namespace castor3d
 		return VertexCount;
 	}
 
-	void DirectionalLightPass::doUpdate( Size const & size
+	void DirectionalLightPass::doUpdate( bool first
+		, Size const & size
 		, Light const & light
-		, Camera const & camera )
+		, Camera const & camera
+		, ShadowMap const * shadowMap
+		, uint32_t shadowMapIndex )
 	{
 		m_viewport.resize( size );
 		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );

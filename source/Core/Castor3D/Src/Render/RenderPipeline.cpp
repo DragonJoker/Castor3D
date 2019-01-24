@@ -125,7 +125,7 @@ namespace castor3d
 
 	void RenderPipeline::setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
 	{
-		REQUIRE( !m_pipeline );
+		CU_Require( !m_pipeline );
 
 		for ( auto & layout : layouts )
 		{

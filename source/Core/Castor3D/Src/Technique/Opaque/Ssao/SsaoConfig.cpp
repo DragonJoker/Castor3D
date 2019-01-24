@@ -4,87 +4,87 @@ using namespace castor;
 
 namespace castor3d
 {
-	SsaoConfig::TextWriter::TextWriter( String const & p_tabs )
-		: castor::TextWriter< SsaoConfig >{ p_tabs }
+	SsaoConfig::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< SsaoConfig >{ tabs }
 	{
 	}
 
-	bool SsaoConfig::TextWriter::operator()( SsaoConfig const & p_object, TextFile & p_file )
+	bool SsaoConfig::TextWriter::operator()( SsaoConfig const & object, TextFile & file )
 	{
 		bool result{ true };
 
-		if ( p_object.m_enabled )
+		if ( object.enabled )
 		{
 			Logger::logInfo( m_tabs + cuT( "Writing SsaoConfig" ) );
-			result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "ssao\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "ssao\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tenabled " ) + ( p_object.m_enabled ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tenabled " ) + ( object.enabled ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig enabled" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\thigh_quality " ) + ( p_object.m_highQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\thigh_quality " ) + ( object.highQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig high quality" );
 			}
 
 			//if ( result )
 			//{
-			//	result = p_file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( p_object.m_useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	result = file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( object.useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
 			//}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( p_object.m_intensity, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( object.intensity, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( p_object.m_radius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( object.radius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig radius" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tbias " ) + string::toString( p_object.m_bias, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tbias " ) + string::toString( object.bias, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig bias" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( p_object.m_numSamples, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( object.numSamples, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig num samples" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( p_object.m_edgeSharpness, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( object.edgeSharpness, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
 			}
 
 			//if ( result )
 			//{
-			//	result = p_file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( p_object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	result = file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
 			//}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( p_object.m_blurStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( object.blurStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur step size" );
 			}
 
 			if ( result )
 			{
-				result = p_file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( p_object.m_blurRadius.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( object.blurRadius.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
 			}
 
-			p_file.writeText( m_tabs + cuT( "}\n" ) );
+			file.writeText( m_tabs + cuT( "}\n" ) );
 		}
 
 		return result;
@@ -97,36 +97,36 @@ namespace castor3d
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Radius" )
-			, m_radius );
+			, radius );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Bias" )
-			, m_bias );
+			, bias );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Intensity" )
-			, m_intensity );
+			, intensity );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Samples" )
-			, m_numSamples );
+			, numSamples );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Edge Sharpness" )
-			, m_edgeSharpness );
+			, edgeSharpness );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Blur Step Size" )
-			, m_blurStepSize );
+			, blurStepSize );
 		visitor.visit( name
 			, ashes::ShaderStageFlag::eFragment
 			, cuT( "SSAO" )
 			, cuT( "Blur Radius" )
-			, m_blurRadius );
+			, blurRadius );
 	}
 }

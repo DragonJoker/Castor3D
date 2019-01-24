@@ -23,7 +23,7 @@ namespace castor3d
 		{
 			return lhs.m_distance < rhs.m_distance;
 		}
-		DECLARE_VECTOR( LineDistance, LineDist );
+		CU_DeclareVector( LineDistance, LineDist );
 	}
 
 	String const LinesMapping::Name = "lines_mapping";
@@ -85,7 +85,7 @@ namespace castor3d
 
 	void LinesMapping::sortByDistance( Point3r const & cameraPosition )
 	{
-		REQUIRE( getOwner()->isInitialised() );
+		CU_Require( getOwner()->isInitialised() );
 
 		try
 		{

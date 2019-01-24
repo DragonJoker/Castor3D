@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <Castor3DPrerequisites.hpp>
 #include <D3D11RendererPrerequisites.hpp>
 
-#ifdef CASTOR_PLATFORM_WINDOWS
+#ifdef CU_PlatformWindows
 #	ifdef D3D11RenderSystem_EXPORTS
 #		define C3D_D3D11_API __declspec( dllexport )
 #	else

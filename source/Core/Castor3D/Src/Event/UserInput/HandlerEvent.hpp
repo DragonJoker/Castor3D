@@ -64,7 +64,7 @@ namespace castor3d
 		 */
 		inline EventHandlerSPtr getHandler()const
 		{
-			REQUIRE( !m_handler.expired() );
+			CU_Require( !m_handler.expired() );
 			return m_handler.lock();
 		}
 

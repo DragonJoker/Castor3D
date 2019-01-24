@@ -16,7 +16,7 @@ namespace castor
 	{
 		if ( m_userContexts.find( name ) != m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
+			CU_Exception( "A user context with name [" + string::stringCast< char >( name ) + "] already exists." );
 		}
 
 		m_userContexts.insert( std::make_pair( name, data ) );
@@ -28,7 +28,7 @@ namespace castor
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
+			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
 		void * result = it->second;
@@ -42,7 +42,7 @@ namespace castor
 
 		if ( it == m_userContexts.end() )
 		{
-			CASTOR_EXCEPTION( "No user context with name [" + string::stringCast< char >( name ) + "]." );
+			CU_Exception( "No user context with name [" + string::stringCast< char >( name ) + "]." );
 		}
 
 		return it->second;

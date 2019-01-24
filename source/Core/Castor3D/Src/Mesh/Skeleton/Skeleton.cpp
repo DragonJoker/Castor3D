@@ -49,12 +49,12 @@ namespace castor3d
 	{
 		if ( std::find( begin(), end(), bone ) == end() )
 		{
-			CASTOR_EXCEPTION( "Skeleton::setBoneParent - Child bone is not in the Skeleton's nodes" );
+			CU_Exception( "Skeleton::setBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
 
 		if ( std::find( begin(), end(), parent ) == end() )
 		{
-			CASTOR_EXCEPTION( "Skeleton::setBoneParent - Parent bone is not in the Skeleton's nodes" );
+			CU_Exception( "Skeleton::setBoneParent - Parent bone is not in the Skeleton's nodes" );
 		}
 
 		parent->addChild( bone );

@@ -45,15 +45,19 @@ namespace castor
 			CU_API BinaryLoader();
 			/**
 			 *\~english
-			 *\brief			Loads an image from a binary file
-			 *\param[in,out]	image	The image name
-			 *\param[in]		path	The path of the file from which to load the image
+			 *\brief			Loads an image from a binary file.
+			 *\param[in,out]	image		The image.
+			 *\param[in]		path		The path of the file from which to load the image.
+			 *\param[in]		dropAlpha	If \p false, the image colour channels will be premultiplied by alpha channel.
 			 *\~french
-			 *\brief			Charge une image à partir d'un fichier binaire
-			 *\param[in,out]	image	Le nom de l'image
-			 *\param[in]		path	Le chemin du fichier contenant l'image
+			 *\brief			Charge une image à partir d'un fichier binaire.
+			 *\param[in,out]	image		L'image.
+			 *\param[in]		path		Le chemin du fichier contenant l'image.
+			 *\param[in]		dropAlpha	Si \p false, les canaux de couleur de l'image seront prémultipliés par le canal alpha.
 			 */
-			CU_API virtual bool operator()( Image & image, Path const & path );
+			CU_API virtual bool operator()( Image & image
+				, Path const & path
+				, bool dropAlpha );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -91,7 +95,7 @@ namespace castor
 		friend class Font;
 		friend class Image::BinaryLoader;
 
-		DECLARE_INVARIANT_BLOCK()
+		CU_DeclareInvariantBlock()
 
 	public:
 		/**
@@ -169,20 +173,23 @@ namespace castor
 			: Resource< Image > ( name )
 			, m_buffer( std::make_shared< PxBuffer< PFDst > >( size, buffer, PFSrc ) )
 		{
-			CHECK_INVARIANTS();
+			CU_CheckInvariants();
 		}
 		/**
 		 *\~english
-		 *\brief		Creates the image from a file
-		 *\param[in]	name		The resource name
-		 *\param[in]	pathFile	The file path
+		 *\brief		Creates the image from a file.
+		 *\param[in]	name		The resource name.
+		 *\param[in]	pathFile	The file path.
+		 *\param[in]	dropAlpha	If \p false, the image colour channels will be premultiplied by alpha channel.
 		 *\~french
-		 *\brief		Crée l'image à partir d'un fichier
-		 *\param[in]	name		Le nom de ressource
-		 *\param[in]	pathFile	Le chemin du fichier
+		 *\brief		Crée l'image à partir d'un fichier.
+		 *\param[in]	name		Le nom de ressource.
+		 *\param[in]	pathFile	Le chemin du fichier.
+		 *\param[in]	dropAlpha	Si \p false, les canaux de couleur de l'image seront prémultipliés par le canal alpha.
 		 */
 		CU_API Image( String const & name
-			, Path const & pathFile );
+			, Path const & pathFile
+			, bool dropAlpha );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -328,10 +335,10 @@ namespace castor
 			, uint32_t y
 			, Pixel< PF > const & pixel )
 		{
-			CHECK_INVARIANTS();
-			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
+			CU_CheckInvariants();
+			CU_Require( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
 			convertPixel( PF, pixel.constPtr(), getPixelFormat(), m_buffer->getAt( x, y ) );
-			CHECK_INVARIANTS();
+			CU_CheckInvariants();
 			return * this;
 		}
 		/**
@@ -349,10 +356,10 @@ namespace castor
 			, uint32_t y
 			, Pixel< PF > & pixel )const
 		{
-			CHECK_INVARIANTS();
-			REQUIRE( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
+			CU_CheckInvariants();
+			CU_Require( x < m_buffer->getWidth() && y < m_buffer->getHeight() );
 			convertPixel( getPixelFormat(), m_buffer->getAt( x, y ), PF, pixel.ptr() );
-			CHECK_INVARIANTS();
+			CU_CheckInvariants();
 		}
 		/**
 		 *\~english

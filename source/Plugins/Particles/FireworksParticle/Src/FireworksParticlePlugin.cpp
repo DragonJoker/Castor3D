@@ -7,7 +7,7 @@
 
 #include "FireworksParticle.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Fireworks_API
 #else
 #	ifdef FireworksParticle_EXPORTS

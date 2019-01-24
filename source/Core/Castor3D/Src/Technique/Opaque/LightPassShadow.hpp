@@ -339,19 +339,29 @@ namespace castor3d
 				, true }
 		{
 		}
+
+	protected:
 		/**
-		 *\copydoc		castor3d::LightPass::render
+		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
-		ashes::Semaphore const & render( uint32_t index
-			, ashes::Semaphore const & toWait
+		void doUpdate( bool first
+			, castor::Size const & size
+			, Light const & light
+			, Camera const & camera
 			, ShadowMap const * shadowMap
 			, uint32_t shadowMapIndex )override
 		{
-			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMap, shadowMapIndex, !index );
-			return my_pass_type::render( index, toWait, nullptr, 0u );
+			my_pass_type::doUpdate( first
+				, size
+				, light
+				, camera
+				, nullptr
+				, 0u );
+			this->doPrepareCommandBuffer( *this->m_pipeline
+				, shadowMap
+				, shadowMapIndex
+				, first );
 		}
-
-	private:
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */

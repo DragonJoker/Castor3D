@@ -98,7 +98,7 @@ namespace castor3d
 	void RenderPassTimer::beginPass( ashes::CommandBuffer const & cmd
 		, uint32_t passIndex )const
 	{
-		REQUIRE( passIndex < m_passesCount );
+		CU_Require( passIndex < m_passesCount );
 		cmd.resetQueryPool( *m_timerQuery
 			, passIndex * 2u
 			, 2u );
@@ -110,7 +110,7 @@ namespace castor3d
 	void RenderPassTimer::endPass( ashes::CommandBuffer const & cmd
 		, uint32_t passIndex )const
 	{
-		REQUIRE( passIndex < m_passesCount );
+		CU_Require( passIndex < m_passesCount );
 		cmd.writeTimestamp( ashes::PipelineStageFlag::eBottomOfPipe
 			, *m_timerQuery
 			, passIndex * 2u + 1u );

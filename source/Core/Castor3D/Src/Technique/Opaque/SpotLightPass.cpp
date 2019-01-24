@@ -55,16 +55,7 @@ namespace castor3d
 	{
 		auto & spotLight = *light.getSpotLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
-		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
-		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
-		auto position = light.getParent()->getDerivedPosition();
-		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
-		data.attenuation = castor::Point4f{ spotLight.getAttenuation()[0], spotLight.getAttenuation()[1], spotLight.getAttenuation()[2], 0.0f };
-		data.exponentCutOff[0] = spotLight.getExponent();
-		data.exponentCutOff[1] = spotLight.getCutOff().cos();
-		data.direction = castor::Point4f{ spotLight.getDirection()[0], spotLight.getDirection()[1], spotLight.getDirection()[2], 0.0f };
-		data.transform = spotLight.getLightSpaceTransform();
+		light.bind( &data.base.colourIndex );
 		m_lightPass.m_ubo->upload();
 	}
 

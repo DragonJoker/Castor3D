@@ -426,7 +426,7 @@ namespace castor3d
 		 */
 		inline bool doGetSubChunk( BinaryChunk & p_chunk )
 		{
-			REQUIRE( m_chunk );
+			CU_Require( m_chunk );
 			bool result = m_chunk->checkAvailable( 1 );
 
 			if ( result )

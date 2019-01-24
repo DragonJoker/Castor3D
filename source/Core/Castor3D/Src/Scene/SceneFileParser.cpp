@@ -310,12 +310,19 @@ bool SceneFileParser::parseFile( Path const & pathFile )
 		castor::ZipArchive archive( path, File::OpenMode::eRead );
 		path = Engine::getEngineDirectory() / pathFile.getFileName();
 
-		if ( File::directoryExists( path ) )
+		//if ( File::directoryExists( path ) )
+		//{
+		//	File::directoryDelete( path );
+		//}
+
+		bool ok = true;
+
+		if ( !File::directoryExists( path ) )
 		{
-			File::directoryDelete( path );
+			ok = archive.inflate( path );
 		}
 
-		if ( archive.inflate( path ) )
+		if ( ok )
 		{
 			PathArray files;
 
@@ -338,9 +345,9 @@ bool SceneFileParser::parseFile( Path const & pathFile )
 				else
 				{
 					auto it = std::find_if( files.begin(), files.end(), []( Path const & p_path )
-					{
-						return p_path.getExtension() == cuT( "cscn" );
-					} );
+						{
+							return p_path.getExtension() == cuT( "cscn" );
+						} );
 
 					if ( it != files.end() )
 					{
@@ -455,6 +462,10 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 
 	addParser( uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "min_offset" ), parserShadowsMinOffset, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "max_slope_offset" ), parserShadowsMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_max" ), parserShadowsVarianceMax, { makeParameter< ParameterType::eFloat >() } );
+	addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
 
@@ -521,6 +532,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "refraction_ratio" ), parserPassRefractionRatio, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "subsurface_scattering" ), parserPassSubsurfaceScattering );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "parallax_occlusion" ), parserPassParallaxOcclusion, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "bw_accumulation" ), parserPassBWAccumulationOperator, { makeParameter< ParameterType::eUInt32 >( makeRange( 0u, 6u ) ) } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
 
 	addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
@@ -646,13 +658,13 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "enabled" ), parserSsaoEnabled, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "high_quality" ), parserSsaoHighQuality, { makeParameter< ParameterType::eBool >() } );
-	//addParser( uint32_t( CSCNSection::eSsao ), cuT( "use_normals_buffer" ), parserSsaoUseNormalsBuffer, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "use_normals_buffer" ), parserSsaoUseNormalsBuffer, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "radius" ), parserSsaoRadius, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "bias" ), parserSsaoBias, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "intensity" ), parserSsaoIntensity, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "num_samples" ), parserSsaoNumSamples, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "edge_sharpness" ), parserSsaoEdgeSharpness, { makeParameter< ParameterType::eFloat >() } );
-	//addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), parserSsaoBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), parserSsaoBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_step_size" ), parserSsaoBlurStepSize, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_radius" ), parserSsaoBlurRadius, { makeParameter< ParameterType::eUInt32 >() } );
 	addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
@@ -848,7 +860,7 @@ String SceneFileParser::doGetSectionName( uint32_t section )
 
 		if ( result.empty() )
 		{
-			FAILURE( "Section not found" );
+			CU_Failure( "Section not found" );
 		}
 
 		break;

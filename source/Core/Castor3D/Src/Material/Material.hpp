@@ -292,7 +292,7 @@ namespace castor3d
 		inline std::shared_ptr< typename PassTyper< Type >::Type > getTypedPass( uint32_t index )const
 		{
 			auto pass = getPass( index );
-			REQUIRE( m_type == Type );
+			CU_Require( m_type == Type );
 			return std::static_pointer_cast< typename PassTyper< Type >::Type >( pass );
 		}
 

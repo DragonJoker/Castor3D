@@ -33,7 +33,7 @@ namespace castor3d
 		//!\~english	Variance shadow mapping.
 		//!\~french		Filtrage par variance.
 		eVariance,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+		CU_ScopedEnumBounds( eNone )
 	};
 	/**
 	*\version
@@ -60,7 +60,7 @@ namespace castor3d
 		//!\~english	Fog intensity increases even more with distance to camera.
 		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
 		eSquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+		CU_ScopedEnumBounds( eDisabled )
 	};
 	/**
 	*\version
@@ -87,9 +87,9 @@ namespace castor3d
 		//!\~english	Squared exponential fog.
 		//!\~french		Brouillard exponentiel au carré.
 		eFogSquaredExponential = 0x004,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+		CU_ScopedEnumBounds( eNone )
 	};
-	IMPLEMENT_FLAGS( SceneFlag )
+	CU_ImplementFlags( SceneFlag )
 	/**
 	*\~english
 	*\brief
@@ -122,7 +122,7 @@ namespace castor3d
 		eColour,
 		eImage,
 		eSkybox,
-		CASTOR_SCOPED_ENUM_BOUNDS( eColour )
+		CU_ScopedEnumBounds( eColour )
 	};
 	/**
 	*\version
@@ -142,7 +142,7 @@ namespace castor3d
 		//!\~english	Billboards rotate only on Y axis.
 		//!\~french		Les billboards tournent uniquement sur l'axe Y.
 		eCylindrical,
-		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
+		CU_ScopedEnumBounds( eSpherical )
 	};
 	/**
 	*\version
@@ -162,7 +162,7 @@ namespace castor3d
 		//!\~english	Billboards size doesn't change.
 		//!\~french		Les dimensions des billboards ne changent pas.
 		eFixed,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDynamic )
+		CU_ScopedEnumBounds( eDynamic )
 	};
 
 	enum class ParticleFormat
@@ -215,49 +215,49 @@ namespace castor3d
 	class BillboardBase;
 	class BillboardList;
 
-	DECLARE_SMART_PTR( SceneNode );
-	DECLARE_SMART_PTR( Scene );
-	DECLARE_SMART_PTR( SceneFileContext );
-	DECLARE_SMART_PTR( SceneFileParser );
-	DECLARE_SMART_PTR( SceneBackground );
-	DECLARE_SMART_PTR( ParticleSystem );
-	DECLARE_SMART_PTR( ParticleSystemImpl );
-	DECLARE_SMART_PTR( CpuParticleSystem );
-	DECLARE_SMART_PTR( TransformFeedbackParticleSystem );
-	DECLARE_SMART_PTR( ComputeParticleSystem );
-	DECLARE_SMART_PTR( AnimatedObject );
-	DECLARE_SMART_PTR( AnimatedObjectGroup );
-	DECLARE_SMART_PTR( AnimatedSkeleton );
-	DECLARE_SMART_PTR( AnimatedMesh );
-	DECLARE_SMART_PTR( AnimationInstance );
-	DECLARE_SMART_PTR( SkeletonAnimationInstance );
-	DECLARE_SMART_PTR( SkeletonAnimationInstanceObject );
-	DECLARE_SMART_PTR( SkeletonAnimationInstanceNode );
-	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
-	DECLARE_SMART_PTR( MeshAnimationInstance );
-	DECLARE_SMART_PTR( BillboardBase );
-	DECLARE_SMART_PTR( BillboardList );
+	CU_DeclareSmartPtr( SceneNode );
+	CU_DeclareSmartPtr( Scene );
+	CU_DeclareSmartPtr( SceneFileContext );
+	CU_DeclareSmartPtr( SceneFileParser );
+	CU_DeclareSmartPtr( SceneBackground );
+	CU_DeclareSmartPtr( ParticleSystem );
+	CU_DeclareSmartPtr( ParticleSystemImpl );
+	CU_DeclareSmartPtr( CpuParticleSystem );
+	CU_DeclareSmartPtr( TransformFeedbackParticleSystem );
+	CU_DeclareSmartPtr( ComputeParticleSystem );
+	CU_DeclareSmartPtr( AnimatedObject );
+	CU_DeclareSmartPtr( AnimatedObjectGroup );
+	CU_DeclareSmartPtr( AnimatedSkeleton );
+	CU_DeclareSmartPtr( AnimatedMesh );
+	CU_DeclareSmartPtr( AnimationInstance );
+	CU_DeclareSmartPtr( SkeletonAnimationInstance );
+	CU_DeclareSmartPtr( SkeletonAnimationInstanceObject );
+	CU_DeclareSmartPtr( SkeletonAnimationInstanceNode );
+	CU_DeclareSmartPtr( SkeletonAnimationInstanceBone );
+	CU_DeclareSmartPtr( MeshAnimationInstance );
+	CU_DeclareSmartPtr( BillboardBase );
+	CU_DeclareSmartPtr( BillboardList );
 
 	//! SceneNode pointer array.
-	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
+	CU_DeclareVector( SceneNodeSPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name.
-	DECLARE_MAP( castor::String, SceneSPtr, ScenePtrStr );
+	CU_DeclareMap( castor::String, SceneSPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name.
-	DECLARE_MAP( castor::String, SceneNodeSPtr, SceneNodePtrStr );
+	CU_DeclareMap( castor::String, SceneNodeSPtr, SceneNodePtrStr );
 	//! AnimatedObjectGroup pointer map, sorted by name.
-	DECLARE_MAP( castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
+	CU_DeclareMap( castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! AnimatedObject pointer map, sorted by name.
-	DECLARE_MAP( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
+	CU_DeclareMap( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name.
-	DECLARE_MAP( castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
+	CU_DeclareMap( castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! SkeletonAnimationInstanceObject pointer array.
-	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
+	CU_DeclareVector( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
 	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
-	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
+	CU_DeclareMap( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
+	CU_DeclareMap( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
 	//! Skeleton animation instance pointer array.
-	DECLARE_VECTOR( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
+	CU_DeclareVector( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
 
 	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
 	using OnSceneChanged = castor::Signal< OnSceneChangedFunction >;

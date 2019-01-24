@@ -48,37 +48,39 @@ namespace castor
 	{
 	}
 
-	ImageSPtr ImageCache::add( String const & p_name, Path const & p_path )
+	ImageSPtr ImageCache::add( String const & imageName
+		, Path const & path
+		, bool dropAlpha )
 	{
 		auto lock = makeUniqueLock( *this );
 		ImageSPtr result;
 
-		if ( Collection< Image, String >::has( p_name ) )
+		if ( Collection< Image, String >::has( imageName ) )
 		{
-			result = Collection< Image, String >::find( p_name );
+			result = Collection< Image, String >::find( imageName );
 
 			if ( !result->getBuffer() )
 			{
-				Image::BinaryLoader()( *result, p_path );
+				Image::BinaryLoader()( *result, path, dropAlpha );
 			}
 			else
 			{
-				doReportDuplicate( p_name );
+				doReportDuplicate( imageName );
 			}
 		}
 		else
 		{
-			String name = p_path.getFileName() + cuT( "." ) + p_path.getExtension();
+			String name = path.getFileName() + cuT( "." ) + path.getExtension();
 
-			if ( File::fileExists( p_path ) )
+			if ( File::fileExists( path ) )
 			{
-				result = std::make_shared< Image >( p_name, p_path );
-				Collection< Image, String >::insert( p_name, result );
-				doReportCreation( p_name );
+				result = std::make_shared< Image >( imageName, path, dropAlpha );
+				Collection< Image, String >::insert( imageName, result );
+				doReportCreation( imageName );
 			}
 			else
 			{
-				CASTOR_EXCEPTION( "Can't create the image [" + string::stringCast< char >( p_name ) + "], invalid path: " + string::stringCast< char >( p_path ) );
+				CU_Exception( "Can't create the image [" + string::stringCast< char >( imageName ) + "], invalid path: " + string::stringCast< char >( path ) );
 			}
 		}
 

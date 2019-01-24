@@ -107,7 +107,7 @@ namespace castor3d
 			uint32_t nodeIndex{ uint32_t( index[1] ) };
 			uint32_t faceIndex{ uint32_t( index[3] ) };
 
-			REQUIRE( map.size() > pipelineIndex );
+			CU_Require( map.size() > pipelineIndex );
 			auto itPipeline = map.begin();
 
 			while ( pipelineIndex )
@@ -116,7 +116,7 @@ namespace castor3d
 				--pipelineIndex;
 			}
 
-			REQUIRE( itPipeline->second.size() > nodeIndex );
+			CU_Require( itPipeline->second.size() > nodeIndex );
 			auto itNode = itPipeline->second.begin() + nodeIndex;
 
 			subnode = std::static_pointer_cast< SubNodeType >( ( *itNode )->data.shared_from_this() );
@@ -134,7 +134,7 @@ namespace castor3d
 			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
 			uint32_t nodeIndex{ uint32_t( index[1] ) };
 
-			REQUIRE( map.size() > pipelineIndex );
+			CU_Require( map.size() > pipelineIndex );
 			auto itPipeline = map.begin();
 
 			while ( pipelineIndex )
@@ -144,7 +144,7 @@ namespace castor3d
 			}
 
 			auto itPass = itPipeline->second.begin();
-			REQUIRE( !itPass->second.empty() );
+			CU_Require( !itPass->second.empty() );
 			auto itMesh = itPass->second.begin();
 
 			while ( nodeIndex && itPass != itPipeline->second.end() )
@@ -171,7 +171,7 @@ namespace castor3d
 			{
 				uint32_t instanceIndex{ uint32_t( index[2] ) };
 				uint32_t faceIndex{ uint32_t( index[3] ) };
-				REQUIRE( !itMesh->second.empty() );
+				CU_Require( !itMesh->second.empty() );
 				auto itNode = itMesh->second.begin() + instanceIndex;
 
 				subnode = ( *itNode )->data.shared_from_this();
@@ -369,7 +369,7 @@ namespace castor3d
 				break;
 
 			default:
-				FAILURE( "Unsupported index" );
+				CU_Failure( "Unsupported index" );
 				result = PickNodeType::eNone;
 				break;
 			}
@@ -603,7 +603,7 @@ namespace castor3d
 			, true );
 	}
 
-	void PickingPass::doUpdate( RenderQueueArray & CU_PARAM_UNUSED( queues ) )
+	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
 	{
 	}
 
@@ -665,7 +665,7 @@ namespace castor3d
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
@@ -713,7 +713,7 @@ namespace castor3d
 			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
 				, vec4( position.xyz(), 1.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-				, texture );
+				, uv );
 			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )

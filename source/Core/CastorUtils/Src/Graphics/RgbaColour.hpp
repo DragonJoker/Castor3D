@@ -106,7 +106,7 @@ namespace castor
 		//!\~english	Alpha PixelComponents
 		//!\~french		Composante alpha
 		eAlpha,
-		CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+		CU_ScopedEnumBounds( eRed )
 	};
 	/**
 	 *\~english
@@ -210,7 +210,7 @@ namespace castor
 		};
 
 	private:
-		DECLARE_ARRAY( float, RgbaComponent::eCount, Float4 );
+		CU_DeclareArray( float, RgbaComponent::eCount, Float4 );
 		using ColourComponentArray = std::array< ComponentType, size_t( RgbaComponent::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
 		using ColourComponentArrayRIt = typename ColourComponentArray::reverse_iterator;

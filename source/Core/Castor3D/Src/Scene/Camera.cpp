@@ -127,7 +127,7 @@ namespace castor3d
 
 			if ( modified || m_nodeChanged )
 			{
-				node->getTransformationMatrix();
+				auto & nodeMtx = node->getTransformationMatrix();
 				auto position = node->getDerivedPosition();
 				auto const & orientation = node->getDerivedOrientation();
 				Point3r right{ 1.0_r, 0.0_r, 0.0_r };
@@ -147,7 +147,7 @@ namespace castor3d
 
 	void Camera::setProjection( castor::Matrix4x4r const & projection )
 	{
-		REQUIRE( m_ownProjection );
+		CU_Require( m_ownProjection );
 
 		if ( m_projection != projection )
 		{

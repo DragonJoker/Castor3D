@@ -41,31 +41,37 @@ namespace castor
 		 *\~english
 		 *\brief		Creates an image.
 		 *\remarks		If the image already exists, it is returned.
-		 *\param[in]	p_name		The font name.
-		 *\param[in]	p_path		The full access path to the image file.
+		 *\param[in]	name		The image name.
+		 *\param[in]	path		The full access path to the image file.
+		 *\param[in]	dropAlpha	If \p false, the image colour channels will be premultiplied by alpha channel.
 		 *\return		The created (or retrieved) image.
 		 *\~french
 		 *\brief		Crée une image.
-		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_name		Le nom de la police.
-		 *\param[in]	p_path		Le chemin complet d'accès au fichier de l'image.
+		 *\remarks		Si l'image existe déjà, elle est retournée.
+		 *\param[in]	name		Le nom de l'image.
+		 *\param[in]	path		Le chemin complet d'accès au fichier de l'image.
+		 *\param[in]	dropAlpha	Si \p false, les canaux de couleur de l'image seront prémultipliés par le canal alpha.
 		 *\return		L'image créée (ou récupérée).
 		 */
-		CU_API ImageSPtr add( String const & p_name, Path const & p_path );
+		CU_API ImageSPtr add( String const & name
+			, Path const & path
+			, bool dropAlpha );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params.
 		 *\remarks		If the image already exists, it is returned.
-		 *\param[in]	p_name		The image name.
-		 *\param[in]	p_size		The wanted image dimensions.
-		 *\param[in]	p_format	The wanted image pixel format.
+		 *\param[in]	name	The image name.
+		 *\param[in]	size	The wanted image dimensions.
+		 *\param[in]	format	The wanted image pixel format.
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés.
-		 *\param[in]	p_name		Le nom de l'image.
-		 *\param[in]	p_size		Les dimensions voulues pour l'image.
-		 *\param[in]	p_format	Le format de pixel voulu pour l'image.
+		 *\param[in]	name	Le nom de l'image.
+		 *\param[in]	size	Les dimensions voulues pour l'image.
+		 *\param[in]	format	Le format de pixel voulu pour l'image.
 		 */
-		CU_API ImageSPtr add( String const & p_name, Size const & p_size, PixelFormat p_format );
+		CU_API ImageSPtr add( String const & name
+			, Size const & size
+			, PixelFormat format );
 
 	public:
 		using Collection< Image, String >::begin;

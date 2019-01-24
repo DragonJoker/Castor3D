@@ -35,9 +35,9 @@ namespace CastorViewer
 	class TranslateNodeEvent;
 	class KeyboardEvent;
 
-	DECLARE_SMART_PTR( MouseNodeEvent );
-	DECLARE_SMART_PTR( TranslateNodeEvent );
-	DECLARE_SMART_PTR( KeyboardEvent );
+	CU_DeclareSmartPtr( MouseNodeEvent );
+	CU_DeclareSmartPtr( TranslateNodeEvent );
+	CU_DeclareSmartPtr( KeyboardEvent );
 
 	class RenderPanel
 		: public wxPanel

@@ -32,213 +32,247 @@ namespace castor3d
 
 		void Utils::declareCalcTexCoord()
 		{
-			m_calcTexCoord = m_writer.implementFunction< Vec2 >( cuT( "calcTexCoord" )
+			m_calcTexCoord = m_writer.implementFunction< Vec2 >( "calcTexCoord"
 				, [&]( Vec2 const & renderPos
 					, Vec2 const & renderSize )
 				{
 					m_writer.returnStmt( renderPos / renderSize );
 				}
-				, InVec2{ m_writer, cuT( "renderPos" ) }
-				, InVec2{ m_writer, cuT( "renderSize" ) } );
+				, InVec2{ m_writer, "renderPos" }
+				, InVec2{ m_writer, "renderSize" } );
 		}
 
 		void Utils::declareCalcVSPosition()
 		{
-			m_calcVSPosition = m_writer.implementFunction< Vec3 >( cuT( "calcVSPosition" )
+			m_calcVSPosition = m_writer.implementFunction< Vec3 >( "calcVSPosition"
 				, [&]( Vec2 const & uv
 					, Float const & depth
 					, Mat4 const & invProj )
 				{
-					auto csPosition = m_writer.declLocale( cuT( "csPosition" )
+					auto csPosition = m_writer.declLocale( "csPosition"
 						, vec3( uv * 2.0_f - 1.0_f
 							, ( m_isZeroToOneDepth
 								? depth
 								: depth * 2.0_f - 1.0_f ) ) );
-					auto vsPosition = m_writer.declLocale( cuT( "vsPosition" )
-						, invProj * vec4( csPosition, 1.0 ) );
-					vsPosition.xyz() /= vsPosition.w();
-					m_writer.returnStmt( vsPosition.xyz() );
+					auto vsPosition = m_writer.declLocale( "vsPosition"
+						, invProj * vec4( csPosition, 1.0_f ) );
+					m_writer.returnStmt( vsPosition.xyz() / vsPosition.w() );
 				}
-				, InVec2{ m_writer, cuT( "uv" ) }
-				, InFloat{ m_writer, cuT( "depth" ) }
-				, InMat4{ m_writer, cuT( "invProj" ) } );
+				, InVec2{ m_writer, "uv" }
+				, InFloat{ m_writer, "depth" }
+				, InMat4{ m_writer, "invProj" } );
 		}
 
 		void Utils::declareCalcWSPosition()
 		{
-			m_calcWSPosition = m_writer.implementFunction< Vec3 >( cuT( "calcWSPosition" )
+			m_calcWSPosition = m_writer.implementFunction< Vec3 >( "calcWSPosition"
 				, [&]( Vec2 const & uv
 					, Float const & depth
 					, Mat4 const & invViewProj )
 				{
-					auto csPosition = m_writer.declLocale( cuT( "psPosition" )
+					auto csPosition = m_writer.declLocale( "psPosition"
 						, vec3( uv * 2.0_f - 1.0_f
 							, ( m_isZeroToOneDepth
 								? depth
 								: depth * 2.0_f - 1.0_f ) ) );
-					auto wsPosition = m_writer.declLocale( cuT( "wsPosition" )
+					auto wsPosition = m_writer.declLocale( "wsPosition"
 						, invViewProj * vec4( csPosition, 1.0_f ) );
-					wsPosition.xyz() /= wsPosition.w();
-					m_writer.returnStmt( wsPosition.xyz() );
+					m_writer.returnStmt( wsPosition.xyz() / wsPosition.w() );
 				}
-				, InVec2{ m_writer, cuT( "uv" ) }
-				, InFloat{ m_writer, cuT( "depth" ) }
-				, InMat4{ m_writer, cuT( "invViewProj" ) } );
+				, InVec2{ m_writer, "uv" }
+				, InFloat{ m_writer, "depth" }
+				, InMat4{ m_writer, "invViewProj" } );
 		}
 
 		void Utils::declareApplyGamma()
 		{
-			m_applyGamma = m_writer.implementFunction< Vec3 >( cuT( "applyGamma" )
+			m_applyGamma = m_writer.implementFunction< Vec3 >( "applyGamma"
 				, [&]( Float const & gamma
 					, Vec3 const & hdr )
 				{
-					m_writer.returnStmt( pow( hdr, vec3( 1.0_f / gamma ) ) );
+					m_writer.returnStmt( pow( max( hdr, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( 1.0_f / gamma ) ) );
 				}
-				, InFloat{ m_writer, cuT( "gamma" ) }
-				, InVec3{ m_writer, cuT( "hdr" ) } );
+				, InFloat{ m_writer, "gamma" }
+				, InVec3{ m_writer, "hdr" } );
 		}
 
 		void Utils::declareRemoveGamma()
 		{
-			m_removeGamma = m_writer.implementFunction< Vec3 >( cuT( "removeGamma" )
+			m_removeGamma = m_writer.implementFunction< Vec3 >( "removeGamma"
 				, [&]( Float const & gamma
 					, Vec3 const & srgb )
 				{
-					m_writer.returnStmt( pow( srgb, vec3( gamma ) ) );
+					m_writer.returnStmt( pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) ) );
 				}
-				, InFloat{ m_writer, cuT( "gamma" ) }
-				, InVec3{ m_writer, cuT( "srgb" ) } );
+				, InFloat{ m_writer, "gamma" }
+				, InVec3{ m_writer, "srgb" } );
 		}
 
 		void Utils::declareLineariseDepth()
 		{
-			m_lineariseDepth = m_writer.implementFunction< Float >( cuT( "lineariseDepth" )
+			m_lineariseDepth = m_writer.implementFunction< Float >( "lineariseDepth"
 				, [&]( Float const & depth
 					, Float const & nearPlane
 					, Float const & farPlane )
 				{
-					auto z = m_writer.declLocale( cuT( "z" )
+					auto z = m_writer.declLocale( "z"
 						, ( m_isZeroToOneDepth
 							? depth
 							: depth * 2.0_f - 1.0_f ) );
 					z *= m_writer.paren( farPlane - nearPlane );
 					m_writer.returnStmt( 2.0 * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 				}
-				, InFloat{ m_writer, cuT( "depth" ) }
-				, InFloat{ m_writer, cuT( "nearPlane" ) }
-				, InFloat{ m_writer, cuT( "farPlane" ) } );
+				, InFloat{ m_writer, "depth" }
+				, InFloat{ m_writer, "nearPlane" }
+				, InFloat{ m_writer, "farPlane" } );
 		}
 
 		void Utils::declareGetMapNormal()
 		{
-			m_getMapNormal = m_writer.implementFunction< Vec3 >( cuT( "getMapNormal" )
+			m_getMapNormal = m_writer.implementFunction< Vec3 >( "getMapNormal"
 				, [&]( Vec2 const & uv
 					, Vec3 const & normal
 					, Vec3 const & position )
 				{
-					auto c3d_mapNormal( m_writer.getVariable< SampledImage2DRgba32 >( cuT( "c3d_mapNormal" ) ) );
+					auto c3d_mapNormal( m_writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
-					auto mapNormal = m_writer.declLocale( cuT( "mapNormal" )
+					auto mapNormal = m_writer.declLocale( "mapNormal"
 						, texture( c3d_mapNormal, uv.xy() ).xyz() );
 					mapNormal = sdw::fma( mapNormal
 						, vec3( 2.0_f )
 						, vec3( -1.0_f ) );
-					auto Q1 = m_writer.declLocale( cuT( "Q1" )
+					auto Q1 = m_writer.declLocale( "Q1"
 						, dFdx( position ) );
-					auto Q2 = m_writer.declLocale( cuT( "Q2" )
+					auto Q2 = m_writer.declLocale( "Q2"
 						, dFdy( position ) );
-					auto st1 = m_writer.declLocale( cuT( "st1" )
+					auto st1 = m_writer.declLocale( "st1"
 						, dFdx( uv ) );
-					auto st2 = m_writer.declLocale( cuT( "st2" )
+					auto st2 = m_writer.declLocale( "st2"
 						, dFdy( uv ) );
-					auto N = m_writer.declLocale( cuT( "N" )
+					auto N = m_writer.declLocale( "N"
 						, normalize( normal ) );
-					auto T = m_writer.declLocale( cuT( "T" )
+					auto T = m_writer.declLocale( "T"
 						, normalize( Q1 * st2.t() - Q2 * st1.t() ) );
-					auto B = m_writer.declLocale( cuT( "B" )
+					auto B = m_writer.declLocale( "B"
 						, -normalize( cross( N, T ) ) );
-					auto tbn = m_writer.declLocale( cuT( "tbn" )
+					auto tbn = m_writer.declLocale( "tbn"
 						, mat3( T, B, N ) );
 					m_writer.returnStmt( normalize( tbn * mapNormal ) );
 				}
-				, InVec2{ m_writer, cuT( "uv" ) }
-				, InVec3{ m_writer, cuT( "normal" ) }
-				, InVec3{ m_writer, cuT( "position" ) } );
+				, InVec2{ m_writer, "uv" }
+				, InVec3{ m_writer, "normal" }
+				, InVec3{ m_writer, "position" } );
 		}
 
 		void Utils::declareComputeAccumulation()
 		{
-			m_computeAccumulation = m_writer.implementFunction< Vec4 >( cuT( "computeAccumulation" )
+			m_computeAccumulation = m_writer.implementFunction< Vec4 >( "computeAccumulation"
 				, [&]( Float const & depth
 					, Vec3 const & colour
 					, Float const & alpha
 					, Float const & nearPlane
-					, Float const & farPlane )
+					, Float const & farPlane
+					, Float const & accumulationOperator )
 				{
-					//// Naive
-					//auto z = utils.lineariseDepth( z
-					//	, nearPlane
-					//	, farPlane );
-					//auto weight = m_writer.declLocale( cuT( "weight" ), 1.0_f - z );
+					auto weight = m_writer.declLocale< Float >( "weight"
+						, 1.0_f );
 
-					// (10)
-					auto z = lineariseDepth( depth
-						, nearPlane
-						, farPlane );
-					auto weight = m_writer.declLocale( cuT( "weight" )
-						, max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3e3_f, 1e-2_f ) );
-
-					//// (9)
-					//auto weight = m_writer.declLocale( cuT( "weight" )
-					//	, max( min( 0.03_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 4.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-					//// (8)
-					//auto weight = m_writer.declLocale( cuT( "weight" )
-					//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 6.0_f ) + pow( glsl::abs( z ) / 10.0_f, 3.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-					//// (7)
-					//auto weight = m_writer.declLocale( cuT( "weight" )
-					//	, max( min( 10.0_f / writer.paren( pow( glsl::abs( z ) / 200.0_f, 6.0_f ) + pow( glsl::abs( z ) / 5.0_f, 2.0_f ) + 1e-5 ), 3e3 ), 1e-2 ) );
-
-					//// (other)
-					//auto a = m_writer.declLocale( cuT( "a" )
-					//	, min( alpha, 1.0 ) * 8.0 + 0.01 );
-					//auto b = m_writer.declLocale( cuT( "b" )
-					//	, -z * 0.95 + 1.0 );
-					///* If your scene has a lot of content very close to the far plane,
-					//then include this line (one rsqrt instruction):
-					//b /= sqrt(1e4 * abs(csZ)); */
-					//auto weight = m_writer.declLocale( cuT( "weight" )
-					//	, clamp( a * a * a * 1e8 * b * b * b, 1e-2, 3e2 ) );
+					SWITCH( m_writer, m_writer.cast< Int >( accumulationOperator ) )
+					{
+						CASE( 0 )
+						{
+							// Naive
+							weight = 1.0_f - lineariseDepth( depth
+								, nearPlane
+								, farPlane );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 1 )
+						{
+							// (10)
+							weight = max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3000.0_f, 0.01_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 2 )
+						{
+							// (9)
+							weight = max( min( 0.03_f / ( pow( abs( depth ) / 200.0_f, 4.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 3 )
+						{
+							// (8)
+							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 10.0_f, 3.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 4 )
+						{
+							// (7)
+							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 5.0_f, 2.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 5 )
+						{
+							// (other)
+							auto a = m_writer.declLocale( "a"
+								, min( alpha, 1.0_f ) * 8.0_f + 0.01_f );
+							auto b = m_writer.declLocale( "b"
+								, -depth * 0.95_f + 1.0_f );
+							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+						CASE( 6 )
+						{
+							// (other)
+							auto a = m_writer.declLocale( "a"
+								, min( alpha, 1.0_f ) * 8.0_f + 0.01_f );
+							auto b = m_writer.declLocale( "b"
+								, -depth * 0.95_f + 1.0_f );
+							// If your scene has a lot of content very close to the far plane,
+							// then include this line (one rsqrt instruction):
+							b /= sqrt( 10000.0_f * abs( depth ) );
+							weight = clamp( a * a * a * 100000000.0_f * b * b * b, 0.01_f, 300.0_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
+					}
+					HCTIWS;
 
 					m_writer.returnStmt( vec4( colour * alpha, alpha ) * weight );
 				}
-				, InFloat{ m_writer, cuT( "depth" ) }
-				, InVec3{ m_writer, cuT( "colour" ) }
-				, InFloat{ m_writer, cuT( "alpha" ) }
-				, InFloat{ m_writer, cuT( "nearPlane" ) }
-				, InFloat{ m_writer, cuT( "farPlane" ) } );
+				, InFloat{ m_writer, "depth" }
+				, InVec3{ m_writer, "colour" }
+				, InFloat{ m_writer, "alpha" }
+				, InFloat{ m_writer, "nearPlane" }
+				, InFloat{ m_writer, "farPlane" }
+				, InFloat{ m_writer, "accumulationOperator" } );
 		}
 
 		void Utils::declareFresnelSchlick()
 		{
-			m_fresnelSchlick = m_writer.implementFunction< Vec3 >( cuT( "fresnelSchlick" )
+			m_fresnelSchlick = m_writer.implementFunction< Vec3 >( "fresnelSchlick"
 				, [&]( Float const & product
 					, Vec3 const & f0
 					, Float const & roughness )
 				{
 					m_writer.returnStmt( sdw::fma( max( vec3( 1.0_f - roughness ), f0 ) - f0
-						, vec3( pow( 1.0_f - product, 5.0_f ) )
+						, vec3( pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f ) )
 						, f0 ) );
 				}
-				, InFloat{ m_writer, cuT( "product" ) }
-				, InVec3{ m_writer, cuT( "f0" ) }
-				, InFloat{ m_writer, cuT( "roughness" ) } );
+				, InFloat{ m_writer, "product" }
+				, InVec3{ m_writer, "f0" }
+				, InFloat{ m_writer, "roughness" } );
 		}
 
 		void Utils::declareComputeIBL()
 		{
-			m_computeIBL = m_writer.implementFunction< Vec3 >( cuT( "computeIBL" )
+			m_computeIBL = m_writer.implementFunction< Vec3 >( "computeIBL"
 				, [&]( Vec3 const & normal
 					, Vec3 const & position
 					, Vec3 const & baseColour
@@ -250,32 +284,32 @@ namespace castor3d
 					, SampledImageCubeRgba32 const & prefilteredEnvMap
 					, SampledImage2DRgba32 const & brdfMap )
 				{
-					auto V = m_writer.declLocale( cuT( "V" )
+					auto V = m_writer.declLocale( "V"
 						, normalize( worldEye - position ) );
-					auto NdotV = m_writer.declLocale( cuT( "NdotV" )
+					auto NdotV = m_writer.declLocale( "NdotV"
 						, max( dot( normal, V ), 0.0_f ) );
-					auto F = m_writer.declLocale( cuT( "F" )
+					auto F = m_writer.declLocale( "F"
 						, fresnelSchlick( NdotV, f0, roughness ) );
-					auto kS = m_writer.declLocale( cuT( "kS" )
+					auto kS = m_writer.declLocale( "kS"
 						, F );
-					auto kD = m_writer.declLocale( cuT( "kD" )
+					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 					kD *= 1.0 - metallic;
-					auto irradiance = m_writer.declLocale( cuT( "irradiance" )
+					auto irradiance = m_writer.declLocale( "irradiance"
 						, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
-					auto diffuseReflection = m_writer.declLocale( cuT( "diffuseReflection" )
+					auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
 						, irradiance * baseColour );
 
-					auto R = m_writer.declLocale( cuT( "R" )
+					auto R = m_writer.declLocale( "R"
 						, reflect( -V, normal ) );
 					R.y() = -R.y();
-					auto prefilteredColor = m_writer.declLocale( cuT( "prefilteredColor" )
+					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, textureLod( prefilteredEnvMap, R, roughness * Float( float( MaxIblReflectionLod ) ) ).rgb() );
-					auto envBRDFCoord = m_writer.declLocale( cuT( "envBRDFCoord" )
+					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 						, vec2( NdotV, roughness ) );
-					auto envBRDF = m_writer.declLocale( cuT( "envBRDF" )
+					auto envBRDF = m_writer.declLocale( "envBRDF"
 						, texture( brdfMap, envBRDFCoord ).rg() );
-					auto specularReflection = m_writer.declLocale( cuT( "specularReflection" )
+					auto specularReflection = m_writer.declLocale( "specularReflection"
 						, prefilteredColor * sdw::fma( kS
 							, vec3( envBRDF.x() )
 							, vec3( envBRDF.y() ) ) );
@@ -284,16 +318,16 @@ namespace castor3d
 						, diffuseReflection
 						, specularReflection ) );
 				}
-				, InVec3{ m_writer, cuT( "normal" ) }
-				, InVec3{ m_writer, cuT( "position" ) }
-				, InVec3{ m_writer, cuT( "albedo" ) }
-				, InVec3{ m_writer, cuT( "f0" ) }
-				, InFloat{ m_writer, cuT( "roughness" ) }
-				, InFloat{ m_writer, cuT( "metallic" ) }
-				, InVec3{ m_writer, cuT( "worldEye" ) }
-				, InSampledImageCubeRgba32{ m_writer, cuT( "irradianceMap" ) }
-				, InSampledImageCubeRgba32{ m_writer, cuT( "prefilteredEnvMap" ) }
-				, InSampledImage2DRgba32{ m_writer, cuT( "brdfMap" ) } );
+				, InVec3{ m_writer, "normal" }
+				, InVec3{ m_writer, "position" }
+				, InVec3{ m_writer, "albedo" }
+				, InVec3{ m_writer, "f0" }
+				, InFloat{ m_writer, "roughness" }
+				, InFloat{ m_writer, "metallic" }
+				, InVec3{ m_writer, "worldEye" }
+				, InSampledImageCubeRgba32{ m_writer, "irradianceMap" }
+				, InSampledImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
+				, InSampledImage2DRgba32{ m_writer, "brdfMap" } );
 		}
 
 		void Utils::declareInvertVec2Y()
@@ -316,16 +350,56 @@ namespace castor3d
 				, InVec3{ m_writer, "v" } );
 		}
 
+		void Utils::declareInvertVec4Y()
+		{
+			m_invertVec4Y = m_writer.implementFunction< Vec4 >( "invertVec3Y"
+				, [&]( Vec4 const & v )
+				{
+					m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z(), v.w() ) );
+				}
+				, InVec4{ m_writer, "v" } );
+		}
+
+		void Utils::declareNegateVec2Y()
+		{
+			m_negateVec2Y = m_writer.implementFunction< Vec2 >( "negateVec2Y"
+				, [&]( Vec2 const & v )
+				{
+					m_writer.returnStmt( vec2( v.x(), -v.y() ) );
+				}
+				, InVec2{ m_writer, "v" } );
+		}
+
+		void Utils::declareNegateVec3Y()
+		{
+			m_negateVec3Y = m_writer.implementFunction< Vec3 >( "negateVec3Y"
+				, [&]( Vec3 const & v )
+				{
+					m_writer.returnStmt( vec3( v.x(), -v.y(), v.z() ) );
+				}
+				, InVec3{ m_writer, "v" } );
+		}
+
+		void Utils::declareNegateVec4Y()
+		{
+			m_negateVec4Y = m_writer.implementFunction< Vec4 >( "negateVec3Y"
+				, [&]( Vec4 const & v )
+				{
+					m_writer.returnStmt( vec3( v.x(), -v.y(), v.z(), v.w() ) );
+				}
+				, InVec4{ m_writer, "v" } );
+		}
+
 		void Utils::declareEncodeMaterial()
 		{
-			m_encodeMaterial = m_writer.implementFunction< sdw::Void >( cuT( "encodeMaterial" )
+			m_encodeMaterial = m_writer.implementFunction< sdw::Void >( "encodeMaterial"
 				, [&]( Int const & receiver
 					, Int const & reflection
 					, Int const & refraction
 					, Int const & envMapIndex
 					, Float encoded )
 				{
-					auto flags = m_writer.declLocale( cuT( "flags" )
+					auto flags = m_writer.declLocale( "flags"
 						, 0_u
 						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( receiver ) << UInt( ReceiverOffset ) )		& UInt( ReceiverMask ) )
 						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( refraction ) << UInt( RefractionOffset ) )	& UInt( RefractionMask ) )
@@ -333,46 +407,46 @@ namespace castor3d
 						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( envMapIndex ) << UInt( EnvMapIndexOffset ) )	& UInt( EnvMapIndexMask ) ) );
 					encoded = m_writer.cast< Float >( flags );
 				}
-				, InInt{ m_writer, cuT( "receiver" ) }
-				, InInt{ m_writer, cuT( "reflection" ) }
-				, InInt{ m_writer, cuT( "refraction" ) }
-				, InInt{ m_writer, cuT( "envMapIndex" ) }
-				, OutFloat{ m_writer, cuT( "encoded" ) } );
+				, InInt{ m_writer, "receiver" }
+				, InInt{ m_writer, "reflection" }
+				, InInt{ m_writer, "refraction" }
+				, InInt{ m_writer, "envMapIndex" }
+				, OutFloat{ m_writer, "encoded" } );
 		}
 
 		void Utils::declareDecodeMaterial()
 		{
-			m_decodeMaterial = m_writer.implementFunction< sdw::Void >( cuT( "decodeMaterial" )
+			m_decodeMaterial = m_writer.implementFunction< sdw::Void >( "decodeMaterial"
 				, [&]( Float const & encoded
 					, Int receiver
 					, Int reflection
 					, Int refraction
 					, Int envMapIndex )
 				{
-					auto flags = m_writer.declLocale( cuT( "flags" )
+					auto flags = m_writer.declLocale( "flags"
 						, m_writer.cast< UInt >( encoded ) );
 					receiver = m_writer.cast< Int >( m_writer.paren( flags & UInt( ReceiverMask ) ) >> UInt( ReceiverOffset ) );
 					refraction = m_writer.cast< Int >( m_writer.paren( flags & UInt( RefractionMask ) ) >> UInt( RefractionOffset ) );
 					reflection = m_writer.cast< Int >( m_writer.paren( flags & UInt( ReflectionMask ) ) >> UInt( ReflectionOffset ) );
 					envMapIndex = m_writer.cast< Int >( m_writer.paren( flags & UInt( EnvMapIndexMask ) ) >> UInt( EnvMapIndexOffset ) );
 				}
-				, InFloat{ m_writer, cuT( "encoded" ) }
-				, OutInt{ m_writer, cuT( "receiver" ) }
-				, OutInt{ m_writer, cuT( "reflection" ) }
-				, OutInt{ m_writer, cuT( "refraction" ) }
-				, OutInt{ m_writer, cuT( "envMapIndex" ) } );
+				, InFloat{ m_writer, "encoded" }
+				, OutInt{ m_writer, "receiver" }
+				, OutInt{ m_writer, "reflection" }
+				, OutInt{ m_writer, "refraction" }
+				, OutInt{ m_writer, "envMapIndex" } );
 		}
 
 		void Utils::declareDecodeReceiver()
 		{
-			m_decodeReceiver = m_writer.implementFunction< sdw::Void >( cuT( "decodeReceiver" )
+			m_decodeReceiver = m_writer.implementFunction< sdw::Void >( "decodeReceiver"
 				, [&]( Int const & encoded
 					, Int receiver )
 				{
 					receiver = m_writer.paren( encoded & ReceiverMask ) >> ReceiverOffset;
 				}
-				, InInt{ m_writer, cuT( "encoded" ) }
-				, OutInt{ m_writer, cuT( "receiver" ) } );
+				, InInt{ m_writer, "encoded" }
+				, OutInt{ m_writer, "receiver" } );
 		}
 
 		sdw::Vec2 Utils::bottomUpToTopDown( sdw::Vec2 const & texCoord )const
@@ -410,6 +484,86 @@ namespace castor3d
 			if ( m_isTopDown )
 			{
 				return m_invertVec3Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec4 Utils::bottomUpToTopDown( sdw::Vec4 const & texCoord )const
+		{
+			if ( !m_isTopDown )
+			{
+				return m_invertVec4Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & texCoord )const
+		{
+			if ( m_isTopDown )
+			{
+				return m_invertVec4Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec2 Utils::negateBottomUpToTopDown( sdw::Vec2 const & texCoord )const
+		{
+			if ( !m_isTopDown )
+			{
+				return m_negateVec2Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const
+		{
+			if ( m_isTopDown )
+			{
+				return m_negateVec2Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec3 Utils::negateBottomUpToTopDown( sdw::Vec3 const & texCoord )const
+		{
+			if ( !m_isTopDown )
+			{
+				return m_negateVec3Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const
+		{
+			if ( m_isTopDown )
+			{
+				return m_negateVec3Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec4 Utils::negateBottomUpToTopDown( sdw::Vec4 const & texCoord )const
+		{
+			if ( !m_isTopDown )
+			{
+				return m_negateVec4Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const
+		{
+			if ( m_isTopDown )
+			{
+				return m_negateVec4Y( texCoord );
 			}
 
 			return texCoord;
@@ -471,13 +625,15 @@ namespace castor3d
 			, Vec3 const & colour
 			, Float const & alpha
 			, Float const & nearPlane
-			, Float const & farPlane )
+			, Float const & farPlane
+			, Float const & accumulationOperator )
 		{
 			return m_computeAccumulation( depth
 				, colour
 				, alpha
 				, nearPlane
-				, farPlane );
+				, farPlane
+				, accumulationOperator );
 		}
 
 		Vec3 Utils::fresnelSchlick( Float const & product

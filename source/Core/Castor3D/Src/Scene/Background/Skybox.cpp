@@ -172,42 +172,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
@@ -231,7 +231,7 @@ namespace castor3d
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultImage().initialiseSource( folder, relative, ImageComponents::eRGB );
 		setEquiTexture( texture, size );
 	}
 
@@ -268,7 +268,7 @@ namespace castor3d
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultImage().initialiseSource( folder, relative, ImageComponents::eRGB );
 		setCrossTexture( texture );
 	}
 
@@ -281,7 +281,7 @@ namespace castor3d
 
 	bool SkyboxBackground::doInitialise( ashes::RenderPass const & renderPass )
 	{
-		REQUIRE( m_texture );
+		CU_Require( m_texture );
 		return doInitialiseTexture();
 	}
 
@@ -365,7 +365,7 @@ namespace castor3d
 		m_crossTexture->initialise();
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
-		REQUIRE( width == height );
+		CU_Require( width == height );
 
 		// create the cube texture if needed.
 		m_texture = std::make_shared< TextureLayout >( renderSystem

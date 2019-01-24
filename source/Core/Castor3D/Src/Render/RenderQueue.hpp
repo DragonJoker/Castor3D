@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( push )
 #	pragma warning( disable:4503 )
 #endif
@@ -215,13 +215,13 @@ namespace castor3d
 		/**@{*/
 		inline SceneRenderNodes & getAllRenderNodes()const
 		{
-			REQUIRE( m_renderNodes );
+			CU_Require( m_renderNodes );
 			return *m_renderNodes;
 		}
 
 		inline SceneCulledRenderNodes & getCulledRenderNodes()const
 		{
-			REQUIRE( m_culledRenderNodes );
+			CU_Require( m_culledRenderNodes );
 			return *m_culledRenderNodes;
 		}
 
@@ -257,7 +257,7 @@ namespace castor3d
 	};
 }
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( pop )
 #endif
 

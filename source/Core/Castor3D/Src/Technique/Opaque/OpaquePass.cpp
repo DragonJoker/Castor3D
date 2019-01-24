@@ -70,7 +70,7 @@ namespace castor3d
 		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
 		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		// Colour attachments.
 		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
@@ -306,7 +306,7 @@ namespace castor3d
 		, bool invertNormals )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+		CU_Require( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
 			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace sdw;
 		VertexWriter writer;
@@ -317,7 +317,7 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto texture = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location

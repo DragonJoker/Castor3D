@@ -18,8 +18,8 @@ namespace Obj
 		,	private castor::NonCopyable
 	{
 	private:
-		DECLARE_MAP( castor3d::PassRPtr, castor::Point3f, FloatPass );
-		DECLARE_VECTOR( castor3d::TextureLayoutSPtr, Texture );
+		CU_DeclareMap( castor3d::PassRPtr, castor::Point3f, FloatPass );
+		CU_DeclareVector( castor3d::TextureLayoutSPtr, Texture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
 	public:

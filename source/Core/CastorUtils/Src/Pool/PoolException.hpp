@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_POOL_EXCEPTION_H___
-#define ___CU_POOL_EXCEPTION_H___
+#ifndef ___CU_PoolException_H___
+#define ___CU_PoolException_H___
 
 #include "CastorUtilsPrerequisites.hpp"
 #include "Exception/Exception.hpp"
@@ -30,7 +30,7 @@ namespace castor
 		eMarkedNotFromPool,
 		eGrowingNotFromRanges,
 		eSTLAllocatorUnique,
-		CASTOR_SCOPED_ENUM_BOUNDS( eCommonOutOfMemory )
+		CU_ScopedEnumBounds( eCommonOutOfMemory )
 	};
 
 	/*!
@@ -275,6 +275,6 @@ namespace castor
 \~french
 \brief		Macro définie pour faciliter l'utilisation de castor::PoolException
 */
-#define POOL_EXCEPTION( error ) throw castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
+#define CU_PoolException( error ) throw castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
 
 #endif

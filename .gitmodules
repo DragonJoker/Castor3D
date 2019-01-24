@@ -19,3 +19,6 @@
 [submodule "source/external/ShaderWriter"]
 	path = source/external/ShaderWriter
 	url = https://github.com/DragonJoker/ShaderWriter.git
+[submodule "data/TestScenes"]
+	path = data/TestScenes
+	url = https://github.com/DragonJoker/Castor3DTestScenes.git

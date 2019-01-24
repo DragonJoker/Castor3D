@@ -36,8 +36,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static ashes::Format constexpr ColourFormat = ashes::Format::eR8G8B8A8_UNORM;
-
 		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -72,12 +70,12 @@ namespace castor3d
 			auto c3d_dummy = configuration.declMember< IVec2 >( cuT( "c3d_dummy" ) );
 			auto c3d_gaussian = configuration.declMember< Vec4 >( cuT( "c3d_gaussian" ), 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapNormal" ), 2u, 0u, config.useNormalsBuffer );
 			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapInput" ), 3u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_readMultiplyFirst = writer.declConstant< Vec4 >( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
-			auto c3d_readAddSecond = writer.declConstant< Vec4 >( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declConstant( cuT( "c3d_readMultiplyFirst" ), vec3( 2.0_f ), config.useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant( cuT( "c3d_readAddSecond" ), vec3( 1.0_f ), config.useNormalsBuffer );
 
 			auto in = writer.getIn();
 
@@ -138,7 +136,7 @@ namespace castor3d
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
 						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0_i ).xyz();
 						tapNormal = normalize( sdw::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
@@ -187,12 +185,12 @@ namespace castor3d
 					auto planeWeight = writer.declLocale( cuT( "planeWeight" )
 						, 1.0_f );
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
 						auto normalCloseness = writer.declLocale( cuT( "normalCloseness" )
 							, dot( tapNormal, normal ) );
 
-						if ( !config.m_blurHighQuality )
+						if ( !config.blurHighQuality )
 						{
 							normalCloseness = normalCloseness * normalCloseness;
 							normalCloseness = normalCloseness * normalCloseness;
@@ -203,7 +201,7 @@ namespace castor3d
 							, writer.paren( 1.0_f - normalCloseness ) * k_normal );
 						normalWeight = max( writer.paren( 1.0_f - c3d_edgeSharpness * normalError ), 0.0_f );
 
-						if ( config.m_blurHighQuality )
+						if ( config.blurHighQuality )
 						{
 							auto lowDistanceThreshold2 = writer.declLocale( cuT( "lowDistanceThreshold2" )
 								, 0.001_f );
@@ -259,7 +257,7 @@ namespace castor3d
 					auto normal = writer.declLocale( cuT( "normal" )
 						, vec3( 0.0_f ) );
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
 						normal = texelFetch( c3d_mapNormal, ssCenter, 0_i ).xyz();
 						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
@@ -380,7 +378,7 @@ namespace castor3d
 			image.extent.width = size.width;
 			image.extent.height = size.height;
 			image.extent.depth = 1u;
-			image.format = ColourFormat;
+			image.format = SsaoBlurPass::ResultFormat;
 			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
 			image.samples = ashes::SampleCountFlag::e1;
@@ -404,7 +402,7 @@ namespace castor3d
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].format = ColourFormat;
+			renderPass.attachments[0].format = SsaoBlurPass::ResultFormat;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
 			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
@@ -516,11 +514,11 @@ namespace castor3d
 
 	void SsaoBlurPass::update()const
 	{
-		if ( m_config.m_blurRadius.isDirty() )
+		if ( m_config.blurRadius.isDirty() )
 		{
 			auto & configuration = m_configurationUbo->getData();
 
-			switch ( m_config.m_blurRadius.value().value() )
+			switch ( m_config.blurRadius.value().value() )
 			{
 			case 1u:
 				configuration.gaussian[0][0] = 0.5f;

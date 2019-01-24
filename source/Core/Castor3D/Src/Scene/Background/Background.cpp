@@ -134,7 +134,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, ashes::FrameBuffer const & frameBuffer )
 	{
-		REQUIRE( m_initialised );
+		CU_Require( m_initialised );
 		ashes::ClearColorValue colour;
 		ashes::DepthStencilClearValue depth{ 1.0, 0 };
 		commandBuffer.begin();
@@ -158,7 +158,7 @@ namespace castor3d
 		, castor::Size const & size
 		, ashes::RenderPass const & renderPass )
 	{
-		REQUIRE( m_initialised );
+		CU_Require( m_initialised );
 		return prepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -170,7 +170,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, ashes::DescriptorSet const & descriptorSet )const
 	{
-		REQUIRE( m_initialised );
+		CU_Require( m_initialised );
 		commandBuffer.begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
 			, ashes::CommandBufferInheritanceInfo
 			{
@@ -230,7 +230,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, ashes::DescriptorSet const & descriptorSet )const
 	{
-		REQUIRE( m_initialised );
+		CU_Require( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
 		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );

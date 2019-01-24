@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_LINUX )
+#if defined( CU_PlatformLinux )
 
 #include "Miscellaneous/CpuInformations.hpp"
 
@@ -30,7 +30,7 @@ namespace castor
 			char res[128];
 			FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
 			auto read = fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res );
-			ENSURE( read && read < sizeof( res ) );
+			CU_Ensure( read && read < sizeof( res ) );
 			pclose( fp );
 			return uint32_t( res[0] );
 		}

@@ -24,8 +24,8 @@ namespace castor3d
 	class RenderTargetCache
 		: public castor::OwnedBy< Engine >
 	{
-		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
-		DECLARE_ARRAY( RenderTargetArray, TargetType::eCount, TargetType );
+		CU_DeclareVector( RenderTargetSPtr, RenderTarget );
+		CU_DeclareArray( RenderTargetArray, TargetType::eCount, TargetType );
 	public:
 		/**
 		 *\~english

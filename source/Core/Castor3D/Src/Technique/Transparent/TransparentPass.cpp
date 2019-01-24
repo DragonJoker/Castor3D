@@ -267,6 +267,22 @@ namespace castor3d
 		m_nodesCommands->begin();
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();
+		auto & view = m_frameBuffer->begin()->getView();
+		auto subresource = view.getSubResourceRange();
+		subresource.aspectMask = ashes::getAspectMask( view.getFormat() );
+		m_nodesCommands->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eEarlyFragmentTests
+			, ashes::ImageMemoryBarrier
+			{
+				0u,
+				ashes::AccessFlag::eDepthStencilAttachmentRead,
+				ashes::ImageLayout::eUndefined,
+				ashes::ImageLayout::eDepthStencilAttachmentOptimal,
+				~( 0u ),
+				~( 0u ),
+				view.getTexture(),
+				subresource
+			} );
 		m_nodesCommands->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
@@ -522,7 +538,7 @@ namespace castor3d
 		, bool invertNormals )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+		CU_Require( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
 			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace sdw;
 		VertexWriter writer;
@@ -533,7 +549,7 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
@@ -566,7 +582,7 @@ namespace castor3d
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
-		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+		CU_Require( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
 			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -612,7 +628,7 @@ namespace castor3d
 			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-				, texture );
+				, uv );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
@@ -946,7 +962,8 @@ namespace castor3d
 				, colour
 				, alpha
 				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane );
+				, c3d_cameraFarPlane
+				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
@@ -1182,7 +1199,8 @@ namespace castor3d
 				, colour
 				, alpha
 				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane );
+				, c3d_cameraFarPlane
+				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
@@ -1416,7 +1434,8 @@ namespace castor3d
 				, colour
 				, alpha
 				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane );
+				, c3d_cameraFarPlane
+				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
 				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z

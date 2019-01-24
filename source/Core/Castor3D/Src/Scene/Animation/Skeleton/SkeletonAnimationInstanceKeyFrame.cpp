@@ -46,7 +46,7 @@ namespace castor3d
 					{
 						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
 						auto it = keyFrame.find( *bone );
-						REQUIRE( it != keyFrame.end() );
+						CU_Require( it != keyFrame.end() );
 						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
 					}
 
@@ -56,7 +56,7 @@ namespace castor3d
 						{
 							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
 							auto it = keyFrame.find( *bone );
-							REQUIRE( it != keyFrame.end() );
+							CU_Require( it != keyFrame.end() );
 							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
 						}
 					}
@@ -75,12 +75,12 @@ namespace castor3d
 				}
 			}
 
-			ENSURE( !isNan( min[0] ) && !isNan( min[1] ) && !isNan( min[2] ) );
-			ENSURE( !isNan( max[0] ) && !isNan( max[1] ) && !isNan( max[2] ) );
-			ENSURE( !isInf( min[0] ) && !isInf( min[1] ) && !isInf( min[2] ) );
-			ENSURE( !isInf( max[0] ) && !isInf( max[1] ) && !isInf( max[2] ) );
-			ENSURE( min != Point3r( rmax, rmax, rmax ) );
-			ENSURE( max != Point3r( rmin, rmin, rmin ) );
+			CU_Ensure( !isNan( min[0] ) && !isNan( min[1] ) && !isNan( min[2] ) );
+			CU_Ensure( !isNan( max[0] ) && !isNan( max[1] ) && !isNan( max[2] ) );
+			CU_Ensure( !isInf( min[0] ) && !isInf( min[1] ) && !isInf( min[2] ) );
+			CU_Ensure( !isInf( max[0] ) && !isInf( max[1] ) && !isInf( max[2] ) );
+			CU_Ensure( min != Point3r( rmax, rmax, rmax ) );
+			CU_Ensure( max != Point3r( rmin, rmin, rmin ) );
 			return BoundingBox{ min, max };
 		}
 	}
@@ -95,7 +95,7 @@ namespace castor3d
 		for ( auto & object : skeletonAnimation )
 		{
 			auto it = keyFrame.find( object->getObject() );
-			REQUIRE( it != keyFrame.end() );
+			CU_Require( it != keyFrame.end() );
 			m_objects.emplace_back( object.get(), it->second );
 
 			if ( object->getObject().getType() == SkeletonAnimationObjectType::eBone )

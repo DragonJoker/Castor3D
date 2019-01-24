@@ -193,7 +193,7 @@ namespace CastorGui
 
 	void ComboBoxCtrl::doCreate()
 	{
-		REQUIRE( getControlsManager() );
+		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
@@ -238,7 +238,7 @@ namespace CastorGui
 
 	void ComboBoxCtrl::doDestroy()
 	{
-		REQUIRE( getControlsManager() );
+		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		getControlsManager()->disconnectEvents( *this );
 

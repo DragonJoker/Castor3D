@@ -135,7 +135,7 @@ namespace castor3d
 		 */
 		inline Line const & operator[]( uint32_t index )const
 		{
-			REQUIRE( index < m_lines.size() );
+			CU_Require( index < m_lines.size() );
 			return m_lines[index];
 		}
 		/**

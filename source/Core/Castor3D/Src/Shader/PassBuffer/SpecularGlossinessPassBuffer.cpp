@@ -69,7 +69,7 @@ namespace castor3d
 
 	void SpecularGlossinessPassBuffer::visit( LegacyPass const & pass )
 	{
-		REQUIRE( pass.getId() > 0 );
+		CU_Require( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
 
 #if C3D_MaterialsStructOfArrays
@@ -115,7 +115,7 @@ namespace castor3d
 
 	void SpecularGlossinessPassBuffer::visit( SpecularGlossinessPbrPass const & pass )
 	{
-		REQUIRE( pass.getId() > 0 );
+		CU_Require( pass.getId() > 0 );
 		auto index = pass.getId() - 1;
 
 #if C3D_MaterialsStructOfArrays
@@ -134,7 +134,7 @@ namespace castor3d
 		m_data.reflRefr[index].r = pass.getRefractionRatio();
 		m_data.reflRefr[index].g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data.reflRefr[index].b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = 1.0f;
+		m_data.reflRefr[index].a = float( pass.getBWAccumulationOperator() );
 		doVisitExtended( pass, m_data.extended );
 
 #else
@@ -153,7 +153,7 @@ namespace castor3d
 		m_data[index].reflRefr.r = pass.getRefractionRatio();
 		m_data[index].reflRefr.g = checkFlag( pass.getTextureFlags(), TextureChannel::eRefraction ) ? 1.0f : 0.0f;
 		m_data[index].reflRefr.b = checkFlag( pass.getTextureFlags(), TextureChannel::eReflection ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.a = 1.0f;
+		m_data[index].reflRefr.a = float( pass.getBWAccumulationOperator() );
 		doVisitExtended( pass, m_data[index].extended );
 
 #endif

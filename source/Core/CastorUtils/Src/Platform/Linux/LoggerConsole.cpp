@@ -1,6 +1,6 @@
 #include "Log/LoggerConsole.hpp"
 
-#if defined( CASTOR_PLATFORM_LINUX )
+#if defined( CU_PlatformLinux )
 
 #include <iomanip>
 

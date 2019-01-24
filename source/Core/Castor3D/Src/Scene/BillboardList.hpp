@@ -205,7 +205,7 @@ namespace castor3d
 		struct Vertex
 		{
 			castor::Point3f position;
-			castor::Point2f texcoord;
+			castor::Point2f uv;
 		};
 		using Quad = std::array< Vertex, 4u >;
 

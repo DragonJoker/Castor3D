@@ -118,207 +118,148 @@ namespace castor3d
 		 */
 		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
-		 *\~english
-		 *\brief		Sets the light's colour.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la couleur.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setColour( castor::Point3f const & value )
-		{
-			m_colour = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's intensity values.
-		 *\param[in]	value	The new values.
-		 *\~french
-		 *\brief		Définit les valeurs d'intensité.
-		 *\param[in]	value	Les nouvelles valeurs.
-		 */
-		inline void setIntensity( castor::Point2f const & value )
-		{
-			m_intensity = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's diffuse intensity.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'intensité diffuse.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setDiffuseIntensity( float value )
-		{
-			m_intensity[0] = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's specular intensity.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'intensité spéculaire.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setSpecularIntensity( float value )
-		{
-			m_intensity[1] = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the volumetric scattering steps count.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le nombre d'étapes du volumetric scattering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setVolumetricSteps( uint32_t value )
-		{
-			m_volumetricSteps = value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the volumetric scattering factor.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le facteur du volumetric scattering.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setVolumetricScatteringFactor( float value )
-		{
-			m_volumetricScattering = value;
-		}
-		/**
-		 *\~english
-		 *\return		The light type.
-		 *\~french
-		 *\return		Le type de lumière.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline LightType getLightType()const
 		{
 			return m_lightType;
 		}
-		/**
-		 *\~english
-		 *\return		The diffuse intensity.
-		 *\~french
-		 *\return		L'intensité diffuse.
-		 */
+
 		inline float getDiffuseIntensity()const
 		{
 			return m_intensity[0];
 		}
-		/**
-		 *\~english
-		 *\return		The specular intensity.
-		 *\~french
-		 *\return		L'intensité spéculaire.
-		 */
+
 		inline float getSpecularIntensity()const
 		{
 			return m_intensity[1];
 		}
-		/**
-		 *\~english
-		 *\return		The intensity values.
-		 *\~french
-		 *\return		Les valeurs d'intensité.
-		 */
+
 		inline castor::Point2f const & getIntensity()const
 		{
 			return m_intensity;
 		}
-		/**
-		 *\~english
-		 *\return		The intensity values.
-		 *\~french
-		 *\return		Les valeurs d'intensité.
-		 */
-		inline castor::Point2f & getIntensity()
-		{
-			return m_intensity;
-		}
-		/**
-		 *\~english
-		 *\return		The depth of the far plane.
-		 *\~french
-		 *\return		La profondeur du plan éloigné.
-		 */
+
 		inline float getFarPlane()const
 		{
 			return m_farPlane;
 		}
-		/**
-		 *\~english
-		 *\return		The step count used for volumetric scattering.
-		 *\~french
-		 *\return		Le nombre d'étapes utilisé pour le volumetric scattering.
-		 */
+
 		inline uint32_t getVolumetricSteps()const
 		{
 			return m_volumetricSteps;
 		}
-		/**
-		 *\~english
-		 *\return		The volumetric scattering factor.
-		 *\~french
-		 *\return		Le facteur de volumetric scattering.
-		 */
+
 		inline float getVolumetricScatteringFactor()const
 		{
 			return m_volumetricScattering;
 		}
-		/**
-		 *\~english
-		 *\return		The colour.
-		 *\~french
-		 *\return		La couleur.
-		 */
+
 		inline castor::Point3f const & getColour()const
 		{
 			return m_colour;
 		}
-		/**
-		 *\~english
-		 *\return		The colour.
-		 *\~french
-		 *\return		La couleur.
-		 */
-		inline castor::Point3f & getColour()
-		{
-			return m_colour;
-		}
-		/**
-		 *\~english
-		 *\return		The parent light.
-		 *\~french
-		 *\return		La lumière parente.
-		 */
+
 		inline Light const & getLight()const
 		{
 			return m_light;
 		}
-		/**
-		 *\~english
-		 *\return		The parent light.
-		 *\~french
-		 *\return		La lumière parente.
-		 */
-		inline Light & getLight()
-		{
-			return m_light;
-		}
-		/**
-		 *\~english
-		 *\return		The light's cube box.
-		 *\~french
-		 *\return		La cube box de la lumière.
-		 */
+
 		inline castor::BoundingBox const & getBoundingBox()const
 		{
 			return m_cubeBox;
 		}
+
+		inline castor::Point2f const & getShadowOffsets()const
+		{
+			return m_shadowOffsets;
+		}
+
+		inline castor::Point2f const & getShadowVariance()const
+		{
+			return m_shadowVariance;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline Light & getLight()
+		{
+			return m_light;
+		}
+
+		inline castor::Point3f & getColour()
+		{
+			return m_colour;
+		}
+
+		inline castor::Point2f & getIntensity()
+		{
+			return m_intensity;
+		}
+
+		inline void setColour( castor::Point3f const & value )
+		{
+			m_colour = value;
+		}
+
+		inline void setIntensity( castor::Point2f const & value )
+		{
+			m_intensity = value;
+		}
+
+		inline void setDiffuseIntensity( float value )
+		{
+			m_intensity[0] = value;
+		}
+
+		inline void setSpecularIntensity( float value )
+		{
+			m_intensity[1] = value;
+		}
+
+		inline void setVolumetricSteps( uint32_t value )
+		{
+			m_volumetricSteps = value;
+		}
+
+		inline void setVolumetricScatteringFactor( float value )
+		{
+			m_volumetricScattering = value;
+		}
+
+		inline void setShadowMinOffset( float value )
+		{
+			m_shadowOffsets[0] = value;
+		}
+
+		inline void setShadowMaxSlopeOffset( float value )
+		{
+			m_shadowOffsets[1] = value;
+		}
+
+		inline void setShadowMaxVariance( float value )
+		{
+			m_shadowVariance[0] = value;
+		}
+
+		inline void setShadowVarianceBias( float value )
+		{
+			m_shadowVariance[1] = value;
+		}
+		/**@}*/
 
 	protected:
 		/**
@@ -343,6 +284,19 @@ namespace castor3d
 		 *\param[in]	buffer		Le tampon de destination.
 		 */
 		void doCopyComponent( castor::Point2f const & components
+			, castor::Point4f *& buffer )const;
+		/**
+		 *\~english
+		 *\brief		Copies the given light PixelComponents values into the buffer.
+		 *\param[in]	components1, components2	The components.
+		 *\param[out]	buffer						The destination buffer.
+		 *\~french
+		 *\brief		Copie les valeurs de la composante de lumière donnée dans le tampon.
+		 *\param[in]	components1, components2	Les composantes.
+		 *\param[in]	buffer						Le tampon de destination.
+		 */
+		void doCopyComponent( castor::Point2f const & components1
+			, castor::Point2f const & components2
 			, castor::Point4f *& buffer )const;
 		/**
 		 *\~english
@@ -509,6 +463,8 @@ namespace castor3d
 		castor::Point2f m_intensity{ 1.0, 1.0 };
 		uint32_t m_volumetricSteps{ 0u };
 		float m_volumetricScattering{ 0.2f };
+		castor::Point2f m_shadowOffsets;
+		castor::Point2f m_shadowVariance;
 	};
 }
 

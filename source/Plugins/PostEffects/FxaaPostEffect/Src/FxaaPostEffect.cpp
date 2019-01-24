@@ -8,6 +8,7 @@
 #include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -40,17 +41,20 @@ namespace fxaa
 			// Shader inputs
 			UBO_FXAA( writer, 0u, 0u );
 			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
 			auto out = writer.getOut();
 
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareInvertVec2Y();
+
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = utils.bottomUpToTopDown( uv );
 					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - ( c3d_pixelSize * ( 0.5 + c3d_subpixShift ) );

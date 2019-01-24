@@ -40,7 +40,7 @@ namespace castor3d
 			//!\~english	Particles are updated using a compute shader.
 			//!\~french		Les particules sont mises à jour en utilisant un compute shader.
 			eComputeShader,
-			CASTOR_SCOPED_ENUM_BOUNDS( eCpu )
+			CU_ScopedEnumBounds( eCpu )
 		};
 
 	public:

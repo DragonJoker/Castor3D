@@ -78,7 +78,7 @@ namespace GuiCommon
 		int fontStyle{ 0 };
 		int letterCase{ 0 };
 	};
-	DECLARE_MAP( int, StyleInfo, StyleInfo );
+	CU_DeclareMap( int, StyleInfo, StyleInfo );
 }
 
 #endif

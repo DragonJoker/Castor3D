@@ -74,7 +74,7 @@ namespace castor
 	{
 		for ( auto i = 0u; i < size; ++i )
 		{
-			REQUIRE( *bits == '0' || *bits == '1' );
+			CU_Require( *bits == '0' || *bits == '1' );
 			set( m_bitCount - i - 1u, ( *bits++ ) == '1' );
 		}
 	}
@@ -82,7 +82,7 @@ namespace castor
 	template< typename BlockType >
 	inline void DynamicBitsetT< BlockType >::set( size_t bit, bool value )
 	{
-		REQUIRE( bit < m_bitCount );
+		CU_Require( bit < m_bitCount );
 
 		BlockType & block = m_blocks[details::getBlockIndex< BlockType >( bit )];
 		BlockType mask = BlockType{ 1u } << details::getBitIndex< BlockType >( bit );
@@ -95,7 +95,7 @@ namespace castor
 	template< typename BlockType >
 	inline bool DynamicBitsetT< BlockType >::get( size_t bit )const
 	{
-		REQUIRE( bit < m_bitCount );
+		CU_Require( bit < m_bitCount );
 		return ( m_blocks[details::getBlockIndex< BlockType >( bit )] & details::makeBitMask< BlockType >( details::getBitIndex< BlockType >( bit ) ) )
 			? true
 			: false;
@@ -104,7 +104,7 @@ namespace castor
 	template< typename BlockType >
 	inline BlockType DynamicBitsetT< BlockType >::getBlock( size_t index )const
 	{
-		REQUIRE( index < m_blocks.size() );
+		CU_Require( index < m_blocks.size() );
 		return m_blocks[index];
 	}
 

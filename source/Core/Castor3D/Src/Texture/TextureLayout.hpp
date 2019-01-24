@@ -50,15 +50,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	folder	The folder containing the image.
+		 *\param[in]	folder		The folder containing the image.
 		 *\param[in]	relative	The image file path, relative to folder.
+		 *\param[in]	components	The components to keep in the loaded image.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	folder	Le dossier contenant l'image.
+		 *\param[in]	folder		Le dossier contenant l'image.
 		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
+		 *\param[in]	components	Les composantes à garder dans l'image chargée.
 		 */
 		C3D_API void setSource( castor::Path const & folder
-			, castor::Path const & relative );
+			, castor::Path const & relative
+			, ImageComponents components );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -112,19 +115,19 @@ namespace castor3d
 
 		inline ashes::Texture const & getTexture()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline TextureView const & getImage( size_t index = 0u )const
 		{
-			REQUIRE( index < m_views.size() && m_views[index] );
+			CU_Require( index < m_views.size() && m_views[index] );
 			return *m_views[index];
 		}
 
 		inline TextureView & getImage( size_t index = 0u )
 		{
-			REQUIRE( index < m_views.size() && m_views[index] );
+			CU_Require( index < m_views.size() && m_views[index] );
 			return *m_views[index];
 		}
 
@@ -140,13 +143,13 @@ namespace castor3d
 
 		inline TextureView const & getDefaultImage()const
 		{
-			REQUIRE( m_defaultView );
+			CU_Require( m_defaultView );
 			return *m_defaultView;
 		}
 
 		inline TextureView & getDefaultImage()
 		{
-			REQUIRE( m_defaultView );
+			CU_Require( m_defaultView );
 			return *m_defaultView;
 		}
 

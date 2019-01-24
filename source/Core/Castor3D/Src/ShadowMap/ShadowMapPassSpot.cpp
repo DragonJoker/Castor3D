@@ -80,7 +80,7 @@ namespace castor3d
 		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
 		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.attachments[2].format = ShadowMapSpot::VarianceFormat;
 		renderPass.attachments[2].loadOp = ashes::AttachmentLoadOp::eClear;
@@ -89,7 +89,7 @@ namespace castor3d
 		renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 		renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
 		renderPass.attachments[2].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[2].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;

@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include "Miscellaneous/CpuInformations.hpp"
 
@@ -13,7 +13,7 @@ namespace castor
 {
 	namespace Platform
 	{
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
 		{

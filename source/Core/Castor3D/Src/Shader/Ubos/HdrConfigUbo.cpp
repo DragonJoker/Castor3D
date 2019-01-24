@@ -48,7 +48,7 @@ namespace castor3d
 
 	void HdrConfigUbo::update( HdrConfig const & config )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).setExposure( config.getExposure() );
 		m_ubo->getData( 0u ).setGamma( config.getGamma() );
 		m_ubo->upload();

@@ -8,6 +8,7 @@
 #include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -38,17 +39,20 @@ namespace smaa
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
-					vtx_texture = texcoord;
+					vtx_texture = utils.bottomUpToTopDown( uv );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

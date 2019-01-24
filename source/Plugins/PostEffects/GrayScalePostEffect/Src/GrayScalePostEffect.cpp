@@ -14,6 +14,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -40,23 +41,26 @@ namespace GrayScale
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram()
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 texcoord = writer.declInput< Vec2 >( "texcoord", 1u );
+			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = texcoord;
+					vtx_texture = utils.bottomUpToTopDown( uv );
 					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -166,7 +170,7 @@ namespace GrayScale
 		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
 		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
-		m_vertexShader.shader = getVertexProgram();
+		m_vertexShader.shader = getVertexProgram( renderSystem );
 		m_pixelShader.shader = getFragmentProgram();
 		ashes::ShaderStageStateArray stages;
 		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );

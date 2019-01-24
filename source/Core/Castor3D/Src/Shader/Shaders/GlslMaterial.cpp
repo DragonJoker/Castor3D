@@ -25,7 +25,7 @@ namespace castor3d
 			, m_refractionRatio{ m_reflRefr.x() }
 			, m_hasRefraction{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.y() ) ) }
 			, m_hasReflection{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_reflRefr.z() ) ) }
-			, m_exposure{ m_reflRefr.w() }
+			, m_bwAccumulationOperator{ m_reflRefr.w() }
 			, m_subsurfaceScatteringEnabled{ shader, makeCast( shader->getTypesCache().getInt(), makeExpr( *shader, m_sssInfo.x() ) ) }
 			, m_gaussianWidth{ shader, makeExpr( *shader, m_sssInfo.y() ) }
 			, m_subsurfaceScatteringStrength{ shader, makeExpr( *shader, m_sssInfo.z() ) }

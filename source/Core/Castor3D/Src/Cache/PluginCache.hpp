@@ -155,7 +155,7 @@ namespace castor3d
 		std::recursive_mutex m_mutexLoadedPluginTypes;
 	};
 	using PluginCache = Cache< Plugin, castor::String >;
-	DECLARE_SMART_PTR( PluginCache );
+	CU_DeclareSmartPtr( PluginCache );
 }
 
 #endif

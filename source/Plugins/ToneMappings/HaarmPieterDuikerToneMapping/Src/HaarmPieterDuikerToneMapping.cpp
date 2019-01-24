@@ -53,7 +53,7 @@ namespace HaarmPieterDuiker
 			{
 				writer.returnStmt( log2( v ) / log2( 10.0_f ) );
 			}
-			, InVec3{ writer, "in" } );
+			, InVec3{ writer, "v" } );
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()

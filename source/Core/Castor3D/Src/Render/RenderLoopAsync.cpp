@@ -93,7 +93,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_RENDER_SYNC_FRAME );
+			CU_Exception( CALL_RENDER_SYNC_FRAME );
 		}
 
 		if ( m_rendering )
@@ -116,7 +116,7 @@ namespace castor3d
 	{
 		if ( m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
+			CU_Exception( CALL_PAUSE_RENDERING );
 		}
 
 		m_paused = true;
@@ -131,7 +131,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
+			CU_Exception( CALL_RESUME_RENDERING );
 		}
 
 		m_paused = false;

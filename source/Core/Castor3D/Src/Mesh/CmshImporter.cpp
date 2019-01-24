@@ -25,7 +25,7 @@ namespace castor3d
 
 	bool CmshImporter::doImportScene( Scene & scene )
 	{
-		CASTOR_EXCEPTION( "WTF are you trying to do? There is no scene, in a cmsh file." );
+		CU_Exception( "WTF are you trying to do? There is no scene, in a cmsh file." );
 	}
 
 	bool CmshImporter::doImportMesh( Mesh & mesh )

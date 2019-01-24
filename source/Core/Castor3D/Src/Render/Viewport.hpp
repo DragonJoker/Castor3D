@@ -183,6 +183,13 @@ namespace castor3d
 		 */
 		C3D_API void resize( const castor::Size & value );
 		/**
+		 *\~english
+		 *\return		The number of pixels per meter at z = -1.
+		 *\~french
+		 *\return		Le nombre de pixels par mètre, pour z = -1.
+		 */
+		C3D_API float getProjectionScale()const;
+		/**
 		*\~english
 		*name
 		*	Getters.

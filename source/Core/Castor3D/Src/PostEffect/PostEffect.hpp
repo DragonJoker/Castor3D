@@ -153,7 +153,7 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_result );
+			CU_Require( m_result );
 			return *m_result;
 		}
 

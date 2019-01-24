@@ -101,7 +101,7 @@ namespace castor3d
 					, programFlags
 					, sceneFlags
 					, alphaFunc );
-				REQUIRE( result );
+				CU_Require( result );
 				return doAddBillboardProgram( std::move( result )
 					, passFlags
 					, textureFlags
@@ -134,7 +134,7 @@ namespace castor3d
 					, sceneFlags
 					, alphaFunc
 					, invertNormals );
-				REQUIRE( result );
+				CU_Require( result );
 				return doAddAutomaticProgram( std::move( result )
 					, passFlags
 					, textureFlags
@@ -241,7 +241,7 @@ namespace castor3d
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( cuT( "position" ), 0u );
-		auto texture = writer.declInput< Vec2 >( cuT( "texcoord" ), 1u );
+		auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
 		auto center = writer.declInput< Vec3 >( cuT( "center" ), 2u );
 		auto in = writer.getIn();
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -313,7 +313,7 @@ namespace castor3d
 				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
 
-				vtx_texture = vec3( texture, 0.0 );
+				vtx_texture = vec3( uv, 0.0 );
 				vtx_instance = in.gl_InstanceID;
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );

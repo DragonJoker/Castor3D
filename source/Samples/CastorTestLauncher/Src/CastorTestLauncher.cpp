@@ -101,7 +101,7 @@ namespace test_launcher
 
 			for ( auto file : arrayFiles )
 			{
-				if ( file.getExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
 					if ( !castor->getPluginCache().loadPlugin( file ) )
 					{
@@ -115,12 +115,12 @@ namespace test_launcher
 
 		if ( renderers.empty() )
 		{
-			CASTOR_EXCEPTION( "No renderer plug-ins" );
+			CU_Exception( "No renderer plug-ins" );
 		}
 
 		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
 		{
-			CASTOR_EXCEPTION( "Renderer plug-in was not selected" );
+			CU_Exception( "Renderer plug-in was not selected" );
 		}
 
 		castor->loadRenderer( m_rendererType );

@@ -122,13 +122,13 @@ namespace castor3d
 			{
 				if ( linear < threshold )
 				{
-					REQUIRE( result >= constant );
+					CU_Require( result >= constant );
 					result = sqrtf( ( result - constant ) / quadratic );
 				}
 				else
 				{
 					auto delta = linear * linear - 4 * quadratic * ( constant - result );
-					REQUIRE( delta >= 0 );
+					CU_Require( delta >= 0 );
 					result = ( -linear + sqrtf( delta ) ) / ( 2 * quadratic );
 				}
 			}
@@ -312,23 +312,29 @@ namespace castor3d
 	{
 	}
 
-	void LightPass::update( castor::Size const & size
+	void LightPass::update( bool first
+		, castor::Size const & size
 		, Light const & light
-		, Camera const & camera )
-	{
-		auto index = size_t( light.getShadowType() ) + size_t( ( light.getVolumetricSteps() > 0 ? 1u : 0u ) * size_t( ShadowType::eCount ) );
-		m_pipeline = &m_pipelines[index];
-		doUpdate( size, light, camera );
-	}
-
-	ashes::Semaphore const & LightPass::render( uint32_t index
-		, ashes::Semaphore const & toWait
+		, Camera const & camera
 		, ShadowMap const * shadowMap
 		, uint32_t shadowMapIndex )
 	{
+		auto index = size_t( light.getShadowType() ) + size_t( ( light.getVolumetricSteps() > 0 ? 1u : 0u ) * size_t( ShadowType::eCount ) );
+		m_pipeline = &m_pipelines[index];
+		doUpdate( first
+			, size
+			, light
+			, camera
+			, shadowMap
+			, shadowMapIndex );
+	}
+
+	ashes::Semaphore const & LightPass::render( uint32_t index
+		, ashes::Semaphore const & toWait )
+	{
 		static ashes::DepthStencilClearValue const clearDepthStencil{ 1.0, 1 };
 		static ashes::ClearColorValue const clearColour{ 0.0, 0.0, 0.0, 1.0 };
-		REQUIRE( m_pipeline );
+		CU_Require( m_pipeline );
 		auto result = &toWait;
 		auto & device = getCurrentDevice( m_engine );
 
@@ -566,6 +572,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *m_engine.getRenderSystem();
 
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
@@ -600,14 +607,14 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 		shader::LegacyMaterials materials{ writer };
-		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -743,6 +750,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *m_engine.getRenderSystem();
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
@@ -778,14 +786,14 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 		shader::LegacyMaterials materials{ writer };
-		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils
@@ -981,6 +989,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *m_engine.getRenderSystem();
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
@@ -1012,14 +1021,14 @@ namespace castor3d
 				, volumetric
 				, index );
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
 		shader::LegacyMaterials materials{ writer };
-		materials.declare( m_engine.getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
 			, lighting->getShadowModel()
 			, utils

@@ -323,7 +323,7 @@ namespace GuiCommon
 				auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
 					, image
 					, ashes::MemoryPropertyFlag::eHostVisible );
-				texture->getImage().initialiseSource( Path{}, path );
+				texture->getImage().initialiseSource( Path{}, path, ImageComponents::eAll );
 				unit->setTexture( texture );
 				unit->initialise();
 			}

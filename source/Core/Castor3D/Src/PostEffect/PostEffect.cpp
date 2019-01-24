@@ -19,7 +19,7 @@ namespace castor3d
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
-		, Parameters const & CU_PARAM_UNUSED( parameters )
+		, Parameters const & CU_UnusedParam( parameters )
 		, bool postToneMapping )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, Named{ name }
@@ -51,7 +51,7 @@ namespace castor3d
 			, name
 			, m_passesCount );
 		auto result = doInitialise( *m_timer );
-		ENSURE( m_result != nullptr );
+		CU_Ensure( m_result != nullptr );
 		return result;
 	}
 

@@ -14,15 +14,15 @@ namespace castor3d
 	class IViewportImpl;
 	class Ray;
 
-	DECLARE_SMART_PTR( Camera );
-	DECLARE_SMART_PTR( Viewport );
-	DECLARE_SMART_PTR( IViewportImpl );
-	DECLARE_SMART_PTR( Ray );
+	CU_DeclareSmartPtr( Camera );
+	CU_DeclareSmartPtr( Viewport );
+	CU_DeclareSmartPtr( IViewportImpl );
+	CU_DeclareSmartPtr( Ray );
 
 	//! Camera pointer map, sorted by name
-	DECLARE_MAP( castor::String, CameraSPtr, CameraPtrStr );
+	CU_DeclareMap( castor::String, CameraSPtr, CameraPtrStr );
 	//! Camera pointer array
-	DECLARE_VECTOR( CameraSPtr, CameraPtr );
+	CU_DeclareVector( CameraSPtr, CameraPtr );
 
 	//@}
 }

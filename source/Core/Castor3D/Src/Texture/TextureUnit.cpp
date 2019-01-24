@@ -199,7 +199,7 @@ namespace castor3d
 		{
 			result = m_texture->initialise();
 			auto sampler = getSampler();
-			REQUIRE( sampler );
+			CU_Require( sampler );
 			sampler->initialise();
 
 			if ( result && m_texture->getMipmapCount() > 1u )
@@ -243,7 +243,7 @@ namespace castor3d
 
 	ashes::TextureType TextureUnit::getType()const
 	{
-		REQUIRE( m_texture );
+		CU_Require( m_texture );
 		return m_texture->getType();
 	}
 }

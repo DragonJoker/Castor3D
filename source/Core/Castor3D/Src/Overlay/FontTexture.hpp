@@ -24,7 +24,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		DECLARE_MAP( char32_t, castor::Position, GlyphPosition );
+		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
 		using OnChangedFunction = std::function< void( FontTexture const & ) >;
 		using OnChanged = castor::Signal< OnChangedFunction >;
 

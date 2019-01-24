@@ -23,18 +23,18 @@ SOFTWARE.
 #ifndef ___CU_Config_HPP___
 #define ___CU_Config_HPP___
 
-#define CASTOR_USE_PCH @CASTOR_USE_PCH@
+#define CU_UsePCH @CASTOR_USE_PCH@
 
 //! Tells whether or not to use doubles for type real (if not, floats are used)
-#undef CASTOR_USE_DOUBLE
-#define CASTOR_USE_DOUBLE @CASTOR_USE_DOUBLE@
+#undef CU_UseDouble
+#define CU_UseDouble @CASTOR_USE_DOUBLE@
 
 //! Tells whether or not use function tracking
-#undef CASTOR_USE_TRACK
-#define CASTOR_USE_TRACK @CASTOR_USE_TRACK@
+#undef CU_UseTrack
+#define CU_UseTrack @CASTOR_USE_TRACK@
 
 //! Tells whether or not the build has Xinerama.
-#undef CASTOR_HAS_XINERAMA
-#define CASTOR_HAS_XINERAMA @CASTOR_HAS_XINERAMA@
+#undef CU_HasXinerama
+#define CU_HasXinerama @CASTOR_HAS_XINERAMA@
 
 #endif

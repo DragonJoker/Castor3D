@@ -8,7 +8,7 @@
 
 #include "BloomPostEffect.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Bloom_API
 #else
 #	ifdef BloomPostEffect_EXPORTS

@@ -23,7 +23,7 @@ namespace castor
 		eNoInstance,
 		//\~english An instance found when there shouldn't be one.	\~french Un intance alors qu'on ne devrait pas en avoir.
 		eAnInstance,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoInstance )
+		CU_ScopedEnumBounds( eNoInstance )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,20 +52,21 @@ namespace castor
 		: public castor::Exception
 	{
 	public:
-		UnicityException( UnicityError p_error
-			, std::string const & p_description
-			, char const * p_file
-			, char const * p_function
-			, uint32_t p_line )
-			: Exception( STR_UNICITY_ERROR[uint32_t( p_error )] + p_description
-				, p_file
-				, p_function
-				, p_line )
+		UnicityException( UnicityError error
+			, std::string const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: Exception( STR_UNICITY_ERROR[uint32_t( error )] + description
+				, file
+				, function
+				, line )
 		{
 		}
 	};
-	//!\~english Helper macro to use UnicityException	\~french Macro pour faciliter l'utilisation de UnicityException
-#	define UNICITY_ERROR( p_error, p_text ) throw UnicityException( p_error, p_text, __FILE__, __FUNCTION__, __LINE__)
+	//!\~english	Helper macro to use UnicityException.
+	//\~french		Macro pour faciliter l'utilisation de UnicityException.
+#	define CU_UnicityError( error, text ) throw UnicityException( error, text, __FILE__, __FUNCTION__, __LINE__)
 }
 
 #endif

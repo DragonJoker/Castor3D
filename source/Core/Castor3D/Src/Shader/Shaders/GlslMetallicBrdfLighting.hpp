@@ -155,16 +155,6 @@ namespace castor3d
 				, sdw::InFloat
 				, FragmentInput
 				, OutputComponents & > m_computeLight;
-			sdw::Function< sdw::Void
-				, InLight
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InFloat
-				, FragmentInput
-				, OutputComponents & > m_computeOneLight;
 		};
 	}
 }

@@ -113,7 +113,7 @@ namespace GuiCommon
 
 	bool CastorApplication::OnInit()
 	{
-#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
@@ -302,7 +302,7 @@ namespace GuiCommon
 
 		if ( renderers.empty() )
 		{
-			CASTOR_EXCEPTION( "No renderer plug-ins" );
+			CU_Exception( "No renderer plug-ins" );
 		}
 		else if ( renderers.size() == 1 )
 		{

@@ -128,7 +128,7 @@ namespace castor3d
 		*/
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 

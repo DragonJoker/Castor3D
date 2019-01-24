@@ -220,7 +220,7 @@ namespace castor3d
 		, SceneNodeSPtr parent
 		, MeshSPtr mesh )
 	{
-		REQUIRE( mesh );
+		CU_Require( mesh );
 		auto result = MyObjectCache::add( name, parent, mesh );
 		doRegister( *result );
 		return result;

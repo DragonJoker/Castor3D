@@ -210,14 +210,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
 		 *\param[in]	folder		The folder containing the image.
-		 *\param[in]	relative	The image file path, relative to p_folder.
+		 *\param[in]	relative	The image file path, relative to folder.
+		 *\param[in]	components	The components to keep in the loaded image.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
 		 *\param[in]	folder		Le dossier contenant l'image.
-		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à p_folder.
+		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
+		 *\param[in]	components	Les composantes à garder dans l'image chargée.
 		 */
 		C3D_API void initialiseSource( castor::Path const & folder
-			, castor::Path const & relative );
+			, castor::Path const & relative
+			, ImageComponents components );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -284,7 +287,7 @@ namespace castor3d
 
 		inline ashes::TextureView const & getView()const
 		{
-			REQUIRE( m_view );
+			CU_Require( m_view );
 			return *m_view;
 		}
 		/**@}*/

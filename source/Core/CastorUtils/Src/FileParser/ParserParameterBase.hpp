@@ -55,7 +55,7 @@ namespace castor
 		eRgbaColour,
 		eHdrRgbColour,
 		eHdrRgbaColour,
-		CASTOR_SCOPED_ENUM_BOUNDS( eText )
+		CU_ScopedEnumBounds( eText )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

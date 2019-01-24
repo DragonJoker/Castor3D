@@ -46,7 +46,7 @@ namespace castor3d
 				break;
 
 			default:
-				FAILURE( cuT( "Unsupported pass type" ) );
+				CU_Failure( cuT( "Unsupported pass type" ) );
 				break;
 			}
 		}
@@ -113,11 +113,11 @@ namespace castor3d
 			break;
 
 		default:
-			FAILURE( cuT( "Unsupported pass type" ) );
+			CU_Failure( cuT( "Unsupported pass type" ) );
 			break;
 		}
 
-		REQUIRE( newPass );
+		CU_Require( newPass );
 		m_passListeners.emplace( newPass, newPass->onChanged.connect( [this]( Pass const & pass )
 			{
 				onPassChanged( pass );
@@ -141,13 +141,13 @@ namespace castor3d
 
 	PassSPtr Material::getPass( uint32_t index )const
 	{
-		REQUIRE( index < m_passes.size() );
+		CU_Require( index < m_passes.size() );
 		return m_passes[index];
 	}
 
 	void Material::destroyPass( uint32_t index )
 	{
-		REQUIRE( index < m_passes.size() );
+		CU_Require( index < m_passes.size() );
 		m_passListeners.erase( *( m_passes.begin() + index ) );
 		m_passes.erase( m_passes.begin() + index );
 		onChanged( *this );

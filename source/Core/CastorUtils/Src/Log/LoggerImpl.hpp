@@ -24,7 +24,7 @@ namespace castor
 	class LoggerImpl
 	{
 	private:
-		DECLARE_MAP( void *, LogCallback, LoggerCallback );
+		CU_DeclareMap( void *, LogCallback, LoggerCallback );
 
 	public:
 		/**

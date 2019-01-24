@@ -22,7 +22,7 @@ namespace castor3d
 	{
 	public:
 		typedef std::pair< castor::String, castor::String > Extension;
-		DECLARE_VECTOR( Extension, Extension );
+		CU_DeclareVector( Extension, Extension );
 
 	private:
 		friend class Plugin;

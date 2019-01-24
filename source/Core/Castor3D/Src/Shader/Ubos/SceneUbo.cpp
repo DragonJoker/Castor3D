@@ -56,7 +56,7 @@ namespace castor3d
 
 	void SceneUbo::updateCameraPosition( Camera const & camera )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		auto position = camera.getParent()->getDerivedPosition();
 		configuration.cameraPos = Point4f{ position[0], position[1], position[2], 0.0 };
@@ -68,7 +68,7 @@ namespace castor3d
 	void SceneUbo::update( Camera const * camera
 		, Fog const & fog )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.fogType = int( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
@@ -85,7 +85,7 @@ namespace castor3d
 		, Camera const * camera
 		, bool lights )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 
 		if ( lights )
@@ -102,7 +102,7 @@ namespace castor3d
 
 	void SceneUbo::setWindowSize( Size const & window )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).windowSize = castor::Point2i{ window[0], window[1] };
 	}
 }

@@ -264,6 +264,7 @@ namespace castor3d
 					result.m_colourIndex = texelFetch( c3d_sLights, offset++ );
 					result.m_intensityFarPlane = texelFetch( c3d_sLights, offset++ );
 					result.m_volumetric = texelFetch( c3d_sLights, offset++ );
+					result.m_shadow = texelFetch( c3d_sLights, offset++ );
 #endif
 					m_writer.returnStmt( result );
 				}
@@ -287,7 +288,7 @@ namespace castor3d
 #else
 
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );
-					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( int( MaxLightComponentsCount ) ) + Int( int( BaseLightComponentsCount ) ) );
 					auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( cuT( "c3d_maxCascadeCount" ) );
 					result.m_directionCount = texelFetch( c3d_sLights, offset++ );
 					result.m_direction = normalize( result.m_direction );

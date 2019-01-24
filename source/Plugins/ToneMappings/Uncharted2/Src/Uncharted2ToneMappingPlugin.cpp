@@ -9,7 +9,7 @@
 
 using namespace Uncharted2;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Uncharted2ToneMapping_API
 #else
 #	ifdef Uncharted2ToneMapping_EXPORTS

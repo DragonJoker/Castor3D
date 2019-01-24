@@ -14,10 +14,10 @@ namespace castor
 	\date		03/01/2011
 	\~english
 	\brief		Helper class, used to track entering and leaving a block
-	\remark		Call the macro CASTOR_TRACK() at the beginning of a block to have a console output when entering or leaving that block
+	\remark		Call the macro CU_Track() at the beginning of a block to have a console output when entering or leaving that block
 	\~french
 	\brief		Classe permettant de tracer les entrées et sorties de bloc
-	\remark		Appelez la macro CASTOR_TRACK() au début d'un bloc pour avoir une entrée dans la console en entrée et en sortie du bloc
+	\remark		Appelez la macro CU_Track() au début d'un bloc pour avoir une entrée dans la console en entrée et en sortie du bloc
 	*/
 	class BlockTracker
 	{
@@ -50,6 +50,6 @@ namespace castor
 	};
 }
 
-#	define CASTOR_TRACK( fn ) castor::BlockTracker tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CU_Track( fn ) castor::BlockTracker tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

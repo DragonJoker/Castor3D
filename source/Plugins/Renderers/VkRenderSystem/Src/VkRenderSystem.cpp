@@ -17,7 +17,7 @@
 #	include "spirv_glsl.hpp"
 #endif
 
-#define C3DVkRenderer_DebugSpirV 0
+#define C3DVkRenderer_DebugSpirV 1
 
 using namespace castor;
 
@@ -83,26 +83,6 @@ namespace VkRender
 			return result;
 		}
 
-		void doFillConstant( ashes::SpecialisationInfoBase const & specialisationInfo
-			, ashes::SpecialisationMapEntry const & entry
-			, spirv_cross::SPIRType const & type
-			, spirv_cross::SPIRConstant & constant )
-		{
-			auto offset = entry.offset;
-			auto size = type.width * type.vecsize;
-
-			for ( auto col = 0u; col < type.vecsize; ++col )
-			{
-				for ( auto vec = 0u; vec < type.vecsize; ++vec )
-				{
-					std::memcpy( &constant.m.c[col].r[vec]
-						, specialisationInfo.getData() + offset
-						, size );
-					offset += size;
-				}
-			}
-		}
-
 		void doSetEntryPoint( ashes::ShaderStageFlag stage
 			, spirv_cross::CompilerGLSL & compiler )
 		{
@@ -161,56 +141,67 @@ namespace VkRender
 		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, true, true )
 	{
+		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+			{
+				if ( newLine )
+				{
+					Logger::logTrace( msg );
+				}
+				else
+				{
+					Logger::logTraceNoNL( msg );
+				}
+			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logDebug( msg );
-			}
-			else
-			{
-				Logger::logDebugNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logDebug( msg );
+				}
+				else
+				{
+					Logger::logDebugNoNL( msg );
+				}
+			} );
 		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logInfo( msg );
-			}
-			else
-			{
-				Logger::logInfoNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logInfo( msg );
+				}
+				else
+				{
+					Logger::logInfoNoNL( msg );
+				}
+			} );
 		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logWarning( msg );
-			}
-			else
-			{
-				Logger::logWarningNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logWarning( msg );
+				}
+				else
+				{
+					Logger::logWarningNoNL( msg );
+				}
+			} );
 		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logError( msg );
-			}
-			else
-			{
-				Logger::logErrorNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logError( msg );
+				}
+				else
+				{
+					Logger::logErrorNoNL( msg );
+				}
+			} );
 		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-		{
-			string::stringCast< char >( appName ),
-			"Castor3D",
-			enableValidation,
-		} ) );
+			{
+				string::stringCast< char >( appName ),
+				"Castor3D",
+				enableValidation,
+			} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
 		auto & gpu = m_renderer->getPhysicalDevice( 0u );
 		m_memoryProperties = gpu.getMemoryProperties();
@@ -239,27 +230,41 @@ namespace VkRender
 
 		if ( module.shader )
 		{
-#if !defined( NDEBUG ) && C3DVkRenderer_HasSPIRVCross && C3DVkRenderer_DebugSpirV
+#if !defined( NDEBUG )
+
+			auto glsl = glsl::compileGlsl( *module.shader
+				, ast::SpecialisationInfo{}
+				, glsl::GlslConfig
+				{
+					module.shader->getType(),
+					460,
+					true,
+					false,
+					true,
+					true,
+					true,
+					true,
+				} );
+
+			// Don't do this at home !
+			const_cast< castor3d::ShaderModule & >( module ).source = glsl + "\n" + spirv::writeSpirv( *module.shader );
 
 			result = spirv::serialiseSpirv( *module.shader );
-			auto stream = castor::makeStringStream();
-			stream << spirv::writeSpirv( *module.shader );
+
+#	if C3DVkRenderer_HasSPIRVCross && C3DVkRenderer_DebugSpirV
+
 			std::string name = module.name + "_" + getName( module.stage );
-			std::clog << std::endl << module.name + " " + getName( module.stage ) << " shader:" << std::endl;
-			std::clog << stream.str() << std::endl;
-			std::string glsl;
 
 			try
 			{
-				glsl = compileSpvToGlsl( *getMainDevice()
+				auto glsl2 = compileSpvToGlsl( *getMainDevice()
 					, result
 					, module.stage );
+				const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glsl2;
 			}
 			catch ( std::exception & exc )
 			{
-				auto stream = castor::makeStringStream();
-				stream << spirv::writeSpirv( *module.shader );
-				std::cerr << stream.str() << std::endl;
+				std::cerr << module.source << std::endl;
 				std::cerr << exc.what() << std::endl;
 				{
 					BinaryFile file{ File::getExecutableDirectory() / ( name + "_sdw.spv" )
@@ -267,77 +272,19 @@ namespace VkRender
 					file.writeArray( result.data()
 						, result.size() );
 				}
-				glsl = glsl::compileGlsl( *module.shader
-					, ast::SpecialisationInfo{}
-					, glsl::GlslConfig
-					{
-						460,
-						true,
-						true,
-						true,
-						true,
-						true,
-					} );
-				result = castor3d::compileGlslToSpv( *getMainDevice()
+
+				auto ref = castor3d::compileGlslToSpv( *getMainDevice()
 					, module.stage
 					, glsl );
 				{
 					BinaryFile file{ File::getExecutableDirectory() / ( name + "_glslang.spv" )
 						, File::OpenMode::eWrite };
-					file.writeArray( result.data()
-						, result.size() );
+					file.writeArray( ref.data()
+						, ref.size() );
 				}
 			}
 
-#elif !defined( NDEBUG ) && C3DVkRenderer_DebugSpirV
-
-			auto glsl = glsl::compileGlsl( *module.shader
-				, ast::SpecialisationInfo{}
-				, glsl::GlslConfig
-				{
-					460,
-					true,
-					true,
-					true,
-					true,
-					true,
-				} );
-			result = castor3d::compileGlslToSpv( *getMainDevice()
-				, module.stage
-				, glsl );
-
-#elif !defined( NDEBUG )
-
-			auto glsl = glsl::compileGlsl( *module.shader
-				, ast::SpecialisationInfo{}
-				, glsl::GlslConfig
-				{
-					460,
-					true,
-					true,
-					true,
-					true,
-					true,
-				} );
-			// Don't do this at home !
-			auto stream = castor::makeStringStream();
-			stream << std::endl << spirv::writeSpirv( *module.shader );
-			const_cast< castor3d::ShaderModule & >( module ).source = glsl;
-			const_cast< castor3d::ShaderModule & >( module ).source += stream.str();
-
-			result = spirv::serialiseSpirv( *module.shader );
-			{
-				std::string name = module.name + "_" + getName( module.stage );
-				BinaryFile file{ File::getExecutableDirectory() / ( name + "_sdw.spv" )
-					, File::OpenMode::eWrite };
-				file.writeArray( result.data()
-					, result.size() );
-			}
-
-			//result = castor3d::compileGlslToSpv( *getMainDevice()
-			//	, module.stage
-			//	, glsl );
-
+#	endif
 #else
 
 			result = spirv::serialiseSpirv( *module.shader );

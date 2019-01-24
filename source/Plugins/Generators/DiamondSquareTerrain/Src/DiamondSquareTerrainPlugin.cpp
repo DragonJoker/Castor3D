@@ -3,7 +3,7 @@
 #include <Engine.hpp>
 #include <Log/Logger.hpp>
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_DiamondSquareTerrain_API
 #else
 #	ifdef DiamondSquareTerrain_EXPORTS

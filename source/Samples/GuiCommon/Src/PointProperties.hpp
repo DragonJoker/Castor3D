@@ -100,7 +100,7 @@ namespace GuiCommon
 	typedef DoublePointProperty< 3 > Point3dProperty;
 	typedef DoublePointProperty< 4 > Point4dProperty;
 
-#if CASTOR_USE_DOUBLE
+#if CU_UseDouble
 	typedef Point2dProperty Point2rProperty;
 	typedef Point3dProperty Point3rProperty;
 	typedef Point4dProperty Point4rProperty;

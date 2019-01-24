@@ -1,6 +1,6 @@
 #include "Log/LoggerConsole.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include "Miscellaneous/StringUtils.hpp"
 
@@ -15,7 +15,7 @@
 
 namespace castor
 {
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 	class ConsoleHandle
 	{

@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
 		 *\param[in]	index	L'indice de la source lumineuse.
 		 */
-		C3D_API void bind( castor::Point4f * buffer );
+		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material.
@@ -266,6 +266,26 @@ namespace castor3d
 		inline void setVolumetricScatteringFactor( float value )
 		{
 			m_category->setVolumetricScatteringFactor( value );
+		}
+
+		inline void setShadowMinOffset( float value )
+		{
+			m_category->setShadowMinOffset( value );
+		}
+
+		inline void setShadowMaxSlopeOffset( float value )
+		{
+			m_category->setShadowMaxSlopeOffset( value );
+		}
+
+		inline void setShadowMaxVariance( float value )
+		{
+			m_category->setShadowMaxVariance( value );
+		}
+
+		inline void setShadowVarianceBias( float value )
+		{
+			m_category->setShadowVarianceBias( value );
 		}
 
 		inline void setEnabled( bool value )

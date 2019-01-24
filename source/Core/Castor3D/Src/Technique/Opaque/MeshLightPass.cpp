@@ -48,7 +48,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eLoad;
 			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.attachments[1].format = diffuseView.getFormat();
@@ -236,13 +236,11 @@ namespace castor3d
 	}
 
 	ashes::Semaphore const & MeshLightPass::render( uint32_t index
-		, ashes::Semaphore const & toWait
-		, ShadowMap const * shadowMap
-		, uint32_t shadowMapIndex )
+		, ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		result = &m_stencilPass.render( *result );
-		result = &LightPass::render( index, *result, shadowMap, shadowMapIndex );
+		result = &LightPass::render( index, *result );
 		return *result;
 	}
 
@@ -251,9 +249,12 @@ namespace castor3d
 		return m_count;
 	}
 
-	void MeshLightPass::doUpdate( Size const & size
+	void MeshLightPass::doUpdate( bool first
+		, Size const & size
 		, Light const & light
-		, Camera const & camera )
+		, Camera const & camera
+		, ShadowMap const * shadowMap
+		, uint32_t shadowMapIndex )
 	{
 		auto model = doComputeModelMatrix( light, camera );
 		m_matrixUbo.update( camera.getView(), camera.getProjection() );

@@ -980,7 +980,7 @@ namespace castor3d
 		uint32_t const mtxSize = sizeof( float ) * 16;
 		uint32_t const stride = mtxSize * 400u;
 		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
-		REQUIRE( count <= renderNodes.size() );
+		CU_Require( count <= renderNodes.size() );
 		auto buffer = bonesBuffer.getPtr();
 		auto it = renderNodes.begin();
 		auto i = 0u;
@@ -1104,7 +1104,7 @@ namespace castor3d
 				{
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
+					CU_Require( count1 == count2 );
 				}
 			} );
 	}
@@ -1130,7 +1130,7 @@ namespace castor3d
 				{
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data, info );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
-					REQUIRE( count1 == count2 );
+					CU_Require( count1 == count2 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
@@ -1354,7 +1354,7 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
@@ -1425,7 +1425,7 @@ namespace castor3d
 			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-				, texture );
+				, uv );
 			auto curMtxModel = writer.declLocale< Mat4 >( cuT( "curMtxModel" ) );
 			auto prvMtxModel = writer.declLocale< Mat4 >( cuT( "prvMtxModel" ) );
 

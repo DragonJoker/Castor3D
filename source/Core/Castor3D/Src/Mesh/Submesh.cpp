@@ -349,7 +349,7 @@ namespace castor3d
 				m_vertexBuffer->getBuffer().unlock();
 			}
 
-			//m_points.clear();
+			m_points.clear();
 		}
 	}
 }

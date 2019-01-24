@@ -16,43 +16,43 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	DECLARE_MULTIMAP( double, StaticRenderNode *, StaticRenderNodePtrByDistance );
-	DECLARE_MULTIMAP( double, SkinningRenderNode *, SkinningRenderNodePtrByDistance );
-	DECLARE_MULTIMAP( double, MorphingRenderNode *, MorphingRenderNodePtrByDistance );
-	DECLARE_MULTIMAP( double, BillboardRenderNode *, BillboardRenderNodePtrByDistance );
-	DECLARE_VECTOR( StaticRenderNode *, StaticRenderNodePtr );
-	DECLARE_VECTOR( SkinningRenderNode *, SkinningRenderNodePtr );
-	DECLARE_VECTOR( MorphingRenderNode *, MorphingRenderNodePtr );
-	DECLARE_VECTOR( BillboardRenderNode *, BillboardRenderNodePtr );
-	DECLARE_MAP( RenderPipelineRPtr, StaticRenderNodePtrArray, StaticRenderNodesPtrByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, SkinningRenderNodePtrArray, SkinningRenderNodesPtrByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, MorphingRenderNodePtrArray, MorphingRenderNodesPtrByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodePtrArray, BillboardRenderNodesPtrByPipeline );
-	DECLARE_MAP( SubmeshRPtr, StaticRenderNodePtrArray, SubmeshStaticRenderNodesPtr );
-	DECLARE_MAP( SubmeshRPtr, SkinningRenderNodePtrArray, SubmeshSkinningRenderNodesPtr );
-	DECLARE_MAP( PassRPtr, SubmeshStaticRenderNodesPtrMap, SubmeshStaticRenderNodesPtrByPass );
-	DECLARE_MAP( PassRPtr, SubmeshSkinningRenderNodesPtrMap, SubmeshSkinninRenderNodesPtrByPass );
-	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesPtrByPassMap, SubmeshStaticRenderNodesPtrByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, SubmeshSkinninRenderNodesPtrByPassMap, SubmeshSkinningRenderNodesPtrByPipeline );
+	CU_DeclareMultimap( double, StaticRenderNode *, StaticRenderNodePtrByDistance );
+	CU_DeclareMultimap( double, SkinningRenderNode *, SkinningRenderNodePtrByDistance );
+	CU_DeclareMultimap( double, MorphingRenderNode *, MorphingRenderNodePtrByDistance );
+	CU_DeclareMultimap( double, BillboardRenderNode *, BillboardRenderNodePtrByDistance );
+	CU_DeclareVector( StaticRenderNode *, StaticRenderNodePtr );
+	CU_DeclareVector( SkinningRenderNode *, SkinningRenderNodePtr );
+	CU_DeclareVector( MorphingRenderNode *, MorphingRenderNodePtr );
+	CU_DeclareVector( BillboardRenderNode *, BillboardRenderNodePtr );
+	CU_DeclareMap( RenderPipelineRPtr, StaticRenderNodePtrArray, StaticRenderNodesPtrByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, SkinningRenderNodePtrArray, SkinningRenderNodesPtrByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, MorphingRenderNodePtrArray, MorphingRenderNodesPtrByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, BillboardRenderNodePtrArray, BillboardRenderNodesPtrByPipeline );
+	CU_DeclareMap( SubmeshRPtr, StaticRenderNodePtrArray, SubmeshStaticRenderNodesPtr );
+	CU_DeclareMap( SubmeshRPtr, SkinningRenderNodePtrArray, SubmeshSkinningRenderNodesPtr );
+	CU_DeclareMap( PassRPtr, SubmeshStaticRenderNodesPtrMap, SubmeshStaticRenderNodesPtrByPass );
+	CU_DeclareMap( PassRPtr, SubmeshSkinningRenderNodesPtrMap, SubmeshSkinninRenderNodesPtrByPass );
+	CU_DeclareMap( RenderPipelineRPtr, SubmeshStaticRenderNodesPtrByPassMap, SubmeshStaticRenderNodesPtrByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, SubmeshSkinninRenderNodesPtrByPassMap, SubmeshSkinningRenderNodesPtrByPipeline );
 
-	DECLARE_MULTIMAP( double, StaticRenderNode, StaticRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, SkinningRenderNode, SkinningRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, MorphingRenderNode, MorphingRenderNodeByDistance );
-	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
-	DECLARE_MAP( SceneCuller::CulledSubmesh const *, StaticRenderNode, StaticRenderNode );
-	DECLARE_MAP( SceneCuller::CulledSubmesh const *, SkinningRenderNode, SkinningRenderNode );
-	DECLARE_MAP( SceneCuller::CulledSubmesh const *, MorphingRenderNode, MorphingRenderNode );
-	DECLARE_MAP( SceneCuller::CulledBillboard const *, BillboardRenderNode, BillboardRenderNode );
-	DECLARE_MAP( RenderPipelineRPtr, StaticRenderNodeMap, StaticRenderNodesByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, SkinningRenderNodeMap, SkinningRenderNodesByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, MorphingRenderNodeMap, MorphingRenderNodesByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodeMap, BillboardRenderNodesByPipeline );
-	DECLARE_MAP( SubmeshRPtr, StaticRenderNodeMap, SubmeshStaticRenderNodes );
-	DECLARE_MAP( SubmeshRPtr, SkinningRenderNodeMap, SubmeshSkinningRenderNodes );
-	DECLARE_MAP( PassRPtr, SubmeshStaticRenderNodesMap, SubmeshStaticRenderNodesByPass );
-	DECLARE_MAP( PassRPtr, SubmeshSkinningRenderNodesMap, SubmeshSkinninRenderNodesByPass );
-	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
-	DECLARE_MAP( RenderPipelineRPtr, SubmeshSkinninRenderNodesByPassMap, SubmeshSkinningRenderNodesByPipeline );
+	CU_DeclareMultimap( double, StaticRenderNode, StaticRenderNodeByDistance );
+	CU_DeclareMultimap( double, SkinningRenderNode, SkinningRenderNodeByDistance );
+	CU_DeclareMultimap( double, MorphingRenderNode, MorphingRenderNodeByDistance );
+	CU_DeclareMultimap( double, BillboardRenderNode, BillboardRenderNodeByDistance );
+	CU_DeclareMap( SceneCuller::CulledSubmesh const *, StaticRenderNode, StaticRenderNode );
+	CU_DeclareMap( SceneCuller::CulledSubmesh const *, SkinningRenderNode, SkinningRenderNode );
+	CU_DeclareMap( SceneCuller::CulledSubmesh const *, MorphingRenderNode, MorphingRenderNode );
+	CU_DeclareMap( SceneCuller::CulledBillboard const *, BillboardRenderNode, BillboardRenderNode );
+	CU_DeclareMap( RenderPipelineRPtr, StaticRenderNodeMap, StaticRenderNodesByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, SkinningRenderNodeMap, SkinningRenderNodesByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, MorphingRenderNodeMap, MorphingRenderNodesByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, BillboardRenderNodeMap, BillboardRenderNodesByPipeline );
+	CU_DeclareMap( SubmeshRPtr, StaticRenderNodeMap, SubmeshStaticRenderNodes );
+	CU_DeclareMap( SubmeshRPtr, SkinningRenderNodeMap, SubmeshSkinningRenderNodes );
+	CU_DeclareMap( PassRPtr, SubmeshStaticRenderNodesMap, SubmeshStaticRenderNodesByPass );
+	CU_DeclareMap( PassRPtr, SubmeshSkinningRenderNodesMap, SubmeshSkinninRenderNodesByPass );
+	CU_DeclareMap( RenderPipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
+	CU_DeclareMap( RenderPipelineRPtr, SubmeshSkinninRenderNodesByPassMap, SubmeshSkinningRenderNodesByPipeline );
 }
 
 #endif

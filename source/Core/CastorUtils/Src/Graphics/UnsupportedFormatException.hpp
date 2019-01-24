@@ -53,7 +53,7 @@ namespace castor
 	\~french
 	\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
 	*/
-#	define UNSUPPORTED_ERROR( p_text) throw UnsupportedFormatException( p_text, __FILE__, __FUNCTION__, __LINE__)
+#	define CU_UnsupportedError( p_text) throw UnsupportedFormatException( p_text, __FILE__, __FUNCTION__, __LINE__)
 }
 
 #endif

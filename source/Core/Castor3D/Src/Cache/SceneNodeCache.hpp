@@ -155,7 +155,7 @@ namespace castor3d
 		}
 	};
 	using SceneNodeCache = ObjectCache< SceneNode, castor::String >;
-	DECLARE_SMART_PTR( SceneNodeCache );
+	CU_DeclareSmartPtr( SceneNodeCache );
 }
 
 #endif

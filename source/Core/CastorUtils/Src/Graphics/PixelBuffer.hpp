@@ -103,19 +103,19 @@ namespace castor
 
 		inline pixel_type const & operator*()const
 		{
-			REQUIRE( m_current != m_end );
+			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 
 		inline pixel_type & operator*()
 		{
-			REQUIRE( m_current != m_end );
+			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 
 		inline pixel_type * operator->()
 		{
-			REQUIRE( m_current != m_end );
+			CU_Require( m_current != m_end );
 			return &m_pixel;
 		}
 
@@ -252,13 +252,13 @@ namespace castor
 
 		inline pixel_type const & operator*()const
 		{
-			REQUIRE( m_current != m_end );
+			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 
 		inline pixel_type & operator*()
 		{
-			REQUIRE( m_current != m_end );
+			CU_Require( m_current != m_end );
 			return m_pixel;
 		}
 

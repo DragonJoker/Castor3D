@@ -37,7 +37,7 @@ namespace castor3d
 		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
-		DECLARE_LIST( castor::ByteArray, BytePtr );
+		CU_DeclareList( castor::ByteArray, BytePtr );
 		template< typename T > friend struct SubmeshComponentAdder;
 
 	public:

@@ -149,13 +149,13 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_colourTexture );
+			CU_Require( m_colourTexture );
 			return *m_colourTexture;
 		}
 
 		inline TextureLayout const & getDepth()const
 		{
-			REQUIRE( m_depthBuffer );
+			CU_Require( m_depthBuffer );
 			return *m_depthBuffer;
 		}
 
@@ -166,13 +166,13 @@ namespace castor3d
 
 		inline RenderTechniquePass const & getOpaquePass()const
 		{
-			REQUIRE( m_opaquePass );
+			CU_Require( m_opaquePass );
 			return *m_opaquePass;
 		}
 
 		inline RenderTechniquePass const & getTransparentPass()const
 		{
-			REQUIRE( m_transparentPass );
+			CU_Require( m_transparentPass );
 			return *m_transparentPass;
 		}
 
@@ -183,7 +183,7 @@ namespace castor3d
 
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_signalFinished );
+			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 

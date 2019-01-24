@@ -25,6 +25,8 @@ add_target(
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/D3D11RenderSystemPch.cpp
 	"-DD3D11Renderer_STATIC"
 	"-DD3D11Renderer_STATIC"
+	""
+	"${SPIRV_FILES}"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

@@ -63,25 +63,25 @@ namespace castor3d
 		/**@{*/
 		inline TextureLayout const & getTexture()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline TextureLayout & getTexture()
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline ashes::Texture const & getImage()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
 		inline ashes::TextureView const & getView()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getDefaultView();
 		}
 

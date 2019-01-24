@@ -121,13 +121,16 @@ namespace castor3d
 		 */
 		uint32_t getCount()const override;
 
-	private:
+	protected:
 		/**
 		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
-		void doUpdate( castor::Size const & size
+		void doUpdate( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera )override;
+			, Camera const & camera
+			, ShadowMap const * shadowMap = nullptr
+			, uint32_t shadowMapIndex = 0u )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

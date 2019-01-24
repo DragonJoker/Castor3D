@@ -50,7 +50,7 @@ namespace castor3d
 			sdw::Float m_refractionRatio;
 			sdw::Int m_hasRefraction;
 			sdw::Int m_hasReflection;
-			sdw::Float m_exposure;
+			sdw::Float m_bwAccumulationOperator;
 			sdw::Int m_subsurfaceScatteringEnabled;
 			sdw::Float m_gaussianWidth;
 			sdw::Float m_subsurfaceScatteringStrength;
@@ -58,7 +58,7 @@ namespace castor3d
 			sdw::Array< sdw::Vec4 > m_transmittanceProfile;
 		};
 
-		DECLARE_SMART_PTR( BaseMaterial );
+		CU_DeclareSmartPtr( BaseMaterial );
 
 		struct LegacyMaterial
 			: public BaseMaterial

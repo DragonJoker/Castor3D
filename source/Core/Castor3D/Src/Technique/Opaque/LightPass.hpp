@@ -41,7 +41,7 @@ namespace castor3d
 		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Roughness, B => Unused
 		eData4, // RGB => Emissive, A => Transmittance
 		eData5, // RG => Velocity, B => Material Index, A => Unused
-		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
+		CU_ScopedEnumBounds( eDepth ),
 	};
 	/**
 	 *\~english
@@ -234,31 +234,31 @@ namespace castor3d
 			/**@{*/
 			inline ashes::DescriptorSetLayout const & getUboDescriptorLayout()const
 			{
-				REQUIRE( m_uboDescriptorLayout );
+				CU_Require( m_uboDescriptorLayout );
 				return *m_uboDescriptorLayout;
 			}
 
 			inline ashes::DescriptorSetLayout const & getTextureDescriptorLayout()const
 			{
-				REQUIRE( m_textureDescriptorLayout );
+				CU_Require( m_textureDescriptorLayout );
 				return *m_textureDescriptorLayout;
 			}
 
 			inline ashes::DescriptorSetPool const & getUboDescriptorPool()const
 			{
-				REQUIRE( m_uboDescriptorPool );
+				CU_Require( m_uboDescriptorPool );
 				return *m_uboDescriptorPool;
 			}
 
 			inline ashes::DescriptorSetPool const & getTextureDescriptorPool()const
 			{
-				REQUIRE( m_textureDescriptorPool );
+				CU_Require( m_textureDescriptorPool );
 				return *m_textureDescriptorPool;
 			}
 
 			inline ashes::PipelineLayout const & getPipelineLayout()const
 			{
-				REQUIRE( m_pipelineLayout );
+				CU_Require( m_pipelineLayout );
 				return *m_pipelineLayout;
 			}
 			/**@}*/
@@ -333,18 +333,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first			Tells if this is the first pass.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	light			The light.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	shadowMap		The optional shadow map.
+		 *\param[in]	shadowMapIndex	The shadow map index.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
+		 *\param[in]	first			Dit s'il s'agit de la première passe.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	light			La source lumineuse.
+		 *\param[in]	camera			La caméra.
+		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
+		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
 		 */
-		void update( castor::Size const & size
+		void update( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera );
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex );
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
@@ -352,9 +361,7 @@ namespace castor3d
 		 *\brief		Dessine la passe de rendu.
 		 */
 		virtual ashes::Semaphore const & render( uint32_t index
-			, ashes::Semaphore const & toWait
-			, ShadowMap const * shadowMap
-			, uint32_t shadowMapIndex );
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -378,7 +385,7 @@ namespace castor3d
 
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_signalReady );
+			CU_Require( m_signalReady );
 			return *m_signalReady;
 		}
 		/**@}*/
@@ -451,18 +458,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first			Tells if this is the first pass.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	light			The light.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	shadowMap		The optional shadow map.
+		 *\param[in]	shadowMapIndex	The shadow map index.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
+		 *\param[in]	first			Dit s'il s'agit de la première passe.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	light			La source lumineuse.
+		 *\param[in]	camera			La caméra.
+		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
+		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
 		 */
-		virtual void doUpdate( castor::Size const & size
+		virtual void doUpdate( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera ) = 0;
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the command buffer for given pipeline.
@@ -555,8 +571,8 @@ namespace castor3d
 	protected:
 		struct Config
 		{
-			//!\~english	The variable containing the light colour.
-			//!\~french		La variable contenant la couleur de la lumière.
+			//!\~english	The variable containing the light colour and index.
+			//!\~french		La variable contenant la couleur de la lumière et son indice.
 			castor::Point4f colourIndex;
 			//!\~english	The variable containing the light intensities (RG) and far plane (B).
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
@@ -564,6 +580,9 @@ namespace castor3d
 			//!\~english	The variable containing the light volumetric scattering data.
 			//!\~french		La variable contenant les données de volumetric scattering.
 			castor::Point4f volumetric;
+			//!\~english	The variable containing the light shadow data.
+			//!\~french		La variable contenant les données d'ombres.
+			castor::Point4f shadow;
 		};
 
 		Engine & m_engine;

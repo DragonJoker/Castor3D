@@ -120,7 +120,7 @@ namespace castor3d
 
 			m_quadLayout = ashes::makeLayout< Vertex >( 0u, ashes::VertexInputRate::eVertex );
 			m_quadLayout->createAttribute( 0u, ashes::Format::eR32G32B32_SFLOAT, offsetof( Vertex, position ) );
-			m_quadLayout->createAttribute( 1u, ashes::Format::eR32G32_SFLOAT, offsetof( Vertex, texcoord ) );
+			m_quadLayout->createAttribute( 1u, ashes::Format::eR32G32_SFLOAT, offsetof( Vertex, uv ) );
 
 			ashes::BufferCRefArray buffers;
 			std::vector< uint64_t > offsets;

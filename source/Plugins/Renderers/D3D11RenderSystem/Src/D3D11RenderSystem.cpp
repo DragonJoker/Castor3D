@@ -5,6 +5,7 @@
 #include <Core/Renderer.hpp>
 
 #include <CompilerHlsl/compileHlsl.hpp>
+#include <CompilerSpirV/compileSpirV.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -22,56 +23,67 @@ namespace D3D11Render
 		, bool enableValidation )
 		: castor3d::RenderSystem( engine, Name, true, true )
 	{
+		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logTrace( msg );
+			}
+			else
+			{
+				Logger::logTraceNoNL( msg );
+			}
+			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logDebug( msg );
-			}
-			else
-			{
-				Logger::logDebugNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logDebug( msg );
+				}
+				else
+				{
+					Logger::logDebugNoNL( msg );
+				}
+			} );
 		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logInfo( msg );
-			}
-			else
-			{
-				Logger::logInfoNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logInfo( msg );
+				}
+				else
+				{
+					Logger::logInfoNoNL( msg );
+				}
+			} );
 		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logWarning( msg );
-			}
-			else
-			{
-				Logger::logWarningNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logWarning( msg );
+				}
+				else
+				{
+					Logger::logWarningNoNL( msg );
+				}
+			} );
 		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
 			{
-				Logger::logError( msg );
-			}
-			else
-			{
-				Logger::logErrorNoNL( msg );
-			}
-		} );
+				if ( newLine )
+				{
+					Logger::logError( msg );
+				}
+				else
+				{
+					Logger::logErrorNoNL( msg );
+				}
+			} );
 		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-		{
-			string::stringCast< char >( appName ),
-			"Castor3D",
-			enableValidation,
-		} ) );
+			{
+				string::stringCast< char >( appName ),
+				"Castor3D",
+				enableValidation,
+			} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
 		auto & gpu = m_renderer->getPhysicalDevice( 0u );
 		m_memoryProperties = gpu.getMemoryProperties();
@@ -100,7 +112,19 @@ namespace D3D11Render
 		if ( module.shader )
 		{
 			hlsl = hlsl::compileHlsl( *module.shader
-				, ast::SpecialisationInfo{} );
+				, ast::SpecialisationInfo{}
+				, hlsl::HlslConfig
+				{
+					module.shader->getType(),
+					true,
+				} );
+
+#if !defined( NDEBUG )
+
+			// Don't do this at home !
+			const_cast< castor3d::ShaderModule & >( module ).source = hlsl;
+
+#endif
 		}
 		else
 		{

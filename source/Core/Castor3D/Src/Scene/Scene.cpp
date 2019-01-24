@@ -980,13 +980,13 @@ namespace castor3d
 
 	EnvironmentMap & Scene::getEnvironmentMap( SceneNode const & node )
 	{
-		REQUIRE( hasEnvironmentMap( node ) );
+		CU_Require( hasEnvironmentMap( node ) );
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
 	EnvironmentMap const & Scene::getEnvironmentMap( SceneNode const & node )const
 	{
-		REQUIRE( hasEnvironmentMap( node ) );
+		CU_Require( hasEnvironmentMap( node ) );
 		return *m_reflectionMaps.find( &node )->second;
 	}
 

@@ -316,13 +316,13 @@ namespace castor3d
 
 		inline FrameListener const & getListener()const
 		{
-			REQUIRE( !m_listener.expired() );
+			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
 		inline FrameListener & getListener()
 		{
-			REQUIRE( !m_listener.expired() );
+			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
@@ -395,7 +395,7 @@ namespace castor3d
 
 		inline void setDirectionalShadowCascades( uint32_t value )
 		{
-			REQUIRE( value <= shader::DirectionalMaxCascadesCount );
+			CU_Require( value <= shader::DirectionalMaxCascadesCount );
 			m_directionalShadowCascades = value;
 		}
 		/**@}*/

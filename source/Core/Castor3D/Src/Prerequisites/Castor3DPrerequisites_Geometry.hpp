@@ -38,59 +38,59 @@ namespace castor3d
 	struct SubmeshVertex;
 	struct VertexBoneData;
 
-	DECLARE_SMART_PTR( Face );
-	DECLARE_SMART_PTR( Graph );
-	DECLARE_SMART_PTR( Mesh );
-	DECLARE_SMART_PTR( MeshGenerator );
-	DECLARE_SMART_PTR( Submesh );
-	DECLARE_SMART_PTR( SubmeshComponent );
-	DECLARE_SMART_PTR( InstantiationComponent );
-	DECLARE_SMART_PTR( BonesInstantiationComponent );
-	DECLARE_SMART_PTR( IndexMapping );
-	DECLARE_SMART_PTR( Cone );
-	DECLARE_SMART_PTR( Cylinder );
-	DECLARE_SMART_PTR( Icosahedron );
-	DECLARE_SMART_PTR( Cube );
-	DECLARE_SMART_PTR( Plane );
-	DECLARE_SMART_PTR( Projection );
-	DECLARE_SMART_PTR( Sphere );
-	DECLARE_SMART_PTR( Torus );
-	DECLARE_SMART_PTR( Geometry );
-	DECLARE_SMART_PTR( MovableObject );
-	DECLARE_SMART_PTR( Subdivider );
-	DECLARE_SMART_PTR( FaceGroup );
-	DECLARE_SMART_PTR( Bone );
-	DECLARE_SMART_PTR( Skeleton );
+	CU_DeclareSmartPtr( Face );
+	CU_DeclareSmartPtr( Graph );
+	CU_DeclareSmartPtr( Mesh );
+	CU_DeclareSmartPtr( MeshGenerator );
+	CU_DeclareSmartPtr( Submesh );
+	CU_DeclareSmartPtr( SubmeshComponent );
+	CU_DeclareSmartPtr( InstantiationComponent );
+	CU_DeclareSmartPtr( BonesInstantiationComponent );
+	CU_DeclareSmartPtr( IndexMapping );
+	CU_DeclareSmartPtr( Cone );
+	CU_DeclareSmartPtr( Cylinder );
+	CU_DeclareSmartPtr( Icosahedron );
+	CU_DeclareSmartPtr( Cube );
+	CU_DeclareSmartPtr( Plane );
+	CU_DeclareSmartPtr( Projection );
+	CU_DeclareSmartPtr( Sphere );
+	CU_DeclareSmartPtr( Torus );
+	CU_DeclareSmartPtr( Geometry );
+	CU_DeclareSmartPtr( MovableObject );
+	CU_DeclareSmartPtr( Subdivider );
+	CU_DeclareSmartPtr( FaceGroup );
+	CU_DeclareSmartPtr( Bone );
+	CU_DeclareSmartPtr( Skeleton );
 
 	class MeshFactory;
-	DECLARE_SMART_PTR( MeshFactory );
+	CU_DeclareSmartPtr( MeshFactory );
 
 	//! Face array
-	DECLARE_VECTOR( Face, Face );
+	CU_DeclareVector( Face, Face );
 	//! Face pointer array
-	DECLARE_VECTOR( FaceSPtr, FacePtr );
+	CU_DeclareVector( FaceSPtr, FacePtr );
 	//! FaceGroup pointer array
-	DECLARE_VECTOR( FaceGroupSPtr, FaceGroupPtr );
+	CU_DeclareVector( FaceGroupSPtr, FaceGroupPtr );
 	//! Submesh pointer array
-	DECLARE_VECTOR( SubmeshSPtr, SubmeshPtr );
+	CU_DeclareVector( SubmeshSPtr, SubmeshPtr );
 	//! Geometry pointer array
-	DECLARE_VECTOR( GeometrySPtr, GeometryPtr );
+	CU_DeclareVector( GeometrySPtr, GeometryPtr );
 	//! SubmeshVertex array.
-	DECLARE_VECTOR( SubmeshVertex, SubmeshVertex );
+	CU_DeclareVector( SubmeshVertex, SubmeshVertex );
 	//! Mesh pointer array
-	DECLARE_MAP( castor::String, MeshSPtr, MeshPtrStr );
+	CU_DeclareMap( castor::String, MeshSPtr, MeshPtrStr );
 	//! MovableObject pointer map, sorted by name
-	DECLARE_MAP( castor::String, MovableObjectSPtr, MovableObjectPtrStr );
+	CU_DeclareMap( castor::String, MovableObjectSPtr, MovableObjectPtrStr );
 	//! Geometry pointer map, sorted by name
-	DECLARE_MAP( castor::String, GeometrySPtr, GeometryPtrStr );
-	DECLARE_MAP( uint32_t, int, IntUInt );
-	DECLARE_MAP( castor::String, SubmeshSPtr, SubmeshPtrStr );
-	DECLARE_MAP( castor::String, int, IntStr );
+	CU_DeclareMap( castor::String, GeometrySPtr, GeometryPtrStr );
+	CU_DeclareMap( uint32_t, int, IntUInt );
+	CU_DeclareMap( castor::String, SubmeshSPtr, SubmeshPtrStr );
+	CU_DeclareMap( castor::String, int, IntStr );
 	//! Bone pointer array
-	DECLARE_VECTOR( BoneSPtr, BonePtr );
+	CU_DeclareVector( BoneSPtr, BonePtr );
 	//! Bone pointer map sorted by name
-	DECLARE_MAP( castor::String, BoneSPtr, BonePtrStr );
-	DECLARE_MAP( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
+	CU_DeclareMap( castor::String, BoneSPtr, BonePtrStr );
+	CU_DeclareMap( castor::String, SubmeshComponentSPtr, SubmeshComponentStr );
 
 	//@}
 }

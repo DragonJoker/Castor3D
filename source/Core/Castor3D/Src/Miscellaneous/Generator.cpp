@@ -206,9 +206,9 @@ void Generator::doCleanup()
 	m_backBuffer.clear();
 }
 
-Point2i Generator::_loadImage( String const & strImagePath, Image & CU_PARAM_UNUSED( image ) )
+Point2i Generator::_loadImage( String const & strImagePath, Image & CU_UnusedParam( image ) )
 {
-	ImageSPtr pImage = m_engine->getImageCache().add( strImagePath, Path{ strImagePath } );
+	ImageSPtr pImage = m_engine->getImageCache().add( strImagePath, Path{ strImagePath }, false );
 	return Point2i( pImage->getWidth(), pImage->getHeight() );
 }
 

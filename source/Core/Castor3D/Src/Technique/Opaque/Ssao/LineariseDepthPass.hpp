@@ -99,6 +99,8 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
+		static constexpr uint32_t LogMaxOffset = 3u;
+		static constexpr float MinRadius = 1.0f;
 
 	private:
 		Engine & m_engine;

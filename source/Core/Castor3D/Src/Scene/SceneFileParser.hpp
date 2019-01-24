@@ -24,43 +24,43 @@ namespace castor3d
 	enum class CSCNSection
 		: uint32_t
 	{
-		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
-		eScene = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
-		eWindow = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),
-		eSampler = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),
-		eCamera = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),
-		eViewport = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),
-		eLight = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),
-		eNode = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),
-		eObject = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),
-		eObjectMaterials = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),
-		eFont = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),
-		ePanelOverlay = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),
-		eBorderPanelOverlay = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),
-		eTextOverlay = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),
-		eMesh = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),
-		eSubmesh = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),
-		eMaterial = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),
-		ePass = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),
-		eTextureUnit = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
-		eRenderTarget = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
-		eShaderProgram = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
-		shaderStage = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
-		eShaderUBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
-		eUBOVariable = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
-		eBillboard = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
-		eBillboardList = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),
-		eAnimGroup = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
-		eAnimation = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
-		eSkybox = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
-		eParticleSystem = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
-		eParticle = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
-		eSsao = MAKE_SECTION_NAME( 'S', 'S', 'A', 'O' ),
-		eSubsurfaceScattering = MAKE_SECTION_NAME( 'S', 'S', 'S', 'G' ),
-		eTransmittanceProfile = MAKE_SECTION_NAME( 'T', 'R', 'P', 'R' ),
-		eHdrConfig = MAKE_SECTION_NAME( 'H', 'D', 'R', 'C' ),
-		eShadows = MAKE_SECTION_NAME( 'S', 'H', 'D', 'W' ),
-		eMeshDefaultMaterials = MAKE_SECTION_NAME( 'M', 'M', 'T', 'L' ),
+		eRoot = CU_MakeSectionName( 'R', 'O', 'O', 'T' ),
+		eScene = CU_MakeSectionName( 'S', 'C', 'N', 'E' ),
+		eWindow = CU_MakeSectionName( 'W', 'N', 'D', 'W' ),
+		eSampler = CU_MakeSectionName( 'S', 'M', 'P', 'R' ),
+		eCamera = CU_MakeSectionName( 'C', 'A', 'M', 'R' ),
+		eViewport = CU_MakeSectionName( 'V', 'W', 'P', 'T' ),
+		eLight = CU_MakeSectionName( 'L', 'G', 'H', 'T' ),
+		eNode = CU_MakeSectionName( 'N', 'O', 'D', 'E' ),
+		eObject = CU_MakeSectionName( 'O', 'B', 'J', 'T' ),
+		eObjectMaterials = CU_MakeSectionName( 'O', 'M', 'T', 'L' ),
+		eFont = CU_MakeSectionName( 'F', 'O', 'N', 'T' ),
+		ePanelOverlay = CU_MakeSectionName( 'P', 'O', 'V', 'L' ),
+		eBorderPanelOverlay = CU_MakeSectionName( 'B', 'O', 'V', 'L' ),
+		eTextOverlay = CU_MakeSectionName( 'T', 'O', 'V', 'L' ),
+		eMesh = CU_MakeSectionName( 'M', 'E', 'S', 'H' ),
+		eSubmesh = CU_MakeSectionName( 'S', 'M', 'S', 'H' ),
+		eMaterial = CU_MakeSectionName( 'M', 'T', 'R', 'L' ),
+		ePass = CU_MakeSectionName( 'P', 'A', 'S', 'S' ),
+		eTextureUnit = CU_MakeSectionName( 'U', 'N', 'I', 'T' ),
+		eRenderTarget = CU_MakeSectionName( 'R', 'T', 'G', 'R' ),
+		eShaderProgram = CU_MakeSectionName( 'G', 'L', 'S', 'L' ),
+		shaderStage = CU_MakeSectionName( 'S', 'P', 'G', 'M' ),
+		eShaderUBO = CU_MakeSectionName( 'S', 'U', 'B', 'O' ),
+		eUBOVariable = CU_MakeSectionName( 'S', 'U', 'B', 'V' ),
+		eBillboard = CU_MakeSectionName( 'B', 'L', 'B', 'd' ),
+		eBillboardList = CU_MakeSectionName( 'B', 'L', 'B', 'L' ),
+		eAnimGroup = CU_MakeSectionName( 'A', 'N', 'G', 'P' ),
+		eAnimation = CU_MakeSectionName( 'A', 'N', 'M', 'T' ),
+		eSkybox = CU_MakeSectionName( 'S', 'K', 'B', 'X' ),
+		eParticleSystem = CU_MakeSectionName( 'P', 'L', 'S', 'M' ),
+		eParticle = CU_MakeSectionName( 'P', 'T', 'C', 'L' ),
+		eSsao = CU_MakeSectionName( 'S', 'S', 'A', 'O' ),
+		eSubsurfaceScattering = CU_MakeSectionName( 'S', 'S', 'S', 'G' ),
+		eTransmittanceProfile = CU_MakeSectionName( 'T', 'R', 'P', 'R' ),
+		eHdrConfig = CU_MakeSectionName( 'H', 'D', 'R', 'C' ),
+		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
+		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -163,6 +163,7 @@ namespace castor3d
 		SsaoConfig ssaoConfig;
 		SubsurfaceScatteringUPtr subsurfaceScattering;
 		std::shared_ptr< SkyboxBackground > skybox;
+		ImageComponents components;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -244,7 +245,7 @@ namespace castor3d
 	private:
 		C3D_API void doInitialiseParser( castor::Path const & path )override;
 		C3D_API void doCleanupParser()override;
-		C3D_API bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( line ) )override
+		C3D_API bool doDelegateParser( castor::String const & CU_UnusedParam( line ) )override
 		{
 			return false;
 		}

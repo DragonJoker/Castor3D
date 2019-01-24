@@ -305,7 +305,7 @@ namespace castor
 		template< typename T >
 		struct CoFactorComputer< T, 1 >
 		{
-			static inline T get( castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( matrix ), uint32_t CU_PARAM_UNUSED( column ), uint32_t CU_PARAM_UNUSED( row ) )
+			static inline T get( castor::SquareMatrix< T, 1 > const & CU_UnusedParam( matrix ), uint32_t CU_UnusedParam( column ), uint32_t CU_UnusedParam( row ) )
 			{
 				return T{ 1 };
 			}

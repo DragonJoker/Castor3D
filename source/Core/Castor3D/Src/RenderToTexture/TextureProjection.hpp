@@ -69,13 +69,13 @@ namespace castor3d
 		/**@{*/
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_finished );
+			CU_Require( m_finished );
 			return *m_finished;
 		}
 		/**@}*/

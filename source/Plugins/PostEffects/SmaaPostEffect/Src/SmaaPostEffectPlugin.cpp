@@ -11,7 +11,7 @@
 #include "SmaaPostEffect.hpp"
 #include "Smaa_Parsers.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Smaa_API
 #else
 #	ifdef SmaaPostEffect_EXPORTS

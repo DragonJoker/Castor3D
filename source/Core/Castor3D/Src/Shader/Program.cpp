@@ -208,7 +208,7 @@ namespace castor3d
 	Path ShaderProgram::getFile( ashes::ShaderStageFlag target )const
 	{
 		auto it = m_files.find( target );
-		REQUIRE( it != m_files.end() );
+		CU_Require( it != m_files.end() );
 		return it->second;
 	}
 
@@ -238,7 +238,7 @@ namespace castor3d
 	ShaderModule const & ShaderProgram::getSource( ashes::ShaderStageFlag target )const
 	{
 		auto it = m_modules.find( target );
-		REQUIRE( it != m_modules.end() );
+		CU_Require( it != m_modules.end() );
 		return it->second;
 	}
 

@@ -129,7 +129,7 @@ namespace GuiCommon
 			wxPGProperty * doCreateTextureImageProperty( wxString const & name
 				, castor3d::TextureLayout const & texture )
 			{
-				REQUIRE( texture.getImage().isStaticSource() );
+				CU_Require( texture.getImage().isStaticSource() );
 				auto source = texture.getImage().toString();
 				return new wxImageFileProperty{ name
 					, name
@@ -140,7 +140,7 @@ namespace GuiCommon
 				, castor3d::TextureLayout const & texture
 				, castor3d::CubeMapFace face )
 			{
-				REQUIRE( texture.getImage( uint32_t( face ) ).isStaticSource() );
+				CU_Require( texture.getImage( uint32_t( face ) ).isStaticSource() );
 				auto source = texture.getImage( uint32_t( face ) ).toString();
 				return new wxImageFileProperty{ name
 					, name

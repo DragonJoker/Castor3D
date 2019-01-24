@@ -101,6 +101,7 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
 			ProgramPipeline( Engine & engine
+				, GeometryPassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout
 				, ashes::DescriptorSetLayout const & texLayout
 				, ashes::RenderPass const & renderPass
@@ -115,6 +116,7 @@ namespace castor3d
 				, RenderPassTimer & timer );
 			void accept( RenderTechniqueVisitor & visitor );
 
+			GeometryPassResult const & m_geometryPassResult;
 			ashes::RenderPass const * m_renderPass;
 			castor3d::ShaderModule m_vertexShader;
 			castor3d::ShaderModule m_pixelShader;

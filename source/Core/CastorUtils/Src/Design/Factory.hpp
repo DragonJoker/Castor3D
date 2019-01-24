@@ -135,7 +135,7 @@ namespace castor
 			}
 			else
 			{
-				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
+				CU_Exception( ERROR_UNKNOWN_OBJECT );
 			}
 
 			return result;

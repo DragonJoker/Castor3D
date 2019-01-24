@@ -90,7 +90,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
 			, scene
 			, m_geometryPassResult
@@ -100,7 +100,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -128,7 +128,7 @@ namespace castor3d
 		m_opaquePass.update( info
 			, jitter );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->update( camera );
 		}
@@ -157,7 +157,7 @@ namespace castor3d
 			, *result
 			, info );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			result = &m_ssao->render( *result );
 		}
@@ -206,7 +206,7 @@ namespace castor3d
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->accept( visitor );
 		}

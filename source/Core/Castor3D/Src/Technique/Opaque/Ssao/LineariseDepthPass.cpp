@@ -91,12 +91,20 @@ namespace castor3d
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
 
+			auto reconstructCSZ = writer.implementFunction< Float >( "reconstructCSZ"
+				, [&]( Float const & depth
+					, Vec3 const & clipInfo )
+				{
+					writer.returnStmt( clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] ) );
+				}
+				, InFloat{ writer, "d" }
+				, InVec3{ writer, "clipInfo" } );
+
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					auto depth = writer.declLocale( cuT( "depth" )
-						, texelFetch( c3d_mapDepth, ivec2( in.gl_FragCoord.xy() ), 0_i ).r() );
-					pxl_fragColor = c3d_clipInfo[0] / writer.paren( c3d_clipInfo[1] * depth + c3d_clipInfo[2] );
+					pxl_fragColor = reconstructCSZ( texelFetch( c3d_mapDepth, ivec2( in.gl_FragCoord.xy() ), 0_i ).r()
+						, c3d_clipInfo );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -125,22 +133,11 @@ namespace castor3d
 						, ivec2( in.gl_FragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
-					if ( renderSystem.getCurrentDevice()->getRenderer().getFeatures().hasStorageBuffers )
-					{
-						pxl_fragColor = texelFetch( c3d_mapDepth
-							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
-								, ivec2( 0_i, 0_i )
-								, c3d_textureSize - ivec2( 1_i, 1_i ) )
-							, 0_i ).r();
-					}
-					else
-					{
-						pxl_fragColor = texelFetch( c3d_mapDepth
-							, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
-								, ivec2( 0_i, 0_i )
-								, c3d_textureSize - ivec2( 1_i, 1_i ) )
-							, c3d_previousLevel ).r();
-					}
+					pxl_fragColor = texelFetch( c3d_mapDepth
+						, clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+							, ivec2( 0_i, 0_i )
+							, c3d_textureSize - ivec2( 1_i, 1_i ) )
+						, c3d_previousLevel ).r();
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -247,7 +244,7 @@ namespace castor3d
 			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
 			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.subpasses.resize( 1u );
 			renderPass.subpasses[0].flags = 0u;
@@ -485,7 +482,7 @@ namespace castor3d
 		m_minifyPipelineLayout = device.createPipelineLayout( *m_minifyDescriptorLayout );
 
 		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
-		uint32_t index = 1u;
+		uint32_t index = 0u;
 		auto * sourceView = m_linearisedView.get();
 		ashes::ImageViewCreateInfo viewInfo{};
 		viewInfo.format = m_result.getTexture()->getPixelFormat();
@@ -503,10 +500,13 @@ namespace castor3d
 
 		for ( auto & pipeline : m_minifyPipelines )
 		{
+			auto & data = m_previousLevel->getData( index );
+			data.previousLevel = index;
+			data.textureSize = Point2i{ size.width, size.height };
 			size.width >>= 1;
 			size.height >>= 1;
 			pipeline.sourceView = sourceView;
-			viewInfo.subresourceRange.baseMipLevel = index;
+			viewInfo.subresourceRange.baseMipLevel = index + 1u;
 			pipeline.targetView = m_result.getTexture()->getTexture().createView( viewInfo );
 			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
@@ -514,15 +514,12 @@ namespace castor3d
 				, *m_minifySampler );
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 1u )
 				, *m_previousLevel
-				, index - 1u );
+				, index );
 			pipeline.descriptor->update();
 			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *pipeline.targetView );
 			pipeline.frameBuffer = m_renderPass->createFrameBuffer( ashes::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
-			auto & data = m_previousLevel->getData( index - 1u );
-			data.previousLevel = index - 1;
-			data.textureSize = Point2i{ size.width << 1, size.height << 1 };
 			pipeline.pipeline = m_minifyPipelineLayout->createPipeline( ashes::GraphicsPipelineCreateInfo
 			{
 				m_minifyProgram,
@@ -579,6 +576,21 @@ namespace castor3d
 		m_timer->beginPass( *m_commandBuffer );
 
 		// Linearisation pass.
+		auto subresource = m_depthBuffer.getSubResourceRange();
+		subresource.aspectMask = ashes::getAspectMask( m_depthBuffer.getFormat() );
+		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, ashes::ImageMemoryBarrier
+			{
+				0u,
+				ashes::AccessFlag::eShaderRead,
+				ashes::ImageLayout::eUndefined,
+				ashes::ImageLayout::eShaderReadOnlyOptimal,
+				~( 0u ),
+				~( 0u ),
+				m_depthBuffer.getTexture(),
+				subresource
+			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_lineariseFrameBuffer
 			, { colour }
@@ -588,17 +600,23 @@ namespace castor3d
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_linearisedView->makeShaderInputResource( ashes::ImageLayout::eColourAttachmentOptimal
-				, ashes::AccessFlag::eColourAttachmentWrite ) );
+		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+			, ashes::PipelineStageFlag::eLateFragmentTests
+			, ashes::ImageMemoryBarrier
+			{
+				ashes::AccessFlag::eShaderRead,
+				ashes::AccessFlag::eDepthStencilAttachmentWrite,
+				ashes::ImageLayout::eShaderReadOnlyOptimal,
+				ashes::ImageLayout::eDepthStencilAttachmentOptimal,
+				~( 0u ),
+				~( 0u ),
+				m_depthBuffer.getTexture(),
+				subresource
+			} );
 
 		// Minification passes.
 		for ( auto & pipeline : m_minifyPipelines )
 		{
-			m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
-				, ashes::PipelineStageFlag::eColourAttachmentOutput
-				, pipeline.targetView->makeColourAttachment( ashes::ImageLayout::eUndefined, 0u ) );
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *pipeline.frameBuffer
 				, { colour }
@@ -608,10 +626,6 @@ namespace castor3d
 			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			m_commandBuffer->draw( 6u );
 			m_commandBuffer->endRenderPass();
-			m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-				, ashes::PipelineStageFlag::eFragmentShader
-				, pipeline.targetView->makeShaderInputResource( ashes::ImageLayout::eColourAttachmentOptimal
-					, ashes::AccessFlag::eColourAttachmentWrite ) );
 		}
 
 		m_timer->endPass( *m_commandBuffer );

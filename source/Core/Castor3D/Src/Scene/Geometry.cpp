@@ -155,7 +155,7 @@ namespace castor3d
 				{
 					return lookup.get() == &submesh;
 				} );
-			REQUIRE( it != mesh->end() );
+			CU_Require( it != mesh->end() );
 
 			bool changed = false;
 			MaterialSPtr oldMaterial;
@@ -191,7 +191,7 @@ namespace castor3d
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "No mesh" );
+			CU_Exception( "No mesh" );
 		}
 	}
 

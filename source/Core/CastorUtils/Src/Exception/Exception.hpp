@@ -200,6 +200,6 @@ namespace castor
 \~french
 \brief		Macro définie pour faciliter l'utilisation de castor::Exception
 */
-#define CASTOR_EXCEPTION( p_text ) throw castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
+#define CU_Exception( text ) throw castor::Exception{ text, __FILE__, __FUNCTION__, __LINE__ }
 
 #endif

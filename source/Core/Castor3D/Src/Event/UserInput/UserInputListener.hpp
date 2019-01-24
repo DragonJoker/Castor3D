@@ -383,7 +383,7 @@ namespace castor3d
 
 			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), p_handler ) != std::end( m_handlers ) )
 			{
-				CASTOR_EXCEPTION( "This handler already exists in the listener." );
+				CU_Exception( "This handler already exists in the listener." );
 			}
 
 			m_handlers.push_back( p_handler );

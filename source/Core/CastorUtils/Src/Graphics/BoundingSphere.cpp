@@ -33,7 +33,7 @@ namespace castor
 		m_radius = real( point::distance( box.getMax(), m_center ) );
 #if !defined( NDEBUG )
 		auto radius = real( point::distance( m_center, box.getMin() ) );
-		ENSURE( std::abs( m_radius - radius ) < 0.01 );
+		CU_Ensure( std::abs( m_radius - radius ) < 0.01 );
 #endif
 	}
 

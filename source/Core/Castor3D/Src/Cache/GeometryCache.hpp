@@ -224,7 +224,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_updatePickingTimer;
 	};
 	using GeometryCache = ObjectCache< Geometry, castor::String >;
-	DECLARE_SMART_PTR( GeometryCache );
+	CU_DeclareSmartPtr( GeometryCache );
 }
 
 #endif

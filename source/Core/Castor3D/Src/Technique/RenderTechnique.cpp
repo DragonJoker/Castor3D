@@ -353,6 +353,11 @@ namespace castor3d
 			, camera
 			, jitter );
 
+#else
+
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info
+			, jitter );
+
 #endif
 
 		// Render part

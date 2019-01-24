@@ -43,7 +43,7 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 

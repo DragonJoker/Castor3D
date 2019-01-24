@@ -59,7 +59,7 @@ namespace castor
 		//!\~english	Blue PixelComponents
 		//!\~french		Composante bleue
 		eBlue,
-		CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+		CU_ScopedEnumBounds( eRed )
 	};
 	/**
 	 *\~english
@@ -163,7 +163,7 @@ namespace castor
 		};
 
 	private:
-		DECLARE_ARRAY( float, RgbComponent::eCount, Float4 );
+		CU_DeclareArray( float, RgbComponent::eCount, Float4 );
 		using ColourComponentArray = std::array< ComponentType, size_t( RgbComponent::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
 		using ColourComponentArrayRIt = typename ColourComponentArray::reverse_iterator;

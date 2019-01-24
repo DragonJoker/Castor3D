@@ -421,7 +421,7 @@ namespace castor3d
 		using EventQueue = EventHandler::EventQueue;
 
 	public:
-		DECLARE_SMART_PTR( Derived );
+		CU_DeclareSmartPtr( Derived );
 		using ClientMouseFunction = EventHandler::ClientMouseFunction;
 		using ClientKeyboardFunction = EventHandler::ClientKeyboardFunction;
 		using ClientHandlerFunction = EventHandler::ClientHandlerFunction;

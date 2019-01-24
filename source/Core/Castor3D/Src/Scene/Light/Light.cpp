@@ -54,7 +54,7 @@ namespace castor3d
 		m_category->update();
 	}
 
-	void Light::bind( Point4f * buffer )
+	void Light::bind( Point4f * buffer )const
 	{
 		m_category->bind( buffer );
 	}
@@ -76,19 +76,19 @@ namespace castor3d
 
 	DirectionalLightSPtr Light::getDirectionalLight()const
 	{
-		REQUIRE( m_category->getLightType() == LightType::eDirectional );
+		CU_Require( m_category->getLightType() == LightType::eDirectional );
 		return std::static_pointer_cast< DirectionalLight >( m_category );
 	}
 
 	PointLightSPtr Light::getPointLight()const
 	{
-		REQUIRE( m_category->getLightType() == LightType::ePoint );
+		CU_Require( m_category->getLightType() == LightType::ePoint );
 		return std::static_pointer_cast< PointLight >( m_category );
 	}
 
 	SpotLightSPtr Light::getSpotLight()const
 	{
-		REQUIRE( m_category->getLightType() == LightType::eSpot );
+		CU_Require( m_category->getLightType() == LightType::eSpot );
 		return std::static_pointer_cast< SpotLight >( m_category );
 	}
 

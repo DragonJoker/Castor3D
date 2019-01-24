@@ -130,9 +130,7 @@ namespace castor3d
 		 *\brief		Dessine la passe de rendu.
 		 */
 		ashes::Semaphore const & render( uint32_t index
-			, ashes::Semaphore const & toWait
-			, ShadowMap const * shadowMap
-			, uint32_t shadowMapIndex )override;
+			, ashes::Semaphore const & toWait )override;
 		/**
 		 *\~english
 		 *\return		The number of primitives to draw.
@@ -141,13 +139,16 @@ namespace castor3d
 		 */
 		uint32_t getCount()const override;
 
-	private:
+	protected:
 		/**
 		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
-		void doUpdate( castor::Size const & size
+		void doUpdate( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera )override;
+			, Camera const & camera
+			, ShadowMap const * shadowMap = nullptr
+			, uint32_t shadowMapIndex = 0u )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */

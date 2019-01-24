@@ -21,7 +21,7 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	private:
-		DECLARE_LIST( castor::ByteArray, BytePtr );
+		CU_DeclareList( castor::ByteArray, BytePtr );
 
 	public:
 		/**

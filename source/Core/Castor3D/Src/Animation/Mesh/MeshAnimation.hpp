@@ -76,7 +76,7 @@ namespace castor3d
 		 */
 		inline MeshAnimationSubmesh & getSubmesh( uint32_t index )
 		{
-			REQUIRE( index < m_submeshes.size() );
+			CU_Require( index < m_submeshes.size() );
 			return m_submeshes[index];
 		}
 

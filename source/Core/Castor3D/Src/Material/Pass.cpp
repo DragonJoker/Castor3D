@@ -108,6 +108,12 @@ namespace castor3d
 		{
 			result = file.writeText( m_tabs + cuT( "\talpha " ) + string::toString( pass.getOpacity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Pass >::checkError( result, "Pass opacity" );
+
+			if ( result && pass.getBWAccumulationOperator() != 0u )
+			{
+				result = file.writeText( m_tabs + cuT( "\tbw_accumulation " ) + string::toString( uint32_t( pass.getBWAccumulationOperator() ), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< Pass >::checkError( result, "Pass opacity" );
+			}
 		}
 
 		if ( result && pass.getEmissive() > 0 )
@@ -228,7 +234,7 @@ namespace castor3d
 
 	void Pass::destroyTextureUnit( uint32_t index )
 	{
-		REQUIRE( index < m_textureUnits.size() );
+		CU_Require( index < m_textureUnits.size() );
 		Logger::logInfo( makeStringStream() << cuT( "Destroying TextureUnit " ) << index );
 		auto it = m_textureUnits.begin();
 		m_textureUnits.erase( it + index );
@@ -238,7 +244,7 @@ namespace castor3d
 
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
 	{
-		REQUIRE( index < m_textureUnits.size() );
+		CU_Require( index < m_textureUnits.size() );
 		return m_textureUnits[index];
 	}
 
@@ -449,7 +455,7 @@ namespace castor3d
 			auto it = std::find( m_textureUnits.begin()
 				, m_textureUnits.end()
 				, opacityMap );
-			REQUIRE( it != m_textureUnits.end() );
+			CU_Require( it != m_textureUnits.end() );
 			m_textureUnits.erase( it );
 			doUpdateFlags();
 			m_texturesReduced = false;

@@ -216,34 +216,33 @@ namespace castor3d
 
 		if ( cache.getLightsCount( type ) )
 		{
-			auto & lightPass = *m_lightPass[size_t( type )];
-			auto & lightPassShadow = *m_lightPassShadow[size_t( type )];
+			auto lightPass = m_lightPass[size_t( type )].get();
+			auto lightPassShadow = m_lightPassShadow[size_t( type )].get();
 
 			for ( auto & light : cache.getLights( type ) )
 			{
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
+					LightPass * pass = nullptr;
+
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						lightPassShadow.update( camera.getSize()
-							, *light
-							, camera );
-						result = &lightPassShadow.render( index
-							, *result
-							, light->getShadowMap()
-							, light->getShadowMapIndex() );
+						pass = lightPassShadow;
 					}
 					else
 					{
-						lightPass.update( camera.getSize()
-							, *light
-							, camera );
-						result = &lightPass.render( index
-							, *result
-							, nullptr
-							, 0u );
+						pass = lightPass;
 					}
+
+					pass->update( !index
+						, camera.getSize()
+						, *light
+						, camera
+						, light->getShadowMap()
+						, light->getShadowMapIndex() );
+					result = &pass->render( index
+						, *result );
 
 					++index;
 					info.m_visibleLightsCount++;

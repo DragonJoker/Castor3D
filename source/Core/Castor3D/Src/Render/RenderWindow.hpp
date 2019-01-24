@@ -295,7 +295,7 @@ namespace castor3d
 
 		inline ashes::Device const & getDevice()const
 		{
-			REQUIRE( m_device );
+			CU_Require( m_device );
 			return *m_device;
 		}
 

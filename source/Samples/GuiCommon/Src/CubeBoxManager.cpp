@@ -185,7 +185,7 @@ namespace GuiCommon
 
 	void CubeBoxManager::hideObject( Geometry const & object )
 	{
-		REQUIRE( object.getName() == m_object->getName() );
+		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()

@@ -28,7 +28,7 @@ namespace castor3d
 		//!\~english	Keyboard event type.
 		//!\~french		Type d'évènement de clavier.
 		eHandler,
-		CASTOR_SCOPED_ENUM_BOUNDS( eMouse )
+		CU_ScopedEnumBounds( eMouse )
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -63,7 +63,7 @@ namespace castor3d
 		//!\~english	One mouse wheel is rolled.
 		//!\~french		Une molette de la souris est tournée.
 		eWheel,
-		CASTOR_SCOPED_ENUM_BOUNDS( eMove )
+		CU_ScopedEnumBounds( eMove )
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -86,7 +86,7 @@ namespace castor3d
 		//!\~english	A displayable char key is stroked.
 		//!\~french		Une touche de caractère imprimable est tapée.
 		eChar,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePushed )
+		CU_ScopedEnumBounds( ePushed )
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -106,7 +106,7 @@ namespace castor3d
 		//!\~english	Handler deactivated.
 		//!\~french		Gestionnaire désactivé.
 		eDeactivate,
-		CASTOR_SCOPED_ENUM_BOUNDS( eActivate )
+		CU_ScopedEnumBounds( eActivate )
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -128,7 +128,7 @@ namespace castor3d
 		//!\~english	Right mouse button.
 		//!\~french		Le bouton droit.
 		eRight,
-		CASTOR_SCOPED_ENUM_BOUNDS( eLeft )
+		CU_ScopedEnumBounds( eLeft )
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -256,12 +256,12 @@ namespace castor3d
 	class HandlerEvent;
 	class UserInputListener;
 
-	DECLARE_SMART_PTR( EventHandler );
-	DECLARE_SMART_PTR( UserInputEvent );
-	DECLARE_SMART_PTR( KeyboardEvent );
-	DECLARE_SMART_PTR( MouseEvent );
-	DECLARE_SMART_PTR( HandlerEvent );
-	DECLARE_SMART_PTR( UserInputListener );
+	CU_DeclareSmartPtr( EventHandler );
+	CU_DeclareSmartPtr( UserInputEvent );
+	CU_DeclareSmartPtr( KeyboardEvent );
+	CU_DeclareSmartPtr( MouseEvent );
+	CU_DeclareSmartPtr( HandlerEvent );
+	CU_DeclareSmartPtr( UserInputListener );
 
 	template< class Derived > class NonClientEventHandler;
 }

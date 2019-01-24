@@ -23,7 +23,7 @@ namespace castor3d
 		{
 			return lhs.m_distance < rhs.m_distance;
 		}
-		DECLARE_VECTOR( FaceDistance, FaceDist );
+		CU_DeclareVector( FaceDistance, FaceDist );
 	}
 
 	String const TriFaceMapping::Name = "triface_mapping";
@@ -130,7 +130,7 @@ namespace castor3d
 
 	void TriFaceMapping::sortByDistance( Point3r const & cameraPosition )
 	{
-		REQUIRE( getOwner()->isInitialised() );
+		CU_Require( getOwner()->isInitialised() );
 
 		try
 		{
@@ -227,7 +227,7 @@ namespace castor3d
 				indexBuffer.unlock();
 			}
 
-			//m_faces.clear();
+			m_faces.clear();
 		}
 	}
 }

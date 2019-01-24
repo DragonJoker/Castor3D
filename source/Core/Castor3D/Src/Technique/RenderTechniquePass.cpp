@@ -144,7 +144,7 @@ namespace castor3d
 		}
 	}
 
-	bool RenderTechniquePass::doInitialise( Size const & CU_PARAM_UNUSED( size ) )
+	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
 		m_finished = getCurrentDevice( *this ).createSemaphore();
 		return true;

@@ -12,6 +12,9 @@
 using namespace castor;
 using namespace castor3d;
 
+#define C3D_DebugLinearisePass 0
+#define C3D_DebugRawPass 0
+
 namespace castor3d
 {
 	SsaoPass::SsaoPass( Engine & engine
@@ -26,12 +29,14 @@ namespace castor3d
 			, size
 			, *m_ssaoConfigUbo
 			, *gpResult.getViews()[size_t( DsTexture::eDepth )] ) }
+#if !C3D_DebugLinearisePass
 		, m_rawSsaoPass{ std::make_shared< RawSsaoPass >( engine
 			, size
 			, config
 			, *m_ssaoConfigUbo
 			, m_linearisePass->getResult()
-			, *gpResult.getViews()[size_t( DsTexture::eData1 )] )}
+			, *gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+#	if !C3D_DebugRawPass
 		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, size
 			, config
@@ -46,6 +51,8 @@ namespace castor3d
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, *gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+#	endif
+#endif
 	{
 	}
 
@@ -59,31 +66,49 @@ namespace castor3d
 	{
 		m_ssaoConfigUbo->update( m_config, camera );
 		m_linearisePass->update( camera );
+#if !C3D_DebugLinearisePass
+#	if !C3D_DebugRawPass
 		m_horizontalBlur->update();
 		m_verticalBlur->update();
-		m_config.m_blurRadius.reset();
+#	endif
+#endif
+		m_config.blurRadius.reset();
 	}
 
 	ashes::Semaphore const & SsaoPass::render( ashes::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
 		result = &m_linearisePass->linearise( *result );
+#if !C3D_DebugLinearisePass
 		result = &m_rawSsaoPass->compute( *result );
+#	if !C3D_DebugRawPass
 		result = &m_horizontalBlur->blur( *result );
 		result = &m_verticalBlur->blur( *result );
+#	endif
+#endif
 		return *result;
 	}
 
 	void SsaoPass::accept( RenderTechniqueVisitor & visitor )
 	{
 		m_linearisePass->accept( visitor );
+#if !C3D_DebugLinearisePass
 		m_rawSsaoPass->accept( m_config, visitor );
+#	if !C3D_DebugRawPass
 		m_horizontalBlur->accept( true, m_config, visitor );
 		m_verticalBlur->accept( false, m_config, visitor );
+#	endif
+#endif
 	}
 
 	TextureUnit const & SsaoPass::getResult()const
 	{
+#if C3D_DebugLinearisePass
+		return m_linearisePass->getResult();
+#elif C3D_DebugRawPass
+		return m_rawSsaoPass->getResult();
+#else
 		return m_verticalBlur->getResult();
+#endif
 	}
 }

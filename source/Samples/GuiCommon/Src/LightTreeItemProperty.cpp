@@ -18,7 +18,7 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
+		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light:" );
 		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
 		static wxString PROPERTY_LIGHT_COLOUR = _( "Colour" );
@@ -26,6 +26,19 @@ namespace GuiCommon
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
+		static wxString PROPERTY_SHADOW_ENABLED = _( "Enabled" );
+		static wxString PROPERTY_SHADOW_TYPE = _( "Type" );
+		static wxString PROPERTY_SHADOW_TYPE_NONE = _( "None" );
+		static wxString PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
+		static wxString PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
+		static wxString PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
+		static wxString PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
+		static wxString PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
+		static wxString PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
+		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
+		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
+		static wxString PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
@@ -40,6 +53,19 @@ namespace GuiCommon
 		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+		PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
+		PROPERTY_SHADOW_ENABLED = _( "Enabled" );
+		PROPERTY_SHADOW_TYPE = _( "Type" );
+		PROPERTY_SHADOW_TYPE_NONE = _( "None" );
+		PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
+		PROPERTY_SHADOW_TYPE_PCF = _( "PCF" );
+		PROPERTY_SHADOW_TYPE_VSM = _( "VSM" );
+		PROPERTY_SHADOW_MIN_OFFSET = _( "Min. Offset" );
+		PROPERTY_SHADOW_MAX_SLOPE_OFFSET = _( "Max. Slope Offset" );
+		PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
+		PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
+		PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
+		PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
 
 		CreateTreeItemMenu();
 	}
@@ -68,6 +94,8 @@ namespace GuiCommon
 			doCreateSpotLightProperties( grid, m_light.getSpotLight() );
 			break;
 		}
+
+		doCreateShadowProperties( grid );
 	}
 
 	void LightTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
@@ -81,29 +109,76 @@ namespace GuiCommon
 			if ( property->GetName() == PROPERTY_LIGHT_COLOUR )
 			{
 				colour << property->GetValue();
-				OnColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
+				onColourChange( RgbColour::fromBGR( colour.GetRGB() ) );
 			}
 			else if ( property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
-				OnIntensityChange( Point2fRefFromVariant( property->GetValue() ) );
+				onIntensityChange( Point2fRefFromVariant( property->GetValue() ) );
 			}
-			else if ( m_light.getLightType() != LightType::eDirectional )
+			else if ( property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 			{
-				if ( property->GetName() == PROPERTY_LIGHT_ATTENUATION )
+				CU_Assert( m_light.getLightType() != LightType::eDirectional
+					, "Only for non directional light types" );
+				onAttenuationChange( Point3fRefFromVariant( property->GetValue() ) );
+			}
+			else if ( property->GetName() == PROPERTY_LIGHT_CUT_OFF )
+			{
+				CU_Assert( m_light.getLightType() == LightType::eSpot
+					, "Only for spot light types" );
+				onCutOffChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_LIGHT_EXPONENT )
+			{
+				CU_Assert( m_light.getLightType() == LightType::eSpot
+					, "Only for spot light types" );
+				onExponentChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_TYPE )
+			{
+				if ( property->GetValueAsString() == PROPERTY_SHADOW_TYPE_NONE )
 				{
-					OnAttenuationChange( Point3fRefFromVariant( property->GetValue() ) );
+					onShadowTypeChange( ShadowType::eNone );
 				}
-				else if ( m_light.getLightType() == LightType::eSpot )
+				else if ( property->GetValueAsString() == PROPERTY_SHADOW_TYPE_RAW )
 				{
-					if ( property->GetName() == PROPERTY_LIGHT_CUT_OFF )
-					{
-						OnCutOffChange( property->GetValue() );
-					}
-					else if ( property->GetName() == PROPERTY_LIGHT_EXPONENT )
-					{
-						OnExponentChange( property->GetValue() );
-					}
+					onShadowTypeChange( ShadowType::eRaw );
 				}
+				else if ( property->GetValueAsString() == PROPERTY_SHADOW_TYPE_PCF )
+				{
+					onShadowTypeChange( ShadowType::ePCF );
+				}
+				else if ( property->GetValueAsString() == PROPERTY_SHADOW_TYPE_VSM )
+				{
+					onShadowTypeChange( ShadowType::eVariance );
+				}
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_MIN_OFFSET )
+			{
+				onShadowMinOffsetChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_MAX_SLOPE_OFFSET )
+			{
+				onShadowMaxSlopeOffsetChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_MAX_VARIANCE )
+			{
+				onShadowMaxVarianceChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_VARIANCE_BIAS )
+			{
+				onShadowVarianceBiasChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_VOLUMETRIC_STEPS )
+			{
+				CU_Assert( m_light.getLightType() == LightType::eDirectional
+					, "Only for directional light types" );
+				onShadowVolumetricStepsChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR )
+			{
+				CU_Assert( m_light.getLightType() == LightType::eDirectional
+					, "Only for directional light types" );
+				onShadowVolumetricScatteringFactorChange( property->GetValue() );
 			}
 		}
 	}
@@ -126,7 +201,31 @@ namespace GuiCommon
 		grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( light->getExponent() );
 	}
 
-	void LightTreeItemProperty::OnColourChange( RgbColour const & value )
+	void LightTreeItemProperty::doCreateShadowProperties( wxPropertyGrid * grid )
+	{
+		wxString selected;
+		wxPGChoices choices;
+		choices.Add( PROPERTY_SHADOW_TYPE_NONE );
+		choices.Add( PROPERTY_SHADOW_TYPE_RAW );
+		choices.Add( PROPERTY_SHADOW_TYPE_PCF );
+		choices.Add( PROPERTY_SHADOW_TYPE_VSM );
+		selected = choices.GetLabels()[size_t( m_light.getShadowType() )];
+
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SHADOW ) );
+		grid->Append( new wxEnumProperty( PROPERTY_SHADOW_TYPE, PROPERTY_SHADOW_TYPE, choices ) )->SetValue( selected );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_MIN_OFFSET ) )->SetValue( m_light.getCategory()->getShadowOffsets()[0] );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_MAX_SLOPE_OFFSET ) )->SetValue( m_light.getCategory()->getShadowOffsets()[1] );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_MAX_VARIANCE ) )->SetValue( m_light.getCategory()->getShadowVariance()[0] );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_VARIANCE_BIAS ) )->SetValue( m_light.getCategory()->getShadowVariance()[1] );
+
+		if ( m_light.getLightType() == LightType::eDirectional )
+		{
+			grid->Append( new wxIntProperty( PROPERTY_SHADOW_VOLUMETRIC_STEPS ) )->SetValue( long( m_light.getCategory()->getVolumetricSteps() ) );
+			grid->Append( new wxFloatProperty( PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR ) )->SetValue( m_light.getCategory()->getVolumetricScatteringFactor() );
+		}
+	}
+
+	void LightTreeItemProperty::onColourChange( RgbColour const & value )
 	{
 		doApplyChange( [value, this]()
 		{
@@ -134,7 +233,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnIntensityChange( Point2f const & value )
+	void LightTreeItemProperty::onIntensityChange( Point2f const & value )
 	{
 		float d = value[0];
 		float s = value[1];
@@ -145,7 +244,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnAttenuationChange( Point3f const & value )
+	void LightTreeItemProperty::onAttenuationChange( Point3f const & value )
 	{
 		float x = value[0];
 		float y = value[1];
@@ -166,7 +265,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnCutOffChange( double value )
+	void LightTreeItemProperty::onCutOffChange( double value )
 	{
 		doApplyChange( [value, this]()
 		{
@@ -174,11 +273,68 @@ namespace GuiCommon
 		} );
 	}
 
-	void LightTreeItemProperty::OnExponentChange( double value )
+	void LightTreeItemProperty::onExponentChange( double value )
 	{
 		doApplyChange( [value, this]()
 		{
 			m_light.getSpotLight()->setExponent( float( value ) );
 		} );
+	}
+
+	void LightTreeItemProperty::onShadowTypeChange( ShadowType value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setShadowProducer( value != ShadowType::eNone );
+				m_light.setShadowType( value );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowMinOffsetChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setShadowMinOffset( float( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowMaxSlopeOffsetChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setShadowMaxSlopeOffset( float( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowMaxVarianceChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setShadowMaxVariance( float( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowVarianceBiasChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setShadowVarianceBias( float( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowVolumetricStepsChange( long value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setVolumetricSteps( uint32_t( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onShadowVolumetricScatteringFactorChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setVolumetricScatteringFactor( float( value ) );
+			} );
 	}
 }

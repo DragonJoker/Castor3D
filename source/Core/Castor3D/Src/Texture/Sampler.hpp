@@ -169,7 +169,7 @@ namespace castor3d
 
 		inline ashes::Sampler const & getSampler()const
 		{
-			REQUIRE( m_sampler );
+			CU_Require( m_sampler );
 			return *m_sampler;
 		}
 		/**@}*/

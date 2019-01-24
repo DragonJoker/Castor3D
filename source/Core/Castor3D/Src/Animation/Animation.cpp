@@ -65,7 +65,7 @@ namespace castor3d
 			++cur;
 		}
 
-		ENSURE( prv != cur );
+		CU_Ensure( prv != cur );
 	}
 
 	void Animation::updateLength()

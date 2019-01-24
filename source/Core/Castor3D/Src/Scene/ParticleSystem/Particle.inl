@@ -392,18 +392,18 @@ namespace castor3d
 	template< ParticleFormat Type >
 	inline void Particle::setValue( uint32_t index, typename ElementTyper< Type >::Type const & value )
 	{
-		REQUIRE( index < m_description.size() );
+		CU_Require( index < m_description.size() );
 		auto it = m_description.begin() + index;
-		REQUIRE( it->m_dataType == Type );
+		CU_Require( it->m_dataType == Type );
 		std::memcpy( &m_data[it->m_offset], ElementTyper< Type >::getPointer( value ), sizeof( value ) );
 	}
 
 	template< ParticleFormat Type >
 	inline typename ElementTyper< Type >::Type Particle::getValue( uint32_t index )const
 	{
-		REQUIRE( index < m_description.size() );
+		CU_Require( index < m_description.size() );
 		auto it = m_description.begin() + index;
-		REQUIRE( it->m_dataType == Type );
+		CU_Require( it->m_dataType == Type );
 		typename ElementTyper< Type >::Type result{};
 		std::memcpy( ElementTyper< Type >::getPointer( result ), &m_data[it->m_offset], sizeof( result ) );
 		return result;

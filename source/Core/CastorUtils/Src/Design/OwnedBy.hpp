@@ -65,7 +65,7 @@ namespace castor
 	 *\brief		Macro pour déclarer une spécialisation exportée de OwnedBy.
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
-#	define DECLARED_EXPORTED_OWNED_BY( exp, owner, name )\
+#	define CU_DeclareExportedOwnedBy( exp, owner, name )\
 	namespace castor\
 	{\
 		template<>\
@@ -93,7 +93,7 @@ namespace castor
 	 *\brief		Macro pour implémenter une spécialisation de OwnedBy.
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
-#	define IMPLEMENT_EXPORTED_OWNED_BY( owner, name )\
+#	define CU_ImplementExportedOwnedBy( owner, name )\
 	namespace castor\
 	{\
 		OwnedBy< owner >::OwnedBy( owner & p_owner )\

@@ -1,10 +1,10 @@
 #include "GuiCommonPrerequisites.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>
-#elif defined( CASTOR_PLATFORM_LINUX )
+#elif defined( CU_PlatformLinux )
 #	include <gdk/gdkx.h>
 #	include <gtk/gtk.h>
 #	undef None
@@ -123,10 +123,10 @@ namespace GuiCommon
 			{
 #if defined( NDEBUG )
 
-				if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
+				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
 #else
 
-				if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
 
 #endif
 				{
@@ -157,7 +157,7 @@ namespace GuiCommon
 					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
 						uint8_t const * line = buffer;
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -176,7 +176,7 @@ namespace GuiCommon
 
 						buffer -= pitch;
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
@@ -188,7 +188,7 @@ namespace GuiCommon
 
 					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -205,7 +205,7 @@ namespace GuiCommon
 							it++;
 						}
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
@@ -342,7 +342,7 @@ namespace GuiCommon
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.getExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
@@ -386,12 +386,12 @@ namespace GuiCommon
 
 	ashes::WindowHandle makeWindowHandle( wxWindow * window )
 	{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 		return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 			, window->GetHandle() ) );
 
-#elif defined( CASTOR_PLATFORM_LINUX )
+#elif defined( CU_PlatformLinux )
 
 		GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
 		GLXDrawable drawable = 0;
@@ -456,5 +456,27 @@ namespace GuiCommon
 	wxSize make_wxSize( castor::Size const & p_value )
 	{
 		return wxSize( p_value.getWidth(), p_value.getHeight() );
+	}
+
+	ast::ShaderStage convert( ashes::ShaderStageFlag stage )
+	{
+		switch ( stage )
+		{
+		case ashes::ShaderStageFlag::eVertex:
+			return ast::ShaderStage::eVertex;
+		case ashes::ShaderStageFlag::eTessellationControl:
+			return ast::ShaderStage::eTessellationControl;
+		case ashes::ShaderStageFlag::eTessellationEvaluation:
+			return ast::ShaderStage::eTessellationEvaluation;
+		case ashes::ShaderStageFlag::eGeometry:
+			return ast::ShaderStage::eGeometry;
+		case ashes::ShaderStageFlag::eFragment:
+			return ast::ShaderStage::eFragment;
+		case ashes::ShaderStageFlag::eCompute:
+			return ast::ShaderStage::eCompute;
+		default:
+			assert( false && "Unsupported ashes::ShaderStageFlag" );
+			return ast::ShaderStage::eVertex;
+		}
 	}
 }

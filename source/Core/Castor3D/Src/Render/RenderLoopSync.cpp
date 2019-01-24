@@ -31,7 +31,7 @@ namespace castor3d
 
 	void RenderLoopSync::beginRendering()
 	{
-		CASTOR_EXCEPTION( CALL_START_RENDERING );
+		CU_Exception( CALL_START_RENDERING );
 	}
 
 	void RenderLoopSync::renderSyncFrame()
@@ -67,17 +67,17 @@ namespace castor3d
 
 	void RenderLoopSync::pause()
 	{
-		CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
+		CU_Exception( CALL_PAUSE_RENDERING );
 	}
 
 	void RenderLoopSync::resume()
 	{
-		CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
+		CU_Exception( CALL_RESUME_RENDERING );
 	}
 
 	void RenderLoopSync::endRendering()
 	{
-		CASTOR_EXCEPTION( CALL_END_RENDERING );
+		CU_Exception( CALL_END_RENDERING );
 	}
 
 	ashes::DevicePtr RenderLoopSync::doCreateMainDevice( ashes::WindowHandle && handle

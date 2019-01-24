@@ -55,7 +55,7 @@ namespace castor3d
 		, Matrix4x4r const & invView
 		, Matrix4x4r const & invProj )
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;

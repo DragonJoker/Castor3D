@@ -19,6 +19,26 @@ namespace castor3d
 
 	namespace
 	{
+		String getName( ImageComponents value )
+		{
+			switch ( value )
+			{
+			case castor3d::ImageComponents::eR:
+				return "R";
+			case castor3d::ImageComponents::eRG:
+				return "RG";
+			case castor3d::ImageComponents::eRGB:
+				return "RGB";
+			case castor3d::ImageComponents::eA:
+				return "A";
+			case castor3d::ImageComponents::eAll:
+				return "All";
+			default:
+				CU_Failure( "Unsupported ImageComponents" );
+				return "Unknown";
+			}
+		}
+
 		class StaticTextureSource
 			: public TextureSource
 		{
@@ -94,7 +114,8 @@ namespace castor3d
 		public:
 			StaticFileTextureSource( Engine & engine
 				, Path const & folder
-				, Path const & relative )
+				, Path const & relative
+				, ImageComponents components )
 				: StaticTextureSource{ engine }
 				, m_folder{ folder }
 				, m_relative{ relative }
@@ -103,16 +124,19 @@ namespace castor3d
 
 				if ( File::fileExists( folder / relative ) )
 				{
-					String name{ relative.getFileName() };
+					String name{ relative + getName( components ) };
 
-					if ( m_engine.getImageCache().has( relative ) )
+					if ( m_engine.getImageCache().has( name ) )
 					{
-						auto image = m_engine.getImageCache().find( relative );
+						auto image = m_engine.getImageCache().find( name );
 						buffer = image->getPixels();
 					}
 					else
 					{
-						auto image = m_engine.getImageCache().add( relative, folder / relative );
+						auto image = m_engine.getImageCache().add( name
+							, folder / relative
+							, ( components != ImageComponents::eA
+								&& components != ImageComponents::eAll ) );
 						buffer = image->getPixels();
 						Size size{ buffer->dimensions() };
 						//Size adjustedSize{ getNext2Pow( size.getWidth() ), getNext2Pow( size.getHeight() ) };
@@ -126,7 +150,7 @@ namespace castor3d
 
 				if ( !buffer )
 				{
-					CASTOR_EXCEPTION( cuT( "TextureView::setSource - Couldn't load image " ) + relative );
+					CU_Exception( cuT( "TextureView::setSource - Couldn't load image " ) + relative );
 				}
 
 				setBuffer( buffer );
@@ -395,11 +419,13 @@ namespace castor3d
 	}
 
 	void TextureView::initialiseSource( Path const & folder
-		, Path const & relative )
+		, Path const & relative
+		, ImageComponents components )
 	{
 		m_source = std::make_unique< StaticFileTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 			, folder
-			, relative );
+			, relative
+			, components );
 		m_info.format = m_source->getPixelFormat();
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
 			, m_source->getPixelFormat() );

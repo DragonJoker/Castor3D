@@ -366,7 +366,7 @@ namespace castor3d
 		, bool invertNormals )const
 	{
 		// Since their vertex attribute locations overlap, we must not have both set at the same time.
-		REQUIRE( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
+		CU_Require( ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? 1 : 0 )
 			+ ( checkFlag( programFlags, ProgramFlag::eMorphing ) ? 1 : 0 ) < 2 );
 		using namespace sdw;
 		VertexWriter writer;
@@ -378,7 +378,7 @@ namespace castor3d
 			, RenderPass::VertexInputs::NormalLocation );
 		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
@@ -431,7 +431,7 @@ namespace castor3d
 		{
 			auto vertexPosition = writer.declLocale( cuT( "vertexPosition" )
 				, vec4( position.xyz(), 1.0 ) );
-			vtx_texture = texture;
+			vtx_texture = uv;
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{

@@ -136,7 +136,7 @@ namespace CastorGui
 
 	void Control::setBackgroundMaterial( MaterialSPtr p_value )
 	{
-		REQUIRE( p_value );
+		CU_Require( p_value );
 		m_backgroundMaterial = p_value;
 		BorderPanelOverlaySPtr panel = getBackground();
 
@@ -171,7 +171,7 @@ namespace CastorGui
 	void Control::setVisible( bool p_value )
 	{
 		BorderPanelOverlaySPtr panel = getBackground();
-		REQUIRE( panel );
+		CU_Require( panel );
 		panel->setVisible( p_value );
 		panel.reset();
 		doSetVisible( p_value );
@@ -180,7 +180,7 @@ namespace CastorGui
 	bool Control::isVisible()const
 	{
 		BorderPanelOverlaySPtr panel = getBackground();
-		REQUIRE( panel );
+		CU_Require( panel );
 		bool visible = panel->isVisible();
 		ControlRPtr parent = getParent();
 
@@ -201,7 +201,7 @@ namespace CastorGui
 
 		if ( it == m_children.end() )
 		{
-			CASTOR_EXCEPTION( "This control does not exist in my childs" );
+			CU_Exception( "This control does not exist in my childs" );
 		}
 
 		return it->lock();
@@ -222,7 +222,7 @@ namespace CastorGui
 	bool Control::doIsVisible()const
 	{
 		auto panel = getBackground();
-		REQUIRE( panel );
+		CU_Require( panel );
 		return panel->isVisible();
 	}
 }

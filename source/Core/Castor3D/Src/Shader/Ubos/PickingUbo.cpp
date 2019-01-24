@@ -47,7 +47,7 @@ namespace castor3d
 	void PickingUbo::update( uint32_t drawIndex
 		, uint32_t nodeIndex )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.drawIndex = drawIndex ? 1 : 0;
 		configuration.nodeIndex = nodeIndex - 1;

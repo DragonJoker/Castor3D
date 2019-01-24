@@ -32,13 +32,13 @@ namespace castor
 	template< typename TObj, typename TKey >
 	inline typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::begin()
 	{
-		REQUIRE( m_locked );
+		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 	template< typename TObj, typename TKey >
 	inline typename Collection< TObj, TKey >::TObjPtrMapConstIt Collection< TObj, TKey >::begin()const
 	{
-		REQUIRE( m_locked );
+		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 	template< typename TObj, typename TKey >

@@ -226,6 +226,11 @@ namespace castor3d
 			return m_viewport.getFovY();
 		}
 
+		inline float getProjectionScale()const
+		{
+			return m_viewport.getProjectionScale();
+		}
+
 		bool isVisible( castor::BoundingBox const & box
 			, castor::Matrix4x4r const & transformations )const
 		{

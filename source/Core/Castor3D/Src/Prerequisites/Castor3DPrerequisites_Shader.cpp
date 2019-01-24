@@ -184,7 +184,7 @@ namespace castor3d
 				switch ( lightType )
 				{
 				case LightType::eDirectional:
-					FAILURE( "Directional light model should use the other overload" );
+					CU_Failure( "Directional light model should use the other overload" );
 					break;
 
 				case LightType::ePoint:
@@ -196,7 +196,7 @@ namespace castor3d
 					break;
 
 				default:
-					FAILURE( "Invalid light type" );
+					CU_Failure( "Invalid light type" );
 					break;
 				}
 
@@ -329,7 +329,7 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						FAILURE( "Directional light model should use the other overload" );
+						CU_Failure( "Directional light model should use the other overload" );
 						break;
 
 					case LightType::ePoint:
@@ -341,7 +341,7 @@ namespace castor3d
 						break;
 
 					default:
-						FAILURE( "Invalid light type" );
+						CU_Failure( "Invalid light type" );
 						break;
 					}
 
@@ -472,7 +472,7 @@ namespace castor3d
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
-						FAILURE( "Directional light model should use the other overload" );
+						CU_Failure( "Directional light model should use the other overload" );
 						break;
 
 					case LightType::ePoint:
@@ -484,7 +484,7 @@ namespace castor3d
 						break;
 
 					default:
-						FAILURE( "Invalid light type" );
+						CU_Failure( "Invalid light type" );
 						break;
 					}
 
@@ -727,7 +727,7 @@ namespace castor3d
 							// shift texture coordinates along direction of P
 							currentTexCoords -= deltaTexCoords;
 							// get depthmap value at current texture coordinates
-							currentDepthMapValue = texture( c3d_mapHeight, currentTexCoords ).r();
+							currentDepthMapValue = textureLod( c3d_mapHeight, currentTexCoords, 0.0_f ).r();
 							// get depth of next layer
 							currentLayerDepth += layerDepth;
 						}

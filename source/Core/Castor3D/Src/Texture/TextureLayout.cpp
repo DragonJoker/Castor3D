@@ -35,7 +35,7 @@ namespace castor3d
 				{
 					if ( checkFlag( flags, ashes::ImageCreateFlag::eCubeCompatible ) )
 					{
-						REQUIRE( ( arrayLayers % 6 ) == 0 );
+						CU_Require( ( arrayLayers % 6 ) == 0 );
 						return arrayLayers == 6u
 							? ashes::TextureViewType::eCube
 							: ashes::TextureViewType::eCubeArray;
@@ -50,7 +50,7 @@ namespace castor3d
 				return ashes::TextureViewType::e3D;
 
 			default:
-				FAILURE( "Unsupported texture type." );
+				CU_Failure( "Unsupported texture type." );
 				return ashes::TextureViewType::e2D;
 			}
 		}
@@ -195,15 +195,16 @@ namespace castor3d
 	{
 		if ( m_info.mipLevels > 1u )
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			m_texture->generateMipmaps();
 		}
 	}
 
 	void TextureLayout::setSource( Path const & folder
-		, Path const & relative )
+		, Path const & relative
+		, ImageComponents components )
 	{
-		m_defaultView->initialiseSource( folder, relative );
+		m_defaultView->initialiseSource( folder, relative, components );
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )

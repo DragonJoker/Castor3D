@@ -28,8 +28,15 @@ namespace castor3d
 			C3D_API void declareComputeAccumulation();
 			C3D_API void declareFresnelSchlick();
 			C3D_API void declareComputeIBL();
+			// 1.0 - y
 			C3D_API void declareInvertVec2Y();
 			C3D_API void declareInvertVec3Y();
+			C3D_API void declareInvertVec4Y();
+			// -y
+			C3D_API void declareNegateVec2Y();
+			C3D_API void declareNegateVec3Y();
+			C3D_API void declareNegateVec4Y();
+
 			C3D_API void declareEncodeMaterial();
 			C3D_API void declareDecodeMaterial();
 			C3D_API void declareDecodeReceiver();
@@ -37,6 +44,14 @@ namespace castor3d
 			C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 			C3D_API sdw::Vec3 bottomUpToTopDown( sdw::Vec3 const & texCoord )const;
 			C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
+			C3D_API sdw::Vec4 bottomUpToTopDown( sdw::Vec4 const & texCoord )const;
+			C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
+			C3D_API sdw::Vec2 negateBottomUpToTopDown( sdw::Vec2 const & texCoord )const;
+			C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const;
+			C3D_API sdw::Vec3 negateBottomUpToTopDown( sdw::Vec3 const & texCoord )const;
+			C3D_API sdw::Vec3 negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const;
+			C3D_API sdw::Vec4 negateBottomUpToTopDown( sdw::Vec4 const & texCoord )const;
+			C3D_API sdw::Vec4 negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const;
 			C3D_API sdw::Vec2 calcTexCoord( sdw::Vec2 const & renderPos
 				, sdw::Vec2 const & renderSize )const;
 			C3D_API sdw::Vec3 calcVSPosition( sdw::Vec2 const & uv
@@ -59,7 +74,8 @@ namespace castor3d
 				, sdw::Vec3 const & colour
 				, sdw::Float const & alpha
 				, sdw::Float const & nearPlane
-				, sdw::Float const & farPlane );
+				, sdw::Float const & farPlane
+				, sdw::Float const & accumulationOperator );
 			C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
 				, sdw::Vec3 const & f0
 				, sdw::Float const & roughness )const;
@@ -179,6 +195,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InFloat
+				, sdw::InFloat
 				, sdw::InFloat > m_computeAccumulation;
 			sdw::Function< sdw::Vec3
 				, sdw::InFloat
@@ -199,6 +216,14 @@ namespace castor3d
 				, sdw::InVec2 > m_invertVec2Y;
 			sdw::Function< sdw::Vec3
 				, sdw::InVec3 > m_invertVec3Y;
+			sdw::Function< sdw::Vec4
+				, sdw::InVec4 > m_invertVec4Y;
+			sdw::Function< sdw::Vec2
+				, sdw::InVec2 > m_negateVec2Y;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3 > m_negateVec3Y;
+			sdw::Function< sdw::Vec4
+				, sdw::InVec4 > m_negateVec4Y;
 			sdw::Function< sdw::Void
 				, sdw::InInt
 				, sdw::InInt

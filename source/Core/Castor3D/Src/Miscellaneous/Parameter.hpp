@@ -306,8 +306,8 @@ namespace castor3d
 		}
 
 	private:
-		DECLARE_VECTOR( uint8_t, Byte );
-		DECLARE_MAP( castor::String, ByteArray, ParamName );
+		CU_DeclareVector( uint8_t, Byte );
+		CU_DeclareMap( castor::String, ByteArray, ParamName );
 		ParamNameMap m_mapParameters;
 	};
 }
