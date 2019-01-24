@@ -174,7 +174,7 @@ namespace castor3d
 		, int32_t cascadeIndex
 		, float minCastersZ )
 	{
-		if ( cascadeIndex < m_cascades.size() )
+		if ( size_t( cascadeIndex ) < m_cascades.size() )
 		{
 			if ( !cascadeIndex )
 			{

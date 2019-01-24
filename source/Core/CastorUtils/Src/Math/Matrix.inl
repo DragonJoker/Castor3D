@@ -36,9 +36,7 @@ namespace castor
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * rhs )
 		: Matrix{ noInit }
 	{
-		static uint64_t constexpr count = Rows * Columns;
-
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			m_data[i] = T( rhs[i] );
 		}
@@ -62,9 +60,7 @@ namespace castor
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & rhs )
 		: Matrix( noInit )
 	{
-		static uint64_t constexpr count = Rows * Columns;
-
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			m_data[i] = T( rhs.m_data[i] );
 		}
@@ -84,7 +80,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::initialise( T const & value )
 	{
-		static uint64_t constexpr count = MinValue< Columns, Rows >::value;
+		static size_t constexpr count = MinValue< Columns, Rows >::value;
 		initialise();
 		T * buffer = m_data.data();
 
@@ -313,7 +309,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			*mine++ = T( *rhs++ );
 		}

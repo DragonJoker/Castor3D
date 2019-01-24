@@ -14,6 +14,7 @@
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/SceneUbo.hpp"
@@ -28,10 +29,9 @@
 #include <Image/TextureView.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
 
 #include <Graphics/Image.hpp>
 

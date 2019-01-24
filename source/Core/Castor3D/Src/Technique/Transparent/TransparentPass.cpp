@@ -8,16 +8,6 @@
 #include "Render/RenderNode/RenderNode_Render.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/Program.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
-
-#include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
-
-#include <Pipeline/ColourBlendState.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-
 #include "Shader/Shaders/GlslFog.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
@@ -25,6 +15,17 @@
 #include "Shader/Shaders/GlslPhongReflection.hpp"
 #include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureView.hpp"
+#include "Texture/TextureLayout.hpp"
+
+#include <ShaderWriter/Source.hpp>
+
+#include <Pipeline/ColourBlendState.hpp>
+#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
+
 
 using namespace castor;
 using namespace castor3d;
