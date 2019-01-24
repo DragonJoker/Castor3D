@@ -5,9 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
-#include <GlslWriterPrerequisites.hpp>
+#include <CastorUtilsPrerequisites.hpp>
 
-#if !defined( CASTOR_PLATFORM_WINDOWS )
+#if !defined( CU_PlatformWindows )
 #	define C3D_API
 #else
 #	ifdef MemoryBarrier
@@ -29,15 +29,15 @@ See LICENSE file in root folder
 #include <Math/SquareMatrix.hpp>
 #include <Miscellaneous/StringUtils.hpp>
 
-#include <GlslWriterPrerequisites.hpp>
-
-#include <RendererPrerequisites.hpp>
+#include <ShaderWriter/Source.hpp>
+#include <AshesPrerequisites.hpp>
 
 namespace castor3d
 {
 	using castor::real;
-	using castor::UIntStrMap;
+	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
+	using castor::UInt32Array;
 }
 
 #include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
@@ -59,7 +59,7 @@ namespace castor3d
 	//@{
 
 	class Importer;
-	DECLARE_SMART_PTR( Importer );
+	CU_DeclareSmartPtr( Importer );
 
 	//@}
 	/**@name General */
@@ -84,7 +84,7 @@ namespace castor3d
 		eLight,
 		eBillboard,
 		eParticleEmitter,
-		CASTOR_SCOPED_ENUM_BOUNDS( eCamera )
+		CU_ScopedEnumBounds( eCamera )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -100,7 +100,7 @@ namespace castor3d
 	{
 		eWindow,
 		eTexture,
-		CASTOR_SCOPED_ENUM_BOUNDS( eWindow )
+		CU_ScopedEnumBounds( eWindow )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -141,7 +141,7 @@ namespace castor3d
 		//!\~english	Particle plug-in.
 		//!\~french		Plug-in de particule.
 		eParticle,
-		CASTOR_SCOPED_ENUM_BOUNDS( eRenderer )
+		CU_ScopedEnumBounds( eRenderer )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -156,7 +156,7 @@ namespace castor3d
 		eOrtho,
 		ePerspective,
 		eFrustum,
-		CASTOR_SCOPED_ENUM_BOUNDS( eOrtho )
+		CU_ScopedEnumBounds( eOrtho )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -187,7 +187,7 @@ namespace castor3d
 		//!\~english	Bottom plane.
 		//!\~french		Plan bas.
 		eBottom,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNear )
+		CU_ScopedEnumBounds( eNear )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -224,7 +224,7 @@ namespace castor3d
 		//!\~english	Near right bottom corner.
 		//!\~french		Coin proche bas droit.
 		eNearRightBottom,
-		CASTOR_SCOPED_ENUM_BOUNDS( eFarLeftBottom )
+		CU_ScopedEnumBounds( eFarLeftBottom )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -245,7 +245,7 @@ namespace castor3d
 		//!\~english	This kind of event happens after the buffer' swap.
 		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
 		ePostRender,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePreRender )
+		CU_ScopedEnumBounds( ePreRender )
 	};
 
 	template< class TParsed >
@@ -274,25 +274,25 @@ namespace castor3d
 	class RenderPassTimer;
 	class GaussianBlur;
 
-	DECLARE_SMART_PTR( Engine );
-	DECLARE_SMART_PTR( Plugin );
-	DECLARE_SMART_PTR( RendererPlugin );
-	DECLARE_SMART_PTR( ImporterPlugin );
-	DECLARE_SMART_PTR( DividerPlugin );
-	DECLARE_SMART_PTR( GenericPlugin );
-	DECLARE_SMART_PTR( PostFxPlugin );
-	DECLARE_SMART_PTR( ParticlePlugin );
-	DECLARE_SMART_PTR( FrameEvent );
-	DECLARE_SMART_PTR( FrameListener );
-	DECLARE_SMART_PTR( PickingPass );
-	DECLARE_SMART_PTR( TransformFeedback );
-	DECLARE_SMART_PTR( ComputePipeline );
-	DECLARE_SMART_PTR( RenderPassTimer );
-	DECLARE_SMART_PTR( GaussianBlur );
+	CU_DeclareSmartPtr( Engine );
+	CU_DeclareSmartPtr( Plugin );
+	CU_DeclareSmartPtr( RendererPlugin );
+	CU_DeclareSmartPtr( ImporterPlugin );
+	CU_DeclareSmartPtr( DividerPlugin );
+	CU_DeclareSmartPtr( GenericPlugin );
+	CU_DeclareSmartPtr( PostFxPlugin );
+	CU_DeclareSmartPtr( ParticlePlugin );
+	CU_DeclareSmartPtr( FrameEvent );
+	CU_DeclareSmartPtr( FrameListener );
+	CU_DeclareSmartPtr( PickingPass );
+	CU_DeclareSmartPtr( TransformFeedback );
+	CU_DeclareSmartPtr( ComputePipeline );
+	CU_DeclareSmartPtr( RenderPassTimer );
+	CU_DeclareSmartPtr( GaussianBlur );
 
-	castor::Matrix4x4f convert( std::array< float, 16 > const & value );
-	renderer::ClearColorValue convert( castor::RgbaColour const & value );
-	castor::RgbaColour convert( renderer::ClearColorValue const & value );
+	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
+	C3D_API ashes::ClearColorValue convert( castor::RgbaColour const & value );
+	C3D_API castor::RgbaColour convert( ashes::ClearColorValue const & value );
 
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
@@ -355,14 +355,14 @@ namespace castor3d
 	using RenderTechniqueCache = Cache< RenderTechnique, castor::String >;
 	using RenderWindowCache = Cache< RenderWindow, castor::String >;
 
-	DECLARE_SMART_PTR( ListenerCache );
-	DECLARE_SMART_PTR( MeshCache );
-	DECLARE_SMART_PTR( SceneCache );
-	DECLARE_SMART_PTR( SamplerCache );
-	DECLARE_SMART_PTR( ShaderProgramCache );
-	DECLARE_SMART_PTR( RenderTargetCache );
-	DECLARE_SMART_PTR( RenderTechniqueCache );
-	DECLARE_SMART_PTR( RenderWindowCache );
+	CU_DeclareSmartPtr( ListenerCache );
+	CU_DeclareSmartPtr( MeshCache );
+	CU_DeclareSmartPtr( SceneCache );
+	CU_DeclareSmartPtr( SamplerCache );
+	CU_DeclareSmartPtr( ShaderProgramCache );
+	CU_DeclareSmartPtr( RenderTargetCache );
+	CU_DeclareSmartPtr( RenderTechniqueCache );
+	CU_DeclareSmartPtr( RenderWindowCache );
 
 	/*!
 	*\author
@@ -409,33 +409,33 @@ namespace castor3d
 
 	using CameraCache = ObjectCache< Camera, castor::String >;
 
-	DECLARE_SMART_PTR( CameraCache );
+	CU_DeclareSmartPtr( CameraCache );
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView;
 
 	//! real array
-	DECLARE_VECTOR( real, Real );
+	CU_DeclareVector( real, Real );
 	//! RenderWindow pointer array
-	DECLARE_VECTOR( RenderWindowSPtr, RenderWindowPtr );
+	CU_DeclareVector( RenderWindowSPtr, RenderWindowPtr );
 	//! FrameEvent pointer array
-	DECLARE_VECTOR( FrameEventUPtr, FrameEventPtr );
+	CU_DeclareVector( FrameEventUPtr, FrameEventPtr );
 	//! FrameListener pointer map, sorted by name
-	DECLARE_MAP( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
+	CU_DeclareMap( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	//! RenderWindow pointer map, sorted by index
-	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
+	CU_DeclareMap( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
-	DECLARE_MAP( castor::String, PluginSPtr, PluginStr );
-	DECLARE_MAP( int, castor::String, StrInt );
-	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
-	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
+	CU_DeclareMap( castor::String, PluginSPtr, PluginStr );
+	CU_DeclareMap( int, castor::String, StrInt );
+	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
+	CU_DeclareVector( BillboardListSPtr, BillboardList );
 
-	DECLARE_MAP( castor::String, RendererPluginSPtr, RendererPtr );
-	DECLARE_ARRAY( PluginStrMap, PluginType::eCount, PluginStrMap );
-	DECLARE_MAP( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
-	DECLARE_ARRAY( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
-	DECLARE_MAP( castor::Path, PluginType, PluginTypePath );
-	DECLARE_MAP( castor::String, BillboardListSPtr, BillboardListStr );
+	CU_DeclareMap( castor::String, RendererPluginSPtr, RendererPtr );
+	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
+	CU_DeclareMap( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
+	CU_DeclareArray( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
+	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
+	CU_DeclareMap( castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< castor::String, RenderWindowSPtr > WindowPtrStrMap;
 
@@ -527,27 +527,27 @@ namespace castor3d
 		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 }
 
-DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Engine, Engine )
-DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::RenderSystem, RenderSystem )
-DECLARED_EXPORTED_OWNED_BY( C3D_API, castor3d::Scene, Scene )
+CU_DeclareExportedOwnedBy( C3D_API, castor3d::Engine, Engine )
+CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )
+CU_DeclareExportedOwnedBy( C3D_API, castor3d::Scene, Scene )
 
 namespace castor3d
 {
-	C3D_API renderer::Device const & getCurrentDevice( RenderSystem const & obj );
-	C3D_API renderer::Device const & getCurrentDevice( Engine const & obj );
-	C3D_API renderer::Device const & getCurrentDevice( Scene const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( RenderSystem const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( Engine const & obj );
+	C3D_API ashes::Device const & getCurrentDevice( Scene const & obj );
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< RenderSystem > const & obj )
 	{
 		return getCurrentDevice( *obj.getRenderSystem() );
 	}
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< Engine > const & obj )
 	{
 		return getCurrentDevice( *obj.getEngine() );
 	}
 
-	inline renderer::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
+	inline ashes::Device const & getCurrentDevice( castor::OwnedBy< Scene > const & obj )
 	{
 		return getCurrentDevice( *obj.getScene() );
 	}

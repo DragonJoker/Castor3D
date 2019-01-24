@@ -9,7 +9,7 @@
 #include "Scene/Background/Visitor.hpp"
 #include "EnvironmentMap/EnvironmentMap.hpp"
 #include "Scene/Background/Visitor.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -22,10 +22,10 @@
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslUtils.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -33,27 +33,27 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::ImageCreateInfo doGetImageCreate( renderer::Format format
+		ashes::ImageCreateInfo doGetImageCreate( ashes::Format format
 			, Size const & dimensions
 			, bool attachment
 			, uint32_t mipLevel = 1u )
 		{
-			renderer::ImageCreateInfo result;
-			result.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo result;
+			result.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			result.arrayLayers = 6u;
 			result.extent.width = dimensions.getWidth();
 			result.extent.height = dimensions.getHeight();
 			result.extent.depth = 1u;
 			result.format = format;
-			result.initialLayout = renderer::ImageLayout::eUndefined;
-			result.imageType = renderer::TextureType::e2D;
+			result.initialLayout = ashes::ImageLayout::eUndefined;
+			result.imageType = ashes::TextureType::e2D;
 			result.mipLevels = mipLevel;
-			result.samples = renderer::SampleCountFlag::e1;
-			result.sharingMode = renderer::SharingMode::eExclusive;
-			result.tiling = renderer::ImageTiling::eOptimal;
-			result.usage = renderer::ImageUsageFlag::eSampled
-				| renderer::ImageUsageFlag::eTransferDst
-				| ( attachment ? renderer::ImageUsageFlag::eColourAttachment : renderer::ImageUsageFlag( 0u ) );
+			result.samples = ashes::SampleCountFlag::e1;
+			result.sharingMode = ashes::SharingMode::eExclusive;
+			result.tiling = ashes::ImageTiling::eOptimal;
+			result.usage = ashes::ImageUsageFlag::eSampled
+				| ashes::ImageUsageFlag::eTransferDst
+				| ( attachment ? ashes::ImageUsageFlag::eColourAttachment : ashes::ImageUsageFlag( 0u ) );
 			return result;
 		}
 	}
@@ -77,7 +77,7 @@ namespace castor3d
 			cuT( "front" ),
 		};
 
-		bool result = true;
+		auto result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "// Skybox\n" ) ) > 0;
 
 		if ( !obj.getEquiTexturePath().empty()
 			&& castor::File::fileExists( obj.getEquiTexturePath() ) )
@@ -156,8 +156,8 @@ namespace castor3d
 		, m_viewport{ engine }
 	{
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-			, doGetImageCreate( renderer::Format::eR8G8B8A8_UNORM, { 16u, 16u }, false )
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, doGetImageCreate( ashes::Format::eR8G8B8A8_UNORM, { 16u, 16u }, false )
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 	}
 
 	SkyboxBackground::~SkyboxBackground()
@@ -172,42 +172,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative );
+		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative, ImageComponents::eRGB );
 		notifyChanged();
 	}
 
@@ -215,23 +215,23 @@ namespace castor3d
 		, castor::Path const & relative
 		, uint32_t size )
 	{
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.arrayLayers = 1u;
 		image.extent.width = size;
 		image.extent.height = size;
 		image.extent.depth = 1u;
-		image.imageType = renderer::TextureType::e2D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.imageType = ashes::TextureType::e2D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferDst;
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eSampled
+			| ashes::ImageUsageFlag::eTransferDst;
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
+		texture->getDefaultImage().initialiseSource( folder, relative, ImageComponents::eRGB );
 		setEquiTexture( texture, size );
 	}
 
@@ -253,22 +253,22 @@ namespace castor3d
 	void SkyboxBackground::loadCrossTexture( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.arrayLayers = 1u;
 		image.extent.depth = 1u;
-		image.imageType = renderer::TextureType::e2D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.imageType = ashes::TextureType::e2D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferSrc
-			| renderer::ImageUsageFlag::eTransferDst;
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eSampled
+			| ashes::ImageUsageFlag::eTransferSrc
+			| ashes::ImageUsageFlag::eTransferDst;
 		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
+		texture->getDefaultImage().initialiseSource( folder, relative, ImageComponents::eRGB );
 		setCrossTexture( texture );
 	}
 
@@ -279,9 +279,9 @@ namespace castor3d
 		notifyChanged();
 	}
 
-	bool SkyboxBackground::doInitialise( renderer::RenderPass const & renderPass )
+	bool SkyboxBackground::doInitialise( ashes::RenderPass const & renderPass )
 	{
-		REQUIRE( m_texture );
+		CU_Require( m_texture );
 		return doInitialiseTexture();
 	}
 
@@ -312,14 +312,14 @@ namespace castor3d
 			doInitialiseCrossTexture();
 		}
 
-		m_hdr = m_texture->getPixelFormat() == renderer::Format::eR32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR32G32B32A32_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16_SFLOAT
-			|| m_texture->getPixelFormat() == renderer::Format::eR16G16B16A16_SFLOAT;
+		m_hdr = m_texture->getPixelFormat() == ashes::Format::eR32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32B32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR32G32B32A32_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16B16_SFLOAT
+			|| m_texture->getPixelFormat() == ashes::Format::eR16G16B16A16_SFLOAT;
 		return m_texture->initialise();
 	}
 
@@ -335,14 +335,13 @@ namespace castor3d
 		{
 			m_texture = std::make_shared< TextureLayout >( renderSystem
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
-
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-			m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
+			m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
+			m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
+			m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
+			m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
@@ -366,35 +365,35 @@ namespace castor3d
 		m_crossTexture->initialise();
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
-		REQUIRE( width == height );
+		CU_Require( width == height );
 
 		// create the cube texture if needed.
 		m_texture = std::make_shared< TextureLayout >( renderSystem
 			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource();
-		m_texture->getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource();
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
+		m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
+		m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
+		m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
+		m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
 		m_texture->initialise();
 
-		renderer::ImageSubresourceLayers srcSubresource
+		ashes::ImageSubresourceLayers srcSubresource
 		{
 			m_crossTexture->getDefaultView().getSubResourceRange().aspectMask,
 			0,
 			0,
 			1,
 		};
-		renderer::ImageSubresourceLayers dstSubresource
+		ashes::ImageSubresourceLayers dstSubresource
 		{
 			m_texture->getDefaultView().getSubResourceRange().aspectMask,
 			0,
 			0,
 			1,
 		};
-		renderer::ImageCopy copyInfos[6];
+		ashes::ImageCopy copyInfos[6];
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].extent = { width, width, 1u };
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcSubresource = srcSubresource;
 		copyInfos[uint32_t( CubeMapFace::ePositiveX )].srcOffset.x = width * 2;
@@ -452,25 +451,25 @@ namespace castor3d
 		auto & device = getCurrentDevice( renderSystem );
 		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		commandBuffer->begin();
-		commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
-			, renderer::PipelineStageFlag::eTransfer
-			, m_crossTexture->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+		commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTopOfPipe
+			, ashes::PipelineStageFlag::eTransfer
+			, m_crossTexture->getDefaultView().makeTransferSource( ashes::ImageLayout::eUndefined, 0u ) );
 		uint32_t index{ 0u };
 
 		for ( auto & copyInfo : copyInfos )
 		{
-			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTopOfPipe
-				, renderer::PipelineStageFlag::eTransfer
-				, m_texture->getImage( index ).getView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTopOfPipe
+				, ashes::PipelineStageFlag::eTransfer
+				, m_texture->getImage( index ).getView().makeTransferDestination( ashes::ImageLayout::eUndefined, 0u ) );
 			commandBuffer->copyImage( copyInfo
 				, m_crossTexture->getTexture()
-				, renderer::ImageLayout::eTransferSrcOptimal
+				, ashes::ImageLayout::eTransferSrcOptimal
 				, m_texture->getTexture()
-				, renderer::ImageLayout::eTransferDstOptimal );
-			commandBuffer->memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_texture->getImage( index ).getView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
-					, renderer::AccessFlag::eTransferWrite ) );
+				, ashes::ImageLayout::eTransferDstOptimal );
+			commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_texture->getImage( index ).getView().makeShaderInputResource( ashes::ImageLayout::eTransferDstOptimal
+					, ashes::AccessFlag::eTransferWrite ) );
 			++index;
 		}
 

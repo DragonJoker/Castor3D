@@ -9,11 +9,11 @@
 #include <Image/Texture.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/Fence.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 
@@ -23,26 +23,26 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::TexturePtr doCreateRadianceTexture( RenderSystem const & renderSystem
+		ashes::TexturePtr doCreateRadianceTexture( RenderSystem const & renderSystem
 			, Size const & size )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::ImageCreateInfo image{};
-			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo image{};
+			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			return device.createTexture( image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine )
@@ -57,11 +57,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( renderer::Filter::eLinear );
-				result->setMagFilter( renderer::Filter::eLinear );
-				result->setWrapS( renderer::WrapMode::eClampToEdge );
-				result->setWrapT( renderer::WrapMode::eClampToEdge );
-				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				result->setMinFilter( ashes::Filter::eLinear );
+				result->setMagFilter( ashes::Filter::eLinear );
+				result->setWrapS( ashes::WrapMode::eClampToEdge );
+				result->setWrapT( ashes::WrapMode::eClampToEdge );
+				result->setWrapR( ashes::WrapMode::eClampToEdge );
 				engine.getSamplerCache().add( name, result );
 			}
 
@@ -69,9 +69,9 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::TextureViewPtr doCreateSrcView( renderer::Texture const & texture )
+		ashes::TextureViewPtr doCreateSrcView( ashes::Texture const & texture )
 		{
-			return texture.createView( renderer::TextureViewType::eCube
+			return texture.createView( ashes::TextureViewType::eCube
 				, texture.getFormat()
 				, 0u
 				, 1u
@@ -79,123 +79,121 @@ namespace castor3d
 				, 6u );
 		}
 
-		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem )
+		ashes::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem )
 		{
-			glsl::Shader vtx;
+			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RadianceCompute" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
-				Ubo matrix{ writer, cuT( "Matrix" ), 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( cuT( "c3d_viewProjection" ) );
+				auto position = writer.declInput< Vec3 >( "position", 0u );
+				Ubo matrix{ writer, "Matrix", 0u, 0u };
+				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
 				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto out = gl_PerVertex{ writer };
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
+				auto out = writer.getOut();
 
-				std::function< void() > main = [&]()
-				{
-					vtx_worldPosition = position;
-					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
-				};
-
-				writer.implementFunction< void >( cuT( "main" ), main );
-				vtx = writer.finalise();
+				writer.implementFunction< Void >( "main"
+					, [&]()
+					{
+						vtx_worldPosition = position;
+						out.gl_out.gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
+					} );
+				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			glsl::Shader pxl;
+			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RadianceCompute" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				FragmentWriter writer;
 
 				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
+				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
 
 				// Outputs
-				auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				writer.implementFunction< void >( cuT( "main" ), [&]()
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					// the sample direction equals the hemisphere's orientation 
-					auto normal = writer.declLocale( cuT( "normal" )
-						, normalize( vtx_worldPosition ) );
-
-					auto irradiance = writer.declLocale( cuT( "irradiance" )
-						, vec3( 0.0_f ) );
-
-					auto up = writer.declLocale( cuT( "up" )
-						, vec3( 0.0_f, 1.0, 0.0 ) );
-					auto right = writer.declLocale( cuT( "right" )
-						, cross( up, normal ) );
-					up = cross( normal, right );
-
-					auto sampleDelta = writer.declLocale( cuT( "sampleDelta" )
-						, 0.025_f );
-					auto nrSamples = writer.declLocale( cuT( "nrSamples" )
-						, 0_i );
-					auto PI = writer.declLocale( cuT( "PI" )
-						, 3.14159265359_f );
-
-					FOR( writer, Float, phi, 0.0, "phi < 2.0 * PI", "phi += sampleDelta" )
+				writer.implementFunction< Void >( "main"
+					, [&]()
 					{
-						FOR( writer, Float, theta, 0.0, "theta < 0.5 * PI", "theta += sampleDelta" )
-						{
-							// spherical to cartesian (in tangent space)
-							auto tangentSample = writer.declLocale( cuT( "tangentSample" )
-								, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
-							// tangent space to world
-							auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-								, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+						// From https://learnopengl.com/#!PBR/Lighting
+						// the sample direction equals the hemisphere's orientation 
+						auto normal = writer.declLocale( "normal"
+							, normalize( vtx_worldPosition ) );
 
-							irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
-							nrSamples = nrSamples + 1;
+						auto irradiance = writer.declLocale( "irradiance"
+							, vec3( 0.0_f ) );
+
+						auto up = writer.declLocale( "up"
+							, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+						auto right = writer.declLocale( "right"
+							, cross( up, normal ) );
+						up = cross( normal, right );
+
+						auto sampleDelta = writer.declLocale( "sampleDelta"
+							, 0.025_f );
+						auto nrSamples = writer.declLocale( "nrSamples"
+							, 0_i );
+
+						FOR( writer, Float, phi, 0.0_f, phi < Float{ PiMult2< float > }, phi += sampleDelta )
+						{
+							FOR( writer, Float, theta, 0.0_f, theta < Float{ PiDiv2< float > }, theta += sampleDelta )
+							{
+								// spherical to cartesian (in tangent space)
+								auto tangentSample = writer.declLocale( "tangentSample"
+									, vec3( sin( theta ) * cos( phi ), sin( theta ) * sin( phi ), cos( theta ) ) );
+								// tangent space to world
+								auto sampleVec = writer.declLocale( "sampleVec"
+									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
+
+								irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
+								nrSamples = nrSamples + 1;
+							}
+							ROF;
 						}
 						ROF;
-					}
-					ROF;
 
-					irradiance = irradiance * PI * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
-					pxl_fragColor = vec4( irradiance, 1.0 );
-				} );
+						irradiance = irradiance * Float{ Pi< float > } * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
+						pxl_fragColor = vec4( irradiance, 1.0_f );
+					} );
 
-				pxl = writer.finalise();
+				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			renderer::ShaderStageStateArray program
+			ashes::ShaderStageStateArray program
 			{
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+			program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 			return program;
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
-			, renderer::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
+			, ashes::Format format )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::RenderPassCreateInfo createInfo{};
+			ashes::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
 
 			createInfo.attachments.resize( 1u );
 			createInfo.attachments[0].format = format;
-			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-			renderer::AttachmentReference colourReference;
+			ashes::AttachmentReference colourReference;
 			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+			colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 			createInfo.subpasses.resize( 1u );
 			createInfo.subpasses[0].flags = 0u;
@@ -203,12 +201,12 @@ namespace castor3d
 
 			createInfo.dependencies.resize( 1u );
 			createInfo.dependencies[0].srcSubpass = 0u;
-			createInfo.dependencies[0].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			createInfo.dependencies[0].dstSubpass = ashes::ExternalSubpass;
+			createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+			createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -218,11 +216,11 @@ namespace castor3d
 
 	RadianceComputer::RadianceComputer( Engine & engine
 		, Size const & size
-		, renderer::Texture const & srcTexture )
+		, ashes::Texture const & srcTexture )
 		: RenderCube{ *engine.getRenderSystem(), false }
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_result{ doCreateRadianceTexture( m_renderSystem, size ) }
-		, m_resultView{ m_result->createView( renderer::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_resultView{ m_result->createView( ashes::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine ) }
 		, m_srcView{ doCreateSrcView( srcTexture ) }
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
@@ -235,16 +233,16 @@ namespace castor3d
 			auto & facePass = m_renderPasses[face];
 
 			// Create the views.
-			facePass.dstView = dstTexture.createView( renderer::TextureViewType::e2D
+			facePass.dstView = dstTexture.createView( ashes::TextureViewType::e2D
 				, dstTexture.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
 			// Initialise the frame buffer.
-			renderer::FrameBufferAttachmentArray attaches;
+			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *facePass.dstView );
-			facePass.frameBuffer = m_renderPass->createFrameBuffer( renderer::Extent2D{ size.getWidth(), size.getHeight() }
+			facePass.frameBuffer = m_renderPass->createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 
@@ -264,8 +262,8 @@ namespace castor3d
 			auto & facePass = m_renderPasses[face];
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *facePass.frameBuffer
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
+				, ashes::SubpassContents::eInline );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
 		}

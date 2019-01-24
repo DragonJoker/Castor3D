@@ -42,8 +42,8 @@ namespace castor3d
 		 */
 		C3D_API BillboardBase( Scene & scene
 			, SceneNodeSPtr node
-			, renderer::VertexLayoutPtr && vertexLayout
-			, renderer::VertexBufferBasePtr && vertexBuffer = nullptr );
+			, ashes::VertexLayoutPtr && vertexLayout
+			, ashes::VertexBufferBasePtr && vertexBuffer = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -114,12 +114,12 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline renderer::VertexBufferBase const & getVertexBuffer()const
+		inline ashes::VertexBufferBase const & getVertexBuffer()const
 		{
 			return *m_vertexBuffer;
 		}
 
-		inline renderer::VertexBufferBase & getVertexBuffer()
+		inline ashes::VertexBufferBase & getVertexBuffer()
 		{
 			return *m_vertexBuffer;
 		}
@@ -197,15 +197,15 @@ namespace castor3d
 		OnBillboardMaterialChanged onMaterialChanged;
 
 	private:
-		void doGatherBuffers( renderer::BufferCRefArray & buffers
+		void doGatherBuffers( ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts );
+			, ashes::VertexLayoutCRefArray & layouts );
 
 	public:
 		struct Vertex
 		{
 			castor::Point3f position;
-			castor::Point2f texcoord;
+			castor::Point2f uv;
 		};
 		using Quad = std::array< Vertex, 4u >;
 
@@ -215,10 +215,10 @@ namespace castor3d
 		MaterialWPtr m_material;
 		castor::Point2f m_dimensions;
 		castor::Point3r m_cameraPosition;
-		renderer::VertexBufferBasePtr m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::VertexBufferPtr< Quad > m_quadBuffer;
-		renderer::VertexLayoutPtr m_quadLayout;
+		ashes::VertexBufferBasePtr m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::VertexBufferPtr< Quad > m_quadBuffer;
+		ashes::VertexLayoutPtr m_quadLayout;
 		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };
 		bool m_initialised{ false };

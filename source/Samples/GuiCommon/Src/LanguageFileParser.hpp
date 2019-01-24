@@ -21,10 +21,10 @@ namespace GuiCommon
 	*/
 	enum class LANGSection
 	{
-		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
-		eLanguage = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
-		eKeywords = MAKE_SECTION_NAME( 'K', 'W', 'R', 'D' ),
-		eStyle = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
+		eRoot = CU_MakeSectionName( 'R', 'O', 'O', 'T' ),
+		eLanguage = CU_MakeSectionName( 'L', 'A', 'N', 'G' ),
+		eKeywords = CU_MakeSectionName( 'K', 'W', 'R', 'D' ),
+		eStyle = CU_MakeSectionName( 'S', 'T', 'Y', 'L' ),
 	};
 	/*!
 	\author Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace GuiCommon
 		virtual void doInitialiseParser( castor::Path const & path );
 		virtual void doCleanupParser();
 		virtual bool doDiscardParser( castor::String const & p_line );
-		virtual bool doDelegateParser( castor::String const & CU_PARAM_UNUSED( p_line ) )
+		virtual bool doDelegateParser( castor::String const & CU_UnusedParam( p_line ) )
 		{
 			return false;
 		}
@@ -60,19 +60,19 @@ namespace GuiCommon
 		virtual castor::String doGetSectionName( uint32_t p_section );
 	};
 
-	DECLARE_ATTRIBUTE_PARSER( Root_Language )
-	DECLARE_ATTRIBUTE_PARSER( Language_Pattern )
-	DECLARE_ATTRIBUTE_PARSER( Language_Lexer )
-	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags )
-	DECLARE_ATTRIBUTE_PARSER( Language_Keywords )
-	DECLARE_ATTRIBUTE_PARSER( Language_Style )
-	DECLARE_ATTRIBUTE_PARSER( Language_FontName )
-	DECLARE_ATTRIBUTE_PARSER( Language_FontSize )
-	DECLARE_ATTRIBUTE_PARSER( Style_Type )
-	DECLARE_ATTRIBUTE_PARSER( Style_FgColour )
-	DECLARE_ATTRIBUTE_PARSER( Style_BgColour )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle )
-	DECLARE_ATTRIBUTE_PARSER( Keywords_End )
+	CU_DeclareAttributeParser( Root_Language )
+	CU_DeclareAttributeParser( Language_Pattern )
+	CU_DeclareAttributeParser( Language_Lexer )
+	CU_DeclareAttributeParser( Language_FoldFlags )
+	CU_DeclareAttributeParser( Language_Keywords )
+	CU_DeclareAttributeParser( Language_Style )
+	CU_DeclareAttributeParser( Language_FontName )
+	CU_DeclareAttributeParser( Language_FontSize )
+	CU_DeclareAttributeParser( Style_Type )
+	CU_DeclareAttributeParser( Style_FgColour )
+	CU_DeclareAttributeParser( Style_BgColour )
+	CU_DeclareAttributeParser( Style_FontStyle )
+	CU_DeclareAttributeParser( Keywords_End )
 }
 
 #endif

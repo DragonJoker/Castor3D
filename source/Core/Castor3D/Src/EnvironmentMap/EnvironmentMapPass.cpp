@@ -1,7 +1,7 @@
 #include "EnvironmentMapPass.hpp"
 
 #include "EnvironmentMap/EnvironmentMap.hpp"
-#include "Render/Culling/DummyCuller.hpp"
+#include "Render/Culling/FrustumCuller.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
@@ -29,13 +29,13 @@ namespace castor3d
 			return camera;
 		}
 
-		renderer::TextureViewPtr doCreateView( TextureView const & image
+		ashes::TextureViewPtr doCreateView( TextureView const & image
 			, uint32_t face )
 		{
-			renderer::ImageViewCreateInfo view{};
+			ashes::ImageViewCreateInfo view{};
 			view.format = image.getView().getFormat();
-			view.viewType = renderer::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eColour;
+			view.viewType = ashes::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eColour;
 			view.subresourceRange.baseArrayLayer = face;
 			view.subresourceRange.layerCount = 1u;
 			view.subresourceRange.baseMipLevel = 0u;
@@ -50,7 +50,7 @@ namespace castor3d
 		: OwnedBy< EnvironmentMap >{ reflectionMap }
 		, m_node{ node }
 		, m_camera{ doCreateCamera( *node ) }
-		, m_culler{ std::make_unique< DummyCuller >( *m_camera->getScene() ) }
+		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
 			, m_matrixUbo
@@ -77,9 +77,9 @@ namespace castor3d
 
 	bool EnvironmentMapPass::initialise( Size const & size
 		, uint32_t face
-		, renderer::RenderPass const & renderPass
+		, ashes::RenderPass const & renderPass
 		, SceneBackground const & background
-		, renderer::DescriptorSetPool const & pool )
+		, ashes::DescriptorSetPool const & pool )
 	{
 		auto & device = getCurrentDevice( *getOwner() );
 		real const aspect = real( size.getWidth() ) / size.getHeight();
@@ -110,10 +110,10 @@ namespace castor3d
 		m_opaquePass->initialise( size );
 
 		// Create custom background pass.
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
 		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *m_envView );
-		m_frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size[0], size[1] }
+		m_frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size[0], size[1] }
 			, std::move( attaches ) );
 		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
 		auto & commandBuffer = *m_backgroundCommands;
@@ -138,7 +138,7 @@ namespace castor3d
 
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 		m_finished = device.createSemaphore();
-		m_fence = device.createFence( renderer::FenceCreateFlag::eSignaled );
+		m_fence = device.createFence( ashes::FenceCreateFlag::eSignaled );
 		return true;
 	}
 
@@ -171,7 +171,7 @@ namespace castor3d
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}
 
-	renderer::Semaphore const & EnvironmentMapPass::render( renderer::Semaphore const & toWait )
+	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
 	{
 		auto & device = getCurrentDevice( *getOwner() );
 		RenderInfo info;
@@ -180,17 +180,17 @@ namespace castor3d
 		m_matrixUbo.update( m_camera->getView()
 			, m_camera->getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
-		renderer::Semaphore const * result = &toWait;
+		ashes::Semaphore const * result = &toWait;
 
-		static renderer::ClearColorValue const black{};
-		static renderer::DepthStencilClearValue const depth{ 1.0, 0 };
+		static ashes::ClearColorValue const black{};
+		static ashes::DepthStencilClearValue const depth{ 1.0, 0 };
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { depth, black }
-			, renderer::SubpassContents::eSecondaryCommandBuffers );
-		renderer::CommandBufferCRefArray commandBuffers;
+			, ashes::SubpassContents::eSecondaryCommandBuffers );
+		ashes::CommandBufferCRefArray commandBuffers;
 
 		if ( m_opaquePass->hasNodes() )
 		{
@@ -210,7 +210,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, toWait
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();

@@ -41,7 +41,7 @@ void Sphere::doGenerate( Mesh & mesh, Parameters const & parameters )
 	if ( m_nbFaces >= 3 )
 	{
 		Submesh & submesh = *mesh.createSubmesh();
-		real rAngle = real( Angle::PiMult2 ) / m_nbFaces;
+		real rAngle = PiMult2< real > / m_nbFaces;
 		std::vector< Point2r > arc( m_nbFaces + 1 );
 		real rAlpha = 0;
 		uint32_t iCur = 0;

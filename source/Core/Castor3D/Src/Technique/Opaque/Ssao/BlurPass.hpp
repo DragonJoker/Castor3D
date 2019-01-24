@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <Buffer/PushConstantsBuffer.hpp>
 #include <Miscellaneous/PushConstantRange.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -52,12 +52,12 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
-			, renderer::Extent2D const & size
+			, ashes::Extent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
-			, renderer::TextureView const & normals );
+			, ashes::TextureView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le flou.
 		 */
-		renderer::Semaphore const & blur( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & blur( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -101,9 +101,12 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( renderer::CommandBuffer & commandBuffer )const override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
+		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
+
+	public:
+		static ashes::Format constexpr ResultFormat = ashes::Format::eR8G8B8A8_UNORM;
 
 	private:
 		struct Configuration
@@ -116,19 +119,19 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
-		renderer::TextureView const & m_normals;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		ashes::TextureView const & m_normals;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 		SsaoConfig const & m_config;
-		renderer::ShaderStageStateArray m_program;
-		renderer::Extent2D m_size;
+		ashes::ShaderStageStateArray m_program;
+		ashes::Extent2D m_size;
 		TextureUnit m_result;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_fbo;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
-		renderer::UniformBufferPtr< Configuration > m_configurationUbo;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
+		ashes::UniformBufferPtr< Configuration > m_configurationUbo;
 
 	};
 }

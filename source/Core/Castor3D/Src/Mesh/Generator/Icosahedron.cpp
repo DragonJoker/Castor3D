@@ -131,14 +131,14 @@ void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 		auto posA = submesh->getPoint( face[0] ).pos;
 		auto posB = submesh->getPoint( face[1] ).pos;
 		auto posC = submesh->getPoint( face[2] ).pos;
-		real u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posA[2], posA[0] ) * ( 1 / Angle::Pi ) ) );
-		real v = real( acos( posA[1] ) * ( 1 / Angle::Pi ) );
+		real u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posA[2], posA[0] ) * ( 1 / Pi< float > ) ) );
+		real v = real( acos( posA[1] ) * ( 1 / Pi< float > ) );
 		submesh->getPoint( face[0] ).tex = Point3f{ u, v, 0 };
-		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posB[2], posB[0] ) * ( 1 / Angle::Pi ) ) );
-		v = real( acos( posB[1] ) * ( 1 / Angle::Pi ) );
+		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posB[2], posB[0] ) * ( 1 / Pi< float > ) ) );
+		v = real( acos( posB[1] ) * ( 1 / Pi< float > ) );
 		submesh->getPoint( face[1] ).tex = Point3f{ u, v, 0 };
-		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posC[2], posC[0] ) * ( 1 / Angle::Pi ) ) );
-		v = real( acos( posC[1] ) * ( 1 / Angle::Pi ) );
+		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( posC[2], posC[0] ) * ( 1 / Pi< float > ) ) );
+		v = real( acos( posC[1] ) * ( 1 / Pi< float > ) );
 		submesh->getPoint( face[2] ).tex = Point3f{ u, v, 0 };
 	}
 

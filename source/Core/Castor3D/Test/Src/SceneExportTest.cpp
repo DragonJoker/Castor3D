@@ -190,7 +190,7 @@ namespace Testing
 
 		if ( window )
 		{
-			window->initialise( Size{ 800, 600 }, renderer::WindowHandle{ std::make_unique< TestWindowHandle >() } );
+			window->initialise( Size{ 800, 600 }, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
 			m_engine.getRenderLoop().renderSyncFrame();
 			m_engine.getRenderLoop().renderSyncFrame();
 		}

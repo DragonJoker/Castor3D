@@ -25,7 +25,7 @@ namespace castor3d
 			, TextureChannels textureFlags
 			, SceneFlags sceneFlags
 			, Scene const & scene
-			, renderer::CompareOp alphaFunc = renderer::CompareOp::eAlways )
+			, ashes::CompareOp alphaFunc = ashes::CompareOp::eAlways )
 			: m_passFlags{ std::move( passFlags ) }
 			, m_textureFlags{ std::move( textureFlags ) }
 			, m_sceneFlags{ std::move( sceneFlags ) }
@@ -48,7 +48,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		virtual void visit( castor::String const & name
-			, renderer::ShaderStageFlag type
+			, ashes::ShaderStageFlag type
 			, castor::String const & shader )
 		{
 		}
@@ -82,7 +82,7 @@ namespace castor3d
 			return m_scene;
 		}
 
-		inline renderer::CompareOp const & getAlphaFunc()const
+		inline ashes::CompareOp const & getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -95,7 +95,7 @@ namespace castor3d
 		TextureChannels m_textureFlags;
 		SceneFlags m_sceneFlags;
 		Scene const & m_scene;
-		renderer::CompareOp m_alphaFunc;
+		ashes::CompareOp m_alphaFunc;
 	};
 }
 

@@ -1,10 +1,10 @@
 #include "GuiCommonPrerequisites.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>
-#elif defined( CASTOR_PLATFORM_LINUX )
+#elif defined( CU_PlatformLinux )
 #	include <gdk/gdkx.h>
 #	include <gtk/gtk.h>
 #	undef None
@@ -111,6 +111,31 @@ namespace GuiCommon
 
 			wxFont m_font;
 		};
+
+		castor::PathArray listPluginsFiles( castor::Path const & folder )
+		{
+			castor::PathArray files;
+			castor::File::listDirectoryFiles( folder, files );
+			castor::PathArray result;
+
+			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
+			for ( auto file : files )
+			{
+#if defined( NDEBUG )
+
+				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
+#else
+
+				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
+
+#endif
+				{
+					result.push_back( file );
+				}
+			}
+
+			return result;
+		}
 	}
 
 	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
@@ -132,7 +157,7 @@ namespace GuiCommon
 					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
 						uint8_t const * line = buffer;
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -151,7 +176,7 @@ namespace GuiCommon
 
 						buffer -= pitch;
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
@@ -163,7 +188,7 @@ namespace GuiCommon
 
 					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
 					{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
@@ -180,7 +205,7 @@ namespace GuiCommon
 							it++;
 						}
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 						it = rowStart;
 						it.OffsetY( data, 1 );
 #endif
@@ -290,25 +315,25 @@ namespace GuiCommon
 
 	void loadPlugins( castor3d::Engine & engine )
 	{
-		castor::PathArray arrayFiles;
-		castor::File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
-		castor::PathArray arrayKept;
+		castor::PathArray arrayKept = listPluginsFiles( Engine::getPluginsDirectory() );
 
-		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto file : arrayFiles )
+#if !defined( NDEBUG )
+
+		// When debug is installed, plugins are installed in lib/Debug/Castor3D
+		if ( arrayKept.empty() )
 		{
-#if defined( NDEBUG )
+			castor::Path pathBin = castor::File::getExecutableDirectory();
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
-#else
+			while ( pathBin.getFileName() != cuT( "bin" ) )
+			{
+				pathBin = pathBin.getPath();
+			}
 
-			if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+			castor::Path pathUsr = pathBin.getPath();
+			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
+		}
 
 #endif
-			{
-				arrayKept.push_back( file );
-			}
-		}
 
 		if ( !arrayKept.empty() )
 		{
@@ -317,7 +342,7 @@ namespace GuiCommon
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.getExtension() == CASTOR_DLL_EXT )
+				if ( file.getExtension() == CU_SharedLibExt )
 				{
 					// Since techniques depend on renderers, we load these first
 					if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
@@ -349,7 +374,7 @@ namespace GuiCommon
 
 				for ( auto file : arrayFailed )
 				{
-					castor::Logger::logWarning( Path( file ).getFileName() );
+					castor::Logger::logWarning( castor::Path( file ).getFileName() );
 				}
 
 				arrayFailed.clear();
@@ -359,14 +384,14 @@ namespace GuiCommon
 		castor::Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	renderer::WindowHandle makeWindowHandle( wxWindow * window )
+	ashes::WindowHandle makeWindowHandle( wxWindow * window )
 	{
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
-		return renderer::WindowHandle( std::make_unique< renderer::IMswWindowHandle >( ::GetModuleHandle( nullptr )
+		return ashes::WindowHandle( std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr )
 			, window->GetHandle() ) );
 
-#elif defined( CASTOR_PLATFORM_LINUX )
+#elif defined( CU_PlatformLinux )
 
 		GtkWidget * gtkWidget = static_cast< GtkWidget * >( window->GetHandle() );
 		GLXDrawable drawable = 0;
@@ -383,7 +408,7 @@ namespace GuiCommon
 			}
 		}
 
-		return renderer::WindowHandle( std::make_unique< renderer::IXWindowHandle >( drawable, display ) );
+		return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
 
 #endif
 	}
@@ -431,5 +456,27 @@ namespace GuiCommon
 	wxSize make_wxSize( castor::Size const & p_value )
 	{
 		return wxSize( p_value.getWidth(), p_value.getHeight() );
+	}
+
+	ast::ShaderStage convert( ashes::ShaderStageFlag stage )
+	{
+		switch ( stage )
+		{
+		case ashes::ShaderStageFlag::eVertex:
+			return ast::ShaderStage::eVertex;
+		case ashes::ShaderStageFlag::eTessellationControl:
+			return ast::ShaderStage::eTessellationControl;
+		case ashes::ShaderStageFlag::eTessellationEvaluation:
+			return ast::ShaderStage::eTessellationEvaluation;
+		case ashes::ShaderStageFlag::eGeometry:
+			return ast::ShaderStage::eGeometry;
+		case ashes::ShaderStageFlag::eFragment:
+			return ast::ShaderStage::eFragment;
+		case ashes::ShaderStageFlag::eCompute:
+			return ast::ShaderStage::eCompute;
+		default:
+			assert( false && "Unsupported ashes::ShaderStageFlag" );
+			return ast::ShaderStage::eVertex;
+		}
 	}
 }

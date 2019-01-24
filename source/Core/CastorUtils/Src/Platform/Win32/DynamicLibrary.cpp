@@ -1,6 +1,6 @@
 #include "Miscellaneous/DynamicLibrary.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include <windows.h>
 
@@ -23,7 +23,7 @@ namespace castor
 
 				if ( !m_library )
 				{
-					CASTOR_EXCEPTION( System::getLastErrorText() );
+					CU_Exception( System::getLastErrorText() );
 				}
 			}
 			catch ( std::exception & p_exc )

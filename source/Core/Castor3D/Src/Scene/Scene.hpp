@@ -244,14 +244,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline SceneBackground const & getBackground()const
+		inline SceneBackgroundSPtr getBackground()const
 		{
-			return *m_background;
-		}
-
-		inline SceneBackground & getBackground()
-		{
-			return *m_background;
+			return m_background;
 		}
 
 		inline SceneBackground const & getColourBackground()const
@@ -321,13 +316,13 @@ namespace castor3d
 
 		inline FrameListener const & getListener()const
 		{
-			REQUIRE( !m_listener.expired() );
+			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
 		inline FrameListener & getListener()
 		{
-			REQUIRE( !m_listener.expired() );
+			CU_Require( !m_listener.expired() );
 			return *m_listener.lock();
 		}
 
@@ -366,7 +361,7 @@ namespace castor3d
 			return m_directionalShadowCascades;
 		}
 
-		C3D_API renderer::SemaphoreCRefArray getRenderTargetsSemaphores()const;
+		C3D_API ashes::SemaphoreCRefArray getRenderTargetsSemaphores()const;
 		/**@}*/
 		/**
 		*\~english
@@ -400,7 +395,7 @@ namespace castor3d
 
 		inline void setDirectionalShadowCascades( uint32_t value )
 		{
-			REQUIRE( value <= shader::DirectionalMaxCascadesCount );
+			CU_Require( value <= shader::DirectionalMaxCascadesCount );
 			m_directionalShadowCascades = value;
 		}
 		/**@}*/

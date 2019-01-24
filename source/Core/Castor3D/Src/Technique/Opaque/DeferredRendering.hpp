@@ -53,6 +53,7 @@ namespace castor3d
 			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
 			, Scene & scene
+			, HdrConfigUbo & hdrConfigUbo
 			, SsaoConfig & config );
 		/**
 		 *\~english
@@ -91,18 +92,18 @@ namespace castor3d
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 */
-		renderer::Semaphore const & render( RenderInfo & info
+		ashes::Semaphore const & render( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, renderer::Semaphore const & toWait );
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
 		 *\brief		Displays debug data on screen.
 		 *\~french
 		 *\brief		Dessine les données de débogage sur l'écran.
 		 */
-		void debugDisplay( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer )const;
+		void debugDisplay( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -119,7 +120,7 @@ namespace castor3d
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
 		GeometryPassResult m_geometryPassResult;
-		std::vector< renderer::TexturePtr > m_results;
+		std::vector< ashes::TexturePtr > m_results;
 	};
 }
 

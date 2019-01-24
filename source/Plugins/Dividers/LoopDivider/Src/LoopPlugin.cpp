@@ -6,7 +6,7 @@
 using namespace castor;
 using namespace Loop;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Loop_API
 #else
 #	ifdef LoopDivider_EXPORTS

@@ -52,12 +52,13 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait )override;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		void debugDisplay( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
 
 	private:
@@ -79,30 +80,39 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
 		 */
-		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, bool invertNormals )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
+		 */
+		ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ashes::CompareOp alphaFunc )const override;
 
 	public:
-		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
-		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
-		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
+		static ashes::Format constexpr VarianceFormat = ashes::Format::eR32G32_SFLOAT;
+		static ashes::Format constexpr LinearDepthFormat = ashes::Format::eR32_SFLOAT;
+		static ashes::Format constexpr RawDepthFormat = ashes::Format::eD24_UNORM_S8_UINT;
 
 	private:
 		struct FrameBuffer
 		{
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::TextureViewPtr depthView;
-			renderer::TextureViewPtr varianceView;
-			renderer::TextureViewPtr linearView;
+			ashes::FrameBufferPtr frameBuffer;
+			ashes::TextureViewPtr depthView;
+			ashes::TextureViewPtr varianceView;
+			ashes::TextureViewPtr linearView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
+		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
-		renderer::TexturePtr m_depthTexture;
+		ashes::TexturePtr m_depthTexture;
 		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType;
 		uint32_t m_cascades;

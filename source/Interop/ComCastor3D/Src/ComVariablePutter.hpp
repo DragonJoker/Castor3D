@@ -282,9 +282,9 @@ namespace CastorCom
 
 #define DECLARE_VARIABLE_PTR_PUTTER( ctype, nmspc, type )\
 	template< typename Class >\
-	struct VariablePutter< Class, nmspc::type##SPtr >\
+	struct VariablePutter< Class, std::shared_ptr< nmspc::type > >\
 	{\
-		typedef void ( Class::*Function )( nmspc::type##SPtr );\
+		typedef void ( Class::*Function )( std::shared_ptr< nmspc::type > );\
 		VariablePutter( Class * instance, Function function )\
 			: m_instance( instance )\
 			, m_function( function )\

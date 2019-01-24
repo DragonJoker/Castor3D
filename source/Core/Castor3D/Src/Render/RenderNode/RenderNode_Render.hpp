@@ -9,5 +9,3 @@
 #include "Shader/Ubos/ModelUbo.hpp"
 
 #include <Buffer/UniformBuffer.hpp>
-
-using namespace castor;

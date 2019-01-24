@@ -121,15 +121,15 @@ namespace CastorGui
 		}
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserGui )
+	CU_ImplementAttributeParser( parserGui )
 	{
 		ParserContext * context = new ParserContext;
 		context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->getEngine();
 		p_context->registerUserContext( PLUGIN_NAME, context );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eGUI )
+	CU_EndAttributePush( CastorGui::GUISection::eGUI )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserDefaultFont )
+	CU_ImplementAttributeParser( parserDefaultFont )
 	{
 		ControlsManager & ctrlsManager = getControlsManager( p_context );
 		ParserContext & context = getParserContext( p_context );
@@ -144,27 +144,27 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Unknown font: " ) + name );
+			CU_ParsingError( cuT( "Unknown font: " ) + name );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserGuiEnd )
+	CU_ImplementAttributeParser( parserGuiEnd )
 	{
 		delete reinterpret_cast< ParserContext * >( p_context->unregisterUserContext( PLUGIN_NAME ) );
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButton )
+	CU_ImplementAttributeParser( parserButton )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_button );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eButton )
+	CU_EndAttributePush( CastorGui::GUISection::eButton )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonFont )
+	CU_ImplementAttributeParser( parserButtonFont )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -177,12 +177,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonCaption )
+	CU_ImplementAttributeParser( parserButtonCaption )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -195,12 +195,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonTextMaterial )
+	CU_ImplementAttributeParser( parserButtonTextMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -217,17 +217,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedBackgroundMaterial )
+	CU_ImplementAttributeParser( parserButtonHighlightedBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -244,17 +244,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedForegroundMaterial )
+	CU_ImplementAttributeParser( parserButtonHighlightedForegroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -271,17 +271,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHighlightedTextMaterial )
+	CU_ImplementAttributeParser( parserButtonHighlightedTextMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -298,17 +298,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedBackgroundMaterial )
+	CU_ImplementAttributeParser( parserButtonPushedBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -325,17 +325,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedForegroundMaterial )
+	CU_ImplementAttributeParser( parserButtonPushedForegroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -352,17 +352,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonPushedTextMaterial )
+	CU_ImplementAttributeParser( parserButtonPushedTextMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -379,17 +379,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonHAlign )
+	CU_ImplementAttributeParser( parserButtonHAlign )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -402,12 +402,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonVAlign )
+	CU_ImplementAttributeParser( parserButtonVAlign )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ButtonCtrlSPtr button = context.m_button;
@@ -420,29 +420,29 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No button initialised." ) );
+			CU_ParsingError( cuT( "No button initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserButtonEnd )
+	CU_ImplementAttributeParser( parserButtonEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_button );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBox )
+	CU_ImplementAttributeParser( parserComboBox )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_combo );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eComboBox )
+	CU_EndAttributePush( CastorGui::GUISection::eComboBox )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxFont )
+	CU_ImplementAttributeParser( parserComboBoxFont )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
@@ -455,12 +455,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxItem )
+	CU_ImplementAttributeParser( parserComboBoxItem )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
@@ -473,12 +473,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxSelectedItemBackgroundMaterial )
+	CU_ImplementAttributeParser( parserComboBoxSelectedItemBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
@@ -495,17 +495,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxSelectedItemForegroundMaterial )
+	CU_ImplementAttributeParser( parserComboBoxSelectedItemForegroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
@@ -522,17 +522,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxHighlightedItemBackgroundMaterial )
+	CU_ImplementAttributeParser( parserComboBoxHighlightedItemBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ComboBoxCtrlSPtr combo = context.m_combo;
@@ -549,34 +549,34 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No combo box initialised." ) );
+			CU_ParsingError( cuT( "No combo box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserComboBoxEnd )
+	CU_ImplementAttributeParser( parserComboBoxEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_combo );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEdit )
+	CU_ImplementAttributeParser( parserEdit )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_edit );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eEdit )
+	CU_EndAttributePush( CastorGui::GUISection::eEdit )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEditFont )
+	CU_ImplementAttributeParser( parserEditFont )
 	{
 		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
@@ -589,12 +589,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEditCaption )
+	CU_ImplementAttributeParser( parserEditCaption )
 	{
 		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
@@ -607,12 +607,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEditMultiLine )
+	CU_ImplementAttributeParser( parserEditMultiLine )
 	{
 		ParserContext & context = getParserContext( p_context );
 		EditCtrlSPtr edit = context.m_edit;
@@ -627,29 +627,29 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No edit initialised." ) );
+			CU_ParsingError( cuT( "No edit initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEditEnd )
+	CU_ImplementAttributeParser( parserEditEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_edit );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBox )
+	CU_ImplementAttributeParser( parserListBox )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_listbox );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eListBox )
+	CU_EndAttributePush( CastorGui::GUISection::eListBox )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxFont )
+	CU_ImplementAttributeParser( parserListBoxFont )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
@@ -662,12 +662,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxItem )
+	CU_ImplementAttributeParser( parserListBoxItem )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
@@ -680,12 +680,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxSelectedItemBackgroundMaterial )
+	CU_ImplementAttributeParser( parserListBoxSelectedItemBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
@@ -702,17 +702,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxHighlightedItemBackgroundMaterial )
+	CU_ImplementAttributeParser( parserListBoxHighlightedItemBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
@@ -729,17 +729,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxSelectedItemForegroundMaterial )
+	CU_ImplementAttributeParser( parserListBoxSelectedItemForegroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ListBoxCtrlSPtr listbox = context.m_listbox;
@@ -756,51 +756,51 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No list box initialised." ) );
+			CU_ParsingError( cuT( "No list box initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserListBoxEnd )
+	CU_ImplementAttributeParser( parserListBoxEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_listbox );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSlider )
+	CU_ImplementAttributeParser( parserSlider )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_slider );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eSlider )
+	CU_EndAttributePush( CastorGui::GUISection::eSlider )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSliderEnd )
+	CU_ImplementAttributeParser( parserSliderEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_slider );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStatic )
+	CU_ImplementAttributeParser( parserStatic )
 	{
 		ParserContext & context = getParserContext( p_context );
 		String name;
 		p_params[0]->get( name );
 		CreateControl( context, name, context.m_static );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eStatic )
+	CU_EndAttributePush( CastorGui::GUISection::eStatic )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticFont )
+	CU_ImplementAttributeParser( parserStaticFont )
 	{
 		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
@@ -813,12 +813,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticCaption )
+	CU_ImplementAttributeParser( parserStaticCaption )
 	{
 		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
@@ -831,12 +831,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticHAlign )
+	CU_ImplementAttributeParser( parserStaticHAlign )
 	{
 		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
@@ -849,12 +849,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticVAlign )
+	CU_ImplementAttributeParser( parserStaticVAlign )
 	{
 		ParserContext & context = getParserContext( p_context );
 		StaticCtrlSPtr ctrl = context.m_static;
@@ -867,20 +867,20 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No static initialised." ) );
+			CU_ParsingError( cuT( "No static initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserStaticEnd )
+	CU_ImplementAttributeParser( parserStaticEnd )
 	{
 		ParserContext & context = getParserContext( p_context );
 		FinishControl( getControlsManager( p_context ), context, context.m_static );
 		context.Pop();
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelPosition )
+	CU_ImplementAttributeParser( parserControlPixelPosition )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -893,12 +893,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelSize )
+	CU_ImplementAttributeParser( parserControlPixelSize )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -911,12 +911,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlPixelBorderSize )
+	CU_ImplementAttributeParser( parserControlPixelBorderSize )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -929,12 +929,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBackgroundMaterial )
+	CU_ImplementAttributeParser( parserControlBackgroundMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -951,17 +951,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderMaterial )
+	CU_ImplementAttributeParser( parserControlBorderMaterial )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -978,17 +978,17 @@ namespace CastorGui
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Material not found: [" + name + "]." ) );
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderInnerUv )
+	CU_ImplementAttributeParser( parserControlBorderInnerUv )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -1001,12 +1001,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlBorderOuterUv )
+	CU_ImplementAttributeParser( parserControlBorderOuterUv )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -1019,12 +1019,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlCenterUv )
+	CU_ImplementAttributeParser( parserControlCenterUv )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -1037,12 +1037,12 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserControlVisible )
+	CU_ImplementAttributeParser( parserControlVisible )
 	{
 		ParserContext & context = getParserContext( p_context );
 		ControlRPtr control = context.getTop();
@@ -1055,8 +1055,8 @@ namespace CastorGui
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 }

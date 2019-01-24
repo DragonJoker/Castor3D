@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include "Align/Aligned.hpp"
 
@@ -8,23 +8,23 @@
 #include "Exception/Assertion.hpp"
 
 #	include <malloc.h>
-#	define CU_ALIGNED_ALLOC( m, a, s )\
+#	define CU_AlignedAlloc( m, a, s )\
 	m = _aligned_malloc( s, a )
-#	define CU_ALIGNED_FREE( m )\
+#	define CU_AlignedFree( m )\
 	_aligned_free( m )
 
 namespace castor
 {
-	void * alignedAlloc( size_t p_alignment, size_t p_size )
+	void * alignedAlloc( size_t alignment, size_t size )
 	{
 		void * mem;
-		CU_ALIGNED_ALLOC( mem, p_alignment, p_size );
+		CU_AlignedAlloc( mem, alignment, size );
 		return mem;
 	}
 
-	void alignedFree( void * p_memory )
+	void alignedFree( void * memory )
 	{
-		CU_ALIGNED_FREE( p_memory );
+		CU_AlignedFree( memory );
 	}
 }
 

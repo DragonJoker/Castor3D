@@ -14,7 +14,7 @@ namespace Loop
 	{
 		double getAlpha( uint32_t n )
 		{
-			double tmp = 3.0 + 2.0 * cos( 2.0 * Angle::Pi / n );
+			double tmp = 3.0 + 2.0 * cos( 2.0 * Pi< float > / n );
 			double beta = 1.25 - ( tmp * tmp ) / 32.0;
 			return n * ( 1 - beta ) / beta;
 		}

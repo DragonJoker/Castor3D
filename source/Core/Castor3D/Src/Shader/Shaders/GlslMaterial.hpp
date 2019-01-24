@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslMat.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
 namespace castor3d
 {
@@ -14,75 +15,72 @@ namespace castor3d
 	{
 		static uint32_t constexpr MaxMaterialsCount = 2000u;
 		static int constexpr MaxMaterialComponentsCount = 15;
+		static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
 		castor::String const PassBufferName = cuT( "Materials" );
 
 		class LegacyMaterials;
 		class PbrMRMaterials;
 		class PbrSGMaterials;
-		
+
 		struct BaseMaterial
-			: public glsl::Type
+			: public sdw::StructInstance
 		{
 			friend class Materials;
 
+			C3D_API virtual sdw::Vec3 m_diffuse()const = 0;
+
 		protected:
-			C3D_API explicit BaseMaterial( castor::String const & type );
-			C3D_API BaseMaterial( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API BaseMaterial( castor::String const & type
-				, glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
+			C3D_API BaseMaterial( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
+
+		protected:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
+
+		protected:
+			sdw::Vec4 m_common;
+			sdw::Vec4 m_reflRefr;
+			sdw::Vec4 m_sssInfo;
 
 		public:
-			C3D_API virtual glsl::Vec3 m_diffuse()const = 0;
-			C3D_API glsl::Float m_opacity()const;
-			C3D_API glsl::Float m_emissive()const;
-			C3D_API glsl::Float m_alphaRef()const;
-			C3D_API glsl::Float m_gamma()const;
-			C3D_API glsl::Float m_refractionRatio()const;
-			C3D_API glsl::Int m_hasRefraction()const;
-			C3D_API glsl::Int m_hasReflection()const;
-			C3D_API glsl::Float m_exposure()const;
-			C3D_API glsl::Int m_subsurfaceScatteringEnabled()const;
-			C3D_API glsl::Float m_gaussianWidth()const;
-			C3D_API glsl::Float m_subsurfaceScatteringStrength()const;
-			C3D_API glsl::Int m_transmittanceProfileSize()const;
-			C3D_API glsl::Array< glsl::Vec4 > m_transmittanceProfile()const;
-
-		protected:
-			C3D_API glsl::Vec4 m_common()const;
-			C3D_API glsl::Vec4 m_reflRefr()const;
-			C3D_API glsl::Vec4 m_sssInfo()const;
+			sdw::Float m_opacity;
+			sdw::Float m_emissive;
+			sdw::Float m_alphaRef;
+			sdw::Float m_gamma;
+			sdw::Float m_refractionRatio;
+			sdw::Int m_hasRefraction;
+			sdw::Int m_hasReflection;
+			sdw::Float m_bwAccumulationOperator;
+			sdw::Int m_subsurfaceScatteringEnabled;
+			sdw::Float m_gaussianWidth;
+			sdw::Float m_subsurfaceScatteringStrength;
+			sdw::Int m_transmittanceProfileSize;
+			sdw::Array< sdw::Vec4 > m_transmittanceProfile;
 		};
 
-		DECLARE_SMART_PTR( BaseMaterial );
+		CU_DeclareSmartPtr( BaseMaterial );
 
 		struct LegacyMaterial
 			: public BaseMaterial
 		{
 			friend class LegacyMaterials;
 
-			C3D_API LegacyMaterial();
-			C3D_API LegacyMaterial( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API LegacyMaterial & operator=( LegacyMaterial const & rhs );
-			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()const override;
-			C3D_API glsl::Float m_ambient()const;
-			C3D_API glsl::Vec3 m_specular()const;
-			C3D_API glsl::Float m_shininess()const;
+			C3D_API LegacyMaterial( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			LegacyMaterial & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
 
-		protected:
-			C3D_API glsl::Vec4 m_diffAmb()const;
-			C3D_API glsl::Vec4 m_specShin()const;
+			C3D_API sdw::Vec3 m_diffuse()const override;
+
+		private:
+			sdw::Vec4 m_diffAmb;
+			sdw::Vec4 m_specShin;
+
+		public:
+			sdw::Float m_ambient;
+			sdw::Vec3 m_specular;
+			sdw::Float m_shininess;
 		};
 
 		struct MetallicRoughnessMaterial
@@ -90,27 +88,22 @@ namespace castor3d
 		{
 			friend class PbrMRMaterials;
 
-			C3D_API MetallicRoughnessMaterial();
-			C3D_API MetallicRoughnessMaterial( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API MetallicRoughnessMaterial & operator=( MetallicRoughnessMaterial const & rhs );
-			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()const override;
-			C3D_API glsl::Vec3 m_albedo()const;
-			C3D_API glsl::Float m_roughness()const;
-			C3D_API glsl::Float m_metallic()const;
+			C3D_API MetallicRoughnessMaterial( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			MetallicRoughnessMaterial & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 m_diffuse()const override;
 
 		protected:
-			C3D_API glsl::Vec4 m_albRough()const;
-			C3D_API glsl::Vec4 m_metDiv()const;
+			sdw::Vec4 m_albRough;
+			sdw::Vec4 m_metDiv;
+
+		public:
+			sdw::Vec3 m_albedo;
+			sdw::Float m_roughness;
+			sdw::Float m_metallic;
 		};
 
 		struct SpecularGlossinessMaterial
@@ -118,78 +111,77 @@ namespace castor3d
 		{
 			friend class PbrSGMaterials;
 
-			C3D_API SpecularGlossinessMaterial();
-			C3D_API SpecularGlossinessMaterial( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API SpecularGlossinessMaterial & operator=( SpecularGlossinessMaterial const & rhs );
-			C3D_API static void declare( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 m_diffuse()const override;
-			C3D_API glsl::Vec3 m_specular()const;
-			C3D_API glsl::Float m_glossiness()const;
+			C3D_API SpecularGlossinessMaterial( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			SpecularGlossinessMaterial & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			C3D_API sdw::Vec3 m_diffuse()const override;
 
 		protected:
-			C3D_API glsl::Vec4 m_diffDiv()const;
-			C3D_API glsl::Vec4 m_specGloss()const;
+			sdw::Vec4 m_diffDiv;
+			sdw::Vec4 m_specGloss;
+
+		public:
+			sdw::Vec3 m_specular;
+			sdw::Float m_glossiness;
 		};
 
 		class Materials
 		{
 		protected:
-			C3D_API explicit Materials( glsl::GlslWriter & writer );
+			C3D_API explicit Materials( sdw::ShaderWriter & writer );
 
 		public:
-			C3D_API virtual void declare() = 0;
-			C3D_API virtual BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const = 0;
+			C3D_API virtual void declare( bool hasSsbo ) = 0;
+			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const = 0;
 
 		protected:
-			glsl::GlslWriter & m_writer;
+			sdw::ShaderWriter & m_writer;
+			std::unique_ptr< sdw::Struct > m_type;
 		};
 
 		class LegacyMaterials
 			: public Materials
 		{
 		public:
-			C3D_API explicit LegacyMaterials( glsl::GlslWriter & writer );
-			C3D_API void declare()override;
-			C3D_API LegacyMaterial getMaterial( glsl::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
+			C3D_API explicit LegacyMaterials( sdw::ShaderWriter & writer );
+			C3D_API void declare( bool hasSsbo )override;
+			C3D_API LegacyMaterial getMaterial( sdw::Int const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
 
 		private:
-			glsl::Function< LegacyMaterial, glsl::InInt > m_getMaterial;
+			std::unique_ptr< sdw::ArraySsboT< LegacyMaterial > > m_ssbo;
+			sdw::Function< LegacyMaterial, sdw::InInt > m_getMaterial;
 		};
 
 		class PbrMRMaterials
 			: public Materials
 		{
 		public:
-			C3D_API explicit PbrMRMaterials( glsl::GlslWriter & writer );
-			C3D_API void declare()override;
-			C3D_API MetallicRoughnessMaterial getMaterial( glsl::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
+			C3D_API explicit PbrMRMaterials( sdw::ShaderWriter & writer );
+			C3D_API void declare( bool hasSsbo )override;
+			C3D_API MetallicRoughnessMaterial getMaterial( sdw::Int const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
 
 		private:
-			glsl::Function< MetallicRoughnessMaterial, glsl::InInt > m_getMaterial;
+			std::unique_ptr< sdw::ArraySsboT< MetallicRoughnessMaterial > > m_ssbo;
+			sdw::Function< MetallicRoughnessMaterial, sdw::InInt > m_getMaterial;
 		};
 
 		class PbrSGMaterials
 			: public Materials
 		{
 		public:
-			C3D_API explicit PbrSGMaterials( glsl::GlslWriter & writer );
-			C3D_API void declare()override;
-			C3D_API SpecularGlossinessMaterial getMaterial( glsl::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( glsl::Int const & index )const override;
+			C3D_API explicit PbrSGMaterials( sdw::ShaderWriter & writer );
+			C3D_API void declare( bool hasSsbo )override;
+			C3D_API SpecularGlossinessMaterial getMaterial( sdw::Int const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
 
 		private:
-			glsl::Function< SpecularGlossinessMaterial, glsl::InInt > m_getMaterial;
+			std::unique_ptr< sdw::ArraySsboT< SpecularGlossinessMaterial > > m_ssbo;
+			sdw::Function< SpecularGlossinessMaterial, sdw::InInt > m_getMaterial;
 		};
 	}
 }

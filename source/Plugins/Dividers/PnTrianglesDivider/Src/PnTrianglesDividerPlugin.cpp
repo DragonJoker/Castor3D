@@ -6,7 +6,7 @@
 using namespace castor;
 using namespace PnTriangles;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_PnTriangles_API
 #else
 #	ifdef PnTrianglesDivider_EXPORTS

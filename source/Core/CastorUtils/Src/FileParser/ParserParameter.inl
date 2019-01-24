@@ -115,10 +115,10 @@ namespace castor
 		{
 			for ( auto & value : makeArrayView( values, values + count ) )
 			{
-				if ( value < range.min()
-					|| value > range.max() )
+				if ( value < range.getMin()
+					|| value > range.getMax() )
 				{
-					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.min() << cuT( ", " ) << range.max() << cuT( "]" ) );
+					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
 					value = range.clamp( value );
 				}
 			}
@@ -956,7 +956,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UIntStrMap const & p_values )
+	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & p_values )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_values( p_values )
 	{
@@ -1009,7 +1009,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UIntStrMap const & p_values )
+	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & p_values )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_values( p_values )
 	{

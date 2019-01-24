@@ -68,7 +68,7 @@ namespace castor
 			}
 			else
 			{
-				CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
+				CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace castor
 				}
 				else
 				{
-					CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
+					CU_Exception( "Can't create the font, invalid name: " + string::stringCast< char >( p_name ) + ", path: " + string::stringCast< char >( p_path ) );
 				}
 			}
 		}

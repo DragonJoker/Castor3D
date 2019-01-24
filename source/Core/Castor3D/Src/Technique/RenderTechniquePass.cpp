@@ -9,7 +9,7 @@
 #include "Shader/Shaders/GlslShadow.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -80,19 +80,19 @@ namespace castor3d
 	{
 	}
 
-	void RenderTechniquePass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
 	}
 
-	void RenderTechniquePass::doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
 	}
 
-	void RenderTechniquePass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -102,7 +102,7 @@ namespace castor3d
 			, *node.texDescriptorSet );
 	}
 
-	void RenderTechniquePass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -144,7 +144,7 @@ namespace castor3d
 		}
 	}
 
-	bool RenderTechniquePass::doInitialise( Size const & CU_PARAM_UNUSED( size ) )
+	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
 		m_finished = getCurrentDevice( *this ).createSemaphore();
 		return true;
@@ -174,86 +174,86 @@ namespace castor3d
 		}
 	}
 
-	glsl::Shader RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderTechniquePass::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return glsl::Shader{};
+		return nullptr;
 	}
 
 	void RenderTechniquePass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		m_sceneUbo.update( m_scene, *m_camera );
+		m_sceneUbo.update( m_scene, m_camera );
 	}
 
-	renderer::DepthStencilState RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, m_opaque };
+		return ashes::DepthStencilState{ 0u, true, m_opaque };
 	}
 
-	renderer::ColourBlendState RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	renderer::DescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinBufferIndex;
-		renderer::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::DescriptorSetLayoutBindingArray textureBindings;
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eDiffuse ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eSpecular ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eGloss ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eNormal ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		bool opacityMap = checkFlag( flags.textureFlags, TextureChannel::eOpacity )
-			&& ( !m_opaque || flags.alphaFunc != renderer::CompareOp::eAlways );
+			&& ( !m_opaque || flags.alphaFunc != ashes::CompareOp::eAlways );
 
 		if ( opacityMap )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eHeight ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eAmbientOcclusion ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eEmissive ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eTransmittance ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.textureFlags, TextureChannel::eReflection )
 			|| checkFlag( flags.textureFlags, TextureChannel::eRefraction ) )
 		{
-			textureBindings.emplace_back( index++, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		return textureBindings;

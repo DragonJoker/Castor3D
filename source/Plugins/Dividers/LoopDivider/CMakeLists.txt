@@ -18,8 +18,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
-	"LoopPch.hpp"
-	"LoopPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/LoopPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/LoopPch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Dividers" )

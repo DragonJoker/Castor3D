@@ -173,7 +173,7 @@ namespace castor3d
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Font " + string::stringCast< char >( p_strFont ) + "not found" );
+			CU_Exception( "Font " + string::stringCast< char >( p_strFont ) + "not found" );
 		}
 
 		m_textChanged = true;
@@ -187,7 +187,7 @@ namespace castor3d
 		if ( !fontTexture )
 		{
 			setVisible( false );
-			CASTOR_EXCEPTION( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
+			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
 		}
 
 		FontSPtr font = fontTexture->getFont();

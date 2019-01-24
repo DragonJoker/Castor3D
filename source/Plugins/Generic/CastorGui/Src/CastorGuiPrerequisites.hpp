@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include <Design/Signal.hpp>
 #include <Graphics/Colour.hpp>
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_CGui_API
 #else
 #	ifdef CastorGui_EXPORTS
@@ -249,14 +249,14 @@ namespace CastorGui
 	using OnSliderEvent = castor::Signal< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
-	DECLARE_SMART_PTR( ControlsManager );
-	DECLARE_SMART_PTR( Control );
-	DECLARE_SMART_PTR( ButtonCtrl );
-	DECLARE_SMART_PTR( ComboBoxCtrl );
-	DECLARE_SMART_PTR( EditCtrl );
-	DECLARE_SMART_PTR( ListBoxCtrl );
-	DECLARE_SMART_PTR( SliderCtrl );
-	DECLARE_SMART_PTR( StaticCtrl );
+	CU_DeclareSmartPtr( ControlsManager );
+	CU_DeclareSmartPtr( Control );
+	CU_DeclareSmartPtr( ButtonCtrl );
+	CU_DeclareSmartPtr( ComboBoxCtrl );
+	CU_DeclareSmartPtr( EditCtrl );
+	CU_DeclareSmartPtr( ListBoxCtrl );
+	CU_DeclareSmartPtr( SliderCtrl );
+	CU_DeclareSmartPtr( StaticCtrl );
 
 	typedef std::vector< ControlSPtr > ControlArray;
 	/** Sets the pass colour.

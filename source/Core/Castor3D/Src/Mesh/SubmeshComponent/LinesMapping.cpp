@@ -23,7 +23,7 @@ namespace castor3d
 		{
 			return lhs.m_distance < rhs.m_distance;
 		}
-		DECLARE_VECTOR( LineDistance, LineDist );
+		CU_DeclareVector( LineDistance, LineDist );
 	}
 
 	String const LinesMapping::Name = "lines_mapping";
@@ -85,7 +85,7 @@ namespace castor3d
 
 	void LinesMapping::sortByDistance( Point3r const & cameraPosition )
 	{
-		REQUIRE( getOwner()->isInitialised() );
+		CU_Require( getOwner()->isInitialised() );
 
 		try
 		{
@@ -103,14 +103,14 @@ namespace castor3d
 
 					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
 						, uint32_t( indexSize * sizeof( uint32_t ) )
-						, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
+						, ashes::MemoryMapFlag::eRead | ashes::MemoryMapFlag::eWrite ) ) )
 					{
 						LineDistArray arraySorted;
 						arraySorted.reserve( indexSize / 2 );
 
 						if ( InterleavedVertex * vertex = vertices.lock( 0
 							, vertices.getCount()
-							, renderer::MemoryMapFlag::eRead ) )
+							, ashes::MemoryMapFlag::eRead ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 2 )
 							{
@@ -164,9 +164,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( uint32_t * buffer = reinterpret_cast< uint32_t * >( indexBuffer.getBuffer().lock( 0
-				, uint32_t( count * sizeof( uint32_t ) )
-				, renderer::MemoryMapFlag::eRead | renderer::MemoryMapFlag::eWrite ) ) )
+			if ( uint32_t * buffer = indexBuffer.lock( 0, count, ashes::MemoryMapFlag::eRead | ashes::MemoryMapFlag::eWrite ) )
 			{
 				for ( auto const & line : m_lines )
 				{
@@ -176,8 +174,8 @@ namespace castor3d
 					++buffer;
 				}
 
-				indexBuffer.getBuffer().flush( 0u, uint32_t( count * sizeof( uint32_t ) ) );
-				indexBuffer.getBuffer().unlock();
+				indexBuffer.flush( 0u, count );
+				indexBuffer.unlock();
 			}
 
 			m_lines.clear();

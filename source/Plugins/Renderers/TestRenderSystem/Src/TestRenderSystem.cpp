@@ -4,7 +4,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslWriter.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -20,9 +20,9 @@ namespace TestRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, false )
+		: castor3d::RenderSystem( engine, Name, true, true )
 	{
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -33,7 +33,7 @@ namespace TestRender
 				Logger::logDebugNoNL( msg );
 			}
 		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -44,7 +44,7 @@ namespace TestRender
 				Logger::logInfoNoNL( msg );
 			}
 		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -55,7 +55,7 @@ namespace TestRender
 				Logger::logWarningNoNL( msg );
 			}
 		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -66,7 +66,7 @@ namespace TestRender
 				Logger::logErrorNoNL( msg );
 			}
 		} );
-		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
+		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
 		{
 			string::stringCast< char >( appName ),
 			"Castor3D",
@@ -92,17 +92,35 @@ namespace TestRender
 			, enableValidation );
 	}
 
-	glsl::GlslWriter RenderSystem::createGlslWriter()
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ 450
-			, true
-			, true
-			, true
-			, true
-			, true
-			, true
-			, true
-			, true
-			, true } };
+		castor3d::UInt32Array result;
+		std::string glsl;
+
+		if ( module.shader )
+		{
+			glsl = glsl::compileGlsl( *module.shader
+				, ast::SpecialisationInfo{}
+				, glsl::GlslConfig
+				{
+					module.shader->getType(),
+					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					false,
+					false,
+					false,
+					false,
+					false,
+					false,
+				} );
+		}
+		else
+		{
+			glsl = module.source;
+		}
+
+		auto size = glsl.size() + 1u;
+		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.data(), glsl.data(), glsl.size() );
+		return result;
 	}
 }

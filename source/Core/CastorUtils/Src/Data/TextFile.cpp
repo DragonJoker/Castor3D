@@ -15,8 +15,8 @@ namespace castor
 
 	uint64_t TextFile::readLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
 		uint64_t uiReturn = 0;
 		p_toRead.clear();
 
@@ -69,8 +69,8 @@ namespace castor
 			}
 		}
 
-		ENSURE( uiReturn <= p_size );
-		CHECK_INVARIANTS();
+		CU_Ensure( uiReturn <= p_size );
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 
@@ -81,8 +81,8 @@ namespace castor
 
 	uint64_t TextFile::readChar( xchar & p_toRead )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
 		uint64_t uiReturn = 0;
 
 		if ( isOk() )
@@ -108,8 +108,8 @@ namespace castor
 
 	uint64_t TextFile::writeText( String const & p_line )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
 
 		if ( isOk() )
@@ -125,14 +125,14 @@ namespace castor
 			}
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 
-	uint64_t TextFile::copytoString( String & p_strOut )
+	uint64_t TextFile::copyToString( String & p_strOut )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eRead ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
 		uint64_t uiReturn = 0;
 		p_strOut.clear();
 		String strLine;
@@ -143,14 +143,14 @@ namespace castor
 			p_strOut += strLine + cuT( "\n" );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 
 	uint64_t TextFile::print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
+		CU_CheckInvariants();
+		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t uiReturn = 0;
 		xchar * text = new xchar[std::size_t( p_uiMaxSize )];
 
@@ -164,8 +164,8 @@ namespace castor
 		}
 
 		delete [] text;
-		ENSURE( uiReturn <= p_uiMaxSize );
-		CHECK_INVARIANTS();
+		CU_Ensure( uiReturn <= p_uiMaxSize );
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 }

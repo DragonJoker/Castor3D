@@ -5,6 +5,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
+set( GlslangLibraries 
+	glslang
+	OGLCompiler
+	OSDependent
+	SPVRemapper
+	SPIRV )
+
+include_directories(
+	${CMAKE_SOURCE_DIR}/external/glslang
+)
+
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/RequiredVersion.hpp.in
 	${CMAKE_CURRENT_BINARY_DIR}/Src/RequiredVersion.hpp
@@ -22,10 +33,10 @@ include_directories( ${Castor3DIncludeDirs} )
 add_target(
 	${PROJECT_NAME}
 	api_dll
-	"CastorUtils;GlslWriter;Renderer"
-	"${CastorMinLibraries};Renderer"
-	"Castor3DPch.hpp"
-	"Castor3DPch.cpp"
+	"CastorUtils;ShaderAST;ShaderWriter;Ashes"
+	"${CastorMinLibraries};ShaderWriter;Ashes;${GlslangLibraries}"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.cpp
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES
@@ -97,6 +108,16 @@ parse_subdir_files( Src/Texture "Texture" )
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
+	ShaderWriter
+	Ashes
+	${PROJECT_NAME}
+	PARENT_SCOPE
+)
+
+set( CastorBinLibraries
+	${CastorBinLibraries}
+	ShaderWriter
+	Ashes
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )

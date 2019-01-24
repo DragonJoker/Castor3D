@@ -50,7 +50,7 @@ namespace castor3d
 			Submesh & submeshBase = *mesh.createSubmesh();
 			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
+			real angleRotation = PiMult2< real > / m_nbFaces;
 			uint32_t i = 0;
 			real rCos, rSin;
 			InterleavedVertexArray baseVertex;

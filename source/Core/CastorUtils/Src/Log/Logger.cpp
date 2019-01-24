@@ -176,7 +176,7 @@ namespace castor
 	{
 		if ( m_singleton )
 		{
-			CASTOR_EXCEPTION( ERROR_LOGGER_ALREADY_INITIALISED );
+			CU_Exception( ERROR_LOGGER_ALREADY_INITIALISED );
 		}
 		else
 		{
@@ -469,7 +469,7 @@ namespace castor
 	{
 		if ( !m_singleton )
 		{
-			CASTOR_EXCEPTION( cuT( "No Logger initialised." ) );
+			CU_Exception( cuT( "No Logger initialised." ) );
 		}
 
 		return *m_singleton;

@@ -50,7 +50,8 @@ namespace castor3d
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
 			, TextureUnit && linearMap
-			, std::vector< PassData > && passes );
+			, std::vector< PassData > && passes
+			, uint32_t count );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -98,7 +99,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine la shadow map de la lumière donnée.
 		 */
-		C3D_API virtual renderer::Semaphore const & render( renderer::Semaphore const & toWait ) = 0;
+		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index/* = 0u*/ ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -109,8 +111,8 @@ namespace castor3d
 		 *\param[in]	size	Les dimensions d'affichage.
 		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
 		 */
-		C3D_API virtual void debugDisplay( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		C3D_API virtual void debugDisplay( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
@@ -122,7 +124,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -130,18 +132,18 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 		/**
 		*\~english
 		*name
@@ -151,6 +153,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API ashes::Sampler const & getSampler()const;
+		C3D_API ashes::TextureView const & getView()const;
+		C3D_API virtual ashes::TextureView const & getView( uint32_t index )const;
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
@@ -169,6 +174,11 @@ namespace castor3d
 		inline TextureUnit const & getLinearDepth()const
 		{
 			return m_linearMap;
+		}
+
+		inline uint32_t getCount()const
+		{
+			return m_count;
 		}
 		/**@}*/
 
@@ -199,26 +209,26 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, bool invertNormals )const;
+			, bool invertNormals )const = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
-		C3D_API virtual glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const = 0;
+			, ashes::CompareOp alphaFunc )const = 0;
 
 	protected:
 		/**
@@ -237,18 +247,18 @@ namespace castor3d
 		 *\param[in]	material		L'indice du matériau.
 		 *\param[in]	materials		Les matériaux.
 		 */
-		void doDiscardAlpha( glsl::GlslWriter & writer
+		void doDiscardAlpha( sdw::ShaderWriter & writer
 			, TextureChannels const & textureFlags
-			, renderer::CompareOp alphaFunc
-			, glsl::Int const & material
+			, ashes::CompareOp alphaFunc
+			, sdw::Int const & material
 			, shader::Materials const & materials )const;
 
 	protected:
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::FencePtr m_fence;
+		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;
-		renderer::SemaphorePtr m_finished;
+		uint32_t m_count;
+		ashes::SemaphorePtr m_finished;
 		TextureUnit m_shadowMap;
 		TextureUnit m_linearMap;
 		bool m_initialised{ false };

@@ -52,7 +52,7 @@ namespace Bloom
 		bool doBuildCommandBuffer( castor3d::RenderPassTimer const & timer );
 
 	private:
-		renderer::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
+		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
 		castor3d::TextureLayoutSPtr m_blurTexture;
 		std::unique_ptr< CombinePass > m_combinePass;
 		std::unique_ptr< HiPass > m_hiPass;

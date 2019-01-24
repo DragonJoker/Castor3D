@@ -36,6 +36,8 @@
 #include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
+#include <Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Mesh/SubmeshComponent/TriFaceMapping.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/Overlay.hpp>
 #include <Overlay/PanelOverlay.hpp>
@@ -59,12 +61,8 @@
 #include <Scene/Light/PointLight.hpp>
 #include <Scene/Light/SpotLight.hpp>
 #include <Shader/ShaderProgram.hpp>
-#include <State/BlendState.hpp>
-#include <State/DepthStencilState.hpp>
-#include <State/MultisampleState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
-#include <Texture/TextureImage.hpp>
+#include <Texture/TextureView.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -266,7 +264,7 @@ namespace cpy
 	{
 		castor::Point3r operator()( castor::Point3r const & p_1, castor::Point3r const & p_2 )
 		{
-			return p_1 ^ p_2;
+			return castor::point::cross( p_1, p_2 );
 		}
 	};
 
@@ -287,24 +285,24 @@ namespace cpy
 
 	struct FaceAdder
 	{
-		void operator()( castor3d::Submesh * p_submesh, uint32_t a, uint32_t b, uint32_t c )
+		void operator()( castor3d::TriFaceMapping * p_mapping, uint32_t a, uint32_t b, uint32_t c )
 		{
-			p_submesh->addFace( a, b, c );
+			p_mapping->addFace( a, b, c );
 		}
 	};
 
-	struct Texture3DResizer
+	struct LineAdder
 	{
-		void operator()( castor3d::TextureImage * texture, castor::Size const & size, uint32_t depth )
+		void operator()( castor3d::LinesMapping * p_mapping, uint32_t a, uint32_t b )
 		{
-			texture->resize( castor::Point3ui( size.getWidth(), size.getHeight(), depth ) );
+			p_mapping->addLine( a, b );
 		}
 	};
 
 	template< class Texture, typename Param >
-	struct Texture3DImagesetter
+	struct Texture3DImageSetter
 	{
-		void operator()( castor3d::TextureImage * texture, castor::Size const & size, uint32_t depth, Param param )
+		void operator()( castor3d::TextureView * texture, castor::Size const & size, uint32_t depth, Param param )
 		{
 			texture->setSource( castor::Point3ui( size.getWidth(), size.getHeight(), depth ), param );
 		}
@@ -342,35 +340,62 @@ namespace cpy
 		}
 	};
 
-	template< typename Blend >
-	struct Blendsetter
+	struct CameraCacheElementProducer
 	{
-		typedef void ( castor3d::BlendState::*Function )( Blend, uint8_t );
-		Function m_function;
-		uint8_t m_index;
-		Blendsetter( Function function, uint8_t index )
-			:	m_function( function )
-			,	m_index( index )
+		castor3d::CameraSPtr operator()( castor3d::CameraCache * p_cache, castor::String const & p_key, castor3d::SceneNodeSPtr p_node, castor3d::Viewport && p_viewport )
 		{
+			return p_cache->add( p_key, p_node, std::move( p_viewport ) );
 		}
-		void operator()( castor3d::BlendState * state, Blend blend )
+	};
+
+	struct QuaternionFromAxisAngle
+	{
+		castor::Quaternion operator()( castor::Point3f const & axis
+			, castor::Angle const & angle )
 		{
-			( state->*( this->m_function ) )( blend, m_index );
+			return castor::Quaternion::fromAxisAngle( axis, angle );
+		}
+	};
+
+	struct QuaternionFromAxes
+	{
+		castor::Quaternion operator()( castor::Point3f const & x
+			, castor::Point3f const & y
+			, castor::Point3f const & z )
+		{
+			return castor::Quaternion::fromAxes( x, y, z );
+		}
+	};
+
+	struct QuaternionFromMatrix
+	{
+		castor::Quaternion operator()( castor::Matrix4x4r const & matrix )
+		{
+			return castor::Quaternion::fromMatrix( matrix );
+		}
+	};
+
+	struct FillRgb
+	{
+		castor::Image & operator()( castor::Image & image, castor::RgbColour const & rgb )
+		{
+			return image.fill( rgb );
+		}
+	};
+
+	struct FillRgba
+	{
+		castor::Image & operator()( castor::Image & image, castor::RgbaColour const & rgba )
+		{
+			return image.fill( rgba );
 		}
 	};
 
 	template< class Texture, typename Param >
-	Texture3DImagesetter< Texture, Param >
+	Texture3DImageSetter< Texture, Param >
 	make_image_setter( void ( Texture::* )( castor::Point3ui const & sizes, Param param ) )
 	{
-		return Texture3DImagesetter< Texture, Param >();
-	}
-
-	template< typename Blend >
-	Blendsetter< Blend >
-	make_blend_setter( void ( castor3d::BlendState::*function )( Blend, uint8_t ), uint8_t index )
-	{
-		return Blendsetter< Blend >( function, index );
+		return Texture3DImageSetter< Texture, Param >();
 	}
 }
 
@@ -512,10 +537,15 @@ namespace boost
 			{
 				return boost::mpl::vector< void, castor3d::Submesh *, castor::Point3r const & >();
 			}
-			inline boost::mpl::vector< void, castor3d::Submesh *, uint32_t, uint32_t, uint32_t >
+			inline boost::mpl::vector< void, castor3d::TriFaceMapping *, uint32_t, uint32_t, uint32_t >
 			get_signature( cpy::FaceAdder, void * = 0 )
 			{
-				return boost::mpl::vector< void, castor3d::Submesh *, uint32_t, uint32_t, uint32_t >();
+				return boost::mpl::vector< void, castor3d::TriFaceMapping *, uint32_t, uint32_t, uint32_t >();
+			}
+			inline boost::mpl::vector< void, castor3d::LinesMapping *, uint32_t, uint32_t >
+			get_signature( cpy::LineAdder, void * = 0 )
+			{
+				return boost::mpl::vector< void, castor3d::LinesMapping *, uint32_t, uint32_t >();
 			}
 			inline boost::mpl::vector< castor3d::MaterialSPtr, castor3d::Geometry *, castor3d::SubmeshSPtr >
 			get_signature( castor3d::MaterialSPtr( castor3d::Geometry::* )( castor3d::SubmeshSPtr ), void * = 0 )
@@ -527,22 +557,11 @@ namespace boost
 			{
 				return boost::mpl::vector< void, castor3d::Geometry *, castor3d::SubmeshSPtr, castor3d::MaterialSPtr >();
 			}
-			inline boost::mpl::vector< void, castor3d::TextureImage *, castor::Size const &, uint32_t >
-			get_signature( cpy::Texture3DResizer, void * = 0 )
-			{
-				return boost::mpl::vector< void, castor3d::TextureImage *, castor::Size const &, uint32_t >();
-			}
 			template< class Texture, typename Param >
 			inline boost::mpl::vector< void, Texture *, castor::Size const &, uint32_t, Param >
-			get_signature( cpy::Texture3DImagesetter< Texture, Param >, void * = 0 )
+			get_signature( cpy::Texture3DImageSetter< Texture, Param >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Texture *, castor::Size const &, uint32_t, Param >();
-			}
-			template< typename Blend >
-			inline boost::mpl::vector< void, castor3d::BlendState *, Blend >
-			get_signature( cpy::Blendsetter< Blend >, void * = 0 )
-			{
-				return boost::mpl::vector< void, castor3d::BlendState *, Blend >();
 			}
 			inline boost::mpl::vector< castor3d::GeometrySPtr, castor::String const &, castor3d::SceneNodeSPtr, castor3d::MeshSPtr >
 			get_signature( cpy::GeometryCacheElementProducer, void * = 0 )
@@ -563,6 +582,36 @@ namespace boost
 			get_signature( cpy::OverlayCacheElementProducer, void * = 0 )
 			{
 				return boost::mpl::vector< castor3d::OverlaySPtr, castor::String const &, castor3d::OverlayType, castor3d::SceneSPtr, castor3d::OverlaySPtr >();
+			}
+			inline boost::mpl::vector< castor::Quaternion, castor::Point3f const &, castor::Angle const & >
+			get_signature( cpy::QuaternionFromAxisAngle, void * = 0 )
+			{
+				return boost::mpl::vector< castor::Quaternion, castor::Point3f const &, castor::Angle const & >();
+			}
+			inline boost::mpl::vector< castor::Quaternion, castor::Point3f const &, castor::Point3f const &, castor::Point3f const & >
+			get_signature( cpy::QuaternionFromAxes, void * = 0 )
+			{
+				return boost::mpl::vector< castor::Quaternion, castor::Point3f const &, castor::Point3f const &, castor::Point3f const & >();
+			}
+			inline boost::mpl::vector< castor::Quaternion, castor::Matrix4x4r const & >
+			get_signature( cpy::QuaternionFromMatrix, void * = 0 )
+			{
+				return boost::mpl::vector< castor::Quaternion, castor::Matrix4x4r const & >();
+			}
+			inline boost::mpl::vector< castor::Image &, castor::Image &, castor::RgbColour const & >
+			get_signature( cpy::FillRgb, void * = 0 )
+			{
+				return boost::mpl::vector< castor::Image &, castor::Image &, castor::RgbColour const & >();
+			}
+			inline boost::mpl::vector< castor::Image &, castor::Image &, castor::RgbaColour const & >
+			get_signature( cpy::FillRgba, void * = 0 )
+			{
+				return boost::mpl::vector< castor::Image &, castor::Image &, castor::RgbaColour const & >();
+			}
+			inline boost::mpl::vector< castor3d::CameraSPtr, castor3d::CameraCache *, castor::String const &, castor3d::SceneNodeSPtr, castor3d::Viewport && >
+			get_signature( cpy::CameraCacheElementProducer, void * = 0 )
+			{
+				return boost::mpl::vector< castor3d::CameraSPtr, castor3d::CameraCache *, castor::String const &, castor3d::SceneNodeSPtr, castor3d::Viewport && >();
 			}
 		}
 	}

@@ -35,27 +35,4 @@ namespace CastorCom
 
 		return hr;
 	}
-
-	STDMETHODIMP CSubmesh::AddFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_mapping->addFace( x, y, z );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISubmesh,					// This is the GUID of PixelComponents throwing error
-					 cuT( "addFace" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
 }

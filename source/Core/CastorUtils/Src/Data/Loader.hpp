@@ -55,7 +55,7 @@ namespace castor
 		 */
 		virtual bool operator()( T & p_object, Type & p_file )
 		{
-			LOADER_ERROR( "Import not supported by the loader registered for this type" );
+			CU_LoaderError( "Import not supported by the loader registered for this type" );
 		}
 	};
 }

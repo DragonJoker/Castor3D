@@ -113,7 +113,7 @@ namespace GuiCommon
 
 	bool CastorApplication::OnInit()
 	{
-#if defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
+#if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
@@ -148,11 +148,13 @@ namespace GuiCommon
 			catch ( Exception & exc )
 			{
 				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.getFullDescription() );
+				doCleanupCastor();
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
 				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
+				doCleanupCastor();
 				result = false;
 			}
 		}
@@ -187,6 +189,7 @@ namespace GuiCommon
 		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
 		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
 		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
+		parser.AddSwitch( wxT( "direct3d11" ), wxEmptyString, _( "Defines the renderer to Direct3D 11." ) );
 		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
 		bool result = parser.Parse( false ) == 0;
 
@@ -226,6 +229,10 @@ namespace GuiCommon
 			else if ( parser.Found( wxT( "vulkan" ) ) )
 			{
 				m_rendererType = cuT( "vulkan" );
+			}
+			else if ( parser.Found( wxT( "direct3d11" ) ) )
+			{
+				m_rendererType = cuT( "direct3d11" );
 			}
 			else if ( parser.Found( wxT( "test" ) ) )
 			{
@@ -295,7 +302,7 @@ namespace GuiCommon
 
 		if ( renderers.empty() )
 		{
-			CASTOR_EXCEPTION( "No renderer plug-ins" );
+			CU_Exception( "No renderer plug-ins" );
 		}
 		else if ( renderers.size() == 1 )
 		{

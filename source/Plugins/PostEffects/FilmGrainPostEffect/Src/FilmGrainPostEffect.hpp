@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Texture/TextureUnit.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace film_grain
 {
@@ -28,30 +28,30 @@ namespace film_grain
 
 	public:
 		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, renderer::Extent2D const & size );
+			, ashes::Extent2D const & size );
 		void update( castor::Nanoseconds const & time );
 
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_configUbo;
 		}
 
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_configUbo;
 		}
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		uint64_t m_time{ 0ull };
-		renderer::Extent2D m_size;
-		renderer::UniformBufferPtr< Configuration > m_configUbo;
+		ashes::Extent2D m_size;
+		ashes::UniformBufferPtr< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
-		renderer::TexturePtr m_noise;
-		renderer::TextureViewPtr m_noiseView;
+		ashes::TexturePtr m_noise;
+		ashes::TextureViewPtr m_noiseView;
 	};
 
 	class PostEffect
@@ -96,10 +96,10 @@ namespace film_grain
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::PostEffectSurface m_surface;
 		castor::PreciseTimer m_timer;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_quad;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

@@ -8,10 +8,10 @@ See LICENSE file in root folder
 
 #include "Miscellaneous/Utils.hpp"
 
-#if defined( CASTOR_COMPILER_MSVC )
-#	define CASTOR_ALIGNED_DECL( a ) alignas( a )
+#if defined( CU_CompilerMSVC )
+#	define CU_Alignas( a ) alignas( a )
 #else
-#	define CASTOR_ALIGNED_DECL( a )
+#	define CU_Alignas( a )
 #endif
 
 namespace castor
@@ -65,7 +65,7 @@ namespace castor
 	\brief		Classe template qui fournit le support de l'alignement.
 	*/
 	template< int A >
-	class CASTOR_ALIGNED_DECL( A ) Aligned
+	class CU_Alignas( A ) Aligned
 	{
 	public:
 		static const size_t AlignValue = A;
@@ -119,7 +119,7 @@ namespace castor
 	\brief		Classe template qui fournit le support de l'alignement.
 	*/
 	template< typename T >
-	class CASTOR_ALIGNED_DECL( alignof( T ) ) AlignedFrom
+	class CU_Alignas( alignof( T ) ) AlignedFrom
 	{
 	public:
 		static const size_t AlignValue = alignof( T );

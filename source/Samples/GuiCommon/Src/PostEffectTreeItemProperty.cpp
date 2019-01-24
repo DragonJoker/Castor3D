@@ -6,7 +6,8 @@
 #include <PostEffect/PostEffect.hpp>
 #include <Render/RenderSystem.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -41,14 +42,26 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlag type
-				, glsl::Shader const & shader )override
+				, ashes::ShaderStageFlag type
+				, sdw::Shader const & shader )override
 			{
-				doGetSource( name ).sources[type] = shader.getSource();
+				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
+					, ast::SpecialisationInfo{}
+					, glsl::GlslConfig
+					{
+						convert( type ),
+						430,
+						false,
+						false,
+						true,
+						true,
+						true,
+						true,
+					} );
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, float & value )override
@@ -57,7 +70,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, int32_t & value )override
@@ -66,7 +79,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, uint32_t & value )override
@@ -75,7 +88,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2f & value )override
@@ -84,7 +97,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2i & value )override
@@ -93,7 +106,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2ui & value )override
@@ -102,7 +115,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3f & value )override
@@ -111,7 +124,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3i & value )override
@@ -120,7 +133,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3ui & value )override
@@ -129,7 +142,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4f & value )override
@@ -138,7 +151,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4i & value )override
@@ -147,7 +160,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4ui & value )override
@@ -156,7 +169,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Matrix4x4f & value )override
@@ -165,7 +178,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< float > & value )override
@@ -174,7 +187,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< int32_t > & value )override
@@ -183,7 +196,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< uint32_t > & value )override
@@ -192,7 +205,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< float > & value )override
@@ -201,7 +214,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< int32_t > & value )override
@@ -210,7 +223,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< uint32_t > & value )override
@@ -219,7 +232,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2f > & value )override
@@ -228,7 +241,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2i > & value )override
@@ -237,7 +250,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2ui > & value )override
@@ -246,7 +259,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3f > & value )override
@@ -255,7 +268,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3i > & value )override
@@ -264,7 +277,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3ui > & value )override
@@ -273,7 +286,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4f > & value )override
@@ -282,7 +295,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4i > & value )override
@@ -291,7 +304,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4ui > & value )override
@@ -300,7 +313,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
@@ -309,7 +322,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< float > > & value )override
@@ -318,7 +331,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
@@ -327,7 +340,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
@@ -356,7 +369,7 @@ namespace GuiCommon
 			}
 
 			UniformBufferValues & doGetUbo( ShaderSource & source
-				, renderer::ShaderStageFlags stages
+				, ashes::ShaderStageFlags stages
 				, castor::String const & name )
 			{
 				auto it = std::find_if( source.ubos.begin()
@@ -379,7 +392,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, T & value )
@@ -391,7 +404,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< T > & value )
@@ -403,7 +416,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisitTracked( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< T > & value )
@@ -415,7 +428,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisitTracked( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< T > > & value )

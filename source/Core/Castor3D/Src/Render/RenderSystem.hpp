@@ -49,7 +49,8 @@ namespace castor3d
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, castor::String const & name
-			, bool topDown );
+			, bool topDown
+			, bool zeroToOneDepth );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -71,24 +72,6 @@ namespace castor3d
 		 *\brief		Nettoie le render system
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Connects to the device onEnabled/onDisabled signals.
-		 *\param[in]	device	The device to register.
-		 *\~french
-		 *\brief		Se connecte aux signaux onEnablle/onDisable du périphérique.
-		 *\param[in]	device	Le périphérique à enregistrer.
-		 */
-		C3D_API void registerDevice( renderer::Device & device );
-		/**
-		 *\~english
-		 *\brief		Disconnects from the device onEnabled/onDisabled signals.
-		 *\param[in]	device	The device to unregister.
-		 *\~french
-		 *\brief		Se déconnecte du signaux onEnablle/onDisable du périphérique.
-		 *\param[in]	device	Le périphérique à désenregistrer.
-		 */
-		C3D_API void unregisterDevice( renderer::Device & device );
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on the stack
@@ -114,11 +97,15 @@ namespace castor3d
 		C3D_API Scene * getTopScene()const;
 		/**
 		 *\~english
-		 *\return		A pre-configured GlslWriter instance.
+		 *\brief		Compiles a shader module to the necessary shader language.
+		 *\param[in]	module	The shader to compile.
+		 *\return		The compiled shader.
 		 *\~french
-		 *\brief		Une instance pré-configurée de GlslWriter.
+		 *\brief		Compile un shader dans le langage shader nécessaire.
+		 *\param[in]	module	Le shader à compiler.
+		 *\return		Le shader compilé.
 		 */
-		C3D_API virtual glsl::GlslWriter createGlslWriter();
+		C3D_API virtual UInt32Array compileShader( ShaderModule const & module ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -133,9 +120,9 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon créé.
 		 */
-		C3D_API GpuBufferOffset getBuffer( renderer::BufferTarget target
+		C3D_API GpuBufferOffset getBuffer( ashes::BufferTarget target
 			, uint32_t size
-			, renderer::MemoryPropertyFlags flags );
+			, ashes::MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -146,7 +133,7 @@ namespace castor3d
 		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( renderer::BufferTarget target
+		C3D_API void putBuffer( ashes::BufferTarget target
 			, GpuBufferOffset const & bufferOffset );
 		/**
 		 *\~english
@@ -165,7 +152,7 @@ namespace castor3d
 		 *\param[in]	gpu	L'indice du GPU.
 		 *\return		Le périphérique logique créé.
 		 */
-		C3D_API renderer::DevicePtr createDevice( renderer::WindowHandle && handle
+		C3D_API ashes::DevicePtr createDevice( ashes::WindowHandle && handle
 			, uint32_t gpu = 0u );
 		/**
 		*\~english
@@ -216,7 +203,7 @@ namespace castor3d
 		*\param[in] zFar
 		*	La position de l'arrière plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4r getPerspective( float radiansFovY
+		C3D_API castor::Matrix4x4r getPerspective( castor::Angle const & fovy
 			, float aspect
 			, float zNear
 			, float zFar )const;
@@ -278,25 +265,30 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::PhysicalDeviceProperties const & getProperties()const
+		inline ashes::PhysicalDeviceProperties const & getProperties()const
 		{
 			return m_properties;
 		}
 
-		inline renderer::PhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		inline ashes::PhysicalDeviceMemoryProperties const & getMemoryProperties()const
 		{
 			return m_memoryProperties;
 		}
 
-		inline renderer::PhysicalDeviceFeatures const & getFeatures()const
+		inline ashes::PhysicalDeviceFeatures const & getFeatures()const
 		{
 			return m_features;
 		}
 
-		inline renderer::Device const * getCurrentDevice()const
+		inline ashes::Device const * getCurrentDevice()const
 		{
-			REQUIRE( m_currentDevice );
+			CU_Require( m_currentDevice );
 			return m_currentDevice;
+		}
+
+		inline void setCurrentDevice( ashes::Device const * device )
+		{
+			m_currentDevice = device;
 		}
 
 		inline bool hasCurrentDevice()const
@@ -324,9 +316,9 @@ namespace castor3d
 			return m_mainDevice != nullptr;
 		}
 
-		inline renderer::DevicePtr getMainDevice()
+		inline ashes::DevicePtr getMainDevice()
 		{
-			REQUIRE( hasMainDevice() );
+			CU_Require( hasMainDevice() );
 			return m_mainDevice;
 		}
 
@@ -344,6 +336,11 @@ namespace castor3d
 		{
 			return m_topDown;
 		}
+
+		inline bool isZeroToOneDepth()const
+		{
+			return m_zeroToOneDepth;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -354,7 +351,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setMainDevice( renderer::DevicePtr device )
+		inline void setMainDevice( ashes::DevicePtr device )
 		{
 			m_mainDevice = device;
 		}
@@ -375,20 +372,19 @@ namespace castor3d
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
 		bool const m_topDown;
+		bool const m_zeroToOneDepth;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
-		renderer::RendererPtr m_renderer;
-		renderer::DevicePtr m_mainDevice;
-		renderer::Device const * m_currentDevice{ nullptr };
+		ashes::RendererPtr m_renderer;
+		ashes::DevicePtr m_mainDevice;
+		ashes::Device const * m_currentDevice{ nullptr };
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::String m_name;
 		castor::Nanoseconds m_gpuTime;
 		GpuBufferPool m_gpuBufferPool;
-		std::map< renderer::Device *, renderer::DeviceEnabledConnection > m_deviceEnabledConnections;
-		std::map< renderer::Device *, renderer::DeviceDisabledConnection > m_deviceDisabledConnections;
-		renderer::PhysicalDeviceMemoryProperties m_memoryProperties{};
-		renderer::PhysicalDeviceFeatures m_features{};
-		renderer::PhysicalDeviceProperties m_properties{};
+		ashes::PhysicalDeviceMemoryProperties m_memoryProperties{};
+		ashes::PhysicalDeviceFeatures m_features{};
+		ashes::PhysicalDeviceProperties m_properties{};
 
 #if C3D_TRACE_OBJECTS
 

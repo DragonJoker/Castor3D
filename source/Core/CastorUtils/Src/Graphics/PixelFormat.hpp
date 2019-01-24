@@ -37,7 +37,7 @@ namespace castor
 		eDepth,
 		//!\~english Stencil	\~french Stencil
 		eStencil,
-		CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+		CU_ScopedEnumBounds( eRed )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

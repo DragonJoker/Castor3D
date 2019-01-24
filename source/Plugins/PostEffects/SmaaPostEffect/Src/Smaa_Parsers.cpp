@@ -25,21 +25,21 @@ namespace smaa
 		return *static_cast< ParserContext * >( context->getUserContext( PostEffect::Type ) );
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSmaa )
+	CU_ImplementAttributeParser( parserSmaa )
 	{
 		ParserContext * context = new ParserContext;
 		context->engine = std::static_pointer_cast< castor3d::SceneFileContext >( p_context )->m_pParser->getEngine();
 		p_context->registerUserContext( PostEffect::Type, context );
 	}
-	END_ATTRIBUTE_PUSH( SmaaSection::eRoot )
+	CU_EndAttributePush( SmaaSection::eRoot )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserMode )
+	CU_ImplementAttributeParser( parserMode )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -48,15 +48,15 @@ namespace smaa
 			context.data.mode = Mode( value );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserPreset )
+	CU_ImplementAttributeParser( parserPreset )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -65,15 +65,15 @@ namespace smaa
 			context.preset = Preset( value );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserEdgeDetection )
+	CU_ImplementAttributeParser( parserEdgeDetection )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
@@ -82,204 +82,204 @@ namespace smaa
 			context.data.edgeDetection = EdgeDetectionType( value );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserDisableDiagonalDetection )
+	CU_ImplementAttributeParser( parserDisableDiagonalDetection )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.disableDiagonalDetection );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserDisableCornerDetection )
+	CU_ImplementAttributeParser( parserDisableCornerDetection )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.disableCornerDetection );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserThreshold )
+	CU_ImplementAttributeParser( parserThreshold )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.threshold );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserMaxSearchSteps )
+	CU_ImplementAttributeParser( parserMaxSearchSteps )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.maxSearchSteps );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserMaxSearchStepsDiag )
+	CU_ImplementAttributeParser( parserMaxSearchStepsDiag )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.maxSearchStepsDiag );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserCornerRounding )
+	CU_ImplementAttributeParser( parserCornerRounding )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.cornerRounding );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 		
-	IMPLEMENT_ATTRIBUTE_PARSER( parserPredication )
+	CU_ImplementAttributeParser( parserPredication )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.enablePredication );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 		
-	IMPLEMENT_ATTRIBUTE_PARSER( parserReprojection )
+	CU_ImplementAttributeParser( parserReprojection )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.enableReprojection );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserReprojectionWeightScale )
+	CU_ImplementAttributeParser( parserReprojectionWeightScale )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.reprojectionWeightScale );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserLocalContrastAdaptationFactor )
+	CU_ImplementAttributeParser( parserLocalContrastAdaptationFactor )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.localContrastAdaptationFactor );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationScale )
+	CU_ImplementAttributeParser( parserPredicationScale )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.predicationScale );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationStrength )
+	CU_ImplementAttributeParser( parserPredicationStrength )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.predicationStrength );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserPredicationThreshold )
+	CU_ImplementAttributeParser( parserPredicationThreshold )
 	{
 		auto & context = getParserContext( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( "Missing parameter" );
+			CU_ParsingError( "Missing parameter" );
 		}
 		else
 		{
 			p_params[0]->get( context.data.predicationThreshold );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( parserSmaaEnd )
+	CU_ImplementAttributeParser( parserSmaaEnd )
 	{
 		auto & context = getParserContext( p_context );
 		auto engine = context.engine;
@@ -318,5 +318,5 @@ namespace smaa
 
 		delete reinterpret_cast< ParserContext * >( p_context->unregisterUserContext( PostEffect::Type ) );
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 }

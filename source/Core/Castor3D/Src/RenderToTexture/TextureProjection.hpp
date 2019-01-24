@@ -50,9 +50,9 @@ namespace castor3d
 		*	Initialisation / Cleanup.
 		*/
 		/**@{*/
-		C3D_API void initialise( renderer::TextureView const & source
-			, renderer::Format targetColour
-			, renderer::Format targetDepth );
+		C3D_API void initialise( ashes::TextureView const & source
+			, ashes::Format targetColour
+			, ashes::Format targetDepth );
 		C3D_API void cleanup();
 		/**@}*/
 		/**
@@ -67,42 +67,42 @@ namespace castor3d
 		*	Getters.
 		*/
 		/**@{*/
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_finished );
+			CU_Require( m_finished );
 			return *m_finished;
 		}
 		/**@}*/
 
 	private:
-		renderer::ShaderStageStateArray doInitialiseShader();
+		ashes::ShaderStageStateArray doInitialiseShader();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( renderer::ShaderStageStateArray & program
-			, renderer::TextureView const & texture
-			, renderer::RenderPass const & renderPass );
+		bool doInitialisePipeline( ashes::ShaderStageStateArray & program
+			, ashes::TextureView const & texture
+			, ashes::RenderPass const & renderPass );
 		void doPrepareFrame();
 
 	private:
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Size m_size;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::PushConstantsBuffer< castor::Point2f > m_sizePushConstant;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
 		SamplerSPtr m_sampler;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
 		castor::Matrix4x4r m_mtxModel;
 	};
 }

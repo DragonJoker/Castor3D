@@ -45,7 +45,7 @@ namespace GuiCommon
 
 		inline castor::String const & getKeywords( uint32_t index )const
 		{
-			REQUIRE( index < 9 );
+			CU_Require( index < 9 );
 			return m_keywords[index];
 		}
 

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -39,10 +39,10 @@ namespace smaa
 
 	protected:
 		SmaaConfig const & m_config;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

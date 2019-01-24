@@ -10,11 +10,6 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	castor::String const & getSmaaShader();
-	void writeConstants( glsl::GlslWriter & writer
-		, SmaaConfig const & config
-		, castor::Point4f const & renderTargetMetrics
-		, bool vertexShader );
 }
 
 #endif

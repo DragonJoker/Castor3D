@@ -8,6 +8,7 @@
 #include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -18,10 +19,9 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <Shader/ShaderProgram.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
 
@@ -33,98 +33,101 @@ namespace fxaa
 	{
 		static String const PosPos = cuT( "vtx_posPos" );
 
-		glsl::Shader getFxaaVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFxaaVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
 			UBO_FXAA( writer, 0u, 0u );
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = texcoord;
-					out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
+					vtx_texture = utils.bottomUpToTopDown( uv );
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
 					vtx_posPos.xy() = position.xy();
-					vtx_posPos.zw() = position.xy() - writer.paren( c3d_pixelSize * writer.paren( 0.5 + c3d_subpixShift ) );
+					vtx_posPos.zw() = position.xy() - ( c3d_pixelSize * ( 0.5 + c3d_subpixShift ) );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getFxaaFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFxaaFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			UBO_FXAA( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-#define FXAA_REDUCE_MIN	( 1.0 / 128.0 )
+#define FXAA_REDUCE_MIN	Float{ 1.0 / 128.0 }
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto rgbNW = writer.declLocale( cuT( "rgbNW" )
+					auto rgbNW = writer.declLocale( "rgbNW"
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
-					auto rgbNE = writer.declLocale( cuT( "rgbNE" )
+					auto rgbNE = writer.declLocale( "rgbNE"
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
-					auto rgbSW = writer.declLocale( cuT( "rgbSW" )
+					auto rgbSW = writer.declLocale( "rgbSW"
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
-					auto rgbSE = writer.declLocale( cuT( "rgbSE" )
+					auto rgbSE = writer.declLocale( "rgbSE"
 						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
-					auto rgbM = writer.declLocale( cuT( "rgbM" )
+					auto rgbM = writer.declLocale( "rgbM"
 						, texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).rgb() );
 
-					auto luma = writer.declLocale( cuT( "luma" )
+					auto luma = writer.declLocale( "luma"
 						, vec3( 0.299_f, 0.587_f, 0.114_f ) );
-					auto lumaNW = writer.declLocale( cuT( "lumaNW" )
+					auto lumaNW = writer.declLocale( "lumaNW"
 						, dot( rgbNW, luma ) );
-					auto lumaNE = writer.declLocale( cuT( "lumaNE" )
+					auto lumaNE = writer.declLocale( "lumaNE"
 						, dot( rgbNE, luma ) );
-					auto lumaSW = writer.declLocale( cuT( "lumaSW" )
+					auto lumaSW = writer.declLocale( "lumaSW"
 						, dot( rgbSW, luma ) );
-					auto lumaSE = writer.declLocale( cuT( "lumaSE" )
+					auto lumaSE = writer.declLocale( "lumaSE"
 						, dot( rgbSE, luma ) );
-					auto lumaM = writer.declLocale( cuT( "lumaM" )
+					auto lumaM = writer.declLocale( "lumaM"
 						, dot( rgbM, luma ) );
 
-					auto lumaMin = writer.declLocale( cuT( "lumaMin" )
+					auto lumaMin = writer.declLocale( "lumaMin"
 						, min( lumaM, min( min( lumaNW, lumaNE ), min( lumaSW, lumaSE ) ) ) );
-					auto lumaMax = writer.declLocale( cuT( "lumaMax" )
+					auto lumaMax = writer.declLocale( "lumaMax"
 						, max( lumaM, max( max( lumaNW, lumaNE ), max( lumaSW, lumaSE ) ) ) );
 
-					auto dir = writer.declLocale( cuT( "dir" )
+					auto dir = writer.declLocale( "dir"
 						, vec2( -writer.paren( writer.paren( lumaNW + lumaNE ) - writer.paren( lumaSW + lumaSE ) )
 							, ( writer.paren( lumaNW + lumaSW ) - writer.paren( lumaNE + lumaSE ) ) ) );
 
-					auto dirReduce = writer.declLocale( cuT( "dirReduce" )
+					auto dirReduce = writer.declLocale( "dirReduce"
 						, max( writer.paren( lumaNW + lumaNE + lumaSW + lumaSE ) * writer.paren( 0.25_f * c3d_reduceMul ), FXAA_REDUCE_MIN ) );
-					auto rcpDirMin = writer.declLocale( cuT( "rcpDirMin" )
-						, 1.0 / ( min( glsl::abs( dir.x() ), glsl::abs( dir.y() ) ) + dirReduce ) );
+					auto rcpDirMin = writer.declLocale( "rcpDirMin"
+						, 1.0_f / ( min( abs( dir.x() ), abs( dir.y() ) ) + dirReduce ) );
 					dir = min( vec2( c3d_spanMax, c3d_spanMax )
 						, max( vec2( -c3d_spanMax, -c3d_spanMax )
 							, dir * rcpDirMin ) ) * c3d_pixelSize;
 
-					auto texcoord0 = writer.declLocale( cuT( "texcoord0" )
+					auto texcoord0 = writer.declLocale( "texcoord0"
 						, vtx_texture + dir * writer.paren( 1.0_f / 3.0_f - 0.5_f ) );
-					auto texcoord1 = writer.declLocale( cuT( "texcoord1" )
+					auto texcoord1 = writer.declLocale( "texcoord1"
 						, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ) );
 
-					auto rgbA = writer.declLocale( cuT( "rgbA" )
+					auto rgbA = writer.declLocale( "rgbA"
 						, writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
 								+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
 							* writer.paren( 1.0_f / 2.0_f ) );
@@ -132,18 +135,19 @@ namespace fxaa
 					texcoord0 = vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f );
 					texcoord1 = vtx_texture + dir * writer.paren( 3.0_f / 3.0_f - 0.5_f );
 
-					auto rgbB = writer.declLocale( cuT( "rgbB" )
+					auto rgbB = writer.declLocale( "rgbB"
 						, writer.paren( rgbA * 1.0_f / 2.0_f )
 							+ writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
 									+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
 								* writer.paren( 1.0_f / 4.0_f ) );
-					auto lumaB = writer.declLocale( cuT( "lumaB" )
+					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );
 
-					pxl_fragColor = vec4( writer.ternary( Type{ cuT( "lumaB < lumaMin || lumaB > lumaMax" ) }, rgbA, rgbB ), 1.0_f );
+					pxl_fragColor = vec4( writer.ternary( lumaB < lumaMin || lumaB > lumaMax, rgbA, rgbB )
+						, 1.0_f );
 				} );
 
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -165,8 +169,8 @@ namespace fxaa
 			, reduceMul );
 	}
 
-	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_fxaaUbo.getUbo() );
@@ -186,6 +190,8 @@ namespace fxaa
 			, renderSystem
 			, parameters }
 		, m_surface{ *renderSystem.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "Fxaa" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "Fxaa" }
 	{
 		String param;
 
@@ -209,11 +215,11 @@ namespace fxaa
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eNearest );
-			m_sampler->setMagFilter( renderer::Filter::eNearest );
-			m_sampler->setWrapS( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapT( renderer::WrapMode::eClampToBorder );
-			m_sampler->setWrapR( renderer::WrapMode::eClampToBorder );
+			m_sampler->setMinFilter( ashes::Filter::eNearest );
+			m_sampler->setMagFilter( ashes::Filter::eNearest );
+			m_sampler->setWrapS( ashes::WrapMode::eClampToBorder );
+			m_sampler->setWrapT( ashes::WrapMode::eClampToBorder );
+			m_sampler->setWrapR( ashes::WrapMode::eClampToBorder );
 		}
 		else
 		{
@@ -235,23 +241,23 @@ namespace fxaa
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "FXAA" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "FXAA" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "FXAA" )
-			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
 			, cuT( "FXAA" )
 			, cuT( "SubPixShift" )
 			, m_subpixShift );
 		visitor.visit( cuT( "FXAA" )
-			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
 			, cuT( "FXAA" )
 			, cuT( "SpanMax" )
 			, m_spanMax );
 		visitor.visit( cuT( "FXAA" )
-			, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
 			, cuT( "FXAA" )
 			, cuT( "ReduceMul" )
 			, m_reduceMul );
@@ -276,59 +282,60 @@ namespace fxaa
 	{
 		m_sampler->initialise();
 
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
 		// Create the FXAA quad renderer.
-		renderer::DescriptorSetLayoutBindingArray bindings
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment },
 		};
-		m_vertexShader = getFxaaVertexProgram( getRenderSystem() );
-		m_pixelShader = getFxaaFragmentProgram( getRenderSystem() );
+		m_vertexShader.shader = getFxaaVertexProgram( getRenderSystem() );
+		m_pixelShader.shader = getFxaaFragmentProgram( getRenderSystem() );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem()
 			, castor::Size{ size.width, size.height } );
@@ -363,15 +370,15 @@ namespace fxaa
 			timer.beginPass( cmd );
 
 			// Put target image in shader input layout.
-			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, targetView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, targetView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 			// Render the effect.
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{} }
+				, ashes::SubpassContents::eInline );
 			m_fxaaQuad->registerFrame( cmd );
 			cmd.endRenderPass();
 

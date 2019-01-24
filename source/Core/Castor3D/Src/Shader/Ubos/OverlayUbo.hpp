@@ -89,7 +89,7 @@ namespace castor3d
 		 *\~french
 		 *\name			Getters.
 		 */
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -118,16 +118,16 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
 #define UBO_OVERLAY( writer, binding, set )\
-	glsl::Ubo overlay{ writer, OverlayUbo::BufferOverlayName, binding, set };\
-	auto c3d_position = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::Position );\
-	auto c3d_renderSize = overlay.declMember< glsl::IVec2 >( castor3d::OverlayUbo::RenderSize );\
-	auto c3d_renderRatio = overlay.declMember< glsl::Vec2 >( castor3d::OverlayUbo::RenderRatio );\
-	auto c3d_materialIndex = overlay.declMember< glsl::Int >( castor3d::OverlayUbo::MaterialIndex );\
+	sdw::Ubo overlay{ writer, OverlayUbo::BufferOverlayName, binding, set };\
+	auto c3d_position = overlay.declMember< sdw::Vec2 >( castor3d::OverlayUbo::Position );\
+	auto c3d_renderSize = overlay.declMember< sdw::IVec2 >( castor3d::OverlayUbo::RenderSize );\
+	auto c3d_renderRatio = overlay.declMember< sdw::Vec2 >( castor3d::OverlayUbo::RenderRatio );\
+	auto c3d_materialIndex = overlay.declMember< sdw::Int >( castor3d::OverlayUbo::MaterialIndex );\
 	overlay.end()
 
 #endif

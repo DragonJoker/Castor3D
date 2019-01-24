@@ -5,6 +5,8 @@
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Skeleton/Skeleton.hpp>
+#include <Binary/BinarySkeleton.hpp>
+#include <Binary/BinaryMesh.hpp>
 
 using StringArray = std::vector< std::string >;
 
@@ -91,10 +93,10 @@ bool doLoadRenderer( castor3d::Engine & engine )
 	{
 #if defined( NDEBUG )
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
 #else
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
 
 #endif
 		{
@@ -110,7 +112,7 @@ bool doLoadRenderer( castor3d::Engine & engine )
 
 		for ( auto file : arrayKept )
 		{
-			if ( file.getExtension() == CASTOR_DLL_EXT )
+			if ( file.getExtension() == CU_SharedLibExt )
 			{
 				// Since techniques depend on renderers, we load these first
 				if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
@@ -312,8 +314,8 @@ int main( int argc, char * argv[] )
 		castor::Logger::initialise( castor::LogType::eDebug );
 #endif
 
-		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine;
+		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshUpgrader.log" ) );
+		castor3d::Engine engine{ cuT( "CastorMeshUpgrader" ), false };
 
 		if ( doInitialiseEngine( engine ) )
 		{

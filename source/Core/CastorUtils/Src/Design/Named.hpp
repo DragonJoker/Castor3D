@@ -108,7 +108,7 @@ namespace castor
 	};
 	//!\~english	A typedef for NamedBase with String as a name
 	//!\~french		Un typedef pour NamedBase avec String comme type de nom (le plus classique, quoi)
-	typedef NamedBase< String > Named;
+	using Named = NamedBase< String >;
 }
 
 #endif

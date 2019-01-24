@@ -12,8 +12,8 @@ add_target(
 	bin
 	"${Castor3DBinsDependencies}"
 	"${CastorMinLibraries};${wxWidgetsLibraries}"
-	"OceanLightingPch.hpp"
-	"OceanLightingPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/OceanLightingPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/OceanLightingPch.cpp
 	"${wxWidgets_CFLAGS}"
 	"${wxWidgets_CXXFLAGS}"
 	)

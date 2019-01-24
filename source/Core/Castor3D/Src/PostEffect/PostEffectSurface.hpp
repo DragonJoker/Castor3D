@@ -49,9 +49,9 @@ namespace castor3d
 		 *\param[in]	format			Le format des pixels couleur de la surface.
 		 *\param[in]	mipLevels		Le nombre de niveausx de mipmap de la texture couleur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, renderer::Format format = renderer::Format::eR32G32B32A32_SFLOAT
+			, ashes::Format format = ashes::Format::eR32G32B32A32_SFLOAT
 			, uint32_t mipLevels = 1u );
 		/**
 		 *\~english
@@ -67,10 +67,10 @@ namespace castor3d
 		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
 		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, renderer::Format colourFormat
-			, renderer::Format depthFormat );
+			, ashes::Format colourFormat
+			, ashes::Format depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -83,7 +83,7 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions de la surface.
 		 *\param[in]	colourTexture	La texture couleur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture );
 		/**
@@ -100,10 +100,10 @@ namespace castor3d
 		 *\param[in]	colourTexture	La texture couleur de la surface.
 		 *\param[in]	depthFormat		Le format des pixels profondeur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture
-			, renderer::Format depthFormat );
+			, ashes::Format depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -118,9 +118,9 @@ namespace castor3d
 		 *\param[in]	colourFormat	Le format des pixels couleur de la surface.
 		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, renderer::Format colourFormat
+			, ashes::Format colourFormat
 			, TextureLayoutSPtr depthTexture );
 		/**
 		 *\~english
@@ -136,7 +136,7 @@ namespace castor3d
 		 *\param[in]	colourTexture	La texture couleur de la surface.
 		 *\param[in]	depthTexture	La texture profondeur de la surface.
 		 */
-		C3D_API bool initialise( renderer::RenderPass const & renderPass
+		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture
 			, TextureLayoutSPtr depthTexture );
@@ -150,13 +150,19 @@ namespace castor3d
 
 		//!\~english	The surface framebuffer.
 		//!\~french		Le framebuffer de la surface.
-		renderer::FrameBufferPtr frameBuffer;
+		ashes::FrameBufferPtr frameBuffer;
 		//!\~english	The surface colour texture.
 		//!\~french		La texture couleur de la surface.
 		TextureLayoutSPtr colourTexture;
 		//!\~english	The surface depth texture.
 		//!\~french		La texture profondeur de la surface.
 		TextureLayoutSPtr depthTexture;
+		//!\~english	The surface depth view.
+		//!\~french		La vie profondeur de la surface.
+		ashes::TextureViewPtr depthView;
+		//!\~english	The surface stencil view.
+		//!\~french		La vie stencil de la surface.
+		ashes::TextureViewPtr stencilView;
 		//!\~english	The surface dimensions.
 		//!\~french		Les dimensions de la surface.
 		castor::Size size;

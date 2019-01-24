@@ -3,7 +3,7 @@
 #include "Render/RenderPipeline.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Scene/BillboardList.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Castor3DPrerequisites.hpp"
 
 using namespace castor;

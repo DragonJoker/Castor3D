@@ -239,7 +239,7 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline ParserParameter( UIntStrMap const & p_values );
+		inline ParserParameter( UInt32StrMap const & p_values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -262,7 +262,7 @@ namespace castor
 		inline bool parse( String & p_params );
 
 	public:
-		UIntStrMap const & m_values;
+		UInt32StrMap const & m_values;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -286,7 +286,7 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline ParserParameter( UIntStrMap const & p_values );
+		inline ParserParameter( UInt32StrMap const & p_values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -309,7 +309,7 @@ namespace castor
 		inline bool parse( String & p_params );
 
 	public:
-		UIntStrMap const & m_values;
+		UInt32StrMap const & m_values;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -410,7 +410,7 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( UIntStrMap const & p_values )
+	ParserParameterBaseSPtr makeParameter( UInt32StrMap const & p_values )
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );

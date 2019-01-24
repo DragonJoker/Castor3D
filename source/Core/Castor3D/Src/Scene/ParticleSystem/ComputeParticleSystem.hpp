@@ -123,17 +123,17 @@ namespace castor3d
 	protected:
 		ParticleDeclaration m_inputs;
 		ShaderProgramSPtr m_program;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
-		std::array< renderer::BufferPtr< uint8_t >, 2 > m_particlesStorages;
-		renderer::BufferPtr< uint32_t > m_generatedCountBuffer;
-		renderer::BufferPtr< castor::Point4f > m_randomStorage;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::ComputePipelinePtr m_pipeline;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		std::array< renderer::DescriptorSetPtr, 2u > m_descriptorSets;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::FencePtr m_fence;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
+		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
+		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
+		ashes::BufferPtr< castor::Point4f > m_randomStorage;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::ComputePipelinePtr m_pipeline;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		std::array< ashes::DescriptorSetPtr, 2u > m_descriptorSets;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::FencePtr m_fence;
 		uint32_t m_particlesCount{ 0u };
 		castor::Point3i m_worgGroupSizes{ 128, 1, 1 };
 		uint32_t m_in{ 0 };

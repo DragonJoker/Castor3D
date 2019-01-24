@@ -13,23 +13,23 @@ namespace castor3d
 		class MetallicPbrReflectionModel
 		{
 		public:
-			C3D_API explicit MetallicPbrReflectionModel( glsl::GlslWriter & writer );
-			C3D_API glsl::Vec3 computeIncident( glsl::Vec3 const & wsPosition
-				, glsl::Vec3 const & wsCamera )const;
-			C3D_API glsl::Vec3 computeRefl( glsl::Vec3 const & wsIncident
-				, glsl::Vec3 const & wsNormal
-				, glsl::Float const & occlusion
-				, glsl::SamplerCube const & envMap
-				, glsl::Vec3 const & ambientLight
-				, glsl::Vec3 const & albedo )const;
-			C3D_API glsl::Vec3 computeRefr( glsl::Vec3 const & wsIncident
-				, glsl::Vec3 const & wsNormal
-				, glsl::Float const & occlusion
-				, glsl::SamplerCube const & envMap
-				, glsl::Float const & refractionRatio
-				, glsl::Vec3 const & reflection
-				, glsl::Vec3 const & albedo
-				, glsl::Float const & roughness )const;
+			C3D_API explicit MetallicPbrReflectionModel( sdw::ShaderWriter & writer );
+			C3D_API sdw::Vec3 computeIncident( sdw::Vec3 const & wsPosition
+				, sdw::Vec3 const & wsCamera )const;
+			C3D_API sdw::Vec3 computeRefl( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::Float const & occlusion
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Vec3 const & ambientLight
+				, sdw::Vec3 const & albedo )const;
+			C3D_API sdw::Vec3 computeRefr( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::Float const & occlusion
+				, sdw::SampledImageCubeRgba32 const & envMap
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 const & reflection
+				, sdw::Vec3 const & albedo
+				, sdw::Float const & roughness )const;
 
 		private:
 			void doDeclareComputeIncident();
@@ -37,26 +37,26 @@ namespace castor3d
 			void doDeclareComputeRefr();
 
 		public:
-			glsl::GlslWriter & m_writer;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3 > m_computeIncident;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InSamplerCube
-				, glsl::InVec3
-				, glsl::InVec3 > m_computeRefl;
-			glsl::Function< glsl::Vec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InSamplerCube
-				, glsl::InFloat
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat > m_computeRefr;
+			sdw::ShaderWriter & m_writer;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeIncident;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InSampledImageCubeRgba32
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeRefl;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InSampledImageCubeRgba32
+				, sdw::InFloat
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat > m_computeRefr;
 		};
 	}
 }

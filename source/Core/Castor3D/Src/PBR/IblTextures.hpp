@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	source	La texture d'environnement source.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
-			, renderer::Texture const & source
+			, ashes::Texture const & source
 			, SamplerSPtr sampler );
 		/**
 		 *\~english
@@ -69,40 +69,40 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::TextureView const & getIrradianceTexture()const
+		inline ashes::TextureView const & getIrradianceTexture()const
 		{
 			return m_radianceComputer.getResult();
 		}
 
-		inline renderer::TextureView const & getPrefilteredEnvironmentTexture()const
+		inline ashes::TextureView const & getPrefilteredEnvironmentTexture()const
 		{
 			return m_environmentPrefilter.getResult();
 		}
 
-		inline renderer::TextureView const & getPrefilteredBrdfTexture()const
+		inline ashes::TextureView const & getPrefilteredBrdfTexture()const
 		{
 			return *m_prefilteredBrdfView;
 		}
 
-		inline renderer::Sampler const & getIrradianceSampler()const
+		inline ashes::Sampler const & getIrradianceSampler()const
 		{
 			return m_radianceComputer.getSampler();
 		}
 
-		inline renderer::Sampler const & getPrefilteredEnvironmentSampler()const
+		inline ashes::Sampler const & getPrefilteredEnvironmentSampler()const
 		{
 			return m_environmentPrefilter.getSampler();
 		}
 
-		inline renderer::Sampler const & getPrefilteredBrdfSampler()const
+		inline ashes::Sampler const & getPrefilteredBrdfSampler()const
 		{
 			return m_sampler->getSampler();
 		}
 		/**@}*/
 
 	private:
-		renderer::TexturePtr m_prefilteredBrdf;
-		renderer::TextureViewPtr m_prefilteredBrdfView;
+		ashes::TexturePtr m_prefilteredBrdf;
+		ashes::TextureViewPtr m_prefilteredBrdfView;
 		SamplerSPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;

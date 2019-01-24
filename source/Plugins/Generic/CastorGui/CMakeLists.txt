@@ -18,8 +18,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
-	"CastorGuiPch.hpp"
-	"CastorGuiPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorGuiPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorGuiPch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )

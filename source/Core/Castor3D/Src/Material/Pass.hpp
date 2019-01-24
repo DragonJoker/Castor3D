@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 #include <Design/Signal.hpp>
+#include <Math/RangedValue.hpp>
 
 namespace castor3d
 {
@@ -197,336 +198,203 @@ namespace castor3d
 		 */
 		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
 		/**
-		 *\~english
-		 *\return		The texture channels flags combination.
-		 *\~french
-		 *\return		La combinaison d'indicateurs de canal de texture.
-		 */
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		inline TextureChannels const & getTextureFlags()const
 		{
 			return m_textureFlags;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the pass shader is automatically generated.
-		 *\~french
-		 *\return		\p true si le shader de la passe est généré automatiquement.
-		 */
+
 		inline bool hasAutomaticShader()const
 		{
 			return m_automaticShader;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the two sided status.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le statut d'application aux deux faces.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setTwoSided( bool value )
-		{
-			m_twoSided = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the emissive factor.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le facteur d'émission.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setEmissive( float const & value )
-		{
-			m_emissive = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the refraction ratio.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le ratio de réfraction.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setRefractionRatio( float value )
-		{
-			m_refractionRatio = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the parallax occlusion mapping usage.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit l'utilisation du parallax occlusion mapping.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setParallaxOcclusion( bool value )
-		{
-			m_parallaxOcclusion = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha blend mode.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le mode de mélange alpha.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setAlphaBlendMode( BlendMode value )
-		{
-			m_alphaBlendMode = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour blend mode.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le mode de mélange couleur.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setColourBlendMode( BlendMode value )
-		{
-			m_colourBlendMode = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\return		The texture units count.
-		 *\~french
-		 *\return		Le nombre d'unités de texture.
-		 */
+
 		inline uint32_t getTextureUnitsCount()const
 		{
 			return uint32_t( m_textureUnits.size() );
 		}
-		/**
-		 *\~english
-		 *\brief		Tells if the pass is two sided.
-		 *\~french
-		 *\brief
-		 *\remarks		Dit si la passe s'applique sur les deux faces.
-		 */
+
 		inline bool IsTwoSided()const
 		{
 			return m_twoSided;
 		}
-		/**
-		 *\~english
-		 *\return		\p true if environment mapping is enabled for this pass.
-		 *\~french
-		 *\return		\p true si l'environment mapping est activé sur cette passe.
-		 */
+
 		inline bool hasEnvironmentMapping()const
 		{
 			return checkFlag( getTextureFlags(), TextureChannel::eReflection )
 				|| checkFlag( getTextureFlags(), TextureChannel::eRefraction );
 		}
-		/**
-		 *\~english
-		 *\return		The global opacity value.
-		 *\~french
-		 *\return		La valeur globale d'opacité.
-		 */
+
 		inline float getOpacity()const
 		{
 			return m_opacity;
 		}
-		/**
-		 *\~english
-		 *\return		The emissive factor.
-		 *\~french
-		 *\return		Le facteur émission.
-		 */
+
+		inline uint32_t getBWAccumulationOperator()const
+		{
+			return m_bwAccumulationOperator.value();
+		}
+
 		inline float getEmissive()const
 		{
 			return m_emissive;
 		}
-		/**
-		 *\~english
-		 *\return		The refraction ratio.
-		 *\~french
-		 *\return		Le ration de réfraction.
-		 */
+
 		inline float getRefractionRatio()const
 		{
 			return m_refractionRatio;
 		}
-		/**
-		 *\~english
-		 *\return		The alpha blend mode.
-		 *\~french
-		 *\return		Le mode de mélange alpha.
-		 */
+
 		inline BlendMode getAlphaBlendMode()const
 		{
 			return m_alphaBlendMode;
 		}
-		/**
-		 *\~english
-		 *\return		The colour blend mode.
-		 *\~french
-		 *\return		Le mode de mélange couleur.
-		 */
+
 		inline BlendMode getColourBlendMode()const
 		{
 			return m_colourBlendMode;
 		}
-		/**
-		 *\~english
-		 *\return		A constant iterator on the beginning of the textures array.
-		 *\~french
-		 *\return		Un itérateur constant sur le début du tableau de textures.
-		 */
-		inline auto begin()const
-		{
-			return m_textureUnits.begin();
-		}
-		/**
-		 *\~english
-		 *\return		An iterator on the beginning of the textures array.
-		 *\~french
-		 *\return		Un itérateur sur le début du tableau de textures.
-		 */
-		inline auto begin()
-		{
-			return m_textureUnits.begin();
-		}
-		/**
-		 *\~english
-		 *\return		A constant iterator on the end of the textures array.
-		 *\~french
-		 *\return		Un itérateur constant sur la fin du tableau de textures.
-		 */
-		inline auto end()const
-		{
-			return m_textureUnits.end();
-		}
-		/**
-		 *\~english
-		 *\return		An iterator on the end of the textures array.
-		 *\~french
-		 *\return		Un itérateur sur la fin du tableau de textures.
-		 */
-		inline auto end()
-		{
-			return m_textureUnits.end();
-		}
-		/**
-		 *\~english
-		 *\return		\p true if gamma correction is needed for this pass.
-		 *\~french
-		 *\return		\p true si la correction gamma doit être appliquée à cette passe.
-		 */
+
 		inline bool needsGammaCorrection()const
 		{
 			return m_needsGammaCorrection;
 		}
-		/**
-		 *\~english
-		 *\return		The pass ID.
-		 *\~french
-		 *\brief
-		 *\return		L'ID de la passe
-		 */
+
 		inline uint32_t getId()const
 		{
 			return m_id;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the pass ID.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief
-		 *\brief		Définit l'ID de la passe
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setId( uint32_t value )
-		{
-			m_id = value;
-		}
-		/**
-		 *\~english
-		 *\return		The alpha function.
-		 *\~french
-		 *\return		La fonction d'alpha.
-		 */
-		inline renderer::CompareOp getAlphaFunc()const
+
+		inline ashes::CompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha function.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la fonction d'alpha.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
-		inline void setAlphaFunc( renderer::CompareOp value )
-		{
-			m_alphaFunc = value;
-			onChanged( *this );
-		}
-		/**
-		 *\~english
-		 *\return		The alpha reference value.
-		 *\~french
-		 *\return		La valeur de référence pour l'alpha.
-		 */
+
 		inline float getAlphaValue()const
 		{
 			return m_alphaValue;
 		}
+
+		inline bool hasSubsurfaceScattering()const
+		{
+			return m_subsurfaceScattering != nullptr;
+		}
+
+		inline bool hasParallaxOcclusion()const
+		{
+			return m_parallaxOcclusion;
+		}
+
+		inline SubsurfaceScattering const & getSubsurfaceScattering()const
+		{
+			CU_Require( m_subsurfaceScattering );
+			return *m_subsurfaceScattering;
+		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the alpha reference value.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit la valeur de référence pour l'alpha.
-		 *\param[in]	value	La nouvelle valeur.
-		 */
+		*\~english
+		*name
+		*	Textures iteration.
+		*\~french
+		*name
+		*	Itération sur les textures.
+		*/
+		/**@{*/
+		inline auto begin()const
+		{
+			return m_textureUnits.begin();
+		}
+
+		inline auto begin()
+		{
+			return m_textureUnits.begin();
+		}
+
+		inline auto end()const
+		{
+			return m_textureUnits.end();
+		}
+
+		inline auto end()
+		{
+			return m_textureUnits.end();
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		inline void setTwoSided( bool value )
+		{
+			m_twoSided = value;
+			onChanged( *this );
+		}
+
+		inline void setEmissive( float const & value )
+		{
+			m_emissive = value;
+			onChanged( *this );
+		}
+
+		inline void setRefractionRatio( float value )
+		{
+			m_refractionRatio = value;
+			onChanged( *this );
+		}
+
+		inline void setParallaxOcclusion( bool value )
+		{
+			m_parallaxOcclusion = value;
+			onChanged( *this );
+		}
+
+		inline void setAlphaBlendMode( BlendMode value )
+		{
+			m_alphaBlendMode = value;
+			onChanged( *this );
+		}
+
+		inline void setColourBlendMode( BlendMode value )
+		{
+			m_colourBlendMode = value;
+			onChanged( *this );
+		}
+
+		inline void setId( uint32_t value )
+		{
+			m_id = value;
+		}
+
+		inline void setAlphaFunc( ashes::CompareOp value )
+		{
+			m_alphaFunc = value;
+			onChanged( *this );
+		}
+
 		inline void setAlphaValue( float value )
 		{
 			m_alphaValue = value;
 			onChanged( *this );
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the pass has subsurface scattering extended informations.
-		 *\~french
-		 *\return		\p true si la passe a des informations étendues pour le subsurface scattering.
-		 */
-		inline bool hasSubsurfaceScattering()const
+
+		inline void setBWAccumulationOperator( uint32_t value )
 		{
-			return m_subsurfaceScattering != nullptr;
+			m_bwAccumulationOperator = value;
+			onChanged( *this );
 		}
-		/**
-		 *\~english
-		 *\return		\p true if the pass uses parallax occlusion mapping.
-		 *\~french
-		 *\return		\p true si la passe utilise le parallax occlusion mapping.
-		 */
-		inline bool hasParallaxOcclusion()const
-		{
-			return m_parallaxOcclusion;
-		}
-		/**
-		 *\~english
-		 *\return		The subsurface scattering extended informations.
-		 *\~french
-		 *\return		Les informations étendues pour le subsurface scattering.
-		 */
-		inline SubsurfaceScattering const & getSubsurfaceScattering()const
-		{
-			REQUIRE( m_subsurfaceScattering );
-			return *m_subsurfaceScattering;
-		}
+		/**@}*/
 
 	protected:
 		/**
@@ -597,7 +465,7 @@ namespace castor3d
 		 *\param[in]	channel	Le canal de texture.
 		 *\param[in]	format	Le format de pixels voulu.
 		 */
-		void doReduceTexture( TextureChannel channel, renderer::Format format );
+		void doReduceTexture( TextureChannel channel, ashes::Format format );
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
@@ -621,6 +489,9 @@ namespace castor3d
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };
+		//!\~english	The blended weighted accumulation operator.
+		//!\~french		La valeur d'opacité.
+		castor::RangedValue< uint32_t > m_bwAccumulationOperator{ castor::makeRangedValue( 1u, 0u, 7u ) };
 		//!\~english	The emission factor.
 		//!\~french		Le facteur d'émission.
 		float m_emissive{ 0.0f };
@@ -644,7 +515,7 @@ namespace castor3d
 		float m_alphaValue{ 0.0f };
 		//!\~english	The alpha function for alpha comparison.
 		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		renderer::CompareOp m_alphaFunc{ renderer::CompareOp::eAlways };
+		ashes::CompareOp m_alphaFunc{ ashes::CompareOp::eAlways };
 		//!\~english	Tells if the pass' textures are reduced.
 		//!\~french		Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced{ false };

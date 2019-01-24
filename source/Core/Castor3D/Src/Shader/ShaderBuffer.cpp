@@ -17,29 +17,33 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::BufferBasePtr doCreateBuffer( Engine & engine
-			, uint32_t size )
+		ashes::BufferBasePtr doCreateBuffer( Engine & engine
+			, uint32_t size
+			, bool forceTbo )
 		{
-			renderer::BufferBasePtr result;
-			renderer::BufferTarget target = engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
-				? renderer::BufferTarget::eStorageBuffer
-				: renderer::BufferTarget::eUniformTexelBuffer;
+			ashes::BufferBasePtr result;
+			ashes::BufferTarget target = forceTbo
+				? ashes::BufferTarget::eUniformTexelBuffer
+				: ( engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
+					? ashes::BufferTarget::eStorageBuffer
+					: ashes::BufferTarget::eUniformTexelBuffer );
 			result = getCurrentDevice( engine ).createBuffer( size
-				, target | renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, target | ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 			return result;
 		}
 
-		renderer::BufferViewPtr doCreateView( Engine & engine
+		ashes::BufferViewPtr doCreateView( Engine & engine
 			, uint32_t size
-			, renderer::BufferBase const & buffer )
+			, bool forceTbo
+			, ashes::BufferBase const & buffer )
 		{
-			renderer::BufferViewPtr result;
+			ashes::BufferViewPtr result;
 
-			if ( !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
+			if ( forceTbo || !engine.getRenderSystem()->getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers ) )
 			{
 				result = getCurrentDevice( engine ).createBufferView( buffer
-					, renderer::Format::eR32G32B32A32_SFLOAT
+					, ashes::Format::eR32G32B32A32_SFLOAT
 					, 0u
 					, uint32_t( buffer.getSize() ) );
 			}
@@ -51,9 +55,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
-		, uint32_t size )
-		: m_buffer{ doCreateBuffer( engine, size ) }
-		, m_bufferView{ doCreateView( engine, size, *m_buffer ) }
+		, uint32_t size
+		, bool forceTbo )
+		: m_buffer{ doCreateBuffer( engine, size, forceTbo ) }
+		, m_bufferView{ doCreateView( engine, size, forceTbo, *m_buffer ) }
 		, m_data( size_t( size ), uint8_t( 0 ) )
 	{
 	}
@@ -71,10 +76,10 @@ namespace castor3d
 
 	void ShaderBuffer::update( uint32_t offset, uint32_t size )
 	{
-		REQUIRE( size + offset <= m_data.size() );
+		CU_Require( size + offset <= m_data.size() );
 		if ( uint8_t * buffer = m_buffer->lock( offset
 			, size
-			, renderer::MemoryMapFlag::eWrite ) )
+			, ashes::MemoryMapFlag::eWrite ) )
 		{
 			std::memcpy( buffer, m_data.data(), size );
 			m_buffer->flush( 0u, size );
@@ -82,20 +87,20 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
+	ashes::DescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index )const
 	{
 		if ( m_bufferView )
 		{
-			return { index, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment };
+			return { index, ashes::DescriptorType::eUniformTexelBuffer, ashes::ShaderStageFlag::eFragment };
 		}
 		else
 		{
-			return { index, renderer::DescriptorType::eStorageBuffer, renderer::ShaderStageFlag::eFragment };
+			return { index, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eFragment };
 		}
 	}
 
-	void ShaderBuffer::createBinding( renderer::DescriptorSet & descriptorSet
-		, renderer::DescriptorSetLayoutBinding const & binding )const
+	void ShaderBuffer::createBinding( ashes::DescriptorSet & descriptorSet
+		, ashes::DescriptorSetLayoutBinding const & binding )const
 	{
 		if ( m_bufferView )
 		{

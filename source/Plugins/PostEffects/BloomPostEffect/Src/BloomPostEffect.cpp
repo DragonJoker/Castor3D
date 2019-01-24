@@ -18,14 +18,14 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -80,33 +80,33 @@ namespace Bloom
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "HiPass" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_hiPass->getVertexShader() );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_hiPass->getVertexShader().shader );
 		visitor.visit( cuT( "HiPass" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_hiPass->getPixelShader() );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_hiPass->getPixelShader().shader );
 
 #if !Bloom_DebugHiPass
 		visitor.visit( cuT( "BlurX" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_blurXPass->getVertexShader() );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_blurXPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurX" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_blurXPass->getPixelShader() );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_blurXPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "BlurY" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_blurYPass->getVertexShader() );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_blurYPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurY" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_blurYPass->getPixelShader() );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_blurYPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Combine" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_combinePass->getVertexShader() );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_combinePass->getVertexShader().shader );
 		visitor.visit( cuT( "Combine" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_combinePass->getPixelShader() );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_combinePass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );
@@ -116,16 +116,16 @@ namespace Bloom
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 #if !Bloom_DebugHiPass
 		// Create vertex buffer
-		m_vertexBuffer = renderer::makeVertexBuffer< castor3d::NonTexturedQuad >( device
+		m_vertexBuffer = ashes::makeVertexBuffer< castor3d::NonTexturedQuad >( device
 			, 1u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::MemoryPropertyFlag::eHostVisible );
 
-		if ( auto data = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+		if ( auto data = m_vertexBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
 		{
 			castor3d::NonTexturedQuad buffer
 			{
@@ -144,24 +144,24 @@ namespace Bloom
 		}
 
 		auto format = m_target->getPixelFormat();
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = size.width >> 1;
 		image.extent.height = size.height >> 1;
 		image.extent.depth = 1u;
 		image.format = format;
-		image.imageType = renderer::TextureType::e2D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.imageType = ashes::TextureType::e2D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = m_blurPassesCount;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eColourAttachment
-			| renderer::ImageUsageFlag::eSampled;
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eColourAttachment
+			| ashes::ImageUsageFlag::eSampled;
 		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
 			, image
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		m_blurTexture->initialise();
 #endif
 

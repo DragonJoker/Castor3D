@@ -12,13 +12,13 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CRenderTarget::Initialise( /* [in] */ unsigned int index )
+	STDMETHODIMP CRenderTarget::Initialise()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->initialise( index );
+			m_internal->initialise();
 			hr = S_OK;
 		}
 		else

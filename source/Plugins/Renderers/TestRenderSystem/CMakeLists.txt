@@ -12,17 +12,17 @@ set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${RENDERERLIB_DIR}/TestRenderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${RENDERERLIB_DIR}/TestRenderer/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/TestRenderer/Src )
+include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/TestRenderer/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/TestRenderSystem/Src )
 
 add_target(
 	${PROJECT_NAME}
-	api_plugin
+	plugin
 	"Castor3D"
-	"${CastorMinLibraries};TestRenderer"
-	"TestRenderSystemPch.hpp"
-	"TestRenderSystemPch.cpp"
+	"${CastorMinLibraries};TestRenderer;CompilerGlsl"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.cpp
 	"-DTestRenderer_STATIC"
 	"-DTestRenderer_STATIC"
 )

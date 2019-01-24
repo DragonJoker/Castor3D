@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 
 #include <Design/OwnedBy.hpp>
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -46,9 +46,9 @@ namespace castor3d
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
-			, renderer::TextureView const & texture
-			, renderer::Extent2D const & textureSize
-			, renderer::Format format
+			, ashes::TextureView const & texture
+			, ashes::Extent2D const & textureSize
+			, ashes::Format format
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -56,7 +56,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Applique le flou sur la texture.
 		 */
-		C3D_API renderer::Semaphore const & blur( renderer::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & blur( ashes::Semaphore const & toWait );
 		/**
 		*\~english
 		*name
@@ -66,52 +66,56 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::RenderPass const & getRenderPass()const
+		inline ashes::RenderPass const & getRenderPass()const
 		{
-			REQUIRE( m_renderPass );
+			CU_Require( m_renderPass );
 			return *m_renderPass;
 		}
 
-		inline renderer::FrameBuffer const & getBlurXFrameBuffer()const
+		inline ashes::FrameBuffer const & getBlurXFrameBuffer()const
 		{
-			REQUIRE( m_blurXFbo );
+			CU_Require( m_blurXFbo );
 			return *m_blurXFbo;
 		}
 
-		inline renderer::FrameBuffer const & getBlurYFrameBuffer()const
+		inline ashes::FrameBuffer const & getBlurYFrameBuffer()const
 		{
-			REQUIRE( m_blurYFbo );
+			CU_Require( m_blurYFbo );
 			return *m_blurYFbo;
 		}
 
-		inline renderer::CommandBuffer const & getBlurXCommandBuffer()const
+		inline ashes::CommandBuffer const & getBlurXCommandBuffer()const
 		{
 			return m_blurXQuad.getCommandBuffer();
 		}
 
-		inline renderer::CommandBuffer const & getBlurYCommandBuffer()const
+		inline ashes::CommandBuffer const & getBlurYCommandBuffer()const
 		{
 			return m_blurYQuad.getCommandBuffer();
 		}
 
-		inline glsl::Shader const & getBlurXVertexShader()const
+		inline sdw::Shader const & getBlurXVertexShader()const
 		{
-			return m_blurXVertexShader;
+			CU_Require( m_blurXVertexShader.shader );
+			return *m_blurXVertexShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurXPixelShader()const
+		inline sdw::Shader const & getBlurXPixelShader()const
 		{
-			return m_blurXPixelShader;
+			CU_Require( m_blurXPixelShader.shader );
+			return *m_blurXPixelShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurYVertexShader()const
+		inline sdw::Shader const & getBlurYVertexShader()const
 		{
-			return m_blurYVertexShader;
+			CU_Require( m_blurYVertexShader.shader );
+			return *m_blurYVertexShader.shader;
 		}
 
-		inline glsl::Shader const & getBlurYPixelShader()const
+		inline sdw::Shader const & getBlurYPixelShader()const
 		{
-			return m_blurYPixelShader;
+			CU_Require( m_blurYPixelShader.shader );
+			return *m_blurYPixelShader.shader;
 		}
 		/**@}*/
 
@@ -140,41 +144,41 @@ namespace castor3d
 		{
 		public:
 			RenderQuad( RenderSystem & renderSystem
-				, renderer::TextureView const & src
-				, renderer::TextureView const & dst
-				, renderer::UniformBuffer< Configuration > const & blurUbo
-				, renderer::Format format
-				, renderer::Extent2D const & size );
+				, ashes::TextureView const & src
+				, ashes::TextureView const & dst
+				, ashes::UniformBuffer< Configuration > const & blurUbo
+				, ashes::Format format
+				, ashes::Extent2D const & size );
 
 		private:
-			virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-				, renderer::DescriptorSet & descriptorSet );
+			virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet );
 
-			renderer::TextureView const & m_srcView;
-			renderer::TextureView const & m_dstView;
-			renderer::UniformBuffer< Configuration > const & m_blurUbo;
+			ashes::TextureView const & m_srcView;
+			ashes::TextureView const & m_dstView;
+			ashes::UniformBuffer< Configuration > const & m_blurUbo;
 		};
 
-		renderer::TextureView const & m_source;
-		renderer::Extent2D m_size;
-		renderer::Format m_format;
+		ashes::TextureView const & m_source;
+		ashes::Extent2D m_size;
+		ashes::Format m_format;
 		TextureUnit m_intermediate;
 
 		std::vector< float > m_kernel;
-		renderer::CommandBufferPtr m_horizCommandBuffer;
-		renderer::CommandBufferPtr m_verticCommandBuffer;
-		renderer::SemaphorePtr m_horizSemaphore;
-		renderer::SemaphorePtr m_verticSemaphore;
-		renderer::UniformBufferPtr< Configuration > m_blurUbo;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_blurXFbo;
-		glsl::Shader m_blurXVertexShader;
-		glsl::Shader m_blurXPixelShader;
+		ashes::CommandBufferPtr m_horizCommandBuffer;
+		ashes::CommandBufferPtr m_verticCommandBuffer;
+		ashes::SemaphorePtr m_horizSemaphore;
+		ashes::SemaphorePtr m_verticSemaphore;
+		ashes::UniformBufferPtr< Configuration > m_blurUbo;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_blurXFbo;
+		ShaderModule m_blurXVertexShader;
+		ShaderModule m_blurXPixelShader;
 		RenderQuad m_blurXQuad;
-		renderer::RenderPassPtr m_blurYPass;
-		renderer::FrameBufferPtr m_blurYFbo;
-		glsl::Shader m_blurYVertexShader;
-		glsl::Shader m_blurYPixelShader;
+		ashes::RenderPassPtr m_blurYPass;
+		ashes::FrameBufferPtr m_blurYFbo;
+		ShaderModule m_blurYVertexShader;
+		ShaderModule m_blurYPixelShader;
 		RenderQuad m_blurYQuad;
 
 

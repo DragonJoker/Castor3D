@@ -39,7 +39,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		virtual void visit( castor::String const & name
-			, renderer::ShaderStageFlags shaders
+			, ashes::ShaderStageFlags shaders
 			, HdrConfig & value ) = 0;
 		using PipelineVisitor::visit;
 		/**@}*/

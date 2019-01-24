@@ -6,108 +6,121 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslMat.hpp>
+#include <ShaderWriter/MatTypes/Mat4.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 
 namespace castor3d
 {
 	namespace shader
 	{
 		struct Light
-			: public glsl::Type
+			: public sdw::StructInstance
 		{
-			C3D_API Light();
-			C3D_API Light( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
+			C3D_API Light( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 			C3D_API Light & operator=( Light const & rhs );
-			C3D_API glsl::Vec4 m_colourIndex()const;
-			C3D_API glsl::Vec4 m_intensityFarPlane()const;
-			C3D_API glsl::Vec4 m_volumetric()const;
-			C3D_API glsl::Vec3 m_colour()const;
-			C3D_API glsl::Vec2 m_intensity()const;
-			C3D_API glsl::Float m_farPlane()const;
-			C3D_API glsl::Int m_shadowType()const;
-			C3D_API glsl::Int m_index()const;
-			C3D_API glsl::UInt m_volumetricSteps()const;
-			C3D_API glsl::Float m_volumetricScattering()const;
 
-			template< typename T >
-			inline Light & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			sdw::Vec4 m_colourIndex;
+			sdw::Vec4 m_intensityFarPlane;
+			sdw::Vec4 m_volumetric;
+			// Specific values
+			sdw::Vec3 m_colour;
+			sdw::Vec2 m_intensity;
+			sdw::Float m_farPlane;
+			sdw::Int m_shadowType;
+			sdw::Int m_index;
+			sdw::UInt m_volumetricSteps;
+			sdw::Float m_volumetricScattering;
+			sdw::Vec4 m_shadow;
+			sdw::Vec2 m_shadowOffsets;
+			sdw::Vec2 m_shadowVariance;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
 		};
 
 		struct DirectionalLight
-			: public glsl::Type
+			: public sdw::StructInstance
 		{
-			C3D_API DirectionalLight();
-			C3D_API DirectionalLight( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API DirectionalLight & operator=( DirectionalLight const & rhs );
-			C3D_API Light m_lightBase()const;
-			C3D_API glsl::Vec4 m_directionCount()const;
-			C3D_API glsl::Array< glsl::Mat4 > m_transforms()const;
-			C3D_API glsl::Vec4 m_splitDepths()const;
-			C3D_API glsl::Vec3 m_direction()const;
-			C3D_API glsl::UInt m_cascadeCount()const;
-			C3D_API glsl::Mat4 m_transform( glsl::UInt const & cascadeIndex )const;
-			C3D_API glsl::Float m_splitDepth( glsl::UInt const & cascadeIndex )const;
+			C3D_API DirectionalLight( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			inline DirectionalLight & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			Light m_lightBase;
+			sdw::Vec4 m_directionCount;
+			sdw::Array< sdw::Mat4 > m_transforms;
+			sdw::Vec4 m_splitDepths;
+			// Specific values
+			sdw::Vec3 m_direction;
+			sdw::UInt m_cascadeCount;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
 		};
 
 		struct PointLight
-			: public glsl::Type
+			: public sdw::StructInstance
 		{
-			C3D_API PointLight();
-			C3D_API PointLight( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API PointLight & operator=( PointLight const & rhs );
-			C3D_API Light m_lightBase()const;
-			C3D_API glsl::Vec3 m_position()const;
-			C3D_API glsl::Vec3 m_attenuation()const;
+			C3D_API PointLight( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			inline PointLight & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			Light m_lightBase;
+			sdw::Vec4 m_position4;
+			sdw::Vec4 m_attenuation4;
+			// SpecificValues
+			sdw::Vec3 m_position;
+			sdw::Vec3 m_attenuation;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
 		};
 
 		struct SpotLight
-			: public glsl::Type
+			: public sdw::StructInstance
 		{
-			C3D_API SpotLight();
-			C3D_API SpotLight( glsl::GlslWriter * writer
-				, castor::String const & name = castor::String() );
-			C3D_API SpotLight & operator=( SpotLight const & rhs );
-			C3D_API Light m_lightBase()const;
-			C3D_API glsl::Vec3 m_position()const;
-			C3D_API glsl::Vec3 m_attenuation()const;
-			C3D_API glsl::Vec3 m_direction()const;
-			C3D_API glsl::Vec4 m_exponentCutOff()const;
-			C3D_API glsl::Float m_exponent()const;
-			C3D_API glsl::Float m_cutOff()const;
-			C3D_API glsl::Mat4 m_transform()const;
+			C3D_API SpotLight( sdw::Shader * shader
+				, ast::expr::ExprPtr expr );
 
-			template< typename T >
-			inline SpotLight & operator=( T const & rhs )
-			{
-				updateWriter( rhs );
-				m_writer->writeAssign( *this, rhs );
-				return *this;
-			}
+			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
+			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+
+			// Raw values
+			Light m_lightBase;
+			sdw::Vec4 m_position4;
+			sdw::Vec4 m_attenuation4;
+			sdw::Vec4 m_direction4;
+			sdw::Vec4 m_exponentCutOff;
+			sdw::Mat4 m_transform;
+			// SpecificValues
+			sdw::Vec3 m_position;
+			sdw::Vec3 m_attenuation;
+			sdw::Vec3 m_direction;
+			sdw::Float m_exponent;
+			sdw::Float m_cutOff;
+
+		private:
+			using sdw::StructInstance::getMember;
+			using sdw::StructInstance::getMemberArray;
 		};
+
+		Writer_Parameter( Light );
+		Writer_Parameter( DirectionalLight );
+		Writer_Parameter( PointLight );
+		Writer_Parameter( SpotLight );
 	}
 }
 

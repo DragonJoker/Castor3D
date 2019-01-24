@@ -53,11 +53,11 @@ namespace castor3d
 		 *\param[in]	targets			Les cibles du tampon.
 		 *\param[in]	memoryFlags		Les propriétés mémoire du tampon.
 		 */
-		C3D_API void initialiseStorage( renderer::Device const & device
+		C3D_API void initialiseStorage( ashes::Device const & device
 			, uint32_t numLevels
 			, uint32_t minBlockSize
-			, renderer::BufferTargets targets
-			, renderer::MemoryPropertyFlags memoryFlags );
+			, ashes::BufferTargets targets
+			, ashes::MemoryPropertyFlags memoryFlags );
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -105,7 +105,7 @@ namespace castor3d
 		 */
 		C3D_API uint8_t * lock( uint32_t offset
 			, uint32_t size
-			, renderer::MemoryMapFlags const & flags )const;
+			, ashes::MemoryMapFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -165,7 +165,7 @@ namespace castor3d
 		 *\param[in]	dstOffset	L'offset de départ dans ce tampon.
 		 *\param[in]	size		Le nombre d'éléments à copier.
 		 */
-		C3D_API void copy( renderer::CommandBuffer const & commandBuffer
+		C3D_API void copy( ashes::CommandBuffer const & commandBuffer
 			, GpuBuffer const & src
 			, uint32_t srcOffset
 			, uint32_t dstOffset
@@ -184,8 +184,8 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[in]	buffer	Les données.
 		 */
-		C3D_API void upload( renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer
+		C3D_API void upload( ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, uint32_t count
 			, uint8_t const * buffer )const;
@@ -203,8 +203,8 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[out]	buffer	Les données.
 		 */
-		C3D_API void download( renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer
+		C3D_API void download( ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
 			, uint32_t count
 			, uint8_t * buffer )const;
@@ -216,20 +216,21 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		inline renderer::Buffer< uint8_t > const & getBuffer()const
+		inline ashes::Buffer< uint8_t > const & getBuffer()const
 		{
 			return *m_buffer;
 		}
 
 	private:
-		void doInitialiseStorage( renderer::Device const & device
+		void doInitialiseStorage( ashes::Device const & device
 			, uint32_t size
-			, renderer::BufferTargets targets
-			, renderer::MemoryPropertyFlags memoryFlags );
+			, ashes::BufferTargets targets
+			, ashes::MemoryPropertyFlags memoryFlags );
 
 	private:
+		ashes::Device const * m_device{ nullptr };
 		GpuBufferBuddyAllocatorUPtr m_allocator;
-		renderer::BufferPtr< uint8_t > m_buffer;
+		ashes::BufferPtr< uint8_t > m_buffer;
 	};
 }
 

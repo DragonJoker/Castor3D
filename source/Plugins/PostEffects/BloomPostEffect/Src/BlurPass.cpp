@@ -20,14 +20,13 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/ShaderProgram.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -35,58 +34,59 @@ namespace Bloom
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				out.gl_Position() = writer.rendererScalePosition( vec4( position, 0.0, 1.0 ) );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main", [&]()
+				{
+					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getPixelProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
 		{
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			Ubo config{ writer, castor3d::GaussianBlur::Config, 0u, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( castor3d::GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( castor3d::GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4 );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main", [&]()
 				{
-					auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
+					auto offset = writer.declLocale( "offset"
+						, vec2( 0.0_f, 0 ) );
 					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
 
-					FOR( writer, UInt, i, 1u, cuT( "i < c3d_coefficientsCount" ), cuT( "++i" ) )
+					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += c3d_pixelSize;
-						pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_ui][i % 4_ui] * texture( c3d_mapDiffuse, vtx_texture + offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapDiffuse, vtx_texture - offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapDiffuse, vtx_texture + offset );
 					}
 					ROF;
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		std::vector< float > getHalfPascal( uint32_t height )
@@ -137,16 +137,16 @@ namespace Bloom
 			return result;
 		}
 
-		renderer::UniformBufferPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( renderer::Device const & device
-			, renderer::Extent2D dimensions
+		ashes::UniformBufferPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( ashes::Device const & device
+			, ashes::Extent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
 		{
-			auto result = renderer::makeUniformBuffer< castor3d::GaussianBlur::Configuration >( device
+			auto result = ashes::makeUniformBuffer< castor3d::GaussianBlur::Configuration >( device
 				, blurPassesCount
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 			auto coefficientsCount = blurKernelSize;
 			auto kernel = doCreateKernel( coefficientsCount );
 
@@ -166,19 +166,19 @@ namespace Bloom
 			return result;
 		}
 
-		std::vector< renderer::SamplerPtr > doCreateSamplers( renderer::Device const & device
+		std::vector< ashes::SamplerPtr > doCreateSamplers( ashes::Device const & device
 			, uint32_t blurPassesCount )
 		{
-			std::vector< renderer::SamplerPtr > result;
+			std::vector< ashes::SamplerPtr > result;
 
 			for ( auto i = 0u; i < blurPassesCount; ++i )
 			{
-				result.push_back( device.createSampler( renderer::WrapMode::eClampToBorder
-					, renderer::WrapMode::eClampToBorder
-					, renderer::WrapMode::eClampToBorder
-					, renderer::Filter::eNearest
-					, renderer::Filter::eNearest
-					, renderer::MipmapMode::eNearest
+				result.push_back( device.createSampler( ashes::WrapMode::eClampToBorder
+					, ashes::WrapMode::eClampToBorder
+					, ashes::WrapMode::eClampToBorder
+					, ashes::Filter::eNearest
+					, ashes::Filter::eNearest
+					, ashes::MipmapMode::eNearest
 					, float( i )
 					, float( i + 1u ) ) );
 			}
@@ -186,49 +186,49 @@ namespace Bloom
 			return result;
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
-			, renderer::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
+			, ashes::Format format )
 		{
-			renderer::RenderPassCreateInfo renderPass{};
+			ashes::RenderPassCreateInfo renderPass{};
 			renderPass.attachments.resize( 1u );
 			renderPass.attachments[0].format = format;
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].colorAttachments = { { 0u, renderer::ImageLayout::eColourAttachmentOptimal } };
+			renderPass.subpasses[0].colorAttachments = { { 0u, ashes::ImageLayout::eColourAttachmentOptimal } };
 
 			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eHostWrite;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eHost;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
+			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eHostWrite;
+			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eHost;
+			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
-			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
+			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
 
 			return device.createRenderPass( renderPass );
 		}
 
-		renderer::DescriptorSetLayoutPtr doCreateDescriptorLayout( renderer::Device const & device )
+		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( ashes::Device const & device )
 		{
-			std::vector< renderer::DescriptorSetLayoutBinding > bindings
+			std::vector< ashes::DescriptorSetLayoutBinding > bindings
 			{
-				renderer::DescriptorSetLayoutBinding{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-				renderer::DescriptorSetLayoutBinding{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+				ashes::DescriptorSetLayoutBinding{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+				ashes::DescriptorSetLayoutBinding{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 			};
 			return device.createDescriptorSetLayout( std::move( bindings ) );
 		}
@@ -236,28 +236,29 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BlurPass::Subpass::Subpass( renderer::Device const & device
-		, renderer::Format format
-		, renderer::TextureView const & srcView
-		, renderer::TextureView const & dstView
-		, renderer::RenderPass const & renderPass
-		, renderer::DescriptorSetPool const & descriptorPool
-		, renderer::PipelineLayout const & pipelineLayout
-		, renderer::Extent2D dimensions
-		, glsl::Shader const & vertexShader
-		, glsl::Shader const & pixelShader
-		, renderer::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+	BlurPass::Subpass::Subpass( castor3d::RenderSystem & renderSystem
+		, ashes::Device const & device
+		, ashes::Format format
+		, ashes::TextureView const & srcView
+		, ashes::TextureView const & dstView
+		, ashes::RenderPass const & renderPass
+		, ashes::DescriptorSetPool const & descriptorPool
+		, ashes::PipelineLayout const & pipelineLayout
+		, ashes::Extent2D dimensions
+		, castor3d::ShaderModule const & vertexShader
+		, castor3d::ShaderModule const & pixelShader
+		, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index )
 	{
 		dimensions.width >>= ( index + 1 );
 		dimensions.height >>= ( index + 1 );
 
-		sampler = device.createSampler( renderer::WrapMode::eClampToBorder
-			, renderer::WrapMode::eClampToBorder
-			, renderer::WrapMode::eClampToBorder
-			, renderer::Filter::eNearest
-			, renderer::Filter::eNearest
-			, renderer::MipmapMode::eNearest
+		sampler = device.createSampler( ashes::WrapMode::eClampToBorder
+			, ashes::WrapMode::eClampToBorder
+			, ashes::WrapMode::eClampToBorder
+			, ashes::Filter::eNearest
+			, ashes::Filter::eNearest
+			, ashes::MipmapMode::eNearest
 			, float( index )
 			, float( index + 1u ) );
 
@@ -271,58 +272,60 @@ namespace Bloom
 			, *sampler );
 		descriptorSet->update();
 
-		renderer::FrameBufferAttachmentArray attaches
+		ashes::FrameBufferAttachmentArray attaches
 		{
 			{ *renderPass.getAttachments().begin(), dstView }
 		};
 		frameBuffer = renderPass.createFrameBuffer( dimensions, std::move( attaches ) );
 
-		renderer::VertexInputState inputState;
-		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), renderer::VertexInputRate::eVertex } );
-		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32_SFLOAT, 0u } );
+		ashes::VertexInputState inputState;
+		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), ashes::VertexInputRate::eVertex } );
+		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32_SFLOAT, 0u } );
 
-		renderer::ShaderStageStateArray shaderStages;
-		shaderStages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		shaderStages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		shaderStages[0].module->loadShader( vertexShader.getSource() );
-		shaderStages[1].module->loadShader( pixelShader.getSource() );
+		ashes::ShaderStageStateArray shaderStages;
+		shaderStages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		shaderStages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		shaderStages[0].module->loadShader( renderSystem.compileShader( vertexShader ) );
+		shaderStages[1].module->loadShader( renderSystem.compileShader( pixelShader ) );
 
-		renderer::GraphicsPipelineCreateInfo pipelineInfo
+		ashes::GraphicsPipelineCreateInfo pipelineInfo
 		{
 			shaderStages,
 			renderPass,
 			inputState,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{},
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
 			{},
-			renderer::DepthStencilState{ 0u, false, false },
+			ashes::DepthStencilState{ 0u, false, false },
 			std::nullopt,
-			renderer::Viewport{ { 0, 0 }, dimensions },
-			renderer::Scissor{ { 0, 0 }, dimensions }
+			ashes::Viewport{ { 0, 0 }, dimensions },
+			ashes::Scissor{ { 0, 0 }, dimensions }
 		};
 		pipeline = pipelineLayout.createPipeline( pipelineInfo );
 	}
 
-	std::vector< BlurPass::Subpass > doCreateSubpasses( renderer::Device const & device
-		, renderer::Format format
+	std::vector< BlurPass::Subpass > doCreateSubpasses( castor3d::RenderSystem & renderSystem
+		, ashes::Device const & device
+		, ashes::Format format
 		, castor3d::TextureLayout const & srcImage
 		, castor3d::TextureLayout const & dstImage
-		, renderer::RenderPass const & renderPass
-		, renderer::DescriptorSetPool const & descriptorPool
-		, renderer::PipelineLayout const & pipelineLayout
-		, renderer::Extent2D dimensions
-		, glsl::Shader const & vertexShader
-		, glsl::Shader const & pixelShader
-		, renderer::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, ashes::RenderPass const & renderPass
+		, ashes::DescriptorSetPool const & descriptorPool
+		, ashes::PipelineLayout const & pipelineLayout
+		, ashes::Extent2D dimensions
+		, castor3d::ShaderModule const & vertexShader
+		, castor3d::ShaderModule const & pixelShader
+		, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t blurPassesCount )
 	{
 		std::vector< BlurPass::Subpass > result;
 
 		for ( auto i = 0u; i < blurPassesCount; ++i )
 		{
-			result.emplace_back( device
+			result.emplace_back( renderSystem
+				, device
 				, format
 				, srcImage.getImage( i ).getView()
 				, dstImage.getImage( i ).getView()
@@ -342,10 +345,10 @@ namespace Bloom
 	//*********************************************************************************************
 
 	BlurPass::BlurPass( castor3d::RenderSystem & renderSystem
-		, renderer::Format format
+		, ashes::Format format
 		, castor3d::TextureLayout const & srcImage
 		, castor3d::TextureLayout const & dstImage
-		, renderer::Extent2D dimensions
+		, ashes::Extent2D dimensions
 		, uint32_t blurKernelSize
 		, uint32_t blurPassesCount
 		, bool isVertical )
@@ -356,10 +359,11 @@ namespace Bloom
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ m_device.createPipelineLayout( *m_descriptorLayout ) }
-		, m_vertexShader{ getVertexProgram( renderSystem ) }
-		, m_pixelShader{ getPixelProgram( renderSystem ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "BloomBlurPass", getVertexProgram( renderSystem ) }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "BloomBlurPass", getPixelProgram( renderSystem ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( m_blurPassesCount ) }
-		, m_passes{ doCreateSubpasses( m_device
+		, m_passes{ doCreateSubpasses( renderSystem
+			, m_device
 			, format
 			, srcImage
 			, dstImage
@@ -376,7 +380,7 @@ namespace Bloom
 	}
 
 	castor3d::CommandsSemaphoreArray BlurPass::getCommands( castor3d::RenderPassTimer const & timer
-		, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
+		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		castor3d::CommandsSemaphoreArray result;
 
@@ -384,15 +388,15 @@ namespace Bloom
 		{
 			auto & blur = m_passes[i];
 
-			renderer::CommandBufferPtr commandBuffer = m_device.getGraphicsCommandPool().createCommandBuffer( true );
+			ashes::CommandBufferPtr commandBuffer = m_device.getGraphicsCommandPool().createCommandBuffer( true );
 			auto & cmd = *commandBuffer;
 
 			cmd.begin();
 			timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
 			cmd.beginRenderPass( *m_renderPass
 				, *blur.frameBuffer
-				, { renderer::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
-			, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
+			, ashes::SubpassContents::eInline );
 			cmd.bindPipeline( *blur.pipeline );
 			cmd.bindDescriptorSet( *blur.descriptorSet, *m_pipelineLayout );
 			cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );

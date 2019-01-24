@@ -37,7 +37,7 @@ namespace castor3d
 			castor::Point2f coords;
 			castor::Point2f texture;
 		};
-		DECLARE_VECTOR( Vertex, Vertex );
+		CU_DeclareVector( Vertex, Vertex );
 		/*!
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010

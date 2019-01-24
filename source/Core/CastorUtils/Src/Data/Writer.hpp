@@ -52,7 +52,7 @@ namespace castor
 		 */
 		virtual bool operator()( T const & p_object, Type & p_file )
 		{
-			LOADER_ERROR( "Export not supported by the loader registered for this type" );
+			CU_LoaderError( "Export not supported by the loader registered for this type" );
 		}
 	};
 }

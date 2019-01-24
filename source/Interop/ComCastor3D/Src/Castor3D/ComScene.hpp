@@ -4,6 +4,7 @@
 
 #include "ComSceneNode.hpp"
 #include "ComRgbColour.hpp"
+#include "ComSceneBackground.hpp"
 
 #include <Scene/Scene.hpp>
 
@@ -48,6 +49,7 @@ namespace CastorCom
 		}
 
 		COM_PROPERTY( BackgroundColour, IRgbColour *, makeGetter( m_internal.get(), &castor3d::Scene::getBackgroundColour ), makePutter( m_internal.get(), &castor3d::Scene::setBackgroundColour ) );
+		COM_PROPERTY( Background, ISceneBackground *, makeGetter( m_internal.get(), &castor3d::Scene::getBackground ), makePutter( m_internal.get(), &castor3d::Scene::setBackground ) );
 		COM_PROPERTY( Name, BSTR, makeGetter( m_internal.get(), &castor3d::Scene::getName ), makePutter( m_internal.get(), &castor3d::Scene::setName ) );
 		COM_PROPERTY( AmbientLight, IRgbColour *, makeGetter( m_internal.get(), &castor3d::Scene::getAmbientLight ), makePutter( m_internal.get(), &castor3d::Scene::setAmbientLight ) );
 
@@ -56,7 +58,6 @@ namespace CastorCom
 		COM_PROPERTY_GET( CameraRootNode, ISceneNode *, makeGetter( m_internal.get(), &castor3d::Scene::getCameraRootNode ) );
 
 		STDMETHOD( ClearScene )();
-		STDMETHOD( SetBackgroundImage )( /* [in] */ BSTR path );
 		STDMETHOD( CreateSceneNode )( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal );
 		STDMETHOD( CreateGeometry )( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal );
 		STDMETHOD( CreateCamera )( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal );
@@ -70,7 +71,6 @@ namespace CastorCom
 		STDMETHOD( RemoveNode )( /* [in] */ ISceneNode * node );
 		STDMETHOD( RemoveGeometry )( /* [in] */ IGeometry * geometry );
 		STDMETHOD( RemoveCamera )( /* [in] */ ICamera * camera );
-		STDMETHOD( GetBackgroundImage )( /* [out, retval] */ ITextureLayout ** pVal );
 
 	private:
 		castor3d::SceneSPtr m_internal;

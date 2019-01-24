@@ -9,23 +9,23 @@ See LICENSE file in root folder
 #include "Exception.hpp"
 #include "Log/Logger.hpp"
 
-#ifndef CASTOR_USE_ASSERT
+#ifndef CU_UseAssert
 #	ifndef NDEBUG
-#		define CASTOR_USE_ASSERT 1
-#		define CASTOR_EXCEPT_ASSERT 0
+#		define CU_UseAssert 1
+#		define CU_ExceptAssert 0
 #	else
-#		define CASTOR_USE_ASSERT 0
-#		define CASTOR_EXCEPT_ASSERT 0
+#		define CU_UseAssert 0
+#		define CU_ExceptAssert 0
 #	endif
 #endif
 
-#if CASTOR_USE_ASSERT
+#if CU_UseAssert
 
-#	if defined( CASTOR_ASSERT )
-#		undef CASTOR_ASSERT
+#	if defined( CU_Assert )
+#		undef CU_Assert
 #	endif
 
-#	if CASTOR_EXCEPT_ASSERT
+#	if CU_ExceptAssert
 
 namespace castor
 {
@@ -97,7 +97,7 @@ namespace castor
 	}
 }
 
-#		define CASTOR_ASSERT( pred, text )
+#		define CU_Assert( pred, text )
 	if ( !( pred ) )\
 	{\
 		throw castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
@@ -129,41 +129,41 @@ namespace castor
 	}
 }
 
-#		define CASTOR_ASSERT( pred, text ) castor::cuAssert( pred, text )
+#		define CU_Assert( pred, text ) castor::cuAssert( pred, text )
 
 #	endif
 
 //!\~english	Calls invariant checking function.
 //!\~french		Appelle la fonction de vérification des invariants de classe.
-#	define CHECK_INVARIANTS doContractCheckInvariants
+#	define CU_CheckInvariants doContractCheckInvariants
 
 #else
 
-#	define CASTOR_ASSERT( pred, text )
-#	define CHECK_INVARIANTS()
+#	define CU_Assert( pred, text )
+#	define CU_CheckInvariants()
 
 #endif
 
 //!\~english	Checks a pre-condition.
 //!\~french		Vérifie une pré-condition.
-#define REQUIRE( cond ) CASTOR_ASSERT( cond, "Required condition failed: "#cond )
+#define CU_Require( cond ) CU_Assert( cond, "Required condition failed: "#cond )
 //!\~english	Checks a post-condition.
 //!\~french		Vérifie une post-condition.
-#define ENSURE( cond ) CASTOR_ASSERT( cond, "Ensured condition failed: "#cond )
+#define CU_Ensure( cond ) CU_Assert( cond, "Ensured condition failed: "#cond )
 //!\~english	Checks an invariant condition.
 //!\~french		Vérifie une condition invariante.
-#define CHECK_INVARIANT( cond ) CASTOR_ASSERT( cond, "Invariant check failed: "#cond )
+#define CU_CheckInvariant( cond ) CU_Assert( cond, "Invariant check failed: "#cond )
 //!\~english	Attests a failure.
 //!\~french		Atteste d'un échec.
-#define FAILURE( text ) CASTOR_ASSERT( false, "Failure: "#text )
+#define CU_Failure( text ) CU_Assert( false, "Failure: "#text )
 //!\~english	Declares the invariant checking function.
 //!\~french		Déclare la fonction de vérification des invariants de classe.
-#define DECLARE_INVARIANT_BLOCK() void doContractCheckInvariants()const;
+#define CU_DeclareInvariantBlock() void doContractCheckInvariants()const;
 //!\~english	Begins invariant checking function implementation.
 //!\~french		Commence l'implémentation de la fonction de vérification des invariants de classe.
-#define BEGIN_INVARIANT_BLOCK( className ) void className::doContractCheckInvariants()const {
+#define CU_BeginInvariantBlock( className ) void className::doContractCheckInvariants()const {
 //!\~english	Ends invariant checking function implementation.
 //!\~french		Termine l'implémentation de la fonction de vérification des invariants de classe.
-#define END_INVARIANT_BLOCK() }
+#define CU_EndInvariantBlock() }
 
 #endif

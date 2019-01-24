@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -30,8 +30,8 @@ namespace fxaa
 			, float reduceMul );
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
 		FxaaUbo m_fxaaUbo;
@@ -81,10 +81,10 @@ namespace fxaa
 		castor::ChangeTracked< float > m_reduceMul{ { 1.0f / 8.0f } };
 		castor3d::SamplerSPtr m_sampler;
 		castor3d::PostEffectSurface m_surface;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< RenderQuad > m_fxaaQuad;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

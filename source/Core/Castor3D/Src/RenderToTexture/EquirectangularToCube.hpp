@@ -24,14 +24,14 @@ namespace castor3d
 	private:
 		struct FrameBuffer
 		{
-			renderer::TextureViewPtr view;
-			renderer::FrameBufferPtr frameBuffer;
+			ashes::TextureViewPtr view;
+			ashes::FrameBufferPtr frameBuffer;
 		};
 		std::array< FrameBuffer, 6u > m_frameBuffers;
-		renderer::Device const & m_device;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::TextureView const & m_view;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::Device const & m_device;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::TextureView const & m_view;
+		ashes::RenderPassPtr m_renderPass;
 	};
 }
 

@@ -179,7 +179,7 @@ namespace CastorGui
 
 	void SliderCtrl::doCreate()
 	{
-		REQUIRE( getControlsManager() );
+		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		StaticCtrlSPtr line = m_line.lock();
 		line->setBackgroundMaterial( getEngine().getMaterialCache().find( cuT( "Gray" ) ) );
@@ -197,7 +197,7 @@ namespace CastorGui
 
 	void SliderCtrl::doDestroy()
 	{
-		REQUIRE( getControlsManager() );
+		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		manager.disconnectEvents( *this );
 		StaticCtrlSPtr line = m_line.lock();

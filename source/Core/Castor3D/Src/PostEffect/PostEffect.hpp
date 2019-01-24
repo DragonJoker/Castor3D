@@ -17,15 +17,15 @@ namespace castor3d
 {
 	struct CommandsSemaphore
 	{
-		CommandsSemaphore( renderer::CommandBufferPtr && commandBuffer
-			, renderer::SemaphorePtr && semaphore )
+		CommandsSemaphore( ashes::CommandBufferPtr && commandBuffer
+			, ashes::SemaphorePtr && semaphore )
 			: commandBuffer{ std::move( commandBuffer ) }
 			, semaphore{ std::move( semaphore ) }
 		{
 		}
 
-		renderer::CommandBufferPtr commandBuffer;
-		renderer::SemaphorePtr semaphore;
+		ashes::CommandBufferPtr commandBuffer;
+		ashes::SemaphorePtr semaphore;
 	};
 	using CommandsSemaphoreArray = std::vector< CommandsSemaphore >;
 	/*!
@@ -153,7 +153,7 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_result );
+			CU_Require( m_result );
 			return *m_result;
 		}
 
@@ -164,8 +164,8 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doCopyResultToTarget( renderer::TextureView const & result
-			, renderer::CommandBuffer & commandBuffer );
+		C3D_API void doCopyResultToTarget( ashes::TextureView const & result
+			, ashes::CommandBuffer & commandBuffer );
 
 	private:
 		/**

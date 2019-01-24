@@ -331,7 +331,7 @@ namespace castor3d
 
 	protected:
 		friend class MeshGenerator;
-		DECLARE_VECTOR( AnimationPtrStrMap, AnimationMap );
+		CU_DeclareVector( AnimationPtrStrMap, AnimationMap );
 		//!\~english	Tells whether or not the mesh is modified.
 		//!\~french		Dit si le maillage est modifié.
 		bool m_modified;

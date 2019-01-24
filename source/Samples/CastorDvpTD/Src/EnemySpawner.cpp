@@ -62,7 +62,7 @@ namespace castortd
 			baseNode->setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + Point3r{ 0, p_game.getCellHeight(), 0 } );
 			baseNode->attachTo( p_game.getMapNode() );
 			auto node = p_game.getScene().getSceneNodeCache().add( name );
-			node->setOrientation( Quaternion::fromAxisAngle( Point3r{ 1, 0, 1 }, Angle::fromDegrees( 45 ) ) );
+			node->setOrientation( Quaternion::fromAxisAngle( Point3r{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( baseNode );
 			auto geometry = p_game.getScene().getGeometryCache().add( name, node, p_game.getEnemyMesh() );
 

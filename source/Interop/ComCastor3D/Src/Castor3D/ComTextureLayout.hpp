@@ -48,7 +48,7 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureImage *, makeIndexedGetter( m_internal.get(), &castor3d::TextureLayout::getImage ) );
+		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureView *, makeIndexedGetter( m_internal.get(), &castor3d::TextureLayout::getImage ) );
 
 		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
 

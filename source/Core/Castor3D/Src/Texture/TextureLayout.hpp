@@ -38,8 +38,8 @@ namespace castor3d
 		 *\param[in]	memoryProperties	Les propriétés requise pour la mémoire.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
-			, renderer::ImageCreateInfo info
-			, renderer::MemoryPropertyFlags memoryProperties );
+			, ashes::ImageCreateInfo info
+			, ashes::MemoryPropertyFlags memoryProperties );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -50,15 +50,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	folder	The folder containing the image.
+		 *\param[in]	folder		The folder containing the image.
 		 *\param[in]	relative	The image file path, relative to folder.
+		 *\param[in]	components	The components to keep in the loaded image.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	folder	Le dossier contenant l'image.
+		 *\param[in]	folder		Le dossier contenant l'image.
 		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
+		 *\param[in]	components	Les composantes à garder dans l'image chargée.
 		 */
 		C3D_API void setSource( castor::Path const & folder
-			, castor::Path const & relative );
+			, castor::Path const & relative
+			, ImageComponents components );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -105,42 +108,52 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline renderer::TextureType getType()const
+		inline ashes::TextureType getType()const
 		{
 			return m_info.imageType;
 		}
 
-		inline renderer::Texture const & getTexture()const
+		inline ashes::Texture const & getTexture()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline TextureView const & getImage( size_t index = 0u )const
 		{
-			REQUIRE( index < m_views.size() && m_views[index] );
+			CU_Require( index < m_views.size() && m_views[index] );
 			return *m_views[index];
 		}
 
 		inline TextureView & getImage( size_t index = 0u )
 		{
-			REQUIRE( index < m_views.size() && m_views[index] );
+			CU_Require( index < m_views.size() && m_views[index] );
 			return *m_views[index];
+		}
+
+		inline TextureView const & getImage( CubeMapFace index )const
+		{
+			return getImage( size_t( index ) );
+		}
+
+		inline TextureView & getImage( CubeMapFace index )
+		{
+			return getImage( size_t( index ) );
 		}
 
 		inline TextureView const & getDefaultImage()const
 		{
-			REQUIRE( m_defaultView );
+			CU_Require( m_defaultView );
 			return *m_defaultView;
 		}
 
 		inline TextureView & getDefaultImage()
 		{
-			REQUIRE( m_defaultView );
+			CU_Require( m_defaultView );
 			return *m_defaultView;
 		}
 
-		inline renderer::TextureView const & getDefaultView()const
+		inline ashes::TextureView const & getDefaultView()const
 		{
 			return m_defaultView->getView();
 		}
@@ -165,12 +178,12 @@ namespace castor3d
 			return m_info.mipLevels;
 		}
 
-		inline renderer::Extent3D const & getDimensions()const
+		inline ashes::Extent3D const & getDimensions()const
 		{
 			return m_info.extent;
 		}
 
-		inline renderer::Format getPixelFormat()const
+		inline ashes::Format getPixelFormat()const
 		{
 			return m_info.format;
 		}
@@ -202,15 +215,15 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateFromFirstImage( castor::Size const & size, renderer::Format format );
+		void doUpdateFromFirstImage( castor::Size const & size, ashes::Format format );
 
 	private:
 		bool m_initialised{ false };
-		renderer::ImageCreateInfo m_info;
-		renderer::MemoryPropertyFlags m_properties;
+		ashes::ImageCreateInfo m_info;
+		ashes::MemoryPropertyFlags m_properties;
 		std::vector< TextureViewUPtr > m_views;
 		TextureViewUPtr m_defaultView;
-		renderer::TexturePtr m_texture;
+		ashes::TexturePtr m_texture;
 	};
 }
 

@@ -33,10 +33,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< HdrConfig >( device
+			m_ubo = ashes::makeUniformBuffer< HdrConfig >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 			m_ubo->upload();
 		}
 	}
@@ -48,7 +48,7 @@ namespace castor3d
 
 	void HdrConfigUbo::update( HdrConfig const & config )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).setExposure( config.getExposure() );
 		m_ubo->getData( 0u ).setGamma( config.getGamma() );
 		m_ubo->upload();

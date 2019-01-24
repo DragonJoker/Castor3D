@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -19,9 +19,9 @@ namespace smaa
 	{
 	public:
 		Reproject( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & currentColourView
-			, renderer::TextureView const & previousColourView
-			, renderer::TextureView const * velocityView
+			, ashes::TextureView const & currentColourView
+			, ashes::TextureView const & previousColourView
+			, ashes::TextureView const * velocityView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
@@ -33,17 +33,17 @@ namespace smaa
 		}
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		renderer::TextureView const & m_currentColourView;
-		renderer::TextureView const & m_previousColourView;
-		renderer::TextureView const * m_velocityView;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		ashes::TextureView const & m_currentColourView;
+		ashes::TextureView const & m_previousColourView;
+		ashes::TextureView const * m_velocityView;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

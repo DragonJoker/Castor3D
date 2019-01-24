@@ -80,7 +80,7 @@ namespace castor3d
 
 		typedef castor::Collection< Overlay, castor::String >::TObjPtrMapIt iterator;
 		typedef castor::Collection< Overlay, castor::String >::TObjPtrMapConstIt const_iterator;
-		DECLARE_MAP( castor::String, FontTextureSPtr, FontTextureStr );
+		CU_DeclareMap( castor::String, FontTextureSPtr, FontTextureStr );
 
 		struct OverlayInitialiser
 		{
@@ -314,7 +314,7 @@ namespace castor3d
 		FontTextureStrMap m_fontTextures;
 	};
 	using OverlayCache = Cache< Overlay, castor::String >;
-	DECLARE_SMART_PTR( OverlayCache );
+	CU_DeclareSmartPtr( OverlayCache );
 }
 
 #endif

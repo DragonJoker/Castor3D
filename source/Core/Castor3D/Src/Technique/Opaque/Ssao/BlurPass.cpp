@@ -22,9 +22,10 @@
 #include <RenderPass/FrameBufferAttachment.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -35,34 +36,32 @@ namespace castor3d
 {
 	namespace
 	{
-		static renderer::Format constexpr ColourFormat = renderer::Format::eR8G8B8A8_UNORM;
-
-		glsl::Shader doGetVertexProgram( Engine & engine )
+		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
 
 			// Shader outputs
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 		
-		glsl::Shader doGetPixelProgram( Engine & engine
+		ShaderPtr doGetPixelProgram( Engine & engine
 			, SsaoConfig const & config )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			using namespace glsl;
-			auto writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			UBO_SSAO_CONFIG( writer, 0u, 0u );
 			/** (1, 0) or (0, 1)*/
@@ -71,14 +70,14 @@ namespace castor3d
 			auto c3d_dummy = configuration.declMember< IVec2 >( cuT( "c3d_dummy" ) );
 			auto c3d_gaussian = configuration.declMember< Vec4 >( cuT( "c3d_gaussian" ), 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declSampler< Sampler2D >( cuT( "c3d_mapNormal" ), 2u, 0u, config.m_useNormalsBuffer );
-			auto c3d_mapInput = writer.declSampler< Sampler2D >( cuT( "c3d_mapInput" ), 3u, 0u );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapNormal" ), 2u, 0u, config.useNormalsBuffer );
+			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapInput" ), 3u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_readMultiplyFirst = writer.declConstant< Vec4 >( cuT( "c3d_readMultiplyFirst" ), vec4( 2.0_f ), config.m_useNormalsBuffer );
-			auto c3d_readAddSecond = writer.declConstant< Vec4 >( cuT( "c3d_readAddSecond" ), vec4( 1.0_f ), config.m_useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declConstant( cuT( "c3d_readMultiplyFirst" ), vec3( 2.0_f ), config.useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant( cuT( "c3d_readAddSecond" ), vec3( 1.0_f ), config.useNormalsBuffer );
 
-			auto gl_FragCoord = writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) );
+			auto in = writer.getIn();
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
@@ -91,7 +90,7 @@ namespace castor3d
 				{
 					writer.returnStmt( p );
 				}
-				, InFloat{ &writer, cuT( "p" ) } );
+				, InFloat{ writer, cuT( "p" ) } );
 
 			// Reconstruct camera-space P.xyz from screen-space S = (x, y) in
 			// pixels and camera-space z < 0.  Assumes that the upper-left pixel center
@@ -103,11 +102,11 @@ namespace castor3d
 					, Float const & z
 					, Vec4 const & projInfo )
 				{
-					writer.returnStmt( vec3( glsl::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
+					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
-				, InVec2{ &writer, cuT( "S" ) }
-				, InFloat{ &writer, cuT( "z" ) }
-				, InVec4{ &writer, cuT( "projInfo" ) } );
+				, InVec2{ writer, cuT( "S" ) }
+				, InFloat{ writer, cuT( "z" ) }
+				, InVec4{ writer, cuT( "projInfo" ) } );
 
 			auto positionFromKey = writer.implementFunction< Vec3 >( cuT( "positionFromKey" )
 				, [&]( Float const & key
@@ -122,9 +121,9 @@ namespace castor3d
 							, projInfo ) );
 					writer.returnStmt( position );
 				}
-				, InFloat{ &writer, cuT( "key" ) }
-				, InIVec2{ &writer, cuT( "ssCenter" ) }
-				, InVec4{ &writer, cuT( "projInfo" ) } );
+				, InFloat{ writer, cuT( "key" ) }
+				, InIVec2{ writer, cuT( "ssCenter" ) }
+				, InVec4{ writer, cuT( "projInfo" ) } );
 
 			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
 				, [&]( IVec2 const & tapLoc
@@ -133,31 +132,31 @@ namespace castor3d
 					, Vec3 tapNormal )
 				{
 					auto temp = writer.declLocale( cuT( "temp" )
-						, texelFetch( c3d_mapInput, tapLoc, 0 ) );
+						, texelFetch( c3d_mapInput, tapLoc, 0_i ) );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
-						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0 ).xyz();
-						tapNormal = normalize( glsl::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+						tapNormal = texelFetch( c3d_mapNormal, tapLoc, 0_i ).xyz();
+						tapNormal = normalize( sdw::fma( tapNormal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 					else
 					{
 						tapNormal = vec3( 0.0_f );
 					}
 				}
-				, InIVec2{ &writer, cuT( "tapLoc" ) }
-				, OutFloat{ &writer, cuT( "tapKey" ) }
-				, OutFloat{ &writer, cuT( "value" ) }
-				, OutVec3{ &writer, cuT( "tapNormal" ) } );
+				, InIVec2{ writer, cuT( "tapLoc" ) }
+				, OutFloat{ writer, cuT( "tapKey" ) }
+				, OutFloat{ writer, cuT( "value" ) }
+				, OutVec3{ writer, cuT( "tapNormal" ) } );
 
 			auto square = writer.implementFunction< Float >( cuT( "square" )
 				, [&]( Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
-				, InFloat{ &writer, cuT( "x") } );
+				, InFloat{ writer, cuT( "x") } );
 
 			auto calculateBilateralWeight = writer.implementFunction< Float >( cuT( "calculateBilateralWeight" )
 				, [&]( Float const & key
@@ -186,12 +185,12 @@ namespace castor3d
 					auto planeWeight = writer.declLocale( cuT( "planeWeight" )
 						, 1.0_f );
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
 						auto normalCloseness = writer.declLocale( cuT( "normalCloseness" )
 							, dot( tapNormal, normal ) );
 
-						if ( !config.m_blurHighQuality )
+						if ( !config.blurHighQuality )
 						{
 							normalCloseness = normalCloseness * normalCloseness;
 							normalCloseness = normalCloseness * normalCloseness;
@@ -202,7 +201,7 @@ namespace castor3d
 							, writer.paren( 1.0_f - normalCloseness ) * k_normal );
 						normalWeight = max( writer.paren( 1.0_f - c3d_edgeSharpness * normalError ), 0.0_f );
 
-						if ( config.m_blurHighQuality )
+						if ( config.blurHighQuality )
 						{
 							auto lowDistanceThreshold2 = writer.declLocale( cuT( "lowDistanceThreshold2" )
 								, 0.001_f );
@@ -226,29 +225,29 @@ namespace castor3d
 							// Minimum distance threshold must be scale-invariant, so factor in the radius
 							planeWeight = writer.ternary( distance2 * square( scale ) < lowDistanceThreshold2
 								, 1.0_f
-								, pow( max( 0.0_f
+								, Float{ pow( max( 0.0_f
 										, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
-									, 2.0_f ) );
+									, 2.0_f ) } );
 						}
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
 				}
-				, InFloat{ &writer, cuT( "key" ) }
-				, InFloat{ &writer, cuT( "tapKey" ) }
-				, InIVec2{ &writer, cuT( "tapLoc" ) }
-				, InVec3{ &writer, cuT( "normal" ) }
-				, InVec3{ &writer, cuT( "tapNormal" ) }
-				, InVec3{ &writer, cuT( "position" ) } );
+				, InFloat{ writer, cuT( "key" ) }
+				, InFloat{ writer, cuT( "tapKey" ) }
+				, InIVec2{ writer, cuT( "tapLoc" ) }
+				, InVec3{ writer, cuT( "normal" ) }
+				, InVec3{ writer, cuT( "tapNormal" ) }
+				, InVec3{ writer, cuT( "position" ) } );
 
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
 					auto ssCenter = writer.declLocale( cuT( "ssCenter" )
-						, ivec2( gl_FragCoord.xy() ) );
+						, ivec2( in.gl_FragCoord.xy() ) );
 
 					auto temp = writer.declLocale( cuT( "temp" )
-						, texelFetch( c3d_mapInput, ssCenter, 0 ) );
+						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );
 					auto sum = writer.declLocale( cuT( "sum" )
 						, temp.r() );
 
@@ -258,10 +257,10 @@ namespace castor3d
 					auto normal = writer.declLocale( cuT( "normal" )
 						, vec3( 0.0_f ) );
 
-					if ( config.m_useNormalsBuffer )
+					if ( config.useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ssCenter, 0 ).xyz();
-						normal = normalize( glsl::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+						normal = texelFetch( c3d_mapNormal, ssCenter, 0_i ).xyz();
+						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					}
 
 					IF( writer, key == 1.0_f )
@@ -283,7 +282,7 @@ namespace castor3d
 					auto position = writer.declLocale( cuT( "position" )
 						, positionFromKey( key, ssCenter, c3d_projInfo ) );
 
-					FOR( writer, Int, r, -c3d_blurRadius, "r <= c3d_blurRadius", "++r" )
+					FOR( writer, Int, r, -c3d_blurRadius, r <= c3d_blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
@@ -293,13 +292,15 @@ namespace castor3d
 								, ssCenter + c3d_axis * writer.paren( r * c3d_blurStepSize ) );
 
 							// spatial domain: offset gaussian tap
+							auto absR = writer.declLocale( cuT( "absR" )
+								, writer.cast< UInt >( abs( r ) ) );
 							auto weight = writer.declLocale( cuT( "weight" )
-								, 0.3_f + c3d_gaussian[abs( r ) % 2][abs( r ) / 2] );
+								, 0.3_f + c3d_gaussian[absR % 2_u][absR / 2_u] );
 
 							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
 							auto value = writer.declLocale< Float >( cuT( "value" ) );
 							auto tapNormal = writer.declLocale< Vec3 >( cuT( "tapNormal" ) );
-							writer << getTapInformation( tapLoc, tapKey, value, tapNormal ) << endi;
+							getTapInformation( tapLoc, tapKey, value, tapNormal );
 
 							auto bilateralWeight = writer.declLocale( cuT( "bilateralWeight" )
 								, calculateBilateralWeight( key
@@ -321,33 +322,33 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / writer.paren( totalWeight + epsilon );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 
 #undef result
 #undef keyPassThrough
 		}
 
-		renderer::ShaderStageStateArray doGetProgram( Engine & engine
+		ashes::ShaderStageStateArray doGetProgram( Engine & engine
 			, SsaoConfig const & config
-			, glsl::Shader & vertexShader
-			, glsl::Shader & pixelShader )
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader )
 		{
-			vertexShader = doGetVertexProgram( engine );
-			pixelShader = doGetPixelProgram( engine, config );
+			vertexShader.shader = doGetVertexProgram( engine );
+			pixelShader.shader = doGetPixelProgram( engine, config );
 			auto & device = getCurrentDevice( engine );
-			renderer::ShaderStageStateArray result
+			ashes::ShaderStageStateArray result
 			{
-				{ device.createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ device.createShaderModule( renderer::ShaderStageFlag::eFragment ) },
+				{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+				{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) },
 			};
-			result[0].module->loadShader( vertexShader.getSource() );
-			result[1].module->loadShader( pixelShader.getSource() );
+			result[0].module->loadShader( engine.getRenderSystem()->compileShader( vertexShader ) );
+			result[1].module->loadShader( engine.getRenderSystem()->compileShader( pixelShader ) );
 			return result;
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
 			, String const & name
-			, renderer::WrapMode mode )
+			, ashes::WrapMode mode )
 		{
 			SamplerSPtr sampler;
 
@@ -358,8 +359,8 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( renderer::Filter::eNearest );
-				sampler->setMagFilter( renderer::Filter::eNearest );
+				sampler->setMinFilter( ashes::Filter::eNearest );
+				sampler->setMagFilter( ashes::Filter::eNearest );
 				sampler->setWrapS( mode );
 				sampler->setWrapT( mode );
 			}
@@ -367,25 +368,25 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, renderer::Extent2D const & size )
+		TextureUnit doCreateTexture( Engine & engine, ashes::Extent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, cuT( "SSAOBlur_Result" ), renderer::WrapMode::eClampToEdge );
+			auto sampler = doCreateSampler( engine, cuT( "SSAOBlur_Result" ), ashes::WrapMode::eClampToEdge );
 
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.width;
 			image.extent.height = size.height;
 			image.extent.depth = 1u;
-			image.format = ColourFormat;
-			image.imageType = renderer::TextureType::e2D;
+			image.format = SsaoBlurPass::ResultFormat;
+			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -393,54 +394,54 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( Engine & engine )
+		ashes::RenderPassPtr doCreateRenderPass( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::RenderPassCreateInfo renderPass{};
+			ashes::RenderPassCreateInfo renderPass{};
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].format = ColourFormat;
-			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].format = SsaoBlurPass::ResultFormat;
+			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
 
 			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
-			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
+			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
 
 			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( renderPass );
 		}
 
-		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, TextureUnit const & texture )
 		{
-			renderer::FrameBufferAttachmentArray attaches;
+			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.getAttachments().begin() ), texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
+			return renderPass.createFrameBuffer( ashes::Extent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
 	}
@@ -448,12 +449,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SsaoBlurPass::SsaoBlurPass( Engine & engine
-		, renderer::Extent2D const & size
+		, ashes::Extent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, Point2i const & axis
 		, TextureUnit const & input
-		, renderer::TextureView const & normals )
+		, ashes::TextureView const & normals )
 		: RenderQuad{ *engine.getRenderSystem(), true }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -467,16 +468,18 @@ namespace castor3d
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 		, m_finished{ getCurrentDevice( engine ).createSemaphore() }
-		, m_configurationUbo{ renderer::makeUniformBuffer< Configuration >( getCurrentDevice( engine ), 1u, 0u, renderer::MemoryPropertyFlag::eHostVisible ) }
+		, m_configurationUbo{ ashes::makeUniformBuffer< Configuration >( getCurrentDevice( engine ), 1u, 0u, ashes::MemoryPropertyFlag::eHostVisible ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SsaoBlur" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SsaoBlur" }
 	{
 		auto & configuration = m_configurationUbo->getData();
 		configuration.axis = axis;
 
-		renderer::DescriptorSetLayoutBindingArray bindings
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 2u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			{ 2u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 		};
 		createPipeline( size
 			, Position{}
@@ -485,16 +488,16 @@ namespace castor3d
 			, *m_renderPass
 			, bindings
 			, {} );
-		static renderer::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
+		static ashes::ClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 		auto & device = getCurrentDevice( m_renderSystem );
 		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
 
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eSimultaneousUse );
+		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eSimultaneousUse );
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_fbo
 			, { colour }
-			, renderer::SubpassContents::eInline );
+			, ashes::SubpassContents::eInline );
 		registerFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();
@@ -511,11 +514,11 @@ namespace castor3d
 
 	void SsaoBlurPass::update()const
 	{
-		if ( m_config.m_blurRadius.isDirty() )
+		if ( m_config.blurRadius.isDirty() )
 		{
 			auto & configuration = m_configurationUbo->getData();
 
-			switch ( m_config.m_blurRadius.value().value() )
+			switch ( m_config.blurRadius.value().value() )
 			{
 			case 1u:
 				configuration.gaussian[0][0] = 0.5f;
@@ -562,7 +565,7 @@ namespace castor3d
 		}
 	}
 
-	renderer::Semaphore const & SsaoBlurPass::blur( renderer::Semaphore const & toWait )const
+	ashes::Semaphore const & SsaoBlurPass::blur( ashes::Semaphore const & toWait )const
 	{
 		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
@@ -571,7 +574,7 @@ namespace castor3d
 
 		device.getGraphicsQueue().submit( *m_commandBuffer
 			, *result
-			, renderer::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eColourAttachmentOutput
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();
@@ -598,16 +601,16 @@ namespace castor3d
 		stream << cuT( "Blur" );
 		auto name = stream.str();
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 		config.accept( name, visitor );
 	}
 
-	void SsaoBlurPass::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_ssaoConfigUbo.getUbo()
@@ -622,7 +625,7 @@ namespace castor3d
 			, m_sampler->getSampler() );
 	}
 
-	void SsaoBlurPass::doRegisterFrame( renderer::CommandBuffer & commandBuffer )const
+	void SsaoBlurPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
 	{
 	}
 }

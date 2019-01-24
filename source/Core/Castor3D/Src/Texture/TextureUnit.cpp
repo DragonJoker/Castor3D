@@ -199,7 +199,7 @@ namespace castor3d
 		{
 			result = m_texture->initialise();
 			auto sampler = getSampler();
-			REQUIRE( sampler );
+			CU_Require( sampler );
 			sampler->initialise();
 
 			if ( result && m_texture->getMipmapCount() > 1u )
@@ -207,17 +207,17 @@ namespace castor3d
 				m_texture->generateMipmaps();
 			}
 
-			m_descriptor = renderer::WriteDescriptorSet
+			m_descriptor = ashes::WriteDescriptorSet
 			{
 				0u,
 				0u,
 				1u,
-				renderer::DescriptorType::eCombinedImageSampler,
+				ashes::DescriptorType::eCombinedImageSampler,
 				{
 					{
 						std::ref( sampler->getSampler() ),
 						std::ref( m_texture->getDefaultView() ),
-						renderer::ImageLayout::eShaderReadOnlyOptimal,
+						ashes::ImageLayout::eShaderReadOnlyOptimal,
 					}
 				}
 			};
@@ -241,9 +241,9 @@ namespace castor3d
 		}
 	}
 
-	renderer::TextureType TextureUnit::getType()const
+	ashes::TextureType TextureUnit::getType()const
 	{
-		REQUIRE( m_texture );
+		CU_Require( m_texture );
 		return m_texture->getType();
 	}
 }

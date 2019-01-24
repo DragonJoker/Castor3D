@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -104,7 +104,7 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		sets the shader file.
+		 *\brief		Sets the shader file.
 		 *\param[in]	target		The shader module concerned.
 		 *\param[in]	pathFile	The file name.
 		 *\~french
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\param[in]	target		Le module shader concerné.
 		 *\param[in]	pathFile	Le nom du fichier.
 		 */
-		C3D_API void setFile( renderer::ShaderStageFlag target, castor::Path const & pathFile );
+		C3D_API void setFile( ashes::ShaderStageFlag target, castor::Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader file.
@@ -123,7 +123,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		Le nom du fichier.
 		 */
-		C3D_API castor::Path getFile( renderer::ShaderStageFlag target )const;
+		C3D_API castor::Path getFile( ashes::ShaderStageFlag target )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file.
@@ -134,10 +134,10 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		\p true si le shader a un fichier source.
 		 */
-		C3D_API bool hasFile( renderer::ShaderStageFlag target )const;
+		C3D_API bool hasFile( ashes::ShaderStageFlag target )const;
 		/**
 		 *\~english
-		 *\brief		sets the shader source.
+		 *\brief		Sets the shader source.
 		 *\param[in]	target	The shader object concerned.
 		 *\param[in]	source	The source code.
 		 *\~french
@@ -145,18 +145,18 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	source	Le code de la source.
 		 */
-		C3D_API void setSource( renderer::ShaderStageFlag target, castor::String const & source );
+		C3D_API void setSource( ashes::ShaderStageFlag target, castor::String const & source );
 		/**
 		 *\~english
-		 *\brief		sets the shader source.
+		 *\brief		Sets the shader source.
 		 *\param[in]	target	The shader object concerned.
-		 *\param[in]	source	The source code.
+		 *\param[in]	shader	The source shader.
 		 *\~french
 		 *\brief		Définit la source du shader.
 		 *\param[in]	target	Le shader object concerné.
-		 *\param[in]	source	Le code de la source.
+		 *\param[in]	shader	Le shader de la source.
 		 */
-		C3D_API void setSource( renderer::ShaderStageFlag target, glsl::Shader const & source );
+		C3D_API void setSource( ashes::ShaderStageFlag target, ShaderPtr shader );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source.
@@ -167,7 +167,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		Le code de la source.
 		 */
-		C3D_API castor::String getSource( renderer::ShaderStageFlag target )const;
+		C3D_API ShaderModule const & getSource( ashes::ShaderStageFlag target )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code.
@@ -178,7 +178,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		\p true si le shader a un code source.
 		 */
-		C3D_API bool hasSource( renderer::ShaderStageFlag target )const;
+		C3D_API bool hasSource( ashes::ShaderStageFlag target )const;
 		/**
 		*\~english
 		*name
@@ -188,7 +188,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::ShaderStageStateArray const & getStates()const
+		inline ashes::ShaderStageStateArray const & getStates()const
 		{
 			return m_states;
 		}
@@ -323,13 +323,9 @@ namespace castor3d
 		//@}
 
 	protected:
-		struct ShaderModule
-		{
-			castor::Path file;
-			glsl::Shader source;
-		};
-		std::map< renderer::ShaderStageFlag, ShaderModule > m_modules;
-		renderer::ShaderStageStateArray m_states;
+		std::map< ashes::ShaderStageFlag, castor::Path > m_files;
+		std::map< ashes::ShaderStageFlag, ShaderModule > m_modules;
+		ashes::ShaderStageStateArray m_states;
 	};
 }
 

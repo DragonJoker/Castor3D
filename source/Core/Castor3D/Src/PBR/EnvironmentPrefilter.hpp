@@ -33,12 +33,12 @@ namespace castor3d
 		{
 		public:
 			MipRenderCube( RenderSystem & renderSystem
-				, renderer::RenderPass const & renderPass
+				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
-				, renderer::Extent2D const & originalSize
-				, renderer::Extent2D const & size
-				, renderer::TextureView const & srcView
-				, renderer::Texture const & dstTexture
+				, ashes::Extent2D const & originalSize
+				, ashes::Extent2D const & size
+				, ashes::TextureView const & srcView
+				, ashes::Texture const & dstTexture
 				, SamplerSPtr sampler );
 			void registerFrames();
 			void render();
@@ -46,13 +46,13 @@ namespace castor3d
 		private:
 			struct FrameBuffer
 			{
-				renderer::TextureViewPtr dstView;
-				renderer::FrameBufferPtr frameBuffer;
+				ashes::TextureViewPtr dstView;
+				ashes::FrameBufferPtr frameBuffer;
 			};
-			renderer::Device const & m_device;
-			renderer::RenderPass const & m_renderPass;
-			renderer::CommandBufferPtr m_commandBuffer;
-			renderer::FencePtr m_fence;
+			ashes::Device const & m_device;
+			ashes::RenderPass const & m_renderPass;
+			ashes::CommandBufferPtr m_commandBuffer;
+			ashes::FencePtr m_fence;
 			SamplerSPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 		};
@@ -72,7 +72,7 @@ namespace castor3d
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, castor::Size const & size
-			, renderer::Texture const & srcTexture
+			, ashes::Texture const & srcTexture
 			, SamplerSPtr sampler );
 		/**
 		 *\~english
@@ -90,12 +90,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline renderer::TextureView const & getResult()const
+		inline ashes::TextureView const & getResult()const
 		{
 			return *m_resultView;
 		}
 
-		inline renderer::Sampler const & getSampler()const
+		inline ashes::Sampler const & getSampler()const
 		{
 			return m_sampler->getSampler();
 		}
@@ -103,11 +103,11 @@ namespace castor3d
 
 	private:
 		RenderSystem & m_renderSystem;
-		renderer::TextureViewPtr m_srcView;
-		renderer::TexturePtr m_result;
-		renderer::TextureViewPtr m_resultView;
+		ashes::TextureViewPtr m_srcView;
+		ashes::TexturePtr m_result;
+		ashes::TextureViewPtr m_resultView;
 		SamplerSPtr m_sampler;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
 	};
 }

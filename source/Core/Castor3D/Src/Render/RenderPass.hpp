@@ -198,7 +198,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API glsl::Shader getVertexShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -219,11 +219,11 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API glsl::Shader getPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -238,7 +238,7 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API glsl::Shader getGeometryShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr getGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const;
@@ -266,14 +266,14 @@ namespace castor3d
 		 */
 		C3D_API void preparePipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, PassFlags & passFlags
 			, TextureChannels & textureFlags
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags
-			, renderer::PrimitiveTopology topology
+			, ashes::PrimitiveTopology topology
 			, bool twoSided
-			, renderer::VertexLayoutCRefArray const & layouts );
+			, ashes::VertexLayoutCRefArray const & layouts );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
@@ -298,12 +298,12 @@ namespace castor3d
 		 */
 		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::PrimitiveTopology topology )const;
+			, ashes::PrimitiveTopology topology )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for back face culling.
@@ -328,12 +328,12 @@ namespace castor3d
 		 */
 		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::PrimitiveTopology topology )const;
+			, ashes::PrimitiveTopology topology )const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -436,7 +436,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node );
 		/**
 		 *\~english
@@ -448,7 +448,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node );
 		/**
 		 *\~english
@@ -460,7 +460,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Les noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node );
 		/**
 		 *\~english
@@ -472,7 +472,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node );
 		/**
 		 *\~english
@@ -484,7 +484,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
@@ -496,7 +496,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes );
 		/**
 		 *\~english
@@ -508,7 +508,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -521,7 +521,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -534,7 +534,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Les noeud.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -547,7 +547,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -560,7 +560,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -573,7 +573,7 @@ namespace castor3d
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
 		 */
-		C3D_API void initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes
 			, ShadowMapLightTypeArray const & shadowMaps );
 		/**
@@ -606,7 +606,7 @@ namespace castor3d
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\return		
 		 */
-		C3D_API static renderer::ColourBlendState createBlendState( BlendMode colourBlendMode
+		C3D_API static ashes::ColourBlendState createBlendState( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, uint32_t attachesCount );
 		/**
@@ -648,7 +648,7 @@ namespace castor3d
 			return m_matrixUbo;
 		}
 
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return m_renderQueue.getCommandBuffer();
 		}
@@ -658,7 +658,7 @@ namespace castor3d
 			return m_renderQueue.hasNodes();
 		}
 
-		inline renderer::RenderPass const & getRenderPass()const
+		inline ashes::RenderPass const & getRenderPass()const
 		{
 			return *m_renderPass;
 		}
@@ -725,7 +725,7 @@ namespace castor3d
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc
+			, ashes::CompareOp alphaFunc
 			, bool invertNormals )const;
 		/**
 		 *\~english
@@ -947,7 +947,7 @@ namespace castor3d
 		 *\brief		Met à jour les pools d'UBO en VRAM.
 		 */
 		void doUpdateUbos( Camera const & camera
-			, Point2r const & jitter );
+			, castor::Point2r const & jitter );
 		/**
 		*\~english
 		*\return
@@ -995,7 +995,7 @@ namespace castor3d
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
+			, ashes::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
@@ -1008,7 +1008,7 @@ namespace castor3d
 		 *\param[in]		flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
-			, renderer::VertexLayoutCRefArray const & layouts
+			, ashes::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
@@ -1018,7 +1018,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les UBO.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
+		C3D_API virtual ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the common textures descriptor layout bindings.
@@ -1027,7 +1027,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates the depth stencil state.
@@ -1036,7 +1036,7 @@ namespace castor3d
 		 *\brief		Crée l'attache de profondeur et stencil.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates the colour blend state.
@@ -1045,7 +1045,7 @@ namespace castor3d
 		 *\brief		Crée l'attache de mélange des couleurs.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const = 0;
 
 	private:
 		/**
@@ -1076,7 +1076,7 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node ) = 0;
 		/**
@@ -1089,7 +1089,7 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillUboDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node ) = 0;
 		/**
@@ -1102,7 +1102,7 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
@@ -1116,7 +1116,7 @@ namespace castor3d
 		 *\param[in]	layout	Le layout des descripteurs.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API virtual void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & node
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
@@ -1147,7 +1147,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -1166,7 +1166,7 @@ namespace castor3d
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const = 0;
@@ -1186,11 +1186,11 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const = 0;
+			, ashes::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -1207,11 +1207,11 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const = 0;
+			, ashes::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -1228,11 +1228,11 @@ namespace castor3d
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
 		 *\param[in]	alphaFunc		La fonction de test alpha.
 		 */
-		C3D_API virtual glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		C3D_API virtual ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const = 0;
+			, ashes::CompareOp alphaFunc )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -1308,7 +1308,7 @@ namespace castor3d
 		bool m_opaque{ false };
 		bool m_oit{ false };
 		SceneUbo m_sceneUbo;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 		castor::Size m_size;
 

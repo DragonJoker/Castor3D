@@ -70,14 +70,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		C3D_API void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -88,15 +88,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		C3D_API glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -104,46 +104,46 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */
-		C3D_API glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPixelShaderSource
 		 */
-		C3D_API glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		C3D_API ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const;
+			, ashes::CompareOp alphaFunc )const;
 
 	private:
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
 	};
 }
 

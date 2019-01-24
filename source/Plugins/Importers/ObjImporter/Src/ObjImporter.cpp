@@ -663,7 +663,7 @@ namespace Obj
 						if ( mesh.getScene()->getMaterialView().has( value ) )
 						{
 							material = mesh.getScene()->getMaterialView().find( value );
-							REQUIRE( material->getType() == MaterialType::eLegacy );
+							CU_Require( material->getType() == MaterialType::eLegacy );
 							pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
 						}
 						else

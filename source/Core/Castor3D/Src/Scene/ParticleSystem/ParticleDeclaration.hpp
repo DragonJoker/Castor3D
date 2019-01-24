@@ -20,7 +20,7 @@ namespace castor3d
 	class ParticleDeclaration
 	{
 	public:
-		DECLARE_VECTOR( ParticleElementDeclaration, ParticleElementDeclaration );
+		CU_DeclareVector( ParticleElementDeclaration, ParticleElementDeclaration );
 		using iterator = ParticleElementDeclarationArrayIt;
 		using const_iterator = ParticleElementDeclarationArrayConstIt;
 

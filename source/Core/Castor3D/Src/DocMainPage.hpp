@@ -171,7 +171,7 @@
  *<li>Removed every GlXxxRenderer class, except for GlOverlayRenderer.</li>
  *<li>Support for OpenGL 1.x has been removed.</li>
  *<li>Support for OpenGL 3.x has been enforced, forcing UBOs, for example.</li>
- *<li>Implemented a GlslWriter, to write GLSL code from C++ source.</li>
+ *<li>Implemented a ShaderWriter, to write GLSL code from C++ source.</li>
  *</ul>
  *\subsubsection feat_0_8_0_sub Subdividers
  *<ul>
@@ -337,7 +337,7 @@
  *<li>Removed Point::link, Point::copy/clopy/clone functions.</li>
  *<li>Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek and cftell by functions in namespace castor.</li>
  *<li>Modified Colour class, it doesn't extend Point4f anymore.</li>
- *<li>Removed macro DECLARE_SHARED_PTR, now using  DECLARE_SMART_PTR, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
+ *<li>Removed macro DECLARE_SHARED_PTR, now using  CU_DeclareSmartPtr, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
  *</ul>
  *\subsubsection misc_0_7_0_c3d Castor3D
  *<ul>
@@ -709,7 +709,7 @@
  *<li>Suppression des classes GlXxxRenderer.</li>
  *<li>Le support d'OpenGL 1.x a été supprimé.</li>
  *<li>Le support d'OpenGL 3.x a été renforcé, en forçant l'utilisation des UBOs, par exemple.</li>
- *<li>Implémentation de GlslWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
+ *<li>Implémentation de ShaderWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
  *</ul>
  *\subsubsection feat_0_8_0_sub Subdiviseurs
  *<ul>
@@ -787,7 +787,7 @@
  *<li>Remplacement de la classe String par une classe string.</li>
  *<li>Suppression des dépendances à boost, à part pour thread, et uniquement pour les compilateurs ne supportant pas std::thread.</li>
  *<li>Les macros cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek et cftell ont été remplacées par des fonctions dans Castor.</li>
- *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par DECLARE_SMART_PTR, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
+ *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par CU_DeclareSmartPtr, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
  *<li>Suppression de l'encodage Unicode pour les fichiers.</li>
  *<li>Ajout du support de l'indentation de flux.</li>
  *<li>Améliorations de castor::FileParser :

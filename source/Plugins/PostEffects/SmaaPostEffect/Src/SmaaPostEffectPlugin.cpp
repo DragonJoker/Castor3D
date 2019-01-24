@@ -11,7 +11,7 @@
 #include "SmaaPostEffect.hpp"
 #include "Smaa_Parsers.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Smaa_API
 #else
 #	ifdef SmaaPostEffect_EXPORTS
@@ -51,14 +51,14 @@ namespace
 
 	castor::FileParser::AttributeParsersBySection createParsers()
 	{
-		static castor::UIntStrMap modes
+		static castor::UInt32StrMap modes
 		{
 			{ "1X", uint32_t( smaa::Mode::e1X ) },
 			{ "T2X", uint32_t( smaa::Mode::eT2X ) },
 			{ "S2X", uint32_t( smaa::Mode::eS2X ) },
 			{ "4X", uint32_t( smaa::Mode::e4X ) }
 		};
-		static castor::UIntStrMap presets
+		static castor::UInt32StrMap presets
 		{
 			{ "low", uint32_t( smaa::Preset::eLow ) },
 			{ "medium", uint32_t( smaa::Preset::eMedium ) },
@@ -66,7 +66,7 @@ namespace
 			{ "ultra", uint32_t( smaa::Preset::eUltra ) },
 			{ "custom", uint32_t( smaa::Preset::eCustom ) }
 		};
-		static castor::UIntStrMap detections
+		static castor::UInt32StrMap detections
 		{
 			{ "depth", uint32_t( smaa::EdgeDetectionType::eDepth ) },
 			{ "colour", uint32_t( smaa::EdgeDetectionType::eColour ) },
@@ -97,7 +97,7 @@ namespace
 		return result;
 	}
 
-	castor::StrUIntMap createSections()
+	castor::StrUInt32Map createSections()
 	{
 		return
 		{

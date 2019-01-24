@@ -44,7 +44,7 @@ namespace GuiCommon
 				InterleavedVertex::createP( Point3f{ +1, +1, +1 } ),
 				InterleavedVertex::createP( Point3f{ +1, -1, +1 } ),
 			};
-			submesh->setTopology( renderer::PrimitiveTopology::eLineList );
+			submesh->setTopology( ashes::PrimitiveTopology::eLineList );
 			submesh->addPoints( vertex );
 			auto mapping = std::make_shared< LinesMapping >( *submesh );
 			LineIndices lines[]
@@ -185,7 +185,7 @@ namespace GuiCommon
 
 	void CubeBoxManager::hideObject( Geometry const & object )
 	{
-		REQUIRE( object.getName() == m_object->getName() );
+		CU_Require( object.getName() == m_object->getName() );
 		Engine * engine = m_scene.getEngine();
 		engine->postEvent( makeFunctorEvent( EventType::ePostRender
 			, [this, &object]()

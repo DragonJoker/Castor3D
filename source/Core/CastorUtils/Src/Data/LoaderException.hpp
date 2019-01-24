@@ -23,19 +23,20 @@ namespace castor
 		: public castor::Exception
 	{
 	public:
-		LoaderException( std::string const & p_description
-			, char const * p_file
-			, char const * p_function
-			, uint32_t p_line )
-			: Exception( p_description
-				, p_file
-				, p_function
-				, p_line )
+		LoaderException( std::string const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: Exception( description
+				, file
+				, function
+				, line )
 		{
 		}
 	};
-	//!\~english Helper macro to use LoaderException	\~french Macro pour faciliter l'utilisation de LoaderException
-#	define LOADER_ERROR( p_text) throw LoaderException( p_text, __FILE__, __FUNCTION__, __LINE__)
+	//!\~english	Helper macro to use LoaderException.
+	//\~french		Macro pour faciliter l'utilisation de LoaderException.
+#	define CU_LoaderError( text ) throw LoaderException{ text, __FILE__, __FUNCTION__, __LINE__ }
 }
 
 #endif

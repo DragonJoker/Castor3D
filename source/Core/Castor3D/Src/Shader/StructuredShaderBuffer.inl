@@ -26,8 +26,8 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	uint32_t StructuredShaderBuffer< ElementTypeTraits >::add( ElementType & element )
 	{
-		REQUIRE( m_elements.getId() == 0u );
-		REQUIRE( m_elements.size() < m_maxElemCount );
+		CU_Require( m_elements.getId() == 0u );
+		CU_Require( m_elements.size() < m_maxElemCount );
 		m_elements.emplace_back( &element );
 		m_elements.setId( m_elementID++ );
 		m_connections.emplace_back( element.onChanged.connect( [this]( ElementType const & element )
@@ -42,8 +42,8 @@ namespace castor3d
 	void StructuredShaderBuffer< ElementTypeTraits >::remove( ElementType & element )
 	{
 		auto id = element.getId();
-		REQUIRE( id < m_elements.size() );
-		REQUIRE( &element == m_elements[id] );
+		CU_Require( id < m_elements.size() );
+		CU_Require( &element == m_elements[id] );
 		auto it = m_elements.erase( m_elements.begin() + id );
 
 		for ( it; it != m_elements.end(); ++it )

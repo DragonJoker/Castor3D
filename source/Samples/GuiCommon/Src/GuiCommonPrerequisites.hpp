@@ -113,9 +113,9 @@ namespace GuiCommon
 	typedef std::shared_ptr< LanguageFileContext > LanguageFileContextPtr;
 	typedef std::shared_ptr< StyleInfo > StyleInfoPtr;
 
-	DECLARE_MAP( uint32_t, wxImage *, ImageId );
-	DECLARE_VECTOR( thread_sptr, ThreadPtr );
-	DECLARE_VECTOR( LanguageInfoPtr, LanguageInfoPtr );
+	CU_DeclareMap( uint32_t, wxImage *, ImageId );
+	CU_DeclareVector( thread_sptr, ThreadPtr );
+	CU_DeclareVector( LanguageInfoPtr, LanguageInfoPtr );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
 	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
@@ -210,7 +210,7 @@ namespace GuiCommon
 	 *\param[in]	p_window	La fenêtre
 	 *\return		Le WindowHandle créé
 	 */
-	renderer::WindowHandle makeWindowHandle( wxWindow * p_window );
+	ashes::WindowHandle makeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
@@ -281,6 +281,8 @@ namespace GuiCommon
 	 *\return		Le wxSize
 	 */
 	wxSize make_wxSize( castor::Size const & p_value );
+
+	ast::ShaderStage convert( ashes::ShaderStageFlag stage );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

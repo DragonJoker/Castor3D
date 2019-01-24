@@ -62,37 +62,37 @@ namespace castor3d
 
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.
-		bool m_enabled{ false };
+		bool enabled{ false };
 		//!\~english	The high quality activation status.
 		//!\~french		Le statut d'activation de haute qualité.
-		bool m_highQuality{ false };
+		bool highQuality{ false };
 		//!\~english	The normals buffer usage status.
 		//!\~french		Le statut d'utilisation du tampon de normales.
-		bool m_useNormalsBuffer{ false };
+		bool useNormalsBuffer{ false };
 		//!\~english	The effect radius.
 		//!\~french		Le rayon de l'effet.
-		float m_radius{ 0.5f };
+		float radius{ 0.5f };
 		//!\~english	The effect bias.
 		//!\~french		Le bias de l'effet.
-		float m_bias{ 0.025f };
+		float bias{ 0.025f };
 		//!\~english	The effect intensity.
 		//!\~french		L'intensité de l'effet.
-		float m_intensity{ 1.0f };
+		float intensity{ 1.0f };
 		//!\~english	The samples count pixel.
 		//!\~french		Le nombre d'échantillons par pixel.
-		uint32_t m_numSamples{ 19u };
+		uint32_t numSamples{ 19u };
 		//!\~english	The edge sharpness, increase to make depth edges crisper, decrease to reduce flicker.
 		//!\~french		La précision des bords, augmenter pour rendre les borodures plus précises, diminuer pour réduire le scintillement.
-		float m_edgeSharpness{ 1.0f };
+		float edgeSharpness{ 1.0f };
 		//!\~english	The high quality activation status for the blur.
 		//!\~french		Le statut d'activation de haute qualité pour le flou.
-		bool m_blurHighQuality{ false };
+		bool blurHighQuality{ false };
 		//!\~english	Step in 2-pixel intervals since we already blurred against neighbors in the first AO pass.
 		//!\~french		Etape en intervalles de 2 pixels, un flou a déjà été appliqué, vis à vis des voisins, dans la première passe d'AO.
-		uint32_t m_blurStepSize{ 2u };
+		uint32_t blurStepSize{ 2u };
 		//!\~english	Filter radius in pixels. This will be multiplied by m_blurStepSize.
 		//!\~english	Rayon du filtre en pixels. Sera multiplié par m_blurStepSize.
-		castor::ChangeTracked< castor::RangedValue< int32_t > > m_blurRadius{ { 4, castor::makeRange( 1, 6 ) } };
+		castor::ChangeTracked< castor::RangedValue< int32_t > > blurRadius{ { 4, castor::makeRange( 1, 6 ) } };
 	};
 }
 

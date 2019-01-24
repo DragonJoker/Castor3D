@@ -45,7 +45,7 @@ namespace CastorCom
 		COM_PROPERTY_GET( EngineDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getEngineDirectory ) );
 		COM_PROPERTY_GET( DataDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getDataDirectory ) );
 
-		STDMETHOD( Create )( );
+		STDMETHOD( Create )( /* [in] */ BSTR appName, /* [in] */ boolean enableValidation );
 		STDMETHOD( Destroy )( );
 		STDMETHOD( Initialise )( /* [in] */ int fps );
 		STDMETHOD( Cleanup )( );
@@ -58,10 +58,6 @@ namespace CastorCom
 		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal );
 		STDMETHOD( RemoveWindow )( /* [in] */ IRenderWindow * val );
 		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
-		STDMETHOD( CreateBlendState )( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal );
-		STDMETHOD( CreateDepthStencilState )( /* [in] */ BSTR name, /* [out, retval] */ IDepthStencilState ** pVal );
-		STDMETHOD( CreateMultisampleState )( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal );
-		STDMETHOD( CreateRasteriserState )( /* [in] */ BSTR name, /* [out, retval] */ IRasteriserState ** pVal );
 		STDMETHOD( RemoveScene )( /* [in] */ BSTR name );
 		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window );
 

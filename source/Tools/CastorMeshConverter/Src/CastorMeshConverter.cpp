@@ -97,10 +97,10 @@ bool doLoadRenderer( castor3d::Engine & engine )
 	{
 #if defined( NDEBUG )
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
 #else
 
-		if ( file.find( castor::String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != castor::String::npos )
+		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
 
 #endif
 		{
@@ -116,7 +116,7 @@ bool doLoadRenderer( castor3d::Engine & engine )
 
 		for ( auto file : arrayKept )
 		{
-			if ( file.getExtension() == CASTOR_DLL_EXT )
+			if ( file.getExtension() == CU_SharedLibExt )
 			{
 				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
@@ -397,7 +397,14 @@ struct ObjectWriter< true, castor3d::Mesh >
 		{
 			if ( result )
 			{
-				auto name = options.output + cuT( "_" ) + castor::string::toString( index, std::locale{ "C" } );
+				castor::String name = options.output + cuT( "_" );
+
+				if ( srcSubmesh->getDefaultMaterial() )
+				{
+					name += srcSubmesh->getDefaultMaterial()->getName();
+				}
+
+				name += castor::string::toString( index, std::locale{ "C" } );
 				auto newPath = path / ( name + cuT( ".cmsh" ) );
 				auto mesh = std::make_unique< castor3d::Mesh >( name, *object.getScene() );
 
@@ -409,7 +416,7 @@ struct ObjectWriter< true, castor3d::Mesh >
 				auto dstSubmesh = mesh->createSubmesh();
 				dstSubmesh->setDefaultMaterial( srcSubmesh->getDefaultMaterial() );
 				dstSubmesh->addPoints( srcSubmesh->getPoints() );
-				auto & indexMapping = srcSubmesh->getIndexMapping();
+				auto & indexMapping = *srcSubmesh->getIndexMapping();
 				castor3d::SubmeshComponentSPtr indexMappingComponent;
 
 				for ( auto & component : srcSubmesh->getComponents() )

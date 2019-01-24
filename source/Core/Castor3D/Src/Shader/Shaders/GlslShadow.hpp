@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslIntrinsics.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d
 {
@@ -14,16 +14,22 @@ namespace castor3d
 	{
 		struct OutputComponents
 		{
-			C3D_API explicit OutputComponents( glsl::GlslWriter & writer );
-			C3D_API OutputComponents( glsl::InOutVec3 const & diffuse
-				, glsl::InOutVec3 const & specular );
-			glsl::InOutVec3 m_diffuse;
-			glsl::InOutVec3 m_specular;
+			C3D_API explicit OutputComponents( sdw::ShaderWriter & writer );
+			C3D_API OutputComponents( sdw::InOutVec3 const & diffuse
+				, sdw::InOutVec3 const & specular );
+
+			C3D_API ast::expr::Expr * getExpr()const;
+			C3D_API sdw::Shader * getShader()const;
+
+			sdw::InOutVec3 m_diffuse;
+			sdw::InOutVec3 m_specular;
+
+		private:
+			ast::expr::ExprPtr m_expr;
 		};
 
-		C3D_API castor::String paramToString( castor::String & sep
+		C3D_API ast::expr::ExprList makeFnArg( sdw::Shader & shader
 			, OutputComponents const & value );
-		C3D_API castor::String toString( OutputComponents const & value );
 
 		class Shadow
 		{
@@ -36,7 +42,8 @@ namespace castor3d
 			C3D_API static castor::String const MapDepthPoint;
 
 		public:
-			C3D_API explicit Shadow( glsl::GlslWriter & writer );
+			C3D_API explicit Shadow( sdw::ShaderWriter & writer
+				, bool isZeroToOneDepth = true );
 			C3D_API void declare( uint32_t & index
 				, uint32_t maxCascades );
 			C3D_API void declareDirectional( ShadowType type
@@ -46,86 +53,116 @@ namespace castor3d
 				, uint32_t & index );
 			C3D_API void declareSpot( ShadowType type
 				, uint32_t & index );
-			C3D_API glsl::Float computeDirectionalShadow( glsl::Int const & shadowType
-				, glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::UInt const & cascadeIndex
-				, glsl::Vec3 const & normal );
-			C3D_API glsl::Float computeSpotShadow( glsl::Int const & shadowType
-				, glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::Vec3 const & normal
-				, glsl::Int const & index );
-			C3D_API glsl::Float computePointShadow( glsl::Int const & shadowType
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::Vec3 const & normal
-				, glsl::Float const & farPlane
-				, glsl::Int const & index );
-			C3D_API void computeVolumetric( glsl::Int const & shadowType
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & eyePosition
-				, glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & lightDirection
-				, glsl::UInt const & cascadeIndex
-				, glsl::Vec3 const & lightColour
-				, glsl::Vec2 const & lightIntensity
-				, glsl::UInt const & lightVolumetricSteps
-				, glsl::Float const & lightVolumetricScattering
-				, OutputComponents & parentOutput );
-			C3D_API glsl::Float computeDirectionalShadow( glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::UInt const & cascadeIndex
-				, glsl::Vec3 const & normal );
-			C3D_API glsl::Float computeSpotShadow( glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::Vec3 const & normal );
-			C3D_API glsl::Float computePointShadow( glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & lightDirection
-				, glsl::Vec3 const & normal
-				, glsl::Float const & farPlane );
-			C3D_API void computeVolumetric( glsl::Vec3 const & worldSpacePosition
-				, glsl::Vec3 const & eyePosition
-				, glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & lightDirection
-				, glsl::UInt const & cascadeIndex
-				, glsl::Vec3 const & lightColour
-				, glsl::Vec2 const & lightIntensity
-				, glsl::UInt const & lightVolumetricSteps
-				, glsl::Float const & lightVolumetricScattering
-				, OutputComponents & parentOutput );
+			C3D_API sdw::Float computeDirectionalShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::Vec3 const & normal )const;
+			C3D_API sdw::Float computeSpotShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::Vec3 const & normal
+				, sdw::Int const & index )const;
+			C3D_API sdw::Float computePointShadow( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::Vec3 const & normal
+				, sdw::Float const & farPlane
+				, sdw::Int const & index )const;
+			C3D_API void computeVolumetric( sdw::Int const & shadowType
+				, sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec2 const & clipSpacePosition
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & eyePosition
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::Vec3 const & lightColour
+				, sdw::Vec2 const & lightIntensity
+				, sdw::UInt const & lightVolumetricSteps
+				, sdw::Float const & lightVolumetricScattering
+				, OutputComponents & parentOutput )const;
+			C3D_API sdw::Float computeDirectionalShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::Vec3 const & normal )const;
+			C3D_API sdw::Float computeSpotShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::Vec3 const & normal )const;
+			C3D_API sdw::Float computePointShadow( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & lightDirection
+				, sdw::Vec3 const & normal
+				, sdw::Float const & farPlane )const;
+			C3D_API void computeVolumetric( sdw::Vec2 const & shadowOffsets
+				, sdw::Vec2 const & shadowVariance
+				, sdw::Vec2 const & clipSpacePosition
+				, sdw::Vec3 const & worldSpacePosition
+				, sdw::Vec3 const & eyePosition
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & lightDirection
+				, sdw::UInt const & cascadeIndex
+				, sdw::Vec3 const & lightColour
+				, sdw::Vec2 const & lightIntensity
+				, sdw::UInt const & lightVolumetricSteps
+				, sdw::Float const & lightVolumetricScattering
+				, OutputComponents & parentOutput )const;
+			C3D_API sdw::Vec4 getLightSpacePosition( sdw::Mat4 const & lightMatrix
+				, sdw::Vec3 const & worldSpacePosition )const;
 
 		private:
-			glsl::Float chebyshevUpperBound( glsl::Vec2 const & moments
-				, glsl::Float const & distance
-				, glsl::Float const & minVariance
-				, glsl::Float const & varianceBias );
-			glsl::Float getShadowOffset( glsl::Vec3 const & normal
-				, glsl::Vec3 const & lightDirection
-				, glsl::Float const & minOffset
-				, glsl::Float const & maxSlopeOffset );
-			glsl::Float textureProj( glsl::Vec4 const & lightSpacePosition
-				, glsl::Vec2 const & offset
-				, glsl::Sampler2D const & shadowMap
-				, glsl::Float const & bias );
-			glsl::Float filterPCF( glsl::Vec4 const & lightSpacePosition
-				, glsl::Sampler2D const & shadowMap
-				, glsl::Float const & bias );
-			glsl::Float textureProjCascade( glsl::Vec4 const & lightSpacePosition
-				, glsl::Vec2 const & offset
-				, glsl::Sampler2DArray const & shadowMap
-				, glsl::UInt const & cascadeIndex
-				, glsl::Float const & bias );
-			glsl::Float filterPCFCascade( glsl::Vec4 const & lightSpacePosition
-				, glsl::Sampler2DArray const & shadowMap
-				, glsl::UInt const & cascadeIndex
-				, glsl::Float const & bias );
-			glsl::Vec4 getLightSpacePosition( glsl::Mat4 const & lightMatrix
-				, glsl::Vec3 const & worldSpacePosition );
+			sdw::Float chebyshevUpperBound( sdw::Vec2 const & moments
+				, sdw::Float const & distance
+				, sdw::Float const & minVariance
+				, sdw::Float const & varianceBias )const;
+			sdw::Float getShadowOffset( sdw::Vec3 const & normal
+				, sdw::Vec3 const & lightDirection
+				, sdw::Float const & minOffset
+				, sdw::Float const & maxSlopeOffset )const;
+			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
+				, sdw::Vec2 const & offset
+				, sdw::SampledImage2DRg32 const & shadowMap
+				, sdw::Float const & bias )const;
+			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
+				, sdw::Vec2 const & offset
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
+				, sdw::Int const & index
+				, sdw::Float const & bias )const;
+			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
+				, sdw::SampledImage2DRg32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::Float const & bias )const;
+			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
+				, sdw::Int const & index
+				, sdw::Vec2 const & invTexDim
+				, sdw::Float const & bias )const;
+			sdw::Float textureProjCascade( sdw::Vec4 const & lightSpacePosition
+				, sdw::Vec2 const & offset
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
+				, sdw::UInt const & cascadeIndex
+				, sdw::Float const & bias )const;
+			sdw::Float filterPCFCascade( sdw::Vec4 const & lightSpacePosition
+				, sdw::SampledImage2DArrayRg32 const & shadowMap
+				, sdw::Vec2 const & invTexDim
+				, sdw::UInt const & cascadeIndex
+				, sdw::Float const & bias )const;
 
 		private:
 			void doDeclareGetRandom();
@@ -133,6 +170,8 @@ namespace castor3d
 			void doDeclareChebyshevUpperBound();
 			void doDeclareTextureProj();
 			void doDeclareFilterPCF();
+			void doDeclareTextureOneProj();
+			void doDeclareFilterOnePCF();
 			void doDeclareTextureProjCascade();
 			void doDeclareFilterPCFCascade();
 			void doDeclareGetLightSpacePosition();
@@ -146,101 +185,134 @@ namespace castor3d
 			void doDeclareOneVolumetric( ShadowType type );
 
 		private:
-			glsl::GlslWriter & m_writer;
-			glsl::Function< glsl::Float
-				, glsl::InVec4 > m_getRandom;
-			glsl::Function< glsl::Float
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InFloat > m_getShadowOffset;
-			glsl::Function< glsl::Float
-				, glsl::InVec4
-				, glsl::InVec2
-				, glsl::InSampler2D
-				, glsl::InFloat > m_textureProj;
-			glsl::Function< glsl::Float
-				, glsl::InVec4
-				, glsl::InSampler2D
-				, glsl::InFloat > m_filterPCF;
-			glsl::Function < glsl::Float
-				, glsl::InVec2
-				, glsl::InFloat
-				, glsl::InFloat
-				, glsl::InFloat > m_chebyshevUpperBound;
-			glsl::Function< glsl::Float
-				, glsl::InVec4
-				, glsl::InVec2
-				, glsl::InSampler2DArray
-				, glsl::InUInt
-				, glsl::InFloat > m_textureProjCascade;
-			glsl::Function< glsl::Float
-				, glsl::InVec4
-				, glsl::InSampler2DArray
-				, glsl::InUInt
-				, glsl::InFloat > m_filterPCFCascade;
-			glsl::Function< glsl::Vec4
-				, glsl::InMat4
-				, glsl::InVec3 > m_getLightSpacePosition;
-			glsl::Function< glsl::Float
-				, glsl::InInt
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InUInt
-				, glsl::InVec3 > m_computeDirectional;
-			glsl::Function< glsl::Float
-				, glsl::InInt
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InInt > m_computeSpot;
-			glsl::Function< glsl::Float
-				, glsl::InInt
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat
-				, glsl::InInt > m_computePoint;
-			glsl::Function< glsl::Void
-				, glsl::InInt
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InUInt
-				, glsl::InVec3
-				, glsl::InVec2
-				, glsl::InUInt
-				, glsl::InFloat
+			sdw::ShaderWriter & m_writer;
+			bool m_isZeroToOneDepth;
+			sdw::Function< sdw::Float
+				, sdw::InVec4 > m_getRandom;
+			sdw::Function< sdw::Float
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InFloat > m_getShadowOffset;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InInt
+				, sdw::InFloat > m_textureProj;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InFloat > m_filterPCF;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DRg32
+				, sdw::InFloat > m_textureOneProj;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DRg32
+				, sdw::InVec2
+				, sdw::InFloat > m_filterOnePCF;
+			sdw::Function < sdw::Float
+				, sdw::InVec2
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::InFloat > m_chebyshevUpperBound;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InUInt
+				, sdw::InFloat > m_textureProjCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InVec2
+				, sdw::InUInt
+				, sdw::InFloat > m_filterPCFCascade;
+			sdw::Function< sdw::Vec4
+				, sdw::InMat4
+				, sdw::InVec3 > m_getLightSpacePosition;
+			sdw::Function< sdw::Float
+				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InUInt
+				, sdw::InVec3 > m_computeDirectional;
+			sdw::Function< sdw::Float
+				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InInt > m_computeSpot;
+			sdw::Function< sdw::Float
+				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat
+				, sdw::InInt > m_computePoint;
+			sdw::Function< sdw::Void
+				, sdw::InInt
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InVec2
+				, sdw::InUInt
+				, sdw::InFloat
 				, OutputComponents & > m_computeVolumetric;
-			glsl::Function< glsl::Float
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InUInt
-				, glsl::InVec3 > m_computeOneDirectional;
-			glsl::Function< glsl::Float
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3 > m_computeOneSpot;
-			glsl::Function< glsl::Float
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InFloat > m_computeOnePoint;
-			glsl::Function< glsl::Void
-				, glsl::InVec3
-				, glsl::InVec3
-				, glsl::InMat4
-				, glsl::InVec3
-				, glsl::InUInt
-				, glsl::InVec3
-				, glsl::InVec2
-				, glsl::InUInt
-				, glsl::InFloat
+			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InUInt
+				, sdw::InVec3 > m_computeOneDirectional;
+			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeOneSpot;
+			sdw::Function< sdw::Float
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InFloat > m_computeOnePoint;
+			sdw::Function< sdw::Void
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InMat4
+				, sdw::InVec3
+				, sdw::InUInt
+				, sdw::InVec3
+				, sdw::InVec2
+				, sdw::InUInt
+				, sdw::InFloat
 				, OutputComponents & > m_computeOneVolumetric;
 		};
 	}

@@ -182,7 +182,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de la texture.
 		 */
-		C3D_API renderer::Buffer< castor::Point4f > const & getBuffer()const
+		C3D_API ashes::Buffer< castor::Point4f > const & getBuffer()const
 		{
 			return *m_textureBuffer;
 		}
@@ -192,7 +192,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La vue de la texture.
 		 */
-		C3D_API renderer::BufferView const & getView()const
+		C3D_API ashes::BufferView const & getView()const
 		{
 			return *m_textureView;
 		}
@@ -227,17 +227,18 @@ namespace castor3d
 
 	private:
 		void onLightChanged( Light & light );
+		bool doCheckUniqueDirectionalLight( LightType toAdd );
 
 	private:
 		LightsMap m_typeSortedLights;
 		mutable castor::Point4fArray m_lightsBuffer;
-		renderer::BufferPtr< castor::Point4f > m_textureBuffer;
-		renderer::BufferViewPtr m_textureView;
+		ashes::BufferPtr< castor::Point4f > m_textureBuffer;
+		ashes::BufferViewPtr m_textureView;
 		LightsRefArray m_dirtyLights;
 		std::map< Light *, OnLightChangedConnection > m_connections;
 	};
 	using LightCache = ObjectCache< Light, castor::String >;
-	DECLARE_SMART_PTR( LightCache );
+	CU_DeclareSmartPtr( LightCache );
 }
 
 #endif

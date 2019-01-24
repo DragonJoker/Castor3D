@@ -36,9 +36,7 @@ namespace castor
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * rhs )
 		: Matrix{ noInit }
 	{
-		static uint64_t constexpr count = Rows * Columns;
-
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			m_data[i] = T( rhs[i] );
 		}
@@ -62,9 +60,7 @@ namespace castor
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & rhs )
 		: Matrix( noInit )
 	{
-		static uint64_t constexpr count = Rows * Columns;
-
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			m_data[i] = T( rhs.m_data[i] );
 		}
@@ -76,10 +72,16 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline void Matrix< T, Columns, Rows >::initialise()
+	{
+		std::memset( m_data.data(), 0, size );
+	}
+
+	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::initialise( T const & value )
 	{
-		static uint64_t constexpr count = MinValue< Columns, Rows >::value;
-		std::memset( m_data.data(), 0, size );
+		static size_t constexpr count = MinValue< Columns, Rows >::value;
+		initialise();
 		T * buffer = m_data.data();
 
 		for ( int i = 0; i < count; i++ )
@@ -124,7 +126,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::getRow( uint32_t index, Point< T, Columns > & result )const
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
@@ -135,7 +137,7 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::setColumn( uint32_t index, T const * col )
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 
 		if ( Rows >= 1 && index < Columns )
 		{
@@ -164,28 +166,28 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > const & Matrix< T, Columns, Rows >::getColumn( uint32_t index )const
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 		return m_columns[index];
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > & Matrix< T, Columns, Rows >::getColumn( uint32_t index )
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 		return m_columns[index];
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::getColumn( uint32_t index, Point< T, Rows > & result )const
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 		result = m_columns[index];
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::getColumn( uint32_t index, Coords< T, Rows > & result )
 	{
-		REQUIRE( index < Columns );
+		CU_Require( index < Columns );
 		result = m_columns[index];
 	}
 
@@ -307,7 +309,7 @@ namespace castor
 	{
 		T * mine = m_data.data();
 
-		for ( uint64_t i = 0; i < count; i++ )
+		for ( size_t i = 0; i < count; i++ )
 		{
 			*mine++ = T( *rhs++ );
 		}
@@ -400,14 +402,14 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > const & Matrix< T, Columns, Rows >::operator[]( uint32_t i )const
 	{
-		REQUIRE( i < Columns );
+		CU_Require( i < Columns );
 		return m_columns[i];
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > & Matrix< T, Columns, Rows >::operator[]( uint32_t i )
 	{
-		REQUIRE( i < Columns );
+		CU_Require( i < Columns );
 		return m_columns[i];
 	}
 

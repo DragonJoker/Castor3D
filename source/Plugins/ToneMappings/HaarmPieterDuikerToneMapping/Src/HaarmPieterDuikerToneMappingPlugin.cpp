@@ -9,7 +9,7 @@
 
 using namespace HaarmPieterDuiker;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_HaarmPieterDuikerToneMapping_API
 #else
 #	ifdef HaarmPieterDuikerToneMapping_EXPORTS

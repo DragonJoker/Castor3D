@@ -7,6 +7,7 @@
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderPassTimer.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -18,176 +19,186 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/SubpassDependency.hpp>
 #include <RenderPass/SubpassDescription.hpp>
-#include <Shader/ShaderProgram.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 namespace light_streaks
 {
 	namespace
 	{
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = writer.paren( position + 1.0 ) / 2.0;
-				out.gl_Position() = writer.rendererScalePosition( vec4( position.xy(), 0.0, 1.0 ) );
-			} );
-			return writer.finalise();
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareNegateVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getHiPassProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getHiPassProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				pxl_fragColor = vec4( texture( c3d_mapDiffuse, writer.adjustTexCoords( vtx_texture ), 0.0f ).xyz(), 1.0 );
-				auto maxComponent = writer.declLocale( cuT( "maxComponent" ), glsl::max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-				maxComponent = glsl::max( maxComponent, pxl_fragColor.b() );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0 );
+					auto maxComponent = writer.declLocale( "maxComponent"
+						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
+					maxComponent = max( maxComponent, pxl_fragColor.b() );
 
-				IF( writer, maxComponent > 1.0_f )
-				{
-					pxl_fragColor.xyz() /= maxComponent;
-				}
-				ELSE
-				{
-					pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
-				}
-				FI;
-			} );
-			return writer.finalise();
+					IF( writer, maxComponent > 1.0_f )
+					{
+						pxl_fragColor.xyz() /= maxComponent;
+					}
+					ELSE
+					{
+						pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+					}
+					FI;
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getKawaseProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getKawaseProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			UBO_KAWASE( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, vec3( 0.0_f ) );
-				auto b = writer.declLocale( cuT( "b" )
-					, pow( writer.cast< Float >( c3d_samples ), writer.cast< Float >( c3d_pass ) ) );
-				auto texcoords = writer.declLocale( cuT( "texcoords" )
-					, vtx_texture );
-
-				if ( getCurrentDevice( *renderSystem ).getClipDirection() != renderer::ClipDirection::eTopDown )
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
-				}
+					auto colour = writer.declLocale( "colour"
+						, vec3( 0.0_f ) );
+					auto b = writer.declLocale( "b"
+						, pow( writer.cast< Float >( c3d_samples ), writer.cast< Float >( c3d_pass ) ) );
+					auto texcoords = writer.declLocale( "texcoords"
+						, vtx_texture );
 
-				FOR( writer, Int, s, 0, "s < c3d_samples", "s++" )
-				{
-					// Weight = a^(b*s)
-					auto weight = writer.declLocale( cuT( "weight" )
-						, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
-					// Streak direction is a 2D vector in image space
-					auto sampleCoord = writer.declLocale( cuT( "sampleCoord" )
-						, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
-					// Scale and accumulate
-					colour += texture( c3d_mapDiffuse, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
-				}
-				ROF;
+					if ( getCurrentDevice( *renderSystem ).getClipDirection() != ashes::ClipDirection::eTopDown )
+					{
+						texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
+					}
 
-				pxl_fragColor = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
-			} );
-			return writer.finalise();
+					FOR( writer, Int, s, 0, s < c3d_samples, ++s )
+					{
+						// Weight = a^(b*s)
+						auto weight = writer.declLocale( "weight"
+							, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
+						// Streak direction is a 2D vector in image space
+						auto sampleCoord = writer.declLocale( "sampleCoord"
+							, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
+						// Scale and accumulate
+						colour += texture( c3d_mapDiffuse, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
+					}
+					ROF;
+
+					pxl_fragColor = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getCombineProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getCombineProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
 			auto index = castor3d::MinBufferIndex;
-			auto c3d_mapScene = writer.declSampler< Sampler2D >( PostEffect::CombineMapScene, 0u, 0u );
-			auto c3d_mapKawase1 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase1, 1u, 0u );
-			auto c3d_mapKawase2 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase2, 2u, 0u );
-			auto c3d_mapKawase3 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase3, 3u, 0u );
-			auto c3d_mapKawase4 = writer.declSampler< Sampler2D >( PostEffect::CombineMapKawase4, 4u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapScene = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapScene, 0u, 0u );
+			auto c3d_mapKawase1 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase1, 1u, 0u );
+			auto c3d_mapKawase2 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase2, 2u, 0u );
+			auto c3d_mapKawase3 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase3, 3u, 0u );
+			auto c3d_mapKawase4 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase4, 4u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 			{
-				auto texcoordsKawase = writer.declLocale( cuT( "texcoordsKawase" )
-					, writer.adjustTexCoords( vtx_texture ) );
-				pxl_fragColor = texture( c3d_mapScene, vec2( texcoordsKawase.x(), 1.0 - texcoordsKawase.y() ) );
+				auto texcoordsKawase = writer.declLocale( "texcoordsKawase"
+					, vtx_texture );
+				pxl_fragColor = texture( c3d_mapScene, utils.bottomUpToTopDown( texcoordsKawase ) );
 				pxl_fragColor += texture( c3d_mapKawase1, texcoordsKawase );
 				pxl_fragColor += texture( c3d_mapKawase2, texcoordsKawase );
 				pxl_fragColor += texture( c3d_mapKawase3, texcoordsKawase );
 				pxl_fragColor += texture( c3d_mapKawase4, texcoordsKawase );
 			} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
 	//*********************************************************************************************
 
 	PostEffect::Surface::Surface( castor3d::RenderSystem & renderSystem
-		, renderer::Format format
-		, renderer::Extent2D const & size
-		, renderer::RenderPass const & renderPass )
+		, ashes::Format format
+		, ashes::Extent2D const & size
+		, ashes::RenderPass const & renderPass )
 	{
-		renderer::ImageCreateInfo imageCreateInfo{};
+		ashes::ImageCreateInfo imageCreateInfo{};
 		imageCreateInfo.flags = 0u;
 		imageCreateInfo.arrayLayers = 1u;
 		imageCreateInfo.extent.width = size.width;
 		imageCreateInfo.extent.height = size.height;
 		imageCreateInfo.extent.depth = 1u;
 		imageCreateInfo.format = format;
-		imageCreateInfo.imageType = renderer::TextureType::e2D;
-		imageCreateInfo.initialLayout = renderer::ImageLayout::eUndefined;
+		imageCreateInfo.imageType = ashes::TextureType::e2D;
+		imageCreateInfo.initialLayout = ashes::ImageLayout::eUndefined;
 		imageCreateInfo.mipLevels = 1u;
-		imageCreateInfo.samples = renderer::SampleCountFlag::e1;
-		imageCreateInfo.sharingMode = renderer::SharingMode::eExclusive;
-		imageCreateInfo.tiling = renderer::ImageTiling::eOptimal;
-		imageCreateInfo.usage = renderer::ImageUsageFlag::eColourAttachment
-			| renderer::ImageUsageFlag::eSampled
-			| renderer::ImageUsageFlag::eTransferDst
-			| renderer::ImageUsageFlag::eTransferSrc;
+		imageCreateInfo.samples = ashes::SampleCountFlag::e1;
+		imageCreateInfo.sharingMode = ashes::SharingMode::eExclusive;
+		imageCreateInfo.tiling = ashes::ImageTiling::eOptimal;
+		imageCreateInfo.usage = ashes::ImageUsageFlag::eColourAttachment
+			| ashes::ImageUsageFlag::eSampled
+			| ashes::ImageUsageFlag::eTransferDst
+			| ashes::ImageUsageFlag::eTransferSrc;
 		image = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, imageCreateInfo
-			, renderer::MemoryPropertyFlag::eDeviceLocal );
+			, ashes::MemoryPropertyFlag::eDeviceLocal );
 		image->initialise();
 
-		renderer::FrameBufferAttachmentArray attachments{ { *renderPass.getAttachments().begin(), image->getDefaultView() } };
+		ashes::FrameBufferAttachmentArray attachments{ { *renderPass.getAttachments().begin(), image->getDefaultView() } };
 		frameBuffer = renderPass.createFrameBuffer( size, std::move( attachments ) );
 	}
 
@@ -210,6 +221,21 @@ namespace light_streaks
 			, renderSystem
 			, params )
 		, m_kawaseUbo{ *renderSystem.getEngine() }
+		, m_pipelines
+		{
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksHiPass" },
+			},
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksKawase" },
+			},
+			{
+				{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+				{ ashes::ShaderStageFlag::eFragment, "LightStreaksCombine" },
+			},
+		}
 	{
 		m_linearSampler = doCreateSampler( true );
 		m_nearestSampler = doCreateSampler( false );
@@ -233,35 +259,35 @@ namespace light_streaks
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "HiPass" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_pipelines.hiPass.vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_pipelines.hiPass.vertexShader.shader );
 		visitor.visit( cuT( "HiPass" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pipelines.hiPass.pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pipelines.hiPass.pixelShader.shader );
 
 		visitor.visit( cuT( "Kawase" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_pipelines.kawase.vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_pipelines.kawase.vertexShader.shader );
 		visitor.visit( cuT( "Kawase" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pipelines.kawase.pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pipelines.kawase.pixelShader.shader );
 		visitor.visit( cuT( "Kawase" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "Kawase" )
 			, cuT( "Attenuation" )
 			, m_kawaseUbo.getUbo().getData().attenuation );
 		visitor.visit( cuT( "Kawase" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "Kawase" )
 			, cuT( "Samples" )
 			, m_kawaseUbo.getUbo().getData().samples );
 
 		visitor.visit( cuT( "Combine" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_pipelines.combine.vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_pipelines.combine.vertexShader.shader );
 		visitor.visit( cuT( "Combine" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pipelines.combine.pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pipelines.combine.pixelShader.shader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -270,15 +296,15 @@ namespace light_streaks
 		m_linearSampler->initialise();
 		m_nearestSampler->initialise();
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create vertex buffer
-		m_vertexBuffer = renderer::makeVertexBuffer< castor3d::NonTexturedQuad >( device
+		m_vertexBuffer = ashes::makeVertexBuffer< castor3d::NonTexturedQuad >( device
 			, 1u
 			, 0u
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::MemoryPropertyFlag::eHostVisible );
 
-		if ( auto data = m_vertexBuffer->lock( 0u, 1u, renderer::MemoryMapFlag::eWrite ) )
+		if ( auto data = m_vertexBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
 		{
 			castor3d::NonTexturedQuad buffer
 			{
@@ -297,14 +323,14 @@ namespace light_streaks
 		}
 
 		// Create descriptor and pipeline layouts
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 		};
 
 		for ( uint32_t i = 0u; i < Count; ++i )
 		{
-			setLayoutBindings.emplace_back( i + 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( i + 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		}
 
 		m_pipelines.combine.layout.descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
@@ -313,7 +339,7 @@ namespace light_streaks
 
 		setLayoutBindings =
 		{
-			{ 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
+			{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
 		};
 		m_pipelines.hiPass.layout.descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_pipelines.hiPass.layout.pipelineLayout = device.createPipelineLayout( *m_pipelines.hiPass.layout.descriptorLayout );
@@ -321,48 +347,48 @@ namespace light_streaks
 
 		setLayoutBindings =
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment }
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
 		};
 		m_pipelines.kawase.layout.descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_pipelines.kawase.layout.pipelineLayout = device.createPipelineLayout( *m_pipelines.kawase.layout.descriptorLayout );
 		m_pipelines.kawase.layout.descriptorPool = m_pipelines.kawase.layout.descriptorLayout->createPool( Count * 3u );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 		size.width >>= 2;
@@ -427,7 +453,21 @@ namespace light_streaks
 		m_kawaseUbo.cleanup();
 		m_vertexBuffer.reset();
 
-		Pipeline dummy1, dummy2, dummy3;
+		Pipeline dummy1
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksCombine" },
+		};
+		Pipeline dummy2
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksKawase" },
+		};
+		Pipeline dummy3
+		{
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+			{ ashes::ShaderStageFlag::eVertex, "LightStreaksHiPass" },
+		};
 		std::swap( m_pipelines.combine, dummy1 );
 		std::swap( m_pipelines.kawase, dummy2 );
 		std::swap( m_pipelines.hiPass, dummy3 );
@@ -446,17 +486,17 @@ namespace light_streaks
 	castor3d::SamplerSPtr PostEffect::doCreateSampler( bool p_linear )
 	{
 		castor::String name = cuT( "KawaseSampler_" );
-		renderer::Filter mode;
+		ashes::Filter mode;
 
 		if ( p_linear )
 		{
 			name += cuT( "Linear" );
-			mode = renderer::Filter::eLinear;
+			mode = ashes::Filter::eLinear;
 		}
 		else
 		{
 			name += cuT( "Nearest" );
-			mode = renderer::Filter::eNearest;
+			mode = ashes::Filter::eNearest;
 		}
 
 		castor3d::SamplerSPtr sampler;
@@ -466,9 +506,9 @@ namespace light_streaks
 			sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
 			sampler->setMinFilter( mode );
 			sampler->setMagFilter( mode );
-			sampler->setWrapS( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapT( renderer::WrapMode::eClampToEdge );
-			sampler->setWrapR( renderer::WrapMode::eClampToEdge );
+			sampler->setWrapS( ashes::WrapMode::eClampToEdge );
+			sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+			sampler->setWrapR( ashes::WrapMode::eClampToEdge );
 		}
 		else
 		{
@@ -480,33 +520,34 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseHiPassProgram()
 	{
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.hiPass.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.hiPass.pixelShader = getHiPassProgram( getRenderSystem() );
+		m_pipelines.hiPass.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.hiPass.pixelShader.shader = getHiPassProgram( getRenderSystem() );
 
 		// Create pipeline
-		renderer::VertexInputState inputState;
-		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), renderer::VertexInputRate::eVertex } );
-		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32_SFLOAT, 0u } );
+		ashes::VertexInputState inputState;
+		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), ashes::VertexInputRate::eVertex } );
+		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32_SFLOAT, 0u } );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_pipelines.hiPass.vertexShader.getSource() );
-		stages[1].module->loadShader( m_pipelines.hiPass.pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.hiPass.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.hiPass.pixelShader ) );
 
-		renderer::GraphicsPipelineCreateInfo pipeline
+		ashes::GraphicsPipelineCreateInfo pipeline
 		{
 			stages,
 			*m_renderPass,
 			inputState,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
-			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, false, false }
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{},
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
+			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.hiPass.pipeline = m_pipelines.hiPass.layout.pipelineLayout->createPipeline( pipeline );
 
@@ -518,7 +559,7 @@ namespace light_streaks
 			descriptorSet.createBinding( m_pipelines.hiPass.layout.descriptorLayout->getBinding( 0u )
 				, m_target->getDefaultView()
 				, m_linearSampler->getSampler()
-				, renderer::ImageLayout::eShaderReadOnlyOptimal );
+				, ashes::ImageLayout::eShaderReadOnlyOptimal );
 			descriptorSet.update();
 		}
 
@@ -527,33 +568,34 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseKawaseProgram()
 	{
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.kawase.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.kawase.pixelShader = getKawaseProgram( getRenderSystem() );
+		m_pipelines.kawase.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.kawase.pixelShader.shader = getKawaseProgram( getRenderSystem() );
 
 		// Create pipeline
-		renderer::VertexInputState inputState;
-		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), renderer::VertexInputRate::eVertex } );
-		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32_SFLOAT, 0u } );
+		ashes::VertexInputState inputState;
+		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), ashes::VertexInputRate::eVertex } );
+		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32_SFLOAT, 0u } );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_pipelines.kawase.vertexShader.getSource() );
-		stages[1].module->loadShader( m_pipelines.kawase.pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.kawase.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.kawase.pixelShader ) );
 
-		renderer::GraphicsPipelineCreateInfo pipeline
+		ashes::GraphicsPipelineCreateInfo pipeline
 		{
 			stages,
 			*m_renderPass,
 			inputState,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
-			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, false, false }
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{},
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
+			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.kawase.pipeline = m_pipelines.kawase.layout.pipelineLayout->createPipeline( pipeline );
 		uint32_t index = 0u;
@@ -574,7 +616,7 @@ namespace light_streaks
 				descriptorSet.createBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 1u )
 					, source->image->getDefaultView()
 					, m_linearSampler->getSampler()
-					, renderer::ImageLayout::eShaderReadOnlyOptimal );
+					, ashes::ImageLayout::eShaderReadOnlyOptimal );
 				descriptorSet.update();
 				std::swap( source, destination );
 				++index;
@@ -586,33 +628,34 @@ namespace light_streaks
 
 	bool PostEffect::doInitialiseCombineProgram()
 	{
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		m_pipelines.combine.vertexShader = getVertexProgram( getRenderSystem() );
-		m_pipelines.combine.pixelShader = getCombineProgram( getRenderSystem() );
+		m_pipelines.combine.vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pipelines.combine.pixelShader.shader = getCombineProgram( getRenderSystem() );
 
 		// Create pipeline
-		renderer::VertexInputState inputState;
-		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), renderer::VertexInputRate::eVertex } );
-		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, renderer::Format::eR32G32_SFLOAT, 0u } );
+		ashes::VertexInputState inputState;
+		inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), ashes::VertexInputRate::eVertex } );
+		inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32_SFLOAT, 0u } );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_pipelines.combine.vertexShader.getSource() );
-		stages[1].module->loadShader( m_pipelines.combine.pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_pipelines.combine.vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pipelines.combine.pixelShader ) );
 
-		renderer::GraphicsPipelineCreateInfo pipeline
+		ashes::GraphicsPipelineCreateInfo pipeline
 		{
 			stages,
 			*m_renderPass,
 			inputState,
-			renderer::InputAssemblyState{ renderer::PrimitiveTopology::eTriangleList },
-			renderer::RasterisationState{},
-			renderer::MultisampleState{},
-			renderer::ColourBlendState::createDefault(),
-			{ renderer::DynamicState::eViewport, renderer::DynamicState::eScissor },
-			renderer::DepthStencilState{ 0u, false, false }
+			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
+			ashes::RasterisationState{},
+			ashes::MultisampleState{},
+			ashes::ColourBlendState::createDefault(),
+			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.combine.pipeline = m_pipelines.combine.layout.pipelineLayout->createPipeline( pipeline );
 
@@ -629,14 +672,14 @@ namespace light_streaks
 		descriptorSet.createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 0u )
 			, m_target->getDefaultView()
 			, m_linearSampler->getSampler()
-			, renderer::ImageLayout::eShaderReadOnlyOptimal );
+			, ashes::ImageLayout::eShaderReadOnlyOptimal );
 
 		for ( uint32_t i = 0u; i < Count; ++i )
 		{
 			descriptorSet.createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( i + 1u )
 				, m_pipelines.kawase.surfaces[i].image->getDefaultView()
 				, m_linearSampler->getSampler()
-				, renderer::ImageLayout::eShaderReadOnlyOptimal );
+				, ashes::ImageLayout::eShaderReadOnlyOptimal );
 		}
 
 		descriptorSet.update();
@@ -647,16 +690,16 @@ namespace light_streaks
 	bool PostEffect::doBuildCommandBuffer( castor3d::RenderPassTimer const & timer )
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Fill command buffer.
-		static renderer::ClearValueArray const clearValues[Count + 1]
+		static ashes::ClearValueArray const clearValues[Count + 1]
 		{
-			{ renderer::ClearColorValue{ 1.0, 0.0, 0.0, 1.0 } },
-			{ renderer::ClearColorValue{ 0.0, 1.0, 0.0, 1.0 } },
-			{ renderer::ClearColorValue{ 0.0, 0.0, 1.0, 1.0 } },
-			{ renderer::ClearColorValue{ 1.0, 1.0, 0.0, 1.0 } },
-			{ renderer::ClearColorValue{ 0.0, 1.0, 1.0, 1.0 } },
+			{ ashes::ClearColorValue{ 1.0, 0.0, 0.0, 1.0 } },
+			{ ashes::ClearColorValue{ 0.0, 1.0, 0.0, 1.0 } },
+			{ ashes::ClearColorValue{ 0.0, 0.0, 1.0, 1.0 } },
+			{ ashes::ClearColorValue{ 1.0, 1.0, 0.0, 1.0 } },
+			{ ashes::ClearColorValue{ 0.0, 1.0, 1.0, 1.0 } },
 		};
 		auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
 		castor3d::CommandsSemaphore hiPassCommands
@@ -668,16 +711,16 @@ namespace light_streaks
 		hiPassCmd.begin();
 		timer.beginPass( hiPassCmd, 0u );
 		// Put target image in fragment shader input layout.
-		hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eColourAttachmentOptimal
-				, renderer::AccessFlag::eColourAttachmentWrite ) );
+		hiPassCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eColourAttachmentOptimal
+				, ashes::AccessFlag::eColourAttachmentWrite ) );
 
 		// Hi-pass.
 		hiPassCmd.beginRenderPass( *m_renderPass
 			, *hiPassSurface.frameBuffer
 			, clearValues[0]
-			, renderer::SubpassContents::eInline );
+			, ashes::SubpassContents::eInline );
 		hiPassCmd.setViewport( { hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight(), 0, 0, } );
 		hiPassCmd.setScissor( { 0, 0, hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } );
 		hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
@@ -687,9 +730,9 @@ namespace light_streaks
 		hiPassCmd.draw( 6u );
 		hiPassCmd.endRenderPass();
 		// Put source image in transfer source layout
-		hiPassCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-			, renderer::PipelineStageFlag::eTransfer
-			, hiPassSurface.image->getDefaultView().makeTransferSource( renderer::ImageLayout::eUndefined, 0u ) );
+		hiPassCmd.memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+			, ashes::PipelineStageFlag::eTransfer
+			, hiPassSurface.image->getDefaultView().makeTransferSource( ashes::ImageLayout::eUndefined, 0u ) );
 		timer.endPass( hiPassCmd, 0u );
 		hiPassCmd.end();
 		m_commands.emplace_back( std::move( hiPassCommands ) );
@@ -706,16 +749,16 @@ namespace light_streaks
 		for ( uint32_t i = 1u; i < Count; ++i )
 		{
 			// Put destination image in transfer destination layout
-			copyCmd.memoryBarrier( renderer::PipelineStageFlag::eFragmentShader
-				, renderer::PipelineStageFlag::eTransfer
-				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeTransferDestination( renderer::ImageLayout::eUndefined, 0u ) );
+			copyCmd.memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
+				, ashes::PipelineStageFlag::eTransfer
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeTransferDestination( ashes::ImageLayout::eUndefined, 0u ) );
 			copyCmd.copyImage( hiPassSurface.image->getDefaultView()
 				, m_pipelines.hiPass.surfaces[i].image->getDefaultView() );
 			// Put back destination image in shader input layout
-			copyCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eTransferDstOptimal
-					, renderer::AccessFlag::eTransferWrite ) );
+			copyCmd.memoryBarrier( ashes::PipelineStageFlag::eTransfer
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eTransferDstOptimal
+					, ashes::AccessFlag::eTransferWrite ) );
 		}
 
 		timer.endPass( copyCmd, 1u );
@@ -740,14 +783,14 @@ namespace light_streaks
 			for ( uint32_t j = 0u; j < 3u; ++j )
 			{
 				// Put source image in shader input layout
-				kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-					, renderer::PipelineStageFlag::eFragmentShader
-					, source->image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+				kawaseCmd.memoryBarrier( ashes::PipelineStageFlag::eTransfer
+					, ashes::PipelineStageFlag::eFragmentShader
+					, source->image->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 				kawaseCmd.beginRenderPass( *m_renderPass
 					, *destination->frameBuffer
 					, clearValues[i]
-					, renderer::SubpassContents::eInline );
+					, ashes::SubpassContents::eInline );
 				kawaseCmd.setViewport( { destination->image->getWidth(), destination->image->getHeight(), 0, 0, } );
 				kawaseCmd.setScissor( { 0, 0, destination->image->getWidth(), destination->image->getHeight() } );
 				kawaseCmd.bindPipeline( *m_pipelines.kawase.pipeline );
@@ -760,9 +803,9 @@ namespace light_streaks
 			}
 
 			// Put Kawase surface's general view in fragment shader input layout.
-			kawaseCmd.memoryBarrier( renderer::PipelineStageFlag::eTransfer
-				, renderer::PipelineStageFlag::eFragmentShader
-				, kawaseSurface.image->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			kawaseCmd.memoryBarrier( ashes::PipelineStageFlag::eTransfer
+				, ashes::PipelineStageFlag::eFragmentShader
+				, kawaseSurface.image->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 		}
 
 		timer.endPass( kawaseCmd, 2u );
@@ -782,7 +825,7 @@ namespace light_streaks
 		combineCmd.beginRenderPass( *m_renderPass
 			, *combineSurface.frameBuffer
 			, clearValues[Count]
-			, renderer::SubpassContents::eInline );
+			, ashes::SubpassContents::eInline );
 		combineCmd.setViewport( { size.width, size.height, 0, 0, } );
 		combineCmd.setScissor( { 0, 0, size.width, size.height } );
 		combineCmd.bindPipeline( *m_pipelines.combine.pipeline );

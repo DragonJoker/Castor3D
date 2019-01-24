@@ -4,7 +4,7 @@
 
 namespace castor
 {
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 	const xchar Path::Separator = cuT( '\\' );
 #else
 	const xchar Path::Separator = cuT( '/' );

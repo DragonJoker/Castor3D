@@ -368,14 +368,14 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	T const & Point< T, TCount >::at( uint32_t index )const
 	{
-		REQUIRE( index < TCount );
+		CU_Require( index < TCount );
 		return m_coords[index];
 	}
 
 	template< typename T, uint32_t TCount >
 	T & Point< T, TCount >::at( uint32_t index )
 	{
-		REQUIRE( index < TCount );
+		CU_Require( index < TCount );
 		return m_coords[index];
 	}
 

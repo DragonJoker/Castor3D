@@ -33,7 +33,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
+			CU_Exception( cuT( "No animation named " ) + name );
 		}
 
 		return *it->second;
@@ -45,7 +45,7 @@ namespace castor3d
 
 		if ( it == m_animations.end() )
 		{
-			CASTOR_EXCEPTION( cuT( "No animation named " ) + name );
+			CU_Exception( cuT( "No animation named " ) + name );
 		}
 
 		return *it->second;

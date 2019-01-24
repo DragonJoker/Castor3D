@@ -107,8 +107,8 @@ namespace castor3d
 		 *\param[out]	velocity	Reçoit le rendu des vélocités.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 */
-		C3D_API renderer::Semaphore const & render( castor::Point2r const & jitter
-			, renderer::SemaphoreCRefArray const & waitSemaphores
+		C3D_API ashes::Semaphore const & render( castor::Point2r const & jitter
+			, ashes::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -149,13 +149,13 @@ namespace castor3d
 
 		inline TextureLayout const & getResult()const
 		{
-			REQUIRE( m_colourTexture );
+			CU_Require( m_colourTexture );
 			return *m_colourTexture;
 		}
 
 		inline TextureLayout const & getDepth()const
 		{
-			REQUIRE( m_depthBuffer );
+			CU_Require( m_depthBuffer );
 			return *m_depthBuffer;
 		}
 
@@ -166,13 +166,13 @@ namespace castor3d
 
 		inline RenderTechniquePass const & getOpaquePass()const
 		{
-			REQUIRE( m_opaquePass );
+			CU_Require( m_opaquePass );
 			return *m_opaquePass;
 		}
 
 		inline RenderTechniquePass const & getTransparentPass()const
 		{
-			REQUIRE( m_transparentPass );
+			CU_Require( m_transparentPass );
 			return *m_transparentPass;
 		}
 
@@ -181,9 +181,9 @@ namespace castor3d
 			return m_allShadowMaps;
 		}
 
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_signalFinished );
+			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 
@@ -210,15 +210,15 @@ namespace castor3d
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
-		renderer::Semaphore const & doRenderShadowMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const & doRenderEnvironmentMaps( renderer::Semaphore const & semaphore );
-		renderer::Semaphore const & doRenderBackground( renderer::SemaphoreCRefArray const & semaphores );
-		renderer::Semaphore const & doRenderOpaque( castor::Point2r const & jitter
+		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
+		ashes::Semaphore const & doRenderOpaque( castor::Point2r const & jitter
 			, RenderInfo & info
-			, renderer::Semaphore const & semaphore );
-		renderer::Semaphore const & doRenderTransparent( castor::Point2r const & jitter
+			, ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderTransparent( castor::Point2r const & jitter
 			, RenderInfo & info
-			, renderer::Semaphore const & semaphore );
+			, ashes::Semaphore const & semaphore );
 
 	private:
 		bool m_initialised;
@@ -228,27 +228,27 @@ namespace castor3d
 		TextureLayoutSPtr m_colourTexture;
 		TextureLayoutSPtr m_depthBuffer;
 		MatrixUbo m_matrixUbo;
+		HdrConfigUbo m_hdrConfigUbo;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
-		HdrConfigUbo m_hdrConfigUbo;
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;
 		ShadowMapUPtr m_directionalShadowMap;
-		ShadowMapArray m_pointShadowMaps;
-		ShadowMapArray m_spotShadowMaps;
+		ShadowMapUPtr m_pointShadowMap;
+		ShadowMapUPtr m_spotShadowMap;
 		ShadowMapLightTypeArray m_allShadowMaps;
 		ShadowMapLightTypeArray m_activeShadowMaps;
-		renderer::SemaphorePtr m_signalFinished;
-		renderer::RenderPassPtr m_bgRenderPass;
-		renderer::FrameBufferPtr m_bgFrameBuffer;
-		renderer::CommandBufferPtr m_bgCommandBuffer;
-		renderer::CommandBufferPtr m_cbgCommandBuffer;
-		renderer::RenderPassPtr m_debugRenderPass;
-		renderer::FrameBufferPtr m_debugFrameBuffer;
-		renderer::StagingBufferPtr m_stagingBuffer;
-		renderer::CommandBufferPtr m_uploadCommandBuffer;
+		ashes::SemaphorePtr m_signalFinished;
+		ashes::RenderPassPtr m_bgRenderPass;
+		ashes::FrameBufferPtr m_bgFrameBuffer;
+		ashes::CommandBufferPtr m_bgCommandBuffer;
+		ashes::CommandBufferPtr m_cbgCommandBuffer;
+		ashes::RenderPassPtr m_debugRenderPass;
+		ashes::FrameBufferPtr m_debugFrameBuffer;
+		ashes::StagingBufferPtr m_stagingBuffer;
+		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;
 		OnBackgroundChangedConnection m_onCBgChanged;
 	};

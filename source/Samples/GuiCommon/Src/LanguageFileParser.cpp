@@ -98,13 +98,13 @@ namespace GuiCommon
 		return result;
 	}
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Root_Language )
+	CU_ImplementAttributeParser( Root_Language )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -113,15 +113,15 @@ namespace GuiCommon
 			context->currentLanguage->setName( name );
 		}
 	}
-	END_ATTRIBUTE_PUSH( LANGSection::eLanguage )
+	CU_EndAttributePush( LANGSection::eLanguage )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_Pattern )
+	CU_ImplementAttributeParser( Language_Pattern )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -145,19 +145,19 @@ namespace GuiCommon
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Must be followed by a list of file patterns : pattern *.glsl [*.frag ...]" ) );
+				CU_ParsingError( cuT( "Must be followed by a list of file patterns : pattern *.glsl [*.frag ...]" ) );
 			}
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_FoldFlags )
+	CU_ImplementAttributeParser( Language_FoldFlags )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -176,41 +176,41 @@ namespace GuiCommon
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Must be followed by a list of parameters : fold_flags <param1> <param2> ..." ) );
+				CU_ParsingError( cuT( "Must be followed by a list of parameters : fold_flags <param1> <param2> ..." ) );
 			}
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_Keywords )
+	CU_ImplementAttributeParser( Language_Keywords )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 		context->keywords.clear();
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			p_params[0]->get( context->index );
 		}
 	}
-	END_ATTRIBUTE_PUSH( LANGSection::eKeywords )
+	CU_EndAttributePush( LANGSection::eKeywords )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_Style )
+	CU_ImplementAttributeParser( Language_Style )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 	}
-	END_ATTRIBUTE_PUSH( LANGSection::eStyle )
+	CU_EndAttributePush( LANGSection::eStyle )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_FontName )
+	CU_ImplementAttributeParser( Language_FontName )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -219,15 +219,15 @@ namespace GuiCommon
 			context->currentLanguage->setFontName( name );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Language_FontSize )
+	CU_ImplementAttributeParser( Language_FontSize )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -236,15 +236,15 @@ namespace GuiCommon
 			context->currentLanguage->setFontSize( size );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Style_Type )
+	CU_ImplementAttributeParser( Style_Type )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -253,15 +253,15 @@ namespace GuiCommon
 			context->currentStyle = &context->currentLanguage->getStyle( type );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Style_FgColour )
+	CU_ImplementAttributeParser( Style_FgColour )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -270,15 +270,15 @@ namespace GuiCommon
 			context->currentStyle->foreground = wxColour( name );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Style_BgColour )
+	CU_ImplementAttributeParser( Style_BgColour )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 		if ( p_params.empty() )
 		{
-			PARSING_ERROR( cuT( "Missing parameter." ) );
+			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
@@ -287,9 +287,9 @@ namespace GuiCommon
 			context->currentStyle->background = wxColour( name );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Style_FontStyle )
+	CU_ImplementAttributeParser( Style_FontStyle )
 	{
 		String params;
 		p_params[0]->get( params );
@@ -324,15 +324,15 @@ namespace GuiCommon
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Must be followed by a list of parameters : font_style <param1> <param2> ..." ) );
+			CU_ParsingError( cuT( "Must be followed by a list of parameters : font_style <param1> <param2> ..." ) );
 		}
 	}
-	END_ATTRIBUTE()
+	CU_EndAttribute()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Keywords_End )
+	CU_ImplementAttributeParser( Keywords_End )
 	{
 		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
 		context->currentLanguage->setKeywords( context->index - 1, context->keywords );
 	}
-	END_ATTRIBUTE_POP()
+	CU_EndAttributePop()
 }

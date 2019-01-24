@@ -34,8 +34,8 @@ add_target(
 	lib
 	"Castor3D"
 	"${CastorBinLibraries}"
-	"GuiCommonPch.hpp"
-	"GuiCommonPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GuiCommonPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/GuiCommonPch.cpp
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )

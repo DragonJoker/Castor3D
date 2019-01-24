@@ -6,17 +6,18 @@
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Descriptor/DescriptorSet.hpp>
 #include <Descriptor/DescriptorSetLayout.hpp>
+#include <Shader/GlslToSpv.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 
 namespace castor3d
 {
@@ -31,6 +32,8 @@ namespace castor3d
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "ToneMapping" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "ToneMapping" }
 	{
 	}
 
@@ -40,43 +43,45 @@ namespace castor3d
 
 	bool ToneMapping::initialise( Size const & size
 		, TextureLayout const & source
-		, renderer::RenderPass const & renderPass )
+		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		m_signalFinished = getCurrentDevice( renderSystem ).createSemaphore();
 
 		{
-			auto writer = renderSystem.createGlslWriter();
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
 
 			// Shader outputs
 			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position.x(), position.y(), 0.0, 1.0 );
-			} );
+			writer.implementFunction< sdw::Void >( cuT( "main" )
+				, [&]()
+				{
+					vtx_texture = uv;
+					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+				} );
 
-			m_vertexShader = writer.finalise();
+			m_vertexShader.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_pixelShader = doCreate();
-		renderer::ShaderStageStateArray program
+		m_pixelShader.shader = doCreate();
+		auto & device = getCurrentDevice( renderSystem );
+		ashes::ShaderStageStateArray program
 		{
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-			{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 		};
-		program[0].module->loadShader( m_vertexShader.getSource() );
-		program[1].module->loadShader( m_pixelShader.getSource() );
-		renderer::DescriptorSetLayoutBindingArray bindings
+		program[0].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_vertexShader ) );
+		program[1].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_pixelShader ) );
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
 		};
 		createPipeline( { size[0], size[1] }
 			, Position{}
@@ -103,18 +108,18 @@ namespace castor3d
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, m_config );
 	}
 
-	void ToneMapping::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_hdrConfigUbo.getUbo()

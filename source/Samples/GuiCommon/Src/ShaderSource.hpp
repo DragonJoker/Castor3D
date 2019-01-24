@@ -299,7 +299,7 @@ namespace GuiCommon
 		UniformBufferValues & operator=( UniformBufferValues && ) = default;
 
 		wxString name;
-		renderer::ShaderStageFlags stages;
+		ashes::ShaderStageFlags stages;
 		std::vector< std::unique_ptr< UniformValueBase > > uniforms;
 	};
 
@@ -311,7 +311,7 @@ namespace GuiCommon
 		ShaderSource & operator=( ShaderSource && ) = default;
 
 		castor::String name;
-		std::map< renderer::ShaderStageFlag, castor::String > sources;
+		std::map< ashes::ShaderStageFlag, castor::String > sources;
 		std::vector< UniformBufferValues > ubos;
 	};
 

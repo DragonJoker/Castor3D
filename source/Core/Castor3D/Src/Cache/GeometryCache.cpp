@@ -220,7 +220,7 @@ namespace castor3d
 		, SceneNodeSPtr parent
 		, MeshSPtr mesh )
 	{
-		REQUIRE( mesh );
+		CU_Require( mesh );
 		auto result = MyObjectCache::add( name, parent, mesh );
 		doRegister( *result );
 		return result;
@@ -249,9 +249,9 @@ namespace castor3d
 			geometry,
 			submesh,
 			pass,
-			m_modelUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_modelMatrixUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
-			m_pickingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_modelUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_modelMatrixUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_pickingUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 

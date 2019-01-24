@@ -6,7 +6,7 @@
 using namespace castor;
 using namespace Phong;
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_Phong_API
 #else
 #	ifdef PhongDivider_EXPORTS

@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
 		 *\param[in]	index	L'indice de la source lumineuse.
 		 */
-		C3D_API void bind( castor::Point4f * buffer );
+		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material.
@@ -198,6 +198,11 @@ namespace castor3d
 		{
 			return m_shadowMap;
 		}
+
+		inline uint32_t getShadowMapIndex()const
+		{
+			return m_shadowMapIndex;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -263,6 +268,26 @@ namespace castor3d
 			m_category->setVolumetricScatteringFactor( value );
 		}
 
+		inline void setShadowMinOffset( float value )
+		{
+			m_category->setShadowMinOffset( value );
+		}
+
+		inline void setShadowMaxSlopeOffset( float value )
+		{
+			m_category->setShadowMaxSlopeOffset( value );
+		}
+
+		inline void setShadowMaxVariance( float value )
+		{
+			m_category->setShadowMaxVariance( value );
+		}
+
+		inline void setShadowVarianceBias( float value )
+		{
+			m_category->setShadowVarianceBias( value );
+		}
+
 		inline void setEnabled( bool value )
 		{
 			m_enabled = value;
@@ -288,9 +313,10 @@ namespace castor3d
 			m_shadowType = value;
 		}
 
-		inline void setShadowMap( ShadowMapRPtr value )
+		inline void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )
 		{
 			m_shadowMap = value;
+			m_shadowMapIndex = index;
 		}
 		/**@}*/
 
@@ -306,6 +332,7 @@ namespace castor3d
 		ShadowType m_shadowType{ ShadowType::eNone };
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
+		uint32_t m_shadowMapIndex{ 0u };
 	};
 }
 

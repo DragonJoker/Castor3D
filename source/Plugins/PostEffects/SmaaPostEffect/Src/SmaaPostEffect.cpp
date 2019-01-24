@@ -21,9 +21,10 @@
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <Pipeline/ColourBlendState.hpp>
 #include <Pipeline/RasterisationState.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
 
@@ -40,42 +41,41 @@ namespace smaa
 
 	namespace
 	{
-		glsl::Shader doGetCopyVertexShader( castor3d::RenderSystem & renderSystem )
+		castor3d::ShaderPtr doGetCopyVertexShader()
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					vtx_texture = uv;
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader doGetCopyPixelShader( castor3d::RenderSystem & renderSystem
-			, SmaaConfig const & config)
+		castor3d::ShaderPtr doGetCopyPixelShader( SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_map = writer.declSampler< Sampler2D >( cuT( "c3d_map" ), 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto c3d_map = writer.declSampledImage< FImg2DRgba32 >( "c3d_map", 0u, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					if ( config.data.mode == Mode::eT2X
@@ -89,53 +89,53 @@ namespace smaa
 						pxl_fragColour = texture( c3d_map, vtx_texture );
 					}
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( renderer::Device const & device
-			, renderer::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
+			, ashes::Format format )
 		{
-			renderer::RenderPassCreateInfo renderPass;
+			ashes::RenderPassCreateInfo renderPass;
 			renderPass.flags = 0u;
 
 			renderPass.attachments.resize( 1u );
 			renderPass.attachments[0].format = format;
-			renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-			renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+			renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eMemoryRead;
-			renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-			renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eMemoryRead;
+			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
+			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-			renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-			renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eMemoryRead;
-			renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eMemoryRead;
+			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
+			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( renderPass );
 		}
 
-		renderer::FrameBufferPtr doCreateFrameBuffer( renderer::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, castor3d::TextureLayout const & texture )
 		{
-			renderer::FrameBufferAttachmentArray attaches
+			ashes::FrameBufferAttachmentArray attaches
 			{
 				{ *renderPass.getAttachments().begin(), texture.getDefaultView() }
 			};
@@ -364,10 +364,10 @@ namespace smaa
 #endif
 
 		auto & device = getCurrentDevice( *this );
-		m_copyProgram.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		m_copyProgram.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		m_copyProgram[0].module->loadShader( doGetCopyVertexShader( *getRenderSystem() ).getSource() );
-		m_copyProgram[1].module->loadShader( doGetCopyPixelShader( *getRenderSystem(), m_config ).getSource() );
+		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		m_copyProgram[0].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eVertex, "SmaaCopy", doGetCopyVertexShader() } ) );
+		m_copyProgram[1].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eFragment, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
 		m_copyRenderPass = doCreateRenderPass( device, m_target->getPixelFormat() );
 		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
 
@@ -446,7 +446,7 @@ namespace smaa
 		}
 
 		auto & device = getCurrentDevice( m_renderTarget );
-		renderer::DescriptorSetLayoutBindingArray bindings;
+		ashes::DescriptorSetLayoutBindingArray bindings;
 		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), true );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
@@ -466,13 +466,13 @@ namespace smaa
 
 		copyCmd.begin();
 		timer.beginPass( copyCmd, passIndex );
-		copyCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_smaaResult->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		copyCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_smaaResult->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
-			, { renderer::ClearColorValue{} }
-			, renderer::SubpassContents::eInline );
+			, { ashes::ClearColorValue{} }
+			, ashes::SubpassContents::eInline );
 		copyQuad->registerFrame( copyCmd );
 		copyCmd.endRenderPass();
 		timer.endPass( copyCmd, passIndex );
@@ -565,9 +565,9 @@ namespace smaa
 		return result;
 	}
 
-	renderer::Texture const * PostEffect::doGetPredicationTexture()
+	ashes::Texture const * PostEffect::doGetPredicationTexture()
 	{
-		renderer::Texture const * predication = nullptr;
+		ashes::Texture const * predication = nullptr;
 
 		if ( m_config.data.enablePredication )
 		{
@@ -577,9 +577,9 @@ namespace smaa
 		return predication;
 	}
 
-	renderer::TextureView const * PostEffect::doGetVelocityView()
+	ashes::TextureView const * PostEffect::doGetVelocityView()
 	{
-		renderer::TextureView const * velocityView = nullptr;
+		ashes::TextureView const * velocityView = nullptr;
 
 		switch ( m_config.data.mode )
 		{

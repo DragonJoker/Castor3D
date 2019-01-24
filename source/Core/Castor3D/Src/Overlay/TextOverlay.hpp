@@ -36,7 +36,7 @@ namespace castor3d
 			castor::Point2f text;
 			castor::Point2f texture;
 		};
-		DECLARE_VECTOR( Vertex, Vertex );
+		CU_DeclareVector( Vertex, Vertex );
 		/*!
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
@@ -81,7 +81,7 @@ namespace castor3d
 		};
 
 	public:
-		DECLARE_MAP( char32_t, castor::Position, GlyphPosition );
+		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
 
 	public:
 		/**
@@ -421,7 +421,7 @@ namespace castor3d
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
 		using TextureCoordinates = std::array< float, 2 >;
-		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
+		CU_DeclareVector( TextureCoordinates, TextureCoords );
 		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */

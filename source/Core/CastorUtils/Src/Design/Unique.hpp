@@ -41,7 +41,7 @@ namespace castor
 			}
 			else
 			{
-				UNICITY_ERROR( UnicityError::eAnInstance, typeid( T ).name() );
+				CU_UnicityError( UnicityError::eAnInstance, typeid( T ).name() );
 			}
 		}
 		/**

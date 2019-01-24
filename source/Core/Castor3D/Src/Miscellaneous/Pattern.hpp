@@ -131,7 +131,7 @@ namespace castor3d
 		 */
 		TObjRef operator[]( uint32_t p_index )
 		{
-			REQUIRE( p_index < m_listElements.size() );
+			CU_Require( p_index < m_listElements.size() );
 			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -153,7 +153,7 @@ namespace castor3d
 		 */
 		TObjConstRef operator[]( uint32_t p_index )const
 		{
-			REQUIRE( p_index < m_listElements.size() );
+			CU_Require( p_index < m_listElements.size() );
 			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -175,7 +175,7 @@ namespace castor3d
 		 */
 		TObjRef getElement( uint32_t p_index )
 		{
-			REQUIRE( p_index < m_listElements.size() );
+			CU_Require( p_index < m_listElements.size() );
 			typename TObjList::iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -197,7 +197,7 @@ namespace castor3d
 		 */
 		TObjConstRef getElement( uint32_t p_index )const
 		{
-			REQUIRE( p_index < m_listElements.size() );
+			CU_Require( p_index < m_listElements.size() );
 			typename TObjList::const_iterator it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )

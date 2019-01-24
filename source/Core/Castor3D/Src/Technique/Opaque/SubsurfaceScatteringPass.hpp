@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Command/CommandBuffer.hpp>
 #include <Sync/Semaphore.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/OwnedBy.hpp>
 
@@ -78,7 +78,7 @@ namespace castor3d
 		 *\brief		Dessine le subsurfaces scattering.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\~english
 		 *\brief		Dumps the results on the screen.
@@ -137,27 +137,27 @@ namespace castor3d
 				, castor::Size const & size
 				, GpInfoUbo & gpInfoUbo
 				, SceneUbo & sceneUbo
-				, renderer::UniformBuffer< BlurConfiguration > const & blurUbo
+				, ashes::UniformBuffer< BlurConfiguration > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, TextureUnit const & destination
 				, bool isVertic
-				, renderer::ShaderStageStateArray const & shaderStages );
+				, ashes::ShaderStageStateArray const & shaderStages );
 			Blur( Blur && rhs );
-			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
+			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
-			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-				, renderer::DescriptorSet & descriptorSet )override;
+			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet )override;
 
 		private:
 			RenderSystem & m_renderSystem;
 			GeometryPassResult const & m_geometryBufferResult;
 			GpInfoUbo & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
-			renderer::UniformBuffer< BlurConfiguration > const & m_blurUbo;
-			renderer::RenderPassPtr m_renderPass;
-			renderer::FrameBufferPtr m_frameBuffer;
+			ashes::UniformBuffer< BlurConfiguration > const & m_blurUbo;
+			ashes::RenderPassPtr m_renderPass;
+			ashes::FrameBufferPtr m_frameBuffer;
 		};
 
 		class Combine
@@ -166,51 +166,51 @@ namespace castor3d
 		public:
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
-				, renderer::UniformBuffer< BlurWeights > const & blurUbo
+				, ashes::UniformBuffer< BlurWeights > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination
-				, renderer::ShaderStageStateArray const & shaderStages );
+				, ashes::ShaderStageStateArray const & shaderStages );
 			Combine( Combine && rhs );
-			void prepareFrame( renderer::CommandBuffer & commandBuffer )const;
+			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
-			void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-				, renderer::DescriptorSet & descriptorSet )override;
+			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet )override;
 
 		private:
 			RenderSystem & m_renderSystem;
-			renderer::UniformBuffer< BlurWeights > const & m_blurUbo;
+			ashes::UniformBuffer< BlurWeights > const & m_blurUbo;
 			GeometryPassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			std::array< TextureUnit, 3u > const & m_blurResults;
-			renderer::RenderPassPtr m_renderPass;
-			renderer::FrameBufferPtr m_frameBuffer;
+			ashes::RenderPassPtr m_renderPass;
+			ashes::FrameBufferPtr m_frameBuffer;
 		};
 
 	private:
 		castor::Size m_size;
-		renderer::UniformBufferPtr< BlurConfiguration > m_blurConfigUbo;
-		renderer::UniformBufferPtr< BlurWeights > m_blurWeightsUbo;
+		ashes::UniformBufferPtr< BlurConfiguration > m_blurConfigUbo;
+		ashes::UniformBufferPtr< BlurWeights > m_blurWeightsUbo;
 		TextureUnit m_intermediate;
 		std::array< TextureUnit, 3u > m_blurResults;
 		TextureUnit m_result;
-		glsl::Shader m_blurHorizVertexShader;
-		glsl::Shader m_blurHorizPixelShader;
-		renderer::ShaderStageStateArray m_blurHorizProgram;
+		ShaderModule m_blurHorizVertexShader;
+		ShaderModule m_blurHorizPixelShader;
+		ashes::ShaderStageStateArray m_blurHorizProgram;
 		Blur m_blurX[3];
-		glsl::Shader m_blurVerticVertexShader;
-		glsl::Shader m_blurVerticPixelShader;
-		renderer::ShaderStageStateArray m_blurVerticProgram;
+		ShaderModule m_blurVerticVertexShader;
+		ShaderModule m_blurVerticPixelShader;
+		ashes::ShaderStageStateArray m_blurVerticProgram;
 		Blur m_blurY[3];
-		glsl::Shader m_combineVertexShader;
-		glsl::Shader m_combinePixelShader;
-		renderer::ShaderStageStateArray m_combineProgram;
+		ShaderModule m_combineVertexShader;
+		ShaderModule m_combinePixelShader;
+		ashes::ShaderStageStateArray m_combineProgram;
 		Combine m_combine;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
-		renderer::FencePtr m_fence;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
+		ashes::FencePtr m_fence;
 		RenderPassTimerSPtr m_timer;
 	};
 }

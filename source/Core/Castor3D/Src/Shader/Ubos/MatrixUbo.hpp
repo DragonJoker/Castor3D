@@ -108,8 +108,8 @@ namespace castor3d
 		C3D_API void update( castor::Matrix4x4r const & view
 			, castor::Matrix4x4r const & projection
 			, castor::Point2r const & jitter
-			, renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer )const;
+			, ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -127,12 +127,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -151,22 +151,22 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
 #define UBO_MATRIX( writer, binding, set )\
-	glsl::Ubo matrices{ writer\
+	sdw::Ubo matrices{ writer\
 		, castor3d::MatrixUbo::BufferMatrix\
 		, binding\
 		, set };\
-	auto c3d_projection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::Projection );\
-	auto c3d_invProjection = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::InvProjection );\
-	auto c3d_curView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurView );\
-	auto c3d_prvView = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvView );\
-	auto c3d_curViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
-	auto c3d_prvViewProj = matrices.declMember< glsl::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
-	auto c3d_jitter = matrices.declMember< glsl::Vec2 >( castor3d::MatrixUbo::Jitter );\
+	auto c3d_projection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::Projection );\
+	auto c3d_invProjection = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::InvProjection );\
+	auto c3d_curView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurView );\
+	auto c3d_prvView = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvView );\
+	auto c3d_curViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::CurViewProj );\
+	auto c3d_prvViewProj = matrices.declMember< sdw::Mat4 >( castor3d::MatrixUbo::PrvViewProj );\
+	auto c3d_jitter = matrices.declMember< sdw::Vec2 >( castor3d::MatrixUbo::Jitter );\
 	matrices.end()
 
 #endif

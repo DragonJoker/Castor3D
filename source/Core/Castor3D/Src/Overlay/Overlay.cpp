@@ -84,7 +84,7 @@ namespace castor3d
 	{
 		if ( m_category->getType() != OverlayType::ePanel )
 		{
-			CASTOR_EXCEPTION( "This overlay is not a panel." );
+			CU_Exception( "This overlay is not a panel." );
 		}
 
 		return std::static_pointer_cast< PanelOverlay >( m_category );
@@ -94,7 +94,7 @@ namespace castor3d
 	{
 		if ( m_category->getType() != OverlayType::eBorderPanel )
 		{
-			CASTOR_EXCEPTION( "This overlay is not a border panel." );
+			CU_Exception( "This overlay is not a border panel." );
 		}
 
 		return std::static_pointer_cast< BorderPanelOverlay >( m_category );
@@ -104,7 +104,7 @@ namespace castor3d
 	{
 		if ( m_category->getType() != OverlayType::eText )
 		{
-			CASTOR_EXCEPTION( "This overlay is not a text." );
+			CU_Exception( "This overlay is not a text." );
 		}
 
 		return std::static_pointer_cast< TextOverlay >( m_category );

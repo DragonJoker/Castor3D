@@ -8,6 +8,12 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	template< typename Type >
+	static constexpr Type Pi{ Type( 3.1415926535897932384626433832795028841968 ) };
+	template< typename Type >
+	static constexpr Type PiMult2{ Type( 3.1415926535897932384626433832795028841968 * 2.0 ) };
+	template< typename Type >
+	static constexpr Type PiDiv2{ Type( 3.1415926535897932384626433832795028841968 / 2.0 ) };
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -23,24 +29,24 @@ namespace castor
 	class AngleT
 	{
 	public:
-		//!\~english Radian to degree conversion constant	\~french Constante de conversion de radian vers degré
-		CU_API static const Type RadianToDegree;
-		//!\~english Radian to gradient conversion constant	\~french Constante de conversion de radian vers gradient
-		CU_API static const Type RadianToGrad;
-		//!\~english Degree to radian conversion constant	\~french Constante de conversion de degré vers radian
-		CU_API static const Type DegreeToRadian;
-		//!\~english Degree to gradient conversion constant	\~french Constante de conversion de degré vers gradient
-		CU_API static const Type DegreeToGrad;
-		//!\~english Gradient to degree conversion constant	\~french Constante de conversion de gradient vers degré
-		CU_API static const Type GradToDegree;
-		//!\~english Gradient to radian conversion constant	\~french Constante de conversion de gradient vers radian
-		CU_API static const Type GradToRadian;
-		//!\~english Pi constant, expressed in real	\~french Constante pi exprimée en real
-		CU_API static const Type Pi;
-		//!\~english Pi * 2 constant	\~french Constante pi * 2
-		CU_API static const Type PiMult2;
-		//!\~english Pi / 2 constant	\~french Constante pi / 2
-		CU_API static const Type PiDiv2;
+		//!\~english	Radian to degree conversion constant.
+		//!\~french		Constante de conversion de radian vers degré.
+		CU_API static constexpr Type RadianToDegree{ Type( 57.295779513082320876798154814105 ) };
+		//!\~english	Radian to gradient conversion constant.
+		//!\~french		Constante de conversion de radian vers gradient.
+		CU_API static constexpr Type RadianToGrad{ 200 / Pi< Type > };
+		//!\~english	Degree to radian conversion constant.
+		//!\~french		Constante de conversion de degré vers radian.
+		CU_API static constexpr Type DegreeToRadian{ Type( 0.01745329251994329576923690768489 ) };
+		//!\~english	Degree to gradient conversion constant.
+		//!\~french		Constante de conversion de degré vers gradient.
+		CU_API static constexpr Type DegreeToGrad{ Type( 200 ) / 180 };
+		//!\~english	Gradient to degree conversion constant.
+		//!\~french		Constante de conversion de gradient vers degré.
+		CU_API static constexpr Type GradToDegree{ Pi< Type > / 200 };
+		//!\~english	Gradient to radian conversion constant.
+		//!\~french		Constante de conversion de gradient vers radian.
+		CU_API static constexpr Type GradToRadian{ 180 / Type( 200 ) };
 
 	private:
 		/**
@@ -52,8 +58,8 @@ namespace castor
 		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
 		 */
 		template< typename T >
-		explicit AngleT( T p_radians )noexcept
-			: m_radians( Type( p_radians ) )
+		explicit AngleT( T radians )noexcept
+			: m_radians( Type( radians ) )
 		{
 		}
 
@@ -61,47 +67,47 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Named constructor, from a degrees angle
-		 *\param[in]	p_degrees	The angle in degrees
+		 *\param[in]	degrees	The angle in degrees
 		 *\return		The built angle
 		 *\~french
 		 *\brief		Constructeur nommé, à partir d'un angle en degrés
-		 *\param[in]	p_degrees	L'angle, exprimé en degrés
+		 *\param[in]	degrees	L'angle, exprimé en degrés
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromDegrees( T p_degrees )noexcept
+		static AngleT< Type > fromDegrees( T degrees )noexcept
 		{
-			return AngleT< Type >( p_degrees * DegreeToRadian );
+			return AngleT< Type >( degrees * DegreeToRadian );
 		}
 		/**
 		 *\~english
 		 *\brief		Named constructor, from a radians angle
-		 *\param[in]	p_radians	The angle in radians
+		 *\param[in]	radians	The angle in radians
 		 *\return		The built angle
 		 *\~french
 		 *\brief		Constructeur nommé, à partir d'un angle en radians
-		 *\param[in]	p_radians	L'angle, exprimé en radians
+		 *\param[in]	radians	L'angle, exprimé en radians
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromRadians( T p_radians )noexcept
+		static AngleT< Type > fromRadians( T radians )noexcept
 		{
-			return AngleT< Type >( p_radians );
+			return AngleT< Type >( radians );
 		}
 		/**
 		 *\~english
 		 *\brief		Named constructor, from a gradients angle
-		 *\param[in]	p_grads	The angle in gradients
+		 *\param[in]	grads	The angle in gradients
 		 *\return		The built angle
 		 *\~french
 		 *\brief		Constructeur nommé, à partir d'un angle en gradients
-		 *\param[in]	p_grads	L'angle, exprimé en gradients
+		 *\param[in]	grads	L'angle, exprimé en gradients
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromGrads( T p_grads )noexcept
+		static AngleT< Type > fromGrads( T grads )noexcept
 		{
-			return AngleT< Type >( p_grads * GradToRadian );
+			return AngleT< Type >( grads * GradToRadian );
 		}
 		/**
 		 *\~english
@@ -147,30 +153,30 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		sets this angle value from degrees
-		 *\param[in]	p_rAngle	Angle in degrees
+		 *\param[in]	value	Angle in degrees
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de degrés
-		 *\param[in]	p_rAngle	L'angle exprimé en degrés
+		 *\param[in]	value	L'angle exprimé en degrés
 		 */
-		inline void degrees( double p_rAngle )noexcept;
+		inline void degrees( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from radians
-		 *\param[in]	p_rAngle	Angle in radians
+		 *\param[in]	value	Angle in radians
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de radians
-		 *\param[in]	p_rAngle	L'angle exprimé en radians
+		 *\param[in]	value	L'angle exprimé en radians
 		 */
-		inline void radians( double p_rAngle )noexcept;
+		inline void radians( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from gradients
-		 *\param[in]	p_rAngle	Angle in gradients
+		 *\param[in]	value	Angle in gradients
 		 *\~french
 		 *\brief		Définit la valeur de cet angle à partir de gradients
-		 *\param[in]	p_rAngle	L'angle exprimé en gradients
+		 *\param[in]	value	L'angle exprimé en gradients
 		 */
-		inline void grads( double p_rAngle )noexcept;
+		inline void grads( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -228,30 +234,30 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given cosine value
-		 *\param[in]	p_rValue	The cosine value
+		 *\param[in]	value	The cosine value
 		 *\~french
 		 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
-		 *\param[in]	p_rValue	Le cosinus
+		 *\param[in]	value	Le cosinus
 		 */
-		inline void acos( double p_rValue );
+		inline void acos( double value );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given sine value
-		 *\param[in]	p_rValue	The sine value
+		 *\param[in]	value	The sine value
 		 *\~french
 		 *\brief		Calcule la valeur de cet angle à partir du sinus donné
-		 *\param[in]	p_rValue	Le sinus
+		 *\param[in]	value	Le sinus
 		 */
-		inline void asin( double p_rValue );
+		inline void asin( double value );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given tangent value
-		 *\param[in]	p_rValue	The tangent value
+		 *\param[in]	value	The tangent value
 		 *\~french
 		 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
-		 *\param[in]	p_rValue	La tangente
+		 *\param[in]	value	La tangente
 		 */
-		inline void atan( double p_rValue );
+		inline void atan( double value );
 		/**
 		 *\~english
 		 *\brief		Negation operator.
@@ -264,69 +270,69 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
-		 *\param[in]	p_rhs	Angle to add to this one
+		 *\param[in]	rhs	Angle to add to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par addition
-		 *\param[in]	p_rhs	L'angle à ajouter à celui-ci
+		 *\param[in]	rhs	L'angle à ajouter à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator+=( AngleT< Type > const & p_rhs )noexcept;
+		inline AngleT< Type > & operator+=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	Angle to subtract to this one
+		 *\param[in]	rhs	Angle to subtract to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par soustraction
-		 *\param[in]	p_rhs	L'angle à soustraire de celui-ci
+		 *\param[in]	rhs	L'angle à soustraire de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator-=( AngleT< Type > const & p_rhs )noexcept;
+		inline AngleT< Type > & operator-=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	Angle to multiply to this one
+		 *\param[in]	rhs	Angle to multiply to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par multiplication
-		 *\param[in]	p_rhs	L'angle à multiplier à celui-ci
+		 *\param[in]	rhs	L'angle à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( AngleT< Type > const & p_rhs )noexcept;
+		inline AngleT< Type > & operator*=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_rhs	Angle divider of this one
+		 *\param[in]	rhs	Angle divider of this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par division
-		 *\param[in]	p_rhs	L'angle diviseur de celui-ci
+		 *\param[in]	rhs	L'angle diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( AngleT< Type > const & p_rhs )noexcept;
+		inline AngleT< Type > & operator/=( AngleT< Type > const & rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	Scalar to multiply to this one
+		 *\param[in]	rhs	Scalar to multiply to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par multiplication
-		 *\param[in]	p_rhs	Le scalaire à multiplier à celui-ci
+		 *\param[in]	rhs	Le scalaire à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator*=( double p_rhs )noexcept;
+		inline AngleT< Type > & operator*=( double rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_rhs	Scalar divider of this one
+		 *\param[in]	rhs	Scalar divider of this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par division
-		 *\param[in]	p_rhs	Le scalaire diviseur de celui-ci
+		 *\param[in]	rhs	Le scalaire diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		inline AngleT< Type > & operator/=( double p_rhs )noexcept;
+		inline AngleT< Type > & operator/=( double rhs )noexcept;
 		/**
 		 *\~english
 		*\return		The angle value, in radians.
@@ -343,192 +349,192 @@ namespace castor
 		Type m_radians;
 
 		template< typename T >
-		friend bool operator==( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
+		friend bool operator==( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
 		template< typename T >
-		friend bool operator<( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
+		friend bool operator<( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
 		template< typename T >
-		friend bool operator>( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs )noexcept;
+		friend bool operator>( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
 	};
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is equal to p_rhs
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is equal to rhs
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
-	 *\return		\p true si p_lhs est égal à p_rhs
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
+	 *\return		\p true si lhs est égal à rhs
 	 */
 	template< typename Type >
-	inline bool operator==( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is different from p_rhs
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is different from rhs
 	 *\~french
 	 *\brief		Opérateur de différence
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
-	 *\return		\p true si p_lhs est différent de p_rhs
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
+	 *\return		\p true si lhs est différent de rhs
 	 */
 	template< typename Type >
-	inline bool operator!=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator!=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		"Less than" operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is less than p_rhs.
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is less than rhs.
 	 *\~french
 	 *\brief		Opérateur "inférieur à"
-	 *\param[in]	p_lhs	Premier opérande.
-	 *\param[in]	p_rhs	Second opérande.
-	 *\return		\p true si p_lhs est inférieur à p_rhs.
+	 *\param[in]	lhs	Premier opérande.
+	 *\param[in]	rhs	Second opérande.
+	 *\return		\p true si lhs est inférieur à rhs.
 	 */
 	template< typename Type >
-	inline bool operator<( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator<( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		"Greater than or equal to" operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is greater than or equal to p_rhs.
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is greater than or equal to rhs.
 	 *\~french
 	 *\brief		Opérateur "supérieur ou égal à"
-	 *\param[in]	p_lhs	Premier opérande.
-	 *\param[in]	p_rhs	Second opérande.
-	 *\return		\p true si p_lhs est supérieur ou égal à p_rhs.
+	 *\param[in]	lhs	Premier opérande.
+	 *\param[in]	rhs	Second opérande.
+	 *\return		\p true si lhs est supérieur ou égal à rhs.
 	 */
 	template< typename Type >
-	inline bool operator>=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator>=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		"Greater than" operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is greater than p_rhs.
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is greater than rhs.
 	 *\~french
 	 *\brief		Opérateur "supérieur à"
-	 *\param[in]	p_lhs	Premier opérande.
-	 *\param[in]	p_rhs	Second opérande.
-	 *\return		\p true si p_lhs est supérieur à p_rhs.
+	 *\param[in]	lhs	Premier opérande.
+	 *\param[in]	rhs	Second opérande.
+	 *\return		\p true si lhs est supérieur à rhs.
 	 */
 	template< typename Type >
-	inline bool operator>( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		"Less than or equal to" operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
-	 *\return		\p true if p_lhs is less than or equal to p_rhs.
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
+	 *\return		\p true if lhs is less than or equal to rhs.
 	 *\~french
 	 *\brief		Opérateur "inférieur ou égal à"
-	 *\param[in]	p_lhs	Premier opérande.
-	 *\param[in]	p_rhs	Second opérande.
-	 *\return		\p true si p_lhs est inférieur ou égal à p_rhs.
+	 *\param[in]	lhs	Premier opérande.
+	 *\param[in]	rhs	Second opérande.
+	 *\return		\p true si lhs est inférieur ou égal à rhs.
 	 */
 	template< typename Type >
-	inline bool operator<=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline bool operator<=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of addition
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de l'addition
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator+( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline AngleT< Type > operator+( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of substraction
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de la soustraction
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator-( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline AngleT< Type > operator-( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of multiplication
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline AngleT< Type > operator*( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of division
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de la division
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept;
+	inline AngleT< Type > operator/( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of multiplication
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator*( AngleT< Type > const & p_lhs, double p_rhs )noexcept;
+	inline AngleT< Type > operator*( AngleT< Type > const & lhs, double rhs )noexcept;
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_lhs	First operand
-	 *\param[in]	p_rhs	Second operand
+	 *\param[in]	lhs	First operand
+	 *\param[in]	rhs	Second operand
 	 *\return		Result of division
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_lhs	Premier opérande
-	 *\param[in]	p_rhs	Second opérande
+	 *\param[in]	lhs	Premier opérande
+	 *\param[in]	rhs	Second opérande
 	 *\return		Le résultat de la division
 	 */
 	template< typename Type >
-	inline AngleT< Type > operator/( AngleT< Type > const & p_lhs, double p_rhs )noexcept;
+	inline AngleT< Type > operator/( AngleT< Type > const & lhs, double rhs )noexcept;
 
 	using Angle = AngleT< float >;
 }
 
-inline castor::Angle operator "" _degrees( long double p_value )
+inline castor::Angle operator "" _degrees( long double value )
 {
-	return castor::Angle::fromDegrees( p_value );
+	return castor::Angle::fromDegrees( value );
 }
 
-inline castor::Angle operator "" _radians( long double p_value )
+inline castor::Angle operator "" _radians( long double value )
 {
-	return castor::Angle::fromRadians( p_value );
+	return castor::Angle::fromRadians( value );
 }
 
 #include "Angle.inl"

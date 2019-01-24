@@ -1,6 +1,6 @@
 #include "Log/LoggerConsole.hpp"
 
-#if defined( CASTOR_PLATFORM_ANDROID )
+#if defined( CU_PlatformAndroid )
 
 #include <android/log.h>
 

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "TransparentPass.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -29,32 +29,32 @@ namespace castor3d
 		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
 		FinalCombineProgram( Engine & engine
-			, renderer::RenderPass const & renderPass
+			, ashes::RenderPass const & renderPass
 			, RenderPassTimer & timer
-			, renderer::DescriptorSetLayout const & uboLayout
-			, renderer::DescriptorSetLayout const & texLayout
-			, renderer::VertexLayout const & vtxLayout
+			, ashes::DescriptorSetLayout const & uboLayout
+			, ashes::DescriptorSetLayout const & texLayout
+			, ashes::VertexLayout const & vtxLayout
 			, FogType fogType );
 		~FinalCombineProgram();
-		void prepare( renderer::FrameBuffer const & frameBuffer
-			, renderer::DescriptorSet const & uboDescriptorSet
-			, renderer::DescriptorSet const & texDescriptorSet
-			, renderer::BufferBase const & vbo );
+		void prepare( ashes::FrameBuffer const & frameBuffer
+			, ashes::DescriptorSet const & uboDescriptorSet
+			, ashes::DescriptorSet const & texDescriptorSet
+			, ashes::BufferBase const & vbo );
 		void accept( RenderTechniqueVisitor & visitor );
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 
 	private:
 		RenderPassTimer & m_timer;
-		renderer::RenderPass const & m_renderPass;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::RenderPass const & m_renderPass;
+		ShaderModule m_vertexShader;
+		ShaderModule m_pixelShader;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
+		ashes::CommandBufferPtr m_commandBuffer;
 	};
 	//!\~english	An array of FinalCombineProgram, one per fog type.
 	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
@@ -86,8 +86,9 @@ namespace castor3d
 		FinalCombinePass( Engine & engine
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
+			, HdrConfigUbo & hdrConfigUbo
 			, WeightedBlendTextures const & wbResult
-			, renderer::TextureView const & colourView );
+			, ashes::TextureView const & colourView );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -110,17 +111,17 @@ namespace castor3d
 		 *\param[in]	invProj		La matrice projection inversée.
 		 */
 		void update( Camera const & camera
-			, Matrix4x4r const & invViewProj
-			, Matrix4x4r const & invView
-			, Matrix4x4r const & invProj );
+			, castor::Matrix4x4r const & invViewProj
+			, castor::Matrix4x4r const & invView
+			, castor::Matrix4x4r const & invProj );
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
 		 *\~french
 		 *\brief		Dessine la passe de combinaison.
 		 */
-		renderer::Semaphore const & render( FogType fogType
-			, renderer::Semaphore const & toWait );
+		ashes::Semaphore const & render( FogType fogType
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -132,19 +133,19 @@ namespace castor3d
 		SceneUbo & m_sceneUbo;
 		GpInfoUbo m_gpInfo;
 		SamplerSPtr m_sampler;
-		renderer::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
-		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
-		renderer::DescriptorSetPtr m_uboDescriptorSet;
-		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
-		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
-		renderer::DescriptorSetPtr m_texDescriptorSet;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
+		ashes::DescriptorSetPtr m_uboDescriptorSet;
+		ashes::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_texDescriptorPool;
+		ashes::DescriptorSetPtr m_texDescriptorSet;
+		ashes::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
 		FinalCombinePrograms m_programs;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::SemaphorePtr m_semaphore;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::SemaphorePtr m_semaphore;
 	};
 }
 

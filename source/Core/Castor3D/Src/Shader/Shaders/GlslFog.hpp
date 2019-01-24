@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___GLSL_FOG_H___
@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <GlslIntrinsics.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d
 {
@@ -16,13 +16,18 @@ namespace castor3d
 		{
 		public:
 			C3D_API Fog( FogType flags
-				, glsl::GlslWriter & writer );
-			C3D_API void applyFog( glsl::Vec4 & colour
-				, glsl::Float const & dist
-				, glsl::Float const & y );
+				, sdw::ShaderWriter & writer );
+			C3D_API void applyFog( sdw::Vec4 const & bgColour
+				, sdw::Float const & dist
+				, sdw::Float const & y
+				, sdw::Vec4 & colour );
 
 		protected:
-			glsl::GlslWriter & m_writer;
+			sdw::Function< sdw::Vec4
+				, sdw::InVec4
+				, sdw::InVec4
+				, sdw::InFloat
+				, sdw::InFloat > m_fog;
 		};
 	}
 }

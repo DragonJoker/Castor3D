@@ -23,7 +23,7 @@
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -38,20 +38,20 @@ namespace castor3d
 		TextureUnit doCreateTexture( Engine & engine
 			, Size const & size )
 		{
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
-			image.imageType = renderer::TextureType::e2D;
+			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
-			image.format = renderer::Format::eR16G16B16A16_SFLOAT;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
+			image.format = ashes::Format::eR16G16B16A16_SFLOAT;
 
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			texture->getDefaultImage().initialiseSource();
 
 			TextureUnit result{ engine };
@@ -67,7 +67,7 @@ namespace castor3d
 		, Scene const & scene
 		, GeometryPassResult const & gpResult
 		, OpaquePass & opaque
-		, renderer::TextureView const & depthView
+		, ashes::TextureView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_size{ size }
@@ -144,14 +144,14 @@ namespace castor3d
 		m_specular.cleanup();
 	}
 
-	renderer::Semaphore const & LightingPass::render( Scene const & scene
+	ashes::Semaphore const & LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
-		, renderer::Semaphore const & toWait
+		, ashes::Semaphore const & toWait
 		, RenderInfo & info )
 	{
 		auto & cache = scene.getLightCache();
-		renderer::Semaphore const * result = &toWait;
+		ashes::Semaphore const * result = &toWait;
 
 		if ( !cache.isEmpty() )
 		{
@@ -203,45 +203,46 @@ namespace castor3d
 		m_lightPassShadow[size_t( LightType::eSpot )]->accept( visitor );
 	}
 
-	renderer::Semaphore const & LightingPass::doRenderLights( Scene const & scene
+	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
-		, LightType p_type
+		, LightType type
 		, GeometryPassResult const & gp
-		, renderer::Semaphore const & toWait
+		, ashes::Semaphore const & toWait
 		, uint32_t & index
 		, RenderInfo & info )
 	{
 		auto result = &toWait;
 		auto & cache = scene.getLightCache();
 
-		if ( cache.getLightsCount( p_type ) )
+		if ( cache.getLightsCount( type ) )
 		{
-			auto & lightPass = *m_lightPass[size_t( p_type )];
-			auto & lightPassShadow = *m_lightPassShadow[size_t( p_type )];
+			auto lightPass = m_lightPass[size_t( type )].get();
+			auto lightPassShadow = m_lightPassShadow[size_t( type )].get();
 
-			for ( auto & light : cache.getLights( p_type ) )
+			for ( auto & light : cache.getLights( type ) )
 			{
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
+					LightPass * pass = nullptr;
+
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						lightPassShadow.update( camera.getSize()
-							, *light
-							, camera );
-						result = &lightPassShadow.render( index
-							, *result
-							, &light->getShadowMap()->getTexture() );
+						pass = lightPassShadow;
 					}
 					else
 					{
-						lightPass.update( camera.getSize()
-							, *light
-							, camera );
-						result = &lightPass.render( index
-							, *result
-							, nullptr );
+						pass = lightPass;
 					}
+
+					pass->update( !index
+						, camera.getSize()
+						, *light
+						, camera
+						, light->getShadowMap()
+						, light->getShadowMapIndex() );
+					result = &pass->render( index
+						, *result );
 
 					++index;
 					info.m_visibleLightsCount++;

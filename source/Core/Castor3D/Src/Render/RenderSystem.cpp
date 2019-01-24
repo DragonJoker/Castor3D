@@ -2,7 +2,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -10,11 +10,13 @@ namespace castor3d
 {
 	RenderSystem::RenderSystem( Engine & engine
 		, String const & name
-		, bool topDown )
+		, bool topDown
+		, bool zeroToOneDepth )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_initialised{ false }
 		, m_topDown{ topDown }
+		, m_zeroToOneDepth{ zeroToOneDepth }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{
@@ -30,29 +32,29 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
+			static std::map< uint32_t, String > vendors
+			{
+				{ 0x1002, cuT( "AMD" ) },
+				{ 0x10DE, cuT( "NVIDIA" ) },
+				{ 0x8086, cuT( "INTEL" ) },
+				{ 0x13B5, cuT( "ARM" ) },
+			};
 			auto & device = *getMainDevice();
 			StringStream stream( makeStringStream() );
 			stream << ( device.getProperties().apiVersion >> 22 ) << cuT( "." ) << ( ( device.getProperties().apiVersion >> 12 ) & 0x0FFF );
-
+			m_gpuInformations.setVendor( vendors[device.getProperties().vendorID] );
 			m_gpuInformations.setRenderer( device.getProperties().deviceName );
 			m_gpuInformations.setVersion( stream.str() );
 			m_gpuInformations.setShaderLanguageVersion( device.getShaderVersion() );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eConstantsBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTextureBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eInstancing, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAccumulationBuffer, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eNonPowerOfTwoTextures, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eAtomicCounterBuffers, true );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eImmutableTextureStorage, true );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, device.getRenderer().getFeatures().hasStorageBuffers );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eTransformFeedback, false );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, false );
 
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eFragment, true );
-			m_gpuInformations.useShaderType( renderer::ShaderStageFlag::eVertex, true );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eCompute, device.getRenderer().getFeatures().hasComputeShaders );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eTessellationControl, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eTessellationEvaluation, device.getFeatures().tessellationShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eGeometry, device.getFeatures().geometryShader );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eFragment, true );
+			m_gpuInformations.useShaderType( ashes::ShaderStageFlag::eVertex, true );
 
 			m_initialised = true;
 		}
@@ -72,26 +74,6 @@ namespace castor3d
 		m_tracker.reportTracked();
 
 #endif
-	}
-
-	void RenderSystem::registerDevice( renderer::Device & device )
-	{
-		m_deviceEnabledConnections.emplace( &device
-			, device.onEnabled.connect( [this]( renderer::Device const & device )
-			{
-				m_currentDevice = &device;
-			} ) );
-		m_deviceDisabledConnections.emplace( &device
-			, device.onDisabled.connect( [this]( renderer::Device const & device )
-			{
-				m_currentDevice = nullptr;
-			} ) );
-	}
-
-	void RenderSystem::unregisterDevice( renderer::Device & device )
-	{
-		m_deviceEnabledConnections.erase( &device );
-		m_deviceDisabledConnections.erase( &device );
 	}
 
 	void RenderSystem::pushScene( Scene * p_scene )
@@ -116,25 +98,16 @@ namespace castor3d
 		return result;
 	}
 
-	glsl::GlslWriter RenderSystem::createGlslWriter()
-	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, m_gpuInformations.hasConstantsBuffers()
-			, m_gpuInformations.hasTextureBuffers()
-			, m_gpuInformations.hasShaderStorageBuffers()
-			, false } };
-	}
-
-	GpuBufferOffset RenderSystem::getBuffer( renderer::BufferTarget type
+	GpuBufferOffset RenderSystem::getBuffer( ashes::BufferTarget type
 		, uint32_t size
-		, renderer::MemoryPropertyFlags flags )
+		, ashes::MemoryPropertyFlags flags )
 	{
 		return m_gpuBufferPool.getGpuBuffer( type
 			, size
 			, flags );
 	}
 
-	void RenderSystem::putBuffer( renderer::BufferTarget type
+	void RenderSystem::putBuffer( ashes::BufferTarget type
 		, GpuBufferOffset const & bufferOffset )
 	{
 		m_gpuBufferPool.putGpuBuffer( type
@@ -146,11 +119,10 @@ namespace castor3d
 		m_gpuBufferPool.cleanup();
 	}
 	
-	renderer::DevicePtr RenderSystem::createDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderSystem::createDevice( ashes::WindowHandle && handle
 		, uint32_t gpu )
 	{
-		renderer::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
-		registerDevice( *result );
+		ashes::DevicePtr result = m_renderer->createDevice( m_renderer->createConnection( gpu, std::move( handle ) ) );
 		return result;
 	}
 
@@ -164,12 +136,12 @@ namespace castor3d
 		return convert( m_renderer->frustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getPerspective( float radiansFovY
+	castor::Matrix4x4r RenderSystem::getPerspective( castor::Angle const & fovy
 		, float aspect
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_renderer->perspective( radiansFovY, aspect, zNear, zFar ) );
+		return convert( m_renderer->perspective( fovy.radians(), aspect, zNear, zFar ) );
 	}
 
 	castor::Matrix4x4r RenderSystem::getOrtho( float left

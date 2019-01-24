@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_LINUX )
+#if defined( CU_PlatformLinux )
 
 #include "Data/File.hpp"
 
@@ -20,7 +20,7 @@ namespace castor
 		template< typename DirectoryFuncType, typename FileFuncType >
 		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
 		{
-			REQUIRE( !p_folderPath.empty() );
+			CU_Require( !p_folderPath.empty() );
 			bool result = false;
 			DIR * dir;
 

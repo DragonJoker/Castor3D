@@ -232,7 +232,7 @@ namespace Fireworks
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		auto stride = m_inputs.stride();
 
-		if ( auto dst = vbo.getBuffer().lock( 0u, m_firstUnused * stride, renderer::MemoryMapFlag::eWrite ) )
+		if ( auto dst = vbo.getBuffer().lock( 0u, m_firstUnused * stride, ashes::MemoryMapFlag::eWrite ) )
 		{
 			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{

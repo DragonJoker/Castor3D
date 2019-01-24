@@ -98,7 +98,7 @@ namespace castor
 					error += " (" + it->second + ")";
 				}
 
-				LOADER_ERROR( error );
+				CU_LoaderError( error );
 				result = false;
 			}
 
@@ -278,7 +278,7 @@ namespace castor
 			}
 			catch ( std::runtime_error & p_exc )
 			{
-				LOADER_ERROR( "Font loading failed : " + std::string( p_exc.what() ) );
+				CU_LoaderError( "Font loading failed : " + std::string( p_exc.what() ) );
 			}
 		}
 

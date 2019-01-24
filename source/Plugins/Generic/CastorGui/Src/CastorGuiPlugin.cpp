@@ -59,13 +59,13 @@ namespace CastorGui
 
 		FileParser::AttributeParsersBySection CreateParsers( castor3d::Engine * engine )
 		{
-			static UIntStrMap mapHAligns
+			static UInt32StrMap mapHAligns
 			{
 				{ "left", uint32_t( HAlign::eLeft ) },
 				{ "center", uint32_t( HAlign::eCenter ) },
 				{ "right", uint32_t( HAlign::eRight ) }
 			};
-			static UIntStrMap mapVAligns
+			static UInt32StrMap mapVAligns
 			{
 				{ "top", uint32_t( VAlign::eTop ) },
 				{ "center", uint32_t( VAlign::eCenter ) },
@@ -128,7 +128,7 @@ namespace CastorGui
 			return result;
 		}
 
-		StrUIntMap CreateSections()
+		StrUInt32Map CreateSections()
 		{
 			return
 			{

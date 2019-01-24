@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtilsPrerequisites.hpp"
 
-#if CASTOR_USE_SSE2
+#if CU_UseSSE2
 
 #include <xmmintrin.h>
 

@@ -14,8 +14,8 @@
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 #include "Shader/Shaders/GlslMaterial.hpp"
 
@@ -38,47 +38,47 @@ namespace castor3d
 			, ssaoConfig }
 	{
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ depthBuffer->getDimensions().width, depthBuffer->getDimensions().height };
+		ashes::Extent2D size{ depthBuffer->getDimensions().width, depthBuffer->getDimensions().height };
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 3u );
 		renderPass.attachments[0].format = depthBuffer->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eDepthStencilAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, renderer::ImageLayout::eDepthStencilAttachmentOptimal };
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		renderer::FrameBufferAttachmentArray attaches;
+		ashes::FrameBufferAttachmentArray attaches;
 		attaches.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), depthBuffer->getDefaultView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
 	}
@@ -109,7 +109,7 @@ namespace castor3d
 		remFlag( programFlags, ProgramFlag::eEnvironmentMapping );
 	}
 
-	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -120,7 +120,7 @@ namespace castor3d
 			, true );
 	}
 
-	void DepthPass::doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
@@ -135,59 +135,59 @@ namespace castor3d
 	{
 	}
 
-	renderer::DepthStencilState DepthPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::DepthStencilState DepthPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return renderer::DepthStencilState{ 0u, true, true };
+		return ashes::DepthStencilState{ 0u, true, true };
 	}
 
-	renderer::ColourBlendState DepthPass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::ColourBlendState DepthPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
-	glsl::Shader DepthPass::doGetVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace glsl;
-		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( cuT( "material" )
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
@@ -199,20 +199,20 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
-		writer.implementFunction< void >( cuT( "main" )
+		writer.implementFunction< sdw::Void >( cuT( "main" )
 			, [&]()
 		{
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, vec4( position.xyz(), 1.0 ) );
 				auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-					, texture );
+					, uv );
 
 				if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 				{
 					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
-						, SkinningUbo::computeTransform( writer, programFlags ) );
+						, SkinningUbo::computeTransform( skinningData, writer, programFlags ) );
 				}
 				else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 				{
@@ -234,12 +234,12 @@ namespace castor3d
 					vtx_material = c3d_materialIndex;
 				}
 
-				auto mtxModel = writer.declBuiltin< Mat4 >( cuT( "mtxModel" ) );
+				auto mtxModel = writer.getVariable< Mat4 >( cuT( "mtxModel" ) );
 
 				if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
 				{
-					curPosition = vec4( glsl::mix( curPosition.xyz(), position2.xyz(), c3d_time ), 1.0 );
-					v3Texture = glsl::mix( v3Texture, texture2, c3d_time );
+					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0 );
+					v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
 				}
 
 				vtx_texture = v3Texture;
@@ -255,7 +255,7 @@ namespace castor3d
 				//  code)
 				curPosition.xy() -= c3d_jitter * curPosition.w();
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
-				out.gl_Position() = curPosition;
+				out.gl_out.gl_Position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();
@@ -266,22 +266,22 @@ namespace castor3d
 				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
 			} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
-	glsl::Shader DepthPass::doGetGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
 	{
-		return glsl::Shader{};
+		return ShaderPtr{};
 	}
 
-	glsl::Shader DepthPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetLegacyPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -290,11 +290,11 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -303,11 +303,11 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
 		return doGetPixelShaderSource( passFlags
 			, textureFlags
@@ -316,14 +316,14 @@ namespace castor3d
 			, alphaFunc );
 	}
 
-	glsl::Shader DepthPass::doGetPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr DepthPass::doGetPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
-		using namespace glsl;
-		GlslWriter writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
 		// Intputs
 		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
@@ -334,34 +334,33 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto c3d_mapOpacity( writer.declSampler< Sampler2D >( cuT( "c3d_mapOpacity" )
+		auto c3d_mapOpacity( writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapOpacity" )
 			, 0u
 			, 1u
 			, checkFlag( textureFlags, TextureChannel::eOpacity ) ) );
-		auto gl_FragCoord( writer.declBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		auto out = writer.getOut();
 
 		auto materials = shader::createMaterials( writer, passFlags );
-		materials->declare();
+		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 
-		writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto material = materials->getBaseMaterial( vtx_material );
 			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material->m_opacity() );
+				, material->m_opacity );
 			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-				, material->m_alphaRef() );
+				, material->m_alphaRef );
 
 			if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 			{
-				auto c3d_mapOpacity = writer.getBuiltin< glsl::Sampler2D >( cuT( "c3d_mapOpacity" ) );
-				auto vtx_texture = writer.getBuiltin< glsl::Vec3 >( cuT( "vtx_texture" ) );
+				auto vtx_texture = writer.getVariable< sdw::Vec3 >( cuT( "vtx_texture" ) );
 				alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 				shader::applyAlphaFunc( writer
 					, alphaFunc
 					, alpha
 					, alphaRef );
 			}
-			else if ( alphaFunc != renderer::CompareOp::eAlways )
+			else if ( alphaFunc != ashes::CompareOp::eAlways )
 			{
 				shader::applyAlphaFunc( writer
 					, alphaFunc
@@ -370,6 +369,6 @@ namespace castor3d
 			}
 		} );
 
-		return writer.finalise();
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 }

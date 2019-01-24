@@ -30,7 +30,7 @@ namespace castor3d
 			//	where P is the projection matrix that maps camera space points
 			//	to [-1, 1] x [-1, 1].  That is, SsaoConfigUbo::getProjectUnitMatrix().
 			castor::Point4f projInfo;
-			castor::Matrix4x4f invViewMatrix;
+			castor::Matrix4x4f viewMatrix;
 			// Integer number of samples to take at each pixel.
 			int32_t numSamples;
 			// This is the number of turns around the circle that the spiral pattern makes.
@@ -133,12 +133,12 @@ namespace castor3d
 		 *\~french
 		 *\name			Accesseurs.
 		 */
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -162,32 +162,32 @@ namespace castor3d
 		C3D_API static castor::String const BlurStepSize;
 		C3D_API static castor::String const BlurRadius;
 		C3D_API static castor::String const ProjInfo;
-		C3D_API static castor::String const InvViewMatrix;
+		C3D_API static castor::String const ViewMatrix;
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
 #define UBO_SSAO_CONFIG( Writer, Binding, Set )\
-	glsl::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, Binding, Set };\
-	auto c3d_projInfo = ssaoConfig.declMember< glsl::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
-	auto c3d_worldToCamera = ssaoConfig.declMember< glsl::Mat4 >( castor3d::SsaoConfigUbo::InvViewMatrix );\
-	auto c3d_numSamples = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSamples );\
-	auto c3d_numSpiralTurns = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::NumSpiralTurns );\
-	auto c3d_projScale = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::ProjScale );\
-	auto c3d_radius = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::Radius );\
-	auto c3d_invRadius = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::InvRadius );\
-	auto c3d_radius2 = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::Radius2 );\
-	auto c3d_invRadius2 = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::InvRadius2 );\
-	auto c3d_bias = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::Bias );\
-	auto c3d_intensity = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::Intensity );\
-	auto c3d_intensityDivR6 = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::IntensityDivR6 );\
-	auto c3d_farPlaneZ = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::FarPlaneZ );\
-	auto c3d_edgeSharpness = ssaoConfig.declMember< glsl::Float >( castor3d::SsaoConfigUbo::EdgeSharpness );\
-	auto c3d_blurStepSize = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
-	auto c3d_blurRadius = ssaoConfig.declMember< glsl::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
+	sdw::Ubo ssaoConfig{ Writer, castor3d::SsaoConfigUbo::BufferSsaoConfig, Binding, Set };\
+	auto c3d_projInfo = ssaoConfig.declMember< sdw::Vec4 >( castor3d::SsaoConfigUbo::ProjInfo );\
+	auto c3d_viewMatrix = ssaoConfig.declMember< sdw::Mat4 >( castor3d::SsaoConfigUbo::ViewMatrix );\
+	auto c3d_numSamples = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::NumSamples );\
+	auto c3d_numSpiralTurns = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::NumSpiralTurns );\
+	auto c3d_projScale = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::ProjScale );\
+	auto c3d_radius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Radius );\
+	auto c3d_invRadius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::InvRadius );\
+	auto c3d_radius2 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Radius2 );\
+	auto c3d_invRadius2 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::InvRadius2 );\
+	auto c3d_bias = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Bias );\
+	auto c3d_intensity = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::Intensity );\
+	auto c3d_intensityDivR6 = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::IntensityDivR6 );\
+	auto c3d_farPlaneZ = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::FarPlaneZ );\
+	auto c3d_edgeSharpness = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::EdgeSharpness );\
+	auto c3d_blurStepSize = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
+	auto c3d_blurRadius = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
 	ssaoConfig.end()
 
 #endif

@@ -28,38 +28,14 @@ namespace castor3d
 	enum class GpuFeature
 		: uint32_t
 	{
-		//!\~english	Tells whether or not the selected render API supports instanced draw calls.
-		//!\~french		Dit si l'API de rendu choisie supporte le dessin instancié.
-		eInstancing = 0x00000001,
-		//!\~english	Tells whether or not the selected render API supports accumulation buffers.
-		//!\~french		Dit si l'API de rendu choisie supporte le buffer d'accumulation.
-		eAccumulationBuffer = 0x00000002,
-		//!\~english	Tells whether or not the selected render API supports non power of two textures.
-		//!\~french		Dit si l'API de rendu choisie supporte les textures non puissance de 2.
-		eNonPowerOfTwoTextures = 0x00000004,
-		//!\~english	Tells whether or not the selected render API supports stereo.
+		//!\~english	Tells whether or not the selected render API supports stereographic rendering.
 		//!\~french		Dit si l'API de rendu choisie supporte la stéréographie.
-		eStereo = 0x00000008,
-		//!\~english	Tells whether or not the selected render API supports constants buffers.
-		//!\~french		Dit si l'API de rendu choisie supporte les tampons de constantes.
-		eConstantsBuffers = 0x00000010,
-		//!\~english	Tells whether or not the selected render API supports texture buffers.
-		//!\~french		Dit si l'API de rendu choisie supporte les tampons de textures.
-		eTextureBuffers = 0x00000020,
+		eStereoRendering = 0x00000001,
 		//!\~english	Tells whether or not the selected render API supports shader stoarage buffers.
 		//!\~french		Dit si l'API de rendu choisie supporte les tampons de stockage shader.
-		eShaderStorageBuffers = 0x00000040,
-		//!\~english	Tells whether or not the selected render API supports atomic counter buffers.
-		//!\~french		Dit si l'API de rendu choisie supporte les tampons de compteurs atomiques.
-		eAtomicCounterBuffers = 0x00000080,
-		//!\~english	Tells whether or not the selected render API supports transform feedback.
-		//!\~french		Dit si l'API de rendu choisie supporte le transform feedback.
-		eTransformFeedback = 0x00000100,
-		//!\~english	Tells whether or not the selected render API supports texture immutable storages.
-		//!\~french		Dit si l'API de rendu choisie supporte les stockage immuables pour les textures.
-		eImmutableTextureStorage = 0x00000200,
+		eShaderStorageBuffers = 0x00000002,
 	};
-	IMPLEMENT_FLAGS( GpuFeature )
+	CU_ImplementFlags( GpuFeature )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016
@@ -96,7 +72,7 @@ namespace castor3d
 		eViewportHeight,
 		eViewports,
 
-		CASTOR_SCOPED_ENUM_BOUNDS( eTexture3DSize )
+		CU_ScopedEnumBounds( eTexture3DSize )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -121,12 +97,12 @@ namespace castor3d
 		inline GpuInformations()
 			: m_useShader
 			{
-				{ renderer::ShaderStageFlag::eVertex, false },
-				{ renderer::ShaderStageFlag::eTessellationControl, false },
-				{ renderer::ShaderStageFlag::eTessellationEvaluation, false },
-				{ renderer::ShaderStageFlag::eGeometry, false },
-				{ renderer::ShaderStageFlag::eFragment, false },
-				{ renderer::ShaderStageFlag::eCompute, false },
+				{ ashes::ShaderStageFlag::eVertex, false },
+				{ ashes::ShaderStageFlag::eTessellationControl, false },
+				{ ashes::ShaderStageFlag::eTessellationEvaluation, false },
+				{ ashes::ShaderStageFlag::eGeometry, false },
+				{ ashes::ShaderStageFlag::eFragment, false },
+				{ ashes::ShaderStageFlag::eCompute, false },
 			}
 		{
 			for ( auto i = 0u; i < uint32_t( GpuMax::eCount ); ++i )
@@ -182,59 +158,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut du support de la stéréo.
 		 */
-		inline bool isStereoAvailable()const
+		inline bool hasStereoRendering()const
 		{
-			return hasFeature( GpuFeature::eStereo );
-		}
-		/**
-		 *\~english
-		 *\return		The instanced draw calls support status.
-		 *\~french
-		 *\return		Le statut du support de l'instanciation.
-		 */
-		inline bool hasInstancing()const
-		{
-			return hasFeature( GpuFeature::eInstancing );
-		}
-		/**
-		 *\~english
-		 *\return		The accumulation buffer support status.
-		 *\~french
-		 *\return		Le statut du support du buffer d'accumulation.
-		 */
-		inline bool hasAccumulationBuffer()const
-		{
-			return hasFeature( GpuFeature::eAccumulationBuffer );
-		}
-		/**
-		 *\~english
-		 *\return		The non power of two textures support status.
-		 *\~french
-		 *\return		Le statut du support des textures non puissance de deux.
-		 */
-		inline bool hasNonPowerOfTwoTextures()const
-		{
-			return hasFeature( GpuFeature::eNonPowerOfTwoTextures );
-		}
-		/**
-		 *\~english
-		 *\return		The constant buffers support status.
-		 *\~french
-		 *\return		Le statut du support des tampons de constantes.
-		 */
-		inline bool hasConstantsBuffers()const
-		{
-			return hasFeature( GpuFeature::eConstantsBuffers );
-		}
-		/**
-		 *\~english
-		 *\return		The texture buffers support status.
-		 *\~french
-		 *\return		Le statut du support des tampons de textures.
-		 */
-		inline bool hasTextureBuffers()const
-		{
-			return hasFeature( GpuFeature::eTextureBuffers );
+			return hasFeature( GpuFeature::eStereoRendering );
 		}
 		/**
 		 *\~english
@@ -254,7 +180,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		inline bool hasShaderType( renderer::ShaderStageFlag type )const
+		inline bool hasShaderType( ashes::ShaderStageFlag type )const
 		{
 			return m_useShader.at( type );
 		}
@@ -268,7 +194,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void useShaderType( renderer::ShaderStageFlag type, bool value )
+		inline void useShaderType( ashes::ShaderStageFlag type, bool value )
 		{
 			m_useShader[type] = value;
 		}
@@ -402,7 +328,7 @@ namespace castor3d
 	private:
 		GpuFeatures m_features{ 0u };
 		uint32_t m_shaderLanguageVersion{ 0 };
-		std::map< renderer::ShaderStageFlag, bool > m_useShader;
+		std::map< ashes::ShaderStageFlag, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
 		uint32_t m_totalMemorySize;
 		castor::String m_vendor;

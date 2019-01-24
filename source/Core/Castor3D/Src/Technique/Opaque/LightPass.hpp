@@ -18,7 +18,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 #include <Sync/Semaphore.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -41,7 +41,7 @@ namespace castor3d
 		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Roughness, B => Unused
 		eData4, // RGB => Emissive, A => Transmittance
 		eData5, // RG => Velocity, B => Material Index, A => Unused
-		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
+		CU_ScopedEnumBounds( eDepth ),
 	};
 	/**
 	 *\~english
@@ -64,7 +64,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	renderer::Format getTextureFormat( DsTexture texture );
+	ashes::Format getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -107,96 +107,6 @@ namespace castor3d
 	float getMaxDistance( LightCategory const & light
 		, castor::Point3f const & attenuation
 		, float max );
-	/**
-	 *\~english
-	 *\brief		Declares the GLSL function used to encode the material specifics into a vec4.
-	 *\param[in]	writer	The GLSL writer.
-	 *\~french
-	 *\brief		Déclare la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-	 *\param[in]	writer	Le writer GLSL.
-	 */
-	void declareEncodeMaterial( glsl::GlslWriter & writer );
-	/**
-	 *\~english
-	 *\brief		Declares the GLSL function used to decode the material specifics from a vec4.
-	 *\param[in]	writer	The GLSL writer.
-	 *\~french
-	 *\brief		Déclare la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-	 *\param[in]	writer	Le writer GLSL.
-	 */
-	void declareDecodeMaterial( glsl::GlslWriter & writer );
-	/**
-	 *\~english
-	 *\brief		Declares the GLSL function used to decode the shadow receiver status from a vec4.
-	 *\param[in]	writer	The GLSL writer.
-	 *\~french
-	 *\brief		Déclare la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-	 *\param[in]	writer	Le writer GLSL.
-	 */
-	void declareDecodeReceiver( glsl::GlslWriter & writer );
-	/**
-	 *\~english
-	 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
-	 *\param[in]	writer		The GLSL writer.
-	 *\param[in]	receiver	The shadow receiver status.
-	 *\param[in]	reflection	The reflection status.
-	 *\param[in]	refraction	The refraction status.
-	 *\param[in]	envMapIndex	The environment map index.
-	 *\param[in]	encoded		The variable that will receive the encoded value.
-	 *\~french
-	 *\brief		Appelle la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-	 *\param[in]	writer		Le writer GLSL.
-	 *\param[in]	receiver	Le statut de receveur d'ombres.
-	 *\param[in]	reflection	Le statut de réflexion.
-	 *\param[in]	refraction	Le statut de réfraction.
-	 *\param[in]	envMapIndex	L'indice de la texture environnementale.
-	 *\param[in]	encoded		La variable qui recevra la valeur encodée.
-	 */
-	void encodeMaterial( glsl::GlslWriter & writer
-		, glsl::Int const & receiver
-		, glsl::Int const & reflection
-		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex
-		, glsl::Float const & encoded );
-	/**
-	 *\~english
-	 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
-	 *\param[in]	writer		The GLSL writer.
-	 *\param[in]	encoded		The encoded value.
-	 *\param[in]	receiver	The variable that contains the shadow receiver status.
-	 *\param[in]	reflection	The variable that contains the reflection status.
-	 *\param[in]	refraction	The variable that contains the refraction status.
-	 *\param[in]	envMapIndex	The variable that contains the environment map index.
-	 *\~french
-	 *\brief		Appelle la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-	 *\param[in]	writer		Le writer GLSL.
-	 *\param[in]	encoded		La valeur encodée.
-	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
-	 *\param[in]	reflection	La variable qui recevra le statut de réflexion.
-	 *\param[in]	refraction	La variable qui recevra le statut de réfraction.
-	 *\param[in]	envMapIndex	La variable qui recevra l'indice de la texture environnementale.
-	 */
-	void decodeMaterial( glsl::GlslWriter & writer
-		, glsl::Float const & encoded
-		, glsl::Int const & receiver
-		, glsl::Int const & reflection
-		, glsl::Int const & refraction
-		, glsl::Int const & envMapIndex );
-	/**
-	 *\~english
-	 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
-	 *\param[in]	writer		The GLSL writer.
-	 *\param[in]	encoded		The encoded value.
-	 *\param[in]	receiver	The variable that contains the shadow receiver status.
-	 *\~french
-	 *\brief		Appelle la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-	 *\param[in]	writer		Le writer GLSL.
-	 *\param[in]	encoded		La valeur encodée.
-	 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
-	 */
-	void decodeReceiver( glsl::GlslWriter & writer
-		, glsl::Int & encoded
-		, glsl::Int const & receiver );
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -213,12 +123,12 @@ namespace castor3d
 	protected:
 		struct RenderPass
 		{
-			RenderPass( renderer::RenderPassPtr && renderPass
-				, renderer::TextureView const & depthView
-				, renderer::TextureView const & diffuseView
-				, renderer::TextureView const & specularView );
-			renderer::RenderPassPtr renderPass;
-			renderer::FrameBufferPtr frameBuffer;
+			RenderPass( ashes::RenderPassPtr && renderPass
+				, ashes::TextureView const & depthView
+				, ashes::TextureView const & diffuseView
+				, ashes::TextureView const & specularView );
+			ashes::RenderPassPtr renderPass;
+			ashes::FrameBufferPtr frameBuffer;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -245,8 +155,8 @@ namespace castor3d
 			 *\param[in]	pxl		Le source du fagment shader.
 			 */
 			Program( Engine & engine
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english
@@ -271,10 +181,10 @@ namespace castor3d
 			 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
-			void initialise( renderer::VertexBufferBase & vbo
-				, renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & firstRenderPass
-				, renderer::RenderPass const & blendRenderPass
+			void initialise( ashes::VertexBufferBase & vbo
+				, ashes::VertexLayout const & vertexLayout
+				, ashes::RenderPass const & firstRenderPass
+				, ashes::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
 				, GpInfoUbo & gpInfoUbo
@@ -309,7 +219,7 @@ namespace castor3d
 			 *\param[in]	first	Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
 			 *\param[in]	offset	L'offset dans le VBO.
 			 */
-			void render( renderer::CommandBuffer & commandBuffer
+			void render( ashes::CommandBuffer & commandBuffer
 				, uint32_t count
 				, bool first
 				, uint32_t offset )const;
@@ -322,33 +232,33 @@ namespace castor3d
 			*	Accesseurs.
 			*/
 			/**@{*/
-			inline renderer::DescriptorSetLayout const & getUboDescriptorLayout()const
+			inline ashes::DescriptorSetLayout const & getUboDescriptorLayout()const
 			{
-				REQUIRE( m_uboDescriptorLayout );
+				CU_Require( m_uboDescriptorLayout );
 				return *m_uboDescriptorLayout;
 			}
 
-			inline renderer::DescriptorSetLayout const & getTextureDescriptorLayout()const
+			inline ashes::DescriptorSetLayout const & getTextureDescriptorLayout()const
 			{
-				REQUIRE( m_textureDescriptorLayout );
+				CU_Require( m_textureDescriptorLayout );
 				return *m_textureDescriptorLayout;
 			}
 
-			inline renderer::DescriptorSetPool const & getUboDescriptorPool()const
+			inline ashes::DescriptorSetPool const & getUboDescriptorPool()const
 			{
-				REQUIRE( m_uboDescriptorPool );
+				CU_Require( m_uboDescriptorPool );
 				return *m_uboDescriptorPool;
 			}
 
-			inline renderer::DescriptorSetPool const & getTextureDescriptorPool()const
+			inline ashes::DescriptorSetPool const & getTextureDescriptorPool()const
 			{
-				REQUIRE( m_textureDescriptorPool );
+				CU_Require( m_textureDescriptorPool );
 				return *m_textureDescriptorPool;
 			}
 
-			inline renderer::PipelineLayout const & getPipelineLayout()const
+			inline ashes::PipelineLayout const & getPipelineLayout()const
 			{
-				REQUIRE( m_pipelineLayout );
+				CU_Require( m_pipelineLayout );
 				return *m_pipelineLayout;
 			}
 			/**@}*/
@@ -364,8 +274,8 @@ namespace castor3d
 			 *\param[in]	blend	Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & renderPass
+			virtual ashes::PipelinePtr doCreatePipeline( ashes::VertexLayout const & vertexLayout
+				, ashes::RenderPass const & renderPass
 				, bool blend ) = 0;
 			/**
 			 *\~english
@@ -379,14 +289,14 @@ namespace castor3d
 
 		public:
 			Engine & m_engine;
-			renderer::ShaderStageStateArray m_program;
-			renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
-			renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
-			renderer::DescriptorSetLayoutPtr m_textureDescriptorLayout;
-			renderer::DescriptorSetPoolPtr m_textureDescriptorPool;
-			renderer::PipelineLayoutPtr m_pipelineLayout;
-			renderer::PipelinePtr m_blendPipeline;
-			renderer::PipelinePtr m_firstPipeline;
+			ashes::ShaderStageStateArray m_program;
+			ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+			ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
+			ashes::DescriptorSetLayoutPtr m_textureDescriptorLayout;
+			ashes::DescriptorSetPoolPtr m_textureDescriptorPool;
+			ashes::PipelineLayoutPtr m_pipelineLayout;
+			ashes::PipelinePtr m_blendPipeline;
+			ashes::PipelinePtr m_firstPipeline;
 			bool m_shadows;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
@@ -423,27 +333,35 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first			Tells if this is the first pass.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	light			The light.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	shadowMap		The optional shadow map.
+		 *\param[in]	shadowMapIndex	The shadow map index.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
+		 *\param[in]	first			Dit s'il s'agit de la première passe.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	light			La source lumineuse.
+		 *\param[in]	camera			La caméra.
+		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
+		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
 		 */
-		void update( castor::Size const & size
+		void update( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera );
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex );
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
 		 */
-		virtual renderer::Semaphore const & render( uint32_t index
-			, renderer::Semaphore const & toWait
-			, TextureUnit * shadowMapOpt );
+		virtual ashes::Semaphore const & render( uint32_t index
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -465,9 +383,9 @@ namespace castor3d
 		 */
 		virtual uint32_t getCount()const = 0;
 
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_signalReady );
+			CU_Require( m_signalReady );
 			return *m_signalReady;
 		}
 		/**@}*/
@@ -476,11 +394,11 @@ namespace castor3d
 		struct Pipeline
 		{
 			ProgramPtr program;
-			renderer::DescriptorSetPtr uboDescriptorSet;
-			renderer::WriteDescriptorSetArray textureWrites;
-			renderer::DescriptorSetPtr textureDescriptorSet;
-			renderer::CommandBufferPtr firstCommandBuffer;
-			renderer::CommandBufferPtr blendCommandBuffer;
+			ashes::DescriptorSetPtr uboDescriptorSet;
+			ashes::WriteDescriptorSetArray textureWrites;
+			ashes::DescriptorSetPtr textureDescriptorSet;
+			ashes::CommandBufferPtr firstCommandBuffer;
+			ashes::CommandBufferPtr blendCommandBuffer;
 		};
 		/**
 		 *\~english
@@ -499,11 +417,11 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
-			, renderer::RenderPassPtr && firstRenderPass
-			, renderer::RenderPassPtr && blendRenderPass
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::RenderPassPtr && firstRenderPass
+			, ashes::RenderPassPtr && blendRenderPass
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -525,8 +443,8 @@ namespace castor3d
 		void doInitialise( Scene const & scene
 			, GeometryPassResult const & gp
 			, LightType type
-			, renderer::VertexBufferBase & vbo
-			, renderer::VertexLayout const & vertexLayout
+			, ashes::VertexBufferBase & vbo
+			, ashes::VertexLayout const & vertexLayout
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo
 			, RenderPassTimer & timer );
@@ -540,18 +458,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the light pass.
-		 *\param[in]	size	The render area dimensions.
-		 *\param[in]	light	The light.
-		 *\param[in]	camera	The viewing camera.
+		 *\param[in]	first			Tells if this is the first pass.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	light			The light.
+		 *\param[in]	camera			The viewing camera.
+		 *\param[in]	shadowMap		The optional shadow map.
+		 *\param[in]	shadowMapIndex	The shadow map index.
 		 *\~french
 		 *\brief		Met à jour la passe d'éclairage.
-		 *\param[in]	size	Les dimensions de la zone de rendu.
-		 *\param[in]	light	La source lumineuse.
-		 *\param[in]	camera	La caméra.
+		 *\param[in]	first			Dit s'il s'agit de la première passe.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	light			La source lumineuse.
+		 *\param[in]	camera			La caméra.
+		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
+		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
 		 */
-		virtual void doUpdate( castor::Size const & size
+		virtual void doUpdate( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera ) = 0;
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the command buffer for given pipeline.
@@ -565,7 +492,8 @@ namespace castor3d
 		 *\param[in]	first		Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
 		 */
 		void doPrepareCommandBuffer( Pipeline & pipeline
-			, TextureUnit const * shadowMap
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex
 			, bool first );
 		/**
 		 *\~english
@@ -579,7 +507,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual glsl::Shader doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+		virtual ShaderPtr doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
 			, bool volumetric )const;
@@ -595,7 +523,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual glsl::Shader doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
+		virtual ShaderPtr doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
 			, bool volumetric )const;
@@ -611,7 +539,7 @@ namespace castor3d
 		 *\param[in]	type		Le type de source lumineuse.
 		 *\return		Le source.
 		 */
-		virtual glsl::Shader doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
+		virtual ShaderPtr doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
 			, bool volumetric )const;
@@ -625,7 +553,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags	Les indicateurs de scène.
 		 *\return		Le source.
 		 */
-		virtual glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
+		virtual ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a light pass program.
@@ -643,8 +571,8 @@ namespace castor3d
 	protected:
 		struct Config
 		{
-			//!\~english	The variable containing the light colour.
-			//!\~french		La variable contenant la couleur de la lumière.
+			//!\~english	The variable containing the light colour and index.
+			//!\~french		La variable contenant la couleur de la lumière et son indice.
 			castor::Point4f colourIndex;
 			//!\~english	The variable containing the light intensities (RG) and far plane (B).
 			//!\~french		La variable contenant les intensités de la lumière (RG) et le plan éloigné (B).
@@ -652,28 +580,31 @@ namespace castor3d
 			//!\~english	The variable containing the light volumetric scattering data.
 			//!\~french		La variable contenant les données de volumetric scattering.
 			castor::Point4f volumetric;
+			//!\~english	The variable containing the light shadow data.
+			//!\~french		La variable contenant les données d'ombres.
+			castor::Point4f shadow;
 		};
 
 		Engine & m_engine;
 		Scene const * m_scene{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
-		renderer::UniformBufferBase const * m_baseUbo{ nullptr };
+		ashes::UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
-		renderer::CommandBufferPtr m_commandBuffer;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
+		ashes::CommandBufferPtr m_commandBuffer;
 		std::array< Pipeline, size_t( ShadowType::eCount ) * 2u > m_pipelines; // * 2u for volumetric scattering or not.
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
-		renderer::VertexBufferPtr< float > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
+		ashes::VertexBufferPtr< float > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
-		renderer::SemaphorePtr m_signalReady;
-		renderer::FencePtr m_fence;
+		ashes::SemaphorePtr m_signalReady;
+		ashes::FencePtr m_fence;
 		GeometryPassResult const * m_geometryPassResult;
 	};
 }

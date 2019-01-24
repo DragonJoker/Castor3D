@@ -54,7 +54,12 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
+	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type
+	{
+		cuT( "ortho" ),
+		cuT( "perspective" ),
+		cuT( "frustum" )
+	};
 
 	Viewport::Viewport( Engine const & engine
 		, ViewportType type
@@ -114,7 +119,7 @@ namespace castor3d
 				break;
 
 			case castor3d::ViewportType::ePerspective:
-				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY.value().radians()
+				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY
 					, m_ratio
 					, m_near
 					, m_far );
@@ -198,7 +203,13 @@ namespace castor3d
 	void Viewport::resize( const castor::Size & value )
 	{
 		m_size = value;
-		m_viewport = renderer::Viewport{ m_size[0], m_size[1], 0, 0 };
-		m_scissor = renderer::Scissor{ 0, 0, m_size[0], m_size[1] };
+		m_viewport = ashes::Viewport{ m_size[0], m_size[1], 0, 0 };
+		m_scissor = ashes::Scissor{ 0, 0, m_size[0], m_size[1] };
+	}
+
+	float Viewport::getProjectionScale()const
+	{
+		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
+		return std::abs( getHeight() / scale );
 	}
 }

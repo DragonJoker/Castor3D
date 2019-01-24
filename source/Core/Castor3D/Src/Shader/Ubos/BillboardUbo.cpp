@@ -31,10 +31,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			m_ubo = ashes::makeUniformBuffer< Configuration >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -45,7 +45,7 @@ namespace castor3d
 
 	void BillboardUbo::update( Point2f const & dimensions )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).dimensions = dimensions;
 		m_ubo->upload();
 	}

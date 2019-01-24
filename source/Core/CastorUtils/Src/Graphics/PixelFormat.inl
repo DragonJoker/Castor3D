@@ -3,7 +3,7 @@
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Assertion.hpp"
 
-#if CASTOR_USE_SSE2
+#if CU_UseSSE2
 #	include <emmintrin.h>
 #endif
 
@@ -3170,7 +3170,7 @@ namespace castor
 				uint8_t * pDst = &p_pDstBuffer[0];
 				uint32_t uiSrcCount = 0;
 				uint32_t count = p_uiSrcSize / PixelDefinitions< PFSrc >::Size;
-				REQUIRE( p_uiSrcSize / PixelDefinitions< PFSrc >::Size == p_uiDstSize / PixelDefinitions< PFDst >::Size );
+				CU_Require( p_uiSrcSize / PixelDefinitions< PFSrc >::Size == p_uiDstSize / PixelDefinitions< PFDst >::Size );
 				PixelConverter< PFSrc, PFDst > converter;
 
 				for ( uint32_t i = 0; i < count; i++ )
@@ -3279,7 +3279,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -3323,7 +3323,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -3355,7 +3355,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -3461,7 +3461,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -3523,7 +3523,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -3557,7 +3557,7 @@ namespace castor
 				break;
 
 			default:
-				UNSUPPORTED_ERROR( "No conversion defined" );
+				CU_UnsupportedError( "No conversion defined" );
 				break;
 			}
 		}
@@ -4688,11 +4688,11 @@ namespace castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
@@ -4725,11 +4725,11 @@ namespace castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
@@ -4762,11 +4762,11 @@ namespace castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, PixelFormat )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
+			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
 		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{

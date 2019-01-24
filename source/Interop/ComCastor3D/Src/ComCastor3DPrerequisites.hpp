@@ -49,6 +49,7 @@ namespace CastorCom
 	typedef std::basic_string< TCHAR > tstring;
 
 	static const castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
+	static const castor::String ERROR_UNSUPPORTED_C3D_TYPE = cuT( "The type is unsupported" );
 
 	template< typename T, typename FuncT >
 	HRESULT retrieveValue( T * pVal, FuncT p_func )

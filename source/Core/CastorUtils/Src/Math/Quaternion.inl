@@ -379,7 +379,7 @@ namespace castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::fromRadians( 0.0 );
+			p_angle = 0.0_radians;
 			p_vector[0] = T{ 1 };
 			p_vector[1] = T{ 0 };
 			p_vector[2] = T{ 0 };
@@ -408,7 +408,7 @@ namespace castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::fromRadians( 0.0 );
+			p_angle = 0.0_radians;
 			p_vector[0] = T{ 1 };
 			p_vector[1] = T{ 0 };
 			p_vector[2] = T{ 0 };

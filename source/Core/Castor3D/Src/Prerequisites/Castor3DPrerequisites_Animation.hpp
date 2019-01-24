@@ -34,7 +34,7 @@ namespace castor3d
 		//!\~english	Submesh animation (morphing).
 		//!\~french		Animation de sous-maillage (morphing).
 		eMesh,
-		CASTOR_SCOPED_ENUM_BOUNDS( eMovable )
+		CU_ScopedEnumBounds( eMovable )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace castor3d
 		//!\~english	Linear mode.
 		//!\~french		Mode linéaire.
 		eLinear,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNearest )
+		CU_ScopedEnumBounds( eNearest )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -76,7 +76,7 @@ namespace castor3d
 		//!\~english	Paused animation state.
 		//!\~french		Animation en pause.
 		ePaused,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePlaying )
+		CU_ScopedEnumBounds( ePlaying )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -98,7 +98,7 @@ namespace castor3d
 		//!\~english	Bone objects.
 		//!\~french		Objets os.
 		eBone,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNode )
+		CU_ScopedEnumBounds( eNode )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -145,17 +145,17 @@ namespace castor3d
 		float m_scale;
 	};
 
-	DECLARE_SMART_PTR( Animation );
-	DECLARE_SMART_PTR( AnimationKeyFrame );
-	DECLARE_SMART_PTR( SkeletonAnimation );
-	DECLARE_SMART_PTR( SkeletonAnimationKeyFrame );
-	DECLARE_SMART_PTR( SkeletonAnimationObject );
-	DECLARE_SMART_PTR( SkeletonAnimationBone );
-	DECLARE_SMART_PTR( SkeletonAnimationNode );
-	DECLARE_SMART_PTR( MeshAnimation );
-	DECLARE_SMART_PTR( MeshAnimationKeyFrame );
-	DECLARE_SMART_PTR( MeshAnimationSubmesh );
-	DECLARE_SMART_PTR( Animable );
+	CU_DeclareSmartPtr( Animation );
+	CU_DeclareSmartPtr( AnimationKeyFrame );
+	CU_DeclareSmartPtr( SkeletonAnimation );
+	CU_DeclareSmartPtr( SkeletonAnimationKeyFrame );
+	CU_DeclareSmartPtr( SkeletonAnimationObject );
+	CU_DeclareSmartPtr( SkeletonAnimationBone );
+	CU_DeclareSmartPtr( SkeletonAnimationNode );
+	CU_DeclareSmartPtr( MeshAnimation );
+	CU_DeclareSmartPtr( MeshAnimationKeyFrame );
+	CU_DeclareSmartPtr( MeshAnimationSubmesh );
+	CU_DeclareSmartPtr( Animable );
 
 	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
 	using SubmeshAnimationBufferMap = std::map< uint32_t, SubmeshAnimationBuffer >;
@@ -165,13 +165,13 @@ namespace castor3d
 	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
 
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( castor::String, AnimationSPtr, AnimationPtrStr );
+	CU_DeclareMap( castor::String, AnimationSPtr, AnimationPtrStr );
 	//! SkeletonAnimationObject pointer map, sorted by name.
-	DECLARE_MAP( castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
+	CU_DeclareMap( castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! SkeletonAnimationObject pointer array.
-	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
+	CU_DeclareVector( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
 	//! SkeletonAnimationObject array.
-	DECLARE_VECTOR( MeshAnimationSubmesh, MeshAnimationSubmesh );
+	CU_DeclareVector( MeshAnimationSubmesh, MeshAnimationSubmesh );
 
 	//@}
 }

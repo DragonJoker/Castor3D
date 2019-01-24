@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include <config.hpp>
 
-#if CASTOR_USE_PCH
-#	ifdef CASTOR_PLATFORM_WINDOWS
+#if CU_UsePCH
+#	ifdef CU_PlatformWindows
 #		undef __WXGTK__
 #		define __WXMSW__
 #	endif
@@ -113,7 +113,7 @@ See LICENSE file in root folder
 #	include <GuiCommonPrerequisites.hpp>
 #endif
 
-#if !defined( VLD_AVAILABLE ) && defined( CASTOR_PLATFORM_WINDOWS ) && !defined( NDEBUG )
+#if !defined( VLD_AVAILABLE ) && defined( CU_PlatformWindows ) && !defined( NDEBUG )
 #	define _CRTDBG_MAP_ALLOC
 #	include <cstdlib>
 #	include <crtdbg.h>

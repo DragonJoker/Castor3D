@@ -9,7 +9,7 @@ namespace castor
 		, m_numLevels{ numLevels }
 		, m_minBlockSize{ minBlockSize }
 	{
-		REQUIRE( numLevels < 32 );
+		CU_Require( numLevels < 32 );
 		m_freeLists.resize( m_numLevels + 1 );
 		m_freeLists[0u].push_back( Block{ this->getPointer( 0u ) } );
 	}
@@ -65,7 +65,7 @@ namespace castor
 			{
 				return ptrLevel.first == offset;
 			} );
-		REQUIRE( it != m_allocated.end() );
+		CU_Require( it != m_allocated.end() );
 
 		if ( it != m_allocated.end() )
 		{

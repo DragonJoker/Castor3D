@@ -1,4 +1,4 @@
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( disable:4503 )
 #endif
 
@@ -19,10 +19,10 @@
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <Command/CommandBufferInheritanceInfo.hpp>
 
@@ -143,7 +143,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, Pass & pass
 			, NodesType & nodes
-			, renderer::PrimitiveTopology topology
+			, ashes::PrimitiveTopology topology
 			, CulledType const & culled
 			, CreatorFunc creator )
 		{
@@ -391,7 +391,7 @@ namespace castor3d
 				, sceneFlags
 				, pass
 				, nodes
-				, renderer::PrimitiveTopology::eTriangleStrip
+				, ashes::PrimitiveTopology::eTriangleStrip
 				, culled
 				, [&renderPass, &pass, &billboard]( RenderPipeline & pipeline )
 				{
@@ -619,7 +619,7 @@ namespace castor3d
 						, textureFlags
 						, programFlags
 						, sceneFlags
-						, renderer::PrimitiveTopology::eTriangleStrip
+						, ashes::PrimitiveTopology::eTriangleStrip
 						, pass->IsTwoSided()
 						, billboard.getGeometryBuffers().layouts );
 
@@ -655,7 +655,7 @@ namespace castor3d
 		template< typename NodeType >
 		void doAddRenderNodeCommand( RenderPipeline & pipeline
 			, NodeType const & node
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
 			if ( instanceCount )
@@ -681,7 +681,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, renderer::IndexType::eUInt32 );
+						, ashes::IndexType::eUInt32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -698,7 +698,7 @@ namespace castor3d
 			, RenderPipeline & pipeline
 			, NodeType const & node
 			, Submesh & object
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t instanceCount = 1u )
 		{
 			if ( instanceCount )
@@ -724,7 +724,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, renderer::IndexType::eUInt32 );
+						, ashes::IndexType::eUInt32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -739,7 +739,7 @@ namespace castor3d
 		template< typename CulledMapType
 			, typename AllMapType >
 		void doAddRenderNodes( CulledMapType & outputNodes
-			, renderer::CommandBuffer const & commandBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, AllMapType & renderNodes
@@ -764,7 +764,7 @@ namespace castor3d
 		void doParseRenderNodes( MapType & inputNodes
 			, CulledMapType & outputNodes
 			, CulledArrayType const & culledNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -783,7 +783,7 @@ namespace castor3d
 		}
 
 		template< typename CulledMapType >
-		void doAddRenderNodesCommands( renderer::CommandBuffer const & commandBuffer
+		void doAddRenderNodesCommands( ashes::CommandBuffer const & commandBuffer
 			, RenderPipeline & pipeline
 			, Pass & pass
 			, Submesh & submesh
@@ -799,7 +799,7 @@ namespace castor3d
 
 		template< typename MapType >
 		void doParseRenderNodesCommands( MapType & inputNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -812,7 +812,7 @@ namespace castor3d
 
 		template<>
 		void doParseRenderNodesCommands( BillboardRenderNodesPtrByPipelineMap & inputNodes
-			, renderer::CommandBuffer const & commandBuffer )
+			, ashes::CommandBuffer const & commandBuffer )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -837,28 +837,9 @@ namespace castor3d
 			{
 				doOnCullerCompute( culler );
 			} ) )
+		, m_renderNodes{ std::make_unique< SceneRenderNodes >( m_culler.getScene() ) }
+		, m_culledRenderNodes{ std::make_unique< SceneCulledRenderNodes >( m_culler.getScene() ) }
 	{
-		if ( m_culler.hasCamera() )
-		{
-			doInitialise( m_culler.getScene(), m_culler.getCamera() );
-		}
-		else
-		{
-			doInitialise( m_culler.getScene() );
-		}
-	}
-
-	void RenderQueue::doInitialise( Scene const & scene
-		, Camera const & camera )
-	{
-		doInitialise( scene );
-		m_culledRenderNodes = std::make_unique< SceneCulledRenderNodes >( scene );
-	}
-
-	void RenderQueue::doInitialise( Scene const & scene )
-	{
-		m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
-		m_renderNodes = std::make_unique< SceneRenderNodes >( scene );
 	}
 
 	void RenderQueue::cleanup()
@@ -870,6 +851,11 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
+		if ( !m_commandBuffer )
+		{
+			m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
+		}
+
 		if ( m_allChanged )
 		{
 			doParseAllRenderNodes( shadowMaps );
@@ -891,10 +877,10 @@ namespace castor3d
 
 	void RenderQueue::doPrepareCommandBuffer()
 	{
-		auto & camera = m_culler.getCamera();
+		auto & culledNodes = getCulledRenderNodes();
 
-		m_commandBuffer->begin( renderer::CommandBufferUsageFlag::eRenderPassContinue
-			, renderer::CommandBufferInheritanceInfo
+		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
+			, ashes::CommandBufferInheritanceInfo
 			{
 				&getOwner()->getRenderPass(),
 				0u,
@@ -904,7 +890,7 @@ namespace castor3d
 				0u
 			} );
 
-		doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.frontCulled
+		doTraverseNodes( culledNodes.instancedStaticNodes.frontCulled
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -916,7 +902,7 @@ namespace castor3d
 					, submesh
 					, nodes );
 			} );
-		doTraverseNodes( m_culledRenderNodes->instancedStaticNodes.backCulled
+		doTraverseNodes( culledNodes.instancedStaticNodes.backCulled
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -928,7 +914,7 @@ namespace castor3d
 					, submesh
 					, nodes );
 			} );
-		doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.frontCulled
+		doTraverseNodes( culledNodes.instancedSkinnedNodes.frontCulled
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -940,7 +926,7 @@ namespace castor3d
 					, submesh
 					, nodes );
 			} );
-		doTraverseNodes( m_culledRenderNodes->instancedSkinnedNodes.backCulled
+		doTraverseNodes( culledNodes.instancedSkinnedNodes.backCulled
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -953,24 +939,24 @@ namespace castor3d
 					, nodes );
 			} );
 
-		doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.frontCulled
+		doParseRenderNodesCommands( culledNodes.staticNodes.frontCulled
 			, *m_commandBuffer );
-		doParseRenderNodesCommands( m_culledRenderNodes->staticNodes.backCulled
-			, *m_commandBuffer );
-
-		doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.frontCulled
-			, *m_commandBuffer );
-		doParseRenderNodesCommands( m_culledRenderNodes->skinnedNodes.backCulled
+		doParseRenderNodesCommands( culledNodes.staticNodes.backCulled
 			, *m_commandBuffer );
 
-		doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.frontCulled
+		doParseRenderNodesCommands( culledNodes.skinnedNodes.frontCulled
 			, *m_commandBuffer );
-		doParseRenderNodesCommands( m_culledRenderNodes->morphingNodes.backCulled
+		doParseRenderNodesCommands( culledNodes.skinnedNodes.backCulled
 			, *m_commandBuffer );
 
-		doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.frontCulled
+		doParseRenderNodesCommands( culledNodes.morphingNodes.frontCulled
 			, *m_commandBuffer );
-		doParseRenderNodesCommands( m_culledRenderNodes->billboardNodes.backCulled
+		doParseRenderNodesCommands( culledNodes.morphingNodes.backCulled
+			, *m_commandBuffer );
+
+		doParseRenderNodesCommands( culledNodes.billboardNodes.frontCulled
+			, *m_commandBuffer );
+		doParseRenderNodesCommands( culledNodes.billboardNodes.backCulled
 			, *m_commandBuffer );
 
 		m_commandBuffer->end();
@@ -978,118 +964,120 @@ namespace castor3d
 
 	void RenderQueue::doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
-		m_renderNodes->instancedStaticNodes.backCulled.clear();
-		m_renderNodes->instancedStaticNodes.frontCulled.clear();
-		m_renderNodes->staticNodes.backCulled.clear();
-		m_renderNodes->staticNodes.frontCulled.clear();
-		m_renderNodes->skinnedNodes.backCulled.clear();
-		m_renderNodes->skinnedNodes.frontCulled.clear();
-		m_renderNodes->instancedSkinnedNodes.backCulled.clear();
-		m_renderNodes->instancedSkinnedNodes.frontCulled.clear();
-		m_renderNodes->morphingNodes.backCulled.clear();
-		m_renderNodes->morphingNodes.frontCulled.clear();
-		m_renderNodes->billboardNodes.backCulled.clear();
-		m_renderNodes->billboardNodes.frontCulled.clear();
+		auto & culledNodes = getCulledRenderNodes();
+		auto & allNodes = getAllRenderNodes();
+		allNodes.instancedStaticNodes.backCulled.clear();
+		allNodes.instancedStaticNodes.frontCulled.clear();
+		allNodes.staticNodes.backCulled.clear();
+		allNodes.staticNodes.frontCulled.clear();
+		allNodes.skinnedNodes.backCulled.clear();
+		allNodes.skinnedNodes.frontCulled.clear();
+		allNodes.instancedSkinnedNodes.backCulled.clear();
+		allNodes.instancedSkinnedNodes.frontCulled.clear();
+		allNodes.morphingNodes.backCulled.clear();
+		allNodes.morphingNodes.frontCulled.clear();
+		allNodes.billboardNodes.backCulled.clear();
+		allNodes.billboardNodes.frontCulled.clear();
 
 		castor3d::doSortRenderNodes( *getOwner()
 			, m_opaque
 			, m_ignoredNode
-			, *m_renderNodes
+			, allNodes
 			, shadowMaps );
 		castor3d::doSortRenderNodes( *getOwner()
 			, m_opaque
-			, m_renderNodes->scene
-			, m_renderNodes->billboardNodes
+			, allNodes.scene
+			, allNodes.billboardNodes
 			, shadowMaps );
 
 		auto & renderPass = *getOwner();
-		auto & nodes = *m_renderNodes;
 		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [&renderPass, &nodes, shadowMaps]()
+			, [&renderPass, &allNodes, shadowMaps]()
 			{
-				doInitialiseNodes( renderPass, nodes.staticNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.staticNodes.backCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.skinnedNodes.backCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, nodes.morphingNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.staticNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.staticNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.skinnedNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.skinnedNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.morphingNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.morphingNodes.backCulled, shadowMaps );
 
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.frontCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedStaticNodes.backCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.frontCulled, shadowMaps );
-				doInitialiseInstancedNodes( renderPass, nodes.instancedSkinnedNodes.backCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, allNodes.instancedStaticNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, allNodes.instancedStaticNodes.backCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, allNodes.instancedSkinnedNodes.frontCulled, shadowMaps );
+				doInitialiseInstancedNodes( renderPass, allNodes.instancedSkinnedNodes.backCulled, shadowMaps );
 			} ) );
-		auto & bbNodes = m_renderNodes->billboardNodes;
 		renderPass.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-			, [&renderPass, &bbNodes, shadowMaps]()
+			, [&renderPass, &allNodes, shadowMaps]()
 			{
-				doInitialiseNodes( renderPass, bbNodes.frontCulled, shadowMaps );
-				doInitialiseNodes( renderPass, bbNodes.backCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.billboardNodes.frontCulled, shadowMaps );
+				doInitialiseNodes( renderPass, allNodes.billboardNodes.backCulled, shadowMaps );
 			} ) );
 	}
 
 	void RenderQueue::doParseCulledRenderNodes()
 	{
-		m_culledRenderNodes->instancedStaticNodes.backCulled.clear();
-		m_culledRenderNodes->instancedStaticNodes.frontCulled.clear();
-		m_culledRenderNodes->staticNodes.backCulled.clear();
-		m_culledRenderNodes->staticNodes.frontCulled.clear();
-		m_culledRenderNodes->skinnedNodes.backCulled.clear();
-		m_culledRenderNodes->skinnedNodes.frontCulled.clear();
-		m_culledRenderNodes->instancedSkinnedNodes.backCulled.clear();
-		m_culledRenderNodes->instancedSkinnedNodes.frontCulled.clear();
-		m_culledRenderNodes->morphingNodes.backCulled.clear();
-		m_culledRenderNodes->morphingNodes.frontCulled.clear();
-		m_culledRenderNodes->billboardNodes.backCulled.clear();
-		m_culledRenderNodes->billboardNodes.frontCulled.clear();
+		auto & culledNodes = getCulledRenderNodes();
+		auto & allNodes = getAllRenderNodes();
+		culledNodes.instancedStaticNodes.backCulled.clear();
+		culledNodes.instancedStaticNodes.frontCulled.clear();
+		culledNodes.staticNodes.backCulled.clear();
+		culledNodes.staticNodes.frontCulled.clear();
+		culledNodes.skinnedNodes.backCulled.clear();
+		culledNodes.skinnedNodes.frontCulled.clear();
+		culledNodes.instancedSkinnedNodes.backCulled.clear();
+		culledNodes.instancedSkinnedNodes.frontCulled.clear();
+		culledNodes.morphingNodes.backCulled.clear();
+		culledNodes.morphingNodes.frontCulled.clear();
+		culledNodes.billboardNodes.backCulled.clear();
+		culledNodes.billboardNodes.frontCulled.clear();
 		auto & culler = getOwner()->getCuller();
 
-		doTraverseNodes( m_renderNodes->instancedStaticNodes.frontCulled
-			, [this, &culler]( RenderPipeline & pipeline
+		doTraverseNodes( allNodes.instancedStaticNodes.frontCulled
+			, [this, &culledNodes, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, auto & nodes )
 			{
-				doAddRenderNodes( m_culledRenderNodes->instancedStaticNodes.frontCulled
+				doAddRenderNodes( culledNodes.instancedStaticNodes.frontCulled
 					, *m_commandBuffer
 					, pipeline
 					, pass
 					, nodes
 					, culler.getCulledSubmeshes( m_opaque ) );
 			} );
-		doTraverseNodes( m_renderNodes->instancedStaticNodes.backCulled
-			, [this, &culler]( RenderPipeline & pipeline
+		doTraverseNodes( allNodes.instancedStaticNodes.backCulled
+			, [this, &culledNodes, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, auto & nodes )
 			{
-				doAddRenderNodes( m_culledRenderNodes->instancedStaticNodes.backCulled
+				doAddRenderNodes( culledNodes.instancedStaticNodes.backCulled
 					, *m_commandBuffer
 					, pipeline
 					, pass
 					, nodes
 					, culler.getCulledSubmeshes( m_opaque ) );
 			} );
-		doTraverseNodes( m_renderNodes->instancedSkinnedNodes.frontCulled
-			, [this, &culler]( RenderPipeline & pipeline
+		doTraverseNodes( allNodes.instancedSkinnedNodes.frontCulled
+			, [this, &culledNodes, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, auto & nodes )
 			{
-				doAddRenderNodes( m_culledRenderNodes->instancedSkinnedNodes.frontCulled
+				doAddRenderNodes( culledNodes.instancedSkinnedNodes.frontCulled
 					, *m_commandBuffer
 					, pipeline
 					, pass
 					, nodes
 					, culler.getCulledSubmeshes( m_opaque ) );
 			} );
-		doTraverseNodes( m_renderNodes->instancedSkinnedNodes.backCulled
-			, [this, &culler]( RenderPipeline & pipeline
+		doTraverseNodes( allNodes.instancedSkinnedNodes.backCulled
+			, [this, &culledNodes, &culler]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
 				, auto & nodes )
 			{
-				doAddRenderNodes( m_culledRenderNodes->instancedSkinnedNodes.backCulled
+				doAddRenderNodes( culledNodes.instancedSkinnedNodes.backCulled
 					, *m_commandBuffer
 					, pipeline
 					, pass
@@ -1097,39 +1085,39 @@ namespace castor3d
 					, culler.getCulledSubmeshes( m_opaque ) );
 			} );
 
-		doParseRenderNodes( m_renderNodes->staticNodes.frontCulled
-			, m_culledRenderNodes->staticNodes.frontCulled
+		doParseRenderNodes( allNodes.staticNodes.frontCulled
+			, culledNodes.staticNodes.frontCulled
 			, culler.getCulledSubmeshes( m_opaque )
 			, *m_commandBuffer );
-		doParseRenderNodes( m_renderNodes->staticNodes.backCulled
-			, m_culledRenderNodes->staticNodes.backCulled
-			, culler.getCulledSubmeshes( m_opaque )
-			, *m_commandBuffer );
-
-		doParseRenderNodes( m_renderNodes->skinnedNodes.frontCulled
-			, m_culledRenderNodes->skinnedNodes.frontCulled
-			, culler.getCulledSubmeshes( m_opaque )
-			, *m_commandBuffer );
-		doParseRenderNodes( m_renderNodes->skinnedNodes.backCulled
-			, m_culledRenderNodes->skinnedNodes.backCulled
+		doParseRenderNodes( allNodes.staticNodes.backCulled
+			, culledNodes.staticNodes.backCulled
 			, culler.getCulledSubmeshes( m_opaque )
 			, *m_commandBuffer );
 
-		doParseRenderNodes( m_renderNodes->morphingNodes.frontCulled
-			, m_culledRenderNodes->morphingNodes.frontCulled
+		doParseRenderNodes( allNodes.skinnedNodes.frontCulled
+			, culledNodes.skinnedNodes.frontCulled
 			, culler.getCulledSubmeshes( m_opaque )
 			, *m_commandBuffer );
-		doParseRenderNodes( m_renderNodes->morphingNodes.backCulled
-			, m_culledRenderNodes->morphingNodes.backCulled
+		doParseRenderNodes( allNodes.skinnedNodes.backCulled
+			, culledNodes.skinnedNodes.backCulled
 			, culler.getCulledSubmeshes( m_opaque )
 			, *m_commandBuffer );
 
-		doParseRenderNodes( m_renderNodes->billboardNodes.frontCulled
-			, m_culledRenderNodes->billboardNodes.frontCulled
+		doParseRenderNodes( allNodes.morphingNodes.frontCulled
+			, culledNodes.morphingNodes.frontCulled
+			, culler.getCulledSubmeshes( m_opaque )
+			, *m_commandBuffer );
+		doParseRenderNodes( allNodes.morphingNodes.backCulled
+			, culledNodes.morphingNodes.backCulled
+			, culler.getCulledSubmeshes( m_opaque )
+			, *m_commandBuffer );
+
+		doParseRenderNodes( allNodes.billboardNodes.frontCulled
+			, culledNodes.billboardNodes.frontCulled
 			, culler.getCulledBillboards( m_opaque )
 			, *m_commandBuffer );
-		doParseRenderNodes( m_renderNodes->billboardNodes.backCulled
-			, m_culledRenderNodes->billboardNodes.backCulled
+		doParseRenderNodes( allNodes.billboardNodes.backCulled
+			, culledNodes.billboardNodes.backCulled
 			, culler.getCulledBillboards( m_opaque )
 			, *m_commandBuffer );
 	}

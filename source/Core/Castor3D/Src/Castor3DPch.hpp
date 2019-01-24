@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <config.hpp>
 
-#if CASTOR_USE_PCH
+#if CU_UsePCH
 #	include "Castor3DPrerequisites.hpp"
 
 #	include <RequiredVersion.hpp>
@@ -74,8 +74,8 @@ See LICENSE file in root folder
 #	include <Miscellaneous/StringUtils.hpp>
 #	include <Miscellaneous/Utils.hpp>
 
-// GlslWriter
-#	include <GlslSource.hpp>
+// ShaderWriter
+#	include <ShaderWriter/Source.hpp>
 
 // RendererLib
 #	include <Buffer/Buffer.hpp>

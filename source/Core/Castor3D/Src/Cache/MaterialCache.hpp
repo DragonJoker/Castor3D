@@ -170,7 +170,7 @@ namespace castor3d
 		 */
 		inline PassBuffer const & getPassBuffer()const
 		{
-			REQUIRE( m_passBuffer );
+			CU_Require( m_passBuffer );
 			return *m_passBuffer;
 		}
 
@@ -183,7 +183,7 @@ namespace castor3d
 		std::shared_ptr< PassBuffer > m_passBuffer;
 	};
 	using MaterialCache = Cache< Material, castor::String >;
-	DECLARE_SMART_PTR( MaterialCache );
+	CU_DeclareSmartPtr( MaterialCache );
 }
 
 #endif

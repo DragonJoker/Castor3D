@@ -125,19 +125,19 @@ namespace castor3d
 			, OverlayType::eText
 			, nullptr
 			, m_titlePanel->getOverlay().shared_from_this() )->getTextOverlay();
-		m_cpuName = cache.add( baseName + cuT( "_CPUName" )
+		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
 			, OverlayType::eText
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		m_cpuValue = cache.add( baseName + cuT( "_CPUValue" )
+		m_cpu.value = cache.add( baseName + cuT( "_CPUValue" )
 			, OverlayType::eText
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		m_gpuName = cache.add( baseName + cuT( "_GPUName" )
+		m_gpu.name = cache.add( baseName + cuT( "_GPUName" )
 			, OverlayType::eText
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
-		m_gpuValue = cache.add( baseName + cuT( "_GPUValue" )
+		m_gpu.value = cache.add( baseName + cuT( "_GPUValue" )
 			, OverlayType::eText
 			, nullptr
 			, m_panel->getOverlay().shared_from_this() )->getTextOverlay();
@@ -145,37 +145,37 @@ namespace castor3d
 		m_panel->setPixelPosition( Position{ 330, 0u } );
 		m_titlePanel->setPixelPosition( Position{ 0, 0 } );
 		m_titleText->setPixelPosition( Position{ 10, 0 } );
-		m_cpuName->setPixelPosition( Position{ 10, 20 } );
-		m_cpuValue->setPixelPosition( Position{ 45, 20 } );
-		m_gpuName->setPixelPosition( Position{ 130, 20 } );
-		m_gpuValue->setPixelPosition( Position{ 165, 20 } );
+		m_cpu.name->setPixelPosition( Position{ 10, 20 } );
+		m_cpu.value->setPixelPosition( Position{ 45, 20 } );
+		m_gpu.name->setPixelPosition( Position{ 130, 20 } );
+		m_gpu.value->setPixelPosition( Position{ 165, 20 } );
 
 		m_panel->setPixelSize( Size{ 250, 40 } );
 		m_titlePanel->setPixelSize( Size{ 250, 20 } );
 		m_titleText->setPixelSize( Size{ 230, 20 } );
-		m_cpuName->setPixelSize( Size{ 30, 20 } );
-		m_cpuValue->setPixelSize( Size{ 75, 20 } );
-		m_gpuName->setPixelSize( Size{ 30, 20 } );
-		m_gpuValue->setPixelSize( Size{ 75, 20 } );
+		m_cpu.name->setPixelSize( Size{ 30, 20 } );
+		m_cpu.value->setPixelSize( Size{ 75, 20 } );
+		m_gpu.name->setPixelSize( Size{ 30, 20 } );
+		m_gpu.value->setPixelSize( Size{ 75, 20 } );
 
 		m_titleText->setFont( cuT( "Arial20" ) );
-		m_cpuName->setFont( cuT( "Arial10" ) );
-		m_gpuName->setFont( cuT( "Arial10" ) );
-		m_cpuValue->setFont( cuT( "Arial10" ) );
-		m_gpuValue->setFont( cuT( "Arial10" ) );
+		m_cpu.name->setFont( cuT( "Arial10" ) );
+		m_gpu.name->setFont( cuT( "Arial10" ) );
+		m_cpu.value->setFont( cuT( "Arial10" ) );
+		m_gpu.value->setFont( cuT( "Arial10" ) );
 
 		m_titleText->setCaption( category );
-		m_cpuName->setCaption( cuT( "CPU:" ) );
-		m_gpuName->setCaption( cuT( "GPU:" ) );
+		m_cpu.name->setCaption( cuT( "CPU:" ) );
+		m_gpu.name->setCaption( cuT( "GPU:" ) );
 
 		auto & materials = cache.getEngine()->getMaterialCache();
 		m_panel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_titlePanel->setMaterial( materials.find( cuT( "AlphaDarkBlue" ) ) );
 		m_titleText->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpuName->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpuName->setMaterial( materials.find( cuT( "White" ) ) );
-		m_cpuValue->setMaterial( materials.find( cuT( "White" ) ) );
-		m_gpuValue->setMaterial( materials.find( cuT( "White" ) ) );
+		m_cpu.name->setMaterial( materials.find( cuT( "White" ) ) );
+		m_gpu.name->setMaterial( materials.find( cuT( "White" ) ) );
+		m_cpu.value->setMaterial( materials.find( cuT( "White" ) ) );
+		m_gpu.value->setMaterial( materials.find( cuT( "White" ) ) );
 
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eLeft );
@@ -183,10 +183,10 @@ namespace castor3d
 		m_panel->setVisible( true );
 		m_titlePanel->setVisible( true );
 		m_titleText->setVisible( true );
-		m_cpuName->setVisible( true );
-		m_gpuName->setVisible( true );
-		m_cpuValue->setVisible( true );
-		m_gpuValue->setVisible( true );
+		m_cpu.name->setVisible( true );
+		m_gpu.name->setVisible( true );
+		m_cpu.value->setVisible( true );
+		m_gpu.value->setVisible( true );
 	}
 
 	void DebugOverlays::RenderPassOverlays::initialise( uint32_t index )
@@ -196,12 +196,12 @@ namespace castor3d
 
 	DebugOverlays::RenderPassOverlays::~RenderPassOverlays()
 	{
-		if ( m_cpuName )
+		if ( m_cpu.name )
 		{
-			m_cache.remove( m_cpuName->getOverlayName() );
-			m_cache.remove( m_gpuName->getOverlayName() );
-			m_cache.remove( m_gpuValue->getOverlayName() );
-			m_cache.remove( m_cpuValue->getOverlayName() );
+			m_cache.remove( m_cpu.name->getOverlayName() );
+			m_cache.remove( m_gpu.name->getOverlayName() );
+			m_cache.remove( m_gpu.value->getOverlayName() );
+			m_cache.remove( m_cpu.value->getOverlayName() );
 			m_cache.remove( m_titleText->getOverlayName() );
 			m_cache.remove( m_titlePanel->getOverlayName() );
 			m_cache.remove( m_panel->getOverlayName() );
@@ -230,21 +230,20 @@ namespace castor3d
 		return m_timers.empty();
 	}
 
-	Nanoseconds DebugOverlays::RenderPassOverlays::update()
+	void DebugOverlays::RenderPassOverlays::update()
 	{
-		Nanoseconds cpu{ 0 };
-		Nanoseconds gpu{ 0 };
+		m_cpu.time = 0_ns;
+		m_gpu.time = 0_ns;
 
 		for ( auto & timer : m_timers )
 		{
-			cpu += timer.get().getCpuTime();
-			gpu += timer.get().getGpuTime();
+			m_cpu.time += timer.get().getCpuTime();
+			m_gpu.time += timer.get().getGpuTime();
 			timer.get().reset();
 		}
 
-		m_cpuValue->setCaption( makeStringStream() << cpu );
-		m_gpuValue->setCaption( makeStringStream() << gpu );
-		return gpu;
+		m_cpu.value->setCaption( makeStringStream() << m_cpu.time );
+		m_gpu.value->setCaption( makeStringStream() << m_gpu.time );
 	}
 
 	void DebugOverlays::RenderPassOverlays::retrieveGpuTime()
@@ -285,12 +284,11 @@ namespace castor3d
 	{
 		if ( m_visible )
 		{
-			m_gpuTime = 0_ms;
-			m_cpuTime = 0_ms;
+			m_gpuTime = 0_ns;
+			m_cpuTime = 0_ns;
 			m_taskTimer.getElapsed();
 		}
 
-		m_externalTime = m_frameTimer.getElapsed();
 		m_renderInfo = RenderInfo{};
 
 		if ( m_dirty )
@@ -303,6 +301,7 @@ namespace castor3d
 			}
 		}
 
+		m_externalTime = m_frameTimer.getElapsed();
 		return m_renderInfo;
 	}
 
@@ -350,13 +349,16 @@ namespace castor3d
 			m_averageFps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_averageTime ).count();
 			m_fps = 1000000.0f / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count();
 			m_gpuTotalTime = 0_ns;
+			m_gpuClientTime = 0_ns;
 
 			for ( auto & pass : m_renderPasses )
 			{
-				m_gpuTotalTime += pass.second.update();
+				pass.second.update();
+				m_gpuTotalTime += pass.second.getGpuTime();
+				m_gpuClientTime += pass.second.getCpuTime();
 			}
 
-			m_gpuClientTime = m_gpuTime - m_gpuTotalTime;
+			//m_gpuClientTime = m_gpuTime - m_gpuTotalTime;
 			m_debugPanel->update();
 			getEngine()->getRenderSystem()->resetGpuTime();
 

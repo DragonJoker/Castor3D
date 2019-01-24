@@ -27,7 +27,7 @@ namespace castor
 		: private Collection< Font, String >
 	{
 	public:
-		DECLARE_MAP( castor::String, castor::Path, PathName );
+		CU_DeclareMap( castor::String, castor::Path, PathName );
 
 	public:
 		/**

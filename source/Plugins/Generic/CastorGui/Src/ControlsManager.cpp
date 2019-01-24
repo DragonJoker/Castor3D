@@ -117,7 +117,7 @@ namespace CastorGui
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
 		{
-			CASTOR_EXCEPTION( "A control with this ID already exists in the manager" );
+			CU_Exception( "A control with this ID already exists in the manager" );
 		}
 
 		m_controlsById.insert( std::make_pair( p_control->getId(), p_control ) );
@@ -136,7 +136,7 @@ namespace CastorGui
 
 		if ( it == controls.end() )
 		{
-			CASTOR_EXCEPTION( "This control does not exist in the manager" );
+			CU_Exception( "This control does not exist in the manager" );
 		}
 
 		return it->second.lock();
@@ -315,7 +315,7 @@ namespace CastorGui
 
 			if ( it == m_controlsById.end() )
 			{
-				CASTOR_EXCEPTION( "This control does not exist in the manager." );
+				CU_Exception( "This control does not exist in the manager." );
 			}
 
 			m_controlsById.erase( it );

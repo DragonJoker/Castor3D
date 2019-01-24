@@ -8,39 +8,39 @@ See LICENSE file in root folder
 
 #if defined( _MSC_VER )
 
-#	define CASTOR_COMPILER_MSVC
-#	define CASTOR_COMPILER_VERSION _MSC_VER
+#	define CU_CompilerMSVC
+#	define CU_CompilerVersion _MSC_VER
 #	if !defined( VLD_AVAILABLE )
 #		define _CRTDBG_MAP_ALLOC
 #		include <stdlib.h>
 #		include <crtdbg.h>
 #	endif
-#	if CASTOR_COMPILER_VERSION < 1900
+#	if CU_CompilerVersion < 1900
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 
 #elif defined( __clang__ )
 
-#	define CASTOR_COMPILER_CLANG
-#	define CASTOR_COMPILER_GNUC
+#	define CU_CompilerCLANG
+#	define CU_CompilerGNUC
 #	if ( ! __has_feature( cxx_alignas ) || !__has_feature( cxx_nullptr ) || !__has_feature( cxx_defaulted_functions ) || !__has_feature( cxx_deleted_functions ) || !__has_feature( cxx_variadic_templates ) )
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 
 #elif defined( __GNUG__ )
 
-#	define CASTOR_COMPILER_GNUC
-#	define CASTOR_COMPILER_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#	if CASTOR_COMPILER_VERSION < 40900
+#	define CU_CompilerGNUC
+#	define CU_CompilerVersion (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#	if CU_CompilerVersion < 40900
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 
 #elif defined( __BORLANDC__ )
 
-#	define CASTOR_COMPILER_BORLAND
-#	define CASTOR_COMPILER_VERSION __BORLANDC__
+#	define CU_CompilerBORLAND
+#	define CU_CompilerVersion __BORLANDC__
 #	warning "Theoretically supported compiler, but untested yet"
-#	if CASTOR_COMPILER_VERSION <= 0x621
+#	if CU_CompilerVersion <= 0x621
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 
@@ -48,10 +48,10 @@ See LICENSE file in root folder
 #	error "Yet unsupported compiler"
 #endif
 
-#if defined( CASTOR_COMPILER_MSVC )
-#	define CASTOR_DLL_PREFIX cuT( "")
+#if defined( CU_CompilerMSVC )
+#	define CU_SharedLibPrefix cuT( "")
 #else
-#	define CASTOR_DLL_PREFIX cuT( "lib")
+#	define CU_SharedLibPrefix cuT( "lib")
 #endif
 
 #endif

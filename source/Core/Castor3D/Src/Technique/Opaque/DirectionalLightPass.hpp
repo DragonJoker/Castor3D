@@ -48,8 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, DirectionalLightPass & pass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english
@@ -63,8 +63,8 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			renderer::PipelinePtr doCreatePipeline( renderer::VertexLayout const & vertexLayout
-				, renderer::RenderPass const & renderPass
+			ashes::PipelinePtr doCreatePipeline( ashes::VertexLayout const & vertexLayout
+				, ashes::RenderPass const & renderPass
 				, bool blend )override;
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doBind
@@ -93,9 +93,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		DirectionalLightPass( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -121,17 +121,20 @@ namespace castor3d
 		 */
 		uint32_t getCount()const override;
 
-	private:
+	protected:
 		/**
 		 *\copydoc		castor3d::LightPass::doUpdate
 		 */
-		void doUpdate( castor::Size const & size
+		void doUpdate( bool first
+			, castor::Size const & size
 			, Light const & light
-			, Camera const & camera )override;
+			, Camera const & camera
+			, ShadowMap const * shadowMap = nullptr
+			, uint32_t shadowMapIndex = 0u )override;
 		/**
 		 *\copydoc		castor3d::LightPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
+		ShaderPtr doGetVertexShaderSource( SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
@@ -151,7 +154,7 @@ namespace castor3d
 			//!\~french		La variable contenant les matrices de transformations de la lumière.
 			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
-		renderer::UniformBufferPtr< Config > m_ubo;
+		ashes::UniformBufferPtr< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

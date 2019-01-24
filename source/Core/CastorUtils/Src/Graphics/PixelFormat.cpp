@@ -479,7 +479,7 @@ namespace castor
 				break;
 
 			default:
-				FAILURE( "Unsupported pixel format" );
+				CU_Failure( "Unsupported pixel format" );
 				break;
 			}
 
@@ -605,7 +605,7 @@ namespace castor
 				break;
 
 			default:
-				FAILURE( "Unsupported pixel format" );
+				CU_Failure( "Unsupported pixel format" );
 				break;
 			}
 
@@ -729,7 +729,7 @@ namespace castor
 				break;
 
 			default:
-				FAILURE( "Unsupported pixel format" );
+				CU_Failure( "Unsupported pixel format" );
 				break;
 			}
 		}
@@ -851,7 +851,7 @@ namespace castor
 				break;
 
 			default:
-				FAILURE( "Unsupported pixel format" );
+				CU_Failure( "Unsupported pixel format" );
 				break;
 			}
 		}
@@ -981,7 +981,7 @@ namespace castor
 					break;
 
 				default:
-					FAILURE( "Unsupported pixel format" );
+					CU_Failure( "Unsupported pixel format" );
 					break;
 				}
 			}
@@ -1108,7 +1108,7 @@ namespace castor
 				break;
 
 			default:
-				FAILURE( "Unsupported pixel format" );
+				CU_Failure( "Unsupported pixel format" );
 				break;
 			}
 

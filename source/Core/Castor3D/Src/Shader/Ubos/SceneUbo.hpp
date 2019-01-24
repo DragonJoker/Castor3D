@@ -97,7 +97,7 @@ namespace castor3d
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void update( Camera const & camera
+		C3D_API void update( Camera const * camera
 			, Fog const & fog )const;
 		/**
 		 *\~english
@@ -112,7 +112,7 @@ namespace castor3d
 		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
 		C3D_API void update( Scene const & scene
-			, Camera const & camera
+			, Camera const * camera
 			, bool lights = true )const;
 		/**
 		 *\~english
@@ -129,12 +129,12 @@ namespace castor3d
 		 *\~french
 		 *\name			getters.
 		 */
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline renderer::UniformBuffer< Configuration > const & getUbo()const
+		inline ashes::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -175,24 +175,24 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
 #define UBO_SCENE( writer, binding, set )\
-	glsl::Ubo scene{ writer\
+	sdw::Ubo scene{ writer\
 		, castor3d::SceneUbo::BufferScene\
 		, binding\
 		, set };\
-	auto c3d_ambientLight = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::AmbientLight );\
-	auto c3d_backgroundColour = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< glsl::IVec4 >( castor3d::SceneUbo::LightsCount );\
-	auto c3d_cameraPosition = scene.declMember< glsl::Vec4 >( castor3d::SceneUbo::CameraPos );\
-	auto c3d_windowSize = scene.declMember< glsl::IVec2 >( castor3d::SceneUbo::WindowSize );\
-	auto c3d_cameraNearPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraNearPlane ); \
-	auto c3d_cameraFarPlane = scene.declMember< glsl::Float >( castor3d::SceneUbo::CameraFarPlane );\
-	auto c3d_fogType = scene.declMember< glsl::Int >( castor3d::SceneUbo::FogType );\
-	auto c3d_fogDensity = scene.declMember< glsl::Float >( castor3d::SceneUbo::FogDensity );\
+	auto c3d_ambientLight = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::AmbientLight );\
+	auto c3d_backgroundColour = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
+	auto c3d_lightsCount = scene.declMember< sdw::IVec4 >( castor3d::SceneUbo::LightsCount );\
+	auto c3d_cameraPosition = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::CameraPos );\
+	auto c3d_windowSize = scene.declMember< sdw::IVec2 >( castor3d::SceneUbo::WindowSize );\
+	auto c3d_cameraNearPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraNearPlane ); \
+	auto c3d_cameraFarPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraFarPlane );\
+	auto c3d_fogType = scene.declMember< sdw::Int >( castor3d::SceneUbo::FogType );\
+	auto c3d_fogDensity = scene.declMember< sdw::Float >( castor3d::SceneUbo::FogDensity );\
 	scene.end()
 
 #endif

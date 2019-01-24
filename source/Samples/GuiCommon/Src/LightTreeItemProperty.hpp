@@ -24,14 +24,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_light		The target light
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	light		The target light
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_light		La lumiàre cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	light		La lumiàre cible
 		 */
-		LightTreeItemProperty( bool p_editable, castor3d::Light & p_light );
+		LightTreeItemProperty( bool editable, castor3d::Light & light );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -56,21 +56,29 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		virtual void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		virtual void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid );
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doPropertyChange
 		 */
-		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
+		virtual void doPropertyChange( wxPropertyGridEvent & event );
 
 	private:
-		void doCreateDirectionalLightProperties( wxPropertyGrid * p_grid, castor3d::DirectionalLightSPtr p_light );
-		void doCreatePointLightProperties( wxPropertyGrid * p_grid, castor3d::PointLightSPtr p_light );
-		void doCreateSpotLightProperties( wxPropertyGrid * p_grid, castor3d::SpotLightSPtr p_light );
-		void OnColourChange( castor::RgbColour const & p_value );
-		void OnIntensityChange( castor::Point2f const & p_value );
-		void OnAttenuationChange( castor::Point3f const & p_value );
-		void OnCutOffChange( double p_value );
-		void OnExponentChange( double p_value );
+		void doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLightSPtr light );
+		void doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLightSPtr light );
+		void doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLightSPtr light );
+		void doCreateShadowProperties( wxPropertyGrid * grid );
+		void onColourChange( castor::RgbColour const & value );
+		void onIntensityChange( castor::Point2f const & value );
+		void onAttenuationChange( castor::Point3f const & value );
+		void onCutOffChange( double value );
+		void onExponentChange( double value );
+		void onShadowTypeChange( castor3d::ShadowType value );
+		void onShadowMinOffsetChange( double value );
+		void onShadowMaxSlopeOffsetChange( double value );
+		void onShadowMaxVarianceChange( double value );
+		void onShadowVarianceBiasChange( double value );
+		void onShadowVolumetricStepsChange( long value );
+		void onShadowVolumetricScatteringFactorChange( double value );
 
 	private:
 		castor3d::Light & m_light;

@@ -305,7 +305,7 @@ namespace castor
 		template< typename T >
 		struct CoFactorComputer< T, 1 >
 		{
-			static inline T get( castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( matrix ), uint32_t CU_PARAM_UNUSED( column ), uint32_t CU_PARAM_UNUSED( row ) )
+			static inline T get( castor::SquareMatrix< T, 1 > const & CU_UnusedParam( matrix ), uint32_t CU_UnusedParam( column ), uint32_t CU_UnusedParam( row ) )
 			{
 				return T{ 1 };
 			}
@@ -370,7 +370,7 @@ namespace castor
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & rhs )
 		: my_matrix_type()
 	{
-		uint32_t constexpr count = std::min( Count, _Rows );
+		static uint32_t constexpr count = MinValue< Count, _Rows >::value;
 
 		for ( uint32_t i = 0; i < count; i++ )
 		{

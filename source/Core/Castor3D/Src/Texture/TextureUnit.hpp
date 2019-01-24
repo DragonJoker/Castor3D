@@ -110,7 +110,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La dimension de la texture.
 		 */
-		C3D_API renderer::TextureType getType()const;
+		C3D_API ashes::TextureType getType()const;
 		/**
 		 *\~english
 		 *\return		The texture.
@@ -227,7 +227,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le descripteur utilisé pour la texture.
 		 */
-		inline renderer::WriteDescriptorSet getDescriptor()const
+		inline ashes::WriteDescriptorSet getDescriptor()const
 		{
 			return m_descriptor;
 		}
@@ -240,7 +240,7 @@ namespace castor3d
 		RenderTargetWPtr m_renderTarget;
 		SamplerWPtr m_sampler;
 		bool m_autoMipmaps;
-		renderer::WriteDescriptorSet m_descriptor;
+		ashes::WriteDescriptorSet m_descriptor;
 		mutable bool m_changed;
 	};
 }

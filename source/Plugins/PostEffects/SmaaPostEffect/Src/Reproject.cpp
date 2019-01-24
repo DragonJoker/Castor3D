@@ -8,6 +8,7 @@
 #include <Render/RenderPassTimer.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -21,7 +22,7 @@
 
 #include <numeric>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -29,146 +30,182 @@ namespace smaa
 {
 	namespace
 	{
-		glsl::Shader doGetReprojectVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			auto texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_Position() = vec4( position, 0.0, 1.0 );
-					vtx_texture = texcoord;
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					vtx_texture = utils.bottomUpToTopDown( uv );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader doGetReprojectFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem.createGlslWriter();
-			writeConstants( writer, config, renderTargetMetrics, false );
-			writer.declConstant( constants::Reprojection
-				, 1_i
-				, reprojection );
-			writer.declConstant( constants::ReprojectionWeightScale
+			using namespace sdw;
+			FragmentWriter writer;
+			auto c3d_reprojectionWeightScale = writer.declConstant( constants::ReprojectionWeightScale
 				, Float( config.data.reprojectionWeightScale ) );
-			writer << getSmaaShader();
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_currentColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_currentColourTex" ), 0u, 0u );
-			auto c3d_previousColourTex = writer.declSampler< Sampler2D >( cuT( "c3d_previousColourTex" ), 1u, 0u );
-			auto c3d_velocityTex = writer.declSampler< Sampler2D >( cuT( "c3d_velocityTex" ), 2u, 0u, reprojection );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			auto c3d_currentColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_currentColourTex", 0u, 0u );
+			auto c3d_previousColourTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_previousColourTex", 1u, 0u );
+			auto c3d_velocityTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_velocityTex", 2u, 0u, reprojection );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declFragData< Vec4 >( cuT( "pxl_fragColour" ), 0u );
+			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
 
-			writer.implementFunction< void >( cuT( "main" )
-				, [&]()
+			auto SMAAResolvePS = writer.implementFunction< Vec4 >( "SMAAResolvePS"
+				, [&]( Vec2 const & texcoord
+					, SampledImage2DRgba32 const & currentColorTex
+					, SampledImage2DRgba32 const & previousColorTex )
 				{
-					if ( reprojection )
+					if ( config.data.enableReprojection )
 					{
-						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex, c3d_velocityTex )" << endi;
+						// Velocity is assumed to be calculated for motion blur, so we need to
+						// inverse it for reprojection:
+						auto velocity = writer.declLocale( "velocity"
+							, -texture( c3d_velocityTex, texcoord ).rg() );
+
+						// Fetch current pixel:
+						auto current = writer.declLocale( "current"
+							, texture( currentColorTex, texcoord ) );
+
+						// Reproject current coordinates and fetch previous pixel:
+						auto previous = writer.declLocale( "previous"
+							, texture( previousColorTex, texcoord + velocity ) );
+
+						// Attenuate the previous pixel if the velocity is different:
+						auto delta = writer.declLocale( "delta"
+							, abs( current.a() * current.a() - previous.a() * previous.a() ) / 5.0_f );
+						auto weight = writer.declLocale( "weight"
+							, 0.5_f * clamp( 1.0_f - sqrt( delta ) * c3d_reprojectionWeightScale, 0.0_f, 1.0_f ) );
+
+						// Blend the pixels according to the calculated weight:
+						writer.returnStmt( mix( current, previous, vec4( weight ) ) );
 					}
 					else
 					{
-						writer << "pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex )" << endi;
+						// Just blend the pixels:
+						auto current = writer.declLocale( "current"
+							, texture( currentColorTex, texcoord ) );
+						auto previous = writer.declLocale( "previous"
+							, texture( previousColorTex, texcoord ) );
+						writer.returnStmt( mix( current, previous, vec4( 0.5_f ) ) );
 					}
+				}
+				, InVec2{ writer, "texcoord" }
+				, InSampledImage2DRgba32{ writer, "currentColorTex" }
+				, InSampledImage2DRgba32{ writer, "previousColorTex" } );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
 				} );
-			return writer.finalise();
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 	
 	//*********************************************************************************************
 
 	Reproject::Reproject( castor3d::RenderTarget & renderTarget
-		, renderer::TextureView const & currentColourView
-		, renderer::TextureView const & previousColourView
-		, renderer::TextureView const * velocityView
+		, ashes::TextureView const & currentColourView
+		, ashes::TextureView const & previousColourView
+		, ashes::TextureView const * velocityView
 		, SmaaConfig const & config )
 		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
 		, m_surface{ *renderTarget.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SmaaReproject" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SmaaReproject" }
 	{
-		renderer::Extent2D size{ m_currentColourView.getTexture().getDimensions().width, m_currentColourView.getTexture().getDimensions().height };
+		ashes::Extent2D size{ m_currentColourView.getTexture().getDimensions().width, m_currentColourView.getTexture().getDimensions().height };
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = renderTarget.getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
 		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite | renderer::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader.shader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, config );
-		m_pixelShader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader.shader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
 			, config
 			, velocityView != nullptr );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
-		renderer::DescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( 0u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
+		setLayoutBindings.emplace_back( 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 		auto * view = &m_previousColourView;
 
 		if ( m_velocityView )
 		{
-			setLayoutBindings.emplace_back( 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
 			view = m_velocityView;
 		}
 
@@ -198,17 +235,17 @@ namespace smaa
 		reprojectCmd.begin();
 		timer.beginPass( reprojectCmd, passIndex );
 		// Put neighbourhood images in shader input layout.
-		reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_currentColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
-		reprojectCmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-			, renderer::PipelineStageFlag::eFragmentShader
-			, m_previousColourView.makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+		reprojectCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_currentColourView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		reprojectCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+			, ashes::PipelineStageFlag::eFragmentShader
+			, m_previousColourView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 		reprojectCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { renderer::ClearColorValue{} }
-			, renderer::SubpassContents::eInline );
+			, { ashes::ClearColorValue{} }
+			, ashes::SubpassContents::eInline );
 		registerFrame( reprojectCmd );
 		reprojectCmd.endRenderPass();
 		timer.endPass( reprojectCmd, passIndex );
@@ -220,15 +257,15 @@ namespace smaa
 	void Reproject::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Reproject" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "Reproject" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 	}
 
-	void Reproject::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void Reproject::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, m_currentColourView

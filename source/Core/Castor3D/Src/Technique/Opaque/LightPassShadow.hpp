@@ -304,8 +304,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, LightPassShadow & lightPass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl )
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl )
 				: my_program_type( engine, lightPass, vtx, pxl, true )
 			{
 			}
@@ -327,9 +327,9 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
 				, depthView
@@ -339,18 +339,29 @@ namespace castor3d
 				, true }
 		{
 		}
-		/**
-		 *\copydoc		castor3d::LightPass::render
-		 */
-		renderer::Semaphore const & render( uint32_t index
-			, renderer::Semaphore const & toWait
-			, TextureUnit * shadowMapOpt )override
-		{
-			this->doPrepareCommandBuffer( *this->m_pipeline, shadowMapOpt, !index );
-			return my_pass_type::render( index, toWait, nullptr );
-		}
 
-	private:
+	protected:
+		/**
+		 *\copydoc		castor3d::LightPass::doUpdate
+		 */
+		void doUpdate( bool first
+			, castor::Size const & size
+			, Light const & light
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex )override
+		{
+			my_pass_type::doUpdate( first
+				, size
+				, light
+				, camera
+				, nullptr
+				, 0u );
+			this->doPrepareCommandBuffer( *this->m_pipeline
+				, shadowMap
+				, shadowMapIndex
+				, first );
+		}
 		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */

@@ -27,15 +27,15 @@ namespace Testing
 	void CastorUtilsSignalTest::Creation()
 	{
 		Signal < std::function< void() > > signal;
-		auto connection( signal.connect( [](){ CASTOR_EXCEPTION( "coucou" ); } ) );
+		auto connection( signal.connect( [](){ CU_Exception( "coucou" ); } ) );
 		CT_CHECK_THROW( signal() );
 	}
 
 	void CastorUtilsSignalTest::Assignment()
 	{
 		Signal < std::function< void() > > signal;
-		auto connection = signal.connect( [](){ CASTOR_EXCEPTION( "coucou" ); } );
-		connection = signal.connect( [](){ CASTOR_EXCEPTION( "coin" ); } );
+		auto connection = signal.connect( [](){ CU_Exception( "coucou" ); } );
+		connection = signal.connect( [](){ CU_Exception( "coin" ); } );
 		try
 		{
 			signal();
@@ -52,20 +52,20 @@ namespace Testing
 	{
 		Signal < std::function< void() > > signal1;
 		Signal < std::function< void() > > signal2;
-		auto conn1 = signal1.connect( [](){ CASTOR_EXCEPTION( "coucou" ); } );
-		auto conn2 = signal2.connect( [](){ CASTOR_EXCEPTION( "coin" ); } );
+		auto conn1 = signal1.connect( [](){ CU_Exception( "coucou" ); } );
+		auto conn2 = signal2.connect( [](){ CU_Exception( "coin" ); } );
 		CT_CHECK_THROW( signal1() );
 		CT_CHECK_THROW( signal2() );
 		conn1 = std::move( conn2 );
 		CT_CHECK_NOTHROW( signal1() );
 		CT_CHECK_THROW( signal2() );
-		conn1 = signal1.connect( [](){ CASTOR_EXCEPTION( "coucou" ); } );
+		conn1 = signal1.connect( [](){ CU_Exception( "coucou" ); } );
 		CT_CHECK_NOTHROW( signal2() );
 		CT_CHECK_THROW( signal1() );
-		conn1 = signal2.connect( [](){ CASTOR_EXCEPTION( "coin" ); } );
+		conn1 = signal2.connect( [](){ CU_Exception( "coin" ); } );
 		CT_CHECK_NOTHROW( signal1() );
 		CT_CHECK_THROW( signal2() );
-		conn2 = signal1.connect( [](){ CASTOR_EXCEPTION( "coucou" ); } );
+		conn2 = signal1.connect( [](){ CU_Exception( "coucou" ); } );
 		CT_CHECK_THROW( signal2() );
 		CT_CHECK_THROW( signal1() );
 	}

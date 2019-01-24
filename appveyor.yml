@@ -25,7 +25,13 @@ branches:
 
 install:
   - cmd: git submodule init
-  - cmd: git submodule update
+  - cmd: git submodule update --init -- "source/CMake"
+  - cmd: git submodule update --recursive --init -- "source/external/Ashes"
+  - cmd: git submodule update --init -- "source/external/FreeImage"
+  - cmd: git submodule update --init -- "source/external/zlib"
+  - cmd: git submodule update --recursive --init -- "source/external/ShaderWriter"
+  - cmd: git submodule update --init -- "source/external/glslang"
+  - cmd: git submodule update --init -- "dependencies"
   - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017
   - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 15 2017 Win64
   - cmd: if "%platform%"=="Win32" set PLATFORM_NAME=x86

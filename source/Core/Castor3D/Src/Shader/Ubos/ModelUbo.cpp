@@ -33,10 +33,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			m_ubo = ashes::makeUniformBuffer< Configuration >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -47,7 +47,7 @@ namespace castor3d
 
 	void ModelUbo::setEnvMapIndex( uint32_t value )
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.environmentIndex = int32_t( value );
 	}
@@ -55,7 +55,7 @@ namespace castor3d
 	void ModelUbo::update( bool shadowReceiver
 		, uint32_t materialIndex )const
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.shadowReceiver = shadowReceiver ? 1 : 0;
 		configuration.materialIndex = materialIndex - 1;

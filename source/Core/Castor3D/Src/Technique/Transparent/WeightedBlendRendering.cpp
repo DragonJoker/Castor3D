@@ -18,36 +18,36 @@ namespace castor3d
 {
 	namespace
 	{
-		renderer::TexturePtr doCreateTexture( Engine & engine
+		ashes::TexturePtr doCreateTexture( Engine & engine
 			, Size const & size
 			, WbTexture texture )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentDevice( renderSystem );
 
-			renderer::ImageCreateInfo image{};
+			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.getWidth();
 			image.extent.height = size.getHeight();
 			image.extent.depth = 1u;
 			image.format = getTextureFormat( texture );
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
 			image.mipLevels = 1u;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 
-			return device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
+			return device.createTexture( image, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 
-		renderer::TextureViewPtr doCreateDepthView( Engine & engine
-			, renderer::TextureView const & depthView )
+		ashes::TextureViewPtr doCreateDepthView( Engine & engine
+			, ashes::TextureView const & depthView )
 		{
 			auto & depth = depthView.getTexture();
-			renderer::ImageViewCreateInfo view{};
+			ashes::ImageViewCreateInfo view{};
 			view.format = depth.getFormat();
-			view.viewType = renderer::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = renderer::ImageAspectFlag::eDepth;
+			view.viewType = ashes::TextureViewType::e2D;
+			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
 			view.subresourceRange.baseArrayLayer = 0u;
 			view.subresourceRange.layerCount = 1u;
 			view.subresourceRange.baseMipLevel = 0u;
@@ -58,21 +58,22 @@ namespace castor3d
 
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & colourView
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & colourView
 		, TextureLayoutSPtr velocityTexture
 		, castor::Size const & size
-		, Scene const & scene )
+		, Scene const & scene
+		, HdrConfigUbo & hdrConfigUbo )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
 		, m_depthView{ doCreateDepthView( engine, depthView ) }
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
-		, m_accumulationView{ m_accumulation->createView( renderer::TextureViewType::e2D, m_accumulation->getFormat() ) }
+		, m_accumulationView{ m_accumulation->createView( ashes::TextureViewType::e2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
-		, m_revealageView{ m_revealage->createView( renderer::TextureViewType::e2D, m_revealage->getFormat() ) }
+		, m_revealageView{ m_revealage->createView( ashes::TextureViewType::e2D, m_revealage->getFormat() ) }
 		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
-		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), m_weightedBlendPassResult, colourView }
+		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, m_weightedBlendPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );
 		m_transparentPass.initialise( m_size );
@@ -87,7 +88,7 @@ namespace castor3d
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 
-		m_transparentPass.getSceneUbo().update( camera, scene.getFog() );
+		m_transparentPass.getSceneUbo().update( &camera, scene.getFog() );
 		m_finalCombinePass.update( camera
 			, invViewProj
 			, invView
@@ -96,9 +97,9 @@ namespace castor3d
 			, jitter );
 	}
 
-	renderer::Semaphore const & WeightedBlendRendering::render( RenderInfo & info
+	ashes::Semaphore const & WeightedBlendRendering::render( RenderInfo & info
 		, Scene const & scene
-		, renderer::Semaphore const & toWait )
+		, ashes::Semaphore const & toWait )
 	{
 		m_engine.setPerObjectLighting( true );
 		auto * result = &toWait;

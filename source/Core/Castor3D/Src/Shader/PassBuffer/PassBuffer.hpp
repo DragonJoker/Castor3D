@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #include "Material/Pass.hpp"
 #include "Shader/ShaderBuffer.hpp"
 
+#include <Design/ArrayView.hpp>
+
+#define C3D_MaterialsStructOfArrays 0
+
 namespace castor3d
 {
 	/*!
@@ -67,7 +71,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.
 		 */
-		C3D_API renderer::DescriptorSetLayoutBinding createLayoutBinding()const;
+		C3D_API ashes::DescriptorSetLayoutBinding createLayoutBinding()const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set binding at given point.
@@ -76,8 +80,8 @@ namespace castor3d
 		 *\brief		Crée une attache de set de descripteurs au point donné.
 		 *\param[in]	binding	L'attache de layout de set de descripteurs.
 		 */
-		C3D_API void createBinding( renderer::DescriptorSet & descriptorSet
-			, renderer::DescriptorSetLayoutBinding const & binding )const;
+		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
+			, ashes::DescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\brief		Puts the pass data into the buffer.
@@ -142,6 +146,25 @@ namespace castor3d
 			float b;
 			float a;
 		};
+
+#if C3D_MaterialsStructOfArrays
+		/*!
+		\~english
+		\brief		Common passes extended data.
+		\~french
+		\brief		Données étendues communes aux passes.
+		*/
+		struct ExtendedData
+		{
+			//!\~english	The Subsurface Scattering informations.
+			//!\~french		Les informations de Subsurface Scattering.
+			castor::ArrayView< RgbaColour > sssInfo;
+			//!\~english	The luminosity transmittance profile data.
+			//!\~french		Les données du profil de transmission de luminosité.
+			castor::ArrayView< std::array< RgbaColour, 10u > > transmittanceProfile;
+		};
+
+#else
 		/*!
 		\~english
 		\brief		Common passes extended data.
@@ -157,8 +180,9 @@ namespace castor3d
 			//!\~french		Les données du profil de transmission de luminosité.
 			std::array< RgbaColour, 10u > transmittanceProfile;
 		};
-		//!\~english	Extended data size.
-		//!\~french		La taille des données étendues.
+
+#endif
+
 		static constexpr uint32_t ExtendedDataSize = sizeof( RgbaColour ) * 11;
 
 	protected:

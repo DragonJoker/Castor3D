@@ -62,12 +62,12 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipelines( renderer::Extent2D const & size
+		C3D_API void createPipelines( ashes::Extent2D const & size
 			, castor::Position const & position
-			, renderer::ShaderStageStateArray const & program
-			, renderer::TextureView const & view
-			, renderer::RenderPass const & renderPass
-			, renderer::PushConstantRangeCRefArray const & pushRanges );
+			, ashes::ShaderStageStateArray const & program
+			, ashes::TextureView const & view
+			, ashes::RenderPass const & renderPass
+			, ashes::PushConstantRangeArray const & pushRanges );
 		/**
 		*\~english
 		*\brief
@@ -80,13 +80,13 @@ namespace castor3d
 		*\param[in] program
 		*	Le programme shader.
 		*/
-		C3D_API void createPipelines( renderer::Extent2D const & size
+		C3D_API void createPipelines( ashes::Extent2D const & size
 			, castor::Position const & position
-			, renderer::ShaderStageStateArray const & program
-			, renderer::TextureView const & view
-			, renderer::RenderPass const & renderPass
-			, renderer::PushConstantRangeCRefArray const & pushRanges
-			, renderer::DepthStencilState const & dsState );
+			, ashes::ShaderStageStateArray const & program
+			, ashes::TextureView const & view
+			, ashes::RenderPass const & renderPass
+			, ashes::PushConstantRangeArray const & pushRanges
+			, ashes::DepthStencilState const & dsState );
 		/**
 		*\~english
 		*\brief
@@ -104,7 +104,7 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad.
 		*/
-		C3D_API void prepareFrame( renderer::RenderPass const & renderPass
+		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex
 			, uint32_t face );
 		/**
@@ -115,7 +115,7 @@ namespace castor3d
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
 		*/
-		C3D_API void registerFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer
 			, uint32_t face )const;
 		/**
 		*\~english
@@ -125,38 +125,38 @@ namespace castor3d
 		*\return
 		*	Le tampon de commandes de dessin du quad.
 		*/
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			REQUIRE( m_commandBuffer );
+			CU_Require( m_commandBuffer );
 			return *m_commandBuffer;
 		}
 
 	private:
-		C3D_API virtual void doFillDescriptorLayoutBindings( renderer::DescriptorSetLayoutBindingArray & bindings );
-		C3D_API virtual void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet
+		C3D_API virtual void doFillDescriptorLayoutBindings( ashes::DescriptorSetLayoutBindingArray & bindings );
+		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet
 			, uint32_t face );
-		C3D_API virtual void doRegisterFrame( renderer::CommandBuffer & commandBuffer
+		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer
 			, uint32_t face )const;
 
 	protected:
 		RenderSystem & m_renderSystem;
 		SamplerSPtr m_sampler;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
 
 	private:
 		struct FacePipeline
 		{
-			renderer::PipelinePtr pipeline;
-			renderer::DescriptorSetPtr descriptorSet;
+			ashes::PipelinePtr pipeline;
+			ashes::DescriptorSetPtr descriptorSet;
 		};
 
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::UniformBufferPtr< castor::Matrix4x4f > m_matrixUbo;
-		renderer::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::UniformBufferPtr< castor::Matrix4x4f > m_matrixUbo;
+		ashes::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::array< FacePipeline, 6u > m_faces;
 	};
 }

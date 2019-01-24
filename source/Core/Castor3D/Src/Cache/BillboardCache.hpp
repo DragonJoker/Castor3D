@@ -151,7 +151,7 @@ namespace castor3d
 		BillboardUboPools & m_pools;
 	};
 	using BillboardListCache = ObjectCache< BillboardList, castor::String >;
-	DECLARE_SMART_PTR( BillboardListCache );
+	CU_DeclareSmartPtr( BillboardListCache );
 }
 
 #endif

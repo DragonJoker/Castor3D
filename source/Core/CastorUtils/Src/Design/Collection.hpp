@@ -28,8 +28,8 @@ namespace castor
 		: public castor::NonCopyable
 	{
 	public:
-		DECLARE_SMART_PTR( TObj );
-		DECLARE_TPL_MAP( TKey, TObjSPtr, TObjPtr );
+		CU_DeclareSmartPtr( TObj );
+		CU_DeclareTemplateMap( TKey, TObjSPtr, TObjPtr );
 		typedef typename TObjPtrMap::value_type ValueType;
 		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
 		typedef typename CallTraits< TKey >::ConstParamType KeyParamType;

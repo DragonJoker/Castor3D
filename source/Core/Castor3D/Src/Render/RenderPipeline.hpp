@@ -72,10 +72,10 @@ namespace castor3d
 		*	Les indicateurs de création.
 		*/
 		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
-			, renderer::DepthStencilState && dsState
-			, renderer::RasterisationState && rsState
-			, renderer::ColourBlendState && blState
-			, renderer::MultisampleState && msState
+			, ashes::DepthStencilState && dsState
+			, ashes::RasterisationState && rsState
+			, ashes::ColourBlendState && blState
+			, ashes::MultisampleState && msState
 			, ShaderProgramSPtr program
 			, PipelineFlags const & flags );
 		/**
@@ -99,7 +99,7 @@ namespace castor3d
 		*\param[in] renderPass
 		*	La passe de rendu à laquelle ce pipeline est lié.
 		*/
-		C3D_API void initialise( renderer::RenderPass const & renderPass );
+		C3D_API void initialise( ashes::RenderPass const & renderPass );
 		/**
 		*\~english
 		*\brief
@@ -135,43 +135,36 @@ namespace castor3d
 		*	Ils doivent être appelés avant l'appel à initialise().
 		**/
 		/**@{*/
-		inline void setVertexLayouts( std::vector< renderer::VertexLayout > layouts )
+		C3D_API void setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts );
+
+		inline void setVertexLayouts( std::vector< ashes::VertexLayout > layouts )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
 		}
 
-		inline void setVertexLayouts( renderer::VertexLayoutCRefArray const & layouts )
+		inline void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts )
 		{
-			REQUIRE( !m_pipeline );
-			for ( auto & layout : layouts )
-			{
-				m_vertexLayouts.push_back( layout.get() );
-			}
-		}
-
-		inline void setDescriptorSetLayouts( std::vector< renderer::DescriptorSetLayoutPtr > && layouts )
-		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_descriptorLayouts = std::move( layouts );
 		}
 
-		inline void setPushConstantRanges( renderer::PushConstantRangeCRefArray const & pushConstantRanges )
+		inline void setPushConstantRanges( ashes::PushConstantRangeArray const & pushConstantRanges )
 		{
-			REQUIRE( !m_pipeline );
+			CU_Require( !m_pipeline );
 			m_pushConstantRanges = pushConstantRanges;
 		}
 
-		inline void setViewport( renderer::Viewport const & viewport )
+		inline void setViewport( ashes::Viewport const & viewport )
 		{
-			REQUIRE( !m_pipeline );
-			m_viewport = std::make_unique< renderer::Viewport >( viewport );
+			CU_Require( !m_pipeline );
+			m_viewport = std::make_unique< ashes::Viewport >( viewport );
 		}
 
-		inline void setScissor( renderer::Scissor const & scissor )
+		inline void setScissor( ashes::Scissor const & scissor )
 		{
-			REQUIRE( !m_pipeline );
-			m_scissor = std::make_unique< renderer::Scissor >( scissor );
+			CU_Require( !m_pipeline );
+			m_scissor = std::make_unique< ashes::Scissor >( scissor );
 		}
 		/**@}*/
 		/**
@@ -188,21 +181,21 @@ namespace castor3d
 			return m_flags;
 		}
 
-		inline renderer::Pipeline const & getPipeline()const
+		inline ashes::Pipeline const & getPipeline()const
 		{
-			REQUIRE( m_pipeline );
+			CU_Require( m_pipeline );
 			return *m_pipeline;
 		}
 
-		inline renderer::PipelineLayout const & getPipelineLayout()const
+		inline ashes::PipelineLayout const & getPipelineLayout()const
 		{
-			REQUIRE( m_pipelineLayout );
+			CU_Require( m_pipelineLayout );
 			return *m_pipelineLayout;
 		}
 
-		inline renderer::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
+		inline ashes::DescriptorSetLayout const & getDescriptorSetLayout( uint32_t index )const
 		{
-			REQUIRE( index < m_descriptorLayouts.size() );
+			CU_Require( index < m_descriptorLayouts.size() );
 			return *m_descriptorLayouts[index];
 		}
 
@@ -211,28 +204,28 @@ namespace castor3d
 			return index < m_descriptorPools.size();
 		}
 
-		inline renderer::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
+		inline ashes::DescriptorSetPool const & getDescriptorPool( uint32_t index )const
 		{
-			REQUIRE( index < m_descriptorPools.size() );
+			CU_Require( index < m_descriptorPools.size() );
 			return *m_descriptorPools[index];
 		}
 		/**@}*/
 
 	private:
-		renderer::DepthStencilState m_dsState;
-		renderer::RasterisationState m_rsState;
-		renderer::ColourBlendState m_blState;
-		renderer::MultisampleState m_msState;
+		ashes::DepthStencilState m_dsState;
+		ashes::RasterisationState m_rsState;
+		ashes::ColourBlendState m_blState;
+		ashes::MultisampleState m_msState;
 		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
-		std::vector< renderer::VertexLayout > m_vertexLayouts;
-		std::vector< renderer::DescriptorSetLayoutPtr > m_descriptorLayouts;
-		std::vector< renderer::DescriptorSetPoolPtr > m_descriptorPools;
-		renderer::PushConstantRangeCRefArray m_pushConstantRanges;
-		std::unique_ptr< renderer::Viewport > m_viewport;
-		std::unique_ptr< renderer::Scissor > m_scissor;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
+		std::vector< ashes::VertexLayout > m_vertexLayouts;
+		std::vector< ashes::DescriptorSetLayoutPtr > m_descriptorLayouts;
+		std::vector< ashes::DescriptorSetPoolPtr > m_descriptorPools;
+		ashes::PushConstantRangeArray m_pushConstantRanges;
+		std::unique_ptr< ashes::Viewport > m_viewport;
+		std::unique_ptr< ashes::Scissor > m_scissor;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
 	};
 }
 

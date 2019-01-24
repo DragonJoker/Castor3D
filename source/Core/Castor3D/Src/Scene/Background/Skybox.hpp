@@ -249,7 +249,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
-		bool doInitialise( renderer::RenderPass const & renderPass )override;
+		bool doInitialise( ashes::RenderPass const & renderPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doCleanup
 		*/

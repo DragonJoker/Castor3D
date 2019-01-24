@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include <Castor3DPrerequisites.hpp>
 #include <VkRendererPrerequisites.hpp>
 
-#ifdef CASTOR_PLATFORM_WINDOWS
+#ifdef CU_PlatformWindows
 #	ifdef VkRenderSystem_EXPORTS
 #		define C3D_Vk_API __declspec( dllexport )
 #	else

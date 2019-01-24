@@ -11,7 +11,7 @@
 #include "LinearMotionBlurParsers.hpp"
 #include "LinearMotionBlurPostEffect.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_LinearMotionBlur_API
 #else
 #	ifdef LinearMotionBlurPostEffect_EXPORTS
@@ -63,7 +63,7 @@ namespace
 		return result;
 	}
 
-	castor::StrUIntMap createSections()
+	castor::StrUInt32Map createSections()
 	{
 		return
 		{

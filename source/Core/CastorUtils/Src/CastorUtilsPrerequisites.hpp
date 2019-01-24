@@ -54,7 +54,7 @@ namespace castor
 		eBinary,
 		//! Text file
 		eText,
-		CASTOR_SCOPED_ENUM_BOUNDS( eBinary )
+		CU_ScopedEnumBounds( eBinary )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -163,7 +163,7 @@ namespace castor
 		//!\~english	Stencil 8 bits.
 		//!\~french		Stencil 8 bits.
 		eS8,
-		CASTOR_SCOPED_ENUM_BOUNDS( eL8 )
+		CU_ScopedEnumBounds( eL8 )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -188,10 +188,10 @@ namespace castor
 		//!\~english	Intersection.
 		//!\~french		Intersection
 		eIntersect,
-		CASTOR_SCOPED_ENUM_BOUNDS( eIn )
+		CU_ScopedEnumBounds( eIn )
 	};
 
-#if CASTOR_USE_DOUBLE
+#if CU_UseDouble
 	using real = double;
 #else
 	using real = float;
@@ -327,190 +327,191 @@ namespace castor
 	using Angle = AngleT< real >;
 	using Quaternion = QuaternionT< real >;
 
-	DECLARE_POINT( bool,		4, b );
-	DECLARE_POINT( bool,		3, b );
-	DECLARE_POINT( bool,		2, b );
-	DECLARE_POINT( int8_t,		4, c );
-	DECLARE_POINT( int8_t,		3, c );
-	DECLARE_POINT( int8_t,		2, c );
-	DECLARE_POINT( uint8_t,		4, ub );
-	DECLARE_POINT( uint8_t,		3, ub );
-	DECLARE_POINT( uint8_t,		2, ub );
-	DECLARE_POINT( int16_t,		4, s );
-	DECLARE_POINT( int16_t,		3, s );
-	DECLARE_POINT( int16_t,		2, s );
-	DECLARE_POINT( uint16_t,	4, us );
-	DECLARE_POINT( uint16_t,	3, us );
-	DECLARE_POINT( uint16_t,	2, us );
-	DECLARE_POINT( int32_t,		4, i );
-	DECLARE_POINT( int32_t,		3, i );
-	DECLARE_POINT( int32_t,		2, i );
-	DECLARE_POINT( uint32_t,	4, ui );
-	DECLARE_POINT( uint32_t,	3, ui );
-	DECLARE_POINT( uint32_t,	2, ui );
-	DECLARE_POINT( real,		4, r );
-	DECLARE_POINT( real,		3, r );
-	DECLARE_POINT( real,		2, r );
-	DECLARE_POINT( float,		4, f );
-	DECLARE_POINT( float,		3, f );
-	DECLARE_POINT( float,		2, f );
-	DECLARE_POINT( double,		4, d );
-	DECLARE_POINT( double,		3, d );
-	DECLARE_POINT( double,		2, d );
+	CU_DeclarePoint( bool,		4, b );
+	CU_DeclarePoint( bool,		3, b );
+	CU_DeclarePoint( bool,		2, b );
+	CU_DeclarePoint( int8_t,	4, c );
+	CU_DeclarePoint( int8_t,	3, c );
+	CU_DeclarePoint( int8_t,	2, c );
+	CU_DeclarePoint( uint8_t,	4, ub );
+	CU_DeclarePoint( uint8_t,	3, ub );
+	CU_DeclarePoint( uint8_t,	2, ub );
+	CU_DeclarePoint( int16_t,	4, s );
+	CU_DeclarePoint( int16_t,	3, s );
+	CU_DeclarePoint( int16_t,	2, s );
+	CU_DeclarePoint( uint16_t,	4, us );
+	CU_DeclarePoint( uint16_t,	3, us );
+	CU_DeclarePoint( uint16_t,	2, us );
+	CU_DeclarePoint( int32_t,	4, i );
+	CU_DeclarePoint( int32_t,	3, i );
+	CU_DeclarePoint( int32_t,	2, i );
+	CU_DeclarePoint( uint32_t,	4, ui );
+	CU_DeclarePoint( uint32_t,	3, ui );
+	CU_DeclarePoint( uint32_t,	2, ui );
+	CU_DeclarePoint( real,		4, r );
+	CU_DeclarePoint( real,		3, r );
+	CU_DeclarePoint( real,		2, r );
+	CU_DeclarePoint( float,		4, f );
+	CU_DeclarePoint( float,		3, f );
+	CU_DeclarePoint( float,		2, f );
+	CU_DeclarePoint( double,	4, d );
+	CU_DeclarePoint( double,	3, d );
+	CU_DeclarePoint( double,	2, d );
 
-	DECLARE_COORD( bool,		4, b );
-	DECLARE_COORD( bool,		3, b );
-	DECLARE_COORD( bool,		2, b );
-	DECLARE_COORD( int8_t,		4, c );
-	DECLARE_COORD( int8_t,		3, c );
-	DECLARE_COORD( int8_t,		2, c );
-	DECLARE_COORD( uint8_t,		4, ub );
-	DECLARE_COORD( uint8_t,		3, ub );
-	DECLARE_COORD( uint8_t,		2, ub );
-	DECLARE_COORD( int16_t,		4, s );
-	DECLARE_COORD( int16_t,		3, s );
-	DECLARE_COORD( int16_t,		2, s );
-	DECLARE_COORD( uint16_t,	4, us );
-	DECLARE_COORD( uint16_t,	3, us );
-	DECLARE_COORD( uint16_t,	2, us );
-	DECLARE_COORD( int32_t,		4, i );
-	DECLARE_COORD( int32_t,		3, i );
-	DECLARE_COORD( int32_t,		2, i );
-	DECLARE_COORD( uint32_t,	4, ui );
-	DECLARE_COORD( uint32_t,	3, ui );
-	DECLARE_COORD( uint32_t,	2, ui );
-	DECLARE_COORD( int,			4, i );
-	DECLARE_COORD( int,			3, i );
-	DECLARE_COORD( int,			2, i );
-	DECLARE_COORD( real,		4, r );
-	DECLARE_COORD( real,		3, r );
-	DECLARE_COORD( real,		2, r );
-	DECLARE_COORD( float,		4, f );
-	DECLARE_COORD( float,		3, f );
-	DECLARE_COORD( float,		2, f );
-	DECLARE_COORD( double,		4, d );
-	DECLARE_COORD( double,		3, d );
-	DECLARE_COORD( double,		2, d );
-	DECLARE_COORD( uint8_t,		4, ub );
-	DECLARE_COORD( uint8_t,		3, ub );
-	DECLARE_COORD( uint8_t,		2, ub );
+	CU_DeclareCoord( bool,		4, b );
+	CU_DeclareCoord( bool,		3, b );
+	CU_DeclareCoord( bool,		2, b );
+	CU_DeclareCoord( int8_t,	4, c );
+	CU_DeclareCoord( int8_t,	3, c );
+	CU_DeclareCoord( int8_t,	2, c );
+	CU_DeclareCoord( uint8_t,	4, ub );
+	CU_DeclareCoord( uint8_t,	3, ub );
+	CU_DeclareCoord( uint8_t,	2, ub );
+	CU_DeclareCoord( int16_t,	4, s );
+	CU_DeclareCoord( int16_t,	3, s );
+	CU_DeclareCoord( int16_t,	2, s );
+	CU_DeclareCoord( uint16_t,	4, us );
+	CU_DeclareCoord( uint16_t,	3, us );
+	CU_DeclareCoord( uint16_t,	2, us );
+	CU_DeclareCoord( int32_t,	4, i );
+	CU_DeclareCoord( int32_t,	3, i );
+	CU_DeclareCoord( int32_t,	2, i );
+	CU_DeclareCoord( uint32_t,	4, ui );
+	CU_DeclareCoord( uint32_t,	3, ui );
+	CU_DeclareCoord( uint32_t,	2, ui );
+	CU_DeclareCoord( int32_t,	4, i );
+	CU_DeclareCoord( int32_t,	3, i );
+	CU_DeclareCoord( int32_t,	2, i );
+	CU_DeclareCoord( real,		4, r );
+	CU_DeclareCoord( real,		3, r );
+	CU_DeclareCoord( real,		2, r );
+	CU_DeclareCoord( float,		4, f );
+	CU_DeclareCoord( float,		3, f );
+	CU_DeclareCoord( float,		2, f );
+	CU_DeclareCoord( double,	4, d );
+	CU_DeclareCoord( double,	3, d );
+	CU_DeclareCoord( double,	2, d );
+	CU_DeclareCoord( uint8_t,	4, ub );
+	CU_DeclareCoord( uint8_t,	3, ub );
+	CU_DeclareCoord( uint8_t,	2, ub );
 
-	DECLARE_CONST_COORD( bool,		4, b );
-	DECLARE_CONST_COORD( bool,		3, b );
-	DECLARE_CONST_COORD( bool,		2, b );
-	DECLARE_CONST_COORD( int8_t,	4, c );
-	DECLARE_CONST_COORD( int8_t,	3, c );
-	DECLARE_CONST_COORD( int8_t,	2, c );
-	DECLARE_CONST_COORD( uint8_t,	4, ub );
-	DECLARE_CONST_COORD( uint8_t,	3, ub );
-	DECLARE_CONST_COORD( uint8_t,	2, ub );
-	DECLARE_CONST_COORD( int16_t,	4, s );
-	DECLARE_CONST_COORD( int16_t,	3, s );
-	DECLARE_CONST_COORD( int16_t,	2, s );
-	DECLARE_CONST_COORD( uint16_t,	4, us );
-	DECLARE_CONST_COORD( uint16_t,	3, us );
-	DECLARE_CONST_COORD( uint16_t,	2, us );
-	DECLARE_CONST_COORD( int32_t,	4, i );
-	DECLARE_CONST_COORD( int32_t,	3, i );
-	DECLARE_CONST_COORD( int32_t,	2, i );
-	DECLARE_CONST_COORD( uint32_t,	4, ui );
-	DECLARE_CONST_COORD( uint32_t,	3, ui );
-	DECLARE_CONST_COORD( uint32_t,	2, ui );
-	DECLARE_CONST_COORD( int,		4, i );
-	DECLARE_CONST_COORD( int,		3, i );
-	DECLARE_CONST_COORD( int,		2, i );
-	DECLARE_CONST_COORD( real,		4, r );
-	DECLARE_CONST_COORD( real,		3, r );
-	DECLARE_CONST_COORD( real,		2, r );
-	DECLARE_CONST_COORD( float,		4, f );
-	DECLARE_CONST_COORD( float,		3, f );
-	DECLARE_CONST_COORD( float,		2, f );
-	DECLARE_CONST_COORD( double,	4, d );
-	DECLARE_CONST_COORD( double,	3, d );
-	DECLARE_CONST_COORD( double,	2, d );
-	DECLARE_CONST_COORD( uint8_t,	4, ub );
-	DECLARE_CONST_COORD( uint8_t,	3, ub );
-	DECLARE_CONST_COORD( uint8_t,	2, ub );
+	CU_DeclareConstCoord( bool,		4, b );
+	CU_DeclareConstCoord( bool,		3, b );
+	CU_DeclareConstCoord( bool,		2, b );
+	CU_DeclareConstCoord( int8_t,	4, c );
+	CU_DeclareConstCoord( int8_t,	3, c );
+	CU_DeclareConstCoord( int8_t,	2, c );
+	CU_DeclareConstCoord( uint8_t,	4, ub );
+	CU_DeclareConstCoord( uint8_t,	3, ub );
+	CU_DeclareConstCoord( uint8_t,	2, ub );
+	CU_DeclareConstCoord( int16_t,	4, s );
+	CU_DeclareConstCoord( int16_t,	3, s );
+	CU_DeclareConstCoord( int16_t,	2, s );
+	CU_DeclareConstCoord( uint16_t,	4, us );
+	CU_DeclareConstCoord( uint16_t,	3, us );
+	CU_DeclareConstCoord( uint16_t,	2, us );
+	CU_DeclareConstCoord( int32_t,	4, i );
+	CU_DeclareConstCoord( int32_t,	3, i );
+	CU_DeclareConstCoord( int32_t,	2, i );
+	CU_DeclareConstCoord( uint32_t,	4, ui );
+	CU_DeclareConstCoord( uint32_t,	3, ui );
+	CU_DeclareConstCoord( uint32_t,	2, ui );
+	CU_DeclareConstCoord( int32_t,	4, i );
+	CU_DeclareConstCoord( int32_t,	3, i );
+	CU_DeclareConstCoord( int32_t,	2, i );
+	CU_DeclareConstCoord( real,		4, r );
+	CU_DeclareConstCoord( real,		3, r );
+	CU_DeclareConstCoord( real,		2, r );
+	CU_DeclareConstCoord( float,	4, f );
+	CU_DeclareConstCoord( float,	3, f );
+	CU_DeclareConstCoord( float,	2, f );
+	CU_DeclareConstCoord( double,	4, d );
+	CU_DeclareConstCoord( double,	3, d );
+	CU_DeclareConstCoord( double,	2, d );
+	CU_DeclareConstCoord( uint8_t,	4, ub );
+	CU_DeclareConstCoord( uint8_t,	3, ub );
+	CU_DeclareConstCoord( uint8_t,	2, ub );
 	
-	DECLARE_SQMTX( bool,	4, b );
-	DECLARE_SQMTX( bool,	3, b );
-	DECLARE_SQMTX( bool,	2, b );
-	DECLARE_SQMTX( int,		4, i );
-	DECLARE_SQMTX( int,		3, i );
-	DECLARE_SQMTX( int,		2, i );
-	DECLARE_SQMTX( uint32_t,4, ui );
-	DECLARE_SQMTX( uint32_t,3, ui );
-	DECLARE_SQMTX( uint32_t,2, ui );
-	DECLARE_SQMTX( real,	4, r );
-	DECLARE_SQMTX( real,	3, r );
-	DECLARE_SQMTX( real,	2, r );
-	DECLARE_SQMTX( float,	4, f );
-	DECLARE_SQMTX( float,	3, f );
-	DECLARE_SQMTX( float,	2, f );
-	DECLARE_SQMTX( double,	4, d );
-	DECLARE_SQMTX( double,	3, d );
-	DECLARE_SQMTX( double,	2, d );
+	CU_DeclareSqMtx( bool,		4, b );
+	CU_DeclareSqMtx( bool,		3, b );
+	CU_DeclareSqMtx( bool,		2, b );
+	CU_DeclareSqMtx( int32_t,	4, i );
+	CU_DeclareSqMtx( int32_t,	3, i );
+	CU_DeclareSqMtx( int32_t,	2, i );
+	CU_DeclareSqMtx( uint32_t,	4, ui );
+	CU_DeclareSqMtx( uint32_t,	3, ui );
+	CU_DeclareSqMtx( uint32_t,	2, ui );
+	CU_DeclareSqMtx( real,		4, r );
+	CU_DeclareSqMtx( real,		3, r );
+	CU_DeclareSqMtx( real,		2, r );
+	CU_DeclareSqMtx( float,		4, f );
+	CU_DeclareSqMtx( float,		3, f );
+	CU_DeclareSqMtx( float,		2, f );
+	CU_DeclareSqMtx( double,	4, d );
+	CU_DeclareSqMtx( double,	3, d );
+	CU_DeclareSqMtx( double,	2, d );
 
-	DECLARE_MTX( bool,		2, 3, b );
-	DECLARE_MTX( bool,		2, 4, b );
-	DECLARE_MTX( bool,		3, 2, b );
-	DECLARE_MTX( bool,		3, 4, b );
-	DECLARE_MTX( bool,		4, 2, b );
-	DECLARE_MTX( bool,		4, 3, b );
-	DECLARE_MTX( int,		2, 3, i );
-	DECLARE_MTX( int,		2, 4, i );
-	DECLARE_MTX( int,		3, 2, i );
-	DECLARE_MTX( int,		3, 4, i );
-	DECLARE_MTX( int,		4, 2, i );
-	DECLARE_MTX( int,		4, 3, i );
-	DECLARE_MTX( uint32_t,	2, 3, ui );
-	DECLARE_MTX( uint32_t,	2, 4, ui );
-	DECLARE_MTX( uint32_t,	3, 2, ui );
-	DECLARE_MTX( uint32_t,	3, 4, ui );
-	DECLARE_MTX( uint32_t,	4, 2, ui );
-	DECLARE_MTX( uint32_t,	4, 3, ui );
-	DECLARE_MTX( real,		2, 3, r );
-	DECLARE_MTX( real,		2, 4, r );
-	DECLARE_MTX( real,		3, 2, r );
-	DECLARE_MTX( real,		3, 4, r );
-	DECLARE_MTX( real,		4, 2, r );
-	DECLARE_MTX( real,		4, 3, r );
-	DECLARE_MTX( float,		2, 3, f );
-	DECLARE_MTX( float,		2, 4, f );
-	DECLARE_MTX( float,		3, 2, f );
-	DECLARE_MTX( float,		3, 4, f );
-	DECLARE_MTX( float,		4, 2, f );
-	DECLARE_MTX( float,		4, 3, f );
-	DECLARE_MTX( double,	2, 3, d );
-	DECLARE_MTX( double,	2, 4, d );
-	DECLARE_MTX( double,	3, 2, d );
-	DECLARE_MTX( double,	3, 4, d );
-	DECLARE_MTX( double,	4, 2, d );
-	DECLARE_MTX( double,	4, 3, d );
+	CU_DeclareMtx( bool,		2, 3, b );
+	CU_DeclareMtx( bool,		2, 4, b );
+	CU_DeclareMtx( bool,		3, 2, b );
+	CU_DeclareMtx( bool,		3, 4, b );
+	CU_DeclareMtx( bool,		4, 2, b );
+	CU_DeclareMtx( bool,		4, 3, b );
+	CU_DeclareMtx( int32_t,		2, 3, i );
+	CU_DeclareMtx( int32_t,		2, 4, i );
+	CU_DeclareMtx( int32_t,		3, 2, i );
+	CU_DeclareMtx( int32_t,		3, 4, i );
+	CU_DeclareMtx( int32_t,		4, 2, i );
+	CU_DeclareMtx( int32_t,		4, 3, i );
+	CU_DeclareMtx( uint32_t,	2, 3, ui );
+	CU_DeclareMtx( uint32_t,	2, 4, ui );
+	CU_DeclareMtx( uint32_t,	3, 2, ui );
+	CU_DeclareMtx( uint32_t,	3, 4, ui );
+	CU_DeclareMtx( uint32_t,	4, 2, ui );
+	CU_DeclareMtx( uint32_t,	4, 3, ui );
+	CU_DeclareMtx( real,		2, 3, r );
+	CU_DeclareMtx( real,		2, 4, r );
+	CU_DeclareMtx( real,		3, 2, r );
+	CU_DeclareMtx( real,		3, 4, r );
+	CU_DeclareMtx( real,		4, 2, r );
+	CU_DeclareMtx( real,		4, 3, r );
+	CU_DeclareMtx( float,		2, 3, f );
+	CU_DeclareMtx( float,		2, 4, f );
+	CU_DeclareMtx( float,		3, 2, f );
+	CU_DeclareMtx( float,		3, 4, f );
+	CU_DeclareMtx( float,		4, 2, f );
+	CU_DeclareMtx( float,		4, 3, f );
+	CU_DeclareMtx( double,		2, 3, d );
+	CU_DeclareMtx( double,		2, 4, d );
+	CU_DeclareMtx( double,		3, 2, d );
+	CU_DeclareMtx( double,		3, 4, d );
+	CU_DeclareMtx( double,		4, 2, d );
+	CU_DeclareMtx( double,		4, 3, d );
 
-	DECLARE_SMART_PTR( Quaternion );
-	DECLARE_SMART_PTR( SphericalVertex );
-	DECLARE_SMART_PTR( BoundingBox );
-	DECLARE_SMART_PTR( BoundingSphere );
-	DECLARE_SMART_PTR( Image );
-	DECLARE_SMART_PTR( Font );
-	DECLARE_SMART_PTR( PxBufferBase );
-	DECLARE_SMART_PTR( FileParserContext );
-	DECLARE_SMART_PTR( ParserParameterBase );
-	DECLARE_SMART_PTR( DynamicLibrary );
+	CU_DeclareSmartPtr( Quaternion );
+	CU_DeclareSmartPtr( SphericalVertex );
+	CU_DeclareSmartPtr( BoundingBox );
+	CU_DeclareSmartPtr( BoundingSphere );
+	CU_DeclareSmartPtr( Image );
+	CU_DeclareSmartPtr( Font );
+	CU_DeclareSmartPtr( PxBufferBase );
+	CU_DeclareSmartPtr( FileParserContext );
+	CU_DeclareSmartPtr( ParserParameterBase );
+	CU_DeclareSmartPtr( DynamicLibrary );
 
-	DECLARE_VECTOR( uint8_t, Byte );
-	DECLARE_VECTOR( SphericalVertexSPtr, SphericalVertexPtr );
-	DECLARE_VECTOR( int, Int );
-	DECLARE_VECTOR( String, String );
-	DECLARE_VECTOR( Path, Path );
-	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );
-	DECLARE_MAP( String, uint32_t, UIntStr );
-	DECLARE_MAP( String, uint64_t, UInt64Str );
-	DECLARE_MAP( String, bool, BoolStr );
-	DECLARE_MAP( String, String, StrStr );
-	DECLARE_SET( String, Str );
-	DECLARE_MAP( uint32_t, String, StrUInt );
+	CU_DeclareVector( uint8_t, Byte );
+	CU_DeclareVector( SphericalVertexSPtr, SphericalVertexPtr );
+	CU_DeclareVector( int32_t, Int32 );
+	CU_DeclareVector( uint32_t, UInt32 );
+	CU_DeclareVector( String, String );
+	CU_DeclareVector( Path, Path );
+	CU_DeclareVector( ParserParameterBaseSPtr, ParserParameter );
+	CU_DeclareMap( String, uint32_t, UInt32Str );
+	CU_DeclareMap( String, uint64_t, UInt64Str );
+	CU_DeclareMap( String, bool, BoolStr );
+	CU_DeclareMap( String, String, StrStr );
+	CU_DeclareSet( String, Str );
+	CU_DeclareMap( uint32_t, String, StrUInt32 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		27/08/2012
@@ -557,7 +558,7 @@ namespace castor
 		eMarked,
 		eFixedGrowing,
 		eFixedGrowingMarked,
-		CASTOR_SCOPED_ENUM_BOUNDS( eFixed )
+		CU_ScopedEnumBounds( eFixed )
 	};
 
 	template< typename Object, MemoryDataType MemDataType > class PoolManagedObject;

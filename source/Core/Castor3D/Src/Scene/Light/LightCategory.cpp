@@ -3,7 +3,7 @@
 
 #include <Graphics/PixelBuffer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -101,6 +101,7 @@ namespace castor3d
 		doCopyComponent( getColour(), float( m_shadowMapIndex ), buffer );
 		doCopyComponent( getIntensity(), getFarPlane(), float( getLight().getShadowType() ), buffer );
 		doCopyComponent( float( getVolumetricSteps() ), getVolumetricScatteringFactor(), 0.0f, 0.0f, buffer );
+		doCopyComponent( getShadowOffsets(), getShadowVariance(), buffer );
 		doBind( buffer );
 	}
 
@@ -109,6 +110,17 @@ namespace castor3d
 	{
 		( *buffer )[0] = component[0];
 		( *buffer )[1] = component[1];
+		++buffer;
+	}
+
+	void LightCategory::doCopyComponent( castor::Point2f const & components1
+		, castor::Point2f const & components2
+		, castor::Point4f *& buffer )const
+	{
+		( *buffer )[0] = components1[0];
+		( *buffer )[1] = components1[1];
+		( *buffer )[2] = components2[0];
+		( *buffer )[3] = components2[1];
 		++buffer;
 	}
 

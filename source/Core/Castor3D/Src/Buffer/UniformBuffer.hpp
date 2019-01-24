@@ -38,7 +38,7 @@ namespace castor3d
 		 */
 		inline UniformBuffer( RenderSystem const & renderSystem
 			, uint32_t count
-			, renderer::MemoryPropertyFlags flags );
+			, ashes::MemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -103,10 +103,10 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[in]	buffer	Les données.
 		 */
-		inline void upload( renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer
+		inline void upload( ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, renderer::PipelineStageFlags flags
+			, ashes::PipelineStageFlags flags
 			, RenderPassTimer const & timer
 			, uint32_t index )const;
 		/**
@@ -123,10 +123,10 @@ namespace castor3d
 		 *\param[in]	count	Nombre d'éléments.
 		 *\param[out]	buffer	Les données.
 		 */
-		inline void download( renderer::StagingBuffer & stagingBuffer
-			, renderer::CommandBuffer const & commandBuffer
+		inline void download( ashes::StagingBuffer & stagingBuffer
+			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, renderer::PipelineStageFlags flags )const;
+			, ashes::PipelineStageFlags flags )const;
 		/**
 		*\~english
 		*\return
@@ -147,7 +147,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		inline renderer::UniformBuffer< T > const & getBuffer()const
+		inline ashes::UniformBuffer< T > const & getBuffer()const
 		{
 			return *m_buffer;
 		}
@@ -159,7 +159,7 @@ namespace castor3d
 		*\return
 		*	Le tampon interne.
 		*/
-		inline renderer::UniformBuffer< T > & getBuffer()
+		inline ashes::UniformBuffer< T > & getBuffer()
 		{
 			return *m_buffer;
 		}
@@ -167,9 +167,9 @@ namespace castor3d
 	private:
 		RenderSystem const & m_renderSystem;
 		uint32_t m_count;
-		renderer::UniformBufferPtr< T > m_buffer;
+		ashes::UniformBufferPtr< T > m_buffer;
 		std::set< uint32_t > m_available;
-		renderer::MemoryPropertyFlags m_flags;
+		ashes::MemoryPropertyFlags m_flags;
 	};
 }
 

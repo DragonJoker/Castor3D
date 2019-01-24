@@ -230,14 +230,14 @@ namespace castor
 	template< typename T, uint32_t Count >
 	T const & Coords< T, Count >::at( uint32_t index )const
 	{
-		REQUIRE( index < Count );
+		CU_Require( index < Count );
 		return m_coords[index];
 	}
 
 	template< typename T, uint32_t Count >
 	T & Coords< T, Count >::at( uint32_t index )
 	{
-		REQUIRE( index < Count );
+		CU_Require( index < Count );
 		return m_coords[index];
 	}
 

@@ -263,7 +263,7 @@ namespace GuiCommon
 				StringStream strVT( makeStringStream() );
 				StringStream strVN( makeStringStream() );
 				StringStream strF( makeStringStream() );
-				renderer::Buffer< uint32_t > & idxBuffer = submesh->getIndexBuffer();
+				ashes::Buffer< uint32_t > & idxBuffer = submesh->getIndexBuffer();
 				auto stride = uint32_t( sizeof( InterleavedVertex ) );
 				Point3r ptPos;
 				Point3r ptNml;

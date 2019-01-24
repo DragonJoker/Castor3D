@@ -99,8 +99,8 @@ add_target(
 	api_dll
 	""
 	"${CastorMinLibraries};${X11Libraries}"
-	"CastorUtilsPch.hpp"
-	"CastorUtilsPch.cpp"
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtilsPch.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtilsPch.cpp
 	"${FreeImage_FLAGS}"
 	""
 	""
@@ -148,6 +148,8 @@ install(
 )
 
 if ( WIN32 )
+	set( CMAKE_INSTALL_DEBUG_LIBRARIES TRUE )
+	set( CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION bin/$<$<CONFIG:Debug>:Debug/> )
 	include( InstallRequiredSystemLibraries )
 endif ()
 

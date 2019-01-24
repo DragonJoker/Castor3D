@@ -19,7 +19,7 @@
 #include "Scene/Background/Skybox.hpp"
 #include "Scene/Background/BackgroundTextWriter.hpp"
 #include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -199,7 +199,7 @@ namespace castor3d
 		{
 			Logger::logInfo( cuT( "Scene::write - Background" ) );
 			BackgroundTextWriter writer{ file, m_tabs + cuT( "\t" ) };
-			scene.getBackground().accept( writer );
+			scene.getBackground()->accept( writer );
 		}
 
 		if ( result && scene.getFog().getType() != FogType::eDisabled )
@@ -980,19 +980,19 @@ namespace castor3d
 
 	EnvironmentMap & Scene::getEnvironmentMap( SceneNode const & node )
 	{
-		REQUIRE( hasEnvironmentMap( node ) );
+		CU_Require( hasEnvironmentMap( node ) );
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
 	EnvironmentMap const & Scene::getEnvironmentMap( SceneNode const & node )const
 	{
-		REQUIRE( hasEnvironmentMap( node ) );
+		CU_Require( hasEnvironmentMap( node ) );
 		return *m_reflectionMaps.find( &node )->second;
 	}
 
-	renderer::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
+	ashes::SemaphoreCRefArray Scene::getRenderTargetsSemaphores()const
 	{
-		renderer::SemaphoreCRefArray result;
+		ashes::SemaphoreCRefArray result;
 
 		for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
 		{

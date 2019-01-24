@@ -13,8 +13,8 @@ namespace smaa
 	{
 	public:
 		ColourEdgeDetection( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & colourView
-			, renderer::Texture const * predication
+			, ashes::TextureView const & colourView
+			, ashes::Texture const * predication
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex )override;
@@ -23,12 +23,12 @@ namespace smaa
 		virtual void doInitialisePipeline()override;
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
-		renderer::TextureView const & m_colourView;
-		renderer::TextureViewPtr m_predicationView;
+		ashes::TextureView const & m_colourView;
+		ashes::TextureViewPtr m_predicationView;
 	};
 }
 

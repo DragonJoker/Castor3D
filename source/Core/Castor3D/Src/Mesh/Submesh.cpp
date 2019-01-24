@@ -41,10 +41,10 @@ namespace castor3d
 		{
 			doGenerateVertexBuffer();
 			auto & device = getCurrentDevice( *this );
-			m_indexBuffer = renderer::makeBuffer< uint32_t >( device
+			m_indexBuffer = ashes::makeBuffer< uint32_t >( device
 				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
-				, renderer::BufferTarget::eIndexBuffer
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eIndexBuffer
+				, ashes::MemoryPropertyFlag::eHostVisible );
 
 			for ( auto & component : m_components )
 			{
@@ -55,19 +55,19 @@ namespace castor3d
 
 			if ( !m_vertexLayout )
 			{
-				m_vertexLayout = renderer::makeLayout< InterleavedVertex >( 0u
-					, renderer::VertexInputRate::eVertex );
+				m_vertexLayout = ashes::makeLayout< InterleavedVertex >( 0u
+					, ashes::VertexInputRate::eVertex );
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::PositionLocation
-					, renderer::Format::eR32G32B32_SFLOAT
+					, ashes::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, pos ) );
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::NormalLocation
-					, renderer::Format::eR32G32B32_SFLOAT
+					, ashes::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, nml ) );
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
-					, renderer::Format::eR32G32B32_SFLOAT
+					, ashes::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tan ) );
 				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
-					, renderer::Format::eR32G32B32_SFLOAT
+					, ashes::Format::eR32G32B32_SFLOAT
 					, offsetof( InterleavedVertex, tex ) );
 			}
 
@@ -110,7 +110,7 @@ namespace castor3d
 
 			if ( auto buffer = m_vertexBuffer->lock( 0u
 				, size
-				, renderer::MemoryMapFlag::eWrite ) )
+				, ashes::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_points.begin(), m_points.end(), buffer );
 				m_vertexBuffer->flush( 0u, size );
@@ -170,23 +170,23 @@ namespace castor3d
 
 			switch ( getTopology() )
 			{
-			case renderer::PrimitiveTopology::ePointList:
+			case ashes::PrimitiveTopology::ePointList:
 				break;
 
-			case renderer::PrimitiveTopology::eLineList:
+			case ashes::PrimitiveTopology::eLineList:
 				result /= 2;
 				break;
 
-			case renderer::PrimitiveTopology::eLineStrip:
+			case ashes::PrimitiveTopology::eLineStrip:
 				result -= 1u;
 				break;
 
-			case renderer::PrimitiveTopology::eTriangleList:
+			case ashes::PrimitiveTopology::eTriangleList:
 				result /= 3u;
 				break;
 
-			case renderer::PrimitiveTopology::eTriangleStrip:
-			case renderer::PrimitiveTopology::eTriangleFan:
+			case ashes::PrimitiveTopology::eTriangleStrip:
+			case ashes::PrimitiveTopology::eTriangleFan:
 				result -= 2u;
 				break;
 			}
@@ -298,9 +298,9 @@ namespace castor3d
 
 		if ( it == m_geometryBuffers.end() )
 		{
-			renderer::BufferCRefArray buffers;
-			renderer::UInt64Array offsets;
-			renderer::VertexLayoutCRefArray layouts;
+			ashes::BufferCRefArray buffers;
+			ashes::UInt64Array offsets;
+			ashes::VertexLayoutCRefArray layouts;
 			buffers.emplace_back( m_vertexBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
 			layouts.emplace_back( *m_vertexLayout );
@@ -334,22 +334,22 @@ namespace castor3d
 			if ( !m_vertexBuffer
 				|| size != m_vertexBuffer->getCount() )
 			{
-				m_vertexBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
+				m_vertexBuffer = ashes::makeVertexBuffer< InterleavedVertex >( device
 					, size
 					, 0u
-					, renderer::MemoryPropertyFlag::eHostVisible );
+					, ashes::MemoryPropertyFlag::eHostVisible );
 			}
 
-			if ( auto buffer = m_vertexBuffer->lock( 0u
-				, size
-				, renderer::MemoryMapFlag::eWrite ) )
+			if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
+				, ~( 0ull )
+				, ashes::MemoryMapFlag::eWrite ) )
 			{
-				std::copy( m_points.begin(), m_points.end(), buffer );
-				m_vertexBuffer->flush( 0u, size );
-				m_vertexBuffer->unlock();
+				std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
+				m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
+				m_vertexBuffer->getBuffer().unlock();
 			}
 
-			//m_points.clear();
+			m_points.clear();
 		}
 	}
 }

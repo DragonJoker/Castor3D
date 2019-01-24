@@ -11,6 +11,8 @@
 #include <Render/RenderWindow.hpp>
 #include <Technique/RenderTechnique.hpp>
 
+#include <CompilerGlsl/compileGlsl.hpp>
+
 #include "AdditionalProperties.hpp"
 #include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -37,6 +39,7 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_REFRACTION = _( "Refraction" );
 		static wxString PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
+		static wxString PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
 		class PassShaderGatherer
@@ -47,7 +50,7 @@ namespace GuiCommon
 				, TextureChannels textureFlags
 				, SceneFlags sceneFlags
 				, Scene const & scene
-				, renderer::CompareOp alphaFunc
+				, ashes::CompareOp alphaFunc
 				, ShaderSources & sources )
 				: castor3d::RenderTechniqueVisitor{ std::move( passFlags )
 					, std::move( textureFlags )
@@ -89,21 +92,33 @@ namespace GuiCommon
 
 		private:
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlag type
+				, ashes::ShaderStageFlag type
 				, castor::String const & shader )override
 			{
 				doGetSource( name ).sources[type] = shader;
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlag type
-				, glsl::Shader const & shader )override
+				, ashes::ShaderStageFlag type
+				, sdw::Shader const & shader )override
 			{
-				doGetSource( name ).sources[type] = shader.getSource();
+				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
+					, ast::SpecialisationInfo{}
+					, glsl::GlslConfig
+					{
+						convert( type ),
+						430,
+						false,
+						false,
+						true,
+						true,
+						true,
+						true,
+					} );
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, float & value )override
@@ -112,7 +127,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, int32_t & value )override
@@ -121,7 +136,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, uint32_t & value )override
@@ -130,7 +145,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2f & value )override
@@ -139,7 +154,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2i & value )override
@@ -148,7 +163,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2ui & value )override
@@ -157,7 +172,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3f & value )override
@@ -166,7 +181,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3i & value )override
@@ -175,7 +190,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3ui & value )override
@@ -184,7 +199,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4f & value )override
@@ -193,7 +208,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4i & value )override
@@ -202,7 +217,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4ui & value )override
@@ -211,7 +226,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Matrix4x4f & value )override
@@ -220,7 +235,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< float > & value )override
@@ -229,7 +244,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< int32_t > & value )override
@@ -238,7 +253,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< uint32_t > & value )override
@@ -247,7 +262,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< float > & value )override
@@ -256,7 +271,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< int32_t > & value )override
@@ -265,7 +280,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< uint32_t > & value )override
@@ -274,7 +289,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2f > & value )override
@@ -283,7 +298,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2i > & value )override
@@ -292,7 +307,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point2ui > & value )override
@@ -301,7 +316,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3f > & value )override
@@ -310,7 +325,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3i > & value )override
@@ -319,7 +334,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point3ui > & value )override
@@ -328,7 +343,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4f > & value )override
@@ -337,7 +352,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4i > & value )override
@@ -346,7 +361,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Point4ui > & value )override
@@ -355,7 +370,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::Matrix4x4f > & value )override
@@ -364,7 +379,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< float > > & value )override
@@ -373,7 +388,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< int32_t > > & value )override
@@ -382,7 +397,7 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value )override
@@ -411,7 +426,7 @@ namespace GuiCommon
 			}
 
 			UniformBufferValues & doGetUbo( ShaderSource & source
-				, renderer::ShaderStageFlags stages
+				, ashes::ShaderStageFlags stages
 				, castor::String const & name )
 			{
 				auto it = std::find_if( source.ubos.begin()
@@ -434,7 +449,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, T & value )
@@ -446,7 +461,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< T > & value )
@@ -458,7 +473,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisitTracked( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< T > & value )
@@ -470,7 +485,7 @@ namespace GuiCommon
 
 			template< typename T >
 			void doVisitTracked( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::ChangeTracked< castor::RangedValue< T > > & value )
@@ -508,6 +523,7 @@ namespace GuiCommon
 		PROPERTY_PASS_SHADER = _( "Shader" );
 		PROPERTY_PASS_GLOSSINESS = _( "Glossiness" );
 		PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
+		PROPERTY_PASS_BWACCUM = _( "BW Accumulator" );
 
 		CreateTreeItemMenu();
 	}
@@ -516,62 +532,63 @@ namespace GuiCommon
 	{
 	}
 
-	void PassTreeItemProperty::doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void PassTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		PassSPtr pass = getPass();
 
 		if ( pass )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) ) );
+			grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) ) );
 
 			switch ( pass->getType() )
 			{
 			case MaterialType::eLegacy:
 				{
 					auto legacy = std::static_pointer_cast< LegacyPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getDiffuse() ) ) ) );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getSpecular() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( legacy->getAmbient() );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( legacy->getShininess() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getDiffuse() ) ) ) );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( legacy->getSpecular() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( legacy->getAmbient() );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( legacy->getShininess() );
 				}
 				break;
 
 			case MaterialType::ePbrMetallicRoughness:
 				{
 					auto pbr = std::static_pointer_cast< MetallicRoughnessPbrPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getAlbedo() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( pbr->getRoughness() );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( pbr->getMetallic() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_ALBEDO ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getAlbedo() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_ROUGHNESS ) )->SetValue( pbr->getRoughness() );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_METALLIC ) )->SetValue( pbr->getMetallic() );
 				}
 				break;
 
 			case MaterialType::ePbrSpecularGlossiness:
 				{
 					auto pbr = std::static_pointer_cast< SpecularGlossinessPbrPass >( pass );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getDiffuse() ) ) ) );
-					p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getSpecular() ) ) ) );
-					p_grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getDiffuse() ) ) ) );
+					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( pbr->getSpecular() ) ) ) );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_GLOSSINESS ) )->SetValue( pbr->getGlossiness() );
 				}
 				break;
 			}
 
-			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( pass->getEmissive() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
+			grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( pass->IsTwoSided() );
+			grid->Append( new wxFloatProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( pass->getEmissive() );
+			grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
+			grid->Append( new wxUIntProperty( PROPERTY_PASS_BWACCUM ) )->SetValue( int( pass->getBWAccumulationOperator() ) );
 
 			if ( checkFlag( pass->getTextureFlags(), TextureChannel::eRefraction ) )
 			{
-				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
+				grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
 			}
 
-			p_grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
+			grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, editor ) );
 		}
 	}
 
-	void PassTreeItemProperty::doPropertyChange( wxPropertyGridEvent & p_event )
+	void PassTreeItemProperty::doPropertyChange( wxPropertyGridEvent & event )
 	{
 		PassSPtr pass = getPass();
-		wxPGProperty * property = p_event.GetProperty();
+		wxPGProperty * property = event.GetProperty();
 
 		if ( property && pass )
 		{
@@ -607,6 +624,10 @@ namespace GuiCommon
 			{
 				OnOpacityChange( property->GetValue() );
 			}
+			else if ( property->GetName() == PROPERTY_PASS_OPACITY )
+			{
+				OnBWAccumulatorChange( property->GetValue() );
+			}
 			else if ( property->GetName() == PROPERTY_PASS_REFRACTION )
 			{
 				OnRefractionRatioChange( property->GetValue() );
@@ -630,7 +651,7 @@ namespace GuiCommon
 		}
 	}
 
-	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & p_value )
+	void PassTreeItemProperty::OnDiffuseColourChange( RgbColour const & value )
 	{
 		auto pass = m_pass.lock();
 
@@ -639,9 +660,9 @@ namespace GuiCommon
 		case MaterialType::eLegacy:
 			{
 				auto legacy = getTypedPass< MaterialType::eLegacy >();
-				doApplyChange( [p_value, legacy]()
+				doApplyChange( [value, legacy]()
 				{
-					legacy->setDiffuse( p_value );
+					legacy->setDiffuse( value );
 				} );
 			}
 			break;
@@ -649,16 +670,16 @@ namespace GuiCommon
 		case MaterialType::ePbrSpecularGlossiness:
 			{
 				auto pbr = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
-				doApplyChange( [p_value, pbr]()
+				doApplyChange( [value, pbr]()
 				{
-					pbr->setDiffuse( p_value );
+					pbr->setDiffuse( value );
 				} );
 			}
 			break;
 		}
 	}
 
-	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & p_value )
+	void PassTreeItemProperty::OnSpecularColourChange( RgbColour const & value )
 	{
 		auto pass = m_pass.lock();
 
@@ -667,9 +688,9 @@ namespace GuiCommon
 		case MaterialType::eLegacy:
 			{
 				auto legacy = getTypedPass< MaterialType::eLegacy >();
-				doApplyChange( [p_value, legacy]()
+				doApplyChange( [value, legacy]()
 				{
-					legacy->setSpecular( p_value );
+					legacy->setSpecular( value );
 				} );
 			}
 			break;
@@ -677,112 +698,122 @@ namespace GuiCommon
 		case MaterialType::ePbrSpecularGlossiness:
 			{
 				auto pbr = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
-				doApplyChange( [p_value, pbr]()
+				doApplyChange( [value, pbr]()
 				{
-					pbr->setSpecular( p_value );
+					pbr->setSpecular( value );
 				} );
 			}
 			break;
 		}
 	}
 
-	void PassTreeItemProperty::OnAmbientChange (double p_value)
+	void PassTreeItemProperty::OnAmbientChange (double value)
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setAmbient( float( p_value ) );
+			pass->setAmbient( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnEmissiveChange( double p_value )
+	void PassTreeItemProperty::OnEmissiveChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setEmissive( float( p_value ) );
+			pass->setEmissive( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnExponentChange( double p_value )
+	void PassTreeItemProperty::OnExponentChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::eLegacy >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setShininess( float( p_value ) );
+			pass->setShininess( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnTwoSidedChange( bool p_value )
+	void PassTreeItemProperty::OnTwoSidedChange( bool value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setTwoSided( p_value );
+			pass->setTwoSided( value );
 		} );
 	}
 
-	void PassTreeItemProperty::OnOpacityChange( double p_value )
+	void PassTreeItemProperty::OnOpacityChange( double value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setOpacity( float( p_value ) );
+			pass->setOpacity( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnRefractionRatioChange( double p_value )
+	void PassTreeItemProperty::OnBWAccumulatorChange( long value )
 	{
 		PassSPtr pass = getPass();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setRefractionRatio( float( p_value ) );
+			pass->setBWAccumulationOperator( uint32_t( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & p_value )
+	void PassTreeItemProperty::OnRefractionRatioChange( double value )
+	{
+		PassSPtr pass = getPass();
+
+		doApplyChange( [value, pass]()
+		{
+			pass->setRefractionRatio( float( value ) );
+		} );
+	}
+
+	void PassTreeItemProperty::OnAlbedoChange( castor::RgbColour const & value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setAlbedo( p_value );
+			pass->setAlbedo( value );
 		} );
 	}
 
-	void PassTreeItemProperty::OnRoughnessChange( double p_value )
+	void PassTreeItemProperty::OnRoughnessChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setRoughness( float( p_value ) );
+			pass->setRoughness( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnMetallicChange( double p_value )
+	void PassTreeItemProperty::OnMetallicChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrMetallicRoughness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setMetallic( float( p_value ) );
+			pass->setMetallic( float( value ) );
 		} );
 	}
 
-	void PassTreeItemProperty::OnGlossinessChange( double p_value )
+	void PassTreeItemProperty::OnGlossinessChange( double value )
 	{
 		auto pass = getTypedPass< MaterialType::ePbrSpecularGlossiness >();
 
-		doApplyChange( [p_value, pass]()
+		doApplyChange( [value, pass]()
 		{
-			pass->setGlossiness( float( p_value ) );
+			pass->setGlossiness( float( value ) );
 		} );
 	}
 

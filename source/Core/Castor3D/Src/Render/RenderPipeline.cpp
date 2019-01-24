@@ -15,17 +15,17 @@
 #include <Pipeline/PipelineLayout.hpp>
 #include <Pipeline/ShaderStageState.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
 	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
-		, renderer::DepthStencilState && dsState
-		, renderer::RasterisationState && rsState
-		, renderer::ColourBlendState && blState
-		, renderer::MultisampleState && msState
+		, ashes::DepthStencilState && dsState
+		, ashes::RasterisationState && rsState
+		, ashes::ColourBlendState && blState
+		, ashes::MultisampleState && msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
@@ -36,33 +36,28 @@ namespace castor3d
 		, m_program{ std::move( program ) }
 		, m_flags( flags )
 	{
-		if ( !renderSystem.isTopDown() )
-		{
-			if ( m_rsState.cullMode == renderer::CullModeFlag::eFront )
-			{
-				m_rsState.cullMode = renderer::CullModeFlag::eBack;
-			}
-			else
-			{
-				m_rsState.cullMode = renderer::CullModeFlag::eFront;
-			}
-		}
+		//if ( !renderSystem.isTopDown() )
+		//{
+		//	m_rsState.cullMode = ( ( m_rsState.cullMode == ashes::CullModeFlag::eFront )
+		//		? ashes::CullModeFlag::eBack
+		//		: ashes::CullModeFlag::eFront );
+		//}
 	}
 
 	RenderPipeline::~RenderPipeline()
 	{
 	}
 
-	void RenderPipeline::initialise( renderer::RenderPass const & renderPass )
+	void RenderPipeline::initialise( ashes::RenderPass const & renderPass )
 	{
-		renderer::VertexLayoutCRefArray vertexLayouts;
+		ashes::VertexLayoutCRefArray vertexLayouts;
 
 		for ( auto & layout : m_vertexLayouts )
 		{
 			vertexLayouts.emplace_back( layout );
 		}
 
-		renderer::DescriptorSetLayoutCRefArray descriptorLayouts;
+		ashes::DescriptorSetLayoutCRefArray descriptorLayouts;
 
 		for ( auto & descriptorLayout : m_descriptorLayouts )
 		{
@@ -72,12 +67,14 @@ namespace castor3d
 			}
 		}
 
-		renderer::GraphicsPipelineCreateInfo createInfo
+		m_program->initialise();
+
+		ashes::GraphicsPipelineCreateInfo createInfo
 		{
 			m_program->getStates(),
 			renderPass,
-			renderer::VertexInputState::create( vertexLayouts ),
-			renderer::InputAssemblyState{ m_flags.topology },
+			ashes::VertexInputState::create( vertexLayouts ),
+			ashes::InputAssemblyState{ m_flags.topology },
 			m_rsState,
 			m_msState,
 			m_blState,
@@ -90,7 +87,7 @@ namespace castor3d
 		}
 		else
 		{
-			createInfo.dynamicStates.push_back( renderer::DynamicState::eViewport );
+			createInfo.dynamicStates.push_back( ashes::DynamicState::eViewport );
 		}
 
 		if ( m_scissor )
@@ -99,7 +96,7 @@ namespace castor3d
 		}
 		else
 		{
-			createInfo.dynamicStates.push_back( renderer::DynamicState::eScissor );
+			createInfo.dynamicStates.push_back( ashes::DynamicState::eScissor );
 		}
 
 		m_pipelineLayout = getCurrentDevice( *this ).createPipelineLayout( descriptorLayouts
@@ -123,6 +120,16 @@ namespace castor3d
 			{
 				m_descriptorPools.emplace_back( descriptorLayout->createPool( maxSets ) );
 			}
+		}
+	}
+
+	void RenderPipeline::setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
+	{
+		CU_Require( !m_pipeline );
+
+		for ( auto & layout : layouts )
+		{
+			m_vertexLayouts.emplace_back( layout.get() );
 		}
 	}
 }

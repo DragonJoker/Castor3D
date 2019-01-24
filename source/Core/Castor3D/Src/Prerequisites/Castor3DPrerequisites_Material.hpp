@@ -31,7 +31,7 @@ namespace castor3d
 		//!\~english	Specular/Glossiness PBR.
 		//!\~french		PBR Specular/Glossiness.
 		ePbrSpecularGlossiness,
-		CASTOR_SCOPED_ENUM_BOUNDS( eLegacy )
+		CU_ScopedEnumBounds( eLegacy )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -61,7 +61,7 @@ namespace castor3d
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
 		eDepthPeeling,
-		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
+		CU_ScopedEnumBounds( eNoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -95,7 +95,7 @@ namespace castor3d
 		//\~french		Shader utilisant le parallax occlusion mapping.
 		eParallaxOcclusionMapping = 0x40,
 	};
-	IMPLEMENT_FLAGS( PassFlag )
+	CU_ImplementFlags( PassFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -124,7 +124,7 @@ namespace castor3d
 		//!\~english Face on negative Z
 		//!\~french Face des Z négatifs.
 		eNegativeZ,
-		CASTOR_SCOPED_ENUM_BOUNDS( ePositiveX )
+		CU_ScopedEnumBounds( ePositiveX )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -188,7 +188,23 @@ namespace castor3d
 		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::eAll), utilisé pour dire que nous voulons un shader d'incrustation texte
 		eText = 0x1000,
 	};
-	IMPLEMENT_FLAGS( TextureChannel )
+	CU_ImplementFlags( TextureChannel )
+	/*!
+	\author 	Sylvain DOREMUS
+	\~english
+	\brief		The components kept while loading an image.
+	\~french
+	\brief		Les composantes gardées lors du chargement d'une image.
+	*/
+	enum class ImageComponents
+		: uint8_t
+	{
+		eR,
+		eRG,
+		eRGB,
+		eA,
+		eAll,
+	};
 
 	class TextureLayout;
 	class TextureUnit;
@@ -201,35 +217,35 @@ namespace castor3d
 	class Sampler;
 	class SubsurfaceScattering;
 
-	DECLARE_SMART_PTR( TextureLayout );
-	DECLARE_SMART_PTR( TextureUnit );
-	DECLARE_SMART_PTR( TextureView );
-	DECLARE_SMART_PTR( Material );
-	DECLARE_SMART_PTR( Pass );
-	DECLARE_SMART_PTR( LegacyPass );
-	DECLARE_SMART_PTR( MetallicRoughnessPbrPass );
-	DECLARE_SMART_PTR( SpecularGlossinessPbrPass );
-	DECLARE_SMART_PTR( Sampler );
-	DECLARE_SMART_PTR( SubsurfaceScattering );
+	CU_DeclareSmartPtr( TextureLayout );
+	CU_DeclareSmartPtr( TextureUnit );
+	CU_DeclareSmartPtr( TextureView );
+	CU_DeclareSmartPtr( Material );
+	CU_DeclareSmartPtr( Pass );
+	CU_DeclareSmartPtr( LegacyPass );
+	CU_DeclareSmartPtr( MetallicRoughnessPbrPass );
+	CU_DeclareSmartPtr( SpecularGlossinessPbrPass );
+	CU_DeclareSmartPtr( Sampler );
+	CU_DeclareSmartPtr( SubsurfaceScattering );
 
 	//! Material pointer array
-	DECLARE_VECTOR( MaterialSPtr, MaterialPtr );
+	CU_DeclareVector( MaterialSPtr, MaterialPtr );
 	//! TextureUnit array
-	DECLARE_VECTOR( TextureUnit, TextureUnit );
+	CU_DeclareVector( TextureUnit, TextureUnit );
 	//! TextureUnit pointer array
-	DECLARE_VECTOR( TextureUnitSPtr, TextureUnitPtr );
+	CU_DeclareVector( TextureUnitSPtr, TextureUnitPtr );
 	//! Pass array
-	DECLARE_VECTOR( Pass, Pass );
+	CU_DeclareVector( Pass, Pass );
 	//! Pass pointer array
-	DECLARE_VECTOR( PassSPtr, PassPtr );
+	CU_DeclareVector( PassSPtr, PassPtr );
 	//! uint32_t array
-	DECLARE_VECTOR( uint32_t, UInt );
+	CU_DeclareVector( uint32_t, UInt32 );
 	//! Material pointer map, sorted by name
-	DECLARE_MAP( castor::String, MaterialSPtr, MaterialPtrStr );
+	CU_DeclareMap( castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
-	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
+	CU_DeclareMap( uint32_t, MaterialSPtr, MaterialPtrUInt );
 	//! TextureUnit reference array
-	DECLARE_VECTOR( std::reference_wrapper< TextureUnit >, DepthMap );
+	CU_DeclareVector( std::reference_wrapper< TextureUnit >, DepthMap );
 
 	using OnPassChangedFunction = std::function< void( Pass const & ) >;
 	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
@@ -239,9 +255,8 @@ namespace castor3d
 	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
-	renderer::Format convert( castor::PixelFormat format );
-	castor::PixelFormat convert( renderer::Format format );
-
+	C3D_API ashes::Format convert( castor::PixelFormat format );
+	C3D_API castor::PixelFormat convert( ashes::Format format );
 	//@}
 }
 

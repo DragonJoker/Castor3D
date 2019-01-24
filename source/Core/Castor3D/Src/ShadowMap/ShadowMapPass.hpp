@@ -99,7 +99,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
 		/**
@@ -119,14 +119,14 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
@@ -137,7 +137,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -145,34 +145,34 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::doGetGeometryShaderSource
 		 */
-		glsl::Shader doGetGeometryShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetGeometryShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 
 	protected:
 		ShadowMap const & m_shadowMap;

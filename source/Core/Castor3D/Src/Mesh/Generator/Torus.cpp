@@ -64,7 +64,7 @@ void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 		uint32_t uiIntMax = m_internalNbFaces;
 
 		// Build the internal circle that will be rotated to build the torus
-		real step = real( Angle::PiMult2 ) / m_internalNbFaces;
+		real step = PiMult2< real > / m_internalNbFaces;
 
 		for ( uint32_t j = 0; j <= uiIntMax; j++ )
 		{
@@ -76,7 +76,7 @@ void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
 		}
 
 		// Build the torus
-		step = real( Angle::PiMult2 ) / m_externalNbFaces;
+		step = PiMult2< real > / m_externalNbFaces;
 		auto indexMapping = std::make_shared< TriFaceMapping >( submesh );
 
 		for ( uint32_t i = 1; i <= uiExtMax; i++ )

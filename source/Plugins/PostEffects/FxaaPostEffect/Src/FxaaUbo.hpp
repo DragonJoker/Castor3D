@@ -27,7 +27,7 @@ namespace fxaa
 			, float span
 			, float reduce );
 
-		inline renderer::UniformBuffer< Configuration > & getUbo()
+		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
@@ -40,12 +40,12 @@ namespace fxaa
 		static const castor::String PixelSize;
 
 	private:
-		renderer::UniformBufferPtr< Configuration > m_ubo;
+		ashes::UniformBufferPtr< Configuration > m_ubo;
 	};
 }
 
 #define UBO_FXAA( writer, binding, set )\
-	glsl::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
+	sdw::Ubo fxaa{ writer, FxaaUbo::Name, binding, set };\
 	auto c3d_pixelSize = fxaa.declMember< Vec2 >( FxaaUbo::PixelSize );\
 	auto c3d_subpixShift = fxaa.declMember< Float >( FxaaUbo::SubpixShift );\
 	auto c3d_spanMax = fxaa.declMember< Float >( FxaaUbo::SpanMax );\

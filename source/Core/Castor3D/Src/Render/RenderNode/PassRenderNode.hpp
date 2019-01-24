@@ -19,13 +19,13 @@ namespace castor3d
 	struct PassRenderNode
 	{
 		C3D_API explicit PassRenderNode( Pass & pass );
-		void fillDescriptor( renderer::DescriptorSetLayout const & layout
+		void fillDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, renderer::DescriptorSet & descriptorSet
+			, ashes::DescriptorSet & descriptorSet
 			, bool opacityOnly = false );
-		void fillDescriptor( renderer::DescriptorSetLayout const & layout
+		void fillDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
-			, renderer::WriteDescriptorSetArray & writes
+			, ashes::WriteDescriptorSetArray & writes
 			, bool opacityOnly = false );
 
 		//!\~english	The pass.

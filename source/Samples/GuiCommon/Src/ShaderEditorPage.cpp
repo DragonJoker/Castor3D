@@ -13,7 +13,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/Program.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Technique/RenderTechniquePass.hpp>
 
@@ -25,7 +25,7 @@ namespace GuiCommon
 	ShaderEditorPage::ShaderEditorPage( Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
-		, renderer::ShaderStageFlag type
+		, ashes::ShaderStageFlag type
 		, castor::String const & source
 		, std::vector< UniformBufferValues > & ubos
 		, wxWindow * parent

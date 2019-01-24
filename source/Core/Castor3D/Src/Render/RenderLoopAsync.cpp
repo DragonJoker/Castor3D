@@ -4,6 +4,7 @@
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
+#include <Design/BlockGuard.hpp>
 #include <Core/Exception.hpp>
 
 using namespace castor;
@@ -92,7 +93,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_RENDER_SYNC_FRAME );
+			CU_Exception( CALL_RENDER_SYNC_FRAME );
 		}
 
 		if ( m_rendering )
@@ -115,7 +116,7 @@ namespace castor3d
 	{
 		if ( m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
+			CU_Exception( CALL_PAUSE_RENDERING );
 		}
 
 		m_paused = true;
@@ -130,7 +131,7 @@ namespace castor3d
 	{
 		if ( !m_paused )
 		{
-			CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
+			CU_Exception( CALL_RESUME_RENDERING );
 		}
 
 		m_paused = false;
@@ -146,10 +147,10 @@ namespace castor3d
 		}
 	}
 
-	renderer::DevicePtr RenderLoopAsync::doCreateMainDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderLoopAsync::doCreateMainDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::DevicePtr result;
+		ashes::DevicePtr result;
 
 		if ( !m_createContext )
 		{
@@ -199,10 +200,17 @@ namespace castor3d
 					if ( device )
 					{
 						m_renderSystem.setMainDevice( device );
-						device->enable();
+						auto guard = makeBlockGuard(
+							[this, &device]()
+							{
+								m_renderSystem.setCurrentDevice( device.get() );
+							},
+							[this]()
+							{
+								m_renderSystem.setCurrentDevice( nullptr );
+							} );
 						GpuInformations info;
 						m_renderSystem.initialise( std::move( info ) );
-						device->disable();
 						m_created = true;
 					}
 					else
@@ -231,7 +239,7 @@ namespace castor3d
 				m_ended = true;
 			}
 		}
-		catch ( renderer::Exception & exc )
+		catch ( ashes::Exception & exc )
 		{
 			Logger::logError( String{ cuT( "RenderLoop - " ) } + exc.what() );
 			m_frameEnded = true;
@@ -251,13 +259,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoopAsync::doSetHandle( renderer::WindowHandle && handle )
+	void RenderLoopAsync::doSetHandle( ashes::WindowHandle && handle )
 	{
 		auto lock = makeUniqueLock( m_mutexWindow );
 		m_handle = std::move( handle );
 	}
 
-	renderer::WindowHandle & RenderLoopAsync::doGetHandle()
+	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
 	{
 		auto lock = makeUniqueLock( m_mutexWindow );
 		return m_handle;

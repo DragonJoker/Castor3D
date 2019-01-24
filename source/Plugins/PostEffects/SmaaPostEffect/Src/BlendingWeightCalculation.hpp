@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -19,7 +19,7 @@ namespace smaa
 	{
 	public:
 		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & edgeDetectionView
+			, ashes::TextureView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
@@ -33,19 +33,19 @@ namespace smaa
 		}
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
-		renderer::TextureView const & m_edgeDetectionView;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::TextureView const & m_edgeDetectionView;
+		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		renderer::SamplerPtr m_pointSampler;
-		renderer::UniformBufferPtr< castor::Point4i > m_ubo;
+		ashes::SamplerPtr m_pointSampler;
+		ashes::UniformBufferPtr< castor::Point4i > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

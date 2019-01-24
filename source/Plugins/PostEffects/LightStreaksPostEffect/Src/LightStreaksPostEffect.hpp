@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <Render/Viewport.hpp>
 #include <Shader/Ubos/MatrixUbo.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace light_streaks
 {
@@ -68,37 +68,37 @@ namespace light_streaks
 	private:
 		struct Layout
 		{
-			renderer::DescriptorSetLayoutPtr descriptorLayout;
-			renderer::DescriptorSetPoolPtr descriptorPool;
-			renderer::PipelineLayoutPtr pipelineLayout;
+			ashes::DescriptorSetLayoutPtr descriptorLayout;
+			ashes::DescriptorSetPoolPtr descriptorPool;
+			ashes::PipelineLayoutPtr pipelineLayout;
 		};
 
 		struct Surface
 		{
 			Surface( castor3d::RenderSystem & renderSystem
-				, renderer::Format format
-				, renderer::Extent2D const & size
-				, renderer::RenderPass const & renderPass );
+				, ashes::Format format
+				, ashes::Extent2D const & size
+				, ashes::RenderPass const & renderPass );
 			castor3d::TextureLayoutSPtr image;
-			renderer::FrameBufferPtr frameBuffer;
-			std::vector< renderer::DescriptorSetPtr > descriptorSets;
+			ashes::FrameBufferPtr frameBuffer;
+			std::vector< ashes::DescriptorSetPtr > descriptorSets;
 		};
 
 		struct Pipeline
 		{
+			castor3d::ShaderModule vertexShader;
+			castor3d::ShaderModule pixelShader;
 			Layout layout;
 			std::vector< Surface > surfaces;
-			renderer::PipelinePtr pipeline;
-			glsl::Shader vertexShader;
-			glsl::Shader pixelShader;
+			ashes::PipelinePtr pipeline;
 		};
 
 		castor3d::SamplerSPtr m_linearSampler;
 		castor3d::SamplerSPtr m_nearestSampler;
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		KawaseUbo m_kawaseUbo;
-		std::vector< renderer::TextureViewPtr > m_hiPassViews;
-		renderer::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
+		std::vector< ashes::TextureViewPtr > m_hiPassViews;
+		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
 
 		struct
 		{

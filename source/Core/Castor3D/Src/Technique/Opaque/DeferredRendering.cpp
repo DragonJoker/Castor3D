@@ -30,11 +30,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
-				result->setMinFilter( renderer::Filter::eNearest );
-				result->setMagFilter( renderer::Filter::eNearest );
-				result->setWrapS( renderer::WrapMode::eClampToEdge );
-				result->setWrapT( renderer::WrapMode::eClampToEdge );
-				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				result->setMinFilter( ashes::Filter::eNearest );
+				result->setMagFilter( ashes::Filter::eNearest );
+				result->setWrapS( ashes::WrapMode::eClampToEdge );
+				result->setWrapT( ashes::WrapMode::eClampToEdge );
+				result->setWrapR( ashes::WrapMode::eClampToEdge );
 				result->initialise();
 			}
 
@@ -51,6 +51,7 @@ namespace castor3d
 		, TextureLayoutSPtr resultTexture
 		, Size const & size
 		, Scene & scene
+		, HdrConfigUbo & hdrConfigUbo
 		, SsaoConfig & config )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
@@ -71,7 +72,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo );
 		m_ssao = std::make_unique< SsaoPass >( engine
-			, renderer::Extent2D{ m_size.getWidth(), m_size.getHeight() }
+			, ashes::Extent2D{ m_size.getWidth(), m_size.getHeight() }
 			, m_ssaoConfig
 			, m_geometryPassResult );
 		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
@@ -88,7 +89,8 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+			, hdrConfigUbo
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
 			, scene
 			, m_geometryPassResult
@@ -97,7 +99,8 @@ namespace castor3d
 			, resultTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
-			, m_ssaoConfig.m_enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+			, hdrConfigUbo
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -116,7 +119,7 @@ namespace castor3d
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
-		m_opaquePass.getSceneUbo().update( scene, camera );
+		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_gpInfoUbo.update( m_size
 			, camera
 			, invViewProj
@@ -125,7 +128,7 @@ namespace castor3d
 		m_opaquePass.update( info
 			, jitter );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->update( camera );
 		}
@@ -140,12 +143,12 @@ namespace castor3d
 		}
 	}
 
-	renderer::Semaphore const & DeferredRendering::render( RenderInfo & info
+	ashes::Semaphore const & DeferredRendering::render( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, renderer::Semaphore const & toWait )
+		, ashes::Semaphore const & toWait )
 	{
-		renderer::Semaphore const * result = &toWait;
+		ashes::Semaphore const * result = &toWait;
 		m_engine.setPerObjectLighting( false );
 		result = &m_opaquePass.render( *result );
 		result = &m_lightingPass->render( scene
@@ -154,7 +157,7 @@ namespace castor3d
 			, *result
 			, info );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			result = &m_ssao->render( *result );
 		}
@@ -172,8 +175,8 @@ namespace castor3d
 		return *result;
 	}
 
-	void DeferredRendering::debugDisplay( renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer )const
+	void DeferredRendering::debugDisplay( ashes::RenderPass const & renderPass
+		, ashes::FrameBuffer const & frameBuffer )const
 	{
 		//auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
 		//int width = int( m_size.getWidth() ) / count;
@@ -203,7 +206,7 @@ namespace castor3d
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );
 
-		if ( m_ssaoConfig.m_enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->accept( visitor );
 		}

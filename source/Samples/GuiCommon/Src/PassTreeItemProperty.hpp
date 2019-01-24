@@ -72,7 +72,7 @@ namespace GuiCommon
 		inline std::shared_ptr< typename castor3d::PassTyper< Type >::Type > getTypedPass()
 		{
 			auto pass = m_pass.lock();
-			REQUIRE( pass && pass->getType() == Type );
+			CU_Require( pass && pass->getType() == Type );
 			return std::static_pointer_cast< typename castor3d::PassTyper< Type >::Type >( pass );
 		}
 
@@ -94,6 +94,7 @@ namespace GuiCommon
 		void OnExponentChange( double p_value );
 		void OnTwoSidedChange( bool p_value );
 		void OnOpacityChange( double p_value );
+		void OnBWAccumulatorChange( long p_value );
 		void OnRefractionRatioChange( double p_value );
 		void OnAlbedoChange( castor::RgbColour const & p_value );
 		void OnRoughnessChange( double p_value );

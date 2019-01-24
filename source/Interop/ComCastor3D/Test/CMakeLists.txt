@@ -15,8 +15,8 @@ if ( MSVC )
 		bin_dos
 		"ComCastor3D"
 		"ComCastor3D"
-		"ComCastor3DTestPch.hpp"
-		"ComCastor3DTestPch.cpp"
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DTestPch.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DTestPch.cpp
 	)
 
 	# Copy tlb files into Test directory.

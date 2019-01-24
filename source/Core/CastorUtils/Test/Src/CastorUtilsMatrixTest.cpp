@@ -216,7 +216,7 @@ namespace Testing
 		}
 		Logger::logInfo( cuT( "	Perspective" ) );
 		{
-			Angle fov( Angle::fromDegrees( 90.0 ) );
+			Angle fov{ 90.0_degrees };
 			real aspect = 4.0f / 3.0f;
 			Matrix4x4r mtx( 1 );
 			matrix::perspective( mtx, fov, aspect, near, far );

@@ -9,7 +9,7 @@ namespace castor
 		, m_encoding{ p_encoding }
 		, m_fileFullPath{ p_fileName }
 	{
-		REQUIRE( !p_fileName.empty() );
+		CU_Require( !p_fileName.empty() );
 		String mode;
 
 		switch ( p_mode )
@@ -47,7 +47,7 @@ namespace castor
 			break;
 
 		default:
-			FAILURE( "Unsupported file opening mode" );
+			CU_Failure( "Unsupported file opening mode" );
 			break;
 		}
 
@@ -80,10 +80,10 @@ namespace castor
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Couldn't open file " + string::stringCast< char >( m_fileFullPath ) + " : " + string::stringCast< char >( System::getLastErrorText() ) );
+			CU_Exception( "Couldn't open file " + string::stringCast< char >( m_fileFullPath ) + " : " + string::stringCast< char >( System::getLastErrorText() ) );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 	}
 
 	File::~File()
@@ -96,7 +96,7 @@ namespace castor
 
 	int File::seek( long long p_offset, OffsetMode p_origin )
 	{
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		int iReturn = 0;
 
 		if ( m_file )
@@ -120,19 +120,19 @@ namespace castor
 			}
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return iReturn;
 	}
 
 	long long File::getLength()
 	{
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		m_length = 0;
 		long long llPosition = castor::fileTell( m_file );
 		castor::fileSeek( m_file, 0, SEEK_END );
 		m_length = castor::fileTell( m_file );
 		castor::fileSeek( m_file, llPosition, SEEK_SET );
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return m_length;
 	}
 
@@ -156,7 +156,7 @@ namespace castor
 
 	long long File::tell()
 	{
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		long long llReturn = 0;
 
 		if ( m_file )
@@ -164,35 +164,35 @@ namespace castor
 			llReturn = castor::fileTell( m_file );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return llReturn;
 	}
 
-	BEGIN_INVARIANT_BLOCK( File )
-	CHECK_INVARIANT( m_file );
-	END_INVARIANT_BLOCK()
+	CU_BeginInvariantBlock( File )
+	CU_CheckInvariant( m_file );
+	CU_EndInvariantBlock()
 
 	uint64_t File::doWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( isOk() && ( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) ) );
+		CU_CheckInvariants();
+		CU_Require( isOk() && ( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) ) );
 		uint64_t uiReturn = 0;
 
 		if ( isOk() )
 		{
 			uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_file );
 			m_cursor += uiReturn;
-			ENSURE( uiReturn <= p_uiSize );
+			CU_Ensure( uiReturn <= p_uiSize );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 
 	uint64_t File::doRead( uint8_t * p_buffer, uint64_t p_uiSize )
 	{
-		CHECK_INVARIANTS();
-		REQUIRE( isOk() && checkFlag( m_mode, OpenMode::eRead ) );
+		CU_CheckInvariants();
+		CU_Require( isOk() && checkFlag( m_mode, OpenMode::eRead ) );
 		uint64_t uiReturn = 0;
 
 		if ( isOk() )
@@ -206,10 +206,10 @@ namespace castor
 			}
 
 			m_cursor += uiReturn;
-			ENSURE( uiReturn <= p_uiSize );
+			CU_Ensure( uiReturn <= p_uiSize );
 		}
 
-		CHECK_INVARIANTS();
+		CU_CheckInvariants();
 		return uiReturn;
 	}
 

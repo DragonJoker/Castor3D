@@ -234,7 +234,7 @@ namespace castor
 	\~french
 	\brief		Typedef d'un pointeur sur une DynamicLibrary
 	*/
-	DECLARE_SMART_PTR( DynamicLibrary );
+	CU_DeclareSmartPtr( DynamicLibrary );
 }
 
 #endif

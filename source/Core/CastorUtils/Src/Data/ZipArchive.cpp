@@ -15,7 +15,7 @@
 #	include "MiniZip/iowin32.h"
 #endif
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 #	include <fcntl.h>
 #	include <io.h>
 #	define SET_BINARY_MODE( file ) setmode( fileno( file ), O_BINARY )
@@ -68,7 +68,7 @@ namespace castor
 
 					if ( !m_zip )
 					{
-						CASTOR_EXCEPTION( "Couldn't create archive file" );
+						CU_Exception( "Couldn't create archive file" );
 					}
 				}
 				else
@@ -87,7 +87,7 @@ namespace castor
 
 					if ( !m_unzip )
 					{
-						CASTOR_EXCEPTION( "Couldn't open archive file" );
+						CU_Exception( "Couldn't open archive file" );
 					}
 				}
 			}
@@ -100,7 +100,7 @@ namespace castor
 
 					if ( error != UNZ_OK )
 					{
-						CASTOR_EXCEPTION( "Error while closing ZIP archive : " + zlib::getError( error ) );
+						CU_Exception( "Error while closing ZIP archive : " + zlib::getError( error ) );
 					}
 
 					m_zip = nullptr;
@@ -112,7 +112,7 @@ namespace castor
 
 					if ( error != UNZ_OK )
 					{
-						CASTOR_EXCEPTION( "Error while closing ZIP archive : " + zlib::getError( error ) );
+						CU_Exception( "Error while closing ZIP archive : " + zlib::getError( error ) );
 					}
 
 					m_unzip = nullptr;
@@ -189,14 +189,14 @@ namespace castor
 
 				if ( error != UNZ_OK )
 				{
-					CASTOR_EXCEPTION( "Error in unzgetGlobalInfo: " + zlib::getError( error ) );
+					CU_Exception( "Error in unzgetGlobalInfo: " + zlib::getError( error ) );
 				}
 
 				error = unzGoToFirstFile( m_unzip );
 
 				if ( error != UNZ_OK )
 				{
-					CASTOR_EXCEPTION( "Error in unzGoToFirstFile: " + zlib::getError( error ) );
+					CU_Exception( "Error in unzGoToFirstFile: " + zlib::getError( error ) );
 				}
 
 				for ( uLong i = 0; i < gi.number_entry; ++i )
@@ -209,7 +209,7 @@ namespace castor
 
 						if ( error != UNZ_OK )
 						{
-							CASTOR_EXCEPTION( "Error in unzGoToNextFile: " + zlib::getError( error ) );
+							CU_Exception( "Error in unzGoToNextFile: " + zlib::getError( error ) );
 						}
 					}
 				}
@@ -226,7 +226,7 @@ namespace castor
 
 				if ( error != UNZ_OK )
 				{
-					CASTOR_EXCEPTION( "Error in unzgetCurrentFileInfo: " + zlib::getError( error ) );
+					CU_Exception( "Error in unzgetCurrentFileInfo: " + zlib::getError( error ) );
 				}
 
 				Path name = Path{ string::stringCast< xchar >( fileNameInZip.data(), fileNameInZip.data() + fileInfo.size_filename ) };
@@ -260,7 +260,7 @@ namespace castor
 
 					if ( error != UNZ_OK )
 					{
-						CASTOR_EXCEPTION( "Error in unzOpenCurrentFilePassword: " + zlib::getError( error ) );
+						CU_Exception( "Error in unzOpenCurrentFilePassword: " + zlib::getError( error ) );
 					}
 
 					BinaryFile file( p_outFolder / name, File::OpenMode::eWrite );
@@ -274,7 +274,7 @@ namespace castor
 
 							if ( error < 0 )
 							{
-								CASTOR_EXCEPTION( "Error in unzReadCurrentFile: " + zlib::getError( error ) );
+								CU_Exception( "Error in unzReadCurrentFile: " + zlib::getError( error ) );
 							}
 
 							if ( error > 0 )
@@ -293,7 +293,7 @@ namespace castor
 
 						if ( error != UNZ_OK )
 						{
-							CASTOR_EXCEPTION( "Error in unzCloseCurrentFile: " + zlib::getError( error ) );
+							CU_Exception( "Error in unzCloseCurrentFile: " + zlib::getError( error ) );
 						}
 					}
 				}
@@ -328,14 +328,14 @@ namespace castor
 
 					if ( !File::fileExists( Path{ string::stringCast< xchar >( filePath ) } ) )
 					{
-						CASTOR_EXCEPTION( "The file doesn't exist: " + filePath );
+						CU_Exception( "The file doesn't exist: " + filePath );
 					}
 
 					std::fstream file( filePath, std::ios::binary | std::ios::in );
 
 					if ( !file.is_open() )
 					{
-						CASTOR_EXCEPTION( "Couldn't open file: " + filePath );
+						CU_Exception( "Couldn't open file: " + filePath );
 					}
 
 					file.seekg( 0, std::ios::end );

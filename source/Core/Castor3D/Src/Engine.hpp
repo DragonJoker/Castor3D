@@ -150,7 +150,7 @@ namespace castor3d
 		 *\param[in]	name		Le nom d'enregistrement.
 		 *\param[in]	sections	Les sections.
 		 */
-		C3D_API void registerSections( castor::String const & name, castor::StrUIntMap const & sections );
+		C3D_API void registerSections( castor::String const & name, castor::StrUInt32Map const & sections );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
@@ -192,8 +192,8 @@ namespace castor3d
 		 *\param[in]	size		La taille du viewport de rendu.
 		 *\param[in]	texture		La texture.
 		 */
-		C3D_API void renderDepth( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		C3D_API void renderDepth( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Position const & position
 			, castor::Size const & size
 			, TextureLayout const & texture );
@@ -287,7 +287,7 @@ namespace castor3d
 			return m_additionalParsers;
 		}
 
-		inline std::map< castor::String, castor::StrUIntMap > const & getAdditionalSections()const
+		inline std::map< castor::String, castor::StrUInt32Map > const & getAdditionalSections()const
 		{
 			return m_additionalSections;
 		}
@@ -430,7 +430,7 @@ namespace castor3d
 		castor::ImageCache m_imageCache;
 		UserInputListenerSPtr m_userInputListener;
 		std::map< castor::String, castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		std::map< castor::String, castor::StrUIntMap > m_additionalSections;
+		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
 		FrameListenerWPtr m_defaultListener;
 		RenderSystemFactory m_renderSystemFactory;
 		MeshFactory m_meshFactory;

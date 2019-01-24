@@ -75,7 +75,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< IndexMapping > component
 			, Submesh & submesh )
 		{
-			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
 		}
 	};
 
@@ -87,7 +87,7 @@ namespace castor3d
 		static inline void add( std::shared_ptr< TriFaceMapping > component
 			, Submesh & submesh )
 		{
-			CASTOR_EXCEPTION( "Use setIndexMapping, to define the index mapping for a Submesh" );
+			CU_Exception( "Use setIndexMapping, to define the index mapping for a Submesh" );
 		}
 	};
 
@@ -117,25 +117,25 @@ namespace castor3d
 
 	inline InterleavedVertex const & Submesh::operator[]( uint32_t index )const
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex & Submesh::operator[]( uint32_t index )
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex const & Submesh::getPoint( uint32_t index )const
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
 	inline InterleavedVertex & Submesh::getPoint( uint32_t index )
 	{
-		REQUIRE( index < m_points.size() );
+		CU_Require( index < m_points.size() );
 		return m_points[index];
 	}
 
@@ -174,27 +174,27 @@ namespace castor3d
 		return m_points;
 	}
 
-	inline renderer::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
+	inline ashes::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
 	{
 		return *m_vertexBuffer;
 	}
 
-	inline renderer::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
+	inline ashes::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
 	{
 		return *m_vertexBuffer;
 	}
 
-	inline renderer::VertexLayout const & Submesh::getVertexLayout()const
+	inline ashes::VertexLayout const & Submesh::getVertexLayout()const
 	{
 		return *m_vertexLayout;
 	}
 
-	inline renderer::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
+	inline ashes::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
 		return *m_indexBuffer;
 	}
 
-	inline renderer::Buffer< uint32_t > & Submesh::getIndexBuffer()
+	inline ashes::Buffer< uint32_t > & Submesh::getIndexBuffer()
 	{
 		return *m_indexBuffer;
 	}
@@ -236,10 +236,9 @@ namespace castor3d
 		m_components.emplace( mapping->getType(), mapping );
 	}
 
-	inline IndexMapping const & Submesh::getIndexMapping()const
+	inline IndexMappingSPtr Submesh::getIndexMapping()const
 	{
-		REQUIRE( m_indexMapping );
-		return *m_indexMapping;
+		return m_indexMapping;
 	}
 
 	inline bool Submesh::hasComponent( castor::String const & name )const
@@ -280,25 +279,25 @@ namespace castor3d
 
 	inline InstantiationComponent & Submesh::getInstantiation()
 	{
-		REQUIRE( m_instantiation );
+		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
 	inline InstantiationComponent const & Submesh::getInstantiation()const
 	{
-		REQUIRE( m_instantiation );
+		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
 	inline BonesInstantiationComponent & Submesh::getInstantiatedBones()
 	{
-		REQUIRE( m_instantiatedBones );
+		CU_Require( m_instantiatedBones );
 		return *m_instantiatedBones;
 	}
 
 	inline BonesInstantiationComponent const & Submesh::getInstantiatedBones()const
 	{
-		REQUIRE( m_instantiatedBones );
+		CU_Require( m_instantiatedBones );
 		return *m_instantiatedBones;
 	}
 
@@ -307,12 +306,12 @@ namespace castor3d
 		return m_components;
 	}
 
-	inline renderer::PrimitiveTopology Submesh::getTopology()const
+	inline ashes::PrimitiveTopology Submesh::getTopology()const
 	{
 		return m_topology;
 	}
 
-	inline void Submesh::setTopology( renderer::PrimitiveTopology value )
+	inline void Submesh::setTopology( ashes::PrimitiveTopology value )
 	{
 		m_topology = value;
 	}

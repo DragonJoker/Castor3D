@@ -8,9 +8,9 @@
 
 namespace castor3d
 {
-	BackgroundFramePreparator::BackgroundFramePreparator( renderer::CommandBuffer & commandBuffer
-		, renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer )
+	BackgroundFramePreparator::BackgroundFramePreparator( ashes::CommandBuffer & commandBuffer
+		, ashes::RenderPass const & renderPass
+		, ashes::FrameBuffer const & frameBuffer )
 		: m_commandBuffer{ commandBuffer }
 	{
 	}

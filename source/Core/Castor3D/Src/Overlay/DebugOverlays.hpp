@@ -218,6 +218,14 @@ namespace castor3d
 
 		class RenderPassOverlays
 		{
+		private:
+			struct TimeOverlays
+			{
+				castor::Nanoseconds time{ 0_ns };
+				TextOverlaySPtr name;
+				TextOverlaySPtr value;
+			};
+
 		public:
 			RenderPassOverlays( RenderPassOverlays const & ) = delete;
 			RenderPassOverlays & operator=( RenderPassOverlays const & ) = delete;
@@ -230,8 +238,18 @@ namespace castor3d
 			void addTimer( RenderPassTimer & timer );
 			bool removeTimer( RenderPassTimer & timer );
 			void retrieveGpuTime();
-			castor::Nanoseconds update();
+			void update();
 			void setVisible( bool visible );
+
+			inline castor::Nanoseconds getGpuTime()
+			{
+				return m_gpu.time;
+			}
+
+			inline castor::Nanoseconds getCpuTime()
+			{
+				return m_cpu.time;
+			}
 
 		private:
 			OverlayCache & m_cache;
@@ -239,10 +257,8 @@ namespace castor3d
 			PanelOverlaySPtr m_panel;
 			PanelOverlaySPtr m_titlePanel;
 			TextOverlaySPtr m_titleText;
-			TextOverlaySPtr m_cpuName;
-			TextOverlaySPtr m_cpuValue;
-			TextOverlaySPtr m_gpuName;
-			TextOverlaySPtr m_gpuValue;
+			TimeOverlays m_cpu;
+			TimeOverlays m_gpu;
 		};
 
 		using RenderPassOverlaysArray = std::map< castor::String, RenderPassOverlays >;
@@ -272,7 +288,7 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale;
 		RenderInfo m_renderInfo;
-		renderer::QueryPoolPtr m_queries;
+		ashes::QueryPoolPtr m_queries;
 		uint32_t m_queriesCount{ 0u };
 		bool m_dirty{ false };
 	};

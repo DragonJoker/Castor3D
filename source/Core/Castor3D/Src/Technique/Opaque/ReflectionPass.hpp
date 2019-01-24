@@ -19,7 +19,7 @@ See LICENSE file in root folder
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -63,12 +63,13 @@ namespace castor3d
 		ReflectionPass( Engine & engine
 			, Scene & scene
 			, GeometryPassResult const & gp
-			, renderer::TextureView const & lightDiffuse
-			, renderer::TextureView const & lightSpecular
-			, renderer::TextureView const & result
+			, ashes::TextureView const & lightDiffuse
+			, ashes::TextureView const & lightSpecular
+			, ashes::TextureView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
-			, renderer::TextureView const * ssao );
+			, HdrConfigUbo & hdrConfigUbo
+			, ashes::TextureView const * ssao );
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
@@ -86,7 +87,7 @@ namespace castor3d
 		 *\brief		Dessine le mapping de réflexion.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -100,53 +101,54 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = default;
 			ProgramPipeline( Engine & engine
-				, renderer::DescriptorSetLayout const & uboLayout
-				, renderer::DescriptorSetLayout const & texLayout
-				, renderer::RenderPass const & renderPass
-				, renderer::TextureView const * ssao
-				, renderer::Extent2D const & size
+				, GeometryPassResult const & gp
+				, ashes::DescriptorSetLayout const & uboLayout
+				, ashes::DescriptorSetLayout const & texLayout
+				, ashes::RenderPass const & renderPass
+				, ashes::TextureView const * ssao
+				, ashes::Extent2D const & size
 				, FogType fogType
 				, MaterialType matType );
-			void updateCommandBuffer( renderer::VertexBufferBase & vbo
-				, renderer::DescriptorSet const & uboSet
-				, renderer::DescriptorSet const & texSet
-				, renderer::FrameBuffer const & frameBuffer
+			void updateCommandBuffer( ashes::VertexBufferBase & vbo
+				, ashes::DescriptorSet const & uboSet
+				, ashes::DescriptorSet const & texSet
+				, ashes::FrameBuffer const & frameBuffer
 				, RenderPassTimer & timer );
 			void accept( RenderTechniqueVisitor & visitor );
 
-			renderer::RenderPass const * m_renderPass;
-			glsl::Shader m_vertexShader;
-			glsl::Shader m_pixelShader;
-			renderer::ShaderStageStateArray m_program;
-			renderer::PipelineLayoutPtr m_pipelineLayout;
-			renderer::PipelinePtr m_pipeline;
-			renderer::CommandBufferPtr m_commandBuffer;
+			GeometryPassResult const & m_geometryPassResult;
+			ashes::RenderPass const * m_renderPass;
+			castor3d::ShaderModule m_vertexShader;
+			castor3d::ShaderModule m_pixelShader;
+			ashes::ShaderStageStateArray m_program;
+			ashes::PipelineLayoutPtr m_pipelineLayout;
+			ashes::PipelinePtr m_pipeline;
+			ashes::CommandBufferPtr m_commandBuffer;
 		};
 		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
 
 	private:
-		renderer::Device const & m_device;
+		ashes::Device const & m_device;
 		Scene const & m_scene;
-		GpInfoUbo & m_gpInfoUbo;
-		renderer::TextureView const * m_ssaoResult;
-		renderer::Extent2D m_size;
+		ashes::TextureView const * m_ssaoResult;
+		ashes::Extent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		GeometryPassResult const & m_geometryPassResult;
-		renderer::TextureView const & m_lightDiffuse;
-		renderer::TextureView const & m_lightSpecular;
-		renderer::VertexBufferBasePtr m_vertexBuffer;
-		renderer::DescriptorSetLayoutPtr m_uboDescriptorLayout;
-		renderer::DescriptorSetPoolPtr m_uboDescriptorPool;
-		renderer::DescriptorSetPtr m_uboDescriptorSet;
-		renderer::DescriptorSetLayoutPtr m_texDescriptorLayout;
-		renderer::DescriptorSetPoolPtr m_texDescriptorPool;
-		renderer::DescriptorSetPtr m_texDescriptorSet;
-		renderer::WriteDescriptorSetArray m_texDescriptorWrites;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::SemaphorePtr m_finished;
-		renderer::FencePtr m_fence;
+		ashes::TextureView const & m_lightDiffuse;
+		ashes::TextureView const & m_lightSpecular;
+		ashes::VertexBufferBasePtr m_vertexBuffer;
+		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
+		ashes::DescriptorSetPtr m_uboDescriptorSet;
+		ashes::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_texDescriptorPool;
+		ashes::DescriptorSetPtr m_texDescriptorSet;
+		ashes::WriteDescriptorSetArray m_texDescriptorWrites;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::SemaphorePtr m_finished;
+		ashes::FencePtr m_fence;
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;
 		bool m_ssaoEnabled{ false };

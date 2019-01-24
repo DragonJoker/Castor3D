@@ -19,6 +19,8 @@
 #include <Graphics/Image.hpp>
 #include <Pool/UniqueObjectPool.hpp>
 
+#include <Shader/GlslToSpv.hpp>
+
 using namespace castor;
 
 //*************************************************************************************************
@@ -72,7 +74,8 @@ namespace castor3d
 		{
 		};
 		Image::initialiseImageLib();
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+		initialiseGlslang();
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -83,7 +86,7 @@ namespace castor3d
 				Logger::logDebugNoNL( msg );
 			}
 		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -94,7 +97,7 @@ namespace castor3d
 				Logger::logInfoNoNL( msg );
 			}
 		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -105,7 +108,7 @@ namespace castor3d
 				Logger::logWarningNoNL( msg );
 			}
 		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )
 			{
@@ -229,6 +232,7 @@ namespace castor3d
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
 		Image::cleanupImageLib();
+		cleanupGlslang();
 	}
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
@@ -242,25 +246,25 @@ namespace castor3d
 		if ( m_renderSystem )
 		{
 			m_defaultSampler = m_samplerCache->add( cuT( "Default" ) );
-			m_defaultSampler->setMinFilter( renderer::Filter::eLinear );
-			m_defaultSampler->setMagFilter( renderer::Filter::eLinear );
-			m_defaultSampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_defaultSampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_defaultSampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_defaultSampler->setMinFilter( ashes::Filter::eLinear );
+			m_defaultSampler->setMagFilter( ashes::Filter::eLinear );
+			m_defaultSampler->setWrapS( ashes::WrapMode::eRepeat );
+			m_defaultSampler->setWrapT( ashes::WrapMode::eRepeat );
+			m_defaultSampler->setWrapR( ashes::WrapMode::eRepeat );
 
 			m_lightsSampler = m_samplerCache->add( cuT( "LightsSampler" ) );
-			m_lightsSampler->setMinFilter( renderer::Filter::eNearest );
-			m_lightsSampler->setMagFilter( renderer::Filter::eNearest );
-			m_lightsSampler->setWrapS( renderer::WrapMode::eClampToEdge );
-			m_lightsSampler->setWrapT( renderer::WrapMode::eClampToEdge );
-			m_lightsSampler->setWrapR( renderer::WrapMode::eClampToEdge );
+			m_lightsSampler->setMinFilter( ashes::Filter::eNearest );
+			m_lightsSampler->setMagFilter( ashes::Filter::eNearest );
+			m_lightsSampler->setWrapS( ashes::WrapMode::eClampToEdge );
+			m_lightsSampler->setWrapT( ashes::WrapMode::eClampToEdge );
+			m_lightsSampler->setWrapR( ashes::WrapMode::eClampToEdge );
 
 			doLoadCoreData();
 		}
 
 		if ( !m_renderSystem )
 		{
-			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
+			CU_Exception( C3D_NO_RENDERSYSTEM );
 		}
 
 		if ( m_lightsSampler )
@@ -371,6 +375,12 @@ namespace castor3d
 	{
 		Path pathReturn;
 		Path pathBin = File::getExecutableDirectory();
+
+		while ( pathBin.getFileName() != cuT( "bin" ) )
+		{
+			pathBin = pathBin.getPath();
+		}
+
 		Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
 		return pathReturn;
@@ -385,6 +395,12 @@ namespace castor3d
 	{
 		Path pathReturn;
 		Path pathBin = File::getExecutableDirectory();
+
+		while ( pathBin.getFileName() != cuT( "bin" ) )
+		{
+			pathBin = pathBin.getPath();
+		}
+
 		Path pathUsr = pathBin.getPath();
 		pathReturn = pathUsr / cuT( "share" );
 		return pathReturn;
@@ -412,19 +428,19 @@ namespace castor3d
 
 		if ( it != m_additionalParsers.end() )
 		{
-			CASTOR_EXCEPTION( "registerParsers - Duplicate entry for " + name );
+			CU_Exception( "registerParsers - Duplicate entry for " + name );
 		}
 
 		m_additionalParsers.emplace( name, parsers );
 	}
 
-	void Engine::registerSections( castor::String const & name, castor::StrUIntMap const & sections )
+	void Engine::registerSections( castor::String const & name, castor::StrUInt32Map const & sections )
 	{
 		auto && it = m_additionalSections.find( name );
 
 		if ( it != m_additionalSections.end() )
 		{
-			CASTOR_EXCEPTION( "registerSections - Duplicate entry for " + name );
+			CU_Exception( "registerSections - Duplicate entry for " + name );
 		}
 
 		m_additionalSections.emplace( name, sections );
@@ -436,7 +452,7 @@ namespace castor3d
 
 		if ( it == m_additionalParsers.end() )
 		{
-			CASTOR_EXCEPTION( "unregisterParsers - Unregistered entry " + name );
+			CU_Exception( "unregisterParsers - Unregistered entry " + name );
 		}
 
 		m_additionalParsers.erase( it );
@@ -448,7 +464,7 @@ namespace castor3d
 
 		if ( it == m_additionalSections.end() )
 		{
-			CASTOR_EXCEPTION( "unregisterSections - Unregistered entry " + name );
+			CU_Exception( "unregisterSections - Unregistered entry " + name );
 		}
 
 		m_additionalSections.erase( it );
@@ -459,8 +475,8 @@ namespace castor3d
 		return m_renderSystem->isTopDown();
 	}
 
-	void Engine::renderDepth( renderer::RenderPass const & renderPass
-		, renderer::FrameBuffer const & frameBuffer
+	void Engine::renderDepth( ashes::RenderPass const & renderPass
+		, ashes::FrameBuffer const & frameBuffer
 		, castor::Position const & position
 		, castor::Size const & size
 		, TextureLayout const & texture )

@@ -64,11 +64,11 @@ namespace castor3d
 	};
 	struct GeometryBuffers
 	{
-		renderer::BufferCRefArray vbo;
-		renderer::UInt64Array vboOffsets;
+		ashes::BufferCRefArray vbo;
+		ashes::UInt64Array vboOffsets;
 		uint32_t vtxCount;
-		renderer::VertexLayoutCRefArray layouts;
-		renderer::BufferBase const * ibo{ nullptr };
+		ashes::VertexLayoutCRefArray layouts;
+		ashes::BufferBase const * ibo{ nullptr };
 		uint64_t iboOffset;
 		uint32_t idxCount;
 	};
@@ -129,7 +129,7 @@ namespace castor3d
 		//! Instantiation material index
 		eMatIndex = 0x800,
 	};
-	IMPLEMENT_FLAGS( ElementUsage )
+	CU_ImplementFlags( ElementUsage )
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -147,8 +147,8 @@ namespace castor3d
 		TextureChannels textureFlags;
 		ProgramFlags programFlags;
 		SceneFlags sceneFlags;
-		renderer::PrimitiveTopology topology;
-		renderer::CompareOp alphaFunc;
+		ashes::PrimitiveTopology topology;
+		ashes::CompareOp alphaFunc;
 	};
 
 	template< typename T >
@@ -197,37 +197,37 @@ namespace castor3d
 	struct SkinningRenderNode;
 	struct StaticRenderNode;
 
-	DECLARE_SMART_PTR( ParticleElementDeclaration );
-	DECLARE_SMART_PTR( Context );
-	DECLARE_SMART_PTR( EnvironmentMap );
-	DECLARE_SMART_PTR( EnvironmentMapPass );
-	DECLARE_SMART_PTR( IblTextures );
-	DECLARE_SMART_PTR( PostEffect );
-	DECLARE_SMART_PTR( RenderColourCubeLayerToTexture );
-	DECLARE_SMART_PTR( RenderColourCubeToTexture );
-	DECLARE_SMART_PTR( RenderColourLayerToTexture );
-	DECLARE_SMART_PTR( RenderColourToCube );
-	DECLARE_SMART_PTR( RenderQuad );
-	DECLARE_SMART_PTR( RenderDepthCubeLayerToTexture );
-	DECLARE_SMART_PTR( RenderDepthCubeToTexture );
-	DECLARE_SMART_PTR( RenderDepthLayerToTexture );
-	DECLARE_SMART_PTR( RenderDepthToCube );
-	DECLARE_SMART_PTR( RenderLoop );
-	DECLARE_SMART_PTR( RenderPipeline );
-	DECLARE_SMART_PTR( RenderSystem );
-	DECLARE_SMART_PTR( RenderTarget );
-	DECLARE_SMART_PTR( RenderTechnique );
-	DECLARE_SMART_PTR( RenderWindow );
-	DECLARE_SMART_PTR( SceneCuller );
-	DECLARE_SMART_PTR( ShadowMap );
-	DECLARE_SMART_PTR( ShadowMapPass );
-	DECLARE_SMART_PTR( TextureProjection );
-	DECLARE_SMART_PTR( ToneMapping );
+	CU_DeclareSmartPtr( ParticleElementDeclaration );
+	CU_DeclareSmartPtr( Context );
+	CU_DeclareSmartPtr( EnvironmentMap );
+	CU_DeclareSmartPtr( EnvironmentMapPass );
+	CU_DeclareSmartPtr( IblTextures );
+	CU_DeclareSmartPtr( PostEffect );
+	CU_DeclareSmartPtr( RenderColourCubeLayerToTexture );
+	CU_DeclareSmartPtr( RenderColourCubeToTexture );
+	CU_DeclareSmartPtr( RenderColourLayerToTexture );
+	CU_DeclareSmartPtr( RenderColourToCube );
+	CU_DeclareSmartPtr( RenderQuad );
+	CU_DeclareSmartPtr( RenderDepthCubeLayerToTexture );
+	CU_DeclareSmartPtr( RenderDepthCubeToTexture );
+	CU_DeclareSmartPtr( RenderDepthLayerToTexture );
+	CU_DeclareSmartPtr( RenderDepthToCube );
+	CU_DeclareSmartPtr( RenderLoop );
+	CU_DeclareSmartPtr( RenderPipeline );
+	CU_DeclareSmartPtr( RenderSystem );
+	CU_DeclareSmartPtr( RenderTarget );
+	CU_DeclareSmartPtr( RenderTechnique );
+	CU_DeclareSmartPtr( RenderWindow );
+	CU_DeclareSmartPtr( SceneCuller );
+	CU_DeclareSmartPtr( ShadowMap );
+	CU_DeclareSmartPtr( ShadowMapPass );
+	CU_DeclareSmartPtr( TextureProjection );
+	CU_DeclareSmartPtr( ToneMapping );
 
-	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
-	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
+	CU_DeclareMap( RenderWindow *, ContextSPtr, ContextPtr );
+	CU_DeclareMap( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
-	using ShadowMapRefArray = std::vector< std::reference_wrapper< ShadowMap > >;
+	using ShadowMapRefArray = std::vector< std::pair< std::reference_wrapper< ShadowMap >, UInt32Array > >;
 	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 
 	//@}

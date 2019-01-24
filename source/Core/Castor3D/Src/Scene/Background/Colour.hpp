@@ -63,25 +63,25 @@ namespace castor3d
 		/**@{*/
 		inline TextureLayout const & getTexture()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
 		inline TextureLayout & getTexture()
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		inline renderer::Texture const & getImage()const
+		inline ashes::Texture const & getImage()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
-		inline renderer::TextureView const & getView()const
+		inline ashes::TextureView const & getView()const
 		{
-			REQUIRE( m_texture );
+			CU_Require( m_texture );
 			return m_texture->getDefaultView();
 		}
 
@@ -95,7 +95,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/
-		bool doInitialise( renderer::RenderPass const & renderPass )override;
+		bool doInitialise( ashes::RenderPass const & renderPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doCleanup
 		*/
@@ -110,9 +110,8 @@ namespace castor3d
 
 	private:
 		castor::ChangeTracked< castor::HdrRgbColour > m_colour;
-		renderer::BufferPtr< castor::Point4f > m_stagingBuffer;
-		renderer::BufferImageCopyArray m_copyRegions;
-		renderer::CommandBufferPtr m_cmdCopy;
+		ashes::StagingTexturePtr m_stagingTexture;
+		ashes::CommandBufferPtr m_cmdCopy;
 		Viewport m_viewport;
 	};
 }

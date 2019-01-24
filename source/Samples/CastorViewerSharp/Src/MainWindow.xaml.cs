@@ -138,6 +138,7 @@ namespace CastorViewerSharp
 
 		#endregion
 
+
 		#region Overrides
 
 		/// <summary>
@@ -147,9 +148,8 @@ namespace CastorViewerSharp
 		protected override void OnInitialized( EventArgs e )
 		{
 			base.OnInitialized( e );
-			m_logger = new Logger();
 			m_engine = new engine();
-			m_engine.Create();
+			m_engine.Create( "CastorViewerSharp", 1 );
 			LoadPlugins();
 			m_timer = new DispatcherTimer();
 			m_timer.Tick += new EventHandler( OnTimer );
@@ -236,10 +236,6 @@ namespace CastorViewerSharp
 		/// The Castor3D engine
 		/// </summary>
 		private engine m_engine;
-		/// <summary>
-		/// The Castor logger
-		/// </summary>
-		private Logger m_logger;
 		/// <summary>
 		/// The render window
 		/// </summary>

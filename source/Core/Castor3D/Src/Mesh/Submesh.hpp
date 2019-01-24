@@ -37,7 +37,7 @@ namespace castor3d
 		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
-		DECLARE_LIST( castor::ByteArray, BytePtr );
+		CU_DeclareList( castor::ByteArray, BytePtr );
 		template< typename T > friend struct SubmeshComponentAdder;
 
 	public:
@@ -278,7 +278,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mappage d'indices.
 		 */
-		inline IndexMapping const & getIndexMapping()const;
+		inline IndexMappingSPtr getIndexMapping()const;
 		/**
 		 *\~english
 		 *\brief		Adds a component.
@@ -309,7 +309,7 @@ namespace castor3d
 		 *\brief		Définit la topologie.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setTopology( renderer::PrimitiveTopology value );
+		inline void setTopology( ashes::PrimitiveTopology value );
 		/**
 		*\~english
 		*name
@@ -331,11 +331,11 @@ namespace castor3d
 		inline castor::BoundingSphere & getBoundingSphere();
 		inline InterleavedVertexArray const & getPoints()const;
 		inline InterleavedVertexArray & getPoints();
-		inline renderer::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
-		inline renderer::VertexBuffer< InterleavedVertex > & getVertexBuffer();
-		inline renderer::VertexLayout const & getVertexLayout()const;
-		inline renderer::Buffer< uint32_t > const & getIndexBuffer()const;
-		inline renderer::Buffer< uint32_t > & getIndexBuffer();
+		inline ashes::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
+		inline ashes::VertexBuffer< InterleavedVertex > & getVertexBuffer();
+		inline ashes::VertexLayout const & getVertexLayout()const;
+		inline ashes::Buffer< uint32_t > const & getIndexBuffer()const;
+		inline ashes::Buffer< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;
 		inline Mesh const & getParent()const;
 		inline Mesh & getParent();
@@ -349,7 +349,7 @@ namespace castor3d
 		inline BonesInstantiationComponent & getInstantiatedBones();
 		inline BonesInstantiationComponent const & getInstantiatedBones()const;
 		inline SubmeshComponentStrMap const & getComponents()const;
-		inline renderer::PrimitiveTopology getTopology()const;
+		inline ashes::PrimitiveTopology getTopology()const;
 
 	private:
 		void doGenerateVertexBuffer();
@@ -376,10 +376,10 @@ namespace castor3d
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };
-		renderer::PrimitiveTopology m_topology{ renderer::PrimitiveTopology::eTriangleList };
-		renderer::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::BufferPtr< uint32_t > m_indexBuffer;
+		ashes::PrimitiveTopology m_topology{ ashes::PrimitiveTopology::eTriangleList };
+		ashes::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::BufferPtr< uint32_t > m_indexBuffer;
 		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
 
 		friend class BinaryWriter< Submesh >;

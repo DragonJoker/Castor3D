@@ -21,12 +21,12 @@ namespace film_grain
 	{
 		if ( !data )
 		{
-			CASTOR_EXCEPTION( "XpmImage - Null data" );
+			CU_Exception( "XpmImage - Null data" );
 		}
 
 		if ( !size )
 		{
-			CASTOR_EXCEPTION( "XpmImage - Empty file" );
+			CU_Exception( "XpmImage - Empty file" );
 		}
 
 		uint32_t coloursCount = 0;
@@ -41,12 +41,12 @@ namespace film_grain
 			|| !coloursCount
 			|| !charCount )
 		{
-			CASTOR_EXCEPTION( "XpmImage - Invalid header" );
+			CU_Exception( "XpmImage - Invalid header" );
 		}
 
 		if ( imgSize.getHeight() + coloursCount != size - 1 )
 		{
-			CASTOR_EXCEPTION( "XpmImage - Invalid data size" );
+			CU_Exception( "XpmImage - Invalid data size" );
 		}
 
 		// Parse colours
@@ -63,7 +63,7 @@ namespace film_grain
 
 					if ( !it )
 					{
-						CASTOR_EXCEPTION( "XpmImage - Malformed colour line" );
+						CU_Exception( "XpmImage - Malformed colour line" );
 					}
 				}
 
@@ -76,7 +76,7 @@ namespace film_grain
 
 					if ( std::sscanf( value.c_str(), "#%02X%02X%02X", &r, &g, &b ) == EOF )
 					{
-						CASTOR_EXCEPTION( "XpmImage - Invalid image data" );
+						CU_Exception( "XpmImage - Invalid image data" );
 					}
 
 					std::array< uint8_t, 3u > components{ { uint8_t( r ), uint8_t( g ), uint8_t( b ) } };

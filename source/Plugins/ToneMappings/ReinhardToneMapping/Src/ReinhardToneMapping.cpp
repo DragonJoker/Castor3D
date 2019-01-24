@@ -5,11 +5,11 @@
 #include <Render/RenderSystem.hpp>
 #include <Shader/Ubos/HdrConfigUbo.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 
 using namespace castor;
-using namespace glsl;
+using namespace sdw;
 using namespace castor3d;
 
 namespace Reinhard
@@ -37,36 +37,34 @@ namespace Reinhard
 			, parameters );
 	}
 
-	glsl::Shader ToneMapping::doCreate()
+	castor3d::ShaderPtr ToneMapping::doCreate()
 	{
-		glsl::Shader pxl;
-		{
-			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
-			// Shader inputs
-			UBO_HDR_CONFIG( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+		// Shader inputs
+		UBO_HDR_CONFIG( writer, 0u, 0u );
+		auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
+		// Shader outputs
+		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
 
-			glsl::Utils utils{ writer };
-			utils.declareApplyGamma();
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+		writer.implementFunction< sdw::Void >( "main", [&]()
 			{
-				auto hdrColor = writer.declLocale( cuT( "hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				auto hdrColor = writer.declLocale( "hdrColor"
+					, texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				// Exposure tone mapping
-				auto mapped = writer.declLocale( cuT( "mapped" ), vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_exposure ) );
+				auto mapped = writer.declLocale( "mapped"
+					, vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_exposure ) );
 				// Gamma correction
 				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, mapped ), 1.0 );
 			} );
 
-			pxl = writer.finalise();
-		}
-
-		return pxl;
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

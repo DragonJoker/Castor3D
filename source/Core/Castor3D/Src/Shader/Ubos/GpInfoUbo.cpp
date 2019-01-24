@@ -37,10 +37,10 @@ namespace castor3d
 		if ( !m_ubo )
 		{
 			auto & device = getCurrentDevice( m_engine );
-			m_ubo = renderer::makeUniformBuffer< Configuration >( device
+			m_ubo = ashes::makeUniformBuffer< Configuration >( device
 				, 1u
-				, renderer::BufferTarget::eTransferDst
-				, renderer::MemoryPropertyFlag::eHostVisible );
+				, ashes::BufferTarget::eTransferDst
+				, ashes::MemoryPropertyFlag::eHostVisible );
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace castor3d
 		, Matrix4x4r const & invView
 		, Matrix4x4r const & invProj )
 	{
-		REQUIRE( m_ubo );
+		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;

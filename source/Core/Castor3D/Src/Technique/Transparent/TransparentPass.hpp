@@ -27,11 +27,11 @@ namespace castor3d
 		eAccumulation,
 		eRevealage,
 		eVelocity,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDepth ),
+		CU_ScopedEnumBounds( eDepth ),
 	};
 	//!\~english	The weighted blend pass result.
 	//!\~french		Le résultat de la passe de weighted blend.
-	using WeightedBlendTextures = std::array< renderer::TextureViewCRef, size_t( WbTexture::eCount ) >;
+	using WeightedBlendTextures = std::array< ashes::TextureViewCRef, size_t( WbTexture::eCount ) >;
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
@@ -53,7 +53,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	renderer::Format getTextureFormat( WbTexture texture );
+	ashes::Format getTextureFormat( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
@@ -64,7 +64,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	renderer::ImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
+	ashes::ImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -131,7 +131,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -145,7 +145,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline void setDepthFormat( renderer::Format value )
+		inline void setDepthFormat( ashes::Format value )
 		{
 			m_depthFormat = value;
 		}
@@ -159,33 +159,33 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		renderer::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		renderer::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, BillboardListRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
-		void doFillTextureDescriptor( renderer::DescriptorSetLayout const & layout
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		renderer::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		glsl::Shader doGetVertexShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -193,36 +193,36 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
 		 */
-		glsl::Shader doGetLegacyPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetLegacyPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
-		glsl::Shader doGetPbrMRPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrMRPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
 		 */
-		glsl::Shader doGetPbrSGPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetPbrSGPixelShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, ashes::CompareOp alphaFunc )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
-		renderer::Format m_depthFormat;
-		renderer::CommandBufferPtr m_nodesCommands;
-		renderer::FrameBufferPtr m_frameBuffer;
+		ashes::Format m_depthFormat;
+		ashes::CommandBufferPtr m_nodesCommands;
+		ashes::FrameBufferPtr m_frameBuffer;
 	};
 }
 

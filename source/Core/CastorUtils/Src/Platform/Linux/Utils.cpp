@@ -1,12 +1,12 @@
 ﻿#include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_LINUX )
+#if defined( CU_PlatformLinux )
 
 #include "Miscellaneous/Utils.hpp"
 #include "Graphics/Size.hpp"
 
 #include <X11/Xlib.h>
-#if CASTOR_HAS_XINERAMA
+#if CU_HasXinerama
 #	include <X11/extensions/Xinerama.h>
 #endif
 
@@ -18,7 +18,7 @@ namespace castor
 {
 	namespace System
 	{
-#	if CASTOR_HAS_XINERAMA
+#	if CU_HasXinerama
 
 		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{

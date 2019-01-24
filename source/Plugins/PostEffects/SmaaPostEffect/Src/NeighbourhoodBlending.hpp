@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <PostEffect/PostEffectSurface.hpp>
 #include <RenderToTexture/RenderQuad.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace smaa
 {
@@ -19,9 +19,9 @@ namespace smaa
 	{
 	public:
 		NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
-			, renderer::TextureView const & sourceView
-			, renderer::TextureView const & blendView
-			, renderer::TextureView const * velocityView
+			, ashes::TextureView const & sourceView
+			, ashes::TextureView const & blendView
+			, ashes::TextureView const * velocityView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex
@@ -34,17 +34,17 @@ namespace smaa
 		}
 
 	private:
-		void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
-		renderer::RenderPassPtr m_renderPass;
+		ashes::RenderPassPtr m_renderPass;
 		std::vector< castor3d::PostEffectSurface > m_surfaces;
-		renderer::TextureView const & m_sourceView;
-		renderer::TextureView const & m_blendView;
-		renderer::TextureView const * m_velocityView;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		ashes::TextureView const & m_sourceView;
+		ashes::TextureView const & m_blendView;
+		ashes::TextureView const * m_velocityView;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

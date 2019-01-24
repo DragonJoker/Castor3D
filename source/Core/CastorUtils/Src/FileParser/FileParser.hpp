@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FILE_PARSER_H___
@@ -31,12 +31,12 @@ namespace castor
 
 	//!\~english	Define to ease the declaration of a parser.
 	//!\~french		Un define pour faciliter la déclaration d'un analyseur.
-#define DECLARE_ATTRIBUTE_PARSER( funcname )\
+#define CU_DeclareAttributeParser( funcname )\
 	bool DO_WRITE_PARSER_NAME( funcname );
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
-#define IMPLEMENT_ATTRIBUTE_PARSER( funcname )\
+#define CU_ImplementAttributeParser( funcname )\
 	bool DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
@@ -44,7 +44,7 @@ namespace castor
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
-#define IMPLEMENT_ATTRIBUTE_PARSER_NMSPC( nmspc, funcname )\
+#define CU_ImplementAttributeParserNmspc( nmspc, funcname )\
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
@@ -52,7 +52,7 @@ namespace castor
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
-#define END_ATTRIBUTE_PUSH( section )\
+#define CU_EndAttributePush( section )\
 		DO_WRITE_PARSER_END( true )\
 		p_context->m_sections.push_back( uint32_t( section ) );\
 		return result;\
@@ -60,14 +60,14 @@ namespace castor
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
-#define END_ATTRIBUTE()\
+#define CU_EndAttribute()\
 		DO_WRITE_PARSER_END( false )\
 		return result;\
 	}
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
-#define END_ATTRIBUTE_POP()\
+#define CU_EndAttributePop()\
 		DO_WRITE_PARSER_END( false )\
 		p_context->m_sections.pop_back();\
 		return result;\
@@ -75,17 +75,17 @@ namespace castor
 
 	//!\~english	Define to ease the call to FileParser::parseError.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseError.
-#define PARSING_ERROR( p_error )\
+#define CU_ParsingError( p_error )\
 	p_parser->parseError( p_error )
 
 	//!\~english	Define to ease the call to FileParser::parseWarning.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseWarning.
-#define PARSING_WARNING( p_warning )\
+#define CU_ParsingWarning( p_warning )\
 	p_parser->parseWarning( p_warning )
 
 	//!\~english	Define to ease creation of a section name.
 	//!\~french		Un define pour faciliter la création d'un nom de section.
-#define MAKE_SECTION_NAME( a, b, c, d )\
+#define CU_MakeSectionName( a, b, c, d )\
 	( (uint32_t( a ) << 24 ) | ( uint32_t( b ) << 16 ) | ( uint32_t( c ) << 8 ) | ( uint32_t( d ) << 0 ) )
 
 	/*!
@@ -106,7 +106,7 @@ namespace castor
 			ParserParameterArray m_params;
 		};
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 
 		/*!
 		\~english
@@ -119,7 +119,7 @@ namespace castor
 		class AttributeParserMap
 		{
 		private:
-			DECLARE_MAP( String, ParserFunctionAndParams, );
+			CU_DeclareMap( String, ParserFunctionAndParams, );
 			Map m_map;
 
 		public:
@@ -172,7 +172,7 @@ namespace castor
 
 #else
 
-		DECLARE_MAP( String, ParserFunctionAndParams, AttributeParser );
+		CU_DeclareMap( String, ParserFunctionAndParams, AttributeParser );
 
 #endif
 

@@ -1,7 +1,7 @@
 #include "ObjectRenderNode.hpp"
 
 #include "Render/RenderPipeline.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Castor3DPrerequisites.hpp"
 
 namespace castor3d

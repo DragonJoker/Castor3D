@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_ANDROID )
+#if defined( CU_PlatformAndroid )
 
 #	include "Align/Aligned.hpp"
 #	include "Exception/Assertion.hpp"
@@ -8,15 +8,15 @@
 
 namespace castor
 {
-	void * alignedAlloc( size_t p_alignment, size_t p_size )
+	void * alignedAlloc( size_t alignment, size_t size )
 	{
-		REQUIRE( ( p_size % p_alignment ) == 0 && cuT( "size is not an integral multiple of alignment" ) );
-		return malloc( p_size );
+		CU_Require( ( size % alignment ) == 0 && cuT( "size is not an integral multiple of alignment" ) );
+		return malloc( size );
 	}
 
-	void alignedFree( void * p_memory )
+	void alignedFree( void * memory )
 	{
-		free( p_memory );
+		free( memory );
 	}
 }
 

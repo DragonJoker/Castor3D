@@ -80,12 +80,12 @@ namespace castor3d
 		 *\name			getters.
 		 */
 		/**@{*/
-		inline renderer::UniformBuffer< HdrConfig > & getUbo()
+		inline ashes::UniformBuffer< HdrConfig > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline renderer::UniformBuffer< HdrConfig > const & getUbo()const
+		inline ashes::UniformBuffer< HdrConfig > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -105,7 +105,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		renderer::UniformBufferPtr< HdrConfig > m_ubo;
+		ashes::UniformBufferPtr< HdrConfig > m_ubo;
 	};
 }
 

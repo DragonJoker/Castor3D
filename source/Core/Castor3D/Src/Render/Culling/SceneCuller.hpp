@@ -62,13 +62,13 @@ namespace castor3d
 
 		inline Camera const & getCamera()const
 		{
-			REQUIRE( hasCamera() );
+			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 
 		inline Camera & getCamera()
 		{
-			REQUIRE( hasCamera() );
+			CU_Require( hasCamera() );
 			return *m_camera;
 		}
 

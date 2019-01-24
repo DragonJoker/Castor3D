@@ -342,7 +342,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::doDestroy()
 	{
-		REQUIRE( getControlsManager() );
+		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		manager.disconnectEvents( *this );
 

@@ -175,7 +175,7 @@ namespace castor
 			//!\~english	The offset is set from the end of the file.
 			//!\~french		L'offset est défini par rapport à la fin du fichier.
 			eEnd,
-			CASTOR_SCOPED_ENUM_BOUNDS( eBeginning )
+			CU_ScopedEnumBounds( eBeginning )
 		};
 		/*!
 		\~english
@@ -198,7 +198,7 @@ namespace castor
 			//!\~english	UTF16 text encoding.
 			//!\~french		Encodage de texte en UTF16.
 			eUTF16,
-			CASTOR_SCOPED_ENUM_BOUNDS( eAuto )
+			CU_ScopedEnumBounds( eAuto )
 		};
 
 	protected:
@@ -408,7 +408,7 @@ namespace castor
 		}
 
 	protected:
-		DECLARE_INVARIANT_BLOCK()
+		CU_DeclareInvariantBlock()
 		CU_API uint64_t doWrite( uint8_t const * p_buffer, uint64_t p_uiSize );
 		CU_API uint64_t doRead( uint8_t * p_buffer, uint64_t p_uiSize );
 
@@ -432,8 +432,8 @@ namespace castor
 		//!\~french		La taille totale du fichier.
 		uint64_t m_length{ 0 };
 	};
-	IMPLEMENT_CLASS_FLAGS( File, OpenMode )
-	IMPLEMENT_CLASS_FLAGS( File, CreateMode )
+	CU_ImplementClassFlags( File, OpenMode )
+	CU_ImplementClassFlags( File, CreateMode )
 }
 
 #endif

@@ -232,7 +232,7 @@ namespace castor
 			while ( it != m_connections.end() )
 			{
 				auto disco = ( *it )->disconnect();
-				REQUIRE( disco );
+				CU_Require( disco );
 				it = m_connections.begin();
 			}
 		}

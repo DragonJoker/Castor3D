@@ -15,7 +15,7 @@ See LICENSE file in root folder
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {
@@ -68,7 +68,7 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( castor::Size const & size
 			, TextureLayout const & source
-			, renderer::RenderPass const & renderPass );
+			, ashes::RenderPass const & renderPass );
 		/**
 		 *\~english
 		 *\brief		Cleanup function.
@@ -101,9 +101,9 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline renderer::Semaphore const & getSemaphore()const
+		inline ashes::Semaphore const & getSemaphore()const
 		{
-			REQUIRE( m_signalFinished );
+			CU_Require( m_signalFinished );
 			return *m_signalFinished;
 		}
 
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual glsl::Shader doCreate() = 0;
+		C3D_API virtual ShaderPtr doCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
@@ -144,16 +144,16 @@ namespace castor3d
 		C3D_API virtual void doUpdate() = 0;
 
 	private:
-		C3D_API void doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-			, renderer::DescriptorSet & descriptorSet )override;
+		C3D_API void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+			, ashes::DescriptorSet & descriptorSet )override;
 
 	protected:
 		castor::String m_fullName;
 		HdrConfig & m_config;
 		HdrConfigUbo m_hdrConfigUbo;
-		renderer::SemaphorePtr m_signalFinished;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
+		ashes::SemaphorePtr m_signalFinished;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
 	};
 }
 

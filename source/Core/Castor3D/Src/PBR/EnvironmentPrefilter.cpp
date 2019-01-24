@@ -8,12 +8,12 @@
 #include <Miscellaneous/PushConstantRange.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include <Shader/GlslToSpv.hpp>
 #include <Sync/Fence.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 
@@ -23,26 +23,26 @@ namespace castor3d
 
 	namespace
 	{
-		renderer::TexturePtr doCreatePrefilteredTexture( RenderSystem const & renderSystem
+		ashes::TexturePtr doCreatePrefilteredTexture( RenderSystem const & renderSystem
 			, Size const & size )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::ImageCreateInfo image{};
-			image.flags = renderer::ImageCreateFlag::eCubeCompatible;
+			ashes::ImageCreateInfo image{};
+			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
 			image.arrayLayers = 6u;
 			image.extent.width = size[0];
 			image.extent.height = size[1];
 			image.extent.depth = 1u;
-			image.format = renderer::Format::eR32G32B32A32_SFLOAT;
-			image.imageType = renderer::TextureType::e2D;
-			image.initialLayout = renderer::ImageLayout::eUndefined;
-			image.mipLevels = glsl::Utils::MaxIblReflectionLod + 1;
-			image.samples = renderer::SampleCountFlag::e1;
-			image.sharingMode = renderer::SharingMode::eExclusive;
-			image.tiling = renderer::ImageTiling::eOptimal;
-			image.usage = renderer::ImageUsageFlag::eColourAttachment | renderer::ImageUsageFlag::eSampled;
+			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
+			image.imageType = ashes::TextureType::e2D;
+			image.initialLayout = ashes::ImageLayout::eUndefined;
+			image.mipLevels = shader::Utils::MaxIblReflectionLod + 1;
+			image.samples = ashes::SampleCountFlag::e1;
+			image.sharingMode = ashes::SharingMode::eExclusive;
+			image.tiling = ashes::ImageTiling::eOptimal;
+			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			return device.createTexture( image
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine
@@ -60,12 +60,12 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( renderer::Filter::eLinear );
-				result->setMagFilter( renderer::Filter::eLinear );
-				result->setMipFilter( renderer::MipmapMode::eLinear );
-				result->setWrapS( renderer::WrapMode::eClampToEdge );
-				result->setWrapT( renderer::WrapMode::eClampToEdge );
-				result->setWrapR( renderer::WrapMode::eClampToEdge );
+				result->setMinFilter( ashes::Filter::eLinear );
+				result->setMagFilter( ashes::Filter::eLinear );
+				result->setMipFilter( ashes::MipmapMode::eLinear );
+				result->setWrapS( ashes::WrapMode::eClampToEdge );
+				result->setWrapT( ashes::WrapMode::eClampToEdge );
+				result->setWrapR( ashes::WrapMode::eClampToEdge );
 				result->setMinLod( 0.0f );
 				result->setMaxLod( float( maxLod ) );
 				engine.getSamplerCache().add( name, result );
@@ -75,235 +75,237 @@ namespace castor3d
 			return result;
 		}
 
-		renderer::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
-			, renderer::Extent2D const & size
+		ashes::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem
+			, ashes::Extent2D const & size
 			, uint32_t mipLevel )
 		{
-			glsl::Shader vtx;
+			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "EnvironmentPrefilter" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declAttribute< Vec3 >( cuT( "position" ), 0u );
-				Ubo matrix{ writer, cuT( "Matrix" ), 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( cuT( "c3d_viewProjection" ) );
+				auto position = writer.declInput< Vec3 >( "position", 0u );
+				Ubo matrix{ writer, "Matrix", 0u, 0u };
+				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
 				matrix.end();
 
 				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto out = gl_PerVertex{ writer };
+				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
+				auto out = writer.getOut();
 
-				std::function< void() > main = [&]()
-				{
-					vtx_worldPosition = position;
-					out.gl_Position() = writer.paren( c3d_viewProjection * vec4( position, 1.0 ) ).xyww();
-				};
-
-				writer.implementFunction< void >( cuT( "main" ), main );
-				vtx = writer.finalise();
+				writer.implementFunction< Void >( "main"
+					, [&]()
+					{
+						vtx_worldPosition = position;
+						out.gl_out.gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
+					} );
+				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			glsl::Shader pxl;
+			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "EnvironmentPrefilter" };
 			{
-				using namespace glsl;
-				GlslWriter writer{ renderSystem.createGlslWriter() };
+				using namespace sdw;
+				FragmentWriter writer;
 
 				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" ), 0u );
-				auto c3d_mapDiffuse = writer.declSampler< SamplerCube >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-				auto c3d_roughness = writer.declConstant< Float >( cuT( "c3d_roughness" ), mipLevel / float( glsl::Utils::MaxIblReflectionLod ) );
+				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
+				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
+					, writer.cast< Float >( mipLevel ) / float( shader::Utils::MaxIblReflectionLod ) );
 
 				// Outputs
-				auto pxl_fragColor = writer.declFragData< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				auto distributionGGX = writer.implementFunction< Float >( cuT( "DistributionGGX" )
+				auto distributionGGX = writer.implementFunction< Float >( "DistributionGGX"
 					, [&]( Vec3 const & N
 						, Vec3 const & H
 						, Float const & roughness )
-				{
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.declLocale( cuT( "a" )
-						, roughness * roughness );
-					auto a2 = writer.declLocale( cuT( "a2" )
-						, a * a );
-					auto NdotH = writer.declLocale( cuT( "NdotH" )
-						, max( dot( N, H ), 0.0 ) );
-					auto NdotH2 = writer.declLocale( cuT( "NdotH2" )
-						, NdotH * NdotH );
+					{
+						auto a = writer.declLocale( "a"
+							, roughness * roughness );
+						auto a2 = writer.declLocale( "a2"
+							, a * a );
+						auto NdotH = writer.declLocale( "NdotH"
+							, max( dot( N, H ), 0.0_f ) );
+						auto NdotH2 = writer.declLocale( "NdotH2"
+							, NdotH * NdotH );
 
-					auto nom = writer.declLocale( cuT( "nom" )
-						, a2 );
-					auto denom = writer.declLocale( cuT( "denom" )
-						, ( NdotH2 * writer.paren( a2 - 1.0 ) + 1.0 ) );
-					denom = denom * denom * PI;
+						auto nom = writer.declLocale( "nom"
+							, a2 );
+						auto denom = writer.declLocale( "denom"
+							, fma( NdotH2, writer.paren( a2 - 1.0_f ), 1.0_f ) );
+						denom = denom * denom * Float{ Pi< float > };
 
-					writer.returnStmt( nom / denom );
-				}
-					, InVec3{ &writer, cuT( "N" ) }
-					, InVec3{ &writer, cuT( "H" ) }
-				, InFloat{ &writer, cuT( "roughness" ) } );
+						writer.returnStmt( nom / denom );
+					}
+					, InVec3{ writer, "N" }
+					, InVec3{ writer, "H" }
+					, InFloat{ writer, "roughness" } );
 
-				auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
+				auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
 					, [&]( UInt const & inBits )
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
-					auto bits = writer.declLocale( cuT( "bits" )
+					auto bits = writer.declLocale( "bits"
 						, inBits );
 					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_ui ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_ui ) >> 1u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_ui ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_ui ) >> 2u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_ui ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_ui ) >> 4u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_ui ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_ui ) >> 8u );
-					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
+					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1u );
+					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2u );
+					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4u );
+					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8u );
+					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
-				, InUInt{ &writer, cuT( "inBits" ) } );
+				, InUInt{ writer, "inBits" } );
 
-				auto hammersley = writer.implementFunction< Vec2 >( cuT( "Hammersley" )
+				auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
 					, [&]( UInt const & i
 						, UInt const & n )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
-				}
-					, InUInt{ &writer, cuT( "i" ) }
-				, InUInt{ &writer, cuT( "n" ) } );
+					{
+						// From https://learnopengl.com/#!PBR/Lighting
+						writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
+					}
+					, InUInt{ writer, "i" }
+					, InUInt{ writer, "n" } );
 
-				auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
+				auto importanceSample = writer.implementFunction< Vec3 >( "ImportanceSampleGGX"
 					, [&]( Vec2 const & xi
 						, Vec3 const & n
 						, Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					auto a = writer.declLocale( cuT( "a" )
-						, roughness * roughness );
-					auto a2 = writer.declLocale( cuT( "a2" )
-						, a * a );
-
-					auto phi = writer.declLocale( cuT( "phi" )
-						, 2.0_f * PI * xi.x() );
-					auto cosTheta = writer.declLocale( cuT( "cosTheta" )
-						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a2 - 1.0 ) * xi.y() ) ) );
-					auto sinTheta = writer.declLocale( cuT( "sinTheta" )
-						, sqrt( 1.0 - cosTheta * cosTheta ) );
-
-					// from spherical coordinates to cartesian coordinates
-					auto H = writer.declLocale< Vec3 >( cuT( "H" ) );
-					H.x() = cos( phi ) * sinTheta;
-					H.y() = sin( phi ) * sinTheta;
-					H.z() = cosTheta;
-
-					// from tangent-space vector to world-space sample vector
-					auto up = writer.declLocale( cuT( "up" )
-						, writer.ternary( glsl::abs( n.z() ) < 0.999, vec3( 0.0_f, 0.0, 1.0 ), vec3( 1.0_f, 0.0, 0.0 ) ) );
-					auto tangent = writer.declLocale( cuT( "tangent" )
-						, normalize( cross( up, n ) ) );
-					auto bitangent = writer.declLocale( cuT( "bitangent" )
-						, cross( n, tangent ) );
-
-					auto sampleVec = writer.declLocale( cuT( "sampleVec" )
-						, tangent * H.x() + bitangent * H.y() + n * H.z() );
-					writer.returnStmt( normalize( sampleVec ) );
-				}
-					, InVec2{ &writer, cuT( "xi" ) }
-					, InVec3{ &writer, cuT( "n" ) }
-				, InFloat{ &writer, cuT( "roughness" ) } );
-
-				writer.implementFunction< void >( cuT( "main" ), [&]()
-				{
-					auto constexpr PI = 3.1415926535897932384626433832795028841968;
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto N = writer.declLocale( cuT( "N" )
-						, normalize( vtx_worldPosition ) );
-					auto R = writer.declLocale( cuT( "R" )
-						, N );
-					auto V = writer.declLocale( cuT( "V" )
-						, R );
-
-					auto sampleCount = writer.declLocale( cuT( "sampleCount" )
-						, 1024_ui );
-					auto totalWeight = writer.declLocale( cuT( "totalWeight" )
-						, 0.0_f );
-					auto prefilteredColor = writer.declLocale( cuT( "prefilteredColor" )
-						, vec3( 0.0_f ) );
-
-					FOR( writer, UInt, i, 0u, "i < sampleCount", "++i" )
 					{
-						auto xi = writer.declLocale( cuT( "xi" )
-							, hammersley( i, sampleCount ) );
-						auto H = writer.declLocale( cuT( "H" )
-							, importanceSample( xi, N, c3d_roughness ) );
-						auto L = writer.declLocale( cuT( "L" )
-							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+						// From https://learnopengl.com/#!PBR/Lighting
+						auto a = writer.declLocale( "a"
+							, roughness * roughness );
+						auto a2 = writer.declLocale( "a2"
+							, a * a );
 
-						auto NdotL = writer.declLocale( cuT( "NdotL" )
-							, max( dot( N, L ), 0.0 ) );
+						auto phi = writer.declLocale( "phi"
+							, 2.0_f * Float{ Pi< float > } * xi.x() );
+						auto cosTheta = writer.declLocale( "cosTheta"
+							, sqrt( writer.paren( 1.0_f - xi.y() ) / writer.paren( 1.0_f + writer.paren( a2 - 1.0_f ) * xi.y() ) ) );
+						auto sinTheta = writer.declLocale( "sinTheta"
+							, sqrt( 1.0_f - cosTheta * cosTheta ) );
 
-						IF( writer, "NdotL > 0.0" )
-						{
-							auto D = writer.declLocale( cuT( "D" )
-								, distributionGGX( N, H, c3d_roughness ) );
-							auto NdotH = writer.declLocale( cuT( "NdotH" )
-								, max( dot( N, H ), 0.0 ) );
-							auto HdotV = writer.declLocale( cuT( "HdotV" )
-								, max( dot( H, V ), 0.0 ) );
-							auto pdf = writer.declLocale( cuT( "pdf" )
-								, D * NdotH / writer.paren( 4.0_f * HdotV ) + 0.0001 );
+						// from spherical coordinates to cartesian coordinates
+						auto H = writer.declLocale< Vec3 >( "H" );
+						H.x() = cos( phi ) * sinTheta;
+						H.y() = sin( phi ) * sinTheta;
+						H.z() = cosTheta;
 
-							auto resolution = writer.declLocale( cuT( "resolution" )
-								, Float( int( size.width ) ) ); // resolution of source cubemap (per face)
-							auto saTexel = writer.declLocale( cuT( "saTexel" )
-								, 4.0_f * PI / writer.paren( 6.0 * resolution * resolution ) );
-							auto saSample = writer.declLocale( cuT( "saSample" )
-								, 1.0_f / writer.paren( writer.cast< Float >( sampleCount ) * pdf + 0.0001 ) );
-							auto mipLevel = writer.declLocale( cuT( "mipLevel" )
-								, writer.ternary( c3d_roughness == 0.0_f, 0.0_f, 0.5_f * log2( saSample / saTexel ) ) );
+						// from tangent-space vector to world-space sample vector
+						auto up = writer.declLocale( "up"
+							, writer.ternary( sdw::abs( n.z() ) < 0.999_f
+								, vec3( 0.0_f, 0.0_f, 1.0_f )
+								, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
+						auto tangent = writer.declLocale( "tangent"
+							, normalize( cross( up, n ) ) );
+						auto bitangent = writer.declLocale( "bitangent"
+							, cross( n, tangent ) );
 
-							prefilteredColor += texture( c3d_mapDiffuse, L, mipLevel ).rgb() * NdotL;
-							totalWeight += NdotL;
-						}
-						FI;
+						auto sampleVec = writer.declLocale( "sampleVec"
+							, tangent * H.x() + bitangent * H.y() + n * H.z() );
+						writer.returnStmt( normalize( sampleVec ) );
 					}
-					ROF;
+					, InVec2{ writer, "xi" }
+					, InVec3{ writer, "n" }
+					, InFloat{ writer, "roughness" } );
 
-					prefilteredColor = prefilteredColor / totalWeight;
-					pxl_fragColor = vec4( prefilteredColor, 1.0 );
-				} );
+				writer.implementFunction< sdw::Void >( "main"
+					, [&]()
+					{
+						// From https://learnopengl.com/#!PBR/Lighting
+						auto N = writer.declLocale( "N"
+							, normalize( vtx_worldPosition ) );
+						auto R = writer.declLocale( "R"
+							, N );
+						auto V = writer.declLocale( "V"
+							, R );
 
-				pxl = writer.finalise();
+						auto sampleCount = writer.declLocale( "sampleCount"
+							, 1024_u );
+						auto totalWeight = writer.declLocale( "totalWeight"
+							, 0.0_f );
+						auto prefilteredColor = writer.declLocale( "prefilteredColor"
+							, vec3( 0.0_f ) );
+
+						FOR( writer, UInt, i, 0u, i < sampleCount, ++i )
+						{
+							auto xi = writer.declLocale( "xi"
+								, hammersley( i, sampleCount ) );
+							auto H = writer.declLocale( "H"
+								, importanceSample( xi, N, c3d_roughness ) );
+							auto L = writer.declLocale( "L"
+								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+
+							auto NdotL = writer.declLocale( "NdotL"
+								, max( dot( N, L ), 0.0_f ) );
+
+							IF( writer, NdotL > 0.0_f )
+							{
+								auto D = writer.declLocale( "D"
+									, distributionGGX( N, H, c3d_roughness ) );
+								auto NdotH = writer.declLocale( "NdotH"
+									, max( dot( N, H ), 0.0_f ) );
+								auto HdotV = writer.declLocale( "HdotV"
+									, max( dot( H, V ), 0.0_f ) );
+								auto pdf = writer.declLocale( "pdf"
+									, D * NdotH / writer.paren( 4.0_f * HdotV ) + 0.0001_f );
+
+								auto resolution = writer.declLocale( "resolution"
+									, Float( float( size.width ) ) ); // resolution of source cubemap (per face)
+								auto saTexel = writer.declLocale( "saTexel"
+									, 4.0_f * Float{ Pi< float > } / writer.paren( 6.0_f * resolution * resolution ) );
+								auto saSample = writer.declLocale( "saSample"
+									, 1.0_f / writer.paren( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
+								auto mipLevel = writer.declLocale( "mipLevel"
+									, writer.ternary( c3d_roughness == 0.0_f
+										, 0.0_f
+										, 0.5_f * log2( saSample / saTexel ) ) );
+
+								prefilteredColor += texture( c3d_mapDiffuse, L, mipLevel ).rgb() * NdotL;
+								totalWeight += NdotL;
+							}
+							FI;
+						}
+						ROF;
+
+						prefilteredColor = prefilteredColor / totalWeight;
+						pxl_fragColor = vec4( prefilteredColor, 1.0_f );
+					} );
+
+				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			renderer::ShaderStageStateArray program
+			ashes::ShaderStageStateArray program
 			{
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eVertex ) },
-				{ getCurrentDevice( renderSystem ).createShaderModule( renderer::ShaderStageFlag::eFragment ) }
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
+				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
 			};
-			program[0].module->loadShader( vtx.getSource() );
-			program[1].module->loadShader( pxl.getSource() );
+			program[0].module->loadShader( renderSystem.compileShader( vtx ) );
+			program[1].module->loadShader( renderSystem.compileShader( pxl ) );
 			return program;
 		}
 
-		renderer::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
-			, renderer::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
+			, ashes::Format format )
 		{
 			auto & device = getCurrentDevice( renderSystem );
-			renderer::RenderPassCreateInfo createInfo{};
+			ashes::RenderPassCreateInfo createInfo{};
 			createInfo.flags = 0u;
 
 			createInfo.attachments.resize( 1u );
 			createInfo.attachments[0].format = format;
-			createInfo.attachments[0].samples = renderer::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = renderer::AttachmentLoadOp::eClear;
-			createInfo.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = renderer::ImageLayout::eShaderReadOnlyOptimal;
+			createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
+			createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
+			createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+			createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+			createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+			createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+			createInfo.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
 
-			renderer::AttachmentReference colourReference;
+			ashes::AttachmentReference colourReference;
 			colourReference.attachment = 0u;
-			colourReference.layout = renderer::ImageLayout::eColourAttachmentOptimal;
+			colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 			createInfo.subpasses.resize( 1u );
 			createInfo.subpasses[0].flags = 0u;
@@ -311,12 +313,12 @@ namespace castor3d
 
 			createInfo.dependencies.resize( 1u );
 			createInfo.dependencies[0].srcSubpass = 0u;
-			createInfo.dependencies[0].dstSubpass = renderer::ExternalSubpass;
-			createInfo.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+			createInfo.dependencies[0].dstSubpass = ashes::ExternalSubpass;
+			createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+			createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+			createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+			createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+			createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 			return device.createRenderPass( createInfo );
 		}
@@ -325,33 +327,33 @@ namespace castor3d
 	//*********************************************************************************************
 
 	EnvironmentPrefilter::MipRenderCube::MipRenderCube( RenderSystem & renderSystem
-		, renderer::RenderPass const & renderPass
+		, ashes::RenderPass const & renderPass
 		, uint32_t mipLevel
-		, renderer::Extent2D const & originalSize
-		, renderer::Extent2D const & size
-		, renderer::TextureView const & srcView
-		, renderer::Texture const & dstTexture
+		, ashes::Extent2D const & originalSize
+		, ashes::Extent2D const & size
+		, ashes::TextureView const & srcView
+		, ashes::Texture const & dstTexture
 		, SamplerSPtr sampler )
 		: RenderCube{ renderSystem, false, std::move( sampler ) }
 		, m_device{ getCurrentDevice( renderSystem ) }
 		, m_renderPass{ renderPass }
 		, m_commandBuffer{ m_device.getGraphicsCommandPool().createCommandBuffer() }
-		, m_fence{ m_device.createFence( renderer::FenceCreateFlag::eSignaled ) }
+		, m_fence{ m_device.createFence( ashes::FenceCreateFlag::eSignaled ) }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
-			facePass.dstView = dstTexture.createView( renderer::TextureViewType::e2D
+			facePass.dstView = dstTexture.createView( ashes::TextureViewType::e2D
 				, dstTexture.getFormat()
 				, mipLevel
 				, 1u
 				, face
 				, 1u );
 			// Initialise the frame buffer.
-			renderer::FrameBufferAttachmentArray attaches;
+			ashes::FrameBufferAttachmentArray attaches;
 			attaches.emplace_back( *( renderPass.getAttachments().begin() ), *facePass.dstView );
-			facePass.frameBuffer = renderPass.createFrameBuffer( renderer::Extent2D{ size.width, size.height }
+			facePass.frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		}
 
@@ -372,8 +374,8 @@ namespace castor3d
 			auto & frameBuffer = m_frameBuffers[face];
 			m_commandBuffer->beginRenderPass( m_renderPass
 				, *frameBuffer.frameBuffer
-				, { renderer::ClearColorValue{ 0, 0, 0, 0 } }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
+				, ashes::SubpassContents::eInline );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
 		}
@@ -385,7 +387,7 @@ namespace castor3d
 	{
 		m_fence->reset();
 		m_device.getGraphicsQueue().submit( *m_commandBuffer, m_fence.get() );
-		m_fence->wait( renderer::FenceTimeout );
+		m_fence->wait( ashes::FenceTimeout );
 		m_device.waitIdle();
 	}
 
@@ -393,21 +395,21 @@ namespace castor3d
 
 	EnvironmentPrefilter::EnvironmentPrefilter( Engine & engine
 		, castor::Size const & size
-		, renderer::Texture const & srcTexture
+		, ashes::Texture const & srcTexture
 		, SamplerSPtr sampler )
 		: m_renderSystem{ *engine.getRenderSystem() }
-		, m_srcView{ srcTexture.createView( renderer::TextureViewType::eCube, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
+		, m_srcView{ srcTexture.createView( ashes::TextureViewType::eCube, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
 		, m_result{ doCreatePrefilteredTexture( m_renderSystem, size ) }
-		, m_resultView{ m_result->createView( renderer::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_resultView{ m_result->createView( ashes::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine, m_result->getMipmapLevels() - 1u ) }
 		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
 	{
 		auto & dstTexture = *m_result;
-		renderer::Extent2D originalSize{ size.getWidth(), size.getHeight() };
+		ashes::Extent2D originalSize{ size.getWidth(), size.getHeight() };
 
-		for ( auto mipLevel = 0u; mipLevel < glsl::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
+		for ( auto mipLevel = 0u; mipLevel < shader::Utils::MaxIblReflectionLod + 1u; ++mipLevel )
 		{
-			renderer::Extent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
+			ashes::Extent2D mipSize{ uint32_t( originalSize.width * std::pow( 0.5, mipLevel ) )
 				, uint32_t( originalSize.height * std::pow( 0.5, mipLevel ) ) };
 			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_renderSystem
 				, *m_renderPass

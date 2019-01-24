@@ -1,6 +1,6 @@
 #include "Config/PlatformConfig.hpp"
 
-#if defined( CASTOR_PLATFORM_WINDOWS )
+#if defined( CU_PlatformWindows )
 
 #include "Miscellaneous/Utils.hpp"
 #include "Graphics/Size.hpp"
@@ -89,7 +89,7 @@ namespace castor
 
 	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
 	{
-#	if defined( CASTOR_COMPILER_MSVC )
+#	if defined( CU_CompilerMSVC )
 
 		localtime_s( p_tm, p_pTime );
 

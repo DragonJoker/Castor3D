@@ -24,9 +24,9 @@ namespace castor3d
 	}
 
 	void MorphComponent::gather( MaterialSPtr material
-		, renderer::BufferCRefArray & buffers
+		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, renderer::VertexLayoutCRefArray & layouts )
+		, ashes::VertexLayoutCRefArray & layouts )
 	{
 		buffers.emplace_back( m_animBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
@@ -41,23 +41,23 @@ namespace castor3d
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
 			auto & device = getCurrentDevice( *getOwner() );
-			m_animBuffer = renderer::makeVertexBuffer< InterleavedVertex >( device
+			m_animBuffer = ashes::makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u
-				, renderer::MemoryPropertyFlag::eHostVisible );
-			m_animLayout = renderer::makeLayout< InterleavedVertex >( BindingPoint
-				, renderer::VertexInputRate::eVertex );
+				, ashes::MemoryPropertyFlag::eHostVisible );
+			m_animLayout = ashes::makeLayout< InterleavedVertex >( BindingPoint
+				, ashes::VertexInputRate::eVertex );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Position2Location
-				, renderer::Format::eR32G32B32_SFLOAT
+				, ashes::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, pos ) );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Normal2Location
-				, renderer::Format::eR32G32B32_SFLOAT
+				, ashes::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, nml ) );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Tangent2Location
-				, renderer::Format::eR32G32B32_SFLOAT
+				, ashes::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, tan ) );
 			m_animLayout->createAttribute( RenderPass::VertexInputs::Texture2Location
-				, renderer::Format::eR32G32B32_SFLOAT
+				, ashes::Format::eR32G32B32_SFLOAT
 				, offsetof( InterleavedVertex, tex ) );
 		}
 
@@ -81,7 +81,7 @@ namespace castor3d
 
 		if ( count )
 		{
-			if ( auto * buffer = m_animBuffer->lock( 0, count, renderer::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_animBuffer->lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
 			{
 				std::copy( m_data.begin(), m_data.end(), buffer );
 				m_animBuffer->flush( 0u, count );

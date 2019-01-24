@@ -61,9 +61,9 @@ namespace castor3d
 		 */
 		bool initialise( castor::Size const & size
 			, uint32_t face
-			, renderer::RenderPass const & renderPass
+			, ashes::RenderPass const & renderPass
 			, SceneBackground const & background
-			, renderer::DescriptorSetPool const & pool );
+			, ashes::DescriptorSetPool const & pool );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -90,23 +90,23 @@ namespace castor3d
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API renderer::Semaphore const & render( renderer::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 
 	private:
 		SceneNodeSPtr m_node;
 		CameraSPtr m_camera;
 		SceneCullerUPtr m_culler;
-		renderer::TextureViewPtr m_envView;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::RenderPass const * m_renderPass{ nullptr };
-		renderer::CommandBufferPtr m_backgroundCommands;
-		renderer::DescriptorSetPtr m_backgroundDescriptorSet;
+		ashes::TextureViewPtr m_envView;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::RenderPass const * m_renderPass{ nullptr };
+		ashes::CommandBufferPtr m_backgroundCommands;
+		ashes::DescriptorSetPtr m_backgroundDescriptorSet;
 		MatrixUbo m_matrixUbo;
 		std::unique_ptr< ForwardRenderTechniquePass > m_opaquePass;
 		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
-		renderer::FencePtr m_fence;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
+		ashes::FencePtr m_fence;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;
 		ModelMatrixUbo m_modelMatrixUbo;

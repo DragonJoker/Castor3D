@@ -9,7 +9,7 @@
 
 #include "FilmGrainPostEffect.hpp"
 
-#ifndef CASTOR_PLATFORM_WINDOWS
+#ifndef CU_PlatformWindows
 #	define C3D_FilmGrain_API
 #else
 #	ifdef FilmGrainPostEffect_EXPORTS

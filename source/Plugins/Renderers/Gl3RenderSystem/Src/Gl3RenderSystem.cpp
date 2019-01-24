@@ -4,7 +4,7 @@
 
 #include <Core/Renderer.hpp>
 
-#include <GlslWriter.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -20,58 +20,69 @@ namespace Gl3Render
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, false )
+		: castor3d::RenderSystem( engine, Name, false, false )
 	{
-		renderer::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
+		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
-				Logger::logDebug( msg );
-			}
-			else
+				if ( newLine )
+				{
+					Logger::logTrace( msg );
+				}
+				else
+				{
+					Logger::logTraceNoNL( msg );
+				}
+			} );
+		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 			{
-				Logger::logDebugNoNL( msg );
-			}
-		} );
-		renderer::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
+				if ( newLine )
+				{
+					Logger::logDebug( msg );
+				}
+				else
+				{
+					Logger::logDebugNoNL( msg );
+				}
+			} );
+		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 			{
-				Logger::logInfo( msg );
-			}
-			else
+				if ( newLine )
+				{
+					Logger::logInfo( msg );
+				}
+				else
+				{
+					Logger::logInfoNoNL( msg );
+				}
+			} );
+		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 			{
-				Logger::logInfoNoNL( msg );
-			}
-		} );
-		renderer::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
+				if ( newLine )
+				{
+					Logger::logWarning( msg );
+				}
+				else
+				{
+					Logger::logWarningNoNL( msg );
+				}
+			} );
+		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 			{
-				Logger::logWarning( msg );
-			}
-			else
+				if ( newLine )
+				{
+					Logger::logError( msg );
+				}
+				else
+				{
+					Logger::logErrorNoNL( msg );
+				}
+			} );
+		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
 			{
-				Logger::logWarningNoNL( msg );
-			}
-		} );
-		renderer::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logError( msg );
-			}
-			else
-			{
-				Logger::logErrorNoNL( msg );
-			}
-		} );
-		m_renderer.reset( createRenderer( renderer::Renderer::Configuration
-		{
-			string::stringCast< char >( appName ),
-			"Castor3D",
-			enableValidation,
-		} ) );
+				string::stringCast< char >( appName ),
+				"Castor3D",
+				enableValidation,
+			} ) );
 		Logger::logInfo( cuT( "Using " ) + Name );
 		auto & gpu = m_renderer->getPhysicalDevice( 0u );
 		m_memoryProperties = gpu.getMemoryProperties();
@@ -92,17 +103,35 @@ namespace Gl3Render
 			, enableValidation );
 	}
 
-	glsl::GlslWriter RenderSystem::createGlslWriter()
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
 	{
-		return glsl::GlslWriter{ glsl::GlslWriterConfig{ m_gpuInformations.getShaderLanguageVersion()
-			, m_gpuInformations.hasConstantsBuffers()
-			, m_gpuInformations.hasTextureBuffers()
-			, m_gpuInformations.hasShaderStorageBuffers()
-			, false
-			, false
-			, false
-			, false
-			, false
-			, m_renderer->getPhysicalDevice( 0u ).isSPIRVSupported() } };
+		castor3d::UInt32Array result;
+		std::string glsl;
+
+		if ( module.shader )
+		{
+			glsl = glsl::compileGlsl( *module.shader
+				, ast::SpecialisationInfo{}
+				, glsl::GlslConfig
+				{
+					module.shader->getType(),
+					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					false,
+					true,
+					false,
+					false,
+					false,
+					false,
+				} );
+		}
+		else
+		{
+			glsl = module.source;
+		}
+
+		auto size = glsl.size() + 1u;
+		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.data(), glsl.data(), glsl.size() );
+		return result;
 	}
 }

@@ -17,21 +17,21 @@
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderPassTimer.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Buffer/StagingBuffer.hpp>
 #include <Buffer/UniformBuffer.hpp>
+#include <Image/StagingTexture.hpp>
 #include <Image/Texture.hpp>
 #include <RenderPass/RenderPass.hpp>
 #include <RenderPass/RenderPassCreateInfo.hpp>
 #include <RenderPass/RenderSubpass.hpp>
 #include <RenderPass/RenderSubpassState.hpp>
-#include <Shader/ShaderProgram.hpp>
 #include <Sync/ImageMemoryBarrier.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
 
@@ -41,104 +41,109 @@ namespace film_grain
 {
 	namespace
 	{
-		static String const FilmGrainUbo = cuT( "FilmGrainUbo" );
-		static String const PixelSize = cuT( "c3d_pixelSize" );
-		static String const NoiseIntensity = cuT( "c3d_noiseIntensity" );
-		static String const Exposure = cuT( "c3d_exposure" );
-		static String const Time = cuT( "c3d_time" );
-		static String const SrcTex = cuT( "c3d_srcTex" );
-		static String const NoiseTex = cuT( "c3d_noiseTex" );
+		static std::string const FilmGrainUbo = "FilmGrainUbo";
+		static std::string const PixelSize = "c3d_pixelSize";
+		static std::string const NoiseIntensity = "c3d_noiseIntensity";
+		static std::string const Exposure = "c3d_exposure";
+		static std::string const Time = "c3d_time";
+		static std::string const SrcTex = "c3d_srcTex";
+		static std::string const NoiseTex = "c3d_noiseTex";
 		static uint32_t constexpr NoiseMapCount = 6u;
 
-		glsl::Shader getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declAttribute< Vec2 >( cuT( "position" ), 0u );
-			Vec2 texcoord = writer.declAttribute< Vec2 >( cuT( "texcoord" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
-			auto out = gl_PerVertex{ writer };
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texcoord;
-				out.gl_Position() = vec4( position.xy(), 0.0, 1.0 );
-			} );
-			return writer.finalise();
+			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = utils.bottomUpToTopDown( uv );
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		glsl::Shader getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
-			using namespace glsl;
-			GlslWriter writer = renderSystem->createGlslWriter();
+			using namespace sdw;
+			FragmentWriter writer;
 
 			// Shader inputs
-			glsl::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
+			sdw::Ubo filmGrain{ writer, FilmGrainUbo, 0u, 0u };
 			auto c3d_pixelSize = filmGrain.declMember< Vec2 >( PixelSize );
 			auto c3d_noiseIntensity = filmGrain.declMember< Float >( NoiseIntensity );
 			auto c3d_exposure = filmGrain.declMember< Float >( Exposure );
 			auto c3d_time = filmGrain.declMember< Float >( Time );
 			filmGrain.end();
 
-			auto c3d_noiseTex = writer.declSampler< Sampler3D >( NoiseTex, 1u, 0u );
-			auto c3d_srcTex = writer.declSampler< Sampler2D >( SrcTex, 2u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_noiseTex = writer.declSampledImage< FImg3DR32 >( NoiseTex, 1u, 0u );
+			auto c3d_srcTex = writer.declSampledImage< FImg2DRgba32 >( SrcTex, 2u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto plx_fragColor = writer.declFragData< Vec4 >( cuT( "plx_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 			
-			auto overlay = writer.implementFunction< Vec3 >( cuT( "overlay" )
+			auto overlay = writer.implementFunction< Vec3 >( "overlay"
 				, [&]( Vec3 const & a
 					, Vec3 const & b )
 				{
-					auto comp = writer.declLocale( cuT( "comp" )
+					auto comp = writer.declLocale( "comp"
 						, pow( abs( b ), vec3( 2.2_f ) ) );
 
-					IF( writer, cuT( "comp.x < 0.5 && comp.y < 0.5 && comp.z < 0.5" ) )
+					IF( writer, comp.x() < 0.5_f && comp.y() < 0.5_f && comp.z() < 0.5_f )
 					{
 						writer.returnStmt( 2.0_f * a * b );
 					}
 					FI;
 
-					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * writer.paren( 1.0_f - a ) * writer.paren( 1.0_f - b ) );
+					writer.returnStmt( vec3( 1.0_f ) - 2.0_f * ( 1.0_f - a ) * ( 1.0_f - b ) );
 				}
-				, InVec3{ &writer, cuT( "a" ) }
-				, InVec3{ &writer, cuT( "b" ) } );
+				, InVec3{ writer, "a" }
+				, InVec3{ writer, "b" } );
 
-			auto addNoise = writer.implementFunction< Vec3 >( cuT( "addNoise" )
+			auto addNoise = writer.implementFunction< Vec3 >( "addNoise"
 				, [&]( Vec3 const & color
 					, Vec2 const & texcoord )
 				{
-					auto coord = writer.declLocale( cuT( "coord" )
-						, texcoord * 2.0 );
+					auto coord = writer.declLocale( "coord"
+						, texcoord * 2.0_f );
 					coord.x() *= c3d_pixelSize.y() / c3d_pixelSize.x();
-					auto noise = writer.declLocale( cuT( "noise" )
-						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ).r() );
-					auto exposureFactor = writer.declLocale( cuT( "exposureFactor" )
+					auto noise = writer.declLocale( "noise"
+						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ) );
+					auto exposureFactor = writer.declLocale( "exposureFactor"
 						, c3d_exposure / 2.0 );
 					exposureFactor = sqrt( exposureFactor );
-					auto t = writer.declLocale( cuT( "t" )
+					auto t = writer.declLocale( "t"
 						, mix( 3.5_f * c3d_noiseIntensity
 							, 1.13_f * c3d_noiseIntensity
 							, exposureFactor ) );
 					writer.returnStmt( overlay( color
 						, vec3( mix( 0.5_f, noise, t ) ) ) );
 				}
-				, InVec3{ &writer, cuT( "color" ) }
-				, InVec2{ &writer, cuT( "texcoord" ) } );
+				, InVec3{ writer, "color" }
+				, InVec2{ writer, "texcoord" } );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
-			{
-				auto colour = writer.declLocale( cuT( "colour" )
-					, texture( c3d_srcTex, vtx_texture ).xyz() );
-				colour = addNoise( colour, vtx_texture );
-				plx_fragColor = vec4( colour, 1.0 );
-			} );
-			return writer.finalise();
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					auto colour = writer.declLocale( "colour"
+						, texture( c3d_srcTex, vtx_texture ).xyz() );
+					colour = addNoise( colour, vtx_texture );
+					pxl_fragColor = vec4( colour, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		template< typename T, size_t N >
@@ -151,7 +156,7 @@ namespace film_grain
 	//*********************************************************************************************
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
-		, renderer::Extent2D const & size )
+		, ashes::Extent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_size{ size }
 	{
@@ -161,12 +166,12 @@ namespace film_grain
 		if ( !m_renderSystem.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eLinear );
-			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setMipFilter( renderer::MipmapMode::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler->setMinFilter( ashes::Filter::eLinear );
+			m_sampler->setMagFilter( ashes::Filter::eLinear );
+			m_sampler->setMipFilter( ashes::MipmapMode::eLinear );
+			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
 			m_sampler->initialise();
 		}
 		else
@@ -176,26 +181,26 @@ namespace film_grain
 
 		auto & device = getCurrentDevice( m_renderSystem );
 
-		renderer::ImageCreateInfo image{};
+		ashes::ImageCreateInfo image{};
 		image.flags = 0u;
 		image.arrayLayers = 1u;
 		image.extent.width = 512u;
 		image.extent.height = 512u;
 		image.extent.depth = NoiseMapCount;
-		image.format = renderer::Format::eR8G8B8A8_UNORM;
-		image.imageType = renderer::TextureType::e3D;
-		image.initialLayout = renderer::ImageLayout::eUndefined;
+		image.format = ashes::Format::eR8G8B8A8_UNORM;
+		image.imageType = ashes::TextureType::e3D;
+		image.initialLayout = ashes::ImageLayout::eUndefined;
 		image.mipLevels = 1u;
-		image.samples = renderer::SampleCountFlag::e1;
-		image.sharingMode = renderer::SharingMode::eExclusive;
-		image.tiling = renderer::ImageTiling::eOptimal;
-		image.usage = renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst;
-		m_noise = device.createTexture( image, renderer::MemoryPropertyFlag::eDeviceLocal );
+		image.samples = ashes::SampleCountFlag::e1;
+		image.sharingMode = ashes::SharingMode::eExclusive;
+		image.tiling = ashes::ImageTiling::eOptimal;
+		image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
+		m_noise = device.createTexture( image, ashes::MemoryPropertyFlag::eDeviceLocal );
 
-		renderer::ImageViewCreateInfo imageView{};
+		ashes::ImageViewCreateInfo imageView{};
 		imageView.format = image.format;
-		imageView.viewType = renderer::TextureViewType::e3D;
-		imageView.subresourceRange.aspectMask = renderer::getAspectMask( imageView.format );
+		imageView.viewType = ashes::TextureViewType::e3D;
+		imageView.subresourceRange.aspectMask = ashes::getAspectMask( imageView.format );
 		imageView.subresourceRange.baseMipLevel = 0u;
 		imageView.subresourceRange.levelCount = 1u;
 		imageView.subresourceRange.baseArrayLayer = 0u;
@@ -214,31 +219,32 @@ namespace film_grain
 		};
 
 		uint32_t maxSize = buffers[0]->size();
-		renderer::StagingBuffer stagingBuffer{ device
-			, renderer::BufferTarget::eTransferSrc
-			, maxSize };
-		renderer::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+		auto dim = buffers[0]->dimensions();
+		auto format = castor3d::convert( buffers[0]->format() );
+		auto staging = device.createStagingTexture( format
+			, ashes::Extent2D{ dim.getWidth(), dim.getHeight() } );
+		ashes::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
-			stagingBuffer.uploadTextureData( *cmdCopy
+			staging->uploadTextureData( *cmdCopy
 				, {
 					m_noiseView->getSubResourceRange().aspectMask,
 					m_noiseView->getSubResourceRange().baseMipLevel,
 					m_noiseView->getSubResourceRange().baseArrayLayer,
 					m_noiseView->getSubResourceRange().layerCount,
 				}
+				, format
 				, { 0, 0, int32_t( i ) }
-				, { image.extent.width, image.extent.height, 1u }
+				, { image.extent.width, image.extent.height }
 				, buffers[i]->constPtr()
-				, buffers[i]->size()
 				, *m_noiseView );
 		}
 
-		m_configUbo = renderer::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
+		m_configUbo = ashes::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible );
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible );
 		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
@@ -251,8 +257,8 @@ namespace film_grain
 		m_configUbo->upload();
 	}
 
-	void RenderQuad::doFillDescriptorSet( renderer::DescriptorSetLayout & descriptorSetLayout
-		, renderer::DescriptorSet & descriptorSet )
+	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_configUbo
@@ -278,17 +284,19 @@ namespace film_grain
 			, params
 			, false }
 		, m_surface{ *renderSystem.getEngine() }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "FilmGrain" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "FilmGrain" }
 	{
 		String name = cuT( "FilmGrain2D" );
 
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( renderer::Filter::eLinear );
-			m_sampler->setMagFilter( renderer::Filter::eLinear );
-			m_sampler->setWrapS( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapT( renderer::WrapMode::eRepeat );
-			m_sampler->setWrapR( renderer::WrapMode::eRepeat );
+			m_sampler->setMinFilter( ashes::Filter::eLinear );
+			m_sampler->setMagFilter( ashes::Filter::eLinear );
+			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
+			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
 		}
 		else
 		{
@@ -312,18 +320,18 @@ namespace film_grain
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eVertex
-			, m_vertexShader );
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "FilmGrain" )
 			, cuT( "Exposure" )
 			, m_quad->getUbo().getData().m_exposure );
 		visitor.visit( cuT( "FilmGrain" )
-			, renderer::ShaderStageFlag::eFragment
+			, ashes::ShaderStageFlag::eFragment
 			, cuT( "FilmGrain" )
 			, cuT( "NoiseIntensity" )
 			, m_quad->getUbo().getData().m_noiseIntensity );
@@ -336,60 +344,61 @@ namespace film_grain
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
+		auto & renderSystem = *getRenderSystem();
 		auto & device = getCurrentDevice( *this );
-		renderer::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
-		m_vertexShader = getVertexProgram( getRenderSystem() );
-		m_pixelShader = getFragmentProgram( getRenderSystem() );
+		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
+		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 
-		renderer::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( renderer::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_vertexShader.getSource() );
-		stages[1].module->loadShader( m_pixelShader.getSource() );
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
 
 		// Create the render pass.
-		renderer::RenderPassCreateInfo renderPass;
+		ashes::RenderPassCreateInfo renderPass;
 		renderPass.flags = 0u;
 
 		renderPass.attachments.resize( 1u );
 		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = renderer::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = renderer::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = renderer::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = renderer::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = renderer::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = renderer::ImageLayout::eColourAttachmentOptimal;
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
 
 		renderPass.subpasses.resize( 1u );
 		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = renderer::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, renderer::ImageLayout::eColourAttachmentOptimal } );
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
 
 		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = renderer::ExternalSubpass;
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
 		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = renderer::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = renderer::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = renderer::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = renderer::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = renderer::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = renderer::DependencyFlag::eByRegion;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
 
 		m_renderPass = device.createRenderPass( renderPass );
 
-		renderer::DescriptorSetLayoutBindingArray bindings
+		ashes::DescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment },
-			{ 1u, renderer::DescriptorType::eCombinedImageSampler, renderer::ShaderStageFlag::eFragment },
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
 		};
 
 		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
@@ -416,14 +425,14 @@ namespace film_grain
 			cmd.begin();
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.
-			cmd.memoryBarrier( renderer::PipelineStageFlag::eColourAttachmentOutput
-				, renderer::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( renderer::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { renderer::ClearColorValue{} }
-				, renderer::SubpassContents::eInline );
+				, { ashes::ClearColorValue{} }
+				, ashes::SubpassContents::eInline );
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 			timer.endPass( cmd );

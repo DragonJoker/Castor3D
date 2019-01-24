@@ -195,7 +195,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_updateTimer;
 	};
 	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
-	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
+	CU_DeclareSmartPtr( AnimatedObjectGroupCache );
 }
 
 #endif

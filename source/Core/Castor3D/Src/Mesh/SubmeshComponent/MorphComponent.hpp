@@ -40,16 +40,16 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( MaterialSPtr material
-			, renderer::BufferCRefArray & buffers
+			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts )override;
+			, ashes::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline renderer::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
+		inline ashes::VertexBuffer< InterleavedVertex > const & getAnimationBuffer()const
 		{
 			return *m_animBuffer;
 		}
@@ -59,7 +59,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer.
 		 */
-		inline renderer::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
+		inline ashes::VertexBuffer< InterleavedVertex > & getAnimationBuffer()
 		{
 			return *m_animBuffer;
 		}
@@ -92,8 +92,8 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 1u;
 
 	private:
-		renderer::VertexBufferPtr< InterleavedVertex > m_animBuffer;
-		renderer::VertexLayoutPtr m_animLayout;
+		ashes::VertexBufferPtr< InterleavedVertex > m_animBuffer;
+		ashes::VertexLayoutPtr m_animLayout;
 		InterleavedVertexArray m_data;
 	};
 }

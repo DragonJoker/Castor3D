@@ -38,7 +38,7 @@ namespace castor3d
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
-			// Calculate split depths based on view camera furstum
+			// Calculate split depths based on view camera frustum
 			// Based on method presentd in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
 			std::vector< float > cascadeSplits( cascades, 0.0f );
 			float cascadeSplitLambda = 0.95f;
@@ -107,10 +107,13 @@ namespace castor3d
 				Point3f lightDir = light.getDirection();
 
 				// Store split distance and matrix in cascade
-				matrix::lookAt( result[i].viewMatrix, frustumCenter - lightDir * -minExtents[2], frustumCenter, Point3f( 0.0f, 1.0f, 0.0f ) );
-				result[i].projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0], minExtents[1], maxExtents[1], minCastersZ, maxExtents[2] - minExtents[2] );
-				result[i].viewProjMatrix = result[i].projMatrix * result[i].viewMatrix;
-				result[i].splitDepth = ( near + splitDist * clipRange ) * -1.0f;
+				auto & cascade = result[i];
+				matrix::lookAt( cascade.viewMatrix, frustumCenter - lightDir * -minExtents[2], frustumCenter, Point3f( 0.0f, 1.0f, 0.0f ) );
+				cascade.projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0]
+					, minExtents[1], maxExtents[1]
+					, minCastersZ * 100.0f, maxExtents[2] - minExtents[2] );
+				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
+				cascade.splitDepth = ( near + splitDist * clipRange ) * -1.0f;
 				lastSplitDist = cascadeSplits[i];
 			}
 
@@ -171,7 +174,7 @@ namespace castor3d
 		, int32_t cascadeIndex
 		, float minCastersZ )
 	{
-		if ( cascadeIndex < m_cascades.size() )
+		if ( size_t( cascadeIndex ) < m_cascades.size() )
 		{
 			if ( !cascadeIndex )
 			{

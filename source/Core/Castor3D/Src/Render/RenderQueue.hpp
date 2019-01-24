@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( push )
 #	pragma warning( disable:4503 )
 #endif
@@ -215,17 +215,17 @@ namespace castor3d
 		/**@{*/
 		inline SceneRenderNodes & getAllRenderNodes()const
 		{
-			REQUIRE( m_renderNodes );
+			CU_Require( m_renderNodes );
 			return *m_renderNodes;
 		}
 
 		inline SceneCulledRenderNodes & getCulledRenderNodes()const
 		{
-			REQUIRE( m_culledRenderNodes );
+			CU_Require( m_culledRenderNodes );
 			return *m_culledRenderNodes;
 		}
 
-		inline renderer::CommandBuffer const & getCommandBuffer()const
+		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			return *m_commandBuffer;
 		}
@@ -239,8 +239,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialise( Scene const & scene, Camera const & camera );
-		void doInitialise( Scene const & scene );
 		void doPrepareCommandBuffer();
 		void doParseAllRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doParseCulledRenderNodes();
@@ -253,13 +251,13 @@ namespace castor3d
 		SceneNode const * m_ignoredNode{ nullptr };
 		std::unique_ptr< SceneRenderNodes > m_renderNodes;
 		std::unique_ptr< SceneCulledRenderNodes > m_culledRenderNodes;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged;
 		bool m_culledChanged;
 	};
 }
 
-#if defined( CASTOR_COMPILER_MSVC )
+#if defined( CU_CompilerMSVC )
 #	pragma warning( pop )
 #endif
 

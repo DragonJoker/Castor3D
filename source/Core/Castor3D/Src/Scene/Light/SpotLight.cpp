@@ -174,17 +174,13 @@ namespace castor3d
 	{
 		auto node = getLight().getParent();
 		node->update();
-		auto orientation = node->getDerivedOrientation();
-		auto position = node->getDerivedPosition();
-		Point3f up{ 0, 1, 0 };
-		orientation.transform( up, up );
-		matrix::lookAt( m_lightSpace, position, position + m_direction, up );
+		lightCamera.attachTo( node );
 		lightCamera.getViewport().setPerspective( getCutOff() * 2
 			, lightCamera.getRatio()
 			, 0.5_r
 			, m_farPlane );
-		lightCamera.getViewport().update();
-		m_lightSpace = lightCamera.getProjection() * m_lightSpace;
+		lightCamera.update();
+		m_lightSpace = lightCamera.getProjection() * lightCamera.getView();
 		m_shadowMapIndex = index;
 	}
 

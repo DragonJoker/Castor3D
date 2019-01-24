@@ -1,14 +1,14 @@
 #include "PointLightPass.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Shader/ShaderProgram.hpp>
+#include "Engine.hpp"
+#include "Render/RenderPipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Light/PointLight.hpp"
+#include "Shader/Program.hpp"
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include "Shader/Shaders/GlslLight.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
@@ -35,8 +35,8 @@ namespace castor3d
 
 	PointLightPass::Program::Program( Engine & engine
 		, PointLightPass & lightPass
-		, glsl::Shader const & vtx
-		, glsl::Shader const & pxl
+		, ShaderModule const & vtx
+		, ShaderModule const & pxl
 		, bool hasShadows )
 		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
 		, m_lightPass{ lightPass }
@@ -51,21 +51,16 @@ namespace castor3d
 	{
 		auto & pointLight = *light.getPointLight();
 		auto & data = m_lightPass.m_ubo->getData( 0u );
-		data.base.colourIndex = castor::Point4f{ light.getColour()[0], light.getColour()[1], light.getColour()[2], 0.0f };
-		data.base.intensityFarPlane = castor::Point4f{ light.getIntensity()[0], light.getIntensity()[1], light.getFarPlane(), 0.0f };
-		data.base.volumetric = castor::Point4f{ light.getVolumetricSteps(), light.getVolumetricScatteringFactor(), 0.0f, 0.0f };
-		auto position = light.getParent()->getDerivedPosition();
-		data.position = castor::Point4f{ position[0], position[1], position[2], 0.0f };
-		data.attenuation = castor::Point4f{ pointLight.getAttenuation()[0], pointLight.getAttenuation()[1], pointLight.getAttenuation()[2], 0.0f };
+		light.bind( &data.base.colourIndex );
 		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
 
 	PointLightPass::PointLightPass( Engine & engine
-		, renderer::TextureView const & depthView
-		, renderer::TextureView const & diffuseView
-		, renderer::TextureView const & specularView
+		, ashes::TextureView const & depthView
+		, ashes::TextureView const & diffuseView
+		, ashes::TextureView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool p_shadows )
 		: MeshLightPass{ engine
@@ -75,10 +70,10 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::ePoint
 		, p_shadows }
-		, m_ubo{ renderer::makeUniformBuffer< Config >( getCurrentDevice( engine )
+		, m_ubo{ ashes::makeUniformBuffer< Config >( getCurrentDevice( engine )
 			, 1u
-			, renderer::BufferTarget::eTransferDst
-			, renderer::MemoryPropertyFlag::eHostVisible ) }
+			, ashes::BufferTarget::eTransferDst
+			, ashes::MemoryPropertyFlag::eHostVisible ) }
 	{
 		m_baseUbo = &m_ubo->getUbo();
 	}
@@ -97,8 +92,8 @@ namespace castor3d
 		}
 
 		visitor.visit( name
-			, renderer::ShaderStageFlag::eFragment
-			, m_pixelShader );
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
 	}
 
 	Point3fArray PointLightPass::doGenerateVertices()const

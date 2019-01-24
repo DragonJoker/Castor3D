@@ -283,7 +283,7 @@ namespace OceanLighting
 		{
 			std::for_each( l_arrayFiles.begin(), l_arrayFiles.end(), [&]( Path const & p_pathFile )
 			{
-				if ( p_pathFile.GetExtension() == CASTOR_DLL_EXT )
+				if ( p_pathFile.GetExtension() == CU_SharedLibExt )
 				{
 					l_arrayThreads.push_back( std::make_shared< std::thread >( PluginLoader( &l_arrayFailed, &l_mutex ), m_pCastor3D, p_pathFile ) );
 				}

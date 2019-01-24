@@ -14,20 +14,20 @@ namespace Bloom
 	{
 	public:
 		CombinePass( castor3d::RenderSystem & renderSystem
-			, renderer::Format format
-			, renderer::TextureView const & sceneView
-			, renderer::TextureView const & blurView
-			, renderer::Extent2D const & size
+			, ashes::Format format
+			, ashes::TextureView const & sceneView
+			, ashes::TextureView const & blurView
+			, ashes::Extent2D const & size
 			, uint32_t blurPassesCount );
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
-			, renderer::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
 
-		inline glsl::Shader const & getVertexShader()const
+		inline castor3d::ShaderModule const & getVertexShader()const
 		{
 			return m_vertexShader;
 		}
 
-		inline glsl::Shader const & getPixelShader()const
+		inline castor3d::ShaderModule const & getPixelShader()const
 		{
 			return m_pixelShader;
 		}
@@ -42,21 +42,21 @@ namespace Bloom
 		static castor::String const CombineMapScene;
 
 	private:
-		renderer::Device const & m_device;
+		ashes::Device const & m_device;
 		castor3d::TextureLayoutSPtr m_image;
-		renderer::TextureViewPtr m_view;
-		glsl::Shader m_vertexShader;
-		glsl::Shader m_pixelShader;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::FrameBufferPtr m_frameBuffer;
-		renderer::DescriptorSetLayoutPtr m_descriptorLayout;
-		renderer::PipelineLayoutPtr m_pipelineLayout;
-		renderer::PipelinePtr m_pipeline;
-		renderer::SamplerPtr m_sceneSampler;
-		renderer::SamplerPtr m_blurSampler;
-		renderer::DescriptorSetPoolPtr m_descriptorPool;
-		renderer::DescriptorSetPtr m_descriptorSet;
-		renderer::CommandBufferPtr m_commandBuffer;
+		ashes::TextureViewPtr m_view;
+		castor3d::ShaderModule m_vertexShader;
+		castor3d::ShaderModule m_pixelShader;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::PipelinePtr m_pipeline;
+		ashes::SamplerPtr m_sceneSampler;
+		ashes::SamplerPtr m_blurSampler;
+		ashes::DescriptorSetPoolPtr m_descriptorPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::CommandBufferPtr m_commandBuffer;
 		uint32_t m_blurPassesCount;
 	};
 }

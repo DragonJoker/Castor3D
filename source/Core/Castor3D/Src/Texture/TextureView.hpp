@@ -83,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions de la source.
 		 */
-		inline renderer::Extent3D getDimensions()const
+		inline ashes::Extent3D getDimensions()const
 		{
 			return m_size;
 		}
@@ -93,7 +93,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la source.
 		 */
-		inline renderer::Format getPixelFormat()const
+		inline ashes::Format getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -111,7 +111,7 @@ namespace castor3d
 		 *\param[in,out]	depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool doAdjustDimensions( renderer::Extent3D & size );
+		bool doAdjustDimensions( ashes::Extent3D & size );
 
 	protected:
 		//!\~english	The engine.
@@ -119,10 +119,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		renderer::Format m_format;
+		ashes::Format m_format;
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		renderer::Extent3D m_size;
+		ashes::Extent3D m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -188,7 +188,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de l'image dans son layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout
-			, renderer::ImageViewCreateInfo info
+			, ashes::ImageViewCreateInfo info
 			, uint32_t index );
 		/**
 		 *\~english
@@ -210,14 +210,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
 		 *\param[in]	folder		The folder containing the image.
-		 *\param[in]	relative	The image file path, relative to p_folder.
+		 *\param[in]	relative	The image file path, relative to folder.
+		 *\param[in]	components	The components to keep in the loaded image.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
 		 *\param[in]	folder		Le dossier contenant l'image.
-		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à p_folder.
+		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
+		 *\param[in]	components	Les composantes à garder dans l'image chargée.
 		 */
 		C3D_API void initialiseSource( castor::Path const & folder
-			, castor::Path const & relative );
+			, castor::Path const & relative
+			, ImageComponents components );
 		/**
 		 *\~english
 		 *\brief		Initialises the texture buffer.
@@ -282,21 +285,21 @@ namespace castor3d
 			return m_info.subresourceRange.baseMipLevel;
 		}
 
-		inline renderer::TextureView const & getView()const
+		inline ashes::TextureView const & getView()const
 		{
-			REQUIRE( m_view );
+			CU_Require( m_view );
 			return *m_view;
 		}
 		/**@}*/
 
 	private:
-		C3D_API void doUpdate( renderer::ImageViewCreateInfo info );
+		C3D_API void doUpdate( ashes::ImageViewCreateInfo info );
 
 	private:
 		uint32_t m_index;
-		renderer::ImageViewCreateInfo m_info;
+		ashes::ImageViewCreateInfo m_info;
 		std::unique_ptr< TextureSource > m_source;
-		renderer::TextureViewPtr m_view;
+		ashes::TextureViewPtr m_view;
 	};
 }
 

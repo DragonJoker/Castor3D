@@ -21,7 +21,7 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	private:
-		DECLARE_LIST( castor::ByteArray, BytePtr );
+		CU_DeclareList( castor::ByteArray, BytePtr );
 
 	public:
 		/**
@@ -63,9 +63,9 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( MaterialSPtr material
-			, renderer::BufferCRefArray & buffers
+			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, renderer::VertexLayoutCRefArray & layouts )override;
+			, ashes::VertexLayoutCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -117,7 +117,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline renderer::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
+		inline ashes::VertexBuffer< VertexBoneData > const & getBonesBuffer()const
 		{
 			return *m_bonesBuffer;
 		}
@@ -127,7 +127,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le VertexBuffer des bones.
 		 */
-		inline renderer::VertexBuffer< VertexBoneData > & getBonesBuffer()
+		inline ashes::VertexBuffer< VertexBoneData > & getBonesBuffer()
 		{
 			return *m_bonesBuffer;
 		}
@@ -152,8 +152,8 @@ namespace castor3d
 		C3D_API static uint32_t constexpr BindingPoint = 3u;
 
 	private:
-		renderer::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
-		renderer::VertexLayoutPtr m_bonesLayout;
+		ashes::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
+		ashes::VertexLayoutPtr m_bonesLayout;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

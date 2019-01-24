@@ -48,8 +48,8 @@ namespace castor3d
 			 */
 			Program( Engine & engine
 				, SpotLightPass & lightPass
-				, glsl::Shader const & vtx
-				, glsl::Shader const & pxl
+				, ShaderModule const & vtx
+				, ShaderModule const & pxl
 				, bool hasShadows );
 			/**
 			 *\~english
@@ -87,9 +87,9 @@ namespace castor3d
 		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		SpotLightPass( Engine & engine
-			, renderer::TextureView const & depthView
-			, renderer::TextureView const & diffuseView
-			, renderer::TextureView const & specularView
+			, ashes::TextureView const & depthView
+			, ashes::TextureView const & diffuseView
+			, ashes::TextureView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -139,7 +139,7 @@ namespace castor3d
 			//!\~french		La variable contenant la matrice de transformation de la lumière.
 			castor::Matrix4x4f transform;
 		};
-		renderer::UniformBufferPtr< Config > m_ubo;
+		ashes::UniformBufferPtr< Config > m_ubo;
 	};
 }
 

@@ -5,11 +5,10 @@
 #include <Render/RenderSystem.hpp>
 #include <Shader/Ubos/HdrConfigUbo.hpp>
 
-#include <GlslSource.hpp>
-#include <GlslUtils.hpp>
+#include <ShaderWriter/Source.hpp>
+#include <Shader/Shaders/GlslUtils.hpp>
 
 using namespace castor;
-using namespace glsl;
 using namespace castor3d;
 
 namespace Uncharted2
@@ -37,69 +36,65 @@ namespace Uncharted2
 			, parameters );
 	}
 
-	glsl::Shader ToneMapping::doCreate()
+	castor3d::ShaderPtr ToneMapping::doCreate()
 	{
-		glsl::Shader pxl;
-		{
-			auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		FragmentWriter writer;
 
-			// Shader inputs
-			UBO_HDR_CONFIG( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampler< Sampler2D >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+		// Shader inputs
+		UBO_HDR_CONFIG( writer, 0u, 0u );
+		auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto pxl_rgb = writer.declFragData< Vec4 >( cuT( "pxl_rgb" ), 0 );
+		// Shader outputs
+		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
 
-			glsl::Utils utils{ writer };
-			utils.declareApplyGamma();
+		shader::Utils utils{ writer };
+		utils.declareApplyGamma();
 
-			static float constexpr ShoulderStrength = 0.15f;
-			static float constexpr LinearStrength = 0.50f;
-			static float constexpr LinearAngle = 0.10f;
-			static float constexpr ToeStrength = 0.20f;
-			static float constexpr ToeNumerator = 0.02f;
-			static float constexpr ToeDenominator = 0.30f;
-			static float constexpr LinearWhitePointValue = 11.2f;
-			static float constexpr ExposureBias = 2.0f;
+		auto ShoulderStrength = writer.declConstant( "ShoulderStrength", 0.15_f );
+		auto LinearStrength = writer.declConstant( "LinearStrength", 0.50_f );
+		auto LinearAngle = writer.declConstant( "LinearAngle", 0.10_f );
+		auto ToeStrength = writer.declConstant( "ToeStrength", 0.20_f );
+		auto ToeNumerator = writer.declConstant( "ToeNumerator", 0.02_f );
+		auto ToeDenominator = writer.declConstant( "ToeDenominator", 0.30_f );
+		auto LinearWhitePointValue = writer.declConstant( "LinearWhitePointValue", 11.2_f );
+		auto ExposureBias = writer.declConstant( "ExposureBias", 2.0_f );
 
-			auto uncharted2ToneMap = writer.implementFunction< Vec3 >( cuT( "uncharted2ToneMap" )
-				, [&]( Vec3 const & x )
-				{
-					writer.returnStmt( writer.paren(
-							writer.paren(
-								x
-								* writer.paren( x * ShoulderStrength + LinearAngle * LinearStrength )
-								+ ToeStrength * ToeNumerator )
-							/ writer.paren(
-								x
-								* writer.paren( x * ShoulderStrength + LinearStrength )
-								+ ToeStrength * ToeDenominator ) )
-						- ToeNumerator / ToeDenominator );
-				}
-				, InVec3{ &writer, cuT( "x" ) } );
-
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+		auto uncharted2ToneMap = writer.implementFunction< Vec3 >( "uncharted2ToneMap"
+			, [&]( Vec3 const & x )
 			{
-				auto hdrColor = writer.declLocale( cuT( "hdrColor" )
-					, texture( c3d_mapDiffuse, vtx_texture ).rgb() );
-				hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
+				writer.returnStmt( writer.paren(
+						writer.paren(
+							x
+							* writer.paren( x * ShoulderStrength + LinearAngle * LinearStrength )
+							+ ToeStrength * ToeNumerator )
+						/ writer.paren(
+							x
+							* writer.paren( x * ShoulderStrength + LinearStrength )
+							+ ToeStrength * ToeDenominator ) )
+					- ToeNumerator / ToeDenominator );
+			}
+			, InVec3{ writer, "x" } );
 
-				auto current = writer.declLocale( cuT( "current" )
-					, uncharted2ToneMap( hdrColor * c3d_exposure ) );
+		writer.implementFunction< sdw::Void >( "main", [&]()
+		{
+			auto hdrColor = writer.declLocale( "hdrColor"
+				, texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+			hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
-				auto whiteScale = writer.declLocale( cuT( "whiteScale" )
-					, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
-				auto colour = writer.declLocale( cuT( "colour" )
-					, current * whiteScale );
+			auto current = writer.declLocale( "current"
+				, uncharted2ToneMap( hdrColor * c3d_exposure ) );
 
-				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0 );
-			} );
+			auto whiteScale = writer.declLocale( "whiteScale"
+				, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
+			auto colour = writer.declLocale( "colour"
+				, current * whiteScale );
 
-			pxl = writer.finalise();
-		}
+			pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0 );
+		} );
 
-		return pxl;
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

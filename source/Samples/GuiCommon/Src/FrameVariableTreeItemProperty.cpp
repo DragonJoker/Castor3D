@@ -33,6 +33,116 @@ namespace GuiCommon
 		static wxString PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
 		static wxString PROPERTY_TYPE_MAT4  = wxT( "mat4x4" );
 
+		wxPGProperty * doBuildTrackedRangedValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				{
+					auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > const & >( uniform );
+					result = new wxIntProperty( name
+						, name
+						, rangedUniform.getValue().value().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().getMin() );
+					result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().getMax() );
+				}
+				break;
+
+			case UniformType::eUInt:
+				{
+					auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > const & >( uniform );
+					result = new wxUIntProperty( name
+						, name
+						, rangedUniform.getValue().value().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().value().range().getMin() ) );
+					result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().value().range().getMax() ) );
+				}
+				break;
+
+			case UniformType::eFloat:
+				{
+					auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > const & >( uniform );
+					result = new wxFloatProperty( name
+						, name
+						, rangedUniform.getValue().value().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().getMin() );
+					result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().getMax() );
+				}
+				break;
+			}
+
+			return result;
+		}
+
+		wxPGProperty * doBuildTrackedUnrangedValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				result = new wxIntProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< int32_t > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eUInt:
+				result = new wxUIntProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< uint32_t > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eFloat:
+				result = new wxFloatProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< float > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2f:
+				result = new FloatPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2f > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3f:
+				result = new FloatPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3f > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4f:
+				result = new FloatPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4f > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2i:
+				result = new IntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2i > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3i:
+				result = new IntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3i > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4i:
+				result = new IntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4i > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2ui:
+				result = new UIntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2ui > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3ui:
+				result = new UIntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3ui > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4ui:
+				result = new UIntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4ui > > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eMat4f:
+				result = new Matrix4fProperty( GC_POINT_1234, GC_POINT_1234, name, name, static_cast< UniformValue< castor::ChangeTracked< Matrix4x4f > > const & >( uniform ).getValue() );
+				break;
+			}
+
+			return result;
+		}
+
 		wxPGProperty * doBuildTrackedValueProperty( wxString const & name
 			, UniformValueBase const & uniform )
 		{
@@ -40,101 +150,144 @@ namespace GuiCommon
 
 			if ( uniform.isRanged() )
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > const & >( uniform );
-						result = new wxIntProperty( name
-							, name
-							, rangedUniform.getValue().value().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().min() );
-						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().max() );
-					}
-					break;
-
-				case UniformType::eUInt:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > const & >( uniform );
-						result = new wxUIntProperty( name
-							, name
-							, rangedUniform.getValue().value().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().value().range().min() ) );
-						result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().value().range().max() ) );
-					}
-					break;
-
-				case UniformType::eFloat:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > const & >( uniform );
-						result = new wxFloatProperty( name
-							, name
-							, rangedUniform.getValue().value().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().value().range().min() );
-						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().value().range().max() );
-					}
-					break;
-				}
+				result = doBuildTrackedRangedValueProperty( name, uniform );
 			}
 			else
 			{
-				switch ( uniform.getType() )
+				result = doBuildTrackedUnrangedValueProperty( name, uniform );
+			}
+
+			return result;
+		}
+
+		wxPGProperty * doBuildUntrackedRangedValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+			
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
 				{
-				case UniformType::eInt:
-					result = new wxIntProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< int32_t > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eUInt:
-					result = new wxUIntProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< uint32_t > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eFloat:
-					result = new wxFloatProperty( name, name, static_cast< UniformValue< castor::ChangeTracked< float > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2f:
-					result = new FloatPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2f > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3f:
-					result = new FloatPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3f > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4f:
-					result = new FloatPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4f > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2i:
-					result = new IntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2i > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3i:
-					result = new IntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3i > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4i:
-					result = new IntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4i > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2ui:
-					result = new UIntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< castor::ChangeTracked< Point2ui > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3ui:
-					result = new UIntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< castor::ChangeTracked< Point3ui > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4ui:
-					result = new UIntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< castor::ChangeTracked< Point4ui > > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eMat4f:
-					result = new Matrix4fProperty( GC_POINT_1234, GC_POINT_1234, name, name, static_cast< UniformValue< castor::ChangeTracked< Matrix4x4f > > const & >( uniform ).getValue() );
-					break;
+					auto rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform );
+					result = new wxIntProperty( name
+						, name
+						, rangedUniform.getValue().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().getMin() );
+					result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().getMax() );
 				}
+				break;
+
+			case UniformType::eUInt:
+				{
+					auto rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform );
+					result = new wxUIntProperty( name
+						, name
+						, rangedUniform.getValue().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().range().getMin() ) );
+					result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().range().getMax() ) );
+				}
+				break;
+
+			case UniformType::eFloat:
+				{
+					auto rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform );
+					result = new wxFloatProperty( name
+						, name
+						, rangedUniform.getValue().value() );
+					result->SetEditor( wxT( "SpinCtrl" ) );
+					result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().getMin() );
+					result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().getMax() );
+				}
+				break;
+			}
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				result = new wxIntProperty( name
+					, name
+					, static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform ).getValue() );
+				result->SetEditor( wxT( "SpinCtrl" ) );
+				break;
+
+			case UniformType::eUInt:
+				result = new wxUIntProperty( name
+					, name
+					, static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform ).getValue() );
+				result->SetEditor( wxT( "SpinCtrl" ) );
+				break;
+
+			case UniformType::eFloat:
+				result = new wxFloatProperty( name
+					, name
+					, static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform ).getValue() );
+				result->SetEditor( wxT( "SpinCtrl" ) );
+				break;
+			}
+
+			return result;
+		}
+
+		wxPGProperty * doBuildUntrackedUnrangedValueProperty( wxString const & name
+			, UniformValueBase const & uniform )
+		{
+			wxPGProperty * result = nullptr;
+
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				result = new wxIntProperty( name, name, static_cast< UniformValue< int32_t > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eUInt:
+				result = new wxUIntProperty( name, name, static_cast< UniformValue< uint32_t > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eFloat:
+				result = new wxFloatProperty( name, name, static_cast< UniformValue< float > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2f:
+				result = new FloatPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2f > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3f:
+				result = new FloatPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3f > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4f:
+				result = new FloatPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4f > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2i:
+				result = new IntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2i > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3i:
+				result = new IntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3i > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4i:
+				result = new IntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4i > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec2ui:
+				result = new UIntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2ui > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec3ui:
+				result = new UIntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3ui > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eVec4ui:
+				result = new UIntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4ui > const & >( uniform ).getValue() );
+				break;
+
+			case UniformType::eMat4f:
+				result = new Matrix4fProperty( GC_POINT_1234, GC_POINT_1234, name, name, static_cast< UniformValue< Matrix4x4f > const & >( uniform ).getValue() );
+				break;
 			}
 
 			return result;
@@ -147,124 +300,11 @@ namespace GuiCommon
 
 			if ( uniform.isRanged() )
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform );
-						result = new wxIntProperty( name
-							, name
-							, rangedUniform.getValue().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().min() );
-						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().max() );
-					}
-					break;
-
-				case UniformType::eUInt:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform );
-						result = new wxUIntProperty( name
-							, name
-							, rangedUniform.getValue().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), int32_t( rangedUniform.getValue().range().min() ) );
-						result->SetAttribute( wxT( "Max" ), int32_t( rangedUniform.getValue().range().max() ) );
-					}
-					break;
-
-				case UniformType::eFloat:
-					{
-						auto rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform );
-						result = new wxFloatProperty( name
-							, name
-							, rangedUniform.getValue().value() );
-						result->SetEditor( wxT( "SpinCtrl" ) );
-						result->SetAttribute( wxT( "Min" ), rangedUniform.getValue().range().min() );
-						result->SetAttribute( wxT( "Max" ), rangedUniform.getValue().range().max() );
-					}
-					break;
-				}
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					result = new wxIntProperty( name
-						, name
-						, static_cast< UniformValue< castor::RangedValue< int32_t > > const & >( uniform ).getValue() );
-					result->SetEditor( wxT( "SpinCtrl" ) );
-					break;
-
-				case UniformType::eUInt:
-					result = new wxUIntProperty( name
-						, name
-						, static_cast< UniformValue< castor::RangedValue< uint32_t > > const & >( uniform ).getValue() );
-					result->SetEditor( wxT( "SpinCtrl" ) );
-					break;
-
-				case UniformType::eFloat:
-					result = new wxFloatProperty( name
-						, name
-						, static_cast< UniformValue< castor::RangedValue< float > > const & >( uniform ).getValue() );
-					result->SetEditor( wxT( "SpinCtrl" ) );
-					break;
-				}
+				result = doBuildUntrackedRangedValueProperty( name, uniform );
 			}
 			else
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					result = new wxIntProperty( name, name, static_cast< UniformValue< int32_t > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eUInt:
-					result = new wxUIntProperty( name, name, static_cast< UniformValue< uint32_t > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eFloat:
-					result = new wxFloatProperty( name, name, static_cast< UniformValue< float > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2f:
-					result = new FloatPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2f > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3f:
-					result = new FloatPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3f > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4f:
-					result = new FloatPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4f > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2i:
-					result = new IntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2i > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3i:
-					result = new IntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3i > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4i:
-					result = new IntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4i > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec2ui:
-					result = new UIntPointProperty< 2 >( GC_POINT_XY, name, name, static_cast< UniformValue< Point2ui > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec3ui:
-					result = new UIntPointProperty< 3 >( GC_POINT_XYZ, name, name, static_cast< UniformValue< Point3ui > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eVec4ui:
-					result = new UIntPointProperty< 4 >( GC_POINT_XYZW, name, name, static_cast< UniformValue< Point4ui > const & >( uniform ).getValue() );
-					break;
-
-				case UniformType::eMat4f:
-					result = new Matrix4fProperty( GC_POINT_1234, GC_POINT_1234, name, name, static_cast< UniformValue< Matrix4x4f > const & >( uniform ).getValue() );
-					break;
-				}
+				result = doBuildUntrackedUnrangedValueProperty( name, uniform );
 			}
 
 			return result;
@@ -287,91 +327,191 @@ namespace GuiCommon
 			return result;
 		}
 
+		void doSetTrackedRangedValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				{
+					auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().value().range() );
+				}
+				break;
+
+			case UniformType::eUInt:
+				{
+					auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().value().range() );
+				}
+				break;
+
+			case UniformType::eFloat:
+				{
+					auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().value().range() );
+				}
+				break;
+			}
+		}
+
+		void doSetTrackedUnrangedValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				static_cast< UniformValue< castor::ChangeTracked< int32_t > > & >( uniform ).getValue() = getValue< int32_t >( value );
+				break;
+
+			case UniformType::eUInt:
+				static_cast< UniformValue< castor::ChangeTracked< uint32_t > > & >( uniform ).getValue() = getValue< uint32_t >( value );
+				break;
+
+			case UniformType::eFloat:
+				static_cast< UniformValue< castor::ChangeTracked< float > > & >( uniform ).getValue() = getValue< float >( value );
+				break;
+
+			case UniformType::eVec2i:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point2i > > & >( uniform ).getValue() = PointRefFromVariant< int, 2 >( value );
+				break;
+
+			case UniformType::eVec3i:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point3i > > & >( uniform ).getValue() = PointRefFromVariant< int, 3 >( value );
+				break;
+
+			case UniformType::eVec4i:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point4i > > & >( uniform ).getValue() = PointRefFromVariant< int, 4 >( value );
+				break;
+
+			case UniformType::eVec2ui:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point2ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 2 >( value );
+				break;
+
+			case UniformType::eVec3ui:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point3ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 3 >( value );
+				break;
+
+			case UniformType::eVec4ui:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point4ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 4 >( value );
+				break;
+
+			case UniformType::eVec2f:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point2f > > & >( uniform ).getValue() = PointRefFromVariant< float, 2 >( value );
+				break;
+
+			case UniformType::eVec3f:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point3f > > & >( uniform ).getValue() = PointRefFromVariant< float, 3 >( value );
+				break;
+
+			case UniformType::eVec4f:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Point4f > > & >( uniform ).getValue() = PointRefFromVariant< float, 4 >( value );
+				break;
+
+			case UniformType::eMat4f:
+				static_cast< UniformValue< castor::ChangeTracked< castor::Matrix4x4f > > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
+				break;
+			}
+		}
+
 		void doSetTrackedValue( UniformValueBase & uniform
 			, wxVariant const & value )
 		{
 			if ( uniform.isRanged() )
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< int32_t > > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().value().range() );
-					}
-					break;
-
-				case UniformType::eUInt:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< uint32_t > > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().value().range() );
-					}
-					break;
-
-				case UniformType::eFloat:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::ChangeTracked< castor::RangedValue< float > > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().value().range() );
-					}
-					break;
-				}
+				doSetTrackedRangedValue( uniform, value );
 			}
 			else
 			{
-				switch ( uniform.getType() )
+				doSetTrackedUnrangedValue( uniform, value );
+			}
+		}
+
+		void doSetUntrackedRangedValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
 				{
-				case UniformType::eInt:
-					static_cast< UniformValue< castor::ChangeTracked< int32_t > > & >( uniform ).getValue() = getValue< int32_t >( value );
-					break;
-
-				case UniformType::eUInt:
-					static_cast< UniformValue< castor::ChangeTracked< uint32_t > > & >( uniform ).getValue() = getValue< uint32_t >( value );
-					break;
-
-				case UniformType::eFloat:
-					static_cast< UniformValue< castor::ChangeTracked< float > > & >( uniform ).getValue() = getValue< float >( value );
-					break;
-
-				case UniformType::eVec2i:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point2i > > & >( uniform ).getValue() = PointRefFromVariant< int, 2 >( value );
-					break;
-
-				case UniformType::eVec3i:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point3i > > & >( uniform ).getValue() = PointRefFromVariant< int, 3 >( value );
-					break;
-
-				case UniformType::eVec4i:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point4i > > & >( uniform ).getValue() = PointRefFromVariant< int, 4 >( value );
-					break;
-
-				case UniformType::eVec2ui:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point2ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 2 >( value );
-					break;
-
-				case UniformType::eVec3ui:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point3ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 3 >( value );
-					break;
-
-				case UniformType::eVec4ui:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point4ui > > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 4 >( value );
-					break;
-
-				case UniformType::eVec2f:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point2f > > & >( uniform ).getValue() = PointRefFromVariant< float, 2 >( value );
-					break;
-
-				case UniformType::eVec3f:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point3f > > & >( uniform ).getValue() = PointRefFromVariant< float, 3 >( value );
-					break;
-
-				case UniformType::eVec4f:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Point4f > > & >( uniform ).getValue() = PointRefFromVariant< float, 4 >( value );
-					break;
-
-				case UniformType::eMat4f:
-					static_cast< UniformValue< castor::ChangeTracked< castor::Matrix4x4f > > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
-					break;
+					auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().range() );
 				}
+				break;
+
+			case UniformType::eUInt:
+				{
+					auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().range() );
+				}
+				break;
+
+			case UniformType::eFloat:
+				{
+					auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > & >( uniform );
+					rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().range() );
+				}
+				break;
+
+			}
+		}
+
+		void doSetUntrackedUnrangedValue( UniformValueBase & uniform
+			, wxVariant const & value )
+		{
+			switch ( uniform.getType() )
+			{
+			case UniformType::eInt:
+				static_cast< UniformValue< int32_t > & >( uniform ).getValue() = getValue< int32_t >( value );
+				break;
+
+			case UniformType::eUInt:
+				static_cast< UniformValue< uint32_t > & >( uniform ).getValue() = getValue< uint32_t >( value );
+				break;
+
+			case UniformType::eFloat:
+				static_cast< UniformValue< float > & >( uniform ).getValue() = getValue< float >( value );
+				break;
+
+			case UniformType::eVec2i:
+				static_cast< UniformValue< castor::Point2i > & >( uniform ).getValue() = PointRefFromVariant< int, 2 >( value );
+				break;
+
+			case UniformType::eVec3i:
+				static_cast< UniformValue< castor::Point3i > & >( uniform ).getValue() = PointRefFromVariant< int, 3 >( value );
+				break;
+
+			case UniformType::eVec4i:
+				static_cast< UniformValue< castor::Point4i > & >( uniform ).getValue() = PointRefFromVariant< int, 4 >( value );
+				break;
+
+			case UniformType::eVec2ui:
+				static_cast< UniformValue< castor::Point2ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 2 >( value );
+				break;
+
+			case UniformType::eVec3ui:
+				static_cast< UniformValue< castor::Point3ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 3 >( value );
+				break;
+
+			case UniformType::eVec4ui:
+				static_cast< UniformValue< castor::Point4ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 4 >( value );
+				break;
+
+			case UniformType::eVec2f:
+				static_cast< UniformValue< castor::Point2f > & >( uniform ).getValue() = PointRefFromVariant< float, 2 >( value );
+				break;
+
+			case UniformType::eVec3f:
+				static_cast< UniformValue< castor::Point3f > & >( uniform ).getValue() = PointRefFromVariant< float, 3 >( value );
+				break;
+
+			case UniformType::eVec4f:
+				static_cast< UniformValue< castor::Point4f > & >( uniform ).getValue() = PointRefFromVariant< float, 4 >( value );
+				break;
+
+			case UniformType::eMat4f:
+				static_cast< UniformValue< castor::Matrix4x4f > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
+				break;
 			}
 		}
 
@@ -380,87 +520,11 @@ namespace GuiCommon
 		{
 			if ( uniform.isRanged() )
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< int32_t > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< int32_t >( getValue< int32_t >( value ), rangedUniform.getValue().range() );
-					}
-					break;
-
-				case UniformType::eUInt:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< uint32_t > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< uint32_t >( getValue< uint32_t >( value ), rangedUniform.getValue().range() );
-					}
-					break;
-
-				case UniformType::eFloat:
-					{
-						auto & rangedUniform = static_cast< UniformValue< castor::RangedValue< float > > & >( uniform );
-						rangedUniform.getValue() = castor::RangedValue< float >( getValue< float >( value ), rangedUniform.getValue().range() );
-					}
-					break;
-
-				}
+				doSetUntrackedRangedValue( uniform, value );
 			}
 			else
 			{
-				switch ( uniform.getType() )
-				{
-				case UniformType::eInt:
-					static_cast< UniformValue< int32_t > & >( uniform ).getValue() = getValue< int32_t >( value );
-					break;
-
-				case UniformType::eUInt:
-					static_cast< UniformValue< uint32_t > & >( uniform ).getValue() = getValue< uint32_t >( value );
-					break;
-
-				case UniformType::eFloat:
-					static_cast< UniformValue< float > & >( uniform ).getValue() = getValue< float >( value );
-					break;
-
-				case UniformType::eVec2i:
-					static_cast< UniformValue< castor::Point2i > & >( uniform ).getValue() = PointRefFromVariant< int, 2 >( value );
-					break;
-
-				case UniformType::eVec3i:
-					static_cast< UniformValue< castor::Point3i > & >( uniform ).getValue() = PointRefFromVariant< int, 3 >( value );
-					break;
-
-				case UniformType::eVec4i:
-					static_cast< UniformValue< castor::Point4i > & >( uniform ).getValue() = PointRefFromVariant< int, 4 >( value );
-					break;
-
-				case UniformType::eVec2ui:
-					static_cast< UniformValue< castor::Point2ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 2 >( value );
-					break;
-
-				case UniformType::eVec3ui:
-					static_cast< UniformValue< castor::Point3ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 3 >( value );
-					break;
-
-				case UniformType::eVec4ui:
-					static_cast< UniformValue< castor::Point4ui > & >( uniform ).getValue() = PointRefFromVariant< uint32_t, 4 >( value );
-					break;
-
-				case UniformType::eVec2f:
-					static_cast< UniformValue< castor::Point2f > & >( uniform ).getValue() = PointRefFromVariant< float, 2 >( value );
-					break;
-
-				case UniformType::eVec3f:
-					static_cast< UniformValue< castor::Point3f > & >( uniform ).getValue() = PointRefFromVariant< float, 3 >( value );
-					break;
-
-				case UniformType::eVec4f:
-					static_cast< UniformValue< castor::Point4f > & >( uniform ).getValue() = PointRefFromVariant< float, 4 >( value );
-					break;
-
-				case UniformType::eMat4f:
-					static_cast< UniformValue< castor::Matrix4x4f > & >( uniform ).getValue() = matrixRefFromVariant< float, 4 >( value );
-					break;
-				}
+				doSetUntrackedUnrangedValue( uniform, value );
 			}
 		}
 

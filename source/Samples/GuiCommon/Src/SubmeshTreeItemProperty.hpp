@@ -78,7 +78,7 @@ namespace GuiCommon
 
 	private:
 		void OnMaterialChange( castor::String const & name );
-		void OnTopologyChange( renderer::PrimitiveTopology value );
+		void OnTopologyChange( ashes::PrimitiveTopology value );
 
 	private:
 		castor3d::Geometry & m_geometry;

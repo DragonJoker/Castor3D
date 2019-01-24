@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MetallicRoughnessPassBuffer_H___
@@ -51,7 +51,20 @@ namespace castor3d
 		 */
 		C3D_API void visit( MetallicRoughnessPbrPass const & pass )override;
 
-	private:
+	public:
+#if C3D_MaterialsStructOfArrays
+
+		struct PassesData
+		{
+			castor::ArrayView< RgbaColour > albRough;
+			castor::ArrayView< RgbaColour > metDiv;
+			castor::ArrayView< RgbaColour > common;
+			castor::ArrayView< RgbaColour > reflRefr;
+			ExtendedData extended;
+		};
+
+#else
+
 		struct PassData
 		{
 			RgbaColour albRough;
@@ -61,6 +74,8 @@ namespace castor3d
 			ExtendedData extended;
 		};
 		using PassesData = castor::ArrayView< PassData >;
+
+#endif
 
 	private:
 		static constexpr uint32_t DataSize = ( sizeof( RgbaColour ) * 4 )

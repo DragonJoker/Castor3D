@@ -40,7 +40,7 @@ namespace castor3d
 		 */
 		inline uint32_t operator[]( uint32_t index )const
 		{
-			REQUIRE( index < 2 );
+			CU_Require( index < 2 );
 			return m_line.m_index[index];
 		}
 

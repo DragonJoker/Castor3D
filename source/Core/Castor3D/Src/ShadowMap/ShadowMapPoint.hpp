@@ -51,13 +51,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMap::render
 		 */
-		renderer::Semaphore const & render( renderer::Semaphore const & toWait )override;
+		ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( renderer::RenderPass const & renderPass
-			, renderer::FrameBuffer const & frameBuffer
+		void debugDisplay( ashes::RenderPass const & renderPass
+			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
+		C3D_API ashes::TextureView const & getView( uint32_t index )const override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -96,30 +98,46 @@ namespace castor3d
 			, ProgramFlags & programFlags
 			, SceneFlags & sceneFlags )const override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
 		 */
-		glsl::Shader doGetPixelShaderSource( PassFlags const & passFlags
+		ShaderPtr doGetVertexShaderSource( PassFlags const & passFlags
 			, TextureChannels const & textureFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, renderer::CompareOp alphaFunc )const override;
+			, bool invertNormals )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
+		 */
+		ShaderPtr doGetPixelShaderSource( PassFlags const & passFlags
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, ashes::CompareOp alphaFunc )const override;
 
 	public:
-		static renderer::Format constexpr VarianceFormat = renderer::Format::eR32G32_SFLOAT;
-		static renderer::Format constexpr LinearDepthFormat = renderer::Format::eR32_SFLOAT;
-		static renderer::Format constexpr RawDepthFormat = renderer::Format::eD24_UNORM_S8_UINT;
+		static ashes::Format constexpr VarianceFormat = ashes::Format::eR32G32_SFLOAT;
+		static ashes::Format constexpr LinearDepthFormat = ashes::Format::eR32_SFLOAT;
+		static ashes::Format constexpr RawDepthFormat = ashes::Format::eD24_UNORM_S8_UINT;
 
 	private:
 		struct FrameBuffer
 		{
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::TextureViewPtr varianceView;
-			renderer::TextureViewPtr linearView;
+			ashes::FrameBufferPtr frameBuffer;
+			ashes::TextureViewPtr varianceView;
+			ashes::TextureViewPtr linearView;
 		};
-		renderer::TexturePtr m_depthTexture;
-		renderer::TextureViewPtr m_depthView;
-		std::array< FrameBuffer, 6u > m_frameBuffers;
-		ShadowType m_shadowType;
+		struct PassData
+		{
+			ashes::CommandBufferPtr commandBuffer;
+			ashes::TexturePtr depthTexture;
+			ashes::TextureViewPtr depthView;
+			std::array< FrameBuffer, 6u > frameBuffers;
+			ashes::SemaphorePtr finished;
+			ShadowType shadowType;
+			ashes::TextureViewPtr varianceView;
+			ashes::TextureViewPtr linearView;
+		};
+		std::vector< PassData > m_passesData;
 	};
 }
 

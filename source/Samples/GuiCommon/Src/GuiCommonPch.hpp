@@ -7,8 +7,8 @@ See LICENSE file in root folder
 #include <config.hpp>
 #include <Castor3DPrerequisites.hpp>
 
-#if CASTOR_USE_PCH
-#	ifdef CASTOR_PLATFORM_WINDOWS
+#if CU_UsePCH
+#	ifdef CU_PlatformWindows
 #		if CASTOR_GTK
 #			ifdef __WXGTK__
 #				undef __WXMSW__

@@ -51,30 +51,6 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::SetBackgroundImage( /* [in] */ BSTR path )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			castor::Path l_path{ fromBstr( path ) };
-			m_internal->setBackground( l_path.getPath(), l_path.getFileName( true ) );
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "SetBackgroundImage" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
 	STDMETHODIMP CScene::CreateSceneNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )
 	{
 		HRESULT hr = E_POINTER;
@@ -443,36 +419,6 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 cuT( "RemoveCamera" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITextureLayout ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CTextureLayout::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CTextureLayout * >( *pVal )->setInternal( m_internal->getBackgroundImage() );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "GetBackgroundImage" ),	// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );

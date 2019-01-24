@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <Design/ChangeTracked.hpp>
 
@@ -47,9 +47,9 @@ namespace castor3d
 		 *\param[in]	viewport		Le viewport depuis lequel on récupère les information de clip.
 		 */
 		LineariseDepthPass( Engine & engine
-			, renderer::Extent2D const & size
+			, ashes::Extent2D const & size
 			, SsaoConfigUbo & ssaoConfigUbo
-			, renderer::TextureView const & depthBuffer );
+			, ashes::TextureView const & depthBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -70,7 +70,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		renderer::Semaphore const & linearise( renderer::Semaphore const & toWait )const;
+		ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -99,37 +99,39 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
+		static constexpr uint32_t LogMaxOffset = 3u;
+		static constexpr float MinRadius = 1.0f;
 
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		renderer::TextureView const & m_depthBuffer;
-		renderer::Extent2D m_size;
+		ashes::TextureView const & m_depthBuffer;
+		ashes::Extent2D m_size;
 		TextureUnit m_result;
 		RenderPassTimerSPtr m_timer;
-		renderer::RenderPassPtr m_renderPass;
-		renderer::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		renderer::VertexLayoutPtr m_vertexLayout;
-		renderer::SamplerPtr m_lineariseSampler;
-		renderer::SamplerPtr m_minifySampler;
-		renderer::CommandBufferPtr m_commandBuffer;
-		renderer::SemaphorePtr m_finished;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
+		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::SamplerPtr m_lineariseSampler;
+		ashes::SamplerPtr m_minifySampler;
+		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::SemaphorePtr m_finished;
 		/**
 		*name
 		*	Linearisation.
 		*/
 		/**@{*/
-		glsl::Shader m_lineariseVertexShader;
-		glsl::Shader m_linearisePixelShader;
-		renderer::ShaderStageStateArray m_lineariseProgram;
-		renderer::TextureViewPtr m_linearisedView;
-		renderer::FrameBufferPtr m_lineariseFrameBuffer;
-		renderer::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
-		renderer::DescriptorSetPoolPtr m_lineariseDescriptorPool;
-		renderer::DescriptorSetPtr m_lineariseDescriptor;
-		renderer::PipelineLayoutPtr m_linearisePipelineLayout;
-		renderer::PipelinePtr m_linearisePipeline;
-		renderer::PushConstantsBuffer< castor::Point3f > m_clipInfo;
+		ShaderModule m_lineariseVertexShader;
+		ShaderModule m_linearisePixelShader;
+		ashes::ShaderStageStateArray m_lineariseProgram;
+		ashes::TextureViewPtr m_linearisedView;
+		ashes::FrameBufferPtr m_lineariseFrameBuffer;
+		ashes::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_lineariseDescriptorPool;
+		ashes::DescriptorSetPtr m_lineariseDescriptor;
+		ashes::PipelineLayoutPtr m_linearisePipelineLayout;
+		ashes::PipelinePtr m_linearisePipeline;
+		ashes::UniformBufferPtr< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
 		/**
@@ -137,29 +139,27 @@ namespace castor3d
 		*	Minification.
 		*/
 		/**@{*/
+		struct MinifyConfiguration
+		{
+			castor::Point2i textureSize;
+			int previousLevel;
+		};
 		struct MinifyPipeline
 		{
-			struct Configuration
-			{
-				castor::Point2i textureSize;
-				int previousLevel;
-			};
-
-			renderer::TextureView const * sourceView;
-			renderer::TextureViewPtr targetView;
-			renderer::DescriptorSetPtr descriptor;
-			renderer::FrameBufferPtr frameBuffer;
-			renderer::PushConstantsBufferPtr< Configuration > previousLevel;
-			renderer::PushConstantRange pushConstants;
-			renderer::PipelinePtr pipeline;
+			ashes::TextureView const * sourceView;
+			ashes::TextureViewPtr targetView;
+			ashes::DescriptorSetPtr descriptor;
+			ashes::FrameBufferPtr frameBuffer;
+			ashes::PipelinePtr pipeline;
 		};
 
-		glsl::Shader m_minifyVertexShader;
-		glsl::Shader m_minifyPixelShader;
-		renderer::ShaderStageStateArray m_minifyProgram;
-		renderer::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
-		renderer::PipelineLayoutPtr m_minifyPipelineLayout;
-		renderer::DescriptorSetPoolPtr m_minifyDescriptorPool;
+		ashes::UniformBufferPtr< MinifyConfiguration > m_previousLevel;
+		ShaderModule m_minifyVertexShader;
+		ShaderModule m_minifyPixelShader;
+		ashes::ShaderStageStateArray m_minifyProgram;
+		ashes::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
+		ashes::PipelineLayoutPtr m_minifyPipelineLayout;
+		ashes::DescriptorSetPoolPtr m_minifyDescriptorPool;
 		std::array< MinifyPipeline, MaxMipLevel > m_minifyPipelines;
 		/**@}*/
 

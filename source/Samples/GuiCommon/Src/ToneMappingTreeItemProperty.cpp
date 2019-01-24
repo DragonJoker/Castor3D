@@ -5,7 +5,8 @@
 
 #include <HDR/ToneMapping.hpp>
 
-#include <GlslShader.hpp>
+#include <ShaderWriter/Shader.hpp>
+#include <CompilerGlsl/compileGlsl.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -40,18 +41,30 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlag type
-				, glsl::Shader const & shader )override
+				, ashes::ShaderStageFlag type
+				, sdw::Shader const & shader )override
 			{
-				doGetSource( name ).sources[type] = shader.getSource();
+				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
+					, ast::SpecialisationInfo{}
+					, glsl::GlslConfig
+					{
+						convert( type ),
+						430,
+						false,
+						false,
+						true,
+						true,
+						true,
+						true,
+					} );
 			}
 
 			void visit( castor::String const & name
-				, renderer::ShaderStageFlags shaders
+				, ashes::ShaderStageFlags shaders
 				, HdrConfig & value )override
 			{
 				auto & source = doGetSource( name );
-				UniformBufferValues ubo{ wxT( "HdrConfig" ), renderer::ShaderStageFlag::eFragment };
+				UniformBufferValues ubo{ wxT( "HdrConfig" ), ashes::ShaderStageFlag::eFragment };
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Exposure" ), value.getExposure() ) );
 				ubo.uniforms.emplace_back( makeUniformValue( wxT( "Gamma" ), value.getGamma() ) );
 				source.ubos.emplace_back( std::move( ubo ) );

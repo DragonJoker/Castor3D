@@ -150,7 +150,7 @@ namespace castor3d
 		{
 			group,
 			mesh,
-			m_morphingUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_morphingUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 
@@ -161,7 +161,7 @@ namespace castor3d
 		{
 			group,
 			skeleton,
-			m_skinningUboPool.getBuffer( renderer::MemoryPropertyFlag::eHostVisible ),
+			m_skinningUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
 		};
 	}
 

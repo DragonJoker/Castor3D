@@ -15,15 +15,17 @@
 #include "Scene/SceneNode.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/ShaderProgram.hpp"
+#include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
 #include <Buffer/Buffer.hpp>
 #include <Buffer/VertexBuffer.hpp>
 
-#include <GlslSource.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
+
+#define C3D_InvertFrontAndBackPipelines 0
 
 namespace castor3d
 {
@@ -238,7 +240,7 @@ namespace castor3d
 		doUpdate( queues );
 	}
 
-	glsl::Shader RenderPass::getVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderPass::getVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -251,7 +253,7 @@ namespace castor3d
 			, invertNormals );
 	}
 
-	glsl::Shader RenderPass::getGeometryShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderPass::getGeometryShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags )const
@@ -262,13 +264,13 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	glsl::Shader RenderPass::getPixelShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderPass::getPixelShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc )const
+		, ashes::CompareOp alphaFunc )const
 	{
-		glsl::Shader result;
+		ShaderPtr result;
 
 		if ( checkFlag( passFlags, PassFlag::ePbrMetallicRoughness ) )
 		{
@@ -300,14 +302,14 @@ namespace castor3d
 
 	void RenderPass::preparePipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, renderer::CompareOp alphaFunc
+		, ashes::CompareOp alphaFunc
 		, PassFlags & passFlags
 		, TextureChannels & textureFlags
 		, ProgramFlags & programFlags
 		, SceneFlags & sceneFlags
-		, renderer::PrimitiveTopology topology
+		, ashes::PrimitiveTopology topology
 		, bool twoSided
-		, renderer::VertexLayoutCRefArray const & layouts )
+		, ashes::VertexLayoutCRefArray const & layouts )
 	{
 		doUpdateFlags( passFlags
 			, textureFlags
@@ -378,12 +380,12 @@ namespace castor3d
 
 	RenderPipeline * RenderPass::getPipelineFront( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, renderer::CompareOp alphaFunc
+		, ashes::CompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::PrimitiveTopology topology )const
+		, ashes::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
@@ -404,12 +406,12 @@ namespace castor3d
 
 	RenderPipeline * RenderPass::getPipelineBack( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, renderer::CompareOp alphaFunc
+		, ashes::CompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::PrimitiveTopology topology )const
+		, ashes::PrimitiveTopology topology )const
 	{
 		if ( m_opaque )
 		{
@@ -543,83 +545,83 @@ namespace castor3d
 			, sceneFlags );
 	}
 
-	renderer::ColourBlendState RenderPass::createBlendState( BlendMode colourBlendMode
+	ashes::ColourBlendState RenderPass::createBlendState( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, uint32_t attachesCount )
 	{
-		renderer::ColourBlendStateAttachment attach;
+		ashes::ColourBlendStateAttachment attach;
 
 		switch ( colourBlendMode )
 		{
 		case BlendMode::eNoBlend:
-			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eZero;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eOne;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eZero;
 			break;
 
 		case BlendMode::eAdditive:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eOne;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eOne;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eOne;
 			break;
 
 		case BlendMode::eMultiplicative:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eZero;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
 			break;
 
 		case BlendMode::eInterpolative:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
 			break;
 
 		default:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcColour;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
 			break;
 		}
 
 		switch ( alphaBlendMode )
 		{
 		case BlendMode::eNoBlend:
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eZero;
+			attach.srcAlphaBlendFactor = ashes::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = ashes::BlendFactor::eZero;
 			break;
 
 		case BlendMode::eAdditive:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eOne;
+			attach.srcAlphaBlendFactor = ashes::BlendFactor::eOne;
+			attach.dstAlphaBlendFactor = ashes::BlendFactor::eOne;
 			break;
 
 		case BlendMode::eMultiplicative:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eZero;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = ashes::BlendFactor::eZero;
+			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eZero;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
 			break;
 
 		case BlendMode::eInterpolative:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = ashes::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
 			break;
 
 		default:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = renderer::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = renderer::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = ashes::BlendFactor::eSrcAlpha;
+			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcAlpha;
+			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
 			break;
 		}
 
-		renderer::ColourBlendState state;
+		ashes::ColourBlendState state;
 
 		for ( auto i = 0u; i < attachesCount; ++i )
 		{
@@ -629,7 +631,7 @@ namespace castor3d
 		return state;
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -670,7 +672,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -711,7 +713,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -762,7 +764,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
@@ -799,7 +801,7 @@ namespace castor3d
 		node.uboDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
@@ -811,7 +813,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseUboDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes )
 	{
 		for ( auto & passNodes : nodes )
@@ -823,7 +825,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -834,7 +836,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, MorphingRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -845,7 +847,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SkinningRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -856,7 +858,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, StaticRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -867,7 +869,7 @@ namespace castor3d
 		node.texDescriptorSet->update();
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -887,7 +889,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderPass::initialiseTextureDescriptor( renderer::DescriptorSetPool const & descriptorPool
+	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
@@ -926,7 +928,7 @@ namespace castor3d
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, renderer::CompareOp alphaFunc
+		, ashes::CompareOp alphaFunc
 		, bool invertNormals )const
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this
@@ -978,7 +980,7 @@ namespace castor3d
 		uint32_t const mtxSize = sizeof( float ) * 16;
 		uint32_t const stride = mtxSize * 400u;
 		auto const count = std::min( bonesBuffer.getSize() / stride, uint32_t( renderNodes.size() ) );
-		REQUIRE( count <= renderNodes.size() );
+		CU_Require( count <= renderNodes.size() );
 		auto buffer = bonesBuffer.getPtr();
 		auto it = renderNodes.begin();
 		auto i = 0u;
@@ -1102,7 +1104,7 @@ namespace castor3d
 				{
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer() );
-					REQUIRE( count1 == count2 );
+					CU_Require( count1 == count2 );
 				}
 			} );
 	}
@@ -1128,7 +1130,7 @@ namespace castor3d
 				{
 					uint32_t count1 = doCopyNodesMatrices( renderNodes, it->second.data, info );
 					uint32_t count2 = doCopyNodesBones( renderNodes, instantiatedBones.getInstancedBonesBuffer(), info );
-					REQUIRE( count1 == count2 );
+					CU_Require( count1 == count2 );
 					info.m_visibleFaceCount += submesh.getFaceCount() * count1;
 					info.m_visibleVertexCount += submesh.getPointsCount() * count1;
 					++info.m_drawCalls;
@@ -1177,34 +1179,50 @@ namespace castor3d
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
 	{
+#if C3D_InvertFrontAndBackPipelines
 		return getEngine()->isTopDown()
 			? m_frontPipelines
 			: m_backPipelines;
+#else
+		return m_frontPipelines;
+#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetBackPipelines()
 	{
+#if C3D_InvertFrontAndBackPipelines
 		return getEngine()->isTopDown()
 			? m_backPipelines
 			: m_frontPipelines;
+#else
+		return m_backPipelines;
+#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetFrontPipelines()const
 	{
+#if C3D_InvertFrontAndBackPipelines
 		return getEngine()->isTopDown()
 			? m_frontPipelines
 			: m_backPipelines;
+#else
+		return m_frontPipelines;
+#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetBackPipelines()const
 	{
+#if C3D_InvertFrontAndBackPipelines
 		return getEngine()->isTopDown()
 			? m_backPipelines
 			: m_frontPipelines;
+#else
+		return m_backPipelines;
+#endif
 	}
 
 	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
+		, ashes::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetFrontPipelines();
@@ -1216,9 +1234,9 @@ namespace castor3d
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eFront }
+					, ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eFront }
 					, std::move( bdState )
-					, renderer::MultisampleState{}
+					, ashes::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
@@ -1232,7 +1250,7 @@ namespace castor3d
 					auto texBindings = doCreateTextureBindings( flags );
 					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
 					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
-					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
 					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
@@ -1242,7 +1260,7 @@ namespace castor3d
 	}
 
 	void RenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, renderer::VertexLayoutCRefArray const & layouts
+		, ashes::VertexLayoutCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetBackPipelines();
@@ -1254,9 +1272,9 @@ namespace castor3d
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
-					, renderer::RasterisationState{ 0u, false, false, renderer::PolygonMode::eFill, renderer::CullModeFlag::eBack }
+					, ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eBack }
 					, std::move( bdState )
-					, renderer::MultisampleState{}
+					, ashes::MultisampleState{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
@@ -1270,7 +1288,7 @@ namespace castor3d
 					auto texBindings = doCreateTextureBindings( flags );
 					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
 					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
-					std::vector< renderer::DescriptorSetLayoutPtr > layouts;
+					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
 					pipeline.setDescriptorSetLayouts( std::move( layouts ) );
@@ -1279,9 +1297,9 @@ namespace castor3d
 		}
 	}
 
-	renderer::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		renderer::DescriptorSetLayoutBindingArray uboBindings;
+		ashes::DescriptorSetLayoutBindingArray uboBindings;
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eDepthPass ) )
 		{
@@ -1290,13 +1308,13 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
 		{
-			uboBindings.emplace_back( LightBufferIndex, renderer::DescriptorType::eUniformTexelBuffer, renderer::ShaderStageFlag::eFragment );
+			uboBindings.emplace_back( LightBufferIndex, ashes::DescriptorType::eUniformTexelBuffer, ashes::ShaderStageFlag::eFragment );
 		}
 
-		uboBindings.emplace_back( MatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( SceneUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
-		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( ModelUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex | renderer::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( MatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( SceneUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
+		uboBindings.emplace_back( ModelUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
@@ -1305,76 +1323,76 @@ namespace castor3d
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			uboBindings.emplace_back( MorphingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( MorphingUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 		{
-			uboBindings.emplace_back( PickingUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eFragment );
+			uboBindings.emplace_back( PickingUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			uboBindings.emplace_back( BillboardUbo::BindingPoint, renderer::DescriptorType::eUniformBuffer, renderer::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( BillboardUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
 		}
 
 		return uboBindings;
 	}
 
-	glsl::Shader RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
+	ShaderPtr RenderPass::doGetVertexShaderSource( PassFlags const & passFlags
 		, TextureChannels const & textureFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, bool invertNormals )const
 	{
-		using namespace glsl;
-		auto writer = getEngine()->getRenderSystem()->createGlslWriter();
+		using namespace sdw;
+		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declAttribute< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( cuT( "position" )
 			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declAttribute< Vec3 >( cuT( "normal" )
+		auto normal = writer.declInput< Vec3 >( cuT( "normal" )
 			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declAttribute< Vec3 >( cuT( "tangent" )
+		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declAttribute< Vec3 >( cuT( "texcoord" )
+		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declAttribute< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declAttribute< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declAttribute< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declAttribute< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declAttribute< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declAttribute< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( cuT( "material" )
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declAttribute< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declAttribute< Vec3 >( cuT( "normal2" )
+		auto normal2 = writer.declInput< Vec3 >( cuT( "normal2" )
 			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declAttribute< Vec3 >( cuT( "tangent2" )
+		auto tangent2 = writer.declInput< Vec3 >( cuT( "tangent2" )
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declAttribute< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( programFlags, ProgramFlag::eMorphing ) );
-		auto gl_InstanceID( writer.declBuiltin< Int >( writer.getInstanceID() ) );
+		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0 );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
-		SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
+		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, programFlags );
 
 		// Outputs
@@ -1396,7 +1414,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto out = gl_PerVertex{ writer };
+		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
 		{
@@ -1407,13 +1425,13 @@ namespace castor3d
 			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
 				, vec4( tangent, 0.0 ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-				, texture );
+				, uv );
 			auto curMtxModel = writer.declLocale< Mat4 >( cuT( "curMtxModel" ) );
 			auto prvMtxModel = writer.declLocale< Mat4 >( cuT( "prvMtxModel" ) );
 
 			if ( checkFlag( programFlags, ProgramFlag::eSkinning ) )
 			{
-				curMtxModel = SkinningUbo::computeTransform( writer, programFlags );
+				curMtxModel = SkinningUbo::computeTransform( skinningData, writer, programFlags );
 				prvMtxModel = curMtxModel;
 			}
 			else if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
@@ -1445,17 +1463,17 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" )
 					, vec3( 1.0_f - c3d_time ) );
-				v4Vertex = vec4( glsl::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				v4Normal = vec4( glsl::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
-				v4Tangent = vec4( glsl::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
-				v3Texture = glsl::fma( v3Texture, time, texture2 * c3d_time );
+				v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
+				v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
+				v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
 			}
 
 			vtx_texture = v3Texture;
 			v4Vertex = curMtxModel * v4Vertex;
 			vtx_worldPosition = v4Vertex.xyz();
 			v4Vertex = c3d_curView * v4Vertex;
-			auto mtxNormal = writer.getBuiltin< Mat3 >( cuT( "mtxNormal" ) );
+			auto mtxNormal = writer.getVariable< Mat3 >( cuT( "mtxNormal" ) );
 
 			if ( invertNormals )
 			{
@@ -1467,10 +1485,10 @@ namespace castor3d
 			}
 
 			vtx_tangent = normalize( writer.paren( mtxNormal * v4Tangent.xyz() ) );
-			vtx_tangent = normalize( glsl::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
+			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = gl_InstanceID;
-			out.gl_Position() = c3d_projection * v4Vertex;
+			vtx_instance = in.gl_InstanceID;
+			out.gl_out.gl_Position = c3d_projection * v4Vertex;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
@@ -1478,7 +1496,7 @@ namespace castor3d
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
 		};
 
-		writer.implementFunction< void >( cuT( "main" ), main );
-		return writer.finalise();
+		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 }

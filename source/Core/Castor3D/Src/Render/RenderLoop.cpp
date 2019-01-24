@@ -36,7 +36,15 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasMainDevice() )
 		{
-			m_renderSystem.getMainDevice()->enable();
+			auto guard = makeBlockGuard(
+				[this]()
+				{
+					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
+				},
+				[this]()
+				{
+					m_renderSystem.setCurrentDevice( nullptr );
+				} );
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 				{
 					p_listener.fireEvents( EventType::ePreRender );
@@ -45,7 +53,6 @@ namespace castor3d
 				{
 					p_listener.fireEvents( EventType::eQueueRender );
 				} );
-			m_renderSystem.getMainDevice()->disable();
 		}
 		else
 		{
@@ -62,7 +69,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::createDevice( renderer::WindowHandle && handle
+	void RenderLoop::createDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
 		if ( !m_renderSystem.hasMainDevice() )
@@ -109,10 +116,10 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
-	renderer::DevicePtr RenderLoop::doCreateDevice( renderer::WindowHandle && handle
+	ashes::DevicePtr RenderLoop::doCreateDevice( ashes::WindowHandle && handle
 		, RenderWindow & window )
 	{
-		renderer::DevicePtr result;
+		ashes::DevicePtr result;
 
 		try
 		{
@@ -160,11 +167,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.getMainDevice()->enable();
+					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
 				},
 				[this]()
 				{
-					m_renderSystem.getMainDevice()->disable();
+					m_renderSystem.setCurrentDevice( nullptr );
 				} );
 			doProcessEvents( EventType::ePreRender );
 			getEngine()->getSceneCache().forEach( []( Scene & scene )
@@ -187,11 +194,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.getMainDevice()->enable();
+					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
 				},
 				[this]()
 				{
-					m_renderSystem.getMainDevice()->disable();
+					m_renderSystem.setCurrentDevice( nullptr );
 				} );
 			m_debugOverlays->endGpuTask();
 		}
