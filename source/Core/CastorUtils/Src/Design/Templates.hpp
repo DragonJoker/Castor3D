@@ -93,7 +93,7 @@ namespace castor
 	template< uint32_t A, uint32_t B >
 	struct MinValue < A, B, typename std::enable_if< ( B < A ) >::type >
 	{
-		static const uint32_t value = A;
+		static const uint32_t value = B;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -136,7 +136,7 @@ namespace castor
 	template< uint32_t A, uint32_t B >
 	struct MaxValue< A, B, typename std::enable_if< ( B > A ) >::type >
 	{
-		static const uint32_t value = A;
+		static const uint32_t value = B;
 	};
 }
 

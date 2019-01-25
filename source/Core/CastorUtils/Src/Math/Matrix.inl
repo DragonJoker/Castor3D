@@ -80,11 +80,11 @@ namespace castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::initialise( T const & value )
 	{
-		static size_t constexpr count = MinValue< Columns, Rows >::value;
+		static size_t constexpr minCount = MinValue< Columns, Rows >::value;
 		initialise();
 		T * buffer = m_data.data();
 
-		for ( int i = 0; i < count; i++ )
+		for ( int i = 0; i < minCount; i++ )
 		{
 			*buffer = value;
 			buffer += Rows + 1;

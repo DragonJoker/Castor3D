@@ -370,17 +370,17 @@ namespace castor
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & rhs )
 		: my_matrix_type()
 	{
-		static uint32_t constexpr count = MinValue< Count, _Rows >::value;
+		static uint32_t constexpr minCount = MinValue< Count, _Rows >::value;
 
-		for ( uint32_t i = 0; i < count; i++ )
+		for ( uint32_t i = 0; i < minCount; i++ )
 		{
-			for ( uint32_t j = 0; j < count; j++ )
+			for ( uint32_t j = 0; j < minCount; j++ )
 			{
 				this->operator[]( i )[j] = rhs[i][j];
 			}
 		}
 
-		for ( int i = count; i < Count; i++ )
+		for ( int i = minCount; i < Count; i++ )
 		{
 			this->operator[]( i )[i] = T{ 1 };
 		}
