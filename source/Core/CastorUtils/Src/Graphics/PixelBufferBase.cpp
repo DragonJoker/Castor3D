@@ -77,17 +77,15 @@ namespace castor
 
 	void PxBufferBase::flip()
 	{
-		uint32_t fwidth = getWidth() * PF::getBytesPerPixel( m_pixelFormat );
 		uint32_t fheight = getHeight();
+		uint32_t fwidth = size() / fheight;
 		uint32_t hheight = fheight / 2;
 		uint8_t * bufferTop = &m_buffer[0];
-		uint8_t * bufferBot = &m_buffer[( fheight - 1 ) * fwidth - 1];
+		uint8_t * bufferBot = &m_buffer[( fheight - 1 ) * fwidth];
 		std::vector< uint8_t > buffer( fwidth );
 
 		for ( uint32_t i = 0; i < hheight; i++ )
 		{
-			auto topLine = bufferTop;
-			auto botLine = bufferBot;
 			std::memcpy( buffer.data(), bufferTop, fwidth );
 			std::memcpy( bufferTop, bufferBot, fwidth );
 			std::memcpy( bufferBot, buffer.data(), fwidth );
