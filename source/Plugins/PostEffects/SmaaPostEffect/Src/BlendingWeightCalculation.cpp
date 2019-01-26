@@ -892,9 +892,9 @@ namespace smaa
 			| ashes::ImageUsageFlag::eTransferDst;
 
 		auto areaTexBuffer = PxBufferBase::create( Size{ AREATEX_WIDTH, AREATEX_HEIGHT }
-			, PixelFormat::eA8L8
+			, PixelFormat::eR8A8_UNORM
 			, areaTexBytes
-			, PixelFormat::eA8L8 );
+			, PixelFormat::eR8A8_UNORM );
 		m_areaTex = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, image
 			, ashes::MemoryPropertyFlag::eDeviceLocal );
@@ -902,9 +902,9 @@ namespace smaa
 		m_areaTex->initialise();
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
-			, PixelFormat::eL8
+			, PixelFormat::eR8_UNORM
 			, searchTexBytes
-			, PixelFormat::eL8 );
+			, PixelFormat::eR8_UNORM );
 		image.format = ashes::Format::eR8_UNORM;
 		m_searchTex = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, image

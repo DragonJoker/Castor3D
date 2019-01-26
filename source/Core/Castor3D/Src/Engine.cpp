@@ -73,7 +73,6 @@ namespace castor3d
 		   , auto element )
 		{
 		};
-		Image::initialiseImageLib();
 		initialiseGlslang();
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
@@ -231,7 +230,6 @@ namespace castor3d
 
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
-		Image::cleanupImageLib();
 		cleanupGlslang();
 	}
 

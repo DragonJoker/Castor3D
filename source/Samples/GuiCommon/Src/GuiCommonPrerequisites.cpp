@@ -223,10 +223,10 @@ namespace GuiCommon
 	{
 		castor::PxBufferBaseSPtr buffer;
 
-		if ( p_buffer->format() != castor::PixelFormat::eA8R8G8B8 )
+		if ( p_buffer->format() != castor::PixelFormat::eR8G8B8A8_UNORM )
 		{
 			buffer = castor::PxBufferBase::create( castor::Size( p_buffer->getWidth(), p_buffer->getHeight() )
-				, castor::PixelFormat::eA8R8G8B8
+				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, p_buffer->constPtr()
 				, p_buffer->format() );
 		}

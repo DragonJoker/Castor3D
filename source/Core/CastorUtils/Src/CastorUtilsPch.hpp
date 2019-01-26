@@ -77,13 +77,6 @@ FT_END_HEADER
 #		endif
 #	endif
 
-extern "C"
-{
-#	if !defined( CU_PlatformAndroid )
-#		include <FreeImage.h>
-#	endif
-}
-
 #endif
 
 #endif

@@ -163,10 +163,10 @@ namespace test_launcher
 		{
 			PxBufferBaseSPtr buffer;
 
-			if ( input->format() != PixelFormat::eA8R8G8B8 )
+			if ( input->format() != PixelFormat::eR8G8B8A8_UNORM )
 			{
 				buffer = PxBufferBase::create( Size( input->getWidth(), input->getHeight() )
-					, PixelFormat::eA8R8G8B8
+					, PixelFormat::eR8G8B8A8_UNORM
 					, input->constPtr()
 					, input->format() );
 			}

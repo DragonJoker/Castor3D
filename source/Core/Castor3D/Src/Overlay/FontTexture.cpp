@@ -68,7 +68,7 @@ namespace castor3d
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 			Size size{ maxWidth * 16, maxHeight * count };
 			auto & image = m_texture->getDefaultImage();
-			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eL8 ) );
+			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eR8_UNORM ) );
 
 			auto it = font->begin();
 			Size const & sizeImg = size;

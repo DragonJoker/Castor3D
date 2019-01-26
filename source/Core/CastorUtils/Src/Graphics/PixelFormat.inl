@@ -163,131 +163,131 @@ namespace castor
 		}
 	}
 
-	//!\~english	Specialisation for PixelFormat::eL8
-	//!\~french		Spécialisation pour PixelFormat::eL8
+	//!\~english	Specialisation for PixelFormat::eR8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eL8 >
+	struct PixelComponents< PixelFormat::eR8_UNORM >
 	{
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
 		static inline uint8_t A8( uint8_t const * )
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
 		}
 	};
-	//!\~english	Specialisation for PixelFormat::eL32F
-	//!\~french		Spécialisation pour PixelFormat::eL32F
+	//!\~english	Specialisation for PixelFormat::eR32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eL32F >
+	struct PixelComponents< PixelFormat::eR32_SFLOAT >
 	{
-#define src ( *reinterpret_cast< float const * >( p_pSrc ) )
-#define dst ( *reinterpret_cast< float * >( p_pSrc ) )
+#define src ( *reinterpret_cast< float const * >( srcBuffer ) )
+#define dst ( *reinterpret_cast< float * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
-		{
-			return src;
-		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
+		{
+			return src;
+		}
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
@@ -295,40 +295,40 @@ namespace castor
 		{
 			return 1.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
 		static inline void A8( uint8_t *, uint8_t pal )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -337,299 +337,299 @@ namespace castor
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eA8L8
-	//!\~french		Spécialisation pour PixelFormat::eA8L8
+	//!\~english	Specialisation for PixelFormat::eR8A8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8A8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA8L8 >
+	struct PixelComponents< PixelFormat::eR8A8_UNORM >
 	{
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[0];
+			return srcBuffer[0];
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return p_pSrc[1];
+			return srcBuffer[1];
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[0] = p_val;
+			srcBuffer[0] = value;
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			p_pSrc[1] = p_val;
+			srcBuffer[1] = value;
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 	};
-	//!\~english	Specialisation for PixelFormat::eAL32F
-	//!\~french		Spécialisation pour PixelFormat::eAL32F
+	//!\~english	Specialisation for PixelFormat::eR32A32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32A32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eAL32F >
+	struct PixelComponents< PixelFormat::eR32A32_SFLOAT >
 	{
-#define src reinterpret_cast< float const * >( p_pSrc )
-#define dst reinterpret_cast< float * >( p_pSrc )
+#define src reinterpret_cast< float const * >( srcBuffer )
+#define dst reinterpret_cast< float * >( srcBuffer )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
-		{
-			return src[0];
-		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
 			return src[0];
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
 			return src[0];
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
 			return src[0];
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
+		{
+			return src[0];
+		}
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
 			return src[1];
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			A32F( p_pSrc, float( p_val ) / 255 );
+			A32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			dst[0] = p_val;
+			dst[0] = value;
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			dst[0] = p_val;
+			dst[0] = value;
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			dst[0] = p_val;
+			dst[0] = value;
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			dst[0] = p_val;
+			dst[0] = value;
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			dst[1] = p_val;
+			dst[1] = value;
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eA1R5G5B5
-	//!\~french		Spécialisation pour PixelFormat::eA1R5G5B5
+	//!\~english	Specialisation for PixelFormat::eR5G5B5A1_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR5G5B5A1_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA1R5G5B5 >
+	struct PixelComponents< PixelFormat::eR5G5B5A1_UNORM >
 	{
-#define src ( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
-#define dst ( *reinterpret_cast< uint16_t * >( p_pSrc ) )
+#define src ( *reinterpret_cast< uint16_t const * >( srcBuffer ) )
+#define dst ( *reinterpret_cast< uint16_t * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x8000 ) ? 0xFF : 0x00 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x7C00 ) >> 7 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x03E0 ) >> 2 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x001F ) << 3 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0x7FFF ) | ( p_val ? 0x8000 : 0x0000 );
+			dst = ( src & 0x7FFF ) | ( value ? 0x8000 : 0x0000 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0x83FF ) | ( ( uint16_t( p_val ) << 7 ) & 0x7C00 );
+			dst = ( src & 0x83FF ) | ( ( uint16_t( value ) << 7 ) & 0x7C00 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0xFC1F ) | ( ( uint16_t( p_val ) << 2 ) & 0x03E0 );
+			dst = ( src & 0xFC1F ) | ( ( uint16_t( value ) << 2 ) & 0x03E0 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0xFFE0 ) | ( ( uint16_t( p_val ) >> 3 ) & 0x001F );
+			dst = ( src & 0xFFE0 ) | ( ( uint16_t( value ) >> 3 ) & 0x001F );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eR5G6B5
-	//!\~french		Spécialisation pour PixelFormat::eR5G6B5
+	//!\~english	Specialisation for PixelFormat::eR5G6B5_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR5G6B5_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR5G6B5 >
+	struct PixelComponents< PixelFormat::eR5G6B5_UNORM >
 	{
-#define src	( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint16_t * >( p_pSrc ) )
+#define src	( *reinterpret_cast< uint16_t const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< uint16_t * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0xF800 ) >> 8 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x07E0 ) >> 3 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0x001F ) << 3 );
 		}
@@ -637,62 +637,62 @@ namespace castor
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0x07FF ) | ( ( uint16_t( p_val ) << 8 ) & 0xF800 );
+			dst = ( src & 0x07FF ) | ( ( uint16_t( value ) << 8 ) & 0xF800 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0xF81F ) | ( ( uint16_t( p_val ) << 3 ) & 0x07E0 );
+			dst = ( src & 0xF81F ) | ( ( uint16_t( value ) << 3 ) & 0x07E0 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0xFFE0 ) | ( ( uint16_t( p_val ) >> 3 ) & 0x001F );
+			dst = ( src & 0xFFE0 ) | ( ( uint16_t( value ) >> 3 ) & 0x001F );
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -701,10 +701,10 @@ namespace castor
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eR8G8B8
-	//!\~french		Spécialisation pour PixelFormat::eR8G8B8
+	//!\~english	Specialisation for PixelFormat::eR8G8B8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eR8G8B8 >
+	struct PixelComponents< PixelFormat::eR8G8B8_UNORM >
 	{
 		struct pixel
 		{
@@ -713,22 +713,22 @@ namespace castor
 			uint8_t b;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
@@ -736,62 +736,62 @@ namespace castor
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -800,10 +800,10 @@ namespace castor
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eB8G8R8
-	//!\~french		Spécialisation pour PixelFormat::eB8G8R8
+	//!\~english	Specialisation for PixelFormat::eB8G8R8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eB8G8R8 >
+	struct PixelComponents< PixelFormat::eB8G8R8_UNORM >
 	{
 		struct pixel
 		{
@@ -812,22 +812,22 @@ namespace castor
 			uint8_t r;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
@@ -835,62 +835,62 @@ namespace castor
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -911,22 +911,22 @@ namespace castor
 			uint8_t b;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
@@ -934,62 +934,62 @@ namespace castor
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -1010,22 +1010,22 @@ namespace castor
 			uint8_t r;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
@@ -1033,62 +1033,62 @@ namespace castor
 		{
 			return 0xFF;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
@@ -1097,10 +1097,10 @@ namespace castor
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
-	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
+	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA8R8G8B8 >
+	struct PixelComponents< PixelFormat::eR8G8B8A8_UNORM >
 	{
 		struct pixel
 		{
@@ -1110,99 +1110,99 @@ namespace castor
 			uint8_t a;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.a = p_val;
+			dst.a = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eA8B8G8R8
-	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8
+	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eA8B8G8R8 >
+	struct PixelComponents< PixelFormat::eA8B8G8R8_UNORM >
 	{
 		struct pixel
 		{
@@ -1212,99 +1212,99 @@ namespace castor
 			uint8_t a;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.a = p_val;
+			dst.a = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eA8R8G8B8_SRGB
-	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8_SRGB
+	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SRGB
 	template<>
-	struct PixelComponents< PixelFormat::eA8R8G8B8_SRGB >
+	struct PixelComponents< PixelFormat::eR8G8B8A8_SRGB >
 	{
 		struct pixel
 		{
@@ -1314,90 +1314,90 @@ namespace castor
 			uint8_t a;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.a = p_val;
+			dst.a = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
@@ -1416,484 +1416,484 @@ namespace castor
 			uint8_t a;
 		};
 
-#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
+#define src	( *reinterpret_cast< pixel const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< pixel * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R8( p_pSrc ) * 0.30 + G8( p_pSrc ) * 0.59 + B8( p_pSrc ) * 0.11 );
+			return uint8_t( R8( srcBuffer ) * 0.30 + G8( srcBuffer ) * 0.59 + B8( srcBuffer ) * 0.11 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return src.a;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
 			return src.r;
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
 			return src.g;
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
 			return src.b;
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R8( p_pSrc, p_val );
-			G8( p_pSrc, p_val );
-			B8( p_pSrc, p_val );
+			R8( srcBuffer, value );
+			G8( srcBuffer, value );
+			B8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.a = p_val;
+			dst.a = value;
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.r = p_val;
+			dst.r = value;
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.g = p_val;
+			dst.g = value;
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst.b = p_val;
+			dst.b = value;
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eRGB16F
-	//!\~french		Spécialisation pour PixelFormat::eRGB16F
+	//!\~english	Specialisation for PixelFormat::eR16G16B16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eRGB16F >
+	struct PixelComponents< PixelFormat::eR16G16B16_SFLOAT >
 	{
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return float( R32F( p_pSrc ) * 0.30 + G32F( p_pSrc ) * 0.59 + B32F( p_pSrc ) * 0.11 );
+			return float( R32F( srcBuffer ) * 0.30 + G32F( srcBuffer ) * 0.59 + B32F( srcBuffer ) * 0.11 );
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 0 );
 			return result;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 1 );
 			return result;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 2 );
 			return result;
 		}
 		static inline float A32F( uint8_t const * )
 		{
 			return 1.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			R32F( p_pSrc, p_val );
-			G32F( p_pSrc, p_val );
-			B32F( p_pSrc, p_val );
+			R32F( srcBuffer, value );
+			G32F( srcBuffer, value );
+			B32F( srcBuffer, value );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 0, value );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 1, value );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 2, value );
 		}
 		static inline void A32F( uint8_t *, float )
 		{
 		}
 	};
-	//!\~english	Specialisation for PixelFormat::eRGB32F
-	//!\~french		Spécialisation pour PixelFormat::eRGB32F
+	//!\~english	Specialisation for PixelFormat::eR32G32B32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32G32B32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eRGB32F >
+	struct PixelComponents< PixelFormat::eR32G32B32_SFLOAT >
 	{
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return float( R32F( p_pSrc ) * 0.30 + G32F( p_pSrc ) * 0.59 + B32F( p_pSrc ) * 0.11 );
+			return float( R32F( srcBuffer ) * 0.30 + G32F( srcBuffer ) * 0.59 + B32F( srcBuffer ) * 0.11 );
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return reinterpret_cast< float const * >( p_pSrc )[0];
+			return reinterpret_cast< float const * >( srcBuffer )[0];
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return reinterpret_cast< float const * >( p_pSrc )[1];
+			return reinterpret_cast< float const * >( srcBuffer )[1];
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return reinterpret_cast< float const * >( p_pSrc )[2];
+			return reinterpret_cast< float const * >( srcBuffer )[2];
 		}
 		static inline float A32F( uint8_t const * )
 		{
 			return 1.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			R32F( p_pSrc, p_val );
-			G32F( p_pSrc, p_val );
-			B32F( p_pSrc, p_val );
+			R32F( srcBuffer, value );
+			G32F( srcBuffer, value );
+			B32F( srcBuffer, value );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			reinterpret_cast< float * >( p_pSrc )[0] = p_val;
+			reinterpret_cast< float * >( srcBuffer )[0] = value;
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			reinterpret_cast< float * >( p_pSrc )[1] = p_val;
+			reinterpret_cast< float * >( srcBuffer )[1] = value;
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			reinterpret_cast< float * >( p_pSrc )[2] = p_val;
+			reinterpret_cast< float * >( srcBuffer )[2] = value;
 		}
 		static inline void A32F( uint8_t *, float )
 		{
 		}
 	};
-	//!\~english	Specialisation for PixelFormat::eRGBA16F
-	//!\~french		Spécialisation pour PixelFormat::eRGBA16F
+	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eRGBA16F >
+	struct PixelComponents< PixelFormat::eR16G16B16A16_SFLOAT >
 	{
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return float( R32F( p_pSrc ) * 0.30 + G32F( p_pSrc ) * 0.59 + B32F( p_pSrc ) * 0.11 );
+			return float( R32F( srcBuffer ) * 0.30 + G32F( srcBuffer ) * 0.59 + B32F( srcBuffer ) * 0.11 );
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 0 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 0 );
 			return result;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 1 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 1 );
 			return result;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 2 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 2 );
 			return result;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
 			float result{};
-			halfToFloat( result, reinterpret_cast< uint16_t const * >( p_pSrc ) + 3 );
+			halfToFloat( result, reinterpret_cast< uint16_t const * >( srcBuffer ) + 3 );
 			return result;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			A32F( p_pSrc, float( p_val ) / 255 );
+			A32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			R32F( p_pSrc, p_val );
-			G32F( p_pSrc, p_val );
-			B32F( p_pSrc, p_val );
+			R32F( srcBuffer, value );
+			G32F( srcBuffer, value );
+			B32F( srcBuffer, value );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 0, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 0, value );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 1, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 1, value );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 2, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 2, value );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			floatToHalf( reinterpret_cast< uint16_t * >( p_pSrc ) + 3, p_val );
+			floatToHalf( reinterpret_cast< uint16_t * >( srcBuffer ) + 3, value );
 		}
 	};
-	//!\~english	Specialisation for PixelFormat::eRGBA32F
-	//!\~french		Spécialisation pour PixelFormat::eRGBA32F
+	//!\~english	Specialisation for PixelFormat::eR32G32B32A32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32G32B32A32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eRGBA32F >
+	struct PixelComponents< PixelFormat::eR32G32B32A32_SFLOAT >
 	{
-#define src	( reinterpret_cast< float const * >( p_pSrc ) )
-#define dst	( reinterpret_cast< float * >( p_pSrc ) )
+#define src	( reinterpret_cast< float const * >( srcBuffer ) )
+#define dst	( reinterpret_cast< float * >( srcBuffer ) )
 
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( R32F( p_pSrc ) * 255 );
+			return uint8_t( R32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( G32F( p_pSrc ) * 255 );
+			return uint8_t( G32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( B32F( p_pSrc ) * 255 );
+			return uint8_t( B32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( A32F( p_pSrc ) * 255 );
+			return uint8_t( A32F( srcBuffer ) * 255 );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return float( R32F( p_pSrc ) * 0.30 + G32F( p_pSrc ) * 0.59 + B32F( p_pSrc ) * 0.11 );
+			return float( R32F( srcBuffer ) * 0.30 + G32F( srcBuffer ) * 0.59 + B32F( srcBuffer ) * 0.11 );
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
 			return src[0];
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
 			return src[1];
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
 			return src[2];
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
 			return src[3];
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L32F( p_pSrc, float( p_val ) / 255 );
+			L32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			R32F( p_pSrc, float( p_val ) / 255 );
+			R32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			G32F( p_pSrc, float( p_val ) / 255 );
+			G32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			B32F( p_pSrc, float( p_val ) / 255 );
+			B32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			A32F( p_pSrc, float( p_val ) / 255 );
+			A32F( srcBuffer, float( value ) / 255 );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			R32F( p_pSrc, p_val );
-			G32F( p_pSrc, p_val );
-			B32F( p_pSrc, p_val );
+			R32F( srcBuffer, value );
+			G32F( srcBuffer, value );
+			B32F( srcBuffer, value );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			dst[0] = p_val;
+			dst[0] = value;
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			dst[1] = p_val;
+			dst[1] = value;
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			dst[2] = p_val;
+			dst[2] = value;
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			dst[3] = p_val;
+			dst[3] = value;
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eD16
-	//!\~french		Spécialisation pour PixelFormat::eD16
+	//!\~english	Specialisation for PixelFormat::eD16_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eD16_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eD16 >
+	struct PixelComponents< PixelFormat::eD16_UNORM >
 	{
-#define src	( *reinterpret_cast< uint16_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint16_t * >( p_pSrc ) )
+#define src	( *reinterpret_cast< uint16_t const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< uint16_t * >( srcBuffer ) )
 
-		static inline uint8_t D8( uint8_t const * p_pSrc )
+		static inline uint8_t D8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src >> 8 );
 		}
-		static inline uint16_t D16( uint8_t const * p_pSrc )
+		static inline uint16_t D16( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
-		static inline uint32_t D24( uint8_t const * p_pSrc )
+		static inline uint32_t D24( uint8_t const * srcBuffer )
 		{
 			return ( uint32_t( src ) << 8 );
 		}
-		static inline uint32_t D32( uint8_t const * p_pSrc )
+		static inline uint32_t D32( uint8_t const * srcBuffer )
 		{
 			return ( uint32_t( src ) << 16 );
 		}
@@ -1905,29 +1905,29 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline float D32F( uint8_t const * p_pSrc )
+		static inline float D32F( uint8_t const * srcBuffer )
 		{
-			return float( D32( p_pSrc ) );
+			return float( D32( srcBuffer ) );
 		}
 		static inline float S32F( uint8_t const * )
 		{
 			return 0;
 		}
-		static inline void D8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void D8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( uint16_t( p_val ) << 8 );
+			dst = ( uint16_t( value ) << 8 );
 		}
-		static inline void D16( uint8_t * p_pSrc, uint16_t p_val )
+		static inline void D16( uint8_t * srcBuffer, uint16_t value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void D24( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D24( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = ( src & 0xFFFF0000 ) | ( 0x0000FFFF & ( p_val >> 8 ) );
+			dst = ( src & 0xFFFF0000 ) | ( 0x0000FFFF & ( value >> 8 ) );
 		}
-		static inline void D32( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D32( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = ( src & 0xFFFF0000 ) | ( 0x0000FFFF & ( p_val >> 16 ) );
+			dst = ( src & 0xFFFF0000 ) | ( 0x0000FFFF & ( value >> 16 ) );
 		}
 		static inline void S1( uint8_t *, uint8_t )
 		{
@@ -1935,276 +1935,276 @@ namespace castor
 		static inline void S8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void D32F( uint8_t * p_pSrc, float p_val )
+		static inline void D32F( uint8_t * srcBuffer, float value )
 		{
-			D32( p_pSrc, uint32_t( p_val ) );
+			D32( srcBuffer, uint32_t( value ) );
 		}
 		static inline void S32F( uint8_t *, float )
 		{
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return D8( p_pSrc );
+			return D8( srcBuffer );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return 0;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			D8( p_pSrc, p_val );
+			D8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eD24S8
-	//!\~french		Spécialisation pour PixelFormat::eD24S8
+	//!\~english	Specialisation for PixelFormat::eD24_UNORM_S8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eD24_UNORM_S8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eD24S8 >
+	struct PixelComponents< PixelFormat::eD24_UNORM_S8_UINT >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+#define src	( *reinterpret_cast< uint32_t const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< uint32_t * >( srcBuffer ) )
 
 		static inline uint8_t	BIT( uint8_t const  p_bySrc )
 		{
 			return ( ( p_bySrc >> 0 ) & 0x01 ) | ( ( p_bySrc >> 1 ) & 0x01 ) | ( ( p_bySrc >> 2 ) & 0x01 ) | ( ( p_bySrc >> 3 ) & 0x01 ) | ( ( p_bySrc >> 4 ) & 0x01 ) | ( ( p_bySrc >> 5 ) & 0x01 ) | ( ( p_bySrc >> 6 ) & 0x01 ) | ( ( p_bySrc >> 7 ) & 0x01 );
 		}
-		static inline uint8_t D8( uint8_t const * p_pSrc )
+		static inline uint8_t D8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( ( src & 0xFF000000 ) >> 24 );
 		}
-		static inline uint16_t D16( uint8_t const * p_pSrc )
+		static inline uint16_t D16( uint8_t const * srcBuffer )
 		{
 			return uint16_t( ( src & 0xFFFF0000 ) >> 16 );
 		}
-		static inline uint32_t D24( uint8_t const * p_pSrc )
+		static inline uint32_t D24( uint8_t const * srcBuffer )
 		{
 			return uint32_t( ( src & 0xFFFFFF00 ) >> 8 );
 		}
-		static inline uint32_t D32( uint8_t const * p_pSrc )
+		static inline uint32_t D32( uint8_t const * srcBuffer )
 		{
 			return uint32_t( ( src & 0xFFFFFF00 ) >> 8 );
 		}
-		static inline uint8_t	S1( uint8_t const * p_pSrc )
+		static inline uint8_t	S1( uint8_t const * srcBuffer )
 		{
-			return ( BIT( p_pSrc[3] ) << 0 ) | ( BIT( p_pSrc[7] ) << 1 ) | ( BIT( p_pSrc[11] ) << 2 ) | ( BIT( p_pSrc[15] ) << 3 ) | ( BIT( p_pSrc[19] ) << 4 ) | ( BIT( p_pSrc[23] ) << 5 ) | ( BIT( p_pSrc[27] ) << 6 ) | ( BIT( p_pSrc[31] ) << 7 );
+			return ( BIT( srcBuffer[3] ) << 0 ) | ( BIT( srcBuffer[7] ) << 1 ) | ( BIT( srcBuffer[11] ) << 2 ) | ( BIT( srcBuffer[15] ) << 3 ) | ( BIT( srcBuffer[19] ) << 4 ) | ( BIT( srcBuffer[23] ) << 5 ) | ( BIT( srcBuffer[27] ) << 6 ) | ( BIT( srcBuffer[31] ) << 7 );
 		}
-		static inline uint8_t S8( uint8_t const * p_pSrc )
+		static inline uint8_t S8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src & 0x000000FF );
 		}
-		static inline float D32F( uint8_t const * p_pSrc )
+		static inline float D32F( uint8_t const * srcBuffer )
 		{
-			return float( D32( p_pSrc ) );
+			return float( D32( srcBuffer ) );
 		}
-		static inline float S32F( uint8_t const * p_pSrc )
+		static inline float S32F( uint8_t const * srcBuffer )
 		{
-			return float( S8( p_pSrc ) ) / 255.0f;
+			return float( S8( srcBuffer ) ) / 255.0f;
 		}
-		static inline void D8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void D8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0x000000FF ) | ( ( uint32_t( p_val ) << 24 ) & 0xFF000000 );
+			dst = ( src & 0x000000FF ) | ( ( uint32_t( value ) << 24 ) & 0xFF000000 );
 		}
-		static inline void D16( uint8_t * p_pSrc, uint16_t p_val )
+		static inline void D16( uint8_t * srcBuffer, uint16_t value )
 		{
-			dst = ( src & 0x000000FF ) | ( ( uint32_t( p_val ) << 16 ) & 0xFFFF0000 );
+			dst = ( src & 0x000000FF ) | ( ( uint32_t( value ) << 16 ) & 0xFFFF0000 );
 		}
-		static inline void D24( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D24( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = ( src & 0x000000FF ) | ( ( p_val << 8 ) & 0xFFFFFF00 );
+			dst = ( src & 0x000000FF ) | ( ( value << 8 ) & 0xFFFFFF00 );
 		}
-		static inline void D32( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D32( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = ( src & 0x000000FF ) | ( p_val & 0xFFFFFF00 );
+			dst = ( src & 0x000000FF ) | ( value & 0xFFFFFF00 );
 		}
-		static inline void S1( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void S1( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void S8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void S8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( src & 0xFFFFFF00 ) | ( p_val & 0x000000FF );
+			dst = ( src & 0xFFFFFF00 ) | ( value & 0x000000FF );
 		}
-		static inline void D32F( uint8_t * p_pSrc, float p_val )
+		static inline void D32F( uint8_t * srcBuffer, float value )
 		{
-			D32( p_pSrc, uint32_t( p_val ) );
+			D32( srcBuffer, uint32_t( value ) );
 		}
-		static inline void S32F( uint8_t * p_pSrc, float p_val )
+		static inline void S32F( uint8_t * srcBuffer, float value )
 		{
-			S8( p_pSrc, uint8_t( p_val * 255.0f ) );
+			S8( srcBuffer, uint8_t( value * 255.0f ) );
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return D8( p_pSrc );
+			return D8( srcBuffer );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return S8( p_pSrc );
+			return S8( srcBuffer );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			D8( p_pSrc, p_val );
+			D8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			S8( p_pSrc, p_val );
+			S8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eD32
-	//!\~french		Spécialisation pour PixelFormat::eD32
+	//!\~english	Specialisation for PixelFormat::eD32_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eD32_UNORM
 	template<>
-	struct PixelComponents< PixelFormat::eD32 >
+	struct PixelComponents< PixelFormat::eD32_UNORM >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+#define src	( *reinterpret_cast< uint32_t const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< uint32_t * >( srcBuffer ) )
 
-		static inline uint8_t D8( uint8_t const * p_pSrc )
+		static inline uint8_t D8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src >> 24 );
 		}
-		static inline uint16_t D16( uint8_t const * p_pSrc )
+		static inline uint16_t D16( uint8_t const * srcBuffer )
 		{
 			return uint16_t( src >> 16 );
 		}
-		static inline uint32_t D24( uint8_t const * p_pSrc )
+		static inline uint32_t D24( uint8_t const * srcBuffer )
 		{
 			return ( src >> 8 );
 		}
-		static inline uint32_t D32( uint8_t const * p_pSrc )
+		static inline uint32_t D32( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
@@ -2216,29 +2216,29 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline float D32F( uint8_t const * p_pSrc )
+		static inline float D32F( uint8_t const * srcBuffer )
 		{
-			return float( D32( p_pSrc ) );
+			return float( D32( srcBuffer ) );
 		}
 		static inline float S32F( uint8_t const * )
 		{
 			return 0;
 		}
-		static inline void D8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void D8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = ( uint32_t( p_val ) << 24 );
+			dst = ( uint32_t( value ) << 24 );
 		}
-		static inline void D16( uint8_t * p_pSrc, uint16_t p_val )
+		static inline void D16( uint8_t * srcBuffer, uint16_t value )
 		{
-			dst = ( uint32_t( p_val ) << 16 );
+			dst = ( uint32_t( value ) << 16 );
 		}
-		static inline void D24( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D24( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = ( p_val << 8 );
+			dst = ( value << 8 );
 		}
-		static inline void D32( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D32( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = p_val;
+			dst = value;
 		}
 		static inline void S1( uint8_t *, uint8_t )
 		{
@@ -2246,105 +2246,105 @@ namespace castor
 		static inline void S8( uint8_t *, uint8_t )
 		{
 		}
-		static inline void D32F( uint8_t * p_pSrc, float p_val )
+		static inline void D32F( uint8_t * srcBuffer, float value )
 		{
-			D32( p_pSrc, uint32_t( p_val ) );
+			D32( srcBuffer, uint32_t( value ) );
 		}
 		static inline void S32F( uint8_t *, float )
 		{
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return D8( p_pSrc );
+			return D8( srcBuffer );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			D8( p_pSrc, p_val );
+			D8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eD32F
-	//!\~french		Spécialisation pour PixelFormat::eD32F
+	//!\~english	Specialisation for PixelFormat::eD32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eD32_SFLOAT
 	template<>
-	struct PixelComponents< PixelFormat::eD32F >
+	struct PixelComponents< PixelFormat::eD32_SFLOAT >
 	{
-#define src	( *reinterpret_cast< float const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< float * >( p_pSrc ) )
+#define src	( *reinterpret_cast< float const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< float * >( srcBuffer ) )
 
-		static inline float D32F( uint8_t const * p_pSrc )
+		static inline float D32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
@@ -2352,19 +2352,19 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline uint8_t D8( uint8_t const * p_pSrc )
+		static inline uint8_t D8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src * 256 );
 		}
-		static inline uint16_t D16( uint8_t const * p_pSrc )
+		static inline uint16_t D16( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src * 65536 );
 		}
-		static inline uint32_t D24( uint8_t const * p_pSrc )
+		static inline uint32_t D24( uint8_t const * srcBuffer )
 		{
 			return uint32_t( src * 65536 * 256 );
 		}
-		static inline uint32_t D32( uint8_t const * p_pSrc )
+		static inline uint32_t D32( uint8_t const * srcBuffer )
 		{
 			return uint32_t( src * 65536 * 65536 );
 		}
@@ -2376,28 +2376,28 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline void D32F( uint8_t * p_pSrc, float p_val )
+		static inline void D32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
 		static inline void S32F( uint8_t *, float )
 		{
 		}
-		static inline void D8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void D8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint8_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint8_t >::max() );
 		}
-		static inline void D16( uint8_t * p_pSrc, uint16_t p_val )
+		static inline void D16( uint8_t * srcBuffer, uint16_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint16_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint16_t >::max() );
 		}
-		static inline void D24( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D24( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint16_t >::max() * std::numeric_limits< uint8_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint16_t >::max() * std::numeric_limits< uint8_t >::max() );
 		}
-		static inline void D32( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D32( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint32_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint32_t >::max() );
 		}
 		static inline void S1( uint8_t *, uint8_t )
 		{
@@ -2405,98 +2405,98 @@ namespace castor
 		static inline void S8( uint8_t *, uint8_t )
 		{
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
 			return 1.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			D8( p_pSrc, p_val );
+			D8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eD32FS8
-	//!\~french		Spécialisation pour PixelFormat::eD32FS8
+	//!\~english	Specialisation for PixelFormat::eD32_SFLOAT_S8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eD32_SFLOAT_S8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eD32FS8 >
+	struct PixelComponents< PixelFormat::eD32_SFLOAT_S8_UINT >
 	{
-#define src	( *reinterpret_cast< float const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< float * >( p_pSrc ) )
+#define src	( *reinterpret_cast< float const * >( srcBuffer ) )
+#define dst	( *reinterpret_cast< float * >( srcBuffer ) )
 
-		static inline float D32F( uint8_t const * p_pSrc )
+		static inline float D32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
@@ -2504,19 +2504,19 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline uint8_t D8( uint8_t const * p_pSrc )
+		static inline uint8_t D8( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src * 256 );
 		}
-		static inline uint16_t D16( uint8_t const * p_pSrc )
+		static inline uint16_t D16( uint8_t const * srcBuffer )
 		{
 			return uint8_t( src * 65536 );
 		}
-		static inline uint32_t D24( uint8_t const * p_pSrc )
+		static inline uint32_t D24( uint8_t const * srcBuffer )
 		{
 			return uint32_t( src * 65536 * 256 );
 		}
-		static inline uint32_t D32( uint8_t const * p_pSrc )
+		static inline uint32_t D32( uint8_t const * srcBuffer )
 		{
 			return uint32_t( src * 65536 * 65536 );
 		}
@@ -2528,28 +2528,28 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline void D32F( uint8_t * p_pSrc, float p_val )
+		static inline void D32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
 		static inline void S32F( uint8_t *, float )
 		{
 		}
-		static inline void D8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void D8( uint8_t * srcBuffer, uint8_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint8_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint8_t >::max() );
 		}
-		static inline void D16( uint8_t * p_pSrc, uint16_t p_val )
+		static inline void D16( uint8_t * srcBuffer, uint16_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint16_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint16_t >::max() );
 		}
-		static inline void D24( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D24( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint16_t >::max() * std::numeric_limits< uint8_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint16_t >::max() * std::numeric_limits< uint8_t >::max() );
 		}
-		static inline void D32( uint8_t * p_pSrc, uint32_t p_val )
+		static inline void D32( uint8_t * srcBuffer, uint32_t value )
 		{
-			dst = float( p_val ) / float( std::numeric_limits< uint32_t >::max() );
+			dst = float( value ) / float( std::numeric_limits< uint32_t >::max() );
 		}
 		static inline void S1( uint8_t *, uint8_t )
 		{
@@ -2557,93 +2557,93 @@ namespace castor
 		static inline void S8( uint8_t *, uint8_t )
 		{
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
-			return uint8_t( L32F( p_pSrc ) * 255 );
+			return uint8_t( L32F( srcBuffer ) * 255 );
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
 			return 0xFF;
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
 			return src;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return L32F( p_pSrc );
+			return L32F( srcBuffer );
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
 			return 1.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
-			D8( p_pSrc, p_val );
+			D8( srcBuffer, value );
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			dst = p_val;
+			dst = value;
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			L32F( p_pSrc, p_val );
+			L32F( srcBuffer, value );
 		}
 
 #undef src
 #undef dst
 	};
-	//!\~english	Specialisation for PixelFormat::eS8
-	//!\~french		Spécialisation pour PixelFormat::eS8
+	//!\~english	Specialisation for PixelFormat::eS8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eS8_UINT
 	template<>
-	struct PixelComponents< PixelFormat::eS8 >
+	struct PixelComponents< PixelFormat::eS8_UINT >
 	{
 		static inline uint8_t	BIT( uint8_t const  p_bySrc )
 		{
@@ -2661,21 +2661,21 @@ namespace castor
 		{
 			return 0;
 		}
-		static inline uint8_t S1( uint8_t const * p_pSrc )
+		static inline uint8_t S1( uint8_t const * srcBuffer )
 		{
-			return ( BIT( p_pSrc[3] ) << 0 ) | ( BIT( p_pSrc[7] ) << 1 ) | ( BIT( p_pSrc[11] ) << 2 ) | ( BIT( p_pSrc[15] ) << 3 ) | ( BIT( p_pSrc[19] ) << 4 ) | ( BIT( p_pSrc[23] ) << 5 ) | ( BIT( p_pSrc[27] ) << 6 ) | ( BIT( p_pSrc[31] ) << 7 );
+			return ( BIT( srcBuffer[3] ) << 0 ) | ( BIT( srcBuffer[7] ) << 1 ) | ( BIT( srcBuffer[11] ) << 2 ) | ( BIT( srcBuffer[15] ) << 3 ) | ( BIT( srcBuffer[19] ) << 4 ) | ( BIT( srcBuffer[23] ) << 5 ) | ( BIT( srcBuffer[27] ) << 6 ) | ( BIT( srcBuffer[31] ) << 7 );
 		}
-		static inline uint8_t S8( uint8_t const * p_pSrc )
+		static inline uint8_t S8( uint8_t const * srcBuffer )
 		{
-			return *p_pSrc;
+			return *srcBuffer;
 		}
 		static inline float D32F( uint8_t const * )
 		{
 			return 0;
 		}
-		static inline float S32F( uint8_t const * p_pSrc )
+		static inline float S32F( uint8_t const * srcBuffer )
 		{
-			return float( S8( p_pSrc ) ) / 255.0f;
+			return float( S8( srcBuffer ) ) / 255.0f;
 		}
 		static inline void D16( uint8_t *, uint16_t )
 		{
@@ -2686,98 +2686,98 @@ namespace castor
 		static inline void D32( uint8_t *, uint32_t )
 		{
 		}
-		static inline void S1( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void S1( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void S8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void S8( uint8_t * srcBuffer, uint8_t value )
 		{
-			*p_pSrc = p_val;
+			*srcBuffer = value;
 		}
 		static inline void D32F( uint8_t *, float )
 		{
 		}
-		static inline void S32F( uint8_t * p_pSrc, float p_val )
+		static inline void S32F( uint8_t * srcBuffer, float value )
 		{
-			S8( p_pSrc, uint8_t( p_val * 255.0f ) );
+			S8( srcBuffer, uint8_t( value * 255.0f ) );
 		}
-		static inline uint8_t L8( uint8_t const * p_pSrc )
+		static inline uint8_t L8( uint8_t const * srcBuffer )
 		{
 			return 0;
 		}
-		static inline uint8_t A8( uint8_t const * p_pSrc )
+		static inline uint8_t A8( uint8_t const * srcBuffer )
 		{
-			return S8( p_pSrc );
+			return S8( srcBuffer );
 		}
-		static inline uint8_t R8( uint8_t const * p_pSrc )
+		static inline uint8_t R8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t G8( uint8_t const * p_pSrc )
+		static inline uint8_t G8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline uint8_t B8( uint8_t const * p_pSrc )
+		static inline uint8_t B8( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc );
+			return L8( srcBuffer );
 		}
-		static inline float L32F( uint8_t const * p_pSrc )
+		static inline float L32F( uint8_t const * srcBuffer )
 		{
-			return L8( p_pSrc ) / 255.0f;
+			return L8( srcBuffer ) / 255.0f;
 		}
-		static inline float R32F( uint8_t const * p_pSrc )
+		static inline float R32F( uint8_t const * srcBuffer )
 		{
-			return R8( p_pSrc ) / 255.0f;
+			return R8( srcBuffer ) / 255.0f;
 		}
-		static inline float G32F( uint8_t const * p_pSrc )
+		static inline float G32F( uint8_t const * srcBuffer )
 		{
-			return G8( p_pSrc ) / 255.0f;
+			return G8( srcBuffer ) / 255.0f;
 		}
-		static inline float B32F( uint8_t const * p_pSrc )
+		static inline float B32F( uint8_t const * srcBuffer )
 		{
-			return B8( p_pSrc ) / 255.0f;
+			return B8( srcBuffer ) / 255.0f;
 		}
-		static inline float A32F( uint8_t const * p_pSrc )
+		static inline float A32F( uint8_t const * srcBuffer )
 		{
-			return A8( p_pSrc ) / 255.0f;
+			return A8( srcBuffer ) / 255.0f;
 		}
-		static inline void L8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void L8( uint8_t * srcBuffer, uint8_t value )
 		{
 		}
-		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void A8( uint8_t * srcBuffer, uint8_t value )
 		{
-			S8( p_pSrc, p_val );
+			S8( srcBuffer, value );
 		}
-		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void R8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void G8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
+		static inline void B8( uint8_t * srcBuffer, uint8_t value )
 		{
-			L8( p_pSrc, p_val );
+			L8( srcBuffer, value );
 		}
-		static inline void L32F( uint8_t * p_pSrc, float p_val )
+		static inline void L32F( uint8_t * srcBuffer, float value )
 		{
-			L8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			L8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void R32F( uint8_t * p_pSrc, float p_val )
+		static inline void R32F( uint8_t * srcBuffer, float value )
 		{
-			R8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			R8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void G32F( uint8_t * p_pSrc, float p_val )
+		static inline void G32F( uint8_t * srcBuffer, float value )
 		{
-			G8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			G8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void B32F( uint8_t * p_pSrc, float p_val )
+		static inline void B32F( uint8_t * srcBuffer, float value )
 		{
-			B8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			B8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
-		static inline void A32F( uint8_t * p_pSrc, float p_val )
+		static inline void A32F( uint8_t * srcBuffer, float value )
 		{
-			A8( p_pSrc, uint8_t( p_val * 255.0 ) );
+			A8( srcBuffer, uint8_t( value * 255.0 ) );
 		}
 	};
 	namespace detail
@@ -2797,140 +2797,140 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter< PFSrc, PFDst, typename std::enable_if< PFSrc == PFDst >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				std::memcpy( p_pDst, p_pSrc, PixelDefinitions< PFSrc >::Size );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				std::memcpy( dstBuffer, srcBuffer, PixelDefinitions< PFSrc >::Size );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eL8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eL8
+		//!\~english	Specialisation for converting to PixelFormat::eR8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L8( p_pDst, PixelComponents< PFSrc >::L8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::L8( dstBuffer, PixelComponents< PFSrc >::L8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eL16F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eL16F
+		//!\~english	Specialisation for converting to PixelFormat::eR16_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eL32F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eL32F
+		//!\~english	Specialisation for converting to PixelFormat::eR32_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eL32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( dstBuffer, PixelComponents< PFSrc >::L32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8L8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8L8
+		//!\~english	Specialisation for converting to PixelFormat::eR8A8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8A8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8L8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8A8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L8( p_pDst, PixelComponents< PFSrc >::L8( p_pSrc ) );
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::L8( dstBuffer, PixelComponents< PFSrc >::L8( srcBuffer ) );
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eAL16F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eAL16F
+		//!\~english	Specialisation for converting to PixelFormat::eR16A16_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16A16_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16A16_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eAL32F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eAL32F
+		//!\~english	Specialisation for converting to PixelFormat::eR32A32_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32A32_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eAL32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32A32_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::L32F( p_pDst, PixelComponents< PFSrc >::L32F( p_pSrc ) );
-				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::L32F( dstBuffer, PixelComponents< PFSrc >::L32F( srcBuffer ) );
+				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA1R5G5B5
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA1R5G5B5
+		//!\~english	Specialisation for converting to PixelFormat::eR5G5B5A1_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G5B5A1_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA1R5G5B5 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G5B5A1_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eR5G6B5
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G6B5
+		//!\~english	Specialisation for converting to PixelFormat::eR5G6B5_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR5G6B5_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G6B5 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR5G6B5_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8
+		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8
+		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eB8G8R8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8_SRGB
@@ -2938,13 +2938,13 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8_SRGB >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		//!\~english	Specialisation for converting to PixelFormat::eB8G8R8_SRGB
@@ -2952,205 +2952,205 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eB8G8R8_SRGB >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
+		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8R8G8B8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8A8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8
+		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8_SRGB
+		//!\~english	Specialisation for converting to PixelFormat::eR8G8B8A8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR8G8B8A8_SRGB
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8R8G8B8_SRGB >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR8G8B8A8_SRGB >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eA8R8G8B8_SRGB
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8R8G8B8_SRGB
+		//!\~english	Specialisation for converting to PixelFormat::eA8B8G8R8_SRGB
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eA8B8G8R8_SRGB
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eA8B8G8R8_SRGB >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A8( p_pDst, PixelComponents< PFSrc >::A8( p_pSrc ) );
-				PixelComponents< PFDst >::B8( p_pDst, PixelComponents< PFSrc >::B8( p_pSrc ) );
-				PixelComponents< PFDst >::G8( p_pDst, PixelComponents< PFSrc >::G8( p_pSrc ) );
-				PixelComponents< PFDst >::R8( p_pDst, PixelComponents< PFSrc >::R8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A8( dstBuffer, PixelComponents< PFSrc >::A8( srcBuffer ) );
+				PixelComponents< PFDst >::B8( dstBuffer, PixelComponents< PFSrc >::B8( srcBuffer ) );
+				PixelComponents< PFDst >::G8( dstBuffer, PixelComponents< PFSrc >::G8( srcBuffer ) );
+				PixelComponents< PFDst >::R8( dstBuffer, PixelComponents< PFSrc >::R8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eRGB16F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGB16F
+		//!\~english	Specialisation for converting to PixelFormat::eR16G16B16_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16G16B16_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16G16B16_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
-				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
-				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
+				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
+				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eRGB32F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGB32F
+		//!\~english	Specialisation for converting to PixelFormat::eR32G32B32_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32G32B32_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGB32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32G32B32_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
-				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
-				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
+				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
+				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eRGBA16F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGBA16F
+		//!\~english	Specialisation for converting to PixelFormat::eR16G16B16A16_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR16G16B16A16_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA16F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR16G16B16A16_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
-				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
-				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
-				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
+				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
+				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
+				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eRGBA32F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eRGBA32F
+		//!\~english	Specialisation for converting to PixelFormat::eR32G32B32A32_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eR32G32B32A32_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eRGBA32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eR32G32B32A32_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::A32F( p_pDst, PixelComponents< PFSrc >::A32F( p_pSrc ) );
-				PixelComponents< PFDst >::R32F( p_pDst, PixelComponents< PFSrc >::R32F( p_pSrc ) );
-				PixelComponents< PFDst >::G32F( p_pDst, PixelComponents< PFSrc >::G32F( p_pSrc ) );
-				PixelComponents< PFDst >::B32F( p_pDst, PixelComponents< PFSrc >::B32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::A32F( dstBuffer, PixelComponents< PFSrc >::A32F( srcBuffer ) );
+				PixelComponents< PFDst >::R32F( dstBuffer, PixelComponents< PFSrc >::R32F( srcBuffer ) );
+				PixelComponents< PFDst >::G32F( dstBuffer, PixelComponents< PFSrc >::G32F( srcBuffer ) );
+				PixelComponents< PFDst >::B32F( dstBuffer, PixelComponents< PFSrc >::B32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eD16
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD16
+		//!\~english	Specialisation for converting to PixelFormat::eD16_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eD16_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD16 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD16_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::D16( p_pDst, PixelComponents< PFSrc >::D16( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::D16( dstBuffer, PixelComponents< PFSrc >::D16( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eD24S8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD24S8
+		//!\~english	Specialisation for converting to PixelFormat::eD24_UNORM_S8_UINT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eD24_UNORM_S8_UINT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD24S8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD24_UNORM_S8_UINT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::D24( p_pDst, PixelComponents< PFSrc >::D24( p_pSrc ) );
-				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::D24( dstBuffer, PixelComponents< PFSrc >::D24( srcBuffer ) );
+				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32
+		//!\~english	Specialisation for converting to PixelFormat::eD32_UNORM
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_UNORM
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_UNORM >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::D32( p_pDst, PixelComponents< PFSrc >::D32( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32( dstBuffer, PixelComponents< PFSrc >::D32( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32F
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32F
+		//!\~english	Specialisation for converting to PixelFormat::eD32_SFLOAT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_SFLOAT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32F >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_SFLOAT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::D32F( p_pDst, PixelComponents< PFSrc >::D32F( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32F( dstBuffer, PixelComponents< PFSrc >::D32F( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eD32FS8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32FS8
+		//!\~english	Specialisation for converting to PixelFormat::eD32_SFLOAT_S8_UINT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eD32_SFLOAT_S8_UINT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32FS8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eD32_SFLOAT_S8_UINT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::D32F( p_pDst, PixelComponents< PFSrc >::D32F( p_pSrc ) );
-				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::D32F( dstBuffer, PixelComponents< PFSrc >::D32F( srcBuffer ) );
+				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		//!\~english	Specialisation for converting to PixelFormat::eS8
-		//!\~french		Spécialisation pour convertir vers PixelFormat::eS8
+		//!\~english	Specialisation for converting to PixelFormat::eS8_UINT
+		//!\~french		Spécialisation pour convertir vers PixelFormat::eS8_UINT
 		template< PixelFormat PFSrc, PixelFormat PFDst >
-		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eS8 >::type >
+		struct PixelConverter < PFSrc, PFDst, typename std::enable_if < PFSrc != PFDst && PFDst == PixelFormat::eS8_UINT >::type >
 		{
-			inline void operator()( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+			inline void operator()( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 			{
-				PixelComponents< PFDst >::S8( p_pDst, PixelComponents< PFSrc >::S8( p_pSrc ) );
-				p_pSrc += PixelDefinitions< PFSrc >::Size;
-				p_pDst += PixelDefinitions< PFDst >::Size;
+				PixelComponents< PFDst >::S8( dstBuffer, PixelComponents< PFSrc >::S8( srcBuffer ) );
+				srcBuffer += PixelDefinitions< PFSrc >::Size;
+				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
 		/*!
@@ -3164,18 +3164,17 @@ namespace castor
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		struct BufferConverter
 		{
-			inline void operator()( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+			inline void operator()( uint8_t const * srcBuffer, uint32_t srcSize, uint8_t * dstBuffer, uint32_t dstSize )
 			{
-				uint8_t const * pSrc = &p_pSrcBuffer[0];
-				uint8_t * pDst = &p_pDstBuffer[0];
-				uint32_t uiSrcCount = 0;
-				uint32_t count = p_uiSrcSize / PixelDefinitions< PFSrc >::Size;
-				CU_Require( p_uiSrcSize / PixelDefinitions< PFSrc >::Size == p_uiDstSize / PixelDefinitions< PFDst >::Size );
+				uint8_t const * src = &srcBuffer[0];
+				uint8_t * dst = &dstBuffer[0];
+				uint32_t count = srcSize / PixelDefinitions< PFSrc >::Size;
+				CU_Require( srcSize / PixelDefinitions< PFSrc >::Size == dstSize / PixelDefinitions< PFDst >::Size );
 				PixelConverter< PFSrc, PFDst > converter;
 
 				for ( uint32_t i = 0; i < count; i++ )
 				{
-					converter( pSrc, pDst );
+					converter( src, dst );
 				}
 			}
 		};
@@ -3183,99 +3182,99 @@ namespace castor
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
 		 *\remarks			Only for colour pixel formats, offsets source and destination by respective pixel format sizes
-		 *\param[in,out]	p_pSrc			The source pixel
-		 *\param[in,out]	p_pDst			The destination pixel
-		 *\param[in]		p_ePixelFmtDst	The destination pixel format
+		 *\param[in,out]	srcBuffer	The source pixel
+		 *\param[in,out]	dstBuffer	The destination pixel
+		 *\param[in]		dstFormat	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
 		 *\remarks			Uniquement pour les formats de pixel couleurs, décale la source et la destination par la taille respective de leur format de pixel
-		 *\param[in,out]	p_pSrc			Le pixel source
-		 *\param[in,out]	p_pDst			Le pixel destination
-		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
+		 *\param[in,out]	srcBuffer	Le pixel source
+		 *\param[in,out]	dstBuffer	Le pixel destination
+		 *\param[in]		dstFormat	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void dynamicColourConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicColourConversion( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			switch ( p_ePixelFmtDst )
+			switch ( dstFormat )
 			{
-			case PixelFormat::eL8:
-				PixelConverter< PF, PixelFormat::eL8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR8_UNORM:
+				PixelConverter< PF, PixelFormat::eR8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eL16F:
-				PixelConverter< PF, PixelFormat::eL16F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR16_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eL32F:
-				PixelConverter< PF, PixelFormat::eL32F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eA8L8:
-				PixelConverter< PF, PixelFormat::eA8L8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR8A8_UNORM:
+				PixelConverter< PF, PixelFormat::eR8A8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eAL16F:
-				PixelConverter< PF, PixelFormat::eAL16F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR16A16_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR16A16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eAL32F:
-				PixelConverter< PF, PixelFormat::eAL32F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR32A32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR32A32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eA1R5G5B5:
-				PixelConverter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR5G5B5A1_UNORM:
+				PixelConverter< PF, PixelFormat::eR5G5B5A1_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eR5G6B5:
-				PixelConverter< PF, PixelFormat::eR5G6B5 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR5G6B5_UNORM:
+				PixelConverter< PF, PixelFormat::eR5G6B5_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eR8G8B8:
-				PixelConverter< PF, PixelFormat::eR8G8B8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR8G8B8_UNORM:
+				PixelConverter< PF, PixelFormat::eR8G8B8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eB8G8R8:
-				PixelConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eB8G8R8_UNORM:
+				PixelConverter< PF, PixelFormat::eB8G8R8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
 			case PixelFormat::eR8G8B8_SRGB:
-				PixelConverter< PF, PixelFormat::eR8G8B8_SRGB >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eR8G8B8_SRGB >()( srcBuffer, dstBuffer );
 				break;
 
 			case PixelFormat::eB8G8R8_SRGB:
-				PixelConverter< PF, PixelFormat::eB8G8R8_SRGB >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eB8G8R8_SRGB >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eA8R8G8B8:
-				PixelConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eR8G8B8A8_UNORM:
+				PixelConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eA8B8G8R8:
-				PixelConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eA8B8G8R8_UNORM:
+				PixelConverter< PF, PixelFormat::eA8B8G8R8_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eA8R8G8B8_SRGB:
-				PixelConverter< PF, PixelFormat::eA8R8G8B8_SRGB >()( p_pSrc, p_pDst );
+			case PixelFormat::eR8G8B8A8_SRGB:
+				PixelConverter< PF, PixelFormat::eR8G8B8A8_SRGB >()( srcBuffer, dstBuffer );
 				break;
 
 			case PixelFormat::eA8B8G8R8_SRGB:
-				PixelConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( p_pSrc, p_pDst );
+				PixelConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eRGB16F:
-				PixelConverter< PF, PixelFormat::eRGB16F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR16G16B16_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eRGBA16F:
-				PixelConverter< PF, PixelFormat::eRGBA16F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR16G16B16A16_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eRGB32F:
-				PixelConverter< PF, PixelFormat::eRGB32F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR32G32B32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eRGBA32F:
-				PixelConverter< PF, PixelFormat::eRGBA32F >()( p_pSrc, p_pDst );
+			case PixelFormat::eR32G32B32A32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
 			default:
@@ -3287,39 +3286,39 @@ namespace castor
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
 		 *\remarks			Only for depth pixel formats, offsets source and destination by respective pixel format sizes
-		 *\param[in,out]	p_pSrc			The source pixel
-		 *\param[in,out]	p_pDst			The destination pixel
-		 *\param[in]		p_ePixelFmtDst	The destination pixel format
+		 *\param[in,out]	srcBuffer	The source pixel
+		 *\param[in,out]	dstBuffer	The destination pixel
+		 *\param[in]		dstFormat	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
 		 *\remarks			Uniquement pour les formats de pixel profondeurs, décale la source et la destination par la taille respective de leur format de pixel
-		 *\param[in,out]	p_pSrc			Le pixel source
-		 *\param[in,out]	p_pDst			Le pixel destination
-		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
+		 *\param[in,out]	srcBuffer	Le pixel source
+		 *\param[in,out]	dstBuffer	Le pixel destination
+		 *\param[in]		dstFormat	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void dynamicDepthConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicDepthConversion( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			switch ( p_ePixelFmtDst )
+			switch ( dstFormat )
 			{
-			case PixelFormat::eD16:
-				PixelConverter< PF, PixelFormat::eD16 >()( p_pSrc, p_pDst );
+			case PixelFormat::eD16_UNORM:
+				PixelConverter< PF, PixelFormat::eD16_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eD24S8:
-				PixelConverter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eD24_UNORM_S8_UINT:
+				PixelConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eD32:
-				PixelConverter< PF, PixelFormat::eD32 >()( p_pSrc, p_pDst );
+			case PixelFormat::eD32_UNORM:
+				PixelConverter< PF, PixelFormat::eD32_UNORM >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eD32F:
-				PixelConverter< PF, PixelFormat::eD32F >()( p_pSrc, p_pDst );
+			case PixelFormat::eD32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eD32_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eD32FS8:
-				PixelConverter< PF, PixelFormat::eD32FS8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eD32_SFLOAT_S8_UINT:
+				PixelConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
 
 			default:
@@ -3331,27 +3330,27 @@ namespace castor
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
 		 *\remarks			Only for stencil pixel formats, offsets source and destination by respective pixel format sizes
-		 *\param[in,out]	p_pSrc			The source pixel
-		 *\param[in,out]	p_pDst			The destination pixel
-		 *\param[in]		p_ePixelFmtDst	The destination pixel format
+		 *\param[in,out]	srcBuffer	The source pixel
+		 *\param[in,out]	dstBuffer	The destination pixel
+		 *\param[in]		dstFormat	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
 		 *\remarks			Uniquement pour les formats de pixel stencil, décale la source et la destination par la taille respective de leur format de pixel
-		 *\param[in,out]	p_pSrc			Le pixel source
-		 *\param[in,out]	p_pDst			Le pixel destination
-		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
+		 *\param[in,out]	srcBuffer	Le pixel source
+		 *\param[in,out]	dstBuffer	Le pixel destination
+		 *\param[in]		dstFormat	Le format du pixel destination
 		 */
 		template< PixelFormat PF >
-		void dynamicStencilConversion( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		void dynamicStencilConversion( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			switch ( p_ePixelFmtDst )
+			switch ( dstFormat )
 			{
-			case PixelFormat::eD24S8:
-				PixelConverter< PF, PixelFormat::eD24S8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eD24_UNORM_S8_UINT:
+				PixelConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, dstBuffer );
 				break;
 
-			case PixelFormat::eS8:
-				PixelConverter< PF, PixelFormat::eS8 >()( p_pSrc, p_pDst );
+			case PixelFormat::eS8_UINT:
+				PixelConverter< PF, PixelFormat::eS8_UINT >()( srcBuffer, dstBuffer );
 				break;
 
 			default:
@@ -3362,164 +3361,102 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Buffer conversion
-		 *\param[in]	p_pSrcBuffer	The source buffer
-		 *\param[in]	p_uiSrcSize		The source buffer size
-		 *\param[in]	p_eDstFormat	The destination pixel format
-		 *\param[in]	p_pDstBuffer	The destination buffer
-		 *\param[in]	p_uiDstSize		The destination buffer size
+		 *\param[in]	srcBuffer	The source buffer
+		 *\param[in]	srcSize		The source buffer size
+		 *\param[in]	dstFormat	The destination pixel format
+		 *\param[in]	dstBuffer	The destination buffer
+		 *\param[in]	dstSize		The destination buffer size
 		 *\~french
 		 *\brief		Conversion de buffer
-		 *\param[in]	p_pSrcBuffer	Le buffer source
-		 *\param[in]	p_uiSrcSize		La taille du buffer source
-		 *\param[in]	p_eDstFormat	Le format du buffer destination
-		 *\param[in]	p_pDstBuffer	Le buffer destination
-		 *\param[in]	p_uiDstSize		La taille du buffer destination
+		 *\param[in]	srcBuffer	Le buffer source
+		 *\param[in]	srcSize		La taille du buffer source
+		 *\param[in]	dstFormat	Le format du buffer destination
+		 *\param[in]	dstBuffer	Le buffer destination
+		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicColourBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void dynamicColourBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
 		{
-			switch ( p_eDstFormat )
+			switch ( dstFormat )
 			{
-			case PixelFormat::eL8:
-				BufferConverter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eL16F:
-				BufferConverter< PF, PixelFormat::eL16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR16_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR16_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eL32F:
-				BufferConverter< PF, PixelFormat::eL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eA8L8:
-				BufferConverter< PF, PixelFormat::eA8L8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR8A8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8A8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eAL16F:
-				BufferConverter< PF, PixelFormat::eAL16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR16A16_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR16A16_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eAL32F:
-				BufferConverter< PF, PixelFormat::eAL32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR32A32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32A32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eA1R5G5B5:
-				BufferConverter< PF, PixelFormat::eA1R5G5B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR5G5B5A1_UNORM:
+				BufferConverter< PF, PixelFormat::eR5G5B5A1_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eR5G6B5:
-				BufferConverter< PF, PixelFormat::eR5G6B5 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR5G6B5_UNORM:
+				BufferConverter< PF, PixelFormat::eR5G6B5_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eR8G8B8:
-				BufferConverter< PF, PixelFormat::eR8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR8G8B8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8G8B8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eB8G8R8:
-				BufferConverter< PF, PixelFormat::eB8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eB8G8R8_UNORM:
+				BufferConverter< PF, PixelFormat::eB8G8R8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eR8G8B8_SRGB:
-				BufferConverter< PF, PixelFormat::eR8G8B8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eR8G8B8_SRGB >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eB8G8R8_SRGB:
-				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eA8R8G8B8:
-				BufferConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR8G8B8A8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eA8B8G8R8:
-				BufferConverter< PF, PixelFormat::eA8B8G8R8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eA8B8G8R8_UNORM:
+				BufferConverter< PF, PixelFormat::eA8B8G8R8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eA8R8G8B8_SRGB:
-				BufferConverter< PF, PixelFormat::eA8R8G8B8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR8G8B8A8_SRGB:
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_SRGB >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
 			case PixelFormat::eA8B8G8R8_SRGB:
-				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eRGB16F:
-				BufferConverter< PF, PixelFormat::eRGB16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR16G16B16_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eRGBA16F:
-				BufferConverter< PF, PixelFormat::eRGBA16F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR16G16B16A16_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eRGB32F:
-				BufferConverter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR32G32B32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eRGBA32F:
-				BufferConverter< PF, PixelFormat::eRGBA32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			default:
-				CU_UnsupportedError( "No conversion defined" );
-				break;
-			}
-		}
-		/**
-		 *\~english
-		 *\brief		Buffer conversion
-		 *\param[in]	p_pSrcBuffer	The source buffer
-		 *\param[in]	p_uiSrcSize		The source buffer size
-		 *\param[in]	p_eDstFormat	The destination pixel format
-		 *\param[in]	p_pDstBuffer	The destination buffer
-		 *\param[in]	p_uiDstSize		The destination buffer size
-		 *\~french
-		 *\brief		Conversion de buffer
-		 *\param[in]	p_pSrcBuffer	Le buffer source
-		 *\param[in]	p_uiSrcSize		La taille du buffer source
-		 *\param[in]	p_eDstFormat	Le format du buffer destination
-		 *\param[in]	p_pDstBuffer	Le buffer destination
-		 *\param[in]	p_uiDstSize		La taille du buffer destination
-		 */
-		template< PixelFormat PF >
-		void dynamicDepthBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
-		{
-			switch ( p_eDstFormat )
-			{
-			case PixelFormat::eD16:
-				BufferConverter< PF, PixelFormat::eD16 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eD24S8:
-				BufferConverter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eD32:
-				BufferConverter< PF, PixelFormat::eD32 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eD32F:
-				BufferConverter< PF, PixelFormat::eD32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eD32FS8:
-				BufferConverter< PF, PixelFormat::eD32FS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eA8R8G8B8:
-				BufferConverter< PF, PixelFormat::eA8R8G8B8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eRGB32F:
-				BufferConverter< PF, PixelFormat::eRGB32F >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eL8:
-				BufferConverter< PF, PixelFormat::eL8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
-				break;
-
-			case PixelFormat::eS8:
-				BufferConverter< PF, PixelFormat::eS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eR32G32B32A32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
 			default:
@@ -3530,30 +3467,92 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Buffer conversion
-		 *\param[in]	p_pSrcBuffer	The source buffer
-		 *\param[in]	p_uiSrcSize		The source buffer size
-		 *\param[in]	p_eDstFormat	The destination pixel format
-		 *\param[in]	p_pDstBuffer	The destination buffer
-		 *\param[in]	p_uiDstSize		The destination buffer size
+		 *\param[in]	srcBuffer	The source buffer
+		 *\param[in]	srcSize		The source buffer size
+		 *\param[in]	dstFormat	The destination pixel format
+		 *\param[in]	dstBuffer	The destination buffer
+		 *\param[in]	dstSize		The destination buffer size
 		 *\~french
 		 *\brief		Conversion de buffer
-		 *\param[in]	p_pSrcBuffer	Le buffer source
-		 *\param[in]	p_uiSrcSize		La taille du buffer source
-		 *\param[in]	p_eDstFormat	Le format du buffer destination
-		 *\param[in]	p_pDstBuffer	Le buffer destination
-		 *\param[in]	p_uiDstSize		La taille du buffer destination
+		 *\param[in]	srcBuffer	Le buffer source
+		 *\param[in]	srcSize		La taille du buffer source
+		 *\param[in]	dstFormat	Le format du buffer destination
+		 *\param[in]	dstBuffer	Le buffer destination
+		 *\param[in]	dstSize		La taille du buffer destination
 		 */
 		template< PixelFormat PF >
-		void dynamicStencilBufferConversion( uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void dynamicDepthBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
 		{
-			switch ( p_eDstFormat )
+			switch ( dstFormat )
 			{
-			case PixelFormat::eD24S8:
-				BufferConverter< PF, PixelFormat::eD24S8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eD16_UNORM:
+				BufferConverter< PF, PixelFormat::eD16_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
-			case PixelFormat::eS8:
-				BufferConverter< PF, PixelFormat::eS8 >()( p_pSrcBuffer, p_uiSrcSize, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::eD24_UNORM_S8_UINT:
+				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eD32_UNORM:
+				BufferConverter< PF, PixelFormat::eD32_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eD32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eD32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eD32_SFLOAT_S8_UINT:
+				BufferConverter< PF, PixelFormat::eD32_SFLOAT_S8_UINT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eR8G8B8A8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eR32G32B32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eR8_UNORM:
+				BufferConverter< PF, PixelFormat::eR8_UNORM >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eS8_UINT:
+				BufferConverter< PF, PixelFormat::eS8_UINT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			default:
+				CU_UnsupportedError( "No conversion defined" );
+				break;
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Buffer conversion
+		 *\param[in]	srcBuffer	The source buffer
+		 *\param[in]	srcSize		The source buffer size
+		 *\param[in]	dstFormat	The destination pixel format
+		 *\param[in]	dstBuffer	The destination buffer
+		 *\param[in]	dstSize		The destination buffer size
+		 *\~french
+		 *\brief		Conversion de buffer
+		 *\param[in]	srcBuffer	Le buffer source
+		 *\param[in]	srcSize		La taille du buffer source
+		 *\param[in]	dstFormat	Le format du buffer destination
+		 *\param[in]	dstBuffer	Le buffer destination
+		 *\param[in]	dstSize		La taille du buffer destination
+		 */
+		template< PixelFormat PF >
+		void dynamicStencilBufferConversion( uint8_t const * srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t * dstBuffer, uint32_t dstSize )
+		{
+			switch ( dstFormat )
+			{
+			case PixelFormat::eD24_UNORM_S8_UINT:
+				BufferConverter< PF, PixelFormat::eD24_UNORM_S8_UINT >()( srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+
+			case PixelFormat::eS8_UINT:
+				BufferConverter< PF, PixelFormat::eS8_UINT >()( srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 
 			default:
@@ -3574,30 +3573,30 @@ namespace castor
 			template< PixelFormat PF >
 			struct PixelComponentTraits< PF, typename std::enable_if< IsColourFormat< PF >::value >::type >
 			{
-				static float getFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static float getFloat( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					float result = 0.0f;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eRed:
-						result = PixelComponents< PF >::R32F( p_pixel.constPtr() );
+						result = PixelComponents< PF >::R32F( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eGreen:
-						result = PixelComponents< PF >::G32F( p_pixel.constPtr() );
+						result = PixelComponents< PF >::G32F( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eBlue:
-						result = PixelComponents< PF >::B32F( p_pixel.constPtr() );
+						result = PixelComponents< PF >::B32F( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						result = PixelComponents< PF >::A32F( p_pixel.constPtr() );
+						result = PixelComponents< PF >::A32F( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						result = PixelComponents< PF >::L32F( p_pixel.constPtr() );
+						result = PixelComponents< PF >::L32F( pixel.constPtr() );
 						break;
 
 					default:
@@ -3608,28 +3607,28 @@ namespace castor
 					return result;
 				}
 
-				static void setFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+				static void setFloat( Pixel< PF > & pixel, PixelComponent component, float value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eRed:
-						PixelComponents< PF >::R8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::R8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eGreen:
-						PixelComponents< PF >::G8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::G8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eBlue:
-						PixelComponents< PF >::B8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::B8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eAlpha:
-						PixelComponents< PF >::A8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::A8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eLuminance:
-						PixelComponents< PF >::L8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::L8( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3637,30 +3636,30 @@ namespace castor
 					}
 				}
 
-				static uint8_t getByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint8_t getByte( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					uint8_t result = 0;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eRed:
-						result = PixelComponents< PF >::R8( p_pixel.constPtr() );
+						result = PixelComponents< PF >::R8( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eGreen:
-						result = PixelComponents< PF >::G8( p_pixel.constPtr() );
+						result = PixelComponents< PF >::G8( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eBlue:
-						result = PixelComponents< PF >::B8( p_pixel.constPtr() );
+						result = PixelComponents< PF >::B8( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eAlpha:
-						result = PixelComponents< PF >::A8( p_pixel.constPtr() );
+						result = PixelComponents< PF >::A8( pixel.constPtr() );
 						break;
 
 					case PixelComponent::eLuminance:
-						result = PixelComponents< PF >::L8( p_pixel.constPtr() );
+						result = PixelComponents< PF >::L8( pixel.constPtr() );
 						break;
 
 					default:
@@ -3671,28 +3670,28 @@ namespace castor
 					return result;
 				}
 
-				static void setByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+				static void setByte( Pixel< PF > & pixel, PixelComponent component, uint8_t value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eRed:
-						PixelComponents< PF >::R8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::R8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eGreen:
-						PixelComponents< PF >::G8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::G8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eBlue:
-						PixelComponents< PF >::B8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::B8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eAlpha:
-						PixelComponents< PF >::A8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::A8( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eLuminance:
-						PixelComponents< PF >::L8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::L8( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3704,18 +3703,18 @@ namespace castor
 			template< PixelFormat PF >
 			struct PixelComponentTraits< PF, typename std::enable_if< IsDepthStencilFormat< PF >::value >::type >
 			{
-				static float getFloat( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static float getFloat( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					float result = 0.0f;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						result = float( PixelComponents< PF >::D32F( p_pixel.constPtr() ) );
+						result = float( PixelComponents< PF >::D32F( pixel.constPtr() ) );
 						break;
 
 					case PixelComponent::eStencil:
-						result = float( PixelComponents< PF >::S32F( p_pixel.constPtr() ) );
+						result = float( PixelComponents< PF >::S32F( pixel.constPtr() ) );
 						break;
 
 					default:
@@ -3726,16 +3725,16 @@ namespace castor
 					return result;
 				}
 
-				static void setFloat( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+				static void setFloat( Pixel< PF > & pixel, PixelComponent component, float value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						PixelComponents< PF >::D32F( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D32F( pixel.ptr(), value );
 						break;
 
 					case PixelComponent::eStencil:
-						PixelComponents< PF >::S32F( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::S32F( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3743,18 +3742,18 @@ namespace castor
 					}
 				}
 
-				static uint8_t getByte( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint8_t getByte( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					uint8_t result = 0;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						result = uint8_t( PixelComponents< PF >::D32( p_pixel.constPtr() ) >> 24 );
+						result = uint8_t( PixelComponents< PF >::D32( pixel.constPtr() ) >> 24 );
 						break;
 
 					case PixelComponent::eStencil:
-						result = uint8_t( PixelComponents< PF >::S8( p_pixel.constPtr() ) );
+						result = uint8_t( PixelComponents< PF >::S8( pixel.constPtr() ) );
 						break;
 
 					default:
@@ -3765,16 +3764,16 @@ namespace castor
 					return result;
 				}
 
-				static void setByte( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+				static void setByte( Pixel< PF > & pixel, PixelComponent component, uint8_t value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						PixelComponents< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
+						PixelComponents< PF >::D32( pixel.ptr(), uint32_t( value ) << 24 );
 						break;
 
 					case PixelComponent::eStencil:
-						PixelComponents< PF >::S8( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::S8( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3782,14 +3781,14 @@ namespace castor
 					}
 				}
 
-				static uint16_t getUInt16( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint16_t getUInt16( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					uint32_t result = 0;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						result = PixelComponents< PF >::D16( p_pixel.constPtr() );
+						result = PixelComponents< PF >::D16( pixel.constPtr() );
 						break;
 
 					default:
@@ -3800,12 +3799,12 @@ namespace castor
 					return result;
 				}
 
-				static void setUInt16( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
+				static void setUInt16( Pixel< PF > & pixel, PixelComponent component, uint16_t value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						PixelComponents< PF >::D16( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D16( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3813,14 +3812,14 @@ namespace castor
 					}
 				}
 
-				static uint32_t getUInt24( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint32_t getUInt24( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					uint32_t result = 0;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						result = PixelComponents< PF >::D24( p_pixel.constPtr() );
+						result = PixelComponents< PF >::D24( pixel.constPtr() );
 						break;
 
 					default:
@@ -3831,12 +3830,12 @@ namespace castor
 					return result;
 				}
 
-				static void setUInt24( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+				static void setUInt24( Pixel< PF > & pixel, PixelComponent component, uint32_t value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						PixelComponents< PF >::D24( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D24( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3844,14 +3843,14 @@ namespace castor
 					}
 				}
 
-				static uint32_t getUInt32( Pixel< PF > const & p_pixel, PixelComponent p_component )
+				static uint32_t getUInt32( Pixel< PF > const & pixel, PixelComponent component )
 				{
 					uint32_t result = 0;
 
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						result = PixelComponents< PF >::D32( p_pixel.constPtr() );
+						result = PixelComponents< PF >::D32( pixel.constPtr() );
 						break;
 
 					default:
@@ -3862,12 +3861,12 @@ namespace castor
 					return result;
 				}
 
-				static void setUInt32( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+				static void setUInt32( Pixel< PF > & pixel, PixelComponent component, uint32_t value )
 				{
-					switch ( p_component )
+					switch ( component )
 					{
 					case PixelComponent::eDepth:
-						PixelComponents< PF >::D32( p_pixel.ptr(), p_value );
+						PixelComponents< PF >::D32( pixel.ptr(), value );
 						break;
 
 					default:
@@ -3878,72 +3877,72 @@ namespace castor
 		}
 
 		template< PixelFormat PF >
-		float getFloatComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		float getFloatComponent( Pixel< PF > const & pixel, PixelComponent component )
 		{
-			return PixelComponentTraits< PF >::getFloat( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getFloat( pixel, component );
 		}
 
 		template< PixelFormat PF >
-		void setFloatComponent( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value )
+		void setFloatComponent( Pixel< PF > & pixel, PixelComponent component, float value )
 		{
-			return PixelComponentTraits< PF >::setFloat( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setFloat( pixel, component, value );
 		}
 
 		template< PixelFormat PF >
-		uint8_t getByteComponent( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint8_t getByteComponent( Pixel< PF > const & pixel, PixelComponent component )
 		{
-			return PixelComponentTraits< PF >::getByte( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getByte( pixel, component );
 		}
 
 		template< PixelFormat PF >
-		void setByteComponent( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value )
+		void setByteComponent( Pixel< PF > & pixel, PixelComponent component, uint8_t value )
 		{
-			return PixelComponentTraits< PF >::setByte( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setByte( pixel, component, value );
 		}
 
 		template< PixelFormat PF >
-		uint16_t getUInt16Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint16_t getUInt16Component( Pixel< PF > const & pixel, PixelComponent component )
 		{
-			return PixelComponentTraits< PF >::getUInt16( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt16( pixel, component );
 		}
 
 		template< PixelFormat PF >
-		void setUInt16Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value )
+		void setUInt16Component( Pixel< PF > & pixel, PixelComponent component, uint16_t value )
 		{
-			return PixelComponentTraits< PF >::setUInt16( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt16( pixel, component, value );
 		}
 
 		template< PixelFormat PF >
-		uint32_t getUInt24Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint32_t getUInt24Component( Pixel< PF > const & pixel, PixelComponent component )
 		{
-			return PixelComponentTraits< PF >::getUInt24( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt24( pixel, component );
 		}
 
 		template< PixelFormat PF >
-		void setUInt24Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+		void setUInt24Component( Pixel< PF > & pixel, PixelComponent component, uint32_t value )
 		{
-			return PixelComponentTraits< PF >::setUInt24( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt24( pixel, component, value );
 		}
 
 		template< PixelFormat PF >
-		uint32_t getUInt32Component( Pixel< PF > const & p_pixel, PixelComponent p_component )
+		uint32_t getUInt32Component( Pixel< PF > const & pixel, PixelComponent component )
 		{
-			return PixelComponentTraits< PF >::getUInt32( p_pixel, p_component );
+			return PixelComponentTraits< PF >::getUInt32( pixel, component );
 		}
 
 		template< PixelFormat PF >
-		void setUInt32Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value )
+		void setUInt32Component( Pixel< PF > & pixel, PixelComponent component, uint32_t value )
 		{
-			return PixelComponentTraits< PF >::setUInt32( p_pixel, p_component, p_value );
+			return PixelComponentTraits< PF >::setUInt32( pixel, component, value );
 		}
 	}
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eL8
-	//!\~french		Spécialisation pour PixelFormat::eL8
+	//!\~english	Specialisation for PixelFormat::eR8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eL8 >
+	struct PixelDefinitions< PixelFormat::eR8_UNORM >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 1;
@@ -3960,26 +3959,26 @@ namespace castor
 		{
 			return cuT( "l8" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eL8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eL8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eL8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eL32F
-	//!\~french		Spécialisation pour PixelFormat::eL32F
+	//!\~english	Specialisation for PixelFormat::eR32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eL32F >
+	struct PixelDefinitions< PixelFormat::eR32_SFLOAT >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -3996,26 +3995,26 @@ namespace castor
 		{
 			return cuT( "l32f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR32_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eL32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR32_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eL16F
-	//!\~french		Spécialisation pour PixelFormat::eL16F
+	//!\~english	Specialisation for PixelFormat::eR16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eL16F >
+	struct PixelDefinitions< PixelFormat::eR16_SFLOAT >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 1;
@@ -4032,24 +4031,24 @@ namespace castor
 		{
 			return cuT( "l16f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eL16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR16_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eA8L8
-	//!\~french		Spécialisation pour PixelFormat::eA8L8
+	//!\~english	Specialisation for PixelFormat::eR8A8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8A8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eA8L8 >
+	struct PixelDefinitions< PixelFormat::eR8A8_UNORM >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 2;
@@ -4058,7 +4057,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eL8;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR8_UNORM;
 		static inline String toString()
 		{
 			return cuT( "16 bits luminosity and alpha" );
@@ -4067,26 +4066,26 @@ namespace castor
 		{
 			return cuT( "al16" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA8L8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8A8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA8L8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8A8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA8L8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8A8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eAL16F
-	//!\~french		Spécialisation pour PixelFormat::eAL16F
+	//!\~english	Specialisation for PixelFormat::eR16A16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16A16_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eAL16F >
+	struct PixelDefinitions< PixelFormat::eR16A16_SFLOAT >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -4095,7 +4094,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eL16F;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR16_SFLOAT;
 		static inline String toString()
 		{
 			return cuT( "Half floats luminosity and alpha" );
@@ -4104,24 +4103,24 @@ namespace castor
 		{
 			return cuT( "al16f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eAL16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR16A16_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eAL32F
-	//!\~french		Spécialisation pour PixelFormat::eAL32F
+	//!\~english	Specialisation for PixelFormat::eR32A32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32A32_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eAL32F >
+	struct PixelDefinitions< PixelFormat::eR32A32_SFLOAT >
 	{
 		static const uint8_t Size = 8;
 		static const uint8_t Count = 2;
@@ -4130,7 +4129,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eL32F;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR32_SFLOAT;
 		static inline String toString()
 		{
 			return cuT( "Floats luminosity and alpha" );
@@ -4139,26 +4138,26 @@ namespace castor
 		{
 			return cuT( "al32f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eAL32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR32A32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eAL32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR32A32_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eAL32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR32A32_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eA1R5G5B5
-	//!\~french		Spécialisation pour PixelFormat::eA1R5G5B5
+	//!\~english	Specialisation for PixelFormat::eR5G5B5A1_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR5G5B5A1_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eA1R5G5B5 >
+	struct PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -4167,7 +4166,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eR5G6B5;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR5G6B5_UNORM;
 		static inline String toString()
 		{
 			return cuT( "16 bits 5551 ARGB" );
@@ -4176,26 +4175,26 @@ namespace castor
 		{
 			return cuT( "argb1555" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA1R5G5B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR5G5B5A1_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA1R5G5B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR5G5B5A1_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA1R5G5B5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR5G5B5A1_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eR5G6B5
-	//!\~french		Spécialisation pour PixelFormat::eR5G6B5
+	//!\~english	Specialisation for PixelFormat::eR5G6B5_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR5G6B5_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eR5G6B5 >
+	struct PixelDefinitions< PixelFormat::eR5G6B5_UNORM >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 3;
@@ -4212,26 +4211,26 @@ namespace castor
 		{
 			return cuT( "rgb565" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eR5G6B5 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR5G6B5_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eR5G6B5 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR5G6B5_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eR5G6B5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR5G6B5_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eR8G8B8
-	//!\~french		Spécialisation pour PixelFormat::eR8G8B8
+	//!\~english	Specialisation for PixelFormat::eR8G8B8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eR8G8B8 >
+	struct PixelDefinitions< PixelFormat::eR8G8B8_UNORM >
 	{
 		static const uint8_t Size = 3;
 		static const uint8_t Count = 3;
@@ -4248,26 +4247,26 @@ namespace castor
 		{
 			return cuT( "rgb24" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eR8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eR8G8B8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8G8B8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eB8G8R8
-	//!\~french		Spécialisation pour PixelFormat::eB8G8R8
+	//!\~english	Specialisation for PixelFormat::eB8G8R8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eB8G8R8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eB8G8R8 >
+	struct PixelDefinitions< PixelFormat::eB8G8R8_UNORM >
 	{
 		static const uint8_t Size = 3;
 		static const uint8_t Count = 3;
@@ -4284,17 +4283,17 @@ namespace castor
 		{
 			return cuT( "bgr24" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eB8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eB8G8R8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eB8G8R8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eB8G8R8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -4320,17 +4319,17 @@ namespace castor
 		{
 			return cuT( "rgb24_srgb" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eR8G8B8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8_SRGB >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eR8G8B8_SRGB, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8G8B8_SRGB, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -4356,26 +4355,26 @@ namespace castor
 		{
 			return cuT( "bgr24_srgb" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eB8G8R8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eB8G8R8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eB8G8R8_SRGB >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eB8G8R8_SRGB, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eB8G8R8_SRGB, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eA8R8G8B8
-	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8
+	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eA8R8G8B8 >
+	struct PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 4;
@@ -4384,7 +4383,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eR8G8B8;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR8G8B8_UNORM;
 		static inline String toString()
 		{
 			return cuT( "32 bits 8888 ARGB" );
@@ -4393,26 +4392,26 @@ namespace castor
 		{
 			return cuT( "argb32" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA8R8G8B8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8A8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA8R8G8B8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA8R8G8B8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8G8B8A8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eA8B8G8R8
-	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8
+	//!\~english	Specialisation for PixelFormat::eA8B8G8R8_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eA8B8G8R8_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eA8B8G8R8 >
+	struct PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 4;
@@ -4421,7 +4420,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eB8G8R8;
+		static const PixelFormat NoAlphaPF = PixelFormat::eB8G8R8_UNORM;
 		static inline String toString()
 		{
 			return cuT( "32 bits 8888 ABGR" );
@@ -4430,26 +4429,26 @@ namespace castor
 		{
 			return cuT( "abgr32" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA8B8G8R8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA8B8G8R8_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eA8R8G8B8_SRGB
-	//!\~french		Spécialisation pour PixelFormat::eA8R8G8B8_SRGB
+	//!\~english	Specialisation for PixelFormat::eR8G8B8A8_SRGB
+	//!\~french		Spécialisation pour PixelFormat::eR8G8B8A8_SRGB
 	template<>
-	struct PixelDefinitions< PixelFormat::eA8R8G8B8_SRGB >
+	struct PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 4;
@@ -4467,17 +4466,17 @@ namespace castor
 		{
 			return cuT( "argb32_srgb" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA8R8G8B8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR8G8B8A8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA8R8G8B8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR8G8B8A8_SRGB >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA8R8G8B8_SRGB, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR8G8B8A8_SRGB, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
@@ -4504,26 +4503,26 @@ namespace castor
 		{
 			return cuT( "abgr32_srgb" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8_SRGB >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eA8B8G8R8_SRGB >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_SRGB >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eA8B8G8R8_SRGB >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eA8B8G8R8_SRGB, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eA8B8G8R8_SRGB, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eRGB16F
-	//!\~french		Spécialisation pour PixelFormat::eRGB16F
+	//!\~english	Specialisation for PixelFormat::eR16G16B16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16G16B16_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eRGB16F >
+	struct PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >
 	{
 		static const uint8_t Size = 6;
 		static const uint8_t Count = 3;
@@ -4540,26 +4539,26 @@ namespace castor
 		{
 			return cuT( "rgb16f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eRGB16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR16G16B16_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eRGB16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR16G16B16_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eRGB16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR16G16B16_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eRGBA16F
-	//!\~french		Spécialisation pour PixelFormat::eRGBA16F
+	//!\~english	Specialisation for PixelFormat::eR16G16B16A16_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR16G16B16A16_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eRGBA16F >
+	struct PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >
 	{
 		static const uint8_t Size = 8;
 		static const uint8_t Count = 4;
@@ -4568,7 +4567,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eRGB16F;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR16G16B16_SFLOAT;
 		static inline String toString()
 		{
 			return cuT( "Half floating point ARGB" );
@@ -4577,26 +4576,26 @@ namespace castor
 		{
 			return cuT( "argb16f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eRGBA16F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR16G16B16A16_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eRGBA16F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR16G16B16A16_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eRGBA16F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR16G16B16A16_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eRGB32F
-	//!\~french		Spécialisation pour PixelFormat::eRGB32F
+	//!\~english	Specialisation for PixelFormat::eR32G32B32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32G32B32_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eRGB32F >
+	struct PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >
 	{
 		static const uint8_t Size = 12;
 		static const uint8_t Count = 3;
@@ -4613,26 +4612,26 @@ namespace castor
 		{
 			return cuT( "rgb32f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eRGB32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR32G32B32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eRGB32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR32G32B32_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eRGB32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR32G32B32_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eRGBA32F
-	//!\~french		Spécialisation pour PixelFormat::eRGBA32F
+	//!\~english	Specialisation for PixelFormat::eR32G32B32A32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eR32G32B32A32_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eRGBA32F >
+	struct PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >
 	{
 		static const uint8_t Size = 16;
 		static const uint8_t Count = 4;
@@ -4641,7 +4640,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = false;
-		static const PixelFormat NoAlphaPF = PixelFormat::eRGB32F;
+		static const PixelFormat NoAlphaPF = PixelFormat::eR32G32B32_SFLOAT;
 		static inline String toString()
 		{
 			return cuT( "Floating point ARGB" );
@@ -4650,26 +4649,26 @@ namespace castor
 		{
 			return cuT( "argb32f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicColourConversion< PixelFormat::eRGBA32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicColourConversion< PixelFormat::eR32G32B32A32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicColourBufferConversion< PixelFormat::eRGBA32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicColourBufferConversion< PixelFormat::eR32G32B32A32_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eRGBA32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eR32G32B32A32_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eDXTC1
-	//!\~french		Spécialisation pour PixelFormat::eDXTC1
+	//!\~english	Specialisation for PixelFormat::eBC1_RGB_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC1_RGB_UNORM_BLOCK
 	template<>
-	struct PixelDefinitions< PixelFormat::eDXTC1 >
+	struct PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 3;
@@ -4690,22 +4689,22 @@ namespace castor
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eDXTC1, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eBC1_RGB_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eDXTC3
-	//!\~french		Spécialisation pour PixelFormat::eDXTC3
+	//!\~english	Specialisation for PixelFormat::eBC3_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC3_UNORM_BLOCK
 	template<>
-	struct PixelDefinitions< PixelFormat::eDXTC3 >
+	struct PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -4714,7 +4713,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = true;
-		static const PixelFormat NoAlphaPF = PixelFormat::eDXTC3;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC3_UNORM_BLOCK;
 		static inline String toString()
 		{
 			return cuT( "DXT3 16 bits compressed format" );
@@ -4727,22 +4726,22 @@ namespace castor
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eDXTC3, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eBC3_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eDXTC5
-	//!\~french		Spécialisation pour PixelFormat::eDXTC5
+	//!\~english	Specialisation for PixelFormat::eBC5_UNORM_BLOCK
+	//!\~french		Spécialisation pour PixelFormat::eBC5_UNORM_BLOCK
 	template<>
-	struct PixelDefinitions< PixelFormat::eDXTC5 >
+	struct PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 4;
@@ -4751,7 +4750,7 @@ namespace castor
 		static const bool Depth = false;
 		static const bool Stencil = false;
 		static const bool Compressed = true;
-		static const PixelFormat NoAlphaPF = PixelFormat::eDXTC5;
+		static const PixelFormat NoAlphaPF = PixelFormat::eBC5_UNORM_BLOCK;
 		static inline String toString()
 		{
 			return cuT( "DXT5 16 bits compressed format" );
@@ -4764,22 +4763,22 @@ namespace castor
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
 			CU_UnsupportedError( "No conversion from " + string::stringCast< char >( toString() ) + " defined" );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eDXTC5, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eBC5_UNORM_BLOCK, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eD16
-	//!\~french		Spécialisation pour PixelFormat::eD16
+	//!\~english	Specialisation for PixelFormat::eD16_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eD16_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eD16 >
+	struct PixelDefinitions< PixelFormat::eD16_UNORM >
 	{
 		static const uint8_t Size = 2;
 		static const uint8_t Count = 1;
@@ -4796,26 +4795,26 @@ namespace castor
 		{
 			return cuT( "depth16" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicDepthConversion< PixelFormat::eD16 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD16_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicDepthBufferConversion< PixelFormat::eD16 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD16_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eD16, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD16_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eD24S8
-	//!\~french		Spécialisation pour PixelFormat::eD24S8
+	//!\~english	Specialisation for PixelFormat::eD24_UNORM_S8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eD24_UNORM_S8_UINT
 	template<>
-	struct PixelDefinitions< PixelFormat::eD24S8 >
+	struct PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -4832,26 +4831,26 @@ namespace castor
 		{
 			return cuT( "depth24s8" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicDepthConversion< PixelFormat::eD24S8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD24_UNORM_S8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicDepthBufferConversion< PixelFormat::eD24S8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD24_UNORM_S8_UINT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter<PixelFormat::eD24S8, PF>()( p_pSrc, p_pDst );
+			detail::PixelConverter<PixelFormat::eD24_UNORM_S8_UINT, PF>()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eD32
-	//!\~french		Spécialisation pour PixelFormat::eD32
+	//!\~english	Specialisation for PixelFormat::eD32_UNORM
+	//!\~french		Spécialisation pour PixelFormat::eD32_UNORM
 	template<>
-	struct PixelDefinitions< PixelFormat::eD32 >
+	struct PixelDefinitions< PixelFormat::eD32_UNORM >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -4868,26 +4867,26 @@ namespace castor
 		{
 			return cuT( "depth32" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicDepthConversion< PixelFormat::eD32 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32_UNORM >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicDepthBufferConversion< PixelFormat::eD32 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32_UNORM >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eD32, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32_UNORM, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eD32F
-	//!\~french		Spécialisation pour PixelFormat::eD32F
+	//!\~english	Specialisation for PixelFormat::eD32_SFLOAT
+	//!\~french		Spécialisation pour PixelFormat::eD32_SFLOAT
 	template<>
-	struct PixelDefinitions< PixelFormat::eD32F >
+	struct PixelDefinitions< PixelFormat::eD32_SFLOAT >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 1;
@@ -4904,26 +4903,26 @@ namespace castor
 		{
 			return cuT( "depth32f" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicDepthConversion< PixelFormat::eD32F >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32_SFLOAT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicDepthBufferConversion< PixelFormat::eD32F >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eD32F, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32_SFLOAT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eD32FS8
-	//!\~french		Spécialisation pour PixelFormat::eD32FS8
+	//!\~english	Specialisation for PixelFormat::eD32_SFLOAT_S8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eD32_SFLOAT_S8_UINT
 	template<>
-	struct PixelDefinitions< PixelFormat::eD32FS8 >
+	struct PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >
 	{
 		static const uint8_t Size = 4;
 		static const uint8_t Count = 2;
@@ -4940,26 +4939,26 @@ namespace castor
 		{
 			return cuT( "depth32fs8" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicDepthConversion< PixelFormat::eD32FS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicDepthConversion< PixelFormat::eD32_SFLOAT_S8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicDepthBufferConversion< PixelFormat::eD32FS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicDepthBufferConversion< PixelFormat::eD32_SFLOAT_S8_UINT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eD32FS8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eD32_SFLOAT_S8_UINT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 
 	//*************************************************************************************************
 
-	//!\~english	Specialisation for PixelFormat::eS8
-	//!\~french		Spécialisation pour PixelFormat::eS8
+	//!\~english	Specialisation for PixelFormat::eS8_UINT
+	//!\~french		Spécialisation pour PixelFormat::eS8_UINT
 	template<>
-	struct PixelDefinitions< PixelFormat::eS8 >
+	struct PixelDefinitions< PixelFormat::eS8_UINT >
 	{
 		static const uint8_t Size = 1;
 		static const uint8_t Count = 1;
@@ -4976,17 +4975,17 @@ namespace castor
 		{
 			return cuT( "stencil8" );
 		}
-		static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst, PixelFormat p_ePixelFmtDst )
+		static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer, PixelFormat dstFormat )
 		{
-			detail::dynamicStencilConversion< PixelFormat::eS8 >( p_pSrc, p_pDst, p_ePixelFmtDst );
+			detail::dynamicStencilConversion< PixelFormat::eS8_UINT >( srcBuffer, dstBuffer, dstFormat );
 		}
-		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
+		static inline void convert( uint8_t const *& srcBuffer, uint32_t srcSize, PixelFormat dstFormat, uint8_t *& dstBuffer, uint32_t dstSize )
 		{
-			detail::dynamicStencilBufferConversion< PixelFormat::eS8 >( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			detail::dynamicStencilBufferConversion< PixelFormat::eS8_UINT >( srcBuffer, srcSize, dstFormat, dstBuffer, dstSize );
 		}
-		template< PixelFormat PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
+		template< PixelFormat PF > static inline void convert( uint8_t const *& srcBuffer, uint8_t *& dstBuffer )
 		{
-			detail::PixelConverter< PixelFormat::eS8, PF >()( p_pSrc, p_pDst );
+			detail::PixelConverter< PixelFormat::eS8_UINT, PF >()( srcBuffer, dstBuffer );
 		}
 	};
 

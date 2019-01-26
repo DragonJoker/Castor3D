@@ -298,7 +298,7 @@ namespace castor
 		CU_API static PxBufferBaseSPtr create( Size const & p_size
 			, PixelFormat p_wantedFormat
 			, uint8_t const * p_buffer = nullptr
-			, PixelFormat p_bufferFormat = PixelFormat::eA8R8G8B8 );
+			, PixelFormat p_bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 
 	private:
 		PixelFormat m_pixelFormat;

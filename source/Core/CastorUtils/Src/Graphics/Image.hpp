@@ -137,9 +137,9 @@ namespace castor
 		 */
 		CU_API Image( String const & name
 			, Size const & size
-			, PixelFormat format = PixelFormat::eA8R8G8B8
+			, PixelFormat format = PixelFormat::eR8G8B8A8_UNORM
 			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eA8R8G8B8 );
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -428,20 +428,6 @@ namespace castor
 		 *\return		La référence de l'image
 		 */
 		CU_API Image & mirror();
-		/**
-		 *\~english
-		 *\brief		Initialises the image loading library.
-		 *\~french
-		 *\brief		Initialise la bibliothèque de chargement d'images.
-		 */
-		CU_API static void initialiseImageLib();
-		/**
-		 *\~english
-		 *\brief		Cleans up the image loading library.
-		 *\~french
-		 *\brief		Nettoie la bibliothèque de chargement d'images.
-		 */
-		CU_API static void cleanupImageLib();
 		/**
 		 *\~english
 		 *\brief		Retrieves the image dimensions

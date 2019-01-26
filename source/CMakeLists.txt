@@ -1,5 +1,5 @@
 cmake_minimum_required( VERSION 3.1 )
-cmake_policy( VERSION 3.1 )
+cmake_policy( VERSION 3.12 )
 
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
@@ -48,6 +48,12 @@ if ( ${COMPILER_FOLDER} STREQUAL "vc15" )
 	set( COMPILER_FOLDER "vc14" )
 endif ()
 
+if ( NOT ANDROID )
+	option( CASTOR_USE_SYSTEM_LIBS "Use system (or dependencies submodule) provided FreeType and zlib" FALSE )
+else ()
+	set( CASTOR_USE_SYSTEM_LIBS FALSE )
+endif ()
+
 if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
 	get_filename_component( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} REALPATH )
@@ -56,6 +62,10 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PL
 	set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
 	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
+	if ( CASTOR_USE_SYSTEM_LIBS )
+		set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
+		set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
+	endif ()
 
 	if ( EXISTS ${DEPENDENCIES_DIR}/wxWidgets )
 		set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
@@ -189,6 +199,15 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		enable_testing()
 	endif ()
 
+	if ( NOT CASTOR_USE_SYSTEM_LIBS )
+		set( ZLIB_SKIP_INSTALL 1 )
+		add_subdirectory( external/zlib )
+		set_property( TARGET zlib PROPERTY FOLDER "External" )
+
+		add_subdirectory( external/FreeType )
+		set_property( TARGET FreeType PROPERTY FOLDER "External" )
+	endif ()
+
 	add_subdirectory( Core )
 	if ( ${CASTOR_BUILD_CASTOR3D} )
 		add_subdirectory( Plugins )
@@ -197,22 +216,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	endif ()
 	add_subdirectory( Tools )
 
-	set( ZLIB_SKIP_INSTALL 1 )
-	add_subdirectory( external/zlib )
-	set_property( TARGET zlib PROPERTY FOLDER "External" )
-
-	add_subdirectory( external/FreeType )
-	set_property( TARGET FreeType PROPERTY FOLDER "External" )
-
-	if ( "${PROJECTS_PLATFORM}" STREQUAL "x64" )
-		add_definitions( -D__LP64__ )
-	endif ()
-	add_definitions( -DFREEIMAGE_LIB )
-	add_definitions( -DOPJ_STATIC )
-	add_definitions( -DLIBRAW_NODLL )
-	add_subdirectory( external/FreeImage )
-	set_property( TARGET FreeImage PROPERTY FOLDER "External" )
-	
 	if ( ${CASTOR_BUILD_CASTOR3D} )
 		# Ashes external library
 		if ( NOT CASTOR_BUILDGRP_RENDERER )
@@ -488,7 +491,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_DEB_COMPONENT_INSTALL ON )
 				set( CPACK_GENERATOR "DEB" )
 				set( CPACK_DEBIAN_PACKAGE_MAINTAINER "Sylvain Doremus" )
-				set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6 (>= 2.5.2), libfreeimage3 (>= 3.15.4), zlib1g (>= 1.2.8)" )
+				set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libfreetype6 (>= 2.5.2), zlib1g (>= 1.2.8)" )
 				set( CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )
 				set( CPACK_DEBIAN_PACKAGE_SECTION "devel" )
 				set( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )

@@ -426,7 +426,7 @@ namespace castor
 	\~french
 	\brief		Typedef sur un pixel au format A8R8G8B8
 	*/
-	typedef Pixel< PixelFormat::eA8R8G8B8 > UbPixel;
+	typedef Pixel< PixelFormat::eR8G8B8A8_UNORM > UbPixel;
 }
 
 #include "Pixel.inl"

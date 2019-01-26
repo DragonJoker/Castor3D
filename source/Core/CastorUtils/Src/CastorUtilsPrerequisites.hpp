@@ -78,92 +78,92 @@ namespace castor
 	{
 		//!\~english	8 bits luminosity.
 		//!\~french		Luminosité 8 bits.
-		eL8,
+		eR8_UNORM,
 		//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
 		//!\~french		Luminosité en half float en VRAM, et en float en RAM.
-		eL16F,
+		eR16_SFLOAT,
 		//!\~english	32 bits loats luminosity.
 		//!\~french		Luminosité en float 32 bits.
-		eL32F,
+		eR32_SFLOAT,
 		//!\~english	16 bits alpha and luminosity.
 		//!\~french		Alpha et luminosité 16 bits.
-		eA8L8,
+		eR8A8_UNORM,
 		//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
 		//!\~french		Luminosité et alpha en half float en VRAM, et en float en RAM.
-		eAL16F,
+		eR16A16_SFLOAT,
 		//!\~english	32 bits floats alpha and luminosity.
 		//!\~french		Luminosité et alpha en float 32 bits.
-		eAL32F,
+		eR32A32_SFLOAT,
 		//!\~english	16 bits 5551 ARGB.
 		//!\~french		16 bits 5551 ARGB.
-		eA1R5G5B5,
+		eR5G5B5A1_UNORM,
 		//!\~english	16 bits 565 RGB.
 		//!\~french		16 bits 565 RGB.
-		eR5G6B5,
+		eR5G6B5_UNORM,
 		//!\~english	24 bits 888 RGB.
 		//!\~french		24 bits 888 RGB.
-		eR8G8B8,
+		eR8G8B8_UNORM,
 		//!\~english	24 bits 888 BGR.
 		//!\~french		24 bits 888 BGR.
-		eB8G8R8,
+		eB8G8R8_UNORM,
 		//!\~english	24 bits 888 RGB in sRGB colour space.
 		//!\~french		24 bits 888 RGB dans l'espace de couleurs sRGB.
 		eR8G8B8_SRGB,
 		//!\~english	24 bits 888 BGR in sRGB colour space.
 		//!\~french		24 bits 888 BGR dans l'espace de couleurs sRGB.
 		eB8G8R8_SRGB,
-		//!\~english	32 bits 8888 ARGB.
-		//!\~french		32 bits 8888 ARGB.
-		eA8R8G8B8,
+		//!\~english	32 bits 8888 RGBA.
+		//!\~french		32 bits 8888 RGBA.
+		eR8G8B8A8_UNORM,
 		//!\~english	32 bits 8888 ABGR.
 		//!\~french		32 bits 8888 ABGR.
-		eA8B8G8R8,
-		//!\~english	32 bits 8888 ARGB in sRGB colour space.
-		//!\~french		32 bits 8888 sRGB dans l'espace de couleurs sRGB.
-		eA8R8G8B8_SRGB,
+		eA8B8G8R8_UNORM,
+		//!\~english	32 bits 8888 RGBA in sRGB colour space.
+		//!\~french		32 bits 8888 RGBA dans l'espace de couleurs sRGB.
+		eR8G8B8A8_SRGB,
 		//!\~english	32 bits 8888 ABGR in sRGB colour space.
 		//!\~french		32 bits 8888 ABGR dans l'espace de couleurs sRGB.
 		eA8B8G8R8_SRGB,
 		//!\~english	Half float RGB.
 		//!\~french		Half float RGB.
-		eRGB16F,
+		eR16G16B16_SFLOAT,
 		//!\~english	Half float ARGB.
 		//!\~french		Half float ARGB.
-		eRGBA16F,
+		eR16G16B16A16_SFLOAT,
 		//!\~english	32 bits float RGB.
 		//!\~french		RGB en flottants 32 bits.
-		eRGB32F,
+		eR32G32B32_SFLOAT,
 		//!\~english	32 bits float ARGB.
 		//!\~french		ARGB en flottants 32 bits.
-		eRGBA32F,
+		eR32G32B32A32_SFLOAT,
 		//!\~english	DXT1 8 bits compressed format.
 		//!\~french		Format compressé DXT1 8 bits.
-		eDXTC1,
+		eBC1_RGB_UNORM_BLOCK,
 		//!\~english	DXT3 16 bits compressed format.
 		//!\~french		Format compressé DXT3 16 bits.
-		eDXTC3,
+		eBC3_UNORM_BLOCK,
 		//!\~english	DXT5 16 bits compressed format.
 		//!\~french		Format compressé DXT5 16 bits.
-		eDXTC5,
+		eBC5_UNORM_BLOCK,
 		//!\~english	Depth 16 bits.
 		//!\~french		Profondeur 16 bits.
-		eD16,
+		eD16_UNORM,
 		//!\~english	Depth 24 bits, Stencil 8 bits.
 		//!\~french		Profondeur 24 bits, Stencil 8 bits.
-		eD24S8,
-		//!\~english	Depth 32 bits.
-		//!\~french		Profondeur 32 bits.
-		eD32,
+		eD24_UNORM_S8_UINT,
 		//!\~english	Depth 32 bits floating point.
 		//!\~french		Profondeur en float 32 bits.
-		eD32F,
+		eD32_UNORM,
+		//!\~english	Depth 32 bits floating point.
+		//!\~french		Profondeur en float 32 bits.
+		eD32_SFLOAT,
 		//!\~english	Depth 32 bits floating point, Stencil 8 bits.
 		//!\~french		Profondeur en float 32 bits, Stencil 8 bits.
-		eD32FS8,
+		eD32_SFLOAT_S8_UINT,
 		//!\~english	Stencil 8 bits.
 		//!\~french		Stencil 8 bits.
-		eS8,
-		CU_ScopedEnumBounds( eL8 )
+		eS8_UINT,
+		CU_ScopedEnumBounds( eR8_UNORM )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -309,7 +309,7 @@ namespace castor
 	class LoggerImpl;
 	class ProgramConsole;
 
-	using PixelBuffer = PxBuffer< PixelFormat::eA8R8G8B8 >;
+	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
 	using DynamicBitset = DynamicBitsetT< uint32_t >;
 
 	template< typename T > using Point2 = Point< T, 2 >;

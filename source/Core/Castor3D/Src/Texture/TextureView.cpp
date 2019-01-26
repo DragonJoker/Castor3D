@@ -168,24 +168,24 @@ namespace castor3d
 
 			inline void setBuffer( PxBufferBaseSPtr buffer ) override
 			{
-				if ( buffer->format() == PixelFormat::eR8G8B8 )
+				if ( buffer->format() == PixelFormat::eR8G8B8_UNORM )
 				{
 					m_buffer = PxBufferBase::create( buffer->dimensions()
-						, PixelFormat::eA8R8G8B8
+						, PixelFormat::eR8G8B8A8_UNORM
 						, buffer->constPtr()
 						, buffer->format() );
 				}
 				else if ( buffer->format() == PixelFormat::eR8G8B8_SRGB )
 				{
 					m_buffer = PxBufferBase::create( buffer->dimensions()
-						, PixelFormat::eA8R8G8B8_SRGB
+						, PixelFormat::eR8G8B8A8_SRGB
 						, buffer->constPtr()
 						, buffer->format() );
 				}
-				else if ( buffer->format() == PixelFormat::eB8G8R8 )
+				else if ( buffer->format() == PixelFormat::eB8G8R8_UNORM )
 				{
 					m_buffer = PxBufferBase::create( buffer->dimensions()
-						, PixelFormat::eA8B8G8R8
+						, PixelFormat::eA8B8G8R8_UNORM
 						, buffer->constPtr()
 						, buffer->format() );
 				}
@@ -196,10 +196,10 @@ namespace castor3d
 						, buffer->constPtr()
 						, buffer->format() );
 				}
-				else if ( buffer->format() == PixelFormat::eRGB32F )
+				else if ( buffer->format() == PixelFormat::eR32G32B32_SFLOAT )
 				{
 					m_buffer = PxBufferBase::create( buffer->dimensions()
-						, PixelFormat::eRGBA32F
+						, PixelFormat::eR32G32B32A32_SFLOAT
 						, buffer->constPtr()
 						, buffer->format() );
 				}

@@ -6,7 +6,7 @@ using namespace castor;
 
 namespace film_grain
 {
-	using Pixel = castor::Pixel< PixelFormat::eR8G8B8 >;
+	using Pixel = castor::Pixel< PixelFormat::eR8G8B8_UNORM >;
 
 	XpmLoader::XpmLoader()
 	{
@@ -87,7 +87,7 @@ namespace film_grain
 			} );
 
 		// Parse image
-		auto pixels = std::static_pointer_cast< PxBuffer< PixelFormat::eR8G8B8 > >( PxBufferBase::create( imgSize, PixelFormat::eR8G8B8 ) );
+		auto pixels = std::static_pointer_cast< PxBuffer< PixelFormat::eR8G8B8_UNORM > >( PxBufferBase::create( imgSize, PixelFormat::eR8G8B8_UNORM ) );
 		auto buffer = pixels->begin();
 
 		for ( char const ** it = &data[1 + coloursCount]; it != &data[1 + coloursCount + h]; ++it )
@@ -103,7 +103,7 @@ namespace film_grain
 		}
 
 		return PxBufferBase::create( pixels->dimensions()
-			, PixelFormat::eA8R8G8B8
+			, PixelFormat::eR8G8B8A8_UNORM
 			, pixels->constPtr()
 			, pixels->format() );
 	}

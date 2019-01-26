@@ -16,63 +16,63 @@ namespace castor3d
 	{
 		switch ( format )
 		{
-		case castor::PixelFormat::eL8:
+		case castor::PixelFormat::eR8_UNORM:
 			return ashes::Format::eR8_UNORM;
-		case castor::PixelFormat::eL16F:
+		case castor::PixelFormat::eR16_SFLOAT:
 			return ashes::Format::eR16_SFLOAT;
-		case castor::PixelFormat::eL32F:
+		case castor::PixelFormat::eR32_SFLOAT:
 			return ashes::Format::eR32_SFLOAT;
-		case castor::PixelFormat::eA8L8:
+		case castor::PixelFormat::eR8A8_UNORM:
 			return ashes::Format::eR8G8_UNORM;
-		case castor::PixelFormat::eAL16F:
+		case castor::PixelFormat::eR16A16_SFLOAT:
 			return ashes::Format::eR16G16_SFLOAT;
-		case castor::PixelFormat::eAL32F:
+		case castor::PixelFormat::eR32A32_SFLOAT:
 			return ashes::Format::eR32G32_SFLOAT;
-		case castor::PixelFormat::eA1R5G5B5:
+		case castor::PixelFormat::eR5G5B5A1_UNORM:
 			return ashes::Format::eA1R5G5B5_UNORM_PACK16;
-		case castor::PixelFormat::eR5G6B5:
+		case castor::PixelFormat::eR5G6B5_UNORM:
 			return ashes::Format::eR5G5B5A1_UNORM_PACK16;
-		case castor::PixelFormat::eR8G8B8:
+		case castor::PixelFormat::eR8G8B8_UNORM:
 			return ashes::Format::eR8G8B8_UNORM;
-		case castor::PixelFormat::eB8G8R8:
+		case castor::PixelFormat::eB8G8R8_UNORM:
 			return ashes::Format::eB8G8R8_UNORM;
 		case castor::PixelFormat::eR8G8B8_SRGB:
 			return ashes::Format::eR8G8B8_SRGB;
 		case castor::PixelFormat::eB8G8R8_SRGB:
 			return ashes::Format::eB8G8R8_SRGB;
-		case castor::PixelFormat::eA8R8G8B8:
+		case castor::PixelFormat::eR8G8B8A8_UNORM:
 			return ashes::Format::eR8G8B8A8_UNORM;
-		case castor::PixelFormat::eA8B8G8R8:
+		case castor::PixelFormat::eA8B8G8R8_UNORM:
 			return ashes::Format::eA8B8G8R8_UNORM_PACK32;
-		case castor::PixelFormat::eA8R8G8B8_SRGB:
+		case castor::PixelFormat::eR8G8B8A8_SRGB:
 			return ashes::Format::eR8G8B8A8_SRGB;
 		case castor::PixelFormat::eA8B8G8R8_SRGB:
 			return ashes::Format::eA8B8G8R8_SRGB_PACK32;
-		case castor::PixelFormat::eRGB16F:
+		case castor::PixelFormat::eR16G16B16_SFLOAT:
 			return ashes::Format::eR16G16B16_SFLOAT;
-		case castor::PixelFormat::eRGBA16F:
+		case castor::PixelFormat::eR16G16B16A16_SFLOAT:
 			return ashes::Format::eR16G16B16A16_SFLOAT;
-		case castor::PixelFormat::eRGB32F:
+		case castor::PixelFormat::eR32G32B32_SFLOAT:
 			return ashes::Format::eR32G32B32_SFLOAT;
-		case castor::PixelFormat::eRGBA32F:
+		case castor::PixelFormat::eR32G32B32A32_SFLOAT:
 			return ashes::Format::eR32G32B32A32_SFLOAT;
-		case castor::PixelFormat::eDXTC1:
+		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
 			return ashes::Format::eBC1_RGB_UNORM_BLOCK;
-		case castor::PixelFormat::eDXTC3:
+		case castor::PixelFormat::eBC3_UNORM_BLOCK:
 			return ashes::Format::eBC2_UNORM_BLOCK;
-		case castor::PixelFormat::eDXTC5:
+		case castor::PixelFormat::eBC5_UNORM_BLOCK:
 			return ashes::Format::eBC3_UNORM_BLOCK;
-		case castor::PixelFormat::eD16:
+		case castor::PixelFormat::eD16_UNORM:
 			return ashes::Format::eD16_UNORM;
-		case castor::PixelFormat::eD24S8:
+		case castor::PixelFormat::eD24_UNORM_S8_UINT:
 			return ashes::Format::eD24_UNORM_S8_UINT;
-		case castor::PixelFormat::eD32:
+		case castor::PixelFormat::eD32_UNORM:
 			return ashes::Format::eX8_D24_UNORM_PACK32;
-		case castor::PixelFormat::eD32F:
+		case castor::PixelFormat::eD32_SFLOAT:
 			return ashes::Format::eD32_SFLOAT;
-		case castor::PixelFormat::eD32FS8:
+		case castor::PixelFormat::eD32_SFLOAT_S8_UINT:
 			return ashes::Format::eD32_SFLOAT_S8_UINT;
-		case castor::PixelFormat::eS8:
+		case castor::PixelFormat::eS8_UINT:
 			return ashes::Format::eS8_UINT;
 		default:
 			assert( false && "Unsupported castor::PixelFormat" );
@@ -85,66 +85,66 @@ namespace castor3d
 		switch ( format )
 		{
 		case ashes::Format::eR8_UNORM:
-			return castor::PixelFormat::eL8;
+			return castor::PixelFormat::eR8_UNORM;
 		case ashes::Format::eR16_SFLOAT:
-			return castor::PixelFormat::eL16F;
+			return castor::PixelFormat::eR16_SFLOAT;
 		case ashes::Format::eR32_SFLOAT:
-			return castor::PixelFormat::eL32F;
+			return castor::PixelFormat::eR32_SFLOAT;
 		case ashes::Format::eR8G8_UNORM:
-			return castor::PixelFormat::eA8L8;
+			return castor::PixelFormat::eR8A8_UNORM;
 		case ashes::Format::eR16G16_SFLOAT:
-			return castor::PixelFormat::eAL16F;
+			return castor::PixelFormat::eR16A16_SFLOAT;
 		case ashes::Format::eR32G32_SFLOAT:
-			return castor::PixelFormat::eAL32F;
+			return castor::PixelFormat::eR32A32_SFLOAT;
 		case ashes::Format::eA1R5G5B5_UNORM_PACK16:
-			return castor::PixelFormat::eA1R5G5B5;
+			return castor::PixelFormat::eR5G5B5A1_UNORM;
 		case ashes::Format::eR5G5B5A1_UNORM_PACK16:
-			return castor::PixelFormat::eR5G6B5;
+			return castor::PixelFormat::eR5G6B5_UNORM;
 		case ashes::Format::eR8G8B8_UNORM:
-			return castor::PixelFormat::eR8G8B8;
+			return castor::PixelFormat::eR8G8B8_UNORM;
 		case ashes::Format::eB8G8R8_UNORM:
-			return castor::PixelFormat::eB8G8R8;
+			return castor::PixelFormat::eB8G8R8_UNORM;
 		case ashes::Format::eR8G8B8_SRGB:
 			return castor::PixelFormat::eR8G8B8_SRGB;
 		case ashes::Format::eB8G8R8_SRGB:
 			return castor::PixelFormat::eB8G8R8_SRGB;
 		case ashes::Format::eR8G8B8A8_UNORM:
-			return castor::PixelFormat::eA8R8G8B8;
+			return castor::PixelFormat::eR8G8B8A8_UNORM;
 		case ashes::Format::eA8B8G8R8_UNORM_PACK32:
-			return castor::PixelFormat::eA8B8G8R8;
+			return castor::PixelFormat::eA8B8G8R8_UNORM;
 		case ashes::Format::eR8G8B8A8_SRGB:
-			return castor::PixelFormat::eA8R8G8B8_SRGB;
+			return castor::PixelFormat::eR8G8B8A8_SRGB;
 		case ashes::Format::eA8B8G8R8_SRGB_PACK32:
 			return castor::PixelFormat::eA8B8G8R8_SRGB;
 		case ashes::Format::eR16G16B16_SFLOAT:
-			return castor::PixelFormat::eRGB16F;
+			return castor::PixelFormat::eR16G16B16_SFLOAT;
 		case ashes::Format::eR16G16B16A16_SFLOAT:
-			return castor::PixelFormat::eRGBA16F;
+			return castor::PixelFormat::eR16G16B16A16_SFLOAT;
 		case ashes::Format::eR32G32B32_SFLOAT:
-			return castor::PixelFormat::eRGB32F;
+			return castor::PixelFormat::eR32G32B32_SFLOAT;
 		case ashes::Format::eR32G32B32A32_SFLOAT:
-			return castor::PixelFormat::eRGBA32F;
+			return castor::PixelFormat::eR32G32B32A32_SFLOAT;
 		case ashes::Format::eBC1_RGB_UNORM_BLOCK:
-			return castor::PixelFormat::eDXTC1;
+			return castor::PixelFormat::eBC1_RGB_UNORM_BLOCK;
 		case ashes::Format::eBC2_UNORM_BLOCK:
-			return castor::PixelFormat::eDXTC3;
+			return castor::PixelFormat::eBC3_UNORM_BLOCK;
 		case ashes::Format::eBC3_UNORM_BLOCK:
-			return castor::PixelFormat::eDXTC5;
+			return castor::PixelFormat::eBC5_UNORM_BLOCK;
 		case ashes::Format::eD16_UNORM:
-			return castor::PixelFormat::eD16;
+			return castor::PixelFormat::eD16_UNORM;
 		case ashes::Format::eD24_UNORM_S8_UINT:
-			return castor::PixelFormat::eD24S8;
+			return castor::PixelFormat::eD24_UNORM_S8_UINT;
 		case ashes::Format::eX8_D24_UNORM_PACK32:
-			return castor::PixelFormat::eD32;
+			return castor::PixelFormat::eD32_UNORM;
 		case ashes::Format::eD32_SFLOAT:
-			return castor::PixelFormat::eD32F;
+			return castor::PixelFormat::eD32_SFLOAT;
 		case ashes::Format::eD32_SFLOAT_S8_UINT:
-			return castor::PixelFormat::eD32FS8;
+			return castor::PixelFormat::eD32_SFLOAT_S8_UINT;
 		case ashes::Format::eS8_UINT:
-			return castor::PixelFormat::eS8;
+			return castor::PixelFormat::eS8_UINT;
 		default:
 			assert( false && "Unsupported ashes::Format" );
-			return castor::PixelFormat::eA8R8G8B8;
+			return castor::PixelFormat::eR8G8B8A8_UNORM;
 		}
 	}
 

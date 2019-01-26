@@ -84,7 +84,7 @@ namespace castor3d
 			}
 
 			buffer = PxBufferBase::create( buffer->dimensions()
-				, PixelFormat::eA8R8G8B8
+				, PixelFormat::eR8G8B8A8_UNORM
 				, buffer->constPtr()
 				, buffer->format() );
 			auto result = texture.createView( ashes::TextureViewType::e2D, texture.getFormat() );

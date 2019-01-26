@@ -422,9 +422,9 @@ namespace castor3d
 		{
 			auto buffer = opacityMap->getTexture()->getDefaultImage().getBuffer();
 
-			if ( buffer->format() != PixelFormat::eL8
-				&& buffer->format() != PixelFormat::eL16F
-				&& buffer->format() != PixelFormat::eL32F )
+			if ( buffer->format() != PixelFormat::eR8_UNORM
+				&& buffer->format() != PixelFormat::eR16_SFLOAT
+				&& buffer->format() != PixelFormat::eR32_SFLOAT )
 			{
 				PxBufferBaseSPtr reduced = buffer;
 				PF::reduceToAlpha( reduced );

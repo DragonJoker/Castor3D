@@ -811,7 +811,7 @@ namespace OceanLighting
 			fclose( f );
 		}
 
-		m_pTexTransmittance = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead, PixelFormat::eL8, Size( 512, 512 ) );
+		m_pTexTransmittance = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead, PixelFormat::eR8_UNORM, Size( 512, 512 ) );
 		m_pTexTransmittance->SetSource( buffer );
 		l_return &= m_pTexTransmittance->Initialise();
 
@@ -838,28 +838,28 @@ namespace OceanLighting
 
 #if ENABLE_FFT
 
-		m_pTexSpectrum_1_2 = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA32F, Size( m_FFT_SIZE, m_FFT_SIZE ) );
+		m_pTexSpectrum_1_2 = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32A32_SFLOAT, Size( m_FFT_SIZE, m_FFT_SIZE ) );
 		l_return &= m_pTexSpectrum_1_2->Initialise();
 
-		m_pTexSpectrum_3_4 = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA32F, Size( m_FFT_SIZE, m_FFT_SIZE ) );
+		m_pTexSpectrum_3_4 = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32A32_SFLOAT, Size( m_FFT_SIZE, m_FFT_SIZE ) );
 		l_return &= m_pTexSpectrum_3_4->Initialise();
 
 		m_pTexSlopeVariance = m_renderSystem.CreateTexture( TextureType::eThreeDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eAL16F32F, Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ) );
 		l_return &= m_pTexSlopeVariance->Initialise();
 
-		m_pTexFFTA = m_renderSystem.CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ) );
+		m_pTexFFTA = m_renderSystem.CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32_SFLOAT, Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ) );
 		l_return &= m_pTexFFTA->Initialise();
 		m_pTexFFTA->Bind( FFT_A_UNIT );
 		m_pTexFFTA->GenerateMipmaps();
 		m_pTexFFTA->Unbind( FFT_A_UNIT );
 
-		m_pTexFFTB = m_renderSystem.CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ) );
+		m_pTexFFTB = m_renderSystem.CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32_SFLOAT, Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ) );
 		l_return &= m_pTexFFTB->Initialise();
 		m_pTexFFTB->Bind( FFT_B_UNIT );
 		m_pTexFFTB->GenerateMipmaps();
 		m_pTexFFTB->Unbind( FFT_B_UNIT );
 
-		m_pTexButterfly = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA32F, Size( m_FFT_SIZE, m_PASSES ) );
+		m_pTexButterfly = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32A32_SFLOAT, Size( m_FFT_SIZE, m_PASSES ) );
 		std::memcpy( m_pTexButterfly->GetImage().GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
 		l_return &= m_pTexButterfly->Initialise();
 
@@ -914,8 +914,8 @@ namespace OceanLighting
 	{
 		bool l_return = true;
 		m_frameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pColorBuffer = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eA8R8G8B8, m_renderTarget.GetSize() );
-		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24S8 );
+		m_pColorBuffer = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR8G8B8A8_UNORM, m_renderTarget.GetSize() );
+		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD24_UNORM_S8_UINT );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 		l_return &= m_frameBuffer->Create();

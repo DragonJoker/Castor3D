@@ -341,7 +341,7 @@ namespace castor
 		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 */
-		PxBuffer( Size const & p_size, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::eA8R8G8B8 );
+		PxBuffer( Size const & p_size, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor

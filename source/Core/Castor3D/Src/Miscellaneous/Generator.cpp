@@ -73,7 +73,7 @@ Generator::Generator( Engine * engine, int width, int height )
 	, m_engine( engine )
 {
 	//uint8_t tmp[] = { 255, 255, 255, 255 };
-	//m_pxColour.set<PixelFormat::eA8R8G8B8>( tmp);
+	//m_pxColour.set<PixelFormat::eR8G8B8A8_UNORM>( tmp);
 	m_uiThreadCount = engine->getCpuInformations().getCoreCount() * 2;
 }
 

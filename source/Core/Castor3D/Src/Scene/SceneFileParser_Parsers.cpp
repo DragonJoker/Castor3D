@@ -360,7 +360,7 @@ namespace castor3d
 			PixelFormat ePF;
 			p_params[0]->get( ePF );
 
-			if ( ePF < PixelFormat::eD16 )
+			if ( ePF < PixelFormat::eD16_UNORM )
 			{
 				parsingContext->renderTarget->setPixelFormat( convert( ePF ) );
 			}
@@ -3436,21 +3436,21 @@ namespace castor3d
 						if ( parsingContext->components == ImageComponents::eR )
 						{
 							auto srcFormat = parsingContext->buffer->format();
-							auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8
-								|| srcFormat == PixelFormat::eB8G8R8
+							auto dstFormat = ( ( srcFormat == PixelFormat::eR8G8B8_UNORM
+								|| srcFormat == PixelFormat::eB8G8R8_UNORM
 								|| srcFormat == PixelFormat::eR8G8B8_SRGB
 								|| srcFormat == PixelFormat::eB8G8R8_SRGB
-								|| srcFormat == PixelFormat::eA8R8G8B8
-								|| srcFormat == PixelFormat::eA8B8G8R8
-								|| srcFormat == PixelFormat::eA8R8G8B8_SRGB
+								|| srcFormat == PixelFormat::eR8G8B8A8_UNORM
+								|| srcFormat == PixelFormat::eA8B8G8R8_UNORM
+								|| srcFormat == PixelFormat::eR8G8B8A8_SRGB
 								|| srcFormat == PixelFormat::eA8B8G8R8_SRGB )
-								? PixelFormat::eL8
-								: ( ( srcFormat == PixelFormat::eRGB16F
-									|| srcFormat == PixelFormat::eRGBA16F )
-									? PixelFormat::eL16F
-									: ( ( srcFormat == PixelFormat::eRGB32F
-										|| srcFormat == PixelFormat::eRGBA32F )
-										? PixelFormat::eL32F
+								? PixelFormat::eR8_UNORM
+								: ( ( srcFormat == PixelFormat::eR16G16B16_SFLOAT
+									|| srcFormat == PixelFormat::eR16G16B16A16_SFLOAT )
+									? PixelFormat::eR16_SFLOAT
+									: ( ( srcFormat == PixelFormat::eR32G32B32_SFLOAT
+										|| srcFormat == PixelFormat::eR32G32B32A32_SFLOAT )
+										? PixelFormat::eR32_SFLOAT
 										: srcFormat ) ) );
 							parsingContext->buffer = PxBufferBase::create( parsingContext->buffer->dimensions()
 								, dstFormat
@@ -3465,18 +3465,18 @@ namespace castor3d
 						else
 						{
 							auto srcFormat = parsingContext->buffer->format();
-							auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8
-								? PixelFormat::eA8R8G8B8
-								: ( srcFormat == PixelFormat::eB8G8R8
-									? PixelFormat::eA8B8G8R8
+							auto dstFormat = ( srcFormat == PixelFormat::eR8G8B8_UNORM
+								? PixelFormat::eR8G8B8A8_UNORM
+								: ( srcFormat == PixelFormat::eB8G8R8_UNORM
+									? PixelFormat::eA8B8G8R8_UNORM
 									: ( srcFormat == PixelFormat::eR8G8B8_SRGB
-										? PixelFormat::eA8R8G8B8_SRGB
+										? PixelFormat::eR8G8B8A8_SRGB
 										: ( srcFormat == PixelFormat::eB8G8R8_SRGB
 											? PixelFormat::eA8B8G8R8_SRGB
-											: ( srcFormat == PixelFormat::eRGB16F
-												? PixelFormat::eRGBA16F
-												: ( srcFormat == PixelFormat::eRGB32F
-													? PixelFormat::eRGBA32F
+											: ( srcFormat == PixelFormat::eR16G16B16_SFLOAT
+												? PixelFormat::eR16G16B16A16_SFLOAT
+												: ( srcFormat == PixelFormat::eR32G32B32_SFLOAT
+													? PixelFormat::eR32G32B32A32_SFLOAT
 													: srcFormat ) ) ) ) ) );
 
 							if ( srcFormat != dstFormat )

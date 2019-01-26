@@ -116,24 +116,24 @@ DiffResult doCompareImages( castor::Image const & reference
 
 	if ( carryOn )
 	{
-		auto src = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eA8R8G8B8 > >( castor::PxBufferBase::create( reference.getDimensions()
-			, castor::PixelFormat::eA8R8G8B8
+		auto src = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( reference.getDimensions()
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, reference.getPixels()->constPtr()
 			, reference.getPixels()->format() ) );
-		auto dst = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eA8R8G8B8 > >( castor::PxBufferBase::create( toTest.getDimensions()
-			, castor::PixelFormat::eA8R8G8B8
+		auto dst = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( toTest.getDimensions()
+			, castor::PixelFormat::eR8G8B8A8_UNORM
 			, toTest.getPixels()->constPtr()
 			, toTest.getPixels()->format() ) );
-		auto diffBuffer = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eA8R8G8B8 > >( castor::PxBufferBase::create( toTest.getDimensions()
-			, castor::PixelFormat::eA8R8G8B8 ) );
+		auto diffBuffer = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( toTest.getDimensions()
+			, castor::PixelFormat::eR8G8B8A8_UNORM ) );
 		auto srcIt = src->begin();
 		auto dstIt = dst->begin();
 		auto diffIt = diffBuffer->begin();
 		uint32_t diff{ 0u };
-		static castor::Pixel< castor::PixelFormat::eA8R8G8B8 > const diffPixel = []()
+		static castor::Pixel< castor::PixelFormat::eR8G8B8A8_UNORM > const diffPixel = []()
 		{
 			std::array< uint8_t, 4u > data{ 0xFF, 0x00, 0xFF, 0xFF };
-			castor::Pixel< castor::PixelFormat::eA8R8G8B8 > result{ true };
+			castor::Pixel< castor::PixelFormat::eR8G8B8A8_UNORM > result{ true };
 			auto it = result.begin();
 			*it = data[0]; ++it;
 			*it = data[1]; ++it;
@@ -272,7 +272,6 @@ int main( int argc, char * argv[] )
 
 		try
 		{
-			castor::Image::initialiseImageLib();
 			castor::Image reference{ castor::cuEmptyString, options.input, false };
 			castor::ThreadPool pool{ options.outputs.size() };
 
@@ -309,7 +308,6 @@ int main( int argc, char * argv[] )
 			}
 
 			pool.waitAll( castor::Milliseconds::max() );
-			castor::Image::cleanupImageLib();
 		}
 		catch ( std::exception & exc )
 		{
