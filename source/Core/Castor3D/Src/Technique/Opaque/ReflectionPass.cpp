@@ -48,7 +48,7 @@ namespace castor3d
 {
 	namespace
 	{
-		static uint32_t constexpr c_environmentCount = 5u;
+		static uint32_t constexpr c_environmentCount = 2u;
 
 		ashes::VertexLayoutPtr doCreateVertexLayout()
 		{
