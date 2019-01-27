@@ -476,8 +476,7 @@ namespace castor3d
 
 		// Fragment Intputs
 		Ubo shadowMap{ writer, ShadowMapPassPoint::ShadowMapUbo, ShadowMapPassPoint::UboBindingPoint, 0u };
-		auto c3d_wordLightPosition( shadowMap.declMember< Vec3 >( ShadowMapPassPoint::WorldLightPosition ) );
-		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassPoint::FarPlane ) );
+		auto c3d_worldLightPositionFarPlane( shadowMap.declMember< Vec4 >( ShadowMapPassPoint::WorldLightPosition ) );
 		shadowMap.end();
 
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -507,8 +506,8 @@ namespace castor3d
 				, *materials );
 
 			auto depth = writer.declLocale( cuT( "depth" )
-				, length( vtx_worldPosition - c3d_wordLightPosition ) );
-			pxl_linear = depth / c3d_farPlane;
+				, length( vtx_worldPosition - c3d_worldLightPositionFarPlane.xyz() ) );
+			pxl_linear = depth / c3d_worldLightPositionFarPlane.w();
 			pxl_variance.x() = pxl_linear;
 			pxl_variance.y() = pxl_linear * pxl_linear;
 
