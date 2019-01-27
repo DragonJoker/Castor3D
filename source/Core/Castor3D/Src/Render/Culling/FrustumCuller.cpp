@@ -1,5 +1,7 @@
 #include "FrustumCuller.hpp"
 
+#include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/SceneNode.hpp"
@@ -20,7 +22,7 @@ namespace castor3d
 		{
 			auto visible = node.sceneNode.isDisplayable()
 				&& node.sceneNode.isVisible()
-				&& ( node.data.getInstantiation().isInstanced( node.material )
+				&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner()->shared_from_this() )
 					|| camera.isVisible( node.instance, node.data ) );
 
 			if ( visible )
@@ -33,7 +35,7 @@ namespace castor3d
 		{
 			auto visible = node.sceneNode.isDisplayable()
 				&& node.sceneNode.isVisible()
-				&& ( node.data.getInstantiation().isInstanced( node.material )
+				&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner()->shared_from_this() )
 				|| camera.isVisible( node.instance, node.data ) );
 
 			if ( visible )

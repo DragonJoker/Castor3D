@@ -27,7 +27,7 @@ namespace castor3d
 		{
 			Geometry & instance;
 			Submesh & data;
-			MaterialSPtr material;
+			PassSPtr pass;
 			SceneNode & sceneNode;
 		};
 		
@@ -35,7 +35,7 @@ namespace castor3d
 		{
 			BillboardBase & instance;
 			BillboardBase & data;
-			MaterialSPtr material;
+			PassSPtr pass;
 			SceneNode & sceneNode;
 		};
 

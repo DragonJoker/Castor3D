@@ -510,84 +510,82 @@ namespace castor3d
 			for ( auto & culledNode : renderPass.getCuller().getAllSubmeshes( opaque ) )
 			{
 				auto & submesh = culledNode.data;
-				auto material = culledNode.material;
+				auto pass = culledNode.pass;
 				auto & instance = culledNode.instance;
+				auto material = pass->getOwner()->shared_from_this();
 
-				for ( auto pass : *material )
+				pass->prepareTextures();
+				auto passFlags = pass->getPassFlags();
+
+				if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
 				{
-					pass->prepareTextures();
-					auto passFlags = pass->getPassFlags();
+					auto programFlags = submesh.getProgramFlags( material );
+					auto sceneFlags = scene.getFlags();
+					auto textureFlags = pass->getTextureFlags();
+					auto animated = doAdjustFlags( programFlags
+						, textureFlags
+						, passFlags
+						, sceneFlags
+						, scene
+						, *pass
+						, renderPass
+						, instance.getName() );
+					renderPass.preparePipeline( pass->getColourBlendMode()
+						, pass->getAlphaBlendMode()
+						, pass->getAlphaFunc()
+						, passFlags
+						, textureFlags
+						, programFlags
+						, sceneFlags
+						, submesh.getTopology()
+						, pass->IsTwoSided()
+						, submesh.getGeometryBuffers( material ).layouts );
 
-					if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque )
+					if ( !isShadowMapProgram( programFlags )
+						|| instance.isShadowCaster() )
 					{
-						auto programFlags = submesh.getProgramFlags( material );
-						auto sceneFlags = scene.getFlags();
-						auto textureFlags = pass->getTextureFlags();
-						auto animated = doAdjustFlags( programFlags
-							, textureFlags
-							, passFlags
-							, sceneFlags
-							, scene
-							, *pass
-							, renderPass
-							, instance.getName() );
-						renderPass.preparePipeline( pass->getColourBlendMode()
-							, pass->getAlphaBlendMode()
-							, pass->getAlphaFunc()
-							, passFlags
-							, textureFlags
-							, programFlags
-							, sceneFlags
-							, submesh.getTopology()
-							, pass->IsTwoSided()
-							, submesh.getGeometryBuffers( material ).layouts );
-
-						if ( !isShadowMapProgram( programFlags )
-							|| instance.isShadowCaster() )
+						if ( animated.skeleton )
 						{
-							if ( animated.skeleton )
-							{
-								doAddSkinningNode( renderPass
-									, passFlags
-									, textureFlags
-									, programFlags
-									, sceneFlags
-									, *pass
-									, submesh
-									, instance
-									, *animated.skeleton
-									, culledNode
-									, nodes.skinnedNodes
-									, nodes.instancedSkinnedNodes );
-							}
-							else if ( animated.mesh )
-							{
-								doAddMorphingNode( renderPass
-									, passFlags
-									, textureFlags
-									, programFlags
-									, sceneFlags
-									, *pass
-									, submesh
-									, instance
-									, *animated.mesh
-									, culledNode
-									, nodes.morphingNodes );
-							}
-							else
-							{
-								doAddStaticNode( renderPass
-									, passFlags
-									, textureFlags
-									, programFlags
-									, sceneFlags
-									, *pass
-									, submesh
-									, instance
-									, culledNode
-									, nodes.staticNodes
-									, nodes.instancedStaticNodes );
-							}
+							doAddSkinningNode( renderPass
+								, passFlags
+								, textureFlags
+								, programFlags
+								, sceneFlags
+								, *pass
+								, submesh
+								, instance
+								, *animated.skeleton
+								, culledNode
+								, nodes.skinnedNodes
+								, nodes.instancedSkinnedNodes );
+						}
+						else if ( animated.mesh )
+						{
+							doAddMorphingNode( renderPass
+								, passFlags
+								, textureFlags
+								, programFlags
+								, sceneFlags
+								, *pass
+								, submesh
+								, instance
+								, *animated.mesh
+								, culledNode
+								, nodes.morphingNodes );
+						}
+						else
+						{
+							doAddStaticNode( renderPass
+								, passFlags
+								, textureFlags
+								, programFlags
+								, sceneFlags
+								, *pass
+								, submesh
+								, instance
+								, culledNode
+								, nodes.staticNodes
+								, nodes.instancedStaticNodes );
 						}
 					}
 				}
@@ -603,39 +601,37 @@ namespace castor3d
 			for ( auto & culledNode : renderPass.getCuller().getAllBillboards( opaque ) )
 			{
 				auto & billboard = culledNode.data;
+				auto & pass = culledNode.pass;
 
-				for ( auto pass : *culledNode.material )
+				pass->prepareTextures();
+				auto sceneFlags = scene.getFlags();
+				auto passFlags = pass->getPassFlags();
+				auto programFlags = billboard.getProgramFlags();
+				auto textureFlags = pass->getTextureFlags();
+				addFlag( programFlags, ProgramFlag::eBillboards );
+				renderPass.preparePipeline( pass->getColourBlendMode()
+					, pass->getAlphaBlendMode()
+					, pass->getAlphaFunc()
+					, passFlags
+					, textureFlags
+					, programFlags
+					, sceneFlags
+					, ashes::PrimitiveTopology::eTriangleStrip
+					, pass->IsTwoSided()
+					, billboard.getGeometryBuffers().layouts );
+
+				if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque
+					&& !isShadowMapProgram( programFlags ) )
 				{
-					pass->prepareTextures();
-					auto sceneFlags = scene.getFlags();
-					auto passFlags = pass->getPassFlags();
-					auto programFlags = billboard.getProgramFlags();
-					auto textureFlags = pass->getTextureFlags();
-					addFlag( programFlags, ProgramFlag::eBillboards );
-					renderPass.preparePipeline( pass->getColourBlendMode()
-						, pass->getAlphaBlendMode()
-						, pass->getAlphaFunc()
+					doAddBillboardNode( renderPass
 						, passFlags
 						, textureFlags
 						, programFlags
 						, sceneFlags
-						, ashes::PrimitiveTopology::eTriangleStrip
-						, pass->IsTwoSided()
-						, billboard.getGeometryBuffers().layouts );
-
-					if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque
-						&& !isShadowMapProgram( programFlags ) )
-					{
-						doAddBillboardNode( renderPass
-							, passFlags
-							, textureFlags
-							, programFlags
-							, sceneFlags
-							, *pass
-							, billboard
-							, culledNode
-							, nodes );
-					}
+						, *pass
+						, billboard
+						, culledNode
+						, nodes );
 				}
 			}
 		}

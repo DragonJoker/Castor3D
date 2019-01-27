@@ -1,6 +1,7 @@
 #include "SceneCuller.hpp"
 
 #include "Material/Material.hpp"
+#include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Scene/BillboardList.hpp"
@@ -101,19 +102,22 @@ namespace castor3d
 
 						if ( material )
 						{
-							if ( material->hasAlphaBlending() )
+							for ( auto & pass : *material )
 							{
-								m_allTransparentSubmeshes.emplace_back( CulledSubmesh{ geometry
-									, *submesh
-									, material
-									, node } );
-							}
-							else
-							{
-								m_allOpaqueSubmeshes.emplace_back( CulledSubmesh{ geometry
-									, *submesh
-									, material
-									, node } );
+								if ( pass->hasAlphaBlending() )
+								{
+									m_allTransparentSubmeshes.emplace_back( CulledSubmesh{ geometry
+										, *submesh
+										, pass
+										, node } );
+								}
+								else
+								{
+									m_allOpaqueSubmeshes.emplace_back( CulledSubmesh{ geometry
+										, *submesh
+										, pass
+										, node } );
+								}
 							}
 						}
 					}
@@ -165,19 +169,22 @@ namespace castor3d
 
 				if ( material )
 				{
-					if ( material->hasAlphaBlending() )
+					for ( auto & pass : *material )
 					{
-						m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
-							, billboards
-							, material
-							, node } );
-					}
-					else
-					{
-						m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
-							, billboards
-							, material
-							, node } );
+						if ( pass->hasAlphaBlending() )
+						{
+							m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node } );
+						}
+						else
+						{
+							m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node } );
+						}
 					}
 				}
 			}
@@ -202,19 +209,22 @@ namespace castor3d
 
 				if ( material )
 				{
-					if ( material->hasAlphaBlending() )
+					for ( auto & pass : *material )
 					{
-						m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
-							, billboards
-							, material
-							, node } );
-					}
-					else
-					{
-						m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
-							, billboards
-							, material
-							, node } );
+						if ( material->hasAlphaBlending() )
+						{
+							m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node } );
+						}
+						else
+						{
+							m_allOpaqueBillboards.emplace_back( CulledBillboard{ billboards
+								, billboards
+								, pass
+								, node } );
+						}
 					}
 				}
 			}
