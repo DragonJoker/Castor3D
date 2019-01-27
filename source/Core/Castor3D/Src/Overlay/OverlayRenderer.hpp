@@ -154,10 +154,8 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			castor::Point2f position;
-			castor::Point2i renderSize;
-			castor::Point2f renderRatio;
-			int32_t materialIndex;
+			castor::Point4f positionRatio;
+			castor::Point4i renderSizeIndex;
 		};
 
 		struct Pipeline

@@ -72,10 +72,22 @@ namespace castor3d
 			, Size const & size )
 		{
 			auto & data = ubo.getData( index );
-			data.position = Point2f{ overlay.getAbsolutePosition() };
-			data.renderSize = Point2i{ size.getWidth(), size.getHeight() };
-			data.renderRatio = overlay.getRenderRatio( size );
-			data.materialIndex = pass.getId();
+			auto position = overlay.getAbsolutePosition();
+			auto ratio = overlay.getRenderRatio( size );
+			data.positionRatio = Point4f
+			{
+				position[0],
+				position[1],
+				ratio[0],
+				ratio[1],
+			};
+			data.renderSizeIndex = Point4i
+			{
+				size.getWidth(),
+				size.getHeight(),
+				pass.getId(),
+				0,
+			};
 		}
 
 		template< typename OverlayT, typename QuadT >
@@ -127,12 +139,15 @@ namespace castor3d
 		{
 			for ( auto & pass : *material )
 			{
-				doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
-					, *pass
-					, m_renderer.m_panelOverlays
-					, m_renderer.m_panelVertexBuffers
-					, overlay.getPanelVertex()
-					, nullptr );
+				if ( !pass->isImplicit() )
+				{
+					doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+						, *pass
+						, m_renderer.m_panelOverlays
+						, m_renderer.m_panelVertexBuffers
+						, overlay.getPanelVertex()
+						, nullptr );
+				}
 			}
 		}
 	}
@@ -143,12 +158,15 @@ namespace castor3d
 		{
 			for ( auto & pass : *material )
 			{
-				doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
-					, *pass
-					, m_renderer.m_panelOverlays
-					, m_renderer.m_panelVertexBuffers
-					, overlay.getPanelVertex()
-					, nullptr );
+				if ( !pass->isImplicit() )
+				{
+					doPrepareOverlay< PanelVertexBufferPool::Quad >( overlay
+						, *pass
+						, m_renderer.m_panelOverlays
+						, m_renderer.m_panelVertexBuffers
+						, overlay.getPanelVertex()
+						, nullptr );
+				}
 			}
 		}
 
@@ -156,12 +174,15 @@ namespace castor3d
 		{
 			for ( auto & pass : *material )
 			{
-				doPrepareOverlay< BorderPanelVertexBufferPool::Quad >( overlay
-					, *pass
-					, m_renderer.m_borderPanelOverlays
-					, m_renderer.m_borderVertexBuffers
-					, overlay.getBorderVertex()
-					, nullptr );
+				if ( !pass->isImplicit() )
+				{
+					doPrepareOverlay< BorderPanelVertexBufferPool::Quad >( overlay
+						, *pass
+						, m_renderer.m_borderPanelOverlays
+						, m_renderer.m_borderVertexBuffers
+						, overlay.getBorderVertex()
+						, nullptr );
+				}
 			}
 		}
 	}
@@ -172,12 +193,15 @@ namespace castor3d
 		{
 			for ( auto & pass : *material )
 			{
-				doPrepareOverlay< TextVertexBufferPool::Quad >( overlay
-					, *pass
-					, m_renderer.m_textOverlays
-					, m_renderer.m_textVertexBuffers
-					, overlay.getTextVertex()
-					, overlay.getFontTexture() );
+				if ( !pass->isImplicit() )
+				{
+					doPrepareOverlay< TextVertexBufferPool::Quad >( overlay
+						, *pass
+						, m_renderer.m_textOverlays
+						, m_renderer.m_textVertexBuffers
+						, overlay.getTextVertex()
+						, overlay.getFontTexture() );
+				}
 			}
 		}
 	}
@@ -765,9 +789,9 @@ namespace castor3d
 					}
 
 					auto size = writer.declLocale( cuT( "size" )
-						, vec2( c3d_renderRatio.x() * writer.cast< Float >( c3d_renderSize.x() )
-							, c3d_renderRatio.y() * writer.cast< Float >( c3d_renderSize.y() ) ) );
-					out.gl_out.gl_Position = c3d_projection * vec4( size * writer.paren( c3d_position + position )
+						, vec2( c3d_positionRatio.z() * writer.cast< Float >( c3d_renderSizeIndex.x() )
+							, c3d_positionRatio.w() * writer.cast< Float >( c3d_renderSizeIndex.y() ) ) );
+					out.gl_out.gl_Position = c3d_projection * vec4( size * writer.paren( c3d_positionRatio.xy() + position )
 						, 0.0_f
 						, 1.0_f );
 				} );
@@ -825,7 +849,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto material = materials->getBaseMaterial( c3d_materialIndex );
+					auto material = materials->getBaseMaterial( c3d_renderSizeIndex.z() );
 					auto diffuse = writer.declLocale( cuT( "diffuse" )
 						, material->m_diffuse() );
 					auto alpha = writer.declLocale( cuT( "alpha" )

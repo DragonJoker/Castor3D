@@ -10,10 +10,8 @@ namespace castor3d
 	uint32_t const OverlayUbo::BindingPoint = 2u;
 	String const OverlayUbo::BufferOverlayName = cuT( "Overlay" );
 	String const OverlayUbo::BufferOverlayInstance = cuT( "overlay" );
-	String const OverlayUbo::Position = cuT( "c3d_position" );
-	String const OverlayUbo::RenderSize = cuT( "c3d_renderSize" );
-	String const OverlayUbo::RenderRatio = cuT( "c3d_renderRatio" );
-	String const OverlayUbo::MaterialIndex = cuT( "c3d_materialIndex" );
+	String const OverlayUbo::PositionRatio = cuT( "c3d_positionRatio" );
+	String const OverlayUbo::RenderSizeIndex = cuT( "c3d_renderSizeIndex" );
 
 	OverlayUbo::OverlayUbo( Engine & engine )
 		: m_engine{ engine }
@@ -32,13 +30,13 @@ namespace castor3d
 		, castor::Size const & renderSize
 		, castor::Point2f const & renderRatio )
 	{
-		m_ubo->getData( 0u ).position = Point2f{ position };
-		m_ubo->getData( 0u ).renderSize = Point2i{ renderSize };
-		m_ubo->getData( 0u ).renderRatio = renderRatio;
+		m_ubo->getData( 0u ).positionRatio = Point4f{ position[0], position[1], renderRatio[0], renderRatio[1] };
+		m_ubo->getData( 0u ).renderSizeIndex[0] = renderSize[0];
+		m_ubo->getData( 0u ).renderSizeIndex[1] = renderSize[1];
 	}
 
 	void OverlayUbo::update( int materialIndex )
 	{
-		m_ubo->getData( 0u ).materialIndex = materialIndex - 1;
+		m_ubo->getData( 0u ).renderSizeIndex[2] = materialIndex - 1;
 	}
 }

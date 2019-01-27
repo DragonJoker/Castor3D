@@ -57,6 +57,64 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		void doCreateAlphaRejectionPass( PassSPtr srcPass
+			, PassSPtr dstPass )
+		{
+			dstPass->setImplicit();
+			dstPass->setTwoSided( true );
+			dstPass->setAlphaFunc( ashes::CompareOp::eGreater );
+			dstPass->setAlphaValue( 0.95f );
+			dstPass->setEmissive( srcPass->getEmissive() );
+			dstPass->setOpacity( srcPass->getOpacity() );
+			dstPass->setRefractionRatio( srcPass->getRefractionRatio() );
+			dstPass->setParallaxOcclusion( srcPass->hasParallaxOcclusion() );
+			dstPass->setColourBlendMode( srcPass->getColourBlendMode() );
+
+			if ( srcPass->hasSubsurfaceScattering() )
+			{
+				dstPass->setSubsurfaceScattering( std::make_unique< SubsurfaceScattering >( srcPass->getSubsurfaceScattering() ) );
+			}
+
+			for ( auto & unit : *srcPass )
+			{
+				dstPass->addTextureUnit( unit );
+			}
+		}
+
+		void doCreateAlphaRejectionPass( MaterialSPtr material
+			, LegacyPassSPtr srcPass )
+		{
+			auto dstPass = std::static_pointer_cast< LegacyPass >( material->createPass() );
+			dstPass->setAmbient( srcPass->getAmbient() );
+			dstPass->setDiffuse( srcPass->getDiffuse() );
+			dstPass->setShininess( srcPass->getShininess() );
+			dstPass->setSpecular( srcPass->getSpecular() );
+			doCreateAlphaRejectionPass( srcPass, dstPass );
+		}
+
+		void doCreateAlphaRejectionPass( MaterialSPtr material
+			, MetallicRoughnessPbrPassSPtr srcPass )
+		{
+			auto dstPass = std::static_pointer_cast< MetallicRoughnessPbrPass >( material->createPass() );
+			dstPass->setAlbedo( srcPass->getAlbedo() );
+			dstPass->setRoughness( srcPass->getRoughness() );
+			dstPass->setMetallic( srcPass->getMetallic() );
+			doCreateAlphaRejectionPass( srcPass, dstPass );
+		}
+
+		void doCreateAlphaRejectionPass( MaterialSPtr material
+			, SpecularGlossinessPbrPassSPtr srcPass )
+		{
+			auto dstPass = std::static_pointer_cast< SpecularGlossinessPbrPass >( material->createPass() );
+			dstPass->setDiffuse( srcPass->getDiffuse() );
+			dstPass->setGlossiness( srcPass->getGlossiness() );
+			dstPass->setSpecular( srcPass->getSpecular() );
+			doCreateAlphaRejectionPass( srcPass, dstPass );
+		}
+	}
+
 	CU_ImplementAttributeParser( parserRootScene )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2856,6 +2914,39 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserMaterialEnd )
 	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( parsingContext->material )
+		{
+			auto material = parsingContext->material;
+
+			if ( material->getPassCount() == 1u )
+			{
+				auto pass = *material->begin();
+
+				if ( pass->hasAlphaBlending()
+					&& pass->getTextureUnit( TextureChannel::eOpacity ) )
+				{
+					// Create a new pass with alpha rejection
+					switch ( pass->getType() )
+					{
+					case MaterialType::eLegacy:
+						doCreateAlphaRejectionPass( material, std::static_pointer_cast< LegacyPass >( pass ) );
+						break;
+					case MaterialType::ePbrMetallicRoughness:
+						doCreateAlphaRejectionPass( material, std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
+						break;
+					case MaterialType::ePbrSpecularGlossiness:
+						doCreateAlphaRejectionPass( material, std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Material not initialised" ) );
+		}
 	}
 	CU_EndAttributePop()
 

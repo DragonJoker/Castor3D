@@ -297,6 +297,11 @@ namespace castor3d
 			CU_Require( m_subsurfaceScattering );
 			return *m_subsurfaceScattering;
 		}
+
+		inline bool isImplicit()const
+		{
+			return m_implicit;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -394,6 +399,11 @@ namespace castor3d
 			m_bwAccumulationOperator = value;
 			onChanged( *this );
 		}
+
+		inline void setImplicit( bool value = true )
+		{
+			m_implicit = value;
+		}
 		/**@}*/
 
 	protected:
@@ -486,6 +496,9 @@ namespace castor3d
 		//!\~english	The pass ID.
 		//!\~french		L'ID de la passe.
 		uint32_t m_id{ 0u };
+		//!\~english	The pass ID.
+		//!\~french		L'ID de la passe.
+		bool m_implicit{ false };
 		//!\~english	The opacity value.
 		//!\~french		La valeur d'opacité.
 		float m_opacity{ 1.0f };

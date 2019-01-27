@@ -24,10 +24,8 @@ namespace castor3d
 	private:
 		struct Configuration
 		{
-			castor::Point2f position;
-			castor::Point2i renderSize;
-			castor::Point2f renderRatio;
-			int32_t materialIndex;
+			castor::Point4f positionRatio;
+			castor::Point4i renderSizeIndex;
 		};
 
 	public:
@@ -103,18 +101,12 @@ namespace castor3d
 		//!\~english	Name of the overlay information frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les informations de l'incrustation.
 		C3D_API static castor::String const BufferOverlayInstance;
-		//!\~english	Name of the overlay position frame variable.
-		//!\~french		Nom de la frame variable contenant la position de l'incrustation.
-		C3D_API static castor::String const Position;
-		//!\~english	Name of the render ratio frame variable.
-		//!\~french		Nom de la frame variable contenant le ratio de rendu.
-		C3D_API static castor::String const RenderSize;
-		//!\~english	Name of the render ratio frame variable.
-		//!\~french		Nom de la frame variable contenant le ratio de rendu.
-		C3D_API static castor::String const RenderRatio;
-		//!\~english	Name of the material index frame variable.
-		//!\~french		Nom de la frame variable contenant l'indice du matériau.
-		C3D_API static castor::String const MaterialIndex;
+		//!\~english	Name of the overlay position (xy) and render ratio (zw) frame variable.
+		//!\~french		Nom de la frame variable contenant la position (xy) et le ratio de rendu (zw) de l'incrustation.
+		C3D_API static castor::String const PositionRatio;
+		//!\~english	Name of the render size (xy) and material index (z) frame variable.
+		//!\~french		Nom de la frame variable contenant la taille de rendu (xy) et l'index du matériau (z).
+		C3D_API static castor::String const RenderSizeIndex;
 
 	private:
 		Engine & m_engine;
@@ -124,10 +116,8 @@ namespace castor3d
 
 #define UBO_OVERLAY( writer, binding, set )\
 	sdw::Ubo overlay{ writer, OverlayUbo::BufferOverlayName, binding, set };\
-	auto c3d_position = overlay.declMember< sdw::Vec2 >( castor3d::OverlayUbo::Position );\
-	auto c3d_renderSize = overlay.declMember< sdw::IVec2 >( castor3d::OverlayUbo::RenderSize );\
-	auto c3d_renderRatio = overlay.declMember< sdw::Vec2 >( castor3d::OverlayUbo::RenderRatio );\
-	auto c3d_materialIndex = overlay.declMember< sdw::Int >( castor3d::OverlayUbo::MaterialIndex );\
+	auto c3d_positionRatio = overlay.declMember< sdw::Vec4 >( castor3d::OverlayUbo::PositionRatio );\
+	auto c3d_renderSizeIndex = overlay.declMember< sdw::IVec4 >( castor3d::OverlayUbo::RenderSizeIndex );\
 	overlay.end()
 
 #endif

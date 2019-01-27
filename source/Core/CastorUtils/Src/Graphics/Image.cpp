@@ -35,22 +35,20 @@ namespace castor
 			int height = pixelBuffer->getHeight();
 			auto buffer = reinterpret_cast< Pixel * >( pixelBuffer->ptr() );
 
-			for ( int y = 0; y < height; y++ )
+			for ( int y = 0; y < height; ++y )
 			{
-				auto * bits = buffer;
-
-				for ( int x = 0; x < width; x++, bits += 4 )
+				for ( int x = 0; x < width; ++x )
 				{
-					const uint8_t alpha = bits->a;
+					const uint8_t alpha = buffer->a;
 
 					// slightly faster: care for two special cases
 					if ( alpha == 0x00 )
 					{
 						// special case for alpha == 0x00
 						// color * 0x00 / 0xFF = 0x00
-						bits->r = 0x00;
-						bits->g = 0x00;
-						bits->b = 0x00;
+						buffer->r = 0x00;
+						buffer->g = 0x00;
+						buffer->b = 0x00;
 					}
 					else if ( alpha == 0xFF )
 					{
@@ -60,12 +58,12 @@ namespace castor
 					}
 					else
 					{
-						bits->r = uint8_t( ( alpha * uint16_t( bits->r ) + 127 ) / 255 );
-						bits->g = uint8_t( ( alpha * uint16_t( bits->g ) + 127 ) / 255 );
-						bits->b = uint8_t( ( alpha * uint16_t( bits->b ) + 127 ) / 255 );
+						buffer->r = uint8_t( ( alpha * uint16_t( buffer->r ) + 127 ) / 255 );
+						buffer->g = uint8_t( ( alpha * uint16_t( buffer->g ) + 127 ) / 255 );
+						buffer->b = uint8_t( ( alpha * uint16_t( buffer->b ) + 127 ) / 255 );
 					}
 
-					++bits;
+					++buffer;
 				}
 			}
 
