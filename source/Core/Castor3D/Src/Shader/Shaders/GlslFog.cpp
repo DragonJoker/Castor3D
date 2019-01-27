@@ -81,12 +81,12 @@ namespace castor3d
 			}
 		}
 
-		void Fog::applyFog( sdw::Vec4 const & bgColour
+		Vec4 Fog::apply( Vec4 const & bgColour
+			, Vec4 const & colour
 			, Float const & dist
-			, Float const & y
-			, Vec4 & colour )
+			, Float const & y )
 		{
-			colour = m_fog( bgColour
+			return m_fog( bgColour
 				, colour
 				, dist
 				, y );

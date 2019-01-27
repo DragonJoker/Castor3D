@@ -288,12 +288,12 @@ namespace castor3d
 					position = utils.calcVSPosition( uv
 							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
 							, c3d_mtxInvProj );
-					fog.applyFog( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						, pxl_fragColor
 						, length( position )
-						, position.z()
-						, pxl_fragColor );
+						, position.z() );
 				}
-				
+
 #if C3D_DebugDiffuseLighting
 				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugSpecularLighting
@@ -542,10 +542,10 @@ namespace castor3d
 					position = utils.calcVSPosition( uv
 							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
 							, c3d_mtxInvProj );
-					fog.applyFog( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						, pxl_fragColor
 						, length( position )
-						, position.z()
-						, pxl_fragColor );
+						, position.z() );
 				}
 
 #if C3D_DebugDiffuseLighting
@@ -798,10 +798,10 @@ namespace castor3d
 					position = utils.calcVSPosition( uv
 							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
 							, c3d_mtxInvProj );
-					fog.applyFog( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						, pxl_fragColor
 						, length( position )
-						, position.z()
-						, pxl_fragColor );
+						, position.z() );
 				}
 
 #if C3D_DebugDiffuseLighting

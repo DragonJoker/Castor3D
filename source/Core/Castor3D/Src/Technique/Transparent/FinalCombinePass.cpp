@@ -260,10 +260,10 @@ namespace castor3d
 							, utils.calcVSPosition( vtx_texture
 								, texture( c3d_mapDepth, texCoord ).r()
 								, c3d_mtxInvProj ) );
-						fog.applyFog( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+							, pxl_fragColor
 							, length( position )
-							, position.z()
-							, pxl_fragColor );
+							, position.z() );
 					}
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

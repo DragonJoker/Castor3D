@@ -17,10 +17,10 @@ namespace castor3d
 		public:
 			C3D_API Fog( FogType flags
 				, sdw::ShaderWriter & writer );
-			C3D_API void applyFog( sdw::Vec4 const & bgColour
+			C3D_API sdw::Vec4 apply( sdw::Vec4 const & bgColour
+				, sdw::Vec4 const & colour
 				, sdw::Float const & dist
-				, sdw::Float const & y
-				, sdw::Vec4 & colour );
+				, sdw::Float const & y );
 
 		protected:
 			sdw::Function< sdw::Vec4

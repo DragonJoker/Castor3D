@@ -932,10 +932,10 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				fog.applyFog( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+				pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					, pxl_fragColor
 					, length( vtx_viewPosition )
-					, vtx_viewPosition.y()
-					, pxl_fragColor );
+					, vtx_viewPosition.y() );
 			}
 		} );
 
@@ -1262,10 +1262,10 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				fog.applyFog( vec4( utils.removeGamma( matGamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+				pxl_fragColor = fog.apply( vec4( utils.removeGamma( matGamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					, pxl_fragColor
 					, length( vtx_viewPosition )
-					, vtx_viewPosition.y()
-					, pxl_fragColor );
+					, vtx_viewPosition.y() );
 			}
 		} );
 
@@ -1592,10 +1592,10 @@ namespace castor3d
 
 			if ( getFogType( sceneFlags ) != FogType::eDisabled )
 			{
-				fog.applyFog( vec4( utils.removeGamma( matGamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+				pxl_fragColor = fog.apply( vec4( utils.removeGamma( matGamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+					, pxl_fragColor
 					, length( vtx_viewPosition )
-					, vtx_viewPosition.y()
-					, pxl_fragColor );
+					, vtx_viewPosition.y() );
 			}
 		} );
 
