@@ -117,7 +117,7 @@ namespace castor
 			}
 			else
 			{
-				CU_LoaderError( stbi_failure_reason() );
+				CU_LoaderError( cuT( "Couldn't load file [" ) + path + cuT( "]:\n" ) + stbi_failure_reason() );
 			}
 
 			return result;
@@ -168,7 +168,7 @@ namespace castor
 			}
 			else
 			{
-				CU_LoaderError( stbi_failure_reason() );
+				CU_LoaderError( cuT( "Couldn't load file [" ) + path + cuT( "]:\n" ) + stbi_failure_reason() );
 			}
 
 			return result;
@@ -210,7 +210,7 @@ namespace castor
 
 				if ( !n )
 				{
-					CU_LoaderError( "Unsupported pixel format" );
+					CU_LoaderError( cuT( "Couldn't save file " ) + path + cuT( ":\nUnsupported pixel format." ) );
 				}
 
 				int x = int( buffer->getWidth() );
@@ -255,17 +255,17 @@ namespace castor
 				}
 				else
 				{
-					CU_LoaderError( "Unsupported image format" );
+					CU_LoaderError( cuT( "Couldn't save file " ) + path + cuT( ":\nUnsupported image format." ) );
 				}
 
 				if ( !result )
 				{
-					CU_LoaderError( stbi_failure_reason() );
+					CU_LoaderError( cuT( "Couldn't load file [" ) + path + cuT( "]:\n" ) + stbi_failure_reason() );
 				}
 			}
 			else
 			{
-				CU_LoaderError( "Null buffer given for save" );
+				CU_LoaderError( cuT( "Couldn't save file " ) + path + cuT( ":\nNull buffer given for save." ) );
 			}
 
 			return result;
@@ -305,7 +305,7 @@ namespace castor
 
 				if ( !n )
 				{
-					CU_LoaderError( "Unsupported pixel format" );
+					CU_LoaderError( cuT( "Couldn't save file " ) + path + cuT( ":\nUnsupported pixel format." ) );
 				}
 
 				int x = int( buffer->getWidth() );
@@ -321,12 +321,12 @@ namespace castor
 
 				if ( !result )
 				{
-					CU_LoaderError( stbi_failure_reason() );
+					CU_LoaderError( cuT( "Couldn't load file [" ) + path + cuT( "]:\n" ) + stbi_failure_reason() );
 				}
 			}
 			else
 			{
-				CU_LoaderError( "Null buffer given for save" );
+				CU_LoaderError( cuT( "Couldn't save file " ) + path + cuT( ":\nNull buffer given for save." ) );
 			}
 
 			return result;
