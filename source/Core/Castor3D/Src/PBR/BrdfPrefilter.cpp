@@ -122,7 +122,7 @@ namespace castor3d
 			ashes::ColourBlendState::createDefault(),
 			{},
 			ashes::DepthStencilState{ 0u, false, false },
-			std::nullopt,
+			ashes::nullopt,
 			ashes::Viewport{ size.getWidth(), size.getHeight(), 0, 0, },
 			ashes::Scissor{ 0, 0, size.getWidth(), size.getHeight() },
 		} );

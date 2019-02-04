@@ -209,7 +209,7 @@ namespace castor3d
 			std::move( bdState ),
 			{},
 			dsState,
-			std::nullopt,
+			ashes::nullopt,
 			ashes::Viewport{ size.width, size.height, position.x(), position.y() },
 			ashes::Scissor{ position.x(), position.y(), size.width, size.height }
 		} );

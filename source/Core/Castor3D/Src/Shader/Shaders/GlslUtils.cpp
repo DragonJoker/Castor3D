@@ -23,10 +23,12 @@ namespace castor3d
 
 		Utils::Utils( sdw::ShaderWriter & writer
 			, bool isTopDown
-			, bool isZeroToOneDepth )
+			, bool isZeroToOneDepth
+			, bool isInvertedNormals )
 			: m_writer{ writer }
 			, m_isTopDown{ isTopDown }
 			, m_isZeroToOneDepth{ isZeroToOneDepth }
+			, m_isInvertedNormals{ isInvertedNormals }
 		{
 		}
 
@@ -360,6 +362,19 @@ namespace castor3d
 				, InVec4{ m_writer, "v" } );
 		}
 
+		void Utils::declareInvertNormal()
+		{
+			if ( m_isInvertedNormals )
+			{
+				m_invertNormal = m_writer.implementFunction< Vec3 >( "invertNormal"
+					, [&]( Vec3 const & v )
+					{
+						m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z() ) );
+					}
+					, InVec3{ m_writer, "v" } );
+			}
+		}
+
 		void Utils::declareNegateVec2Y()
 		{
 			m_negateVec2Y = m_writer.implementFunction< Vec2 >( "negateVec2Y"
@@ -504,6 +519,16 @@ namespace castor3d
 			if ( m_isTopDown )
 			{
 				return m_invertVec4Y( texCoord );
+			}
+
+			return texCoord;
+		}
+
+		sdw::Vec3 Utils::invertNormal( sdw::Vec3 const & texCoord )const
+		{
+			if ( m_isInvertedNormals )
+			{
+				return m_invertNormal( texCoord );
 			}
 
 			return texCoord;

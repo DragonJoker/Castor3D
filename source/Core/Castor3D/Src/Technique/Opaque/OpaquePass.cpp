@@ -377,7 +377,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -524,7 +524,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -583,7 +583,8 @@ namespace castor3d
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 
@@ -632,6 +633,7 @@ namespace castor3d
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive ) );
 			shader::legacy::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matShininess
 				, textureFlags
@@ -721,7 +723,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -780,7 +782,8 @@ namespace castor3d
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 
@@ -834,6 +837,7 @@ namespace castor3d
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
 				, material.m_gamma );
 			shader::pbr::mr::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matMetallic
 				, matRoughness
@@ -920,7 +924,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -982,7 +986,8 @@ namespace castor3d
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
 		auto parallaxMapping = shader::declareParallaxMappingFunc( writer, textureFlags, programFlags );
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 
@@ -1037,6 +1042,7 @@ namespace castor3d
 				, material.m_gamma );
 
 			shader::pbr::sg::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matSpecular
 				, matGlossiness

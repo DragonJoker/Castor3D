@@ -496,7 +496,7 @@ namespace castor3d
 						0u,
 						1u,
 						ashes::DescriptorType::eCombinedImageSampler,
-						{ { std::nullopt, std::nullopt, ashes::ImageLayout::eShaderReadOnlyOptimal } }
+						{ { ashes::nullopt, ashes::nullopt, ashes::ImageLayout::eShaderReadOnlyOptimal } }
 					} );
 				pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
 			}

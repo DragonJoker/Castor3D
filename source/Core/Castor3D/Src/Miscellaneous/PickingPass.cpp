@@ -702,7 +702,7 @@ namespace castor3d
 		// Outputs
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -776,7 +776,7 @@ namespace castor3d
 		auto in = writer.getIn();
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );

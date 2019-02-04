@@ -134,7 +134,7 @@ namespace castor3d
 						auto nom = writer.declLocale( "nom"
 							, a2 );
 						auto denom = writer.declLocale( "denom"
-							, fma( NdotH2, writer.paren( a2 - 1.0_f ), 1.0_f ) );
+							, fma( NdotH2, a2 - 1.0_f, 1.0_f ) );
 						denom = denom * denom * Float{ Pi< float > };
 
 						writer.returnStmt( nom / denom );
@@ -149,11 +149,11 @@ namespace castor3d
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto bits = writer.declLocale( "bits"
 						, inBits );
-					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8u );
+					bits = writer.paren( bits << 16_u ) | writer.paren( bits >> 16_u );
+					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1_u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1_u );
+					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2_u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2_u );
+					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4_u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4_u );
+					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8_u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8_u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
 				, InUInt{ writer, "inBits" } );
@@ -180,9 +180,9 @@ namespace castor3d
 							, a * a );
 
 						auto phi = writer.declLocale( "phi"
-							, 2.0_f * Float{ Pi< float > } * xi.x() );
+							, Float{ PiMult2< float > } * xi.x() );
 						auto cosTheta = writer.declLocale( "cosTheta"
-							, sqrt( writer.paren( 1.0_f - xi.y() ) / writer.paren( 1.0_f + writer.paren( a2 - 1.0_f ) * xi.y() ) ) );
+							, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) ) );
 						auto sinTheta = writer.declLocale( "sinTheta"
 							, sqrt( 1.0_f - cosTheta * cosTheta ) );
 
@@ -249,14 +249,14 @@ namespace castor3d
 								auto HdotV = writer.declLocale( "HdotV"
 									, max( dot( H, V ), 0.0_f ) );
 								auto pdf = writer.declLocale( "pdf"
-									, D * NdotH / writer.paren( 4.0_f * HdotV ) + 0.0001_f );
+									, ( D * NdotH ) / ( 4.0_f * HdotV ) + 0.0001_f );
 
 								auto resolution = writer.declLocale( "resolution"
 									, Float( float( size.width ) ) ); // resolution of source cubemap (per face)
 								auto saTexel = writer.declLocale( "saTexel"
-									, 4.0_f * Float{ Pi< float > } / writer.paren( 6.0_f * resolution * resolution ) );
+									, Float{ 4.0f * Pi< float > } / ( 6.0_f * resolution * resolution ) );
 								auto saSample = writer.declLocale( "saSample"
-									, 1.0_f / writer.paren( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
+									, 1.0_f / ( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
 								auto mipLevel = writer.declLocale( "mipLevel"
 									, writer.ternary( c3d_roughness == 0.0_f
 										, 0.0_f

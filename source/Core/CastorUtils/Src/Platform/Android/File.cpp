@@ -25,46 +25,46 @@ namespace castor
 	namespace
 	{
 		template< typename DirectoryFuncType, typename FileFuncType >
-		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
+		bool TraverseDirectory( Path const & folderPath, DirectoryFuncType directoryFunction, FileFuncType fileFunction )
 		{
-			CU_Require( !p_folderPath.empty() );
+			CU_Require( !folderPath.empty() );
 			bool result = false;
 			DIR * dir;
 
-			if ( ( dir = opendir( string::stringCast< char >( p_folderPath ).c_str() ) ) == nullptr )
+			if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
 			{
 				switch ( errno )
 				{
 				case EACCES:
-					Logger::logWarning( cuT( "Can't open dir : Permission denied - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Permission denied - Directory : " ) + folderPath );
 					break;
 
 				case EBADF:
-					Logger::logWarning( cuT( "Can't open dir : Invalid file descriptor - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Invalid file descriptor - Directory : " ) + folderPath );
 					break;
 
 				case EMFILE:
-					Logger::logWarning( cuT( "Can't open dir : Too many file descriptor in use - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Too many file descriptor in use - Directory : " ) + folderPath );
 					break;
 
 				case ENFILE:
-					Logger::logWarning( cuT( "Can't open dir : Too many files currently open - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Too many files currently open - Directory : " ) + folderPath );
 					break;
 
 				case ENOENT:
-					Logger::logWarning( cuT( "Can't open dir : Directory doesn't exist - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Directory doesn't exist - Directory : " ) + folderPath );
 					break;
 
 				case ENOMEM:
-					Logger::logWarning( cuT( "Can't open dir : Insufficient memory - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Insufficient memory - Directory : " ) + folderPath );
 					break;
 
 				case ENOTDIR:
-					Logger::logWarning( cuT( "Can't open dir : <name> is not a directory - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : <name> is not a directory - Directory : " ) + folderPath );
 					break;
 
 				default:
-					Logger::logWarning( cuT( "Can't open dir : Unknown error - Directory : " ) + p_folderPath );
+					Logger::logWarning( cuT( "Can't open dir : Unknown error - Directory : " ) + folderPath );
 					break;
 				}
 
@@ -83,11 +83,11 @@ namespace castor
 					{
 						if ( dirent->d_type == DT_DIR )
 						{
-							result = p_directoryFunction( p_folderPath / name );
+							result = directoryFunction( folderPath / name );
 						}
 						else
 						{
-							p_fileFunction( p_folderPath / name );
+							fileFunction( folderPath / name );
 						}
 					}
 				}
@@ -246,7 +246,7 @@ namespace castor
 		return mkdir( string::stringCast< char >( p_path ).c_str(), mode ) == 0;
 	}
 
-	bool File::listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
+	bool File::listDirectoryFiles( Path const & folderPath, PathArray & p_files, bool p_recursive )
 	{
 		struct FileFunction
 		{
@@ -276,7 +276,7 @@ namespace castor
 				PathArray & m_files;
 			};
 
-			return TraverseDirectory( p_folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
+			return TraverseDirectory( folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
 		}
 		else
 		{
@@ -291,7 +291,7 @@ namespace castor
 				}
 			};
 
-			return TraverseDirectory( p_folderPath, DirectoryFunction(), FileFunction( p_files ) );
+			return TraverseDirectory( folderPath, DirectoryFunction(), FileFunction( p_files ) );
 		}
 	}
 

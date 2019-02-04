@@ -565,7 +565,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -712,7 +712,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -777,7 +777,9 @@ namespace castor3d
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::PhongReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 
@@ -838,6 +840,7 @@ namespace castor3d
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive ) );
 			shader::legacy::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matShininess
 				, textureFlags
@@ -977,7 +980,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -1051,7 +1054,9 @@ namespace castor3d
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::MetallicPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -1123,6 +1128,7 @@ namespace castor3d
 			}
 
 			shader::pbr::mr::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matMetallic
 				, matRoughness
@@ -1307,7 +1313,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
@@ -1381,7 +1387,9 @@ namespace castor3d
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::SpecularPbrReflectionModel reflections{ writer };
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer };
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		utils.declareInvertNormal();
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareFresnelSchlick();
@@ -1453,6 +1461,7 @@ namespace castor3d
 			}
 
 			shader::pbr::sg::computePreLightingMapContributions( writer
+				, utils
 				, normal
 				, matSpecular
 				, matGlossiness

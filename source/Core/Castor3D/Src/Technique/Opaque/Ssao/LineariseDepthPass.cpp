@@ -461,8 +461,8 @@ namespace castor3d
 			ashes::MultisampleState{},
 			ashes::ColourBlendState::createDefault(),
 			{},
-			std::nullopt,
-			std::nullopt,
+			ashes::nullopt,
+			ashes::nullopt,
 			ashes::Viewport{ size.width, size.height, 0, 0 },
 			ashes::Scissor{ 0, 0, size.width, size.height },
 		} );
@@ -530,8 +530,8 @@ namespace castor3d
 				ashes::MultisampleState{},
 				ashes::ColourBlendState::createDefault(),
 				{},
-				std::nullopt,
-				std::nullopt,
+				ashes::nullopt,
+				ashes::nullopt,
 				ashes::Viewport{ size.width, size.height, 0, 0 },
 				ashes::Scissor{ 0, 0, size.width, size.height },
 			} );

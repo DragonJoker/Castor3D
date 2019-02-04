@@ -66,6 +66,7 @@ namespace castor3d
 		namespace legacy
 		{
 			void computePreLightingMapContributions( sdw::ShaderWriter & writer
+				, shader::Utils const & utils
 				, sdw::Vec3 & normal
 				, sdw::Float & shininess
 				, TextureChannels const & textureFlags
@@ -84,7 +85,7 @@ namespace castor3d
 					auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
 					auto v3MapNormal = writer.declLocale( "v3MapNormal"
-						, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+						, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
 					v3MapNormal = normalize( sdw::fma( v3MapNormal
 						, vec3( 2.0_f )
 						, vec3( -1.0_f ) ) );
@@ -211,6 +212,7 @@ namespace castor3d
 			namespace mr
 			{
 				void computePreLightingMapContributions( sdw::ShaderWriter & writer
+					, shader::Utils const & utils
 					, sdw::Vec3 & normal
 					, sdw::Float & metallic
 					, sdw::Float & roughness
@@ -230,7 +232,7 @@ namespace castor3d
 						auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
 						auto v3MapNormal = writer.declLocale( "v3MapNormal"
-							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+							, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
 						v3MapNormal = normalize( sdw::fma( v3MapNormal
 							, vec3( 2.0_f )
 							, vec3( -1.0_f ) ) );
@@ -354,6 +356,7 @@ namespace castor3d
 			namespace sg
 			{
 				void computePreLightingMapContributions( sdw::ShaderWriter & writer
+					, shader::Utils const & utils
 					, sdw::Vec3 & normal
 					, sdw::Vec3 & specular
 					, sdw::Float & glossiness
@@ -373,7 +376,7 @@ namespace castor3d
 						auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
 						auto v3MapNormal = writer.declLocale( "v3MapNormal"
-							, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
+							, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
 						v3MapNormal = normalize( sdw::fma( v3MapNormal
 							, vec3( 2.0_f )
 							, vec3( -1.0_f ) ) );

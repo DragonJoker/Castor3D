@@ -11,12 +11,14 @@ namespace castor3d
 	RenderSystem::RenderSystem( Engine & engine
 		, String const & name
 		, bool topDown
-		, bool zeroToOneDepth )
+		, bool zeroToOneDepth
+		, bool invertedNormals )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_initialised{ false }
 		, m_topDown{ topDown }
 		, m_zeroToOneDepth{ zeroToOneDepth }
+		, m_invertedNormals{ invertedNormals }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{

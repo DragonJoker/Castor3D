@@ -157,6 +157,7 @@ namespace castor3d
 		namespace legacy
 		{
 			C3D_API void computePreLightingMapContributions( sdw::ShaderWriter & writer
+				, shader::Utils const & utils
 				, sdw::Vec3 & p_normal
 				, sdw::Float & p_shininess
 				, TextureChannels const & textureFlags
@@ -196,6 +197,7 @@ namespace castor3d
 			namespace mr
 			{
 				C3D_API void computePreLightingMapContributions( sdw::ShaderWriter & writer
+					, shader::Utils const & utils
 					, sdw::Vec3 & p_normal
 					, sdw::Float & p_metallic
 					, sdw::Float & p_roughness
@@ -233,6 +235,7 @@ namespace castor3d
 			namespace sg
 			{
 				C3D_API void computePreLightingMapContributions( sdw::ShaderWriter & writer
+					, shader::Utils const & utils
 					, sdw::Vec3 & normal
 					, sdw::Vec3 & specular
 					, sdw::Float & glossiness

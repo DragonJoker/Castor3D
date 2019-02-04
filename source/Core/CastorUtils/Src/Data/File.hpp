@@ -16,59 +16,59 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Opens a file
-	 *\param[out]	p_pFile		Receives the file descriptor
-	 *\param[in]	p_pszPath	The file path
-	 *\param[in]	p_pszMode	The opening mode
+	 *\param[out]	file	Receives the file descriptor
+	 *\param[in]	path	The file path
+	 *\param[in]	mode	The opening mode
 	 *\return		\p true on success
 	 *\~french
 	 *\brief		Ouvre un fichier
-	 *\param[out]	p_pFile		Reçoit le descripteur du fichier
-	 *\param[in]	p_pszPath	Le chemin d'acès au fichier
-	 *\param[in]	p_pszMode	Le mode d'ouverture
+	 *\param[out]	file	Reçoit le descripteur du fichier
+	 *\param[in]	path	Le chemin d'acès au fichier
+	 *\param[in]	mode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool fileOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool fileOpen( FILE *& file, char const * path, char const * mode );
 	/**
 	 *\~english
 	 *\brief		Opens a file
-	 *\param[out]	p_pFile		Receives the file descriptor
-	 *\param[in]	p_pszPath	The file path
-	 *\param[in]	p_pszMode	The opening mode
+	 *\param[out]	file	Receives the file descriptor
+	 *\param[in]	path	The file path
+	 *\param[in]	mode	The opening mode
 	 *\return		\p true on success
 	 *\~french
 	 *\brief		Ouvre un fichier
-	 *\param[out]	p_pFile		Reçoit le descripteur du fichier
-	 *\param[in]	p_pszPath	Le chemin d'acès au fichier
-	 *\param[in]	p_pszMode	Le mode d'ouverture
+	 *\param[out]	file	Reçoit le descripteur du fichier
+	 *\param[in]	path	Le chemin d'acès au fichier
+	 *\param[in]	mode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool fileOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool fileOpen64( FILE *& file, char const * path, char const * mode );
 	/**
 	 *\~english
 	 *\brief		Seeks into a file
-	 *\param[in]	p_pFile		The file descriptor
-	 *\param[in]	p_offset	The seek offset
-	 *\param[in]	p_iOrigin	The seek origin
+	 *\param[in]	file	The file descriptor
+	 *\param[in]	offset	The seek offset
+	 *\param[in]	origin	The seek origin
 	 *\return		\p true on success
 	 *\~french
 	 *\brief		Déplace le curseur du fichier
-	 *\param[out]	p_pFile		Le descripteur du fichier
-	 *\param[in]	p_offset	L'indice de déplacement
-	 *\param[in]	p_iOrigin	L'origine du déplacement
+	 *\param[out]	file	Le descripteur du fichier
+	 *\param[in]	offset	L'indice de déplacement
+	 *\param[in]	origin	L'origine du déplacement
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool fileSeek( FILE * p_pFile, int64_t p_offset, int p_iOrigin );
+	CU_API bool fileSeek( FILE * file, int64_t offset, int origin );
 	/**
 	 *\~english
 	 *\brief		Retrieves the file cursor position
-	 *\param[out]	p_pFile		The file descriptor
+	 *\param[out]	file	The file descriptor
 	 *\return		The position
 	 *\~french
 	 *\brief		Récupère la position du curseur dans un fichier
-	 *\param[out]	p_pFile		Le descripteur du fichier
+	 *\param[out]	file	Le descripteur du fichier
 	 *\return		La position
 	 */
-	CU_API int64_t fileTell( FILE * p_pFile );
+	CU_API int64_t fileTell( FILE * file );
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -205,18 +205,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
-		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
-		 *\param[in]	p_encoding	The file encoding mode
+		 *\param[in]	filePath	The file path
+		 *\param[in]	mode		The opening mode, combination of one or more OpenMode
+		 *\param[in]	encoding	The file encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
-		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
-		 *\param[in]	p_encoding	Le mode d'encodage du fichier
+		 *\param[in]	filePath	Le chemin du fichier
+		 *\param[in]	mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
+		 *\param[in]	encoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName
-			, FlagCombination< OpenMode > const & p_mode
-			, EncodingMode p_encoding = EncodingMode::eASCII );
+		CU_API File( Path const & filePath
+			, FlagCombination< OpenMode > const & mode
+			, EncodingMode encoding = EncodingMode::eASCII );
 
 	public:
 		/**
@@ -229,32 +229,34 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		sets the cursor in the file according to the given offset and the given mode
-		 *\param[in]	p_offset	The wanted offset
-		 *\param[in]	p_origin	The offset mode
+		 *\param[in]	offset	The wanted offset
+		 *\param[in]	origin	The offset mode
 		 *\return		\p 0 if successful
 		 *\~french
 		 *\brief		Fonction de déplacement dans le fichier, selon l'offset et le mode donnés
-		 *\param[in]	p_offset	L'offset
-		 *\param[in]	p_origin	Le mode
+		 *\param[in]	offset	L'offset
+		 *\param[in]	origin	Le mode
 		 *\return		\p 0 si réussi
 		 */
-		CU_API int seek( long long p_offset
-			, OffsetMode p_origin = OffsetMode::eBeginning );
+		CU_API int seek( long long offset
+			, OffsetMode origin = OffsetMode::eBeginning );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
-		 *\param[in]	p_folderPath	The directory path
-		 *\param[out]	p_files			Receives the files list
-		 *\param[in]	p_recursive		Tells if search must be recursive
+		 *\param[in]	folderPath	The directory path
+		 *\param[out]	files		Receives the files list
+		 *\param[in]	recursive	Tells if search must be recursive
 		 *\return		\p true if the directory is listed
 		 *\~french
 		 *\brief		Liste tous les fichiers d'un répertoire, récursivement ou pas
-		 *\param[in]	p_folderPath	Le chemin du dossier
-		 *\param[out]	p_files			Reçoit la liste des fichiers
-		 *\param[in]	p_recursive		Définit si la recherche doit être récursive ou pas
+		 *\param[in]	folderPath	Le chemin du dossier
+		 *\param[out]	files		Reçoit la liste des fichiers
+		 *\param[in]	recursive	Définit si la recherche doit être récursive ou pas
 		 *\return		\p true si le dossier a été listé
 		 */
-		CU_API static bool listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive = false );
+		CU_API static bool listDirectoryFiles( Path const & folderPath
+			, PathArray & files
+			, bool recursive = false );
 		/**
 		 *\~english
 		 *\brief		Gives the current directory (id est where the execution is)
@@ -276,73 +278,75 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Tests directory existence
-		 *\param[in]	p_path	Directory path
+		 *\param[in]	folderPath	Directory path
 		 *\return		\p true if directory is found
 		 *\~french
 		 *\brief		Teste l'existence d'un dossier
-		 *\param[in]	p_path	Le chemin du dossier
+		 *\param[in]	folderPath	Le chemin du dossier
 		 *\return		\p true si le dossier existe
 		 */
-		CU_API static bool	directoryExists( Path const & p_path );
+		CU_API static bool	directoryExists( Path const & folderPath );
 		/**
 		 *\~english
 		 *\brief		Creates a directory
-		 *\param[in]	p_path	Directory path
-		 *\param[in]	p_flags	User rights
+		 *\param[in]	folderPath	Directory path
+		 *\param[in]	flags		User rights
 		 *\return		\p true if the directory has been created
 		 *\~french
 		 *\brief		Crée un dossier
-		 *\param[in]	p_path	Le chemin du dossier
-		 *\param[in]	p_flags	Les droits d'utilisation
+		 *\param[in]	folderPath	Le chemin du dossier
+		 *\param[in]	flags		Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		CU_API static bool directoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags = CreateMode::eAllRWX );
+		CU_API static bool directoryCreate( Path const & folderPath
+			, FlagCombination< CreateMode > const & flags = CreateMode::eAllRWX );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory
-		 *\param[in]	p_path	Directory path
+		 *\param[in]	folderPath	Directory path
 		 *\return		\p true if the directory has been deleted
 		 *\~french
 		 *\brief		Supprime un dossier vide
-		 *\param[in]	p_path	Le chemin du dossier
+		 *\param[in]	folderPath	Le chemin du dossier
 		 *\return		\p true si le dossier a été supprimé
 		 */
-		CU_API static bool directoryDelete( Path const & p_path );
+		CU_API static bool directoryDelete( Path const & folderPath );
 		/**
 		 *\~english
 		 *\brief		Tests file existence
-		 *\param[in]	p_pathFile	File name and path
+		 *\param[in]	filePath	File name and path
 		 *\return		\p true if file is found
 		 *\~french
 		 *\brief		Teste l'existence d'un fichier
-		 *\param[in]	p_pathFile	Le chemin du fichier
+		 *\param[in]	filePath	Le chemin du fichier
 		 *\return		\p true si le fichier existe
 		 */
-		CU_API static bool fileExists( Path const & p_pathFile );
+		CU_API static bool fileExists( Path const & filePath );
 		/**
 		 *\~english
 		 *\brief		Deletes a file
-		 *\param[in]	p_file	    File name and path
+		 *\param[in]	filePath	File name and path
 		 *\return		\p true if file has been correctly deleted
 		 *\~french
 		 *\brief		Supprime un fichier
-		 *\param[in]	p_file	    Le chemin du fichier
+		 *\param[in]	filePath	Le chemin du fichier
 		 *\return		\p true si le fichier a été supprimé correctement
 		 */
-		CU_API static bool deleteFile( Path const & p_file );
+		CU_API static bool deleteFile( Path const & filePath );
 		/**
 		 *\~english
 		 *\brief		Copy a file into a folder
-		 *\param[in]	p_file	    File name and path
-		 *\param[in]	p_folder	The destination folder
+		 *\param[in]	filePath	File name and path
+		 *\param[in]	folderPath	The destination folder
 		 *\return		\p true if file has been correctly copied
 		 *\~french
 		 *\brief		Copie un fichier dans un dossier
-		 *\param[in]	p_file	    Le chemin du fichier
-		 *\param[in]	p_folder	Le dossier de destination
+		 *\param[in]	filePath	Le chemin du fichier
+		 *\param[in]	folderPath	Le dossier de destination
 		 *\return		\p true si le fichier a été copié correctement
 		 */
-		CU_API static bool copyFile( Path const & p_file, Path const & p_folder );
+		CU_API static bool copyFile( Path const & filePath
+			, Path const & folderPath );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size
@@ -409,8 +413,8 @@ namespace castor
 
 	protected:
 		CU_DeclareInvariantBlock()
-		CU_API uint64_t doWrite( uint8_t const * p_buffer, uint64_t p_uiSize );
-		CU_API uint64_t doRead( uint8_t * p_buffer, uint64_t p_uiSize );
+		CU_API uint64_t doWrite( uint8_t const * buffer, uint64_t size );
+		CU_API uint64_t doRead( uint8_t * buffer, uint64_t size );
 
 	protected:
 		//!\~english	The opening mode.

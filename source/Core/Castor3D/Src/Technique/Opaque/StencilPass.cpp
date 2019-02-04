@@ -156,7 +156,7 @@ namespace castor3d
 			ashes::ColourBlendState::createDefault(),
 			{},
 			dsstate,
-			std::nullopt,
+			ashes::nullopt,
 			ashes::Viewport{ size.width, size.height, 0, 0 },
 			ashes::Scissor{ 0, 0, size.width, size.height },
 		} );

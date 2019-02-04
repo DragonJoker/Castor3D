@@ -50,7 +50,8 @@ namespace castor3d
 		C3D_API RenderSystem( Engine & engine
 			, castor::String const & name
 			, bool topDown
-			, bool zeroToOneDepth );
+			, bool zeroToOneDepth
+			, bool invertedNormals );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -341,6 +342,11 @@ namespace castor3d
 		{
 			return m_zeroToOneDepth;
 		}
+
+		inline bool isInvertedNormals()const
+		{
+			return m_invertedNormals;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -373,6 +379,7 @@ namespace castor3d
 		bool m_initialised;
 		bool const m_topDown;
 		bool const m_zeroToOneDepth;
+		bool const m_invertedNormals;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::RendererPtr m_renderer;

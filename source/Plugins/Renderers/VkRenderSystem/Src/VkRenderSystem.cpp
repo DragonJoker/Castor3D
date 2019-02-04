@@ -139,7 +139,7 @@ namespace VkRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true, true )
+		: castor3d::RenderSystem( engine, Name, true, true, false )
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{

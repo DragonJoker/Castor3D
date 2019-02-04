@@ -1410,7 +1410,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< Int >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
 		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );

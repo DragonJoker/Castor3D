@@ -17,7 +17,8 @@ namespace castor3d
 		public:
 			C3D_API Utils( sdw::ShaderWriter & writer
 				, bool isTopDown = true
-				, bool isZeroToOneDepth = true );
+				, bool isZeroToOneDepth = true
+				, bool isInvertedNormals = false );
 			C3D_API void declareCalcTexCoord();
 			C3D_API void declareCalcVSPosition();
 			C3D_API void declareCalcWSPosition();
@@ -32,6 +33,7 @@ namespace castor3d
 			C3D_API void declareInvertVec2Y();
 			C3D_API void declareInvertVec3Y();
 			C3D_API void declareInvertVec4Y();
+			C3D_API void declareInvertNormal();
 			// -y
 			C3D_API void declareNegateVec2Y();
 			C3D_API void declareNegateVec3Y();
@@ -46,6 +48,7 @@ namespace castor3d
 			C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
 			C3D_API sdw::Vec4 bottomUpToTopDown( sdw::Vec4 const & texCoord )const;
 			C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
+			C3D_API sdw::Vec3 invertNormal( sdw::Vec3 const & texCoord )const;
 			C3D_API sdw::Vec2 negateBottomUpToTopDown( sdw::Vec2 const & texCoord )const;
 			C3D_API sdw::Vec2 negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const;
 			C3D_API sdw::Vec3 negateBottomUpToTopDown( sdw::Vec3 const & texCoord )const;
@@ -165,6 +168,7 @@ namespace castor3d
 			sdw::ShaderWriter & m_writer;
 			bool m_isTopDown;
 			bool m_isZeroToOneDepth;
+			bool m_isInvertedNormals;
 			sdw::Function< sdw::Vec2
 				, sdw::InVec2
 				, sdw::InVec2 > m_calcTexCoord;
@@ -218,6 +222,8 @@ namespace castor3d
 				, sdw::InVec3 > m_invertVec3Y;
 			sdw::Function< sdw::Vec4
 				, sdw::InVec4 > m_invertVec4Y;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3 > m_invertNormal;
 			sdw::Function< sdw::Vec2
 				, sdw::InVec2 > m_negateVec2Y;
 			sdw::Function< sdw::Vec3

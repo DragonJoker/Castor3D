@@ -220,7 +220,7 @@ namespace Bloom
 				ashes::ColourBlendState::createDefault(),
 				{},
 				ashes::DepthStencilState{ 0u, false, false },
-				std::nullopt,
+				ashes::nullopt,
 				ashes::Viewport{ { 0, 0 }, size },
 				ashes::Scissor{ { 0, 0 }, size }
 			};

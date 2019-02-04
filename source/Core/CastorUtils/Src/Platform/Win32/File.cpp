@@ -25,12 +25,12 @@ namespace castor
 	namespace
 	{
 		template< typename DirectoryFuncType, typename FileFuncType >
-		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
+		bool TraverseDirectory( Path const & folderPath, DirectoryFuncType directoryFunction, FileFuncType fileFunction )
 		{
-			CU_Require( !p_folderPath.empty() );
+			CU_Require( !folderPath.empty() );
 			bool result = false;
 			WIN32_FIND_DATA findData;
-			HANDLE handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &findData );
+			HANDLE handle = ::FindFirstFile( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
 
 			if ( handle != INVALID_HANDLE_VALUE )
 			{
@@ -41,11 +41,11 @@ namespace castor
 				{
 					if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 					{
-						result = p_directoryFunction( p_folderPath / name );
+						result = directoryFunction( folderPath / name );
 					}
 					else
 					{
-						p_fileFunction( p_folderPath / name );
+						fileFunction( folderPath / name );
 					}
 				}
 
@@ -59,11 +59,11 @@ namespace castor
 						{
 							if ( ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
 							{
-								result = p_directoryFunction( p_folderPath / name );
+								result = directoryFunction( folderPath / name );
 							}
 							else
 							{
-								p_fileFunction( p_folderPath / name );
+								fileFunction( folderPath / name );
 							}
 						}
 					}
@@ -234,7 +234,7 @@ namespace castor
 #endif
 	}
 
-	bool File::listDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
+	bool File::listDirectoryFiles( Path const & folderPath, PathArray & p_files, bool p_recursive )
 	{
 		struct FileFunction
 		{
@@ -264,7 +264,7 @@ namespace castor
 				PathArray & m_files;
 			};
 
-			return TraverseDirectory( p_folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
+			return TraverseDirectory( folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
 		}
 		else
 		{
@@ -279,7 +279,7 @@ namespace castor
 				}
 			};
 
-			return TraverseDirectory( p_folderPath, DirectoryFunction(), FileFunction( p_files ) );
+			return TraverseDirectory( folderPath, DirectoryFunction(), FileFunction( p_files ) );
 		}
 	}
 
