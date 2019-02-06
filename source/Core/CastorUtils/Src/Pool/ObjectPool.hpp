@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_OBJECT_POOL_H___
@@ -25,15 +25,15 @@ namespace castor
 	struct NewDeletePolicy
 	{
 		template< typename ... TParams >
-		static inline Object * create( Object * p_space, TParams ... p_params )
+		static inline Object * create( Object * space, TParams ... params )
 		{
-			return new( p_space )Object( p_params... );
+			return new( space )Object( params... );
 		}
 
 		template< typename ... TParams >
-		static inline void destroy( Object * p_space )
+		static inline void destroy( Object * space )
 		{
-			p_space->~Object();
+			space->~Object();
 		}
 	};
 	/*!
@@ -61,13 +61,13 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor, initialises the pool with given elements count.
-		 *\param[in]	p_count	The elements count.
+		 *\param[in]	count	The elements count.
 		 *\~french
 		 *\brief		Constructeur, initialise le pool au nombre d'éléments donné.
-		 *\param[in]	p_count	Le compte des objets.
+		 *\param[in]	count	Le compte des objets.
 		 */
-		explicit ObjectPool( size_t p_count )noexcept
-			: m_count( p_count )
+		explicit ObjectPool( size_t count )noexcept
+			: m_count( count )
 		{
 			MemoryData::initialise( m_count );
 		}
@@ -95,15 +95,15 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Allocates and builds an object from the pool's memory.
-		 *\param[in]	p_params	The object's constructor parameters.
+		 *\param[in]	params	The object's constructor parameters.
 		 *\return		The built object, or nullptr.
 		 *\~french
 		 *\brief		Alloue et construit un objet à partir de la mémoire du pool.
-		 *\param[in]	p_params	Les paramètres du constructeur de l'objet.
+		 *\param[in]	params	Les paramètres du constructeur de l'objet.
 		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
-		Object * allocate( TParams ... p_params )
+		Object * allocate( TParams ... params )
 		{
 			Object * space = MemoryData::allocate();
 
@@ -112,23 +112,23 @@ namespace castor
 				return nullptr;
 			}
 
-			return new( space )Object( p_params... );
+			return new( space )Object( params... );
 		}
 		/**
 		 *\~english
 		 *\brief		Deallocates an object (gives its memory back to the pool).
-		 *\param[in]	p_object	The object to deallocate.
+		 *\param[in]	object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
-		 *\param[in]	p_object	L'objet à désallouer.
+		 *\param[in]	object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
 		 */
-		bool deallocate( Object * p_object )noexcept
+		bool deallocate( Object * object )noexcept
 		{
-			if ( MemoryData::deallocate( p_object ) )
+			if ( MemoryData::deallocate( object ) )
 			{
-				p_object->~Object();
+				object->~Object();
 				return true;
 			}
 
@@ -173,13 +173,13 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor, initialises the pool with given elements count.
-		 *\param[in]	p_count	The elements count.
+		 *\param[in]	count	The elements count.
 		 *\~french
 		 *\brief		Constructeur, initialise le pool au nombre d'éléments donné.
-		 *\param[in]	p_count	Le compte des objets.
+		 *\param[in]	count	Le compte des objets.
 		 */
-		explicit AlignedObjectPool( size_t p_count )noexcept
-			: m_count( p_count )
+		explicit AlignedObjectPool( size_t count )noexcept
+			: m_count( count )
 		{
 			MemoryData::initialise( m_count );
 		}
@@ -207,15 +207,15 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Allocates and builds an object from the pool's memory.
-		 *\param[in]	p_params	The object's constructor parameters.
+		 *\param[in]	params	The object's constructor parameters.
 		 *\return		The built object, or nullptr.
 		 *\~french
 		 *\brief		Alloue et construit un objet à partir de la mémoire du pool.
-		 *\param[in]	p_params	Les paramètres du constructeur de l'objet.
+		 *\param[in]	params	Les paramètres du constructeur de l'objet.
 		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
-		Object * allocate( TParams ... p_params )
+		Object * allocate( TParams ... params )
 		{
 			Object * space = MemoryData::allocate();
 
@@ -229,18 +229,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Deallocates an object (gives its memory back to the pool).
-		 *\param[in]	p_object	The object to deallocate.
+		 *\param[in]	object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
-		 *\param[in]	p_object	L'objet à désallouer.
+		 *\param[in]	object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
 		 */
-		bool deallocate( Object * p_object )noexcept
+		bool deallocate( Object * object )noexcept
 		{
-			if ( MemoryData::deallocate( p_object ) )
+			if ( MemoryData::deallocate( object ) )
 			{
-				NewDeletePolicy< Object >::destroy( p_object );
+				NewDeletePolicy< Object >::destroy( object );
 				return true;
 			}
 

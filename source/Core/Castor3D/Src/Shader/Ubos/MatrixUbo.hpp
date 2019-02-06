@@ -96,14 +96,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	view		The new view matrix.
-		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	jitter		The jittering value.
+		 *\param[in]	view			The new view matrix.
+		 *\param[in]	projection		The new projection matrix.
+		 *\param[in]	jitter			The jittering value.
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	view		La nouvelle matrice de vue.
-		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	jitter		La valeur de jittering.
+		 *\param[in]	view			La nouvelle matrice de vue.
+		 *\param[in]	projection		La nouvelle matrice de projection.
+		 *\param[in]	jitter			La valeur de jittering.
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void update( castor::Matrix4x4r const & view
 			, castor::Matrix4x4r const & projection
@@ -123,9 +127,9 @@ namespace castor3d
 		C3D_API void update( castor::Matrix4x4r const & projection )const;
 		/**
 		 *\~english
-		 *\name			getters.
+		 *\name			Getters.
 		 *\~french
-		 *\name			getters.
+		 *\name			Accesseurs.
 		 */
 		inline ashes::UniformBuffer< Configuration > & getUbo()
 		{

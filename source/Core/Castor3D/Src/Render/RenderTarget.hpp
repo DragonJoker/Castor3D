@@ -73,7 +73,8 @@ namespace castor3d
 			 *\param[in]	target	La cible de rendu
 			 *\param[in]	file	Le fichier
 			 */
-			C3D_API bool operator()( castor3d::RenderTarget const & target, castor::TextFile & file )override;
+			C3D_API bool operator()( castor3d::RenderTarget const & target
+				, castor::TextFile & file )override;
 		};
 
 	public:
@@ -139,7 +140,8 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	type	Le type de render target.
 		 */
-		C3D_API RenderTarget( Engine & engine, TargetType type = TargetType::eWindow );
+		C3D_API RenderTarget( Engine & engine
+			, TargetType type = TargetType::eWindow );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -182,7 +184,7 @@ namespace castor3d
 		 *\brief		Sets the target dimensions.
 		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
 		 *\param[in]	size	The new dimensions.
-		 *\~english
+		 *\~french
 		 *\brief		Définit les dimensions la cible.
 		 *\remarks		Cette méthode doit être appelée avant l'initialisation, sinon elle n'aura aucun effet.
 		 *\param[in]	size	Les nouvelles dimensions.

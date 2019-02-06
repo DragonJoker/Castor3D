@@ -43,7 +43,8 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & mesh
+			, Parameters const & parameters );
 
 	private:
 		//!\~english The number of faces	\~french Nombre de faces
@@ -52,7 +53,8 @@ namespace castor3d
 		real m_height;
 		//!\~english  The cone radius	\~french Le rayon de la base
 		real m_radius;
-		friend std::ostream & operator <<( std::ostream & o, Cone const & c );
+		friend std::ostream & operator <<( std::ostream & o
+			, Cone const & c );
 	};
 	/**
 	 *\~english
@@ -60,7 +62,8 @@ namespace castor3d
 	 *\~french
 	 *\brief		Operateur de flux
 	 */
-	inline std::ostream & operator <<( std::ostream & o, Cone const & c )
+	inline std::ostream & operator <<( std::ostream & o
+		, Cone const & c )
 	{
 		return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
 	}

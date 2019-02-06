@@ -12,19 +12,19 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Parser function definition.
-	 *\param[in]	p_parser	The file parser.
-	 *\param[in]	p_params	The params contained in the line.
+	 *\param[in]	parser	The file parser.
+	 *\param[in]	params	The params contained in the line.
 	 *\return		\p true if a brace is to be opened on next line.
 	 *\~french
 	 *\brief		Définition d'une fonction d'analyse.
-	 *\param[in]	p_parser	L'analyseur de fichier.
-	 *\param[in]	p_params	Les paramètres contenus dans la ligne.
+	 *\param[in]	parser	L'analyseur de fichier.
+	 *\param[in]	params	Les paramètres contenus dans la ligne.
 	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
 	 */
-	typedef std::function< bool( castor::FileParser * p_parser, ParserParameterArray const & p_params ) > ParserFunction;
+	using ParserFunction = std::function< bool( castor::FileParser * parser, ParserParameterArray const & params ) >;
 
 #define DO_WRITE_PARSER_NAME( funcname )\
-	funcname( castor::FileParser * p_parser, castor::ParserParameterArray const & p_params )
+	funcname( castor::FileParser * parser, castor::ParserParameterArray const & params )
 
 #define DO_WRITE_PARSER_END( retval )\
 		result = retval;
@@ -40,7 +40,7 @@ namespace castor
 	bool DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
-		castor::FileParserContextSPtr p_context = p_parser->getContext();
+		castor::FileParserContextSPtr context = parser->getContext();
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
@@ -48,13 +48,13 @@ namespace castor
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool result = false;\
-		castor::FileParserContextSPtr p_context = p_parser->getContext();
+		castor::FileParserContextSPtr context = parser->getContext();
 
 	//!\~english	Define to ease the implementation of a parser.
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePush( section )\
 		DO_WRITE_PARSER_END( true )\
-		p_context->m_sections.push_back( uint32_t( section ) );\
+		context->m_sections.push_back( uint32_t( section ) );\
 		return result;\
 	}
 
@@ -69,19 +69,19 @@ namespace castor
 	//!\~french		Un define pour faciliter l'implémentation d'un analyseur.
 #define CU_EndAttributePop()\
 		DO_WRITE_PARSER_END( false )\
-		p_context->m_sections.pop_back();\
+		context->m_sections.pop_back();\
 		return result;\
 	}
 
 	//!\~english	Define to ease the call to FileParser::parseError.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseError.
-#define CU_ParsingError( p_error )\
-	p_parser->parseError( p_error )
+#define CU_ParsingError( error )\
+	parser->parseError( error )
 
 	//!\~english	Define to ease the call to FileParser::parseWarning.
 	//!\~french		Un define pour faciliter l'appel de FileParser::parseWarning.
-#define CU_ParsingWarning( p_warning )\
-	p_parser->parseWarning( p_warning )
+#define CU_ParsingWarning( warning )\
+	parser->parseWarning( warning )
 
 	//!\~english	Define to ease creation of a section name.
 	//!\~french		Un define pour faciliter la création d'un nom de section.
@@ -243,13 +243,13 @@ namespace castor
 		 *\param[in]	params		The given parameters.
 		 *\param[in]	expected	The expected parameters.
 		 *\param[in]	received	The filled parameters.
-		 *\return		\p false if \p p_params doesn't contain all expected parameters types.
+		 *\return		\p false if \p params doesn't contain all expected parameters types.
 		 *\~french
 		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend.
 		 *\param[in]	params		Les paramètres donnés.
 		 *\param[in]	expected	Les paramètres attendus.
 		 *\param[in]	received	Les paramètres remplis.
-		 *\return		\p false si \p p_params ne contient pas tous les types de paramètres attendus par la fonction.
+		 *\return		\p false si \p params ne contient pas tous les types de paramètres attendus par la fonction.
 		 */
 		CU_API bool checkParams( String const & params
 			, ParserParameterArray const & expected
@@ -334,14 +334,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line.
-		 *\param[in]	p_error	The error text.
+		 *\param[in]	error	The error text.
 		 *\return		false if the line must be ignored.
 		 *\~french
 		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne.
-		 *\param[in]	p_error	Le texte de l'erreur.
+		 *\param[in]	error	Le texte de l'erreur.
 		 *\return		false si la ligne doit être ignorée.
 		 */
-		CU_API virtual bool doDiscardParser( String const & p_error ) = 0;
+		CU_API virtual bool doDiscardParser( String const & error ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error.
@@ -352,19 +352,19 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Gives the name associated to section ID.
-		 *\param[in]	p_section	The section ID.
+		 *\param[in]	section	The section ID.
 		 *\return		The name.
 		 *\~french
 		 *\brief		donne le nom associé à l'ID de section.
-		 *\param[in]	p_section	L'ID de section
+		 *\param[in]	section	L'ID de section
 		 *\return		Le nom.
 		 */
-		CU_API virtual castor::String doGetSectionName( uint32_t p_section ) = 0;
+		CU_API virtual castor::String doGetSectionName( uint32_t section ) = 0;
 
 	private:
-		bool doParseScriptLine( String & p_line );
+		bool doParseScriptLine( String & line );
 		bool doParseScriptBlockEnd();
-		bool doInvokeParser( castor::String & p_line, AttributeParserMap const & p_parsers );
+		bool doInvokeParser( castor::String & line, AttributeParserMap const & parsers );
 		void doEnterBlock();
 		void doLeaveBlock();
 		bool doIsInIgnoredBlock();
@@ -375,11 +375,14 @@ namespace castor
 		int m_ignoreLevel;
 
 	protected:
-		//!\~english The map holding the parsers, sorted by section	\~french La map de parseurs, triés par section
+		//!\~english	The map holding the parsers, sorted by section.
+		//!\~french		La map de parseurs, triés par section.
 		AttributeParsersBySection m_parsers;
-		//!\~english Th parser context	\~french Le contexte du parseur
+		//!\~english	The parser context.
+		//!\~french		Le contexte du parseur.
 		FileParserContextSPtr m_context;
-		//!\~english Tells the lines parsed are to be ignored	\~french Dit que les ligne slues sont ignorées
+		//!\~english	Tells the lines parsed are to be ignored.
+		//!\~french		Dit que les ligne slues sont ignorées.
 		bool m_ignored;
 	};
 }

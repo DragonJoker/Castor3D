@@ -118,25 +118,25 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Checks the parameter.
-		 *\param[in,out]	p_params	The text containing the parameter value.
+		 *\param[in,out]	params	The text containing the parameter value.
 		 *\return			\p false if any error occured.
 		 *\~french
 		 *\brief			Vérifie le paramètre.
-		 *\param[in,out]	p_params	Le texte contenant la valeur du paramètre.
+		 *\param[in,out]	params	Le texte contenant la valeur du paramètre.
 		 *\return			\p si un problème quelconque est arrivé.
 		 */
-		CU_API virtual bool parse( String & p_params ) = 0;
+		CU_API virtual bool parse( String & params ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value.
-		 *\param[out]	p_value		Receives the value.
+		 *\param[out]	value	Receives the value.
 		 *\return		The value.
 		 *\~french
 		 *\brief		Récupère la valeur du paramètre.
-		 *\param[out]	p_value		Reçoit la valeur.
+		 *\param[out]	value	Reçoit la valeur.
 		 *\return		La valeur.
 		 */
-		template< typename T > T const & get( T & p_value );
+		template< typename T > T const & get( T & value );
 	};
 }
 

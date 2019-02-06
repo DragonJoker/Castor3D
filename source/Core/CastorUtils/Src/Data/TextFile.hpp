@@ -40,18 +40,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
-		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
-		 *\param[in]	p_encoding	The text encoding mode
+		 *\param[in]	fileName	The file path
+		 *\param[in]	mode		The opening mode, combination of one or more OpenMode
+		 *\param[in]	encoding	The text encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
-		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
-		 *\param[in]	p_encoding	L'encodage pour un fichier en mode texte
+		 *\param[in]	fileName	Le chemin du fichier
+		 *\param[in]	mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
+		 *\param[in]	encoding	L'encodage pour un fichier en mode texte
 		 */
-		CU_API TextFile( Path const & p_fileName
-			, FlagCombination< OpenMode > const & p_mode
-			, EncodingMode p_encoding = EncodingMode::eASCII );
+		CU_API TextFile( Path const & fileName
+			, FlagCombination< OpenMode > const & mode
+			, EncodingMode encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
@@ -62,104 +62,104 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Reads one line from the file (stops at first separator met or when size is read)
-		 *\param[out]	p_toRead		Receives the read line
-		 *\param[in]	p_size			The maximum line size
-		 *\param[in]	p_strSeparators	The list of line separators
+		 *\param[out]	toRead		Receives the read line
+		 *\param[in]	size		The maximum line size
+		 *\param[in]	separators	The list of line separators
 		 *\return		The bytes read
 		 *\~french
 		 *\brief		Lit une ligne à partir du fichier (s'arrête au premier séparateur rencontré ou quand la taille est atteinte)
-		 *\param[out]	p_toRead		Reçoit la ligne lue
-		 *\param[in]	p_size			La taille maximale de la ligne
-		 *\param[in]	p_strSeparators	La liste des séparateurs de ligne
+		 *\param[out]	toRead		Reçoit la ligne lue
+		 *\param[in]	size		La taille maximale de la ligne
+		 *\param[in]	separators	La liste des séparateurs de ligne
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t readLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
+		CU_API uint64_t readLine( String & toRead, uint64_t size, String separators = cuT( "\r\n" ) );
 		/**
 		 *\~english
 		 *\brief		Reads one word from the file (stops at first ' ' met)
-		 *\param[out]	p_toRead	Receives the read word
+		 *\param[out]	toRead	Receives the read word
 		 *\return		The bytes read
 		 *\~french
 		 *\brief		Lit un mot à partir du fichier (s'arrête au premier ' ' rencontré)
-		 *\param[out]	p_toRead	Reçoit le mot lu
+		 *\param[out]	toRead	Reçoit le mot lu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t readWord( String & p_toRead );
+		CU_API uint64_t readWord( String & toRead );
 		/**
 		 *\~english
 		 *\brief		Reads one char from the file
-		 *\param[out]	p_toRead	Receives the read char
+		 *\param[out]	toRead	Receives the read char
 		 *\return		The bytes read
 		 *\~french
 		 *\brief		Lit un caractère à partir du fichier
-		 *\param[out]	p_toRead	Reçoit le caractère lu
+		 *\param[out]	toRead	Reçoit le caractère lu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t readChar( xchar & p_toRead );
+		CU_API uint64_t readChar( xchar & toRead );
 		/**
 		 *\~english
 		 *\brief		Copies all this file's content into a string
-		 *\param[out]	p_strOut	Receives thge content
+		 *\param[out]	out	Receives the content
 		 *\return		The bytes read
 		 *\~french
 		 *\brief		Copie tout le contenu de ce fichier dans une chaîne de caractères
-		 *\param[out]	p_strOut	Reçoit le contenu
+		 *\param[out]	out	Reçoit le contenu
 		 *\return		Le nombre d'octets lus
 		 */
-		CU_API uint64_t copyToString( String & p_strOut );
+		CU_API uint64_t copyToString( String & out );
 		/**
 		 *\~english
 		 *\brief		Writes a text into the file
-		 *\param[in]	p_strText	The text
+		 *\param[in]	text	The text
 		 *\return		The bytes written
 		 *\~french
 		 *\brief		Ecrit une texte dans le fichier
-		 *\param[in]	p_strText	Le texte
+		 *\param[in]	text	Le texte
 		 *\return		Le nombre d'octets écrits
 		 */
-		CU_API uint64_t writeText( String const & p_strText );
+		CU_API uint64_t writeText( String const & text );
 		/**
 		 *\~english
 		 *\brief		Writes a formatted text into the file
-		 *\param[in]	p_uiMaxSize	The maximum text size
-		 *\param[in]	p_pFormat	The text format
-		 *\param[in]	...			POD arguments (cf. printf)
+		 *\param[in]	maxSize	The maximum text size
+		 *\param[in]	format	The text format
+		 *\param[in]	...		POD arguments (cf. printf)
 		 *\return		The bytes written
 		 *\~french
 		 *\brief		Ecrit un texte formaté dans le fichier
-		 *\param[in]	p_uiMaxSize	La taille maximale du texte
-		 *\param[in]	p_pFormat	Le format du texte
-		 *\param[in]	...			Paramètres POD (cf. printf)
+		 *\param[in]	maxSize	La taille maximale du texte
+		 *\param[in]	format	Le format du texte
+		 *\param[in]	...		Paramètres POD (cf. printf)
 		 *\return		Le nombre d'octets écrits
 		 */
-		CU_API uint64_t print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
+		CU_API uint64_t print( uint64_t maxSize, xchar const * format, ... );
 	};
 	/**
 	 *\~english
 	 *\brief		open mode dependant write function
-	 *\param[in]	p_file		The file
-	 *\param[in]	p_toWrite	The data to write in the file
+	 *\param[in]	file	The file
+	 *\param[in]	toWrite	The data to write in the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction d'écriture dépendant du mode d'ouverture
-	 *\param[in]	p_file		Le fichier
-	 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
+	 *\param[in]	file	Le fichier
+	 *\param[in]	toWrite	La donnée à écrire dans le fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > TextFile & operator<<( TextFile & p_file, T const & p_toWrite );
+	template< typename T > TextFile & operator<<( TextFile & file, T const & toWrite );
 	/**
 	 *\~english
 	 *\brief		open mode dependant read function
-	 *\param[in]	p_file		The file
-	 *\param[out]	p_toRead	The data to read from the file
+	 *\param[in]	file	The file
+	 *\param[out]	toRead	The data to read from the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction de lecture dépendant du mode d'ouverture
-	 *\param[in]	p_file		Le fichier
-	 *\param[out]	p_toRead	La donnée à lire à partir du fichier
+	 *\param[in]	file	Le fichier
+	 *\param[out]	toRead	La donnée à lire à partir du fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > TextFile & operator>>( TextFile & p_file, T & p_toRead );
+	template< typename T > TextFile & operator>>( TextFile & file, T & toRead );
 }
 
 #include "TextFile.inl"

@@ -26,12 +26,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor, initialises the pool with given threads count.
-		 *\param[in]	p_count	The threads count.
+		 *\param[in]	count	The threads count.
 		 *\~french
 		 *\brief		Constructeur, initialise le pool au nombre de threads donné.
-		 *\param[in]	p_count	Le nombre de threads du pool.
+		 *\param[in]	count	Le nombre de threads du pool.
 		 */
-		CU_API explicit ThreadPool( size_t p_count );
+		CU_API explicit ThreadPool( size_t count );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -56,25 +56,25 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Waits for all the threads to finish their job.
-		 *\param[in]	p_timeout	The maximum time to wait.
+		 *\param[in]	timeout	The maximum time to wait.
 		 *\return		\p true if all threads have finished.
 		 *\~french
 		 *\brief		Attend que tous les threads aient terminé leur tâche.
-		 *\param[in]	p_timeout	Le temps d'attente maximum.
+		 *\param[in]	timeout	Le temps d'attente maximum.
 		 *\return		\p true Si tous les threads on terminé.
 		 */
-		CU_API bool waitAll( castor::Milliseconds const & p_timeout )const;
+		CU_API bool waitAll( castor::Milliseconds const & timeout )const;
 		/**
 		 *\~english
 		 *\brief		Feeds a worker thread with the given job.
 		 *\remarks		If no thread is available, waits for one to finish its job.
-		 *\param[in]	p_job	The job.
+		 *\param[in]	job	The job.
 		 *\~french
 		 *\brief		donne à un thread de travail la tâche donnée.
 		 *\remarks		Si aucun thread n'est disponible, attend que l'un d'eux finisse sa tâche.
-		 *\param[in]	p_job	La tâche.
+		 *\param[in]	job	La tâche.
 		 */
-		CU_API void pushJob( WorkerThread::Job p_job );
+		CU_API void pushJob( WorkerThread::Job job );
 		/**
 		 *\~english
 		 *\return		The threads count.
@@ -88,7 +88,7 @@ namespace castor
 
 	private:
 		WorkerThread & doReserveWorker();
-		void doFreeWorker( WorkerThread & p_worker );
+		void doFreeWorker( WorkerThread & worker );
 
 	private:
 		size_t const m_count;

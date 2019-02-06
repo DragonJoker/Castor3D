@@ -12,7 +12,8 @@ using namespace castor;
 
 namespace castor3d
 {
-	Ray::Ray( Point2i const & point, Camera const & camera )
+	Ray::Ray( Position const & point
+		, Camera const & camera )
 	{
 		auto const & projection = camera.getProjection();
 		auto const & view = camera.getView();
@@ -40,19 +41,24 @@ namespace castor3d
 		point::normalise( m_direction );
 	}
 
-	Ray::Ray( int x, int y, Camera const & camera )
-		: Ray{ Point2i{ x, y }, camera }
+	Ray::Ray( int x, int y
+		, Camera const & camera )
+		: Ray{ Position{ x, y }, camera }
 	{
 	}
 
-	Ray::Ray( Point3r const & origin, Point3r const & direction )
+	Ray::Ray( Point3r const & origin
+		, Point3r const & direction )
 		: m_origin{ origin }
 		, m_direction{ direction }
 	{
 		point::normalise( m_direction );
 	}
 
-	Intersection Ray::intersects( Point3r const & pt1, Point3r const & pt2, Point3r const & pt3, real & distance )const
+	Intersection Ray::intersects( Point3r const & pt1
+		, Point3r const & pt2
+		, Point3r const & pt3
+		, real & distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
 		Intersection result = Intersection::eOut;
@@ -87,7 +93,10 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( Face const & face, castor::Matrix4x4r const & transform, Submesh const & submesh, real & distance )const
+	Intersection Ray::intersects( Face const & face
+		, castor::Matrix4x4r const & transform
+		, Submesh const & submesh
+		, real & distance )const
 	{
 		//Point3r pt1, pt2, pt3;
 		//auto stride = submesh.getVertexBuffer().getDeclaration().stride();
@@ -98,7 +107,8 @@ namespace castor3d
 		return Intersection::eOut;
 	}
 
-	Intersection Ray::intersects( Point3r const & vertex, real & distance )const
+	Intersection Ray::intersects( Point3r const & vertex
+		, real & distance )const
 	{
 		Intersection result = Intersection::eOut;
 		Point3r u( m_origin - vertex );
@@ -113,7 +123,8 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( BoundingBox const & box, real & distance )const
+	Intersection Ray::intersects( BoundingBox const & box
+		, real & distance )const
 	{
 		Point3r v1( box.getMin().constPtr() );
 		Point3r v8( box.getMax().constPtr() );
@@ -207,7 +218,8 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( BoundingSphere const & sphere, real & distance )const
+	Intersection Ray::intersects( BoundingSphere const & sphere
+		, real & distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
 		auto result = Intersection::eOut;
@@ -266,7 +278,10 @@ namespace castor3d
 		return result;
 	}
 
-	Intersection Ray::intersects( GeometrySPtr geometry, Face & nearestFace, SubmeshSPtr & nearestSubmesh, real & distance )const
+	Intersection Ray::intersects( GeometrySPtr geometry
+		, Face & nearestFace
+		, SubmeshSPtr & nearestSubmesh
+		, real & distance )const
 	{
 		MeshSPtr mesh = geometry->getMesh();
 		Point3r center{ geometry->getParent()->getDerivedPosition() };

@@ -31,7 +31,8 @@ namespace castor
 		CU_DeclareSmartPtr( TObj );
 		CU_DeclareTemplateMap( TKey, TObjSPtr, TObjPtr );
 		typedef typename TObjPtrMap::value_type ValueType;
-		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
+		//!\~english	Typedef over the key param type.
+		//!\~french		Typedef sur le type de la clef en paramètre de fonction
 		typedef typename CallTraits< TKey >::ConstParamType KeyParamType;
 
 	private:
@@ -123,14 +124,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Looks for a collected object at the given key
-		 *\param[in]	p_key	The key
+		 *\param[in]	key	The key
 		 *\return		The found object if any, \p null_ptr if none
 		 *\~french
 		 *\brief		Recherche dans la collection un objet situé à la clef donnée
-		 *\param[in]	p_key	La clef
+		 *\param[in]	key	La clef
 		 *\return		L'objet trouvé s'il existe, \p null_ptr sinon
 		 */
-		inline TObjSPtr find( KeyParamType p_key )const;
+		inline TObjSPtr find( KeyParamType key )const;
 		/**
 		 *\~english
 		 *\brief		Gives the collected objects count
@@ -143,38 +144,38 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Inserts an element at the given key into the collection
-		 *\param[in]	p_key		The key at which element is inserted
-		 *\param[in]	p_element	The element to insert
+		 *\param[in]	key		The key at which element is inserted
+		 *\param[in]	element	The element to insert
 		 *\return		\p false if there is already one object at the given key
 		 *\~french
 		 *\brief		Insère un élément à la clef donnée
-		 *\param[in]	p_key		La clef à laquelle l'élément sera associé
-		 *\param[in]	p_element	L'élément à insérer
+		 *\param[in]	key		La clef à laquelle l'élément sera associé
+		 *\param[in]	element	L'élément à insérer
 		 *\return		\p false si un élément est déjà associé à la clef
 		 */
-		inline bool insert( KeyParamType p_key, TObjSPtr p_element );
+		inline bool insert( KeyParamType key, TObjSPtr element );
 		/**
 		 *\~english
 		 *\brief		Tests if there is an element associated to the key
-		 *\param[in]	p_key	The key to test
+		 *\param[in]	key	The key to test
 		 *\return		The test result
 		 *\~french
 		 *\brief		Teste si un élément est associé à la clef donnée
-		 *\param[in]	p_key	La clef à tester
+		 *\param[in]	key	La clef à tester
 		 *\return		Le résultat du test
 		 */
-		inline bool has( KeyParamType p_key )const;
+		inline bool has( KeyParamType key )const;
 		/**
 		 *\~english
 		 *\brief		Removes the element associated to the given key from the collection
-		 *\param[in]	p_key	The key
+		 *\param[in]	key	The key
 		 *\return		The associated element, nullptr if none
 		 *\~french
 		 *\brief		Enlève de la collection l'élément associé à la clef donnée
-		 *\param[in]	p_key	La clef
+		 *\param[in]	key	La clef
 		 *\return		L'élément associé, null_ptr sinon
 		 */
-		inline TObjSPtr erase( KeyParamType p_key );
+		inline TObjSPtr erase( KeyParamType key );
 
 	protected:
 		/**
@@ -187,12 +188,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Updates the last search, performing the lookup in the map.
-		 *\param[in]	p_key	The key to test.
+		 *\param[in]	key	The key to test.
 		 *\~french
 		 *\brief		Met à jour la dernière recherche, en effectuant la recherche dans la map.
-		 *\param[in]	p_key	La clef à tester.
+		 *\param[in]	key	La clef à tester.
 		 */
-		inline void doUpdateLast( KeyParamType p_key )const;
+		inline void doUpdateLast( KeyParamType key )const;
 
 	private:
 		TObjPtrMap m_objects;

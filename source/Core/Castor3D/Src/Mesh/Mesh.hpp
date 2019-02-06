@@ -61,21 +61,23 @@ namespace castor3d
 			 *\param[in]	object	L'objet à écrire.
 			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( Mesh const & object, castor::TextFile & file )override;
+			C3D_API bool operator()( Mesh const & object
+				, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name	This mesh name.
-		 *\param[in]	p_scene	The parent scene.
+		 *\param[in]	name	This mesh name.
+		 *\param[in]	scene	The parent scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name	Le nom du maillage.
-		 *\param[in]	p_scene	La scèene parente.
+		 *\param[in]	name	Le nom du maillage.
+		 *\param[in]	scene	La scèene parente.
 		 */
-		C3D_API Mesh( castor::String const & p_name, Scene & p_scene );
+		C3D_API Mesh( castor::String const & name
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -89,28 +91,28 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API Mesh( Mesh && p_rhs ) = default;
+		C3D_API Mesh( Mesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API Mesh & operator=( Mesh && p_rhs ) = default;
+		C3D_API Mesh & operator=( Mesh && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API Mesh( Mesh const & p_rhs ) = delete;
+		C3D_API Mesh( Mesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API Mesh & operator=( Mesh const & p_rhs ) = delete;
+		C3D_API Mesh & operator=( Mesh const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Clears all submeshes
@@ -153,14 +155,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Tries to retrieve the submesh at the given index
-		 *\param[in]	p_index	The wanted submesh index
+		 *\param[in]	index	The wanted submesh index
 		 *\return		The found submesh, nullptr if not found
 		 *\~french
 		 *\brief		Essaie de récupérer le sous maillage à l'indice donné
-		 *\param[in]	p_index	L'indice du sous maillage voulu
+		 *\param[in]	index	L'indice du sous maillage voulu
 		 *\return		Le sous maillage trouvé, nullptr si non trouvé
 		 */
-		C3D_API SubmeshSPtr getSubmesh( uint32_t p_index )const;
+		C3D_API SubmeshSPtr getSubmesh( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Creates a submesh
@@ -173,39 +175,39 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
-		 *\param[in]	p_submesh	The submesh to delete
+		 *\param[in]	submesh	The submesh to delete
 		 *\~french
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
-		 *\param[in]	p_submesh	Le submesh à supprimer
+		 *\param[in]	submesh	Le submesh à supprimer
 		 */
-		C3D_API void deleteSubmesh( SubmeshSPtr & p_submesh );
+		C3D_API void deleteSubmesh( SubmeshSPtr & submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void computeNormals( bool p_reverted = false );
+		C3D_API void computeNormals( bool reverted = false );
 		/**
 		 *\~english
 		 *\brief		Sets the skeleton
-		 *\param[in]	p_skeleton	The new value
+		 *\param[in]	skeleton	The new value
 		 *\~french
 		 *\brief		Définit le squelette
-		 *\param[in]	p_skeleton	La nouvelle valeur
+		 *\param[in]	skeleton	La nouvelle valeur
 		 */
-		C3D_API void setSkeleton( SkeletonSPtr p_skeleton );
+		C3D_API void setSkeleton( SkeletonSPtr skeleton );
 		/**
 		 *\~english
 		 *\brief		Creates an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Crée une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API MeshAnimation & createAnimation( castor::String const & p_name );
+		C3D_API MeshAnimation & createAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes

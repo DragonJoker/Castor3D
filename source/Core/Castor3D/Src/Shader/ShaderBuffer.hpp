@@ -27,12 +27,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	size	The buffer size.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	size		The buffer size.
+		 *\param[in]	forceTbo	Tells if this buffer must use a TBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	size	La taille du tampon.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	size		La taille du tampon.
+		 *\param[in]	forceTbo	Dit si ce tampon doit utiliser un TBO.
 		 */
 		C3D_API ShaderBuffer( Engine & engine
 			, uint32_t size
@@ -53,9 +55,13 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Updates the buffer.
+		 *\brief		Updates the buffer on GPU.
+		 *\param[in]	offset	The starting offset.
+		 *\param[in]	size	The update range.
 		 *\~french
-		 *\brief		Met à jour le tampon.
+		 *\brief		Met à jour le tampon sur le GPU.
+		 *\param[in]	offset	L'offset de départ.
+		 *\param[in]	size	L'intervalle à mettre à jour.
 		 */
 		C3D_API void update( uint32_t offset, uint32_t size );
 		/**
@@ -69,11 +75,13 @@ namespace castor3d
 		C3D_API ashes::DescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
 		/**
 		 *\~english
-		 *\brief		Creates the descriptor set binding at given point.
-		 *\param[in]	binding	The descriptor set layout binding.
+		 *\brief			Creates the descriptor set binding at given point.
+		 *\param[in,out]	descriptorSet	Receives the created binding.
+		 *\param[in]		binding			The descriptor set layout binding.
 		 *\~french
-		 *\brief		Crée une attache de set de descripteurs au point donné.
-		 *\param[in]	binding	L'attache de layout de set de descripteurs.
+		 *\brief			Crée une attache de set de descripteurs au point donné.
+		 *\param[in,out]	descriptorSet	Reçoit l'attache créée.
+		 *\param[in]		binding			L'attache de layout de set de descripteurs.
 		 */
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
 			, ashes::DescriptorSetLayoutBinding const & binding )const;

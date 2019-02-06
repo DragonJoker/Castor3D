@@ -157,7 +157,7 @@ namespace castor3d
 			std::move( rsstate ),
 			ashes::MultisampleState{},
 			std::move( blstate ),
-			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 			std::move( dsstate ),
 		} );
 	}

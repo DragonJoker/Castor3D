@@ -33,14 +33,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Initialises the pool with given objects count.
-		 *\param[in]	p_count	The object's count, also defines the pool's growing size, if it is empty.
+		 *\param[in]	count	The object's count, also defines the pool's growing size, if it is empty.
 		 *\~french
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
-		 *\param[in]	p_count	Le compte des objets, détermine aussi de combien le pool va grandir, s'il est vide.
+		 *\param[in]	count	Le compte des objets, détermine aussi de combien le pool va grandir, s'il est vide.
 		 */
-		void initialise( size_t p_count )noexcept
+		void initialise( size_t count )noexcept
 		{
-			m_step = p_count;
+			m_step = count;
 			m_total = 0;
 			m_free = nullptr;
 			m_freeIndex = m_free;
@@ -100,35 +100,36 @@ namespace castor
 		 *\~english
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool.
-		 *\param[in]	p_space	The memory to free.
+		 *\param[in]	space	The memory to free.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Libère la mémoire donnée.
 		 *\remarks		Vérifie si la mémoire fait bien partie du pool.
-		 *\param[in]	p_space	La mémoire à libérer.
+		 *\param[in]	space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool deallocate( void * p_space )noexcept
+		bool deallocate( void * space )noexcept
 		{
-			if ( p_space )
+			if ( space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
 					return false;
 				}
 
-				if ( m_buffersEnd == std::find_if(	m_buffers, m_buffersEnd,
-													[&p_space]( buffer const & buffer )
-													{
-														return ptrdiff_t( p_space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( p_space ) < ptrdiff_t( buffer.m_end );
-													} ) )
+				if ( m_buffersEnd == std::find_if(	m_buffers
+					, m_buffersEnd
+					, [&space]( buffer const & buffer )
+					{
+						return ptrdiff_t( space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( space ) < ptrdiff_t( buffer.m_end );
+					} ) )
 				{
-					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )space );
 					return false;
 				}
 
-				*m_freeIndex++ = reinterpret_cast< Object * >( p_space );
+				*m_freeIndex++ = reinterpret_cast< Object * >( space );
 				return true;
 			}
 
@@ -180,24 +181,33 @@ namespace castor
 	private:
 		struct buffer
 		{
-			//!\~english The buffer.	\~french Le tampon.
+			//!\~english	The buffer.
+			//!\~french		Le tampon.
 			uint8_t * m_data = nullptr;
-			//!\~english Pointer to the buffer's end.	\~french Pointeur sur la fin du tampon.
+			//!\~english	Pointer to the buffer's end.
+			//!\~french		Pointeur sur la fin du tampon.
 			uint8_t * m_end = nullptr;
 		};
-		//!\~english The buffers.	\~french Les tampons.
+		//!\~english	The buffers.
+		//!\~french		Les tampons.
 		buffer * m_buffers = nullptr;
-		//!\~english Pointer to the buffers' end.	\~french Pointeur sur la fin des tampons.
+		//!\~english	Pointer to the buffers' end.
+		//!\~french		Pointeur sur la fin des tampons.
 		buffer * m_buffersEnd = nullptr;
-		//!\~english The free chunks.	\~french Les chunks libres.
+		//!\~english	The free chunks.
+		//!\~french		Les chunks libres.
 		Object ** m_free = nullptr;
-		//!\~english The free chunks' end.	\~french La fin des chunks libres.
+		//!\~english	The free chunks' end.
+		//!\~french		La fin des chunks libres.
 		Object ** m_freeEnd = nullptr;
-		//!\~english The las allocated chunk.	\~french Le dernier chunk alloué.
+		//!\~english	The last allocated chunk.
+		//!\~french		Le dernier chunk alloué.
 		Object ** m_freeIndex = nullptr;
-		//!\~english The size increment.	\~french L'incrément de taille.
+		//!\~english	The size increment.
+		//!\~french		L'incrément de taille.
 		size_t m_step = 0;
-		//!\~english The total allocated size.	\~french La taille totale allouée.
+		//!\~english	The total allocated size.
+		//!\~french		La taille totale allouée.
 		size_t m_total = 0;
 	};
 }

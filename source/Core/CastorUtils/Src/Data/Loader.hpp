@@ -46,14 +46,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Reads a resource from a file.
-		 *\param[in,out]	p_object	The object to read.
-		 *\param[in,out]	p_file		The file where to read the object.
+		 *\param[in,out]	object	The object to read.
+		 *\param[in,out]	file	The file where to read the object.
 		 *\~french
 		 *\brief			Lit une ressource à partir d'un fichier.
-		 *\param[in,out]	p_object	L'objet à lire.
-		 *\param[in,out]	p_file		Le fichier où lire l'objet.
+		 *\param[in,out]	object	L'objet à lire.
+		 *\param[in,out]	file	Le fichier où lire l'objet.
 		 */
-		virtual bool operator()( T & p_object, Type & p_file )
+		virtual bool operator()( T & object, Type & file )
 		{
 			CU_LoaderError( "Import not supported by the loader registered for this type" );
 		}

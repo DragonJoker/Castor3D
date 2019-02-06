@@ -28,12 +28,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name	The listener's name.
+		 *\param[in]	name	The listener's name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name	Le nom du listener.
+		 *\param[in]	name	Le nom du listener.
 		 */
-		C3D_API explicit FrameListener( castor::String const & p_name );
+		C3D_API explicit FrameListener( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -51,32 +51,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Puts an event in the corresponding array.
-		 *\param[in]	p_event	The event to put.
+		 *\param[in]	event	The event to put.
 		 *\~french
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type.
-		 *\param[in]	p_event	L'évènement à ajouter.
+		 *\param[in]	event	L'évènement à ajouter.
 		 */
-		C3D_API void postEvent( FrameEventUPtr && p_event );
+		C3D_API void postEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.
-		 *\param[in]	p_type	The type of events to fire.
+		 *\param[in]	type	The type of events to fire.
 		 *\return		\p true si tous les évènements se sont exécutés sans erreur.
 		 *\~french
 		 *\brief		Traite tous les évènements d'un type donné.
-		 *\param[in]	p_type	Le type des évènements à traiter.
+		 *\param[in]	type	Le type des évènements à traiter.
 		 *\return		\p true if all events were processed successfully.
 		 */
-		C3D_API bool fireEvents( EventType p_type );
+		C3D_API bool fireEvents( EventType type );
 		/**
 		 *\~english
 		 *\brief		Discards all events of a given type.
-		 *\param[in]	p_type	The type of events to fire.
+		 *\param[in]	type	The type of events to fire.
 		 *\~french
 		 *\brief		Supprime tous les évènements d'un type donné.
-		 *\param[in]	p_type	Le type des évènements à traiter.
+		 *\param[in]	type	Le type des évènements à traiter.
 		 */
-		C3D_API void flushEvents( EventType p_type );
+		C3D_API void flushEvents( EventType type );
 
 	protected:
 		/**

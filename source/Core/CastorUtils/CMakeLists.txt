@@ -113,6 +113,8 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 	endif ()
 
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
+	set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
+	set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/../data/Images/castor-dark-small.png" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )

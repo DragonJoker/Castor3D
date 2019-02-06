@@ -61,14 +61,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ParticleSystemImpl::addParticleVariable
 		 */
-		C3D_API void addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )override;
+		C3D_API void addParticleVariable( castor::String const & name
+			, ParticleFormat type
+			, castor::String const & defaultValue )override;
 		/**
 		 *\~english
 		 *\brief		Defines the program used to update the particles.
-		 *\param[in]	programFile	The program file path.
+		 *\param[in]	program	The shader program.
 		 *\~french
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
-		 *\param[in]	programFile	Le chemin d'accès au fichier du programme.
+		 *\param[in]	program	Le programme shader.
 		 */
 		C3D_API void setUpdateProgram( ShaderProgramSPtr program );
 		/**

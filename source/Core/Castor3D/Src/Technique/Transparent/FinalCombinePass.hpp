@@ -74,14 +74,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render size.
-		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render size.
+		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	hdrConfigUbo	The HDR UBO.
+		 *\param[in]	wbResult		The accumulation pass buffers.
+		 *\param[in]	colourView		The target colour view.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		La taille du rendu.
-		 *\param[in]	sceneUbo	L'UBO de la scène.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			La taille du rendu.
+		 *\param[in]	sceneUbo		L'UBO de la scène.
+		 *\param[in]	hdrConfigUbo	L'UBO HDR.
+		 *\param[in]	wbResult		Les tampons de la passe d'accumulation.
+		 *\param[in]	colourView		La vue couleur cible.
 		 */
 		FinalCombinePass( Engine & engine
 			, castor::Size const & size
@@ -117,8 +123,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
+		 *\param[in]	fogType	The fog type.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine la passe de combinaison.
+		 *\param[in]	fogType	Le type de brouillard.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		ashes::Semaphore const & render( FogType fogType
 			, ashes::Semaphore const & toWait );

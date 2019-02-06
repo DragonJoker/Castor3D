@@ -29,52 +29,52 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type	The event type.
+		 *\param[in]	type	The event type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type	Le type d'évènement.
+		 *\param[in]	type	Le type d'évènement.
 		 */
-		C3D_API explicit FrameEvent( EventType p_type );
+		C3D_API explicit FrameEvent( EventType type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
-		 *\param[in]	p_object	The object to copy.
+		 *\param[in]	object	The object to copy.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_object	L'objet à copier.
+		 *\param[in]	object	L'objet à copier.
 		 */
-		C3D_API FrameEvent( FrameEvent const & p_object ) = default;
+		C3D_API FrameEvent( FrameEvent const & object ) = default;
 		/**
 		 *\~english
 		 *\brief		Move constructor.
-		 *\param[in]	p_object	The object to move.
+		 *\param[in]	object	The object to move.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
-		 *\param[in]	p_object	L'objet à déplacer.
+		 *\param[in]	object	L'objet à déplacer.
 		 */
-		C3D_API FrameEvent( FrameEvent && p_object ) = default;
+		C3D_API FrameEvent( FrameEvent && object ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
-		 *\param[in]	p_object	The object to copy.
+		 *\param[in]	object	The object to copy.
 		 *\return		A reference to this object.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	p_object	L'objet à copier.
+		 *\param[in]	object	L'objet à copier.
 		 *\return		Une référence sur cet objet.
 		 */
-		C3D_API FrameEvent & operator=( FrameEvent const & p_object ) = default;
+		C3D_API FrameEvent & operator=( FrameEvent const & object ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
-		 *\param[in]	p_object	The object to move.
+		 *\param[in]	object	The object to move.
 		 *\return		A reference to this object.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
-		 *\param[in]	p_object	L'objet à déplacer.
+		 *\param[in]	object	L'objet à déplacer.
 		 *\return		Une référence sur cet objet.
 		 */
-		C3D_API FrameEvent & operator=( FrameEvent && p_object ) = default;
+		C3D_API FrameEvent & operator=( FrameEvent && object ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.

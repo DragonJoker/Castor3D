@@ -89,12 +89,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Sets the handle, initialises the window.
 		 *\param[in]	size	The window size.
-		 *\param[in]	handle	The handle.
+		 *\param[in]	handle	The native window handle.
 		 *\return		\p false if any problem occured
 		 *\~french
 		 *\brief		Définit l'identifiant de la fenêtre, initialise la fenêtre.
 		 *\param[in]	size	Les dimensions de la fenêtre.
-		 *\param[in]	handle	Le handle.
+		 *\param[in]	handle	Le handle de la fenêtre native.
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
 		C3D_API bool initialise( castor::Size const & size
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Renders one frame.
 		 *\param[in]	force	Forces the rendering.
-		 *\~english
+		 *\~french
 		 *\brief		Renders one frame.
 		 *\param[in]	force	Dit si on force le rendu.
 		 */
@@ -249,13 +249,11 @@ namespace castor3d
 		C3D_API void setPixelFormat( ashes::Format value );
 		/**
 		 *\~english
-		 *\brief		Adds a scene rendered through this technique.
+		 *\brief		Adds a scene that can be picked.
 		 *\param[in]	scene	The scene.
-		 *\param[in]	camera	The camera through which the scene is viewed.
 		 *\~french
-		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\brief		Ajoute une scène qui peut être pickée.
 		 *\param[in]	scene	La scène.
-		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
 		 */
 		C3D_API void addPickingScene( Scene & scene );
 		/**

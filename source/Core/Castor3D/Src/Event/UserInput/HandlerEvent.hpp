@@ -24,17 +24,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Constructor.
-		 *\param[in]	p_type		The handler event type.
-		 *\param[in]	p_handler	A handler.
+		 *\param[in]	type	The handler event type.
+		 *\param[in]	handler	A handler.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type		Le type d'évènement de gestionnaire.
-		 *\param[in]	p_handler	Un gestionnaire.
+		 *\param[in]	type	Le type d'évènement de gestionnaire.
+		 *\param[in]	handler	Un gestionnaire.
 		 */
-		HandlerEvent( HandlerEventType p_type, EventHandlerSPtr p_handler )
+		HandlerEvent( HandlerEventType type
+			, EventHandlerSPtr handler )
 			: UserInputEvent{ UserInputEventType::eHandler }
-			, m_handlerEventType{ p_type }
-			, m_handler{ p_handler }
+			, m_handlerEventType{ type }
+			, m_handler{ handler }
 		{
 		}
 		/**
@@ -69,9 +70,11 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english The handler event type. \~french Le type d'évènement de gestionnaire.
+		//!\~english	The handler event type.
+		//!\~french		Le type d'évènement de gestionnaire.
 		HandlerEventType const m_handlerEventType;
-		//!\~english The handler.	\~french Le gestionnaire.
+		//!\~english	The handler.
+		//!\~french		Le gestionnaire.
 		EventHandlerWPtr const m_handler;
 	};
 }

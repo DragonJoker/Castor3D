@@ -31,10 +31,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API explicit PickingPass( Engine & engine
 			, MatrixUbo const & matrixUbo
@@ -56,7 +60,8 @@ namespace castor3d
 		 *\param[in]	scene	La scène.
 		 *\param[in]	camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void addScene( Scene & scene, Camera & camera );
+		C3D_API void addScene( Scene & scene
+			, Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
@@ -149,13 +154,11 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, BillboardListRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
 		void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, SubmeshRenderNode & node )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor

@@ -29,12 +29,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The name
+		 *\param[in]	name	The name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom
+		 *\param[in]	name	Le nom
 		 */
-		explicit Resource( String const & p_name );
+		explicit Resource( String const & name );
 		/**
 		*\~english
 		*\brief		Destructor
@@ -47,54 +47,54 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_other	The Resource to copy
+		 *\param[in]	other	The Resource to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_other	La Resource à copier
+		 *\param[in]	other	La Resource à copier
 		 */
-		Resource( Resource const & p_other );
+		Resource( Resource const & other );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_other	The Resource to move
+		 *\param[in]	other	The Resource to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_other	La Resource à déplacer
+		 *\param[in]	other	La Resource à déplacer
 		 */
-		Resource( Resource && p_other );
+		Resource( Resource && other );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_other	The Resource to copy
+		 *\param[in]	other	The Resource to copy
 		 *\return		A reference to this Resource
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_other	La Resource à copier
+		 *\param[in]	other	La Resource à copier
 		 *\return		Une référence sur ce Resource
 		 */
-		Resource & operator=( Resource const & p_other );
+		Resource & operator=( Resource const & other );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_other	The Resource to move
+		 *\param[in]	other	The Resource to move
 		 *\return		A reference to this Resource
 		 *\~french
 		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_other	La Resource à déplacer
+		 *\param[in]	other	La Resource à déplacer
 		 *\return		Une référence sur ce Resource
 		 */
-		Resource & operator=( Resource && p_other );
+		Resource & operator=( Resource && other );
 		/**
 		 *\~english
 		 *\brief		Defines the resource name
 		 *\remarks		Also tells the collection the new resource name
-		 *\param[in]	p_name	The new name
+		 *\param[in]	name	The new name
 		 *\~french
 		 *\brief		Définit le nom de la ressource
 		 *\remarks		Dit aussi à la collection le nouveau de la ressource
-		 *\param[in]	p_name	Le nouveau nom
+		 *\param[in]	name	Le nouveau nom
 		 */
-		void changeName( String const & p_name );
+		void changeName( String const & name );
 	};
 
 #	include "Resource.inl"

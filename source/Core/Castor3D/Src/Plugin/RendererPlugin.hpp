@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_RENDERER_PLUGIN_H___
@@ -28,14 +28,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	library	The shared library holding the plug-in
 		 *\param[in]	engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
+		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API RendererPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API RendererPlugin( castor::DynamicLibrarySPtr library
+			, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -55,12 +56,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the renderer type.
-		 *\param[in]	p_type	The type.
+		 *\param[in]	type	The type.
 		 *\~french
 		 *\brief		Définit le type de renderer.
-		 *\param[in]	p_type	Le type.
+		 *\param[in]	type	Le type.
 		 */
-		C3D_API void setRendererType( castor::String const & p_type );
+		C3D_API void setRendererType( castor::String const & type );
 
 	private:
 		castor::String m_type;

@@ -37,15 +37,23 @@ namespace castor3d
 		*	Constructor.
 		*\param[in] renderSystem
 		*	The RenderSystem.
+		*\param[in] nearest
+		*	Tells if the sampler needs a Nearest filter or not.
 		*\param[in] invertU
-		*	Tells if the U coordinate of UV must be inverted, thus mirroring the reulting image.
+		*	Tells if the U coordinate of UV must be inverted, thus mirroring vertically the resulting image.
+		*\param[in] invertV
+		*	Tells if the U coordinate of UV must be inverted, thus mirroring horizontally the resulting image.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] renderSystem
 		*	Le RenderSystem.
+		*\param[in] nearest
+		*	Dit si le sampler doit filtrer en Nearest ou pas.
 		*\param[in] invertU
-		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un mirroir de l'image.
+		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un miroir vertical de l'image.
+		*\param[in] invertV
+		*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
 		*/
 		C3D_API explicit RenderQuad( RenderSystem & renderSystem
 			, bool nearest
@@ -55,13 +63,37 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Creates the rendering pipeline.
+		*\param[in] size
+		*	The render size.
+		*\param[in] position
+		*	The render position.
 		*\param[in] program
 		*	The shader program.
+		*\param[in] view
+		*	The source view.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] bindings
+		*	The already existing bindings.
+		*\param[in] pushRanges
+		*	The push constant ranges.
 		*\~french
 		*\brief
 		*	Crée le pipeline de rendu.
+		*\param[in] size
+		*	Les dimensions de rendu.
+		*\param[in] position
+		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
+		*\param[in] view
+		*	La vue cible.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] bindings
+		*	Les attaches déjà existantes.
+		*\param[in] pushRanges
+		*	Les intervalles de push constants.
 		*/
 		C3D_API void createPipeline( ashes::Extent2D const & size
 			, castor::Position const & position
@@ -74,13 +106,41 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Creates the rendering pipeline.
+		*\param[in] size
+		*	The render size.
+		*\param[in] position
+		*	The render position.
 		*\param[in] program
 		*	The shader program.
+		*\param[in] view
+		*	The source view.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] bindings
+		*	The already existing bindings.
+		*\param[in] pushRanges
+		*	The push constant ranges.
+		*\param[in] dsState
+		*	The depth stencil state to use.
 		*\~french
 		*\brief
 		*	Crée le pipeline de rendu.
+		*\param[in] size
+		*	Les dimensions de rendu.
+		*\param[in] position
+		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
+		*\param[in] view
+		*	La vue cible.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] bindings
+		*	Les attaches déjà existantes.
+		*\param[in] pushRanges
+		*	Les intervalles de push constants.
+		*\param[in] dsState
+		*	L'état de profondeur et stencil à utiliser.
 		*/
 		C3D_API void createPipeline( ashes::Extent2D const & size
 			, castor::Position const & position
@@ -102,10 +162,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Prpares the commands to render the quad.
+		*	Prepares the commands to render the quad.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] subpassIndex
+		*	The render subpass index.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] subpassIndex
+		*	L'indice de la sous passe de rendu.
 		*/
 		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex );
@@ -113,9 +181,13 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Prpares the commands to render the quad, inside given command buffer.
+		*\param[in,out] commandBuffer
+		*	The command buffer.
 		*\~french
 		*\brief
 		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
+		*\param[in,out] commandBuffer
+		*	Le tampon de commandes.
 		*/
 		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer )const;
 		/**

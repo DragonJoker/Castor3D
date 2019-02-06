@@ -30,8 +30,9 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	scene		The scene.
+		 *\param[in]	gpResult	The geometry pass buffers.
 		 *\param[in]	opaque		The opaque pass.
-		 *\param[in]	depthAttach	The depth buffer attach.
+		 *\param[in]	depthView	The depth buffer attach.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
@@ -39,8 +40,9 @@ namespace castor3d
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	scene		La scène.
+		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 *\param[in]	opaque		La passe opaque.
-		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
+		 *\param[in]	depthView	L'attache du tampon de profondeur.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
@@ -65,12 +67,14 @@ namespace castor3d
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The viewing camera.
 		 *\param[in]	gp		The geometry pass result.
+		 *\param[out]	toWait	The semaphore from previous render pass.
 		 *\param[out]	info	The render infos.
 		 *\~french
 		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
 		 *\param[in]	scene	La scène.
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	gp		Le résultat de la geometry pass.
+		 *\param[out]	toWait	Le sémaphore de la passe de rendu précédente.
 		 *\param[out]	info	Les informations de rendu.
 		 */
 		ashes::Semaphore const & render( Scene const & scene

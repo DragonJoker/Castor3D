@@ -45,14 +45,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Parses the given text into a parameters list.
-		 *\param[in]	p_text	The source text.
+		 *\param[in]	text	The source text.
 		 *\~french
 		 *\brief		Analyse le texte donné en une liste de paramètres.
-		 *\param[in]	p_text	Le texte source.
+		 *\param[in]	text	Le texte source.
 		 */
-		C3D_API void parse( castor::String const & p_text )
+		C3D_API void parse( castor::String const & text )
 		{
-			castor::StringArray params = castor::string::split( p_text, cuT( " " ), 0xFFFFFFFF, false );
+			castor::StringArray params = castor::string::split( text, cuT( " " ), 0xFFFFFFFF, false );
 
 			for ( auto param : params )
 			{
@@ -77,29 +77,31 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name		The parameter name
-		 *\param[in]	p_values	The parameter values
-		 *\param[in]	p_count		The values count
+		 *\param[in]	name	The parameter name
+		 *\param[in]	values	The parameter values
+		 *\param[in]	count	The values count
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name		Le nom du paramètre
-		 *\param[in]	p_values	Les valeurs du paramètre
-		 *\param[in]	p_count		Le compte des valeurs
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	values	Les valeurs du paramètre
+		 *\param[in]	count	Le compte des valeurs
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T >
-		inline bool add( castor::String const & p_name, T * p_values, uint32_t p_count )
+		inline bool add( castor::String const & name
+			, T * values
+			, uint32_t count )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( p_name );
+			ParamNameMapIt it = m_mapParameters.find( name );
 
 			if ( it == m_mapParameters.end() )
 			{
-				ByteArray param( sizeof( T ) * p_count, 0 );
-				std::memcpy( &param[0], p_values, sizeof( T ) * p_count );
-				m_mapParameters.insert( std::make_pair( p_name, param ) );
+				ByteArray param( sizeof( T ) * count, 0 );
+				std::memcpy( &param[0], values, sizeof( T ) * count );
+				m_mapParameters.insert( std::make_pair( name, param ) );
 				result = true;
 			}
 
@@ -108,14 +110,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a parameters list.
-		 *\param[in]	p_parameters	The parameters list.
+		 *\param[in]	parameters	The parameters list.
 		 *\~french
 		 *\brief		Ajoute une liste de paramètres.
-		 *\param[in]	p_parameters	La liste de paramètres.
+		 *\param[in]	parameters	La liste de paramètres.
 		 */
-		inline void add( Parameters const & p_parameters )
+		inline void add( Parameters const & parameters )
 		{
-			for ( auto parameter : p_parameters.m_mapParameters )
+			for ( auto parameter : parameters.m_mapParameters )
 			{
 				m_mapParameters.insert( { parameter.first, parameter.second } );
 			}
@@ -124,65 +126,68 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name		The parameter name
-		 *\param[in]	p_values	The parameter values
+		 *\param[in]	name	The parameter name
+		 *\param[in]	values	The parameter values
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name		Le nom du paramètre
-		 *\param[in]	p_values	Les valeurs du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	values	Les valeurs du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T, uint32_t N >
-		inline bool add( castor::String const & p_name, T const( &p_values )[N] )
+		inline bool add( castor::String const & name
+			, T const( &values )[N] )
 		{
-			return add( p_name, p_values, N );
+			return add( name, values, N );
 		}
 		/**
 		 *\~english
 		 *\brief		adds a parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
 		template< typename T >
-		inline bool add( castor::String const & p_name, T const & p_value )
+		inline bool add( castor::String const & name
+			, T const & value )
 		{
-			return add( p_name, &p_value, 1 );
+			return add( name, &value, 1 );
 		}
 		/**
 		 *\~english
 		 *\brief		adds a string parameter
 		 *\remarks		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre chaîne de caractères
 		 *\remarks		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		inline bool add( castor::String const & p_name, castor::String const & p_value )
+		inline bool add( castor::String const & name
+			, castor::String const & value )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( p_name );
+			ParamNameMapIt it = m_mapParameters.find( name );
 
 			if ( it == m_mapParameters.end() )
 			{
-				size_t size = sizeof( xchar ) * p_value.size();
+				size_t size = sizeof( xchar ) * value.size();
 				ByteArray param( size + 1, 0 );
-				std::memcpy( &param[0], p_value.data(), size );
-				m_mapParameters.insert( std::make_pair( p_name, param ) );
+				std::memcpy( &param[0], value.data(), size );
+				m_mapParameters.insert( std::make_pair( name, param ) );
 				result = true;
 			}
 
@@ -191,24 +196,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets a parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[in]	value	The parameter value
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
 		 *\brief		Définit la valeur d'un paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool set( castor::String const & p_name, T const & p_value )
+		inline bool set( castor::String const & name
+			, T const & value )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( p_name );
+			ParamNameMapIt it = m_mapParameters.find( name );
 
 			if ( it != m_mapParameters.end() )
 			{
-				std::memcpy( &it->second[0], &p_value, sizeof( T ) );
+				std::memcpy( &it->second[0], &value, sizeof( T ) );
 				result = true;
 			}
 
@@ -217,28 +223,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a parameter value
-		 *\param[in]	p_name		The parameter name
-		 *\param[out]	p_values	The parameter values
-		 *\param[in]	p_count		The values available count
+		 *\param[in]	name	The parameter name
+		 *\param[out]	values	The parameter values
+		 *\param[in]	count	The values available count
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
 		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_name		Le nom du paramètre
-		 *\param[out]	p_values	Ls valeurs du paramètre
-		 *\param[in]	p_count		La nombre disponible de valeurs
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[out]	values	Les valeurs du paramètre
+		 *\param[in]	count	La nombre disponible de valeurs
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool get( castor::String const & p_name, T * p_values, uint32_t p_count )const
+		inline bool get( castor::String const & name
+			, T * values
+			, uint32_t count )const
 		{
 			bool result = false;
-			ParamNameMapConstIt it = m_mapParameters.find( p_name );
+			ParamNameMapConstIt it = m_mapParameters.find( name );
 
 			if ( it != m_mapParameters.end() )
 			{
-				if ( sizeof( T ) * p_count >= it->second.size() )
+				if ( sizeof( T ) * count >= it->second.size() )
 				{
-					std::memcpy( p_values, &it->second[0], it->second.size() );
+					std::memcpy( values, &it->second[0], it->second.size() );
 					result = true;
 				}
 			}
@@ -248,57 +256,60 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[out]	p_value	The parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[out]	value	The parameter value
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
 		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[out]	p_value	La valeur du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[out]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T >
-		inline bool get( castor::String const & p_name, T & p_value )const
+		inline bool get( castor::String const & name
+			, T & value )const
 		{
-			return get( p_name, &p_value, 1 );
+			return get( name, &value, 1 );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a parameter value
-		 *\param[in]	p_name		The parameter name
-		 *\param[out]	p_values	The parameter values
+		 *\param[in]	name	The parameter name
+		 *\param[out]	values	The parameter values
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
 		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_name		Le nom du paramètre
-		 *\param[out]	p_values	Les valeurs du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[out]	values	Les valeurs du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
 		template< typename T, uint32_t N >
-		inline bool get( castor::String const & p_name, T( &p_values )[N] )const
+		inline bool get( castor::String const & name
+			, T( &values )[N] )const
 		{
-			return get( p_name, p_values, N );
+			return get( name, values, N );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[out]	p_value	The parameter value
+		 *\param[in]	name	The parameter name
+		 *\param[out]	value	The parameter value
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
 		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[out]	p_value	La valeur du paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 *\param[out]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		inline bool get( castor::String const & p_name, castor::String & p_value )const
+		inline bool get( castor::String const & name
+			, castor::String & value )const
 		{
 			bool result = false;
-			ParamNameMapConstIt it = m_mapParameters.find( p_name );
+			ParamNameMapConstIt it = m_mapParameters.find( name );
 
 			if ( it != m_mapParameters.end() )
 			{
-				p_value = reinterpret_cast< xchar const * const >( it->second.data() );
+				value = reinterpret_cast< xchar const * const >( it->second.data() );
 				result = true;
 			}
 

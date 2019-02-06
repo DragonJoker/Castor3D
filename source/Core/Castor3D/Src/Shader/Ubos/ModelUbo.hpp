@@ -75,24 +75,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_shadowReceiver	Tells if the model receives shadows.
-		 *\param[in]	p_materialIndex		The material index.
+		 *\param[in]	shadowReceiver	Tells if the model receives shadows.
+		 *\param[in]	materialIndex	The material index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_shadowReceiver	Dit si le modèle reçoit les ombres.
-		 *\param[in]	p_materialIndex		L'indice du matériau.
+		 *\param[in]	shadowReceiver	Dit si le modèle reçoit les ombres.
+		 *\param[in]	materialIndex	L'indice du matériau.
 		 */
-		C3D_API void update( bool p_shadowReceiver
-			, uint32_t p_materialIndex )const;
+		C3D_API void update( bool shadowReceiver
+			, uint32_t materialIndex )const;
 		/**
 		 *\~english
 		 *\brief		Sets the environment map index value.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'indice de la texture d'environnement.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setEnvMapIndex( uint32_t p_value );
+		C3D_API void setEnvMapIndex( uint32_t value );
 		/**
 		 *\~english
 		 *\name			getters.

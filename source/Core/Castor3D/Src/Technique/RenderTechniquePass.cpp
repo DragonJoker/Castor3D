@@ -81,13 +81,11 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
 	}
 
 	void RenderTechniquePass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
 	}

@@ -13,9 +13,9 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename Lockable >
-	std::unique_lock< Lockable > makeUniqueLock( Lockable & p_lockable )
+	std::unique_lock< Lockable > makeUniqueLock( Lockable & lockable )
 	{
-		return std::unique_lock< Lockable >( p_lockable );
+		return std::unique_lock< Lockable >( lockable );
 	}
 }
 

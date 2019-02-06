@@ -23,25 +23,25 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified Constructor
-		 *\param[in]	p_radius	The distance from origin
-		 *\param[in]	p_phi		Phi angle
-		 *\param[in]	p_theta		Theta angle
+		 *\param[in]	radius	The distance from origin
+		 *\param[in]	phi		Phi angle
+		 *\param[in]	theta	Theta angle
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_radius	Distance à l'origine
-		 *\param[in]	p_phi		Angle Phi
-		 *\param[in]	p_theta		Angle Theta
+		 *\param[in]	radius	Distance à l'origine
+		 *\param[in]	phi		Angle Phi
+		 *\param[in]	theta	Angle Theta
 		 */
-		CU_API SphericalVertex( real p_radius = 0, real p_phi = 0, real p_theta = 0 );
+		CU_API SphericalVertex( real radius = 0, real phi = 0, real theta = 0 );
 		/**
 		 *\~english
 		 *\brief		Constructor from a cartesian point
-		 *\param[in]	p_vertex	The vertex to convert
+		 *\param[in]	vertex	The vertex to convert
 		 *\~french
 		 *\brief		Constructeur à partir d'un point cartésien
-		 *\param[in]	p_vertex	Le vertex à convertir
+		 *\param[in]	vertex	Le vertex à convertir
 		 */
-		CU_API explicit SphericalVertex( Point3r const & p_vertex );
+		CU_API explicit SphericalVertex( Point3r const & vertex );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -51,11 +51,14 @@ namespace castor
 		CU_API ~SphericalVertex();
 
 	public:
-		//!\~english The radius (distance to origin)	\~french Rayon (distance à l'origine)
+		//!\~english	The radius (distance to origin).
+		//!\~french		Rayon (distance à l'origine).
 		real m_radius;
-		//!\~english The xy angle	\~french Angle sur le plan XY
+		//!\~english	The xy angle.
+		//!\~french		Angle sur le plan XY.
 		real m_phi;
-		//!\~english The xz angle	\~french Angle sur le plan XZ
+		//!\~english	The xz angle.
+		//!\~french		Angle sur le plan XZ.
 		real m_theta;
 	};
 }

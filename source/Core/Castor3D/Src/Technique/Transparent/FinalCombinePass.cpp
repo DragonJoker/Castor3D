@@ -331,7 +331,7 @@ namespace castor3d
 				rsstate,
 				ashes::MultisampleState{},
 				bdState,
-				{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+				{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 				dsstate,
 			} );
 		}

@@ -45,9 +45,9 @@ namespace castor3d
 		};
 
 	public:
-		C3D_API bool track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool track( castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool untrack( void * p_object, ObjectDeclaration & p_declaration );
+		C3D_API bool track( void * object, std::string const & type, std::string const & file, int line, std::string & name );
+		C3D_API bool track( castor::Named * object, std::string const & type, std::string const & file, int line, std::string & name );
+		C3D_API bool untrack( void * object, ObjectDeclaration & declaration );
 		C3D_API void reportTracked();
 
 	private:

@@ -1,6 +1,8 @@
 project( Castor3D )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
+set( ${PROJECT_NAME}_BRIEF "Multiplatform 3D engine" )
+set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/../data/Images/castor-small.png" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )

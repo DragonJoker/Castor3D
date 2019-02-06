@@ -98,14 +98,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	jitter		The jittering value.
-		 *\param[out]	velocity	Receives the velocity render.
-		 *\param[out]	info		Receives the render informations.
+		 *\param[in]	jitter			The jittering value.
+		 *\param[in]	waitSemaphores	The semaphores to wait for.
+		 *\param[out]	info			Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[out]	jitter		La valeur de jittering.
-		 *\param[out]	velocity	Reçoit le rendu des vélocités.
-		 *\param[out]	info		Reçoit les informations de rendu.
+		 *\param[in]	jitter			La valeur de jittering.
+		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
+		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
 		C3D_API ashes::Semaphore const & render( castor::Point2r const & jitter
 			, ashes::SemaphoreCRefArray const & waitSemaphores
@@ -122,15 +122,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Displays debug dumps.
+		 *\param[in]	size	The rendering size.
 		 *\~french
 		 *\brief		Affiche les dumps de debug.
+		 *\param[in]	size	Les dimensions du rendu.
 		 */
 		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
 		*\~english
-		*\brief		Visitor acceptance function.
+		*\brief
+		*	Visitor acceptance function.
 		*\~french
-		*\brief		Fonction d'acceptation de visiteur.
+		*\brief
+		*	Fonction d'acceptation de visiteur.
 		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**

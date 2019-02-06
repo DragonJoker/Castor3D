@@ -111,25 +111,25 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Retrieves predefined colour name
-	 *\param[in]	p_predefined	The predefined colour
+	 *\param[in]	predefined	The predefined colour
 	 *\return		The colour name
 	 *\~french
 	 *\brief		Récupère le nom d'une couleur prédéfinie
-	 *\param[in]	p_predefined	La couleur prédéfinie
+	 *\param[in]	predefined	La couleur prédéfinie
 	 *\return		Le nom de la couleur
 	 */
-	inline static String getPredefinedName( PredefinedRgbaColour p_predefined );
+	inline static String getPredefinedName( PredefinedRgbaColour predefined );
 	/**
 	 *\~english
 	 *\brief		Retrieves predefined colour from a name
-	 *\param[in]	p_name	The predefined colour name
+	 *\param[in]	name	The predefined colour name
 	 *\return		The predefined colour
 	 *\~french
 	 *\brief		Récupère une couleur prédéfinie à partir de son nom
-	 *\param[in]	p_name	Le nom de la couleur prédéfinie
+	 *\param[in]	name	Le nom de la couleur prédéfinie
 	 *\return		La couleur prédéfinie
 	 */
-	inline static PredefinedRgbaColour getPredefinedRgba( String const & p_name );
+	inline static PredefinedRgbaColour getPredefinedRgba( String const & name );
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/08/2010
@@ -195,18 +195,18 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			inline explicit TextWriter( String const & p_tabs );
+			inline explicit TextWriter( String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a colour into a text file
-			 *\param[in,out]	p_file		The file into which colour is written
+			 *\param[in,out]	file	The file into which colour is written
 			 *\param[in]		colour	The colour to write
 			 *\~french
 			 *\brief			Ecrit une couleur dans un fichier texte
-			 *\param[in,out]	p_file		Le fichier dans lequel on écrit la couleur
+			 *\param[in,out]	file	Le fichier dans lequel on écrit la couleur
 			 *\param[in]		colour	La couleur à écrire
 			 */
-			inline virtual bool operator()( RgbaColourT< ComponentType > const & colour, TextFile & p_file );
+			inline virtual bool operator()( RgbaColourT< ComponentType > const & colour, TextFile & file );
 		};
 
 	private:

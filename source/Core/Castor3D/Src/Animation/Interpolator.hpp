@@ -42,18 +42,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
-		 *\param[in]	p_src		The start.
-		 *\param[in]	p_dst		The end.
-		 *\param[in]	p_percent	The percentage.
+		 *\param[in]	src		The start.
+		 *\param[in]	dst		The end.
+		 *\param[in]	percent	The percentage.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_src		Le départ.
-		 *\param[in]	p_dst		L'arrivée.
-		 *\param[in]	p_percent	Le pourcentage.
+		 *\param[in]	src		Le départ.
+		 *\param[in]	dst		L'arrivée.
+		 *\param[in]	percent	Le pourcentage.
 		 */
-		C3D_API virtual Type interpolate( Type const & p_src
-			, Type const & p_dst
-			, real p_percent )const = 0;
+		C3D_API virtual Type interpolate( Type const & src
+			, Type const & dst
+			, real percent )const = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -100,16 +100,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
-		 *\param[in]	p_src		The start.
+		 *\param[in]	src	The start.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_src		Le départ.
+		 *\param[in]	src	Le départ.
 		 */
-		inline Type interpolate( Type const & p_src
+		inline Type interpolate( Type const & src
 			, Type const &
 			, real )const override
 		{
-			return p_src;
+			return src;
 		}
 	};
 	/*!
@@ -147,32 +147,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
-		 *\param[in]	p_src		The start.
-		 *\param[in]	p_dst		The end.
-		 *\param[in]	p_percent	The percentage.
+		 *\param[in]	src		The start.
+		 *\param[in]	dst		The end.
+		 *\param[in]	percent	The percentage.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_src		Le départ.
-		 *\param[in]	p_dst		L'arrivée.
-		 *\param[in]	p_percent	Le pourcentage.
+		 *\param[in]	src		Le départ.
+		 *\param[in]	dst		L'arrivée.
+		 *\param[in]	percent	Le pourcentage.
 		 */
-		inline Type interpolate( Type const & p_src
-			, Type const & p_dst
-			, real p_percent )const override
+		inline Type interpolate( Type const & src
+			, Type const & dst
+			, real percent )const override
 		{
 			Type result;
 
-			if ( p_percent <= 0.0 )
+			if ( percent <= 0.0 )
 			{
-				result = p_src;
+				result = src;
 			}
-			else if ( p_percent >= 1.0 )
+			else if ( percent >= 1.0 )
 			{
-				result = p_dst;
+				result = dst;
 			}
 			else
 			{
-				result = p_src + ( ( p_dst - p_src ) * p_percent );
+				result = src + ( ( dst - src ) * percent );
 			}
 
 			return result;
@@ -213,32 +213,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
-		 *\param[in]	p_src		The start.
-		 *\param[in]	p_dst		The end.
-		 *\param[in]	p_percent	The percentage.
+		 *\param[in]	src		The start.
+		 *\param[in]	dst		The end.
+		 *\param[in]	percent	The percentage.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_src		Le départ.
-		 *\param[in]	p_dst		L'arrivée.
-		 *\param[in]	p_percent	Le pourcentage.
+		 *\param[in]	src		Le départ.
+		 *\param[in]	dst		L'arrivée.
+		 *\param[in]	percent	Le pourcentage.
 		 */
-		inline castor::Quaternion interpolate( castor::Quaternion const & p_src
-			, castor::Quaternion const & p_dst
-			, real p_percent )const override
+		inline castor::Quaternion interpolate( castor::Quaternion const & src
+			, castor::Quaternion const & dst
+			, real percent )const override
 		{
 			castor::Quaternion result;
 
-			if ( p_percent <= 0.0 )
+			if ( percent <= 0.0 )
 			{
-				result = p_src;
+				result = src;
 			}
-			else if ( p_percent >= 1.0 )
+			else if ( percent >= 1.0 )
 			{
-				result = p_dst;
+				result = dst;
 			}
 			else
 			{
-				result = p_src.slerp( p_dst, p_percent );
+				result = src.slerp( dst, percent );
 			}
 
 			return result;

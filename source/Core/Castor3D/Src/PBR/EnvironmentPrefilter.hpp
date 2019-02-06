@@ -64,11 +64,13 @@ namespace castor3d
 		 *\param[in]	engine		The engine.
 		 *\param[in]	size		The render size.
 		 *\param[in]	srcTexture	The cube texture source.
+		 *\param[in]	sampler		The sampler used for the source texture.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	size		La taille du rendu.
 		 *\param[in]	srcTexture	La texture cube source.
+		 *\param[in]	sampler		Le sampler utilisé pour la texture source.
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, castor::Size const & size

@@ -43,18 +43,18 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a RenderedObject into a text file.
-			 *\param[in]	p_file		The file to save the cameras in.
-			 *\param[in]	p_object	The RenderedObject to save.
+			 *\param[in]	file		The file to save the cameras in.
+			 *\param[in]	object	The RenderedObject to save.
 			 *\~french
 			 *\brief		Ecrit une RenderedObject dans un fichier texte.
-			 *\param[in]	p_file		Le fichier.
-			 *\param[in]	p_object	Le RenderedObject.
+			 *\param[in]	file		Le fichier.
+			 *\param[in]	object	Le RenderedObject.
 			 */
-			C3D_API bool operator()( RenderedObject const & p_object, castor::TextFile & p_file )override;
+			C3D_API bool operator()( RenderedObject const & object, castor::TextFile & file )override;
 		};
 
 	public:
@@ -71,14 +71,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the visibility status.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de visibilité.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setVisible( bool p_value )
+		inline void setVisible( bool value )
 		{
-			m_visible = p_value;
+			m_visible = value;
 		}
 		/**
 		 *\~english
@@ -93,14 +93,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the shadow caster status.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de projection d'ombres.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShadowCaster( bool p_value )
+		inline void setShadowCaster( bool value )
 		{
-			m_castShadows = p_value;
+			m_castShadows = value;
 		}
 		/**
 		 *\~english
@@ -115,14 +115,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Defines the shadow receiving status.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le statut de réception d'ombres.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setShadowReceiver( bool p_value )
+		inline void setShadowReceiver( bool value )
 		{
-			m_receivesShadows = p_value;
+			m_receivesShadows = value;
 		}
 
 	private:

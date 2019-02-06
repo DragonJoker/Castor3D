@@ -85,11 +85,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Computes the cofactor value of given row and column
-		 *\param[in]	p_row, p_column	Row and column
+		 *\param[in]	row, column	Row and column
 		 *\return		The cofactor
 		 *\~french
 		 *\brief		Calcule le cofacteur à la ligne et la colonne données
-		 *\param[in]	p_row, p_column	La ligne et la colonne
+		 *\param[in]	row, column	La ligne et la colonne
 		 *\return		Le cofacteur
 		 */
 		__value_type getCofactor( uint32_t column, uint32_t row )const;
@@ -265,8 +265,8 @@ namespace castor
 	*name Opérateurs de flux.
 	**/
 	/**@{*/
-	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, castor::SquareMatrix< T, Count > const & p_matrix );
-	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, castor::SquareMatrix< T, Count > & p_matrix );
+	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & streamOut, castor::SquareMatrix< T, Count > const & matrix );
+	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & streamIn, castor::SquareMatrix< T, Count > & matrix );
 	/**@}*/
 }
 

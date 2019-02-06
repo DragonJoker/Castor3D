@@ -26,12 +26,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_scene	The scene.
+		 *\param[in]	scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_scene	La scène.
+		 *\param[in]	scene	La scène.
 		 */
-		explicit Animable( Scene & p_scene );
+		explicit Animable( Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -45,28 +45,28 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API Animable( Animable && p_rhs ) = default;
+		C3D_API Animable( Animable && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API Animable & operator=( Animable && p_rhs ) = default;
+		C3D_API Animable & operator=( Animable && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API Animable( Animable const & p_rhs ) = delete;
+		C3D_API Animable( Animable const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API Animable & operator=( Animable const & p_rhs ) = delete;
+		C3D_API Animable & operator=( Animable const & rhs ) = delete;
 
 	public:
 		/**
@@ -79,36 +79,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API bool hasAnimation( castor::String const & p_name )const;
+		C3D_API bool hasAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation const & getAnimation( castor::String const & p_name )const;
+		C3D_API Animation const & getAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API Animation & getAnimation( castor::String const & p_name );
+		C3D_API Animation & getAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\return		The animations.
@@ -124,26 +124,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds an animation.
-		 *\param[in]	p_animation	The animation.
+		 *\param[in]	animation	The animation.
 		 *\~french
 		 *\brief		Ajoute une animation.
-		 *\param[in]	p_animation	L'animation.
+		 *\param[in]	animation	L'animation.
 		 */
-		void doAddAnimation( AnimationSPtr && p_animation );
+		void doAddAnimation( AnimationSPtr && animation );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
+		 *\param[in]	name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
+		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
 		template< typename Type >
-		Type & doGetAnimation( castor::String const & p_name )
+		Type & doGetAnimation( castor::String const & name )
 		{
-			return static_cast< Type & >( getAnimation( p_name ) );
+			return static_cast< Type & >( getAnimation( name ) );
 		}
 
 	protected:

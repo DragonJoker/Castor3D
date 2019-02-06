@@ -170,18 +170,18 @@ namespace castor
 		Coords & operator/=( Point< U, UCount > const & rhs );
 
 		template< typename U >
-		Coords & operator+=( U const * p_coords );
+		Coords & operator+=( U const * coords );
 		template< typename U >
-		Coords & operator-=( U const * p_coords );
+		Coords & operator-=( U const * coords );
 		template< typename U >
-		Coords & operator*=( U const * p_coords );
+		Coords & operator*=( U const * coords );
 		template< typename U >
-		Coords & operator/=( U const * p_coords );
+		Coords & operator/=( U const * coords );
 
-		Coords & operator+=( T const & p_coord );
-		Coords & operator-=( T const & p_coord );
-		Coords & operator*=( T const & p_coord );
-		Coords & operator/=( T const & p_coord );
+		Coords & operator+=( T const & coord );
+		Coords & operator-=( T const & coord );
+		Coords & operator*=( T const & coord );
+		Coords & operator/=( T const & coord );
 		/**@}*/
 		/**
 		 *\~english

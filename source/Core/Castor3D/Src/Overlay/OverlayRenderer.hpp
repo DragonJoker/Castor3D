@@ -94,9 +94,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Begins the overlays preparation.
 		 *\param[in]	camera	The render window camera.
+		 *\param[in]	timer	The render pass timer.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
 		 *\param[in]	camera	La caméra de la fenêtre de rendu.
+		 *\param[in]	timer	Le timer de la passe de rendu.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API void beginPrepare( Camera const & camera
 			, RenderPassTimer const & timer
@@ -104,15 +108,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
+		 *\param[in]	timer	The render pass timer.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
+		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API void endPrepare( RenderPassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays preparation.
+		 *\param[in]	timer	The render pass timer.
 		 *\~french
 		 *\brief		Termine la préparation des incrustations.
+		 *\param[in]	timer	Le timer de la passe de rendu.
 		 */
 		C3D_API void render( RenderPassTimer & timer );
 		/**

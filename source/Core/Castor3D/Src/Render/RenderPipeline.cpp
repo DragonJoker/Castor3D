@@ -80,23 +80,33 @@ namespace castor3d
 			m_blState,
 		};
 		createInfo.depthStencilState = m_dsState;
+		ashes::DynamicStateEnableArray dynamicStates;
 
 		if ( m_viewport )
 		{
-			createInfo.viewport = *m_viewport;
+			createInfo.viewportState.viewports.push_back( *m_viewport );
 		}
 		else
 		{
-			createInfo.dynamicStates.push_back( ashes::DynamicState::eViewport );
+			dynamicStates.push_back( ashes::DynamicStateEnable::eViewport );
 		}
 
 		if ( m_scissor )
 		{
-			createInfo.scissor = *m_scissor;
+			createInfo.viewportState.scissors.push_back( *m_scissor );
 		}
 		else
 		{
-			createInfo.dynamicStates.push_back( ashes::DynamicState::eScissor );
+			dynamicStates.push_back( ashes::DynamicStateEnable::eScissor );
+		}
+
+		if ( !dynamicStates.empty() )
+		{
+			createInfo.dynamicState = ashes::DynamicState
+			{
+				0u,
+				dynamicStates,
+			};
 		}
 
 		m_pipelineLayout = getCurrentDevice( *this ).createPipelineLayout( descriptorLayouts

@@ -150,14 +150,10 @@ namespace castor3d
 		 *\~english
 		 *\brief		Creates an object.
 		 *\param[in]	name	The object name.
-		 *\param[in]	parent	The parent scene node.
-		 *\param[in]	mesh	The mesh.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
 		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	parent	Le noeud de scène parent.
-		 *\param[in]	mesh	Le maillage.
 		 *\return		L'objet créé.
 		 */
 		C3D_API ElementPtr add( Key const & name );

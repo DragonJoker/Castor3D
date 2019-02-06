@@ -517,16 +517,16 @@ namespace castor
 		 *\~english
 		 *\brief		Computes the Minkowski length of the vector
 		 *\param[in]	point	The point
-		 *\param[in]	p_dOrder	The Minkowski order
+		 *\param[in]	order	The Minkowski order
 		 *\return		The Minkowski distance
 		 *\~french
 		 *\brief		Calcule la longueur de Minkowski du vecteur
 		 *\param[in]	point	Le point
-		 *\param[in]	p_dOrder	L'ordre Minkownski
+		 *\param[in]	order	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
 		template< typename T, uint32_t TCount >
-		static double lengthMinkowski( Point< T, TCount > const & point, double p_dOrder );
+		static double lengthMinkowski( Point< T, TCount > const & point, double order );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev length of the vector
@@ -542,65 +542,65 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance between two points.
-		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\param[in]	lhs, rhs	The points.
 		 *\return		The squared Euclidian distance.
 		 *\~french
 		 *\brief		Calcule le carré de la distance Euclidienne entre deux points.
-		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\param[in]	lhs, rhs	Les points.
 		 *\return		Le carré de la norme Euclidienne.
 		 */
 		template< typename T, uint32_t TCount >
-		static double distanceSquared( Point< T, TCount > const & p_lhs, Point< T, TCount > const & p_rhs );
+		static double distanceSquared( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance between two points.
-		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\param[in]	lhs, rhs	The points.
 		 *\return		The Euclidian distance.
 		 *\~french
 		 *\brief		Calcule la norme Euclidienne entre deux points.
-		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\param[in]	lhs, rhs	Les points.
 		 *\return		La norme Euclidienne.
 		 */
 		template< typename T, uint32_t TCount >
-		static double distance( Point< T, TCount > const & p_lhs, Point< T, TCount > const & p_rhs );
+		static double distance( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Manhattan distance between two points.
-		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\param[in]	lhs, rhs	The points.
 		 *\return		The Manhattan distance.
 		 *\~french
 		 *\brief		Calcule la distance de Manhattan entre deux points.
-		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\param[in]	lhs, rhs	Les points.
 		 *\return		La distance de Manhattan.
 		 */
 		template< typename T, uint32_t TCount >
-		static double distanceManhattan( Point< T, TCount > const & p_lhs, Point< T, TCount > const & p_rhs );
+		static double distanceManhattan( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance between two points.
-		 *\param[in]	p_lhs, p_rhs	The points.
-		 *\param[in]	p_dOrder	The Minkowski order.
+		 *\param[in]	lhs, rhs	The points.
+		 *\param[in]	order	The Minkowski order.
 		 *\return		The Minkowski distance.
 		 *\~french
 		 *\brief		Calcule la distance de Minkowski entre deux points.
-		 *\param[in]	p_lhs, p_rhs	Les points.
-		 *\param[in]	p_dOrder	L'ordre Minkownski.
+		 *\param[in]	lhs, rhs	Les points.
+		 *\param[in]	order	L'ordre Minkownski.
 		 *\return		La distance de Minkowski.
 		 */
 		template< typename T, uint32_t TCount >
-		static double distanceMinkowski( Point< T, TCount > const & p_lhs, Point< T, TCount > const & p_rhs, double p_dOrder );
+		static double distanceMinkowski( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs, double order );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance between two points.
-		 *\param[in]	p_lhs, p_rhs	The points.
+		 *\param[in]	lhs, rhs	The points.
 		 *\return		The Chebychev distance.
 		 *\~french
 		 *\brief		Calcule la distance de Chebychev entre deux points.
-		 *\param[in]	p_lhs, p_rhs	Les points.
+		 *\param[in]	lhs, rhs	Les points.
 		 *\return		La distance de Chebychev.
 		 */
 		template< typename T, uint32_t TCount >
-		static double distanceChebychev( Point< T, TCount > const & p_lhs, Point< T, TCount > const & p_rhs );
+		static double distanceChebychev( Point< T, TCount > const & lhs, Point< T, TCount > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the dot product of 2 points

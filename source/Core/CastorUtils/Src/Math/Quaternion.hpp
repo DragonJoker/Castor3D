@@ -49,16 +49,16 @@ namespace castor
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file
-			 *\param[out]	p_object	The Coords< T, Count > object to read
-			 *\param[in]	p_file		The file
+			 *\param[out]	object	The Coords< T, Count > object to read
+			 *\param[in]	file	The file
 			 *\return		\p true if ok
 			 *\~french
 			 *\brief		Charge un objet Coords< T, Count > à partir d'un fichier texte
-			 *\param[out]	p_object	L'objet Coords< T, Count >
-			 *\param[in]	p_file		Le fichier
+			 *\param[out]	object	L'objet Coords< T, Count >
+			 *\param[in]	file	Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( QuaternionT< T > & p_object, TextFile & p_file );
+			virtual bool operator()( QuaternionT< T > & object, TextFile & file );
 		};
 		/*!
 		\author Sylvain DOREMUS
@@ -79,20 +79,20 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			explicit TextWriter( String const & p_tabs );
+			explicit TextWriter( String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file
-			 *\param[in]	p_object	The Point2f object to write
-			 *\param[out]	p_file		The file
+			 *\param[in]	object	The Point2f object to write
+			 *\param[out]	file	The file
 			 *\return		\p true if ok
 			 *\~french
 			 *\brief		Ecrit un objet Point2f dans un fichier texte
-			 *\param[in]	p_object	L'objet Point2f
-			 *\param[out]	p_file		Le fichier
+			 *\param[in]	object	L'objet Point2f
+			 *\param[out]	file	Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( QuaternionT< T > const & p_object, TextFile & p_file );
+			virtual bool operator()( QuaternionT< T > const & object, TextFile & file );
 		};
 
 	private:
@@ -100,7 +100,7 @@ namespace castor
 
 	private:
 		explicit QuaternionT( NoInit const & );
-		QuaternionT( T p_x, T p_y, T p_z, T p_w );
+		QuaternionT( T x, T y, T z, T w );
 
 	public:
 		/**
@@ -113,57 +113,57 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_rhs	The Quaternion object to copy
+		 *\param[in]	rhs	The Quaternion object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_rhs	L'objet Quaternion à copier
+		 *\param[in]	rhs	L'objet Quaternion à copier
 		 */
-		inline QuaternionT( QuaternionT< T > const & p_rhs );
+		inline QuaternionT( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_rhs	The Quaternion object to move
+		 *\param[in]	rhs	The Quaternion object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_rhs	L'objet Quaternion à déplacer
+		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 */
-		inline QuaternionT( QuaternionT< T > && p_rhs );
+		inline QuaternionT( QuaternionT< T > && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_values	The Quaternion values
+		 *\param[in]	values	The Quaternion values
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_values	Les valeurs du Quaternion
+		 *\param[in]	values	Les valeurs du Quaternion
 		 */
-		inline explicit QuaternionT( double const * p_values );
+		inline explicit QuaternionT( double const * values );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_values	The Quaternion values
+		 *\param[in]	values	The Quaternion values
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_values	Les valeurs du Quaternion
+		 *\param[in]	values	Les valeurs du Quaternion
 		 */
-		inline explicit QuaternionT( float const * p_values );
+		inline explicit QuaternionT( float const * values );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_values	The quaternion values
+		 *\param[in]	values	The quaternion values
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_values	Les valeurs du quaternion
+		 *\param[in]	values	Les valeurs du quaternion
 		 */
-		inline explicit QuaternionT( Point4f const & p_values );
+		inline explicit QuaternionT( Point4f const & values );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_values	The quaternion values
+		 *\param[in]	values	The quaternion values
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_values	Les valeurs du quaternion
+		 *\param[in]	values	Les valeurs du quaternion
 		 */
-		inline explicit QuaternionT( Point4d const & p_values );
+		inline explicit QuaternionT( Point4d const & values );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -174,258 +174,258 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to copy
+		 *\param[in]	rhs	The Quaternion object to copy
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_rhs	L'objet Quaternion à copier
+		 *\param[in]	rhs	L'objet Quaternion à copier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator=( QuaternionT< T > const & p_rhs );
+		inline QuaternionT< T > & operator=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to move
+		 *\param[in]	rhs	The Quaternion object to move
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_rhs	L'objet Quaternion à déplacer
+		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator=( QuaternionT< T > && p_rhs );
+		inline QuaternionT< T > & operator=( QuaternionT< T > && rhs );
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to add
+		 *\param[in]	rhs	The Quaternion object to add
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_rhs	L'objet Quaternion à ajouter
+		 *\param[in]	rhs	L'objet Quaternion à ajouter
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator+=( QuaternionT< T > const & p_rhs );
+		inline QuaternionT< T > & operator+=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to subtract
+		 *\param[in]	rhs	The Quaternion object to subtract
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_rhs	L'objet Quaternion à soustraire
+		 *\param[in]	rhs	L'objet Quaternion à soustraire
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator-=( QuaternionT< T > const & p_rhs );
+		inline QuaternionT< T > & operator-=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	The Quaternion object to multiply
+		 *\param[in]	rhs	The Quaternion object to multiply
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_rhs	L'objet Quaternion à multiplier
+		 *\param[in]	rhs	L'objet Quaternion à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( QuaternionT< T > const & p_rhs );
+		inline QuaternionT< T > & operator*=( QuaternionT< T > const & rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	The scalar to multiply
+		 *\param[in]	rhs	The scalar to multiply
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_rhs	Le scalaire à multiplier
+		 *\param[in]	rhs	Le scalaire à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( double p_rhs );
+		inline QuaternionT< T > & operator*=( double rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	The scalar to multiply
+		 *\param[in]	rhs	The scalar to multiply
 		 *\return		A reference to this Quaternion object
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_rhs	Le scalaire à multiplier
+		 *\param[in]	rhs	Le scalaire à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator*=( float p_rhs );
+		inline QuaternionT< T > & operator*=( float rhs );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
+		 *\param[in]	matrix	The rotation matrix
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
+		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( Matrix4x4f const & p_matrix );
+		static inline QuaternionT< T > fromMatrix( Matrix4x4f const & matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
+		 *\param[in]	matrix	The rotation matrix
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
+		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( Matrix4x4d const & p_matrix );
+		static inline QuaternionT< T > fromMatrix( Matrix4x4d const & matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
+		 *\param[in]	matrix	The rotation matrix
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
+		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( float const * p_matrix );
+		static inline QuaternionT< T > fromMatrix( float const * matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
-		 *\param[in]	p_matrix	The rotation matrix
+		 *\param[in]	matrix	The rotation matrix
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
-		 *\param[in]	p_matrix	La matrice de rotation
+		 *\param[in]	matrix	La matrice de rotation
 		 */
-		static inline QuaternionT< T > fromMatrix( double const * p_matrix );
+		static inline QuaternionT< T > fromMatrix( double const * matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
-		 *\param[in]	p_vector	The axis
-		 *\param[in]	p_angle		The angle
+		 *\param[in]	vector	The axis
+		 *\param[in]	angle	The angle
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
+		 *\param[in]	vector	L'axe
+		 *\param[in]	angle	L'angle
 		 */
-		static inline QuaternionT< T > fromAxisAngle( Point3f const & p_vector, Angle const & p_angle );
+		static inline QuaternionT< T > fromAxisAngle( Point3f const & vector, Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from an axis and an angle
-		 *\param[in]	p_vector	The axis
-		 *\param[in]	p_angle		The angle
+		 *\param[in]	vector	The axis
+		 *\param[in]	angle	The angle
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir d'un axe et d'un angle
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
+		 *\param[in]	vector	L'axe
+		 *\param[in]	angle	L'angle
 		 */
-		static inline QuaternionT< T > fromAxisAngle( Point3d const & p_vector, Angle const & p_angle );
+		static inline QuaternionT< T > fromAxisAngle( Point3d const & vector, Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
-		 *\param[in]	p_x, p_y, p_z	The axes
+		 *\param[in]	x, y, z	The axes
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_x, p_y, p_z	Les axes
+		 *\param[in]	x, y, z	Les axes
 		 */
-		static inline QuaternionT< T > fromAxes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
+		static inline QuaternionT< T > fromAxes( Point3f const & x, Point3f const & y, Point3f const & z );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
-		 *\param[in]	p_x, p_y, p_z	The axes
+		 *\param[in]	x, y, z	The axes
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_x, p_y, p_z	Les axes
+		 *\param[in]	x, y, z	Les axes
 		 */
-		static inline QuaternionT< T > fromAxes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
+		static inline QuaternionT< T > fromAxes( Point3d const & x, Point3d const & y, Point3d const & z );
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
-		 *\param[in]	p_vector	The vector to transform
-		 *\param[out]	p_result	Receives the result
-		 *\return		A reference to p_result
+		 *\param[in]	vector	The vector to transform
+		 *\param[out]	result	Receives the result
+		 *\return		A reference to result
 		 *\~french
 		 *\brief		Transforme un vecteur et donne le résultat
-		 *\param[in]	p_vector	Le vecteur à transformer
-		 *\param[out]	p_result	Reçoit le résultat
-		 *\return		Une référence sur p_result
+		 *\param[in]	vector	Le vecteur à transformer
+		 *\param[out]	result	Reçoit le résultat
+		 *\return		Une référence sur result
 		 */
-		inline Point3f & transform( Point3f const & p_vector, Point3f & p_result )const;
+		inline Point3f & transform( Point3f const & vector, Point3f & result )const;
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
-		 *\param[in]	p_vector	The vector to transform
-		 *\param[out]	p_result	Receives the result
-		 *\return		A reference to p_result
+		 *\param[in]	vector	The vector to transform
+		 *\param[out]	result	Receives the result
+		 *\return		A reference to result
 		 *\~french
 		 *\brief		Transforme un vecteur et donne le résultat
-		 *\param[in]	p_vector	Le vecteur à transformer
-		 *\param[out]	p_result	Reçoit le résultat
-		 *\return		Une référence sur p_result
+		 *\param[in]	vector	Le vecteur à transformer
+		 *\param[out]	result	Reçoit le résultat
+		 *\return		Une référence sur result
 		 */
-		inline Point3d & transform( Point3d const & p_vector, Point3d & p_result )const;
+		inline Point3d & transform( Point3d const & vector, Point3d & result )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
-		 *\param[out]	p_matrix	The rotation matrix to fill
+		 *\param[out]	matrix	The rotation matrix to fill
 		 *\~french
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
-		 *\param[out]	p_matrix	La matrice à remplir
+		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( float * p_matrix )const;
+		inline void toMatrix( float * matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
-		 *\param[out]	p_matrix	The rotation matrix to fill
+		 *\param[out]	matrix	The rotation matrix to fill
 		 *\~french
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
-		 *\param[out]	p_matrix	La matrice à remplir
+		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( double * p_matrix )const;
+		inline void toMatrix( double * matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
-		 *\param[out]	p_matrix	The rotation matrix to fill
+		 *\param[out]	matrix	The rotation matrix to fill
 		 *\~french
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
-		 *\param[out]	p_matrix	La matrice à remplir
+		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( Matrix4x4f & p_matrix )const;
+		inline void toMatrix( Matrix4x4f & matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
-		 *\param[out]	p_matrix	The rotation matrix to fill
+		 *\param[out]	matrix	The rotation matrix to fill
 		 *\~french
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
-		 *\param[out]	p_matrix	La matrice à remplir
+		 *\param[out]	matrix	La matrice à remplir
 		 */
-		inline void toMatrix( Matrix4x4d & p_matrix )const;
+		inline void toMatrix( Matrix4x4d & matrix )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
-		 *\param[out]	p_vector	Receives the axis
-		 *\param[out]	p_angle		Receives the angle
+		 *\param[out]	vector	Receives the axis
+		 *\param[out]	angle		Receives the angle
 		 *\~french
 		 *\brief		Calcule l'axe et l'angle de ce Quaternion
-		 *\param[out]	p_vector	Reçoit l'axe
-		 *\param[out]	p_angle		Reçoit l'angle
+		 *\param[out]	vector	Reçoit l'axe
+		 *\param[out]	angle		Reçoit l'angle
 		 */
-		inline void toAxisAngle( Point3f & p_vector, Angle & p_angle )const;
+		inline void toAxisAngle( Point3f & vector, Angle & angle )const;
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
-		 *\param[out]	p_vector	Receives the axis
-		 *\param[out]	p_angle		Receives the angle
+		 *\param[out]	vector	Receives the axis
+		 *\param[out]	angle		Receives the angle
 		 *\~french
 		 *\brief		Calcule l'axe et l'angle de ce Quaternion
-		 *\param[out]	p_vector	Reçoit l'axe
-		 *\param[out]	p_angle		Reçoit l'angle
+		 *\param[out]	vector	Reçoit l'axe
+		 *\param[out]	angle		Reçoit l'angle
 		 */
-		inline void toAxisAngle( Point3d & p_vector, Angle & p_angle )const;
+		inline void toAxisAngle( Point3d & vector, Angle & angle )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
-		 *\param[out]	p_x, p_y, p_z	The axes
+		 *\param[out]	x, y, z	The axes
 		 *\~french
 		 *\brief		Calcule 3 axes à partir de ce quaternion
-		 *\param[out]	p_x, p_y, p_z	Les axes
+		 *\param[out]	x, y, z	Les axes
 		 */
-		inline void toAxes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const;
+		inline void toAxes( Point3f & x, Point3f & y, Point3f & z )const;
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
-		 *\param[out]	p_x, p_y, p_z	The axes
+		 *\param[out]	x, y, z	The axes
 		 *\~french
 		 *\brief		Calcule 3 axes à partir de ce quaternion
-		 *\param[out]	p_x, p_y, p_z	Les axes
+		 *\param[out]	x, y, z	Les axes
 		 */
-		inline void toAxes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const;
+		inline void toAxes( Point3d & x, Point3d & y, Point3d & z )const;
 		/**
 		 *\~english
 		 *\brief		sets this Quaternion to its conjugate
@@ -476,88 +476,88 @@ namespace castor
 		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
 		 *\remarks		The interpolation is oriented and the rotation is performed at constant speed.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation sphérique linéaire de deux quaternions.
 		 *\remarks		L'interpolation est orientée et le rotation est effectuée à vitesse constante.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > mix( QuaternionT< T > const & p_target, double p_factor )const;
+		inline QuaternionT< T > mix( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation another quaternions.
 		 *\remarks		The interpolation is oriented and the rotation is performed at constant speed.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation sphérique linéaire de deux quaternions.
 		 *\remarks		L'interpolation est orientée et le rotation est effectuée à vitesse constante.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > mix( QuaternionT< T > const & p_target, float p_factor )const;
+		inline QuaternionT< T > mix( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Linear interpolation of two quaternions.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined in the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined in the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation linéaire de deux quaternions.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > lerp( QuaternionT< T > const & p_target, double p_factor )const;
+		inline QuaternionT< T > lerp( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Linear interpolation of two quaternions.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined in the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined in the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation linéaire de deux quaternions.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie à l'intérieur de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > lerp( QuaternionT< T > const & p_target, float p_factor )const;
+		inline QuaternionT< T > lerp( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation with another quaternions.
 		 *\remarks		The interpolation always take the short path and the rotation is performed at constant speed.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation sphérique linéaire de deux quaternions.
 		 *\remarks		L'interpolation prend toujours le chemin le plus court, et la rotation est effectuée à vitesse constante.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > slerp( QuaternionT< T > const & p_target, double p_factor )const;
+		inline QuaternionT< T > slerp( QuaternionT< T > const & target, double factor )const;
 		/**
 		 *\~english
 		 *\brief		Spherical linear interpolation with another quaternions.
 		 *\remarks		The interpolation always take the short path and the rotation is performed at constant speed.
-		 *\param[in]	p_target	The target quaternion
-		 *\param[in]	p_factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
+		 *\param[in]	target	The target quaternion
+		 *\param[in]	factor	The interpolation factor. The interpolation is defined beyond the range [0, 1].
 		 *\return		The result of the interpolation
 		 *\~french
 		 *\brief		Interpolation sphérique linéaire de deux quaternions.
 		 *\remarks		L'interpolation prend toujours le chemin le plus court, et la rotation est effectuée à vitesse constante.
-		 *\param[in]	p_target	Le quaternion cible
-		 *\param[in]	p_factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
+		 *\param[in]	target	Le quaternion cible
+		 *\param[in]	factor	Le facteur d'interpolation. L'interpolation est définie hors de l'intervalle [0, 1].
 		 *\return		Le résultat de l'interpolation.
 		 */
-		inline QuaternionT< T > slerp( QuaternionT< T > const & p_target, float p_factor )const;
+		inline QuaternionT< T > slerp( QuaternionT< T > const & target, float factor )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Quaternion identity
@@ -589,130 +589,130 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_lhs	The first Quaternion object to add
-	 *\param[in]	p_rhs	The second Quaternion object to add
+	 *\param[in]	lhs	The first Quaternion object to add
+	 *\param[in]	rhs	The second Quaternion object to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_lhs	Le premier objet Quaternion à ajouter
-	 *\param[in]	p_rhs	Le second objet Quaternion à ajouter
+	 *\param[in]	lhs	Le premier objet Quaternion à ajouter
+	 *\param[in]	rhs	Le second objet Quaternion à ajouter
 	 *\return		Le résultat de l'addtion
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator+( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs );
+	inline QuaternionT< T > operator+( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_lhs	The first Quaternion object to subtract
-	 *\param[in]	p_rhs	The second Quaternion object to subtract
+	 *\param[in]	lhs	The first Quaternion object to subtract
+	 *\param[in]	rhs	The second Quaternion object to subtract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_lhs	Le premier objet Quaternion à soustraire
-	 *\param[in]	p_rhs	Le second objet Quaternion à soustraire
+	 *\param[in]	lhs	Le premier objet Quaternion à soustraire
+	 *\param[in]	rhs	Le second objet Quaternion à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator-( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs );
+	inline QuaternionT< T > operator-( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	The first Quaternion object to multiply
-	 *\param[in]	p_rhs	The second Quaternion object to multiply
+	 *\param[in]	lhs	The first Quaternion object to multiply
+	 *\param[in]	rhs	The second Quaternion object to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	Le premier objet Quaternion à multiplier
-	 *\param[in]	p_rhs	Le second objet Quaternion à multiplier
+	 *\param[in]	lhs	Le premier objet Quaternion à multiplier
+	 *\param[in]	rhs	Le second objet Quaternion à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs );
+	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	The Quaternion object to multiply
-	 *\param[in]	p_rhs	The scalar to multiply
+	 *\param[in]	lhs	The Quaternion object to multiply
+	 *\param[in]	rhs	The scalar to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	L'objet Quaternion à multiplier
-	 *\param[in]	p_rhs	Le scalaire à multiplier
+	 *\param[in]	lhs	L'objet Quaternion à multiplier
+	 *\param[in]	rhs	Le scalaire à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, double p_rhs );
+	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, double rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	The Quaternion object to multiply
-	 *\param[in]	p_rhs	The scalar to multiply
+	 *\param[in]	lhs	The Quaternion object to multiply
+	 *\param[in]	rhs	The scalar to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	L'objet Quaternion à multiplier
-	 *\param[in]	p_rhs	Le scalaire à multiplier
+	 *\param[in]	lhs	L'objet Quaternion à multiplier
+	 *\param[in]	rhs	Le scalaire à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, float p_rhs );
+	inline QuaternionT< T > operator*( QuaternionT< T > const & lhs, float rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	The scalar to multiply
-	 *\param[in]	p_rhs	The Quaternion object to multiply
+	 *\param[in]	lhs	The scalar to multiply
+	 *\param[in]	rhs	The Quaternion object to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	Le scalaire à multiplier
-	 *\param[in]	p_rhs	L'objet Quaternion à multiplier
+	 *\param[in]	lhs	Le scalaire à multiplier
+	 *\param[in]	rhs	L'objet Quaternion à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator*( double p_lhs, QuaternionT< T > const & p_rhs );
+	inline QuaternionT< T > operator*( double lhs, QuaternionT< T > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs	The scalar to multiply
-	 *\param[in]	p_rhs	The Quaternion object to multiply
+	 *\param[in]	lhs	The scalar to multiply
+	 *\param[in]	rhs	The Quaternion object to multiply
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs	Le scalaire à multiplier
-	 *\param[in]	p_rhs	L'objet Quaternion à multiplier
+	 *\param[in]	lhs	Le scalaire à multiplier
+	 *\param[in]	rhs	L'objet Quaternion à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator*( float p_lhs, QuaternionT< T > const & p_rhs );
+	inline QuaternionT< T > operator*( float lhs, QuaternionT< T > const & rhs );
 	/**
 	 *\~english
 	 *\brief		Negation operator
-	 *\param[in]	p_quat		The Quaternion object to negate
+	 *\param[in]	quat	The Quaternion object to negate
 	 *\return		The negation result
 	 *\~french
 	 *\brief		Opérateur de négation
-	 *\param[in]	p_quat		L'objet Quaternion à négativer
+	 *\param[in]	quat	L'objet Quaternion à négativer
 	 *\return		Le résultat de la négation
 	 */
 	template< typename T >
-	inline QuaternionT< T > operator-( QuaternionT< T > const & p_quat );
+	inline QuaternionT< T > operator-( QuaternionT< T > const & quat );
 	/**
 	 *\~english
 	 *\brief			Stream operator.
-	 *\param[in,out]	p_stream	The stream.
-	 *\param[in]		p_quat		The Quaternion object to put in stream.
+	 *\param[in,out]	stream	The stream.
+	 *\param[in]		quat	The Quaternion object to put in stream.
 	 *\return			The stream.
 	 *\~french
 	 *\brief			Opérateur de flux.
-	 *\param[in,out]	p_stream	Le flux.
-	 *\param[in]		p_quat		L'objet Quaternion à mettre dans le flux
+	 *\param[in,out]	stream	Le flux.
+	 *\param[in]		quat	L'objet Quaternion à mettre dans le flux
 	 *\return			Le flux.
 	 */
 	template< typename CharT, typename T >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_stream, QuaternionT< T > const & p_quat )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, QuaternionT< T > const & quat )
 	{
-		p_stream << p_quat.quat.x << ", " << p_quat.quat.y << ", " << p_quat.quat.z << ", " << p_quat.quat.w;
-		return p_stream;
+		stream << quat.quat.x << ", " << quat.quat.y << ", " << quat.quat.z << ", " << quat.quat.w;
+		return stream;
 	}
 }
 

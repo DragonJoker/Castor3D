@@ -41,85 +41,85 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_size	Size
+		 *\param[in]	origin	Position
+		 *\param[in]	size	Size
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_size	Dimensions
+		 *\param[in]	origin	Position
+		 *\param[in]	size	Dimensions
 		 */
-		CU_API Rectangle( Position const & p_ptOrigin = Position(), Size const & p_size = Size() );
+		CU_API Rectangle( Position const & origin = Position(), Size const & size = Size() );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_iLeft, p_iTop		Top left point
-		 *\param[in]	p_iRight, p_iBottom	Right bottom point
+		 *\param[in]	left, top		Top left point
+		 *\param[in]	right, bottom	Right bottom point
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
-		 *\param[in]	p_iRight, p_iBottom	Point bas droit
+		 *\param[in]	left, top		Point haut gauche
+		 *\param[in]	right, bottom	Point bas droit
 		 */
-		CU_API Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API Rectangle( int32_t left, int32_t top, int32_t right, int32_t bottom );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_rhs	The other object
+		 *\param[in]	rhs	The other object
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_rhs	l'autre object
+		 *\param[in]	rhs	l'autre object
 		 */
-		CU_API Rectangle( Rectangle const & p_rhs );
+		CU_API Rectangle( Rectangle const & rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_rhs	The other object
+		 *\param[in]	rhs	The other object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_rhs	l'autre object
+		 *\param[in]	rhs	l'autre object
 		 */
-		CU_API Rectangle & operator=( Rectangle const & p_rhs );
+		CU_API Rectangle & operator=( Rectangle const & rhs );
 		/**
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
-		 *\param[in]	p_point	The point to test
+		 *\param[in]	point	The point to test
 		 *\return		\p Intersection::eIn if onto or into, \p Intersection::eOut if not
 		 *\~french
 		 *\brief		Teste si le point donné est sur ou dans ce rectangle
-		 *\param[in]	p_point	Le point à tester
+		 *\param[in]	point	Le point à tester
 		 *\return		\p Intersection::eIn si sur ou dedans, \p Intersection::eOut sinon
 		 */
-		CU_API Intersection intersects( Position const & p_point )const;
+		CU_API Intersection intersects( Position const & point )const;
 		/**
 		 *\~english
 		 *\brief		Test if the givent rectangle intersects this rectangle
-		 *\param[in]	p_rcRect	The rectangle to test
+		 *\param[in]	rect	The rectangle to test
 		 *\return		The intersection type between the 2 rectangles
 		 *\~french
 		 *\brief		Teste si le rectangle donné intersecte ce rectangle
-		 *\param[in]	p_rcRect	Le rectangle à tester
+		 *\param[in]	rect	Le rectangle à tester
 		 *\return		Le type d'intersection entre les 2 rectangles
 		 */
-		CU_API Intersection intersects( Rectangle const & p_rcRect )const;
+		CU_API Intersection intersects( Rectangle const & rect )const;
 		/**
 		 *\~english
 		 *\brief		sets the rectangle values
-		 *\param[in]	p_iLeft, p_iTop		Top left point
-		 *\param[in]	p_iRight, p_iBottom	Right bottom point
+		 *\param[in]	left, top		Top left point
+		 *\param[in]	right, bottom	Right bottom point
 		 *\~french
 		 *\brief		Définit le rectangle
-		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
-		 *\param[in]	p_iRight, p_iBottom	Point bas droit
+		 *\param[in]	left, top		Point haut gauche
+		 *\param[in]	right, bottom	Point bas droit
 		 */
-		CU_API void set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API void set( int32_t left, int32_t top, int32_t right, int32_t bottom );
 		/**
 		 *\~english
 		 *\brief		Retrieves the rectangle size
-		 *\param[out]	p_result	The rectangle size
+		 *\param[out]	result	The rectangle size
 		 *\~french
 		 *\brief		Récupère les dimensions du rectangle
-		 *\param[out]	p_result	Les dimensions du rectangle
+		 *\param[out]	result	Les dimensions du rectangle
 		 */
-		CU_API void size( Size & p_result )const;
+		CU_API void size( Size & result )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate

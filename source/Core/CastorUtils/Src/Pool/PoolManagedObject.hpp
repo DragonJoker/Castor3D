@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CU_POOL_MANAGED_OBJECT_H___
@@ -34,38 +34,38 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_params	The Object constructor parameters.
+		 *\param[in]	params	The Object constructor parameters.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_params	Les paramètre du constructeur de Object.
+		 *\param[in]	params	Les paramètre du constructeur de Object.
 		 */
 		template< typename ... Params >
-		explicit PoolManagedObject( Params ... p_params )noexcept
-			: Object( p_params... )
+		explicit PoolManagedObject( Params ... params )noexcept
+			: Object( params... )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
-		 *\param[in]	p_rhs	The other object.
+		 *\param[in]	rhs	The other object.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'autre objet.
+		 *\param[in]	rhs	L'autre objet.
 		 */
-		PoolManagedObject( PoolManagedObject const & p_rhs )noexcept
-			: Object( p_rhs )
+		PoolManagedObject( PoolManagedObject const & rhs )noexcept
+			: Object( rhs )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
-		 *\param[in]	p_rhs	The other object.
+		 *\param[in]	rhs	The other object.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'autre objet.
+		 *\param[in]	rhs	L'autre objet.
 		 */
-		explicit PoolManagedObject( Object const & p_rhs )noexcept
-			: Object( p_rhs )
+		explicit PoolManagedObject( Object const & rhs )noexcept
+			: Object( rhs )
 		{
 		}
 		/**
@@ -81,13 +81,13 @@ namespace castor
 		 *\~english
 		 *\brief		New operator overload.
 		 *\remarks		Uses the objects pool to allocate memory.
-		 *\param[in]	p_size	The allocation size.
+		 *\param[in]	size	The allocation size.
 		 *\~french
 		 *\brief		Surcharge de l'opérateur new.
 		 *\remarks		Utilise le pool d'objets pour allouer la mémoire.
-		 *\param[in]	p_size	La taille à allouer.
+		 *\param[in]	size	La taille à allouer.
 		 */
-		static void * operator new( std::size_t p_size )
+		static void * operator new( std::size_t size )
 		{
 			return MyUniqueObjectPool::get().allocate();
 		}
@@ -95,33 +95,33 @@ namespace castor
 		 *\~english
 		 *\brief		Delete operator overload.
 		 *\remarks		Uses the objects pool to deallocate memory.
-		 *\param[in]	p_ptr	The pointer to deallocate.
-		 *\param[in]	p_size	The deallocation size.
+		 *\param[in]	ptr	The pointer to deallocate.
+		 *\param[in]	size	The deallocation size.
 		 *\~french
 		 *\brief		Surcharge de l'opérateur delete.
 		 *\remarks		Utilise le pool d'objets pour désallouer la mémoire.
-		 *\param[in]	p_ptr	Le pointeur à désallouer.
-		 *\param[in]	p_size	La taille à désallouer.
+		 *\param[in]	ptr	Le pointeur à désallouer.
+		 *\param[in]	size	La taille à désallouer.
 		 */
-		static void operator delete( void * p_ptr, std::size_t p_size )
+		static void operator delete( void * ptr, std::size_t size )
 		{
-			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( p_ptr ) );
+			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( ptr ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Delete array operator overload.
 		 *\remarks		Uses the objects pool to deallocate memory.
-		 *\param[in]	p_ptr	The pointer to deallocate.
-		 *\param[in]	p_size	The deallocation size.
+		 *\param[in]	ptr	The pointer to deallocate.
+		 *\param[in]	size	The deallocation size.
 		 *\~french
 		 *\brief		Surcharge de l'opérateur delete de tableau.
 		 *\remarks		Utilise le pool d'objets pour désallouer la mémoire.
-		 *\param[in]	p_ptr	Le pointeur à désallouer.
-		 *\param[in]	p_size	La taille à désallouer.
+		 *\param[in]	ptr	Le pointeur à désallouer.
+		 *\param[in]	size	La taille à désallouer.
 		 */
-		static void operator delete[]( void * p_ptr, std::size_t p_size )
+		static void operator delete[]( void * ptr, std::size_t size )
 		{
-			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( p_ptr ) );
+			MyUniqueObjectPool::get().deallocate( reinterpret_cast< Object * >( ptr ) );
 		}
 	};
 }

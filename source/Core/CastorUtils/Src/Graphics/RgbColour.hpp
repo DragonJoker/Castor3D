@@ -148,15 +148,15 @@ namespace castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			inline explicit TextWriter( String const & p_tabs );
+			inline explicit TextWriter( String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a colour into a text file
-			 *\param[in,out]	file		The file into which colour is written
+			 *\param[in,out]	file	The file into which colour is written
 			 *\param[in]		colour	The colour to write
 			 *\~french
 			 *\brief			Ecrit une couleur dans un fichier texte
-			 *\param[in,out]	file		Le fichier dans lequel on écrit la couleur
+			 *\param[in,out]	file	Le fichier dans lequel on écrit la couleur
 			 *\param[in]		colour	La couleur à écrire
 			 */
 			inline virtual bool operator()( RgbColourT< ComponentType > const & colour, TextFile & file );

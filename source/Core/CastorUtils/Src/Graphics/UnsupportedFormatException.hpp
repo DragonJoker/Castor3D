@@ -27,22 +27,22 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_description	Error description
-		 *\param[in]	p_file			Function file
-		 *\param[in]	p_function		Function name
-		 *\param[in]	p_line			Function line
+		 *\param[in]	description	Error description
+		 *\param[in]	file		Function file
+		 *\param[in]	function	Function name
+		 *\param[in]	line		Function line
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_description	Description de l'erreur
-		 *\param[in]	p_file			Fichier contenant la fonction
-		 *\param[in]	p_function		Nom de la fonction
-		 *\param[in]	p_line			Ligne dans la fonction
+		 *\param[in]	description	Description de l'erreur
+		 *\param[in]	file		Fichier contenant la fonction
+		 *\param[in]	function	Nom de la fonction
+		 *\param[in]	line		Ligne dans la fonction
 		 */
-		UnsupportedFormatException(	std::string const & p_description
-			, char const * p_file
-			, char const * p_function
-			, uint32_t p_line )
-			: Exception( p_description, p_file, p_function, p_line )
+		UnsupportedFormatException(	std::string const & description
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: Exception( description, file, function, line )
 		{
 		}
 	};
@@ -53,7 +53,7 @@ namespace castor
 	\~french
 	\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
 	*/
-#	define CU_UnsupportedError( p_text) throw UnsupportedFormatException( p_text, __FILE__, __FUNCTION__, __LINE__)
+#	define CU_UnsupportedError( text) throw UnsupportedFormatException( text, __FILE__, __FUNCTION__, __LINE__)
 }
 
 #endif

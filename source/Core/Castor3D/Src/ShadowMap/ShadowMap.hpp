@@ -40,12 +40,14 @@ namespace castor3d
 		 *\param[in]	shadowMap	The shadow map.
 		 *\param[in]	linearMap	The linear depth map.
 		 *\param[in]	passes		The passes used to render map.
+		 *\param[in]	count		The passes count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	shadowMap	La texture d'ombres.
 		 *\param[in]	linearMap	La texture de profondeur linéaire.
 		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
+		 *\param[in]	count		Le nombre de passes.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, TextureUnit && shadowMap
@@ -95,25 +97,34 @@ namespace castor3d
 			, uint32_t index ) = 0;
 		/**
 		 *\~english
-		 *\brief		Renders the given light's shadow map.
+		 *\brief		Renders the light's shadow map.
+		 *\param[out]	toWait	The semaphore from previous render pass.
+		 *\param[out]	index	The map index.
 		 *\~french
-		 *\brief		Dessine la shadow map de la lumière donnée.
+		 *\brief		Dessine la shadow map de la lumière.
+		 *\param[out]	toWait	Le sémaphore de la précédente passe de rendu.
+		 *\param[out]	index	L'indice de la texture.
 		 */
 		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait
 			, uint32_t index/* = 0u*/ ) = 0;
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
-		 *\param[in]	size	The dump dimensions.
-		 *\param[in]	index	The shadow map index (to compute its position).
+		 *\param[in]	renderPass	The render pass to use.
+		 *\param[in]	frameBuffer	The framebuffer receiving the render.
+		 *\param[in]	size		The dump dimensions.
+		 *\param[in]	index		The shadow map index (to compute its position).
 		 *\~french
 		 *\brief		Dumpe la texture d'ombres sur l'écran.
-		 *\param[in]	size	Les dimensions d'affichage.
-		 *\param[in]	index	L'indice de la texture d'ombres (pour calculer sa position).
+		 *\param[in]	renderPass	La passe de rendu à utiliser.
+		 *\param[in]	frameBuffer	Le framebuffer recevant le rendu.
+		 *\param[in]	size		Les dimensions d'affichage.
+		 *\param[in]	index		L'indice de la texture d'ombres (pour calculer sa position).
 		 */
 		C3D_API virtual void debugDisplay( ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size, uint32_t index ) = 0;
+			, castor::Size const & size
+			, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
@@ -186,10 +197,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the light type specific data.
-		 *\param[in]	p_size	The wanted frame buffer dimensions.
 		 *\~french
 		 *\brief		Initialise les données spécifiques au type de source lumineuse.
-		 *\param[in]	p_size	Les dimensions voulues pour le frame buffer.
 		 */
 		C3D_API virtual void doInitialise() = 0;
 		/**

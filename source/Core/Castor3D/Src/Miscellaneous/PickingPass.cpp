@@ -562,7 +562,6 @@ namespace castor3d
 	}
 
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
 		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )
@@ -572,7 +571,6 @@ namespace castor3d
 	}
 
 	void PickingPass::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
 		node.uboDescriptorSet->createBinding( layout.getBinding( PickingUbo::BindingPoint )

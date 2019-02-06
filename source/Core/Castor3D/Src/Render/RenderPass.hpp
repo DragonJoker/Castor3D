@@ -75,12 +75,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	name	The pass name.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	category	The pass category.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	name	Le nom de la passe.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
@@ -90,14 +96,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	name	The pass name.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	oit		The order independant status.
+		 *\param[in]	category	The pass category.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The scene culler for this pass.
+		 *\param[in]	oit			The order independant status.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	name	Le nom de la passe.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
@@ -108,14 +120,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	name	The pass name.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	ignored	The geometries attached to this node will be ignored in the render.
+		 *\param[in]	category	The pass category.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The scene culler for this pass.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	name	Le nom de la passe.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
@@ -126,16 +144,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
-		 *\param[in]	name	The pass name.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	oit		The order independant status.
-		 *\param[in]	ignored	The geometries attached to this node will be ignored in the render.
+		 *\param[in]	category	The pass category.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The scene culler for this pass.
+		 *\param[in]	oit			The order independant status.
+		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
-		 *\param[in]	name	Le nom de la passe.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	oit		Le statut de rendu indépendant de l'ordre des objets.
-		 *\param[in]	ignored	Les géométries attachées à ce noeud seront ignorées lors du rendu.
+		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
+		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
@@ -252,7 +276,9 @@ namespace castor3d
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	topology		The render topology.
 		 *\param[in]	twoSided		Tells if the pass is two sided.
+		 *\param[in]	layouts			The vertex buffers layouts.
 		 *\~french
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
 		 *\param[in]	colourBlendMode	Le mode de mélange de couleurs.
@@ -262,7 +288,9 @@ namespace castor3d
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	topology		La topologie de rendu.
 		 *\param[in]	twoSided		Dit si la passe est sur les deux faces.
+		 *\param[in]	layouts			Les layouts des tampons de sommets.
 		 */
 		C3D_API void preparePipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
@@ -284,6 +312,7 @@ namespace castor3d
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	topology		The render topology.
 		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces avant supprimées.
@@ -294,6 +323,7 @@ namespace castor3d
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	topology		La topologie de rendu.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
 		C3D_API RenderPipeline * getPipelineFront( BlendMode colourBlendMode
@@ -314,6 +344,7 @@ namespace castor3d
 		 *\param[in]	textureFlags	A combination of TextureChannel.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
 		 *\param[in]	sceneFlags		Scene related flags.
+		 *\param[in]	topology		The render topology.
 		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
@@ -324,6 +355,7 @@ namespace castor3d
 		 *\param[in]	textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	topology		La topologie de rendu.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
 		C3D_API RenderPipeline * getPipelineBack( BlendMode colourBlendMode
@@ -458,7 +490,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs d'UBO pour un noeud de skinning.
 		 *\param[in]	descriptorPool	Le pool.
-		 *\param[in]	node			Les noeud.
+		 *\param[in]	node			Le noeud.
 		 */
 		C3D_API void initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node );
@@ -503,10 +535,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of a billboard node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de billboard.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, BillboardRenderNode & node
@@ -516,10 +550,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of a morphing node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de morphing.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, MorphingRenderNode & node
@@ -529,10 +565,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of a skinning node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud de skinning.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Les noeud.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SkinningRenderNode & node
@@ -542,10 +580,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of a static node.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	node			The node.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour un noeud statique.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	node			Le noeud.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, StaticRenderNode & node
@@ -555,10 +595,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of skinning nodes.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	nodes			The nodes.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds de skinning.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshSkinninRenderNodesByPassMap & nodes
@@ -568,10 +610,12 @@ namespace castor3d
 		 *\brief		Initialises the textures descriptor set of static nodes.
 		 *\param[in]	descriptorPool	The pool.
 		 *\param[in]	nodes			The nodes.
+		 *\param[in]	shadowMaps		The shadow maps.
 		 *\~french
 		 *\brief		Initialise l'ensemble de descripteurs de textures pour des noeuds statiques.
 		 *\param[in]	descriptorPool	Le pool.
 		 *\param[in]	nodes			Les noeuds.
+		 *\param[in]	shadowMaps		Les shadow maps.
 		 */
 		C3D_API void initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 			, SubmeshStaticRenderNodesByPassMap & nodes
@@ -599,11 +643,13 @@ namespace castor3d
 		 *\brief		Creates a blend state matching given blend modes.
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
+		 *\param[in]	attachesCount	The wanted blend attaches count.
 		 *\return		
 		 *\~french
 		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
 		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
+		 *\param[in]	attachesCount	Le nombre d'attaches de mélange voulues.
 		 *\return		
 		 */
 		C3D_API static ashes::ColourBlendState createBlendState( BlendMode colourBlendMode
@@ -816,20 +862,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders instanced submeshes.
+		 *\brief		Updates instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
+		 *\brief		Met à jour des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders instanced submeshes.
+		 *\brief			Updates instanced submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des sous maillages instanciés.
+		 *\brief			Met à jour des sous maillages instanciés.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -837,20 +883,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders non instanced submeshes.
+		 *\brief		Updates non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
+		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders non instanced submeshes.
+		 *\brief			Updates non instanced submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
+		 *\brief			Met à jour des sous maillages non instanciés.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -858,20 +904,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders non instanced submeshes.
+		 *\brief		Updates non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
+		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( SkinningRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders non instanced submeshes.
+		 *\brief			Updates non instanced submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
+		 *\brief			Met à jour des sous maillages non instanciés.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -879,20 +925,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders instanced submeshes.
+		 *\brief		Updates instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
+		 *\brief		Met à jour des sous maillages instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders instanced submeshes.
+		 *\brief			Updates instanced submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des sous maillages instanciés.
+		 *\brief			Met à jour des sous maillages instanciés.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -900,20 +946,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders non instanced submeshes.
+		 *\brief		Updates non instanced submeshes.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
+		 *\brief		Met à jour des sous maillages non instanciés.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( MorphingRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders non instanced submeshes.
+		 *\brief			Updates non instanced submeshes.
 		 *\param[in]		nodes	The render nodes.
 		 *\param[in, out]	info	Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des sous maillages non instanciés.
+		 *\brief			Met à jour des sous maillages non instanciés.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -921,20 +967,20 @@ namespace castor3d
 			, RenderInfo & info )const;
 		/**
 		 *\~english
-		 *\brief		Renders billboards.
+		 *\brief		Updates billboards.
 		 *\param[in]	nodes	The render nodes.
 		 *\~french
-		 *\brief		Dessine des billboards.
+		 *\brief		Met à jour des billboards.
 		 *\param[in]	nodes	Les noeuds de rendu.
 		 */
 		C3D_API void doUpdate( BillboardRenderNodesPtrByPipelineMap & nodes )const;
 		/**
 		 *\~english
-		 *\brief			Renders billboards.
+		 *\brief			Updates billboards.
 		 *\param[in]		nodes		The render nodes.
 		 *\param[in, out]	info		Receives the render informations.
 		 *\~french
-		 *\brief			Dessine des billboards.
+		 *\brief			Met à jour des billboards.
 		 *\param[in]		nodes	Les noeuds de rendu.
 		 *\param[in,out]	info	Reçoit les informations de rendu.
 		 */
@@ -943,8 +989,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads UBO pools to VRAM.
+		 *\param[in]	camera	The camera.
+		 *\param[in]	jitter	The jitteering data.
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO en VRAM.
+		 *\param[in]	camera	La caméra.
+		 *\param[in]	jitter	Les données de jittering.
 		 */
 		void doUpdateUbos( Camera const & camera
 			, castor::Point2r const & jitter );
@@ -986,26 +1036,30 @@ namespace castor3d
 		C3D_API std::map< PipelineFlags, RenderPipelineUPtr > const & doGetBackPipelines()const;
 		/**
 		 *\~english
-		 *\brief			Prepares the pipeline, culling front faces.
-		 *\param[in,out]	program	The program, and updates it if needed.
-		 *\param[in]		flags	The pipeline flags.
+		 *\brief		Prepares the pipeline, culling front faces.
+		 *\param[in]	program	The program.
+		 *\param[in]	layouts	The vertex buffers layouts.
+		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief			Prépare le pipeline de rendu, en supprimant les faces avant.
-		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
-		 *\param[in]		flags	Les indicateurs de pipeline.
+		 *\brief		Prépare le pipeline de rendu, en supprimant les faces avant.
+		 *\param[in]	program	Le programme.
+		 *\param[in]	layouts	Les layouts des tampons de sommets.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
 			, ashes::VertexLayoutCRefArray const & layouts
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
-		 *\brief			Prepares the pipeline, culling back faces.
-		 *\param[in,out]	program	The program, and updates it if needed.
-		 *\param[in]		flags	The pipeline flags.
+		 *\brief		Prepares the pipeline, culling back faces.
+		 *\param[in]	program	The program.
+		 *\param[in]	layouts	The vertex buffers layouts.
+		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief			Prépare le pipeline de rendu, en supprimant les faces arrière.
-		 *\param[in,out]	program	Le programme, mis à jour si besoin est.
-		 *\param[in]		flags	Les indicateurs de pipeline.
+		 *\brief		Prépare le pipeline de rendu, en supprimant les faces arrière.
+		 *\param[in]	program	Le programme.
+		 *\param[in]	layouts	Les layouts des tampons de sommets.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
 			, ashes::VertexLayoutCRefArray const & layouts
@@ -1046,6 +1100,13 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Cleans up the pass.
+		 *\~french
+		 *\brief		Nettoie la passe.
+		 */
+		C3D_API virtual void doCleanup() = 0;
 
 	private:
 		/**
@@ -1061,13 +1122,6 @@ namespace castor3d
 		C3D_API virtual bool doInitialise( castor::Size const & size ) = 0;
 		/**
 		 *\~english
-		 *\brief		Cleans up the pass.
-		 *\~french
-		 *\brief		Nettoie la passe.
-		 */
-		C3D_API virtual void doCleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Initialises the descriptor set of a billboard node.
 		 *\param[in]	layout	The descriptors layout.
 		 *\param[in]	node	The node.
@@ -1077,7 +1131,6 @@ namespace castor3d
 		 *\param[in]	node	Le noeud.
 		 */
 		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, BillboardListRenderNode & node ) = 0;
 		/**
 		 *\~english
@@ -1090,17 +1143,20 @@ namespace castor3d
 		 *\param[in]	node	Le noeud.
 		 */
 		C3D_API virtual void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, SubmeshRenderNode & node ) = 0;
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a billboard node.
-		 *\param[in]	layout	The descriptors layout.
-		 *\param[in]	node	The node.
+		 *\brief			Initialises the descriptor set of a billboard node.
+		 *\param[in]		layout		The descriptors layout.
+		 *\param[in,out]	index		The texture index, updated to the next available.
+		 *\param[in]		node		The node.
+		 *\param[in]		shadowMaps	The shadow maps.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de billboard.
-		 *\param[in]	layout	Le layout des descripteurs.
-		 *\param[in]	node	Le noeud.
+		 *\brief			Initialise l'ensemble de descripteurs pour un noeud de billboard.
+		 *\param[in]		layout		Le layout des descripteurs.
+		 *\param[in, out]	index		L'indice de la texture, mis à jour au prochain disponible.
+		 *\param[in]		node		Le noeud.
+		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
 		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
@@ -1108,13 +1164,17 @@ namespace castor3d
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
-		 *\brief		Initialises the descriptor set of a morphing node.
-		 *\param[in]	layout	The descriptors layout.
-		 *\param[in]	node	The node.
+		 *\brief			Initialises the descriptor set of a morphing node.
+		 *\param[in]		layout		The descriptors layout.
+		 *\param[in,out]	index		The texture index, updated to the next available.
+		 *\param[in]		node		The node.
+		 *\param[in]		shadowMaps	The shadow maps.
 		 *\~french
-		 *\brief		Initialise l'ensemble de descripteurs pour un noeud de morphing.
-		 *\param[in]	layout	Le layout des descripteurs.
-		 *\param[in]	node	Le noeud.
+		 *\brief			Initialise l'ensemble de descripteurs pour un noeud de morphing.
+		 *\param[in]		layout		Le layout des descripteurs.
+		 *\param[in,out]	index		L'indice de la texture, mis à jour au prochain disponible.
+		 *\param[in]		node		Le noeud.
+		 *\param[in]		shadowMaps	Les shadow maps.
 		 */
 		C3D_API virtual void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
@@ -1259,7 +1319,7 @@ namespace castor3d
 		 *\brief		Met à jour le pipeline.
 		 *\param[in]	pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline  )const = 0;
+		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline )const = 0;
 
 	public:
 		struct VertexInputs

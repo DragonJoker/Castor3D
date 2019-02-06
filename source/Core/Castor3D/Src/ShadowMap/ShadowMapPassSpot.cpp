@@ -133,7 +133,6 @@ namespace castor3d
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, BillboardListRenderNode & node )
 	{
 		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
@@ -141,7 +140,6 @@ namespace castor3d
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
 		, SubmeshRenderNode & node )
 	{
 		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )

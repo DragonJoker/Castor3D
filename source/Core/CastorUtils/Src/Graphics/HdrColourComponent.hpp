@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_HDR_COLOUR_COMPONENT_H___
@@ -26,11 +26,9 @@ namespace castor
 		friend class std::array< HdrColourComponent, 4u >;
 		/**
 		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	p_object	The object to copy
+		 *\brief		Constructor
 		 *\~french
-		 *\brief		Constructeur par recopie
-		 *\param[in]	p_object	L'objet à copier
+		 *\brief		Constructeur
 		 */
 		HdrColourComponent()
 			: m_component( nullptr )
@@ -41,193 +39,193 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_value	The PixelComponents value
+		 *\param[in]	value	The PixelComponents value
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_value	La valeur de la composante
+		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit HdrColourComponent( float * p_value )
-			: m_component( p_value )
+		explicit HdrColourComponent( float * value )
+			: m_component( value )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_rhs	The PixelComponents
+		 *\param[in]	rhs	The PixelComponents
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_rhs	La composante
+		 *\param[in]	rhs	La composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( HdrColourComponent const & p_rhs )
+		HdrColourComponent & operator=( HdrColourComponent const & rhs )
 		{
-			*m_component = *p_rhs.m_component;
+			*m_component = *rhs.m_component;
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from float
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0f and 1.0f
+		 *\param[in]	rhs	The PixelComponents value, must be between 0.0f and 1.0f
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un float
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0.0f et 1.0f
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0f et 1.0f
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( float p_rhs )
+		HdrColourComponent & operator=( float rhs )
 		{
-			*m_component = p_rhs;
+			*m_component = rhs;
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from double
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The PixelComponents value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un double
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( double p_rhs )
+		HdrColourComponent & operator=( double rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from long double
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The PixelComponents value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un long double
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( long double p_rhs )
+		HdrColourComponent & operator=( long double rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int8_t
-		 *\param[in]	p_rhs	The PixelComponents value
+		 *\param[in]	rhs	The PixelComponents value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int8_t
-		 *\param[in]	p_rhs	La valeur de la composante
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int8_t p_rhs )
+		HdrColourComponent & operator=( int8_t rhs )
 		{
-			*m_component = float( uint8_t( p_rhs ) );
+			*m_component = float( uint8_t( rhs ) );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint8_t
-		 *\param[in]	p_rhs	The PixelComponents value
+		 *\param[in]	rhs	The PixelComponents value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint8_t
-		 *\param[in]	p_rhs	La valeur de la composante
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint8_t p_rhs )
+		HdrColourComponent & operator=( uint8_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int16_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int16_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int16_t p_rhs )
+		HdrColourComponent & operator=( int16_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint16_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint16_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint16_t p_rhs )
+		HdrColourComponent & operator=( uint16_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int32_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int32_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int32_t p_rhs )
+		HdrColourComponent & operator=( int32_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint32_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint32_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint32_t p_rhs )
+		HdrColourComponent & operator=( uint32_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int64_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int64_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( int64_t p_rhs )
+		HdrColourComponent & operator=( int64_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint64_t
-		 *\param[in]	p_rhs	The PixelComponents value, must be between 0 and 255
+		 *\param[in]	rhs	The PixelComponents value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint64_t
-		 *\param[in]	p_rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
 		 *\return		Référence sur cet objet
 		 */
-		HdrColourComponent & operator=( uint64_t p_rhs )
+		HdrColourComponent & operator=( uint64_t rhs )
 		{
-			*m_component = float( p_rhs );
+			*m_component = float( rhs );
 			return *this;
 		}
 		/**
@@ -236,9 +234,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int8_t
 		 */
-		inline int8_t & convertTo( int8_t & p_value )const
+		inline int8_t & convertTo( int8_t & v )const
 		{
-			return p_value = int8_t( value() );
+			return v = int8_t( value() );
 		}
 		/**
 		 *\~english
@@ -246,9 +244,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint8_t
 		 */
-		inline uint8_t & convertTo( uint8_t & p_value )const
+		inline uint8_t & convertTo( uint8_t & v )const
 		{
-			return p_value = uint8_t( value() );
+			return v = uint8_t( value() );
 		}
 		/**
 		 *\~english
@@ -256,9 +254,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int16_t
 		 */
-		inline int16_t & convertTo( int16_t & p_value )const
+		inline int16_t & convertTo( int16_t & v )const
 		{
-			return p_value = int16_t( value() );
+			return v = int16_t( value() );
 		}
 		/**
 		 *\~english
@@ -266,9 +264,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint16_t
 		 */
-		inline uint16_t & convertTo( uint16_t & p_value )const
+		inline uint16_t & convertTo( uint16_t & v )const
 		{
-			return p_value = uint16_t( value() );
+			return v = uint16_t( value() );
 		}
 		/**
 		 *\~english
@@ -276,9 +274,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int32_t
 		 */
-		inline int32_t & convertTo( int32_t & p_value )const
+		inline int32_t & convertTo( int32_t & v )const
 		{
-			return p_value = int32_t( value() );
+			return v = int32_t( value() );
 		}
 		/**
 		 *\~english
@@ -286,9 +284,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint32_t
 		 */
-		inline uint32_t & convertTo( uint32_t & p_value )const
+		inline uint32_t & convertTo( uint32_t & v )const
 		{
-			return p_value = uint32_t( value() );
+			return v = uint32_t( value() );
 		}
 		/**
 		 *\~english
@@ -296,9 +294,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers int64_t
 		 */
-		inline int64_t & convertTo( int64_t & p_value )const
+		inline int64_t & convertTo( int64_t & v )const
 		{
-			return p_value = int64_t( value() );
+			return v = int64_t( value() );
 		}
 		/**
 		 *\~english
@@ -306,9 +304,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers uint64_t
 		 */
-		inline uint64_t & convertTo( uint64_t & p_value )const
+		inline uint64_t & convertTo( uint64_t & v )const
 		{
-			return p_value = uint64_t( value() );
+			return v = uint64_t( value() );
 		}
 		/**
 		 *\~english
@@ -316,9 +314,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline float & convertTo( float & p_value )const
+		inline float & convertTo( float & v )const
 		{
-			return p_value = value();
+			return v = value();
 		}
 		/**
 		 *\~english
@@ -326,9 +324,9 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline double & convertTo( double & p_value )const
+		inline double & convertTo( double & v )const
 		{
-			return p_value = value();
+			return v = value();
 		}
 		/**
 		 *\~english
@@ -336,154 +334,154 @@ namespace castor
 		 *\~french
 		 *\brief		Opérateur de conversion vers float
 		 */
-		inline long double & convertTo( long double & p_value )const
+		inline long double & convertTo( long double & v )const
 		{
-			return p_value = value();
+			return v = value();
 		}
 		/**
 		 *\~english
 		 *\brief		sets the PixelComponents value
 		 *\remarks		Clamps the result
-		 *\param[in]	p_value	The value
+		 *\param[in]	value	The value
 		 *\~french
 		 *\brief		Définit la valeur de la composante
 		 *\remarks		Clampe le résultat
-		 *\param[in]	p_value	La valeur
+		 *\param[in]	value	La valeur
 		 */
-		void link( float * p_value )
+		void link( float * value )
 		{
-			m_component = p_value;
+			m_component = value;
 		}
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
 		 *\remarks		Clamps the result
-		 *\param[in]	p_rhs	The value to add
-		 *\return		Result of this + p_rhs
+		 *\param[in]	rhs	The value to add
+		 *\return		Result of this + rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par addition
 		 *\remarks		Clampe le résultat
-		 *\param[in]	p_rhs	La valeur à ajouter
-		 *\return		Resultat de this + p_rhs
+		 *\param[in]	rhs	La valeur à ajouter
+		 *\return		Resultat de this + rhs
 		 */
-		HdrColourComponent & operator+=( HdrColourComponent const & p_rhs )
+		HdrColourComponent & operator+=( HdrColourComponent const & rhs )
 		{
-			*m_component += p_rhs.value();
+			*m_component += rhs.value();
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
 		 *\remarks		Clamps the result
-		 *\param[in]	p_rhs	The value to subtract
-		 *\return		Result of this - p_rhs
+		 *\param[in]	rhs	The value to subtract
+		 *\return		Result of this - rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
 		 *\remarks		Clampe le résultat
-		 *\param[in]	p_rhs	La valeur à soustraire
-		 *\return		Resultat de this - p_rhs
+		 *\param[in]	rhs	La valeur à soustraire
+		 *\return		Resultat de this - rhs
 		 */
-		HdrColourComponent & operator-=( HdrColourComponent const & p_rhs )
+		HdrColourComponent & operator-=( HdrColourComponent const & rhs )
 		{
-			*m_component -= p_rhs.value();
+			*m_component -= rhs.value();
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
 		 *\remarks		Clamps the result
-		 *\param[in]	p_rhs	The value to multiply
-		 *\return		Result of this * p_rhs
+		 *\param[in]	rhs	The value to multiply
+		 *\return		Result of this * rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
 		 *\remarks		Clampe le résultat
-		 *\param[in]	p_rhs	La valeur à multiplier
-		 *\return		Resultat de this * p_rhs
+		 *\param[in]	rhs	La valeur à multiplier
+		 *\return		Resultat de this * rhs
 		 */
-		HdrColourComponent & operator*=( HdrColourComponent const & p_rhs )
+		HdrColourComponent & operator*=( HdrColourComponent const & rhs )
 		{
-			*m_component *= p_rhs.value();
+			*m_component *= rhs.value();
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
 		 *\remarks		Clamps the result
-		 *\param[in]	p_rhs	The value to divide
-		 *\return		Result of this / p_rhs
+		 *\param[in]	rhs	The value to divide
+		 *\return		Result of this / rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par division
 		 *\remarks		Clampe le résultat
-		 *\param[in]	p_rhs	La valeur à diviser
-		 *\return		Resultat de this / p_rhs
+		 *\param[in]	rhs	La valeur à diviser
+		 *\return		Resultat de this / rhs
 		 */
-		HdrColourComponent & operator/=( HdrColourComponent const & p_rhs )
+		HdrColourComponent & operator/=( HdrColourComponent const & rhs )
 		{
-			*m_component /= p_rhs.value();
+			*m_component /= rhs.value();
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		addition assignment operator
-		 *\param[in]	p_rhs	The value to add
-		 *\return		Result of this + p_rhs
+		 *\param[in]	rhs	The value to add
+		 *\return		Result of this + rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_rhs	La valeur à ajouter
-		 *\return		Resultat de this + p_rhs
+		 *\param[in]	rhs	La valeur à ajouter
+		 *\return		Resultat de this + rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator+=( T const & p_rhs )
+		HdrColourComponent & operator+=( T const & rhs )
 		{
-			*m_component = float( *m_component + p_rhs );
+			*m_component = float( *m_component + rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_rhs	The value to subtract
-		 *\return		Result of this - p_rhs
+		 *\param[in]	rhs	The value to subtract
+		 *\return		Result of this - rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_rhs	La valeur à soustraire
-		 *\return		Resultat de this - p_rhs
+		 *\param[in]	rhs	La valeur à soustraire
+		 *\return		Resultat de this - rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator-=( T const & p_rhs )
+		HdrColourComponent & operator-=( T const & rhs )
 		{
-			*m_component = float( *m_component - p_rhs );
+			*m_component = float( *m_component - rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_rhs	The value to multiply
-		 *\return		Result of this * p_rhs
+		 *\param[in]	rhs	The value to multiply
+		 *\return		Result of this * rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_rhs	La valeur à multiplier
-		 *\return		Resultat de this * p_rhs
+		 *\param[in]	rhs	La valeur à multiplier
+		 *\return		Resultat de this * rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator*=( T const & p_rhs )
+		HdrColourComponent & operator*=( T const & rhs )
 		{
-			*m_component = float( *m_component * p_rhs );
+			*m_component = float( *m_component * rhs );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_rhs	The value to divide
-		 *\return		Result of this / p_rhs
+		 *\param[in]	rhs	The value to divide
+		 *\return		Result of this / rhs
 		 *\~french
 		 *\brief		Opérateur d'affectation par division
-		 *\param[in]	p_rhs	La valeur à diviser
-		 *\return		Resultat de this / p_rhs
+		 *\param[in]	rhs	La valeur à diviser
+		 *\return		Resultat de this / rhs
 		 */
 		template< typename T >
-		HdrColourComponent & operator/=( T const & p_rhs )
+		HdrColourComponent & operator/=( T const & rhs )
 		{
-			*m_component = float( *m_component / p_rhs );
+			*m_component = float( *m_component / rhs );
 			return *this;
 		}
 		/**
@@ -529,141 +527,141 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_lhs, p_rhs	The components to compare
+	 *\param[in]	lhs, rhs	The components to compare
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_lhs, p_rhs	Les composantes à comparer
+	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator==( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API bool operator==( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
-	 *\param[in]	p_lhs, p_rhs	The components to compare
+	 *\param[in]	lhs, rhs	The components to compare
 	 *\~french
 	 *\brief		Opérateur de différence
-	 *\param[in]	p_lhs, p_rhs	Les composantes à comparer
+	 *\param[in]	lhs, rhs	Les composantes à comparer
 	 */
-	CU_API bool operator!=( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API bool operator!=( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 	/**
 	 *\~english
 	 *\brief		addition assignment operator
-	 *\param[in]	p_lhs, p_rhs	The components to add
-	 *\return		Result of p_lhs + p_rhs
+	 *\param[in]	lhs, rhs	The components to add
+	 *\return		Result of lhs + rhs
 	 *\~french
 	 *\brief		Opérateur d'affectation par addition
-	 *\param[in]	p_lhs, p_rhs	Les composantes à ajouter
-	 *\return		Resultat de p_lhs + p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à ajouter
+	 *\return		Resultat de lhs + rhs
 	 */
 	template< typename T >
-	float operator+( HdrColourComponent const & p_lhs, T const & p_rhs )
+	float operator+( HdrColourComponent const & lhs, T const & rhs )
 	{
-		float fValue;
-		p_lhs.convertTo( fValue );
-		HdrColourComponent cpnt( &fValue );
-		cpnt += p_rhs;
-		return fValue;
+		float value;
+		lhs.convertTo( value );
+		HdrColourComponent cpnt( &value );
+		cpnt += rhs;
+		return value;
 	}
 	/**
 	 *\~english
 	 *\brief		Substraction assignment operator
-	 *\param[in]	p_lhs, p_rhs	The components to subtract
-	 *\return		Result of p_lhs - p_rhs
+	 *\param[in]	lhs, rhs	The components to subtract
+	 *\return		Result of lhs - rhs
 	 *\~french
 	 *\brief		Opérateur d'affectation par soustraction
-	 *\param[in]	p_lhs, p_rhs	Les composantes à soustraire
-	 *\return		Resultat de p_lhs - p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à soustraire
+	 *\return		Resultat de lhs - rhs
 	 */
 	template< typename T >
-	float operator-( HdrColourComponent const & p_lhs, T const & p_rhs )
+	float operator-( HdrColourComponent const & lhs, T const & rhs )
 	{
-		float fValue;
-		p_lhs.convertTo( fValue );
-		HdrColourComponent cpnt( &fValue );
-		cpnt -= p_rhs;
-		return fValue;
+		float value;
+		lhs.convertTo( value );
+		HdrColourComponent cpnt( &value );
+		cpnt -= rhs;
+		return value;
 	}
 	/**
 	 *\~english
 	 *\brief		Division assignment operator
-	 *\param[in]	p_lhs, p_rhs	The components to divide
-	 *\return		Result of p_lhs / p_rhs
+	 *\param[in]	lhs, rhs	The components to divide
+	 *\return		Result of lhs / rhs
 	 *\~french
 	 *\brief		Opérateur d'affectation par division
-	 *\param[in]	p_lhs, p_rhs	Les composantes à diviser
-	 *\return		Resultat de p_lhs / p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à diviser
+	 *\return		Resultat de lhs / rhs
 	 */
 	template< typename T >
-	float operator/( HdrColourComponent const & p_lhs, T const & p_rhs )
+	float operator/( HdrColourComponent const & lhs, T const & rhs )
 	{
-		float fValue;
-		p_lhs.convertTo( fValue );
-		HdrColourComponent cpnt( &fValue );
-		cpnt /= p_rhs;
-		return fValue;
+		float value;
+		lhs.convertTo( value );
+		HdrColourComponent cpnt( &value );
+		cpnt /= rhs;
+		return value;
 	}
 	/**
 	 *\~english
 	 *\brief		Multiplication assignment operator
-	 *\param[in]	p_lhs, p_rhs	The components to multiply
-	 *\return		Result of p_lhs * p_rhs
+	 *\param[in]	lhs, rhs	The components to multiply
+	 *\return		Result of lhs * rhs
 	 *\~french
 	 *\brief		Opérateur d'affectation par multiplication
-	 *\param[in]	p_lhs, p_rhs	Les composantes à multiplier
-	 *\return		Resultat de p_lhs * p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à multiplier
+	 *\return		Resultat de lhs * rhs
 	 */
 	template< typename T >
-	float operator*( HdrColourComponent const & p_lhs, T const & p_rhs )
+	float operator*( HdrColourComponent const & lhs, T const & rhs )
 	{
-		float fValue;
-		p_lhs.convertTo( fValue );
-		HdrColourComponent cpnt( &fValue );
-		cpnt *= p_rhs;
-		return fValue;
+		float value;
+		lhs.convertTo( value );
+		HdrColourComponent cpnt( &value );
+		cpnt *= rhs;
+		return value;
 	}
 	/**
 	 *\~english
 	 *\brief		addition operator
-	 *\param[in]	p_lhs, p_rhs	The components to add
-	 *\return		Result of p_lhs + p_rhs
+	 *\param[in]	lhs, rhs	The components to add
+	 *\return		Result of lhs + rhs
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_lhs, p_rhs	Les composantes à ajouter
-	 *\return		Resultat de p_lhs + p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à ajouter
+	 *\return		Resultat de lhs + rhs
 	 */
-	CU_API float operator+( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API float operator+( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 	/**
 	 *\~english
 	 *\brief		Subtraction operator
-	 *\param[in]	p_lhs, p_rhs	The components to subtract
-	 *\return		Result of p_lhs - p_rhs
+	 *\param[in]	lhs, rhs	The components to subtract
+	 *\return		Result of lhs - rhs
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_lhs, p_rhs	Les composantes à soustraire
-	 *\return		Resultat de p_lhs - p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à soustraire
+	 *\return		Resultat de lhs - rhs
 	 */
-	CU_API float operator-( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API float operator-( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_lhs, p_rhs	The components to multiply
-	 *\return		Result of p_lhs * p_rhs
+	 *\param[in]	lhs, rhs	The components to multiply
+	 *\return		Result of lhs * rhs
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_lhs, p_rhs	Les composantes à multiplier
-	 *\return		Resultat de p_lhs * p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à multiplier
+	 *\return		Resultat de lhs * rhs
 	 */
-	CU_API float operator*( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API float operator*( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_lhs, p_rhs	The components to divide
-	 *\return		Result of p_lhs / p_rhs
+	 *\param[in]	lhs, rhs	The components to divide
+	 *\return		Result of lhs / rhs
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_lhs, p_rhs	Les composantes à diviser
-	 *\return		Resultat de p_lhs / p_rhs
+	 *\param[in]	lhs, rhs	Les composantes à diviser
+	 *\return		Resultat de lhs / rhs
 	 */
-	CU_API float operator/( HdrColourComponent const & p_lhs, HdrColourComponent const & p_rhs );
+	CU_API float operator/( HdrColourComponent const & lhs, HdrColourComponent const & rhs );
 }
 
 #endif

@@ -52,11 +52,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the pass.
-		 *\param		size	The pass needed dimensions.
+		 *\param		size		The pass needed dimensions.
+		 *\param		face		The target face.
+		 *\param		renderPass	The render pass to use.
+		 *\param		background	The scene background.
+		 *\param		pool		The descriptor pool used to bind the scene background.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Initialise la passe.
-		 *\param		size	Les dimensions voulues pour la passe.
+		 *\param		size		Les dimensions voulues pour la passe.
+		 *\param		face		La face cible.
+		 *\param		renderPass	La passe de rendu à utiliser.
+		 *\param		background	Le fond de la scène.
+		 *\param		pool		Le pool de descripteurs utilisé pour binder le fond de la scène.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		bool initialise( castor::Size const & size
@@ -83,12 +91,15 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de base.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 */
-		C3D_API void update( SceneNode const & node, RenderQueueArray & queues );
+		C3D_API void update( SceneNode const & node
+			, RenderQueueArray & queues );
 		/**
 		 *\~english
 		 *\brief		Render function.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Fonction de rendu.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 

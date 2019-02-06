@@ -31,36 +31,37 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		inline FunctorEvent( FunctorEvent const & p_copy ) = delete;
+		inline FunctorEvent( FunctorEvent const & copy ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		inline FunctorEvent & operator=( FunctorEvent const & p_copy ) = delete;
+		inline FunctorEvent & operator=( FunctorEvent const & copy ) = delete;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type		The event type
-		 *\param[in]	p_functor	The functor to execute
+		 *\param[in]	type	The event type
+		 *\param[in]	functor	The functor to execute
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type		Le type d'évènement
-		 *\param[in]	p_functor	Le foncteur à exécuter
+		 *\param[in]	type	Le type d'évènement
+		 *\param[in]	functor	Le foncteur à exécuter
 		 */
-		inline FunctorEvent( EventType p_type, Functor p_functor )
-			: FrameEvent( p_type )
-			, m_functor( p_functor )
+		inline FunctorEvent( EventType type
+			, Functor functor )
+			: FrameEvent( type )
+			, m_functor( functor )
 		{
 		}
 		/**
@@ -95,17 +96,18 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief		Helper function to create a functor event
-	 *\param[in]	p_type		The event type
-	 *\param[in]	p_functor	The functor to execute
+	 *\param[in]	type		The event type
+	 *\param[in]	functor	The functor to execute
 	 *\~french
 	 *\brief		Constructeur
-	 *\param[in]	p_type		Le type d'évènement
-	 *\param[in]	p_functor	Le foncteur à exécuter
+	 *\param[in]	type		Le type d'évènement
+	 *\param[in]	functor	Le foncteur à exécuter
 	 */
 	template< typename Functor >
-	inline std::unique_ptr< FunctorEvent< Functor > > makeFunctorEvent( EventType p_type, Functor p_functor )
+	inline std::unique_ptr< FunctorEvent< Functor > > makeFunctorEvent( EventType type
+		, Functor functor )
 	{
-		return std::make_unique< FunctorEvent< Functor > >( p_type, p_functor );
+		return std::make_unique< FunctorEvent< Functor > >( type, functor );
 	}
 }
 

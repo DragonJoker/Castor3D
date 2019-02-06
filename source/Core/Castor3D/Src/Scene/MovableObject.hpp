@@ -45,36 +45,39 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
-			 *\param[in]	p_object	the movable object to save
-			 *\param[in]	p_file		The file to save the movable object in
+			 *\param[in]	object	the movable object to save
+			 *\param[in]	file		The file to save the movable object in
 			 *\~french
 			 *\brief		Ecrit un MovableObject dans un fichier texte
-			 *\param[in]	p_object	Le MovableObject
-			 *\param[in]	p_file		Le fichier
+			 *\param[in]	object	Le MovableObject
+			 *\param[in]	file		Le fichier
 			 */
-			C3D_API bool operator()( MovableObject const & p_object, castor::TextFile & p_file )override;
+			C3D_API bool operator()( MovableObject const & object, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The name
-		 *\param[in]	p_scene	The parent scene
-		 *\param[in]	p_sn	Parent node
-		 *\param[in]	p_type	MovableObject type
+		 *\param[in]	name	The name
+		 *\param[in]	scene	The parent scene
+		 *\param[in]	node	Parent node
+		 *\param[in]	type	MovableObject type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom
-		 *\param[in]	p_scene	La scène parente
-		 *\param[in]	p_sn	Noeud parent
-		 *\param[in]	p_type	Le type de MovableObject
+		 *\param[in]	name	Le nom
+		 *\param[in]	scene	La scène parente
+		 *\param[in]	node	Noeud parent
+		 *\param[in]	type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
+		C3D_API MovableObject( castor::String const & name
+			, Scene & scene
+			, MovableType type
+			, SceneNodeSPtr node );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -95,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API virtual void attachTo( SceneNodeSPtr p_node );
+		C3D_API virtual void attachTo( SceneNodeSPtr node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent node

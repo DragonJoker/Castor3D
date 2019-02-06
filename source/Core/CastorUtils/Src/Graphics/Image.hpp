@@ -95,7 +95,7 @@ namespace castor
 		friend class Font;
 		friend class Image::BinaryLoader;
 
-		CU_DeclareInvariantBlock()
+		CU_DeclareInvariantBlock();
 
 	public:
 		/**

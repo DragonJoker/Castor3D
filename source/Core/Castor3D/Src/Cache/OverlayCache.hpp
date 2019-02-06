@@ -50,9 +50,9 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur de comparaison.
 		 */
-		inline bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )const
+		inline bool operator()( OverlayCategorySPtr a, OverlayCategorySPtr b )const
 		{
-			return p_a->getLevel() < p_b->getLevel() || ( p_a->getLevel() == p_b->getLevel() && p_a->getIndex() < p_b->getIndex() );
+			return a->getLevel() < b->getLevel() || ( a->getLevel() == b->getLevel() && a->getIndex() < b->getIndex() );
 		}
 	};
 	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
@@ -85,7 +85,7 @@ namespace castor3d
 		struct OverlayInitialiser
 		{
 			explicit OverlayInitialiser( Cache< Overlay, castor::String > & cache );
-			void operator()( OverlaySPtr p_element );
+			void operator()( OverlaySPtr element );
 
 		private:
 			OverlayCategorySet & m_overlays;
@@ -95,7 +95,7 @@ namespace castor3d
 		struct OverlayCleaner
 		{
 			explicit OverlayCleaner( Cache< Overlay, castor::String > & cache );
-			void operator()( OverlaySPtr p_element );
+			void operator()( OverlaySPtr element );
 
 		private:
 			OverlayCategorySet & m_overlays;
@@ -107,23 +107,23 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	p_produce		The element producer.
-		 *\param[in]	p_initialise	The element initialiser.
-		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	p_merge			The element collection merger.
+		 *\param[in]	produce		The element producer.
+		 *\param[in]	initialise	The element initialiser.
+		 *\param[in]	clean		The element cleaner.
+		 *\param[in]	merge		The element collection merger.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	p_produce		Le créateur d'objet.
-		 *\param[in]	p_initialise	L'initialiseur d'objet.
-		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	p_merge			Le fusionneur de collection d'objets.
+		 *\param[in]	produce		Le créateur d'objet.
+		 *\param[in]	initialise	L'initialiseur d'objet.
+		 *\param[in]	clean		Le nettoyeur d'objet.
+		 *\param[in]	merge		Le fusionneur de collection d'objets.
 		 */
 		C3D_API Cache( Engine & engine
-		   , Producer && p_produce
-		   , Initialiser && p_initialise = Initialiser{}
-		   , Cleaner && p_clean = Cleaner{}
-		   , Merger && p_merge = Merger{} );
+		   , Producer && produce
+		   , Initialiser && initialise = Initialiser{}
+		   , Cleaner && clean = Cleaner{}
+		   , Merger && merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -148,68 +148,72 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.
-		 *\param[in]	p_name	The font name.
+		 *\param[in]	name	The font name.
 		 *\return		The FontTexture if it exist, nullptr if not.
 		 *\~french
 		 *\brief		Récupère une FontTexture, à partir d'un nom de police.
-		 *\param[in]	p_name	Le nom de la police.
+		 *\param[in]	name	Le nom de la police.
 		 *\return		La FontTexture si elle exite, nullptr sinon.
 		 */
-		C3D_API FontTextureSPtr getFontTexture( castor::String const & p_name );
+		C3D_API FontTextureSPtr getFontTexture( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
-		 *\param[in]	p_font	The font.
+		 *\param[in]	font	The font.
 		 *\return		The created FontTexture.
 		 *\~french
 		 *\brief		Crée une FontTexture, à partir d'une police.
-		 *\param[in]	p_font	La police.
+		 *\param[in]	font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API FontTextureSPtr createFontTexture( castor::FontSPtr p_font );
+		C3D_API FontTextureSPtr createFontTexture( castor::FontSPtr font );
 		/**
 		 *\~english
 		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_type		The overlay type.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_parent	The parent overlay, if any.
+		 *\param[in]	name	The object name.
+		 *\param[in]	type	The overlay type.
+		 *\param[in]	scene	The scene.
+		 *\param[in]	parent	The parent overlay, if any.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_type		Le type d'incrustation.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_parent	L'incrustation parente, si elle existe.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	type	Le type d'incrustation.
+		 *\param[in]	scene	La scène.
+		 *\param[in]	parent	L'incrustation parente, si elle existe.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		inline ElementPtr add( Key const & name
+			, OverlayType type
+			, SceneSPtr scene
+			, OverlaySPtr parent )
 		{
-			return MyCacheType::add( p_name, p_type, p_scene, p_parent );
+			return MyCacheType::add( name, type, scene, parent );
 		}
 		/**
 		 *\~english
 		 *\brief		adds an already created object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_element	The object.
+		 *\param[in]	name	The object name.
+		 *\param[in]	element	The object.
 		 *\return		The object.
 		 *\~french
 		 *\brief		Ajoute un objet déjà créé.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_element	L'objet'.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	element	L'objet'.
 		 *\return		L'objet.
 		 */
-		inline ElementPtr add( Key const & p_name, ElementPtr p_element )
+		inline ElementPtr add( Key const & name
+			, ElementPtr element )
 		{
-			return MyCacheType::add( p_name, p_element );
+			return MyCacheType::add( name, element );
 		}
 		/**
 		 *\~english
 		 *\brief		Removes an element, given a name.
-		 *\param[in]	name		The element name.
+		 *\param[in]	name	The element name.
 		 *\~french
 		 *\brief		Retire un élément à partir d'un nom.
-		 *\param[in]	name		Le nom d'élément.
+		 *\param[in]	name	Le nom d'élément.
 		 */
 		inline void remove( Key const & name )
 		{
@@ -310,7 +314,7 @@ namespace castor3d
 		//!\~french		La matrice de projection.
 		castor::Matrix4x4r m_projection;
 		//!\~english	The FontTextures, sorted by font name.
-		//!\~french		Les FontTexutrs, triées par nom de police.
+		//!\~french		Les FontTextures, triées par nom de police.
 		FontTextureStrMap m_fontTextures;
 	};
 	using OverlayCache = Cache< Overlay, castor::String >;

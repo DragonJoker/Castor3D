@@ -46,20 +46,20 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
+			 *\param[in]	file		the file to save the overlay in
+			 *\param[in]	overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
 			 *\brief		Sauvegarde l'incrustation donné dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
+			 *\param[in]	file		Le fichier où enregistrer l'incrustation
+			 *\param[in]	overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( Overlay const & p_overlay, castor::TextFile & p_file )override;
+			C3D_API bool operator()( Overlay const & overlay, castor::TextFile & file )override;
 		};
 
 	public:
@@ -70,29 +70,33 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	p_type		The overlay type
+		 *\param[in]	engine	The engine.
+		 *\param[in]	type	The overlay type.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	engine	Le moteur
-		 *\param[in]	p_type		Le type de l'incrustation
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de l'incrustation.
 		 */
-		C3D_API Overlay( Engine & engine, OverlayType p_type );
+		C3D_API Overlay( Engine & engine
+			, OverlayType type );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	engine	The engine
-		 *\param[in]	p_type		The overlay type
-		 *\param[in]	p_scene	The scene holding the overlay
-		 *\param[in]	p_parent	The parent overlay (if any)
-		 *\~english
+		 *\param[in]	type	The overlay type
+		 *\param[in]	scene	The scene holding the overlay
+		 *\param[in]	parent	The parent overlay (if any)
+		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	engine	Le moteur
-		 *\param[in]	p_type		Le type de l'incrustation
-		 *\param[in]	p_scene	La scène parent
-		 *\param[in]	p_parent	L'incrustation parente
+		 *\param[in]	type	Le type de l'incrustation
+		 *\param[in]	scene	La scène parent
+		 *\param[in]	parent	L'incrustation parente
 		 */
-		C3D_API Overlay( Engine & engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
+		C3D_API Overlay( Engine & engine
+			, OverlayType type
+			, SceneSPtr scene
+			, OverlaySPtr parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,25 +107,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a child to the overlay
-		 *\param[in]	p_overlay	The overlay to add
+		 *\param[in]	overlay	The overlay to add
 		 *\return		\p true if successful, false if not
 		 *\~french
 		 *\brief		Ajoute un enfant à l'incrustation
-		 *\param[in]	p_overlay	L'incrustation enfant
+		 *\param[in]	overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API void addChild( OverlaySPtr p_overlay );
+		C3D_API void addChild( OverlaySPtr overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level
-		 *\param[in]	p_level	The wanted level
+		 *\param[in]	level	The wanted level
 		 *\return		The count
 		 *\~french
 		 *\brief		Récupère le compte des enfants du niveau donné
-		 *\param[in]	p_level	Le niveau voulu
+		 *\param[in]	level	Le niveau voulu
 		 *\return		Le compte
 		 */
-		C3D_API uint32_t getChildrenCount( int p_level )const;
+		C3D_API uint32_t getChildrenCount( int level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel overlay.
@@ -173,30 +177,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
-		 *\param[in]	p_size	The screen size
+		 *\param[in]	size	The screen size
 		 *\return		The position
 		 *\~french
 		 *\brief		Récupère la position absolue de l'incrustation, en pixels
-		 *\param[in]	p_size	La taille de l'écran
+		 *\param[in]	size	La taille de l'écran
 		 *\return		La position
 		 */
-		castor::Position getAbsolutePosition( castor::Size const & p_size )const
+		castor::Position getAbsolutePosition( castor::Size const & size )const
 		{
-			return m_category->getAbsolutePosition( p_size );
+			return m_category->getAbsolutePosition( size );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay size, in pixels
-		 *\param[in]	p_size	The screen size
+		 *\param[in]	size	The screen size
 		 *\return		The size
 		 *\~french
 		 *\brief		Récupère la taille absolue de l'incrustation, en pixels
-		 *\param[in]	p_size	La taille de l'écran
+		 *\param[in]	size	La taille de l'écran
 		 *\return		La taille
 		 */
-		castor::Size getAbsoluteSize( castor::Size const & p_size )const
+		castor::Size getAbsoluteSize( castor::Size const & size )const
 		{
-			return m_category->getAbsoluteSize( p_size );
+			return m_category->getAbsoluteSize( size );
 		}
 		/**
 		 *\~english
@@ -497,102 +501,108 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the overlay order
-		 *\param[in]	p_index	The new index
-		 *\param[in]	p_level	The new level
+		 *\param[in]	index	The new index
+		 *\param[in]	level	The new level
 		 *\~french
 		 *\brief		Définit l'ordre de l'incrustation
-		 *\param[in]	p_index	Le nouvel indice
-		 *\param[in]	p_level	Le nouveau niveau
+		 *\param[in]	index	Le nouvel indice
+		 *\param[in]	level	Le nouveau niveau
 		 */
-		inline void setOrder( int p_index, int p_level )
+		inline void setOrder( int index, int level )
 		{
-			m_category->setOrder( p_index, p_level );
+			m_category->setOrder( index, level );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the material
-		 *\param[in]	p_material	The new value
+		 *\param[in]	material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
-		 *\param[in]	p_material	La nouvelle valeur
+		 *\param[in]	material	La nouvelle valeur
 		 */
-		inline void setMaterial( MaterialSPtr p_material )
+		inline void setMaterial( MaterialSPtr material )
 		{
-			m_category->setMaterial( p_material );
+			m_category->setMaterial( material );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the relative position of the overlay
-		 *\param[in]	p_position	The new position
+		 *\param[in]	position	The new position
 		 *\~french
 		 *\brief		Définit la position relative de l'incrustation
-		 *\param[in]	p_position	La nouvelle position
+		 *\param[in]	position	La nouvelle position
 		 */
-		inline void setPosition( castor::Point2d const & p_position )
+		inline void setPosition( castor::Point2d const & position )
 		{
-			m_category->setPosition( p_position );
+			m_category->setPosition( position );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the relative size of the overlay
-		 *\param[in]	p_size	The new size
+		 *\param[in]	size	The new size
 		 *\~french
 		 *\brief		Définit les dimensions relatives de l'incrustation
-		 *\param[in]	p_size	Les nouvelles dimensions
+		 *\param[in]	size	Les nouvelles dimensions
 		 */
-		inline void setSize( castor::Point2d const & p_size )
+		inline void setSize( castor::Point2d const & size )
 		{
-			m_category->setSize( p_size );
+			m_category->setSize( size );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the relative position of the overlay
-		 *\param[in]	p_position	The new position
+		 *\param[in]	position	The new position
 		 *\~french
 		 *\brief		Définit la position relative de l'incrustation
-		 *\param[in]	p_position	La nouvelle position
+		 *\param[in]	position	La nouvelle position
 		 */
-		inline void setPixelPosition( castor::Position const & p_position )
+		inline void setPixelPosition( castor::Position const & position )
 		{
-			m_category->setPixelPosition( p_position );
+			m_category->setPixelPosition( position );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the relative size of the overlay
-		 *\param[in]	p_size	The new size
+		 *\param[in]	size	The new size
 		 *\~french
 		 *\brief		Définit les dimensions relatives de l'incrustation
-		 *\param[in]	p_size	Les nouvelles dimensions
+		 *\param[in]	size	Les nouvelles dimensions
 		 */
-		inline void setPixelSize( castor::Size const & p_size )
+		inline void setPixelSize( castor::Size const & size )
 		{
-			m_category->setPixelSize( p_size );
+			m_category->setPixelSize( size );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the name of the overlay
-		 *\param[in]	p_name	The new name
+		 *\param[in]	name	The new name
 		 *\~french
 		 *\brief		Définit le nom de l'incrustation
-		 *\param[in]	p_name	Le nouveau nom
+		 *\param[in]	name	Le nouveau nom
 		 */
-		inline void setName( castor::String const & p_name )
+		inline void setName( castor::String const & name )
 		{
-			m_name = p_name;
+			m_name = name;
 		}
 
 	protected:
-		//!\~english The overlay name	\~french Le nom de l'incrustation
+		//!\~english	The overlay name.
+		//!\~french		Le nom de l'incrustation.
 		castor::String m_name;
-		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
+		//!\~english	The parent overlay, if any.
+		//!\~french		L'incrustation parente, s'il y en a.
 		OverlayWPtr m_parent;
-		//!\~english The children	\~french Les enfants
+		//!\~english	The children.
+		//!\~french		Les enfants.
 		OverlayPtrArray m_overlays;
-		//!\~english The overlay category	\~french La catégorie de l'incrustation
+		//!\~english	The overlay category.
+		//!\~french		La catégorie de l'incrustation.
 		OverlayCategorySPtr m_category;
-		//!\~english The parent scene	\~french La scène parente
+		//!\~english	The parent scene.
+		//!\~french		La scène parente.
 		SceneWPtr m_scene;
-		//!\~english The render system	\~french Le système de rendu
+		//!\~english	The render system.
+		//!\~french		Le système de rendu.
 		RenderSystem * m_renderSystem;
 	};
 }

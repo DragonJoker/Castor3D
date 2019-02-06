@@ -78,23 +78,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	skeleton	The overlay's material index.
+		 *\param[in]	skeleton	The skeleton to update from.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	skeleton	L'index du matériau de l'incrustation.
+		 *\param[in]	skeleton	Le squelette à partir duquel la mise à jour s'effectue.
 		 */
 		C3D_API void update( AnimatedSkeleton const & skeleton )const;
 		/**
 		 *\~english
-		 *\brief		Declares the GLSL variables needed to compute skinning in vertex shader.
-		 *\param[in]	writer	The GLSL writer.
+		 *\brief		Declares the variables needed to compute skinning in vertex shader.
+		 *\param[in]	writer	The shader writer.
+		 *\param[in]	binding	The descriptor set binding point.
 		 *\param[in]	set		The descriptor set index.
 		 *\param[in]	flags	The program flags.
+		 *\return		The skinning data.
 		 *\~french
 		 *\brief		Déclare les variables nécessaires au calcul du skinning dans le vertex shader.
-		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	writer	Le shader writer.
+		 *\param[in]	binding	Le point d'attache du descriptor set.
 		 *\param[in]	set		L'index du descriptor set.
 		 *\param[in]	flags	Les indicateurs du programme.
+		 *\return		Les données de skinning.
 		 */
 		C3D_API static SkinningData declare( sdw::ShaderWriter & writer
 			, uint32_t binding
@@ -115,12 +119,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes skinning transformation in vertex shader.
-		 *\param[in]	writer	The GLSL writer.
+		 *\param[in]	data	The skinning data.
+		 *\param[in]	writer	The shader writer.
 		 *\param[in]	flags	The program flags.
 		 *\return		The resulting matrix.
 		 *\~french
 		 *\brief		Effectue le calcul de la transformation du skinning dans le vertex shader.
-		 *\param[in]	writer	Le GLSL writer.
+		 *\param[in]	data	Les données de skinning.
+		 *\param[in]	writer	Le shader writer.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 *\return		La matrice résultat.
 		 */

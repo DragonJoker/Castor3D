@@ -41,11 +41,19 @@ namespace castor3d
 		*	Constructor.
 		*\param[in] renderSystem
 		*	The RenderSystem.
+		*\param[in] nearest
+		*	Tells if the sampler needs a Nearest filter or not, if \p sampler is nullptr.
+		*\param[in] sampler
+		*	The sampler to use.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] renderSystem
 		*	Le RenderSystem.
+		*\param[in] nearest
+		*	Dit si le sampler doit filtrer en Nearest ou pas, si \p sampler est nullptr.
+		*\param[in] sampler
+		*	Le sampler à utiliser.
 		*/
 		C3D_API explicit RenderCube( RenderSystem & renderSystem
 			, bool nearest
@@ -53,14 +61,34 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Creates the rendering pipeline.
+		*	Creates the rendering pipelines.
+		*\param[in] size
+		*	The render size.
+		*\param[in] position
+		*	The render position.
 		*\param[in] program
 		*	The shader program.
+		*\param[in] view
+		*	The source view.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] pushRanges
+		*	The push constant ranges.
 		*\~french
 		*\brief
-		*	Crée le pipeline de rendu.
+		*	Crée les pipelines de rendu.
+		*\param[in] size
+		*	Les dimensions de rendu.
+		*\param[in] position
+		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
+		*\param[in] view
+		*	La vue cible.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] pushRanges
+		*	Les intervalles de push constants.
 		*/
 		C3D_API void createPipelines( ashes::Extent2D const & size
 			, castor::Position const & position
@@ -71,14 +99,38 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Creates the rendering pipeline.
+		*	Creates the rendering pipelines.
+		*\param[in] size
+		*	The render size.
+		*\param[in] position
+		*	The render position.
 		*\param[in] program
 		*	The shader program.
+		*\param[in] view
+		*	The source view.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] pushRanges
+		*	The push constant ranges.
+		*\param[in] dsState
+		*	The depth stencil state to use.
 		*\~french
 		*\brief
-		*	Crée le pipeline de rendu.
+		*	Crée les pipelines de rendu.
+		*\param[in] size
+		*	Les dimensions de rendu.
+		*\param[in] position
+		*	La position du rendu.
 		*\param[in] program
 		*	Le programme shader.
+		*\param[in] view
+		*	La vue cible.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] pushRanges
+		*	Les intervalles de push constants.
+		*\param[in] dsState
+		*	L'état de profondeur et stencil à utiliser.
 		*/
 		C3D_API void createPipelines( ashes::Extent2D const & size
 			, castor::Position const & position
@@ -99,10 +151,22 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Prpares the commands to render the quad.
+		*	Prepares the commands to render one face from the cube.
+		*\param[in] renderPass
+		*	The render pass to use.
+		*\param[in] subpassIndex
+		*	The render subpass index.
+		*\param[in] face
+		*	The face index.
 		*\~french
 		*\brief
-		*	Prépare les commandes de dessin du quad.
+		*	Prépare les commandes de dessin d'une face du cube.
+		*\param[in] renderPass
+		*	La passe de rendu à utiliser.
+		*\param[in] subpassIndex
+		*	L'indice de la sous passe de rendu.
+		*\param[in] face
+		*	L'indice de la face.
 		*/
 		C3D_API void prepareFrame( ashes::RenderPass const & renderPass
 			, uint32_t subpassIndex
@@ -110,10 +174,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Prpares the commands to render the quad, inside given command buffer.
+		*	Prepares the commands to render one face from the cube, inside given command buffer.
+		*\param[in,out] commandBuffer
+		*	The command buffer.
+		*\param[in] face
+		*	The face index.
 		*\~french
 		*\brief
-		*	Prépare les commandes de dessin du quad, dans le tampon de commandes donné.
+		*	Prépare les commandes de dessin d'une face du cube, dans le tampon de commandes donné.
+		*\param[in,out] commandBuffer
+		*	Le tampon de commandes.
+		*\param[in] face
+		*	L'indice de la face.
 		*/
 		C3D_API void registerFrame( ashes::CommandBuffer & commandBuffer
 			, uint32_t face )const;

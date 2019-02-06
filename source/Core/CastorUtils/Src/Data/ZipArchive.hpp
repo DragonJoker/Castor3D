@@ -31,35 +31,35 @@ namespace castor
 			std::list< String > files;
 
 			Folder();
-			Folder( String const & p_name, Path const & p_path );
-			Folder * findFolder( Path const & p_path );
-			void addFile( Path const & p_path );
-			void removeFile( Path const & p_path );
+			Folder( String const & name, Path const & path );
+			Folder * findFolder( Path const & path );
+			void addFile( Path const & path );
+			void removeFile( Path const & path );
 		};
 
 
 		struct ZipImpl
 		{
-			virtual void open( Path const & p_path, File::OpenMode p_mode ) = 0;
+			virtual void open( Path const & path, File::OpenMode mode ) = 0;
 			virtual void close() = 0;
-			virtual void deflate( Folder const & p_files ) = 0;
-			virtual StringArray inflate( Path const & p_outFolder, Folder & p_folder ) = 0;
-			virtual bool findFolder( String const & p_folder ) = 0;
-			virtual bool findFile( String const & p_file ) = 0;
+			virtual void deflate( Folder const & files ) = 0;
+			virtual StringArray inflate( Path const & outFolder, Folder & folder ) = 0;
+			virtual bool findFolder( String const & folder ) = 0;
+			virtual bool findFile( String const & file ) = 0;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Default constructor
-		 *\param[in]	p_path	The archive path name
-		 *\param[in]	p_mode	The open mode
+		 *\param[in]	path	The archive path name
+		 *\param[in]	mode	The open mode
 		 *\~french
 		 *\brief		Constructeur par défaut
-		 *\param[in]	p_path	Le chemin de l' archive
-		 *\param[in]	p_mode	Le mode d'ouverture
+		 *\param[in]	path	Le chemin de l' archive
+		 *\param[in]	mode	Le mode d'ouverture
 		 */
-		CU_API ZipArchive( Path const & p_path, File::OpenMode p_mode );
+		CU_API ZipArchive( Path const & path, File::OpenMode mode );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -77,48 +77,48 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Inflates the archive
-		 *\param[in]	p_folder	The archive output folder
+		 *\param[in]	folder	The archive output folder
 		 *\~french
 		 *\brief		Décompresse l'archive
-		 *\param[in]	p_folder	Le dossier de sortie de l'archive
+		 *\param[in]	folder	Le dossier de sortie de l'archive
 		 */
-		CU_API bool inflate( Path const & p_folder );
+		CU_API bool inflate( Path const & folder );
 		/**
 		 *\~english
 		 *\brief		adds a file to the archive
-		 *\param[in]	p_file	The file path
+		 *\param[in]	file	The file path
 		 *\~french
 		 *\brief		Ajoute un fichier à l'archive
-		 *\param[in]	p_file	Le chemin du fichier
+		 *\param[in]	file	Le chemin du fichier
 		 */
-		CU_API void addFile( Path const & p_file );
+		CU_API void addFile( Path const & file );
 		/**
 		 *\~english
 		 *\brief		Removes a file for the archive
-		 *\param[in]	p_fileName	The file path
+		 *\param[in]	fileName	The file path
 		 *\~french
 		 *\brief		Retire un fichier de l'archive
-		 *\param[in]	p_fileName	Le chemin du fichier
+		 *\param[in]	fileName	Le chemin du fichier
 		 */
-		CU_API void removeFile( Path const & p_fileName );
+		CU_API void removeFile( Path const & fileName );
 		/**
 		 *\~english
 		 *\brief		Looks for a folder into the archive
-		 *\param[in]	p_folder	The folder name
+		 *\param[in]	folder	The folder name
 		 *\~french
 		 *\brief		Recherche un dossier dans l'archive
-		 *\param[in]	p_folder	Le nom du dossier
+		 *\param[in]	folder	Le nom du dossier
 		 */
-		CU_API bool findFolder( String const & p_folder );
+		CU_API bool findFolder( String const & folder );
 		/**
 		 *\~english
 		 *\brief		Looks for a file into the archive
-		 *\param[in]	p_file	The file name
+		 *\param[in]	file	The file name
 		 *\~french
 		 *\brief		Recherche un fichier dans l'archive
-		 *\param[in]	p_file	Le nom du fichier
+		 *\param[in]	file	Le nom du fichier
 		 */
-		CU_API bool findFile( String const & p_file );
+		CU_API bool findFile( String const & file );
 
 	private:
 		std::unique_ptr< ZipImpl > m_impl;

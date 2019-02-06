@@ -29,30 +29,30 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_width, p_height	The dimensions
+		 *\param[in]	width, height	The dimensions
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_width, p_height	Les dimensions
+		 *\param[in]	width, height	Les dimensions
 		 */
-		CU_API Size( uint32_t p_width = 0, uint32_t p_height = 0 );
+		CU_API Size( uint32_t width = 0, uint32_t height = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_obj	The object to copy
+		 *\param[in]	obj	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_obj	L'objet à copier
+		 *\param[in]	obj	L'objet à copier
 		 */
-		CU_API Size( Size const & p_obj );
+		CU_API Size( Size const & obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
-		 *\param[in]	p_obj	The object to move
+		 *\param[in]	obj	The object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
+		 *\param[in]	obj	L'objet à déplacer
 		 */
-		CU_API Size( Size && p_obj );
+		CU_API Size( Size && obj );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,34 +63,34 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_obj	The object to copy
+		 *\param[in]	obj	The object to copy
 		 *\return		A reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_obj	L'objet à copier
+		 *\param[in]	obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator=( Size const & p_obj );
+		CU_API Size & operator=( Size const & obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_obj	The object to move
+		 *\param[in]	obj	The object to move
 		 *\return		A reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
+		 *\param[in]	obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator=( Size && p_obj );
+		CU_API Size & operator=( Size && obj );
 		/**
 		 *\~english
 		 *\brief		sets the size values
-		 *\param[in]	p_width, p_height	The dimensions
+		 *\param[in]	width, height	The dimensions
 		 *\~french
 		 *\brief		Définit la taille
-		 *\param[in]	p_width, p_height	Les dimensions
+		 *\param[in]	width, height	Les dimensions
 		 */
-		CU_API void set( uint32_t p_width, uint32_t p_height );
+		CU_API void set( uint32_t width, uint32_t height );
 		/**
 		 *\~english
 		 *\brief		Retrieves the width
@@ -143,13 +143,13 @@ namespace castor
 		 *\~english
 		 *\brief		Modifies the size
 		 *\remarks		If width+cx < 0 (or height+cy < 0) then width=0 (respectively height=0)
-		 *\param[in]	p_cx, p_cy	The size modifications
+		 *\param[in]	cx, cy	The size modifications
 		 *\~french
 		 *\brief		Modifie la taille
 		 *\remarks		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
-		 *\param[in]	p_cx, p_cy	Les valeurs de modification
+		 *\param[in]	cx, cy	Les valeurs de modification
 		 */
-		CU_API void grow( int32_t p_cx, int32_t p_cy );
+		CU_API void grow( int32_t cx, int32_t cy );
 
 		using BaseType::ptr;
 		using BaseType::constPtr;
@@ -168,25 +168,25 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_a, p_b	The sizes to compare
+	 *\param[in]	a, b	The sizes to compare
 	 *\return		\p true if sizes have same dimensions
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_a, p_b	Les tailles à comparer
+	 *\param[in]	a, b	Les tailles à comparer
 	 *\return		\p true si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator==( Size const & p_a, Size const & p_b );
+	CU_API bool operator==( Size const & a, Size const & b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_a, p_b	The sizes to compare
+	 *\param[in]	a, b	The sizes to compare
 	 *\return		\p false if sizes have same dimensions
 	 *\~french
 	 *\brief		Opérateur de différence
-	 *\param[in]	p_a, p_b	Les tailles à comparer
+	 *\param[in]	a, b	Les tailles à comparer
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator!=( Size const & p_a, Size const & p_b );
+	CU_API bool operator!=( Size const & a, Size const & b );
 }
 
 #endif

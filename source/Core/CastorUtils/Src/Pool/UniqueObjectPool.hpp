@@ -40,16 +40,16 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates the unique object pool instance.
-		 *\param[in]	p_count	The object pool initial objects count.
+		 *\param[in]	count	The object pool initial objects count.
 		 *\~french
 		 *\brief		Crée l'instance unique du pool d'objets.
-		 *\param[in]	p_count	Le compte initial des objets du pool.
+		 *\param[in]	count	Le compte initial des objets du pool.
 		 */
-		static inline void create( uint32_t p_count = 256u )
+		static inline void create( uint32_t count = 256u )
 		{
 			if ( !doGetInstance() )
 			{
-				doGetInstance() = new MyObjectPool( p_count );
+				doGetInstance() = new MyObjectPool( count );
 			}
 		}
 		/**
@@ -106,16 +106,16 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates the unique object pool instance.
-		 *\param[in]	p_count	The object pool initial objects count.
+		 *\param[in]	count	The object pool initial objects count.
 		 *\~french
 		 *\brief		Crée l'instance unique du pool d'objets.
-		 *\param[in]	p_count	Le compte initial des objets du pool.
+		 *\param[in]	count	Le compte initial des objets du pool.
 		 */
-		static inline void create( uint32_t p_count = 256u )
+		static inline void create( uint32_t count = 256u )
 		{
 			if ( !doGetInstance() )
 			{
-				doGetInstance() = new MyAlignedObjectPool( p_count );
+				doGetInstance() = new MyAlignedObjectPool( count );
 			}
 		}
 		/**

@@ -12,11 +12,11 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	CU_API Point3r operator *( Matrix4x4r const & p_mtx, Point3r const & p_pt );
-	CU_API Point3r operator *( Point3r const & p_pt, Matrix4x4r const & p_mtx );
-	CU_API Point4r operator *( Matrix4x4r const & p_mtx, Point4r const & p_pt );
-	CU_API Point4r operator *( Point4r const & p_pt, Matrix4x4r const & p_mtx );
-	CU_API uint32_t getNext2Pow( uint32_t p_uiDim );
+	CU_API Point3r operator*( Matrix4x4r const & lhs, Point3r const & rhs );
+	CU_API Point3r operator*( Point3r const & lhs, Matrix4x4r const & rhs );
+	CU_API Point4r operator*( Matrix4x4r const & lhs, Point4r const & rhs );
+	CU_API Point4r operator*( Point4r const & lhs, Matrix4x4r const & rhs );
+	CU_API uint32_t getNext2Pow( uint32_t value );
 }
 
 #endif

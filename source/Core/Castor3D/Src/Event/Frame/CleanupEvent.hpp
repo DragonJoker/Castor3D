@@ -30,27 +30,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		CleanupEvent( CleanupEvent const & p_copy )
-			: FrameEvent( p_copy )
-			, m_object( p_copy.m_object )
+		CleanupEvent( CleanupEvent const & copy )
+			: FrameEvent( copy )
+			, m_object( copy.m_object )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		CleanupEvent & operator=( CleanupEvent const & p_copy )
+		CleanupEvent & operator=( CleanupEvent const & copy )
 		{
-			CleanupEvent evt( p_copy );
+			CleanupEvent evt( copy );
 			std::swap( m_object, evt.m_object );
 			std::swap( m_type, evt.m_type );
 			return *this;
@@ -60,14 +60,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_object	The object to cleanup
+		 *\param[in]	object	The object to cleanup
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_object	L'objet à nettoyer
+		 *\param[in]	object	L'objet à nettoyer
 		 */
-		explicit CleanupEvent( T & p_object )
+		explicit CleanupEvent( T & object )
 			: FrameEvent( EventType::ePreRender )
-			, m_object( p_object )
+			, m_object( object )
 		{
 		}
 		/**
@@ -102,15 +102,15 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief		Helper function to create a cleanup event
-	 *\param[in]	p_object	The object to cleanup
+	 *\param[in]	object	The object to cleanup
 	 *\~french
 	 *\brief		Fonction d'aide pour créer un éveènement de nettoyage
-	 *\param[in]	p_object	L'objet à nettoyer
+	 *\param[in]	object	L'objet à nettoyer
 	 */
 	template< typename T >
-	std::unique_ptr< CleanupEvent< T > > makeCleanupEvent( T & p_object )
+	std::unique_ptr< CleanupEvent< T > > makeCleanupEvent( T & object )
 	{
-		return std::make_unique< CleanupEvent< T > >( p_object );
+		return std::make_unique< CleanupEvent< T > >( object );
 	}
 }
 

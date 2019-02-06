@@ -85,9 +85,9 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params )
+		inline bool parse( String & params )
 		{
-			return ValueParser< Type >::parse( p_params, m_value );
+			return ValueParser< Type >::parse( params, m_value );
 		}
 
 	public:
@@ -161,9 +161,9 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params )
+		inline bool parse( String & params )
 		{
-			return ValueParser< Type >::parse( p_params, m_value, m_range );
+			return ValueParser< Type >::parse( params, m_value, m_range );
 		}
 
 	public:
@@ -215,7 +215,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params );
+		inline bool parse( String & params );
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -234,12 +234,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\param[in]	values	The values used to validate the parsed value.
 		 *\~french
 		 *\brief		Constructor.
-		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline ParserParameter( UInt32StrMap const & p_values );
+		inline ParserParameter( UInt32StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -259,7 +259,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params );
+		inline bool parse( String & params );
 
 	public:
 		UInt32StrMap const & m_values;
@@ -281,12 +281,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\param[in]	values	The values used to validate the parsed value.
 		 *\~french
 		 *\brief		Constructor.
-		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline ParserParameter( UInt32StrMap const & p_values );
+		inline ParserParameter( UInt32StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -306,7 +306,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params );
+		inline bool parse( String & params );
 
 	public:
 		UInt32StrMap const & m_values;
@@ -328,12 +328,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\param[in]	values	The values used to validate the parsed value.
 		 *\~french
 		 *\brief		Constructor.
-		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		inline ParserParameter( UInt64StrMap const & p_values );
+		inline ParserParameter( UInt64StrMap const & values );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -353,7 +353,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & p_params );
+		inline bool parse( String & params );
 
 	public:
 		UInt64StrMap const & m_values;
@@ -402,34 +402,34 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Creates a parameter of given type.
-	 *\param[in]	p_values	The values used to validate the parsed value.
+	 *\param[in]	values	The values used to validate the parsed value.
 	 *\return		The created parameter.
 	 *\~french
 	 *\brief		Crée un paramètre du type donné.
-	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+	 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( UInt32StrMap const & p_values )
+	ParserParameterBaseSPtr makeParameter( UInt32StrMap const & values )
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( p_values );
+		return std::make_shared< ParserParameter< Type > >( values );
 	}
 	/**
 	 *\~english
 	 *\brief		Creates a parameter of given type.
-	 *\param[in]	p_values	The values used to validate the parsed value.
+	 *\param[in]	values	The values used to validate the parsed value.
 	 *\return		The created parameter.
 	 *\~french
 	 *\brief		Crée un paramètre du type donné.
-	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+	 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( UInt64StrMap const & p_values )
+	ParserParameterBaseSPtr makeParameter( UInt64StrMap const & values )
 	{
 		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( p_values );
+		return std::make_shared< ParserParameter< Type > >( values );
 	}
 }
 

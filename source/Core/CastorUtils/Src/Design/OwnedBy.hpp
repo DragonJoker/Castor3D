@@ -24,13 +24,13 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_owner		The owner object.
+		 *\param[in]	owner	The owner object.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_owner		L'objet propriétaire.
+		 *\param[in]	owner	L'objet propriétaire.
 		 */
-		inline explicit OwnedBy( Owner & p_owner )
-			: m_owner( p_owner )
+		inline explicit OwnedBy( Owner & owner )
+			: m_owner( owner )
 		{
 		}
 		/**
@@ -65,23 +65,23 @@ namespace castor
 	 *\brief		Macro pour déclarer une spécialisation exportée de OwnedBy.
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
-#	define CU_DeclareExportedOwnedBy( exp, owner, name )\
+#	define CU_DeclareExportedOwnedBy( Export, Owner, Name )\
 	namespace castor\
 	{\
 		template<>\
-		class exp OwnedBy< owner >\
+		class Export OwnedBy< Owner >\
 		{\
 		private:\
-			OwnedBy & operator=( OwnedBy< owner > const & p_rhs ) = delete;\
+			OwnedBy & operator=( OwnedBy< Owner > const & rhs ) = delete;\
 		public:\
-			explicit OwnedBy( owner & p_owner );\
-			OwnedBy( OwnedBy< owner > const & p_rhs ) = default;\
-			OwnedBy( OwnedBy< owner > && p_rhs ) = default;\
-			OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = default;\
+			explicit OwnedBy( Owner & owner );\
+			OwnedBy( OwnedBy< Owner > const & rhs ) = default;\
+			OwnedBy( OwnedBy< Owner > && rhs ) = default;\
+			OwnedBy & operator=( OwnedBy< Owner > && rhs ) = default;\
 			~OwnedBy() = default;\
-			owner * get##name()const;\
+			Owner * get##Name()const;\
 		private:\
-			owner & m_owner;\
+			Owner & m_owner;\
 		};\
 	}
 
@@ -93,14 +93,14 @@ namespace castor
 	 *\brief		Macro pour implémenter une spécialisation de OwnedBy.
 	 *\remarks		doit être utilisée dans le namespace global.
 	 */
-#	define CU_ImplementExportedOwnedBy( owner, name )\
+#	define CU_ImplementExportedOwnedBy( Owner, Name )\
 	namespace castor\
 	{\
-		OwnedBy< owner >::OwnedBy( owner & p_owner )\
-			: m_owner( p_owner )\
+		OwnedBy< Owner >::OwnedBy( Owner & owner )\
+			: m_owner( owner )\
 		{\
 		}\
-		owner * OwnedBy< owner >::get##name()const\
+		Owner * OwnedBy< Owner >::get##Name()const\
 		{\
 			return &m_owner;\
 		}\

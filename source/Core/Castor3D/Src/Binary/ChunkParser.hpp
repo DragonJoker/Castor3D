@@ -24,24 +24,26 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[out]	p_size		The values size
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[out]	size	The values size
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[out]	p_size		La taille des valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[out]	size	La taille des valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
+		static inline bool parse( uint8_t * values
+			, size_t size
+			, BinaryChunk & chunk )
 		{
-			bool result = p_chunk.checkAvailable( uint32_t( p_size ) );
+			bool result = chunk.checkAvailable( uint32_t( size ) );
 
 			if ( result )
 			{
-				p_chunk.get( p_values, uint32_t( p_size ) );
+				chunk.get( values, uint32_t( size ) );
 			}
 
 			return result;
@@ -64,26 +66,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[out]	p_count		The values count
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[out]	count	The values count
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[out]	p_count		Le compte des valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[out]	count	Le compte des valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
+		static inline bool parse( T * values
+			, size_t count
+			, BinaryChunk & chunk )
 		{
-			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( p_values )
-				, p_count * sizeof( T )
-				, p_chunk ) };
+			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( values )
+				, count * sizeof( T )
+				, chunk ) };
 
-			for ( uint32_t i = 0; i < p_count; ++i )
+			for ( uint32_t i = 0; i < count; ++i )
 			{
-				prepareChunkData( *p_values++ );
+				prepareChunkData( *values++ );
 			}
 
 			return result;
@@ -91,21 +95,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_value	Receives the parsed value
-		 *\param[in]	p_chunk	The chunk containing the value
+		 *\param[out]	value	Receives the parsed value
+		 *\param[in]	chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_value	Reçoit la valeur
-		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\param[out]	value	Reçoit la valeur
+		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( T & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( T & value
+			, BinaryChunk & chunk )
 		{
-			bool result{ ChunkParserBase::parse( getBuffer( p_value )
-				, uint32_t( getDataSize( p_value ) )
-				, p_chunk ) };
-			prepareChunkData( p_value );
+			bool result{ ChunkParserBase::parse( getBuffer( value )
+				, uint32_t( getDataSize( value ) )
+				, chunk ) };
+			prepareChunkData( value );
 			return result;
 		}
 	};
@@ -126,30 +131,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_value	Receives the parsed value
-		 *\param[in]	p_chunk	The chunk containing the value
+		 *\param[out]	value	Receives the parsed value
+		 *\param[in]	chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_value	Reçoit la valeur
-		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\param[out]	value	Reçoit la valeur
+		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( castor::String & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::String & value
+			, BinaryChunk & chunk )
 		{
-			bool result = p_chunk.checkAvailable( 1 );
-			uint32_t size = p_chunk.getRemaining();
+			bool result = chunk.checkAvailable( 1 );
+			uint32_t size = chunk.getRemaining();
 
 			if ( result )
 			{
 				std::vector< char > buffer( size + 1, 0 );
 				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
-					, p_chunk );
+					, chunk );
 
 				if ( result )
 				{
-					p_value = castor::string::stringCast< xchar >( buffer.data() );
+					value = castor::string::stringCast< xchar >( buffer.data() );
 				}
 			}
 
@@ -173,30 +179,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_value	Receives the parsed value
-		 *\param[in]	p_chunk	The chunk containing the value
+		 *\param[out]	value	Receives the parsed value
+		 *\param[in]	chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_value	Reçoit la valeur
-		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\param[out]	value	Reçoit la valeur
+		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool parse( castor::Path & p_value, BinaryChunk & p_chunk )
+		static inline bool parse( castor::Path & value
+			, BinaryChunk & chunk )
 		{
-			bool result = p_chunk.checkAvailable( 1 );
-			uint32_t size = p_chunk.getRemaining();
+			bool result = chunk.checkAvailable( 1 );
+			uint32_t size = chunk.getRemaining();
 
 			if ( result )
 			{
 				std::vector< char > buffer( size + 1, 0 );
 				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
-					, p_chunk );
+					, chunk );
 
 				if ( result )
 				{
-					p_value = castor::Path{ castor::string::stringCast< xchar >( buffer.data() ) };
+					value = castor::Path{ castor::string::stringCast< xchar >( buffer.data() ) };
 				}
 			}
 

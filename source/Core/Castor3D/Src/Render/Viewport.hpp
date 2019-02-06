@@ -53,18 +53,18 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
-			 *\param[in]	p_file		The file to save the cameras in
-			 *\param[in]	p_viewport	The Viewport to save
+			 *\param[in]	file		The file to save the cameras in
+			 *\param[in]	viewport	The Viewport to save
 			 *\~french
 			 *\brief		Ecrit un Viewport dans un fichier texte
-			 *\param[in]	p_file		Le fichier
-			 *\param[in]	p_viewport	Le Viewport
+			 *\param[in]	file		Le fichier
+			 *\param[in]	viewport	Le Viewport
 			 */
-			C3D_API bool operator()( castor3d::Viewport const & p_viewport, castor::TextFile & p_file )override;
+			C3D_API bool operator()( castor3d::Viewport const & viewport, castor::TextFile & file )override;
 		};
 
 	private:

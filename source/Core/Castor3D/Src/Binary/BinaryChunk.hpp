@@ -110,16 +110,16 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief			Sets given value to big endian.
-	 *\param[in,out]	p_value	The value.
+	 *\param[in,out]	value	The value.
 	 *\~french
 	 *\brief			Met la valeur donnée en big endian.
-	 *\param[in,out]	p_value	La valeur.
+	 *\param[in,out]	value	La valeur.
 	 */
-	static inline void prepareChunkData( ChunkType & p_value )
+	static inline void prepareChunkData( ChunkType & value )
 	{
 		if ( !castor::isBigEndian() )
 		{
-			castor::switchEndianness( p_value );
+			castor::switchEndianness( value );
 		}
 	}
 	/*!
@@ -155,12 +155,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type		The chunk type
+		 *\param[in]	type		The chunk type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type		Le type du chunk
+		 *\param[in]	type		Le type du chunk
 		 */
-		C3D_API explicit BinaryChunk( ChunkType p_type );
+		C3D_API explicit BinaryChunk( ChunkType type );
 		/**
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call
@@ -171,34 +171,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds data to the chunk
-		 *\param[in]	p_data	The data buffer
-		 *\param[in]	p_size	The buffer size
+		 *\param[in]	data	The data buffer
+		 *\param[in]	size	The buffer size
 		 *\~french
 		 *\brief		Ajoute des données au chunk
-		 *\param[in]	p_data	Le tampon de données
-		 *\param[in]	p_size	La taille du tampon
+		 *\param[in]	data	Le tampon de données
+		 *\param[in]	size	La taille du tampon
 		 */
-		C3D_API void add( uint8_t * p_data, uint32_t p_size );
+		C3D_API void add( uint8_t * data, uint32_t size );
 		/**
 		 *\~english
 		 *\brief		Retrieves data from the chunk
-		 *\param[in]	p_data	The data buffer to fill
-		 *\param[in]	p_size	The buffer size
+		 *\param[in]	data	The data buffer to fill
+		 *\param[in]	size	The buffer size
 		 *\~french
 		 *\brief		Récupère des données du chunk
-		 *\param[in]	p_data	Le tampon de données à remplir
-		 *\param[in]	p_size	La taille du tampon
+		 *\param[in]	data	Le tampon de données à remplir
+		 *\param[in]	size	La taille du tampon
 		 */
-		C3D_API void get( uint8_t * p_data, uint32_t p_size );
+		C3D_API void get( uint8_t * data, uint32_t size );
 		/**
 		 *\~english
 		 *\brief		Checks that the remaining place can hold the given size
-		 *\param[in]	p_size	The size
+		 *\param[in]	size	The size
 		 *\~french
 		 *\brief		Vérifie que la place restante peut contenir la taille donnée
-		 *\param[in]	p_size	La taille
+		 *\param[in]	size	La taille
 		 */
-		C3D_API bool checkAvailable( uint32_t p_size = 0 )const;
+		C3D_API bool checkAvailable( uint32_t size = 0 )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining place
@@ -211,47 +211,47 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a subchunk
-		 *\param[out]	p_subchunk	Receives the subchunk
+		 *\param[out]	subchunk	Receives the subchunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un sous chunk
-		 *\param[out]	p_subchunk	Reçoit le sous chunk
+		 *\param[out]	subchunk	Reçoit le sous chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool getSubChunk( BinaryChunk & p_subchunk );
+		C3D_API bool getSubChunk( BinaryChunk & subchunk );
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk into a chunk
-		 *\param[in]	p_subchunk	The subchunk
+		 *\param[in]	subchunk	The subchunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit un subchunk dans un chunk
-		 *\param[in]	p_subchunk	Le subchunk
+		 *\param[in]	subchunk	Le subchunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool addSubChunk( BinaryChunk const & p_subchunk );
+		C3D_API bool addSubChunk( BinaryChunk const & subchunk );
 		/**
 		 *\~english
 		 *\brief		To chunk writer function
-		 *\param[in]	p_file	The file
+		 *\param[in]	file	The file
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction d'écriture dans un fichier
-		 *\param[in]	p_file	Le fichier
+		 *\param[in]	file	Le fichier
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool write( castor::BinaryFile & p_file );
+		C3D_API bool write( castor::BinaryFile & file );
 		/**
 		 *\~english
 		 *\brief		From file reader function
-		 *\param[in]	p_file	The file containing the chunk
+		 *\param[in]	file	The file containing the chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un fichier
-		 *\param[in]	p_file	Le fichier qui contient le chunk
+		 *\param[in]	file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool read( castor::BinaryFile & p_file );
+		C3D_API bool read( castor::BinaryFile & file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining data
@@ -303,16 +303,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the chunk's data
-		 *\param[in]	p_begin	The data buffer's begin
-		 *\param[in]	p_end	The data buffer's end
+		 *\param[in]	begin	The data buffer's begin
+		 *\param[in]	end		The data buffer's end
 		 *\~french
 		 *\brief		Définit les données du chunk
-		 *\param[in]	p_begin	Le début du tampon de données
-		 *\param[in]	p_end	La fin du tampon de données
+		 *\param[in]	begin	Le début du tampon de données
+		 *\param[in]	end		La fin du tampon de données
 		 */
-		inline void setData( uint8_t const * p_begin, uint8_t const * p_end )
+		inline void setData( uint8_t const * begin
+			, uint8_t const * end )
 		{
-			m_data.assign( p_begin, p_end );
+			m_data.assign( begin, end );
 		}
 		/**
 		 *\~english
@@ -337,16 +338,17 @@ namespace castor3d
 
 	private:
 		template< typename T >
-		inline bool doRead( T * p_values, uint32_t p_count )
+		inline bool doRead( T * values
+			, uint32_t count )
 		{
-			auto size = p_count * uint32_t( sizeof( T ) );
+			auto size = count * uint32_t( sizeof( T ) );
 			bool result{ m_index + size < m_data.size() };
 
 			if ( result )
 			{
 				auto begin = reinterpret_cast< T * >( &m_data[m_index] );
-				auto end = begin + p_count;
-				auto value = p_values;
+				auto end = begin + count;
+				auto value = values;
 
 				for ( auto it = begin; it != end; ++it )
 				{
@@ -362,13 +364,17 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english The chunk type	\~french Le type du chunk
+		//!\~english	The chunk type.
+		//!\~french		Le type du chunk.
 		ChunkType m_type;
-		//!\~english The chunk data	\~french Les données du chunk
+		//!\~english	The chunk data.
+		//!\~french		Les données du chunk.
 		castor::ByteArray m_data;
-		//!\~english The current index in the chunk data	\~french L'index courant dans les données du chunk
+		//!\~english	The current index in the chunk data.
+		//!\~french		L'index courant dans les données du chunk.
 		uint32_t m_index;
-		//!\~english The chunk data	\~french Les données du chunk
+		//!\~english	The chunk data.
+		//!\~french		Les données du chunk.
 		std::list< castor::ByteArray > m_addedData;
 	};
 }

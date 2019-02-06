@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PROJECTION_H___
 
 #include "Mesh/MeshGenerator.hpp"
+#include "Miscellaneous/Pattern.hpp"
 
 #include <Math/Point.hpp>
 
@@ -14,11 +15,11 @@ namespace castor3d
 	\author 	Sylvain DOREMUS
 	\date		26/08/2010
 	\~english
-	\brief		Projection mesh representation
-	\remark		The projection mesh is the projection of an arc over along axis on a given distance
+	\brief		Projection mesh representation.
+	\remark		The projection mesh is the projection of an arc over along axis on a given distance.
 	\~french
-	\brief		Représentation d'une projection
-	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée
+	\brief		Représentation d'une projection.
+	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée.
 	*/
 	class Projection
 		: public MeshGenerator
@@ -26,16 +27,16 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		C3D_API Projection();
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~Projection();
 		/**
@@ -44,30 +45,33 @@ namespace castor3d
 		C3D_API static MeshGeneratorSPtr create();
 		/**
 		 *\~english
-		 *\brief		Defines the pattern used to build the projection
-		 *\param[in]	p_pPattern	The arc to project
-		 *\param[in]	p_vAxis		The projection axis
-		 *\param[in]	p_bClosed	Tells if the projection must be closed
+		 *\brief		Defines the pattern used to build the projection.
+		 *\param[in]	pattern	The arc to project.
+		 *\param[in]	axis	The projection axis.
+		 *\param[in]	closed	Tells if the projection must be closed.
 		 *\~french
-		 *\brief		Définit l'arc utilisé pour construire la projection
-		 *\param[in]	p_pPattern	L'arc à projeter
-		 *\param[in]	p_vAxis		L'axe de projection
-		 *\param[in]	p_bClosed	Dit si on doit fermer la projection
+		 *\brief		Définit l'arc utilisé pour construire la projection.
+		 *\param[in]	pattern	L'arc à projeter.
+		 *\param[in]	axis	L'axe de projection.
+		 *\param[in]	closed	Dit si on doit fermer la projection.
 		 */
-		//C3D_API void setPoints( Point3rPatternSPtr p_pPattern, castor::Point3r const & p_vAxis, bool p_bClosed );
+		C3D_API void setPoints( Pattern< castor::Point3r > const & pattern
+			, castor::Point3r const & axis
+			, bool closed );
 
 	private:
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API void doGenerate( Mesh & mesh
+			, Parameters const & parameters )override;
 
 	private:
-		//Point3rPatternSPtr m_pPattern;
-		castor::Point3r m_vAxis;
-		real m_fDepth;
-		bool m_bClosed;
-		uint32_t m_uiNbFaces;
+		Pattern< castor::Point3r > m_pattern;
+		castor::Point3r m_axis;
+		real m_depth;
+		bool m_closed;
+		uint32_t m_nbFaces;
 		friend std::ostream & operator <<( std::ostream & o, Projection const & c );
 	};
 	/**
@@ -78,7 +82,7 @@ namespace castor3d
 	 */
 	inline std::ostream & operator <<( std::ostream & o, Projection const & c )
 	{
-		return o << "Projection( (" << c.m_vAxis[0] << "," << c.m_vAxis[1] << "," << c.m_vAxis[2] << ")," << c.m_fDepth << "," << c.m_bClosed << "," << c.m_uiNbFaces << ")";
+		return o << "Projection( (" << c.m_axis[0] << "," << c.m_axis[1] << "," << c.m_axis[2] << ")," << c.m_depth << "," << c.m_closed << "," << c.m_nbFaces << ")";
 	}
 }
 

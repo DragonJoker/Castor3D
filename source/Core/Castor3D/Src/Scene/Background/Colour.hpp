@@ -31,11 +31,15 @@ namespace castor3d
 		*	Constructor.
 		*\param[in] engine
 		*	The engine.
+		*\param[in] scene
+		*	The scene.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] engine
 		*	Le moteur.
+		*\param[in] scene
+		*	La scène.
 		*/
 		C3D_API ColourBackground( Engine & engine
 			, Scene & scene );

@@ -47,7 +47,8 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & mesh
+			, Parameters const & parameters );
 
 	private:
 		real m_internalRadius;

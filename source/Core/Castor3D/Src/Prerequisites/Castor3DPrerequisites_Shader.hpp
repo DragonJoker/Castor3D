@@ -90,14 +90,14 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief		Tells if the given flags contain a shadow map flag.
-	 *\param[in]	p_flags	The flags to check.
-	 *\return		\p true if p_flags contain one of ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, or ProgramFlag::eShadowMapPoint.
+	 *\param[in]	flags	The flags to check.
+	 *\return		\p true if flags contain one of ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, or ProgramFlag::eShadowMapPoint.
 	 *\~french
 	 *\brief		Dit si les indicateurs donnés contiennent un indicateur de shadow map.
-	 *\param[in]	p_flags	Les indicateurs à vérifier.
-	 *\return		\p true si p_flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
+	 *\param[in]	flags	Les indicateurs à vérifier.
+	 *\return		\p true si flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
 	 */
-	C3D_API bool isShadowMapProgram( ProgramFlags const & p_flags );
+	C3D_API bool isShadowMapProgram( ProgramFlags const & flags );
 
 	class BillboardUbo;
 	class MatrixUbo;
@@ -158,8 +158,8 @@ namespace castor3d
 		{
 			C3D_API void computePreLightingMapContributions( sdw::ShaderWriter & writer
 				, shader::Utils const & utils
-				, sdw::Vec3 & p_normal
-				, sdw::Float & p_shininess
+				, sdw::Vec3 & normal
+				, sdw::Float & shininess
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags
@@ -167,10 +167,10 @@ namespace castor3d
 
 			C3D_API void computePostLightingMapContributions( sdw::ShaderWriter & writer
 				, shader::Utils const & utils
-				, sdw::Vec3 & p_diffuse
-				, sdw::Vec3 & p_specular
-				, sdw::Vec3 & p_emissive
-				, sdw::Float const & p_gamma
+				, sdw::Vec3 & diffuse
+				, sdw::Vec3 & specular
+				, sdw::Vec3 & emissive
+				, sdw::Float const & gamma
 				, TextureChannels const & textureFlags
 				, ProgramFlags const & programFlags
 				, SceneFlags const & sceneFlags );
@@ -198,9 +198,9 @@ namespace castor3d
 			{
 				C3D_API void computePreLightingMapContributions( sdw::ShaderWriter & writer
 					, shader::Utils const & utils
-					, sdw::Vec3 & p_normal
-					, sdw::Float & p_metallic
-					, sdw::Float & p_roughness
+					, sdw::Vec3 & normal
+					, sdw::Float & metallic
+					, sdw::Float & roughness
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags
@@ -208,9 +208,9 @@ namespace castor3d
 
 				C3D_API void computePostLightingMapContributions( sdw::ShaderWriter & writer
 					, shader::Utils const & utils
-					, sdw::Vec3 & p_albedo
-					, sdw::Vec3 & p_emissive
-					, sdw::Float const & p_gamma
+					, sdw::Vec3 & albedo
+					, sdw::Vec3 & emissive
+					, sdw::Float const & gamma
 					, TextureChannels const & textureFlags
 					, ProgramFlags const & programFlags
 					, SceneFlags const & sceneFlags );

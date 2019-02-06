@@ -65,7 +65,7 @@ namespace castor3d
 	void SsaoPass::update( Camera const & camera )
 	{
 		m_ssaoConfigUbo->update( m_config, camera );
-		m_linearisePass->update( camera );
+		m_linearisePass->update( camera.getViewport() );
 #if !C3D_DebugLinearisePass
 #	if !C3D_DebugRawPass
 		m_horizontalBlur->update();

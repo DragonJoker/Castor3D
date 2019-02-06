@@ -159,7 +159,7 @@ namespace castor3d
 			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
 			ashes::MultisampleState{},
 			std::move( blstate ),
-			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 			std::move( dsstate ),
 		} );
 	}

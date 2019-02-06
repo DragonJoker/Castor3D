@@ -51,47 +51,47 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Registers an object type
-		 *\param[in]	p_key		The object type
-		 *\param[in]	p_creator	The object creation function
+		 *\param[in]	key		The object type
+		 *\param[in]	creator	The object creation function
 		 *\~french
 		 *\brief		Enregistre un type d'objet
-		 *\param[in]	p_key		Le type d'objet
-		 *\param[in]	p_creator	La fonction de création d'objet
+		 *\param[in]	key		Le type d'objet
+		 *\param[in]	creator	La fonction de création d'objet
 		 */
-		void registerType( Key const & p_key, Creator p_creator )
+		void registerType( Key const & key, Creator creator )
 		{
-			m_registered[p_key] = p_creator;
+			m_registered[key] = creator;
 		}
 		/**
 		 *\~english
 		 *\brief		Unregisters an object type
-		 *\param[in]	p_key		The object type
+		 *\param[in]	key	The object type
 		 *\~french
 		 *\brief		Désenregistre un type d'objet
-		 *\param[in]	p_key		Le type d'objet
+		 *\param[in]	key	Le type d'objet
 		 */
-		void unregisterType( Key const & p_key )
+		void unregisterType( Key const & key )
 		{
-			auto it = m_registered.find( p_key );
+			auto it = m_registered.find( key );
 
 			if ( it != m_registered.end() )
 			{
-				m_registered.erase( p_key );
+				m_registered.erase( key );
 			}
 		}
 		/**
 		 *\~english
 		 *\brief		Checks if the given object type is registered.
-		 *\param[in]	p_key	The object type.
+		 *\param[in]	key	The object type.
 		 *\return		\p true if registered.
 		 *\~french
 		 *\brief		Vérifie si un type d'objet est enregistré.
-		 *\param[in]	p_key	Le type d'objet.
+		 *\param[in]	key	Le type d'objet.
 		 *\return		\p true si enregistré.
 		 */
-		bool isTypeRegistered( Key const & p_key )
+		bool isTypeRegistered( Key const & key )
 		{
-			return m_registered.find( p_key ) != m_registered.end();
+			return m_registered.find( key ) != m_registered.end();
 		}
 		/**
 		 *\~english
@@ -114,24 +114,24 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
-		 *\param[in]	p_key		The object type
-		 *\param[in]	p_params	The creation parameters
+		 *\param[in]	key		The object type
+		 *\param[in]	params	The creation parameters
 		 *\return		The created object
 		 *\~french
 		 *\brief		Crée un objet à partir d'une clef (type d'objet)
-		 *\param[in]	p_key		Le type d'objet
-		 *\param[in]	p_params	Les paramètres de création
+		 *\param[in]	key		Le type d'objet
+		 *\param[in]	params	Les paramètres de création
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr create( Key const & p_key, Parameters && ... p_params )const
+		ObjPtr create( Key const & key, Parameters && ... params )const
 		{
 			ObjPtr result;
-			auto it = m_registered.find( p_key );
+			auto it = m_registered.find( key );
 
 			if ( it != m_registered.end() )
 			{
-				result = it->second( std::forward< Parameters >( p_params )... );
+				result = it->second( std::forward< Parameters >( params )... );
 			}
 			else
 			{

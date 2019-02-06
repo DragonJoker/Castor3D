@@ -62,21 +62,17 @@ namespace castor3d
 		inline void cleanup();
 		/**
 		 *\~english
-		 *\param[in]	size	The requested memory size.
-		 *\return		\p true if there is enough remaining memory for given size.
+		 *\return		\p true if there is enough remaining memory for a new element.
 		 *\~french
-		 *\param[in]	size	La taille requise pour la mémoire.
-		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
+		 *\return		\p true s'il y a assez de mémoire restante pour un nouvel élément.
 		 */
 		inline bool hasAvailable()const;
 		/**
 		 *\~english
 		 *\brief		Allocates a memory chunk for a CPU buffer.
-		 *\param[in]	size	The requested memory size.
 		 *\return		The memory chunk offset.
 		 *\~french
 		 *\brief		Alloue une zone mémoire pour un CPU buffer.
-		 *\param[in]	size	La taille requise pour la mémoire.
 		 *\return		L'offset de la zone mémoire.
 		 */
 		inline uint32_t allocate();
@@ -93,15 +89,21 @@ namespace castor3d
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[in]	buffer	The data.
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	offset			The start offset.
+		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
+		 *\param[in]	timer			The render pass timer.
+		 *\param[in]	index			The render pass index.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[in]	buffer	Les données.
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	offset			L'offset de départ.
+		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
+		 *\param[in]	timer			Le timer de passe de rendu.
+		 *\param[in]	index			L'indice de passe de rendu.
 		 */
 		inline void upload( ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
@@ -113,15 +115,17 @@ namespace castor3d
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[out]	buffer	The data.
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	offset			The start offset.
+		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[out]	buffer	Les données.
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	offset			L'offset de départ.
+		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 */
 		inline void download( ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer

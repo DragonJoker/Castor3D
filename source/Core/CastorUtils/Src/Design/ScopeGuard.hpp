@@ -24,33 +24,33 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	function	La fonction.
 		 */
-		explicit ScopeGuard( ScopeExitFuncType const & p_function )
-			: m_function{ p_function }
+		explicit ScopeGuard( ScopeExitFuncType const & function )
+			: m_function{ function }
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy Constructor.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		ScopeGuard( ScopeGuard const & p_rhs ) = delete;
+		ScopeGuard( ScopeGuard const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Move Constructor.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard( ScopeGuard && p_rhs ) = default;
+		ScopeGuard( ScopeGuard && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -64,21 +64,21 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor.
-		 *\param[in]	p_rhs	The object to copy.
+		 *\param[in]	rhs	The object to copy.
 		 *\~french
 		 *\brief		Constructeur par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
+		 *\param[in]	rhs	L'objet à copier.
 		 */
-		ScopeGuard & operator=( ScopeGuard const & p_rhs ) = delete;
+		ScopeGuard & operator=( ScopeGuard const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Move Constructor.
-		 *\param[in]	p_rhs	The object to move.
+		 *\param[in]	rhs	The object to move.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
-		 *\param[in]	p_rhs	L'objet à déplacer.
+		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		ScopeGuard & operator=( ScopeGuard && p_rhs ) = default;
+		ScopeGuard & operator=( ScopeGuard && rhs ) = default;
 
 	protected:
 		ScopeExitFuncType m_function;
@@ -86,17 +86,17 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Helper function to create a ScopeGuard.
-	 *\param[in]	p_function	The function.
+	 *\param[in]	function	The function.
 	 *\return		The ScopeGuard.
 	 *\~french
 	 *\brief		Fonction d'aide à la création d'un ScopeGuard.
-	 *\param[in]	p_function	La fonction.
+	 *\param[in]	function	La fonction.
 	 *\return		Le ScopeGuard.
 	 */
 	template< typename ScopeExitFuncType >
-	ScopeGuard< ScopeExitFuncType > makeScopeGuard( ScopeExitFuncType const & p_function )
+	ScopeGuard< ScopeExitFuncType > makeScopeGuard( ScopeExitFuncType const & function )
 	{
-		return ScopeGuard< ScopeExitFuncType >( p_function );
+		return ScopeGuard< ScopeExitFuncType >( function );
 	}
 }
 

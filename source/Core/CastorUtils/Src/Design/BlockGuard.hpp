@@ -64,19 +64,19 @@ namespace castor
 		 *\~english
 		 *\brief		Constructor.
 		 *\remarks		Executes the init action.
-		 *\param[in]	p_init	The action executed on construction.
-		 *\param[in]	p_clean	The action executed on destruction.
+		 *\param[in]	init	The action executed on construction.
+		 *\param[in]	clean	The action executed on destruction.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\remarks		Exécute l'action d'initialisation.
-		 *\param[in]	p_init	L'action effectuée à la construction.
-		 *\param[in]	p_clean	L'action effectuée lors de la destruction.
+		 *\param[in]	init	L'action effectuée à la construction.
+		 *\param[in]	clean	L'action effectuée lors de la destruction.
 		*/
 		template< typename InitFunc >
-		BlockGuard( InitFunc p_init, CleanFunc p_clean )
-			: m_clean( p_clean )
+		BlockGuard( InitFunc init, CleanFunc clean )
+			: m_clean( clean )
 		{
-			p_init();
+			init();
 		}
 		/**
 		 *\~english
@@ -99,19 +99,19 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Helper function to declare a BlockGuard.
-	 *\param[in]	p_init	The action executed on construction.
-	 *\param[in]	p_clean	The action executed on destruction.
+	 *\param[in]	init	The action executed on construction.
+	 *\param[in]	clean	The action executed on destruction.
 	 *\return		The block guard.
 	 *\~french
 	 *\brief		fonction d'aide à la construction d'un BlockGuard.
-	 *\param[in]	p_init	L'action effectuée à la construction.
-	 *\param[in]	p_clean	L'action effectuée lors de la destruction.
+	 *\param[in]	init	L'action effectuée à la construction.
+	 *\param[in]	clean	L'action effectuée lors de la destruction.
 	 *\return		La garde.
 	*/
 	template< typename InitFunc, typename CleanFunc >
-	BlockGuard< CleanFunc > makeBlockGuard( InitFunc p_init, CleanFunc p_clean )
+	BlockGuard< CleanFunc > makeBlockGuard( InitFunc init, CleanFunc clean )
 	{
-		return BlockGuard< CleanFunc >( p_init, p_clean );
+		return BlockGuard< CleanFunc >( init, clean );
 	}
 }
 

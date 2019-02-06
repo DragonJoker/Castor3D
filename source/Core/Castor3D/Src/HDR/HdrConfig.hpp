@@ -49,33 +49,34 @@ namespace castor3d
 			 *\param[in]	obj		La HdrConfig.
 			 *\param[in]	file	Le fichier.
 			 */
-			C3D_API bool operator()( HdrConfig const & obj, castor::TextFile & file )override;
+			C3D_API bool operator()( HdrConfig const & obj
+				, castor::TextFile & file )override;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Sets the exposure value.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de l'exposition.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setExposure( float p_value )
+		inline void setExposure( float value )
 		{
-			m_exposure = p_value;
+			m_exposure = value;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the gamma correction value.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la valeur de la correction gamma.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setGamma( float p_value )
+		inline void setGamma( float value )
 		{
-			m_gamma = p_value;
+			m_gamma = value;
 		}
 		/**
 		 *\~english

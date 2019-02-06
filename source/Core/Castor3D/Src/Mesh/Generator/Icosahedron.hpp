@@ -47,12 +47,14 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & mesh
+			, Parameters const & parameters );
 
 	private:
 		real m_radius;
 		uint32_t m_nbFaces;
-		friend std::ostream & operator <<( std::ostream & o, Icosahedron const & c );
+		friend std::ostream & operator <<( std::ostream & o
+			, Icosahedron const & c );
 	};
 	/**
 	 *\~english

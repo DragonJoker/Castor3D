@@ -57,7 +57,8 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & tabs, TextOverlay const * category = nullptr );
+			C3D_API TextWriter( castor::String const & tabs
+				, TextOverlay const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -70,7 +71,8 @@ namespace castor3d
 			 *\param[in]	overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API bool operator()( TextOverlay const & overlay, castor::TextFile & file );
+			C3D_API bool operator()( TextOverlay const & overlay
+				, castor::TextFile & file );
 			/**
 			 *\copydoc		castor3d::OverlayCategory::TextWriter::writeInto
 			 */
@@ -357,40 +359,42 @@ namespace castor3d
 			//!\~french		Le caractère à afficher.
 			castor::Glyph const & m_glyph;
 
-			DisplayableChar( castor::Point2d const & p_position, castor::Point2d const & size, castor::Glyph const & p_glyph )
-				: m_position{ p_position }
+			DisplayableChar( castor::Point2d const & position
+				, castor::Point2d const & size
+				, castor::Glyph const & glyph )
+				: m_position{ position }
 				, m_size{ size }
-				, m_glyph{ p_glyph }
+				, m_glyph{ glyph }
 			{
 			}
 
-			DisplayableChar( DisplayableChar const & p_rhs )
-				: m_position{ p_rhs.m_position }
-				, m_size{ p_rhs.m_size }
-				, m_glyph{ p_rhs.m_glyph }
+			DisplayableChar( DisplayableChar const & rhs )
+				: m_position{ rhs.m_position }
+				, m_size{ rhs.m_size }
+				, m_glyph{ rhs.m_glyph }
 			{
 			}
 
-			DisplayableChar( DisplayableChar && p_rhs )
-				: m_position{ std::move( p_rhs.m_position ) }
-				, m_size{ std::move( p_rhs.m_size ) }
-				, m_glyph{ p_rhs.m_glyph }
+			DisplayableChar( DisplayableChar && rhs )
+				: m_position{ std::move( rhs.m_position ) }
+				, m_size{ std::move( rhs.m_size ) }
+				, m_glyph{ rhs.m_glyph }
 			{
 			}
 
-			DisplayableChar & operator=( DisplayableChar const & p_rhs )
+			DisplayableChar & operator=( DisplayableChar const & rhs )
 			{
-				m_position = p_rhs.m_position;
-				m_size = p_rhs.m_size;
+				m_position = rhs.m_position;
+				m_size = rhs.m_size;
 				return *this;
 			}
 
-			DisplayableChar & operator=( DisplayableChar && p_rhs )
+			DisplayableChar & operator=( DisplayableChar && rhs )
 			{
-				if ( &p_rhs != this )
+				if ( &rhs != this )
 				{
-					m_position = std::move( p_rhs.m_position );
-					m_size = std::move( p_rhs.m_size );
+					m_position = std::move( rhs.m_position );
+					m_size = std::move( rhs.m_size );
 				}
 
 				return *this;

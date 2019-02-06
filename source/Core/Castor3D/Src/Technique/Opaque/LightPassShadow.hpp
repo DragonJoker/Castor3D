@@ -271,7 +271,7 @@ namespace castor3d
 		using my_traits = LightPassShadowTraits< LtType >;
 		using my_light_type = typename my_traits::light_type;
 		using my_pass_type = typename my_traits::light_pass_type;
-		using my_shadow_map_type = typename my_traits::shadow_pass_type;
+		using my_shadow_matype = typename my_traits::shadow_pass_type;
 
 	private:
 		/*!
@@ -293,14 +293,16 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine	The engine.
-			 *\param[in]	vtx		The vertex shader source.
-			 *\param[in]	pxl		The fragment shader source.
+			 *\param[in]	engine		The engine.
+			 *\param[in]	lightPass	The light pass.
+			 *\param[in]	vtx			The vertex shader source.
+			 *\param[in]	pxl			The fragment shader source.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine	Le moteur.
-			 *\param[in]	vtx		Le source du vertex shader.
-			 *\param[in]	pxl		Le source du fagment shader.
+			 *\param[in]	engine		Le moteur.
+			 *\param[in]	lightPass	La passe d'éclairage.
+			 *\param[in]	vtx			Le source du vertex shader.
+			 *\param[in]	pxl			Le source du fagment shader.
 			 */
 			Program( Engine & engine
 				, LightPassShadow & lightPass
@@ -315,16 +317,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	frameBuffer	The target framebuffer.
-		 *\param[in]	depthAttach	The depth buffer attach.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	depthView		The target depth view.
+		 *\param[in]	diffuseView		The target diffuse view.
+		 *\param[in]	specularView	The target specular view.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
-		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	depthView		La vue de profondeur cible.
+		 *\param[in]	diffuseView		La vue de diffuse cible.
+		 *\param[in]	specularView	La vue de spéculaire cible.
+		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
 			, ashes::TextureView const & depthView

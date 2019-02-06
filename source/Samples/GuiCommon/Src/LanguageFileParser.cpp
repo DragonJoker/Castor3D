@@ -21,8 +21,8 @@ namespace GuiCommon
 
 	void LanguageFileParser::doInitialiseParser( Path const & path )
 	{
-		LanguageFileContextPtr context = std::make_shared< LanguageFileContext >( path );
-		m_context = context;
+		LanguageFileContextPtr langContext = std::make_shared< LanguageFileContext >( path );
+		m_context = langContext;
 		addParser( uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "fold_flags" ), Language_FoldFlags, { makeParameter< ParameterType::eText >() } );
@@ -30,12 +30,12 @@ namespace GuiCommon
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_name" ), Language_FontName, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
-		addParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( context->mapTypes ) } );
+		addParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( langContext->mapTypes ) } );
 		addParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eKeywords ), cuT( "}" ), Keywords_End );
-		context->currentLanguage.reset( new LanguageInfo );
+		langContext->currentLanguage.reset( new LanguageInfo );
 	}
 
 	void LanguageFileParser::doCleanupParser()
@@ -52,8 +52,8 @@ namespace GuiCommon
 			String strWords( p_line );
 			string::replace( strWords, cuT( "\\" ), cuT( "" ) );
 			StringArray arrayWords = string::split( string::trim( strWords ), cuT( "\t " ), 1000, false );
-			LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( m_context );
-			context->keywords.insert( context->keywords.end(), arrayWords.begin(), arrayWords.end() );
+			LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( m_context );
+			langContext->keywords.insert( langContext->keywords.end(), arrayWords.begin(), arrayWords.end() );
 			result = true;
 		}
 		else
@@ -100,33 +100,33 @@ namespace GuiCommon
 
 	CU_ImplementAttributeParser( Root_Language )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String name;
-			p_params[0]->get( name );
-			context->currentLanguage->setName( name );
+			params[0]->get( name );
+			langContext->currentLanguage->setName( name );
 		}
 	}
 	CU_EndAttributePush( LANGSection::eLanguage )
 
 	CU_ImplementAttributeParser( Language_Pattern )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String strParams;
-			p_params[0]->get( strParams );
+			params[0]->get( strParams );
 
 			if ( !strParams.empty() )
 			{
@@ -141,7 +141,7 @@ namespace GuiCommon
 
 						strPatterns += p_strPattern;
 					} );
-				context->currentLanguage->setFilePattern( strPatterns );
+				langContext->currentLanguage->setFilePattern( strPatterns );
 			}
 			else
 			{
@@ -153,16 +153,16 @@ namespace GuiCommon
 
 	CU_ImplementAttributeParser( Language_FoldFlags )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String strParams;
-			p_params[0]->get( strParams );
+			params[0]->get( strParams );
 
 			if ( !strParams.empty() )
 			{
@@ -170,9 +170,9 @@ namespace GuiCommon
 				unsigned long ulFoldFlags = 0;
 				std::for_each( array.begin(), array.end(), [&]( String const & p_strFoldFlag )
 					{
-						ulFoldFlags |= context->mapFoldFlags[p_strFoldFlag];
+						ulFoldFlags |= langContext->mapFoldFlags[p_strFoldFlag];
 					} );
-				context->currentLanguage->setFoldFlags( ulFoldFlags );
+				langContext->currentLanguage->setFoldFlags( ulFoldFlags );
 			}
 			else
 			{
@@ -184,120 +184,120 @@ namespace GuiCommon
 
 	CU_ImplementAttributeParser( Language_Keywords )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
-		context->keywords.clear();
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
+		langContext->keywords.clear();
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
-			p_params[0]->get( context->index );
+			params[0]->get( langContext->index );
 		}
 	}
 	CU_EndAttributePush( LANGSection::eKeywords )
 
 	CU_ImplementAttributeParser( Language_Style )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 	}
 	CU_EndAttributePush( LANGSection::eStyle )
 
 	CU_ImplementAttributeParser( Language_FontName )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String name;
-			p_params[0]->get( name );
-			context->currentLanguage->setFontName( name );
+			params[0]->get( name );
+			langContext->currentLanguage->setFontName( name );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( Language_FontSize )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			int32_t size;
-			p_params[0]->get( size );
-			context->currentLanguage->setFontSize( size );
+			params[0]->get( size );
+			langContext->currentLanguage->setFontSize( size );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( Style_Type )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			uint32_t type;
-			p_params[0]->get( type );
-			context->currentStyle = &context->currentLanguage->getStyle( type );
+			params[0]->get( type );
+			langContext->currentStyle = &langContext->currentLanguage->getStyle( type );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( Style_FgColour )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String name;
-			p_params[0]->get( name );
-			context->currentStyle->foreground = wxColour( name );
+			params[0]->get( name );
+			langContext->currentStyle->foreground = wxColour( name );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( Style_BgColour )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
 
-		if ( p_params.empty() )
+		if ( params.empty() )
 		{
 			CU_ParsingError( cuT( "Missing parameter." ) );
 		}
 		else
 		{
 			String name;
-			p_params[0]->get( name );
-			context->currentStyle->background = wxColour( name );
+			params[0]->get( name );
+			langContext->currentStyle->background = wxColour( name );
 		}
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( Style_FontStyle )
 	{
-		String params;
-		p_params[0]->get( params );
+		String langParams;
+		params[0]->get( langParams );
 
-		if ( !params.empty() )
+		if ( !langParams.empty() )
 		{
-			LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
-			StringArray styles = string::split( string::lowerCase( string::trim( params ) ), cuT( "\t " ), 10, false );
+			LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
+			StringArray styles = string::split( string::lowerCase( string::trim( langParams ) ), cuT( "\t " ), 10, false );
 			int style = 0;
 
 			for ( auto name : styles )
@@ -320,7 +320,7 @@ namespace GuiCommon
 				}
 			}
 
-			context->currentStyle->fontStyle = style;
+			langContext->currentStyle->fontStyle = style;
 		}
 		else
 		{
@@ -331,8 +331,8 @@ namespace GuiCommon
 
 	CU_ImplementAttributeParser( Keywords_End )
 	{
-		LanguageFileContextPtr context = std::static_pointer_cast< LanguageFileContext >( p_context );
-		context->currentLanguage->setKeywords( context->index - 1, context->keywords );
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
+		langContext->currentLanguage->setKeywords( langContext->index - 1, langContext->keywords );
 	}
 	CU_EndAttributePop()
 }

@@ -46,7 +46,7 @@ namespace castor3d
 		 */
 		~Pattern()
 		{
-			m_listElements.clear();
+			m_elements.clear();
 		}
 		/**
 		 *\~english
@@ -56,13 +56,13 @@ namespace castor3d
 		 *\brief		Constuir le chemin miroir
 		 *\return		Le chemin construit
 		 */
-		Pointer getReversed()const
+		Pattern< T > getReversed()const
 		{
-			Pointer result = std::make_shared< Pattern< T > >();
+			Pattern< T > result;
 
-			for ( typename TObjList::iterator it = m_listElements.begin(); it != m_listElements.end(); it++ )
+			for ( auto & element : m_elements )
 			{
-				result->m_listElements.push_front( *it );
+				result.m_elements.push_front( element );
 			}
 
 			return result;
@@ -77,36 +77,37 @@ namespace castor3d
 		 */
 		bool isClosed()const
 		{
-			TObj const & t1 = **m_listElements.begin();
-			TObj const & t2 = **m_listElements.rbegin();
+			TObj const & t1 = **m_elements.begin();
+			TObj const & t2 = **m_elements.rbegin();
 			return t1 == t2;
 		}
 		/**
 		 *\~english
 		 *\brief		adds an element to the list, at a given index
-		 *\param[in]	p_tElement	The element to add
-		 *\param[in]	p_index	The index at which the insertion must be done
+		 *\param[in]	element	The element to add
+		 *\param[in]	index	The index at which the insertion must be done
 		 *\~french
 		 *\brief		Ajoute un sommet, à l'indice donné
-		 *\param[in]	p_tElement	L'élément à ajouter
-		 *\param[in]	p_index	L'indice souhaité
+		 *\param[in]	element	L'élément à ajouter
+		 *\param[in]	index	L'indice souhaité
 		 */
-		void addElement( TObjConstRef p_tElement, uint32_t p_index = 0xFFFFFFFF )
+		void addElement( TObjConstRef element
+			, uint32_t index = 0xFFFFFFFF )
 		{
-			if ( p_index >= m_listElements.size() )
+			if ( index >= m_elements.size() )
 			{
-				m_listElements.push_back( p_tElement );
+				m_elements.push_back( element );
 			}
 			else
 			{
-				typename TObjList::iterator it = m_listElements.begin();
+				auto it = m_elements.begin();
 
-				for ( uint32_t i = 0; i < p_index; i++ )
+				for ( uint32_t i = 0; i < index; i++ )
 				{
 					it++;
 				}
 
-				m_listElements.insert( it, p_tElement );
+				m_elements.insert( it, element );
 			}
 		}
 		/**
@@ -117,24 +118,24 @@ namespace castor3d
 		 */
 		inline uint32_t getSize()const
 		{
-			return uint32_t( m_listElements.size() );
+			return uint32_t( m_elements.size() );
 		}
 		/**
 		 *\~english
 		 *\brief		Accessor to an element
-		 *\param[in]	p_index	the index of the wanted element
+		 *\param[in]	index	the index of the wanted element
 		 *\return		Modifiable element reference
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_index	Index de l'élément voulu
+		 *\param[in]	index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef operator[]( uint32_t p_index )
+		TObjRef operator[]( uint32_t index )
 		{
-			CU_Require( p_index < m_listElements.size() );
-			typename TObjList::iterator it = m_listElements.begin();
+			CU_Require( index < m_elements.size() );
+			auto it = m_elements.begin();
 
-			for ( uint32_t i = 0; i < p_index; i++ )
+			for ( uint32_t i = 0; i < index; i++ )
 			{
 				it++;
 			}
@@ -144,19 +145,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constant accessor to an element
-		 *\param[in]	p_index	the index of the wanted element
+		 *\param[in]	index	the index of the wanted element
 		 *\return		Constant element reference
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_index	Index de l'élément voulu
+		 *\param[in]	index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef operator[]( uint32_t p_index )const
+		TObjConstRef operator[]( uint32_t index )const
 		{
-			CU_Require( p_index < m_listElements.size() );
-			typename TObjList::const_iterator it = m_listElements.begin();
+			CU_Require( index < m_elements.size() );
+			auto it = m_elements.begin();
 
-			for ( uint32_t i = 0; i < p_index; i++ )
+			for ( uint32_t i = 0; i < index; i++ )
 			{
 				it++;
 			}
@@ -166,19 +167,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Accessor to an element
-		 *\param[in]	p_index	the index of the wanted element
+		 *\param[in]	index	the index of the wanted element
 		 *\return		Modifiable element
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_index	Index de l'élément voulu
+		 *\param[in]	index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef getElement( uint32_t p_index )
+		TObjRef getElement( uint32_t index )
 		{
-			CU_Require( p_index < m_listElements.size() );
-			typename TObjList::iterator it = m_listElements.begin();
+			CU_Require( index < m_elements.size() );
+			auto it = m_elements.begin();
 
-			for ( uint32_t i = 0; i < p_index; i++ )
+			for ( uint32_t i = 0; i < index; i++ )
 			{
 				it++;
 			}
@@ -188,19 +189,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constant accessor to an element
-		 *\param[in]	p_index	the index of the wanted element
+		 *\param[in]	index	the index of the wanted element
 		 *\return		Constant element
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_index	Index de l'élément voulu
+		 *\param[in]	index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef getElement( uint32_t p_index )const
+		TObjConstRef getElement( uint32_t index )const
 		{
-			CU_Require( p_index < m_listElements.size() );
-			typename TObjList::const_iterator it = m_listElements.begin();
+			CU_Require( index < m_elements.size() );
+			auto it = m_elements.begin();
 
-			for ( uint32_t i = 0; i < p_index; i++ )
+			for ( uint32_t i = 0; i < index; i++ )
 			{
 				it++;
 			}
@@ -211,7 +212,7 @@ namespace castor3d
 	private:
 		//!\~english	The elements.
 		//!\~french		Les éléments.
-		TObjList m_listElements;
+		TObjList m_elements;
 	};
 }
 

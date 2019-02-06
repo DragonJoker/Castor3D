@@ -103,7 +103,6 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.
-			 *\param[in]	writer		The GLSL writer.
 			 *\param[in]	receiver	The shadow receiver status.
 			 *\param[in]	reflection	The reflection status.
 			 *\param[in]	refraction	The refraction status.
@@ -111,7 +110,6 @@ namespace castor3d
 			 *\param[in]	encoded		The variable that will receive the encoded value.
 			 *\~french
 			 *\brief		Appelle la fonction GLSL utilisée pour encoder les spécificités d'un matériau dans un vec4.
-			 *\param[in]	writer		Le writer GLSL.
 			 *\param[in]	receiver	Le statut de receveur d'ombres.
 			 *\param[in]	reflection	Le statut de réflexion.
 			 *\param[in]	refraction	Le statut de réfraction.
@@ -126,7 +124,6 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Calls the GLSL function used to dencode the material specifics from a vec4.
-			 *\param[in]	writer		The GLSL writer.
 			 *\param[in]	encoded		The encoded value.
 			 *\param[in]	receiver	The variable that contains the shadow receiver status.
 			 *\param[in]	reflection	The variable that contains the reflection status.
@@ -134,7 +131,6 @@ namespace castor3d
 			 *\param[in]	envMapIndex	The variable that contains the environment map index.
 			 *\~french
 			 *\brief		Appelle la fonction GLSL utilisée pour décoder les spécificités d'un matériau depuis un vec4.
-			 *\param[in]	writer		Le writer GLSL.
 			 *\param[in]	encoded		La valeur encodée.
 			 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 			 *\param[in]	reflection	La variable qui recevra le statut de réflexion.
@@ -149,12 +145,10 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Calls the GLSL function used to decode the shadow receiver status from a vec4.
-			 *\param[in]	writer		The GLSL writer.
 			 *\param[in]	encoded		The encoded value.
 			 *\param[in]	receiver	The variable that contains the shadow receiver status.
 			 *\~french
 			 *\brief		Appelle la fonction GLSL utilisée pour décoder le statut de receveur d'ombre depuis un vec4.
-			 *\param[in]	writer		Le writer GLSL.
 			 *\param[in]	encoded		La valeur encodée.
 			 *\param[in]	receiver	La variable qui recevra le statut de receveur d'ombres.
 			 */

@@ -34,11 +34,13 @@ namespace castor3d
 		 *\param[in]	scene			The parent scene.
 		 *\param[in]	node			The parent scene node.
 		 *\param[in]	vertexLayout	The layout for the vertex buffer.
+		 *\param[in]	vertexBuffer	The vertex buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene			La scène parente.
 		 *\param[in]	node			Le noeud de scène parent.
 		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
+		 *\param[in]	vertexBuffer	Le tampon de sommets.
 		 */
 		C3D_API BillboardBase( Scene & scene
 			, SceneNodeSPtr node

@@ -27,14 +27,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	library	The shared library holding the plug-in
 		 *\param[in]	engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
+		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API TechniquePlugin( castor::DynamicLibrarySPtr p_library, Engine * engine );
+		C3D_API TechniquePlugin( castor::DynamicLibrarySPtr library
+			, Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

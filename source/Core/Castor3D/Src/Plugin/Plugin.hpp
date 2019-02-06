@@ -33,7 +33,7 @@ namespace castor3d
 		//!< Signature for the plug-in's type retrieval function
 		typedef void GetTypeFunction( PluginType * );
 		//!< Signature for the plug-in's version checking function
-		typedef void GetRequiredVersionFunction( Version * p_version );
+		typedef void GetRequiredVersionFunction( Version * version );
 		//!< Signature for the plug-in's name retrieval function
 		typedef void GetNameFunction( char const ** );
 
@@ -48,16 +48,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type		The plug-in type
-		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	type		The plug-in type
+		 *\param[in]	library	The shared library holding the plug-in
 		 *\param[in]	engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type		Le type du plug-in
-		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
+		 *\param[in]	type		Le type du plug-in
+		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Plugin( PluginType p_type, castor::DynamicLibrarySPtr p_library, Engine & engine );
+		C3D_API Plugin( PluginType type, castor::DynamicLibrarySPtr library
+			, Engine & engine );
 
 	public:
 		/**
@@ -75,7 +76,7 @@ namespace castor3d
 		 *\brief		Récupère la version nécessaire au bon fonctionnement du plug-in
 		 *\return		La version
 		 */
-		C3D_API void getRequiredVersion( Version & p_version )const;
+		C3D_API void getRequiredVersion( Version & version )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-in name

@@ -47,12 +47,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Runs the given job.
-		 *\param[in]	p_job	The job.
+		 *\param[in]	job	The job.
 		 *\~french
 		 *\brief		Lance la tâche donnée.
-		 *\param[in]	p_job	La tâche.
+		 *\param[in]	job	La tâche.
 		 */
-		CU_API void feed( Job p_job );
+		CU_API void feed( Job job );
 		/**
 		 *\~english
 		 *\return		\p true if the job is ended.
@@ -63,14 +63,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Waits for the job end for a given time.
-		 *\param[in]	p_timeout	The maximum time to wait.
+		 *\param[in]	timeout	The maximum time to wait.
 		 *\return		\p true if the task is ended.
 		 *\~french
 		 *\brief		Attend la fin de la tâche pour un temps donné.
-		 *\param[in]	p_timeout	Le temps maximal à attendre.
+		 *\param[in]	timeout	Le temps maximal à attendre.
 		 *\return		\p true si la tâche est terminée.
 		 */
-		CU_API bool wait( castor::Milliseconds const & p_timeout )const;
+		CU_API bool wait( castor::Milliseconds const & timeout )const;
 		/**
 		 *\~english
 		 *\return		The signal raised when the worker has ended his job.

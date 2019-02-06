@@ -47,14 +47,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the fog type.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le type de brouillard.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setFilterType( ShadowType p_value )
+		inline void setFilterType( ShadowType value )
 		{
-			m_filterType = p_value;
+			m_filterType = value;
 		}
 
 	private:

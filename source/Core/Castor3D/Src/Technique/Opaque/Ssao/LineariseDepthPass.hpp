@@ -37,14 +37,12 @@ namespace castor3d
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
 		 *\param[in]	depthBuffer		The non linearised depth buffer.
-		 *\param[in]	viewport		The viewport from which clip infos are retrieved.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	ssaoConfigUbo	L'UBO de configuration SSAO.
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
-		 *\param[in]	viewport		Le viewport depuis lequel on récupère les information de clip.
 		 */
 		LineariseDepthPass( Engine & engine
 			, ashes::Extent2D const & size
@@ -59,11 +57,13 @@ namespace castor3d
 		~LineariseDepthPass();
 		/**
 		 *\~english
-		 *\brief		Updates clip info.
+		 *\brief		Updates clipping info.
+		 *\param[in]	viewport	The viewport containing the clipping data.
 		 *\~french
 		 *\brief		Met à jour les informations de clipping.
+		 *\param[in]	viewport	Le viewport contenant les données de clipping.
 		 */
-		void update( Camera const & camera );
+		void update( Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.

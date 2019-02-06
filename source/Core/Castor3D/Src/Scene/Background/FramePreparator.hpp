@@ -24,10 +24,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
+		 *\param[in]	commandBuffer	The command buffer.
+		 *\param[in]	renderPass		The render pass.
+		 *\param[in]	frameBuffer		The frame buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
+		 *\param[in]	commandBuffer	Le tampon de commandes.
+		 *\param[in]	renderPass		La passe de rendu.
+		 *\param[in]	frameBuffer		Le tampon de frame.
 		 */
 		C3D_API BackgroundFramePreparator( ashes::CommandBuffer & commandBuffer
 			, ashes::RenderPass const & renderPass

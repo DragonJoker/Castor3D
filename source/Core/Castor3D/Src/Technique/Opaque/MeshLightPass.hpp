@@ -39,14 +39,16 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine	The engine.
-			 *\param[in]	vtx		The vertex shader source.
-			 *\param[in]	pxl		The fragment shader source.
+			 *\param[in]	engine		The engine.
+			 *\param[in]	vtx			The vertex shader source.
+			 *\param[in]	pxl			The fragment shader source.
+			 *\param[in]	hasShadows	Tells if this program uses shadow map.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine	Le moteur.
-			 *\param[in]	vtx		Le source du vertex shader.
-			 *\param[in]	pxl		Le source du fagment shader.
+			 *\param[in]	engine		Le moteur.
+			 *\param[in]	vtx			Le source du vertex shader.
+			 *\param[in]	pxl			Le source du fagment shader.
+			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
 			 */
 			Program( Engine & engine
 				, ShaderModule const & vtx
@@ -73,20 +75,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	frameBuffer	The target framebuffer.
-		 *\param[in]	depthAttach	The depth buffer attach.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	type		The light source type.
-		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	depthView		The target depth view.
+		 *\param[in]	diffuseView		The target diffuse view.
+		 *\param[in]	specularView	The target specular view.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	type			The light source type.
+		 *\param[in]	hasShadows		Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
-		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	type		Le type de source lumineuse.
-		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	depthView		La vue de profondeur cible.
+		 *\param[in]	diffuseView		La vue de diffuse cible.
+		 *\param[in]	specularView	La vue de spéculaire cible.
+		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
+		 *\param[in]	type			Le type de source lumineuse.
+		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		MeshLightPass( Engine & engine
 			, ashes::TextureView const & depthView
@@ -106,11 +110,15 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises the light pass.
 		 *\param[in]	scene		The scene.
+		 *\param[in]	gp			The geometry pass buffers.
 		 *\param[in]	sceneUbo	The scene UBO.
+		 *\param[in]	timer		The render pass timer.
 		 *\~french
 		 *\brief		Initialise la passe d'éclairage.
 		 *\param[in]	scene		La scène.
+		 *\param[in]	gp			Les tampons de la geometry pass.
 		 *\param[in]	sceneUbo	L'UBO de scène.
+		 *\param[in]	timer		Le timer de la passe de rendu.
 		 */
 		void initialise( Scene const & scene
 			, GeometryPassResult const & gp
@@ -126,8 +134,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the light pass.
+		 *\param[in]	index	The lighting pass index.
+		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine la passe de rendu.
+		 *\param[in]	index	L'indice de la passe d'éclairage.
+		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente
 		 */
 		ashes::Semaphore const & render( uint32_t index
 			, ashes::Semaphore const & toWait )override;

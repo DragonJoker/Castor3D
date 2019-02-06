@@ -34,6 +34,7 @@ namespace castor3d
 		 *\param[in]	resultTexture	The render technique texture.
 		 *\param[in]	size			The render dimensions.
 		 *\param[in]	scene			The rendered scene.
+		 *\param[in]	hdrConfigUbo	The HDR configuration UBO.
 		 *\param[in]	config			The SSAO configuration.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
@@ -44,6 +45,7 @@ namespace castor3d
 		 *\param[in]	resultTexture	La texture de la technique de rendu.
 		 *\param[in]	size			Les dimensions du rendu.
 		 *\param[in]	scene			La scène rendue.
+		 *\param[in]	hdrConfigUbo	L'UBO de configuration HDR.
 		 *\param[in]	config			La configuration du SSAO.
 		 */
 		DeferredRendering( Engine & engine
@@ -86,11 +88,13 @@ namespace castor3d
 		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
+		 *\param[in]	toWait		The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
 		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
+		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 */
 		ashes::Semaphore const & render( RenderInfo & info
 			, Scene const & scene

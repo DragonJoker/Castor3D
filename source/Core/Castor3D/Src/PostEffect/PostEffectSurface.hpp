@@ -110,7 +110,7 @@ namespace castor3d
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourFormat	The surface's colour pixel format.
-		 *\param[in]	colourTexture	The surface's depth texture.
+		 *\param[in]	depthTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\param[in]	renderPass		The render pass from which the frame buffer is created.
 		 *\param[in]	size			The surface's size.
 		 *\param[in]	colourTexture	The surface's colour texture.
-		 *\param[in]	colourTexture	The surface's depth texture.
+		 *\param[in]	depthTexture	The surface's depth texture.
 		 *\~french
 		 *\brief		Initialise la surface.
 		 *\param[in]	renderPass		La passe de rendu depuis laquelle le frame buffer est créé.

@@ -488,16 +488,16 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief			Output stream operator.
-	 *\param[in,out]	p_stream	The stream.
-	 *\param[in]		p_object	The object to put in the stream.
+	 *\param[in,out]	stream	The stream.
+	 *\param[in]		object	The object to put in the stream.
 	 *\return			The stream.
 	 *\~french
 	 *\brief			Opérateur de flux de sortie.
-	 *\param[in,out]	p_stream	Le flux.
-	 *\param[in]		p_object	L'objet à mettre dans le flux.
+	 *\param[in,out]	stream	Le flux.
+	 *\param[in]		object	L'objet à mettre dans le flux.
 	 *\return			Le flux
 	 */
-	CU_API std::ostream & operator<<( std::ostream & p_stream, CpuInformations const & p_object );
+	CU_API std::ostream & operator<<( std::ostream & stream, CpuInformations const & object );
 }
 
 #endif

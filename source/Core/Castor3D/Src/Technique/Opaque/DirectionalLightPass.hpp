@@ -37,14 +37,18 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
-			 *\param[in]	engine	The engine.
-			 *\param[in]	vtx		The vertex shader source.
-			 *\param[in]	pxl		The fragment shader source.
+			 *\param[in]	engine		The engine.
+			 *\param[in]	pass		The light pass.
+			 *\param[in]	vtx			The vertex shader source.
+			 *\param[in]	pxl			The fragment shader source.
+			 *\param[in]	hasShadows	Tells if this program uses shadow map.
 			 *\~french
 			 *\brief		Constructeur.
-			 *\param[in]	engine	Le moteur.
-			 *\param[in]	vtx		Le source du vertex shader.
-			 *\param[in]	pxl		Le source du fagment shader.
+			 *\param[in]	engine		Le moteur.
+			 *\param[in]	pass		La passe d'éclairage.
+			 *\param[in]	vtx			Le source du vertex shader.
+			 *\param[in]	pxl			Le source du fagment shader.
+			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
 			 */
 			Program( Engine & engine
 				, DirectionalLightPass & pass
@@ -79,18 +83,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	frameBuffer	The target framebuffer.
-		 *\param[in]	depthAttach	The depth buffer attach.
-		 *\param[in]	gpInfoUbo	The geometry pass UBO.
-		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	depthView		The target depth view.
+		 *\param[in]	diffuseView		The target diffuse view.
+		 *\param[in]	specularView	The target specular view.
+		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	hasShadows		Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	frameBuffer	Le tampon d'image cible.
-		 *\param[in]	depthAttach	L'attache du tampon de profondeur.
-		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
-		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	depthView		La vue de profondeur cible.
+		 *\param[in]	diffuseView		La vue de diffuse cible.
+		 *\param[in]	specularView	La vue de spéculaire cible.
+		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
+		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		DirectionalLightPass( Engine & engine
 			, ashes::TextureView const & depthView

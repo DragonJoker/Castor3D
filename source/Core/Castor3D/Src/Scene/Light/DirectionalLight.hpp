@@ -105,7 +105,18 @@ namespace castor3d
 		 */
 		C3D_API void update()override;
 		/**
-		 *\copydoc		castor3d::LightCategory::updateShadow
+		 *\~english
+		 *\brief		Updates the shadow cascades informations.
+		 *\param[in]	sceneCamera		The viewer camera.
+		 *\param[in]	lightCamera		The light camera.
+		 *\param[in]	cascadeIndex	The cascade to update.
+		 *\param[in]	minCastersZ		The minimal Z of shadow casters.
+		 *\~french
+		 *\brief		Met à jour les information de shadow cascades.
+		 *\param[in]	sceneCamera		La caméra de la scène.
+		 *\param[in]	lightCamera		La caméra de la lumière.
+		 *\param[in]	cascadeIndex	L'index de la cascade à mettre à jour.
+		 *\param[in]	minCastersZ		Le Z minimal des shadow casters.
 		 */
 		C3D_API void updateShadow( Camera const & sceneCamera
 			, Camera & lightCamera

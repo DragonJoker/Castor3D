@@ -412,7 +412,7 @@ namespace castor
 		}
 
 	protected:
-		CU_DeclareInvariantBlock()
+		CU_DeclareInvariantBlock();
 		CU_API uint64_t doWrite( uint8_t const * buffer, uint64_t size );
 		CU_API uint64_t doRead( uint8_t * buffer, uint64_t size );
 

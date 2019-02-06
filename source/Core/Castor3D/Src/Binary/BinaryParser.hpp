@@ -42,19 +42,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From file reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_file	The file containing the chunk
+		 *\param[out]	obj		The object to read
+		 *\param[in]	file	The file containing the chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un fichier
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_file	Le fichier qui contient le chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse( TParsed & p_obj, castor::BinaryFile & p_file )
+		inline bool parse( TParsed & obj
+			, castor::BinaryFile & file )
 		{
 			BinaryChunk header;
-			bool result = header.read( p_file );
+			bool result = header.read( file );
 
 			if ( header.getChunkType() != ChunkType::eCmshFile )
 			{
@@ -81,7 +82,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = parse( p_obj, chunk );
+				result = parse( obj, chunk );
 			}
 
 			return result;
@@ -89,22 +90,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk
+		 *\param[out]	obj		The object to read
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse( TParsed & p_obj, BinaryChunk & p_chunk )
+		inline bool parse( TParsed & obj
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
-			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			if ( chunk.getChunkType() == ChunkTyper< TParsed >::Value )
 			{
-				m_chunk = &p_chunk;
+				m_chunk = &chunk;
 			}
 			else
 			{
@@ -114,24 +116,24 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doParse_v1_1( p_obj );
+				result = doParse_v1_1( obj );
 
 				if ( result )
 				{
 					m_chunk->resetParse();
-					result = doParse_v1_2( p_obj );
+					result = doParse_v1_2( obj );
 				}
 
 				if ( result )
 				{
 					m_chunk->resetParse();
-					result = doParse_v1_3( p_obj );
+					result = doParse_v1_3( obj );
 				}
 
 				if ( result )
 				{
 					m_chunk->resetParse();
-					result = doParse( p_obj );
+					result = doParse( obj );
 				}
 
 				if ( !result )
@@ -145,22 +147,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk
+		 *\param[out]	obj		The object to read
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse_v1_1( TParsed & p_obj, BinaryChunk & p_chunk )
+		inline bool parse_v1_1( TParsed & obj
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
-			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			if ( chunk.getChunkType() == ChunkTyper< TParsed >::Value )
 			{
-				m_chunk = &p_chunk;
+				m_chunk = &chunk;
 			}
 			else
 			{
@@ -170,7 +173,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doParse_v1_1( p_obj );
+				result = doParse_v1_1( obj );
 
 				if ( !result )
 				{
@@ -183,22 +186,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk
+		 *\param[out]	obj		The object to read
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse_v1_2( TParsed & p_obj, BinaryChunk & p_chunk )
+		inline bool parse_v1_2( TParsed & obj
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
-			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			if ( chunk.getChunkType() == ChunkTyper< TParsed >::Value )
 			{
-				m_chunk = &p_chunk;
+				m_chunk = &chunk;
 			}
 			else
 			{
@@ -208,7 +212,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doParse_v1_2( p_obj );
+				result = doParse_v1_2( obj );
 
 				if ( !result )
 				{
@@ -221,22 +225,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk
+		 *\param[out]	obj		The object to read
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[out]	obj		L'objet à lire
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool parse_v1_3( TParsed & p_obj, BinaryChunk & p_chunk )
+		inline bool parse_v1_3( TParsed & obj
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
-			if ( p_chunk.getChunkType() == ChunkTyper< TParsed >::Value )
+			if ( chunk.getChunkType() == ChunkTyper< TParsed >::Value )
 			{
-				m_chunk = &p_chunk;
+				m_chunk = &chunk;
 			}
 			else
 			{
@@ -246,7 +251,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = doParse_v1_3( p_obj );
+				result = doParse_v1_3( obj );
 
 				if ( !result )
 				{
@@ -261,19 +266,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Parses the header chunk.
-		 *\param[in,out]	p_chunk	The parent chunk.
+		 *\param[in,out]	chunk	The parent chunk.
 		 *\return			\p false if any error occured.
 		 *\~french
 		 *\brief			Lit le chunk d'en-tête.
-		 *\param[in,out]	p_chunk	Le chunk.
+		 *\param[in,out]	chunk	Le chunk.
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool doParseHeader( BinaryChunk & p_chunk )const
+		inline bool doParseHeader( BinaryChunk & chunk )const
 		{
-			BinaryChunk chunk;
-			bool result = p_chunk.getSubChunk( chunk );
+			BinaryChunk schunk;
+			bool result = chunk.getSubChunk( schunk );
 
-			if ( chunk.getChunkType() != ChunkType::eCmshHeader )
+			if ( schunk.getChunkType() != ChunkType::eCmshHeader )
 			{
 				castor::Logger::logError( cuT( "Missing header chunk." ) );
 				result = false;
@@ -282,10 +287,10 @@ namespace castor3d
 			castor::String name;
 			uint32_t version{ 0 };
 
-			while ( result && chunk.checkAvailable( 1 ) )
+			while ( result && schunk.checkAvailable( 1 ) )
 			{
 				BinaryChunk subchunk;
-				result = chunk.getSubChunk( subchunk );
+				result = schunk.getSubChunk( subchunk );
 
 				switch ( subchunk.getChunkType() )
 				{
@@ -322,7 +327,7 @@ namespace castor3d
 
 			if ( !result )
 			{
-				p_chunk.endParse();
+				chunk.endParse();
 			}
 
 			return result;
@@ -330,108 +335,114 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[out]	p_count		The values count
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[out]	count	The values count
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[out]	p_count		Le compte des valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[out]	count	Le compte des valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( T * p_values, size_t p_count, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T * values
+			, size_t count
+			, BinaryChunk & chunk )const
 		{
-			return ChunkParser< T >::parse( p_values, p_count, p_chunk );
+			return ChunkParser< T >::parse( values, count, chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool doParseChunk( T( &p_values )[Count], BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T( &values )[Count]
+			, BinaryChunk & chunk )const
 		{
-			return ChunkParser< T >::parse( p_values, Count, p_chunk );
+			return ChunkParser< T >::parse( values, Count, chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, size_t Count >
-		inline bool doParseChunk( std::array< T, Count > & p_values, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( std::array< T, Count > & values
+			, BinaryChunk & chunk )const
 		{
-			return ChunkParser< T >::parse( p_values.data(), Count, p_chunk );
+			return ChunkParser< T >::parse( values.data(), Count, chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[in]	p_chunk		The chunk containing the values
+		 *\param[out]	values	Receives the parsed values
+		 *\param[in]	chunk	The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\param[out]	values	Reçoit les valeurs
+		 *\param[in]	chunk	Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( std::vector< T > & p_values, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( std::vector< T > & values
+			, BinaryChunk & chunk )const
 		{
-			return ChunkParser< T >::parse( p_values.data(), p_values.size(), p_chunk );
+			return ChunkParser< T >::parse( values.data(), values.size(), chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_value	Receives the parsed value
-		 *\param[in]	p_chunk		The chunk containing the value
+		 *\param[out]	value	Receives the parsed value
+		 *\param[in]	chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_value	Reçoit la valeur
-		 *\param[in]	p_chunk		Le chunk contenant la valeur
+		 *\param[out]	value	Reçoit la valeur
+		 *\param[in]	chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool doParseChunk( T & p_value, BinaryChunk & p_chunk )const
+		inline bool doParseChunk( T & value
+			, BinaryChunk & chunk )const
 		{
-			return ChunkParser< T >::parse( p_value, p_chunk );
+			return ChunkParser< T >::parse( value, chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a subchunk.
-		 *\param[out]	p_chunk	Receives the subchunk.
+		 *\param[out]	chunk	Receives the subchunk.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Récupère un sous-chunk.
-		 *\param[out]	p_chunk	Reçoit le sous-chunk.
+		 *\param[out]	chunk	Reçoit le sous-chunk.
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool doGetSubChunk( BinaryChunk & p_chunk )
+		inline bool doGetSubChunk( BinaryChunk & chunk )
 		{
 			CU_Require( m_chunk );
 			bool result = m_chunk->checkAvailable( 1 );
 
 			if ( result )
 			{
-				result = m_chunk->getSubChunk( p_chunk );
+				result = m_chunk->getSubChunk( chunk );
 			}
 
 			return result;
@@ -441,55 +452,53 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk
+		 *\param[out]	obj	The object to read
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[out]	obj	L'objet à lire
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool doParse( TParsed & p_obj ) = 0;
+		C3D_API virtual bool doParse( TParsed & obj ) = 0;
 		/**
 		 *\~english
 		 *\brief		Chunk reader function from a chunk of version 1.1.
-		 *\param[out]	p_obj	The object to read
+		 *\param[out]	obj	The object to read
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
-		 *\param[out]	p_obj	L'objet à lire
+		 *\param[out]	obj	L'objet à lire
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool doParse_v1_1( TParsed & p_obj )
+		C3D_API virtual bool doParse_v1_1( TParsed & obj )
 		{
 			return true;
 		}
 		/**
 		 *\~english
 		 *\brief		Chunk reader function from a chunk of version 1.1.
-		 *\param[out]	p_obj	The object to read
+		 *\param[out]	obj	The object to read
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
-		 *\param[out]	p_obj	L'objet à lire
+		 *\param[out]	obj	L'objet à lire
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool doParse_v1_2( TParsed & p_obj )
+		C3D_API virtual bool doParse_v1_2( TParsed & obj )
 		{
 			return true;
 		}
 		/**
 		 *\~english
 		 *\brief		Chunk reader function from a chunk of version 1.1.
-		 *\param[out]	p_obj	The object to read
+		 *\param[out]	obj	The object to read
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction de lecture à partir d'un chunk en version 1.1.
-		 *\param[out]	p_obj	L'objet à lire
+		 *\param[out]	obj	L'objet à lire
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool doParse_v1_3( TParsed & p_obj )
+		C3D_API virtual bool doParse_v1_3( TParsed & obj )
 		{
 			return true;
 		}

@@ -42,12 +42,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.
+		 *\param[in]	device			The device on which the storage is allocated.
 		 *\param[in]	numLevels		The allocator maximum tree size.
 		 *\param[in]	minBlockSize	The minimum size for a block.
 		 *\param[in]	targets			The buffer targets.
 		 *\param[in]	memoryFlags		The buffer memory properties.
 		 *\~french
 		 *\brief		Initialise le stockage GPU du tampon.
+		 *\param[in]	device			Le device sur lequel le stockage est alloué.
 		 *\param[in]	numLevels		La taille maximale de l'arbre de l'allocateur.
 		 *\param[in]	minBlockSize	La taille minimale d'un bloc.
 		 *\param[in]	targets			Les cibles du tampon.
@@ -112,14 +114,12 @@ namespace castor3d
 		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
 		 *\param[in]	offset	The start offset in the buffer.
 		 *\param[in]	size	The mapped memory size.
-		 *\param[in]	flags	The lock flags.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
 		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
 		 *\param[in]	offset	L'offset de départ.
 		 *\param[in]	size	La taille de la mémoire à mapper.
-		 *\param[in]	flags	Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
 		C3D_API void flush( uint32_t offset
@@ -130,14 +130,12 @@ namespace castor3d
 		 *\remarks		Maps from m_buffer[offset] to m_buffer[offset + count - 1].
 		 *\param[in]	offset	The start offset in the buffer.
 		 *\param[in]	size	The mapped memory size.
-		 *\param[in]	flags	The lock flags.
 		 *\return		The mapped buffer address.
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
 		 *\remarks		Mappe de m_buffer[offset] à m_buffer[offset + count - 1].
 		 *\param[in]	offset	L'offset de départ.
 		 *\param[in]	size	La taille de la mémoire à mapper.
-		 *\param[in]	flags	Les flags de lock.
 		 *\return		L'adresse du tampon mappé.
 		 */
 		C3D_API void invalidate( uint32_t offset
@@ -154,16 +152,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
-		 *\param[in]	src			The source buffer.
-		 *\param[in]	srcOffset	The start offset in the source buffer.
-		 *\param[in]	dstOffset	The start offset in this buffer.
-		 *\param[in]	size		The number of elements to copy.
+		 *\param[in]	commandBuffer	The command buffer on which the copy commands are recorded.
+		 *\param[in]	src				The source buffer.
+		 *\param[in]	srcOffset		The start offset in the source buffer.
+		 *\param[in]	dstOffset		The start offset in this buffer.
+		 *\param[in]	size			The number of elements to copy.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
-		 *\param[in]	src			Le tampon source.
-		 *\param[in]	srcOffset	L'offset de départ dans le tampon source.
-		 *\param[in]	dstOffset	L'offset de départ dans ce tampon.
-		 *\param[in]	size		Le nombre d'éléments à copier.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de copie sont enregistrées.
+		 *\param[in]	src				Le tampon source.
+		 *\param[in]	srcOffset		L'offset de départ dans le tampon source.
+		 *\param[in]	dstOffset		L'offset de départ dans ce tampon.
+		 *\param[in]	size			Le nombre d'éléments à copier.
 		 */
 		C3D_API void copy( ashes::CommandBuffer const & commandBuffer
 			, GpuBuffer const & src
@@ -174,15 +174,19 @@ namespace castor3d
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[in]	buffer	The data.
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	offset			The start offset.
+		 *\param[in]	count			Elements count.
+		 *\param[in]	buffer			The data.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[in]	buffer	Les données.
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	offset			L'offset de départ.
+		 *\param[in]	count			Nombre d'éléments.
+		 *\param[in]	buffer			Les données.
 		 */
 		C3D_API void upload( ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
@@ -193,15 +197,19 @@ namespace castor3d
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
 		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
-		 *\param[in]	offset	The start offset.
-		 *\param[in]	count	Elements count.
-		 *\param[out]	buffer	The data.
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	offset			The start offset.
+		 *\param[in]	count			Elements count.
+		 *\param[out]	buffer			The data.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
-		 *\param[in]	offset	L'offset de départ.
-		 *\param[in]	count	Nombre d'éléments.
-		 *\param[out]	buffer	Les données.
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	offset			L'offset de départ.
+		 *\param[in]	count			Nombre d'éléments.
+		 *\param[out]	buffer			Les données.
 		 */
 		C3D_API void download( ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer

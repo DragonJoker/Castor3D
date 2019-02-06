@@ -46,20 +46,20 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_description	The exception description
-		 *\param[in]	p_file			The file name
-		 *\param[in]	p_function		The function name
-		 *\param[in]	p_line			The line number
+		 *\param[in]	description	The exception description
+		 *\param[in]	file		The file name
+		 *\param[in]	function	The function name
+		 *\param[in]	line		The line number
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_description	La description de l'exception
-		 *\param[in]	p_file			Le nom du fichier
-		 *\param[in]	p_function		Le nom de la fonction
-		 *\param[in]	p_line			Le numéro de ligne
+		 *\param[in]	description	La description de l'exception
+		 *\param[in]	file		Le nom du fichier
+		 *\param[in]	function	Le nom de la fonction
+		 *\param[in]	line		Le numéro de ligne
 		 */
-		AssertException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+		AssertException( std::string const & description, char const * file, char const * function, uint32_t line )
 			: Debug::Backtraced()
-			, Exception( "Assertion failed: " + p_description + "\n" + m_callStack, p_file, p_function, p_line )
+			, Exception( "Assertion failed: " + description + "\n" + m_callStack, file, function, line )
 		{
 		}
 		/**
@@ -75,22 +75,22 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Specified constructor
-	 *\param[in]	p_description	The exception description
-	 *\param[in]	p_file			The file name
-	 *\param[in]	p_function		The function name
-	 *\param[in]	p_line			The line number
+	 *\param[in]	description	The exception description
+	 *\param[in]	file		The file name
+	 *\param[in]	function	The function name
+	 *\param[in]	line		The line number
 	 *\~french
 	 *\brief		Constructeur spécifié
-	 *\param[in]	p_description	La description de l'exception
-	 *\param[in]	p_file			Le nom du fichier
-	 *\param[in]	p_function		Le nom de la fonction
-	 *\param[in]	p_line			Le numéro de ligne
+	 *\param[in]	description	La description de l'exception
+	 *\param[in]	file		Le nom du fichier
+	 *\param[in]	function	Le nom de la fonction
+	 *\param[in]	line		Le numéro de ligne
 	 */
-	inline void cuAssert( bool p_expr, char const * const p_description )
+	inline void cuAssert( bool expr, char const * const description )
 	{
-		if ( !p_expr )
+		if ( !expr )
 		{
-			Logger::logError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::logError( std::stringstream() << "Assertion failed: " << description );
 			Logger::logError( std::stringstream() << Debug::Backtrace{} );
 			assert( false );
 		}
@@ -110,15 +110,16 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Checks an assertion.
-	 *\param[in]	p_expr			The expression to test.
-	 *\param[in]	p_description	The assertion description.
+	 *\param[in]	expr		The expression to test.
+	 *\param[in]	description	The assertion description.
 	 *\~french
 	 *\brief		Constructeur spécifié
-	 *\param[in]	p_expr			L'expression à tester
-	 *\param[in]	p_description	La description de l'assertion.
+	 *\param[in]	expr		L'expression à tester
+	 *\param[in]	description	La description de l'assertion.
 	 */
 	template< typename Expr >
-	inline void cuAssert( Expr const & expr, char const * const description )
+	inline void cuAssert( Expr const & expr
+		, char const * const description )
 	{
 		if ( !expr )
 		{
@@ -158,7 +159,7 @@ namespace castor
 #define CU_Failure( text ) CU_Assert( false, "Failure: "#text )
 //!\~english	Declares the invariant checking function.
 //!\~french		Déclare la fonction de vérification des invariants de classe.
-#define CU_DeclareInvariantBlock() void doContractCheckInvariants()const;
+#define CU_DeclareInvariantBlock() void doContractCheckInvariants()const
 //!\~english	Begins invariant checking function implementation.
 //!\~french		Commence l'implémentation de la fonction de vérification des invariants de classe.
 #define CU_BeginInvariantBlock( className ) void className::doContractCheckInvariants()const {

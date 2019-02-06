@@ -640,16 +640,20 @@ namespace castor3d
 					, FragmentInput const & fragmentIn
 					, OutputComponents & output )
 				{
-					auto diffuseFactor = m_writer.declLocale( "diffuseFactor", dot( fragmentIn.m_worldNormal, -lightDirection ) );
+					// Diffuse term.
+					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
+						, dot( fragmentIn.m_worldNormal, -lightDirection ) );
 					auto stepFactor = m_writer.declLocale( "stepFactor"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
+					output.m_diffuse = stepFactor * shadowFactor * light.m_colour * light.m_intensity.x() * diffuseFactor;
+
+					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
 						, normalize( worldEye - fragmentIn.m_worldVertex ) );
 					auto lightReflect = m_writer.declLocale( "lightReflect"
 						, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
 					auto specularFactor = m_writer.declLocale( "specularFactor"
 						, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-					output.m_diffuse = stepFactor * shadowFactor * light.m_colour * light.m_intensity.x() * diffuseFactor;
 					output.m_specular = stepFactor * shadowFactor * light.m_colour * light.m_intensity.y() * pow( specularFactor, max( shininess, 0.1_f ) );
 				}
 				, InLight( m_writer, "light" )

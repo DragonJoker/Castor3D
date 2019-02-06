@@ -84,10 +84,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	timer	The render pass timer.
+		 *\param[in]	index	The render pass index.
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	timer	Le timer de passe de rendu.
+		 *\param[in]	index	L'indice de passe de rendu.
 		 */
-		void upload( RenderPassTimer & timer, uint32_t index )const;
+		void upload( RenderPassTimer & timer
+			, uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -102,11 +107,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
-		 *\param[in]	target			The buffer type.
 		 *\param[in]	bufferOffset	The buffer offset to release.
 		 *\~french
 		 *\brief		Libère un tampon GPU.
-		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
 		void putBuffer( UniformBufferOffset< T > const & bufferOffset );

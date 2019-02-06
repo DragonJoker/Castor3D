@@ -27,15 +27,15 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_expectedType	The real parameter type.
+		 *\param[in]	expectedType	The real parameter type.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_expectedType	Le type réel du paramètre.
+		 *\param[in]	expectedType	Le type réel du paramètre.
 		 */
-		inline explicit ParserParameterTypeException( ParameterType p_expectedType )
+		inline explicit ParserParameterTypeException( ParameterType expectedType )
 			: castor::Exception( "", "", "", 0 )
 		{
-			m_description = "Wrong parameter type in parser: user gave " + string::stringCast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::stringCast< xchar >( getTypeName( p_expectedType ) );
+			m_description = "Wrong parameter type in parser: user gave " + string::stringCast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::stringCast< xchar >( getTypeName( expectedType ) );
 		}
 	};
 }

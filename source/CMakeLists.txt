@@ -1,5 +1,5 @@
-cmake_minimum_required( VERSION 3.1 )
-cmake_policy( VERSION 3.1 )
+cmake_minimum_required( VERSION 3.8 )
+cmake_policy( VERSION 3.8 )
 
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
@@ -89,13 +89,21 @@ elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	endif ()
+	add_definitions(
+		-D_ENFORCE_MATCHING_ALLOCATORS=0
+		-DNOMINMAX
+	)
 else ()
 	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
 
-find_package( Doxygen )
+find_package( Doxygen COMPONENTS doxygen dot dia )
+
+if( DOXYGEN_FOUND )
+	message( STATUS "+ Found Doxygen (version ${DOXYGEN_VERSION})" )
+endif ()
 
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
@@ -116,10 +124,6 @@ set( Castor3DIncludeDirs
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
 )
-
-if( DOXYGEN_FOUND )
-	message( STATUS "+ Found Doxygen (version ${DOXYGEN_VERSION})" )
-endif ()
 
 #--------------------------------------------------------------------------------------------------
 #	Normalising libraries names

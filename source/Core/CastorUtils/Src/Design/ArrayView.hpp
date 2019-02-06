@@ -32,31 +32,31 @@ namespace castor
 		using const_reverse_iterator = std::reverse_iterator< const_iterator >;
 
 	public:
-		ArrayView( pointer p_begin, pointer p_end )noexcept
-			: m_begin( p_begin )
-			, m_end( p_end )
+		ArrayView( pointer begin, pointer end )noexcept
+			: m_begin( begin )
+			, m_end( end )
 		{
 		}
 
 		template< size_t N >
-		explicit ArrayView( T( & p_buffer )[N] )noexcept
-			: ArrayView( p_buffer, p_buffer + N )
+		explicit ArrayView( T( & buffer )[N] )noexcept
+			: ArrayView( buffer, buffer + N )
 		{
 		}
 
-		ArrayView( T * p_buffer, size_t p_count )noexcept
-			: ArrayView( p_buffer, p_buffer + p_count )
+		ArrayView( T * buffer, size_t count )noexcept
+			: ArrayView( buffer, buffer + count )
 		{
 		}
 
-		reference operator[]( size_t p_index )noexcept
+		reference operator[]( size_t index )noexcept
 		{
-			return m_begin[p_index];
+			return m_begin[index];
 		}
 
-		const_reference operator[]( size_t p_index )const noexcept
+		const_reference operator[]( size_t index )const noexcept
 		{
-			return m_begin[p_index];
+			return m_begin[index];
 		}
 
 		bool empty()const noexcept
@@ -145,21 +145,21 @@ namespace castor
 	};
 
 	template< typename T >
-	ArrayView< T > makeArrayView( T * p_begin, size_t p_size )
+	ArrayView< T > makeArrayView( T * begin, size_t size )
 	{
-		return ArrayView< T >( p_begin, p_begin + p_size );
+		return ArrayView< T >( begin, begin + size );
 	}
 
 	template< typename T >
-	ArrayView< T > makeArrayView( T * p_begin, T * p_end )
+	ArrayView< T > makeArrayView( T * begin, T * end )
 	{
-		return ArrayView< T >( p_begin, p_end );
+		return ArrayView< T >( begin, end );
 	}
 
 	template< typename T, size_t N >
-	ArrayView< T > makeArrayView( T ( & p_buffer )[N] )
+	ArrayView< T > makeArrayView( T ( & buffer )[N] )
 	{
-		return ArrayView< T >( p_buffer );
+		return ArrayView< T >( buffer );
 	}
 }
 

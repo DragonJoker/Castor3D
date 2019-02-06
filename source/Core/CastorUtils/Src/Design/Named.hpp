@@ -26,33 +26,33 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The name
+		 *\param[in]	name	The name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom
+		 *\param[in]	name	Le nom
 		 */
-		explicit NamedBase( T const & p_name )
-			: m_name( p_name )
+		explicit NamedBase( T const & name )
+			: m_name( name )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_named	The object to copy
+		 *\param[in]	named	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_named	L'objet à copier
+		 *\param[in]	named	L'objet à copier
 		 */
-		NamedBase( NamedBase const & p_named ) = default;
+		NamedBase( NamedBase const & named ) = default;
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_named	The object to move
+		 *\param[in]	named	The object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_named	L'objet à déplacer
+		 *\param[in]	named	L'objet à déplacer
 		 */
-		NamedBase( NamedBase && p_named ) = default;
+		NamedBase( NamedBase && named ) = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,21 +63,21 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_named	The object to copy
+		 *\param[in]	named	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_named	L'objet à copier
+		 *\param[in]	named	L'objet à copier
 		 */
-		NamedBase & operator=( NamedBase const & p_named ) = default;
+		NamedBase & operator=( NamedBase const & named ) = default;
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_named	The object to move
+		 *\param[in]	named	The object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_named	L'objet à déplacer
+		 *\param[in]	named	L'objet à déplacer
 		 */
-		NamedBase & operator=( NamedBase && p_named ) = default;
+		NamedBase & operator=( NamedBase && named ) = default;
 		/**
 		 *\~english
 		 *\brief		Retrieves the name
@@ -93,14 +93,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		sets the name
-		 *\param[in]	p_name	The name
+		 *\param[in]	name	The name
 		 *\~french
 		 *\brief		Définit le nom
-		 *\param[in]	p_name	Le nom
+		 *\param[in]	name	Le nom
 		 */
-		inline void setName( T const & p_name )
+		inline void setName( T const & name )
 		{
-			m_name = p_name;
+			m_name = name;
 		}
 
 	protected:

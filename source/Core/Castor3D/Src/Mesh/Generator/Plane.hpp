@@ -45,14 +45,16 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & mesh
+			, Parameters const & parameters );
 
 	private:
 		real m_depth;
 		real m_width;
 		uint32_t m_subDivisionsW;
 		uint32_t m_subDivisionsD;
-		friend std::ostream & operator <<( std::ostream & o, Plane const & c );
+		friend std::ostream & operator <<( std::ostream & o
+			, Plane const & c );
 	};
 	/**
 	 *\~english
@@ -60,7 +62,8 @@ namespace castor3d
 	 *\~french
 	 *\brief		Operateur de flux
 	 */
-	inline std::ostream & operator <<( std::ostream & o, Plane const & c )
+	inline std::ostream & operator <<( std::ostream & o
+		, Plane const & c )
 	{
 		return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
 	}

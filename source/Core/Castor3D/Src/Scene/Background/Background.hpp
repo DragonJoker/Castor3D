@@ -67,11 +67,19 @@ namespace castor3d
 		*	Constructor.
 		*\param engine
 		*	The engine.
+		*\param scene
+		*	The parent scene.
+		*\param type
+		*	The background type.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param engine
 		*	Le moteur.
+		*\param scene
+		*	La scène parente.
+		*\param type
+		*	Le type de fond.
 		*/
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
@@ -91,6 +99,8 @@ namespace castor3d
 		*	Initialisation function.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
+		*\param[in] hdrConfigUbo
+		*	The HDR configuration UBO.
 		*\return
 		*	\p true if ok.
 		*\~french
@@ -98,6 +108,8 @@ namespace castor3d
 		*	Fonction d'initialisation.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
+		*\param[in] hdrConfigUbo
+		*	L'UBO de configuration HDR.
 		*\return
 		*	\p true if ok.
 		*/
@@ -131,6 +143,8 @@ namespace castor3d
 		*	Records the commands used to draw the background.
 		*\param[out] commandBuffer
 		*	Receives the commands.
+		*\param[in] size
+		*	The rendering size.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
 		*\param[in] frameBuffer
@@ -140,6 +154,8 @@ namespace castor3d
 		*	Enregistre les commandes utilisées pour dessiner le fond.
 		*\param[out] commandBuffer
 		*	Reçoit les commandes.
+		*\param[in] size
+		*	Les dimensions de rendu.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*\param[in] frameBuffer
@@ -155,6 +171,8 @@ namespace castor3d
 		*	Records the commands used to draw the background.
 		*\param[out] commandBuffer
 		*	Receives the commands.
+		*\param[in] size
+		*	The rendering size.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
 		*\~french
@@ -162,6 +180,8 @@ namespace castor3d
 		*	Enregistre les commandes utilisées pour dessiner le fond.
 		*\param[out] commandBuffer
 		*	Reçoit les commandes.
+		*\param[in] size
+		*	Les dimensions de rendu.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
 		*/
@@ -174,15 +194,23 @@ namespace castor3d
 		*	Records the commands used to draw the background.
 		*\param[out] commandBuffer
 		*	Receives the commands.
+		*\param[in] size
+		*	The rendering size.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
+		*\param[in] descriptorSet
+		*	The descriptors set.
 		*\~french
 		*\brief
 		*	Enregistre les commandes utilisées pour dessiner le fond.
 		*\param[out] commandBuffer
 		*	Reçoit les commandes.
+		*\param[in] size
+		*	Les dimensions de rendu.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
+		*\param[in] descriptorSet
+		*	L'ensemble de descripteurs.
 		*/
 		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
@@ -192,9 +220,25 @@ namespace castor3d
 		*\~english
 		*\return
 		*	Initialises the descriptor set.
+		*\param[in] matrixUbo
+		*	The scene matrices UBO.
+		*\param[in] modelMatrixUbo
+		*	The model matrices UBO.
+		*\param[in] hdrConfigUbo
+		*	The HDR configuration UBO.
+		*\param[out] descriptorSet
+		*	Receives the descriptors.
 		*\~french
 		*\brief
 		*	Initialise l'ensemble de descripteurs.
+		*\param[in] matrixUbo
+		*	L'UBO des matrices de la scène.
+		*\param[in] modelMatrixUbo
+		*	L'UBO des matrices de modèle.
+		*\param[in] hdrConfigUbo
+		*	L'UBO de configuration HDR.
+		*\param[out] descriptorSet
+		*	Reçoit les descripteurs.
 		*/
 		C3D_API virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
@@ -339,15 +383,23 @@ namespace castor3d
 		*	Records the commands used to draw the background.
 		*\param[out] commandBuffer
 		*	Receives the commands.
+		*\param[in] size
+		*	The rendering size.
 		*\param[in] renderPass
 		*	The render pass into which the background is drawn.
+		*\param[in] descriptorSet
+		*	The descriptors set.
 		*\~french
 		*\brief
 		*	Enregistre les commandes utilisées pour dessiner le fond.
 		*\param[out] commandBuffer
 		*	Reçoit les commandes.
+		*\param[in] size
+		*	Les dimensions de rendu.
 		*\param[in] renderPass
 		*	La passe de rendu dans laquelle le fond est dessiné.
+		*\param[in] descriptorSet
+		*	L'ensemble de descripteurs.
 		*/
 		void doPrepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
@@ -375,11 +427,15 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialisation function.
+		*\param[in] renderPass
+		*	The render pass into which the background is drawn.
 		*\return
 		*	\p true if ok.
 		*\~french
 		*\brief
 		*	Fonction d'initialisation.
+		*\param[in] renderPass
+		*	La passe de rendu dans laquelle le fond est dessiné.
 		*\return
 		*	\p true if ok.
 		*/

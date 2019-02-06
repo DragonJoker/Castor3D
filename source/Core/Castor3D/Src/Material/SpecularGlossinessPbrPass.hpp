@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SpecularGlossinessPbrPass_H___
@@ -42,18 +42,19 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a LegacyPass into a text file.
-			 *\param[in]		p_pass	The LegacyPass to write.
-			 *\param[in,out]	p_file	The file where to write the LegacyPass.
+			 *\param[in]		pass	The LegacyPass to write.
+			 *\param[in,out]	file	The file where to write the LegacyPass.
 			 *\~french
 			 *\brief			Ecrit une LegacyPass dans un fichier texte.
-			 *\param[in]		p_pass	La LegacyPass à écrire.
-			 *\param[in,out]	p_file	Le file où écrire la LegacyPass.
+			 *\param[in]		pass	La LegacyPass à écrire.
+			 *\param[in,out]	file	Le file où écrire la LegacyPass.
 			 */
-			C3D_API bool operator()( SpecularGlossinessPbrPass const & p_pass, castor::TextFile & p_file )override;
+			C3D_API bool operator()( SpecularGlossinessPbrPass const & pass
+				, castor::TextFile & file )override;
 		};
 
 	public:

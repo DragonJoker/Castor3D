@@ -112,12 +112,12 @@ namespace castor3d
 		C3D_API void clear();
 		/**
 		 *\~english
-		 *\brief		Creates an object.
+		 *\brief		Creates a new object and adds it to the collection.
 		 *\param[in]	name	The object name.
 		 *\param[in]	parent	The parent scene node.
 		 *\return		The created object.
 		 *\~french
-		 *\brief		Crée un objet.
+		 *\brief		Crée un nouvel objet et l'ajoute à la collection.
 		 *\param[in]	name	Le nom d'objet.
 		 *\param[in]	parent	Le noeud de scène parent.
 		 *\return		L'objet créé.
@@ -126,15 +126,11 @@ namespace castor3d
 			, SceneNodeSPtr parent );
 		/**
 		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	name	The object name.
-		 *\param[in]	parent	The parent scene node.
-		 *\return		The created object.
+		 *\brief		Adds an existing object.
+		 *\param[in]	element	The object.
 		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	name	Le nom d'objet.
-		 *\param[in]	parent	Le noeud de scène parent.
-		 *\return		L'objet créé.
+		 *\brief		Ajoute un objet existant.
+		 *\param[in]	element	L'objet.
 		 */
 		C3D_API void add( ElementPtr element );
 		/**

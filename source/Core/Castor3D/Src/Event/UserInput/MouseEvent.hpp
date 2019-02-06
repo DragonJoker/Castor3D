@@ -17,17 +17,21 @@ namespace castor3d
 	*\~english
 	*\brief		Structure holding mouse state.
 	*\~french
-	*\brief		Structure contenant l'àtat de la souris.
+	*\brief		Structure contenant l'état de la souris.
 	*/
 	struct MouseState
 	{
-		//!\~english The current position.	\~french La position actuelle.
+		//!\~english	The current position.
+		//!\~french		La position actuelle.
 		castor::Position m_position;
-		//!\~english The wheel position.	\~french La position de la molette.
+		//!\~english	The wheel position.
+		//!\~french		La position de la molette.
 		castor::Position m_wheel;
-		//!\~english The buttons state (true = down).	\~french L'àtat des boutons (true = enfoncà).
+		//!\~english	The buttons state (true = down).
+		//!\~french		L'état des boutons (true = enfoncé).
 		std::array< bool, size_t( MouseButton::eCount ) > m_buttons;
-		//!\~english The button which had the last change.	\~french Le bouton ayant reàu le dernier changement.
+		//!\~english	The button which had the last change.
+		//!\~french		Le bouton ayant reçu le dernier changement.
 		MouseButton m_changed;
 	};
 	/*!
@@ -46,20 +50,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Constructor.
-		 *\param[in]	p_type		The mouse event type.
-		 *\param[in]	p_position	The position, of wheel or mouse, depending on the event type.
-		 *\param[in]	p_button	The mouse button.
+		 *\param[in]	type		The mouse event type.
+		 *\param[in]	position	The position, of wheel or mouse, depending on the event type.
+		 *\param[in]	button		The mouse button.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type		Le type d'évènement de souris.
-		 *\param[in]	p_position	La position, de la souris ou de la molette, selon le type d'évènement.
-		 *\param[in]	p_button	Le bouton de la souris.
+		 *\param[in]	type		Le type d'évènement de souris.
+		 *\param[in]	position	La position, de la souris ou de la molette, selon le type d'évènement.
+		 *\param[in]	button		Le bouton de la souris.
 		 */
-		MouseEvent( MouseEventType p_type, castor::Position const & p_position, MouseButton p_button = MouseButton::eCount )
+		MouseEvent( MouseEventType type
+			, castor::Position const & position
+			, MouseButton button = MouseButton::eCount )
 			: UserInputEvent{ UserInputEventType::eMouse }
-			, m_mouseEventType{ p_type }
-			, m_position{ p_position }
-			, m_button{ p_button }
+			, m_mouseEventType{ type }
+			, m_position{ position }
+			, m_button{ button }
 		{
 		}
 		/**
@@ -103,11 +109,14 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english The mouse event type.	\~french Le type d'évènement souris.
+		//!\~english	The mouse event type.
+		//!\~french		Le type d'évènement souris.
 		MouseEventType const m_mouseEventType;
-		//!\~english The mouse button.	\~french Le bouton de la souris
+		//!\~english	The mouse button.
+		//!\~french		Le bouton de la souris
 		MouseButton const m_button;
-		//!\~english The position, (wheel or mouse, depending on mouse event type).	\~french La position (de la souris ou de la molette, selon le type d'évènement).
+		//!\~english	The position, (wheel or mouse, depending on mouse event type).
+		//!\~french		La position (de la souris ou de la molette, selon le type d'évènement).
 		castor::Position const m_position;
 	};
 }

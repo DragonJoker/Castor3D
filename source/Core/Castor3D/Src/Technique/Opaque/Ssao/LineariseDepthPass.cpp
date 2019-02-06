@@ -368,10 +368,10 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::update( Camera const & camera )
+	void LineariseDepthPass::update( Viewport const & viewport )
 	{
-		auto z_f = camera.getFar();
-		auto z_n = camera.getNear();
+		auto z_f = viewport.getFar();
+		auto z_n = viewport.getNear();
 		auto clipInfo = std::isinf( z_f )
 			? Point3f{ z_n, -1.0f, 1.0f }
 			: Point3f{ z_n * z_f, z_n - z_f, z_f };

@@ -79,16 +79,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Function used to retrieve specific data from the chunk
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_chunk	The chunk containing data
+		 *\param[out]	obj	The object to read
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_chunk	Le chunk contenant les données
+		 *\param[out]	obj	L'objet à lire
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API bool doParse_v1_3( SkeletonAnimationKeyFrame & p_obj )override;
+		C3D_API bool doParse_v1_3( SkeletonAnimationKeyFrame & obj )override;
 	};
 }
 

@@ -47,7 +47,8 @@ namespace castor3d
 		 *\param[in]	result			The texture receiving the result.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	config			The SSAO configuration.
+		 *\param[in]	hdrConfigUbo	The HDR UBO.
+		 *\param[in]	ssao			The SSAO image.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
@@ -58,7 +59,8 @@ namespace castor3d
 		 *\param[in]	result			La texture recevant le résultat.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
-		 *\param[in]	config			La configuration du SSAO.
+		 *\param[in]	hdrConfigUbo	L'UBO HDR.
+		 *\param[in]	ssao			L'image SSAO.
 		 */
 		ReflectionPass( Engine & engine
 			, Scene & scene

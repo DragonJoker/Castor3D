@@ -29,10 +29,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	scene	The scene.
 		 *\param[in]	source	The source environment map.
+		 *\param[in]	sampler	The sampler used for the environment map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	scene	La scène.
 		 *\param[in]	source	La texture d'environnement source.
+		 *\param[in]	sampler	Le sampler utilisé pour la texture d'environnement.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
 			, ashes::Texture const & source

@@ -44,11 +44,13 @@ namespace castor
 	*/
 	template< PoolErrorType ErrorType > struct Error;
 
-	//!\~english Specialisation for PoolErrorType::eCommonOutOfMemory.	\~french Spécialisation pour PoolErrorType::eCommonOutOfMemory.
+	//!\~english	Specialisation for PoolErrorType::eCommonOutOfMemory.
+	//!\~french		Spécialisation pour PoolErrorType::eCommonOutOfMemory.
 	template<>
 	struct Error< PoolErrorType::eCommonOutOfMemory >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
@@ -62,151 +64,167 @@ namespace castor
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eCommonPoolIsFull.	\~french Spécialisation pour PoolErrorType::eCommonPoolIsFull.
+	//!\~english	Specialisation for PoolErrorType::eCommonPoolIsFull.
+	//!\~french		Spécialisation pour PoolErrorType::eCommonPoolIsFull.
 	template<>
 	struct Error< PoolErrorType::eCommonPoolIsFull >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonPoolIsFull >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eCommonPoolIsFull >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eCommonMemoryLeaksDetected.	\~french Spécialisation pour PoolErrorType::eCommonMemoryLeaksDetected.
+	//!\~english	Specialisation for PoolErrorType::eCommonMemoryLeaksDetected.
+	//!\~french		Spécialisation pour PoolErrorType::eCommonMemoryLeaksDetected.
 	template<>
 	struct Error< PoolErrorType::eCommonMemoryLeaksDetected >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_size	The memory size.
+		 *\param[in]	size	The memory size.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_size	La taille mémoire.
+		 *\param[in]	size	La taille mémoire.
 		 */
-		static inline void report( size_t p_size )
+		static inline void report( size_t size )
 		{
-			std::cerr << Error< PoolErrorType::eCommonMemoryLeaksDetected >::Text << ": " << p_size << "bytes" << std::endl;
+			std::cerr << Error< PoolErrorType::eCommonMemoryLeaksDetected >::Text << ": " << size << "bytes" << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eCommonNotFromRange.	\~french Spécialisation pour PoolErrorType::eCommonNotFromRange.
+	//!\~english	Specialisation for PoolErrorType::eCommonNotFromRange.
+	//!\~french		Spécialisation pour PoolErrorType::eCommonNotFromRange.
 	template<>
 	struct Error< PoolErrorType::eCommonNotFromRange >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonNotFromRange >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eCommonNotFromRange >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eMarkedLeakAddress.	\~french Spécialisation pour PoolErrorType::eMarkedLeakAddress.
+	//!\~english	Specialisation for PoolErrorType::eMarkedLeakAddress.
+	//!\~french		Spécialisation pour PoolErrorType::eMarkedLeakAddress.
 	template<>
 	struct Error< PoolErrorType::eMarkedLeakAddress >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "***   " << Error< PoolErrorType::eMarkedLeakAddress >::Text << ": 0x" << std::hex << p_space << std::endl;
+			std::cerr << "***   " << Error< PoolErrorType::eMarkedLeakAddress >::Text << ": 0x" << std::hex << space << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eMarkedDoubleDelete.	\~french Spécialisation pour PoolErrorType::eMarkedDoubleDelete.
+	//!\~english	Specialisation for PoolErrorType::eMarkedDoubleDelete.
+	//!\~french		Spécialisation pour PoolErrorType::eMarkedDoubleDelete.
 	template<>
 	struct Error< PoolErrorType::eMarkedDoubleDelete >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedDoubleDelete >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eMarkedDoubleDelete >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eMarkedNotFromPool.	\~french Spécialisation pour PoolErrorType::eMarkedNotFromPool.
+	//!\~english	Specialisation for PoolErrorType::eMarkedNotFromPool.
+	//!\~french		Spécialisation pour PoolErrorType::eMarkedNotFromPool.
 	template<>
 	struct Error< PoolErrorType::eMarkedNotFromPool >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedNotFromPool >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eMarkedNotFromPool >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eGrowingNotFromRanges.	\~french Spécialisation pour PoolErrorType::eGrowingNotFromRanges.
+	//!\~english	Specialisation for PoolErrorType::eGrowingNotFromRanges.
+	//!\~french		Spécialisation pour PoolErrorType::eGrowingNotFromRanges.
 	template<>
 	struct Error< PoolErrorType::eGrowingNotFromRanges >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
 		 *\brief		Reports a pool error.
-		 *\param[in]	p_space	The memory space.
+		 *\param[in]	space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	space	L'espace mémoire.
 		 */
-		static inline void report( void * p_space )
+		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eGrowingNotFromRanges >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eGrowingNotFromRanges >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for PoolErrorType::eSTLAllocatorUnique.	\~french Spécialisation pour PoolErrorType::eSTLAllocatorUnique.
+	//!\~english	Specialisation for PoolErrorType::eSTLAllocatorUnique.
+	//!\~french		Spécialisation pour PoolErrorType::eSTLAllocatorUnique.
 	template<>
 	struct Error< PoolErrorType::eSTLAllocatorUnique >
 	{
-		//!\~english The error text.	\~french Le texte de l'erreur.
+		//!\~english	The error text.
+		//!\~french		Le texte de l'erreur.
 		CU_API static char const * const Text;
 		/**
 		 *\~english
@@ -222,18 +240,18 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Reports a pool error.
-	 *\param[in]	p_name		The error text.
-	 *\param[in]	p_params	The error parameters.
+	 *\param[in]	name		The error text.
+	 *\param[in]	params	The error parameters.
 	 *\~french
 	 *\brief		Rapporte une erreur de pool.
-	 *\param[in]	p_name		Le texte de l'erreur.
-	 *\param[in]	p_params	Les paramètres de l'erreur.
+	 *\param[in]	name		Le texte de l'erreur.
+	 *\param[in]	params	Les paramètres de l'erreur.
 	 */
 	template< PoolErrorType ErrorType, typename ... Params >
-	static inline void reportError( char const * const p_name, Params ... p_params )
+	static inline void reportError( char const * const name, Params ... params )
 	{
-		std::cerr << "*** " << p_name << " *** ";
-		Error< ErrorType >::report( p_params... );
+		std::cerr << "*** " << name << " *** ";
+		Error< ErrorType >::report( params... );
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -252,17 +270,17 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_file		The file name
-		 *\param[in]	p_function	The function name
-		 *\param[in]	p_line		The line number
+		 *\param[in]	file		The file name
+		 *\param[in]	function	The function name
+		 *\param[in]	line		The line number
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_file		Le nom du fichier
-		 *\param[in]	p_function	Le nom de la fonction
-		 *\param[in]	p_line		Le numéro de ligne
+		 *\param[in]	file		Le nom du fichier
+		 *\param[in]	function	Le nom de la fonction
+		 *\param[in]	line		Le numéro de ligne
 		 */
-		PoolMemoryException( char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( Error< ErrorType >::Text, p_file, p_function, p_line )
+		PoolMemoryException( char const * file, char const * function, uint32_t line )
+			: Exception( Error< ErrorType >::Text, file, function, line )
 		{
 		}
 	};

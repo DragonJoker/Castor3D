@@ -29,16 +29,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
 		 *\param[in]	name		The technique name.
-		 *\param[in]	scene		The scene for this technique.
-		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	environment	Pass used for an environment map rendering.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
 		 *\param[in]	name		Le nom de la technique.
-		 *\param[in]	scene		La scène pour cette technique.
-		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
@@ -53,8 +53,8 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
 		 *\param[in]	name		The technique name.
-		 *\param[in]	scene		The scene for this technique.
-		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	oit			The OIT status.
 		 *\param[in]	environment	Pass used for an environment map rendering.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
@@ -62,8 +62,8 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
 		 *\param[in]	name		Le nom de la technique.
-		 *\param[in]	scene		La scène pour cette technique.
-		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut d'OIT.
 		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
@@ -84,7 +84,18 @@ namespace castor3d
 		 */
 		C3D_API virtual ~ForwardRenderTechniquePass();
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::render
+		 *\~english
+		 *\brief		Initialises the render pass.
+		 *\param[in]	colourView	The target colour view.
+		 *\param[in]	depthView	The target depth view.
+		 *\param[in]	size		The pass dimensions.
+		 *\param[in]	clear		Tells if the attaches must be cleared at the beginning of the pass.
+		 *\~french
+		 *\brief		Initialise la passe de rendu.
+		 *\param[in]	colourView	La vue couleur cible.
+		 *\param[in]	depthView	La vue profondeur cible.
+		 *\param[in]	size		Les dimensions de la passe.
+		 *\param[in]	clear		Dit si les attaches doivent être vidées au début de la passe.
 		 */
 		void initialiseRenderPass( ashes::TextureView const & colourView
 			, ashes::TextureView const & depthView
@@ -95,7 +106,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::render
+		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		C3D_API void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
@@ -111,7 +122,7 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::RenderPass::doCleanup
+		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
 		C3D_API virtual void doCleanup()override;
 

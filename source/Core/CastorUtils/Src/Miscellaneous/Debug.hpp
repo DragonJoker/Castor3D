@@ -15,9 +15,9 @@ namespace castor
 			int const m_toCapture;
 			int const m_toSkip;
 
-			inline Backtrace( int p_toCapture = 20, int p_toSkip = 2 )
-				: m_toCapture{ p_toCapture }
-				, m_toSkip{ p_toSkip }
+			inline Backtrace( int toCapture = 20, int toSkip = 2 )
+				: m_toCapture{ toCapture }
+				, m_toSkip{ toSkip }
 			{
 			}
 		};
@@ -52,21 +52,21 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Puts the backtrace into a stream
-		 *\param[in,out]	p_stream	The stream
+		 *\param[in,out]	stream	The stream
 		 *\~french
 		 *\brief			Transmet la pile d'appels dans un flux
-		 *\param[in,out]	p_stream	Le flux
+		 *\param[in,out]	stream	Le flux
 		 */
-		CU_API std::wostream & operator<<( std::wostream & p_stream, Backtrace const & );
+		CU_API std::wostream & operator<<( std::wostream & stream, Backtrace const & );
 		/**
 		 *\~english
 		 *\brief			Puts the backtrace into a stream
-		 *\param[in,out]	p_stream	The stream
+		 *\param[in,out]	stream	The stream
 		 *\~french
 		 *\brief			Transmet la pile d'appels dans un flux
-		 *\param[in,out]	p_stream	Le flux
+		 *\param[in,out]	stream	Le flux
 		 */
-		CU_API std::ostream & operator<<( std::ostream & p_stream, Backtrace const & );
+		CU_API std::ostream & operator<<( std::ostream & stream, Backtrace const & );
 
 		/*!
 		\author 	Sylvain DOREMUS
@@ -101,20 +101,20 @@ namespace castor
 
 		protected:
 			std::string m_callStack;
-			friend std::ostream & operator<<( std::ostream & p_stream, Backtraced const & p_traced );
+			friend std::ostream & operator<<( std::ostream & stream, Backtraced const & traced );
 
 #endif
 		};
 
-		inline std::ostream & operator<<( std::ostream & p_stream, Backtraced const & p_traced )
+		inline std::ostream & operator<<( std::ostream & stream, Backtraced const & traced )
 		{
 #if !defined( NDEBUG )
 
-			p_stream << p_traced.m_callStack;
+			stream << traced.m_callStack;
 
 #endif
 
-			return p_stream;
+			return stream;
 		}
 	}
 }

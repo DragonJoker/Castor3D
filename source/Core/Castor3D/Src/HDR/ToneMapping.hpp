@@ -40,12 +40,14 @@ namespace castor3d
 		 *\param[in]	name		The tone mapping name.
 		 *\param[in]	fullName	The tone mapping full (fancy) name.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	config		The configuration data.
 		 *\param[in]	parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
 		 *\param[in]	name		Le nom du mappage de tons.
 		 *\param[in]	fullName	Le nom complet (et joli) du mappage de tons.
 		 *\param[in]	engine		Le moteur.
+		 *\param[in]	config		Les données de confiuration.
 		 *\param[in]	parameters	Les paramètres spécifiques à l'implémentation.
 		 */
 		C3D_API ToneMapping( castor::String const & name
@@ -62,9 +64,15 @@ namespace castor3d
 		C3D_API virtual ~ToneMapping();
 		/**
 		 *\~english
-		 *\brief		Initialises tone mapping shader.
+		 *\brief		Initialises tone mapping shader and pipeline.
+		 *\param[in]	size		The render size.
+		 *\param[in]	source		The source texture.
+		 *\param[in]	renderPass	The render pass to use.
 		 *\~french
-		 *\brief		Initialise le shader de mappage de tons.
+		 *\brief		Initialise le shader et le pipeline de mappage de tons.
+		 *\param[in]	size		Les dimensions du rendu.
+		 *\param[in]	source		La texture source.
+		 *\param[in]	renderPass	La passe de rendu à utiliser.
 		 */
 		C3D_API bool initialise( castor::Size const & size
 			, TextureLayout const & source
@@ -79,10 +87,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the tone mapping.
-		 *\param[in]	config	The HDR configuration.
 		 *\~english
 		 *\brief		Met à jour le tone mapping.
-		 *\param[in]	config	La configuration HDR.
 		 */
 		C3D_API void update();
 		/**
@@ -120,11 +126,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Creates tone mapping shader, and the shader variables.
-		 *\param[in,out]	The shader program UBO to create variables.
 		 *\return			The pixel shader source.
 		 *\~french
 		 *\brief			Crée le shader de mappage de tons, ainsi que les variables shader.
-		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
 		 *\return			Le source du pixel shader.
 		 */
 		C3D_API virtual ShaderPtr doCreate() = 0;

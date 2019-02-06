@@ -65,14 +65,14 @@ namespace castor3d
 		/**
 		*\~english
 		*\~brief		Constructor.
-		 *\param[in]	p_catchMouseEvents	Defines if the event handler catches mouse event.
+		 *\param[in]	catchMouseEvents	Defines if the event handler catches mouse event.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
+		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
 		 */
-		explicit EventHandler( bool p_catchMouseEvents )
+		explicit EventHandler( bool catchMouseEvents )
 			: m_enabled{ true }
-			, m_catchMouseEvents{ p_catchMouseEvents }
+			, m_catchMouseEvents{ catchMouseEvents }
 			, m_catchTabKey{ false }
 			, m_catchReturnKey{ false }
 		{
@@ -110,34 +110,35 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		adds a mouse event to the events queue.
-		 *\param[in]	p_event	The mouse event.
+		 *\param[in]	event	The mouse event.
 		 *\~french
 		 *\~brief		Ajoute un évènement de souris à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		void pushEvent( MouseEvent const & p_event )
+		void pushEvent( MouseEvent const & event )
 		{
-			auto event = std::make_shared< MouseEvent >( p_event );
+			auto mouseEvent = std::make_shared< MouseEvent >( event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.emplace_back( event
-				, [this, event]()
+			m_queue.emplace_back( mouseEvent
+				, [this, mouseEvent]()
 				{
-					processMouseEvent( event );
+					processMouseEvent( mouseEvent );
 				} );
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a mouse event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement souris.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connect( MouseEventType p_event, ClientMouseFunction p_function )
+		void connect( MouseEventType event
+			, ClientMouseFunction function )
 		{
-			m_mouseSlotsConnections[size_t( p_event )].push_back( m_mouseSlots[size_t( p_event )].connect( p_function ) );
+			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( function ) );
 		}
 
 		//@}
@@ -147,34 +148,35 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		adds a keyboard event to the events queue.
-		 *\param[in]	p_event	The mouse event.
+		 *\param[in]	event	The mouse event.
 		 *\~french
 		 *\~brief		Ajoute un évènement de clavier à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		void pushEvent( KeyboardEvent const & p_event )
+		void pushEvent( KeyboardEvent const & event )
 		{
-			auto event = std::make_shared< KeyboardEvent >( p_event );
+			auto mouseEvent = std::make_shared< KeyboardEvent >( event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.emplace_back( event
-				, [this, event]()
+			m_queue.emplace_back( mouseEvent
+				, [this, mouseEvent]()
 				{
-					processKeyboardEvent( event );
+					processKeyboardEvent( mouseEvent );
 				} );
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a keyboard event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement clavier.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connect( KeyboardEventType p_event, ClientKeyboardFunction p_function )
+		void connect( KeyboardEventType event
+			, ClientKeyboardFunction function )
 		{
-			m_keyboardSlotsConnections[size_t( p_event )].push_back( m_keyboardSlots[size_t( p_event )].connect( p_function ) );
+			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( function ) );
 		}
 		/**
 		 *\~english
@@ -189,11 +191,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Sets if the control can catch mouse events.
-		 *\param[in]	p_value		The new value.
+		 *\param[in]	value		The new value.
 		 */
-		void setCatchesMouseEvents( bool p_value )
+		void setCatchesMouseEvents( bool value )
 		{
-			m_catchMouseEvents = p_value;
+			m_catchMouseEvents = value;
 		}
 
 		//@}
@@ -203,34 +205,34 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		adds a handler event to the events queue.
-		 *\param[in]	p_event	The mouse event.
+		 *\param[in]	event	The mouse event.
 		 *\~french
 		 *\~brief		Ajoute un évènement de gestionnaire à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		void pushEvent( HandlerEvent const & p_event )
+		void pushEvent( HandlerEvent const & event )
 		{
-			auto event = std::make_shared< HandlerEvent >( p_event );
+			auto handlerEvent = std::make_shared< HandlerEvent >( event );
 			auto lock = castor::makeUniqueLock( m_mutex );
-			m_queue.emplace_back( event
-				, [this, event]()
+			m_queue.emplace_back( handlerEvent
+				, [this, handlerEvent]()
 				{
-					processHandlerEvent( event );
+					processHandlerEvent( handlerEvent );
 				} );
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a handler event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement gestionnaire.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connect( HandlerEventType p_event, ClientHandlerFunction p_function )
+		void connect( HandlerEventType event, ClientHandlerFunction function )
 		{
-			m_handlerSlotsConnections[size_t( p_event )].push_back( m_handlerSlots[size_t( p_event )].connect( p_function ) );
+			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( function ) );
 		}
 		/**
 		 *\~english
@@ -259,41 +261,41 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Mouse event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement souris.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		inline void processMouseEvent( MouseEventSPtr p_event )
+		inline void processMouseEvent( MouseEventSPtr event )
 		{
-			m_mouseSlots[size_t( p_event->getMouseEventType() )]( *p_event );
-			doProcessMouseEvent( p_event );
+			m_mouseSlots[size_t( event->getMouseEventType() )]( *event );
+			doProcessMouseEvent( event );
 		}
 		/**
 		 *\~english
 		 *\~brief		Keyboard event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement clavier.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		inline void processKeyboardEvent( KeyboardEventSPtr p_event )
+		inline void processKeyboardEvent( KeyboardEventSPtr event )
 		{
-			m_keyboardSlots[size_t( p_event->getKeyboardEventType() )]( *p_event );
-			doProcessKeyboardEvent( p_event );
+			m_keyboardSlots[size_t( event->getKeyboardEventType() )]( *event );
+			doProcessKeyboardEvent( event );
 		}
 		/**
 		 *\~english
 		 *\~brief		Handler event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement de gestionnaire.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		inline void processHandlerEvent( HandlerEventSPtr p_event )
+		inline void processHandlerEvent( HandlerEventSPtr event )
 		{
-			m_handlerSlots[size_t( p_event->getHandlerEventType() )]( *p_event );
-			doProcessHandlerEvent( p_event );
+			m_handlerSlots[size_t( event->getHandlerEventType() )]( *event );
+			doProcessHandlerEvent( event );
 		}
 
 	private:
@@ -316,30 +318,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Mouse event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement souris.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		C3D_API virtual void doProcessMouseEvent( MouseEventSPtr p_event ) = 0;
+		C3D_API virtual void doProcessMouseEvent( MouseEventSPtr event ) = 0;
 		/**
 		 *\~english
 		 *\~brief		Keyboard event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement clavier.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		C3D_API virtual void doProcessKeyboardEvent( KeyboardEventSPtr p_event ) = 0;
+		C3D_API virtual void doProcessKeyboardEvent( KeyboardEventSPtr event ) = 0;
 		/**
 		 *\~english
 		 *\~brief		Handler event processing function.
-		 *\param[in]	p_event	The event.
+		 *\param[in]	event	The event.
 		 *\~french
 		 *\~brief		Fonction de traitement d'un évènement gestionnaire.
-		 *\param[in]	p_event	L'évènement.
+		 *\param[in]	event	L'évènement.
 		 */
-		C3D_API virtual void doProcessHandlerEvent( HandlerEventSPtr p_event ) = 0;
+		C3D_API virtual void doProcessHandlerEvent( HandlerEventSPtr event ) = 0;
 		/**
 		 *\~english
 		 *\~brief		Tells if the control catches mouse events.
@@ -384,7 +386,7 @@ namespace castor3d
 
 	private:
 		//!\~english	Activation status.
-		//!\~french		Le statut d'activation
+		//!\~french		Le statut d'activation.
 		bool m_enabled;
 		//!\~english	The mutex used to protect the events queue.
 		//!\~french		Le mutex utilisà pour protàger la file d'évènements.
@@ -457,56 +459,59 @@ namespace castor3d
 		/**
 		*\~english
 		*\~brief		Constructor.
-		 *\param[in]	p_catchMouseEvents	Defines if the event handler catches mouse event.
+		 *\param[in]	catchMouseEvents	Defines if the event handler catches mouse event.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
+		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
 		 */
-		explicit NonClientEventHandler( bool p_catchMouseEvents )
-			: EventHandler{ p_catchMouseEvents }
+		explicit NonClientEventHandler( bool catchMouseEvents )
+			: EventHandler{ catchMouseEvents }
 		{
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a non client mouse event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement souris non client.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connectNC( MouseEventType p_event, NonClientMouseFunction p_function )
+		void connectNC( MouseEventType event
+			, NonClientMouseFunction function )
 		{
-			m_ncMouseSlotsConnections[size_t( p_event )].push_back( m_ncMouseSlots[size_t( p_event )].connect( p_function ) );
+			m_ncMouseSlotsConnections[size_t( event )].push_back( m_ncMouseSlots[size_t( event )].connect( function ) );
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a non client keyboard event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement clavier non client.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connectNC( KeyboardEventType p_event, NonClientKeyboardFunction p_function )
+		void connectNC( KeyboardEventType event
+			, NonClientKeyboardFunction function )
 		{
-			m_ncKeyboardSlotsConnections[size_t( p_event )].push_back( m_ncKeyboardSlots[size_t( p_event )].connect( p_function ) );
+			m_ncKeyboardSlotsConnections[size_t( event )].push_back( m_ncKeyboardSlots[size_t( event )].connect( function ) );
 		}
 		/**
 		 *\~english
 		 *\~brief		Connects a function to a non client handler event.
-		 *\param[in]	p_event		The event type.
-		 *\param[in]	p_function	The function.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Connecte un fonction à un évènement gestionnaire non client.
-		 *\param[in]	p_event		Le type d'évènement.
-		 *\param[in]	p_function	La fonction.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
 		 */
-		void connectNC( HandlerEventType p_event, NonClientHandlerFunction p_function )
+		void connectNC( HandlerEventType event
+			, NonClientHandlerFunction function )
 		{
-			m_ncHandlerSlotsConnections[size_t( p_event )].push_back( m_ncHandlerSlots[size_t( p_event )].connect( p_function ) );
+			m_ncHandlerSlotsConnections[size_t( event )].push_back( m_ncHandlerSlots[size_t( event )].connect( function ) );
 		}
 
 		//@}
@@ -515,23 +520,23 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::EventHandler::doProcessMouseEvent
 		 */
-		inline void doProcessMouseEvent( MouseEventSPtr p_event )
+		inline void doProcessMouseEvent( MouseEventSPtr event )
 		{
-			m_ncMouseSlots[size_t( p_event->getMouseEventType() )]( this->shared_from_this(), *p_event );
+			m_ncMouseSlots[size_t( event->getMouseEventType() )]( this->shared_from_this(), *event );
 		}
 		/**
 		 *\copydoc		castor3d::EventHandler::doProcessKeyboardEvent
 		 */
-		inline void doProcessKeyboardEvent( KeyboardEventSPtr p_event )
+		inline void doProcessKeyboardEvent( KeyboardEventSPtr event )
 		{
-			m_ncKeyboardSlots[size_t( p_event->getKeyboardEventType() )]( this->shared_from_this(), *p_event );
+			m_ncKeyboardSlots[size_t( event->getKeyboardEventType() )]( this->shared_from_this(), *event );
 		}
 		/**
 		 *\copydoc		castor3d::EventHandler::doProcessHandlerEvent
 		 */
-		inline void doProcessHandlerEvent( HandlerEventSPtr p_event )
+		inline void doProcessHandlerEvent( HandlerEventSPtr event )
 		{
-			m_ncHandlerSlots[size_t( p_event->getHandlerEventType() )]( this->shared_from_this(), *p_event );
+			m_ncHandlerSlots[size_t( event->getHandlerEventType() )]( this->shared_from_this(), *event );
 		}
 
 	protected:

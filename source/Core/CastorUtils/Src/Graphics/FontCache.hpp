@@ -48,83 +48,83 @@ namespace castor
 		 *\~english
 		 *\brief		Creates a font.
 		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	p_path		The full access path to the file.
-		 *\param[in]	p_name		The font name.
-		 *\param[in]	p_height	The font precision.
+		 *\param[in]	path	The full access path to the file.
+		 *\param[in]	name	The font name.
+		 *\param[in]	height	The font precision.
 		 *\return		The created (or retrieved) font.
 		 *\~french
 		 *\brief		Crée une police.
 		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_path		Le chemin complet d'accès au fichier.
-		 *\param[in]	p_name		Le nom de la police.
-		 *\param[in]	p_height	La précision de la police.
+		 *\param[in]	path	Le chemin complet d'accès au fichier.
+		 *\param[in]	name	Le nom de la police.
+		 *\param[in]	height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr create( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
+		CU_API FontSPtr create( castor::String const & name, uint32_t height, castor::Path const & path );
 		/**
 		 *\~english
 		 *\brief		Creates a font.
 		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	p_path		The full access path to the file.
-		 *\param[in]	p_name		The font name.
-		 *\param[in]	p_height	The font precision.
+		 *\param[in]	path	The full access path to the file.
+		 *\param[in]	name	The font name.
+		 *\param[in]	height	The font precision.
 		 *\return		The created (or retrieved) font.
 		 *\~french
 		 *\brief		Crée une police.
 		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_path		Le chemin complet d'accès au fichier.
-		 *\param[in]	p_name		Le nom de la police.
-		 *\param[in]	p_height	La précision de la police.
+		 *\param[in]	path	Le chemin complet d'accès au fichier.
+		 *\param[in]	name	Le nom de la police.
+		 *\param[in]	height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr add( castor::String const & p_name, uint32_t p_height, castor::Path const & p_path );
+		CU_API FontSPtr add( castor::String const & name, uint32_t height, castor::Path const & path );
 		/**
 		 *\~english
-		 *\brief		adds an already created font.
-		 *\param[in]	p_name	The font name.
-		 *\param[in]	p_font	The font.
+		 *\brief		Adds an already created font.
+		 *\param[in]	name	The font name.
+		 *\param[in]	font	The font.
 		 *\return		The font.
 		 *\~french
 		 *\brief		Ajoute une police déjà créée.
 		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_name	Le nom de la police.
-		 *\param[in]	p_font	La police.
+		 *\param[in]	name	Le nom de la police.
+		 *\param[in]	font	La police.
 		 *\return		La police.
 		 */
-		CU_API FontSPtr add( castor::String const & p_name, FontSPtr p_font );
+		CU_API FontSPtr add( castor::String const & name, FontSPtr font );
 		/**
 		 *\~english
 		 *\brief		Tells if a font exists.
-		 *\param[in]	p_name	The font name.
+		 *\param[in]	name	The font name.
 		 *\return		\p false if not found.
 		 *\~french
 		 *\brief		Dit si une police existe.
-		 *\param[in]	p_name	Le nom de la police.
+		 *\param[in]	name	Le nom de la police.
 		 *\return		\p false si non trouvée.
 		 */
-		CU_API bool has( castor::String const & p_name );
+		CU_API bool has( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
-		 *\param[in]	p_name	The font name.
+		 *\param[in]	name	The font name.
 		 *\return		The font, nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une police.
-		 *\param[in]	p_name	Le nom de la police.
+		 *\param[in]	name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API FontSPtr find( castor::String const & p_name );
+		CU_API FontSPtr find( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
-		 *\param[in]	p_name	The font name.
+		 *\param[in]	name	The font name.
 		 *\return		The font, nullptr if not found.
 		 *\~french
 		 *\brief		Récupère une police.
-		 *\param[in]	p_name	Le nom de la police.
+		 *\param[in]	name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API void remove( castor::String const & p_name );
+		CU_API void remove( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Clears the collection and file paths.
@@ -140,7 +140,8 @@ namespace castor
 		using Collection< Font, String >::unlock;
 
 	protected:
-		//!\~english The font files paths sorted by file_name.file_extension	\~french Les fichiers des polices, triés par file_name.file_extension
+		//!\~english	The font files paths sorted by file_name.file_extension.
+		//!\~french		Les fichiers des polices, triés par file_name.file_extension.
 		PathNameMap m_paths;
 	};
 }

@@ -45,13 +45,15 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::MeshGenerator::doGenerate
 		*/
-		C3D_API virtual void doGenerate( Mesh & p_mesh, Parameters const & p_parameters );
+		C3D_API virtual void doGenerate( Mesh & mesh
+			, Parameters const & parameters );
 
 	private:
 		real m_height;
 		real m_width;
 		real m_depth;
-		friend std::ostream & operator <<( std::ostream & o, Cube const & c );
+		friend std::ostream & operator <<( std::ostream & o
+			, Cube const & c );
 	};
 	/**
 	 *\~english

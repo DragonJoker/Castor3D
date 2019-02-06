@@ -73,12 +73,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	p_time	The current time index.
+		 *\param[in]	time	The current time index.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	p_time	L'indice de temps courant.
+		 *\param[in]	time	L'indice de temps courant.
 		 */
-		C3D_API void update( float p_time )const;
+		C3D_API void update( float time )const;
 		/**
 		 *\~english
 		 *\name			getters.

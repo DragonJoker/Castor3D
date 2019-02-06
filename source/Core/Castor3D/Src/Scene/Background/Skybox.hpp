@@ -66,7 +66,8 @@ namespace castor3d
 			*\param[in] file
 			*	Le fichier.
 			*/
-			C3D_API bool operator()( SkyboxBackground const & obj, castor::TextFile & file )override;
+			C3D_API bool operator()( SkyboxBackground const & obj
+				, castor::TextFile & file )override;
 		};
 
 	public:
@@ -76,11 +77,15 @@ namespace castor3d
 		*	Constructor.
 		*\param[in] engine
 		*	The engine.
+		*\param[in] scene
+		*	The parent scene.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] engine
 		*	Le moteur.
+		*\param[in] scene
+		*	La scène parente.
 		*/
 		C3D_API explicit SkyboxBackground( Engine & engine
 			, Scene & scene );
@@ -95,111 +100,195 @@ namespace castor3d
 		C3D_API virtual ~SkyboxBackground();
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the skybox's left face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
+		*\brief
 		*	Définit la texture de la face gauche de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadLeftImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
-		*	Sets the skybox's left face texture.
+		*\brief
+		*	Sets the skybox's right face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
-		*	Définit la texture de la face gauche de la skybox.
+		*\brief
+		*	Définit la texture de la face droite de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadRightImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
-		*	Sets the skybox's left face texture.
+		*\brief
+		*	Sets the skybox's top face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
-		*	Définit la texture de la face gauche de la skybox.
+		*\brief
+		*	Définit la texture de la face du haut de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadTopImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
-		*	Sets the skybox's left face texture.
+		*\brief
+		*	Sets the skybox's bottom face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
-		*	Définit la texture de la face gauche de la skybox.
+		*\brief
+		*	Définit la texture de la face du bas de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadBottomImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
-		*	Sets the skybox's left face texture.
+		*\brief
+		*	Sets the skybox's front face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
-		*	Définit la texture de la face gauche de la skybox.
+		*\brief
+		*	Définit la texture de la face avant de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadFrontImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
-		*	Sets the skybox's left face texture.
+		*\brief
+		*	Sets the skybox's back face texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
-		*	Définit la texture de la face gauche de la skybox.
+		*\brief
+		*	Définit la texture de la face arrière de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadBackImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the skybox's equirectangular texture.
+		*\param[in] texture
+		*	The texture.
+		*\param[in] size
+		*	The wanted skybox dimensions.
 		*\~french
-		*\return
+		*\brief
 		*	Définit la texture équirectangulaire de la skybox.
+		*\param[in] texture
+		*	La texture.
+		*\param[in] size
+		*	Les dimensions voulues pour la skybox.
 		*/
 		C3D_API void setEquiTexture( TextureLayoutSPtr texture
 			, uint32_t size );
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the skybox's equirectangular texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
+		*\param[in] size
+		*	The wanted skybox dimensions.
 		*\~french
-		*\return
+		*\brief
 		*	Définit la texture équirectangulaire de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
+		*\param[in] size
+		*	Les dimensions voulues pour la skybox.
 		*/
 		C3D_API void loadEquiTexture( castor::Path const & folder
 			, castor::Path const & relative
 			, uint32_t size );
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the size of the skybox generated from the equirectangular texture.
+		*\param[in] size
+		*	The wanted skybox dimensions.
 		*\~french
-		*\return
+		*\brief
 		*	Définit les dimensions de la skybox extraite depuis la texture équirectangulaire de la skybox.
+		*\param[in] size
+		*	Les dimensions voulues pour la skybox.
 		*/
 		C3D_API void setEquiSize( uint32_t size );
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the skybox's cross texture.
+		*\param[in] folder
+		*	The image folder.
+		*\param[in] relative
+		*	The image file path, relative to \p folder.
 		*\~french
-		*\return
+		*\brief
 		*	Définit la texture croix de la skybox.
+		*\param[in] folder
+		*	Le dossier de l'image.
+		*\param[in] relative
+		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
 		C3D_API void loadCrossTexture( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
-		*\return
+		*\brief
 		*	Sets the skybox's cross texture.
+		*\param[in] texture
+		*	The texture.
 		*\~french
-		*\return
+		*\brief
 		*	Définit la texture croix de la skybox.
+		*\param[in] texture
+		*	La texture.
 		*/
 		C3D_API void setCrossTexture( TextureLayoutSPtr texture );
 		/**

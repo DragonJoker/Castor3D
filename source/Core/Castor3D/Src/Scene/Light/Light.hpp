@@ -41,15 +41,17 @@ namespace castor3d
 			/**
 			 *\~english
 			 *\brief		Constructor.
+			 *\param[in]	tabs	the current indentation.
 			 *\~french
 			 *\brief		Constructeur.
+			 *\param[in]	tabs	L'indentation courante.
 			 */
 			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 *\brief		Saves a Light into a text file.
-			 *\param[in]	file	the file.
-			 *\param[in]	object	the Light to save.
+			 *\param[in]	file	The file.
+			 *\param[in]	object	The Light to save.
 			 *\return		\p true if everything is OK.
 			 *\~french
 			 *\brief		Sauvegarde la Light donné dans un fichier texte.
@@ -57,7 +59,8 @@ namespace castor3d
 			 *\param[in]	object	La Light à enregistrer.
 			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API bool operator()( Light const & object, castor::TextFile & file )override;
+			C3D_API bool operator()( Light const & object
+				, castor::TextFile & file )override;
 		};
 
 	public:
@@ -98,21 +101,19 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
-		 *\brief		Puts the light into the given texture.
-		 *\param[out]	texture	The texture that receives the light's data.
-		 *\param[in]	index	The light index.
+		 *\brief		Records the light data into given buffer.
+		 *\param[out]	buffer	The buffer.
 		 *\~french
-		 *\brief		Met la lumière dans la texture donnée.
-		 *\param[out]	texture	La texture recevant les données de la source lumineuse.
-		 *\param[in]	index	L'indice de la source lumineuse.
+		 *\brief		Enregistre les données de l'image dans le tampon donné.
+		 *\param[out]	buffer	Le tampon.
 		 */
 		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
 		 *\~english
-		 *\brief		Attaches this light to a Material.
+		 *\brief		Attaches this light to a SceneNode.
 		 *\param[in]	node	The new light's parent node.
 		 *\~french
-		 *\brief		Attache cette lumière au node donné.
+		 *\brief		Attache cette lumière au SceneNode donné.
 		 *\param[in]	node	Le nouveau node parent de cette lumière.
 		 */
 		C3D_API void attachTo( SceneNodeSPtr node )override;

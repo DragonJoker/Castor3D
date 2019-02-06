@@ -143,7 +143,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds the animation to the list
 		 *\param[in]	name	The animation to add
-		 *\~english
+		 *\~french
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	name	L'animation à ajouter
 		 */
@@ -151,15 +151,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the loop status of wanted animation.
-		 *\param[in]	name		The name of the animation.
-		 *\param[in]	p_looped	The status.
+		 *\param[in]	name	The name of the animation.
+		 *\param[in]	looped	The status.
 		 *\~french
 		 *\brief		Définit le statut de bouclage de l'animation voulue.
-		 *\param[in]	name		Le nom de l'animation.
-		 *\param[in]	p_looped	Le statut.
+		 *\param[in]	name	Le nom de l'animation.
+		 *\param[in]	looped	Le statut.
 		 */
 		C3D_API void setAnimationLooped( castor::String const & name
-			, bool p_looped );
+			, bool looped );
 		/**
 		 *\~english
 		 *\brief		Sets the time scale of wanted animation.

@@ -182,7 +182,7 @@ namespace castor3d
 		*\~french
 		*name
 		*	Mutateurs
-		*\remraks
+		*\remarks
 		*	ils ont un effet jusqu'à ce que initialise() soit appelée.
 		**/
 		/**@{*/

@@ -738,7 +738,7 @@ namespace castor3d
 				ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
 				ashes::MultisampleState{},
 				blState,
-				{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+				{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 				ashes::DepthStencilState{ 0u, false, false },
 			} );
 			it = pipelines.emplace( textureFlags

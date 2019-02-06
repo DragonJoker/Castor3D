@@ -94,14 +94,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	scene	The scene for this technique.
-		 *\param[in]	camera	The camera for this technique (may be null).
-		 *\param[in]	config	The SSAO configuration.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
+		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	scene	La scène pour cette technique.
-		 *\param[in]	camera	La caméra pour cette technique (peut être nulle).
-		 *\param[in]	config	La configuration du SSAO.
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
+		 *\param[in]	config		La configuration du SSAO.
 		 */
 		TransparentPass( MatrixUbo const & matrixUbo
 			, SceneCuller & culler
@@ -116,20 +116,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the render pass.
+		 *\param[in]	wbpResult	The accumulation pass buffers.
 		 *\~french
 		 *\brief		Initialise la passe de rendu.
+		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
 		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::render
+		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		void update( RenderInfo & info
 			, castor::Point2r const & jitter )override;
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
+		 *\param[in]	toWait	The semaphore to wait for.
 		 *\~french
 		 *\brief		Dessine les noeuds transparents.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**

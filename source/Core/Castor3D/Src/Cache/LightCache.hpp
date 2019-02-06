@@ -67,41 +67,41 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	p_scene				The scene.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\param[in]	p_produce			The element producer.
-		 *\param[in]	p_initialise		The element initialiser.
-		 *\param[in]	p_clean				The element cleaner.
-		 *\param[in]	p_merge				The element collection merger.
-		 *\param[in]	p_attach			The element attacher (to a scene node).
-		 *\param[in]	p_detach			The element detacher (from a scene node).
+		 *\param[in]	scene			The scene.
+		 *\param[in]	rootNode		The root node.
+		 *\param[in]	rootCameraNode	The cameras root node.
+		 *\param[in]	rootObjectNode	The objects root node.
+		 *\param[in]	produce			The element producer.
+		 *\param[in]	initialise		The element initialiser.
+		 *\param[in]	clean			The element cleaner.
+		 *\param[in]	merge			The element collection merger.
+		 *\param[in]	attach			The element attacher (to a scene node).
+		 *\param[in]	detach			The element detacher (from a scene node).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	p_scene				La scène.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 *\param[in]	p_produce			Le créateur d'objet.
-		 *\param[in]	p_initialise		L'initialiseur d'objet.
-		 *\param[in]	p_clean				Le nettoyeur d'objet.
-		 *\param[in]	p_merge				Le fusionneur de collection d'objets.
-		 *\param[in]	p_attach			L'attacheur d'objet (à un noeud de scène).
-		 *\param[in]	p_detach			Le détacheur d'objet (d'un noeud de scène).
+		 *\param[in]	scene			La scène.
+		 *\param[in]	rootNode		Le noeud racine.
+		 *\param[in]	rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	rootObjectNode	Le noeud racine des objets.
+		 *\param[in]	produce			Le créateur d'objet.
+		 *\param[in]	initialise		L'initialiseur d'objet.
+		 *\param[in]	clean			Le nettoyeur d'objet.
+		 *\param[in]	merge			Le fusionneur de collection d'objets.
+		 *\param[in]	attach			L'attacheur d'objet (à un noeud de scène).
+		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		C3D_API ObjectCache( Engine & engine
-			, Scene & p_scene
-			, SceneNodeSPtr p_rootNode
-			, SceneNodeSPtr p_rootCameraNode
-			, SceneNodeSPtr p_rootObjectNode
-			, Producer && p_produce
-			, Initialiser && p_initialise = Initialiser{}
-			, Cleaner && p_clean = Cleaner{}
-			, Merger && p_merge = Merger{}
-			, Attacher && p_attach = Attacher{}
-			, Detacher && p_detach = Detacher{} );
+			, Scene & scene
+			, SceneNodeSPtr rootNode
+			, SceneNodeSPtr rootCameraNode
+			, SceneNodeSPtr rootObjectNode
+			, Producer && produce
+			, Initialiser && initialise = Initialiser{}
+			, Cleaner && clean = Cleaner{}
+			, Merger && merge = Merger{}
+			, Attacher && attach = Attacher{}
+			, Detacher && detach = Detacher{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -126,40 +126,43 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_element	The object.
+		 *\param[in]	name	The object name.
+		 *\param[in]	element	The object.
 		 *\return		The added object, or the existing one.
 		 *\~french
 		 *\brief		Ajoute un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_element	L'objet.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	element	L'objet.
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
-		C3D_API ElementPtr add( Key const & p_name, ElementPtr p_element );
+		C3D_API ElementPtr add( Key const & name
+			, ElementPtr element );
 		/**
 		 *\~english
 		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_type		The light source type.
+		 *\param[in]	name	The object name.
+		 *\param[in]	parent	The parent scene node.
+		 *\param[in]	type	The light source type.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_type		Le type de source lumineuse.
+		 *\param[in]	name	Le nom d'objet.
+		 *\param[in]	parent	Le noeud de scène parent.
+		 *\param[in]	type	Le type de source lumineuse.
 		 *\return		L'objet créé.
 		 */
-		C3D_API ElementPtr add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type );
+		C3D_API ElementPtr add( Key const & name
+			, SceneNodeSPtr parent
+			, LightType type );
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
+		 *\param[in]	name		The object name.
 		 *\~french
 		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	name		Le nom d'objet.
 		 */
-		C3D_API void remove( Key const & p_name );
+		C3D_API void remove( Key const & name );
 		/**
 		 *\~english
 		 *\brief		Updates the dirty lights.
@@ -199,30 +202,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the count of the lights of given type.
-		 *\param[in]	p_type	The light type.
+		 *\param[in]	type	The light type.
 		 *\return		The count.
 		 *\~french
 		 *\brief		Récupère le nombre de lumières du type donné.
-		 *\param[in]	p_type	Le type de lumière.
+		 *\param[in]	type	Le type de lumière.
 		 *\return		Le compte.
 		 */
-		inline uint32_t getLightsCount( LightType p_type )const
+		inline uint32_t getLightsCount( LightType type )const
 		{
-			return uint32_t( getLights( p_type ).size() );
+			return uint32_t( getLights( type ).size() );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the lights of given type.
-		 *\param[in]	p_type	The light type.
+		 *\param[in]	type	The light type.
 		 *\return		The lights.
 		 *\~french
 		 *\brief		Récupère les lumières du type donné.
-		 *\param[in]	p_type	Le type de lumière.
+		 *\param[in]	type	Le type de lumière.
 		 *\return		Les lumières.
 		 */
-		inline LightsArray getLights( LightType p_type )const
+		inline LightsArray getLights( LightType type )const
 		{
-			return m_typeSortedLights[size_t( p_type )];
+			return m_typeSortedLights[size_t( type )];
 		}
 
 	private:

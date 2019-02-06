@@ -668,7 +668,7 @@ namespace castor3d
 			, node.billboardUbo.buffer->getBuffer()
 			, node.billboardUbo.offset
 			, 1u );
-		doFillUboDescriptor( layout, index, node );
+		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
 
@@ -676,10 +676,9 @@ namespace castor3d
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = 0u;
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( index++ ) );
+			, layout.getBinding( PassBufferIndex ) );
 
 		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
@@ -709,7 +708,7 @@ namespace castor3d
 			, node.morphingUbo.buffer->getBuffer()
 			, node.morphingUbo.offset
 			, 1u );
-		doFillUboDescriptor( layout, index, node );
+		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
 
@@ -717,10 +716,9 @@ namespace castor3d
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = 0u;
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( index++ ) );
+			, layout.getBinding( PassBufferIndex ) );
 
 		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 		{
@@ -760,7 +758,7 @@ namespace castor3d
 				, 1u );
 		}
 
-		doFillUboDescriptor( layout, index, node );
+		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
 
@@ -768,7 +766,6 @@ namespace castor3d
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = 0u;
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
 		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
 			, layout.getBinding( PassBufferIndex ) );
@@ -797,7 +794,7 @@ namespace castor3d
 			, node.modelUbo.buffer->getBuffer()
 			, node.modelUbo.offset
 			, 1u );
-		doFillUboDescriptor( layout, index, node );
+		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
 

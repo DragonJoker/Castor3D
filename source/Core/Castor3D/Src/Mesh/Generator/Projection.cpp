@@ -3,110 +3,110 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
 
-using namespace castor3d;
 using namespace castor;
 
-Projection::Projection()
-	: MeshGenerator( cuT( "projection" ) )
-	, m_fDepth( 0 )
-	, m_bClosed( false )
-	, m_uiNbFaces( 0 )
+namespace castor3d
 {
-}
+	Projection::Projection()
+		: MeshGenerator( cuT( "projection" ) )
+		, m_depth( 0 )
+		, m_closed( false )
+		, m_nbFaces( 0 )
+	{
+	}
 
-Projection::~Projection()
-{
-	//m_pPattern.reset();
-}
+	Projection::~Projection()
+	{
+		//m_pPattern.reset();
+	}
 
-MeshGeneratorSPtr Projection::create()
-{
-	return std::make_shared< Projection >();
-}
+	MeshGeneratorSPtr Projection::create()
+	{
+		return std::make_shared< Projection >();
+	}
 
-//void Projection::setPoints( Point3rPatternSPtr pPattern, Point3r const & vAxis, bool bClosed )
-//{
-//	m_pPattern = pPattern;
-//	m_bClosed = bClosed;
-//	m_vAxis = vAxis;
-//	point::normalise( m_vAxis );
-//	m_vAxis = m_vAxis * m_fDepth;
-//}
+	void Projection::setPoints( Pattern< Point3r > const & pattern
+		, castor::Point3r const & axis
+		, bool closed )
+	{
+		m_pattern = pattern;
+		m_closed = closed;
+		m_axis = axis;
+		point::normalise( m_axis );
+		m_axis = m_axis * m_depth;
+	}
 
-void Projection::doGenerate( Mesh & mesh, Parameters const & parameters )
-{
-	//m_uiNbFaces = faces[0];
-	//m_fDepth = dimensions[0];
-	//uint32_t uiNbElem = m_pPattern->getSize();
-	//real fTotalDistance = 0.0;
-	//Point3r ptDiff;
-	//SubmeshSPtr submesh;
-	//real fDistanceToOrigin = 0.0;
-	//Point3r ptCurrentUV;
-	//Point3r ptPreviousUV;
-	//IdPoint3rPattern::PointerArray arrayPatterns;
-	//IdPoint3rPatternPtr pPreviousPattern = m_pPattern;
-	//IdPoint3rPatternPtr pPattern;
+	void Projection::doGenerate( Mesh & mesh, Parameters const & parameters )
+	{
+	//	m_nbFaces = faces[0];
+	//	m_depth = dimensions[0];
+	//	uint32_t nbElem = m_pattern.getSize();
+	//	real totalDistance = 0.0;
+	//	SubmeshSPtr submesh;
+	//	real distanceToOrigin = 0.0;
+	//	Point3r currentUV;
+	//	Point3r previousUV;
+	//	auto previousPattern = m_pattern;
 
-	//if (uiNbElem > 0)
-	//{
-	//	if (m_bClosed && m_pPattern->getElement( 0 ).getPoint() != m_pPattern->getElement( uiNbElem - 1 ).getPoint() )
+	//	if ( nbElem > 0 )
 	//	{
-	//		m_pPattern->addElement( m_pPattern->getElement( uiNbElem - 1), 0);
-	//		uiNbElem++;
-	//	}
-
-	//	for (uint32_t i = 1; i < uiNbElem; i++)
-	//	{
-	//		ptDiff = m_pPattern->getElement( i ).getPoint() - m_pPattern->getElement( i - 1 ).getPoint();
-	//		fTotalDistance += real( point::distanceSquared( ptDiff ) );
-	//	}
-
-	//	for( uint32_t i = 0; i < uiNbElem; i++ )
-	//	{
-	//		getMesh()->createSubmesh();
-	//	}
-
-	//	if (m_bClosed)
-	//	{
-	//		getMesh()->createSubmesh();
-	//	}
-
-	//	// Construction des faces
-	//	for (uint32_t j = 0; j < m_uiNbFaces; j++)
-	//	{
-	//		pPattern.reset( new IdPoint3rPattern);
-
-	//		ptCurrentUV[1] = 0;
-	//		ptPreviousUV[1] = 0;
-	//		ptCurrentUV[0] = real( j + 1) / real( m_uiNbFaces);
-
-	//		for (uint32_t i = 0; i < uiNbElem; i++)
+	//		if ( m_closed && m_pattern.getElement( 0 ) != m_pattern.getElement( nbElem - 1 ) )
 	//		{
-	//			pPattern->addElement( *submesh->addPoint( pPreviousPattern->getElement( i ).getPoint() + m_vAxis ), i);
+	//			m_pattern.addElement( m_pattern.getElement( nbElem - 1), 0);
+	//			nbElem++;
 	//		}
 
-	//		for (uint32_t i = 1; i < uiNbElem; i++)
+	//		for (uint32_t i = 1; i < nbElem; i++)
 	//		{
-	//			IdPoint3r const & ptV0 = pPreviousPattern->getElement( i - 1);
-	//			IdPoint3r const & ptV1 = pPreviousPattern->getElement( i);
-	//			IdPoint3r const & ptV2 = pPattern->getElement( i);
-	//			IdPoint3r const & ptV3 = pPattern->getElement( i - 1);
-
-	//			ptDiff = ptV1.getPoint() - ptV0.getPoint();
-	//			fDistanceToOrigin += real( point::distanceSquared( ptDiff ) );
-	//			ptCurrentUV[1] = fDistanceToOrigin / fTotalDistance;
-
-	//			submesh->addQuadFace( ptV0.getIndex(), ptV1.getIndex(), ptV2.getIndex(), ptV3.getIndex(), uiNbElem, ptPreviousUV, ptCurrentUV);
-
-	//			ptPreviousUV[1] = ptCurrentUV[1];
+	//			auto diff = m_pattern.getElement( i ) - m_pattern.getElement( i - 1 );
+	//			totalDistance += real( point::lengthSquared( diff ) );
 	//		}
 
-	//		pPreviousPattern = pPattern;
-	//		arrayPatterns.push_back( pPattern);
-	//		ptPreviousUV[0] = ptCurrentUV[0];
-	//	}
-	//}
+	//		for( uint32_t i = 0; i < nbElem; i++ )
+	//		{
+	//			mesh.createSubmesh();
+	//		}
 
-	//mesh.computeContainers();
+	//		if (m_closed)
+	//		{
+	//			mesh.createSubmesh();
+	//		}
+
+	//		// Construction des faces
+	//		for (uint32_t j = 0; j < m_nbFaces; j++)
+	//		{
+	//			Pattern< castor::Point3r > pattern;
+
+	//			currentUV[1] = 0;
+	//			previousUV[1] = 0;
+	//			currentUV[0] = real( j + 1 ) / real( m_nbFaces );
+
+	//			for (uint32_t i = 0; i < nbElem; i++)
+	//			{
+	//				pattern.addElement( submesh->addPoint( previousPattern.getElement( i ) + m_axis ).pos, i);
+	//			}
+
+	//			for (uint32_t i = 1; i < nbElem; i++)
+	//			{
+	//				auto const & ptV0 = previousPattern.getElement( i - 1);
+	//				auto const & ptV1 = previousPattern.getElement( i);
+	//				auto const & ptV2 = pattern.getElement( i);
+	//				auto const & ptV3 = pattern.getElement( i - 1);
+
+	//				auto diff = ptV1 - ptV0;
+	//				distanceToOrigin += real( point::lengthSquared( diff ) );
+	//				currentUV[1] = distanceToOrigin / totalDistance;
+
+	//				submesh->addQuadFace( ptV0.getIndex(), ptV1.getIndex(), ptV2.getIndex(), ptV3.getIndex(), nbElem, ptPreviousUV, ptCurrentUV );
+
+	//				previousUV[1] = currentUV[1];
+	//			}
+
+	//			previousPattern = pattern;
+	//			previousUV[0] = currentUV[0];
+	//		}
+	//	}
+
+	//	mesh.computeContainers();
+	}
 }

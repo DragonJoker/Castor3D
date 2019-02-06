@@ -39,13 +39,14 @@ namespace castor3d
 		 *\~english
 		 *\~brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_name		The listener's name.
+		 *\param[in]	name	The listener's name.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	engine	The moteur.
-		 *\param[in]	p_name		The nom du listener.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	name	Le nom du listener.
 		 */
-		C3D_API UserInputListener( Engine & engine, castor::String const & p_name );
+		C3D_API UserInputListener( Engine & engine
+			, castor::String const & name );
 		/**
 		 *\~english
 		 *\~brief		Destructor.
@@ -115,99 +116,101 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Registers an event raised by the handler when it is clicked, if it supports clicking.
-		 *\param[in]	p_handler	The clicked handler.
+		 *\param[in]	handler	The clicked handler.
 		 *\~french
 		 *\~brief		Enregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
-		 *\param[in]	p_handler	Le handler cliqué.
+		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void registerClickAction( castor::String const & p_handler
-			, OnClickActionFunction p_function );
+		C3D_API void registerClickAction( castor::String const & handler
+			, OnClickActionFunction function );
 		/**
 		 *\~english
 		 *\~brief		Registers an event raised by the handler when one of its sub elements is selected.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_index		The selection index.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	index	The selection index.
 		 *\~french
 		 *\~brief		Enregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_index		L'indice de la sélection.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	index	L'indice de la sélection.
 		 */
-		C3D_API void registerSelectAction( castor::String const & p_handler
-			, OnSelectActionFunction p_function );
+		C3D_API void registerSelectAction( castor::String const & handler
+			, OnSelectActionFunction function );
 		/**
 		 *\~english
 		 *\~brief		Registers an event raised by the handler when its caption has changed.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_text		The new text.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	text	The new text.
 		 *\~french
 		 *\~brief		Enregistre un évènement lancé par le handler lorsque son texte a changé.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_text		Le nouveau texte.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	text	Le nouveau texte.
 		 */
-		C3D_API void registerTextAction( castor::String const & p_handler
-			, OnTextActionFunction p_function );
+		C3D_API void registerTextAction( castor::String const & handler
+			, OnTextActionFunction function );
 		/**
 		 *\~english
 		 *\~brief		Unregisters an event raised by the handler when it is clicked, if it supports clicking.
-		 *\param[in]	p_handler	The clicked handler.
+		 *\param[in]	handler	The clicked handler.
 		 *\~french
 		 *\~brief		Désenregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
-		 *\param[in]	p_handler	Le handler cliqué.
+		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void unregisterClickAction( castor::String const & p_handler );
+		C3D_API void unregisterClickAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Unregisters an event raised by the handler when one of its sub elements is selected.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_index		The selection index.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	index	The selection index.
 		 *\~french
 		 *\~brief		Désenregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_index		L'indice de la sélection.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	index	L'indice de la sélection.
 		 */
-		C3D_API void unregisterSelectAction( castor::String const & p_handler );
+		C3D_API void unregisterSelectAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Unregisters an event raised by the handler when its caption has changed.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_text		The new text.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	text	The new text.
 		 *\~french
 		 *\~brief		Désenregistre un évènement lancé par le handler lorsque son texte a changé.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_text		Le nouveau texte.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	text	Le nouveau texte.
 		 */
-		C3D_API void unregisterTextAction( castor::String const & p_handler );
+		C3D_API void unregisterTextAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when it is clicked, if it supports clicking.
-		 *\param[in]	p_handler	The clicked handler.
+		 *\param[in]	handler	The clicked handler.
 		 *\~french
 		 *\~brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
-		 *\param[in]	p_handler	Le handler cliqué.
+		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void onClickAction( castor::String const & p_handler );
+		C3D_API void onClickAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when one of its sub elements is selected.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_index		The selection index.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	index	The selection index.
 		 *\~french
 		 *\~brief		Evènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_index		L'indice de la sélection.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	index	L'indice de la sélection.
 		 */
-		C3D_API void onSelectAction( castor::String const & p_handler, int p_index );
+		C3D_API void onSelectAction( castor::String const & handler
+			, int index );
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when its caption has changed.
-		 *\param[in]	p_handler	The handler.
-		 *\param[in]	p_text		The new text.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	text	The new text.
 		 *\~french
 		 *\~brief		Evènement lancé par le handler lorsque son texte a changé.
-		 *\param[in]	p_handler	Le handler.
-		 *\param[in]	p_text		Le nouveau texte.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	text	Le nouveau texte.
 		 */
-		C3D_API void onTextAction( castor::String const & p_handler, castor::String const & p_text );
+		C3D_API void onTextAction( castor::String const & handler
+			, castor::String const & text );
 
 		//@}
 		/**@name Mouse input events */
@@ -216,47 +219,47 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse move event.
-		 *\param[in]	p_position	The mouse position.
+		 *\param[in]	position	The mouse position.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de déplacement de souris.
-		 *\param[in]	p_position	La position de la souris.
+		 *\param[in]	position	La position de la souris.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseMove( castor::Position const & p_position );
+		C3D_API bool fireMouseMove( castor::Position const & position );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse pushed event.
-		 *\param[in]	p_button	The mouse button.
+		 *\param[in]	button	The mouse button.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de bouton de souris appuyé.
-		 *\param[in]	p_button	Le bouton de la souris.
+		 *\param[in]	button	Le bouton de la souris.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseButtonPushed( MouseButton p_button );
+		C3D_API bool fireMouseButtonPushed( MouseButton button );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse released event.
-		 *\param[in]	p_button	The mouse button.
+		 *\param[in]	button	The mouse button.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de bouton de souris relâché.
-		 *\param[in]	p_button	Le bouton de la souris.
+		 *\param[in]	button	Le bouton de la souris.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseButtonReleased( MouseButton p_button );
+		C3D_API bool fireMouseButtonReleased( MouseButton button );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse wheel event.
-		 *\param[in]	p_offsets	The mouse wheel offsets (x and y).
+		 *\param[in]	offsets	The mouse wheel offsets (x and y).
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de molette de souris.
-		 *\param[in]	p_offsets	Les déplacements de la molette (x et y).
+		 *\param[in]	offsets	Les déplacements de la molette (x et y).
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseWheel( castor::Position const & p_offsets );
+		C3D_API bool fireMouseWheel( castor::Position const & offsets );
 
 		//@}
 		/**@name Keyboard input events */
@@ -265,50 +268,57 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Fires a keyboard key down event.
-		 *\param[in]	p_key		The key code.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
+		 *\param[in]	key		The key code.
+		 *\param[in]	ctrl	Tells if the Ctrl key is down.
+		 *\param[in]	alt		Tells if the Alt key is down.
+		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de touche de clavier appuyée.
-		 *\param[in]	p_key		Le code de la touche.
-		 *\param[in]	p_ctrl		Dit si la touche Ctrl est enfoncée.
-		 *\param[in]	p_alt		Dit si la touche Alt est enfoncée.
-		 *\param[in]	p_shift		Dit si la touche Shift est enfoncée.
+		 *\param[in]	key		Le code de la touche.
+		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireKeydown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_API bool fireKeydown( KeyboardKey key
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a keyboard key up event.
-		 *\param[in]	p_key		The key code.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
+		 *\param[in]	key		The key code.
+		 *\param[in]	ctrl	Tells if the Ctrl key is down.
+		 *\param[in]	alt		Tells if the Alt key is down.
+		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
 		 *\~brief		Lance un évènement de touche de clavier relâchée.
-		 *\param[in]	p_key		Le code de la touche.
-		 *\param[in]	p_ctrl		Dit si la touche Ctrl est enfoncée.
-		 *\param[in]	p_alt		Dit si la touche Alt est enfoncée.
-		 *\param[in]	p_shift		Dit si la touche Shift est enfoncée.
+		 *\param[in]	key		Le code de la touche.
+		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		*/
-		C3D_API bool fireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_API bool fireKeyUp( KeyboardKey key
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a printable key event.
-		 *\param[in]	p_key		The key code.
-		 *\param[in]	p_char		The character coorresponding to the key, displayable as is.
+		 *\param[in]	key	The key code.
+		 *\param[in]	c	The character coorresponding to the key, displayable as is.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
 		 *\~brief		Lance un évènement de caractère imprimable.
-		 *\param[in]	p_key		Le code de la touche.
-		 *\param[in]	p_char		Le caractère correspondant à la touche, affichable tel quel.
+		 *\param[in]	key	Le code de la touche.
+		 *\param[in]	c	Le caractère correspondant à la touche, affichable tel quel.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireChar( KeyboardKey p_key, castor::String const & p_char );
+		C3D_API bool fireChar( KeyboardKey key
+			, castor::String const & c );
 
 		//@}
 		/**@name Overlay events */
@@ -317,30 +327,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Fires a material change event.
-		 *\param[in]	p_overlay	The overlay name.
-		 *\param[in]	p_material	The material name.
+		 *\param[in]	overlay		The overlay name.
+		 *\param[in]	material	The material name.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
 		 *\~brief		Lance un évènement de changement de matériau.
-		 *\param[in]	p_overlay	Le nom de l'incrustation.
-		 *\param[in]	p_material	Le nom du matériau.
+		 *\param[in]	overlay		Le nom de l'incrustation.
+		 *\param[in]	material	Le nom du matériau.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API virtual bool fireMaterialEvent( castor::String const & p_overlay, castor::String const & p_material );
+		C3D_API virtual bool fireMaterialEvent( castor::String const & overlay
+			, castor::String const & material );
 		
 		/**
 		 *\~english
 		 *\~brief		Fires a caption change event.
-		 *\param[in]	p_overlay	The overlay name.
-		 *\param[in]	p_caption	The new caption.
+		 *\param[in]	overlay	The overlay name.
+		 *\param[in]	caption	The new caption.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
 		 *\~brief		Lance un évènement de changement de texte.
-		 *\param[in]	p_overlay	Le nom de l'incrustation.
-		 *\param[in]	p_caption	Le nouveau texte.
+		 *\param[in]	overlay	Le nom de l'incrustation.
+		 *\param[in]	caption	Le nouveau texte.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API virtual bool fireTextEvent( castor::String const & p_overlay, castor::String const & p_caption );
+		C3D_API virtual bool fireTextEvent( castor::String const & overlay
+			, castor::String const & caption );
 
 		//@}
 
@@ -371,51 +383,51 @@ namespace castor3d
 		 *\~english
 		 *\~brief		Removes a handler.
 		 *\remarks		You *MUST* call this function when adding a handler to your lists, if you want to have it updated.
-		 *\param[in]	p_handler	The handler.
+		 *\param[in]	handler	The handler.
 		 *\~french
 		 *\~brief		Supprime un gestionnaire.
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
-		 *\param[in]	p_handler	Le gestionnaire.
+		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doAddHandler( EventHandlerSPtr p_handler )
+		inline void doAddHandler( EventHandlerSPtr handler )
 		{
 			auto lock = castor::makeUniqueLock( m_mutexHandlers );
 
-			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), p_handler ) != std::end( m_handlers ) )
+			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) != std::end( m_handlers ) )
 			{
 				CU_Exception( "This handler already exists in the listener." );
 			}
 
-			m_handlers.push_back( p_handler );
+			m_handlers.push_back( handler );
 		}
 		/**
 		 *\~english
 		 *\~brief		Removes a handler.
 		 *\remarks		You *MUST* call this function when adding a handler to your lists, if you want to have it updated.
-		 *\param[in]	p_handler	The handler.
+		 *\param[in]	handler	The handler.
 		 *\~french
 		 *\~brief		Supprime un gestionnaire.
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
-		 *\param[in]	p_handler	Le gestionnaire.
+		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doRemoveHandler( EventHandlerSPtr p_handler )
+		inline void doRemoveHandler( EventHandlerSPtr handler )
 		{
 			auto lock = castor::makeUniqueLock( m_mutexHandlers );
-			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), p_handler ) );
+			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) );
 		}
 
 	private:
 		/**
 		 *\~english
 		 *\~brief		Retrieves the first handler which can be targeted by mouse.
-		 *\param[in]	p_position	The mouse position.
+		 *\param[in]	position	The mouse position.
 		 *\return		The handler, \p nullptr if none.
 		 *\~french
 		 *\~brief		Récupère le premier gestionnaire pouvant être ciblé par la souris.
-		 *\param[in]	p_position	la position de la souris.
+		 *\param[in]	position	la position de la souris.
 		 *\return		Le gestionnaire, \p nullptr si aucun.
 		 */
-		C3D_API virtual EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & p_position )const = 0;
+		C3D_API virtual EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & position )const = 0;
 
 		/**@name General */
 		//@{

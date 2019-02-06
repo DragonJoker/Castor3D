@@ -28,17 +28,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for opaque nodes.
-		 *\param[in]	name		The technique name.
-		 *\param[in]	scene		The scene for this technique.
-		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	category	The pass category.
+		 *\param[in]	name		The pass name.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	environment	Pass used for an environment map rendering.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds opaques.
-		 *\param[in]	name		Le nom de la technique.
-		 *\param[in]	scene		La scène pour cette technique.
-		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	name		Le nom de la passe.
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 *\param[in]	config		La configuration du SSAO.
@@ -53,18 +55,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor for transparent nodes.
+		 *\param[in]	category	The pass category.
 		 *\param[in]	name		The technique name.
-		 *\param[in]	scene		The scene for this technique.
-		 *\param[in]	camera		The camera for this technique (may be null).
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	oit			The OIT status.
 		 *\param[in]	environment	Pass used for an environment map rendering.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\param[in]	config		The SSAO configuration.
 		 *\~french
 		 *\brief		Constructeur pour les noeuds transparents.
+		 *\param[in]	category	La catégorie de la passe.
 		 *\param[in]	name		Le nom de la technique.
-		 *\param[in]	scene		La scène pour cette technique.
-		 *\param[in]	camera		La caméra pour cette technique (peut être nulle).
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut d'OIT.
 		 *\param[in]	environment	Passe utilisée pour le rendu d'une texture d'environnement.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
@@ -149,12 +153,12 @@ namespace castor3d
 		 *\brief			Renders render nodes.
 		 *\param[in]		nodes		The scene render nodes.
 		 *\param			camera		The viewing camera.
-		 *\param[in, out]	count		Receives the rendered nodes count.
+		 *\param[in,out]	count		Receives the rendered nodes count.
 		 *\~french
 		 *\brief			Dessine les noeuds de rendu.
 		 *\param[in]		nodes		Les noeuds de rendu de la scène.
 		 *\param			camera		La caméra regardant la scène.
-		 *\param[in, out]	count		Reçouit le nombre de noeuds dessinés.
+		 *\param[in,out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
 			, castor::Point2r const & jitter
@@ -185,13 +189,11 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, BillboardListRenderNode & nodes )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillUboDescriptor
 		 */
 		C3D_API void doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
 			, SubmeshRenderNode & nodes )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor

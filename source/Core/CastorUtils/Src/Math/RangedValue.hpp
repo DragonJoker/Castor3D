@@ -26,43 +26,43 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_value	The value.
-		 *\param[in]	p_range	The range.
+		 *\param[in]	value	The value.
+		 *\param[in]	range	The range.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_value	La valeur.
-		 *\param[in]	p_range	Son intervalle.
+		 *\param[in]	value	La valeur.
+		 *\param[in]	range	Son intervalle.
 		 */
-		inline RangedValue( T const & p_value
-			, Range< T > const & p_range )noexcept
-			: m_range{ p_range }
-			, m_value{ m_range.clamp( p_value ) }
+		inline RangedValue( T const & value
+			, Range< T > const & range )noexcept
+			: m_range{ range }
+			, m_value{ m_range.clamp( value ) }
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment from a value.
-		 *\param[in]	p_value	The value.
+		 *\param[in]	value	The value.
 		 *\~french
 		 *\brief		Affectation depuis une valeur.
-		 *\param[in]	p_value	La valeur.
+		 *\param[in]	value	La valeur.
 		 */
-		inline RangedValue & operator=( T const & p_value )noexcept
+		inline RangedValue & operator=( T const & value )noexcept
 		{
-			m_value = m_range.clamp( p_value );
+			m_value = m_range.clamp( value );
 			return *this;
 		}
 		/**
 		 *\~english
 		 *\brief		Redefines the range.
-		 *\param[in]	p_range	The range.
+		 *\param[in]	range	The range.
 		 *\~french
 		 *\brief		Redéfinit l'intervalle.
-		 *\param[in]	p_range	Le nouvel intervalle.
+		 *\param[in]	range	Le nouvel intervalle.
 		 */
-		void updateRange( Range< T > const & p_range )noexcept
+		void updateRange( Range< T > const & range )noexcept
 		{
-			m_range = p_range;
+			m_range = range;
 			m_range.clamp( m_value );
 		}
 		/**
@@ -108,51 +108,51 @@ namespace castor
 		 *\name Opérateurs arithmétiques.
 		 */
 		/**@{*/
-		inline RangedValue< T > & operator+=( RangedValue< T > const & p_rhs )noexcept
+		inline RangedValue< T > & operator+=( RangedValue< T > const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value + p_rhs.m_value );
+			m_value = m_range.clamp( m_value + rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator-=( RangedValue< T > const & p_rhs )noexcept
+		inline RangedValue< T > & operator-=( RangedValue< T > const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value - p_rhs.m_value );
+			m_value = m_range.clamp( m_value - rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator*=( RangedValue< T > const & p_rhs )noexcept
+		inline RangedValue< T > & operator*=( RangedValue< T > const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value * p_rhs.m_value );
+			m_value = m_range.clamp( m_value * rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator/=( RangedValue< T > const & p_rhs )noexcept
+		inline RangedValue< T > & operator/=( RangedValue< T > const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value / p_rhs.m_value );
+			m_value = m_range.clamp( m_value / rhs.m_value );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator+=( T const & p_rhs )noexcept
+		inline RangedValue< T > & operator+=( T const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value + p_rhs );
+			m_value = m_range.clamp( m_value + rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator-=( T const & p_rhs )noexcept
+		inline RangedValue< T > & operator-=( T const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value - p_rhs );
+			m_value = m_range.clamp( m_value - rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator*=( T const & p_rhs )noexcept
+		inline RangedValue< T > & operator*=( T const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value * p_rhs );
+			m_value = m_range.clamp( m_value * rhs );
 			return *this;
 		}
 
-		inline RangedValue< T > & operator/=( T const & p_rhs )noexcept
+		inline RangedValue< T > & operator/=( T const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value / p_rhs );
+			m_value = m_range.clamp( m_value / rhs );
 			return *this;
 		}
 		/**@}*/
@@ -168,21 +168,21 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Helper function to create a ranged value.
-	 *\param[in]	p_value			The value.
-	 *\param[in]	p_min, p_max	The range.
+	 *\param[in]	value		The value.
+	 *\param[in]	min, max	The range.
 	 *\return		The created ranged value.
 	 *\~french
 	 *\brief		Fonction d'aide à la construction d'une valeur dans un intervalle.
-	 *\param[in]	p_value			La valeur.
-	 *\param[in]	p_min, p_max	Les bornes de l'intervalle.
+	 *\param[in]	value		La valeur.
+	 *\param[in]	min, max	Les bornes de l'intervalle.
 	 *\return		L'objet créé.
 	 */
 	template< typename T >
-	inline RangedValue< T > makeRangedValue( T const & p_value
-		, T const & p_min
-		, T const & p_max )noexcept
+	inline RangedValue< T > makeRangedValue( T const & value
+		, T const & min
+		, T const & max )noexcept
 	{
-		return RangedValue< T >{ p_value, makeRange( p_min, p_max ) };
+		return RangedValue< T >{ value, makeRange( min, max ) };
 	}
 	/**
 	 *\~english
@@ -196,152 +196,152 @@ namespace castor
 		template< typename T >
 		struct Equal
 		{
-			inline bool operator()( RangedValue< T > const & p_lhs
-				, RangedValue< T > const & p_rhs )const noexcept
+			inline bool operator()( RangedValue< T > const & lhs
+				, RangedValue< T > const & rhs )const noexcept
 			{
 				static constexpr auto eps = std::numeric_limits< T >::epsilon();
-				return std::abs( p_lhs.value() - p_rhs.value() ) < eps;
+				return std::abs( lhs.value() - rhs.value() ) < eps;
 			}
 		};
 
 		template<>
 		struct Equal< uint32_t >
 		{
-			inline bool operator()( RangedValue< uint32_t > const & p_lhs
-				, RangedValue< uint32_t > const & p_rhs )const noexcept
+			inline bool operator()( RangedValue< uint32_t > const & lhs
+				, RangedValue< uint32_t > const & rhs )const noexcept
 			{
-				return p_lhs.value() == p_rhs.value();
+				return lhs.value() == rhs.value();
 			}
 		};
 	}
 
 	template< typename T >
-	inline bool operator==( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator==( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
 		static constexpr auto eps = std::numeric_limits< T >::epsilon();
-		return std::abs( p_lhs.value() - p_rhs ) < eps;
+		return std::abs( lhs.value() - rhs ) < eps;
 	}
 
 	template< typename T >
-	inline bool operator!=( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator!=( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
-		return !( p_lhs == p_rhs );
+		return !( lhs == rhs );
 	}
 
 	template< typename T >
-	inline bool operator>( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator>( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
-		return p_lhs.value() > p_rhs;
+		return lhs.value() > rhs;
 	}
 
 	template< typename T >
-	inline bool operator<( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator<( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
-		return p_lhs.value() < p_rhs;
+		return lhs.value() < rhs;
 	}
 
 	template< typename T >
-	inline bool operator>=( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator>=( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename T >
-	inline bool operator<=( RangedValue< T > const & p_lhs
-		, T const & p_rhs )noexcept
+	inline bool operator<=( RangedValue< T > const & lhs
+		, T const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename T >
-	inline bool operator==( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator==( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
 		static constexpr auto eps = std::numeric_limits< T >::epsilon();
-		return std::abs( p_lhs - p_rhs.value() ) < eps;
+		return std::abs( lhs - rhs.value() ) < eps;
 	}
 
 	template< typename T >
-	inline bool operator!=( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator!=( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs == p_rhs );
+		return !( lhs == rhs );
 	}
 
 	template< typename T >
-	inline bool operator>( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator>( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs > p_rhs.value();
+		return lhs > rhs.value();
 	}
 
 	template< typename T >
-	inline bool operator<( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator<( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs < p_rhs.value();
+		return lhs < rhs.value();
 	}
 
 	template< typename T >
-	inline bool operator>=( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator>=( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename T >
-	inline bool operator<=( T const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator<=( T const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename T >
-	inline bool operator==( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator==( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
 		static const details::Equal< T > equals;
-		return equals( p_lhs, p_rhs );
+		return equals( lhs, rhs );
 	}
 
 	template< typename T >
-	inline bool operator!=( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator!=( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs == p_rhs );
+		return !( lhs == rhs );
 	}
 
 	template< typename T >
-	inline bool operator>( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator>( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() > p_rhs.value();
+		return lhs.value() > rhs.value();
 	}
 
 	template< typename T >
-	inline bool operator<( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator<( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() < p_rhs.value();
+		return lhs.value() < rhs.value();
 	}
 
 	template< typename T >
-	inline bool operator>=( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator>=( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename T >
-	inline bool operator<=( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline bool operator<=( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 	/**@}*/
 	/**
@@ -352,79 +352,79 @@ namespace castor
 	 */
 	/**@{*/
 	template< typename T >
-	inline T operator+( T const & p_lhs, RangedValue< T > const & p_rhs )noexcept
+	inline T operator+( T const & lhs, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs + p_rhs.value();
+		return lhs + rhs.value();
 	}
 
 	template< typename T >
-	inline T operator-( T const & p_lhs, RangedValue< T > const & p_rhs )noexcept
+	inline T operator-( T const & lhs, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs - p_rhs.value();
+		return lhs - rhs.value();
 	}
 
 	template< typename T >
-	inline T operator*( T const & p_lhs, RangedValue< T > const & p_rhs )noexcept
+	inline T operator*( T const & lhs, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs * p_rhs.value();
+		return lhs * rhs.value();
 	}
 
 	template< typename T >
-	inline T operator/( T const & p_lhs, RangedValue< T > const & p_rhs )noexcept
+	inline T operator/( T const & lhs, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs / p_rhs.value();
+		return lhs / rhs.value();
 	}
 
 	template< typename T >
-	inline T operator+( RangedValue< T > const & p_lhs, T const & p_rhs )noexcept
+	inline T operator+( RangedValue< T > const & lhs, T const & rhs )noexcept
 	{
-		return p_lhs.value() + p_rhs;
+		return lhs.value() + rhs;
 	}
 
 	template< typename T >
-	inline T operator-( RangedValue< T > const & p_lhs, T const & p_rhs )noexcept
+	inline T operator-( RangedValue< T > const & lhs, T const & rhs )noexcept
 	{
-		return p_lhs.value() - p_rhs;
+		return lhs.value() - rhs;
 	}
 
 	template< typename T >
-	inline T operator*( RangedValue< T > const & p_lhs, T const & p_rhs )noexcept
+	inline T operator*( RangedValue< T > const & lhs, T const & rhs )noexcept
 	{
-		return p_lhs.value() * p_rhs;
+		return lhs.value() * rhs;
 	}
 
 	template< typename T >
-	inline T operator/( RangedValue< T > const & p_lhs, T const & p_rhs )noexcept
+	inline T operator/( RangedValue< T > const & lhs, T const & rhs )noexcept
 	{
-		return p_lhs.value() / p_rhs;
+		return lhs.value() / rhs;
 	}
 
 	template< typename T >
-	inline T operator+( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline T operator+( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() + p_rhs.value();
+		return lhs.value() + rhs.value();
 	}
 
 	template< typename T >
-	inline T operator-( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline T operator-( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() - p_rhs.value();
+		return lhs.value() - rhs.value();
 	}
 
 	template< typename T >
-	inline T operator*( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline T operator*( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() * p_rhs.value();
+		return lhs.value() * rhs.value();
 	}
 
 	template< typename T >
-	inline T operator/( RangedValue< T > const & p_lhs
-		, RangedValue< T > const & p_rhs )noexcept
+	inline T operator/( RangedValue< T > const & lhs
+		, RangedValue< T > const & rhs )noexcept
 	{
-		return p_lhs.value() / p_rhs.value();
+		return lhs.value() / rhs.value();
 	}
 	/**@}*/
 }

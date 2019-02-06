@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_CACHE_VIEW_H___
@@ -35,28 +35,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name			The view name.
-		 *\param[in]	p_initialise	The element initialiser.
-		 *\param[in]	p_clean			The element cleaner.
-		 *\param[in]	cache			The viewed cache.
+		 *\param[in]	name		The view name.
+		 *\param[in]	initialise	The element initialiser.
+		 *\param[in]	clean		The element cleaner.
+		 *\param[in]	cache		The viewed cache.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name			The view name.
-		 *\param[in]	p_initialise	L'initialiseur d'objet.
-		 *\param[in]	p_clean			Le nettoyeur d'objet.
-		 *\param[in]	cache			The viewed cache.
+		 *\param[in]	name		The view name.
+		 *\param[in]	initialise	L'initialiseur d'objet.
+		 *\param[in]	clean		Le nettoyeur d'objet.
+		 *\param[in]	cache		The viewed cache.
 		 */
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom de la vue.
-		 *\param[in]	cache	Le cache vu.
-		 */
-		inline CacheView( castor::String const & p_name
-			, Initialiser && p_initialise
-			, Cleaner && p_clean
+		inline CacheView( castor::String const & name
+			, Initialiser && initialise
+			, Cleaner && clean
 			, CacheType & cache );
 		/**
 		 *\~english
@@ -68,28 +60,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an element with the given informations.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_params	The parameters forwarded to the viewed cache.
+		 *\param[in]	name	The element name.
+		 *\param[in]	params	The parameters forwarded to the viewed cache.
 		 *\return		The created element.
 		 *\~french.=
 		 *\brief		Crée un élément avec les informations données.
-		 *\param[in]	p_name		Le nom de l'élément.
-		 *\param[in]	p_params	Les paramètres transmis au cache vu.
+		 *\param[in]	name	Le nom de l'élément.
+		 *\param[in]	params	Les paramètres transmis au cache vu.
 		 *\return		L'élément créé.
 		 */
 		template< typename ... Params >
-		inline ResourcePtr add( castor::String const & p_name, Params && ... p_params );
+		inline ResourcePtr add( castor::String const & name
+			, Params && ... params );
 		/**
 		 *\~english
 		 *\brief		adds an already created an element.
-		 *\param[in]	p_name		The element name.
-		 *\param[in]	p_element	The element.
+		 *\param[in]	name	The element name.
+		 *\param[in]	element	The element.
 		 *\~french
 		 *\brief		Ajoute un élément déjà créé.
-		 *\param[in]	p_name		Le nom d'élément.
-		 *\param[in]	p_element	L'élément.
+		 *\param[in]	name	Le nom d'élément.
+		 *\param[in]	element	L'élément.
 		 */
-		inline ResourcePtr add( castor::String const & p_name, ResourcePtr p_element );
+		inline ResourcePtr add( castor::String const & name
+			, ResourcePtr element );
 		/**
 		 *\~english
 		 *\brief		Removes from the cache the elements created through this view.
@@ -106,33 +100,33 @@ namespace castor3d
 		inline bool isEmpty()const;
 		/**
 		 *\~english
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	name	The object name.
 		 *\return		\p true if an element with given name exists.
 		 *\~french
-		 *\param[in]	p_name	Le nom d'objet.
+		 *\param[in]	name	Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool has( castor::String const & p_name )const;
+		inline bool has( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Looks for an element with given name.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	name	The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
 		 *\brief		Cherche un élément par son nom.
-		 *\param[in]	p_name	Le nom d'objet.
+		 *\param[in]	name	Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ResourcePtr find( castor::String const & p_name )const;
+		inline ResourcePtr find( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name	The object name.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name	Le nom d'objet.
+		 *\param[in]	name	Le nom d'objet.
 		 */
-		inline void remove( castor::String const & p_name );
+		inline void remove( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Returns an iterator to the first element of the collection

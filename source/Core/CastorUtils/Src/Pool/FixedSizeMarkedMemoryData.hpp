@@ -36,14 +36,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Initialises the pool with given objects count.
-		 *\param[in]	p_count	The object's count.
+		 *\param[in]	count	The object's count.
 		 *\~french
 		 *\brief		Initialise le pool avec le nombre d'objets donné.
-		 *\param[in]	p_count	Le compte des objets.
+		 *\param[in]	count	Le compte des objets.
 		 */
-		void initialise( size_t p_count )noexcept
+		void initialise( size_t count )noexcept
 		{
-			m_total = p_count;
+			m_total = count;
 			m_buffer = new uint8_t[m_total + m_total * sizeof( Object )];
 			m_free = new uint8_t * [m_total];
 			m_freeIndex = m_free;
@@ -119,43 +119,43 @@ namespace castor
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool, and if it has been allocated by the pool, via the marked byte.
 		 *\remarks		set the marked byte to "deallocate" state.
-		 *\param[in]	p_space	The memory to free.
+		 *\param[in]	space	The memory to free.
 		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Libère la mémoire donnée.
 		 *\remarks		Vérifie si la mémoire fait bien partie du pool, et si elle a bien été allouée par le pool, via l'octet de marquage.
 						Met l'octet de marquage dans l'état "Libre".
-		 *\param[in]	p_space	La mémoire à libérer.
+		 *\param[in]	space	La mémoire à libérer.
 		 *\return		true si la mémoire faisait partie du pool.
 		 */
-		bool deallocate( void * p_space )noexcept
+		bool deallocate( void * space )noexcept
 		{
-			if ( p_space )
+			if ( space )
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )space );
 					return false;
 				}
 
-				if ( ptrdiff_t( p_space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( p_space ) >= ptrdiff_t( m_bufferEnd ) )
+				if ( ptrdiff_t( space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )space );
 					return false;
 				}
 
-				uint8_t * marked = reinterpret_cast< uint8_t * >( p_space );
+				uint8_t * marked = reinterpret_cast< uint8_t * >( space );
 				--marked;
 
 				if ( *marked != ALLOCATED )
 				{
 					if ( *marked == FREED )
 					{
-						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
+						reportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )space );
 						return false;
 					}
 
-					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
+					reportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )space );
 					return false;
 				}
 
@@ -170,17 +170,23 @@ namespace castor
 		}
 
 	private:
-		//!\~english The buffer.	\~french Le tampon.
+		//!\~english	The buffer.
+		//!\~french		Le tampon.
 		uint8_t * m_buffer = nullptr;
-		//!\~english Pointer to the buffer's end.	\~french Pointeur sur la fin du tampon.
+		//!\~english	Pointer to the buffer's end.
+		//!\~french		Pointeur sur la fin du tampon.
 		uint8_t * m_bufferEnd = nullptr;
-		//!\~english The free chunks.	\~french Les chunks libres.
+		//!\~english	The free chunks.
+		//!\~french		Les chunks libres.
 		uint8_t ** m_free = nullptr;
-		//!\~english The free chunks' end.	\~french La fin des chunks libres.
+		//!\~english	The free chunks' end.
+		//!\~french		La fin des chunks libres.
 		uint8_t ** m_freeEnd = nullptr;
-		//!\~english The last allocated chunk.	\~french Le dernier chunk alloué.
+		//!\~english	The last allocated chunk.
+		//!\~french		Le dernier chunk alloué.
 		uint8_t ** m_freeIndex = nullptr;
-		//!\~english The total pool capacity.	\~french Le nombre total possible d'éléments.
+		//!\~english	The total pool capacity.
+		//!\~french		Le nombre total possible d'éléments.
 		size_t m_total = 0;
 	};
 }

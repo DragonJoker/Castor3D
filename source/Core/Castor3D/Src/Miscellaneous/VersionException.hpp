@@ -26,20 +26,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_given			The given version
-		 *\param[in]	p_expected		The expected version
-		 *\param[in]	p_strFile		The file
-		 *\param[in]	p_strFunction	The function
-		 *\param[in]	p_uiLine		The file line
+		 *\param[in]	given		The given version
+		 *\param[in]	expected	The expected version
+		 *\param[in]	file		The file
+		 *\param[in]	function	The function
+		 *\param[in]	line		The file line
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_given			La version donnée
-		 *\param[in]	p_expected		La version voulue
-		 *\param[in]	p_strFile		Le fichier
-		 *\param[in]	p_strFunction	La fonction
-		 *\param[in]	p_uiLine		La ligne dans le fichier
+		 *\param[in]	given		La version donnée
+		 *\param[in]	expected	La version voulue
+		 *\param[in]	file		Le fichier
+		 *\param[in]	function	La fonction
+		 *\param[in]	line		La ligne dans le fichier
 		 */
-		C3D_API VersionException( Version const & p_given, Version const & p_expected, char const * p_strFile, char const * p_strFunction, uint32_t p_uiLine );
+		C3D_API VersionException( Version const & given
+			, Version const & expected
+			, char const * file
+			, char const * function
+			, uint32_t line );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -49,7 +53,7 @@ namespace castor3d
 		C3D_API virtual ~VersionException() throw() {}
 	};
 
-#	define CASTOR_VERSION_EXCEPTION( p_given, p_expected ) throw castor3d::VersionException( p_given, p_expected, __FILE__, __FUNCTION__, __LINE__ )
+#	define CASTOR_VERSION_EXCEPTION( given, expected ) throw castor3d::VersionException( given, expected, __FILE__, __FUNCTION__, __LINE__ )
 }
 
 #endif

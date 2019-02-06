@@ -53,20 +53,20 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API explicit TextWriter( castor::String const & p_tabs );
+			C3D_API explicit TextWriter( castor::String const & tabs );
 			/**
 			 *\~english
 			 * Writes a castor3d::SceneNode into a text file
-			 *\param[in]	p_file	the file to write the scene node in
-			 *\param[in]	p_node	the scene node to write
+			 *\param[in]	file	the file to write the scene node in
+			 *\param[in]	node	the scene node to write
 			 *\return \p true if successful
 			 *\~french
 			 * Ecrit un castor3d::SceneNode dans un fichier texte
-			 *\param[in]	p_file	le fichier dans lequel le castor3d::SceneNode est écrit
-			 *\param[in]	p_node	Le castor3d::SceneNode à écrire
+			 *\param[in]	file	le fichier dans lequel le castor3d::SceneNode est écrit
+			 *\param[in]	node	Le castor3d::SceneNode à écrire
 			 *\return \p true si tout s'est bien passé, \p false sinon
 			 */
-			C3D_API bool operator()( SceneNode const & p_node, castor::TextFile & p_file )override;
+			C3D_API bool operator()( SceneNode const & node, castor::TextFile & file )override;
 		};
 
 	protected:
@@ -83,14 +83,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name		The node's name.
-		 *\param[in]	p_scene		The parent scene.
+		 *\param[in]	name		The node's name.
+		 *\param[in]	scene		The parent scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom du noeud.
-		 *\param[in]	p_scene		La scène parente.
+		 *\param[in]	name		Le nom du noeud.
+		 *\param[in]	scene		La scène parente.
 		 */
-		C3D_API SceneNode( castor::String const & p_name, Scene & p_scene );
+		C3D_API SceneNode( castor::String const & name, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -108,30 +108,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Attaches a MovableObject to the node
-		 *\param[in]	p_object	The object to attach
+		 *\param[in]	object	The object to attach
 		 *\~french
 		 *\brief		Attache un MovableObject au noeud
-		 *\param[in]	p_object	L'objet à attacher
+		 *\param[in]	object	L'objet à attacher
 		 */
-		C3D_API void attachObject( MovableObject & p_object );
+		C3D_API void attachObject( MovableObject & object );
 		/**
 		 *\~english
 		 *\brief		Detaches a MovableObject from the node
-		 *\param[in]	p_object	The object to detach
+		 *\param[in]	object	The object to detach
 		 *\~french
 		 *\brief		Détache un MovableObject fu noeud
-		 *\param[in]	p_object	L'objet à détacher
+		 *\param[in]	object	L'objet à détacher
 		 */
-		C3D_API void detachObject( MovableObject & p_object );
+		C3D_API void detachObject( MovableObject & object );
 		/**
 		 *\~english
 		 *\brief		Sets the parent node
-		 *\param[in]	p_parent	The new parent
+		 *\param[in]	parent	The new parent
 		 *\~french
 		 *\brief		Définit le noeud parent
-		 *\param[in]	p_parent	Le nouveau parent
+		 *\param[in]	parent	Le nouveau parent
 		 */
-		C3D_API void attachTo( SceneNodeSPtr p_parent );
+		C3D_API void attachTo( SceneNodeSPtr parent );
 		/**
 		 *\~english
 		 *\brief		Detaches the node from it's parent
@@ -141,40 +141,40 @@ namespace castor3d
 		C3D_API void detach();
 		/**
 		 *\~english
-		 *\param[in]	p_name	The name of the node
+		 *\param[in]	name	The name of the node
 		 *\return		\p true if one of my child has the given name
 		 *\~french
-		 *\param[in]	p_name	Le nom du noeud
+		 *\param[in]	name	Le nom du noeud
 		 *\return		\p true si un des enfants de ce noeud a le nom donné
 		 */
-		C3D_API bool hasChild( castor::String const & p_name );
+		C3D_API bool hasChild( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		add the given node to my childs if it isn't already
-		 *\param[in]	p_child	The node to add
+		 *\param[in]	child	The node to add
 		 *\~french
 		 *\brief		Ajoute le noeud donné aux enfants de ce noeud, s'il n'y est pas encore
-		 *\param[in]	p_child	Le noeud à ajouter
+		 *\param[in]	child	Le noeud à ajouter
 		 */
-		C3D_API void addChild( SceneNodeSPtr p_child );
+		C3D_API void addChild( SceneNodeSPtr child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
-		 *\param[in]	p_child	The child to detach
+		 *\param[in]	child	The child to detach
 		 *\~french
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
-		 *\param[in]	p_child	Le noeud à détacher
+		 *\param[in]	child	Le noeud à détacher
 		 */
-		C3D_API void detachChild( SceneNodeSPtr p_child );
+		C3D_API void detachChild( SceneNodeSPtr child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
-		 *\param[in]	p_childName	The name of the child to detach
+		 *\param[in]	childName	The name of the child to detach
 		 *\~french
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
-		 *\param[in]	p_childName	Le nom du noeud à détacher
+		 *\param[in]	childName	Le nom du noeud à détacher
 		 */
-		C3D_API void detachChild( castor::String const & p_childName );
+		C3D_API void detachChild( castor::String const & childName );
 		/**
 		 *\~english
 		 *\brief		Detaches all my childs
@@ -185,84 +185,84 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Rotates around Y axis
-		 *\param[in]	p_angle	The rotation angle
+		 *\param[in]	angle	The rotation angle
 		 *\~french
 		 *\brief		Tourne le noeud autour de son axe Y
-		 *\param[in]	p_angle	L'angle de rotation
+		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void yaw( castor::Angle const & p_angle );
+		C3D_API void yaw( castor::Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotates around Z axis
-		 *\param[in]	p_angle	The rotation angle
+		 *\param[in]	angle	The rotation angle
 		 *\~french
 		 *\brief		Tourne le noeud autour de son axe Z
-		 *\param[in]	p_angle	L'angle de rotation
+		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void pitch( castor::Angle const & p_angle );
+		C3D_API void pitch( castor::Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotates around X axis
-		 *\param[in]	p_angle	The rotation angle
+		 *\param[in]	angle	The rotation angle
 		 *\~french
 		 *\brief		Tourne le noeud autour de son axe X
-		 *\param[in]	p_angle	L'angle de rotation
+		 *\param[in]	angle	L'angle de rotation
 		 */
-		C3D_API void roll( castor::Angle const & p_angle );
+		C3D_API void roll( castor::Angle const & angle );
 		/**
 		 *\~english
 		 *\brief		Rotate the node with the given orientation
-		 *\param[in]	p_quat	The orientation to add to current one
+		 *\param[in]	quat	The orientation to add to current one
 		 *\~french
 		 *\brief		Tourne le noeud d'une rotation donnée
-		 *\param[in]	p_quat	La rotation à appliquer
+		 *\param[in]	quat	La rotation à appliquer
 		 */
-		C3D_API void rotate( castor::Quaternion const & p_quat );
+		C3D_API void rotate( castor::Quaternion const & quat );
 		/**
 		 *\~english
 		 *\brief		Translates the node
-		 *\param[in]	p_t	The translation value
+		 *\param[in]	t	The translation value
 		 *\~french
 		 *\brief		Translate le noeud
-		 *\param[in]	p_t	The La valeur de translation
+		 *\param[in]	t	The La valeur de translation
 		 */
-		C3D_API void translate( castor::Point3r const & p_t );
+		C3D_API void translate( castor::Point3r const & t );
 		/**
 		 *\~english
 		 *\brief		Scales the node
-		 *\param[in]	p_s	The scale value
+		 *\param[in]	s	The scale value
 		 *\~french
 		 *\brief		Change l'échelle du noeud
-		 *\param[in]	p_s	La valeur d'échelle
+		 *\param[in]	s	La valeur d'échelle
 		 */
-		C3D_API void scale( castor::Point3r const & p_s );
+		C3D_API void scale( castor::Point3r const & s );
 		/**
 		 *\~english
 		 *\brief		Sets the orientation
-		 *\param[in]	p_orientation	The new orientation
+		 *\param[in]	orientation	The new orientation
 		 *\~french
 		 *\brief		Définit l'orientation du noeud
-		 *\param[in]	p_orientation	La nouvelle orientation
+		 *\param[in]	orientation	La nouvelle orientation
 		 */
-		C3D_API void setOrientation( castor::Quaternion const & p_orientation );
+		C3D_API void setOrientation( castor::Quaternion const & orientation );
 		/**
 		 *\~english
 		 *\brief		Sets the relative position from a Point3r
-		 *\param[in]	p_position	The new position
+		 *\param[in]	position	The new position
 		 *\~french
 		 *\brief		Définit la position relative du noeud
-		 *\param[in]	p_position	La nouvelle valeur
+		 *\param[in]	position	La nouvelle valeur
 		 */
-		C3D_API void setPosition( castor::Point3r const & p_position );
+		C3D_API void setPosition( castor::Point3r const & position );
 		/**
 		 *\~english
 		 *\brief		Sets the relative scale from a Point3r
-		 *\param[in]	p_scale	The new scale
+		 *\param[in]	scale	The new scale
 		 *\~french
 		 *\brief		Définit l'échelle relative du noeud
-		 *\param[in]	p_scale	La nouvelle valeur
+		 *\param[in]	scale	La nouvelle valeur
 		 */
-		C3D_API void setScale( castor::Point3r const & p_scale );
+		C3D_API void setScale( castor::Point3r const & scale );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
@@ -311,12 +311,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the node visibility status
-		 *\param[in]	p_visible	The new value
+		 *\param[in]	visible	The new value
 		 *\~french
 		 *\brief		Définit le statut de visibilité du noeud
-		 *\param[in]	p_visible	La nouvelle valeur
+		 *\param[in]	visible	La nouvelle valeur
 		 */
-		C3D_API void setVisible( bool p_visible );
+		C3D_API void setVisible( bool visible );
 		/**
 		 *\~english
 		 *\brief		Retrieves the visibility status
@@ -365,16 +365,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the orientation in axis and angle terms
-		 *\param[out]	p_axis	Receives the axis
-		 *\param[out]	p_angle	Receives the angle
+		 *\param[out]	axis	Receives the axis
+		 *\param[out]	angle	Receives the angle
 		 *\~french
 		 *\brief		Récupère l'orientation, en termes d'angle et d'axe
-		 *\param[out]	p_axis	Reçoit l'axe
-		 *\param[out]	p_angle	Reçoit l'angle
+		 *\param[out]	axis	Reçoit l'axe
+		 *\param[out]	angle	Reçoit l'angle
 		 */
-		inline void getAxisAngle( castor::Point3r & p_axis, castor::Angle & p_angle )const
+		inline void getAxisAngle( castor::Point3r & axis, castor::Angle & angle )const
 		{
-			m_orientation.toAxisAngle( p_axis, p_angle );
+			m_orientation.toAxisAngle( axis, angle );
 		}
 		/**
 		 *\~english
@@ -523,16 +523,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the child with given name
-		 *\param[in]	p_name	The child name
+		 *\param[in]	name	The child name
 		 *\return		The value, nullptr if not found
 		 *\~french
 		 *\brief		Récupère l'enfant avec le nom donné
-		 *\param[in]	p_name	Le nom de l'enfant
+		 *\param[in]	name	Le nom de l'enfant
 		 *\return		La valeur, nullptr si non trouvé
 		 */
-		inline SceneNodeSPtr getChild( castor::String const & p_name )const
+		inline SceneNodeSPtr getChild( castor::String const & name )const
 		{
-			return ( m_children.find( p_name ) != m_children.end() ? m_children.find( p_name )->second.lock() : nullptr );
+			return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
 		}
 		/**
 		 *\~english

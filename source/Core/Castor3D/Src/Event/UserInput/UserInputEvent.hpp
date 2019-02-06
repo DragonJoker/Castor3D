@@ -25,13 +25,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Constructor.
-		 *\param[in]	p_type	The user input event type.
+		 *\param[in]	type	The user input event type.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'évènement entràe utilisateur.
+		 *\param[in]	type	Le type d'évènement entràe utilisateur.
 		 */
-		explicit UserInputEvent( UserInputEventType p_type )
-			: m_eventType( p_type )
+		explicit UserInputEvent( UserInputEventType type )
+			: m_eventType( type )
 		{
 		}
 		/**

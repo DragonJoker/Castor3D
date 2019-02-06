@@ -30,8 +30,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The texture buffer.
+		 *\param[in]	engine	The engine.
 		 *\~french
 		 *\return		Le tampon de la texture.
+		 *\param[in]	engine	Le moteur.
 		 */
 		C3D_API explicit TextureSource( Engine & engine )
 			: m_engine{ engine }
@@ -103,12 +105,10 @@ namespace castor3d
 		 *\~english
 		 *\brief			Readjusts dimensions if the selected rendering API doesn't support NPOT textures.
 		 *\param[in,out]	size	The size.
-		 *\param[in,out]	depth	The depth.
 		 *\return			\p true if the dimensions have changed.
 		 *\~french
 		 *\brief			Réajuste les dimensions données si l'API de rendu sélectionnée ne supporte pas les textures NPOT.
 		 *\param[in,out]	size	La taille.
-		 *\param[in,out]	depth	La profondeur.
 		 *\return			\p true si les dimensions ont changé.
 		 */
 		bool doAdjustDimensions( ashes::Extent3D & size );
@@ -179,12 +179,12 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	layout	The parent layout.
-		 *\param[in]	type	The view texture type.
+		 *\param[in]	info	The creation info.
 		 *\param[in]	index	The image index in its layout.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	layout	Le layout parent.
-		 *\param[in]	type	Le type de texture de la vue.
+		 *\param[in]	info	Les informations de création.
 		 *\param[in]	index	L'index de l'image dans son layout.
 		 */
 		C3D_API TextureView( TextureLayout & layout

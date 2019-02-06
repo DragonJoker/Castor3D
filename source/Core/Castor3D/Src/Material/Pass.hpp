@@ -55,7 +55,8 @@ namespace castor3d
 			 *\param[in]		pass	La Pass à écrire.
 			 *\param[in,out]	file	Le file où écrire la Pass.
 			 */
-			C3D_API bool operator()( Pass const & pass, castor::TextFile & file )override;
+			C3D_API bool operator()( Pass const & pass
+				, castor::TextFile & file )override;
 		};
 
 	protected:
@@ -94,12 +95,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		adds a texture unit.
-		 *\param[in]	p_unit	The texture unit.
+		 *\param[in]	unit	The texture unit.
 		 *\~french
 		 *\brief		Ajoute une unité de texture.
-		 *\param[in]	p_unit	L'unité de texture.
+		 *\param[in]	unit	L'unité de texture.
 		 */
-		C3D_API void addTextureUnit( TextureUnitSPtr p_unit );
+		C3D_API void addTextureUnit( TextureUnitSPtr unit );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel.
@@ -192,9 +193,11 @@ namespace castor3d
 		C3D_API virtual uint32_t getPassSize()const = 0;
 		/**
 		 *\~english
-		 *\brief		Fills shader variables of given render node.
+		 *\brief			Fills the pass buffer with this pass data.
+		 *\param[in,out]	buffer	The pass buffer.
 		 *\~french
-		 *\brief		Remplit les variables de shader du noeud de rendu donné.
+		 *\brief			Remplit le pass buffer aves les données de cette passe.
+		 *\param[in,out]	buffer	Le pass buffer.
 		 */
 		C3D_API virtual void accept( PassBuffer & buffer )const = 0;
 		/**
@@ -448,14 +451,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Prepares the opacity channel.
-		 *\param[in]		opacitySource	The texture unit from which opacity comes.
-		 *\param[in]		opacityImage	The alpha channel from opacitySource.
-		 *\param[in,out]	index			The texture index.
+		 *\param[in,out]	index	The texture index.
 		 *\~french
 		 *\brief			Prépare le canal d'opacité.
-		 *\param[in]		opacitySource	L'unité de texture depuis laquelle l'opacité provient.
-		 *\param[in]		opacityImage	Le canal alpha de opacitySource.
-		 *\param[in,out]	index			L'index de la texture.
+		 *\param[in,out]	index	L'index de la texture.
 		 */
 		void doPrepareOpacity( uint32_t & index );
 		/**

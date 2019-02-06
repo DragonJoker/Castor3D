@@ -25,16 +25,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_szFunction	Caller function
-		 *\param[in]	p_szFile		Function file
-		 *\param[in]	p_uiLine		Function line
+		 *\param[in]	function	Caller function
+		 *\param[in]	file		Function file
+		 *\param[in]	line		Function line
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_szFunction	La fonction appelante
-		 *\param[in]	p_szFile		Le fichier où se trouve la fonction
-		 *\param[in]	p_uiLine		La ligne dans la fonction
+		 *\param[in]	function	La fonction appelante
+		 *\param[in]	file		Le fichier où se trouve la fonction
+		 *\param[in]	line		La ligne dans la fonction
 		 */
-		CU_API BlockTracker( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );
+		CU_API BlockTracker( char const * function
+			, char const * file
+			, uint32_t line );
 		/**
 		 *\~english
 		 *\brief		Destructor

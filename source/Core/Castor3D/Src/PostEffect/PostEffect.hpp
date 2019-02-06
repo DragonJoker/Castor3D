@@ -81,17 +81,22 @@ namespace castor3d
 		 *\~english
 		 *\brief		Writes the effect into a text file.
 		 *\param[in]	file	The file.
+		 *\param[in]	tabs	The current indentation.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	file	Le fichier.
+		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API bool writeInto( castor::TextFile & file, castor::String const & tabs );
+		C3D_API bool writeInto( castor::TextFile & file
+			, castor::String const & tabs );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	texture	The target texture.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	texture	La texture cible.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( TextureLayout const & texture );
@@ -119,10 +124,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updated needed data.
-		 *\param[in]	elapsedTime	The time elapsed since last frame, in seconds.
+		 *\param[in]	elapsedTime	The time elapsed since last frame.
 		 *\~french
 		 *\brief		Met à jour les données en ayant besoin.
-		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame, en secondes.
+		 *\param[in]	elapsedTime	Le temps écoulé depuis la dernière frame.
 		 */
 		C3D_API virtual void update( castor::Nanoseconds const & elapsedTime );
 		/**
@@ -171,9 +176,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	timer	The render pass timer.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\return		\p true if ok.
 		 */
 		C3D_API virtual bool doInitialise( RenderPassTimer const & timer ) = 0;
@@ -188,11 +195,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Writes the effect into a text file.
 		 *\param[in]	file	The file.
+		 *\param[in]	tabs	The current indentation.
 		 *\~french
 		 *\brief		Ecrit l'effet dans un fichier texte.
 		 *\param[in]	file	Le fichier.
+		 *\param[in]	tabs	L'indentation actuelle.
 		 */
-		C3D_API virtual bool doWriteInto( castor::TextFile & file, castor::String const & tabs ) = 0;
+		C3D_API virtual bool doWriteInto( castor::TextFile & file
+			, castor::String const & tabs ) = 0;
 
 	protected:
 		castor::String m_fullName;

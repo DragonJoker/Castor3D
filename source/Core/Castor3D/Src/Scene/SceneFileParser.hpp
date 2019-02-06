@@ -85,7 +85,8 @@ namespace castor3d
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\param[in]	parser	L'analyseur.
 		 */
-		C3D_API SceneFileContext( castor::Path const & path, SceneFileParser * parser );
+		C3D_API SceneFileContext( castor::Path const & path
+			, SceneFileParser * parser );
 		/**
 		 *\~english
 		 *\brief		Initialises all variables.
@@ -209,7 +210,7 @@ namespace castor3d
 		 *\brief		Parses the given file (expecting it to be in CSCN file format).
 		 *\param[in]	path	The file access path.
 		 *\return		\p false if any problem occured.
-		 *\~english
+		 *\~french
 		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN).
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\return		\p false si un problème est survenu.
@@ -221,13 +222,14 @@ namespace castor3d
 		 *\param[in]	path	The file access path.
 		 *\param[in]	context	The context.
 		 *\return		\p false if any problem occured.
-		 *\~english
+		 *\~french
 		 *\brief		Analyse le fichier donné (s'attend à recevoir un fichier CSCN), en utilisant un contexte externe.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 *\param[in]	context	Le contexte.
 		 *\return		\p false si un problème est survenu.
 		 */
-		C3D_API bool parseFile( castor::Path const & path, SceneFileContextSPtr context );
+		C3D_API bool parseFile( castor::Path const & path
+			, SceneFileContextSPtr context );
 
 		inline ScenePtrStrMap::iterator scenesBegin()
 		{

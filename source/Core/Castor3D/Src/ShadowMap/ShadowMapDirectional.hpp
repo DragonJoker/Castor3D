@@ -25,12 +25,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	scene	The scene.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	cascades	The cascades count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	scene	La scène.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	cascades	Le nombre de cascades.
 		 */
 		ShadowMapDirectional( Engine & engine
 			, Scene & scene

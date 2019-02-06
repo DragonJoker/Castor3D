@@ -43,14 +43,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Writes a resource to a file.
-		 *\param[in]		p_object	The object to write.
-		 *\param[in,out]	p_file		The file where to write the object.
+		 *\param[in]		object	The object to write.
+		 *\param[in,out]	file	The file where to write the object.
 		 *\~french
 		 *\brief			Ecrit une ressource dans un fichier.
-		 *\param[in]		p_object	L'objet à écrire.
-		 *\param[in,out]	p_file		Le fichier où écrire l'objet.
+		 *\param[in]		object	L'objet à écrire.
+		 *\param[in,out]	file	Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( T const & p_object, Type & p_file )
+		virtual bool operator()( T const & object, Type & file )
 		{
 			CU_LoaderError( "Export not supported by the loader registered for this type" );
 		}

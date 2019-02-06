@@ -40,12 +40,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	name	The renderer name.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	name			The renderer name.
+		 *\param[in]	topDown			Tells if the renderer's clip space is top down.
+		 *\param[in]	zeroToOneDepth	Tells if the renderer's clip space uses [0,1] depth range.
+		 *\param[in]	invertedNormals	Tells if the renderer needs iverted normals.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	name	Le nom du renderer.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	name			Le nom du renderer.
+		 *\param[in]	topDown			Dit si le clip space du renderer est top down.
+		 *\param[in]	zeroToOneDepth	Dit si le clip space du renderer utilise l'intervalle [0,1] pour la profondeur.
+		 *\param[in]	invertedNormals	Dit si le renderer nécessite une inversion des normales.
 		 */
 		C3D_API RenderSystem( Engine & engine
 			, castor::String const & name
@@ -62,8 +68,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the render system
+		 *\param[in]	informations	The GPU informations.
 		 *\~french
 		 *\brief		Initialise le render system
+		 *\param[in]	informations	Les informations deu GPU.
 		 */
 		C3D_API void initialise( GpuInformations && informations );
 		/**
@@ -146,11 +154,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a logical device bound to a physical GPU.
-		 *\param[in]	gpu	The GPU index.
+		 *\param[in]	handle	The native window handle.
+		 *\param[in]	gpu		The GPU index.
 		 *\return		The created device.
 		 *\~french
 		 *\brief		Crée un périphérique logique lié à un GPU physique.
-		 *\param[in]	gpu	L'indice du GPU.
+		 *\param[in]	handle	Le handle de la fenêtre native.
+		 *\param[in]	gpu		L'indice du GPU.
 		 *\return		Le périphérique logique créé.
 		 */
 		C3D_API ashes::DevicePtr createDevice( ashes::WindowHandle && handle
@@ -237,7 +247,7 @@ namespace castor3d
 		/**
 		*\~english
 		*	Computes a perspective projection matrix with no far plane clipping.
-		*\param[in] fovy
+		*\param[in] radiansFovY
 		*	The vertical aperture angle.
 		*\param[in] aspect
 		*	The width / height ratio.
@@ -247,7 +257,7 @@ namespace castor3d
 		*\brief
 		*	Calcule une matrice de projection en perspective sans clipping
 		*	d'arrière plan.
-		*\param[in] fovy
+		*\param[in] radiansFovY
 		*	L'angle d'ouverture verticale.
 		*\param[in] aspect
 		*	Le ratio largeur / hauteur.

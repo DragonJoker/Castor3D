@@ -38,10 +38,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	name	The object name
+		 *\param[in]	kind	The animation type.
+		 *\param[in]	name	The object name.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	name	Le nom de l'objet
+		 *\param[in]	kind	Le type d'animation.
+		 *\param[in]	name	Le nom de l'objet.
 		 */
 		C3D_API explicit AnimatedObject( AnimationType kind
 			, castor::String const & name );
@@ -56,7 +58,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		adds the animation to the list
 		 *\param[in]	name	The animation to add
-		 *\~english
+		 *\~french
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	name	L'animation à ajouter
 		 */

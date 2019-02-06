@@ -33,7 +33,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit LoggerImpl( LogType p_level );
+		explicit LoggerImpl( LogType level );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -44,12 +44,12 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Initialises the headers, from the given logger
-		 *\param[in]	p_logger	The logger
+		 *\param[in]	logger	The logger
 		 *\~french
 		 *\brief		Initialise les en-têtes, depuis le logger donné
-		 *\param[in]	p_logger	Le logger
+		 *\param[in]	logger	Le logger
 		 */
-		void initialise( Logger const & p_logger );
+		void initialise( Logger const & logger );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance
@@ -60,108 +60,114 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Registers a callback
-		 *\param[in]	p_callback	The callback
-		 *\param[in]	p_caller	The caller
+		 *\param[in]	callback	The callback
+		 *\param[in]	caller		The caller
 		 *\~french
 		 *\brief		Enregistre un callback
-		 *\param[in]	p_callback	Le callback
-		 *\param[in]	p_caller	L'appelant
+		 *\param[in]	callback	Le callback
+		 *\param[in]	caller		L'appelant
 		 */
-		void registerCallback( LogCallback p_callback, void * p_caller );
+		void registerCallback( LogCallback callback, void * caller );
 		/**
 		 *\~english
 		 *\brief		Unregisters a callback
-		 *\param[in]	p_caller	The caller
+		 *\param[in]	caller	The caller
 		 *\~french
 		 *\brief		Désenregistre un callback
-		 *\param[in]	p_caller	L'appelant
+		 *\param[in]	caller	L'appelant
 		 */
-		void unregisterCallback( void * p_caller );
+		void unregisterCallback( void * caller );
 		/**
 		 *\~english
 		 *\brief		sets the file for given log level
-		 *\param[in]	p_logFilePath	The file path
-		 *\param[in]	p_logLevel		The log level. If LogType::eCount, sets the file for every log level
+		 *\param[in]	logFilePath	The file path
+		 *\param[in]	logLevel	The log level. If LogType::eCount, sets the file for every log level
 		 *\~french
 		 *\brief		Définit le fichier pour le niveau de log donné
-		 *\param[in]	p_logFilePath	Le chemin du fichier
-		 *\param[in]	p_logLevel		Le niveau de log. Si LogType::eCount, définit le fichier pour tous les niveaux
+		 *\param[in]	logFilePath	Le chemin du fichier
+		 *\param[in]	logLevel	Le niveau de log. Si LogType::eCount, définit le fichier pour tous les niveaux
 		 */
-		void setFileName( String const & p_logFilePath, LogType p_logLevel );
+		void setFileName( String const & logFilePath, LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
-		 *\param[in]	p_logLevel	The log level
-		 *\param[in]	p_message	The message
-		 *\param[in]	p_newLine	Tells if the new line character must be added
+		 *\param[in]	logLevel	The log level
+		 *\param[in]	message		The message
+		 *\param[in]	newLine		Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche un message dans la console
-		 *\param[in]	p_logLevel	Le niveau de log
-		 *\param[in]	p_message	Le message
-		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
+		 *\param[in]	logLevel	Le niveau de log
+		 *\param[in]	message		Le message
+		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void printMessage( LogType p_logLevel, std::string const & p_message, bool p_newLine );
+		void printMessage( LogType logLevel, std::string const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
-		 *\param[in]	p_logLevel	The log level
-		 *\param[in]	p_message	The message
-		 *\param[in]	p_newLine	Tells if the new line character must be added
+		 *\param[in]	logLevel	The log level
+		 *\param[in]	message		The message
+		 *\param[in]	newLine		Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche un message dans la console
-		 *\param[in]	p_logLevel	Le niveau de log
-		 *\param[in]	p_message	Le message
-		 *\param[in]	p_newLine	Dit si le caractère de nouvelle ligne doit être ajouté
+		 *\param[in]	logLevel	Le niveau de log
+		 *\param[in]	message		Le message
+		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void printMessage( LogType p_logLevel, std::wstring const & p_message, bool p_newLine );
+		void printMessage( LogType logLevel, std::wstring const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
-		 *\param[in]	p_queue	The message queue
+		 *\param[in]	queue	The message queue
 		 *\~french
 		 *\brief		Logge une file de messages
-		 *\param[in]	p_queue	La file de messages
+		 *\param[in]	queue	La file de messages
 		 */
-		void logMessageQueue( MessageQueue const & p_queue );
+		void logMessageQueue( MessageQueue const & queue );
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
-		 *\param[in]	p_logLevel	The log level
-		 *\param[in]	p_message	The message
+		 *\param[in]	logLevel	The log level
+		 *\param[in]	message		The message
+		 *\param[in]	newLine		Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche un message dans la console
-		 *\param[in]	p_logLevel	Le niveau de log
-		 *\param[in]	p_message	Le message
+		 *\param[in]	logLevel	Le niveau de log
+		 *\param[in]	message		Le message
+		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doPrintMessage( LogType p_logLevel, String const & p_message, bool p_newLine );
+		void doPrintMessage( LogType logLevel, String const & message, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Prints a line to the console
-		 *\param[in]	p_line		The line
-		 *\param[in]	p_logLevel	The log level
+		 *\param[in]	line		The line
+		 *\param[in]	logLevel	The log level
+		 *\param[in]	newLine		Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche une ligne de texte sur la console
-		 *\param[in]	p_line		La ligne de texte
-		 *\param[in]	p_logLevel	Le niveau de log
+		 *\param[in]	line		La ligne de texte
+		 *\param[in]	logLevel	Le niveau de log
+		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doPrintLine( String const & p_line, LogType p_logLevel, bool p_newLine );
+		void doPrintLine( String const & line, LogType logLevel, bool newLine );
 		/**
 		 *\~english
 		 *\brief		Logs a line in the given stream
-		 *\param[in]	p_timestamp	The line timestamp
-		 *\param[in]	p_line		The line
-		 *\param[in]	p_stream	The stream
-		 *\param[in]	p_logLevel	The log level
+		 *\param[in]	timestamp	The line timestamp
+		 *\param[in]	line		The line
+		 *\param[in]	stream		The stream
+		 *\param[in]	logLevel	The log level
+		 *\param[in]	newLine		Tells if the new line character must be added
 		 *\~french
 		 *\brief		Affiche une ligne de texte dans le flux donné
-		 *\param[in]	p_timestamp	Le timestamp de la ligne
-		 *\param[in]	p_line		La ligne de texte
-		 *\param[in]	p_stream	Le flux
-		 *\param[in]	p_logLevel	Le niveau de log
+		 *\param[in]	timestamp	Le timestamp de la ligne
+		 *\param[in]	line		La ligne de texte
+		 *\param[in]	stream		Le flux
+		 *\param[in]	logLevel	Le niveau de log
+		 *\param[in]	newLine		Dit si le caractère de nouvelle ligne doit être ajouté
 		 */
-		void doLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel, bool p_newLine );
+		void doLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool newLine );
 
 	private:
 		//! The files paths, per log level

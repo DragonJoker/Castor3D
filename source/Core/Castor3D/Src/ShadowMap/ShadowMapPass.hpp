@@ -30,12 +30,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
-		 *\param[in]	scene		The scene.
+		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	scene		La scène.
+		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPass( Engine & engine
@@ -89,11 +91,9 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the given nodes.
 		 *\param		nodes	The nodes.
-		 *\param		camera	The viewing camera.
 		 *\~french
 		 *\brief		Met à jour les noeuds donnés.
 		 *\param		nodes	Les noeuds.
-		 *\param		camera	La caméra regardant la scène.
 		 */
 		void doUpdateNodes( SceneCulledRenderNodes & nodes );
 		/**

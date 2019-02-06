@@ -27,29 +27,29 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_char		The glyph character
-		 *\param[in]	p_size		The glyph dimensions
-		 *\param[in]	p_bearing	The glyph position relative to cursor
-		 *\param[in]	p_advance	Pixels to advance in order to go next character
-		 *\param[in]	p_bitmap	The glyph image
+		 *\param[in]	c		The glyph character
+		 *\param[in]	size	The glyph dimensions
+		 *\param[in]	bearing	The glyph position relative to cursor
+		 *\param[in]	advance	Pixels to advance in order to go next character
+		 *\param[in]	bitmap	The glyph image
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_char		Le caractère de la glyphe
-		 *\param[in]	p_size		Les dimensions de la glyphe
-		 *\param[in]	p_bearing	La position de la glyphe par rapport au curseur
-		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
-		 *\param[in]	p_bitmap	L'image de la glyphe
+		 *\param[in]	c		Le caractère de la glyphe
+		 *\param[in]	size	Les dimensions de la glyphe
+		 *\param[in]	bearing	La position de la glyphe par rapport au curseur
+		 *\param[in]	advance	Nombre de pixels pour placer le caractère suivant
+		 *\param[in]	bitmap	L'image de la glyphe
 		 */
-		inline Glyph( char32_t p_char
-			, Size const & p_size
-			, Position const & p_bearing
-			, uint32_t p_advance
-			, ByteArray const & p_bitmap )
-			: m_size{ p_size }
-			, m_bearing{ p_bearing }
-			, m_bitmap{ p_bitmap }
-			, m_advance{ p_advance }
-			, m_character{ p_char }
+		inline Glyph( char32_t c
+			, Size const & size
+			, Position const & bearing
+			, uint32_t advance
+			, ByteArray const & bitmap )
+			: m_size{ size }
+			, m_bearing{ bearing }
+			, m_bitmap{ bitmap }
+			, m_advance{ advance }
+			, m_character{ c }
 		{
 		}
 		/**
@@ -121,88 +121,93 @@ namespace castor
 		}
 
 	private:
-		//!\~english Glyph position relative to cursor.	\~french Position de la glyphe par rapport au curseur.
+		//!\~english	Glyph position relative to cursor.
+		//!\~french		Position de la glyphe par rapport au curseur.
 		Position const m_bearing;
-		//!\~english Glyph dimensions.	\~french Dimensions de la glyphe.
+		//!\~english	Glyph dimensions.
+		//!\~french		Dimensions de la glyphe.
 		Size const m_size;
-		//!\~english Pixels to advance in order to go next character	\~french Nombre de pixels pour placer le caractère suivant
+		//!\~english	Pixels to advance in order to go next character.
+		//!\~french		Nombre de pixels pour placer le caractère suivant.
 		uint32_t m_advance;
-		//!\~english Glyph image	\~french Image de la glyphe
+		//!\~english	Glyph image.
+		//!\~french		Image de la glyphe.
 		ByteArray const m_bitmap;
-		//!\~english Glyph character	\~french Caractère de la glyphe
+		//!\~english	Glyph character.
+		//!\~french		Caractère de la glyphe.
 		char32_t const m_character;
 	};
 	/**
 	 *\~english
 	 *\brief		Equality comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison d'égalité.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator==( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator==( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() == p_rhs.getCharacter();
+		return lhs.getCharacter() == rhs.getCharacter();
 	}
 	/**
 	 *\~english
 	 *\brief		Difference comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison de différence.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator!=( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator!=( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() != p_rhs.getCharacter();
+		return lhs.getCharacter() != rhs.getCharacter();
 	}
 	/**
 	 *\~english
 	 *\brief		Less than comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison inférieur.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator<( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator<( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() < p_rhs.getCharacter();
+		return lhs.getCharacter() < rhs.getCharacter();
 	}
 	/**
 	 *\~english
 	 *\brief		Greater than comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison supérieur.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator>( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator>( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() > p_rhs.getCharacter();
+		return lhs.getCharacter() > rhs.getCharacter();
 	}
 	/**
 	 *\~english
 	 *\brief		Less than or equal to comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison inférieur ou égal.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator<=( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator<=( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() <= p_rhs.getCharacter();
+		return lhs.getCharacter() <= rhs.getCharacter();
 	}
 	/**
 	 *\~english
 	 *\brief		Greater than or equal to comparison operator.
-	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\param[in]	lhs, rhs	The values to compare.
 	 *\~french
 	 *\brief		Opérateur de comparaison supérieur ou égal.
-	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 *\param[in]	lhs, rhs	Les valeurs à comparer.
 	 */
-	inline bool operator>=( Glyph const & p_lhs, Glyph const & p_rhs )
+	inline bool operator>=( Glyph const & lhs, Glyph const & rhs )
 	{
-		return p_lhs.getCharacter() >= p_rhs.getCharacter();
+		return lhs.getCharacter() >= rhs.getCharacter();
 	}
 }
 

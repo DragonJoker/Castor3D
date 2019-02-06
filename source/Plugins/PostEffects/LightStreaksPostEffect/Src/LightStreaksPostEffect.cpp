@@ -546,7 +546,7 @@ namespace light_streaks
 			ashes::RasterisationState{},
 			ashes::MultisampleState{},
 			ashes::ColourBlendState::createDefault(),
-			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.hiPass.pipeline = m_pipelines.hiPass.layout.pipelineLayout->createPipeline( pipeline );
@@ -594,7 +594,7 @@ namespace light_streaks
 			ashes::RasterisationState{},
 			ashes::MultisampleState{},
 			ashes::ColourBlendState::createDefault(),
-			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.kawase.pipeline = m_pipelines.kawase.layout.pipelineLayout->createPipeline( pipeline );
@@ -654,7 +654,7 @@ namespace light_streaks
 			ashes::RasterisationState{},
 			ashes::MultisampleState{},
 			ashes::ColourBlendState::createDefault(),
-			{ ashes::DynamicState::eViewport, ashes::DynamicState::eScissor },
+			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
 			ashes::DepthStencilState{ 0u, false, false }
 		};
 		m_pipelines.combine.pipeline = m_pipelines.combine.layout.pipelineLayout->createPipeline( pipeline );

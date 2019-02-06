@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_PARSER_PARAMETER_HELPERS_H___
@@ -1139,12 +1139,12 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Retrieves the given parameter type's name.
-	 *\param[in]	p_type	The parameter type.
+	 *\param[in]	type	The parameter type.
 	 *\~french
 	 *\brief		Récupère le nom du type de paramètre donné.
-	 *\param[in]	p_type	Le type de paramètre.
+	 *\param[in]	type	Le type de paramètre.
 	 */
-	CU_API String const & getTypeName( ParameterType p_type );
+	CU_API String const & getTypeName( ParameterType type );
 }
 
 #endif

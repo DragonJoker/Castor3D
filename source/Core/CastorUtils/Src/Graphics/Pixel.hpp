@@ -41,63 +41,63 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_init	Tells if the data are initialised
+		 *\param[in]	init	Tells if the data are initialised
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_init	Dit si on initialise les données
+		 *\param[in]	init	Dit si on initialise les données
 		 */
-		Pixel( bool p_init = false );
+		Pixel( bool init = false );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\remarks		This Pixel doesn't own it's data
-		 *\param[in]	p_components	Initialises the data to this one
+		 *\param[in]	components	Initialises the data to this one
 		 *\~french
 		 *\brief		Constructeur
 		 *\remarks		Le Pixel ne gère pas ses données
-		 *\param[in]	p_components	Initialise les données à celles-ci
+		 *\param[in]	components	Initialise les données à celles-ci
 		 */
-		Pixel( uint8_t * p_components );
+		Pixel( uint8_t * components );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_pxl	The Pixel object to copy
+		 *\param[in]	pxl	The Pixel object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_pxl	L'objet Pixel à copier
+		 *\param[in]	pxl	L'objet Pixel à copier
 		 */
-		Pixel( Pixel const & p_pxl );
+		Pixel( Pixel const & pxl );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
-		 *\param[in]	p_pxl	The Pixel object to move
+		 *\param[in]	pxl	The Pixel object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_pxl	L'objet Pixel à déplacer
+		 *\param[in]	pxl	L'objet Pixel à déplacer
 		 */
-		Pixel( Pixel && p_pxl );
+		Pixel( Pixel && pxl );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\remarks		This Pixel owns it's data
-		 *\param[in]	p_components	Initialises the data to this one
+		 *\param[in]	components	Initialises the data to this one
 		 *\~french
 		 *\brief		Constructeur
 		 *\remarks		Le Pixel gère ses données
-		 *\param[in]	p_components	Initialise les données à celles-ci
+		 *\param[in]	components	Initialise les données à celles-ci
 		 */
 		template< PixelFormat FU >
-		Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components );
+		Pixel( std::array< uint8_t, PixelDefinitions< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pxl	The Pixel object to copy
+		 *\param[in]	pxl	The Pixel object to copy
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pxl	L'objet Pixel à copier
+		 *\param[in]	pxl	L'objet Pixel à copier
 		 */
 		template< PixelFormat FU >
-		Pixel( Pixel< FU > const & p_pxl );
+		Pixel( Pixel< FU > const & pxl );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -108,71 +108,71 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_pxl	The Pixel object to copy
+		 *\param[in]	pxl	The Pixel object to copy
 		 *\return		A reference to this Pixel object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_pxl	L'objet Pixel à copier
+		 *\param[in]	pxl	L'objet Pixel à copier
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		Pixel & operator=( Pixel && p_pxl );
+		Pixel & operator=( Pixel && pxl );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_pxl	The Pixel object to move
+		 *\param[in]	pxl	The Pixel object to move
 		 *\return		A reference to this Pixel object
 		 *\~french
 		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_pxl	L'objet Pixel à déplacer
+		 *\param[in]	pxl	L'objet Pixel à déplacer
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		Pixel & operator=( Pixel const & p_pxl );
+		Pixel & operator=( Pixel const & pxl );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_pxl	The Pixel object to copy
+		 *\param[in]	pxl	The Pixel object to copy
 		 *\return		A reference to this Pixel object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_pxl	L'objet Pixel à copier
+		 *\param[in]	pxl	L'objet Pixel à copier
 		 *\return		Une référence sur cet objet Pixel
 		 */
 		template< PixelFormat FU >
-		Pixel & operator=( Pixel< FU > const & p_pxl );
+		Pixel & operator=( Pixel< FU > const & pxl );
 		/**
 		 *\~english
 		 *\brief		Computes the sum of all components
-		 *\param[out]	p_result	Receives the sum
+		 *\param[out]	result	Receives the sum
 		 *\~french
 		 *\brief		Calcule la somme de toutes les composantes
-		 *\param[out]	p_result	Reçoit la somme
+		 *\param[out]	result	Reçoit la somme
 		 */
 		template< typename U >
-		void sum( U & p_result )const;
+		void sum( U & result )const;
 		/**
 		 *\~english
 		 *\brief		Multiplication function
-		 *\param[in]	p_px	The pixel to multiply
+		 *\param[in]	px	The pixel to multiply
 		 *\return		The multiplication result
 		 *\~french
 		 *\brief		Fonction de multiplication
-		 *\param[in]	p_px	Le pixel à multiplier
+		 *\param[in]	px	Le pixel à multiplier
 		 *\return		Le résultat de la multiplication
 		 */
 		template< PixelFormat FU >
-		Pixel< FU > mul( Pixel< FU > const & p_px )const;
+		Pixel< FU > mul( Pixel< FU > const & px )const;
 		/**
 		 *\~english
 		 *\brief		Multiplication function
-		 *\param[in]	p_byVal	The value
+		 *\param[in]	byVal	The value
 		 *\return		The multiplication result
 		 *\~french
 		 *\brief		Fonction de multiplication
-		 *\param[in]	p_byVal	The value
+		 *\param[in]	byVal	The value
 		 *\return		Le résultat de la multiplication
 		 */
 		template< PixelFormat FU >
-		Pixel< FU > mul( uint8_t const & p_byVal )const;
+		Pixel< FU > mul( uint8_t const & byVal )const;
 		/**
 		 *\~english
 		 *\brief		deallocate components
@@ -188,7 +188,7 @@ namespace castor
 		 *\brief		Lie les données de ce pixel à celles données en paramètre
 		 *\remarks		Le pixel perd la responsabilité de ses données
 		 */
-		void link( uint8_t * p_components );
+		void link( uint8_t * components );
 		/**
 		 *\~english
 		 *\brief		Unlinks the data pointer from the ones previously given
@@ -201,36 +201,36 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components
-		 *\param[in]	p_components	Data to convert
+		 *\param[in]	components	Data to convert
 		 *\~french
 		 *\brief		Convertit les données et les copie dans les composantes de ce pixel
-		 *\param[in]	p_components	Les données à convertir
+		 *\param[in]	components	Les données à convertir
 		 *\return
 		 */
 		template< PixelFormat FU >
-		void set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & p_components );
+		void set( std::array< uint8_t, PixelDefinitions< FU >::Size > const & components );
 		/**
 		 *\~english
 		 *\brief		Converts given data and copies it into this pixel's components
-		 *\param[in]	p_components	Data to convert
+		 *\param[in]	components	Data to convert
 		 *\~french
 		 *\brief		Convertit les données et les copie dans les composantes de ce pixel
-		 *\param[in]	p_components	Les données à convertir
+		 *\param[in]	components	Les données à convertir
 		 *\return
 		 */
 		template< PixelFormat FU >
-		void set( uint8_t const * p_components );
+		void set( uint8_t const * components );
 		/**
 		 *\~english
 		 *\brief		Converts given pixel and copies it into this pixel's components
-		 *\param[in]	p_px	Pixel to convert
+		 *\param[in]	px	Pixel to convert
 		 *\~french
 		 *\brief		Convertit le pixel et le copie dans les composantes de ce pixel
-		 *\param[in]	p_px	Le pixel à convertir
+		 *\param[in]	px	Le pixel à convertir
 		 *\return
 		 */
 		template< PixelFormat FU >
-		void set( Pixel< FU > const & p_px );
+		void set( Pixel< FU > const & px );
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
@@ -241,9 +241,9 @@ namespace castor
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
-		inline component_ref operator[]( uint8_t p_index )
+		inline component_ref operator[]( uint8_t index )
 		{
-			return m_components.get()[p_index];
+			return m_components.get()[index];
 		}
 		/**
 		 *\~english
@@ -255,9 +255,9 @@ namespace castor
 		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
-		inline component_const_ref operator[]( uint8_t p_index )const
+		inline component_const_ref operator[]( uint8_t index )const
 		{
-			return m_components.get()[p_index];
+			return m_components.get()[index];
 		}
 		/**
 		 *\~english
@@ -363,21 +363,21 @@ namespace castor
 		 */
 		/**@{*/
 		template< PixelFormat FU >
-		Pixel & operator+=( Pixel< FU > const & p_px );
+		Pixel & operator+=( Pixel< FU > const & px );
 		template< PixelFormat FU >
-		Pixel & operator-=( Pixel< FU > const & p_px );
+		Pixel & operator-=( Pixel< FU > const & px );
 		template< PixelFormat FU >
-		Pixel & operator*=( Pixel< FU > const & p_px );
+		Pixel & operator*=( Pixel< FU > const & px );
 		template< PixelFormat FU >
-		Pixel & operator/=( Pixel< FU > const & p_px );
+		Pixel & operator/=( Pixel< FU > const & px );
 		template< typename U >
-		Pixel & operator+=( U const & p_t );
+		Pixel & operator+=( U const & t );
 		template< typename U >
-		Pixel & operator-=( U const & p_t );
+		Pixel & operator-=( U const & t );
 		template< typename U >
-		Pixel & operator*=( U const & p_t );
+		Pixel & operator*=( U const & t );
 		template< typename U >
-		Pixel & operator/=( U const & p_t );
+		Pixel & operator/=( U const & t );
 		/**@}*/
 
 	private:
@@ -386,15 +386,15 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_lhs, p_rhs	The pixels to compare
+	 *\param[in]	lhs, rhs	The pixels to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_lhs, p_rhs	Les pixels à comparer
+	 *\param[in]	lhs, rhs	Les pixels à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
 	template < PixelFormat FT, PixelFormat FU >
-	bool operator==( Pixel< FT > const & p_lhs, Pixel< FU > const & p_rhs );
+	bool operator==( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	/**
 	 *\~english
 	 *\name Arithmetic operators.
@@ -403,21 +403,21 @@ namespace castor
 	 */
 	/**@{*/
 	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator+( Pixel< FT > const & p_lhs, Pixel< FU > const & p_rhs );
+	Pixel< FT > operator+( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator-( Pixel< FT > const & p_lhs, Pixel< FU > const & p_rhs );
+	Pixel< FT > operator-( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator/( Pixel< FT > const & p_lhs, Pixel< FU > const & p_rhs );
+	Pixel< FT > operator/( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, PixelFormat FU >
-	Pixel< FT > operator*( Pixel< FT > const & p_lhs, Pixel< FU > const & p_rhs );
+	Pixel< FT > operator*( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, typename U >
-	Pixel< FT > operator+( Pixel< FT > const & p_lhs, U const & p_rhs );
+	Pixel< FT > operator+( Pixel< FT > const & lhs, U const & rhs );
 	template < PixelFormat FT, typename U >
-	Pixel< FT > operator-( Pixel< FT > const & p_lhs, U const & p_rhs );
+	Pixel< FT > operator-( Pixel< FT > const & lhs, U const & rhs );
 	template < PixelFormat FT, typename U >
-	Pixel< FT > operator/( Pixel< FT > const & p_lhs, U const & p_rhs );
+	Pixel< FT > operator/( Pixel< FT > const & lhs, U const & rhs );
 	template < PixelFormat FT, typename U >
-	Pixel< FT > operator*( Pixel< FT > const & p_lhs, U const & p_rhs );
+	Pixel< FT > operator*( Pixel< FT > const & lhs, U const & rhs );
 	/**@}*/
 	/*!
 	\author 	Sylvain DOREMUS

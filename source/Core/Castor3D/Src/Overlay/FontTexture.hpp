@@ -33,13 +33,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_font		The font.
+		 *\param[in]	font	The font.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_font		La police.
+		 *\param[in]	font	La police.
 		 */
-		C3D_API FontTexture( Engine & engine, castor::FontSPtr p_font );
+		C3D_API FontTexture( Engine & engine
+			, castor::FontSPtr font );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -80,14 +81,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted glyph position.
-		 *\param[in]	p_char	The glyph index.
+		 *\param[in]	glyphChar	The glyph index.
 		 *\return		The position.
 		 *\~french
 		 *\brief		Récupère la position de la glyphe voulue.
-		 *\param[in]	p_char	L'indice de la glyphe.
+		 *\param[in]	glyphChar	L'indice de la glyphe.
 		 *\return		La position.
 		 */
-		C3D_API castor::Position const & getGlyphPosition( char32_t p_char )const;
+		C3D_API castor::Position const & getGlyphPosition( char32_t glyphChar )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the font.

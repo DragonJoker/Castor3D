@@ -24,31 +24,31 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_begin	The values begin
-		 *\param[in]	p_end	The values end
-		 *\param[in]	p_type	The subchunk type
-		 *\param[in]	p_chunk	The chunk
+		 *\param[in]	begin	The values begin
+		 *\param[in]	end		The values end
+		 *\param[in]	type	The subchunk type
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_begin	Le début des valeurs
-		 *\param[in]	p_end	La fin des valeurs
-		 *\param[in]	p_type	Le type du subchunk
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[in]	begin	Le début des valeurs
+		 *\param[in]	end		La fin des valeurs
+		 *\param[in]	type	Le type du subchunk
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( uint8_t const * p_begin
-			, uint8_t const * p_end
-			, ChunkType p_type
-			, BinaryChunk & p_chunk )
+		static inline bool write( uint8_t const * begin
+			, uint8_t const * end
+			, ChunkType type
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
 			try
 			{
-				BinaryChunk chunk{ p_type };
-				chunk.setData( p_begin, p_end );
-				result = p_chunk.addSubChunk( chunk );
+				BinaryChunk schunk{ type };
+				schunk.setData( begin, end );
+				result = chunk.addSubChunk( schunk );
 			}
 			catch ( ... )
 			{
@@ -75,25 +75,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_begin	The values begin
-		 *\param[in]	p_end	The values end
-		 *\param[in]	p_type	The subchunk type
-		 *\param[in]	p_chunk	The chunk
+		 *\param[in]	begin	The values begin
+		 *\param[in]	end		The values end
+		 *\param[in]	type	The subchunk type
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_begin	Le début des valeurs
-		 *\param[in]	p_end	La fin de valeurs
-		 *\param[in]	p_type	Le type du subchunk
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[in]	begin	Le début des valeurs
+		 *\param[in]	end		La fin de valeurs
+		 *\param[in]	type	Le type du subchunk
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( T const * p_begin
-			, T const * p_end
-			, ChunkType p_type
-			, BinaryChunk & p_chunk )
+		static inline bool write( T const * begin
+			, T const * end
+			, ChunkType type
+			, BinaryChunk & chunk )
 		{
-			std::vector< T > values{ p_begin, p_end };
+			std::vector< T > values{ begin, end };
 
 			for ( auto & value : values )
 			{
@@ -102,32 +102,32 @@ namespace castor3d
 
 			return ChunkWriterBase::write( reinterpret_cast< uint8_t const * >( values.data() )
 				, reinterpret_cast< uint8_t const * >( values.data() + values.size() )
-				, p_type
-				, p_chunk );
+				, type
+				, chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value	The value
-		 *\param[in]	p_type	The subchunk type
-		 *\param[in]	p_chunk	The chunk
+		 *\param[in]	value	The value
+		 *\param[in]	type	The subchunk type
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value	La valeur
-		 *\param[in]	p_type	Le type du subchunk
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[in]	value	La valeur
+		 *\param[in]	type	Le type du subchunk
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( T const & p_value
-			, ChunkType p_type
-			, BinaryChunk & p_chunk )
+		static inline bool write( T const & value
+			, ChunkType type
+			, BinaryChunk & chunk )
 		{
-			auto value = p_value;
-			prepareChunkData( value );
-			auto begin = getBuffer( value );
-			auto end = begin + getDataSize( value );
-			return ChunkWriterBase::write( begin, end, p_type, p_chunk );
+			auto cvalue = value;
+			prepareChunkData( cvalue );
+			auto begin = getBuffer( cvalue );
+			auto end = begin + getDataSize( cvalue );
+			return ChunkWriterBase::write( begin, end, type, chunk );
 		}
 	};
 	/*!
@@ -147,28 +147,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value	The value
-		 *\param[in]	p_type	The subchunk type
-		 *\param[in]	p_chunk	The chunk
+		 *\param[in]	value	The value
+		 *\param[in]	type	The subchunk type
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value	La valeur
-		 *\param[in]	p_type	Le type du subchunk
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[in]	value	La valeur
+		 *\param[in]	type	Le type du subchunk
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( castor::String const & p_value
-			, ChunkType p_type
-			, BinaryChunk & p_chunk )
+		static inline bool write( castor::String const & value
+			, ChunkType type
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
 			try
 			{
-				auto value = castor::string::stringCast< char >( p_value );
-				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
-				ChunkWriterBase::write( buffer, buffer + value.size(), p_type, p_chunk );
+				auto svalue = castor::string::stringCast< char >( value );
+				auto buffer = reinterpret_cast< uint8_t const * >( svalue.data() );
+				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
 			catch ( ... )
 			{
@@ -195,28 +195,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value	The value
-		 *\param[in]	p_type	The subchunk type
-		 *\param[in]	p_chunk	The chunk
+		 *\param[in]	value	The value
+		 *\param[in]	type	The subchunk type
+		 *\param[in]	chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value	La valeur
-		 *\param[in]	p_type	Le type du subchunk
-		 *\param[in]	p_chunk	Le chunk
+		 *\param[in]	value	La valeur
+		 *\param[in]	type	Le type du subchunk
+		 *\param[in]	chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool write( castor::Path const & p_value
-			, ChunkType p_type
-			, BinaryChunk & p_chunk )
+		static inline bool write( castor::Path const & value
+			, ChunkType type
+			, BinaryChunk & chunk )
 		{
 			bool result = true;
 
 			try
 			{
-				auto value = castor::string::stringCast< char >( p_value );
-				auto buffer = reinterpret_cast< uint8_t const * >( value.data() );
-				ChunkWriterBase::write( buffer, buffer + value.size(), p_type, p_chunk );
+				auto svalue = castor::string::stringCast< char >( value );
+				auto buffer = reinterpret_cast< uint8_t const * >( svalue.data() );
+				ChunkWriterBase::write( buffer, buffer + svalue.size(), type, chunk );
 			}
 			catch ( ... )
 			{

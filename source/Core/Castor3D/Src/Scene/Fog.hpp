@@ -47,14 +47,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the fog's density.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit la densité du brouillard.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setDensity( real p_value )
+		inline void setDensity( real value )
 		{
-			m_density = p_value;
+			m_density = value;
 		}
 		/**
 		 *\~english
@@ -69,14 +69,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Sets the fog type.
-		 *\param[in]	p_value	The new value.
+		 *\param[in]	value	The new value.
 		 *\~french
 		 *\brief		Définit le type de brouillard.
-		 *\param[in]	p_value	La nouvelle valeur.
+		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setType( FogType p_value )
+		inline void setType( FogType value )
 		{
-			m_type = p_value;
+			m_type = value;
 		}
 
 	private:

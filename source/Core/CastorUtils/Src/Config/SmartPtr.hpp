@@ -22,9 +22,9 @@ namespace castor
 	struct DummyDtor
 	{
 		template< typename T >
-		inline void operator()( T * p_pPointer )throw()
+		inline void operator()( T * pPointer )throw()
 		{
-			p_pPointer = 0;
+			pPointer = 0;
 		}
 	};
 	CU_API extern DummyDtor g_dummyDtor;

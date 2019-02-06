@@ -31,14 +31,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	frameBuffer		The target framebuffer.
-		 *\param[in]	depthAttach		The depth buffer attach.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	depthView		The depth buffer view.
 		 *\param[in]	matrixUbo		The matrix UBO.
 		 *\param[in]	modelMatrixUbo	The model matrix UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	frameBuffer		Le tampon d'image cible.
-		 *\param[in]	depthAttach		L'attache du tampon de profondeur.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	depthView		L'attache du tampon de profondeur.
 		 *\param[in]	matrixUbo		L'UBO des matrices.
 		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
 		 */
@@ -49,10 +49,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the program and its pipeline.
-		 *\param[in]	vbo	The vertex buffer containing the object to render.
+		 *\param[in]	vertexLayout	The vertex buffer layout.
+		 *\param[in]	vbo				The vertex buffer containing the object to render.
 		 *\~french
 		 *\brief		Initialise le programme et son pipeline.
-		 *\param[in]	vbo	Le tampon de sommets contenant l'objet à dessiner.
+		 *\param[in]	vertexLayout	Le layout du tampon de sommets.
+		 *\param[in]	vbo				Le tampon de sommets contenant l'objet à dessiner.
 		 */
 		void initialise( ashes::VertexLayout const & vertexLayout
 			, ashes::VertexBufferBase & vbo );
@@ -66,8 +68,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders the stencil pass.
+		 *\param[in]	toWait	The semaphore to wait.
 		 *\~french
 		 *\brief		Dessine la passe de stencil.
+		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
 		/**

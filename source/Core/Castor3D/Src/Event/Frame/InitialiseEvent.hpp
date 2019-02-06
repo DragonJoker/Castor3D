@@ -30,27 +30,27 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		InitialiseEvent( InitialiseEvent const & p_copy )
-			: FrameEvent( p_copy )
-			, m_object( p_copy.m_object )
+		InitialiseEvent( InitialiseEvent const & copy )
+			: FrameEvent( copy )
+			, m_object( copy.m_object )
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	copy	The object to copy
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	copy	L'objet à copier
 		 */
-		InitialiseEvent & operator=( InitialiseEvent const & p_copy )
+		InitialiseEvent & operator=( InitialiseEvent const & copy )
 		{
-			InitialiseEvent evt( p_copy );
+			InitialiseEvent evt( copy );
 			std::swap( m_object, evt.m_object );
 			std::swap( m_type, evt.m_type );
 			return *this;
@@ -60,14 +60,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_object	The object to initialise
+		 *\param[in]	object	The object to initialise
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_object	L'objet à initialiser
+		 *\param[in]	object	L'objet à initialiser
 		 */
-		explicit InitialiseEvent( T & p_object )
+		explicit InitialiseEvent( T & object )
 			: FrameEvent( EventType::ePreRender )
-			, m_object( p_object )
+			, m_object( object )
 		{
 		}
 		/**
@@ -102,15 +102,15 @@ namespace castor3d
 	/**
 	 *\~english
 	 *\brief		Helper function to create an initialise event
-	 *\param[in]	p_object	The object to initialise
+	 *\param[in]	object	The object to initialise
 	 *\~french
 	 *\brief		Fonction d'aide pour créer un éveènement d'initialisation
-	 *\param[in]	p_object	L'objet à initialiser
+	 *\param[in]	object	L'objet à initialiser
 	 */
 	template< typename T >
-	std::unique_ptr< InitialiseEvent< T > > makeInitialiseEvent( T & p_object )
+	std::unique_ptr< InitialiseEvent< T > > makeInitialiseEvent( T & object )
 	{
-		return std::make_unique< InitialiseEvent< T > >( p_object );
+		return std::make_unique< InitialiseEvent< T > >( object );
 	}
 }
 
