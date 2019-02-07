@@ -126,8 +126,8 @@ set( CastorBinLibraries
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
-target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
+target_add_doc( ${PROJECT_NAME} "French" "*.h *.hpp *.dox" )
+target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp *.dox" )
 
 # Copying core zip data files
 file(

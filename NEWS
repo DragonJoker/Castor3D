@@ -4,6 +4,55 @@ Verbatim copying and distribution of this entire article is permitted in any
 medium, provided this notice is preserved.
 
 
+Changes between version 0.11.0 and 0.10.0
+
+  BUGS FIXED
+  * CastorUtils
+  *   Fixed matrix initialisation from another different size matrix.
+  *   Fixed pixel buffer flip.
+  *
+  * OBJImporter
+  *   Few fixes in face group management.
+
+  FEATURES
+  * CastorUtils
+  *   Reworked castor::Matrix and castor::Point to make them hold static data, and reduce memory footprint of Matrix.
+  *
+  * Castor3D
+  *   Castor3D now relies on Ashes rendering API, allowing support for OpenGL 4.X, OpenGL 3.X, Direct3D11 and Vulkan renderers.
+  *   GlslWriter has been completely removed and replaced by ShaderLibrary, allowing the generation of shaders in the appropriate rendering API shader language.
+  *   Added support for cross skyboxes.
+  *   Enabled anisotropic filtering control from scene file.
+  *   Added Raw and PCF shadow maps.
+  *   Added sendEvent function to Engine, to be able to execute an event directly if there is an enabled device.
+  *   Extracted binary write/parse classes to new files, to reduce include dependencies.
+  *   Reworked mip level management for textures loaded from files.
+  *   Added volumetric light scattering.
+  *   MatrixUbo is now a reference, in RenderPass, hence is owned by owner classes.
+  *   Upgraded scene files, meshes can now hold a default material.
+  *   Render queue now uses SceneCuller from its render pass, and this culler is used for frustum culling.
+  *   Cascaded shadow maps are implemented and functional.
+  *   Overlays are now rendered them in their own framebuffer, and then combined with the 3D rendering.
+  *   Shadow maps now use texture arrays (2D or Cube).
+  *
+  * RenderSystems
+  *   Removed most of their code, they are now only wrappers around Ashes renderers.
+  *
+  * PostEffects
+  *   Created LinearMotionBlur post effect.
+  *
+  * Samples
+  *   Added CastorTestLauncher, which allows to run rendering tests through the wanted rendering API.
+  *   Rehabilitated ShaderDialog, it now can be used to display tone mapping and post effect shaders.
+  *   ShaderDialog now displays all the shaders for the pipeline used to display a pass.
+  *   Selected submesh's bounding box now appears in yellow.
+  *
+  * Tools
+  *   CastorMeshUpgrader tool has been added, allowing to update cmsh files with a cl tool.
+  *   CastorMeshConverter tool has been added, allowing to convert "any" mesh file to cmsh mesh with a cl tool.
+  *   Added DiffImage, which allows image comparison between a reference image and another one (generated through CastorTestLauncher), to automatise rendering tests.
+
+
 Changes between version 0.10.0 and 0.9.0
 
   BUGS FIXED

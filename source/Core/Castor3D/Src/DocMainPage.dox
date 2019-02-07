@@ -1,0 +1,226 @@
+/*!
+ *\~english
+ *\mainpage Castor3D Engine
+ *Castor3D is a 3D engine written in C++ 17.<br />
+ *It works on Windows and GNU/Linux.<br />
+ *It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, OpenGL 3.X and OpenGL 4.X.<br />
+ *The project itself is compilable on supported platforms using CMake (\ref build).<br />
+ *<br />
+ *<br />
+ *\section features Features
+ *<ul>
+ *<li>Deferred rendering for opaque objects.</li>
+ *<li>Blended Weighted rendering for transparent objects.</li>
+ *<li>Normal mapping.</li>
+ *<li>Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).</li>
+ *<li>Parallax Occlusion mapping.</li>
+ *<li>Screen Space Ambient Occlusion (using Scalable Ambiant Obscurance implementation).</li>
+ *<li>Reflection/Refraction Mapping.</li>
+ *<li>PBR rendering (Metallic and Specular workflows), and Phong rendering.</li>
+ *<li>HDR rendering with various tone mapping operators.</li>
+ *<li>Screen Space Subsurface Scattering (without backlit transmittance yet).</li>
+ *<li>Volumetric Light Scattering for the directional light source, if it projects shadows.</li>
+ *<li>Cascaded Shadow Maps for the directional light source.</li>
+ *<li>Frustum culling.</li>
+ *<li>Scene graph.</li>
+ *<li>Modular architecture through plug-ins.</li>
+ *<li>Shaders are generated automatically from pipeline configuration.</li>
+ *<li>Shaders are writable directly from C++ code.</li>
+ *<li>Scenes are described using a text format easily comprehensible and extensible. (\ref scenefile)</li>
+ *<li>Asynchronous (timers) or synchronour (thread) rendering.</li>
+ *</ul>
+ *<br />
+ *<br />
+ *\section plugin Plugins
+ *<ul>
+ *<li>Importer: Allow importing meshes from external formats.</li>
+ *<li>Divider: Allow implementation of mesh subdivision algorithms.</li>
+ *<li>Renderer: Allow supporting various rendering APIs (through Ashes renderers).</li>
+ *<li>PostEffect: Allow implementation of post-effects.</li>
+ *<li>Generator: Allow meshes and textures procedural generation.</li>
+ *<li>Generic: Allow adding general features to the engine.</li>
+ *<li>ToneMapping: Allow implementation of additional tone mapping operators.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_renderer Renderers
+ *<ul>
+ *<li>VkRenderSystem.</li>
+ *<li>D3D11RenderSystem.</li>
+ *<li>Gl3RenderSystem.</li>
+ *<li>Gl4RenderSystem.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_importer Importers
+ *<ul>
+ *<li>ASSIMP: Multiple format mesh importer.</li>
+ *<li>PLY: Stanford Polygon library mesh importer.</li>
+ *<li>OBJ: Wavefront OBJ mesh importer.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_divider Dividers
+ *<ul>
+ *<li>Loop subdivision surfaces.</li>
+ *<li>Phong tessellation.</li>
+ *<li>PN-Triangles surfaces.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_postfx PostEffects
+ *<ul>
+ *<li>Bloom: HDR Bloom implementation.</li>
+ *<li>FilmGrain: To display some grain on the render.</li>
+ *<li>GrayScale.</li>
+ *<li>LightStreaks (using Kawase Light Streaks).</li>
+ *<li>FXAA Antialiasing.</li>
+ *<li>SMAA Antialiasing (1X and T2X so far).</li>
+ *<li>Linear Motion Blur.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_generator Generators
+ *<ul>
+ *<li>DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_generic Generic
+ *<ul>
+ *<li>CastorGUI: to build GUIs inside Castor3D scenes.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_tonemap ToneMappings
+ *<ul>
+ *<li>LinearToneMapping: Default tone mapping.</li>
+ *<li>HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.</li>
+ *<li>HejlBurgessDawsonToneMapping: Hejl Burgess Dawson (filmic) tone mapping.</li>
+ *<li>ReinhardToneMapping: Reinhard tone mapping.</li>
+ *<li>Uncharted2ToneMapping: Uncharted 2 tone mapping.</li>
+ *</ul>
+ *<br />
+ *\section other_apps Other applications
+ *<ul>
+ *<li>CastorViewer: A scene viewer based on Castor3D.</li>
+ *<li>CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.</li>
+ *<li>CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.</li>
+ *<li>ImgConverter: Allows you to convert any image file type to XPM or ICO.</li>
+ *</ul>
+ *<br />
+ *\section screenshots Screenshots
+ *\image html Cerberus-PBRMR.png
+ *\image html Nyra-PBRMR.png
+ *\image html Sponza-PBRMR.png
+ *\image html SanMiguel-PBRSG.png
+ *\image html Park-PBRMR.png
+ *\image html Park-Phong.png
+ *<br />
+ *<br />
+ *For the changelog: \ref changelog<br />
+ *
+ *\~french
+ *\mainpage Moteur Castor3D
+ *Castor3D est un moteur 3D multi-plateformes écrit en C++17.<br />
+ *Il fonctionne sur les plateformes Linux (GTK) et Windows.<br />
+ *Il est basé sur l'API de rendu Ashes et supporte donc les API OpenGL 3.X, OpenGL 4.X, Direct3D 11 et Vulkan.<br />
+ *Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake (\ref build).<br />
+ *<br />
+ *<br />
+ *\section features Fonctionnalités
+ *<ul>
+ *<li>Deferred rendering pour les objets opaques</li>
+ *<li>Weighted Blended rendering pour les objets transparents.</li>
+ *<li>Normal mapping.</li>
+ *<li>Shadow Mapping (avec choix entre Raw, PCF ou Variance Shadow Maps).</li>
+ *<li>Parallax Occlusion Mapping.</li>
+ *<li>Screen Space Ambiant Occlusion (en implémentant le Scalable Ambiance Obscurance).</li>
+ *<li>Reflection/Refraction Mapping.</li>
+ *<li>Rendu PBR (Metallic/Roughness et Specular/Glossiness) et rendu Phong traditionnel.</li>
+ *<li>Rendu HDR avec application de divers opérateurs de tone mapping.</li>
+ *<li>Screen Space Subsurface Scattering (sans la backlit transmittance pour l'instant).</li>
+ *<li>Volumetric Light Scattering pour la source directionnelle, si elle projette des ombres.</li>
+ *<li>Cascaded Shadow Maps pour la source directionelle.</li>
+ *<li>Frustum culling.</li>
+ *<li>Graphe de scène.</li>
+ *<li>Architecture modulaire, à base de plug-ins.</li>
+ *<li>Génération automatique de shaders, en fonction de la configuration du pipeline.</li>
+ *<li>Ecriture du code du shader directement depuis le code C++.</li>
+ *<li>Scènes décrites dans un format texte facilement compréhensible et extensible. (\ref scenefile)</li>
+ *<li>Rendu synchrone (timers) ou asynchrone (thread).</li>
+ *</ul>
+ *<br />
+ *<br />
+ *\section plugin Plugins
+ *<ul>
+ *<li>Importer : Ils permettent l'ajout de l'importation de nouveaux formats de fichiers de maillages.</li>
+ *<li>Divider : Ils permettent d'implémenter des algorithmes de subdivision de maillage, à la construction (pas au niveau LOD).</li>
+ *<li>Renderer : Ils sont le support des API de rendu.</li>
+ *<li>PostEffect : Ils permettent l'application d'effets post-rendu.</li>
+ *<li>Generator : Ils permettent de générer des maillages ou textures, de manière procédurale.</li>
+ *<li>Generic : Ils ont pour but d'étendre les fonctionnalités globales du moteur.</li>
+ *<li>ToneMapping : Ils permettent de définir de nouveaux opérateurs de tone mapping.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_importer Importers
+ *<ul>
+ *<li>AssimpImporter, utilisant la bibliothèque assimp pour l'import d'une grande variété de formats.</li>
+ *<li>PlyImporter, permettant l'import de gros maillage PLY (pour lesquels assimp éprouve des difficultés).</li>
+ *<li>ObjImporter, permettant l'import de maillages au format OBJ.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_divider Dividers
+ *<ul>
+ *<li>PN-Triangles ;</li>
+ *<li>Phong ; </li>
+ *<li>Loop.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_renderer Renderers
+ *<ul>
+ *<li>GlRenderSystem, pour utiliser OpenGL.</li>
+ *<li>TestRenderSystem, un renderer de test, ne faisant à peu près rien, mais permettant l'implémentation de tests.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_postfx PostEffect
+ *<ul>
+ *<li>HDRBloom ;</li>
+ *<li>FXAA, un antialiasing de qualité basique ;</li>
+ *<li>GrayScale ;</li>
+ *<li>KawaseLightStreaks ;</li>
+ *<li>SMAA, un antialiasing temporel de bonne qualité ;</li>
+ *<li>FilmGrain.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_generator Generators
+ *<ul>
+ *<li>DiamondSquareTerrain, utilisant l'algorithme diamond square pour générer des reliefs.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_generic Generic
+ *<ul>
+ *<li>CastorGui, étendant les fichiers de scène pour ajouter et dessiner des IHM (boutons, zones de texte, ...) via les incrustations 2D.</li>
+ *</ul>
+ *<br />
+ *\subsection plugin_tonemapping ToneMapping
+ *<ul>
+ *<li>Linear, l'opérateur par défaut.</li>
+ *<li>Haarm Pieter Duiker.</li>
+ *<li>Hejl Burgess Dawson (aussi appelé Filmic).</li>
+ *<li>Reinhard.</li>
+ *<li>Uncharted 2.</li>
+ *</ul>
+ *<br />
+ *\section other_apps Autres applications
+ *<ul>
+ *<li>CastorViewer : Visualiseur de scènes utilisant Castor3D.</li>
+ *<li>CastorMeshConverter : Convertisseur de divers formats de fichier de maillaige vers le format Castor3D.</li>
+ *<li>CastorMeshUpgrader : Met à jour les fichiers de maillage utilisant un format Castor3D antérieur à la dernière version.</li>
+ *<li>ImgConverter : Projet de conversion de tout type d'images vers XPM ou ICO.</li>
+ *</ul>
+ *<br />
+ *\section screenshots Screenshots
+ *\image html Cerberus-PBRMR.png
+ *\image html Nyra-PBRMR.png
+ *\image html Sponza-PBRMR.png
+ *\image html Park-PBRMR.png
+ *\image html Park-Phong.png
+ *\image html SanMiguel-PBRSG.png
+ *<br />
+ *<br />
+ *Pour le changelog: \ref changelog<br />
+ */

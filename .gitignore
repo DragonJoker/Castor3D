@@ -3,8 +3,8 @@
 /build
 /build*
 /setup
-/doc/x86
-/doc/x64
+/doc/Castor3D
+/doc/CastorUtils
 /source/Core/Castor3D/Data/Core
 /source/Samples/CastorDvpTD/HUD_Source.jpg
 /source/Samples/CastorViewerSharp/Src/obj
