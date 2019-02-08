@@ -12,7 +12,6 @@ namespace castor3d
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		02/06/2016
-	\todo		write and read functions.
 	\~english
 	\brief		Animation instance class.
 	\remark		Used to play an Animation on a specific object.

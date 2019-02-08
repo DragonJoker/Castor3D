@@ -13,7 +13,6 @@ namespace castor3d
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		write and read functions.
 	\~english
 	\brief		Mesh animation instance.
 	\~french
