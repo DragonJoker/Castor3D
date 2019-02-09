@@ -44,6 +44,11 @@ using namespace castor3d;
 
 #define C3D_UseLightPassFence 1
 #define C3D_DisableSSSTransmittance 1
+#define C3D_DebugEye 0
+#define C3D_DebugVSPosition 0
+#define C3D_DebugWSPosition 0
+#define C3D_DebugWSNormal 0
+#define C3D_DebugTexCoord 0
 
 namespace castor3d
 {
@@ -624,8 +629,8 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
-					, c3d_renderSize ) );
+				, utils.bottomUpToTopDown( utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -738,6 +743,18 @@ namespace castor3d
 
 			pxl_diffuse = lightDiffuse * diffuse;
 			pxl_specular = lightSpecular * specular;
+
+#if C3D_DebugEye
+			pxl_diffuse = eye;
+#elif C3D_DebugVSPosition
+			pxl_diffuse = vsPosition;
+#elif C3D_DebugWSPosition
+			pxl_diffuse = wsPosition;
+#elif C3D_DebugWSNormal
+			pxl_diffuse = wsNormal;
+#elif C3D_DebugTexCoord
+			pxl_diffuse = vec3( texCoord, 1.0_f );
+#endif
 		} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -803,8 +820,8 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
-					, c3d_renderSize ) );
+				, utils.bottomUpToTopDown( utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -977,6 +994,18 @@ namespace castor3d
 
 			pxl_diffuse = lightDiffuse;
 			pxl_specular = lightSpecular;
+
+#if C3D_DebugEye
+			pxl_diffuse = eye;
+#elif C3D_DebugVSPosition
+			pxl_diffuse = vsPosition;
+#elif C3D_DebugWSPosition
+			pxl_diffuse = wsPosition;
+#elif C3D_DebugWSNormal
+			pxl_diffuse = wsNormal;
+#elif C3D_DebugTexCoord
+			pxl_diffuse = vec3( texCoord, 1.0_f );
+#endif
 		} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -1042,8 +1071,8 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
-					, c3d_renderSize ) );
+				, utils.bottomUpToTopDown( utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -1162,6 +1191,18 @@ namespace castor3d
 
 			pxl_diffuse = lightDiffuse;
 			pxl_specular = lightSpecular;
+
+#if C3D_DebugEye
+			pxl_diffuse = eye;
+#elif C3D_DebugVSPosition
+			pxl_diffuse = vsPosition;
+#elif C3D_DebugWSPosition
+			pxl_diffuse = wsPosition;
+#elif C3D_DebugWSNormal
+			pxl_diffuse = wsNormal;
+#elif C3D_DebugTexCoord
+			pxl_diffuse = vec3( texCoord, 1.0_f );
+#endif
 		} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

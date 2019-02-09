@@ -11,8 +11,12 @@ namespace castor3d
 	{
 		ashes::TexturePtr doCreateTexture( ashes::Device const & device
 			, ashes::Format format
-			, ashes::Extent3D const & size )
+			, ashes::Extent3D const & size
+			, bool isDepth )
 		{
+			ashes::ImageUsageFlags usage = isDepth
+				? ashes::ImageUsageFlag::eDepthStencilAttachment | ashes::ImageUsageFlag::eTransferSrc
+				: ashes::ImageUsageFlag::eColourAttachment;
 			ashes::ImageCreateInfo image{};
 			image.arrayLayers = 1u;
 			image.extent.width = size.width;
@@ -21,7 +25,7 @@ namespace castor3d
 			image.imageType = ashes::TextureType::e2D;
 			image.mipLevels = 1u;
 			image.samples = ashes::SampleCountFlag::e1;
-			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
+			image.usage = usage | ashes::ImageUsageFlag::eSampled;
 			image.format = format;
 
 			return device.createTexture( image
@@ -37,13 +41,12 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
-		m_result[uint32_t( DsTexture::eDepth )] = &depthTexture;
-
-		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
+		for ( auto i = uint32_t( DsTexture::eDepth ); i < uint32_t( DsTexture::eData5 ); i++ )
 		{
 			m_owned.emplace_back( doCreateTexture( device
 				, getTextureFormat( DsTexture( i ) )
-				, depthTexture.getDimensions() ) );
+				, depthTexture.getDimensions()
+				, i == uint32_t( DsTexture::eDepth ) ) );
 
 			m_result[i] = m_owned.back().get();
 		}

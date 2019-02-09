@@ -36,13 +36,19 @@
 #include <Graphics/Image.hpp>
 
 using namespace castor;
-using namespace castor3d;
 
 #define C3D_DebugSSAO 0
 #define C3D_DebugDiffuseLighting 0
 #define C3D_DebugSpecularLighting 0
 #define C3D_DebugIBL 0
 #define C3D_DebugNormals 0
+#define C3D_DebugWorldPos 0
+#define C3D_DebugViewPos 0
+#define C3D_DebugData1 0
+#define C3D_DebugData2 0
+#define C3D_DebugData3 0
+#define C3D_DebugData4 0
+#define C3D_DebugData5 0
 
 namespace castor3d
 {
@@ -286,8 +292,8 @@ namespace castor3d
 				if ( fogType != FogType::eDisabled )
 				{
 					position = utils.calcVSPosition( uv
-							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
-							, c3d_mtxInvProj );
+						, depth
+						, c3d_mtxInvProj );
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( position )
@@ -304,6 +310,20 @@ namespace castor3d
 				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugNormals
 				pxl_fragColor = vec4( normal, 1.0_f );
+#elif C3D_DebugWorldPos
+				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+#elif C3D_DebugViewPos
+				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugData1
+				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+#elif C3D_DebugData2
+				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+#elif C3D_DebugData3
+				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+#elif C3D_DebugData4
+				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+#elif C3D_DebugData5
+				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 			} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -540,8 +560,8 @@ namespace castor3d
 				if ( fogType != FogType::eDisabled )
 				{
 					position = utils.calcVSPosition( uv
-							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
-							, c3d_mtxInvProj );
+						, depth
+						, c3d_mtxInvProj );
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( position )
@@ -560,6 +580,20 @@ namespace castor3d
 				pxl_fragColor = vec4( ambient, 1.0_f );
 #elif C3D_DebugNormals
 				pxl_fragColor = vec4( normal, 1.0_f );
+#elif C3D_DebugWorldPos
+				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+#elif C3D_DebugViewPos
+				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugData1
+				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+#elif C3D_DebugData2
+				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+#elif C3D_DebugData3
+				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+#elif C3D_DebugData4
+				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+#elif C3D_DebugData5
+				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 			} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -796,8 +830,8 @@ namespace castor3d
 				if ( fogType != FogType::eDisabled )
 				{
 					position = utils.calcVSPosition( uv
-							, textureLod( c3d_mapDepth, uv, 0.0_f ).r()
-							, c3d_mtxInvProj );
+						, depth
+						, c3d_mtxInvProj );
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( position )
@@ -816,6 +850,20 @@ namespace castor3d
 				pxl_fragColor = vec4( ambient, 1.0_f );
 #elif C3D_DebugNormals
 				pxl_fragColor = vec4( normal, 1.0_f );
+#elif C3D_DebugWorldPos
+				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+#elif C3D_DebugViewPos
+				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugData1
+				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+#elif C3D_DebugData2
+				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+#elif C3D_DebugData3
+				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+#elif C3D_DebugData4
+				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+#elif C3D_DebugData5
+				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 			} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

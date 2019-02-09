@@ -117,13 +117,18 @@ namespace castor3d
 			, RenderInfo & info );
 
 	private:
+		Engine & m_engine;
 		castor::Size const m_size;
+		TextureUnit m_depth;
 		TextureUnit m_diffuse;
 		TextureUnit m_specular;
 		LightPasses m_lightPass;
 		LightPasses m_lightPassShadow;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
+		ashes::TextureView const & m_srcDepth;
+		ashes::CommandBufferPtr m_blitDepthCommandBuffer;
+		ashes::SemaphorePtr m_blitDepthSemaphore;
 	};
 }
 
