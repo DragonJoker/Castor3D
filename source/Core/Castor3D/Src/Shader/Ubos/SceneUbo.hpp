@@ -26,13 +26,10 @@ namespace castor3d
 		{
 			castor::Point4f ambientLight;
 			castor::Point4f backgroundColour;
-			castor::Point4i lightsCount;
+			castor::Point4f lightsCount;
 			castor::Point4f cameraPos;
-			castor::Point2i windowSize;
-			float cameraNearPlane;
-			float cameraFarPlane;
-			int32_t fogType;
-			float fogDensity;
+			castor::Point4f clipInfo;
+			castor::Point4f fogInfo;
 		};
 
 	public:
@@ -157,21 +154,12 @@ namespace castor3d
 		//!\~english	Name of the camera position frame variable.
 		//!\~french		Nom de la frame variable contenant la position de la caméra.
 		C3D_API static castor::String const CameraPos;
-		//!\~english	Name of the window dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
-		C3D_API static castor::String const WindowSize;
-		//!\~english	Name of the camera near plane frame variable.
-		//!\~french		Nom de la frame variable contenant la valeur du plan proche de la caméra.
-		C3D_API static castor::String const CameraNearPlane;
-		//!\~english	Name of the camera far plane frame variable.
-		//!\~french		Nom de la frame variable contenant la valeur du plan éloigné de la caméra.
-		C3D_API static castor::String const CameraFarPlane;
-		//!\~english	Name of the fog type frame variable.
-		//!\~french		Nom de la frame variable contenant le type de brouillard.
-		C3D_API static castor::String const FogType;
-		//!\~english	Name of the fog's density frame variable.
-		//!\~french		Nom de la frame variable contenant la densité du brouillard.
-		C3D_API static castor::String const FogDensity;
+		//!\~english	Name of the clip informations (window size, near and far plane) frame variable.
+		//!\~french		Nom de la frame variable contenant les informations de clipping (dimensions de la fenêtre, plans proche et lointain).
+		C3D_API static castor::String const ClipInfo;
+		//!\~english	Name of the fog informations (type and density) frame variable.
+		//!\~french		Nom de la frame variable contenant les informations de brouillard (type et densité).
+		C3D_API static castor::String const FogInfo;
 
 	private:
 		Engine & m_engine;
@@ -186,13 +174,10 @@ namespace castor3d
 		, set };\
 	auto c3d_ambientLight = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::AmbientLight );\
 	auto c3d_backgroundColour = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::BackgroundColour );\
-	auto c3d_lightsCount = scene.declMember< sdw::IVec4 >( castor3d::SceneUbo::LightsCount );\
+	auto c3d_lightsCount = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::LightsCount );\
 	auto c3d_cameraPosition = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::CameraPos );\
-	auto c3d_windowSize = scene.declMember< sdw::IVec2 >( castor3d::SceneUbo::WindowSize );\
-	auto c3d_cameraNearPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraNearPlane ); \
-	auto c3d_cameraFarPlane = scene.declMember< sdw::Float >( castor3d::SceneUbo::CameraFarPlane );\
-	auto c3d_fogType = scene.declMember< sdw::Int >( castor3d::SceneUbo::FogType );\
-	auto c3d_fogDensity = scene.declMember< sdw::Float >( castor3d::SceneUbo::FogDensity );\
+	auto c3d_clipInfo = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::ClipInfo );\
+	auto c3d_fogInfo = scene.declMember< sdw::Vec4 >( castor3d::SceneUbo::FogInfo );\
 	scene.end()
 
 #endif

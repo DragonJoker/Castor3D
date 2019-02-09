@@ -163,7 +163,8 @@ namespace castor3d
 			, ashes::MemoryPropertyFlag::eHostVisible | ashes::MemoryPropertyFlag::eHostCoherent );
 
 		m_viewport.resize( size );
-		return true;
+		m_initialised = true;
+		return m_initialised;
 	}
 
 	void ShadowMapPassPoint::doCleanup()

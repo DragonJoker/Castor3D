@@ -32,7 +32,7 @@ namespace castor3d
 			auto begin = m_writer.declLocale( "begin"
 				, 0_i );
 			auto end = m_writer.declLocale( "end"
-				, c3d_lightsCount.x() );
+				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
 
 			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{
@@ -48,7 +48,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += c3d_lightsCount.y();
+			end += m_writer.cast< Int >( c3d_lightsCount.y() );
 
 			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{
@@ -64,7 +64,7 @@ namespace castor3d
 			ROF;
 
 			begin = end;
-			end += c3d_lightsCount.z();
+			end += m_writer.cast< Int >( c3d_lightsCount.z() );
 
 			FOR( m_writer, Int, i, begin, i < end, ++i )
 			{

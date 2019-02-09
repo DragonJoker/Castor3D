@@ -259,7 +259,7 @@ namespace castor3d
 		void doDiscardAlpha( sdw::ShaderWriter & writer
 			, TextureChannels const & textureFlags
 			, ashes::CompareOp alphaFunc
-			, sdw::Int const & material
+			, sdw::UInt const & material
 			, shader::Materials const & materials )const;
 
 	protected:

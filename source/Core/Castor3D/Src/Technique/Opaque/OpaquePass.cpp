@@ -379,7 +379,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
@@ -423,11 +423,11 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				vtx_material = material;
+				vtx_material = writer.cast< UInt >( material );
 			}
 			else
 			{
-				vtx_material = c3d_materialIndex;
+				vtx_material = writer.cast< UInt >( c3d_materialIndex );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
@@ -458,7 +458,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = in.gl_InstanceID;
+			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
@@ -526,7 +526,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = MinBufferIndex;
@@ -725,7 +725,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = MinBufferIndex;
@@ -926,7 +926,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };

@@ -384,23 +384,17 @@ namespace castor3d
 
 	void DebugOverlays::endGpuTask()
 	{
-		if ( m_visible )
+		for ( auto & renderPass : m_renderPasses )
 		{
-			for ( auto & renderPass : m_renderPasses )
-			{
-				renderPass.second.retrieveGpuTime();
-			}
-
-			m_gpuTime += m_taskTimer.getElapsed();
+			renderPass.second.retrieveGpuTime();
 		}
+
+		m_gpuTime += m_taskTimer.getElapsed();
 	}
 
 	void DebugOverlays::endCpuTask()
 	{
-		if ( m_visible )
-		{
-			m_cpuTime += m_taskTimer.getElapsed();
-		}
+		m_cpuTime += m_taskTimer.getElapsed();
 	}
 
 	void DebugOverlays::show( bool show )

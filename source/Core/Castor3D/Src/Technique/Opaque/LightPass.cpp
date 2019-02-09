@@ -647,7 +647,7 @@ namespace castor3d
 				, 0_i );
 			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
-				, writer.cast< Int >( data5.z() ) );
+				, writer.cast< UInt >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto shininess = writer.declLocale( cuT( "shininess" )
@@ -842,7 +842,7 @@ namespace castor3d
 				, 0_i );
 			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
-				, writer.cast< Int >( data5.z() ) );
+				, writer.cast< UInt >( data5.z() ) );
 			auto albedo = writer.declLocale( cuT( "albedo" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -1093,7 +1093,7 @@ namespace castor3d
 				, 0_i );
 			utils.decodeReceiver( flags, shadowReceiver );
 			auto materialId = writer.declLocale( cuT( "materialId" )
-				, writer.cast< Int >( data5.z() ) );
+				, writer.cast< UInt >( data5.z() ) );
 			auto diffuse = writer.declLocale( cuT( "diffuse" )
 				, data2.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )

@@ -127,44 +127,6 @@ namespace castor3d
 				, sdw::Vec3 const & worldSpacePosition )const;
 
 		private:
-			sdw::Float chebyshevUpperBound( sdw::Vec2 const & moments
-				, sdw::Float const & distance
-				, sdw::Float const & minVariance
-				, sdw::Float const & varianceBias )const;
-			sdw::Float getShadowOffset( sdw::Vec3 const & normal
-				, sdw::Vec3 const & lightDirection
-				, sdw::Float const & minOffset
-				, sdw::Float const & maxSlopeOffset )const;
-			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
-				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DRg32 const & shadowMap
-				, sdw::Float const & bias )const;
-			sdw::Float textureProj( sdw::Vec4 const & lightSpacePosition
-				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DArrayRg32 const & shadowMap
-				, sdw::Int const & index
-				, sdw::Float const & bias )const;
-			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DRg32 const & shadowMap
-				, sdw::Vec2 const & invTexDim
-				, sdw::Float const & bias )const;
-			sdw::Float filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DArrayRg32 const & shadowMap
-				, sdw::Int const & index
-				, sdw::Vec2 const & invTexDim
-				, sdw::Float const & bias )const;
-			sdw::Float textureProjCascade( sdw::Vec4 const & lightSpacePosition
-				, sdw::Vec2 const & offset
-				, sdw::SampledImage2DArrayRg32 const & shadowMap
-				, sdw::UInt const & cascadeIndex
-				, sdw::Float const & bias )const;
-			sdw::Float filterPCFCascade( sdw::Vec4 const & lightSpacePosition
-				, sdw::SampledImage2DArrayRg32 const & shadowMap
-				, sdw::Vec2 const & invTexDim
-				, sdw::UInt const & cascadeIndex
-				, sdw::Float const & bias )const;
-
-		private:
 			void doDeclareGetRandom();
 			void doDeclareGetShadowOffset();
 			void doDeclareChebyshevUpperBound();
@@ -174,6 +136,8 @@ namespace castor3d
 			void doDeclareFilterOnePCF();
 			void doDeclareTextureProjCascade();
 			void doDeclareFilterPCFCascade();
+			void doDeclareTextureOneProjCascade();
+			void doDeclareFilterOnePCFCascade();
 			void doDeclareGetLightSpacePosition();
 			void doDeclareComputeDirectionalShadow();
 			void doDeclareComputeSpotShadow();
@@ -233,6 +197,18 @@ namespace castor3d
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InUInt
+				, sdw::InFloat > m_textureOneProjCascade;
+			sdw::Function< sdw::Float
+				, sdw::InVec4
+				, sdw::InSampledImage2DArrayRg32
+				, sdw::InVec2
+				, sdw::InUInt
+				, sdw::InFloat > m_filterOnePCFCascade;
 			sdw::Function< sdw::Vec4
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;

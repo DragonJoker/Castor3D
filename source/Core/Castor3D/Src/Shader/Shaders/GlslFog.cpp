@@ -19,11 +19,11 @@ namespace castor3d
 						, Float const & dist
 						, Float const & y )
 					{
-						auto c3d_fogDensity = writer.getVariable< Float >( "c3d_fogDensity" );
+						auto c3d_fogInfo = writer.getVariable< Vec4 >( "c3d_fogInfo" );
 						auto c3d_cameraPosition = writer.getVariable< Vec4 >( "c3d_cameraPosition" );
 
 						auto z = writer.declLocale( "z", dist / 100 );
-						auto density = writer.declLocale( "density", c3d_fogDensity );
+						auto density = writer.declLocale( "density", c3d_fogInfo.y() );
 
 						if ( flags == FogType::eLinear )
 						{

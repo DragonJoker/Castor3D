@@ -172,7 +172,7 @@ namespace castor3d
 	void ShadowMap::doDiscardAlpha( sdw::ShaderWriter & writer
 		, TextureChannels const & textureFlags
 		, ashes::CompareOp alphaFunc
-		, sdw::Int const & materialIndex
+		, sdw::UInt const & materialIndex
 		, shader::Materials const & materials )const
 	{
 		using namespace sdw;
@@ -180,13 +180,13 @@ namespace castor3d
 		if ( checkFlag( textureFlags, TextureChannel::eOpacity ) )
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
-			auto alpha = writer.declLocale( cuT( "alpha" )
+			auto alpha = writer.declLocale( "alpha"
 				, material->m_opacity );
-			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+			auto alphaRef = writer.declLocale( "alphaRef"
 				, material->m_alphaRef );
 
-			auto c3d_mapOpacity = writer.getVariable< sdw::SampledImage2DRgba32 >( cuT( "c3d_mapOpacity" ) );
-			auto vtx_texture = writer.getVariable< sdw::Vec3 >( cuT( "vtx_texture" ) );
+			auto c3d_mapOpacity = writer.getVariable< sdw::SampledImage2DRgba32 >( "c3d_mapOpacity" );
+			auto vtx_texture = writer.getVariable< sdw::Vec3 >( "vtx_texture" );
 			alpha *= texture( c3d_mapOpacity, vtx_texture.xy() ).r();
 			shader::applyAlphaFunc( writer
 				, alphaFunc
@@ -196,9 +196,9 @@ namespace castor3d
 		else if ( alphaFunc != ashes::CompareOp::eAlways )
 		{
 			auto material = materials.getBaseMaterial( materialIndex );
-			auto alpha = writer.declLocale( cuT( "alpha" )
+			auto alpha = writer.declLocale( "alpha"
 				, material->m_opacity );
-			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
+			auto alphaRef = writer.declLocale( "alphaRef"
 				, material->m_alphaRef );
 
 			shader::applyAlphaFunc( writer

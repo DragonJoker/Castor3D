@@ -135,7 +135,7 @@ namespace castor3d
 
 		public:
 			C3D_API virtual void declare( bool hasSsbo ) = 0;
-			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const = 0;
+			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
 
 		protected:
 			sdw::ShaderWriter & m_writer;
@@ -148,12 +148,12 @@ namespace castor3d
 		public:
 			C3D_API explicit LegacyMaterials( sdw::ShaderWriter & writer );
 			C3D_API void declare( bool hasSsbo )override;
-			C3D_API LegacyMaterial getMaterial( sdw::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
+			C3D_API LegacyMaterial getMaterial( sdw::UInt const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
 		private:
 			std::unique_ptr< sdw::ArraySsboT< LegacyMaterial > > m_ssbo;
-			sdw::Function< LegacyMaterial, sdw::InInt > m_getMaterial;
+			sdw::Function< LegacyMaterial, sdw::InUInt > m_getMaterial;
 		};
 
 		class PbrMRMaterials
@@ -162,12 +162,12 @@ namespace castor3d
 		public:
 			C3D_API explicit PbrMRMaterials( sdw::ShaderWriter & writer );
 			C3D_API void declare( bool hasSsbo )override;
-			C3D_API MetallicRoughnessMaterial getMaterial( sdw::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
+			C3D_API MetallicRoughnessMaterial getMaterial( sdw::UInt const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
 		private:
 			std::unique_ptr< sdw::ArraySsboT< MetallicRoughnessMaterial > > m_ssbo;
-			sdw::Function< MetallicRoughnessMaterial, sdw::InInt > m_getMaterial;
+			sdw::Function< MetallicRoughnessMaterial, sdw::InUInt > m_getMaterial;
 		};
 
 		class PbrSGMaterials
@@ -176,12 +176,12 @@ namespace castor3d
 		public:
 			C3D_API explicit PbrSGMaterials( sdw::ShaderWriter & writer );
 			C3D_API void declare( bool hasSsbo )override;
-			C3D_API SpecularGlossinessMaterial getMaterial( sdw::Int const & index )const;
-			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::Int const & index )const override;
+			C3D_API SpecularGlossinessMaterial getMaterial( sdw::UInt const & index )const;
+			C3D_API BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const override;
 
 		private:
 			std::unique_ptr< sdw::ArraySsboT< SpecularGlossinessMaterial > > m_ssbo;
-			sdw::Function< SpecularGlossinessMaterial, sdw::InInt > m_getMaterial;
+			sdw::Function< SpecularGlossinessMaterial, sdw::InUInt > m_getMaterial;
 		};
 	}
 }

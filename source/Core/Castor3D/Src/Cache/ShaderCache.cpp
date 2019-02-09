@@ -267,7 +267,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
@@ -293,7 +293,7 @@ namespace castor3d
 					up = vec3( 0.0_f, 1.0f, 0.0f );
 				}
 
-				vtx_material = c3d_materialIndex;
+				vtx_material = writer.cast< UInt >( c3d_materialIndex );
 				vtx_normal = curToCamera;
 				vtx_tangent = up;
 				vtx_bitangent = right;
@@ -303,8 +303,8 @@ namespace castor3d
 
 				if ( checkFlag( programFlags, ProgramFlag::eFixedSize ) )
 				{
-					width = c3d_dimensions.x() / writer.cast< Float >( c3d_windowSize.x() );
-					height = c3d_dimensions.y() / writer.cast< Float >( c3d_windowSize.y() );
+					width = c3d_dimensions.x() / c3d_clipInfo.x();
+					height = c3d_dimensions.y() / c3d_clipInfo.y();
 				}
 
 				vtx_worldPosition = curBbcenter
@@ -314,7 +314,7 @@ namespace castor3d
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
 
 				vtx_texture = vec3( uv, 0.0 );
-				vtx_instance = in.gl_InstanceID;
+				vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
 				prvPosition = c3d_prvView * vec4( prvPosition, 1.0 );

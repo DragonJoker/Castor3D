@@ -849,7 +849,7 @@ namespace castor3d
 
 			writer.implementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto material = materials->getBaseMaterial( c3d_renderSizeIndex.z() );
+					auto material = materials->getBaseMaterial( writer.cast< UInt >( c3d_renderSizeIndex.z() ) );
 					auto diffuse = writer.declLocale( cuT( "diffuse" )
 						, material->m_diffuse() );
 					auto alpha = writer.declLocale( cuT( "alpha" )

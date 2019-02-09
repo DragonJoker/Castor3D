@@ -163,9 +163,9 @@ namespace castor3d
 				auto data5 = writer.declLocale( cuT( "data5" )
 					, textureLod( c3d_mapData5, uv, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
+					, writer.cast< UInt >( data5.z() ) );
 
-				IF( writer, materialId == 0_i )
+				IF( writer, materialId == 0_u )
 				{
 					writer.discard();
 				}
@@ -383,9 +383,9 @@ namespace castor3d
 				auto data5 = writer.declLocale( cuT( "data5" )
 					, textureLod( c3d_mapData5, uv, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
+					, writer.cast< UInt >( data5.z() ) );
 
-				IF( writer, materialId == 0_i )
+				IF( writer, materialId == 0_u )
 				{
 					writer.discard();
 				}
@@ -653,9 +653,9 @@ namespace castor3d
 				auto data5 = writer.declLocale( cuT( "data5" )
 					, textureLod( c3d_mapData5, uv, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
+					, writer.cast< UInt >( data5.z() ) );
 
-				IF( writer, materialId == 0_i )
+				IF( writer, materialId == 0_u )
 				{
 					writer.discard();
 				}

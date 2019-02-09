@@ -88,7 +88,7 @@ namespace castor3d
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 
-		m_transparentPass.getSceneUbo().update( &camera, scene.getFog() );
+		m_transparentPass.getSceneUbo().update( scene, &camera );
 		m_finalCombinePass.update( camera
 			, invViewProj
 			, invView

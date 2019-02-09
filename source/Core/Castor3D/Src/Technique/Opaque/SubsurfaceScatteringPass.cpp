@@ -102,7 +102,7 @@ namespace castor3d
 				auto data5 = writer.declLocale( cuT( "data5" )
 					, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
+					, writer.cast< UInt >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );
@@ -241,7 +241,7 @@ namespace castor3d
 				auto blur3 = writer.declLocale( cuT( "blur3" )
 					, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
 				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< Int >( data5.z() ) );
+					, writer.cast< UInt >( data5.z() ) );
 				auto translucency = writer.declLocale( cuT( "translucency" )
 					, data4.w() );
 				auto material = materials->getBaseMaterial( materialId );

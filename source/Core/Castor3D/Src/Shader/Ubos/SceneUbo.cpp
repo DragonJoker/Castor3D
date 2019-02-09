@@ -18,11 +18,8 @@ namespace castor3d
 	String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );
 	String const SceneUbo::BackgroundColour = cuT( "c3d_backgroundColour" );
 	String const SceneUbo::CameraPos = cuT( "c3d_cameraPosition" );
-	String const SceneUbo::WindowSize = cuT( "c3d_windowSize" );
-	String const SceneUbo::CameraNearPlane = cuT( "c3d_cameraNearPlane" );
-	String const SceneUbo::CameraFarPlane = cuT( "c3d_cameraFarPlane" );
-	String const SceneUbo::FogType = cuT( "c3d_fogType" );
-	String const SceneUbo::FogDensity = cuT( "c3d_fogDensity" );
+	String const SceneUbo::ClipInfo = cuT( "c3d_clipInfo" );
+	String const SceneUbo::FogInfo = cuT( "c3d_fogInfo" );
 
 	SceneUbo::SceneUbo( Engine & engine )
 		: m_engine{ engine }
@@ -70,14 +67,18 @@ namespace castor3d
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
-		configuration.fogType = int( fog.getType() );
-		configuration.fogDensity = fog.getDensity();
+		configuration.fogInfo[0] = float( fog.getType() );
+		configuration.fogInfo[1] = fog.getDensity();
 
 		if ( camera )
 		{
-			configuration.cameraNearPlane = camera->getNear();
-			configuration.cameraFarPlane = camera->getFar();
+			configuration.clipInfo[2] = camera->getNear();
+			configuration.clipInfo[3] = camera->getFar();
 			updateCameraPosition( *camera );
+		}
+		else
+		{
+			m_ubo->upload();
 		}
 	}
 
@@ -92,9 +93,9 @@ namespace castor3d
 		{
 			auto & cache = scene.getLightCache();
 			auto lock = makeUniqueLock( cache );
-			configuration.lightsCount[size_t( LightType::eSpot )] = cache.getLightsCount( LightType::eSpot );
-			configuration.lightsCount[size_t( LightType::ePoint )] = cache.getLightsCount( LightType::ePoint );
-			configuration.lightsCount[size_t( LightType::eDirectional )] = cache.getLightsCount( LightType::eDirectional );
+			configuration.lightsCount[size_t( LightType::eSpot )] = float( cache.getLightsCount( LightType::eSpot ) );
+			configuration.lightsCount[size_t( LightType::ePoint )] = float( cache.getLightsCount( LightType::ePoint ) );
+			configuration.lightsCount[size_t( LightType::eDirectional )] = float( cache.getLightsCount( LightType::eDirectional ) );
 		}
 
 		update( camera, scene.getFog() );
@@ -103,6 +104,7 @@ namespace castor3d
 	void SceneUbo::setWindowSize( Size const & window )const
 	{
 		CU_Require( m_ubo );
-		m_ubo->getData( 0u ).windowSize = castor::Point2i{ window[0], window[1] };
+		m_ubo->getData( 0u ).clipInfo[0] = float( window[0] );
+		m_ubo->getData( 0u ).clipInfo[1] = float( window[1] );
 	}
 }

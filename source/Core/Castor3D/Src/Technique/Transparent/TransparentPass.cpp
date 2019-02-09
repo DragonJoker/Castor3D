@@ -57,21 +57,18 @@ namespace castor3d
 				} );
 		}
 
-		void doBindShadowMaps( ShadowMapRefArray const & shadowMaps
+		void doBindShadowMap( ShadowMapRefArray const & shadowMaps
 			, ashes::WriteDescriptorSetArray & writes
+			, uint32_t mapIndex
 			, uint32_t & index )
 		{
 			std::vector< ashes::DescriptorImageInfo > shadowMapWrites;
-
-			for ( auto & shadowMap : shadowMaps )
-			{
-				shadowMapWrites.push_back( {
-					shadowMap.first.get().getSampler(),
-					shadowMap.first.get().getView(),
-					ashes::ImageLayout::eShaderReadOnlyOptimal
-					} );
-			}
-
+			auto & shadowMap = shadowMaps[0u];
+			shadowMapWrites.push_back( {
+				shadowMap.first.get().getSampler(),
+				shadowMap.first.get().getView(),
+				ashes::ImageLayout::eShaderReadOnlyOptimal
+				} );
 			writes.push_back( ashes::WriteDescriptorSet
 				{
 					index,
@@ -408,9 +405,9 @@ namespace castor3d
 			}
 		}
 
-		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
-		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
-		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
@@ -455,9 +452,9 @@ namespace castor3d
 			}
 		}
 
-		doBindShadowMaps( shadowMaps[size_t( LightType::eDirectional )], writes, index );
-		doBindShadowMaps( shadowMaps[size_t( LightType::eSpot )], writes, index );
-		doBindShadowMaps( shadowMaps[size_t( LightType::ePoint )], writes, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
@@ -525,9 +522,9 @@ namespace castor3d
 			textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
-		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
-		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );	// Directional VSM shadow map.
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );	// Spot VSM shadow map.
+		textureBindings.emplace_back( index++, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment, 1u );	// Point VSM shadow map.
 
 		return textureBindings;
 	}
@@ -616,7 +613,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
@@ -660,11 +657,11 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				vtx_material = material;
+				vtx_material = writer.cast< UInt >( material );
 			}
 			else
 			{
-				vtx_material = c3d_materialIndex;
+				vtx_material = writer.cast< UInt >( c3d_materialIndex );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
@@ -696,7 +693,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = in.gl_InstanceID;
+			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
 
 			auto tbn = writer.declLocale( cuT( "tbn" ), transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
@@ -761,7 +758,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::LegacyMaterials materials{ writer };
@@ -965,8 +962,8 @@ namespace castor3d
 			pxl_accumulation = utils.computeAccumulation( in.gl_FragCoord.z()
 				, colour
 				, alpha
-				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane
+				, c3d_clipInfo.z()
+				, c3d_clipInfo.w()
 				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
@@ -1016,7 +1013,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrMRMaterials materials{ writer };
@@ -1205,8 +1202,8 @@ namespace castor3d
 			pxl_accumulation = utils.computeAccumulation( in.gl_FragCoord.z()
 				, colour
 				, alpha
-				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane
+				, c3d_clipInfo.z()
+				, c3d_clipInfo.w()
 				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )
@@ -1256,7 +1253,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
@@ -1443,8 +1440,8 @@ namespace castor3d
 			pxl_accumulation = utils.computeAccumulation( in.gl_FragCoord.z()
 				, colour
 				, alpha
-				, c3d_cameraNearPlane
-				, c3d_cameraFarPlane
+				, c3d_clipInfo.z()
+				, c3d_clipInfo.w()
 				, material.m_bwAccumulationOperator );
 			pxl_revealage = alpha;
 			auto curPosition = writer.declLocale( cuT( "curPosition" )

@@ -41,7 +41,9 @@ namespace castor3d
 		auto & renderSystem = *engine.getRenderSystem();
 		auto & device = getCurrentDevice( renderSystem );
 
-		for ( auto i = uint32_t( DsTexture::eDepth ); i < uint32_t( DsTexture::eData5 ); i++ )
+		m_result[uint32_t( DsTexture::eDepth )] = &depthTexture;
+
+		for ( auto i = uint32_t( DsTexture::eData1 ); i < uint32_t( DsTexture::eData5 ); i++ )
 		{
 			m_owned.emplace_back( doCreateTexture( device
 				, getTextureFormat( DsTexture( i ) )

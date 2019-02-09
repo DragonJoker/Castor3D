@@ -702,7 +702,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
@@ -729,11 +729,11 @@ namespace castor3d
 
 			if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
 			{
-				vtx_material = material;
+				vtx_material = writer.cast< UInt >( material );
 			}
 			else
 			{
-				vtx_material = c3d_materialIndex;
+				vtx_material = writer.cast< UInt >( c3d_materialIndex );
 			}
 
 			if ( checkFlag( programFlags, ProgramFlag::eMorphing ) )
@@ -747,7 +747,7 @@ namespace castor3d
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			v4Vertex = c3d_curView * v4Vertex;
-			vtx_instance = in.gl_InstanceID;
+			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
 			out.gl_out.gl_Position = c3d_projection * v4Vertex;
 		};
 
@@ -776,7 +776,7 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< Int >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_mapOpacity( writer.declSampledImage< FImg2DR32 >( cuT( "c3d_mapOpacity" )
 			, MinBufferIndex

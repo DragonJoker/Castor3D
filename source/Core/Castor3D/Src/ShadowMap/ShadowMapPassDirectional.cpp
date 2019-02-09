@@ -141,7 +141,8 @@ namespace castor3d
 			, 0u
 			, ashes::MemoryPropertyFlag::eHostVisible | ashes::MemoryPropertyFlag::eHostCoherent );
 
-		return true;
+		m_initialised = true;
+		return m_initialised;
 	}
 
 	void ShadowMapPassDirectional::doCleanup()
