@@ -601,12 +601,12 @@ namespace castor3d
 
 		// Utility functions
 		auto lighting = lightType == LightType::eDirectional
-			? shader::legacy::createLightingModel( writer
+			? shader::PhongLightingModel::createModel( writer
 				, shadowType
 				, volumetric
 				, index
 				, m_scene->getDirectionalShadowCascades() )
-			: shader::legacy::createLightingModel( writer
+			: shader::PhongLightingModel::createModel( writer
 				, lightType
 				, shadowType
 				, volumetric
@@ -663,7 +663,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -792,12 +792,12 @@ namespace castor3d
 
 		// Utility functions
 		auto lighting = lightType == LightType::eDirectional
-			? shader::pbr::mr::createLightingModel( writer
+			? shader::MetallicBrdfLightingModel::createModel( writer
 				, shadowType
 				, volumetric
 				, index
 				, m_scene->getDirectionalShadowCascades() )
-			: shader::pbr::mr::createLightingModel( writer
+			: shader::MetallicBrdfLightingModel::createModel( writer
 				, lightType
 				, shadowType
 				, volumetric
@@ -820,8 +820,8 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.bottomUpToTopDown( utils.calcTexCoord( in.gl_FragCoord.xy()
-					, c3d_renderSize ) ) );
+				, utils.calcTexCoord( in.gl_FragCoord.xy()
+					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 			auto data2 = writer.declLocale( cuT( "data2" )
@@ -854,7 +854,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
@@ -1039,12 +1039,12 @@ namespace castor3d
 
 		// Utility functions
 		auto lighting = lightType == LightType::eDirectional
-			? shader::pbr::sg::createLightingModel( writer
+			? shader::SpecularBrdfLightingModel::createModel( writer
 				, shadowType
 				, volumetric
 				, index
 				, m_scene->getDirectionalShadowCascades() )
-			: shader::pbr::sg::createLightingModel( writer
+			: shader::SpecularBrdfLightingModel::createModel( writer
 				, lightType
 				, shadowType
 				, volumetric
@@ -1105,7 +1105,7 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
 				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )

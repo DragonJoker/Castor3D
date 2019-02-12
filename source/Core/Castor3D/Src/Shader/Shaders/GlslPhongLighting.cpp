@@ -3,6 +3,7 @@
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
 #include "GlslLight.hpp"
+#include "GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;
@@ -17,8 +18,8 @@ namespace castor3d
 	{
 		const String PhongLightingModel::Name = cuT( "phong" );
 
-		PhongLightingModel::PhongLightingModel( ShaderWriter & writer )
-			: LightingModel{ writer }
+		PhongLightingModel::PhongLightingModel( ShaderWriter & m_writer )
+			: LightingModel{ m_writer }
 		{
 		}
 
@@ -117,6 +118,135 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
+		}
+
+		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
+			, uint32_t & index
+			, uint32_t maxCascades )
+		{
+			auto result = std::make_shared< PhongLightingModel >( writer );
+			result->declareModel( index, maxCascades );
+			return result;
+		}
+
+		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
+			, ShadowType shadows
+			, bool volumetric
+			, uint32_t & index
+			, uint32_t maxCascades )
+		{
+			auto result = std::make_shared< PhongLightingModel >( writer );
+			result->declareDirectionalModel( shadows
+				, volumetric
+				, index
+				, maxCascades );
+			return result;
+		}
+
+		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
+			, LightType lightType
+			, ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
+		{
+			auto result = std::make_shared< PhongLightingModel >( writer );
+
+			switch ( lightType )
+			{
+			case LightType::eDirectional:
+				CU_Failure( "Directional light model should use the other overload" );
+				break;
+
+			case LightType::ePoint:
+				result->declarePointModel( shadows, volumetric, index );
+				break;
+
+			case LightType::eSpot:
+				result->declareSpotModel( shadows, volumetric, index );
+				break;
+
+			default:
+				CU_Failure( "Invalid light type" );
+				break;
+			}
+
+			return result;
+		}
+
+		void PhongLightingModel::computeMapContributions( sdw::ShaderWriter & writer
+			, shader::Utils const & utils
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & diffuse
+			, sdw::Vec3 & specular
+			, sdw::Vec3 & emissive
+			, sdw::Float & shininess
+			, sdw::Float const & gamma
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, PassFlags const & passFlags )
+		{
+			using namespace sdw;
+			auto texCoord( writer.getVariable< Vec3 >( "texCoord" ) );
+
+			if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
+			{
+				auto vtx_normal( writer.getVariable< Vec3 >( "vtx_normal" ) );
+				auto vtx_tangent( writer.getVariable< Vec3 >( "vtx_tangent" ) );
+				auto vtx_bitangent( writer.getVariable< Vec3 >( "vtx_bitangent" ) );
+				auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
+
+				auto v3MapNormal = writer.declLocale( "v3MapNormal"
+					, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
+				v3MapNormal = normalize( sdw::fma( v3MapNormal
+					, vec3( 2.0_f )
+					, vec3( -1.0_f ) ) );
+
+				if ( checkFlag( textureFlags, TextureChannel::eHeight )
+					&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+				{
+					auto c3d_mapHeight( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapHeight" ) );
+					auto mapHeight = writer.declLocale( "mapHeight"
+						, texture( c3d_mapHeight, texCoord.xy() ).r() );
+					v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+						, v3MapNormal
+						, vec3( mapHeight ) );
+				}
+
+				auto tbn = writer.declLocale( "tbn"
+					, mat3( normalize( vtx_tangent )
+						, normalize( vtx_bitangent )
+						, normal ) );
+				normal = normalize( tbn * v3MapNormal );
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eGloss ) )
+			{
+				auto c3d_mapGloss( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapGloss" ) );
+				shininess = texture( c3d_mapGloss, texCoord.xy() ).r() * 255.0_f;
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eDiffuse ) )
+			{
+				auto c3d_mapDiffuse( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapDiffuse" ) );
+				diffuse *= utils.removeGamma( gamma
+					, texture( c3d_mapDiffuse, texCoord.xy() ).xyz() );
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )
+			{
+				auto c3d_mapSpecular( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapSpecular" ) );
+				specular *= texture( c3d_mapSpecular, texCoord.xy() ).xyz();
+			}
+
+			emissive *= diffuse;
+
+			if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
+			{
+				auto c3d_mapEmissive( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapEmissive" ) );
+				emissive *= utils.removeGamma( gamma
+					, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
+			}
 		}
 
 		void PhongLightingModel::doDeclareModel()

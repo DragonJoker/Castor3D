@@ -55,21 +55,14 @@ namespace Obj
 		bool doIsValidValue( castor::String const & strParam
 			, castor::String const & strSrc
 			, uint32_t index );
-		void doAddTexture( castor::String const & strValue
-			, castor3d::Pass & pass
+		castor3d::TextureUnitSPtr doLoadTexture( castor::String value
 			, castor3d::TextureChannel channel );
 		void doReadMaterials( castor3d::Mesh & mesh
 			, castor::Path const & pathMatFile );
 
 	private:
-		castor::ImageCache & m_collImages;
-		castor3d::MaterialPtrArray m_arrayLoadedMaterials;
-		TextureArray m_arrayTextures;
-		castor::TextFile * m_pFile;
-		FloatPassMap m_mapOffsets;
-		FloatPassMap m_mapScales;
-		FloatPassMap m_mapTurbulences;
-		ThreadSPtr m_pThread;
+		castor3d::MaterialPtrArray m_loadedMaterials;
+		castor::TextFile * m_file;
 	};
 }
 

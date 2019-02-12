@@ -46,6 +46,31 @@ namespace castor3d
 				, sdw::Int const & receivesShadows
 				, FragmentInput const & fragmentIn
 				, OutputComponents & output )const;
+			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+				, uint32_t & index
+				, uint32_t maxCascades );
+			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+				, ShadowType shadows
+				, bool volumetric
+				, uint32_t & index
+				, uint32_t maxCascades );
+			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
+				, LightType light
+				, ShadowType shadows
+				, bool volumetric
+				, uint32_t & index );
+			C3D_API static void computeMapContributions( sdw::ShaderWriter & writer
+				, shader::Utils const & utils
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & diffuse
+				, sdw::Vec3 & specular
+				, sdw::Vec3 & emissive
+				, sdw::Float & glossiness
+				, sdw::Float const & gamma
+				, TextureChannels const & textureFlags
+				, ProgramFlags const & programFlags
+				, SceneFlags const & sceneFlags
+				, PassFlags const & passFlags );
 
 		protected:
 			void doDeclareModel()override;

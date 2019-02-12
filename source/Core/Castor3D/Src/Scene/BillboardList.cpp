@@ -305,12 +305,12 @@ namespace castor3d
 		, std::vector< uint64_t > & offsets
 		, ashes::VertexLayoutCRefArray & layouts )
 	{
-		buffers.emplace_back( m_vertexBuffer->getBuffer() );
-		offsets.emplace_back( 0u );
-		layouts.emplace_back( *m_vertexLayout );
 		buffers.emplace_back( m_quadBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_quadLayout );
+		buffers.emplace_back( m_vertexBuffer->getBuffer() );
+		offsets.emplace_back( 0u );
+		layouts.emplace_back( *m_vertexLayout );
 	}
 
 	//*************************************************************************************************

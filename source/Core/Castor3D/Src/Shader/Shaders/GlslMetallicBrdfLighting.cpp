@@ -3,6 +3,7 @@
 #include "GlslMaterial.hpp"
 #include "GlslShadow.hpp"
 #include "GlslLight.hpp"
+#include "GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;
@@ -15,8 +16,8 @@ namespace castor3d
 	{
 		const String MetallicBrdfLightingModel::Name = cuT( "pbr_mr" );
 
-		MetallicBrdfLightingModel::MetallicBrdfLightingModel( ShaderWriter & writer )
-			: LightingModel{ writer }
+		MetallicBrdfLightingModel::MetallicBrdfLightingModel( ShaderWriter & m_writer )
+			: LightingModel{ m_writer }
 		{
 		}
 
@@ -135,6 +136,135 @@ namespace castor3d
 				, receivesShadows
 				, FragmentInput{ fragmentIn }
 				, parentOutput );
+		}
+
+		std::shared_ptr< MetallicBrdfLightingModel > MetallicBrdfLightingModel::createModel( sdw::ShaderWriter & writer
+			, uint32_t & index
+			, uint32_t maxCascades )
+		{
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
+			result->declareModel( index, maxCascades );
+			return result;
+		}
+
+		std::shared_ptr< MetallicBrdfLightingModel > MetallicBrdfLightingModel::createModel( sdw::ShaderWriter & writer
+			, ShadowType shadows
+			, bool volumetric
+			, uint32_t & index
+			, uint32_t maxCascades )
+		{
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
+			result->declareDirectionalModel( shadows
+				, volumetric
+				, index
+				, maxCascades );
+			return result;
+		}
+
+		std::shared_ptr< MetallicBrdfLightingModel > MetallicBrdfLightingModel::createModel( sdw::ShaderWriter & writer
+			, LightType lightType
+			, ShadowType shadows
+			, bool volumetric
+			, uint32_t & index )
+		{
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer );
+
+			switch ( lightType )
+			{
+			case LightType::eDirectional:
+				CU_Failure( "Directional light model should use the other overload" );
+				break;
+
+			case LightType::ePoint:
+				result->declarePointModel( shadows, volumetric, index );
+				break;
+
+			case LightType::eSpot:
+				result->declareSpotModel( shadows, volumetric, index );
+				break;
+
+			default:
+				CU_Failure( "Invalid light type" );
+				break;
+			}
+
+			return result;
+		}
+
+		void MetallicBrdfLightingModel::computeMapContributions( sdw::ShaderWriter & writer
+			, shader::Utils const & utils
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & albedo
+			, sdw::Float & metallic
+			, sdw::Vec3 & emissive
+			, sdw::Float & roughness
+			, sdw::Float const & gamma
+			, TextureChannels const & textureFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, PassFlags const & passFlags )
+		{
+			using namespace sdw;
+			auto texCoord( writer.getVariable< Vec3 >( "texCoord" ) );
+
+			if ( checkFlag( textureFlags, TextureChannel::eNormal ) )
+			{
+				auto vtx_normal( writer.getVariable< Vec3 >( "vtx_normal" ) );
+				auto vtx_tangent( writer.getVariable< Vec3 >( "vtx_tangent" ) );
+				auto vtx_bitangent( writer.getVariable< Vec3 >( "vtx_bitangent" ) );
+				auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
+
+				auto v3MapNormal = writer.declLocale( "v3MapNormal"
+					, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
+				v3MapNormal = normalize( sdw::fma( v3MapNormal
+					, vec3( 2.0_f )
+					, vec3( -1.0_f ) ) );
+
+				if ( checkFlag( textureFlags, TextureChannel::eHeight )
+					&& !checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+				{
+					auto c3d_mapHeight( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapHeight" ) );
+					auto mapHeight = writer.declLocale( "mapHeight"
+						, texture( c3d_mapHeight, texCoord.xy() ).r() );
+					v3MapNormal = mix( vec3( 0.0_f, 0.0_f, 1.0_f )
+						, v3MapNormal
+						, vec3( mapHeight ) );
+				}
+
+				auto tbn = writer.declLocale( "tbn"
+					, mat3( normalize( vtx_tangent )
+						, normalize( vtx_bitangent )
+						, normal ) );
+				normal = normalize( tbn * v3MapNormal );
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eMetallic ) )
+			{
+				auto c3d_mapMetallic( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapMetallic" ) );
+				metallic = texture( c3d_mapMetallic, texCoord.xy() ).r();
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eRoughness ) )
+			{
+				auto c3d_mapRoughness( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapRoughness" ) );
+				roughness = texture( c3d_mapRoughness, texCoord.xy() ).r();
+			}
+
+			if ( checkFlag( textureFlags, TextureChannel::eAlbedo ) )
+			{
+				auto c3d_mapAlbedo( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapAlbedo" ) );
+				albedo *= utils.removeGamma( gamma
+					, texture( c3d_mapAlbedo, texCoord.xy() ).xyz() );
+			}
+
+			emissive *= albedo;
+
+			if ( checkFlag( textureFlags, TextureChannel::eEmissive ) )
+			{
+				auto c3d_mapEmissive( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapEmissive" ) );
+				emissive *= utils.removeGamma( gamma
+					, texture( c3d_mapEmissive, texCoord.xy() ).xyz() );
+			}
 		}
 
 		void MetallicBrdfLightingModel::doDeclareModel()

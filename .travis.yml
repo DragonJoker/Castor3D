@@ -26,7 +26,6 @@ git:
 before_install:
   - git submodule update --init -- "source/CMake"
   - git submodule update --recursive --init -- "source/external/Ashes"
-  - git submodule update --init -- "source/external/FreeImage"
   - git submodule update --init -- "source/external/zlib"
   - git submodule update --recursive --init -- "source/external/ShaderWriter"
   - git submodule update --init -- "source/external/glslang"

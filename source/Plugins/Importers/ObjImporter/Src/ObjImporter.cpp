@@ -16,6 +16,7 @@
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
 #include <Material/LegacyPass.hpp>
+#include <Material/MetallicRoughnessPbrPass.hpp>
 #include <Mesh/SubmeshComponent/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
@@ -102,12 +103,142 @@ namespace Obj
 				++it;
 			}
 		}
+		struct PhongMaterialDescription
+		{
+			castor::RgbColour specular;
+			float shininess{ 50.0f };
+		};
+
+		struct PbrMaterialDescription
+		{
+			float metallic{ 0.0f };
+			float roughness{ 1.0f };
+		};
+
+		struct MaterialDescription
+		{
+			castor::String name;
+			castor::RgbColour diffAlbedo;
+			bool hasOpacity{ false };
+			float opacity{ 1.0f };
+			float emissive{ 0.0f };
+			std::unique_ptr< PhongMaterialDescription > phong{ std::make_unique< PhongMaterialDescription >() };
+			std::unique_ptr< PbrMaterialDescription > pbr;
+			castor3d::TextureUnitPtrArray textures;
+
+			void setPbr()
+			{
+				phong.reset();
+
+				if ( !pbr )
+				{
+					pbr = std::make_unique< PbrMaterialDescription >();
+				}
+			}
+
+			void setPhong()
+			{
+				pbr.reset();
+
+				if ( !phong )
+				{
+					phong = std::make_unique< PhongMaterialDescription >();
+				}
+			}
+
+			void addTexture( castor3d::TextureUnitSPtr texture )
+			{
+				if ( texture )
+				{
+					textures.push_back( texture );
+				}
+			}
+		};
+
+		void fillPass( MaterialDescription const & desc
+			, PhongMaterialDescription const & phong
+			, LegacyPass & pass )
+		{
+			pass.setDiffuse( desc.diffAlbedo );
+			pass.setShininess( phong.shininess );
+			pass.setSpecular( phong.specular );
+		}
+
+		void fillPass( MaterialDescription const & desc
+			, PbrMaterialDescription const & pbr
+			, MetallicRoughnessPbrPass & pass )
+		{
+			pass.setAlbedo( desc.diffAlbedo );
+			pass.setMetallic( pbr.metallic );
+			pass.setRoughness( pbr.roughness );
+		}
+
+		void fillPass( MaterialDescription const & desc
+			, Pass & pass )
+		{
+			if ( desc.opacity < 1.0 )
+			{
+				pass.setOpacity( desc.opacity );
+			}
+
+			pass.setTwoSided( true );
+			pass.setEmissive( desc.emissive );
+
+			if ( desc.pbr )
+			{
+				fillPass( desc
+					, *desc.pbr
+					, static_cast< castor3d::MetallicRoughnessPbrPass & >( pass ) );
+			}
+			else
+			{
+				fillPass( desc
+					, *desc.phong
+					, static_cast< castor3d::LegacyPass & >( pass ) );
+			}
+
+			for ( auto & texture : desc.textures )
+			{
+				pass.addTextureUnit( std::move( texture ) );
+			}
+		}
+
+		void addMaterial( Scene & scene
+			, castor3d::MaterialPtrArray & loadedMaterials
+			, MaterialDescription const & desc )
+		{
+			MaterialSPtr material;
+
+			if ( scene.getMaterialView().has( desc.name ) )
+			{
+				material = scene.getMaterialView().find( desc.name );
+				CU_Require( !desc.pbr
+					|| material->getType() == MaterialType::ePbrMetallicRoughness );
+			}
+			else
+			{
+				if ( desc.pbr )
+				{
+					material = scene.getMaterialView().add( desc.name
+						, MaterialType::ePbrMetallicRoughness );
+				}
+				else
+				{
+					material = scene.getMaterialView().add( desc.name
+						, MaterialType::eLegacy );
+				}
+
+				material->createPass();
+				loadedMaterials.push_back( material );
+			}
+
+			fillPass( desc, *material->getPass( 0u ) );
+		}
 	}
 
 	ObjImporter::ObjImporter( Engine & engine )
-		: Importer( engine )
-		, m_collImages( engine.getImageCache() )
-		, m_pFile( nullptr )
+		: Importer{ engine }
+		, m_file{ nullptr }
 	{
 	}
 
@@ -129,8 +260,7 @@ namespace Obj
 			m_geometries.insert( { geometry->getName(), geometry } );
 		}
 
-		m_arrayLoadedMaterials.clear();
-		m_arrayTextures.clear();
+		m_loadedMaterials.clear();
 		return result;
 	}
 
@@ -144,16 +274,9 @@ namespace Obj
 
 			if ( file.isOk() )
 			{
-				m_pFile = &file;
+				m_file = &file;
 				doReadObjFile( mesh );
-				m_arrayLoadedMaterials.clear();
-				m_arrayTextures.clear();
-			}
-
-			if ( m_pThread )
-			{
-				m_pThread->join();
-				m_pThread.reset();
+				m_loadedMaterials.clear();
 			}
 
 			result = true;
@@ -166,33 +289,25 @@ namespace Obj
 		return result;
 	}
 
-	void ObjImporter::doAddTexture( String const & strValue
-		, Pass & pass
-		, TextureChannel channel )
+	castor3d::TextureUnitSPtr ObjImporter::doLoadTexture( String value
+		, castor3d::TextureChannel channel )
 	{
 		Point3f offset( 0, 0, 0 );
 		Point3f scale( 1, 1, 1 );
 		Point3f turbulence( 0, 0, 0 );
-		ImageSPtr pImage;
-		String value( strValue );
 		doParseTexParams( value, offset.ptr(), scale.ptr(), turbulence.ptr() );
-		m_mapOffsets[&pass] = offset;
-		m_mapScales[&pass] = scale;
-		m_mapTurbulences[&pass] = turbulence;
 		Logger::logDebug( makeStringStream() << cuT( "-	Texture :    " ) + value );
 		Logger::logDebug( makeStringStream() << cuT( "-	Offset :     " ) << offset );
 		Logger::logDebug( makeStringStream() << cuT( "-	Scale :      " ) << scale );
 		Logger::logDebug( makeStringStream() << cuT( "-	Turbulence : " ) << turbulence );
+		castor3d::TextureUnitSPtr result;
 
 		if ( !value.empty() )
 		{
-			auto texture = loadTexture( Path{ value }, pass, channel );
-
-			if ( texture )
-			{
-				m_arrayTextures.push_back( texture->getTexture() );
-			}
+			result = loadTexture( Path{ value }, channel );
 		}
+
+		return result;
 	}
 
 	void ObjImporter::doReadObjFile( Mesh & mesh )
@@ -472,57 +587,57 @@ namespace Obj
 		, float * scale
 		, float * turb )
 	{
-		String strSrc( strValue );
-		String strParam;
+		String src( strValue );
+		String param;
 		String value;
-		bool bParam = false;
-		bool bValue = false;
+		bool isParam = false;
+		bool isValue = false;
 		strValue.clear();
 
-		for ( std::size_t i = 0 ; i < strSrc.size() ; i++ )
+		for ( size_t i = 0u; i < src.size(); ++i )
 		{
-			auto xc = strSrc[i];
+			auto xc = src[i];
 
-			if ( bParam )
+			if ( isParam )
 			{
 				// On a rencontré un tiret, on est en train de récupérer le param
 				if ( xc == cuT( ' ' ) )
 				{
 					// on est sur un espace, on a fini de récupérer le param
-					bValue = true;
-					bParam = false;
+					isValue = true;
+					isParam = false;
 				}
 				else
 				{
-					strParam += xc;
+					param += xc;
 				}
 			}
-			else if ( bValue )
+			else if ( isValue )
 			{
 				// On a fini de récupérer le param, on est en train de récupérer les valeurs
 				if ( xc == cuT( ' ' ) )
 				{
 					// On est sur un espace, on vérifie le caractère suivant pour savoir, en fonction du param si c'est une valeur ou pas
-					if ( doIsValidValue( strParam, strSrc, uint32_t( i + 1 ) ) )
+					if ( doIsValidValue( param, src, uint32_t( i + 1 ) ) )
 					{
 						value += xc;
 					}
 					else
 					{
 						// Les caractères suivants ne forment pas une valeur valide pour le param
-						bValue = false;
+						isValue = false;
 
-						if ( strParam == cuT( "s" ) )
+						if ( param == cuT( "s" ) )
 						{
-							doParseTexParam( strParam + cuT( " " ) + value, scale );
+							doParseTexParam( param + cuT( " " ) + value, scale );
 						}
-						else if ( strParam == cuT( "o" ) )
+						else if ( param == cuT( "o" ) )
 						{
-							doParseTexParam( strParam + cuT( " " ) + value, offset );
+							doParseTexParam( param + cuT( " " ) + value, offset );
 						}
-						else if ( strParam == cuT( "t" ) )
+						else if ( param == cuT( "t" ) )
 						{
-							doParseTexParam( strParam + cuT( " " ) + value, turb );
+							doParseTexParam( param + cuT( " " ) + value, turb );
 						}
 					}
 				}
@@ -534,14 +649,14 @@ namespace Obj
 			else if ( xc == cuT( '-' ) )
 			{
 				// on est sur un tiret, on commence à récupérer le param
-				strParam.clear();
-				bParam = true;
+				param.clear();
+				isParam = true;
 			}
 			else
 			{
 				// On n'est nulle part, on ajoute le caractère au résultat
-				strValue += strSrc.substr( i );
-				i = strSrc.size();
+				strValue += src.substr( i );
+				i = src.size();
 			}
 		}
 	}
@@ -615,13 +730,10 @@ namespace Obj
 		String strLine;
 		String section;
 		String value;
-		StringArray arraySplitted;
-		LegacyPassSPtr pass;
-		MaterialSPtr material;
+		StringArray splitted;
 		float components[3];
-		float fAlpha = 1.0f;
-		bool bOpaFound = false;
 		TextFile matFile( pathMatFile, File::OpenMode::eRead );
+		std::unique_ptr< MaterialDescription > desc;
 
 		while ( matFile.isOk() )
 		{
@@ -629,15 +741,15 @@ namespace Obj
 
 			if ( !strLine.empty() )
 			{
-				arraySplitted = string::split( strLine, cuT( " " ), 1 );
+				splitted = string::split( strLine, cuT( " " ), 1 );
 
-				if ( !arraySplitted.empty() )
+				if ( !splitted.empty() )
 				{
-					section = arraySplitted[0];
+					section = splitted[0];
 
-					if ( arraySplitted.size() > 1 )
+					if ( splitted.size() > 1 )
 					{
-						value = arraySplitted[1];
+						value = splitted[1];
 					}
 					else
 					{
@@ -649,39 +761,15 @@ namespace Obj
 
 					if ( section == cuT( "newmtl" ) )
 					{
-						// New material description
-						if ( pass )
+						if ( desc )
 						{
-							if ( fAlpha < 1.0 )
-							{
-								pass->setOpacity( fAlpha );
-							}
-
-							fAlpha = 1.0f;
+							addMaterial( *mesh.getScene()
+								, m_loadedMaterials
+								, *desc );
 						}
 
-						if ( mesh.getScene()->getMaterialView().has( value ) )
-						{
-							material = mesh.getScene()->getMaterialView().find( value );
-							CU_Require( material->getType() == MaterialType::eLegacy );
-							pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
-						}
-						else
-						{
-							material.reset();
-						}
-
-						if ( !material )
-						{
-							material = mesh.getScene()->getMaterialView().add( value, MaterialType::eLegacy );
-							material->createPass();
-							pass = material->getTypedPass< MaterialType::eLegacy >( 0u );
-							m_arrayLoadedMaterials.push_back( material );
-						}
-
-						pass->setTwoSided( true );
-						bOpaFound = false;
-						fAlpha = 1.0f;
+						desc = std::make_unique< MaterialDescription >();
+						desc->name = value;
 						Logger::logDebug( cuT( "Material : " ) + value );
 					}
 					else if ( section == cuT( "illum" ) )
@@ -694,7 +782,7 @@ namespace Obj
 						StringStream stream( value );
 						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
-						pass->setDiffuse( castor::RgbColour::fromComponents( components[0], components[1], components[2]) );
+						desc->diffAlbedo = castor::RgbColour::fromComponents( components[0], components[1], components[2] );
 					}
 					else if ( section == cuT( "ks" ) )
 					{
@@ -702,36 +790,55 @@ namespace Obj
 						StringStream stream( value );
 						stream.imbue( castor3d::Engine::getLocale() );
 						stream >> components[0] >> components[1] >> components[2];
-						pass->setSpecular( castor::RgbColour::fromComponents( components[0], components[1], components[2] ) );
+						desc->setPhong();
+						desc->phong->specular = castor::RgbColour::fromComponents( components[0], components[1], components[2] );
+					}
+					else if ( section == cuT( "ke" ) )
+					{
+						// Emissive factor
+						desc->emissive = string::toFloat( value );
+					}
+					else if ( section == cuT( "pm" ) )
+					{
+						// Metallic factor
+						desc->setPbr();
+						desc->pbr->metallic = string::toFloat( value );
+					}
+					else if ( section == cuT( "pr" ) )
+					{
+						// Roughness factor
+						desc->setPbr();
+						desc->pbr->roughness = string::toFloat( value );
 					}
 					else if ( section == cuT( "tr" ) || section == cuT( "d" ) )
 					{
 						// Opacity
-						if ( !bOpaFound )
+						if ( !desc->hasOpacity )
 						{
-							bOpaFound = true;
-							fAlpha = string::toFloat( value );
+							desc->hasOpacity = true;
+							desc->opacity = string::toFloat( value );
 						}
 					}
 					else if ( section == cuT( "ns" ) )
 					{
 						// Shininess
-						pass->setShininess( string::toFloat( value ) );
+						desc->setPhong();
+						desc->phong->shininess = string::toFloat( value );
 					}
 					else if ( section == cuT( "map_kd" ) )
 					{
 						// Diffuse map
-						doAddTexture( value, *pass, TextureChannel::eDiffuse );
+						desc->addTexture( doLoadTexture( value, TextureChannel::eDiffuse ) );
 					}
-					else if ( section == cuT( "bump" ) || section == cuT( "map_bump" ) )
+					else if ( section == cuT( "bump" ) || section == cuT( "map_bump" ) || section == cuT( "norm" ) )
 					{
 						// Normal map
-						doAddTexture( value, *pass, TextureChannel::eNormal );
+						desc->addTexture( doLoadTexture( value, TextureChannel::eNormal ) );
 					}
 					else if ( section == cuT( "map_d" ) || section == cuT( "map_opacity" ) )
 					{
 						// Opacity map
-						doAddTexture( value, *pass, TextureChannel::eOpacity );
+						desc->addTexture( doLoadTexture( value, TextureChannel::eOpacity ) );
 					}
 					else if ( section == cuT( "refl" ) )
 					{
@@ -740,20 +847,37 @@ namespace Obj
 					else if ( section == cuT( "map_ks" ) )
 					{
 						// Specular map
-						doAddTexture( value, *pass, TextureChannel::eSpecular );
+						desc->addTexture( doLoadTexture( value, TextureChannel::eSpecular ) );
 					}
 					else if ( section == cuT( "map_ns" ) )
 					{
 						// Gloss/Shininess map
-						doAddTexture( value, *pass, TextureChannel::eGloss );
+						desc->addTexture( doLoadTexture( value, TextureChannel::eGloss ) );
+					}
+					else if ( section == cuT( "map_pm" ) )
+					{
+						// Metallic map
+						desc->addTexture( doLoadTexture( value, TextureChannel::eMetallic ) );
+					}
+					else if ( section == cuT( "map_pr" ) )
+					{
+						// Roughness map
+						desc->addTexture( doLoadTexture( value, TextureChannel::eRoughness ) );
+					}
+					else if ( section == cuT( "map_ke" ) )
+					{
+						// Emissive map
+						desc->addTexture( doLoadTexture( value, TextureChannel::eEmissive ) );
 					}
 				}
 			}
 		}
 
-		if ( pass && bOpaFound )
+		if ( desc )
 		{
-			pass->setOpacity( fAlpha );
+			addMaterial( *mesh.getScene()
+				, m_loadedMaterials
+				, *desc );
 		}
 	}
 }

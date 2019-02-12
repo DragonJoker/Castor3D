@@ -772,7 +772,7 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		auto lighting = shader::legacy::createLightingModel( writer
+		auto lighting = shader::PhongLightingModel::createModel( writer
 			, index
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::PhongReflectionModel reflections{ writer };
@@ -839,23 +839,18 @@ namespace castor3d
 				, material.m_shininess );
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive ) );
-			shader::legacy::computePreLightingMapContributions( writer
+			lighting->computeMapContributions( writer
 				, utils
 				, normal
+				, diffuse
+				, specular
+				, emissive
 				, matShininess
+				, gamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::legacy::computePostLightingMapContributions( writer
-				, utils
-				, diffuse
-				, specular
-				, emissive
-				, gamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto worldEye = writer.declLocale( cuT( "worldEye" )
 				, c3d_cameraPosition.xyz() );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
@@ -1049,7 +1044,7 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		auto lighting = shader::pbr::mr::createLightingModel( writer
+		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, index
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::MetallicPbrReflectionModel reflections{ writer };
@@ -1127,23 +1122,18 @@ namespace castor3d
 				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
-			shader::pbr::mr::computePreLightingMapContributions( writer
+			lighting->computeMapContributions( writer
 				, utils
 				, normal
+				, matAlbedo
 				, matMetallic
+				, matEmissive
 				, matRoughness
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::pbr::mr::computePostLightingMapContributions( writer
-				, utils
-				, matAlbedo
-				, matEmissive
-				, matGamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 				, vec3( 0.0_f ) );
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
@@ -1382,7 +1372,7 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		auto lighting = shader::pbr::sg::createLightingModel( writer
+		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, index
 			, getCuller().getScene().getDirectionalShadowCascades() );
 		shader::SpecularPbrReflectionModel reflections{ writer };
@@ -1460,23 +1450,18 @@ namespace castor3d
 				occlusion = texture( c3d_mapAmbientOcclusion, texCoord.xy() ).r();
 			}
 
-			shader::pbr::sg::computePreLightingMapContributions( writer
+			lighting->computeMapContributions( writer
 				, utils
 				, normal
+				, matDiffuse
 				, matSpecular
+				, matEmissive
 				, matGlossiness
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::pbr::sg::computePostLightingMapContributions( writer
-				, utils
-				, matDiffuse
-				, matEmissive
-				, matGamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
 				, vec3( 0.0_f ) );
 			auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )

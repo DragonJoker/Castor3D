@@ -74,20 +74,48 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	path		The image file path (can be relative or absolute).
+		 *\param[in]	components	The image components we want to retrieve.
+		 *\return		The texture unit.
+		 *\~french
+		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	path		Le chemin vers l'image (peut être relatif ou absolu).
+		 *\param[in]	components	Les composantes de l'image que l'on souhaite récupérer.
+		 *\return		L'unité de texture.
+		 */
+		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
+			, ImageComponents components )const;
+		/**
+		 *\~english
+		 *\brief		Loads a texture and adds it to the given pass.
 		 *\param[in]	path	The image file path (can be relative or absolute).
+		 *\param[in]	channel	The channel to which the texture unit is affected.
+		 *\return		The texture unit.
+		 *\~french
+		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
+		 *\param[in]	channel	Le canal affecté à l'image.
+		 *\return		L'unité de texture.
+		 */
+		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
+			, TextureChannel channel )const;
+		/**
+		 *\~english
+		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	path	The image file path (can be relative or absolute).
+		 *\param[in]	channel	The channel to which the texture unit is affected.
 		 *\param[in]	pass	The pass.
-		 *\param[in]	channel	The channel affected.
 		 *\return		\p false if any error occured.
 		 *\~french
 		 *\brief		Charge une texture et l'ajoute à la passe donnée.
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
-		 *\param[in]	pass	La passe.
 		 *\param[in]	channel	Le canal affecté à l'image.
+		 *\param[in]	pass	La passe.
 		 *\return		\p false en cas d'erreur.
 		 */
 		C3D_API TextureUnitSPtr loadTexture( castor::Path const & path
-			, Pass & pass
-			, TextureChannel channel )const;
+			, TextureChannel channel
+			, Pass & pass )const;
 
 	protected:
 		/**

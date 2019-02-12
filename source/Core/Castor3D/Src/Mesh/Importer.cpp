@@ -109,10 +109,9 @@ namespace castor3d
 	}
 
 	TextureUnitSPtr Importer::loadTexture( Path const & path
-		, Pass & pass
-		, TextureChannel channel )const
+		, ImageComponents components )const
 	{
-		TextureUnitSPtr unit;
+		TextureUnitSPtr result;
 		Path relative;
 		Path folder;
 
@@ -136,7 +135,7 @@ namespace castor3d
 				, [&fileName]( Path const & file )
 				{
 					return file.getFileName( true ) == fileName
-						   || file.getFileName( true ).find( fileName ) == 0;
+						|| file.getFileName( true ).find( fileName ) == 0;
 				} );
 
 			folder = m_filePath;
@@ -156,8 +155,8 @@ namespace castor3d
 		{
 			try
 			{
-				TextureUnitSPtr unit = std::make_shared< TextureUnit >( *pass.getOwner()->getEngine() );
-				unit->setAutoMipmaps( true );
+				result = std::make_shared< TextureUnit >( *getEngine() );
+				result->setAutoMipmaps( true );
 				ashes::ImageCreateInfo createInfo{};
 				createInfo.flags = 0u;
 				createInfo.arrayLayers = 1u;
@@ -174,21 +173,17 @@ namespace castor3d
 					, ashes::MemoryPropertyFlag::eDeviceLocal );
 				texture->setSource( folder
 					, relative
-					, ( channel == TextureChannel::eNormal
-						? ImageComponents::eRGB
-						: ImageComponents::eAll ) );
-				unit->setTexture( texture );
-				unit->setChannel( channel );
-				pass.addTextureUnit( unit );
+					, components );
+				result->setTexture( texture );
 			}
 			catch ( std::exception & exc )
 			{
-				unit.reset();
+				result.reset();
 				Logger::logWarning( makeStringStream() << cuT( "Error encountered while loading texture file " ) << path << cuT( ":\n" ) << exc.what() );
 			}
 			catch ( ... )
 			{
-				unit.reset();
+				result.reset();
 				Logger::logWarning( cuT( "Unknown error encountered while loading texture file " ) + path );
 			}
 		}
@@ -197,6 +192,37 @@ namespace castor3d
 			Logger::logWarning( makeStringStream() << cuT( "Couldn't load texture file " ) << path << cuT( ":\nFile does not exist." ) );
 		}
 
-		return unit;
+		return result;
+	}
+
+	TextureUnitSPtr Importer::loadTexture( Path const & path
+		, TextureChannel channel )const
+	{
+		auto result = loadTexture( path
+			, ( channel == TextureChannel::eNormal
+				? ImageComponents::eRGB
+				: ImageComponents::eAll ) );
+
+		if ( result )
+		{
+			result->setChannel( channel );
+		}
+
+		return result;
+	}
+
+	TextureUnitSPtr Importer::loadTexture( Path const & path
+		, TextureChannel channel
+		, Pass & pass )const
+	{
+		auto result = loadTexture( path
+			, channel );
+
+		if ( result )
+		{
+			pass.addTextureUnit( result );
+		}
+
+		return result;
 	}
 }

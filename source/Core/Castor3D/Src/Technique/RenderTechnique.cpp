@@ -185,7 +185,6 @@ namespace castor3d
 			, renderTarget.getCuller()
 			, false
 			, false
-			, false
 			, nullptr
 			, config ) }
 #endif

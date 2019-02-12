@@ -27,7 +27,6 @@ install:
   - cmd: git submodule init
   - cmd: git submodule update --init -- "source/CMake"
   - cmd: git submodule update --recursive --init -- "source/external/Ashes"
-  - cmd: git submodule update --init -- "source/external/FreeImage"
   - cmd: git submodule update --init -- "source/external/zlib"
   - cmd: git submodule update --recursive --init -- "source/external/ShaderWriter"
   - cmd: git submodule update --init -- "source/external/glslang"
@@ -41,8 +40,6 @@ install:
   - cmd: cd C:\projects\Castor3D\dependencies\vc14\%PLATFORM_NAME%
   - cmd: 7z x assimp-3.2-win32.zip
   - cmd: 7z x glm-0.9.5.2-win32.zip
-  - cmd: 7z x glslang-12.04.2017.zip
-  - cmd: 7z x zlib-1.2.7-win32.zip
   - cmd: 7z x wxWidgets-3.1.0-win32-headers.zip
   - cmd: 7z x wxWidgets-3.1.0-win32-libs-%DEPS_CONFIG_NAME%-update-4.3.zip
   - cmd: cd C:\projects\Castor3D

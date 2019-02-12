@@ -7,17 +7,19 @@
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Shader/Program.hpp"
+#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Shader/Shaders/GlslUtils.hpp"
+#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Shader/Shaders/GlslPhongLighting.hpp"
+#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Technique/Opaque/GeometryPassResult.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
-
-#include "Shader/Shaders/GlslMaterial.hpp"
 
 #include <RenderPass/RenderPassCreateInfo.hpp>
 
@@ -632,23 +634,18 @@ namespace castor3d
 				, material.m_shininess );
 			auto emissive = writer.declLocale( cuT( "emissive" )
 				, vec3( material.m_emissive ) );
-			shader::legacy::computePreLightingMapContributions( writer
+			shader::PhongLightingModel::computeMapContributions( writer
 				, utils
 				, normal
+				, diffuse
+				, specular
+				, emissive
 				, matShininess
+				, gamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::legacy::computePostLightingMapContributions( writer
-				, utils
-				, diffuse
-				, specular
-				, emissive
-				, gamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			utils.encodeMaterial( c3d_shadowReceiver
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
@@ -836,23 +833,18 @@ namespace castor3d
 				, vec3( material.m_emissive ) );
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
 				, material.m_gamma );
-			shader::pbr::mr::computePreLightingMapContributions( writer
+			shader::MetallicBrdfLightingModel::computeMapContributions( writer
 				, utils
 				, normal
+				, matAlbedo
 				, matMetallic
+				, matEmissive
 				, matRoughness
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::pbr::mr::computePostLightingMapContributions( writer
-				, utils
-				, matAlbedo
-				, matEmissive
-				, matGamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			utils.encodeMaterial( c3d_shadowReceiver
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i
@@ -1041,23 +1033,18 @@ namespace castor3d
 			auto matGamma = writer.declLocale( cuT( "matGamma" )
 				, material.m_gamma );
 
-			shader::pbr::sg::computePreLightingMapContributions( writer
+			shader::SpecularBrdfLightingModel::computeMapContributions( writer
 				, utils
 				, normal
+				, matDiffuse
 				, matSpecular
+				, matEmissive
 				, matGlossiness
+				, matGamma
 				, textureFlags
 				, programFlags
 				, sceneFlags
 				, passFlags );
-			shader::pbr::sg::computePostLightingMapContributions( writer
-				, utils
-				, matDiffuse
-				, matEmissive
-				, matGamma
-				, textureFlags
-				, programFlags
-				, sceneFlags );
 			auto flags = writer.declLocale( cuT( "flags" ), 0.0_f );
 			utils.encodeMaterial( c3d_shadowReceiver
 				, checkFlag( textureFlags, TextureChannel::eReflection ) ? 1_i : 0_i

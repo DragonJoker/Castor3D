@@ -44,6 +44,7 @@ using namespace castor;
 #define C3D_DebugNormals 0
 #define C3D_DebugWorldPos 0
 #define C3D_DebugViewPos 0
+#define C3D_DebugDepth 0
 #define C3D_DebugData1 0
 #define C3D_DebugData2 0
 #define C3D_DebugData3 0
@@ -98,14 +99,14 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0 );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1 );
+			auto position = writer.declInput< Vec2 >( "position", 0 );
+			auto uv = writer.declInput< Vec2 >( "uv", 1 );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 			{
 				vtx_texture = uv;
@@ -132,11 +133,11 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
-			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::LegacyMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -151,181 +152,187 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
-			{
-				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, utils.bottomUpToTopDown( vtx_texture ) );
-				auto uv = writer.declLocale( cuT( "uv" )
-					, lightResultTexcoord );
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, textureLod( c3d_mapData5, uv, 0.0_f ) );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< UInt >( data5.z() ) );
-
-				IF( writer, materialId == 0_u )
 				{
-					writer.discard();
-				}
-				FI;
+					auto fixedTexCoord = writer.declLocale( "fixedTexCoord"
+						, utils.bottomUpToTopDown( vtx_texture ) );
+					auto data5 = writer.declLocale( "data5"
+						, textureLod( c3d_mapData5, fixedTexCoord, 0.0_f ) );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() ) );
 
-				auto data1 = writer.declLocale( cuT( "data1" )
-					, textureLod( c3d_mapData1, uv, 0.0_f ) );
-				auto data2 = writer.declLocale( cuT( "data2" )
-					, textureLod( c3d_mapData2, uv, 0.0_f ) );
-				auto data3 = writer.declLocale( cuT( "data3" )
-					, textureLod( c3d_mapData3, uv, 0.0_f ) );
-				auto data4 = writer.declLocale( cuT( "data4" )
-					, textureLod( c3d_mapData4, uv, 0.0_f ) );
-				auto flags = writer.declLocale( cuT( "flags" )
-					, data1.w() );
-				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
-					, 0_i );
-				auto receiver = writer.declLocale( cuT( "receiver" )
-					, 0_i );
-				auto reflection = writer.declLocale( cuT( "reflection" )
-					, 0_i );
-				auto refraction = writer.declLocale( cuT( "refraction" )
-					, 0_i );
-
-				utils.decodeMaterial( flags
-					, receiver
-					, reflection
-					, refraction
-					, envMapIndex );
-				auto material = writer.declLocale( cuT( "material" )
-					, materials.getMaterial( materialId ) );
-				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, textureLod( c3d_mapLightDiffuse, lightResultTexcoord, 0.0_f ).xyz() );
-				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, textureLod( c3d_mapLightSpecular, lightResultTexcoord, 0.0_f ).xyz() );
-				auto depth = writer.declLocale( cuT( "depth" )
-					, textureLod( c3d_mapDepth, uv, 0.0_f ).x() );
-				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ) );
-				auto normal = writer.declLocale( cuT( "normal" )
-					, normalize( data1.xyz() ) );
-				auto diffuse = writer.declLocale( cuT( "diffuse" )
-					, data2.xyz() );
-				auto occlusion = writer.declLocale( cuT( "occlusion" )
-					, data3.a() );
-				auto emissive = writer.declLocale( cuT( "emissive" )
-					, data4.xyz() );
-				auto ambient = writer.declLocale( cuT( "ambient" )
-					, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
-						, vec3( 0.0_f )
-						, vec3( 1.0_f ) ) );
-
-				if ( hasSsao )
-				{
-					occlusion *= textureLod( c3d_mapSsao, uv, 0.0_f ).r();
-				}
-
-				IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
-				{
-					auto incident = writer.declLocale( cuT( "incident" )
-						, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
-					envMapIndex = envMapIndex - 1_i;
-
-					IF( writer, reflection != 0_i && refraction != 0_i )
+					IF( writer, materialId == 0_u )
 					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
-						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								ambient = reflections.computeReflRefr( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, material.m_refractionRatio
-									, diffuse );
-								diffuse = vec3( 0.0_f );
-							}
-							FI;
-						}
+						writer.discard();
 					}
-					ELSEIF( reflection != 0_i )
+					FI;
+
+					auto data1 = writer.declLocale( "data1"
+						, textureLod( c3d_mapData1, fixedTexCoord, 0.0_f ) );
+					auto data2 = writer.declLocale( "data2"
+						, textureLod( c3d_mapData2, fixedTexCoord, 0.0_f ) );
+					auto data3 = writer.declLocale( "data3"
+						, textureLod( c3d_mapData3, fixedTexCoord, 0.0_f ) );
+					auto data4 = writer.declLocale( "data4"
+						, textureLod( c3d_mapData4, fixedTexCoord, 0.0_f ) );
+					auto flags = writer.declLocale( "flags"
+						, data1.w() );
+					auto envMapIndex = writer.declLocale( "envMapIndex"
+						, 0_i );
+					auto receiver = writer.declLocale( "receiver"
+						, 0_i );
+					auto reflection = writer.declLocale( "reflection"
+						, 0_i );
+					auto refraction = writer.declLocale( "refraction"
+						, 0_i );
+
+					utils.decodeMaterial( flags
+						, receiver
+						, reflection
+						, refraction
+						, envMapIndex );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId ) );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ).xyz() );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, textureLod( c3d_mapLightSpecular, vtx_texture, 0.0_f ).xyz() );
+					auto depth = writer.declLocale( "depth"
+						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					auto position = writer.declLocale( "position"
+						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					auto normal = writer.declLocale( "normal"
+						, normalize( data1.xyz() ) );
+					auto diffuse = writer.declLocale( "diffuse"
+						, data2.xyz() );
+					auto occlusion = writer.declLocale( "occlusion"
+						, data3.a() );
+					auto emissive = writer.declLocale( "emissive"
+						, data4.xyz() );
+					auto ambient = writer.declLocale( "ambient"
+						, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
+							, vec3( 0.0_f )
+							, vec3( 1.0_f ) ) );
+
+					if ( hasSsao )
 					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
+						occlusion *= textureLod( c3d_mapSsao, fixedTexCoord, 0.0_f ).r();
+					}
+
+					IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
+					{
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );
+						envMapIndex = envMapIndex - 1_i;
+
+						IF( writer, envMapIndex >= Int( c_environmentCount ) )
 						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								diffuse *= reflections.computeRefl( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )] );
-								ambient = vec3( 0.0_f );
-							}
-							FI;
+							envMapIndex = 0_i;
 						}
+						FI;
+
+						IF( writer, reflection != 0_i && refraction != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									ambient = reflections.computeReflRefr( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, material.m_refractionRatio
+										, diffuse );
+									diffuse = vec3( 0.0_f );
+								}
+								FI;
+							}
+						}
+						ELSEIF( reflection != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									diffuse *= reflections.computeRefl( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )] );
+									ambient = vec3( 0.0_f );
+								}
+								FI;
+							}
+						}
+						ELSE
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									ambient = reflections.computeRefr( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, material.m_refractionRatio
+										, diffuse );
+									diffuse = vec3( 0.0_f );
+								}
+								FI;
+							}
+						}
+						FI;
 					}
 					ELSE
 					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
-						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								ambient = reflections.computeRefr( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, material.m_refractionRatio
-									, diffuse );
-								diffuse = vec3( 0.0_f );
-							}
-							FI;
-						}
+						ambient *= occlusion * diffuse;
+					diffuse *= lightDiffuse;
 					}
 					FI;
-				}
-				ELSE
-				{
-					ambient *= occlusion * diffuse;
-					diffuse *= lightDiffuse;
-				}
-				FI;
 
-				pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
 
-				if ( fogType != FogType::eDisabled )
-				{
-					position = utils.calcVSPosition( uv
-						, depth
-						, c3d_mtxInvProj );
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
-						, pxl_fragColor
-						, length( position )
-						, position.z() );
-				}
+					if ( fogType != FogType::eDisabled )
+					{
+						position = utils.calcVSPosition( fixedTexCoord
+							, depth
+							, c3d_mtxInvProj );
+						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+							, pxl_fragColor
+							, length( position )
+							, position.z() );
+					}
 
 #if C3D_DebugDiffuseLighting
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugSpecularLighting
-				pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					pxl_fragColor = vec4( lightSpecular, 1.0_f );
 #elif C3D_DebugSSAO
-				pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
 #elif C3D_DebugSSSTransmittance
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugNormals
-				pxl_fragColor = vec4( normal, 1.0_f );
+					pxl_fragColor = vec4( normal, 1.0_f );
 #elif C3D_DebugWorldPos
-				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 #elif C3D_DebugViewPos
-				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugDepth
+					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
 #elif C3D_DebugData1
-				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
 #elif C3D_DebugData2
-				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
 #elif C3D_DebugData3
-				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
 #elif C3D_DebugData4
-				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
 #elif C3D_DebugData5
-				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
-			} );
+				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -347,14 +354,14 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
-			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
-			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBrdf" ), index++, 1u );
-			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapIrradiance" ), index++, 1u );
-			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapPrefiltered" ), index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
+			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
+			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::PbrMRMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -371,104 +378,159 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
-			{
-				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, utils.bottomUpToTopDown( vtx_texture ) );
-				auto uv = writer.declLocale( cuT( "uv" )
-					, lightResultTexcoord );
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, textureLod( c3d_mapData5, uv, 0.0_f ) );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< UInt >( data5.z() ) );
-
-				IF( writer, materialId == 0_u )
 				{
-					writer.discard();
-				}
-				FI;
+					auto fixedTexCoord = writer.declLocale( "fixedTexCoord"
+						, utils.bottomUpToTopDown( vtx_texture ) );
+					auto data5 = writer.declLocale( "data5"
+						, textureLod( c3d_mapData5, fixedTexCoord, 0.0_f ) );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() ) );
 
-				auto data1 = writer.declLocale( cuT( "data1" )
-					, textureLod( c3d_mapData1, uv, 0.0_f ) );
-				auto flags = writer.declLocale( cuT( "flags" )
-					, data1.w() );
-				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
-					, 0_i );
-				auto receiver = writer.declLocale( cuT( "receiver" )
-					, 0_i );
-				auto reflection = writer.declLocale( cuT( "reflection" )
-					, 0_i );
-				auto refraction = writer.declLocale( cuT( "refraction" )
-					, 0_i );
-				utils.decodeMaterial( flags
-					, receiver
-					, reflection
-					, refraction
-					, envMapIndex );
-
-				auto material = writer.declLocale( cuT( "material" )
-					, materials.getMaterial( materialId ) );
-				auto data2 = writer.declLocale( cuT( "data2" )
-					, textureLod( c3d_mapData2, uv, 0.0_f ) );
-				auto data3 = writer.declLocale( cuT( "data3" )
-					, textureLod( c3d_mapData3, uv, 0.0_f ) );
-				auto data4 = writer.declLocale( cuT( "data4" )
-					, textureLod( c3d_mapData4, uv, 0.0_f ) );
-				auto normal = writer.declLocale( cuT( "normal" )
-					, data1.xyz() );
-				auto albedo = writer.declLocale( cuT( "albedo" )
-					, data2.xyz() );
-				auto metalness = writer.declLocale( cuT( "metalness" )
-					, data3.r() );
-				auto roughness = writer.declLocale( cuT( "roughness" )
-					, data3.g() );
-				auto occlusion = writer.declLocale( cuT( "occlusion" )
-					, data3.a() );
-				auto emissive = writer.declLocale( cuT( "emissive" )
-					, data4.xyz() );
-				auto depth = writer.declLocale( cuT( "depth" )
-					, textureLod( c3d_mapDepth, uv, 0.0_f ).x() );
-				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ) );
-				auto ambient = writer.declLocale( cuT( "ambient" )
-					, c3d_ambientLight.xyz() );
-				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, textureLod( c3d_mapLightDiffuse, lightResultTexcoord, 0.0_f ).xyz() );
-				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, textureLod( c3d_mapLightSpecular, lightResultTexcoord, 0.0_f ).xyz() );
-
-				if ( hasSsao )
-				{
-					occlusion *= textureLod( c3d_mapSsao, uv, 0.0_f ).r();
-				}
-
-				IF( writer, envMapIndex > 0_i )
-				{
-					envMapIndex = envMapIndex - 1_i;
-					auto incident = writer.declLocale( cuT( "incident" )
-						, normalize( position - c3d_cameraPosition.xyz() ) );
-					auto ratio = writer.declLocale( cuT( "ratio" )
-						, material.m_refractionRatio );
-
-					IF( writer, reflection != 0_i )
+					IF( writer, materialId == 0_u )
 					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
+						writer.discard();
+					}
+					FI;
+
+					auto data1 = writer.declLocale( "data1"
+						, textureLod( c3d_mapData1, fixedTexCoord, 0.0_f ) );
+					auto flags = writer.declLocale( "flags"
+						, data1.w() );
+					auto envMapIndex = writer.declLocale( "envMapIndex"
+						, 0_i );
+					auto receiver = writer.declLocale( "receiver"
+						, 0_i );
+					auto reflection = writer.declLocale( "reflection"
+						, 0_i );
+					auto refraction = writer.declLocale( "refraction"
+						, 0_i );
+					utils.decodeMaterial( flags
+						, receiver
+						, reflection
+						, refraction
+						, envMapIndex );
+
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId ) );
+					auto data2 = writer.declLocale( "data2"
+						, textureLod( c3d_mapData2, fixedTexCoord, 0.0_f ) );
+					auto data3 = writer.declLocale( "data3"
+						, textureLod( c3d_mapData3, fixedTexCoord, 0.0_f ) );
+					auto data4 = writer.declLocale( "data4"
+						, textureLod( c3d_mapData4, fixedTexCoord, 0.0_f ) );
+					auto normal = writer.declLocale( "normal"
+						, data1.xyz() );
+					auto albedo = writer.declLocale( "albedo"
+						, data2.xyz() );
+					auto metalness = writer.declLocale( "metalness"
+						, data3.r() );
+					auto roughness = writer.declLocale( "roughness"
+						, data3.g() );
+					auto occlusion = writer.declLocale( "occlusion"
+						, data3.a() );
+					auto emissive = writer.declLocale( "emissive"
+						, data4.xyz() );
+					auto depth = writer.declLocale( "depth"
+						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					auto position = writer.declLocale( "position"
+						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					auto ambient = writer.declLocale( "ambient"
+						, c3d_ambientLight.xyz() );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, textureLod( c3d_mapLightDiffuse, fixedTexCoord, 0.0_f ).xyz() );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, textureLod( c3d_mapLightSpecular, fixedTexCoord, 0.0_f ).xyz() );
+
+					if ( hasSsao )
+					{
+						occlusion *= textureLod( c3d_mapSsao, fixedTexCoord, 0.0_f ).r();
+					}
+
+					IF( writer, envMapIndex > 0_i )
+					{
+						envMapIndex = envMapIndex - 1_i;
+
+						IF( writer, envMapIndex >= Int( c_environmentCount ) )
 						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								// Reflection from environment map.
-								ambient = reflections.computeRefl( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, c3d_ambientLight.xyz()
-									, albedo );
-							}
-							FI;
+							envMapIndex = 0_i;
 						}
+						FI;
+
+						auto incident = writer.declLocale( "incident"
+							, normalize( position - c3d_cameraPosition.xyz() ) );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
+
+						IF( writer, reflection != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									// Reflection from environment map.
+									ambient = reflections.computeRefl( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, c3d_ambientLight.xyz()
+										, albedo );
+								}
+								FI;
+							}
+						}
+						ELSE
+						{
+							// Reflection from background skybox.
+							ambient = c3d_ambientLight.xyz()
+								* occlusion
+								* utils.computeMetallicIBL( normal
+									, position
+									, albedo
+									, metalness
+									, roughness
+									, c3d_cameraPosition.xyz()
+									, c3d_mapIrradiance
+									, c3d_mapPrefiltered
+									, c3d_mapBrdf );
+						}
+						FI;
+
+						IF( writer, refraction != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									// Refraction from environment map.
+									ambient = reflections.computeRefr( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, material.m_refractionRatio
+										, ambient
+										, albedo
+										, roughness );
+								}
+								FI;
+							}
+						}
+						ELSEIF( ratio != 0.0_f )
+						{
+							// Refraction from background skybox.
+							ambient = reflections.computeRefr( incident
+								, normal
+								, occlusion
+								, c3d_mapPrefiltered
+								, material.m_refractionRatio
+								, ambient
+								, albedo
+								, roughness );
+						}
+						FI;
 					}
 					ELSE
 					{
@@ -484,118 +546,70 @@ namespace castor3d
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
-					}
-					FI;
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
 
-					IF ( writer, refraction != 0_i )
-					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
+						IF( writer, ratio != 0.0_f )
 						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								// Refraction from environment map.
-								ambient = reflections.computeRefr( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, material.m_refractionRatio
-									, ambient
-									, albedo
-									, roughness );
-							}
-							FI;
+							// Refraction from background skybox.
+							auto incident = writer.declLocale( "incident"
+								, normalize( position - c3d_cameraPosition.xyz() ) );
+							ambient = reflections.computeRefr( incident
+								, normal
+								, occlusion
+								, c3d_mapPrefiltered
+								, material.m_refractionRatio
+								, ambient
+								, albedo
+								, roughness );
 						}
-					}
-					ELSEIF( ratio != 0.0_f )
-					{
-						// Refraction from background skybox.
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapPrefiltered
-							, material.m_refractionRatio
-							, ambient
-							, albedo
-							, roughness );
+						FI;
 					}
 					FI;
-				}
-				ELSE
-				{
-					// Reflection from background skybox.
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* utils.computeMetallicIBL( normal
-							, position
-							, albedo
-							, metalness
-							, roughness
-							, c3d_cameraPosition.xyz()
-							, c3d_mapIrradiance
-							, c3d_mapPrefiltered
-							, c3d_mapBrdf );
-					auto ratio = writer.declLocale( cuT( "ratio" )
-						, material.m_refractionRatio );
 
-					IF( writer, ratio != 0.0_f )
+					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
+
+					if ( fogType != FogType::eDisabled )
 					{
-						// Refraction from background skybox.
-						auto incident = writer.declLocale( cuT( "incident" )
-							, normalize( position - c3d_cameraPosition.xyz() ) );
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapPrefiltered
-							, material.m_refractionRatio
-							, ambient
-							, albedo
-							, roughness );
+						position = utils.calcVSPosition( vtx_texture
+							, depth
+							, c3d_mtxInvProj );
+						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+							, pxl_fragColor
+							, length( position )
+							, position.z() );
 					}
-					FI;
-				}
-				FI;
-
-				pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
-
-				if ( fogType != FogType::eDisabled )
-				{
-					position = utils.calcVSPosition( uv
-						, depth
-						, c3d_mtxInvProj );
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
-						, pxl_fragColor
-						, length( position )
-						, position.z() );
-				}
 
 #if C3D_DebugDiffuseLighting
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugSpecularLighting
-				pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					pxl_fragColor = vec4( lightSpecular, 1.0_f );
 #elif C3D_DebugSSAO
-				pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
 #elif C3D_DebugSSSTransmittance
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugIBL
-				pxl_fragColor = vec4( ambient, 1.0_f );
+					pxl_fragColor = vec4( ambient, 1.0_f );
 #elif C3D_DebugNormals
-				pxl_fragColor = vec4( normal, 1.0_f );
+					pxl_fragColor = vec4( normal, 1.0_f );
 #elif C3D_DebugWorldPos
-				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 #elif C3D_DebugViewPos
-				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugDepth
+					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
 #elif C3D_DebugData1
-				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
 #elif C3D_DebugData2
-				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
 #elif C3D_DebugData3
-				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
 #elif C3D_DebugData4
-				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
 #elif C3D_DebugData5
-				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
-			} );
+				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -617,14 +631,14 @@ namespace castor3d
 			auto c3d_mapData3 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), index++, 1u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), index++, 1u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), index++, 1u );
-			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( cuT( "c3d_mapSsao" ), hasSsao ? index++ : 0u, 1u, hasSsao );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), index++, 1u );
-			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightSpecular" ), index++, 1u );
-			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBrdf" ), index++, 1u );
-			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapIrradiance" ), index++, 1u );
-			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapPrefiltered" ), index++, 1u );
-			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( cuT( "c3d_mapEnvironment" ), index++, 1u, c_environmentCount );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSsao = writer.declSampledImage< FImg2DRg32 >( "c3d_mapSsao", hasSsao ? index++ : 0u, 1u, hasSsao );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", index++, 1u );
+			auto c3d_mapLightSpecular = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightSpecular", index++, 1u );
+			auto c3d_mapBrdf = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBrdf", index++, 1u );
+			auto c3d_mapIrradiance = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapIrradiance", index++, 1u );
+			auto c3d_mapPrefiltered = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapPrefiltered", index++, 1u );
+			auto c3d_mapEnvironment = writer.declSampledImageArray< FImgCubeRgba32 >( "c3d_mapEnvironment", index++, 1u, c_environmentCount );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::PbrSGMaterials materials{ writer };
 			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -641,104 +655,159 @@ namespace castor3d
 			shader::Fog fog{ fogType, writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
-			{
-				auto lightResultTexcoord = writer.declLocale( cuT( "lightResultTexcoord" )
-					, utils.bottomUpToTopDown( vtx_texture ) );
-				auto uv = writer.declLocale( cuT( "uv" )
-					, lightResultTexcoord );
-				auto data5 = writer.declLocale( cuT( "data5" )
-					, textureLod( c3d_mapData5, uv, 0.0_f ) );
-				auto materialId = writer.declLocale( cuT( "materialId" )
-					, writer.cast< UInt >( data5.z() ) );
-
-				IF( writer, materialId == 0_u )
 				{
-					writer.discard();
-				}
-				FI;
+					auto fixedTexCoord = writer.declLocale( "fixedTexCoord"
+						, utils.bottomUpToTopDown( vtx_texture ) );
+					auto data5 = writer.declLocale( "data5"
+						, textureLod( c3d_mapData5, fixedTexCoord, 0.0_f ) );
+					auto materialId = writer.declLocale( "materialId"
+						, writer.cast< UInt >( data5.z() ) );
 
-				auto data1 = writer.declLocale( cuT( "data1" )
-					, textureLod( c3d_mapData1, uv, 0.0_f ) );
-				auto flags = writer.declLocale( cuT( "flags" )
-					, data1.w() );
-				auto envMapIndex = writer.declLocale( cuT( "envMapIndex" )
-					, 0_i );
-				auto receiver = writer.declLocale( cuT( "receiver" )
-					, 0_i );
-				auto reflection = writer.declLocale( cuT( "reflection" )
-					, 0_i );
-				auto refraction = writer.declLocale( cuT( "refraction" )
-					, 0_i );
-				utils.decodeMaterial(flags
-					, receiver
-					, reflection
-					, refraction
-					, envMapIndex );
-
-				auto material = writer.declLocale( cuT( "material" )
-					, materials.getMaterial( materialId ) );
-				auto data2 = writer.declLocale( cuT( "data2" )
-					, textureLod( c3d_mapData2, uv, 0.0_f ) );
-				auto data3 = writer.declLocale( cuT( "data3" )
-					, textureLod( c3d_mapData3, uv, 0.0_f ) );
-				auto data4 = writer.declLocale( cuT( "data4" )
-					, textureLod( c3d_mapData4, uv, 0.0_f ) );
-				auto normal = writer.declLocale( cuT( "normal" )
-					, data1.xyz() );
-				auto diffuse = writer.declLocale( cuT( "diffuse" )
-					, data2.xyz() );
-				auto glossiness = writer.declLocale( cuT( "glossiness" )
-					, data2.w() );
-				auto specular = writer.declLocale( cuT( "specular" )
-					, data3.xyz() );
-				auto occlusion = writer.declLocale( cuT( "occlusion" )
-					, data3.a() );
-				auto emissive = writer.declLocale( cuT( "emissive" )
-					, data4.xyz() );
-				auto depth = writer.declLocale( cuT( "depth" )
-					, textureLod( c3d_mapDepth, uv, 0.0_f ).x() );
-				auto position = writer.declLocale( cuT( "position" )
-					, utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ) );
-				auto ambient = writer.declLocale( cuT( "ambient" )
-					, c3d_ambientLight.xyz() );
-				auto lightDiffuse = writer.declLocale( cuT( "lightDiffuse" )
-					, textureLod( c3d_mapLightDiffuse, lightResultTexcoord, 0.0_f ).xyz() );
-				auto lightSpecular = writer.declLocale( cuT( "lightSpecular" )
-					, textureLod( c3d_mapLightSpecular, lightResultTexcoord, 0.0_f ).xyz() );
-
-				if ( hasSsao )
-				{
-					occlusion *= textureLod( c3d_mapSsao, uv, 0.0_f ).r();
-				}
-
-				IF( writer, envMapIndex > 0_i )
-				{
-					envMapIndex = envMapIndex - 1_i;
-					auto incident = writer.declLocale( cuT( "incident" )
-						, normalize( position - c3d_cameraPosition.xyz() ) );
-					auto ratio = writer.declLocale( cuT( "ratio" )
-						, material.m_refractionRatio );
-
-					IF( writer, reflection != 0_i )
+					IF( writer, materialId == 0_u )
 					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
+						writer.discard();
+					}
+					FI;
+
+					auto data1 = writer.declLocale( "data1"
+						, textureLod( c3d_mapData1, fixedTexCoord, 0.0_f ) );
+					auto flags = writer.declLocale( "flags"
+						, data1.w() );
+					auto envMapIndex = writer.declLocale( "envMapIndex"
+						, 0_i );
+					auto receiver = writer.declLocale( "receiver"
+						, 0_i );
+					auto reflection = writer.declLocale( "reflection"
+						, 0_i );
+					auto refraction = writer.declLocale( "refraction"
+						, 0_i );
+					utils.decodeMaterial( flags
+						, receiver
+						, reflection
+						, refraction
+						, envMapIndex );
+
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( materialId ) );
+					auto data2 = writer.declLocale( "data2"
+						, textureLod( c3d_mapData2, fixedTexCoord, 0.0_f ) );
+					auto data3 = writer.declLocale( "data3"
+						, textureLod( c3d_mapData3, fixedTexCoord, 0.0_f ) );
+					auto data4 = writer.declLocale( "data4"
+						, textureLod( c3d_mapData4, fixedTexCoord, 0.0_f ) );
+					auto normal = writer.declLocale( "normal"
+						, data1.xyz() );
+					auto diffuse = writer.declLocale( "diffuse"
+						, data2.xyz() );
+					auto glossiness = writer.declLocale( "glossiness"
+						, data2.w() );
+					auto specular = writer.declLocale( "specular"
+						, data3.xyz() );
+					auto occlusion = writer.declLocale( "occlusion"
+						, data3.a() );
+					auto emissive = writer.declLocale( "emissive"
+						, data4.xyz() );
+					auto depth = writer.declLocale( "depth"
+						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
+					auto position = writer.declLocale( "position"
+						, utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ) );
+					auto ambient = writer.declLocale( "ambient"
+						, c3d_ambientLight.xyz() );
+					auto lightDiffuse = writer.declLocale( "lightDiffuse"
+						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ).xyz() );
+					auto lightSpecular = writer.declLocale( "lightSpecular"
+						, textureLod( c3d_mapLightSpecular, vtx_texture, 0.0_f ).xyz() );
+
+					if ( hasSsao )
+					{
+						occlusion *= textureLod( c3d_mapSsao, fixedTexCoord, 0.0_f ).r();
+					}
+
+					IF( writer, envMapIndex > 0_i )
+					{
+						envMapIndex = envMapIndex - 1_i;
+
+						IF( writer, envMapIndex >= Int( c_environmentCount ) )
 						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								// Reflection from environment map.
-								ambient = reflections.computeRefl( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, c3d_ambientLight.xyz()
-									, diffuse );
-							}
-							FI;
+							envMapIndex = 0_i;
 						}
+						FI;
+
+						auto incident = writer.declLocale( "incident"
+							, normalize( position - c3d_cameraPosition.xyz() ) );
+						auto ratio = writer.declLocale( "ratio"
+							, material.m_refractionRatio );
+
+						IF( writer, reflection != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									// Reflection from environment map.
+									ambient = reflections.computeRefl( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, c3d_ambientLight.xyz()
+										, diffuse );
+								}
+								FI;
+							}
+						}
+						ELSE
+						{
+							// Reflection from background skybox.
+							ambient = c3d_ambientLight.xyz()
+								* occlusion
+								* utils.computeSpecularIBL( normal
+									, position
+									, diffuse
+									, specular
+									, glossiness
+									, c3d_cameraPosition.xyz()
+									, c3d_mapIrradiance
+									, c3d_mapPrefiltered
+									, c3d_mapBrdf );
+						}
+						FI;
+
+						IF( writer, refraction != 0_i )
+						{
+							for ( auto i = 0; i < c_environmentCount; ++i )
+							{
+								IF( writer, envMapIndex == Int( i ) )
+								{
+									// Refraction from environment map.
+									ambient = reflections.computeRefr( incident
+										, normal
+										, occlusion
+										, c3d_mapEnvironment[Int( i )]
+										, material.m_refractionRatio
+										, ambient
+										, diffuse
+										, glossiness );
+								}
+								FI;
+							}
+						}
+						ELSEIF( ratio != 0.0_f )
+						{
+							// Refraction from background skybox.
+							ambient = reflections.computeRefr( incident
+								, normal
+								, occlusion
+								, c3d_mapPrefiltered
+								, material.m_refractionRatio
+								, ambient
+								, diffuse
+								, glossiness );
+						}
+						FI;
 					}
 					ELSE
 					{
@@ -754,63 +823,13 @@ namespace castor3d
 								, c3d_mapIrradiance
 								, c3d_mapPrefiltered
 								, c3d_mapBrdf );
-					}
-					FI;
-
-					IF ( writer, refraction != 0_i )
-					{
-						for ( auto i = 0; i < c_environmentCount; ++i )
-						{
-							IF( writer, envMapIndex == Int( i ) )
-							{
-								// Refraction from environment map.
-								ambient = reflections.computeRefr( incident
-									, normal
-									, occlusion
-									, c3d_mapEnvironment[Int( i )]
-									, material.m_refractionRatio
-									, ambient
-									, diffuse
-									, glossiness );
-							}
-							FI;
-						}
-					}
-					ELSEIF( ratio != 0.0_f )
-					{
-						// Refraction from background skybox.
-						ambient = reflections.computeRefr( incident
-							, normal
-							, occlusion
-							, c3d_mapPrefiltered
-							, material.m_refractionRatio
-							, ambient
-							, diffuse
-							, glossiness );
-					}
-					FI;
-				}
-				ELSE
-				{
-					// Reflection from background skybox.
-					ambient = c3d_ambientLight.xyz()
-						* occlusion
-						* utils.computeSpecularIBL( normal
-							, position
-							, diffuse
-							, specular
-							, glossiness
-							, c3d_cameraPosition.xyz()
-							, c3d_mapIrradiance
-							, c3d_mapPrefiltered
-							, c3d_mapBrdf );
-					auto ratio = writer.declLocale( cuT( "ratio" )
+					auto ratio = writer.declLocale( "ratio"
 						, material.m_refractionRatio );
 
 					IF( writer, ratio != 0.0_f )
 					{
 						// Refraction from background skybox.
-						auto incident = writer.declLocale( cuT( "incident" )
+						auto incident = writer.declLocale( "incident"
 							, normalize( position - c3d_cameraPosition.xyz() ) );
 						ambient = reflections.computeRefr( incident
 							, normal
@@ -822,50 +841,52 @@ namespace castor3d
 							, glossiness );
 					}
 					FI;
-				}
-				FI;
+					}
+					FI;
 
-				pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0 );
 
-				if ( fogType != FogType::eDisabled )
-				{
-					position = utils.calcVSPosition( uv
-						, depth
-						, c3d_mtxInvProj );
-					pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
-						, pxl_fragColor
-						, length( position )
-						, position.z() );
-				}
+					if ( fogType != FogType::eDisabled )
+					{
+						position = utils.calcVSPosition( fixedTexCoord
+							, depth
+							, c3d_mtxInvProj );
+						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
+							, pxl_fragColor
+							, length( position )
+							, position.z() );
+					}
 
 #if C3D_DebugDiffuseLighting
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugSpecularLighting
-				pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					pxl_fragColor = vec4( lightSpecular, 1.0_f );
 #elif C3D_DebugSSAO
-				pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
 #elif C3D_DebugSSSTransmittance
-				pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
 #elif C3D_DebugIBL
-				pxl_fragColor = vec4( ambient, 1.0_f );
+					pxl_fragColor = vec4( ambient, 1.0_f );
 #elif C3D_DebugNormals
-				pxl_fragColor = vec4( normal, 1.0_f );
+					pxl_fragColor = vec4( normal, 1.0_f );
 #elif C3D_DebugWorldPos
-				pxl_fragColor = vec4( utils.calcWSPosition( uv, depth, c3d_mtxInvViewProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 #elif C3D_DebugViewPos
-				pxl_fragColor = vec4( utils.calcVSPosition( uv, depth, c3d_mtxInvProj ), 1.0_f );
+					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+#elif C3D_DebugDepth
+					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
 #elif C3D_DebugData1
-				pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
 #elif C3D_DebugData2
-				pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
 #elif C3D_DebugData3
-				pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
 #elif C3D_DebugData4
-				pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
 #elif C3D_DebugData5
-				pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
-			} );
+				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 

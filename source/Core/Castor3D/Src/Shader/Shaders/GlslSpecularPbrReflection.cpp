@@ -11,8 +11,8 @@ namespace castor3d
 {
 	namespace shader
 	{
-		SpecularPbrReflectionModel::SpecularPbrReflectionModel( ShaderWriter & writer )
-			: m_writer{ writer }
+		SpecularPbrReflectionModel::SpecularPbrReflectionModel( ShaderWriter & m_writer )
+			: m_writer{ m_writer }
 		{
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// REFLECTIONS" );

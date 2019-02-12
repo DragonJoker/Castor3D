@@ -297,14 +297,19 @@ namespace castor3d
 					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 					kD *= 1.0 - metallic;
+
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
 					auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
 						, irradiance * baseColour );
-
 					auto R = m_writer.declLocale( "R"
 						, reflect( -V, normal ) );
-					R.y() = -R.y();
+
+					if ( m_isTopDown )
+					{
+						R.y() = -R.y();
+					}
+
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, textureLod( prefilteredEnvMap, R, roughness * Float( float( MaxIblReflectionLod ) ) ).rgb() );
 					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"

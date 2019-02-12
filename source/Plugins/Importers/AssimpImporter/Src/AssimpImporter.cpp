@@ -246,8 +246,8 @@ namespace C3dAssimp
 			if ( name.length > 0 )
 			{
 				importer.loadTexture( Path{ string::stringCast< xchar >( name.C_Str() ) }
-					, pass
-					, channel );
+					, channel
+					, pass );
 			}
 		}
 
@@ -284,17 +284,17 @@ namespace C3dAssimp
 				String strSpec = strGlob;
 				String strOpac = strGlob;
 				importer.loadTexture( Path{ string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }
-					, pass
-					, TextureChannel::eDiffuse );
+					, TextureChannel::eDiffuse
+					, pass );
 				importer.loadTexture( Path{ string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }
-					, pass
-					, TextureChannel::eNormal );
+					, TextureChannel::eNormal
+					, pass );
 				importer.loadTexture( Path{ string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }
-					, pass
-					, TextureChannel::eSpecular );
+					, TextureChannel::eSpecular
+					, pass );
 				importer.loadTexture( Path{ string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }
-					, pass
-					, TextureChannel::eOpacity );
+					, TextureChannel::eOpacity
+					, pass );
 			}
 			else
 			{
