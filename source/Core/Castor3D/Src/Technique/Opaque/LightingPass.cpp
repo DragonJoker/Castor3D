@@ -22,6 +22,7 @@
 #include <Buffer/VertexBuffer.hpp>
 #include <RenderPass/FrameBuffer.hpp>
 #include <RenderPass/FrameBufferAttachment.hpp>
+#include <Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
