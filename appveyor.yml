@@ -35,7 +35,6 @@ install:
   - ps: if (!$isLinux) {$GENERATOR_NAME="Visual Studio 15 2017 Win64"}
   - ps: if (!$isLinux) {$OS_NAME="win32"}
   - ps: if (!$isLinux) {$PROJECT_DIR="C:\projects\castor3d"}
-  - ps: if (!$isLinux) {$INSTALL_PREFIX="$PROJECT_DIR\package\Castor3D"}
   - ps: if (!$isLinux) {$PROJECT_FILE="Castor3D.sln"}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM_NAME}
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
@@ -49,12 +48,12 @@ install:
 
 build_script:
   - ps: cd $PROJECT_DIR/build
-  - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
-  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config Release}
+  - ps: if ($isLinux) {cmake --build . --target install}
+  - ps: if (!$isLinux) {cmake --build . --target install --config Release}
 
 after_build:
   - ps: cd $PROJECT_DIR
-  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip .\package\Castor3D\*
+  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*
 
 artifacts:
   - path: Castor3D-$OS_NAME-$PLATFORM_NAME.zip
