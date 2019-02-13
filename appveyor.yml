@@ -1,63 +1,74 @@
 version: '{branch}-rev{build}'
 
-os:
-  - Visual Studio 2017
-
-platform:
-  - Win32
-  - x64
-
-environment:
-  MSVC_DEFAULT_OPTIONS: ON
-
-configuration:
-  - Release
-  - Debug
-
-clone_folder:
-  C:\projects\Castor3D
-
 branches:
   only:
     - master
     - development
     - appveyor
-    - ci
+
+max_jobs: 2
+
+image:
+  - Visual Studio 2017
+  - Ubuntu1804
+
+platform:
+  - x64
+
+configuration:
+  - Release
+
+clone_folder:
+  C:\projects\Castor3D
+  /home/appveyor/projects/Castor3D
 
 install:
-  - cmd: git submodule init
-  - cmd: git submodule update --init -- "source/CMake"
-  - cmd: git submodule update --recursive --init -- "source/external/Ashes"
-  - cmd: git submodule update --init -- "source/external/zlib"
-  - cmd: git submodule update --recursive --init -- "source/external/ShaderWriter"
-  - cmd: git submodule update --init -- "source/external/glslang"
-  - cmd: git submodule update --init -- "dependencies"
-  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017
-  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 15 2017 Win64
-  - cmd: if "%platform%"=="Win32" set PLATFORM_NAME=x86
-  - cmd: if "%platform%"=="x64"   set PLATFORM_NAME=x64
-  - cmd: if "%configuration%"=="Release" set DEPS_CONFIG_NAME=release
-  - cmd: if "%configuration%"=="Debug"   set DEPS_CONFIG_NAME=debug
-  - cmd: cd C:\projects\Castor3D\dependencies\vc14\%PLATFORM_NAME%
+  - git submodule init
+  - git submodule update --init -- "source/CMake"
+  - git submodule update --recursive --init -- "source/external/Ashes"
+  - git submodule update --init -- "source/external/zlib"
+  - git submodule update --recursive --init -- "source/external/ShaderWriter"
+  - git submodule update --init -- "source/external/glslang"
+  - git submodule update --init -- "dependencies"
+  - cmd: set GENERATOR_NAME=Visual Studio 15 2017 Win64
+  - cmd: set PLATFORM_NAME=x64
+  - cmd: set OS_NAME=win32
+  - cmd: set DEPS_CONFIG_NAME=release
+  - cmd: set PROJECT_DIR=C:\projects\Castor3D
+  - cmd: set INSTALL_PREFIX=%PROJECT_DIR%\package\Castor3D
+  - cmd: cd %PROJECT_DIR%\dependencies\vc14\%PLATFORM_NAME%
   - cmd: 7z x assimp-3.2-win32.zip
   - cmd: 7z x glm-0.9.5.2-win32.zip
   - cmd: 7z x wxWidgets-3.1.0-win32-headers.zip
   - cmd: 7z x wxWidgets-3.1.0-win32-libs-%DEPS_CONFIG_NAME%-update-4.3.zip
-  - cmd: cd C:\projects\Castor3D
+  - cmd: cd %PROJECT_DIR%
   - cmd: md build
   - cmd: cd build
-  - cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DRENDERER_STATIC_RENDERERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_FORCE_ALL_IMPORTERS=OFF -DCMAKE_INSTALL_PREFIX=C:\projects\Castor3D\package\Castor3D
+  - cmd: cmake -G "%GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DRENDERER_STATIC_RENDERERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_FORCE_ALL_IMPORTERS=OFF -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX%
+  - sh: GENERATOR_NAME=Unix Makefiles
+  - sh: PLATFORM_NAME=x64
+  - sh: OS_NAME=linux
+  - sh: DEPS_CONFIG_NAME=release
+  - sh: PROJECT_DIR=/home/appveyor/projects/Castor3D
+  - sh: INSTALL_PREFIX=$PROJECT_DIR/package/Castor3D
+  - sh: mkdir build
+  - sh: cd build
+  - sh: cmake -G "$GENERATOR_NAME" -DCMAKE_BUILD_TYPE=$configuration ../source -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DRENDERER_STATIC_RENDERERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_FORCE_ALL_IMPORTERS=OFF -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX
 
 build:
   project: build/Castor3D.sln
   parallel: true
 
 after_build:
-  - cmd: cd C:\projects\Castor3D\build
-  - cmake --build . --target install --config %CONFIGURATION%
+  - cmd: cd %PROJECT_DIR%/build
+  - cmd: cmake --build . --target install --config %CONFIGURATION%
   - cmd: cd ..
-  - cmd: 7z a Castor3D-%PLATFORM_NAME%.zip .\package\Castor3D\*
+  - cmd: 7z a Castor3D-%OS_NAME%-%PLATFORM_NAME%.zip ./package/Castor3D/*
+  - sh: cd $PROJECT_DIR/build
+  - sh: cmake --build . --target install --config $CONFIGURATION
+  - sh: cd ..
+  - sh: 7z a Castor3D-%OS_NAME%-%PLATFORM_NAME%.zip ./package/Castor3D/*
 
 artifacts:
-  - path: Castor3D-%PLATFORM_NAME%.zip
-    name: Castor3D binaries %PLATFORM_NAME%
+  - path: Castor3D-%OS_NAME%-%PLATFORM_NAME%.zip
+    name: Castor3D binaries %PLATFORM_NAME% %OS_NAME%

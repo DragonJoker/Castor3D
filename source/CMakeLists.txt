@@ -358,7 +358,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderAST.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderWriter.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
@@ -367,7 +366,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderAST.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderWriter.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
@@ -375,7 +373,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderASTd.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderWriterd.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
@@ -409,7 +406,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
@@ -418,7 +414,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
@@ -426,7 +421,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
