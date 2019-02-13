@@ -9,8 +9,8 @@ branches:
 max_jobs: 2
 
 image:
-  - Visual Studio 2017
   - Ubuntu1804
+  - Visual Studio 2017
 
 platform:
   - x64
@@ -48,8 +48,10 @@ build_script:
   - ps: if (!$isLinux) {cmake --build . --target install --config Release}
 
 after_build:
-  - ps: cd $PROJECT_DIR
-  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*
+  - ps: if ($isLinux) {cd /home/appveyor/projects/castor3d}
+  - ps: if (!$isLinux) {cd C:\projects\castor3d}
+  - ps: if ($isLinux) {7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*}
+  - ps: if (!$isLinux) {7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip .\package\Castor3D\*}
 
 artifacts:
   - path: Castor3D-$OS_NAME-$PLATFORM_NAME.zip
