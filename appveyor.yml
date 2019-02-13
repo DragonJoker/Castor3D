@@ -28,11 +28,15 @@ install:
   - git submodule update --init -- "source/external/glslang"
   - git submodule update --init -- "dependencies"
   - ps: $PLATFORM_NAME="x64"
-  - ps: if ($isLinux) {$GENERATOR_NAME="Unix Makefiles"} else {$GENERATOR_NAME="Visual Studio 15 2017 Win64"}
-  - ps: if ($isLinux) {$OS_NAME="linux"} else {$OS_NAME="win32"}
-  - ps: if ($isLinux) {$PROJECT_DIR="/home/appveyor/projects/castor3d"} else {$PROJECT_DIR="C:\projects\castor3d"}
-  - ps: if ($isLinux) {$INSTALL_PREFIX="$PROJECT_DIR/package/Castor3D"} else {$INSTALL_PREFIX="$PROJECT_DIR\package\Castor3D"}
-  - ps: if ($isLinux) {$PROJECT_FILE="Makefile"} else {$PROJECT_FILE="Castor3D.sln"}
+  - ps: $GENERATOR_NAME="Unix Makefiles"
+  - ps: $OS_NAME="linux"
+  - ps: $PROJECT_DIR="/home/appveyor/projects/castor3d"
+  - ps: $INSTALL_PREFIX="$PROJECT_DIR/package/Castor3D"
+  - ps: if (!$isLinux) {$GENERATOR_NAME="Visual Studio 15 2017 Win64"}
+  - ps: if (!$isLinux) {$OS_NAME="win32"}
+  - ps: if (!$isLinux) {$PROJECT_DIR="C:\projects\castor3d"}
+  - ps: if (!$isLinux) {$INSTALL_PREFIX="$PROJECT_DIR\package\Castor3D"}
+  - ps: if (!$isLinux) {$PROJECT_FILE="Castor3D.sln"}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM_NAME}
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x wxWidgets-3.1.0-win32-headers.zip}
@@ -45,13 +49,11 @@ install:
 
 build_script:
   - ps: cd $PROJECT_DIR/build
-  - ps: if ($isLinux) {cmake --build . --parallel 4}
-  - ps: if (!$isLinux) {cmake --build . --parallel 4 --config Release}
+  - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
+  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config Release}
 
 after_build:
-  - ps: cd $PROJECT_DIR/build
-  - ps: cmake --build . --target install --config Release
-  - ps: cd ..
+  - ps: cd $PROJECT_DIR
   - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip .\package\Castor3D\*
 
 artifacts:
