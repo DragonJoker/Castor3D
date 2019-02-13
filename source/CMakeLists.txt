@@ -382,7 +382,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
 				EXPORT Ashes
@@ -391,7 +390,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
 				ARCHIVE DESTINATION lib/RelWithDebInfo
@@ -399,7 +397,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
 				ARCHIVE DESTINATION lib/Debug
@@ -427,7 +424,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				LIBRARY DESTINATION lib/Debug
 			)
 		endif ()
-		target_install_headers( ShaderWriter ${ASHES_DIR}/include )
+		target_install_headers( ShaderWriter ${SHADERWRITER_DIR}/include )
 	endif ()
 
 	CoreInit()
