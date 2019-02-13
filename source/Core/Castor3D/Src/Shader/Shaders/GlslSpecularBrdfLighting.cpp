@@ -213,7 +213,7 @@ namespace castor3d
 				auto c3d_mapNormal( writer.getVariable< SampledImage2DRgba32 >( "c3d_mapNormal" ) );
 
 				auto v3MapNormal = writer.declLocale( "v3MapNormal"
-					, utils.invertNormal( texture( c3d_mapNormal, texCoord.xy() ).xyz() ) );
+					, texture( c3d_mapNormal, texCoord.xy() ).xyz() );
 				v3MapNormal = normalize( sdw::fma( v3MapNormal
 					, vec3( 2.0_f )
 					, vec3( -1.0_f ) ) );
@@ -233,7 +233,15 @@ namespace castor3d
 					, mat3( normalize( vtx_tangent )
 						, normalize( vtx_bitangent )
 						, normal ) );
-				normal = normalize( tbn * v3MapNormal );
+
+				if ( utils.hasInvertedNormals() )
+				{
+					normal = normalize( v3MapNormal * tbn );
+				}
+				else
+				{
+					normal = normalize( tbn * v3MapNormal );
+				}
 			}
 
 			if ( checkFlag( textureFlags, TextureChannel::eSpecular ) )

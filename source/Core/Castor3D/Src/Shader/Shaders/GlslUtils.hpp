@@ -155,6 +155,11 @@ namespace castor3d
 			C3D_API void decodeReceiver( sdw::Int & encoded
 				, sdw::Int const & receiver )const;
 
+			inline bool hasInvertedNormals()const
+			{
+				return m_isInvertedNormals;
+			}
+
 		public:
 			C3D_API static uint32_t const MaxIblReflectionLod;
 
