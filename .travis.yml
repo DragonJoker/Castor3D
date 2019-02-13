@@ -26,9 +26,7 @@ git:
 before_install:
   - git submodule update --init -- "source/CMake"
   - git submodule update --recursive --init -- "source/external/Ashes"
-  - git submodule update --init -- "source/external/zlib"
   - git submodule update --recursive --init -- "source/external/ShaderWriter"
-  - git submodule update --init -- "source/external/glslang"
 
 before_script:
   - sudo apt-get update -qq
@@ -41,7 +39,7 @@ before_script:
 script:
   - mkdir -p build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release ../source -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILDGRP_DIVIDER=OFF -DCASTOR_BUILDGRP_GENERATOR=OFF -DCASTOR_BUILDGRP_GENERIC=OFF -DCASTOR_BUILDGRP_IMPORTER=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=OFF -DCASTOR_BUILDGRP_POSTFX=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_TONEMAPS=OFF
+  - cmake -DCMAKE_BUILD_TYPE=Release ../source -DCASTOR_USE_SYSTEM_LIBS=ON -DCASTOR3D_USE_GLSLANG=OFF -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILDGRP_DIVIDER=OFF -DCASTOR_BUILDGRP_GENERATOR=OFF -DCASTOR_BUILDGRP_GENERIC=OFF -DCASTOR_BUILDGRP_IMPORTER=OFF -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=OFF -DCASTOR_BUILDGRP_POSTFX=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_TONEMAPS=OFF
   - make -j4
 
 branches:
@@ -49,3 +47,4 @@ branches:
     - master
     - development
     - travis
+    - ci

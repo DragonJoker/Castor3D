@@ -6,6 +6,8 @@ See LICENSE file in root folder.
 
 #include <Core/Device.hpp>
 
+#if C3D_UseGLSLANG
+
 #include <glslang/Public/ShaderLang.h>
 #include <SPIRV/GlslangToSpv.h>
 
@@ -281,3 +283,27 @@ $&)" );
 		return spirv;
 	}
 }
+
+#else
+
+#include <Exception/Exception.hpp>
+
+namespace castor3d
+{
+	void initialiseGlslang()
+	{
+	}
+
+	void cleanupGlslang()
+	{
+	}
+
+	UInt32Array compileGlslToSpv( ashes::Device const & device
+		, ashes::ShaderStageFlag stage
+		, std::string const & shader )
+	{
+		CU_Exception( "glslang is unavailable." );
+	}
+}
+
+#endif
