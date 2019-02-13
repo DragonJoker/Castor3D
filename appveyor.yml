@@ -45,12 +45,12 @@ install:
 
 build_script:
   - ps: cd $PROJECT_DIR/build
-  - ps: if ($isLinux) {cmake --build . -j4}
-  - ps: if (!$isLinux) {cmake --build . --config $CONFIGURATION}
+  - ps: if ($isLinux) {cmake --build . --parallel 4}
+  - ps: if (!$isLinux) {cmake --build . --parallel 4 --config Release}
 
 after_build:
   - ps: cd $PROJECT_DIR/build
-  - ps: cmake --build . --target install --config $CONFIGURATION
+  - ps: cmake --build . --target install --config Release
   - ps: cd ..
   - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip .\package\Castor3D\*
 
