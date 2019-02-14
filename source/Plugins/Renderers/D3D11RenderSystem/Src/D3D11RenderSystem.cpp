@@ -5,7 +5,7 @@
 #include <Core/Renderer.hpp>
 
 #include <CompilerHlsl/compileHlsl.hpp>
-#include <CompilerSpirV/compileSpirV.hpp>
+//#include <CompilerSpirV/compileSpirV.hpp>
 
 #include <Log/Logger.hpp>
 

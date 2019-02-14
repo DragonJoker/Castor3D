@@ -4,7 +4,11 @@
 #include <Shader/GlslToSpv.hpp>
 
 #include <CompilerSpirV/compileSpirV.hpp>
-#include <CompilerGlsl/compileGlsl.hpp>
+
+#define C3DVkRenderer_HasGLSL 0
+#if C3DVkRenderer_HasGLSL
+#	include <CompilerGlsl/compileGlsl.hpp>
+#endif
 
 #include <Data/BinaryFile.hpp>
 #include <Log/Logger.hpp>
@@ -232,6 +236,7 @@ namespace VkRender
 		{
 #if !defined( NDEBUG )
 
+#if C3DVkRenderer_HasGLSL
 			auto glsl = glsl::compileGlsl( *module.shader
 				, ast::SpecialisationInfo{}
 				, glsl::GlslConfig
@@ -245,6 +250,9 @@ namespace VkRender
 					true,
 					true,
 				} );
+#else
+			std::string glsl;
+#endif
 
 			// Don't do this at home !
 			const_cast< castor3d::ShaderModule & >( module ).source = glsl + "\n" + spirv::writeSpirv( *module.shader );

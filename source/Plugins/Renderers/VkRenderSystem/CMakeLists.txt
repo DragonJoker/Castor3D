@@ -39,7 +39,7 @@ add_target(
 	${PROJECT_NAME}
 	plugin
 	"Castor3D"
-	"${CastorMinLibraries};VkRenderer;CompilerSpirV;CompilerGlsl"
+	"${CastorMinLibraries};VkRenderer;CompilerSpirV"
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.cpp
 	"-DVkRenderer_STATIC"
