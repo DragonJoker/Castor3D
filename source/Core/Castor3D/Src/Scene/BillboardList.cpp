@@ -4,13 +4,12 @@
 
 #include "Event/Frame/FrameListener.hpp"
 #include "Material/Material.hpp"
-#include "Buffer/Buffer.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/Program.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 #include <Design/ArrayView.hpp>
 

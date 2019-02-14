@@ -5,7 +5,7 @@
 #include <Scene/ParticleSystem/ParticleSystem.hpp>
 #include <Scene/BillboardList.hpp>
 
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 #include <random>
 

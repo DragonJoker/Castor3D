@@ -24,7 +24,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Command/CommandBufferInheritanceInfo.hpp>
+#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
 
 using namespace castor;
 

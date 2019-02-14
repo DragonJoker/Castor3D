@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Image/SamplerCreateInfo.hpp>
-#include <Image/Sampler.hpp>
+#include <Ashes/Image/SamplerCreateInfo.hpp>
+#include <Ashes/Image/Sampler.hpp>
 
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>

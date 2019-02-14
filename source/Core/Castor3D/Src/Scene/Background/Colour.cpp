@@ -10,10 +10,10 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Image/StagingTexture.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Image/StagingTexture.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslUtils.hpp"

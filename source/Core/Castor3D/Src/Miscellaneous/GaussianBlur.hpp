@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
 
 #include <Design/OwnedBy.hpp>
 #include <ShaderWriter/Shader.hpp>

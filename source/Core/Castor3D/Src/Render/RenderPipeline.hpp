@@ -6,15 +6,15 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Pipeline/ColourBlendState.hpp>
-#include <Pipeline/DepthStencilState.hpp>
-#include <Pipeline/MultisampleState.hpp>
-#include <Pipeline/RasterisationState.hpp>
-#include <Pipeline/Scissor.hpp>
-#include <Pipeline/VertexLayout.hpp>
-#include <Pipeline/Viewport.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Pipeline/ColourBlendState.hpp>
+#include <Ashes/Pipeline/DepthStencilState.hpp>
+#include <Ashes/Pipeline/MultisampleState.hpp>
+#include <Ashes/Pipeline/RasterisationState.hpp>
+#include <Ashes/Pipeline/Scissor.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/Viewport.hpp>
 
 #include <Design/OwnedBy.hpp>
 

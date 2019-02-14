@@ -3,10 +3,10 @@
 #include "Engine.hpp"
 #include "TextureLayout.hpp"
 
-#include <Image/StagingTexture.hpp>
-#include <Core/Device.hpp>
-#include <Image/Texture.hpp>
-#include <Miscellaneous/BufferImageCopy.hpp>
+#include <Ashes/Image/StagingTexture.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Miscellaneous/BufferImageCopy.hpp>
 
 #include <Graphics/Image.hpp>
 

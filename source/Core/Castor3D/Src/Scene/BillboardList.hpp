@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "MovableObject.hpp"
 #include "RenderedObject.hpp"
 
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 #include <Design/OwnedBy.hpp>
 

@@ -7,10 +7,10 @@
 #include <Scene/Camera.hpp>
 #include <Scene/Light/PointLight.hpp>
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Buffer/VertexBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslLight.hpp"

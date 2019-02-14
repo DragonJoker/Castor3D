@@ -10,8 +10,8 @@
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
 #include <Shader/GlslToSpv.hpp>
 
 #include <ShaderWriter/Source.hpp>

@@ -1,7 +1,5 @@
 #include "FrameEvent.hpp"
 
-#include <Miscellaneous/Debug.hpp>
-
 using namespace castor;
 
 namespace castor3d

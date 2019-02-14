@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "RenderToTexture/RenderQuad.hpp"
 
-#include <RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
 
 namespace castor3d
 {

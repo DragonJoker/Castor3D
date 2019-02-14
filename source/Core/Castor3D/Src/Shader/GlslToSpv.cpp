@@ -4,7 +4,7 @@ See LICENSE file in root folder.
 */
 #include "GlslToSpv.hpp"
 
-#include <Core/Device.hpp>
+#include <Ashes/Core/Device.hpp>
 
 #if C3D_UseGLSLANG
 

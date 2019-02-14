@@ -16,15 +16,15 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Command/CommandBufferInheritanceInfo.hpp>
-#include <Miscellaneous/PushConstantRange.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
+#include <Ashes/Miscellaneous/PushConstantRange.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Shader/ShaderModule.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Shader/ShaderModule.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
 using namespace sdw;

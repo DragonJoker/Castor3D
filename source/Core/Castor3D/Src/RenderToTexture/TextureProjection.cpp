@@ -3,22 +3,21 @@
 #include "Engine.hpp"
 
 #include "Mesh/Vertex.hpp"
-#include "Buffer/Buffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Camera.hpp"
 #include "Shader/Shaders/GlslUtils.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Descriptor/DescriptorSetLayoutBinding.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Pipeline/ShaderStageState.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Pipeline/ShaderStageState.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Shader/ShaderModule.hpp>
+#include <Ashes/Shader/ShaderModule.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

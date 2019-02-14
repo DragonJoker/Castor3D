@@ -10,8 +10,8 @@ See LICENSE file in root folder
 #include "Technique/Opaque/LightPass.hpp"
 #include "Technique/RenderTechniqueVisitor.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Sync/Semaphore.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

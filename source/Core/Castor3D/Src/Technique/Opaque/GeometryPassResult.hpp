@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "Technique/Opaque/LightPass.hpp"
 
-#include <Image/Sampler.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
+#include <Ashes/Image/Sampler.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
 
 namespace castor3d
 {

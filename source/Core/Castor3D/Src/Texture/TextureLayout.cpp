@@ -4,8 +4,8 @@
 
 #include <Miscellaneous/BitSize.hpp>
 
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
 
 using namespace castor;
 

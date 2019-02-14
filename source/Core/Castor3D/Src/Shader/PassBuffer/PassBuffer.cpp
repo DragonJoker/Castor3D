@@ -5,7 +5,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
-#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
 
 #include <Design/ArrayView.hpp>
 

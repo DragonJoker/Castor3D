@@ -6,9 +6,9 @@
 #include "Scene/Scene.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
-#include <Command/CommandBufferInheritanceInfo.hpp>
-#include <Core/Device.hpp>
+#include <Ashes/Buffer/StagingBuffer.hpp>
+#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
+#include <Ashes/Core/Device.hpp>
 #include <Shader/GlslToSpv.hpp>
 
 #include <ShaderWriter/Source.hpp>

@@ -19,11 +19,11 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Pipeline/VertexLayout.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
 
 #include <ShaderWriter/Source.hpp>

@@ -18,10 +18,10 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslMaterial.hpp"

@@ -110,7 +110,7 @@ endif ()
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
-set( ASHES_DIR external/Ashes/source/Ashes )
+set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
@@ -118,8 +118,8 @@ include_directories(
 )
 
 set( Castor3DIncludeDirs
-	${CMAKE_CURRENT_SOURCE_DIR}/${ASHES_DIR}/Ashes/Src
-	${CMAKE_CURRENT_BINARY_DIR}/${ASHES_DIR}/Ashes/Src
+	${CMAKE_CURRENT_SOURCE_DIR}/${ASHES_DIR}/include
+	${CMAKE_CURRENT_BINARY_DIR}/${ASHES_DIR}/source
 	${CMAKE_CURRENT_SOURCE_DIR}/${SHADERWRITER_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/Core/ShaderWriter/Src
 	${CMAKE_CURRENT_BINARY_DIR}/Core/ShaderWriter/Src
@@ -256,7 +256,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			set( ASHES_BUILD_RENDERER_D3D11 ${CASTOR_BUILD_RENDERER_D3D11} )
 			set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILD_RENDERER_TEST} )
 		endif ()
-		add_subdirectory( ${ASHES_DIR} )
+		add_subdirectory( ${ASHES_DIR}/source )
 		set_property( TARGET Ashes PROPERTY FOLDER "External/Ashes" )
 		if ( CASTOR_BUILDGRP_RENDERER )
 			if ( TARGET Gl3Renderer )

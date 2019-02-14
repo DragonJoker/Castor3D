@@ -1,8 +1,8 @@
 #include "Buffer/GpuBuffer.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
-#include <Command/CommandBuffer.hpp>
-#include <Core/Device.hpp>
+#include <Ashes/Buffer/StagingBuffer.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Core/Device.hpp>
 
 using namespace castor;
 

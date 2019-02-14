@@ -10,7 +10,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 

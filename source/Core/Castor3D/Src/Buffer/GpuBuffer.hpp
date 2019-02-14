@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Buffer/GpuBufferBuddyAllocator.hpp"
 
-#include <Buffer/Buffer.hpp>
+#include <Ashes/Buffer/Buffer.hpp>
 
 namespace castor3d
 {

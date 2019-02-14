@@ -3,13 +3,13 @@
 #include <Engine.hpp>
 #include <Shader/GlslToSpv.hpp>
 
-#include <Core/Renderer.hpp>
+#include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
 #include <Log/Logger.hpp>
 
-#include <Core/GlCreateRenderer.hpp>
+#include <Gl4Renderer/Core/GlCreateRenderer.hpp>
 
 using namespace castor;
 

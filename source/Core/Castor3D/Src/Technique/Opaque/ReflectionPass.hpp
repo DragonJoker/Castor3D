@@ -10,14 +10,14 @@ See LICENSE file in root folder
 #include "Shader/Ubos/HdrConfigUbo.hpp"
 #include "Technique/RenderTechniqueVisitor.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Pipeline/Pipeline.hpp>
-#include <Pipeline/PipelineLayout.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/FrameBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Pipeline/Pipeline.hpp>
+#include <Ashes/Pipeline/PipelineLayout.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

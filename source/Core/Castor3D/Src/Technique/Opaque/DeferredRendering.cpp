@@ -6,8 +6,8 @@
 #include "Technique/Opaque/OpaquePass.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 
 using namespace castor;
 

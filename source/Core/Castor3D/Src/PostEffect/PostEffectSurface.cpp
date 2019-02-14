@@ -5,8 +5,8 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
 
 using namespace castor;
 

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#include <RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
 
 namespace castor3d
 {

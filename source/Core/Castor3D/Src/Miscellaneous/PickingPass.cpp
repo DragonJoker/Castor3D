@@ -12,12 +12,12 @@
 #include "Shader/Shaders/GlslMaterial.hpp"
 #include "Shader/Ubos/PickingUbo.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Sync/BufferMemoryBarrier.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Sync/BufferMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

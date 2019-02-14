@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 

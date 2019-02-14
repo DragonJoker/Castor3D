@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderCube.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <Image/TextureView.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
 
 #include <array>
 

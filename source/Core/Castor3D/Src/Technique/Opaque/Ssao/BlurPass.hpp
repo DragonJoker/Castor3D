@@ -9,8 +9,8 @@ See LICENSE file in root folder
 #include "Technique/RenderTechniqueVisitor.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/PushConstantsBuffer.hpp>
-#include <Miscellaneous/PushConstantRange.hpp>
+#include <Ashes/Buffer/PushConstantsBuffer.hpp>
+#include <Ashes/Miscellaneous/PushConstantRange.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

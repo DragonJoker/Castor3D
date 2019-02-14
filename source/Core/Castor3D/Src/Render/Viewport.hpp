@@ -7,8 +7,8 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 #include "Design/GroupChangeTracked.hpp"
 
-#include <Pipeline/Scissor.hpp>
-#include <Pipeline/Viewport.hpp>
+#include <Ashes/Pipeline/Scissor.hpp>
+#include <Ashes/Pipeline/Viewport.hpp>
 
 #include <Math/Angle.hpp>
 #include <Math/PlaneEquation.hpp>

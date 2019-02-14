@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Render/RenderPass.hpp"
 
-#include <Sync/Semaphore.hpp>
+#include <Ashes/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

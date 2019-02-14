@@ -13,7 +13,7 @@
 #include <Data/BinaryFile.hpp>
 #include <Log/Logger.hpp>
 
-#include <Core/VkCreateRenderer.hpp>
+#include <VkRenderer/Core/VkCreateRenderer.hpp>
 
 #if C3DVkRenderer_HasSPIRVCross
 #	include "spirv_cpp.hpp"

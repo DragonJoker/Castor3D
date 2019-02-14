@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "HDR/HdrConfig.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {

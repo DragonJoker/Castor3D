@@ -7,17 +7,17 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Buffer/VertexBuffer.hpp>
-#include <Command/CommandBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Image/Sampler.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <Pipeline/Pipeline.hpp>
-#include <Pipeline/PipelineLayout.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Image/Sampler.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/Pipeline/Pipeline.hpp>
+#include <Ashes/Pipeline/PipelineLayout.hpp>
 
 #include <array>
 

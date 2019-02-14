@@ -24,12 +24,12 @@
 #include "Texture/TextureView.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

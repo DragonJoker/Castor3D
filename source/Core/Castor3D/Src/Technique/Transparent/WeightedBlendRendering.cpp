@@ -5,12 +5,12 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 

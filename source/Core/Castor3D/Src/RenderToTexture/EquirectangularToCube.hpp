@@ -7,8 +7,8 @@ See LICENSE file in root folder
 
 #include "RenderToTexture/RenderCube.hpp"
 
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
 
 namespace castor3d
 {

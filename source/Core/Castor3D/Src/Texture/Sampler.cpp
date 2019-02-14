@@ -4,8 +4,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
-#include <Core/Device.hpp>
-#include <Core/PhysicalDevice.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Core/PhysicalDevice.hpp>
 
 using namespace castor;
 

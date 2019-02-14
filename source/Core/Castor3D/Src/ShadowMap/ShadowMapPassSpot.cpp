@@ -7,7 +7,7 @@
 #include "Shader/PassBuffer/PassBuffer.hpp"
 #include "Technique/RenderTechniquePass.hpp"
 
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 

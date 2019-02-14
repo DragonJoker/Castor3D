@@ -10,8 +10,8 @@
 #include "Shader/Program.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Sync/BufferMemoryBarrier.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Sync/BufferMemoryBarrier.hpp>
 
 #include <Graphics/PixelBuffer.hpp>
 

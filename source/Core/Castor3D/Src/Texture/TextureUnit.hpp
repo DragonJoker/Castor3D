@@ -7,7 +7,7 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Descriptor/WriteDescriptorSet.hpp>
+#include <Ashes/Descriptor/WriteDescriptorSet.hpp>
 
 #include <Design/OwnedBy.hpp>
 

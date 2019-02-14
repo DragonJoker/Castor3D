@@ -8,4 +8,4 @@
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Shader/Ubos/ModelUbo.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>

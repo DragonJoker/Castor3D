@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <CastorUtilsPrerequisites.hpp>
 #include <Castor3DPrerequisites.hpp>
-#include <D3D11RendererPrerequisites.hpp>
+#include <D3D11Renderer/D3D11RendererPrerequisites.hpp>
 
 #ifdef CU_PlatformWindows
 #	ifdef D3D11RenderSystem_EXPORTS

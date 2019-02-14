@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Scene/MovableObject.hpp"
 #include "Scene/ParticleSystem/ParticleDeclaration.hpp"
 
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 #include <Miscellaneous/PreciseTimer.hpp>
 

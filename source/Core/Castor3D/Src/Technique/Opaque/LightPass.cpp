@@ -15,17 +15,17 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Command/CommandBufferInheritanceInfo.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <Pipeline/ColourBlendState.hpp>
-#include <Pipeline/DepthStencilState.hpp>
-#include <Pipeline/MultisampleState.hpp>
-#include <Pipeline/RasterisationState.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
+#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/Pipeline/ColourBlendState.hpp>
+#include <Ashes/Pipeline/DepthStencilState.hpp>
+#include <Ashes/Pipeline/MultisampleState.hpp>
+#include <Ashes/Pipeline/RasterisationState.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslUtils.hpp"

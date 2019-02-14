@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 namespace castor3d
 {

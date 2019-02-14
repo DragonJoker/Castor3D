@@ -22,8 +22,8 @@
 #include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
 
-#include <Image/TextureView.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 

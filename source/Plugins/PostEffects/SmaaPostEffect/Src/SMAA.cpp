@@ -1,6 +1,6 @@
 #include "SMAA.hpp"
 
-#include <Core/Renderer.hpp>
+#include <Ashes/Core/Renderer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

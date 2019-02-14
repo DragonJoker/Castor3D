@@ -19,7 +19,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 
-#include <Core/WindowHandle.hpp>
+#include <Ashes/Core/WindowHandle.hpp>
 
 using namespace castor3d;
 using namespace castor;

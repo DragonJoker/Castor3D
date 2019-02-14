@@ -5,12 +5,12 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Miscellaneous/PushConstantRange.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/Miscellaneous/PushConstantRange.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/Fence.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/Fence.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslUtils.hpp"

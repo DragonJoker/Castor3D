@@ -11,13 +11,13 @@
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
-#include <Core/Renderer.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Pipeline/DepthStencilState.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Core/Renderer.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Pipeline/DepthStencilState.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <numeric>
 

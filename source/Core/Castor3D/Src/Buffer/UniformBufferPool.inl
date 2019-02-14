@@ -1,9 +1,9 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Core/Device.hpp>
-#include <Sync/Fence.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Sync/Fence.hpp>
 
 namespace castor3d
 {

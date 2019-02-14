@@ -6,11 +6,11 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Image/Texture.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/Fence.hpp>
+#include <Ashes/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslUtils.hpp"

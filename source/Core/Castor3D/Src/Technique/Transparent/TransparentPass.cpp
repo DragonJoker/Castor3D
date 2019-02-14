@@ -22,9 +22,9 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Pipeline/ColourBlendState.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Pipeline/ColourBlendState.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 
 using namespace castor;

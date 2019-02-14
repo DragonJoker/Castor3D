@@ -18,7 +18,7 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 #include <Data/BinaryFile.hpp>
 

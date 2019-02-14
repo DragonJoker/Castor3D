@@ -11,12 +11,12 @@ See LICENSE file in root folder
 #include "Shader/Ubos/GpInfoUbo.hpp"
 #include "Technique/RenderTechniqueVisitor.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Pipeline/VertexLayout.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <Sync/Semaphore.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

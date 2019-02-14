@@ -13,16 +13,16 @@
 #include <Technique/RenderTechnique.hpp>
 #include <Texture/Sampler.hpp>
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Buffer/VertexBuffer.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <Pipeline/ColourBlendState.hpp>
-#include <Pipeline/RasterisationState.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Pipeline/ColourBlendState.hpp>
+#include <Ashes/Pipeline/RasterisationState.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

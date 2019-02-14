@@ -6,11 +6,11 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Command/Queue.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Sync/Fence.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Command/Queue.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Sync/Fence.hpp>
 
 using namespace castor;
 

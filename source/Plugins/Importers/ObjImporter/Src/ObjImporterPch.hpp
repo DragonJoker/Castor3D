@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #	include <Mesh/SubmeshComponent/Face.hpp>
 #	include <Mesh/Submesh.hpp>
 #	include <Mesh/Vertex.hpp>
-#	include <Buffer/Buffer.hpp>
+#	include <Ashes/Buffer/Buffer.hpp>
 #	include <Miscellaneous/Version.hpp>
 #	include <Plugin/Plugin.hpp>
 #	include <Texture/TextureLayout.hpp>

@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Image/ImageViewCreateInfo.hpp>
-#include <Image/ImageSubresourceRange.hpp>
-#include <Image/TextureView.hpp>
-#include <Miscellaneous/Extent3D.hpp>
+#include <Ashes/Image/ImageViewCreateInfo.hpp>
+#include <Ashes/Image/ImageSubresourceRange.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/Miscellaneous/Extent3D.hpp>
 
 #include <Graphics/PixelBufferBase.hpp>
 

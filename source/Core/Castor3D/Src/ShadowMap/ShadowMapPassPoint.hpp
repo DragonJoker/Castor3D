@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "ShadowMapPass.hpp"
 #include "Render/Viewport.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {

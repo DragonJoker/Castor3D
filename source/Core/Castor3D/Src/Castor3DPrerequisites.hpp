@@ -30,7 +30,7 @@ See LICENSE file in root folder
 #include <Miscellaneous/StringUtils.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <AshesPrerequisites.hpp>
+#include <Ashes/AshesPrerequisites.hpp>
 
 namespace castor3d
 {

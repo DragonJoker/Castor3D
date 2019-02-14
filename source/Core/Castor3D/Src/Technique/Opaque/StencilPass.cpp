@@ -8,15 +8,15 @@
 #include "Shader/Ubos/MatrixUbo.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Image/Texture.hpp>
-#include <Image/TextureView.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Image/TextureView.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Shader/Shaders/GlslLight.hpp"

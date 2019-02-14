@@ -21,7 +21,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 using namespace castor3d;

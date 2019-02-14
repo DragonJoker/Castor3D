@@ -18,8 +18,8 @@
 #include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslMaterial.hpp"
 
-#include <Buffer/Buffer.hpp>
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/Buffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

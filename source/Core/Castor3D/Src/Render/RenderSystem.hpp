@@ -12,9 +12,9 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#include <Miscellaneous/PhysicalDeviceFeatures.hpp>
-#include <Miscellaneous/PhysicalDeviceMemoryProperties.hpp>
-#include <Miscellaneous/PhysicalDeviceProperties.hpp>
+#include <Ashes/Miscellaneous/PhysicalDeviceFeatures.hpp>
+#include <Ashes/Miscellaneous/PhysicalDeviceMemoryProperties.hpp>
+#include <Ashes/Miscellaneous/PhysicalDeviceProperties.hpp>
 
 namespace castor3d
 {

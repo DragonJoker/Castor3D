@@ -11,8 +11,8 @@
 #include <Scene/Scene.hpp>
 #include <Scene/SceneFileParser.hpp>
 
-#include <Core/PlatformWindowHandle.hpp>
-#include <Core/WindowHandle.hpp>
+#include <Ashes/Core/PlatformWindowHandle.hpp>
+#include <Ashes/Core/WindowHandle.hpp>
 
 #include <wx/display.h>
 #include <wx/mstream.h>

@@ -12,8 +12,8 @@ See LICENSE file in root folder
 #include "RenderToTexture/RenderQuad.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <RenderPass/FrameBuffer.hpp>
-#include <Sync/Semaphore.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/Sync/Semaphore.hpp>
 
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>

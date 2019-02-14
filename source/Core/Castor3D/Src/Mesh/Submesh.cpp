@@ -15,7 +15,7 @@
 #include "Scene/Scene.hpp"
 #include "Vertex.hpp"
 
-#include <Core/Device.hpp>
+#include <Ashes/Core/Device.hpp>
 
 using namespace castor;
 

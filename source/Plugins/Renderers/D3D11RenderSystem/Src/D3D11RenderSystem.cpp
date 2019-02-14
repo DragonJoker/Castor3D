@@ -2,14 +2,14 @@
 
 #include <Engine.hpp>
 
-#include <Core/Renderer.hpp>
+#include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerHlsl/compileHlsl.hpp>
 //#include <CompilerSpirV/compileSpirV.hpp>
 
 #include <Log/Logger.hpp>
 
-#include <Core/D3D11CreateRenderer.hpp>
+#include <D3D11Renderer/Core/D3D11CreateRenderer.hpp>
 
 using namespace castor;
 

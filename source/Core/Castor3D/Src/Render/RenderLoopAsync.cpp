@@ -5,7 +5,7 @@
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/ScopeGuard.hpp>
 #include <Design/BlockGuard.hpp>
-#include <Core/Exception.hpp>
+#include <Ashes/Core/Exception.hpp>
 
 using namespace castor;
 

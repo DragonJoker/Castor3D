@@ -9,11 +9,11 @@
 #include "Shader/Program.hpp"
 #include "Shader/Shaders/GlslShadow.hpp"
 
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Pipeline/InputAssemblyState.hpp>
-#include <Pipeline/Pipeline.hpp>
-#include <Pipeline/PipelineLayout.hpp>
-#include <Pipeline/ShaderStageState.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Pipeline/InputAssemblyState.hpp>
+#include <Ashes/Pipeline/Pipeline.hpp>
+#include <Ashes/Pipeline/PipelineLayout.hpp>
+#include <Ashes/Pipeline/ShaderStageState.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

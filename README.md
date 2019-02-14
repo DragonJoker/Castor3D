@@ -6,10 +6,10 @@
 Castor3D
 ========
 
-Castor3D is a 3D engine written in C++ 17.
-It works on Windows and also on GNU/Linux.
-It relies on RendererLib as a rendering API, allowing Vulkan, OpenGL 3.X and OpenGL 4.X.
-It is still a work in progress, feel free to contribute!
+Castor3D is a 3D engine written in C++ 17.  
+It works on Windows and also on GNU/Linux.  
+It relies on RendererLib as a rendering API, allowing Vulkan, OpenGL 3.X and OpenGL 4.X.  
+It is still a work in progress, feel free to contribute!  
 
 Features
 --------
@@ -96,20 +96,20 @@ Links
 General Questions
 -----------------
 
-1. I need a feature that Castor3D do not implement, what should I do ?
-  There are two ways.
-  First, Castor3D is a free software and library, so you are welcome to improve
-  it yourself ;-) !
-  Second, just ask the author :-) ! 
+1. I need a feature that Castor3D do not implement, what should I do ?  
+    There are two ways.  
+    First, Castor3D is a free software and library, so you are welcome to improve  
+    it yourself ;-) !  
+    Second, just ask the author :-) !  
 
-2. I implemented a cool feature, can I commit it ?
-  Obviously you are welcome to send the author any improvement. But obviously
-  the author is quite careful with readability, correctness and stability, 
-  and will read and check any contribution before including it.
-  Thus, it can take time... There are few basic rules to write contributions:
-  1. Do never change the indentation of any part of the code that's not yours.
-  2. Do never send codes without a lot of comments in (bad or good) English.
-  3. Do never send codes with obscure and/or non-English variable names.
+2. I implemented a cool feature, can I commit it ?  
+    Obviously you are welcome to send the author any improvement. But obviously  
+    the author is quite careful with readability, correctness and stability,  
+    and will read and check any contribution before including it.  
+    Thus, it can take time... There are few basic rules to write contributions:  
+    - Do never change the indentation of any part of the code that's not yours.  
+    - Do never send codes without a lot of comments in (bad or good) English.  
+    - Do never send codes with obscure and/or non-English variable names.  
 
-3. How can I ask the author ?
-  Just send a mail to <dragonjoker59@hotmail.com> !
+3. How can I ask the author ?  
+    Just send a mail to <dragonjoker59@hotmail.com> !

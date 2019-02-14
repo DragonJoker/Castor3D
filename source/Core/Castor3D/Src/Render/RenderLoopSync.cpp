@@ -2,7 +2,7 @@
 
 #include "RenderSystem.hpp"
 
-#include <Core/Exception.hpp>
+#include <Ashes/Core/Exception.hpp>
 
 #include <Design/BlockGuard.hpp>
 

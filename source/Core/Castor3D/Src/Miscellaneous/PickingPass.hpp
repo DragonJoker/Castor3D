@@ -8,8 +8,8 @@ See LICENSE file in root folder
 #include "Render/Viewport.hpp"
 #include "Scene/Geometry.hpp"
 
-#include <Image/Texture.hpp>
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 #define C3D_DebugPicking 0
 

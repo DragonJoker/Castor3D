@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___GUICOMMON_PREREQUISITES_H___
 
 #include <Castor3DPrerequisites.hpp>
-#include <Core/WindowHandle.hpp>
+#include <Ashes/Core/WindowHandle.hpp>
 #include <wx/wx.h>
 
 namespace GuiCommon

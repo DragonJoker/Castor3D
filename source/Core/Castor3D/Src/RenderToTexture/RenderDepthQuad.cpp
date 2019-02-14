@@ -3,9 +3,9 @@
 #include "Engine.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <RenderPass/ClearValue.hpp>
-#include <Sync/Fence.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/RenderPass/ClearValue.hpp>
+#include <Ashes/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

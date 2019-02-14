@@ -3,8 +3,8 @@
 #include "Engine.hpp"
 #include "Render/RenderSystem.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/StagingBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 

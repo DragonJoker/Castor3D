@@ -9,8 +9,8 @@ See LICENSE file in root folder
 #include "Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Pipeline/ShaderStageState.hpp>
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/ShaderStageState.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 namespace castor3d
 {

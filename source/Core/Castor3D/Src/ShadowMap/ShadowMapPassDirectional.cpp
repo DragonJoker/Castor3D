@@ -11,10 +11,10 @@
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureView.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Graphics/Image.hpp>
 
 using namespace castor;

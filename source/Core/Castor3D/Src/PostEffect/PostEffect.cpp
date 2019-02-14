@@ -5,11 +5,11 @@
 #include "Render/RenderTarget.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 using namespace castor;
 

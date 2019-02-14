@@ -4,8 +4,8 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 
-#include <Core/Device.hpp>
-#include <Miscellaneous/QueryPool.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Miscellaneous/QueryPool.hpp>
 
 using namespace castor;
 

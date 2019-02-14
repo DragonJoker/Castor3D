@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3DPrerequisites.hpp"
 #include "Render/RenderInfo.hpp"
 
-#include <Core/WindowHandle.hpp>
+#include <Ashes/Core/WindowHandle.hpp>
 #include <Multithreading/ThreadPool.hpp>
 
 #include <chrono>

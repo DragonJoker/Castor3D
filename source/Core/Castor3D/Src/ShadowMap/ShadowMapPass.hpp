@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_H___
 #define ___C3D_SHADOW_MAP_PASS_H___
 
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 #include "Render/RenderPass.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"

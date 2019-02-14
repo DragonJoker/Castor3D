@@ -5,7 +5,7 @@
 #include "Render/RenderPass.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 

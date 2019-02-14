@@ -15,17 +15,17 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Command/CommandBuffer.hpp>
-#include <Core/Device.hpp>
-#include <Image/Texture.hpp>
-#include <RenderPass/FrameBuffer.hpp>
-#include <RenderPass/FrameBufferAttachment.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/SubpassDependency.hpp>
-#include <RenderPass/SubpassDescription.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/SubpassDependency.hpp>
+#include <Ashes/RenderPass/SubpassDescription.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <Graphics/Image.hpp>
 #include <Miscellaneous/PreciseTimer.hpp>

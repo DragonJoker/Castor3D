@@ -6,7 +6,7 @@
 #include "Scene/Camera.hpp"
 #include "Technique/Opaque/Ssao/SsaoConfig.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 

@@ -2,7 +2,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <Image/Texture.hpp>
+#include <Ashes/Image/Texture.hpp>
 
 namespace castor3d
 {

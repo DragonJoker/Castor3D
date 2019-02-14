@@ -2,8 +2,8 @@
 
 #include "Render/RenderSystem.hpp"
 
-#include <Buffer/Buffer.hpp>
-#include <Core/Device.hpp>
+#include <Ashes/Buffer/Buffer.hpp>
+#include <Ashes/Core/Device.hpp>
 
 using namespace castor;
 

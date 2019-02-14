@@ -1,7 +1,6 @@
 #include "ShadowMapPassPoint.hpp"
 
 #include "Mesh/Submesh.hpp"
-#include "Buffer/VertexBuffer.hpp"
 #include "Render/RenderPipeline.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Shader/Program.hpp"
@@ -10,9 +9,11 @@
 #include "Technique/RenderTechniquePass.hpp"
 #include "Texture/TextureView.hpp"
 
+#include <Ashes/Buffer/VertexBuffer.hpp>
+
 #include <Graphics/Image.hpp>
 
-#include <RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 

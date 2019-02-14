@@ -4,23 +4,23 @@
 #include "Shader/Shaders/GlslUtils.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
-#include <Command/Queue.hpp>
-#include <Core/Device.hpp>
-#include <Descriptor/DescriptorSetLayoutBinding.hpp>
-#include <Image/Texture.hpp>
-#include <Pipeline/DepthStencilState.hpp>
-#include <Pipeline/InputAssemblyState.hpp>
-#include <Pipeline/MultisampleState.hpp>
-#include <Pipeline/Scissor.hpp>
-#include <Pipeline/VertexLayout.hpp>
-#include <Pipeline/Viewport.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <Ashes/Buffer/StagingBuffer.hpp>
+#include <Ashes/Command/Queue.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/Pipeline/DepthStencilState.hpp>
+#include <Ashes/Pipeline/InputAssemblyState.hpp>
+#include <Ashes/Pipeline/MultisampleState.hpp>
+#include <Ashes/Pipeline/Scissor.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/Viewport.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderSubpass.hpp>
+#include <Ashes/RenderPass/RenderSubpassState.hpp>
 #include <Shader/GlslToSpv.hpp>
-#include <Sync/Fence.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Sync/Fence.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

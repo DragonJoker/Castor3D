@@ -4,7 +4,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 

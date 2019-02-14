@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <Buffer/UniformBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
 
 namespace light_streaks
 {

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 #include <Design/OwnedBy.hpp>
 
-#include <Pipeline/ShaderStageState.hpp>
+#include <Ashes/Pipeline/ShaderStageState.hpp>
 
 namespace castor3d
 {

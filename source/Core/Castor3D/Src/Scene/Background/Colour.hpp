@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Scene/Background/Background.hpp"
 
-#include <Buffer/Buffer.hpp>
+#include <Ashes/Buffer/Buffer.hpp>
 #include <Design/ChangeTracked.hpp>
 
 namespace castor3d

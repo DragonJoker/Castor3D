@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Command/CommandBuffer.hpp>
+#include <Ashes/Command/CommandBuffer.hpp>
 
 #include <Design/OwnedBy.hpp>
 

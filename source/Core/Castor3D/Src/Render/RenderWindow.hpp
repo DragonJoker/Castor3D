@@ -12,8 +12,8 @@ See LICENSE file in root folder
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 
-#include <Core/Device.hpp>
-#include <Core/SwapChain.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Core/SwapChain.hpp>
 
 namespace castor3d
 {

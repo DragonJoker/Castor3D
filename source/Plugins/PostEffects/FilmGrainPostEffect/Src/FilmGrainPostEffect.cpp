@@ -22,14 +22,14 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Buffer/UniformBuffer.hpp>
-#include <Image/StagingTexture.hpp>
-#include <Image/Texture.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
-#include <Sync/ImageMemoryBarrier.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Image/StagingTexture.hpp>
+#include <Ashes/Image/Texture.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderSubpass.hpp>
+#include <Ashes/RenderPass/RenderSubpassState.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

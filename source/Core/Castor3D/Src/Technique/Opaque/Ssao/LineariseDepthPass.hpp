@@ -12,8 +12,8 @@ See LICENSE file in root folder
 
 #include <Design/ChangeTracked.hpp>
 
-#include <Buffer/PushConstantsBuffer.hpp>
-#include <Miscellaneous/PushConstantRange.hpp>
+#include <Ashes/Buffer/PushConstantsBuffer.hpp>
+#include <Ashes/Miscellaneous/PushConstantRange.hpp>
 
 namespace castor3d
 {

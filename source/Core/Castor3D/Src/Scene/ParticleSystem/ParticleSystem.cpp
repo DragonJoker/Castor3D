@@ -8,8 +8,8 @@
 #include "Scene/ParticleSystem/ComputeParticleSystem.hpp"
 #include "Scene/ParticleSystem/CpuParticleSystem.hpp"
 
-#include <Core/Device.hpp>
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 using namespace castor;
 

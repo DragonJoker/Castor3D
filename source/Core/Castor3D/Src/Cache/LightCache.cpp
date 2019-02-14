@@ -16,8 +16,8 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureView.hpp"
 
-#include <Core/Device.hpp>
-#include <Image/Texture.hpp>
+#include <Ashes/Core/Device.hpp>
+#include <Ashes/Image/Texture.hpp>
 
 #include <Design/ArrayView.hpp>
 

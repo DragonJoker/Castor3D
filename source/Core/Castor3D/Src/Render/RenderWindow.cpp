@@ -7,12 +7,12 @@
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Buffer/StagingBuffer.hpp>
-#include <Image/StagingTexture.hpp>
-#include <RenderPass/RenderPass.hpp>
-#include <RenderPass/RenderPassCreateInfo.hpp>
-#include <RenderPass/RenderSubpass.hpp>
-#include <RenderPass/RenderSubpassState.hpp>
+#include <Ashes/Buffer/StagingBuffer.hpp>
+#include <Ashes/Image/StagingTexture.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/RenderPass/RenderSubpass.hpp>
+#include <Ashes/RenderPass/RenderSubpassState.hpp>
 #include <Shader/GlslToSpv.hpp>
 
 #include <ShaderWriter/Source.hpp>

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_RENDERER_H___
 #define ___C3D_OVERLAY_RENDERER_H___
 
-#include <Pipeline/VertexLayout.hpp>
+#include <Ashes/Pipeline/VertexLayout.hpp>
 #include "Render/RenderNode/PassRenderNode.hpp"
 #include "Render/RenderPassTimer.hpp"
 #include "Shader/Ubos/MatrixUbo.hpp"

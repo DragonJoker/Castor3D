@@ -13,13 +13,13 @@ See LICENSE file in root folder
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Buffer/VertexBuffer.hpp>
-#include <Descriptor/DescriptorSet.hpp>
-#include <Descriptor/DescriptorSetLayout.hpp>
-#include <Descriptor/DescriptorSetPool.hpp>
-#include <Pipeline/Pipeline.hpp>
-#include <Pipeline/PipelineLayout.hpp>
-#include <Sync/Semaphore.hpp>
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <Ashes/Pipeline/Pipeline.hpp>
+#include <Ashes/Pipeline/PipelineLayout.hpp>
+#include <Ashes/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

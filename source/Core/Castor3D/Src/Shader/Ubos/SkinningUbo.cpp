@@ -6,7 +6,7 @@
 #include "Shader/Program.hpp"
 #include "Shader/Ubos/ModelMatrixUbo.hpp"
 
-#include <Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
