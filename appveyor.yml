@@ -44,15 +44,11 @@ install:
 
 build_script:
   - ps: cd $PROJECT_DIR/build
-  - ps: if ($isLinux) {cmake --build . --target install --parallel 2}
-  - ps: if (!$isLinux) {cmake --build . --target install --parallel 2 --config Release}
+  - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
+  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config Release}
 
 after_build:
   - ps: if ($isLinux) {cd /home/appveyor/projects/castor3d}
   - ps: if (!$isLinux) {cd C:\projects\castor3d}
-  - ps: if ($isLinux) {7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*}
-  - ps: if (!$isLinux) {7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip .\package\Castor3D\*}
-
-artifacts:
-  - path: Castor3D-$OS_NAME-$PLATFORM_NAME.zip
-    name: Castor3D binaries $PLATFORM_NAME $OS_NAME
+  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*
+  - ps: Push-AppveyorArtifact Castor3D-$OS_NAME-$PLATFORM_NAME.zip
