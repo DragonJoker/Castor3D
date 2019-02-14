@@ -1,62 +1,54 @@
 version: '{branch}-rev{build}'
 
-os:
-  - Visual Studio 2017
-
-platform:
-  - Win32
-  - x64
-
-environment:
-  MSVC_DEFAULT_OPTIONS: ON
-
-configuration:
-  - Release
-  - Debug
-
-clone_folder:
-  C:\projects\Castor3D
-
 branches:
   only:
     - master
     - development
     - appveyor
 
-install:
-  - cmd: git submodule init
-  - cmd: git submodule update --init -- "source/CMake"
-  - cmd: git submodule update --recursive --init -- "source/external/Ashes"
-  - cmd: git submodule update --init -- "source/external/zlib"
-  - cmd: git submodule update --recursive --init -- "source/external/ShaderWriter"
-  - cmd: git submodule update --init -- "source/external/glslang"
-  - cmd: git submodule update --init -- "dependencies"
-  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017
-  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 15 2017 Win64
-  - cmd: if "%platform%"=="Win32" set PLATFORM_NAME=x86
-  - cmd: if "%platform%"=="x64"   set PLATFORM_NAME=x64
-  - cmd: if "%configuration%"=="Release" set DEPS_CONFIG_NAME=release
-  - cmd: if "%configuration%"=="Debug"   set DEPS_CONFIG_NAME=debug
-  - cmd: cd C:\projects\Castor3D\dependencies\vc14\%PLATFORM_NAME%
-  - cmd: 7z x assimp-3.2-win32.zip
-  - cmd: 7z x glm-0.9.5.2-win32.zip
-  - cmd: 7z x wxWidgets-3.1.0-win32-headers.zip
-  - cmd: 7z x wxWidgets-3.1.0-win32-libs-%DEPS_CONFIG_NAME%-update-4.3.zip
-  - cmd: cd C:\projects\Castor3D
-  - cmd: md build
-  - cmd: cd build
-  - cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% ../source -DSDW_GENERATE_SOURCE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DRENDERER_STATIC_RENDERERS=ON -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_TEST=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_BUILD_TEST_CASTOR3D=OFF -DCASTOR_BUILD_TEST_RENDERER_OGL=OFF -DCASTOR_FORCE_ALL_IMPORTERS=OFF -DCMAKE_INSTALL_PREFIX=C:\projects\Castor3D\package\Castor3D
+max_jobs: 2
 
-build:
-  project: build/Castor3D.sln
-  parallel: true
+image:
+  - Ubuntu1804
+  - Visual Studio 2017
+
+platform:
+  - x64
+
+configuration:
+  - Release
+
+install:
+  - git submodule init
+  - git submodule update --init -- "source/CMake"
+  - git submodule update --recursive --init -- "source/external/Ashes"
+  - git submodule update --init -- "source/external/FreeType"
+  - git submodule update --init -- "source/external/zlib"
+  - git submodule update --recursive --init -- "source/external/ShaderWriter"
+  - git submodule update --init -- "source/external/glslang"
+  - git submodule update --init -- "dependencies"
+  - ps: $PLATFORM_NAME="x64"
+  - ps: $OS_NAME="linux"
+  - ps: $PROJECT_DIR="/home/appveyor/projects/castor3d"
+  - ps: if (!$isLinux) {$OS_NAME="win32"}
+  - ps: if (!$isLinux) {$PROJECT_DIR="C:\projects\castor3d"}
+  - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM_NAME}
+  - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
+  - ps: if (!$isLinux) {7z x wxWidgets-3.1.0-win32-headers.zip}
+  - ps: if (!$isLinux) {7z x wxWidgets-3.1.0-win32-libs-release-update-4.3.zip}
+  - ps: if (!$isLinux) {cd $PROJECT_DIR}
+  - ps: md build
+  - ps: cd build
+  - ps: if ($isLinux) {cmake -Wno-dev -G "Unix Makefiles" -DPROJECTS_OUTPUT_DIR=/home/appveyor/projects/castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/appveyor/projects/castor3d/package/Castor3D ../source -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF}
+  - ps: if (!$isLinux) {cmake -Wno-dev -G "Visual Studio 15 2017 Win64" -DPROJECTS_OUTPUT_DIR=C:\projects\castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:\projects\castor3d\package\Castor3D ../source -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_RENDERER=ON -DCASTOR_BUILDGRP_SAMPLE=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_BUILD_SAMPLE_CASTOR_TD=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON}
+
+build_script:
+  - ps: cd $PROJECT_DIR/build
+  - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
+  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config Release}
 
 after_build:
-  - cmd: cd C:\projects\Castor3D\build
-  - cmake --build . --target install --config %CONFIGURATION%
-  - cmd: cd ..
-  - cmd: 7z a Castor3D-%PLATFORM_NAME%.zip .\package\Castor3D\*
-
-artifacts:
-  - path: Castor3D-%PLATFORM_NAME%.zip
-    name: Castor3D binaries %PLATFORM_NAME%
+  - ps: if ($isLinux) {cd /home/appveyor/projects/castor3d}
+  - ps: if (!$isLinux) {cd C:\projects\castor3d}
+  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*
+  - ps: Push-AppveyorArtifact Castor3D-$OS_NAME-$PLATFORM_NAME.zip

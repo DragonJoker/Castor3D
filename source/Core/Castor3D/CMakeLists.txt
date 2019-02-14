@@ -7,16 +7,20 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-set( GlslangLibraries 
-	glslang
-	OGLCompiler
-	OSDependent
-	SPVRemapper
-	SPIRV )
+set( C3D_USE_GLSLANG 0 )
 
-include_directories(
-	${CMAKE_SOURCE_DIR}/external/glslang
-)
+if ( CASTOR3D_USE_GLSLANG )
+	set( GlslangLibraries 
+		glslang
+		OGLCompiler
+		OSDependent
+		SPVRemapper
+		SPIRV )
+	include_directories(
+		${CMAKE_SOURCE_DIR}/external/glslang
+	)
+	set( C3D_USE_GLSLANG 1 )
+endif ()
 
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/RequiredVersion.hpp.in

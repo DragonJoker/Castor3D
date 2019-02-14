@@ -49,10 +49,12 @@ if ( ${COMPILER_FOLDER} STREQUAL "vc15" )
 endif ()
 
 if ( NOT ANDROID )
-	option( CASTOR_USE_SYSTEM_LIBS "Use system (or dependencies submodule) provided FreeType and zlib" FALSE )
+	option( CASTOR_USE_SYSTEM_LIBS "Use system (or dependencies submodule) provided FreeType and zlib" OFF )
 else ()
 	set( CASTOR_USE_SYSTEM_LIBS FALSE )
 endif ()
+
+option( CASTOR3D_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
 
 if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
@@ -297,18 +299,20 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 		target_install_headers( Ashes ${ASHES_DIR}/Ashes/Src )
 
-		set( ENABLE_GLSLANG_BINARIES FALSE CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
-		set( ENABLE_AMD_EXTENSIONS FALSE CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
-		set( ENABLE_NV_EXTENSIONS FALSE CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
-		set( ENABLE_HLSL FALSE CACHE BOOL "Enables HLSL input support" FORCE )
-		set( BUILD_TESTING OFF )
-		set( SKIP_GLSLANG_INSTALL ON )
-		add_subdirectory( external/glslang )
-		set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
-		set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
-		set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
-		set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
-		set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
+		if ( CASTOR3D_USE_GLSLANG )
+			set( ENABLE_GLSLANG_BINARIES FALSE CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
+			set( ENABLE_AMD_EXTENSIONS FALSE CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
+			set( ENABLE_NV_EXTENSIONS FALSE CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
+			set( ENABLE_HLSL FALSE CACHE BOOL "Enables HLSL input support" FORCE )
+			set( BUILD_TESTING OFF )
+			set( SKIP_GLSLANG_INSTALL ON )
+			add_subdirectory( external/glslang )
+			set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
+			set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
+			set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
+			set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
+			set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
+		endif ()
 
 		# ShaderWriter external library
 		if ( NOT CASTOR_BUILDGRP_RENDERER )
@@ -354,7 +358,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderAST.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/ShaderWriter.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
@@ -363,7 +366,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderAST.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/bin/ShaderWriter.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
@@ -371,7 +373,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderASTd.dll
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/bin/ShaderWriterd.dll
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
@@ -381,7 +382,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
 				EXPORT Ashes
@@ -390,7 +390,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
 				ARCHIVE DESTINATION lib/RelWithDebInfo
@@ -398,14 +397,12 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			install(
 				FILES
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.a
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.a
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
 				ARCHIVE DESTINATION lib/Debug
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderAST.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/libShaderWriter.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Release
@@ -414,7 +411,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderAST.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_RELWITHDEBINFO}/lib/libShaderWriter.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS RelWithDebInfo
@@ -422,14 +418,13 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			)
 			install(
 				FILES
-					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderASTd.so
 					${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/libShaderWriterd.so
 				COMPONENT ShaderWriter_dev
 				CONFIGURATIONS Debug
 				LIBRARY DESTINATION lib/Debug
 			)
 		endif ()
-		target_install_headers( ShaderWriter ${ASHES_DIR}/include )
+		target_install_headers( ShaderWriter ${SHADERWRITER_DIR}/include )
 	endif ()
 
 	CoreInit()
