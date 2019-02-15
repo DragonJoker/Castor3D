@@ -1,11 +1,10 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Align/Aligned.hpp"
-
-#include "Log/Logger.hpp"
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Align/Aligned.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 #	include <malloc.h>
 #	define CU_AlignedAlloc( m, a, s )\

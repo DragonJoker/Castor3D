@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_RESOURCE_H___
 #define ___CASTOR_RESOURCE_H___
 
-#include "Collection.hpp"
-#include "Named.hpp"
+#include "CastorUtils/Design/Collection.hpp"
+#include "CastorUtils/Design/Named.hpp"
 
 namespace castor
 {

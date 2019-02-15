@@ -1,6 +1,6 @@
-#include "CpuInformations.hpp"
+#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 
 namespace castor
 {

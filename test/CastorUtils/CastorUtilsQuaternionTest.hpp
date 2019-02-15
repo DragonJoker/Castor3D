@@ -4,7 +4,7 @@
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <Math/Quaternion.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
 #if defined( CASTOR_USE_GLM )
 #	include <glm/glm.hpp>
 #endif

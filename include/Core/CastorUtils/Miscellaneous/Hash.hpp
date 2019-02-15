@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_Hash_HPP___
 #define ___CU_Hash_HPP___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <ctime>
 

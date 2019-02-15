@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STRING_H___
 #define ___CASTOR_STRING_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Stream/StreamBaseManipulators.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Stream/StreamBaseManipulators.hpp"
 #include <sstream>
 
 namespace castor

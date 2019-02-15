@@ -1,4 +1,4 @@
-#include "Size.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 namespace castor
 {

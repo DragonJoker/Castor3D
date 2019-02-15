@@ -1,9 +1,9 @@
-#include "Miscellaneous/Utils.hpp"
-#include "Log/Logger.hpp"
-#include "Graphics/PixelFormat.hpp"
-#include "FileParserContext.hpp"
-#include "ParserParameterTypeException.hpp"
-#include "Design/ArrayView.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Graphics/PixelFormat.hpp"
+#include "CastorUtils/FileParser/FileParserContext.hpp"
+#include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
+#include "CastorUtils/Design/ArrayView.hpp"
 
 namespace castor
 {

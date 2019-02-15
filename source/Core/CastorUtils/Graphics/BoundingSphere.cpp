@@ -1,5 +1,5 @@
-#include "BoundingSphere.hpp"
-#include "BoundingBox.hpp"
+#include "CastorUtils/Graphics/BoundingSphere.hpp"
+#include "CastorUtils/Graphics/BoundingBox.hpp"
 
 namespace castor
 {

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___Castor_shared_ptr___
 #define ___Castor_shared_ptr___
 
-#include "Macros.hpp"
+#include "CastorUtils/Config/Macros.hpp"
 
 namespace castor
 {

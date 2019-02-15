@@ -56,9 +56,10 @@ endif ()
 
 option( CASTOR3D_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
 
-if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM}/ )
+set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
+
+if ( EXISTS ${DEPENDENCIES_DIR}/ )
 	message( STATUS "Found dependencies folder, fetching libraries from it" )
-	get_filename_component( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} REALPATH )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 	set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
@@ -112,20 +113,6 @@ endif ()
 #--------------------------------------------------------------------------------------------------
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
-include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/Core/CastorUtils/Src
-	${CMAKE_CURRENT_BINARY_DIR}/Core/CastorUtils/Src
-)
-
-set( Castor3DIncludeDirs
-	${CMAKE_CURRENT_SOURCE_DIR}/${ASHES_DIR}/include
-	${CMAKE_CURRENT_BINARY_DIR}/${ASHES_DIR}/source
-	${CMAKE_CURRENT_SOURCE_DIR}/${SHADERWRITER_DIR}/include
-	${CMAKE_CURRENT_SOURCE_DIR}/Core/ShaderWriter/Src
-	${CMAKE_CURRENT_BINARY_DIR}/Core/ShaderWriter/Src
-	${CMAKE_CURRENT_SOURCE_DIR}/Core/Castor3D/Src
-	${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src
-)
 
 #--------------------------------------------------------------------------------------------------
 #	Normalising libraries names
@@ -171,7 +158,7 @@ if( MSVC )
 	endif()
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
-	file( COPY ${CMAKE_SOURCE_DIR}/../data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
+	file( COPY ${CMAKE_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
 	add_definitions( -D_CRT_SECURE_NO_WARNINGS )
 endif()
 
@@ -186,39 +173,35 @@ option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 
 # Small macro to add subdirectory files to current target source and header files
-macro( parse_subdir_files _FOLDER _GROUP )
+macro( c3d_parse_subdir_files _BASE_DIR _FOLDER _SUBFOLDER _GROUP )
+	if ( NOT "${_FOLDER}" STREQUAL "" )
+		set( _FOLDER_NAME "${_FOLDER}/" )
+	endif ()
 	file( GLOB _FOLDER_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/include/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/include/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/include/${_FOLDER}/*.inl
+		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.h
+		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.hpp
+		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.inl
 	)
 	file( GLOB _FOLDER_ENUM_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.enum
-		${CMAKE_CURRENT_SOURCE_DIR}/include/${_FOLDER}/*.enum
+		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.enum
 	)
 	file( GLOB _FOLDER_SCRIPT_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.py
-		${CMAKE_CURRENT_SOURCE_DIR}/scripts/${_FOLDER}/*.py
+		${_BASE_DIR}/script/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.py
 	)
 	file( GLOB _FOLDER_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.c
-		${CMAKE_CURRENT_SOURCE_DIR}/${_FOLDER}/*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/source/${_FOLDER}/*.h
-		${CMAKE_CURRENT_SOURCE_DIR}/source/${_FOLDER}/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/source/${_FOLDER}/*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/source/${_FOLDER}/*.c
-		${CMAKE_CURRENT_SOURCE_DIR}/source/${_FOLDER}/*.cpp
+		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.h
+		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.hpp
+		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.inl
+		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.c
+		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.cpp
 	)
 	source_group( "Script Files\\${_GROUP}" FILES ${_FOLDER_SCRIPT_FILES} )
 	source_group( "Enum Files\\${_GROUP}" FILES ${_FOLDER_ENUM_FILES} )
 	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+endmacro()
+macro( parse_subdir_files _FOLDER _GROUP )
+	c3d_parse_subdir_files( ${CMAKE_CURRENT_SOURCE_DIR} "" "${FOLDER}" "${GROUP}" )
 endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
@@ -234,14 +217,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( external/FreeType )
 		set_property( TARGET FreeType PROPERTY FOLDER "External" )
 	endif ()
-
-	add_subdirectory( Core )
-	if ( ${CASTOR_BUILD_CASTOR3D} )
-		add_subdirectory( Plugins )
-		add_subdirectory( Samples )
-		add_subdirectory( Interop )
-	endif ()
-	add_subdirectory( Tools )
 
 	if ( ${CASTOR_BUILD_CASTOR3D} )
 		# Ashes external library
@@ -325,35 +300,11 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 	endif ()
 
-	CoreInit()
-	if ( ${CASTOR_BUILD_CASTOR3D} )
-		PluginsInit()
-		SamplesInit()
-		InteropInit()
-	endif ()
-	ToolsInit()
-	
-	CoreBuild()
-	if ( ${CASTOR_BUILD_CASTOR3D} )
-		PluginsBuild()
-		SamplesBuild()
-		InteropBuild()
-	endif ()
-	ToolsBuild()
+	add_subdirectory( source )
 
-	set( msg "\nCastor following projects will be built" )
-	set( msgtest "Test projects :" )
-	CoreSummary( ${msg} ${msgtest} )
-	if ( ${CASTOR_BUILD_CASTOR3D} )
-		PluginsSummary( ${msg} ${msgtest} )
-		SamplesSummary( ${msg} ${msgtest} )
-		InteropSummary( ${msg} ${msgtest} )
-	endif ()
-	ToolsSummary( ${msg} ${msgtest} )
-	message( STATUS "${msg}\n" )
-	if( ${CASTOR_BUILDGRP_TEST} )
-		message( STATUS "${msgtest}\n" )
-	endif ()
+	if( CASTOR_BUILDGRP_TEST )
+		add_subdirectory( test )
+	endif()
 
 	if ( ${CASTOR_BUILDGRP_SETUP} )
 		if ( ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_DEB}" STREQUAL "ON" ) OR ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" ) )

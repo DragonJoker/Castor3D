@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UNIQUE_H___
 #define ___CASTOR_UNIQUE_H___
 
-#include "UnicityException.hpp"
-#include "NonCopyable.hpp"
+#include "CastorUtils/Design/UnicityException.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {

@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CU_RgbColour_H___
 #define ___CU_RgbColour_H___
 
-#include "Math/Point.hpp"
-#include "Data/TextLoader.hpp"
-#include "Data/TextWriter.hpp"
-#include "ColourComponent.hpp"
-#include "HdrColourComponent.hpp"
+#include "CastorUtils/Data/TextLoader.hpp"
+#include "CastorUtils/Data/TextWriter.hpp"
+#include "CastorUtils/Graphics/ColourComponent.hpp"
+#include "CastorUtils/Graphics/HdrColourComponent.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 #undef RGB
 

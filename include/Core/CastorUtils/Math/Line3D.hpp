@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_LINE_3D_H___
 #define ___CASTOR_LINE_3D_H___
 
-#include "CastorUtils.hpp"
+#include "CastorUtils/CastorUtils.hpp"
 
 #include <cmath>
 

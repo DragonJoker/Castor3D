@@ -1,7 +1,7 @@
-#include "Point.hpp"
-#include "Coords.hpp"
-#include "Design/Templates.hpp"
-#include "Simd.hpp"
+#include "CastorUtils/Math/Point.hpp"
+#include "CastorUtils/Math/Coords.hpp"
+#include "CastorUtils/Design/Templates.hpp"
+#include "CastorUtils/Math/Simd.hpp"
 
 #include <cstring>
 

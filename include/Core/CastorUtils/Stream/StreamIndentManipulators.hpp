@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_INDENT_H___
 #define ___CASTOR_STREAM_INDENT_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "StreamIndentBuffer.hpp"
-#include "StreamIndentBufferManager.hpp"
+#include "CastorUtils/Stream/StreamIndentBuffer.hpp"
+#include "CastorUtils/Stream/StreamIndentBufferManager.hpp"
 
 namespace castor
 {

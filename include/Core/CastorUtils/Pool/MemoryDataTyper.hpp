@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_MEMORY_DATA_TYPER_H___
 #define ___CU_MEMORY_DATA_TYPER_H___
 
-#include "PoolException.hpp"
-#include "Align/AlignedMemoryAllocator.hpp"
-#include "Align/NonAlignedMemoryAllocator.hpp"
+#include "CastorUtils/Align/AlignedMemoryAllocator.hpp"
+#include "CastorUtils/Align/NonAlignedMemoryAllocator.hpp"
+#include "CastorUtils/Pool/PoolException.hpp"
 
 namespace castor
 {

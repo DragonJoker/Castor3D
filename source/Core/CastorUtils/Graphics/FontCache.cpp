@@ -1,11 +1,7 @@
-#include "FontCache.hpp"
+#include "CastorUtils/Graphics/FontCache.hpp"
 
-#include "Font.hpp"
-#include "Log/Logger.hpp"
-
-#if defined( CreateFont )
-#	undef CreateFont
-#endif
+#include "CastorUtils/Graphics/Font.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 namespace castor
 {

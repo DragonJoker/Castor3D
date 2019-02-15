@@ -1,10 +1,10 @@
-#include "Log/LoggerConsole.hpp"
+#include "CastorUtils/Log/LoggerConsole.hpp"
 
 #if defined( CU_PlatformAndroid )
 
 #include <android/log.h>
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {

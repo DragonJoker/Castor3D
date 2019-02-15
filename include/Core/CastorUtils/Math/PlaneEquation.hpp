@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_PlaneEquation_HPP___
 #define ___CU_PlaneEquation_HPP___
 
-#include "Line3D.hpp"
-#include "Point.hpp"
+#include "CastorUtils/Math/Line3D.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

@@ -1,12 +1,12 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Data/File.hpp"
+#include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Math/Math.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
-#include "Math/Math.hpp"
-#include "Miscellaneous/Utils.hpp"
-#include "Log/Logger.hpp"
 #include <cstdio>
 #include <cstring>
 #include <sys/types.h>

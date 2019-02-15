@@ -1,4 +1,4 @@
-#include "PlaneEquation.hpp"
+#include "CastorUtils/Math/PlaneEquation.hpp"
 
 namespace castor
 {

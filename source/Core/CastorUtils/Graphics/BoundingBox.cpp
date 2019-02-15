@@ -1,6 +1,6 @@
-#include "BoundingBox.hpp"
+#include "CastorUtils/Graphics/BoundingBox.hpp"
 
-#include <Design/ArrayView.hpp>
+#include "CastorUtils/Design/ArrayView.hpp"
 
 namespace castor
 {

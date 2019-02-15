@@ -1,6 +1,6 @@
 #include "CastorUtilsDynamicBitsetTest.hpp"
 
-#include <Design/DynamicBitset.hpp>
+#include <CastorUtils/Design/DynamicBitset.hpp>
 
 #include <numeric>
 

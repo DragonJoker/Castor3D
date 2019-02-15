@@ -1,5 +1,6 @@
-#include "BlockTimer.hpp"
-#include "Log/Logger.hpp"
+#include "CastorUtils/Miscellaneous/BlockTimer.hpp"
+
+#include "CastorUtils/Log/Logger.hpp"
 
 namespace castor
 {

@@ -1,13 +1,13 @@
-﻿/* See LICENSE file in root folder */
+/* See LICENSE file in root folder */
 #ifndef ___TEST_PREREQUISITES_H___
 #define ___TEST_PREREQUISITES_H___
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <Pool/FixedSizeMemoryData.hpp>
-#include <Pool/FixedSizeMarkedMemoryData.hpp>
-#include <Pool/FixedGrowingSizeMemoryData.hpp>
-#include <Pool/FixedGrowingSizeMarkedMemoryData.hpp>
+#include <CastorUtils/Pool/FixedSizeMemoryData.hpp>
+#include <CastorUtils/Pool/FixedSizeMarkedMemoryData.hpp>
+#include <CastorUtils/Pool/FixedGrowingSizeMemoryData.hpp>
+#include <CastorUtils/Pool/FixedGrowingSizeMarkedMemoryData.hpp>
 
 #include <cstdint>
 #include <chrono>

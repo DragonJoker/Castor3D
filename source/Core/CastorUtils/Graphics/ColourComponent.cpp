@@ -1,4 +1,4 @@
-#include "ColourComponent.hpp"
+#include "CastorUtils/Graphics/ColourComponent.hpp"
 
 namespace castor
 {

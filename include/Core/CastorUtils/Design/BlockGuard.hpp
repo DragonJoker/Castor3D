@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_BLOCK_GUARD_H___
 #define ___CU_BLOCK_GUARD_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <functional>
 

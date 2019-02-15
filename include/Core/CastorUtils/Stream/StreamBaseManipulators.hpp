@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_BASE_MANIPULATORS_H___
 #define ___CASTOR_STREAM_BASE_MANIPULATORS_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <streambuf>
 #include <cassert>

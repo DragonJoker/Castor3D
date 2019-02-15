@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PIXEL_H___
 #define ___CASTOR_PIXEL_H___
 
-#include "Math/Point.hpp"
-#include "PixelFormat.hpp"
+#include "CastorUtils/Graphics/PixelFormat.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

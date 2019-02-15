@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_BLOCK_TIMER___
 #define ___CASTOR_BLOCK_TIMER___
 
-#include "PreciseTimer.hpp"
-#include "CastorUtils.hpp"
+#include "CastorUtils/Miscellaneous/PreciseTimer.hpp"
+#include "CastorUtils/CastorUtils.hpp"
 
 namespace castor
 {

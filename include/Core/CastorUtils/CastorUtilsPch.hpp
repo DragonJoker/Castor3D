@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UTILS_PCH_H___
 #define ___CASTOR_UTILS_PCH_H___
 
-#include "config.hpp"
+#include "CastorUtils/config.hpp"
 
 #if CU_UsePCH
-#	include "CastorUtilsPrerequisites.hpp"
+#	include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #	include <algorithm>
 #	include <fstream>

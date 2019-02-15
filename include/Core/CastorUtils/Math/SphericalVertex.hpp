@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SPHERICAL_VERTEX_H___
 #define ___CASTOR_SPHERICAL_VERTEX_H___
 
-#include "Point.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

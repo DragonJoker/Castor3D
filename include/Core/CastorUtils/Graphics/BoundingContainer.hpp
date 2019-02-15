@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_BoundingContainer_H___
 #define ___CU_BoundingContainer_H___
 
-#include "Math/Point.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

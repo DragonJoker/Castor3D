@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___CastorUtils_Range_HPP___
 #pragma once
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <cmath>
 #include <limits>

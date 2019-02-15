@@ -1,6 +1,6 @@
-#include "ThreadPool.hpp"
+#include "CastorUtils/Multithreading/ThreadPool.hpp"
 
-#include "Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
 
 namespace castor
 {

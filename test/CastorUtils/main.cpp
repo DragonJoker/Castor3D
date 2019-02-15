@@ -1,9 +1,3 @@
-#include "Benchmark.hpp"
-
-#include <Log/Logger.hpp>
-#include <Data/File.hpp>
-
-#include "BenchManager.hpp"
 #include "OpenClBench.hpp"
 #include "CastorUtilsArrayViewTest.hpp"
 #include "CastorUtilsBuddyAllocatorTest.hpp"
@@ -18,6 +12,12 @@
 #include "CastorUtilsSignalTest.hpp"
 #include "CastorUtilsThreadPoolTest.hpp"
 #include "CastorUtilsWorkerThreadTest.hpp"
+
+#include <CastorTest/Benchmark.hpp>
+#include <CastorTest/BenchManager.hpp>
+
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Data/File.hpp>
 
 int main( int argc, char const * argv[] )
 {

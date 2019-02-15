@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_UNIQUE_OBJECT_POOL_H___
 #define ___CU_UNIQUE_OBJECT_POOL_H___
 
-#include "ObjectPool.hpp"
+#include "CastorUtils/Pool/ObjectPool.hpp"
 
 namespace castor
 {

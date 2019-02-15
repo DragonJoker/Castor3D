@@ -1,6 +1,6 @@
-#include "BinaryFile.hpp"
+#include "CastorUtils/Data/BinaryFile.hpp"
 
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 namespace castor
 {

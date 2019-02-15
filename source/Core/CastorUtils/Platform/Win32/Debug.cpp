@@ -1,13 +1,12 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Miscellaneous/Debug.hpp"
-
-#include "Miscellaneous/DynamicLibrary.hpp"
-#include "Miscellaneous/StringUtils.hpp"
-#include "Miscellaneous/Utils.hpp"
-#include "Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Miscellaneous/Debug.hpp"
+#include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #if !defined( NDEBUG )
 #	include <Windows.h>

@@ -1,8 +1,8 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformAndroid )
 
-#include "Miscellaneous/CpuInformations.hpp"
+#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include <android/cpufeatures/cpu-features.h>
 

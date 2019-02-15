@@ -1,6 +1,6 @@
-#include "Design/Templates.hpp"
+#include "CastorUtils/Design/Templates.hpp"
 
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 namespace castor
 {

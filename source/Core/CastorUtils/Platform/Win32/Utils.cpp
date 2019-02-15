@@ -1,9 +1,9 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Miscellaneous/Utils.hpp"
-#include "Graphics/Size.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 #include <Windows.h>
 #include <codecvt>

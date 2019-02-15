@@ -1,9 +1,9 @@
-﻿#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformLinux )
 
-#include "Miscellaneous/Utils.hpp"
-#include "Graphics/Size.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 #include <X11/Xlib.h>
 #if CU_HasXinerama

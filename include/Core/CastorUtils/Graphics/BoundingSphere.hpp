@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_BoundingSphere_H___
 #define ___CU_BoundingSphere_H___
 
-#include "BoundingContainer.hpp"
+#include "CastorUtils/Graphics/BoundingContainer.hpp"
 
 namespace castor
 {

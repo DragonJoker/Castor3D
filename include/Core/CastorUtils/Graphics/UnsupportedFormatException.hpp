@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UNSUPPORTED_FORMAT_EXCEPTION_H___
 #define ___CASTOR_UNSUPPORTED_FORMAT_EXCEPTION_H___
 
-#include "Exception/Exception.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
+
 #include <vector>
 #include <algorithm>
 #include <numeric>

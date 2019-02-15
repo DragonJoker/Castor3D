@@ -1,6 +1,6 @@
 #include "CastorUtilsThreadPoolTest.hpp"
 
-#include <Multithreading/ThreadPool.hpp>
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <atomic>
 

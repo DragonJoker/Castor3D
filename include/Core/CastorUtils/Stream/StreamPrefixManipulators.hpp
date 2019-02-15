@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_PREFIX_H___
 #define ___CASTOR_STREAM_PREFIX_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "StreamPrefixBuffer.hpp"
-#include "StreamPrefixBufferManager.hpp"
+#include "CastorUtils/Stream/StreamPrefixBuffer.hpp"
+#include "CastorUtils/Stream/StreamPrefixBufferManager.hpp"
 
 namespace castor
 {

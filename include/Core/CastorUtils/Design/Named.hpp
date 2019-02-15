@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_NAMED_H___
 #define ___CASTOR_NAMED_H___
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 namespace castor
 {

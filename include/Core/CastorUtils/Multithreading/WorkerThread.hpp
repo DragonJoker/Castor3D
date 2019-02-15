@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_WorkerThread_H___
 #define ___CU_WorkerThread_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Design/Signal.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/Signal.hpp"
 
 #include <thread>
 #include <functional>

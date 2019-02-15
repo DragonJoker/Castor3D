@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PIXEL_BUFFER_H___
 #define ___CASTOR_PIXEL_BUFFER_H___
 
-#include "PixelBufferBase.hpp"
+#include "CastorUtils/Graphics/PixelBufferBase.hpp"
 
 #include <cstddef>
 #include <iterator>

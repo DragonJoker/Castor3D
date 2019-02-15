@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ASSERTION_H___
 #define ___CASTOR_ASSERTION_H___
 
-#include "CastorUtils.hpp"
+#include "CastorUtils/CastorUtils.hpp"
 
-#include "Exception.hpp"
-#include "Log/Logger.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 #ifndef CU_UseAssert
 #	ifndef NDEBUG

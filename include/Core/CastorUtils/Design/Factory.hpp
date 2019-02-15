@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FACTORY_H___
 #define ___CASTOR_FACTORY_H___
 
-#include "NonCopyable.hpp"
-#include "Exception/Exception.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
 
 #include <type_traits>
 #include <functional>

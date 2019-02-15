@@ -1,17 +1,15 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformLinux )
 
-#include "Miscellaneous/Debug.hpp"
-
-#include "Miscellaneous/StringUtils.hpp"
-#include "Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Miscellaneous/Debug.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #if !defined( NDEBUG )
 #	include <execinfo.h>
 #	include <cxxabi.h>
 #endif
-
 
 namespace castor
 {

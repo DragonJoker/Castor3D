@@ -1,4 +1,4 @@
-#include "Log/LoggerConsole.hpp"
+#include "CastorUtils/Log/LoggerConsole.hpp"
 
 #if defined( CU_PlatformLinux )
 

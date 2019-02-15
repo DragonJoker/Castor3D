@@ -1,10 +1,6 @@
-#include "ImageCache.hpp"
+#include "CastorUtils/Graphics/ImageCache.hpp"
 
-#include "Image.hpp"
-
-#if defined( CreateFont )
-#	undef CreateFont
-#endif
+#include "CastorUtils/Graphics/Image.hpp"
 
 namespace castor
 {

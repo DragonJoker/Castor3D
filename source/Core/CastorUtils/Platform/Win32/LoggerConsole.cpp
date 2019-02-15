@@ -1,8 +1,8 @@
-#include "Log/LoggerConsole.hpp"
+#include "CastorUtils/Log/LoggerConsole.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <Windows.h>
 #include <tchar.h>

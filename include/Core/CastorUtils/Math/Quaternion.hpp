@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_QUATERNION_H___
 #define ___CASTOR_QUATERNION_H___
 
-#include "Angle.hpp"
-#include "Point.hpp"
-#include "SquareMatrix.hpp"
+#include "CastorUtils/Math/Angle.hpp"
+#include "CastorUtils/Math/Point.hpp"
+#include "CastorUtils/Math/SquareMatrix.hpp"
 
 namespace castor
 {

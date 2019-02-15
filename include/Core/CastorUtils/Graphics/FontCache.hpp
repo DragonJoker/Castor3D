@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FONT_CACHE_H___
 #define ___CASTOR_FONT_CACHE_H___
 
-#include "Design/Collection.hpp"
+#include "CastorUtils/Design/Collection.hpp"
 
 #if defined( CreateFont )
 #	undef CreateFont

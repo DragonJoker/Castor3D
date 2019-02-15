@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_WRITER_H___
 #define ___CASTOR_WRITER_H___
 
-#include "File.hpp"
-#include "LoaderException.hpp"
+#include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Data/LoaderException.hpp"
 
 namespace castor
 {

@@ -1,10 +1,9 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformWindows )
 
-#include "Miscellaneous/CpuInformations.hpp"
-
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include <Windows.h>
 #include <intrin.h>

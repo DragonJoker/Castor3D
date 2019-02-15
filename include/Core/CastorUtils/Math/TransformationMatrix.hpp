@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TRANSFORMATION_MATRIX_H___
 #define ___CASTOR_TRANSFORMATION_MATRIX_H___
 
-#include "SquareMatrix.hpp"
+#include "CastorUtils/Math/SquareMatrix.hpp"
 
 namespace castor
 {

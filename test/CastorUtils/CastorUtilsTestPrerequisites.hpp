@@ -2,10 +2,10 @@
 #ifndef ___CUT_TestPrerequisites___
 #define ___CUT_TestPrerequisites___
 
-#include <UnitTest.hpp>
-#include <Benchmark.hpp>
+#include <CastorTest/UnitTest.hpp>
+#include <CastorTest/Benchmark.hpp>
 
-#include <Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <random>
 

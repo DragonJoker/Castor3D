@@ -1,17 +1,22 @@
 project( CastorTest )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorTest/Src )
-
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} library" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
+include_directories(
+	${CMAKE_SOURCE_DIR}/include/Core
+	${CMAKE_BINARY_DIR}/include/Core
+	${CMAKE_SOURCE_DIR}/test/CastorTest
+	${CMAKE_BINARY_DIR}/test/CastorTest
+)
+
 add_target(
 	${PROJECT_NAME}
 	lib
+	${CMAKE_SOURCE_DIR}/test/${PROJECT_NAME}
+	${CMAKE_SOURCE_DIR}/test/${PROJECT_NAME}
 	"CastorUtils"
 	"CastorUtils;${CastorBinsDependencies}"
 )

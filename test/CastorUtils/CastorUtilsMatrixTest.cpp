@@ -1,7 +1,7 @@
 #include "CastorUtilsMatrixTest.hpp"
 
-#include <Math/TransformationMatrix.hpp>
-#include <Stream/StreamIndentManipulators.hpp>
+#include <CastorUtils/Math/TransformationMatrix.hpp>
+#include <CastorUtils/Stream/StreamIndentManipulators.hpp>
 
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS

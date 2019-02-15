@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEXT_WRITER_H___
 #define ___CASTOR_TEXT_WRITER_H___
 
-#include "Writer.hpp"
-#include "TextFile.hpp"
-#include "Log/Logger.hpp"
+#include "CastorUtils/Data/Writer.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 namespace castor
 {

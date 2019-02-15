@@ -1,6 +1,6 @@
 #include "CastorUtilsArrayViewTest.hpp"
 
-#include <Design/ArrayView.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 
 #include <numeric>
 

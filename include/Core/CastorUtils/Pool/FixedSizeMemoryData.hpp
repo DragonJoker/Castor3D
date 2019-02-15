@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_FIXED_SIZE_MEMORY_DATA_H___
 #define ___CU_FIXED_SIZE_MEMORY_DATA_H___
 
-#include "MemoryDataTyper.hpp"
+#include "CastorUtils/Pool/MemoryDataTyper.hpp"
 
 #include <cstddef>
 

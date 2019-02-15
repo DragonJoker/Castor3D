@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_BINARY_LOADER_H___
 #define ___CASTOR_BINARY_LOADER_H___
 
-#include "Loader.hpp"
-#include "BinaryFile.hpp"
+#include "CastorUtils/Data/Loader.hpp"
+#include "CastorUtils/Data/BinaryFile.hpp"
 
 namespace castor
 {

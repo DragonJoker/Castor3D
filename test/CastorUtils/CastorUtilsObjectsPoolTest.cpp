@@ -2,8 +2,8 @@
 
 #include "TestObjectPool.hpp"
 
-#include <Pool/PoolManagedObject.hpp>
-#include <Pool/ObjectPool.hpp>
+#include <CastorUtils/Pool/PoolManagedObject.hpp>
+#include <CastorUtils/Pool/ObjectPool.hpp>
 
 #include <algorithm>
 

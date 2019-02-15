@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_LOADER_H___
 #define ___CASTOR_LOADER_H___
 
-#include "File.hpp"
-#include "LoaderException.hpp"
-#include "Design/NonCopyable.hpp"
+#include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Data/LoaderException.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {

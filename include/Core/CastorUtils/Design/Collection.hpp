@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COLLECTION_H___
 #define ___CASTOR_COLLECTION_H___
 
-#include "Config/MultiThreadConfig.hpp"
-#include "Config/SmartPtr.hpp"
-#include "Templates.hpp"
-#include "NonCopyable.hpp"
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Design/Templates.hpp"
+#include "CastorUtils/Design/NonCopyable.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 
 namespace castor
 {

@@ -33,24 +33,6 @@ function( CoreBuild )
 		set( C3D ${Build} PARENT_SCOPE )
 	endif ()
 
-	if( CASTOR_BUILDGRP_TEST )
-		set( Build ${CT} )
-		add_subdirectory( Core/CastorTest )
-		set( CT ${Build} PARENT_SCOPE )
-
-		if ( CASTOR_BUILD_TEST_CASTORUTILS )
-			set( Build ${CUtlT} )
-			add_subdirectory( Core/CastorUtils/Test )
-			set( CUtlT ${Build} PARENT_SCOPE )
-		endif ()
-
-		if ( CASTOR_BUILD_CASTOR3D AND CASTOR_BUILD_TEST_CASTOR3D )
-			set( Build ${C3DT} )
-			add_subdirectory( Core/Castor3D/Test )
-			set( C3DT ${Build} PARENT_SCOPE )
-		endif()
-	endif()
-
 	set( CastorMinLibraries
 		${CastorMinLibraries}
 		PARENT_SCOPE
@@ -62,18 +44,11 @@ function( CoreBuild )
 	)
 endfunction( CoreBuild )
 
-function( CoreSummary msg msgtest )
+function( CoreSummary msg )
 	set( msg_tmp "\nCore :" )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils          ${Cutils}" )
 	set( msg_tmp "${msg_tmp}\n    Castor3D             ${C3D}" )
 	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
-
-	if( ${CASTOR_BUILDGRP_TEST} )
-		set( msgtest_tmp "${msgtest_tmp}\n    CastorTest           ${CT}" )
-		set( msgtest_tmp "${msgtest_tmp}\n    CastorUtilsTest      ${CUtlT}" )
-		set( msgtest_tmp "${msgtest_tmp}\n    Castor3DTest         ${C3DT}" )
-		set( msgtest "${msgtest}${msgtest_tmp}" PARENT_SCOPE )
-	endif()
 endfunction( CoreSummary )
 
 function( CoreSetup )

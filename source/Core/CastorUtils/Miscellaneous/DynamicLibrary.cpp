@@ -1,4 +1,4 @@
-#include "DynamicLibrary.hpp"
+#include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
 namespace castor
 {

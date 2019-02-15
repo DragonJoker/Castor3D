@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UTILS_H___
 #define ___CASTOR_UTILS_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Miscellaneous/StringUtils.hpp"
-#include "Design/Templates.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Design/Templates.hpp"
 
 #include <cstdarg>
 

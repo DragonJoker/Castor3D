@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FONT_H___
 #define ___CASTOR_FONT_H___
 
-#include "Design/Resource.hpp"
-#include "Data/BinaryLoader.hpp"
-#include "Data/TextWriter.hpp"
-#include "Design/Collection.hpp"
-#include "Math/Point.hpp"
-#include "Glyph.hpp"
+#include "CastorUtils/Data/BinaryLoader.hpp"
+#include "CastorUtils/Data/TextWriter.hpp"
+#include "CastorUtils/Design/Collection.hpp"
+#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Graphics/Glyph.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___Castor_Macros___
 #define ___Castor_Macros___
 
-#include "config.hpp"
-#include "PlatformConfig.hpp"
-#include "CompilerConfig.hpp"
+#include "CastorUtils/config.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/CompilerConfig.hpp"
 
 #if !defined( __FUNCTION__ )
 //! Defines this macro if not in debug

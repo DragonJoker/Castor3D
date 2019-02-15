@@ -1,9 +1,9 @@
-﻿#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformAndroid )
 
-#include "Miscellaneous/Utils.hpp"
-#include "Graphics/Size.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #pragma GCC diagnostic ignored "-Wpedantic"
 #include <EGL/egl.h>

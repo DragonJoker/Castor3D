@@ -1,7 +1,8 @@
 #include "CastorUtilsSignalTest.hpp"
 
-#include <Design/Signal.hpp>
-#include <Exception/Exception.hpp>
+#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Exception/Exception.hpp>
+
 #include <random>
 
 using castor::Signal;

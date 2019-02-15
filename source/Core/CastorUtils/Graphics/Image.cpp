@@ -1,9 +1,9 @@
-#include "Graphics/Image.hpp"
+#include "CastorUtils/Graphics/Image.hpp"
 
-#include "Data/LoaderException.hpp"
-#include "Data/Path.hpp"
-#include "Graphics/Rectangle.hpp"
-#include "Log/Logger.hpp"
+#include "CastorUtils/Data/LoaderException.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/Rectangle.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG

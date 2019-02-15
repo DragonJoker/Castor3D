@@ -1,11 +1,10 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformAndroid )
 
-#	include "Miscellaneous/Debug.hpp"
-
-#	include "Miscellaneous/StringUtils.hpp"
-#	include "Config/MultiThreadConfig.hpp"
+#	include "CastorUtils/Config/MultiThreadConfig.hpp"
+#	include "CastorUtils/Miscellaneous/Debug.hpp"
+#	include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #	include <cstdlib>
 

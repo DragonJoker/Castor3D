@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_POINT_H___
 #define ___CASTOR_POINT_H___
 
-#include "Data/TextLoader.hpp"
-#include "Data/TextWriter.hpp"
-#include "Align/Aligned.hpp"
+#include "CastorUtils/Data/TextLoader.hpp"
+#include "CastorUtils/Data/TextWriter.hpp"
+#include "CastorUtils/Align/Aligned.hpp"
 
 #include <cmath>
 #include <iostream>

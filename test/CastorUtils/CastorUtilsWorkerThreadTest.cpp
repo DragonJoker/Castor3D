@@ -1,6 +1,6 @@
 #include "CastorUtilsWorkerThreadTest.hpp"
 
-#include <Multithreading/WorkerThread.hpp>
+#include <CastorUtils/Multithreading/WorkerThread.hpp>
 
 #include <atomic>
 

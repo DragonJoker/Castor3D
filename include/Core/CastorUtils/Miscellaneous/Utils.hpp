@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SYSTEM_UTILS___
 #define ___CASTOR_SYSTEM_UTILS___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <ctime>
 

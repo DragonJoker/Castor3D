@@ -4,7 +4,7 @@
 
 #include "PoolTestPrerequisites.hpp"
 
-#include <Pool/PoolManagedObject.hpp>
+#include <CastorUtils/Pool/PoolManagedObject.hpp>
 
 #include <random>
 

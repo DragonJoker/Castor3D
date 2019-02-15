@@ -1,6 +1,6 @@
-#include "PoolException.hpp"
+#include "CastorUtils/Pool/PoolException.hpp"
 
-#include "MemoryDataTyper.hpp"
+#include "CastorUtils/Pool/MemoryDataTyper.hpp"
 
 namespace castor
 {

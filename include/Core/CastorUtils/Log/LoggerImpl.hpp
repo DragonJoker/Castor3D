@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_LOGGER_IMPL_H___
 #define ___CU_LOGGER_IMPL_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 #include <mutex>
 

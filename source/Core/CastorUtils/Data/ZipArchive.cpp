@@ -1,7 +1,7 @@
-#include "ZipArchive.hpp"
+#include "CastorUtils/Data/ZipArchive.hpp"
 
-#include "Log/Logger.hpp"
-#include "BinaryFile.hpp"
+#include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Data/BinaryFile.hpp"
 
 #ifdef WIN32
 #	undef HAVE_UNISTD_H

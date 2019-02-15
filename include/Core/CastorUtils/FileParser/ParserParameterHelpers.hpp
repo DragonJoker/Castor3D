@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PARSER_PARAMETER_HELPERS_H___
 #define ___CASTOR_PARSER_PARAMETER_HELPERS_H___
 
-#include "ParserParameterBase.hpp"
+#include "CastorUtils/FileParser/ParserParameterBase.hpp"
 
 namespace castor
 {

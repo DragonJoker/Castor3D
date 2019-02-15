@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_BINARY_WRITER_H___
 #define ___CASTOR_BINARY_WRITER_H___
 
-#include "Writer.hpp"
-#include "BinaryFile.hpp"
+#include "CastorUtils/Data/Writer.hpp"
+#include "CastorUtils/Data/BinaryFile.hpp"
 
 namespace castor
 {

@@ -4,7 +4,7 @@
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 #if defined( CASTOR_USE_GLM )
 #	include <glm/glm.hpp>
 #endif

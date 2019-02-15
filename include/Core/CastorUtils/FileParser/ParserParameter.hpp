@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PARSER_PARAMETER_H___
 #define ___CASTOR_PARSER_PARAMETER_H___
 
-#include "ParserParameterHelpers.hpp"
+#include "CastorUtils/FileParser/ParserParameterHelpers.hpp"
 
-#include "Graphics/Colour.hpp"
-#include "Data/Path.hpp"
-#include "Math/Point.hpp"
-#include "Math/Range.hpp"
-#include "Graphics/Position.hpp"
-#include "Graphics/Rectangle.hpp"
-#include "Graphics/Size.hpp"
+#include "CastorUtils/Graphics/Colour.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Math/Point.hpp"
+#include "CastorUtils/Math/Range.hpp"
+#include "CastorUtils/Graphics/Position.hpp"
+#include "CastorUtils/Graphics/Rectangle.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 namespace castor
 {

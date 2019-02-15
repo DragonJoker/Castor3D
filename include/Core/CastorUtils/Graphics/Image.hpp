@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_IMAGE_H___
 #define ___CASTOR_IMAGE_H___
 
-#include "Design/Resource.hpp"
-#include "Data/BinaryLoader.hpp"
-#include "Data/BinaryWriter.hpp"
-#include "Colour.hpp"
-#include "PixelBuffer.hpp"
+#include "CastorUtils/Data/BinaryLoader.hpp"
+#include "CastorUtils/Data/BinaryWriter.hpp"
+#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Graphics/Colour.hpp"
+#include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 namespace castor
 {

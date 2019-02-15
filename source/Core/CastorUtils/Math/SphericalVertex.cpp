@@ -1,4 +1,4 @@
-#include "SphericalVertex.hpp"
+#include "CastorUtils/Math/SphericalVertex.hpp"
 
 namespace castor
 {

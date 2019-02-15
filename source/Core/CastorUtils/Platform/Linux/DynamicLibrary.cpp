@@ -1,10 +1,10 @@
-#include "Miscellaneous/DynamicLibrary.hpp"
+#include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
 #if defined( CU_PlatformLinux )
 
 #include <dlfcn.h>
 
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 
 namespace castor
 {

@@ -1,5 +1,6 @@
-#include "PreciseTimer.hpp"
-#include "CastorUtils.hpp"
+#include "CastorUtils/Miscellaneous/PreciseTimer.hpp"
+
+#include "CastorUtils/CastorUtils.hpp"
 
 namespace castor
 {

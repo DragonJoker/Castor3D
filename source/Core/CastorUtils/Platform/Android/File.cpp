@@ -1,18 +1,18 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformAndroid )
 
-#include "Data/File.hpp"
+#include "CastorUtils/Data/File.hpp"
 
-#include "Math/Math.hpp"
-#include "Miscellaneous/Utils.hpp"
-#include "Log/Logger.hpp"
-#include <cstdio>
-#include <cstring>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <iostream>
+#include "CastorUtils/Math/Math.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
+#	include <cstdio>
+#	include <cstring>
+#	include <sys/types.h>
+#	include <sys/stat.h>
+#	include <iostream>
 #	include <unistd.h>
 #	include <sys/types.h>
 #	include <dirent.h>

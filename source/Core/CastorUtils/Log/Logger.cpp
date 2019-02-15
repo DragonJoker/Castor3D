@@ -1,8 +1,8 @@
-#include "Logger.hpp"
-#include "LoggerImpl.hpp"
+#include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Log/LoggerImpl.hpp"
 
-#include "Config/MultiThreadConfig.hpp"
-#include "Data/File.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Data/File.hpp"
 
 namespace castor
 {

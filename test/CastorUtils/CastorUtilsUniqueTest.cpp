@@ -1,6 +1,6 @@
 #include "CastorUtilsUniqueTest.hpp"
 
-#include <Design/Unique.hpp>
+#include <CastorUtils/Design/Unique.hpp>
 
 using namespace castor;
 

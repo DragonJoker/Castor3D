@@ -1,12 +1,12 @@
-#include "Miscellaneous/DynamicLibrary.hpp"
+#include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
 #if defined( CU_PlatformAndroid )
 
 #include <dlfcn.h>
 
-#include "Exception/Assertion.hpp"
-#include "Log/Logger.hpp"
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 namespace castor
 {

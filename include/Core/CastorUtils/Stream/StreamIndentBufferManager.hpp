@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_STREAM_INDENT_BUFFER_CACHE_H___
 #define ___CASTOR_STREAM_INDENT_BUFFER_CACHE_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Config/MultiThreadConfig.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
 
 #include <atomic>
 

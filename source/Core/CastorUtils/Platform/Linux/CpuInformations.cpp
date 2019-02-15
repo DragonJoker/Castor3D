@@ -1,10 +1,9 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformLinux )
 
-#include "Miscellaneous/CpuInformations.hpp"
-
-#include "Exception/Assertion.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include <cpuid.h>
 

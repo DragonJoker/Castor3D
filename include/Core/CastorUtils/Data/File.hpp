@@ -4,12 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FILE_H___
 #define ___CASTOR_FILE_H___
 
+#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Design/FlagCombination.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+
 #include <fstream>
-#include "CastorUtils.hpp"
-#include "Path.hpp"
-#include "Design/FlagCombination.hpp"
-#include "Exception/Exception.hpp"
-#include "Exception/Assertion.hpp"
 
 namespace castor
 {

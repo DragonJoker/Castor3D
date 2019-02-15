@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COORDS_H___
 #define ___CASTOR_COORDS_H___
 
-#include "Data/TextLoader.hpp"
-#include "Data/TextWriter.hpp"
+#include "CastorUtils/Data/TextLoader.hpp"
+#include "CastorUtils/Data/TextWriter.hpp"
 
 #include <cmath>
 #include <iostream>

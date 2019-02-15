@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_BLOCK_TRACKER_H___
 #define ___CASTOR_BLOCK_TRACKER_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 namespace castor
 {

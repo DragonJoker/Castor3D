@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ZIP_ARCHIVE_H___
 #define ___CASTOR_ZIP_ARCHIVE_H___
 
-#include "File.hpp"
+#include "CastorUtils/Data/File.hpp"
 #include <list>
 
 namespace castor

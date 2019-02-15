@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_GLYPH_H___
 #define ___CASTOR_GLYPH_H___
 
-#include "Design/Resource.hpp"
-#include "Position.hpp"
-#include "Size.hpp"
+#include "CastorUtils/Design/Resource.hpp"
+#include "CastorUtils/Graphics/Position.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 namespace castor
 {

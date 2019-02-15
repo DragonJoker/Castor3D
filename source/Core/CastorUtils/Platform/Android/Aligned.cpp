@@ -1,9 +1,10 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformAndroid )
 
-#	include "Align/Aligned.hpp"
-#	include "Exception/Assertion.hpp"
+#	include "CastorUtils/Align/Aligned.hpp"
+#	include "CastorUtils/Exception/Assertion.hpp"
+
 #	include <cstdlib>
 
 namespace castor

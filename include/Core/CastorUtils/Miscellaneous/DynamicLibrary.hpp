@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_DYNAMIC_LIBRARY_H___
 #define ___CASTOR_DYNAMIC_LIBRARY_H___
 
-#include "CastorUtils.hpp"
-#include "Data/Path.hpp"
+#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Data/Path.hpp"
 
 namespace castor
 {

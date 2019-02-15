@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FILE_PARSER_H___
 #define ___CASTOR_FILE_PARSER_H___
 
-#include "ParserParameter.hpp"
-#include "ParserParameterTypeException.hpp"
+#include "CastorUtils/FileParser/ParserParameter.hpp"
+#include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
 
 namespace castor
 {

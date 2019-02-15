@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
 #define ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
 
-#include "Aligned.hpp"
+#include "CastorUtils/Align/Aligned.hpp"
 
 namespace castor
 {

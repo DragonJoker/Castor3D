@@ -29,18 +29,25 @@ if( OPENCL_FOUND )
 	endforeach()
 endif()
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorTest/Src )
-
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
+include_directories(
+	${CMAKE_SOURCE_DIR}/include/Core
+	${CMAKE_BINARY_DIR}/include/Core
+	${CMAKE_SOURCE_DIR}/test
+	${CMAKE_BINARY_DIR}/test
+	${CMAKE_SOURCE_DIR}/test/CastorUtilsTest
+	${CMAKE_BINARY_DIR}/test/CastorUtilsTest
+)
+
 add_target(
 	${PROJECT_NAME}
 	bin_dos
+	${CMAKE_SOURCE_DIR}/test/CastorUtils
+	${CMAKE_SOURCE_DIR}/test/CastorUtils
 	"CastorUtils;CastorTest"
 	"CastorUtils;CastorTest;${OpenCLLibraries}"
 	"" ""
@@ -50,7 +57,7 @@ add_target(
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tests/Castor" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/Src/mtx_ope.cl )
+copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/mtx_ope.cl )
 
 add_test( NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME} )
 

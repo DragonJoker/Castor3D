@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_DEBUG_H___
 #define ___CASTOR_DEBUG_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 namespace castor
 {

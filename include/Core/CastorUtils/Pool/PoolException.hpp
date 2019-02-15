@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_PoolException_H___
 #define ___CU_PoolException_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Exception/Exception.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
 
 #include <exception>
 #include <cassert>

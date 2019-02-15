@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_GroupChangeTracked_H___
 #define ___CU_GroupChangeTracked_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <vector>
 

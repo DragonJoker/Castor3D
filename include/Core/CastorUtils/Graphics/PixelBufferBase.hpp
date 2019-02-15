@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PIXEL_BUFFER_BASE_H___
 #define ___CASTOR_PIXEL_BUFFER_BASE_H___
 
-#include "Pixel.hpp"
-#include "Size.hpp"
-#include "Position.hpp"
+#include "CastorUtils/Graphics/Pixel.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
+#include "CastorUtils/Graphics/Position.hpp"
 
 namespace castor
 {

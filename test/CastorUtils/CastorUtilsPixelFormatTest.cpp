@@ -1,6 +1,6 @@
 #include "CastorUtilsPixelFormatTest.hpp"
 
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 using namespace castor;
 

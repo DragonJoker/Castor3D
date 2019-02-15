@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___CastorUtils_RangedValue_HPP___
 #pragma once
 
-#include "Range.hpp"
+#include "CastorUtils/Math/Range.hpp"
 
 namespace castor
 {

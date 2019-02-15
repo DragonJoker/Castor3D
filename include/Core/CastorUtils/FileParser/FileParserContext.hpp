@@ -1,12 +1,13 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CASTOR_FILE_PARSER_CONTEXT_H___
 #define ___CASTOR_FILE_PARSER_CONTEXT_H___
 
+#include "CastorUtils/Data/File.hpp"
+
 #include <deque>
 #include <limits>
-#include "Data/File.hpp"
 
 #if defined( min )
 #	undef min

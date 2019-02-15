@@ -1,13 +1,13 @@
-#include "CastorUtilsPch.hpp"
+#include "CastorUtils/CastorUtilsPch.hpp"
+
+#include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Math/Point.hpp"
+#include "CastorUtils/Math/SquareMatrix.hpp"
+#include "CastorUtils/Math/Angle.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
 #endif
-
-#include "Config/SmartPtr.hpp"
-#include "Math/Point.hpp"
-#include "Math/SquareMatrix.hpp"
-#include "Math/Angle.hpp"
 
 namespace castor
 {

@@ -1,9 +1,9 @@
-#include "Graphics/Colour.hpp"
-#include "Data/Path.hpp"
-#include "Math/Point.hpp"
-#include "Graphics/Position.hpp"
-#include "Graphics/Rectangle.hpp"
-#include "Graphics/Size.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/Colour.hpp"
+#include "CastorUtils/Graphics/Position.hpp"
+#include "CastorUtils/Graphics/Rectangle.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

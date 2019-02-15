@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PARSER_PARAMETER_TYPE_EXCEPTION_H___
 #define ___CASTOR_PARSER_PARAMETER_TYPE_EXCEPTION_H___
 
-#include "Exception/Exception.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
 
-#include "ParserParameterHelpers.hpp"
+#include "CastorUtils/FileParser/ParserParameterHelpers.hpp"
 
 namespace castor
 {

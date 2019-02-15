@@ -1,4 +1,4 @@
-#include "StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 using namespace castor;
 

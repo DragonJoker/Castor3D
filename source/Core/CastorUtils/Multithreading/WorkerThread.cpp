@@ -1,6 +1,6 @@
-#include "WorkerThread.hpp"
+#include "CastorUtils/Multithreading/WorkerThread.hpp"
 
-#include "Config/MultiThreadConfig.hpp"
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
 
 namespace castor
 {

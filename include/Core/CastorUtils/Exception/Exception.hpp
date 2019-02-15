@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_EXCEPTION_H___
 #define ___CASTOR_EXCEPTION_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+
 #include <string>
 #include <sstream>
 #include <cstdint>

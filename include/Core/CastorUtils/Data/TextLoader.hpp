@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEXT_LOADER_H___
 #define ___CASTOR_TEXT_LOADER_H___
 
-#include "Loader.hpp"
-#include "TextFile.hpp"
+#include "CastorUtils/Data/Loader.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
 
 namespace castor
 {

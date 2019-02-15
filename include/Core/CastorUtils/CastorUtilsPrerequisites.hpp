@@ -23,8 +23,8 @@ See LICENSE file in root folder
 #include <sstream>
 #include <vector>
 
-#include "Config/SmartPtr.hpp"
-#include "Log/ELogType.hpp"
+#include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Log/ELogType.hpp"
 
 #if defined( min )
 #	undef min

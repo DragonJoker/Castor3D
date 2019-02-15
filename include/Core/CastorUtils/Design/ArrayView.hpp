@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ARRAY_VIEW_H___
 #define ___CASTOR_ARRAY_VIEW_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include <vector>
 

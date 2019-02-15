@@ -1,9 +1,9 @@
-#include "LoggerImpl.hpp"
+#include "CastorUtils/Log/LoggerImpl.hpp"
 
-#include "LoggerConsole.hpp"
-#include "Logger.hpp"
-#include "Data/TextFile.hpp"
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Log/LoggerConsole.hpp"
+#include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 namespace castor
 {

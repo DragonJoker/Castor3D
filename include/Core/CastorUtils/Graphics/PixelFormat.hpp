@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_PixelFormat___
 #define ___CU_PixelFormat___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "Exception/Exception.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
 
 #include <vector>
 #include <algorithm>

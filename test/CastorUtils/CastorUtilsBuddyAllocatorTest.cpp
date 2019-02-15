@@ -1,6 +1,6 @@
 ﻿#include "CastorUtilsBuddyAllocatorTest.hpp"
 
-#include <Pool/BuddyAllocator.hpp>
+#include <CastorUtils/Pool/BuddyAllocator.hpp>
 
 using namespace castor;
 

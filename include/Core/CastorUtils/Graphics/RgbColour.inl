@@ -1,7 +1,7 @@
-#include "Data/BinaryFile.hpp"
-#include "Data/TextFile.hpp"
-#include "Math/Math.hpp"
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Data/BinaryFile.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
+#include "CastorUtils/Math/Math.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {

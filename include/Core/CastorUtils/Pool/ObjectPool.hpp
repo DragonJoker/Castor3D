@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CU_OBJECT_POOL_H___
 #define ___CU_OBJECT_POOL_H___
 
-#include "MemoryDataTyper.hpp"
-#include "FixedGrowingSizeMarkedMemoryData.hpp"
-#include "FixedGrowingSizeMemoryData.hpp"
-#include "FixedSizeMarkedMemoryData.hpp"
-#include "FixedSizeMemoryData.hpp"
+#include "CastorUtils/Pool/MemoryDataTyper.hpp"
+#include "CastorUtils/Pool/FixedGrowingSizeMarkedMemoryData.hpp"
+#include "CastorUtils/Pool/FixedGrowingSizeMemoryData.hpp"
+#include "CastorUtils/Pool/FixedSizeMarkedMemoryData.hpp"
+#include "CastorUtils/Pool/FixedSizeMemoryData.hpp"
 
 namespace castor
 {

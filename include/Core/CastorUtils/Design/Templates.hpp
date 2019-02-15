@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEMPLATES_H___
 #define ___CASTOR_TEMPLATES_H___
 
+#include "CastorUtils/Math/Math.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
+
 #include <limits>
 #include <algorithm>
 #include <functional>
-#include "Miscellaneous/StringUtils.hpp"
-#include "Math/Math.hpp"
 
 namespace castor
 {

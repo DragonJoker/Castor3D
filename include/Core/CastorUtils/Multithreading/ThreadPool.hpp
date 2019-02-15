@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_ThreadPool_H___
 #define ___CU_ThreadPool_H___
 
-#include "WorkerThread.hpp"
+#include "CastorUtils/Multithreading/WorkerThread.hpp"
 
 namespace castor
 {

@@ -136,26 +136,27 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 	endif()
 
 	configure_file( 
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/config.hpp.in
-		${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/config.hpp.in
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		@ONLY
 		NEWLINE_STYLE LF
 	)
 
-	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
+	include_directories( ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME} )
 
 	add_target(
 		${PROJECT_NAME}
 		api_dll
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}
 		""
 		"${CastorMinLibraries};${X11Libraries}"
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtilsPch.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtilsPch.cpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 		""
 		""
 		""
-		"${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp"
+		"${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp"
 	)
 
 	if ( WIN32 )
@@ -164,36 +165,36 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		target_link_libraries( ${PROJECT_NAME} dl )
 	endif ()
 
-	parse_subdir_files( Src/Align "Align" )
-	parse_subdir_files( Src/Config "Config" )
-	parse_subdir_files( Src/Data "Data" )
-	parse_subdir_files( Src/Data/MiniZip "Data\\\\MiniZip" )
-	parse_subdir_files( Src/Design "Design" )
-	parse_subdir_files( Src/Exception "Exception" )
-	parse_subdir_files( Src/FileParser "FileParser" )
-	parse_subdir_files( Src/Graphics "Graphics" )
-	parse_subdir_files( Src/Log "Log" )
-	parse_subdir_files( Src/Math "Math" )
-	parse_subdir_files( Src/Miscellaneous "Miscellaneous" )
-	parse_subdir_files( Src/Multithreading "Multithreading" )
-	parse_subdir_files( Src/Pool "Pool" )
-	parse_subdir_files( Src/Stream "Stream" )
-	parse_subdir_files( Src/Platform/Win32 "Platform\\\\Win32" )
-	parse_subdir_files( Src/Platform/Android "Platform\\\\Android" )
-	parse_subdir_files( Src/Platform/Linux "Platform\\\\Linux" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Align "Align" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Config "Config" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Data "Data" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Data/MiniZip "Data\\\\MiniZip" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Design "Design" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Exception "Exception" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core FileParser "FileParser" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Graphics "Graphics" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Log "Log" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Math "Math" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Miscellaneous "Miscellaneous" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Multithreading "Multithreading" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Pool "Pool" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Stream "Stream" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Platform/Win32 "Platform\\\\Win32" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Platform/Android "Platform\\\\Android" )
+	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Platform/Linux "Platform\\\\Linux" )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
-		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
-		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.inl
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/*config*.hpp
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/*config*.inl
 	)
 	file( GLOB CASTOR_Config_SOURCE_FILES
-		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.cpp
+		${CASTOR_BINARY_DIR}/source/Core/${PROJECT_NAME}/*config*.cpp
 	)
 	source_group( "Header Files\\Config" FILES ${CASTOR_Config_HEADER_FILES} )
 	source_group( "Source Files\\Config" FILES ${CASTOR_Config_SOURCE_FILES} )
 
 	install(
-		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
+		FILES ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		DESTINATION include/${PROJECT_NAME}
 		COMPONENT ${PROJECT_NAME}_dev
 	)

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_POSITION_H___
 #define ___CASTOR_POSITION_H___
 
-#include "Math/Coords.hpp"
+#include "CastorUtils/Math/Coords.hpp"
 
 namespace castor
 {

@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___Rectangle___
 #define ___Rectangle___
 
-#include "Position.hpp"
-#include "Size.hpp"
+#include "CastorUtils/Graphics/Position.hpp"
+#include "CastorUtils/Graphics/Size.hpp"
 
 namespace castor
 {

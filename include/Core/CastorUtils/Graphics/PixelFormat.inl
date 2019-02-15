@@ -1,7 +1,8 @@
+#include "CastorUtils/Graphics/UnsupportedFormatException.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+
 #include <cstring>
-#include "UnsupportedFormatException.hpp"
-#include "Miscellaneous/StringUtils.hpp"
-#include "Exception/Assertion.hpp"
 
 #if CU_UseSSE2
 #	include <emmintrin.h>

@@ -1,6 +1,6 @@
-#include "TextFile.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
 
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 namespace castor
 {

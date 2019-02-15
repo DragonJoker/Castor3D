@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_SIGNAL_H___
 #define ___CU_SIGNAL_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-#include "Exception/Assertion.hpp"
-#include "Miscellaneous/Debug.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Miscellaneous/Debug.hpp"
 
 #include <functional>
 #include <map>

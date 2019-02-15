@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_MATRIX_H___
 #define ___CASTOR_MATRIX_H___
 
-#include "CastorUtils.hpp"
-#include "Exception/Assertion.hpp"
-#include "Point.hpp"
+#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {

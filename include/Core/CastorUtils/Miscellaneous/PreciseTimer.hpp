@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_PRECISE_TIMER_H___
 #define ___CASTOR_PRECISE_TIMER_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 #include <cstdint>
 #include <chrono>
 

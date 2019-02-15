@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_BINARY_FILE___
 #define ___CASTOR_BINARY_FILE___
 
-#include "File.hpp"
+#include "CastorUtils/Data/File.hpp"
 
 namespace castor
 {

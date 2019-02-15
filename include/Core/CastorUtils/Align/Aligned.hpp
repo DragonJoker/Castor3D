@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ALIGNED_H___
 #define ___CASTOR_ALIGNED_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
-#include "Miscellaneous/Utils.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #if defined( CU_CompilerMSVC )
 #	define CU_Alignas( a ) alignas( a )

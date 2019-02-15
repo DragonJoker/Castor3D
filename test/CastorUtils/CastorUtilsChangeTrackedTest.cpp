@@ -1,6 +1,6 @@
 #include "CastorUtilsChangeTrackedTest.hpp"
 
-#include <Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 #include <numeric>
 

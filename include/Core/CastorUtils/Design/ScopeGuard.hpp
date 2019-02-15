@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SCOPE_GUARD_H___
 #define ___CASTOR_SCOPE_GUARD_H___
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
 namespace castor
 {

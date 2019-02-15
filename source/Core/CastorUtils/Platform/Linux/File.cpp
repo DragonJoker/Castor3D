@@ -1,12 +1,11 @@
-#include "Config/PlatformConfig.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
 
 #if defined( CU_PlatformLinux )
 
-#include "Data/File.hpp"
+#include "CastorUtils/Data/File.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
-#include "Miscellaneous/Utils.hpp"
 #include <sys/stat.h>
-
 #include <unistd.h>
 #include <dirent.h>
 #include <pwd.h>
