@@ -11,15 +11,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${Castor3DIncludeDirs} )
+include_directories( ${GenericIncludes} )
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}
 	"Castor3D"
-	"${CastorMinLibraries}"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorGuiPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorGuiPch.cpp
+	"${GenericLibraries}"
+	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )

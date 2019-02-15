@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_BUTTON_H___
 #define ___CI_CTRL_BUTTON_H___
 
-#include "CtrlControl.hpp"
+#include "CastorGui/CtrlControl.hpp"
 
 namespace CastorGui
 {

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DSMAA_DepthEdgeDetection_H___
 #define ___C3DSMAA_DepthEdgeDetection_H___
 
-#include "EdgeDetection.hpp"
+#include "SmaaPostEffect/EdgeDetection.hpp"
 
 namespace smaa
 {

@@ -1,8 +1,8 @@
-﻿#include "DiamondSquareTerrain.hpp"
+#include "DiamondSquareTerrain/DiamondSquareTerrain.hpp"
 
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Miscellaneous/Parameter.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
 
 #include <random>
 

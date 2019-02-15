@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/ )
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___XpmLoader_H___
 #define ___XpmLoader_H___
 
-#include <Castor3DPrerequisites.hpp>
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
 
 namespace film_grain
 {

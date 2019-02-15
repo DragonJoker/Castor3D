@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_FilmGrainPostEffect___
 #define ___C3D_FilmGrainPostEffect___
 
-#include <PostEffect/PostEffect.hpp>
-#include <PostEffect/PostEffectSurface.hpp>
-#include <RenderToTexture/RenderQuad.hpp>
-#include <Texture/TextureUnit.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/RenderToTexture/RenderQuad.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

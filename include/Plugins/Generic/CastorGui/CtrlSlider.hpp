@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_SLIDER_H___
 #define ___CI_CTRL_SLIDER_H___
 
-#include "CtrlControl.hpp"
+#include "CastorGui/CtrlControl.hpp"
 
-#include <Math/RangedValue.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace CastorGui
 {

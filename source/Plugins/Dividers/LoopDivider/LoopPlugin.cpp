@@ -1,7 +1,8 @@
-﻿#include "LoopDivider.hpp"
+#include "LoopDivider/LoopDivider.hpp"
 
-#include <Engine.hpp>
-#include <Log/Logger.hpp>
+#include <Castor3D/Engine.hpp>
+
+#include <CastorUtils/Log/Logger.hpp>
 
 using namespace castor;
 using namespace Loop;

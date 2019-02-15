@@ -1,16 +1,18 @@
-#include "BlurPass.hpp"
+#include "BloomPostEffect/BlurPass.hpp"
 
-#include "BloomPostEffect.hpp"
+#include "BloomPostEffect/BloomPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Miscellaneous/GaussianBlur.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Miscellaneous/GaussianBlur.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+
+#include <CastorUtils/Graphics/Image.hpp>
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Image/Texture.hpp>
@@ -22,11 +24,9 @@
 #include <Ashes/RenderPass/SubpassDescription.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
-#include <Graphics/Image.hpp>
+#include <ShaderWriter/Source.hpp>
 
 #include <numeric>
-
-#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 

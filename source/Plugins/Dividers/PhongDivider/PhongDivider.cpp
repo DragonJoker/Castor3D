@@ -1,4 +1,4 @@
-#include "PhongDivider.hpp"
+#include "PhongDivider/PhongDivider.hpp"
 
 using namespace castor;
 using namespace castor3d;

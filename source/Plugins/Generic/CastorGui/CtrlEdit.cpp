@@ -1,16 +1,16 @@
-﻿#include "CtrlEdit.hpp"
+#include "CastorGui/CtrlEdit.hpp"
 
-#include "ControlsManager.hpp"
+#include "CastorGui/ControlsManager.hpp"
 
-#include <Engine.hpp>
-#include <Overlay/Overlay.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
 
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/PanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 using namespace castor;
 using namespace castor3d;

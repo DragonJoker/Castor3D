@@ -11,15 +11,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${Castor3DIncludeDirs} )
+include_directories( ${DividerIncludes} )
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Dividers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
 	"Castor3D"
-	"${CastorMinLibraries}"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/LoopPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/LoopPch.cpp
+	"${DividerLibraries}"
+	${CASTOR_SOURCE_DIR}/include/Plugins/Dividers/${PROJECT_NAME}/LoopPch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}/LoopPch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Dividers" )

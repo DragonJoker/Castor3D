@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_MotionBlurPostEffect___
 #define ___C3D_MotionBlurPostEffect___
 
-#include <PostEffect/PostEffect.hpp>
-#include <PostEffect/PostEffectSurface.hpp>
-#include <Texture/TextureUnit.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 
-#include <Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 namespace motion_blur
 {

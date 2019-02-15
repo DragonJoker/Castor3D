@@ -4,33 +4,31 @@ See LICENSE file in root folder
 #ifndef ___C3DAssimp___
 #define ___C3DAssimp___
 
-#include <Castor3DPrerequisites.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
 
-#include <FileParser/FileParser.hpp>
+#include <Castor3D/Engine.hpp>
 
-#include <Engine.hpp>
-
-#include <Animation/Animation.hpp>
-#include <Animation/AnimationKeyFrame.hpp>
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Mesh/SubmeshComponent/Face.hpp>
-#include <Mesh/Importer.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Miscellaneous/Version.hpp>
-#include <Plugin/Plugin.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Scene/Scene.hpp>
-#include <Texture/TextureUnit.hpp>
-#include <Texture/TextureLayout.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Animation/AnimationKeyFrame.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
+#include <Castor3D/Mesh/Importer.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
 
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FireworksParticle_H___
 #define ___C3D_FireworksParticle_H___
 
-#include <Scene/ParticleSystem/CpuParticleSystem.hpp>
+#include <Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp>
 
 namespace Fireworks
 {

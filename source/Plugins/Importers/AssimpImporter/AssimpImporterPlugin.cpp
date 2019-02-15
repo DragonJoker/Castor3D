@@ -1,13 +1,12 @@
-#include "AssimpImporter.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
 #endif
 
-#include <Engine.hpp>
-#include <Cache/PluginCache.hpp>
-
-#include <Plugin/ImporterPlugin.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Plugin/ImporterPlugin.hpp>
 
 #include <assimp/version.h>
 

@@ -1,13 +1,12 @@
-#include "CtrlSlider.hpp"
+#include "CastorGui/CtrlSlider.hpp"
 
-#include "ControlsManager.hpp"
-#include "CtrlStatic.hpp"
+#include "CastorGui/ControlsManager.hpp"
+#include "CastorGui/CtrlStatic.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Overlay/Overlay.hpp>
-
-#include <Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
 
 using namespace castor;
 using namespace castor3d;

@@ -1,23 +1,22 @@
-#include "GrayScalePostEffect.hpp"
+#include "GrayScalePostEffect/GrayScalePostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Cache/ShaderCache.hpp>
-
-#include <Mesh/Vertex.hpp>
-#include <Scene/ParticleSystem/ParticleDeclaration.hpp>
-#include <Scene/ParticleSystem/ParticleElementDeclaration.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/Shaders/GlslUtils.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/ShaderCache.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Render/RenderPipeline.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Buffer/UniformBuffer.hpp>
@@ -33,9 +32,9 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
-#include <numeric>
-
 #include <ShaderWriter/Source.hpp>
+
+#include <numeric>
 
 namespace GrayScale
 {

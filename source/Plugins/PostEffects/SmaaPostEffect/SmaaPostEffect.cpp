@@ -1,17 +1,18 @@
-#include "SmaaPostEffect.hpp"
+#include "SmaaPostEffect/SmaaPostEffect.hpp"
 
-#include "ColourEdgeDetection.hpp"
-#include "DepthEdgeDetection.hpp"
-#include "LumaEdgeDetection.hpp"
+#include "SmaaPostEffect/ColourEdgeDetection.hpp"
+#include "SmaaPostEffect/DepthEdgeDetection.hpp"
+#include "SmaaPostEffect/LumaEdgeDetection.hpp"
 
-#include <Engine.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Technique/RenderTechnique.hpp>
-#include <Texture/Sampler.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Shader/GlslToSpv.hpp>
+#include <Castor3D/Technique/RenderTechnique.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -21,7 +22,6 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/Pipeline/ColourBlendState.hpp>
 #include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>

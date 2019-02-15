@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <Mesh/Importer.hpp>
+#include <Castor3D/Mesh/Importer.hpp>
 
 #pragma warning( pop )
 

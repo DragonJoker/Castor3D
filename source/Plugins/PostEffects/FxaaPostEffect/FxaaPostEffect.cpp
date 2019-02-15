@@ -1,17 +1,16 @@
-#include "FxaaPostEffect.hpp"
+#include "FxaaPostEffect/FxaaPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Cache/ShaderCache.hpp>
-
-#include <Miscellaneous/Parameter.hpp>
-#include <Render/RenderPassTimer.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Shader/Shaders/GlslUtils.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/ShaderCache.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>

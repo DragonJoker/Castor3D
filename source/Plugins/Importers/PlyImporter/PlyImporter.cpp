@@ -1,27 +1,26 @@
-#include "PlyImporter.hpp"
+#include "PlyImporter/PlyImporter.hpp"
 
-#include <Engine.hpp>
-
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Cache/CacheView.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/GeometryCache.hpp>
-#include <Cache/MaterialCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Mesh/SubmeshComponent/Face.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Plugin/Plugin.hpp>
-#include <Miscellaneous/Version.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/CameraCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 using namespace castor3d;
 using namespace castor;

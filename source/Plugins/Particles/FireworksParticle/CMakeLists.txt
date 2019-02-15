@@ -17,6 +17,8 @@ include_directories( ${ParticlesIncludes} )
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Particles/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Particles/${PROJECT_NAME}
 	"Castor3D"
 	"${ParticlesLibraries}"
 )

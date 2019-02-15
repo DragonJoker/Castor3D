@@ -1,6 +1,6 @@
-#include "XpmLoader.hpp"
+#include "FilmGrainPostEffect/XpmLoader.hpp"
 
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 using namespace castor;
 

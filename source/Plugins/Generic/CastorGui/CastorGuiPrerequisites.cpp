@@ -1,19 +1,19 @@
-#include "CastorGuiPrerequisites.hpp"
+#include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
 
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Material/SpecularGlossinessPbrPass.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Overlay/PanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 using namespace castor;
 using namespace castor3d;

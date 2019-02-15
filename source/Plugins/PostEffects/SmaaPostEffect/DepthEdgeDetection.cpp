@@ -1,15 +1,15 @@
-#include "DepthEdgeDetection.hpp"
+#include "SmaaPostEffect/DepthEdgeDetection.hpp"
 
-#include "SmaaUbo.hpp"
-#include "SMAA.hpp"
+#include "SmaaPostEffect/SmaaUbo.hpp"
+#include "SmaaPostEffect/SMAA.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
 
 #include <Ashes/Core/Renderer.hpp>
 #include <Ashes/Image/Texture.hpp>
@@ -19,9 +19,9 @@
 #include <Ashes/Pipeline/DepthStencilState.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
-#include <numeric>
-
 #include <ShaderWriter/Source.hpp>
+
+#include <numeric>
 
 using namespace castor;
 

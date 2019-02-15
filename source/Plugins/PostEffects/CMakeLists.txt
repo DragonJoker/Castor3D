@@ -22,9 +22,11 @@ function( PostEffectsBuild )
 		set( PostEffectLibraries ${CastorMinLibraries} )
 
 		set( PostEffectIncludes
-			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
 			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/PostEffects
+			${CASTOR_BINARY_DIR}/include/Plugins/PostEffects
+			${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects
+			${CASTOR_BINARY_DIR}/source/Plugins/PostEffects
 		)
 
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )

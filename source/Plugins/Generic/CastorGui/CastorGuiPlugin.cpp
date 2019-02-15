@@ -1,13 +1,12 @@
-#include <Engine.hpp>
-#include <Cache/ListenerCache.hpp>
+#include "CastorGui/ControlsManager.hpp"
+#include "CastorGui/CastorGui_Parsers.hpp"
 
-#include <Render/RenderSystem.hpp>
-#include <Scene/SceneFileParser.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/ListenerCache.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <Log/Logger.hpp>
-
-#include "ControlsManager.hpp"
-#include "CastorGui_Parsers.hpp"
+#include <CastorUtils/Log/Logger.hpp>
 
 using namespace castor3d;
 using namespace castor;

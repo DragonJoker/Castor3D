@@ -1,12 +1,12 @@
-#include "LinearToneMapping.hpp"
+#include "LinearToneMapping/LinearToneMapping.hpp"
 
-#include <Engine.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <Shader/Shaders/GlslUtils.hpp>
 
 using namespace castor;
 using namespace sdw;

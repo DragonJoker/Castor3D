@@ -1,12 +1,11 @@
-#include <Log/Logger.hpp>
+#include "BloomPostEffect/BloomPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/TargetCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
+#include <Castor3D/Plugin/PostFxPlugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
-#include <Plugin/PostFxPlugin.hpp>
-#include <Render/RenderSystem.hpp>
-
-#include "BloomPostEffect.hpp"
+#include <CastorUtils/Log/Logger.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_Bloom_API

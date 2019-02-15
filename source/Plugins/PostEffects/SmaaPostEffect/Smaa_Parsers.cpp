@@ -1,13 +1,13 @@
-#include "Smaa_Parsers.hpp"
+#include "SmaaPostEffect/Smaa_Parsers.hpp"
 
-#include "SmaaPostEffect.hpp"
+#include "SmaaPostEffect/SmaaPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Event/Frame/FrameListener.hpp>
-#include <Material/Material.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Scene/SceneFileParser.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <stack>
 

@@ -1,32 +1,31 @@
-#include "ObjImporter.hpp"
+#include "ObjImporter/ObjImporter.hpp"
 
-#include "ObjGroup.hpp"
+#include "ObjImporter/ObjGroup.hpp"
 
-#include <Graphics/Colour.hpp>
-#include <Graphics/Image.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Engine.hpp>
-#include <Cache/GeometryCache.hpp>
-#include <Cache/MaterialCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Cache/CacheView.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Mesh/SubmeshComponent/Face.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Miscellaneous/Version.hpp>
-#include <Plugin/Plugin.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor3d;
 using namespace castor;

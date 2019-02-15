@@ -1,15 +1,14 @@
-#include <Log/Logger.hpp>
+#include "LinearMotionBlurPostEffect/LinearMotionBlurParsers.hpp"
+#include "LinearMotionBlurPostEffect/LinearMotionBlurPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/TargetCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
+#include <Castor3D/Plugin/PostFxPlugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <Plugin/PostFxPlugin.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Scene/SceneFileParser.hpp>
-
-#include "LinearMotionBlurParsers.hpp"
-#include "LinearMotionBlurPostEffect.hpp"
+#include <CastorUtils/Log/Logger.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_LinearMotionBlur_API

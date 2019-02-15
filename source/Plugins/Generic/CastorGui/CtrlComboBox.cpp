@@ -1,16 +1,16 @@
-#include "CtrlComboBox.hpp"
+#include "CastorGui/CtrlComboBox.hpp"
 
-#include "ControlsManager.hpp"
-#include "CtrlButton.hpp"
-#include "CtrlListBox.hpp"
+#include "CastorGui/ControlsManager.hpp"
+#include "CastorGui/CtrlButton.hpp"
+#include "CastorGui/CtrlListBox.hpp"
 
-#include <Engine.hpp>
-#include <Overlay/Overlay.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
 
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
 
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 using namespace castor;
 using namespace castor3d;

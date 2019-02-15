@@ -14,10 +14,6 @@ include_directories(
 	${CASTOR_BINARY_DIR}/source/Samples
 )
 
-message( STATUS "${CASTOR_SOURCE_DIR}/include/Samples" )
-message( STATUS "${CASTOR_BINARY_DIR}/include/Samples" )
-message( STATUS "${CASTOR_SOURCE_DIR}/source/Samples" )
-message( STATUS "${CASTOR_BINARY_DIR}/source/Samples" )
 add_target(
 	${PROJECT_NAME}
 	bin

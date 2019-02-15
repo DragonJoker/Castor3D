@@ -1,13 +1,13 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___CI_CASTOR_GUI_PARSERS_H___
 #define ___CI_CASTOR_GUI_PARSERS_H___
 
-#include "CastorGuiPrerequisites.hpp"
+#include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include <FileParser/FileParser.hpp>
-#include <FileParser/FileParserContext.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/FileParser/FileParserContext.hpp>
 
 namespace CastorGui
 {

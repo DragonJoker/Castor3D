@@ -8,15 +8,13 @@ See LICENSE file in root folder
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <Castor3DPrerequisites.hpp>
-
-#include <Event/Frame/FrameListener.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Mesh/SubmeshComponent/Face.hpp>
-#include <Mesh/Subdivider.hpp>
-#include <Miscellaneous/Version.hpp>
-#include <Plugin/Plugin.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
+#include <Castor3D/Mesh/Subdivider.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
 
 #pragma warning( pop )
 

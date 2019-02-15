@@ -4,24 +4,25 @@ See LICENSE file in root folder
 #ifndef ___OBJ_IMPORTER_PCH_H___
 #define ___OBJ_IMPORTER_PCH_H___
 
-#include <config.hpp>
+#include <CastorUtils/config.hpp>
 
 #if CU_UsePCH
-#	include <Engine.hpp>
-#	include <Cache/GeometryCache.hpp>
-#	include <Cache/MaterialCache.hpp>
-#	include <Cache/MeshCache.hpp>
-#	include <Cache/SceneCache.hpp>
-#	include <Cache/SceneNodeCache.hpp>
-#	include <Material/Pass.hpp>
-#	include <Mesh/SubmeshComponent/Face.hpp>
-#	include <Mesh/Submesh.hpp>
-#	include <Mesh/Vertex.hpp>
+#	include <Castor3D/Engine.hpp>
+#	include <Castor3D/Cache/GeometryCache.hpp>
+#	include <Castor3D/Cache/MaterialCache.hpp>
+#	include <Castor3D/Cache/MeshCache.hpp>
+#	include <Castor3D/Cache/SceneCache.hpp>
+#	include <Castor3D/Cache/SceneNodeCache.hpp>
+#	include <Castor3D/Material/Pass.hpp>
+#	include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
+#	include <Castor3D/Mesh/Submesh.hpp>
+#	include <Castor3D/Mesh/Vertex.hpp>
+#	include <Castor3D/Miscellaneous/Version.hpp>
+#	include <Castor3D/Plugin/Plugin.hpp>
+#	include <Castor3D/Texture/TextureLayout.hpp>
+#	include <Castor3D/Texture/TextureUnit.hpp>
+
 #	include <Ashes/Buffer/Buffer.hpp>
-#	include <Miscellaneous/Version.hpp>
-#	include <Plugin/Plugin.hpp>
-#	include <Texture/TextureLayout.hpp>
-#	include <Texture/TextureUnit.hpp>
 #endif
 
 #endif

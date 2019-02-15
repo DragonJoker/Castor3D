@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SmaaPostEffect_H___
 #define ___C3D_SmaaPostEffect_H___
 
-#include "EdgeDetection.hpp"
-#include "BlendingWeightCalculation.hpp"
-#include "NeighbourhoodBlending.hpp"
-#include "Reproject.hpp"
+#include "SmaaPostEffect/EdgeDetection.hpp"
+#include "SmaaPostEffect/BlendingWeightCalculation.hpp"
+#include "SmaaPostEffect/NeighbourhoodBlending.hpp"
+#include "SmaaPostEffect/Reproject.hpp"
 
-#include <PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
 
 namespace smaa
 {

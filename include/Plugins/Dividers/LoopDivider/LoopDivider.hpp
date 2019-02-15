@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LOOP_DIVIDER_H___
 #define ___C3D_LOOP_DIVIDER_H___
 
-#include "LoopPrerequisites.hpp"
+#include "LoopDivider/LoopPrerequisites.hpp"
 
 namespace Loop
 {

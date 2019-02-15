@@ -1,11 +1,11 @@
-﻿#include "PlyImporter.hpp"
+#include "PlyImporter/PlyImporter.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
 #endif
 
-#include <Engine.hpp>
-#include <Plugin/ImporterPlugin.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/ImporterPlugin.hpp>
 
 using namespace castor3d;
 using namespace castor;

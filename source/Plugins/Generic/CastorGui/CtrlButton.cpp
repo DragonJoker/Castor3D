@@ -1,18 +1,18 @@
-#include "CtrlButton.hpp"
+#include "CastorGui/CtrlButton.hpp"
 
-#include "ControlsManager.hpp"
+#include "CastorGui/ControlsManager.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Overlay/Overlay.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
 
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/Pass.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
 
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 using namespace castor;
 using namespace castor3d;

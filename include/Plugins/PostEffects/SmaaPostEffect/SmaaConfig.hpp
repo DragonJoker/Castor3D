@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SmaaConfig_H___
 #define ___C3D_SmaaConfig_H___
 
-#include <Miscellaneous/Parameter.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
 
 namespace smaa
 {

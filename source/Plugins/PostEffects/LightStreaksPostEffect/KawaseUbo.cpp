@@ -1,8 +1,8 @@
-#include "KawaseUbo.hpp"
+#include "LightStreaksPostEffect/KawaseUbo.hpp"
 
-#include "LightStreaksPostEffect.hpp"
+#include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 using namespace castor;
 using namespace castor3d;

@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___MotionBlur_Parsers_H___
 #define ___MotionBlur_Parsers_H___
 
-#include <Castor3DPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 
-#include <FileParser/FileParser.hpp>
-#include <FileParser/FileParserContext.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/FileParser/FileParserContext.hpp>
 
 namespace motion_blur
 {

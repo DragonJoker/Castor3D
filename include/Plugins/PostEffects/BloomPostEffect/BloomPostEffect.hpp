@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_BloomPostEffect___
 #define ___C3D_BloomPostEffect___
 
-#include "BlurPass.hpp"
-#include "CombinePass.hpp"
-#include "HiPass.hpp"
+#include "BloomPostEffect/BlurPass.hpp"
+#include "BloomPostEffect/CombinePass.hpp"
+#include "BloomPostEffect/HiPass.hpp"
 
-#include <Miscellaneous/GaussianBlur.hpp>
-#include <PostEffect/PostEffect.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Miscellaneous/GaussianBlur.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 namespace Bloom
 {

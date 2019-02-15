@@ -1,13 +1,12 @@
-#include <Log/Logger.hpp>
+#include "FilmGrainPostEffect/FilmGrainPostEffect.hpp"
 
-#include <Engine.hpp>
-#include <Cache/TargetCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
+#include <Castor3D/Plugin/PostFxPlugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 
-#include <Plugin/PostFxPlugin.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-
-#include "FilmGrainPostEffect.hpp"
+#include <CastorUtils/Log/Logger.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_FilmGrain_API

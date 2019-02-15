@@ -12,11 +12,9 @@ set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories(
-	${Castor3DIncludeDirs}
+	${RendererIncludes}
 	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include/VkRenderer
 	${CASTOR_BINARY_DIR}/${ASHES_DIR}/include/VkRenderer
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
-	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
 )
 
 if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/../external/SPIRV-Cross/spirv_glsl.cpp )
@@ -44,7 +42,7 @@ add_target(
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	"Castor3D"
-	"${CastorMinLibraries};VkRenderer;CompilerSpirV"
+	"${RendererLibraries};VkRenderer;CompilerSpirV"
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DVkRenderer_STATIC"

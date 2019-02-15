@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CI_CONTROLS_CACHE_H___
 #define ___CI_CONTROLS_CACHE_H___
 
-#include "CastorGuiPrerequisites.hpp"
+#include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include <Graphics/Position.hpp>
-#include <Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Event/UserInput/EventHandler.hpp>
 
-#include <Event/UserInput/EventHandler.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
 
 namespace CastorGui
 {

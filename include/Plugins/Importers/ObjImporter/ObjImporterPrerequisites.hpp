@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___OBJ_IMPORTER_PREREQUISITES_H___
 #define ___OBJ_IMPORTER_PREREQUISITES_H___
 
-#include <Mesh/Importer.hpp>
-#include <Mesh/SubmeshComponent/FaceIndices.hpp>
+#include <Castor3D/Mesh/Importer.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp>
 
 namespace Obj
 {

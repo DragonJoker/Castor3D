@@ -1,9 +1,9 @@
-#include "HejlBurgessDawsonToneMapping.hpp"
+#include "HejlBurgessDawsonToneMapping/HejlBurgessDawsonToneMapping.hpp"
 
-#include <Engine.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

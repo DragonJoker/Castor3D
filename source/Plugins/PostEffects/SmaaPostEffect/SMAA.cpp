@@ -1,4 +1,4 @@
-#include "SMAA.hpp"
+#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Ashes/Core/Renderer.hpp>
 

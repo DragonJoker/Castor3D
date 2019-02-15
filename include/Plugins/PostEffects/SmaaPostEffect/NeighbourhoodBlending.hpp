@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3DSMAA_NeighbourhoodBlending_H___
 #define ___C3DSMAA_NeighbourhoodBlending_H___
 
-#include "SmaaConfig.hpp"
+#include "SmaaPostEffect/SmaaConfig.hpp"
 
-#include <PostEffect/PostEffect.hpp>
-#include <PostEffect/PostEffectSurface.hpp>
-#include <RenderToTexture/RenderQuad.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/RenderToTexture/RenderQuad.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

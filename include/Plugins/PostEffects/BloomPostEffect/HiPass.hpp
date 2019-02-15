@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_Bloom_HiPass___
 #define ___C3D_Bloom_HiPass___
 
-#include <PostEffect/PostEffect.hpp>
-#include <PostEffect/PostEffectSurface.hpp>
-#include <RenderToTexture/RenderQuad.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/RenderToTexture/RenderQuad.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

@@ -1,9 +1,8 @@
-#include "FireworksParticle.hpp"
+#include "FireworksParticle/FireworksParticle.hpp"
 
-#include <Engine.hpp>
-
-#include <Scene/ParticleSystem/ParticleSystem.hpp>
-#include <Scene/BillboardList.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Scene/BillboardList.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 

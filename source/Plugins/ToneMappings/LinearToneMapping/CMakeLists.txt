@@ -17,6 +17,8 @@ include_directories( ${ToneMappingIncludes} )
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/ToneMappings/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings/${PROJECT_NAME}
 	"Castor3D"
 	"${ToneMappingLibraries}"
 )

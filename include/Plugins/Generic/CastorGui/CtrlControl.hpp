@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_CONTROL_H___
 #define ___CI_CTRL_CONTROL_H___
 
-#include "CastorGuiPrerequisites.hpp"
+#include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include <Event/UserInput/EventHandler.hpp>
+#include <Castor3D/Event/UserInput/EventHandler.hpp>
 
-#include <Design/Named.hpp>
-#include <Graphics/Pixel.hpp>
-#include <Graphics/Position.hpp>
-#include <Graphics/Rectangle.hpp>
-#include <Graphics/Size.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/Pixel.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace CastorGui
 {

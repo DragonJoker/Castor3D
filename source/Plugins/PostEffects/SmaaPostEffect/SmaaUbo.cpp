@@ -1,6 +1,6 @@
-#include "SmaaUbo.hpp"
+#include "SmaaPostEffect/SmaaUbo.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 using namespace castor;
 using namespace castor3d;

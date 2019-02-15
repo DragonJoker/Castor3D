@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_REINHARD_TONE_MAPPING_H___
 #define ___C3D_REINHARD_TONE_MAPPING_H___
 
-#include <HDR/ToneMapping.hpp>
+#include <Castor3D/HDR/ToneMapping.hpp>
 
 namespace Reinhard
 {

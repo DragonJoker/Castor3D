@@ -1,6 +1,6 @@
-#include "LoopEdge.hpp"
-#include "LoopVertex.hpp"
-#include "LoopDivider.hpp"
+#include "LoopDivider/LoopEdge.hpp"
+#include "LoopDivider/LoopVertex.hpp"
+#include "LoopDivider/LoopDivider.hpp"
 
 using namespace Loop;
 using namespace castor;

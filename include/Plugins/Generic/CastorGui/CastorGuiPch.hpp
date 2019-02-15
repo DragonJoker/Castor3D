@@ -4,15 +4,15 @@ See LICENSE file in root folder
 #ifndef ___CI_CASTOR_GUI_PCH_H___
 #define ___CI_CASTOR_GUI_PCH_H___
 
-#include <Engine.hpp>
-#include <Cache/OverlayCache.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Texture/TextureUnit.hpp>
+#include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include "CastorGuiPrerequisites.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/OverlayCache.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 #endif

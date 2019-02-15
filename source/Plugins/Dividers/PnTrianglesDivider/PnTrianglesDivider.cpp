@@ -1,4 +1,4 @@
-#include "PnTrianglesDivider.hpp"
+#include "PnTrianglesDivider/PnTrianglesDivider.hpp"
 
 using namespace castor;
 using namespace castor3d;

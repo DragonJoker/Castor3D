@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CI_CASTOR_GUI_PREREQUISITES_H___
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
-#include <Plugin/GenericPlugin.hpp>
+#include <Castor3D/Plugin/GenericPlugin.hpp>
 
-#include <Design/Signal.hpp>
-#include <Graphics/Colour.hpp>
+#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_CGui_API

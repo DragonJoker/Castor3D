@@ -6,12 +6,12 @@ See LICENSE file in root folder
 
 #include "KawaseUbo.hpp"
 
-#include <Miscellaneous/GaussianBlur.hpp>
-#include <PostEffect/PostEffect.hpp>
-#include <PostEffect/PostEffectSurface.hpp>
-#include <Texture/TextureUnit.hpp>
-#include <Render/Viewport.hpp>
-#include <Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/Miscellaneous/GaussianBlur.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

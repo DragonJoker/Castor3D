@@ -1,11 +1,12 @@
-#include "Uncharted2ToneMapping.hpp"
+#include "Uncharted2/Uncharted2ToneMapping.hpp"
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
-#include <Engine.hpp>
-#include <Cache/TargetCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
 
-#include <Miscellaneous/Version.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 using namespace Uncharted2;
 

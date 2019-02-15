@@ -5,7 +5,7 @@ find_package( ASSIMP )
 if( ASSIMP_FOUND )
 	message( STATUS "+ Found Assimp" )
 
-	include_directories( ${Castor3DIncludeDirs} )
+	include_directories( ${ImporterIncludes} )
 	include_directories( ${ASSIMP_INCLUDE_DIR} )
 
 	set( ASSIMPLibraries "" )
@@ -31,8 +31,10 @@ if( ASSIMP_FOUND )
 	add_target(
 		${PROJECT_NAME}
 		plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
 		"Castor3D"
-		"${CastorMinLibraries};${ASSIMPLibraries}"
+		"${ImporterLibraries};${ASSIMPLibraries}"
 	)
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Importers" )

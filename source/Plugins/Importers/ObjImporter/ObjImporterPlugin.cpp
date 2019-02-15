@@ -1,9 +1,7 @@
-﻿#include "ObjImporter.hpp"
+#include "ObjImporter/ObjImporter.hpp"
 
-#include <Engine.hpp>
-#include <Plugin/ImporterPlugin.hpp>
-
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/ImporterPlugin.hpp>
 
 using namespace castor3d;
 using namespace castor;

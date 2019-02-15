@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CI_CTRL_COMBO_BOX_H___
 #define ___CI_CTRL_COMBO_BOX_H___
 
-#include "CtrlButton.hpp"
-#include "CtrlListBox.hpp"
+#include "CastorGui/CtrlButton.hpp"
+#include "CastorGui/CtrlListBox.hpp"
 
 namespace CastorGui
 {

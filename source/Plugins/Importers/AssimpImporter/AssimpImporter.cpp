@@ -1,30 +1,28 @@
-#include "AssimpImporter.hpp"
+#include "AssimpImporter/AssimpImporter.hpp"
 
-#include <Design/ArrayView.hpp>
+#include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
+#include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Plugin/ImporterPlugin.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
-#include <Cache/GeometryCache.hpp>
-#include <Cache/MaterialCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/PluginCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-
-#include <Animation/Mesh/MeshAnimation.hpp>
-#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
-#include <Animation/Mesh/MeshAnimationSubmesh.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
-#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Cache/CacheView.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Mesh/Skeleton/Bone.hpp>
-#include <Plugin/ImporterPlugin.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-
-#include <Log/Logger.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <assimp/version.h>
 

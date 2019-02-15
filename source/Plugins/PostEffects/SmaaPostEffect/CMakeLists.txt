@@ -17,6 +17,8 @@ include_directories( ${PostEffectIncludes} )
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/PostEffects/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${PROJECT_NAME}
 	"Castor3D"
 	"${PostEffectLibraries}"
 )

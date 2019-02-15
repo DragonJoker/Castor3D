@@ -1,6 +1,6 @@
-#include "FxaaUbo.hpp"
+#include "FxaaPostEffect/FxaaUbo.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 namespace fxaa
 {

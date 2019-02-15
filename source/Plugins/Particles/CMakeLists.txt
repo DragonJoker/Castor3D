@@ -10,9 +10,11 @@ function( ParticlesBuild )
 		set( ParticlesLibraries ${CastorMinLibraries} )
 
 		set( ParticlesIncludes
-			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
 			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Particles
+			${CASTOR_BINARY_DIR}/include/Plugins/Particles
+			${CASTOR_SOURCE_DIR}/source/Plugins/Particles
+			${CASTOR_BINARY_DIR}/source/Plugins/Particles
 		)
 
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )

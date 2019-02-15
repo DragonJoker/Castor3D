@@ -1,10 +1,10 @@
-#include "LoopDivider.hpp"
+#include "LoopDivider/LoopDivider.hpp"
 
-#include "LoopVertex.hpp"
-#include "LoopFaceEdges.hpp"
+#include "LoopDivider/LoopVertex.hpp"
+#include "LoopDivider/LoopFaceEdges.hpp"
 
-#include <Math/Point.hpp>
-#include <Math/Angle.hpp>
+#include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Math/Angle.hpp>
 
 using namespace castor;
 

@@ -1,11 +1,10 @@
-﻿#include <Log/Logger.hpp>
+#include "FireworksParticle/FireworksParticle.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/ParticlePlugin.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
-#include <Plugin/ParticlePlugin.hpp>
-#include <Render/RenderSystem.hpp>
-
-#include "FireworksParticle.hpp"
+#include <CastorUtils/Log/Logger.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_Fireworks_API
