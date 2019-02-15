@@ -1,21 +1,24 @@
-[submodule "source/CMake"]
-	path = source/CMake
-	url = https://github.com/DragonJoker/CMakeUtils.git
 [submodule "dependencies"]
 	path = dependencies
 	url = https://github.com/DragonJoker/Castor3DDeps.git
-[submodule "source/external/zlib"]
-	path = source/external/zlib
-	url = https://github.com/DragonJoker/zlib.git
-[submodule "source/external/Ashes"]
-	path = source/external/Ashes
-	url = https://github.com/DragonJoker/Ashes.git
-[submodule "source/external/glslang"]
-	path = source/external/glslang
-	url = https://github.com/KhronosGroup/glslang.git
-[submodule "source/external/ShaderWriter"]
-	path = source/external/ShaderWriter
-	url = https://github.com/DragonJoker/ShaderWriter.git
 [submodule "data/TestScenes"]
 	path = data/TestScenes
 	url = https://github.com/DragonJoker/Castor3DTestScenes.git
+[submodule "CMake"]
+	path = CMake
+	url = https://github.com/DragonJoker/CMakeUtils.git
+[submodule "external/zlib"]
+	path = external/zlib
+	url = https://github.com/DragonJoker/zlib.git
+[submodule "external/Ashes"]
+	path = external/Ashes
+	url = https://github.com/DragonJoker/Ashes.git
+[submodule "external/glslang"]
+	path = external/glslang
+	url = https://github.com/KhronosGroup/glslang.git
+[submodule "external/ShaderWriter"]
+	path = external/ShaderWriter
+	url = https://github.com/DragonJoker/ShaderWriter.git
+[submodule "external/FreeType"]
+	path = external/FreeType
+	url = https://github.com/DragonJoker/FreeType.git
