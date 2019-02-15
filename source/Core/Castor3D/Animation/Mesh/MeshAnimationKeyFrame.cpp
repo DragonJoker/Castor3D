@@ -1,7 +1,7 @@
-#include "MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp"
 
-#include "Animation/Mesh/MeshAnimation.hpp"
-#include "Mesh/Submesh.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
 
 using namespace castor;
 

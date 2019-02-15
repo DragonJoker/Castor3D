@@ -1,13 +1,13 @@
-#include "Geometry.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Scene/Scene.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
-#include "Animation/AnimatedObject.hpp"
-#include "Event/Frame/FrameListener.hpp"
-#include "Material/Material.hpp"
-#include "Mesh/Submesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
 
 using namespace castor;
 

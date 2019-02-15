@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GuiCommon_PropertiesContainer_H___
 #define ___GuiCommon_PropertiesContainer_H___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 #include <wx/propgrid/propgrid.h>
 

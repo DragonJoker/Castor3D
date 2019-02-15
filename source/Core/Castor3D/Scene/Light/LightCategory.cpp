@@ -1,7 +1,7 @@
-#include "LightCategory.hpp"
-#include "Light.hpp"
+#include "Castor3D/Scene/Light/LightCategory.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

@@ -11,7 +11,7 @@ set( MAIN_PROJECT_NAME "Castor3D" )
 set( VERSION_MAJOR 0 )
 set( VERSION_MINOR 11 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2018 )
+set( VERSION_YEAR 2019 )
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH
@@ -200,8 +200,30 @@ macro( c3d_parse_subdir_files _BASE_DIR _FOLDER _SUBFOLDER _GROUP )
 	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
 	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
 endmacro()
-macro( parse_subdir_files _FOLDER _GROUP )
-	c3d_parse_subdir_files( ${CMAKE_CURRENT_SOURCE_DIR} "" "${FOLDER}" "${GROUP}" )
+
+macro( parse_subdir_files _BASE_DIR _FOLDER _GROUP )
+	file( GLOB _FOLDER_HEADER_FILES
+		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.h
+		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.hpp
+		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.inl
+	)
+	file( GLOB _FOLDER_ENUM_FILES
+		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.enum
+	)
+	file( GLOB _FOLDER_SCRIPT_FILES
+		${_BASE_DIR}/script/${PROJECT_NAME}/${_FOLDER}/*.py
+	)
+	file( GLOB _FOLDER_SOURCE_FILES
+		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.h
+		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.hpp
+		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.inl
+		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.c
+		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.cpp
+	)
+	source_group( "Script Files\\${_GROUP}" FILES ${_FOLDER_SCRIPT_FILES} )
+	source_group( "Enum Files\\${_GROUP}" FILES ${_FOLDER_ENUM_FILES} )
+	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
+	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
 endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )

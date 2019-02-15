@@ -1,6 +1,6 @@
-#include "TechniquePlugin.hpp"
+#include "Castor3D/Plugin/TechniquePlugin.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

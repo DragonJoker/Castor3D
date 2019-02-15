@@ -1,9 +1,9 @@
-#include "Sphere.hpp"
+#include "Castor3D/Mesh/Generator/Sphere.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
 
-#include "Miscellaneous/Parameter.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 
 using namespace castor3d;
 using namespace castor;

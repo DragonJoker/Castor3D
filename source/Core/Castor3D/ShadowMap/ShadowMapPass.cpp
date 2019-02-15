@@ -1,12 +1,12 @@
-#include "ShadowMapPass.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPass.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Shader/Program.hpp"
-#include "ShadowMap/ShadowMap.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 

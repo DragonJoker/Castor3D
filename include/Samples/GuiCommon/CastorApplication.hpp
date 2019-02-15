@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GC_CASTOR_APPLICATION_H___
 #define ___GC_CASTOR_APPLICATION_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
-#include <Miscellaneous/Version.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
 
 #include <memory>
 

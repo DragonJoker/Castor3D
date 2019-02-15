@@ -1,8 +1,8 @@
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "Engine.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/Program.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
 CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )

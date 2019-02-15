@@ -4,20 +4,20 @@ See LICENSE file in root folder
 #ifndef ___C3D_CHUNK_DATA_H___
 #define ___C3D_CHUNK_DATA_H___
 
-#include "Mesh/VertexGroup.hpp"
-#include "Mesh/SubmeshComponent/FaceIndices.hpp"
-#include "Mesh/SubmeshComponent/LineIndices.hpp"
-#include "Mesh/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Mesh/VertexGroup.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/LineIndices.hpp"
+#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
 
-#include <Data/Endianness.hpp>
-#include <Graphics/Colour.hpp>
-#include <Math/Coords.hpp>
-#include <Math/Matrix.hpp>
-#include <Math/Point.hpp>
-#include <Graphics/Position.hpp>
-#include <Math/Quaternion.hpp>
-#include <Graphics/Size.hpp>
-#include <Math/SquareMatrix.hpp>
+#include <CastorUtils/Data/Endianness.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
+#include <CastorUtils/Math/Coords.hpp>
+#include <CastorUtils/Math/Matrix.hpp>
+#include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {

@@ -1,8 +1,8 @@
-#include "GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

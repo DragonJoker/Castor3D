@@ -1,19 +1,17 @@
-#include "Submesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
 
-#include "SubmeshUtils.hpp"
-
-#include "Engine.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Mesh/SubmeshComponent/BonesComponent.hpp"
-#include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Mesh/SubmeshComponent/TriFaceMapping.hpp"
-#include "Mesh/SubmeshComponent/LinesMapping.hpp"
-#include "Render/RenderPass.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Scene.hpp"
-#include "Vertex.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Mesh/SubmeshUtils.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <Ashes/Core/Device.hpp>
 

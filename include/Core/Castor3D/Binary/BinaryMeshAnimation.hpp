@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BinaryMeshAnimation_H___
 #define ___C3D_BinaryMeshAnimation_H___
 
-#include "Binary/BinaryParser.hpp"
-#include "Binary/BinaryWriter.hpp"
+#include "Castor3D/Binary/BinaryParser.hpp"
+#include "Castor3D/Binary/BinaryWriter.hpp"
 
 namespace castor3d
 {

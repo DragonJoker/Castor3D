@@ -1,12 +1,12 @@
-#include "NodeTreeItemProperty.hpp"
+#include "GuiCommon/NodeTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
+#include "GuiCommon/PointProperties.hpp"
+#include "GuiCommon/QuaternionProperties.hpp"
 
-#include "PointProperties.hpp"
-#include "QuaternionProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 #include <wx/propgrid/advprops.h>
 

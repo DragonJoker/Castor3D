@@ -1,5 +1,5 @@
-#include "ImgConverter.hpp"
-#include "MainFrame.hpp"
+#include "ImgConverter/ImgConverter.hpp"
+#include "ImgConverter/MainFrame.hpp"
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>

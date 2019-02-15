@@ -64,7 +64,7 @@ function( ToneMappingsBuild )
 	)
 endfunction( ToneMappingsBuild )
 
-function( ToneMappingsSummary msg msgtest )
+function( ToneMappingsSummary msg )
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		set( msg_tmp "\n\nToneMappings :" )
 		if ( ${CASTOR_BUILD_TONEMAP_LINEAR} )

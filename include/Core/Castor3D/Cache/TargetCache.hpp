@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_TARGET_CACHE_H___
 #define ___C3D_TARGET_CACHE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "HDR/ToneMappingFactory.hpp"
-#include "PostEffect/PostEffectFactory.hpp"
-#include "Render/RenderInfo.hpp"
+#include "Castor3D/HDR/ToneMappingFactory.hpp"
+#include "Castor3D/PostEffect/PostEffectFactory.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 
 namespace castor3d
 {

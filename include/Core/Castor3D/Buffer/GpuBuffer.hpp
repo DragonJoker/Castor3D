@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBuffer_H___
 #define ___C3D_GpuBuffer_H___
 
-#include "Buffer/GpuBufferBuddyAllocator.hpp"
+#include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
 
 #include <Ashes/Buffer/Buffer.hpp>
 

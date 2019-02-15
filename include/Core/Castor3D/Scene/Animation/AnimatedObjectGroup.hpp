@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_OBJECT_GROUP_H___
 #define ___C3D_ANIMATED_OBJECT_GROUP_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Data/Loader.hpp>
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Data/Loader.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {

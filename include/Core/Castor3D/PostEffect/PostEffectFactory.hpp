@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_POST_EFFECT_FACTORY_H___
 #define ___C3D_POST_EFFECT_FACTORY_H___
 
-#include "PostEffect.hpp"
+#include "Castor3D/PostEffect/PostEffect.hpp"
 
-#include <Design/Factory.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {

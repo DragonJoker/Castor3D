@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PREREQUISITES_MATERIAL_H___
 #define ___C3D_PREREQUISITES_MATERIAL_H___
 
-#include <Design/Signal.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
 namespace castor3d
 {

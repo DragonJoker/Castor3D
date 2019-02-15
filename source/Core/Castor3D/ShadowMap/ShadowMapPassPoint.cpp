@@ -1,17 +1,17 @@
-#include "ShadowMapPassPoint.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassPoint.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "ShadowMap/ShadowMapPoint.hpp"
-#include "Technique/RenderTechniquePass.hpp"
-#include "Texture/TextureView.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 

@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_FRAME_VARIABLE_BUFFER_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_FRAME_VARIABLE_BUFFER_TREE_ITEM_PROPERTY_H___
 
-#include "ShaderSource.hpp"
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/ShaderSource.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

@@ -5,11 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_TextureUnit_H___
 #pragma once
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Descriptor/WriteDescriptorSet.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBufferPool_HPP___
 #define ___C3D_UniformBufferPool_HPP___
 
-#include "UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
@@ -134,6 +134,6 @@ namespace castor3d
 	};
 }
 
-#include "UniformBufferPool.inl"
+#include "Castor3D/Buffer/UniformBufferPool.inl"
 
 #endif

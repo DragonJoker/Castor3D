@@ -1,14 +1,14 @@
-#include "Scene/Background/Colour.hpp"
+#include "Castor3D/Scene/Background/Colour.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Background/Visitor.hpp"
-#include "EnvironmentMap/EnvironmentMap.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/StagingTexture.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>
@@ -16,7 +16,7 @@
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;

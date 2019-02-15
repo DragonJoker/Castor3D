@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffect_H___
 #define ___C3D_PostEffect_H___
 
-#include "Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

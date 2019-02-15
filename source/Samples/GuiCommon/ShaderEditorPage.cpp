@@ -1,21 +1,21 @@
-#include "ShaderEditorPage.hpp"
+#include "GuiCommon/ShaderEditorPage.hpp"
 
-#include "AuiDockArt.hpp"
-#include "StcTextEditor.hpp"
-#include "FrameVariablesList.hpp"
-#include "PropertiesContainer.hpp"
+#include "GuiCommon/AuiDockArt.hpp"
+#include "GuiCommon/StcTextEditor.hpp"
+#include "GuiCommon/FrameVariablesList.hpp"
+#include "GuiCommon/PropertiesContainer.hpp"
 
-#include <Engine.hpp>
-#include <Cache/WindowCache.hpp>
-#include <Cache/ShaderCache.hpp>
-#include <Material/Pass.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
-#include <Shader/Program.hpp>
-#include <Technique/RenderTechnique.hpp>
-#include <Technique/RenderTechniquePass.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
+#include <Castor3D/Cache/ShaderCache.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Technique/RenderTechnique.hpp>
+#include <Castor3D/Technique/RenderTechniquePass.hpp>
 
 using namespace castor3d;
 using namespace castor;

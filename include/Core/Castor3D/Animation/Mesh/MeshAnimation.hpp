@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_MESH_ANIMATION_H___
 #define ___C3D_MESH_ANIMATION_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "Animation/Animation.hpp"
-#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
+#include "Castor3D/Animation/Animation.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp"
 
 namespace castor3d
 {

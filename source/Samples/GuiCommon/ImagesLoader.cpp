@@ -1,4 +1,4 @@
-#include "ImagesLoader.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
 
 using namespace castor;
 

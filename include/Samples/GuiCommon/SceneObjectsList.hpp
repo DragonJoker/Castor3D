@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_GEOMETRIES_LIST_FRAME_H___
 #define ___GUICOMMON_GEOMETRIES_LIST_FRAME_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/panel.h>
 #include <wx/treectrl.h>

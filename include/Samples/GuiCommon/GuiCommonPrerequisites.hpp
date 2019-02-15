@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_PREREQUISITES_H___
 #define ___GUICOMMON_PREREQUISITES_H___
 
-#include <Castor3DPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 #include <Ashes/Core/WindowHandle.hpp>
 #include <wx/wx.h>
 

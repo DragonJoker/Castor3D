@@ -1,17 +1,17 @@
-#include "Game.hpp"
+#include "CastorDvpTD/Game.hpp"
 
-#include <Cache/AnimatedObjectGroupCache.hpp>
-#include <Engine.hpp>
-#include <Animation/Animation.hpp>
-#include <Event/Frame/FrameListener.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/PointLight.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
 
 using namespace castor;
 using namespace castor3d;

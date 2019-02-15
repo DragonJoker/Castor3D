@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoBlurPass_H___
 #define ___C3D_SsaoBlurPass_H___
 
-#include "Render/Viewport.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Technique/RenderTechniqueVisitor.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/PushConstantsBuffer.hpp>
 #include <Ashes/Miscellaneous/PushConstantRange.hpp>

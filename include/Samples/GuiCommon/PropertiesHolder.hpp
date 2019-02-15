@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GuiCommon_PropertiesHolder_H___
 #define ___GuiCommon_PropertiesHolder_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/panel.h>
 #include <wx/propgrid/propgrid.h>

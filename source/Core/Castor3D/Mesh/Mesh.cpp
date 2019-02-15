@@ -1,11 +1,11 @@
-#include "Mesh.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Animation/Mesh/MeshAnimation.hpp"
-#include "Material/Material.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
 
 using namespace castor;
 

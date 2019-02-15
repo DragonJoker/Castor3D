@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include <CubeBoxManager.hpp>
-#include <NodeState.hpp>
+#include <GuiCommon/CubeBoxManager.hpp>
+#include <GuiCommon/NodeState.hpp>
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
-#include <Math/Point.hpp>
-#include <Math/Quaternion.hpp>
+#include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
 
 #include <wx/frame.h>
 #include <wx/panel.h>

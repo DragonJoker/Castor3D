@@ -1,18 +1,18 @@
-#include "ToneMapping.hpp"
+#include "Castor3D/HDR/ToneMapping.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "HDR/HdrConfig.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Ubos/HdrConfigUbo.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/HDR/HdrConfig.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Descriptor/DescriptorSet.hpp>
 #include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

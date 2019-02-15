@@ -1,4 +1,4 @@
-#include "Recorder.hpp"
+#include "GuiCommon/Recorder.hpp"
 
 #include <emmintrin.h>
 
@@ -59,7 +59,7 @@ namespace libffmpeg
 
 #endif
 
-#include <Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
 using namespace castor;
 using namespace castor3d;

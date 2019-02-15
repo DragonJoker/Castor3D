@@ -1,9 +1,9 @@
-#include "LanguageFileParser.hpp"
-#include "LanguageFileContext.hpp"
-#include "LanguageInfo.hpp"
-#include "StyleInfo.hpp"
+#include "GuiCommon/LanguageFileParser.hpp"
+#include "GuiCommon/LanguageFileContext.hpp"
+#include "GuiCommon/LanguageInfo.hpp"
+#include "GuiCommon/StyleInfo.hpp"
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 using namespace castor;
 

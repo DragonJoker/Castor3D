@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_CHUNK_WRITER_H___
 #define ___C3D_CHUNK_WRITER_H___
 
-#include "BinaryChunk.hpp"
-#include "ChunkData.hpp"
+#include "Castor3D/Binary/BinaryChunk.hpp"
+#include "Castor3D/Binary/ChunkData.hpp"
 
 namespace castor3d
 {

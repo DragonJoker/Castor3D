@@ -41,7 +41,7 @@ function( DividersBuild )
 	endif ()
 endfunction( DividersBuild )
 
-function( DividersSummary msg msgtest )
+function( DividersSummary msg )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
 		set( msg_tmp "\n\nSubdividers :" )
 		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )

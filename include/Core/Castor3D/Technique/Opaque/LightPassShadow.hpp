@@ -4,20 +4,20 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPassShadow_H___
 #define ___C3D_DeferredLightPassShadow_H___
 
-#include "DirectionalLightPass.hpp"
-#include "PointLightPass.hpp"
-#include "SpotLightPass.hpp"
-#include "ShadowMap/ShadowMapDirectional.hpp"
-#include "ShadowMap/ShadowMapPoint.hpp"
-#include "ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
+#include "Castor3D/Technique/Opaque/PointLightPass.hpp"
+#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
+#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
 
-#include "Engine.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Texture/TextureUnit.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 namespace castor3d
 {

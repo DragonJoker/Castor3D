@@ -1,9 +1,9 @@
-#include "WeightedBlendRendering.hpp"
+#include "Castor3D/Technique/Transparent/WeightedBlendRendering.hpp"
 
-#include "Render/RenderInfo.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>

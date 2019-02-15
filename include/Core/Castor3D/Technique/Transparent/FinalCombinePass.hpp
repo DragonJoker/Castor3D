@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_FinalCombinePass_H___
 #define ___C3D_FinalCombinePass_H___
 
-#include "Shader/Ubos/GpInfoUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Technique/RenderTechniqueVisitor.hpp"
-#include "TransparentPass.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Technique/Transparent/TransparentPass.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 

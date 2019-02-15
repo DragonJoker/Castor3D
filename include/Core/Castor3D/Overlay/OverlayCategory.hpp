@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_CATEGORY_H___
 #define ___C3D_OVERLAY_CATEGORY_H___
 
-#include "OverlayVisitor.hpp"
+#include "Castor3D/Overlay/OverlayVisitor.hpp"
 
-#include <Graphics/Position.hpp>
-#include <Graphics/Size.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {

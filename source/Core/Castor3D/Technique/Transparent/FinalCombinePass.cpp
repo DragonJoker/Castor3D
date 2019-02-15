@@ -1,15 +1,15 @@
-#include "FinalCombinePass.hpp"
+#include "Castor3D/Technique/Transparent/FinalCombinePass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Fog.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Fog.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
@@ -21,14 +21,14 @@
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/RenderPass/SubpassDependency.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include "Shader/Shaders/GlslFog.hpp"
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

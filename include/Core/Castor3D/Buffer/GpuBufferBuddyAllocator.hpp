@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBufferBuffyAllocator_H___
 #define ___C3D_GpuBufferBuffyAllocator_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Pool/BuddyAllocator.hpp>
+#include <CastorUtils/Pool/BuddyAllocator.hpp>
 
 #include <cstddef>
 

@@ -1,6 +1,7 @@
-#include "FrameVariableBufferTreeItemProperty.hpp"
+#include "GuiCommon/FrameVariableBufferTreeItemProperty.hpp"
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

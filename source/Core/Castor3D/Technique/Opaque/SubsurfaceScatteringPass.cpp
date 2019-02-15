@@ -1,33 +1,33 @@
-#include "SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Technique/Opaque/SubsurfaceScatteringPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Program.hpp"
-#include "Castor3DPrerequisites.hpp"
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
-#include "Shader/Shaders/GlslSssTransmittance.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Technique/Opaque/GeometryPassResult.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Pipeline/VertexLayout.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <random>
 

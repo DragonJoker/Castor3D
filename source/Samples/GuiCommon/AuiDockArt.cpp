@@ -1,4 +1,4 @@
-#include "AuiDockArt.hpp"
+#include "GuiCommon/AuiDockArt.hpp"
 
 namespace GuiCommon
 {

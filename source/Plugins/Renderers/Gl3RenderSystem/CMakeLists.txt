@@ -11,18 +11,23 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/Gl3Renderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/Gl3Renderer/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/Gl3RenderSystem/Src )
+include_directories(
+	${Castor3DIncludeDirs}
+	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include/Gl3Renderer
+	${CASTOR_BINARY_DIR}/${ASHES_DIR}/include/Gl3Renderer
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
+	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
+)
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	"Castor3D"
 	"${CastorMinLibraries};${OpenGlLibraries};Gl3Renderer;CompilerGlsl"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl3RenderSystemPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Gl3RenderSystemPch.cpp
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DGl3Renderer_STATIC"
 	"-DGl3Renderer_STATIC"
 )

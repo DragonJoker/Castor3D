@@ -1,4 +1,4 @@
-#include "GpuObjectTracker.hpp"
+#include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 
 #if C3D_TRACE_OBJECTS
 

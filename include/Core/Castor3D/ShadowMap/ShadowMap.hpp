@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
-#include "Texture/TextureUnit.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

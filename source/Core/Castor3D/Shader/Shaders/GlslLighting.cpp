@@ -1,8 +1,8 @@
-#include "GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-#include "GlslMaterial.hpp"
-#include "GlslShadow.hpp"
-#include "GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
 #include <ShaderAST/Expr/ExprComma.hpp>
 

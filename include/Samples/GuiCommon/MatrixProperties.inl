@@ -1,4 +1,4 @@
-#include "PointProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
 
 namespace GuiCommon
 {

@@ -2,7 +2,7 @@
 This file belongs to Ashes.
 See LICENSE file in root folder.
 */
-#include "GlslToSpv.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <Ashes/Core/Device.hpp>
 
@@ -286,7 +286,7 @@ $&)" );
 
 #else
 
-#include <Exception/Exception.hpp>
+#include <CastorUtils/Exception/Exception.hpp>
 
 namespace castor3d
 {

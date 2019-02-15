@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PREREQUISITES_RENDER_H___
 #define ___C3D_PREREQUISITES_RENDER_H___
 
-#include <Design/Factory.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {

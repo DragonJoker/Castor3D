@@ -1,4 +1,4 @@
-#include "StyleInfo.hpp"
+#include "GuiCommon/StyleInfo.hpp"
 
 namespace GuiCommon
 {

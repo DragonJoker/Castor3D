@@ -1,10 +1,9 @@
-#include "BillboardRenderNode.hpp"
+#include "Castor3D/Render/RenderNode/BillboardRenderNode.hpp"
 
-#include "Render/RenderPipeline.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Shader/Program.hpp"
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 using namespace castor;
 

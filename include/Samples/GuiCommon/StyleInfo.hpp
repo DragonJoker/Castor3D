@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_STYLE_INFO_H___
 #define ___GUICOMMON_STYLE_INFO_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 namespace GuiCommon
 {

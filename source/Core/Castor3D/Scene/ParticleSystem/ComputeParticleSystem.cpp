@@ -1,19 +1,19 @@
-#include "ComputeParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Scene/ParticleSystem/Particle.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/Particle.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Sync/BufferMemoryBarrier.hpp>
 
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 #include <random>
 

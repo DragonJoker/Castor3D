@@ -1,28 +1,27 @@
 #include "BinaryExportTest.hpp"
 
-#include <Engine.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/PluginCache.hpp>
-#include <Cache/SceneCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Animation/AnimationKeyFrame.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp>
+#include <Castor3D/Binary/BinaryMesh.hpp>
+#include <Castor3D/Binary/BinarySkeleton.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Mesh/Importer.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Plugin/ImporterPlugin.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <Animation/Animation.hpp>
-#include <Animation/AnimationKeyFrame.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
-#include <Animation/Skeleton/SkeletonAnimationNode.hpp>
-#include <Binary/BinaryMesh.hpp>
-#include <Binary/BinarySkeleton.hpp>
-#include <Cache/CacheView.hpp>
-#include <Mesh/Importer.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Skeleton/Bone.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Miscellaneous/Parameter.hpp>
-#include <Plugin/ImporterPlugin.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Scene/SceneFileParser.hpp>
-
-#include <Data/BinaryFile.hpp>
+#include <CastorUtils/Data/BinaryFile.hpp>
 
 using namespace castor;
 using namespace castor3d;

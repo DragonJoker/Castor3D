@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_NODE_H___
 #define ___C3D_SCENE_NODE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Design/Signal.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
 namespace castor3d
 {

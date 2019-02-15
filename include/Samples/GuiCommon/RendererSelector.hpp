@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #define CV_IMG_CASTOR	1268
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/dialog.h>
 

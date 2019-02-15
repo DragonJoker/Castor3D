@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_SYSTEM_H___
 #define ___C3D_RENDER_SYSTEM_H___
 
-#include "Miscellaneous/GpuInformations.hpp"
-#include "Miscellaneous/GpuObjectTracker.hpp"
-#include "Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Miscellaneous/GpuInformations.hpp"
+#include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 
 #include <stack>
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <Ashes/Miscellaneous/PhysicalDeviceFeatures.hpp>
 #include <Ashes/Miscellaneous/PhysicalDeviceMemoryProperties.hpp>

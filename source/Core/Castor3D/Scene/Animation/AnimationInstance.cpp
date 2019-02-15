@@ -1,4 +1,4 @@
-#include "AnimationInstance.hpp"
+#include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
 using namespace castor;
 

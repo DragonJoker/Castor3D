@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_CACHE_H___
 #define ___C3D_CACHE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/Collection.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Design/Signal.hpp>
-#include <Log/Logger.hpp>
+#include <CastorUtils/Design/Collection.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {

@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_LOOP_H___
 #define ___C3D_RENDER_LOOP_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Render/RenderInfo.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 
 #include <Ashes/Core/WindowHandle.hpp>
-#include <Multithreading/ThreadPool.hpp>
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <chrono>
 

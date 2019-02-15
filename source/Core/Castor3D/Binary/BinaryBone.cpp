@@ -1,7 +1,7 @@
-#include "BinaryBone.hpp"
+#include "Castor3D/Binary/BinaryBone.hpp"
 
-#include "Mesh/Skeleton/Bone.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Mesh/Skeleton/Bone.hpp"
+#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
 
 using namespace castor;
 

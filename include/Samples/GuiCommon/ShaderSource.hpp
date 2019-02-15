@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___GC_ShaderSource_HPP___
 #define ___GC_ShaderSource_HPP___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
-#include <Design/ChangeTracked.hpp>
-#include <Math/RangedValue.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 #include <wx/propgrid/propgrid.h>
 

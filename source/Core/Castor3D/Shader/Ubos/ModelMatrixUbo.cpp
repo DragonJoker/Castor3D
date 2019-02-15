@@ -1,7 +1,7 @@
-#include "ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

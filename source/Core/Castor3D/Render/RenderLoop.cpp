@@ -1,12 +1,12 @@
-#include "RenderLoop.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Overlay/DebugOverlays.hpp"
-#include "Render/RenderWindow.hpp"
-#include "Technique/RenderTechnique.hpp"
+#include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Technique/RenderTechnique.hpp"
 
-#include <Design/BlockGuard.hpp>
+#include <CastorUtils/Design/BlockGuard.hpp>
 
 #include <future>
 

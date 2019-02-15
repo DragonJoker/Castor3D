@@ -4,21 +4,21 @@
 
 #include <UnitTest.hpp>
 
-#include <Animation/Animation.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Material/Material.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/SubmeshComponent/SubmeshComponent.hpp>
-#include <Mesh/Skeleton/Bone.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Scene/Animation/AnimationInstance.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/MovableObject.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Scene/Light/Light.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp>
+#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/AnimationInstance.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/MovableObject.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 
 namespace Testing
 {

@@ -1,8 +1,8 @@
-#include "Plugin.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
 
-#include "Miscellaneous/Version.hpp"
+#include "Castor3D/Miscellaneous/Version.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

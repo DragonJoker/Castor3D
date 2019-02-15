@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_PICKING_PASS_H___
 #define ___C3D_PICKING_PASS_H___
 
-#include "Render/RenderPass.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Geometry.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Pipeline/VertexLayout.hpp>

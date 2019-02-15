@@ -1,4 +1,4 @@
-#include "VersionException.hpp"
+#include "Castor3D/Miscellaneous/VersionException.hpp"
 
 using namespace castor;
 

@@ -1,13 +1,12 @@
-#include "Subdivider.hpp"
+#include "Castor3D/Mesh/Subdivider.hpp"
 
-#include "Engine.hpp"
-#include "SubmeshComponent/Face.hpp"
-#include "Submesh.hpp"
-#include "Vertex.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/Face.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

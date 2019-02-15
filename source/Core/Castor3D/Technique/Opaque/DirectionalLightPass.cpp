@@ -1,11 +1,11 @@
-#include "DirectionalLightPass.hpp"
+#include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -13,10 +13,10 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

@@ -1,28 +1,28 @@
-#include "MaterialsList.hpp"
+#include "GuiCommon/MaterialsList.hpp"
 
-#include "ImagesLoader.hpp"
-#include "MaterialTreeItemProperty.hpp"
-#include "PassTreeItemProperty.hpp"
-#include "PropertiesContainer.hpp"
-#include "RenderTargetTreeItemProperty.hpp"
-#include "TextureTreeItemProperty.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
+#include "GuiCommon/MaterialTreeItemProperty.hpp"
+#include "GuiCommon/PassTreeItemProperty.hpp"
+#include "GuiCommon/PropertiesContainer.hpp"
+#include "GuiCommon/RenderTargetTreeItemProperty.hpp"
+#include "GuiCommon/TextureTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <wx/imaglist.h>
 
-#include "xpms/material.xpm"
-#include "xpms/material_sel.xpm"
-#include "xpms/pass.xpm"
-#include "xpms/pass_sel.xpm"
-#include "xpms/texture.xpm"
-#include "xpms/texture_sel.xpm"
+#include "GuiCommon/xpms/material.xpm"
+#include "GuiCommon/xpms/material_sel.xpm"
+#include "GuiCommon/xpms/pass.xpm"
+#include "GuiCommon/xpms/pass_sel.xpm"
+#include "GuiCommon/xpms/texture.xpm"
+#include "GuiCommon/xpms/texture_sel.xpm"
 
 #ifdef LoadImage
 #	undef LoadImage

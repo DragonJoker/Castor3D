@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_POINT_PROPERTIES_H___
 #define ___GUICOMMON_POINT_PROPERTIES_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Math/Point.hpp>
+#include <CastorUtils/Math/Point.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point2b );
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Point3b );
@@ -111,6 +111,6 @@ namespace GuiCommon
 #endif
 }
 
-#include "PointProperties.inl"
+#include "GuiCommon/PointProperties.inl"
 
 #endif

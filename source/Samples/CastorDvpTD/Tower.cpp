@@ -1,9 +1,9 @@
-﻿#include "Tower.hpp"
+#include "CastorDvpTD/Tower.hpp"
 
-#include "Enemy.hpp"
-#include "Game.hpp"
+#include "CastorDvpTD/Enemy.hpp"
+#include "CastorDvpTD/Game.hpp"
 
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 
 using namespace castor;
 using namespace castor3d;

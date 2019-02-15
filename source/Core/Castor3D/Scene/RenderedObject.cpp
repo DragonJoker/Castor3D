@@ -1,4 +1,4 @@
-#include "RenderedObject.hpp"
+#include "Castor3D/Scene/RenderedObject.hpp"
 
 using namespace castor;
 

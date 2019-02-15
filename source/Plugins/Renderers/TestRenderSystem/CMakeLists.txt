@@ -11,18 +11,23 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/TestRenderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/TestRenderer/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/TestRenderSystem/Src )
+include_directories(
+	${Castor3DIncludeDirs}
+	${CMAKE_SOURCE_DIR}/${ASHES_DIR}/include/TestRenderer
+	${CMAKE_BINARY_DIR}/${ASHES_DIR}/include/TestRenderer
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
+	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
+)
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	"Castor3D"
 	"${CastorMinLibraries};TestRenderer;CompilerGlsl"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/TestRenderSystemPch.cpp
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DTestRenderer_STATIC"
 	"-DTestRenderer_STATIC"
 )

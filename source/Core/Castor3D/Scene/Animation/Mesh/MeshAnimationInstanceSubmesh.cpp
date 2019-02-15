@@ -1,14 +1,14 @@
-#include "MeshAnimationInstanceSubmesh.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
-#include "Engine.hpp"
-#include "Animation/Mesh/MeshAnimation.hpp"
-#include "MeshAnimationInstance.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/SubmeshComponent/MorphComponent.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/MorphComponent.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 

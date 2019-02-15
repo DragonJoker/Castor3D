@@ -1,10 +1,10 @@
-#include "FrustumCuller.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
 
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/SceneNode.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 namespace castor3d
 {

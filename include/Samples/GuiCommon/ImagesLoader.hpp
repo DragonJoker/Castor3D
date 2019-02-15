@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_IMAGES_LOADER_H___
 #define ___GUICOMMON_IMAGES_LOADER_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <thread>
 

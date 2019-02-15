@@ -1,9 +1,9 @@
-#include "DistanceRenderNode.hpp"
+#include "Castor3D/Render/RenderNode/DistanceRenderNode.hpp"
 
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Geometry.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 
 namespace castor3d
 {

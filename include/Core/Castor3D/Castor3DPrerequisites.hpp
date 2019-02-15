@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PREREQUISITES_H___
 
 #undef RGB
-#include <CastorUtilsPrerequisites.hpp>
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
 
 #if !defined( CU_PlatformWindows )
 #	define C3D_API
@@ -20,14 +20,14 @@ See LICENSE file in root folder
 #	endif
 #endif
 
-#include <Design/Collection.hpp>
-#include <Design/FlagCombination.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Math/Point.hpp>
-#include <Graphics/Size.hpp>
-#include <Math/Quaternion.hpp>
-#include <Math/SquareMatrix.hpp>
-#include <Miscellaneous/StringUtils.hpp>
+#include <CastorUtils/Design/Collection.hpp>
+#include <CastorUtils/Design/FlagCombination.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <Ashes/AshesPrerequisites.hpp>
@@ -40,16 +40,16 @@ namespace castor3d
 	using castor::UInt32Array;
 }
 
-#include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Camera.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Geometry.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Light.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Material.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Overlay.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Scene.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Shader.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Render.hpp"
-#include "Prerequisites/Castor3DPrerequisites_Event.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Animation.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Camera.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Geometry.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Light.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Material.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Overlay.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Scene.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Shader.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Render.hpp"
+#include "Castor3D/Prerequisites/Castor3DPrerequisites_Event.hpp"
 
 namespace castor3d
 {

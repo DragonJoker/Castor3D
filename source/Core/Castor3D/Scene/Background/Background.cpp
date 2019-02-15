@@ -1,18 +1,18 @@
-#include "Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
 #include <Ashes/Buffer/StagingBuffer.hpp>
 #include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
 #include <Ashes/Core/Device.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 namespace castor3d
 {

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_MATRIX_PROPERTIES_H___
 #define ___GUICOMMON_MATRIX_PROPERTIES_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix2x2f );
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Matrix3x3f );
@@ -53,6 +53,6 @@ namespace GuiCommon
 	typedef FloatMatrixProperty< 4 > Matrix4fProperty;
 }
 
-#include "MatrixProperties.inl"
+#include "GuiCommon/MatrixProperties.inl"
 
 #endif

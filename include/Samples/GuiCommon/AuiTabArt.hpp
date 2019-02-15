@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_TAB_ART_H___
 #define ___GUICOMMON_TAB_ART_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/aui/tabart.h>
 

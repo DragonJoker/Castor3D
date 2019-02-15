@@ -1,5 +1,5 @@
-#include "FrameListener.hpp"
-#include "FrameEvent.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FrameEvent.hpp"
 
 using namespace castor;
 

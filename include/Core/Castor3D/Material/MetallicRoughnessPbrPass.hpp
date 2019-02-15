@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MetallicRoughnessPbrPass_H___
 #define ___C3D_MetallicRoughnessPbrPass_H___
 
-#include "Material/Pass.hpp"
+#include "Castor3D/Material/Pass.hpp"
 
 namespace castor3d
 {

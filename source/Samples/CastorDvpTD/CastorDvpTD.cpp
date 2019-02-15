@@ -1,6 +1,6 @@
-#include "CastorDvpTD.hpp"
+#include "CastorDvpTD/CastorDvpTD.hpp"
 
-#include "MainFrame.hpp"
+#include "CastorDvpTD/MainFrame.hpp"
 
 wxIMPLEMENT_APP( castortd::CastorDvpTD );
 

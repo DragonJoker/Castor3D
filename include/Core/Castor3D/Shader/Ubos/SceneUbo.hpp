@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneUbo_H___
 #define ___C3D_SceneUbo_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

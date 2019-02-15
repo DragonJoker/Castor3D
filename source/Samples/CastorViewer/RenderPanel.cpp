@@ -1,23 +1,23 @@
-#include "RenderPanel.hpp"
-#include "CastorViewer.hpp"
-#include "MainFrame.hpp"
-#include "RotateNodeEvent.hpp"
-#include "TranslateNodeEvent.hpp"
-#include "KeyboardEvent.hpp"
+#include "CastorViewer/RenderPanel.hpp"
+#include "CastorViewer/CastorViewer.hpp"
+#include "CastorViewer/MainFrame.hpp"
+#include "CastorViewer/RotateNodeEvent.hpp"
+#include "CastorViewer/TranslateNodeEvent.hpp"
+#include "CastorViewer/KeyboardEvent.hpp"
 
 #include <wx/display.h>
 
-#include <Event/Frame/FrameListener.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Event/UserInput/UserInputListener.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Material/SpecularGlossinessPbrPass.hpp>
-#include <Mesh/Submesh.hpp>
-#include <ShadowMap/ShadowMapPass.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderWindow.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/ShadowMap/ShadowMapPass.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
 
 #include <Ashes/Core/WindowHandle.hpp>
 

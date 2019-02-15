@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_SphereBoxProperties_H___
 #define ___GUICOMMON_SphereBoxProperties_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Graphics/BoundingSphere.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, BoundingSphere );
 

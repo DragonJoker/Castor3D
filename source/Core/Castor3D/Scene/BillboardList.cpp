@@ -1,17 +1,17 @@
-#include "BillboardList.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FrameListener.hpp"
-#include "Material/Material.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/Program.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Pipeline/VertexLayout.hpp>
 
-#include <Design/ArrayView.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 
 using namespace castor;
 

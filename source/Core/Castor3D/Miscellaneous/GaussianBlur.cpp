@@ -1,13 +1,17 @@
-#include "GaussianBlur.hpp"
+#include "Castor3D/Miscellaneous/GaussianBlur.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -21,13 +25,8 @@
 #include <Ashes/RenderPass/RenderSubpass.hpp>
 #include <Ashes/RenderPass/RenderSubpassState.hpp>
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/GlslToSpv.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
-
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
 
 #include <random>
 

@@ -1,19 +1,19 @@
-#include "ShadowMapDirectional.hpp"
+#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Miscellaneous/GaussianBlur.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Culling/FrustumCuller.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "ShadowMap/ShadowMapPassDirectional.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/GaussianBlur.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassDirectional.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>
@@ -26,8 +26,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Graphics/Image.hpp>
-#include <Miscellaneous/BlockTracker.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 using namespace castor;
 using namespace castor3d;

@@ -1,5 +1,5 @@
-#include "LanguageInfo.hpp"
-#include "StyleInfo.hpp"
+#include "GuiCommon/LanguageInfo.hpp"
+#include "GuiCommon/StyleInfo.hpp"
 
 using namespace castor3d;
 using namespace castor;

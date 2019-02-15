@@ -1,8 +1,8 @@
-#include "SubmeshUtils.hpp"
+#include "Castor3D/Mesh/SubmeshUtils.hpp"
 
-#include "SubmeshComponent/TriFaceMapping.hpp"
-#include "Submesh.hpp"
-#include "Vertex.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
 
 using namespace castor;
 

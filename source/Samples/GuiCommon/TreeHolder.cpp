@@ -1,8 +1,8 @@
-#include "TreeHolder.hpp"
+#include "GuiCommon/TreeHolder.hpp"
 
-#include "AuiDockArt.hpp"
-#include "AuiToolBarArt.hpp"
-#include "ImagesLoader.hpp"
+#include "GuiCommon/AuiDockArt.hpp"
+#include "GuiCommon/AuiToolBarArt.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
 
 #include <wx/treectrl.h>
 

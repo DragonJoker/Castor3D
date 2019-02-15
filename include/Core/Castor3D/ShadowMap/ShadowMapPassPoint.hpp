@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_POINT_H___
 #define ___C3D_SHADOW_MAP_PASS_POINT_H___
 
-#include "ShadowMapPass.hpp"
-#include "Render/Viewport.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPass.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

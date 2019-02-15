@@ -1,6 +1,6 @@
-#include "StcContext.hpp"
-#include "LanguageFileParser.hpp"
-#include "LanguageInfo.hpp"
+#include "GuiCommon/StcContext.hpp"
+#include "GuiCommon/LanguageFileParser.hpp"
+#include "GuiCommon/LanguageInfo.hpp"
 
 using namespace castor3d;
 using namespace castor;

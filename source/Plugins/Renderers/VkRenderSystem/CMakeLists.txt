@@ -11,14 +11,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/VkRenderer/Src )
-include_directories( ${CMAKE_BINARY_DIR}/${ASHES_DIR}/VkRenderer/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/VkRenderSystem/Src )
+include_directories(
+	${Castor3DIncludeDirs}
+	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include/VkRenderer
+	${CASTOR_BINARY_DIR}/${ASHES_DIR}/include/VkRenderer
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
+	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
+)
 
-if ( EXISTS ${CMAKE_SOURCE_DIR}/${ASHES_DIR}/../external/SPIRV-Cross/spirv_glsl.cpp )
+if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/../external/SPIRV-Cross/spirv_glsl.cpp )
 	set( SPIRV_CROSS_DIR
-		${CMAKE_SOURCE_DIR}/${ASHES_DIR}/../external/SPIRV-Cross
+		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/../external/SPIRV-Cross
 	)
 	set( SPIRV_FILES
 		${SPIRV_CROSS_DIR}/GLSL.std.450.h
@@ -38,10 +41,12 @@ endif ()
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	"Castor3D"
 	"${CastorMinLibraries};VkRenderer;CompilerSpirV"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/VkRenderSystemPch.cpp
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DVkRenderer_STATIC"
 	"-DVkRenderer_STATIC"
 	""

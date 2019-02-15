@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_BoneTreeItemProperty_H___
 #define ___GC_BoneTreeItemProperty_H___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

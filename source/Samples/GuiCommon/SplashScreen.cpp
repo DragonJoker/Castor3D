@@ -1,10 +1,11 @@
-#include "SplashScreen.hpp"
+#include "GuiCommon/SplashScreen.hpp"
 
-#include <RequiredVersion.hpp>
-#include <Log/Logger.hpp>
-#include <Miscellaneous/Version.hpp>
+#include <Castor3D/RequiredVersion.hpp>
+#include <Castor3D/Miscellaneous/Version.hpp>
 
-#include "xpms/splash.xpm"
+#include <CastorUtils/Log/Logger.hpp>
+
+#include "GuiCommon/xpms/splash.xpm"
 
 #include <wx/dcbuffer.h>
 

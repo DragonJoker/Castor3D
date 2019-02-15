@@ -1,12 +1,12 @@
-#include "ParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-#include "Engine.hpp"
-#include "Material/Material.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/ParticleSystem/ComputeParticleSystem.hpp"
-#include "Scene/ParticleSystem/CpuParticleSystem.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
 #include <Ashes/Core/Device.hpp>
 #include <Ashes/Pipeline/VertexLayout.hpp>

@@ -1,6 +1,6 @@
-#include "PropertiesHolder.hpp"
+#include "GuiCommon/PropertiesHolder.hpp"
 
-#include "AuiDockArt.hpp"
+#include "GuiCommon/AuiDockArt.hpp"
 
 using namespace castor3d;
 using namespace castor;

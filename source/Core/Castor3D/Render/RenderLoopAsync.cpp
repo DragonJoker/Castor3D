@@ -1,10 +1,10 @@
-#include "RenderLoopAsync.hpp"
+#include "Castor3D/Render/RenderLoopAsync.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include <Miscellaneous/PreciseTimer.hpp>
-#include <Design/ScopeGuard.hpp>
-#include <Design/BlockGuard.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Design/ScopeGuard.hpp>
+#include <CastorUtils/Design/BlockGuard.hpp>
 #include <Ashes/Core/Exception.hpp>
 
 using namespace castor;

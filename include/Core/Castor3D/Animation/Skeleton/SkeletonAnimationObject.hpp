@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_SKELETON_ANIMATION_OBJECT_H___
 #define ___C3D_SKELETON_ANIMATION_OBJECT_H___
 
-#include "Animation/Interpolator.hpp"
+#include "Castor3D/Animation/Interpolator.hpp"
 
-#include <Graphics/BoundingBox.hpp>
-#include <Math/SquareMatrix.hpp>
-#include <Math/Quaternion.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
 
 namespace castor3d
 {

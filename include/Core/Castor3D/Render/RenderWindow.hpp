@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderWindow_H___
 #define ___C3D_RenderWindow_H___
 
-#include "Event/Frame/FrameListener.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Graphics/Size.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 #include <Ashes/Core/Device.hpp>
 #include <Ashes/Core/SwapChain.hpp>

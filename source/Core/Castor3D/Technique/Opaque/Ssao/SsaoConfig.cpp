@@ -1,4 +1,4 @@
-#include "SsaoConfig.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
 using namespace castor;
 

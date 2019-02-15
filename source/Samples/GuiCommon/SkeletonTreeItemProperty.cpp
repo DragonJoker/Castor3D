@@ -1,9 +1,10 @@
-#include "SkeletonTreeItemProperty.hpp"
+#include "GuiCommon/SkeletonTreeItemProperty.hpp"
 
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

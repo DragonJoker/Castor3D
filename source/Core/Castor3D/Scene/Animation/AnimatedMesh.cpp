@@ -1,10 +1,10 @@
-#include "AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 
-#include "Animation/Animable.hpp"
-#include "Animation/Mesh/MeshAnimation.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
+#include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 using namespace castor;
 

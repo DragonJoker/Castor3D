@@ -1,4 +1,4 @@
-#include "MatrixProperties.hpp"
+#include "GuiCommon/MatrixProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

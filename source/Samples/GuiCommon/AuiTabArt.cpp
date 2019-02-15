@@ -1,4 +1,4 @@
-#include "AuiTabArt.hpp"
+#include "GuiCommon/AuiTabArt.hpp"
 
 #include <wx/aui/auibook.h>
 #include <wx/renderer.h>

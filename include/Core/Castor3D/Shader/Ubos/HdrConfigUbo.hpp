@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_HdrConfigUbo_H___
 #define ___C3D_HdrConfigUbo_H___
 
-#include "HDR/HdrConfig.hpp"
+#include "Castor3D/HDR/HdrConfig.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderedObject_H___
 #define ___C3D_RenderedObject_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "MovableObject.hpp"
-#include "RenderedObject.hpp"
+#include "Castor3D/Scene/MovableObject.hpp"
+#include "Castor3D/Scene/RenderedObject.hpp"
 
 namespace castor3d
 {

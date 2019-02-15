@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SPHERE_H___
 #define ___C3D_SPHERE_H___
 
-#include "Mesh/MeshGenerator.hpp"
+#include "Castor3D/Mesh/MeshGenerator.hpp"
 
 namespace castor3d
 {

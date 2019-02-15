@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_BackgroundTreeItemProperty_HPP___
 #define ___GUICOMMON_BackgroundTreeItemProperty_HPP___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

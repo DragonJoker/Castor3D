@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_RENDER_TARGET_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_RENDER_TARGET_TREE_ITEM_PROPERTY_H___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

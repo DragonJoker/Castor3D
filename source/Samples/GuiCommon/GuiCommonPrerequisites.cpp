@@ -1,4 +1,4 @@
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #if defined( CU_PlatformWindows ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
@@ -13,24 +13,23 @@
 using Bool = int;
 #endif
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+
+#include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+
 #include <Ashes/Core/PlatformWindowHandle.hpp>
-
-#include <Graphics/Font.hpp>
-
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/Material.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Plugin/Plugin.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneFileParser.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
-
-#include <Graphics/PixelBufferBase.hpp>
 
 #include <wx/window.h>
 #include <wx/rawbmp.h>

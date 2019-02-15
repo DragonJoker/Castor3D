@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LIGHT_CACHE_H___
 #define ___C3D_LIGHT_CACHE_H___
 
-#include "Scene/Light/LightFactory.hpp"
-#include "Cache/ObjectCache.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Scene/Light/LightFactory.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/BufferView.hpp>
 

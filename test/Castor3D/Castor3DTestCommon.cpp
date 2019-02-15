@@ -1,28 +1,27 @@
 #include "Castor3DTestCommon.hpp"
 
-#include <Cache/AnimatedObjectGroupCache.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/GeometryCache.hpp>
-#include <Cache/LightCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-
-#include <Animation/Animable.hpp>
-#include <Animation/Animation.hpp>
-#include <Animation/Mesh/MeshAnimationKeyFrame.hpp>
-#include <Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Mesh/SubmeshComponent/BonesComponent.hpp>
-#include <Render/Viewport.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Scene/Animation/AnimatedSkeleton.hpp>
-#include <Scene/Animation/AnimationInstance.hpp>
-#include <Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
-#include <Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
+#include <Castor3D/Animation/Animable.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Cache/CameraCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/AnimatedSkeleton.hpp>
+#include <Castor3D/Scene/Animation/AnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
 
 #include <cmath>
 

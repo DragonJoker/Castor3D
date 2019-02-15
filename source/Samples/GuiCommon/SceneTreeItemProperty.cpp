@@ -1,11 +1,12 @@
-#include "SceneTreeItemProperty.hpp"
+#include "GuiCommon/SceneTreeItemProperty.hpp"
 
-#include <Render/RenderLoop.hpp>
-#include <Scene/Scene.hpp>
-#include <Texture/TextureLayout.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/SizeProperties.hpp"
 
-#include "AdditionalProperties.hpp"
-#include "SizeProperties.hpp"
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

@@ -1,4 +1,4 @@
-﻿#include "IndexMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp"
 
 using namespace castor;
 

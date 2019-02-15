@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_Sampler___
 #define ___C3D_Sampler___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Image/SamplerCreateInfo.hpp>
 #include <Ashes/Image/Sampler.hpp>
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Graphics/Colour.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
 
 namespace castor3d
 {

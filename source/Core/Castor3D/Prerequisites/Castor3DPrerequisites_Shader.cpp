@@ -1,11 +1,11 @@
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslPhongLighting.hpp"
-#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
-#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

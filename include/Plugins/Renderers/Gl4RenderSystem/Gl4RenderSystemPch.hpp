@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___Gl4_PrecompiledHeader___
 #define ___Gl4_PrecompiledHeader___
 
-#include <config.hpp>
+#include <CastorUtils/config.hpp>
 
 #if CU_UsePCH
 #include <cstdlib>

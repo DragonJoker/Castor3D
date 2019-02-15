@@ -1,8 +1,8 @@
-#include "Gl3RenderSystem.hpp"
+#include "Gl3RenderSystem/Gl3RenderSystem.hpp"
 
-#include <Engine.hpp>
-#include <Plugin/RendererPlugin.hpp>
-#include <Render/RenderSystemFactory.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/RendererPlugin.hpp>
+#include <Castor3D/Render/RenderSystemFactory.hpp>
 
 extern "C"
 {

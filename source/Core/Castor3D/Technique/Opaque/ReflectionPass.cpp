@@ -1,28 +1,28 @@
-#include "ReflectionPass.hpp"
+#include "Castor3D/Technique/Opaque/ReflectionPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Background/Background.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Shaders/GlslFog.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslMetallicPbrReflection.hpp"
-#include "Shader/Shaders/GlslPhongReflection.hpp"
-#include "Shader/Shaders/GlslSpecularPbrReflection.hpp"
-#include "Shader/Shaders/GlslSssTransmittance.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Shader/Ubos/GpInfoUbo.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Technique/Opaque/GeometryPassResult.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/Image/Texture.hpp>
@@ -33,7 +33,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

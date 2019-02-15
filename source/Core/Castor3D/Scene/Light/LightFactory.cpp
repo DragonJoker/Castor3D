@@ -1,8 +1,8 @@
-﻿#include "LightFactory.hpp"
+#include "Castor3D/Scene/Light/LightFactory.hpp"
 
-#include "DirectionalLight.hpp"
-#include "PointLight.hpp"
-#include "SpotLight.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 using namespace castor;
 

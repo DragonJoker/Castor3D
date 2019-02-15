@@ -1,4 +1,4 @@
-#include "Particle.hpp"
+#include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 
 using namespace castor;
 

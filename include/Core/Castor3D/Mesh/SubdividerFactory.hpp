@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SUBDIVIDER_FACTORY_H___
 #define ___C3D_SUBDIVIDER_FACTORY_H___
 
-#include "Subdivider.hpp"
+#include "Castor3D/Mesh/Subdivider.hpp"
 
-#include <Design/Factory.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {

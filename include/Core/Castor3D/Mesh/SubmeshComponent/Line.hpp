@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Line_H___
 #define ___C3D_Line_H___
 
-#include "LineIndices.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/LineIndices.hpp"
 
 namespace castor3d
 {

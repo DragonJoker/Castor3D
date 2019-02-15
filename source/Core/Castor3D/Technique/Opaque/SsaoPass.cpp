@@ -1,13 +1,13 @@
-#include "SsaoPass.hpp"
+#include "Castor3D/Technique/Opaque/SsaoPass.hpp"
 
-#include "Engine.hpp"
-#include "Scene/Camera.hpp"
-#include "Technique/Opaque/GeometryPassResult.hpp"
-#include "Technique/Opaque/Ssao/BlurPass.hpp"
-#include "Technique/Opaque/Ssao/LineariseDepthPass.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Technique/Opaque/Ssao/RawSsaoPass.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/BlurPass.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/LineariseDepthPass.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/RawSsaoPass.hpp"
 
 using namespace castor;
 using namespace castor3d;

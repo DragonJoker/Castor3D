@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_MorphingRenderNode_H___
 #define ___C3D_MorphingRenderNode_H___
 
-#include "ObjectRenderNode.hpp"
-#include "Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Render/RenderNode/ObjectRenderNode.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 namespace castor3d
 {

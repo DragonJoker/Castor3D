@@ -1,11 +1,11 @@
-#include "EnemySpawner.hpp"
+#include "CastorDvpTD/EnemySpawner.hpp"
 
-#include "Game.hpp"
+#include "CastorDvpTD/Game.hpp"
 
-#include <Mesh/Mesh.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/PointLight.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
 
 using namespace castor;
 using namespace castor3d;

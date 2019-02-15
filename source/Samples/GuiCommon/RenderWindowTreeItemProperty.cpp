@@ -1,8 +1,9 @@
-#include "RenderWindowTreeItemProperty.hpp"
+#include "GuiCommon/RenderWindowTreeItemProperty.hpp"
 
-#include <Render/RenderWindow.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Render/RenderWindow.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

@@ -1,6 +1,6 @@
-#include "Bullet.hpp"
+#include "CastorDvpTD/Bullet.hpp"
 
-#include "Game.hpp"
+#include "CastorDvpTD/Game.hpp"
 
 using namespace castor;
 using namespace castor3d;

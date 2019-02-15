@@ -1,4 +1,4 @@
-#include "SubmeshComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp"
 
 namespace castor3d
 {

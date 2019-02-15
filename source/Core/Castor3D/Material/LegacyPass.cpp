@@ -1,12 +1,12 @@
-﻿#include "LegacyPass.hpp"
+#include "Castor3D/Material/LegacyPass.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Material/Material.hpp"
-#include "Render/RenderNode/RenderNode.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Render/RenderNode/RenderNode.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

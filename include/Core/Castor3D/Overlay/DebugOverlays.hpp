@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
 #define ___C3D_DEBUG_OVERLAYS_H___
 
-#include "Cache/OverlayCache.hpp"
-#include "Render/RenderInfo.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 
-#include <Miscellaneous/PreciseTimer.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
@@ -294,6 +294,6 @@ namespace castor3d
 	};
 }
 
-#include "DebugOverlays.inl"
+#include "Castor3D/Overlay/DebugOverlays.inl"
 
 #endif

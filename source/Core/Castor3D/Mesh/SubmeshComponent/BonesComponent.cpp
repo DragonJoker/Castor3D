@@ -1,9 +1,9 @@
-#include "BonesComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Skeleton/BonedVertex.hpp"
-#include "Render/RenderPass.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Skeleton/BonedVertex.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

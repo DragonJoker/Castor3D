@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureView_H___
 #define ___C3D_TextureView_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Image/ImageViewCreateInfo.hpp>
 #include <Ashes/Image/ImageSubresourceRange.hpp>
 #include <Ashes/Image/TextureView.hpp>
 #include <Ashes/Miscellaneous/Extent3D.hpp>
 
-#include <Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
 namespace castor3d
 {

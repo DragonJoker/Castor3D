@@ -1,11 +1,11 @@
-#include "Scene/Background/BackgroundTextWriter.hpp"
+#include "Castor3D/Scene/Background/BackgroundTextWriter.hpp"
 
-#include "Engine.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Background/Colour.hpp"
-#include "Scene/Background/Image.hpp"
-#include "Scene/Background/Skybox.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Colour.hpp"
+#include "Castor3D/Scene/Background/Image.hpp"
+#include "Castor3D/Scene/Background/Skybox.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 namespace castor3d
 {

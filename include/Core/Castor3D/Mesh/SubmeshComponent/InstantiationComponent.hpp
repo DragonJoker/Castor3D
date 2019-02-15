@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_InstantiationComponent_H___
 #define ___C3D_InstantiationComponent_H___
 
-#include "SubmeshComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp"
 
 namespace castor3d
 {

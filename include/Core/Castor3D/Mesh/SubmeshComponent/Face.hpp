@@ -1,10 +1,10 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FACE_H___
 #define ___C3D_FACE_H___
 
-#include "FaceIndices.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp"
 
 namespace castor3d
 {

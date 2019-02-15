@@ -1,6 +1,6 @@
-#include "GpuBufferPool.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Buffer/Buffer.hpp>
 #include <Ashes/Core/Device.hpp>

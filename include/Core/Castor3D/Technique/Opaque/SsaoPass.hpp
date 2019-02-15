@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredSsaoPass_H___
 #define ___C3D_DeferredSsaoPass_H___
 
-#include "LightPass.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {

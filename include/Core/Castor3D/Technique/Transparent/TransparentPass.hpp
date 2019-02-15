@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredTransparentPass_H___
 #define ___C3D_DeferredTransparentPass_H___
 
-#include "ShadowMap/ShadowMapDirectional.hpp"
-#include "ShadowMap/ShadowMapPoint.hpp"
-#include "ShadowMap/ShadowMapSpot.hpp"
-#include "Technique/RenderTechniquePass.hpp"
+#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Technique/RenderTechniquePass.hpp"
 
 namespace castor3d
 {

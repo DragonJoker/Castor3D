@@ -183,6 +183,6 @@ namespace GuiCommon
 	}
 }
 
-#include "AdditionalProperties.inl"
+#include "GuiCommon/AdditionalProperties.inl"
 
 #endif

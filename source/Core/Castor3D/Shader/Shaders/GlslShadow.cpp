@@ -1,7 +1,7 @@
-#include "GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
-#include "ShadowMap/ShadowMapPassDirectional.hpp"
-#include "ShadowMap/ShadowMapPassSpot.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassDirectional.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassSpot.hpp"
 
 #include <ShaderAST/Expr/ExprComma.hpp>
 

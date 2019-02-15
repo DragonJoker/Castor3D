@@ -1,11 +1,12 @@
-#include "AnimationTreeItemProperty.hpp"
+#include "GuiCommon/AnimationTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Animation/Animation.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

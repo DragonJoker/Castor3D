@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MESH_ANIMATION_INSTANCE_SUBMESH_H___
 #define ___C3D_MESH_ANIMATION_INSTANCE_SUBMESH_H___
 
-#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
+#include "Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp"
 
 namespace castor3d
 {

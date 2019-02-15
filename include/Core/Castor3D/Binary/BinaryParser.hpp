@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_BINARY_PARSER_H___
 #define ___C3D_BINARY_PARSER_H___
 
-#include "ChunkParser.hpp"
+#include "Castor3D/Binary/ChunkParser.hpp"
 
-#include "Miscellaneous/Version.hpp"
+#include "Castor3D/Miscellaneous/Version.hpp"
 
 namespace castor3d
 {

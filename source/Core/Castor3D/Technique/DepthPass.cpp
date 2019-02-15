@@ -1,13 +1,13 @@
-#include "DepthPass.hpp"
+#include "Castor3D/Technique/DepthPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/RenderPass/FrameBuffer.hpp>
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
@@ -15,9 +15,9 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 using namespace castor3d;

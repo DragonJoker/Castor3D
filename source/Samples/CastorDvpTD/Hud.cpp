@@ -1,11 +1,11 @@
-#include "Hud.hpp"
+#include "CastorDvpTD/Hud.hpp"
 
-#include "Game.hpp"
+#include "CastorDvpTD/Game.hpp"
 
-#include <Cache/OverlayCache.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Scene/Scene.hpp>
+#include <Castor3D/Cache/OverlayCache.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 using namespace castor;
 using namespace castor3d;

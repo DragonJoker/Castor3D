@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CV_CASTOR_VIEWER_H___
 #define ___CV_CASTOR_VIEWER_H___
 
-#include <CastorApplication.hpp>
+#include <GuiCommon/CastorApplication.hpp>
 
 namespace CastorViewer
 {

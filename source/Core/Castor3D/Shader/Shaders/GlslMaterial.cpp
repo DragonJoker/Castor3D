@@ -1,4 +1,4 @@
-#include "GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderPipeline_H___
 #define ___C3D_RenderPipeline_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Descriptor/DescriptorSetLayout.hpp>
 #include <Ashes/Descriptor/DescriptorSetPool.hpp>
@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #include <Ashes/Pipeline/VertexLayout.hpp>
 #include <Ashes/Pipeline/Viewport.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

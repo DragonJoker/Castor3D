@@ -1,8 +1,8 @@
-#include "Material.hpp"
+#include "Castor3D/Material/Material.hpp"
 
-#include "LegacyPass.hpp"
-#include "MetallicRoughnessPbrPass.hpp"
-#include "SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/LegacyPass.hpp"
+#include "Castor3D/Material/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/SpecularGlossinessPbrPass.hpp"
 
 using namespace castor;
 

@@ -4,16 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_TONE_MAPPING_H___
 #define ___C3D_TONE_MAPPING_H___
 
-#include "ToneMappingVisitor.hpp"
+#include "Castor3D/HDR/ToneMappingVisitor.hpp"
 
-#include "Render/RenderInfo.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Castor3DPrerequisites.hpp"
-#include "Shader/Ubos/HdrConfigUbo.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

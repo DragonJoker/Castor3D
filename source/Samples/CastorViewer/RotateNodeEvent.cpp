@@ -1,7 +1,8 @@
-#include "RotateNodeEvent.hpp"
+#include "CastorViewer/RotateNodeEvent.hpp"
 
-#include <Scene/SceneNode.hpp>
-#include <Math/Angle.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+
+#include <CastorUtils/Math/Angle.hpp>
 
 using namespace castor3d;
 using namespace castor;

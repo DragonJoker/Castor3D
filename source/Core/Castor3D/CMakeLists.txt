@@ -17,14 +17,14 @@ if ( CASTOR3D_USE_GLSLANG )
 		SPVRemapper
 		SPIRV )
 	include_directories(
-		${CMAKE_SOURCE_DIR}/external/glslang
+		${CASTOR_SOURCE_DIR}/external/glslang
 	)
 	set( C3D_USE_GLSLANG 1 )
 endif ()
 
 configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/RequiredVersion.hpp.in
-	${CMAKE_CURRENT_BINARY_DIR}/Src/RequiredVersion.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp.in
+	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 	NEWLINE_STYLE LF
 )
 
@@ -34,83 +34,87 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-include_directories( ${Castor3DIncludeDirs} )
+include_directories(
+	${Castor3DIncludeDirs}
+)
 
 add_target(
 	${PROJECT_NAME}
 	api_dll
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}
 	"CastorUtils;ShaderAST;ShaderWriter;Ashes"
 	"${CastorMinLibraries};ShaderWriter;Ashes;${GlslangLibraries}"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DPch.cpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/*Prerequisites*.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/*Prerequisites*.inl
 )
 file( GLOB ${PROJECT_NAME}_Prerequisites_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/*Prerequisites*.cpp
 )
 source_group( "Header Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_HEADER_FILES} )
 source_group( "Source Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Cache_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/*Cache*.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/*Cache*.inl
 )
 file( GLOB ${PROJECT_NAME}_Cache_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/*Cache*.cpp
 )
 source_group( "Header Files\\Cache" FILES ${${PROJECT_NAME}_Cache_HEADER_FILES} )
 source_group( "Source Files\\Cache" FILES ${${PROJECT_NAME}_Cache_SOURCE_FILES} )
 
-parse_subdir_files( Src/Animation "Animation" )
-parse_subdir_files( Src/Animation/Skeleton "Animation\\\\Skeleton" )
-parse_subdir_files( Src/Animation/Mesh "Animation\\\\Mesh" )
-parse_subdir_files( Src/Binary "Binary" )
-parse_subdir_files( Src/Buffer "Buffer" )
-parse_subdir_files( Src/Cache "Cache" )
-parse_subdir_files( Src/EnvironmentMap "EnvironmentMap" )
-parse_subdir_files( Src/Event "Event" )
-parse_subdir_files( Src/Event/Frame "Event\\\\Frame" )
-parse_subdir_files( Src/Event/UserInput "Event\\\\UserInput" )
-parse_subdir_files( Src/FrameBuffer "FrameBuffer" )
-parse_subdir_files( Src/HDR "HDR" )
-parse_subdir_files( Src/Material "Material" )
-parse_subdir_files( Src/Mesh "Mesh" )
-parse_subdir_files( Src/Mesh/Generator "Mesh\\\\Generator" )
-parse_subdir_files( Src/Mesh/Skeleton "Mesh\\\\Skeleton" )
-parse_subdir_files( Src/Mesh/SubmeshComponent "Mesh\\\\SubmeshComponent" )
-parse_subdir_files( Src/Miscellaneous "Miscellaneous" )
-parse_subdir_files( Src/Overlay "Overlay" )
-parse_subdir_files( Src/PBR "PBR" )
-parse_subdir_files( Src/Plugin "Plugin" )
-parse_subdir_files( Src/Prerequisites "Prerequisites" )
-parse_subdir_files( Src/PostEffect "PostEffect" )
-parse_subdir_files( Src/RenderToTexture "RenderToTexture" )
-parse_subdir_files( Src/Render "Render" )
-parse_subdir_files( Src/Render/RenderNode "Render\\\\RenderNode" )
-parse_subdir_files( Src/Render/Culling "Render\\\\Culling" )
-parse_subdir_files( Src/Scene "Scene" )
-parse_subdir_files( Src/Scene/Animation "Scene\\\\Animation" )
-parse_subdir_files( Src/Scene/Animation/Skeleton "Scene\\\\Animation\\\\Skeleton" )
-parse_subdir_files( Src/Scene/Animation/Mesh "Scene\\\\Animation\\\\Mesh" )
-parse_subdir_files( Src/Scene/Background "Scene\\\\Background" )
-parse_subdir_files( Src/Scene/Light "Scene\\\\Light" )
-parse_subdir_files( Src/Scene/ParticleSystem "Scene\\\\ParticleSystem" )
-parse_subdir_files( Src/Shader "Shader" )
-parse_subdir_files( Src/Shader/PassBuffer "Shader\\\\PassBuffer" )
-parse_subdir_files( Src/Shader/Shaders "Shader\\\\Shaders" )
-parse_subdir_files( Src/Shader/Ubos "Shader\\\\Ubos" )
-parse_subdir_files( Src/Shader/Uniform "Shader\\\\Uniform" )
-parse_subdir_files( Src/ShadowMap "ShadowMap" )
-parse_subdir_files( Src/State "State" )
-parse_subdir_files( Src/Technique "Technique" )
-parse_subdir_files( Src/Technique/Opaque "Technique\\\\Opaque" )
-parse_subdir_files( Src/Technique/Opaque/Ssao "Technique\\\\Opaque\\\\Ssao" )
-parse_subdir_files( Src/Technique/Transparent "Technique\\\\Transparent" )
-parse_subdir_files( Src/Texture "Texture" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Animation "Animation" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Animation/Skeleton "Animation\\\\Skeleton" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Animation/Mesh "Animation\\\\Mesh" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Binary "Binary" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Buffer "Buffer" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Cache "Cache" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core EnvironmentMap "EnvironmentMap" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Event "Event" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Event/Frame "Event\\\\Frame" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Event/UserInput "Event\\\\UserInput" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core FrameBuffer "FrameBuffer" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core HDR "HDR" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Material "Material" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Mesh "Mesh" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Mesh/Generator "Mesh\\\\Generator" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Mesh/Skeleton "Mesh\\\\Skeleton" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Mesh/SubmeshComponent "Mesh\\\\SubmeshComponent" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Miscellaneous "Miscellaneous" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Overlay "Overlay" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core PBR "PBR" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Plugin "Plugin" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Prerequisites "Prerequisites" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core PostEffect "PostEffect" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core RenderToTexture "RenderToTexture" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Render "Render" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Render/RenderNode "Render\\\\RenderNode" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Render/Culling "Render\\\\Culling" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene "Scene" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/Animation "Scene\\\\Animation" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/Animation/Skeleton "Scene\\\\Animation\\\\Skeleton" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/Animation/Mesh "Scene\\\\Animation\\\\Mesh" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/Background "Scene\\\\Background" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/Light "Scene\\\\Light" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Scene/ParticleSystem "Scene\\\\ParticleSystem" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Shader "Shader" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Shader/PassBuffer "Shader\\\\PassBuffer" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Shader/Shaders "Shader\\\\Shaders" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Shader/Ubos "Shader\\\\Ubos" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Shader/Uniform "Shader\\\\Uniform" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core ShadowMap "ShadowMap" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core State "State" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique "Technique" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Opaque "Technique\\\\Opaque" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Opaque/Ssao "Technique\\\\Opaque\\\\Ssao" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Transparent "Technique\\\\Transparent" )
+c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Texture "Texture" )
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
@@ -137,7 +141,7 @@ target_add_doc( ${PROJECT_NAME} "English" "*.h *.hpp *.dox" )
 file(
 	GLOB
 		CoreZipFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.zip
+		${CASTOR_SOURCE_DIR}/data/${PROJECT_NAME}/*.zip
 )
 copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
 
@@ -145,24 +149,9 @@ copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
 file(
 	GLOB
 		ShaderLanguagesFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Languages/*.lang
+		${CASTOR_SOURCE_DIR}/languages/${PROJECT_NAME}/*.lang
 )
 copy_target_files( ${PROJECT_NAME} "" ${ShaderLanguagesFiles} )
-
-# Preparing sample scene files installation
-file(
-	GLOB
-		SampleSceneFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cscn
-		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cmtl
-		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cmsh
-		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.zip
-)
-install(
-	FILES ${SampleSceneFiles}
-	DESTINATION share/${PROJECT_NAME}/samples
-	COMPONENT ${PROJECT_NAME}_Samples
-)
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 

@@ -1,12 +1,12 @@
-#include "StencilPass.hpp"
+#include "Castor3D/Technique/Opaque/StencilPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Image/Texture.hpp>
@@ -15,12 +15,12 @@
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

@@ -1,9 +1,9 @@
-#include "MorphComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/MorphComponent.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Render/RenderPass.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 

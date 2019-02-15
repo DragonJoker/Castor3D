@@ -1,4 +1,4 @@
-#include "Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 
 #include <Ashes/Buffer/StagingBuffer.hpp>
 #include <Ashes/Command/CommandBuffer.hpp>

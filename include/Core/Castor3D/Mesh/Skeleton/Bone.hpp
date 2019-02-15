@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_BONE_H___
 #define ___C3D_BONE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/Named.hpp>
-#include <Math/SquareMatrix.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {

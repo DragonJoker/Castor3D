@@ -1,23 +1,23 @@
-#include "LightingPass.hpp"
+#include "Castor3D/Technique/Opaque/LightingPass.hpp"
 
-#include "DirectionalLightPass.hpp"
-#include "LightPassShadow.hpp"
-#include "OpaquePass.hpp"
-#include "PointLightPass.hpp"
-#include "SpotLightPass.hpp"
+#include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
+#include "Castor3D/Technique/Opaque/LightPassShadow.hpp"
+#include "Castor3D/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Technique/Opaque/PointLightPass.hpp"
+#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Technique/RenderTechniquePass.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>
@@ -26,8 +26,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

@@ -1,10 +1,10 @@
-#include "Pass.hpp"
+#include "Castor3D/Material/Pass.hpp"
 
-#include "Engine.hpp"
-#include "Material/Material.hpp"
-#include "Render/RenderNode/PassRenderNode.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

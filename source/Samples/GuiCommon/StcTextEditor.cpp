@@ -1,6 +1,6 @@
-#include "StcTextEditor.hpp"
-#include "LanguageInfo.hpp"
-#include "StyleInfo.hpp"
+#include "GuiCommon/StcTextEditor.hpp"
+#include "GuiCommon/LanguageInfo.hpp"
+#include "GuiCommon/StyleInfo.hpp"
 
 #include <wx/filename.h>
 

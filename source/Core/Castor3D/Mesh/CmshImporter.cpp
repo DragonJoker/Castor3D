@@ -1,11 +1,11 @@
-#include "CmshImporter.hpp"
+#include "Castor3D/Mesh/CmshImporter.hpp"
 
-#include "Engine.hpp"
-#include "Binary/BinaryMesh.hpp"
-#include "Binary/BinarySkeleton.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Binary/BinaryMesh.hpp"
+#include "Castor3D/Binary/BinarySkeleton.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

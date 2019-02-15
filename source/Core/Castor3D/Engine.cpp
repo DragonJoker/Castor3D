@@ -1,25 +1,25 @@
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Material/Material.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Overlay/DebugOverlays.hpp"
-#include "Plugin/Plugin.hpp"
-#include "Render/RenderLoopAsync.hpp"
-#include "Render/RenderLoopSync.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Render/RenderWindow.hpp"
-#include "Scene/SceneFileParser.hpp"
-#include "Technique/RenderTechnique.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/Event/Frame/CleanupEvent.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
+#include "Castor3D/Render/RenderLoopAsync.hpp"
+#include "Castor3D/Render/RenderLoopSync.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
+#include "Castor3D/Technique/RenderTechnique.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
-#include <Graphics/Image.hpp>
-#include <Pool/UniqueObjectPool.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Pool/UniqueObjectPool.hpp>
 
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 using namespace castor;
 

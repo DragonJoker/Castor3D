@@ -1,4 +1,4 @@
-#include "GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslFog.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

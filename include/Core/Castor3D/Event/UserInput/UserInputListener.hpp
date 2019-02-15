@@ -4,13 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_USER_INPUT_LISTENER_H___
 #define ___C3D_USER_INPUT_LISTENER_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Event/UserInput/EventHandler.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
 
-#include <Graphics/Position.hpp>
-
-#include "EventHandler.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
+#include <CastorUtils/Graphics/Position.hpp>
 
 namespace castor3d
 {

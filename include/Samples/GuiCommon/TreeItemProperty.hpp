@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
 #define ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/treectrl.h>
 #include <wx/propgrid/propgrid.h>

@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneBackground_H___
 #define ___C3D_SceneBackground_H___
 
-#include "PBR/IblTextures.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/Viewport.hpp"
-#include "Shader/Ubos/HdrConfigUbo.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/PBR/IblTextures.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Descriptor/DescriptorSet.hpp>

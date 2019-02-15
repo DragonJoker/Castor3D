@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderQuad_H___
 #define ___C3D_RenderQuad_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Command/CommandBuffer.hpp>

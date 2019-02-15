@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PLUGIN_CACHE_H___
 #define ___C3D_PLUGIN_CACHE_H___
 
-#include "Cache/Cache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 
 namespace castor3d
 {

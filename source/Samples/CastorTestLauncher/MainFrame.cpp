@@ -1,15 +1,15 @@
-#include "MainFrame.hpp"
+#include "CastorTestLauncher/MainFrame.hpp"
 
-#include "CastorTestLauncher.hpp"
+#include "CastorTestLauncher/CastorTestLauncher.hpp"
 
-#include <Graphics/PixelBufferBase.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
-#include <Material/Material.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneFileParser.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
 #include <Ashes/Core/PlatformWindowHandle.hpp>
 #include <Ashes/Core/WindowHandle.hpp>

@@ -1,7 +1,7 @@
-#include "VkRenderSystem.hpp"
+#include "VkRenderSystem/VkRenderSystem.hpp"
 
-#include <Engine.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Shader/GlslToSpv.hpp>
 
 #include <CompilerSpirV/compileSpirV.hpp>
 
@@ -10,8 +10,8 @@
 #	include <CompilerGlsl/compileGlsl.hpp>
 #endif
 
-#include <Data/BinaryFile.hpp>
-#include <Log/Logger.hpp>
+#include <CastorUtils/Data/BinaryFile.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <VkRenderer/Core/VkCreateRenderer.hpp>
 

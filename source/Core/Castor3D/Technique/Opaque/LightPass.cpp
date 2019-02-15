@@ -1,19 +1,19 @@
-#include "LightPass.hpp"
+#include "Castor3D/Technique/Opaque/LightPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "ShadowMap/ShadowMap.hpp"
-#include "Technique/Opaque/GeometryPassResult.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
 #include <Ashes/Image/Texture.hpp>
@@ -24,20 +24,20 @@
 #include <Ashes/Pipeline/RasterisationState.hpp>
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include "Shader/Shaders/GlslFog.hpp"
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
-#include "Shader/Shaders/GlslPhongLighting.hpp"
-#include "Shader/Shaders/GlslMetallicBrdfLighting.hpp"
-#include "Shader/Shaders/GlslSpecularBrdfLighting.hpp"
-#include "Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 
 using namespace castor;
 using namespace castor3d;

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_StructuredShaderBuffer_H___
 #define ___C3D_StructuredShaderBuffer_H___
 
-#include "Shader/ShaderBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
 namespace castor3d
 {
@@ -114,6 +114,6 @@ namespace castor3d
 	};
 }
 
-#include "StructuredShaderBuffer.inl"
+#include "Castor3D/StructuredShaderBuffer.inl"
 
 #endif

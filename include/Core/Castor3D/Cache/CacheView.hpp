@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_CACHE_VIEW_H___
 #define ___C3D_CACHE_VIEW_H___
 
-#include "Cache.hpp"
+#include "Castor3D/Cache/Cache.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
@@ -195,6 +195,6 @@ namespace castor3d
 	};
 }
 
-#include "CacheView.inl"
+#include "Castor3D/Cache/CacheView.inl"
 
 #endif

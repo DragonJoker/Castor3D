@@ -1,10 +1,10 @@
-#include "EnvironmentMapPass.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMapPass.hpp"
 
-#include "EnvironmentMap/EnvironmentMap.hpp"
-#include "Render/Culling/FrustumCuller.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/Command/Queue.hpp>

@@ -1,8 +1,8 @@
-#include "EquirectangularToCube.hpp"
+#include "Castor3D/RenderToTexture/EquirectangularToCube.hpp"
 
-#include "Render/RenderSystem.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/StagingBuffer.hpp>
 #include <Ashes/Command/Queue.hpp>
@@ -18,13 +18,13 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/RenderPass/RenderSubpass.hpp>
 #include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Sync/Fence.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Math/TransformationMatrix.hpp>
+#include <CastorUtils/Math/TransformationMatrix.hpp>
 
 using namespace castor;
 using namespace sdw;

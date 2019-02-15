@@ -1,15 +1,15 @@
-#include "EnvironmentMap.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "EnvironmentMap/EnvironmentMapPass.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMapPass.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Miscellaneous/BitSize.hpp>
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>

@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_PASS_H___
 #define ___C3D_PASS_H___
 
-#include "SubsurfaceScattering.hpp"
+#include "Castor3D/Material/SubsurfaceScattering.hpp"
 
-#include <Design/OwnedBy.hpp>
-#include <Design/Signal.hpp>
-#include <Math/RangedValue.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
 {

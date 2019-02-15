@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RadianceComputer_H___
 #define ___C3D_RadianceComputer_H___
 
-#include "RenderToTexture/RenderCube.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/RenderToTexture/RenderCube.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
 #include <Ashes/Image/TextureView.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>

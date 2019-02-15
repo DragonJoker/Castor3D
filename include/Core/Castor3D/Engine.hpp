@@ -4,29 +4,29 @@ See LICENSE file in root folder
 #ifndef ___C3D_ENGINE_H___
 #define ___C3D_ENGINE_H___
 
-#include "Cache/Cache.hpp"
-#include "Cache/ListenerCache.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/PluginCache.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Cache/SceneCache.hpp"
-#include "Cache/ShaderCache.hpp"
-#include "Cache/TargetCache.hpp"
-#include "Cache/TechniqueCache.hpp"
-#include "Cache/WindowCache.hpp"
-#include "Mesh/ImporterFactory.hpp"
-#include "Mesh/MeshFactory.hpp"
-#include "Mesh/SubdividerFactory.hpp"
-#include "Miscellaneous/Version.hpp"
-#include "Render/RenderSystemFactory.hpp"
-#include "RenderToTexture/RenderDepthQuad.hpp"
+#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/TechniqueCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
+#include "Castor3D/Mesh/ImporterFactory.hpp"
+#include "Castor3D/Mesh/MeshFactory.hpp"
+#include "Castor3D/Mesh/SubdividerFactory.hpp"
+#include "Castor3D/Miscellaneous/Version.hpp"
+#include "Castor3D/Render/RenderSystemFactory.hpp"
+#include "Castor3D/RenderToTexture/RenderDepthQuad.hpp"
 
-#include <FileParser/FileParser.hpp>
-#include <Graphics/FontCache.hpp>
-#include <Graphics/ImageCache.hpp>
-#include <Design/Unique.hpp>
-#include <Miscellaneous/CpuInformations.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/Graphics/FontCache.hpp>
+#include <CastorUtils/Graphics/ImageCache.hpp>
+#include <CastorUtils/Design/Unique.hpp>
+#include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 
 namespace castor3d
 {

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___Test_RenderSystemPrerequisites_H___
 #define ___Test_RenderSystemPrerequisites_H___
 
-#include <CastorUtilsPrerequisites.hpp>
-#include <Castor3DPrerequisites.hpp>
-#include <TestRendererPrerequisites.hpp>
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
+#include <TestRenderer/TestRendererPrerequisites.hpp>
 
 #ifdef CU_PlatformWindows
 #	ifdef TestRenderSystem_EXPORTS

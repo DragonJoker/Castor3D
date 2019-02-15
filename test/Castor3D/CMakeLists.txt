@@ -1,14 +1,12 @@
 project( Castor3DTest )
 
-include_directories( ${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_BINARY_DIR}/Src
+include_directories(
 	${Castor3DIncludeDirs}
-	${CMAKE_SOURCE_DIR}/Core/CastorTest/Src
-	${CMAKE_BINARY_DIR}/Core/CastorTest/Src
-	${CMAKE_SOURCE_DIR}/${ASHES_DIR}/TestRenderer/Src
-	${CMAKE_BINARY_DIR}/${ASHES_DIR}/TestRenderer/Src
-	${CMAKE_SOURCE_DIR}/Plugins/Renderers/TestRenderSystem/Src
-	${CMAKE_BINARY_DIR}/Plugins/Renderers/TestRenderSystem/Src
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CASTOR_SOURCE_DIR}/test/CastorTest
+	${CASTOR_BINARY_DIR}/test/CastorTest
+	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
+	${CASTOR_BINARY_DIR}/include/Plugins/Renderers
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
@@ -17,10 +15,12 @@ set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 add_target(
-    ${PROJECT_NAME}
-    bin_dos
-    "CastorUtils;Castor3D;CastorTest;TestRenderSystem"
-    "CastorUtils;Castor3D;CastorTest;TestRenderSystem;${CastorMinLibraries}"
+	${PROJECT_NAME}
+	bin_dos
+	${CASTOR_SOURCE_DIR}/test/Castor3D
+	${CASTOR_SOURCE_DIR}/test/Castor3D
+	"CastorUtils;Castor3D;CastorTest;TestRenderSystem"
+	"CastorUtils;Castor3D;CastorTest;TestRenderSystem;${CastorMinLibraries}"
 )
 
 if ( MSVC )

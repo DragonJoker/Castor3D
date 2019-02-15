@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GLSL_SssTransmittance_H___
 #define ___GLSL_SssTransmittance_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 

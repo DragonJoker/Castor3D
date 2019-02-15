@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TEXTURE_LAYOUT_H___
 #define ___C3D_TEXTURE_LAYOUT_H___
 
-#include "TextureView.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
 
 #include <Ashes/Image/ImageCreateInfo.hpp>
 #include <Ashes/Image/Texture.hpp>

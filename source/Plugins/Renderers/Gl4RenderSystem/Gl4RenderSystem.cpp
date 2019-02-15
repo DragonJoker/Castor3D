@@ -1,13 +1,13 @@
-#include "Gl4RenderSystem.hpp"
+#include "Gl4RenderSystem/Gl4RenderSystem.hpp"
 
-#include <Engine.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Shader/GlslToSpv.hpp>
 
 #include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <Gl4Renderer/Core/GlCreateRenderer.hpp>
 

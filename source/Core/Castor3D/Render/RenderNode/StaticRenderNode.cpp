@@ -1,10 +1,10 @@
-#include "StaticRenderNode.hpp"
+#include "Castor3D/Render/RenderNode/StaticRenderNode.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Scene/Geometry.hpp"
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 using namespace castor;
 

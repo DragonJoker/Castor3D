@@ -1,8 +1,8 @@
-#include "VkRenderSystem.hpp"
+#include "VkRenderSystem/VkRenderSystem.hpp"
 
-#include <Engine.hpp>
-#include <Plugin/RendererPlugin.hpp>
-#include <Render/RenderSystemFactory.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/RendererPlugin.hpp>
+#include <Castor3D/Render/RenderSystemFactory.hpp>
 
 extern "C"
 {

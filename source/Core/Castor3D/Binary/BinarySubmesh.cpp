@@ -1,10 +1,10 @@
-#include "BinarySubmesh.hpp"
+#include "Castor3D/Binary/BinarySubmesh.hpp"
 
-#include "Binary/BinaryBonesComponent.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/SubmeshComponent/BonesComponent.hpp"
-#include "Mesh/SubmeshComponent/TriFaceMapping.hpp"
-#include "Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Castor3D/Binary/BinaryBonesComponent.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp"
 
 using namespace castor;
 

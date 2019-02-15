@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_MATERIAL_H___
 #define ___C3D_MATERIAL_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/OwnedBy.hpp>
-#include <Design/Resource.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {

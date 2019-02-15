@@ -12,7 +12,9 @@ set( Castor3DIncludeDirs
 	${CASTOR_SOURCE_DIR}/${SHADERWRITER_DIR}/include
 	${CASTOR_BINARY_DIR}/${SHADERWRITER_DIR}/source
 	${CASTOR_SOURCE_DIR}/include/Core
+	${CASTOR_SOURCE_DIR}/include/Core
 	${CASTOR_BINARY_DIR}/include/Core
+	${CASTOR_BINARY_DIR}/source/Core
 )
 
 add_subdirectory( Core )

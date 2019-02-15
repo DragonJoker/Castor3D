@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredMeshLightPass_H___
 #define ___C3D_DeferredMeshLightPass_H___
 
-#include "StencilPass.hpp"
+#include "Castor3D/Technique/Opaque/StencilPass.hpp"
 
-#include <Shader/Ubos/ModelMatrixUbo.hpp>
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 namespace castor3d
 {

@@ -1,10 +1,11 @@
-#include "IblTextures.hpp"
+#include "Castor3D/PBR/IblTextures.hpp"
 
-#include "Engine.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -21,10 +22,9 @@
 #include <Ashes/RenderPass/RenderSubpassState.hpp>
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;

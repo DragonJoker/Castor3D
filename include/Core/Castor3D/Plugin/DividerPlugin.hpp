@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DIVIDER_PLUGIN_H___
 #define ___C3D_DIVIDER_PLUGIN_H___
 
-#include "Plugin.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {

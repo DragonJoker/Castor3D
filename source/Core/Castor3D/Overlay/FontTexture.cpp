@@ -1,12 +1,11 @@
-#include "FontTexture.hpp"
+#include "Castor3D/Overlay/FontTexture.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-
-#include <Graphics/Font.hpp>
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

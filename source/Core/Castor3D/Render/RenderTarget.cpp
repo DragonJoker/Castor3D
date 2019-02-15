@@ -1,19 +1,19 @@
-#include "RenderTarget.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "HDR/ToneMapping.hpp"
-#include "Overlay/OverlayRenderer.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/Culling/FrustumCuller.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Technique/RenderTechnique.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/HDR/ToneMapping.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Technique/RenderTechnique.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/Core/Device.hpp>
@@ -24,11 +24,11 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/RenderPass/SubpassDependency.hpp>
 #include <Ashes/RenderPass/SubpassDescription.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
-#include <Graphics/Image.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

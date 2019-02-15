@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_IMPORTER_H___
 #define ___C3D_IMPORTER_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Miscellaneous/Parameter.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 
-#include <Data/Path.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Data/Path.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

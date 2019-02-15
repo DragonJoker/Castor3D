@@ -4,29 +4,29 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
-#include "Cache/CacheView.hpp"
-#include "Cache/ObjectCache.hpp"
-#include "Cache/BillboardCache.hpp"
-#include "Cache/CameraCache.hpp"
-#include "Cache/GeometryCache.hpp"
-#include "Cache/SceneNodeCache.hpp"
-#include "Cache/AnimatedObjectGroupCache.hpp"
-#include "Cache/LightCache.hpp"
-#include "Cache/MaterialCache.hpp"
-#include "Cache/MeshCache.hpp"
-#include "Cache/OverlayCache.hpp"
-#include "Cache/ParticleSystemCache.hpp"
-#include "Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Cache/BillboardCache.hpp"
+#include "Castor3D/Cache/CameraCache.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/SceneNodeCache.hpp"
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/MeshCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/ParticleSystemCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 
-#include "Scene/Background/Background.hpp"
-#include "Scene/Fog.hpp"
-#include "Scene/Shadow.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Fog.hpp"
+#include "Castor3D/Scene/Shadow.hpp"
 
-#include <Log/Logger.hpp>
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Design/Signal.hpp>
-#include <Multithreading/ThreadPool.hpp>
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 namespace castor3d
 {

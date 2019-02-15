@@ -1,11 +1,12 @@
-#include "ToneMappingTreeItemProperty.hpp"
+#include "GuiCommon/ToneMappingTreeItemProperty.hpp"
 
-#include "ShaderDialog.hpp"
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/ShaderDialog.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <HDR/ToneMapping.hpp>
+#include <Castor3D/HDR/ToneMapping.hpp>
 
 #include <ShaderWriter/Shader.hpp>
+
 #include <CompilerGlsl/compileGlsl.hpp>
 
 #include <wx/propgrid/advprops.h>

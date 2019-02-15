@@ -1,11 +1,11 @@
-#include "Frustum.hpp"
+#include "Castor3D/Miscellaneous/Frustum.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Render/Viewport.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 
-#include <Graphics/BoundingBox.hpp>
-#include <Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
+#include <CastorUtils/Graphics/BoundingSphere.hpp>
 
 using namespace castor;
 

@@ -1,22 +1,22 @@
-#include "ShadowMapPoint.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
 
-#include "Engine.hpp"
-#include "Cache/SamplerCache.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Render/Culling/DummyCuller.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Castor3DPrerequisites.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Program.hpp"
-#include "ShadowMap/ShadowMapPassPoint.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassPoint.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>
@@ -26,8 +26,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Graphics/Image.hpp>
-#include <Miscellaneous/BlockTracker.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
 using namespace castor;
 using namespace castor3d;

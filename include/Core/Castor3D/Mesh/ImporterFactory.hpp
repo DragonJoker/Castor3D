@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_IMPORTER_FACTORY_H___
 #define ___C3D_IMPORTER_FACTORY_H___
 
-#include "Importer.hpp"
+#include "Castor3D/Mesh/Importer.hpp"
 
-#include <Design/Factory.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {

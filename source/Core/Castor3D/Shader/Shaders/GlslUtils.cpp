@@ -1,4 +1,4 @@
-#include "GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 

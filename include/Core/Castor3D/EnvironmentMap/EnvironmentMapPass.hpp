@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_EnvironmentMapPass_H___
 #define ___C3D_EnvironmentMapPass_H___
 
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Technique/ForwardRenderTechniquePass.hpp"
 
 namespace castor3d
 {

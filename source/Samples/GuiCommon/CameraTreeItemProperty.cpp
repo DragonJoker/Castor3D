@@ -1,9 +1,10 @@
-#include "CameraTreeItemProperty.hpp"
+#include "GuiCommon/CameraTreeItemProperty.hpp"
 
-#include <Scene/Camera.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

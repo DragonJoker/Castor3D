@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_PLUGIN_EXCEPTION_H___
 #define ___C3D_PLUGIN_EXCEPTION_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Exception/Exception.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+
+#include <CastorUtils/Exception/Exception.hpp>
 
 namespace castor3d
 {

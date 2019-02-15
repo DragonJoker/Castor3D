@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_OBJECT_H___
 #define ___C3D_ANIMATED_OBJECT_H___
 
-#include "AnimationInstance.hpp"
+#include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
-#include <Design/Named.hpp>
+#include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
 {

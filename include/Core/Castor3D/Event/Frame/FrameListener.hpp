@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_FRAME_LISTENER_H___
 #define ___C3D_FRAME_LISTENER_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/Named.hpp>
+#include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
 {

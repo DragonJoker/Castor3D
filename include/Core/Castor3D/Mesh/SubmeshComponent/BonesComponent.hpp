@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BonesComponent_H___
 #define ___C3D_BonesComponent_H___
 
-#include "Mesh/Skeleton/VertexBoneData.hpp"
-#include "Mesh/SubmeshComponent/SubmeshComponent.hpp"
+#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp"
 
 namespace castor3d
 {

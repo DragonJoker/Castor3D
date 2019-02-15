@@ -4,20 +4,20 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
-#include "HDR/HdrConfig.hpp"
-#include "Miscellaneous/Parameter.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Render/RenderInfo.hpp"
-#include "Render/Culling/SceneCuller.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/HDR/HdrConfig.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/RenderPass/FrameBuffer.hpp>
 #include <Ashes/Sync/Semaphore.hpp>
 
-#include <Design/OwnedBy.hpp>
-#include <Graphics/Size.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {

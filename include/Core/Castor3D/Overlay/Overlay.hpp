@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_H___
 #define ___C3D_OVERLAY_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "OverlayCategory.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

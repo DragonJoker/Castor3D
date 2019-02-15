@@ -1,10 +1,10 @@
-#include "RenderLoopSync.hpp"
+#include "Castor3D/Render/RenderLoopSync.hpp"
 
-#include "RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Core/Exception.hpp>
 
-#include <Design/BlockGuard.hpp>
+#include <CastorUtils/Design/BlockGuard.hpp>
 
 using namespace castor;
 

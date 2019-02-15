@@ -1,8 +1,8 @@
-﻿#include "OverlayFactory.hpp"
+#include "Castor3D/Overlay/OverlayFactory.hpp"
 
-#include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
 
 using namespace castor;
 

@@ -1,10 +1,11 @@
-#include "KeyboardEvent.hpp"
+#include "CastorViewer/KeyboardEvent.hpp"
 
-#include "CastorViewer.hpp"
-#include "MainFrame.hpp"
+#include "CastorViewer/CastorViewer.hpp"
+#include "CastorViewer/MainFrame.hpp"
 
-#include <Render/RenderWindow.hpp>
-#include <Log/Logger.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+
+#include <CastorUtils/Log/Logger.hpp>
 
 using namespace castor3d;
 using namespace castor;

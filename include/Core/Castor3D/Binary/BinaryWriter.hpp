@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BINARY_WRITER_H___
 #define ___C3D_BINARY_WRITER_H___
 
-#include "ChunkWriter.hpp"
-#include "Miscellaneous/Version.hpp"
+#include "Castor3D/Binary/ChunkWriter.hpp"
+#include "Castor3D/Miscellaneous/Version.hpp"
 
 namespace castor3d
 {

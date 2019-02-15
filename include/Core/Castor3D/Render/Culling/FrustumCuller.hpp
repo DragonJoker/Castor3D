@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FrustumCuller_H___
 #define ___C3D_FrustumCuller_H___
 
-#include "Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 
 namespace castor3d
 {

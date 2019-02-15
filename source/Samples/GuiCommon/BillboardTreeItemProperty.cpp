@@ -1,12 +1,13 @@
-#include "BillboardTreeItemProperty.hpp"
+#include "GuiCommon/BillboardTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Scene/BillboardList.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
 
-#include "AdditionalProperties.hpp"
-#include "PointProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Scene/BillboardList.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

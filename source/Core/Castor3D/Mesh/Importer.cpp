@@ -1,18 +1,18 @@
-#include "Importer.hpp"
+#include "Castor3D/Mesh/Importer.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Scene.hpp"
-#include "Texture/TextureView.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

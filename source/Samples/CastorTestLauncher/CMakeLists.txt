@@ -1,6 +1,10 @@
 project( CastorTestLauncher )
 
-include_directories( ../GuiCommon/Src )
+include_directories(
+	${CASTOR_SOURCE_DIR}/include/Samples
+	${CASTOR_BINARY_DIR}/include/Samples
+	${CASTOR_SOURCE_DIR}/source/Samples/GuiCommon
+)
 
 set( ${PROJECT_NAME}_WXWIDGET 1 )
 set( ${PROJECT_NAME}_DESCRIPTION "Test Scene Launcher for ${MAIN_PROJECT_NAME}" )
@@ -13,6 +17,8 @@ include_directories( ${Castor3DIncludeDirs} )
 add_target(
 	${PROJECT_NAME}
 	bin
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}
 	"${Castor3DBinsDependencies}"
 	"${CastorMinLibraries};${wxWidgetsLibraries}"
 	""

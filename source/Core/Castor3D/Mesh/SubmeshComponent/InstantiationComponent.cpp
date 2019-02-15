@@ -1,9 +1,9 @@
-#include "InstantiationComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
 
-#include "Event/Frame/FrameListener.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPass.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

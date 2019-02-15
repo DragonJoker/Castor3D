@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_CASTOR_GUI_PREREQUISITES_H___
 #define ___C3D_CASTOR_GUI_PREREQUISITES_H___
 
-#include <Graphics/Colour.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
 
 namespace castor3d
 {

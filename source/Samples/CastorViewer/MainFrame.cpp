@@ -1,38 +1,38 @@
-#include "RenderPanel.hpp"
+#include "CastorViewer/RenderPanel.hpp"
 
-#include "MainFrame.hpp"
-#include "CastorViewer.hpp"
-#include "PropertiesContainer.hpp"
-#include "PropertiesHolder.hpp"
-#include "TreeHolder.hpp"
+#include "CastorViewer/MainFrame.hpp"
+#include "CastorViewer/CastorViewer.hpp"
 
 #include <wx/display.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-#include <Material/Material.hpp>
-#include <Render/RenderTarget.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
-#include <ImagesLoader.hpp>
-#include <MaterialsList.hpp>
-#include <RendererSelector.hpp>
-#include <SplashScreen.hpp>
-#include <AuiDockArt.hpp>
-#include <AuiTabArt.hpp>
-#include <AuiToolBarArt.hpp>
-#include <SceneExporter.hpp>
+#include <GuiCommon/ImagesLoader.hpp>
+#include <GuiCommon/MaterialsList.hpp>
+#include <GuiCommon/RendererSelector.hpp>
+#include <GuiCommon/SplashScreen.hpp>
+#include <GuiCommon/AuiDockArt.hpp>
+#include <GuiCommon/AuiTabArt.hpp>
+#include <GuiCommon/AuiToolBarArt.hpp>
+#include <GuiCommon/PropertiesContainer.hpp>
+#include <GuiCommon/PropertiesHolder.hpp>
+#include <GuiCommon/SceneExporter.hpp>
+#include <GuiCommon/TreeHolder.hpp>
 
-#include <xpms/castor.xpm>
-#include <xpms/print_screen.xpm>
+#include <GuiCommon/xpms/castor.xpm>
+#include <GuiCommon/xpms/print_screen.xpm>
 
 #if defined( GUICOMMON_RECORDS )
-#	include <xpms/record.xpm>
-#	include <xpms/stop.xpm>
+#	include <GuiCommon/xpms/record.xpm>
+#	include <GuiCommon/xpms/stop.xpm>
 #endif
 
 using namespace castor3d;

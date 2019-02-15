@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_LOOP_SYNC_H___
 #define ___C3D_RENDER_LOOP_SYNC_H___
 
-#include "RenderLoop.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 
 namespace castor3d
 {

@@ -3,15 +3,13 @@
 #include "BinaryExportTest.hpp"
 #include "SceneExportTest.hpp"
 
-#include <TestRenderSystem.hpp>
-
-#include <Engine.hpp>
-#include <Cache/PluginCache.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
 
 #include <BenchManager.hpp>
 
-#include <Log/Logger.hpp>
-#include <Data/File.hpp>
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Data/File.hpp>
 
 
 using namespace castor;
@@ -107,7 +105,7 @@ namespace
 			CU_Exception( "No renderer plug-ins" );
 		}
 
-		if ( result->loadRenderer( TestRender::RenderSystem::Type ) )
+		if ( result->loadRenderer( "test" ) )
 		{
 			result->initialise( 1, false );
 		}

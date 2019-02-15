@@ -5,7 +5,7 @@
 #include <UnitTest.hpp>
 #include <Benchmark.hpp>
 
-#include <Core/WindowHandle.hpp>
+#include <Ashes/Core/WindowHandle.hpp>
 
 #include "Castor3DTestCommon.hpp"
 

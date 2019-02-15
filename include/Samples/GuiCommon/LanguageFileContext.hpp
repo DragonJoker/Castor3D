@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_LANGUAGE_FILE_CONTEXT_H___
 #define ___GUICOMMON_LANGUAGE_FILE_CONTEXT_H___
 
-#include "StcContext.hpp"
+#include "GuiCommon/StcContext.hpp"
 
-#include <FileParser/FileParser.hpp>
-#include <FileParser/FileParserContext.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/FileParser/FileParserContext.hpp>
 
 namespace GuiCommon
 {

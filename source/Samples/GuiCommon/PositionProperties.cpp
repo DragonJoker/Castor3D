@@ -1,4 +1,4 @@
-#include "PositionProperties.hpp"
+#include "GuiCommon/PositionProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

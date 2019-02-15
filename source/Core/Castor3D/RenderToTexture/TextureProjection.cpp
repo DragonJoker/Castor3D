@@ -1,13 +1,13 @@
-#include "TextureProjection.hpp"
+#include "Castor3D/RenderToTexture/TextureProjection.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Mesh/Vertex.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Camera.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Descriptor/DescriptorSet.hpp>
@@ -16,7 +16,7 @@
 #include <Ashes/Descriptor/DescriptorSetPool.hpp>
 #include <Ashes/Pipeline/ShaderStageState.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Shader/ShaderModule.hpp>
 
 #include <ShaderWriter/Source.hpp>

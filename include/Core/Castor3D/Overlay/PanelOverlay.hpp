@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PANEL_OVERLAY_H___
 #define ___C3D_PANEL_OVERLAY_H___
 
-#include "OverlayCategory.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
 
 namespace castor3d
 {

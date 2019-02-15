@@ -1,13 +1,13 @@
-#include "RenderTechniquePass.hpp"
+#include "Castor3D/Technique/RenderTechniquePass.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderNode/RenderNode_Render.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "D3D11RenderSystemPrerequisites.hpp"
 
-#include <Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 namespace D3D11Render
 {

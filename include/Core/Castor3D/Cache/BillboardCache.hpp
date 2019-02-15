@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardCache_H___
 #define ___C3D_BillboardCache_H___
 
-#include "Cache/ObjectCache.hpp"
-#include "Cache/BillboardUboPools.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Cache/BillboardUboPools.hpp"
 
 namespace castor3d
 {

@@ -1,11 +1,11 @@
-#include "RendererSelector.hpp"
+#include "GuiCommon/RendererSelector.hpp"
 
-#include "ImagesLoader.hpp"
-#include "GradientButton.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
+#include "GuiCommon/GradientButton.hpp"
 
-#include <Engine.hpp>
-#include <Cache/PluginCache.hpp>
-#include <Plugin/RendererPlugin.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Plugin/RendererPlugin.hpp>
 
 using namespace castor3d;
 

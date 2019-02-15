@@ -1,20 +1,20 @@
-#include "PassTreeItemProperty.hpp"
+#include "GuiCommon/PassTreeItemProperty.hpp"
 
-#include "ShaderDialog.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
+#include "GuiCommon/ShaderDialog.hpp"
 
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Material/SpecularGlossinessPbrPass.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Technique/RenderTechnique.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Technique/RenderTechnique.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
-#include "AdditionalProperties.hpp"
-#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

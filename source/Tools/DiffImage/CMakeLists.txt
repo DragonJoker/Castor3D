@@ -5,12 +5,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	1 )
 set( ${PROJECT_NAME}_VERSION_MINOR	0 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories(
+	${CASTOR_SOURCE_DIR}/include/Core
+	${CASTOR_BINARY_DIR}/include/Core
+	${CASTOR_BINARY_DIR}/source/Core
+)
 
 add_target(
 	${PROJECT_NAME}
 	bin_dos
+	${CASTOR_SOURCE_DIR}/include/Tools/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Tools/${PROJECT_NAME}
 	"CastorUtils"
 	"CastorUtils"
 	""

@@ -1,6 +1,6 @@
-#include "RectangleProperties.hpp"
+#include "GuiCommon/RectangleProperties.hpp"
 
-#include "PointProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

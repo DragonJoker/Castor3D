@@ -1,5 +1,5 @@
-#include "MainFrame.hpp"
-#include "ImgConverter.hpp"
+#include "ImgConverter/MainFrame.hpp"
+#include "ImgConverter/ImgConverter.hpp"
 
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>

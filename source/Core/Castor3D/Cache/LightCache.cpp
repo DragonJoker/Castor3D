@@ -1,25 +1,25 @@
-#include "LightCache.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Material/Pass.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Castor3DPrerequisites.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureView.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/CleanupEvent.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
 
 #include <Ashes/Core/Device.hpp>
 #include <Ashes/Image/Texture.hpp>
 
-#include <Design/ArrayView.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 
 using namespace castor;
 

@@ -1,7 +1,7 @@
-#include "SubmeshComponent/BonesComponent.hpp"
-#include "SubmeshComponent/BonesInstantiationComponent.hpp"
-#include "SubmeshComponent/InstantiationComponent.hpp"
-#include "SubmeshComponent/TriFaceMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesInstantiationComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
 
 namespace castor3d
 {

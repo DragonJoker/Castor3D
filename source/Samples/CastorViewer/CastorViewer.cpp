@@ -1,19 +1,19 @@
-#include "CastorViewer.hpp"
-#include "MainFrame.hpp"
+#include "CastorViewer/CastorViewer.hpp"
+#include "CastorViewer/MainFrame.hpp"
 
 #include <wx/cmdline.h>
 
-#include <Data/File.hpp>
-#include <Exception/Exception.hpp>
+#include <CastorUtils/Data/File.hpp>
+#include <CastorUtils/Exception/Exception.hpp>
 
-#include <ImagesLoader.hpp>
-#include <RendererSelector.hpp>
+#include <GuiCommon/ImagesLoader.hpp>
+#include <GuiCommon/RendererSelector.hpp>
 
-#include <xpms/export.xpm>
-#include <xpms/log.xpm>
-#include <xpms/mat_blanc.xpm>
-#include <xpms/properties.xpm>
-#include <xpms/scene_blanc.xpm>
+#include <GuiCommon/xpms/export.xpm>
+#include <GuiCommon/xpms/log.xpm>
+#include <GuiCommon/xpms/mat_blanc.xpm>
+#include <GuiCommon/xpms/properties.xpm>
+#include <GuiCommon/xpms/scene_blanc.xpm>
 
 using namespace castor;
 using namespace castor3d;

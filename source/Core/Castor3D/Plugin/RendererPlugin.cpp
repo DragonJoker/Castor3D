@@ -1,8 +1,8 @@
-#include "RendererPlugin.hpp"
+#include "Castor3D/Plugin/RendererPlugin.hpp"
 
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

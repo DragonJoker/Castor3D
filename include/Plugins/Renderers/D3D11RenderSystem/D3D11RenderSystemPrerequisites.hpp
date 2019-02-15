@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___D3D11_RENDER_SYSTEM_PREREQUISITES_H___
 #define ___D3D11_RENDER_SYSTEM_PREREQUISITES_H___
 
-#include <CastorUtilsPrerequisites.hpp>
-#include <Castor3DPrerequisites.hpp>
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 #include <D3D11Renderer/D3D11RendererPrerequisites.hpp>
 
 #ifdef CU_PlatformWindows

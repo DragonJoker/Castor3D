@@ -1,19 +1,19 @@
-#include "OverlayTreeItemProperty.hpp"
+#include "GuiCommon/OverlayTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
+#include "GuiCommon/PositionProperties.hpp"
+#include "GuiCommon/SizeProperties.hpp"
+#include "GuiCommon/RectangleProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
 
-#include <Graphics/Font.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Overlay/PanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
 
-#include "PositionProperties.hpp"
-#include "SizeProperties.hpp"
-#include "RectangleProperties.hpp"
-#include "PointProperties.hpp"
+#include <CastorUtils/Graphics/Font.hpp>
 
 #include <wx/propgrid/advprops.h>
 

@@ -1,8 +1,8 @@
-#include "HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
-#include "Engine.hpp"
-#include "HDR/HdrConfig.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/HDR/HdrConfig.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

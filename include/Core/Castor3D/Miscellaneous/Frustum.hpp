@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_FRUSTUM_H___
 #define ___C3D_FRUSTUM_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Math/PlaneEquation.hpp>
+#include <CastorUtils/Math/PlaneEquation.hpp>
 
 #define C3D_DebugFrustum 0
 

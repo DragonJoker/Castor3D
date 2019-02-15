@@ -1,10 +1,10 @@
-#include "TriFaceMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Mesh/SubmeshUtils.hpp"
-#include "Mesh/Vertex.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/SubmeshUtils.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
 
-#include <Design/ArrayView.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 
 using namespace castor;
 

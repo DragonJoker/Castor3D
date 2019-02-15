@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_SKELETON_H___
 #define ___C3D_SKELETON_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "Animation/Animable.hpp"
-#include "Bone.hpp"
+#include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Mesh/Skeleton/Bone.hpp"
 
 namespace castor3d
 {

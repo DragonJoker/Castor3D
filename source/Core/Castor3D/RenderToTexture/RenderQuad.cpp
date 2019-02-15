@@ -1,8 +1,8 @@
-#include "RenderQuad.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Command/CommandBuffer.hpp>

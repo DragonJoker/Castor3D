@@ -1,10 +1,10 @@
-#include "RenderTargetTreeItemProperty.hpp"
+#include "GuiCommon/RenderTargetTreeItemProperty.hpp"
 
-#include "ShaderDialog.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/ShaderDialog.hpp"
 
-#include <Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 
-#include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

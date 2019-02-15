@@ -1,16 +1,16 @@
-#include "SubmeshTreeItemProperty.hpp"
+#include "GuiCommon/SubmeshTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Material/Material.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/CubeBoxProperties.hpp"
+#include "GuiCommon/PointProperties.hpp"
+#include "GuiCommon/SphereBoxProperties.hpp"
 
-#include "AdditionalProperties.hpp"
-#include "CubeBoxProperties.hpp"
-#include "PointProperties.hpp"
-#include "SphereBoxProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
 

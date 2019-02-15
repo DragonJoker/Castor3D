@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_AnimatedObjectGroupCache_H___
 #define ___C3D_AnimatedObjectGroupCache_H___
 
-#include "Buffer/UniformBufferPool.hpp"
-#include "Cache/Cache.hpp"
-#include "Shader/Ubos/MorphingUbo.hpp"
-#include "Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 namespace castor3d
 {

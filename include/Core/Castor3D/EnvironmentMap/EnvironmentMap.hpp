@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_EnvironmentMap_H___
 #define ___C3D_EnvironmentMap_H___
 
-#include "PBR/IblTextures.hpp"
-#include "Scene/SceneNode.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/PBR/IblTextures.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

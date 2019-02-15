@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_CACHE_H___
 #define ___C3D_OVERLAY_CACHE_H___
 
-#include "Overlay/Overlay.hpp"
-#include "Cache/Cache.hpp"
-#include "Overlay/OverlayFactory.hpp"
-#include "Render/Viewport.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Overlay/OverlayFactory.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

@@ -25,7 +25,7 @@ function( GeneratorBuild )
 	endif ()
 endfunction( GeneratorBuild )
 
-function( GeneratorSummary msg msgtest )
+function( GeneratorSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
 		set( msg_tmp "\n\nGenerator :" )
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )

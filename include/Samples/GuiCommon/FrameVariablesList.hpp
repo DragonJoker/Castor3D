@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_FRAME_VARIABLES_LIST_VIEW_H___
 #define ___GUICOMMON_FRAME_VARIABLES_LIST_VIEW_H___
 
-#include "ShaderSource.hpp"
+#include "GuiCommon/ShaderSource.hpp"
 
 #include <wx/treectrl.h>
 

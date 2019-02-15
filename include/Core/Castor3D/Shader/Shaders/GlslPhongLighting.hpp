@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GLSL_PhongLighting_H___
 #define ___GLSL_PhongLighting_H___
 
-#include "GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 namespace castor3d
 {

@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMapPoint_H___
 #define ___C3D_ShadowMapPoint_H___
 
-#include "Render/Viewport.hpp"
-#include "ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
 
 namespace castor3d
 {

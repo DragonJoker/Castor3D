@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATION_H___
 #define ___C3D_ANIMATION_H___
 
-#include "AnimationKeyFrame.hpp"
+#include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

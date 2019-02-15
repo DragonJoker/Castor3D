@@ -1,10 +1,10 @@
-#include "SceneFileParser.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Scene/SceneFileParser_Parsers.hpp"
+#include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
-#include <Data/ZipArchive.hpp>
+#include <CastorUtils/Data/ZipArchive.hpp>
 
 using namespace castor3d;
 using namespace castor;

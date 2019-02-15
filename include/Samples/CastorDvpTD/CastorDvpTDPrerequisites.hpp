@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Castor3DPrerequisites.hpp>
-#include <GuiCommonPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
+#include <GuiCommon/GuiCommonPrerequisites.hpp>
 
 #include <wx/wx.h>
 #include <wx/windowptr.h>

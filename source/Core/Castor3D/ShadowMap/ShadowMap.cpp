@@ -1,22 +1,22 @@
-#include "ShadowMap.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Shader/Ubos/ModelUbo.hpp"
-#include "Shader/Ubos/MorphingUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/Ubos/SkinningUbo.hpp"
-#include "ShadowMap/ShadowMapPass.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPass.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>
@@ -24,7 +24,7 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 

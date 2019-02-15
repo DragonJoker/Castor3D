@@ -3,7 +3,7 @@
 #include "Ability.hpp"
 #include "Grid.hpp"
 
-#include <Scene/SceneNode.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 namespace castortd
 {

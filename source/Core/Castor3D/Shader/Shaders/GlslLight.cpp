@@ -1,4 +1,4 @@
-#include "GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
 using namespace castor;
 using namespace sdw;

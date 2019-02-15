@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_SHADER_EDITOR_PAGE_H___
 #define ___GUICOMMON_SHADER_EDITOR_PAGE_H___
 
-#include "ShaderSource.hpp"
+#include "GuiCommon/ShaderSource.hpp"
 
 #include <wx/frame.h>
 #include <wx/aui/auibook.h>

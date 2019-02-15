@@ -1,12 +1,12 @@
-#include "GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 
-#include "GlslLight.hpp"
-#include "GlslPhongLighting.hpp"
-#include "GlslMetallicBrdfLighting.hpp"
-#include "GlslSpecularBrdfLighting.hpp"
-#include "GlslShadow.hpp"
-#include "GlslMaterial.hpp"
-#include "GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;

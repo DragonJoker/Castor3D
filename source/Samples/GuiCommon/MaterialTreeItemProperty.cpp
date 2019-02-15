@@ -1,8 +1,9 @@
-#include "MaterialTreeItemProperty.hpp"
+#include "GuiCommon/MaterialTreeItemProperty.hpp"
 
-#include <Material/Material.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Material/Material.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

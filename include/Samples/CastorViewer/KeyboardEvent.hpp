@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "RenderPanel.hpp"
 
-#include <Event/Frame/FrameEvent.hpp>
+#include <Castor3D/Event/Frame/FrameEvent.hpp>
 
 namespace CastorViewer
 {

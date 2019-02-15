@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SPOT_LIGHT_H___
 #define ___C3D_SPOT_LIGHT_H___
 
-#include "LightCategory.hpp"
+#include "Castor3D/Scene/Light/LightCategory.hpp"
 
-#include <Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 namespace castor3d
 {

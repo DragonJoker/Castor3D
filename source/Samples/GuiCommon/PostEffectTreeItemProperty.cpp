@@ -1,12 +1,13 @@
-#include "PostEffectTreeItemProperty.hpp"
+#include "GuiCommon/PostEffectTreeItemProperty.hpp"
 
-#include "ShaderDialog.hpp"
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/ShaderDialog.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <PostEffect/PostEffect.hpp>
-#include <Render/RenderSystem.hpp>
+#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
 #include <ShaderWriter/Shader.hpp>
+
 #include <CompilerGlsl/compileGlsl.hpp>
 
 #include <wx/propgrid/advprops.h>

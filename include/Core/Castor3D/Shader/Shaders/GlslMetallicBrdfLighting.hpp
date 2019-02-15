@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMetallicBrdfLighting_H___
 #define ___C3D_GlslMetallicBrdfLighting_H___
 
-#include "GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 namespace castor3d
 {

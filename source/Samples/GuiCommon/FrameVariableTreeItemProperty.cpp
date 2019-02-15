@@ -1,10 +1,11 @@
-#include "FrameVariableTreeItemProperty.hpp"
+#include "GuiCommon/FrameVariableTreeItemProperty.hpp"
 
-#include <Render/RenderSystem.hpp>
-#include <Design/ChangeTracked.hpp>
+#include "GuiCommon/PointProperties.hpp"
+#include "GuiCommon/MatrixProperties.hpp"
 
-#include "PointProperties.hpp"
-#include "MatrixProperties.hpp"
+#include <Castor3D/Render/RenderSystem.hpp>
+
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 #include <wx/propgrid/advprops.h>
 

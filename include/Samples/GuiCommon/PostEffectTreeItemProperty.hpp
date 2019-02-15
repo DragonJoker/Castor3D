@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_PostEffectTreeItemProperty_HPP___
 #define ___GC_PostEffectTreeItemProperty_HPP___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

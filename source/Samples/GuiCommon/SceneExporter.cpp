@@ -1,26 +1,26 @@
-#include "SceneExporter.hpp"
+#include "GuiCommon/SceneExporter.hpp"
 
-#include <Engine.hpp>
-#include <Binary/BinaryMesh.hpp>
-#include <Binary/BinarySkeleton.hpp>
-#include <Cache/CacheView.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Material/SpecularGlossinessPbrPass.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Scene.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Binary/BinaryMesh.hpp>
+#include <Castor3D/Binary/BinarySkeleton.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+
+#include <CastorUtils/Data/BinaryFile.hpp>
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
-
-#include <Data/BinaryFile.hpp>
 
 #include <iomanip>
 

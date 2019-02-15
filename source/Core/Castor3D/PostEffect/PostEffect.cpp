@@ -1,9 +1,9 @@
-#include "PostEffect.hpp"
+#include "Castor3D/PostEffect/PostEffect.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Render/RenderTarget.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>

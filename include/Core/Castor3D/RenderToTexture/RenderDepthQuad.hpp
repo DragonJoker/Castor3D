@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderDepthQuad_H___
 #define ___C3D_RenderDepthQuad_H___
 
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Shader/Program.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 namespace castor3d
 {

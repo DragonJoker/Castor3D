@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
 #define ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
 
 namespace GuiCommon
 {

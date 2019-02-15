@@ -1,14 +1,14 @@
-﻿#include "MainFrame.hpp"
+#include "CastorDvpTD/MainFrame.hpp"
 
-#include "RenderPanel.hpp"
-#include "CastorDvpTD.hpp"
-#include "Game.hpp"
+#include "CastorDvpTD/RenderPanel.hpp"
+#include "CastorDvpTD/CastorDvpTD.hpp"
+#include "CastorDvpTD/Game.hpp"
+
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
 
 #include <wx/sizer.h>
-
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Render/RenderWindow.hpp>
 
 using namespace castor;
 using namespace castor3d;

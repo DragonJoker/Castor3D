@@ -1,8 +1,8 @@
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Cache/MaterialCache.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 
 using namespace castor;
 using namespace castor3d;

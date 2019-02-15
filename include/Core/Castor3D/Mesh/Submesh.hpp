@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_Submesh_H___
 #define ___C3D_Submesh_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include "Mesh/Mesh.hpp"
-#include "Mesh/VertexGroup.hpp"
-#include "Mesh/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/VertexGroup.hpp"
+#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 
@@ -387,6 +387,6 @@ namespace castor3d
 	};
 }
 
-#include "Submesh.inl"
+#include "Castor3D/Mesh/Submesh.inl"
 
 #endif

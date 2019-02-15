@@ -1,4 +1,4 @@
-#include "Scene/Background/Visitor.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
 
 namespace castor3d
 {

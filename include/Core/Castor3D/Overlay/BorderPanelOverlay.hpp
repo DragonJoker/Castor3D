@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_BORDER_PANEL_OVERLAY_H___
 #define ___C3D_BORDER_PANEL_OVERLAY_H___
 
-#include "OverlayCategory.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
 
-#include <Graphics/Rectangle.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
 
 namespace castor3d
 {

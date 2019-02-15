@@ -1,8 +1,8 @@
-#include "BonesInstantiationComponent.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesInstantiationComponent.hpp"
 
-#include "Mesh/Submesh.hpp"
-#include "Scene/Scene.hpp"
-#include "Shader/ShaderBuffer.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
 using namespace castor;
 

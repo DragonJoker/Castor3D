@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_BUTTON_H___
 #define ___GC_BUTTON_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/button.h>
 

@@ -1,17 +1,17 @@
-#include "SpotLightPass.hpp"
+#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Light/SpotLight.hpp"
-#include "Shader/Program.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
-#include "Shader/Shaders/GlslLight.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

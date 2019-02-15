@@ -1,4 +1,4 @@
-#include "AnimationKeyFrame.hpp"
+#include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
 using namespace castor;
 

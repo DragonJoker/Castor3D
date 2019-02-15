@@ -1,8 +1,8 @@
-﻿#include "BinaryChunk.hpp"
+#include "Castor3D/Binary/BinaryChunk.hpp"
 
 #include <numeric>
 
-#include <Data/BinaryFile.hpp>
+#include <CastorUtils/Data/BinaryFile.hpp>
 
 using namespace castor;
 

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_ShaderDialog_HPP___
 #define ___GC_ShaderDialog_HPP___
 
-#include "ShaderSource.hpp"
+#include "GuiCommon/ShaderSource.hpp"
 
 #include <wx/frame.h>
 #include <wx/aui/auibook.h>

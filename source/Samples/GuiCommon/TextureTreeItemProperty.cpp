@@ -1,13 +1,13 @@
-#include "TextureTreeItemProperty.hpp"
+#include "GuiCommon/TextureTreeItemProperty.hpp"
 
-#include <Engine.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Render/RenderSystem.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

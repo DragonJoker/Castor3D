@@ -1,6 +1,6 @@
-#include "CpuParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
-#include "ParticleSystem.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 using namespace castor;
 

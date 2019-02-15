@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___Test_RenderSystem_H___
 #define ___Test_RenderSystem_H___
 
-#include "TestRenderSystemPrerequisites.hpp"
+#include "TestRenderSystem/TestRenderSystemPrerequisites.hpp"
 
-#include <Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 namespace TestRender
 {

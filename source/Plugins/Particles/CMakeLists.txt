@@ -33,7 +33,7 @@ function( ParticlesBuild )
 	endif ()
 endfunction( ParticlesBuild )
 
-function( ParticlesSummary msg msgtest )
+function( ParticlesSummary msg )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
 		set( msg_tmp "\n\nParticles :" )
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )

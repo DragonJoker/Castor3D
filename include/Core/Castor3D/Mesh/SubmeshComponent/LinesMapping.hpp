@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_LinesMapping_H___
 #define ___C3D_LinesMapping_H___
 
-#include "IndexMapping.hpp"
-#include "Line.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/Line.hpp"
 
 namespace castor3d
 {

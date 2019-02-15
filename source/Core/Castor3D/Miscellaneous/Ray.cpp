@@ -1,12 +1,12 @@
-#include "Ray.hpp"
+#include "Castor3D/Miscellaneous/Ray.hpp"
 
-#include "Mesh/SubmeshComponent/Face.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/Face.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
 
 using namespace castor;
 

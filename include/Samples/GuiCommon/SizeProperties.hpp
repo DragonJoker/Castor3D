@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_SIZE_PROPERTIES_H___
 #define ___GUICOMMON_SIZE_PROPERTIES_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Graphics/Size.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Size );
 

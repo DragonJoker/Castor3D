@@ -4,19 +4,19 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_PASS_H___
 #define ___C3D_RENDER_PASS_H___
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
-#include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Render/RenderInfo.hpp"
-#include "Render/RenderQueue.hpp"
-#include "Shader/Ubos/BillboardUbo.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Shader/Ubos/ModelUbo.hpp"
-#include "Shader/Ubos/MorphingUbo.hpp"
-#include "Shader/Ubos/SceneUbo.hpp"
-#include "Shader/Ubos/SkinningUbo.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>

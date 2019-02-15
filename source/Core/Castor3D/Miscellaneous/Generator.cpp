@@ -1,7 +1,7 @@
-#include "Generator.hpp"
-#include "Engine.hpp"
+#include "Castor3D/Miscellaneous/Generator.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor3d;
 using namespace castor;

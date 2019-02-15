@@ -1,4 +1,4 @@
-#include "Line.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/Line.hpp"
 
 using namespace castor;
 

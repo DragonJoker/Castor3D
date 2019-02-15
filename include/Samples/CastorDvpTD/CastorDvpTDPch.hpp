@@ -1,20 +1,20 @@
-#include <Engine.hpp>
-#include <Event/Frame/FrameListener.hpp>
-#include <Event/UserInput/UserInputListener.hpp>
-#include <Material/Material.hpp>
-#include <Material/Pass.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Miscellaneous/Ray.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Miscellaneous/Ray.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <CastorApplication.hpp>
+#include <GuiCommon/CastorApplication.hpp>
 
 #include <wx/frame.h>
 #include <wx/panel.h>

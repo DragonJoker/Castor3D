@@ -1,7 +1,7 @@
-#include "AnimatedObjectTreeItemProperty.hpp"
+#include "GuiCommon/AnimatedObjectTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 
 #include <wx/propgrid/advprops.h>
 

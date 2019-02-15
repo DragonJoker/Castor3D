@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___CTL_MainFrame_HPP___
 #define ___CTL_MainFrame_HPP___
 
-#include <Castor3DPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 
 #include <wx/frame.h>
 #include <wx/listctrl.h>
 #include <wx/windowptr.h>
 
-#include <Log/Logger.hpp>
-#include <Data/Path.hpp>
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Data/Path.hpp>
 
 namespace test_launcher
 {

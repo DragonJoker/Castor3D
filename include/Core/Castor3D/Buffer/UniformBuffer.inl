@@ -1,6 +1,6 @@
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
-#include "Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include <Ashes/Buffer/StagingBuffer.hpp>
 #include <Ashes/Command/CommandBuffer.hpp>

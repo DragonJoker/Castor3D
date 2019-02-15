@@ -1,8 +1,8 @@
-#include "Scene/Background/FramePreparator.hpp"
+#include "Castor3D/Scene/Background/FramePreparator.hpp"
 
-#include "Scene/Background/Colour.hpp"
-#include "Scene/Background/Image.hpp"
-#include "Scene/Background/Skybox.hpp"
+#include "Castor3D/Scene/Background/Colour.hpp"
+#include "Castor3D/Scene/Background/Image.hpp"
+#include "Castor3D/Scene/Background/Skybox.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 

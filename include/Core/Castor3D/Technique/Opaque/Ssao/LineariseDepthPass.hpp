@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_LineariseDepthPass_H___
 #define ___C3D_LineariseDepthPass_H___
 
-#include "Render/Viewport.hpp"
-#include "Technique/RenderTechniqueVisitor.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 
-#include <Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 #include <Ashes/Buffer/PushConstantsBuffer.hpp>
 #include <Ashes/Miscellaneous/PushConstantRange.hpp>

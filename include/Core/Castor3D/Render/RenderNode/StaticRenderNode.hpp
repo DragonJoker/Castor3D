@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_StaticRenderNode_H___
 #define ___C3D_StaticRenderNode_H___
 
-#include "ObjectRenderNode.hpp"
+#include "Castor3D/Render/RenderNode/ObjectRenderNode.hpp"
 
 namespace castor3d
 {

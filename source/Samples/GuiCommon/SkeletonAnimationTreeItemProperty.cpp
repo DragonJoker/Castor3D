@@ -1,10 +1,11 @@
-#include "SkeletonAnimationTreeItemProperty.hpp"
+#include "GuiCommon/SkeletonAnimationTreeItemProperty.hpp"
 
-#include <Animation/Animable.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Animation/Animable.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

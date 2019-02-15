@@ -1,8 +1,8 @@
-#include "D3D11RenderSystem.hpp"
+#include "D3D11RenderSystem/D3D11RenderSystem.hpp"
 
-#include <Engine.hpp>
-#include <Plugin/RendererPlugin.hpp>
-#include <Render/RenderSystemFactory.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/RendererPlugin.hpp>
+#include <Castor3D/Render/RenderSystemFactory.hpp>
 
 extern "C"
 {

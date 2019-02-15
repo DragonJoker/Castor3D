@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureProjection_H___
 #define ___C3D_TextureProjection_H___
 
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Ashes/Buffer/PushConstantsBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -20,7 +20,7 @@ See LICENSE file in root folder
 #include <Ashes/RenderPass/RenderPass.hpp>
 #include <Ashes/Sync/Semaphore.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

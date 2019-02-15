@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_LIGHT_H___
 #define ___C3D_LIGHT_H___
 
-#include "Scene/MovableObject.hpp"
+#include "Castor3D/Scene/MovableObject.hpp"
 
-#include "LightCategory.hpp"
+#include "Castor3D/Scene/Light/LightCategory.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

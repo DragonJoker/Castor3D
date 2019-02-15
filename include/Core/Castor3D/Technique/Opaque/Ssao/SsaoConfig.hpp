@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfig_H___
 #define ___C3D_SsaoConfig_H___
 
-#include "Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 
-#include <Math/RangedValue.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
 {

@@ -1,4 +1,4 @@
-#include "MouseNodeEvent.hpp"
+#include "CastorViewer/MouseNodeEvent.hpp"
 
 using namespace castor3d;
 using namespace castor;

@@ -1,15 +1,15 @@
-#include "Camera.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
-#include <Graphics/BoundingBox.hpp>
-#include <Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
+#include <CastorUtils/Graphics/BoundingSphere.hpp>
 
 #if C3D_DebugFrustum
 extern bool C3D_DebugFrustumDisplay;

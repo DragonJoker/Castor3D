@@ -1,4 +1,4 @@
-#include "GradientButton.hpp"
+#include "GuiCommon/GradientButton.hpp"
 
 #include <wx/dcbuffer.h>
 

@@ -4,16 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_MESH_H___
 #define ___C3D_MESH_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "MeshGenerator.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Mesh/MeshFactory.hpp"
+#include "Castor3D/Mesh/MeshGenerator.hpp"
 
-#include "Animation/Animable.hpp"
-#include "Mesh/MeshFactory.hpp"
-
-#include <Graphics/BoundingBox.hpp>
-#include <Graphics/BoundingSphere.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Design/Resource.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
+#include <CastorUtils/Graphics/BoundingSphere.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {

@@ -1,4 +1,4 @@
-#include "CastorDvpTDPrerequisites.hpp"
+#include "CastorDvpTD/CastorDvpTDPrerequisites.hpp"
 
 #if defined( CU_PlatformWindows  ) && !defined( NDEBUG ) && !defined( VLD_AVAILABLE )
 #	define _CRTDBG_MAP_ALLOC
@@ -9,7 +9,7 @@
 #	include <gtk/gtk.h>
 #endif
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 namespace castortd
 {

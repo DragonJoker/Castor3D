@@ -1,20 +1,20 @@
-#include "CubeBoxManager.hpp"
+#include "GuiCommon/CubeBoxManager.hpp"
 
-#include <Event/Frame/FrameListener.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Material/Material.hpp>
-#include <Material/MetallicRoughnessPbrPass.hpp>
-#include <Material/SpecularGlossinessPbrPass.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/Skeleton/Bone.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Mesh/Vertex.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 #include <cstddef>
 

@@ -1,9 +1,10 @@
-#include "GeometryTreeItemProperty.hpp"
+#include "GuiCommon/GeometryTreeItemProperty.hpp"
 
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

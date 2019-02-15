@@ -1,14 +1,14 @@
-#include "SceneCuller.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 namespace castor3d
 {

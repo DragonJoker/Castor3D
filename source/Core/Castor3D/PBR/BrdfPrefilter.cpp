@@ -1,6 +1,7 @@
-#include "BrdfPrefilter.hpp"
+#include "Castor3D/PBR/BrdfPrefilter.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <Ashes/Buffer/VertexBuffer.hpp>
 #include <Ashes/Command/CommandBuffer.hpp>
@@ -15,7 +16,6 @@
 #include <Ashes/RenderPass/RenderSubpass.hpp>
 #include <Ashes/RenderPass/RenderSubpassState.hpp>
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Ashes/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>

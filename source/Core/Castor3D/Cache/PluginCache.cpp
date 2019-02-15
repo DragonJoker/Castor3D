@@ -1,19 +1,19 @@
-#include "PluginCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Plugin/DividerPlugin.hpp"
-#include "Plugin/GeneratorPlugin.hpp"
-#include "Plugin/GenericPlugin.hpp"
-#include "Plugin/ImporterPlugin.hpp"
-#include "Plugin/ParticlePlugin.hpp"
-#include "Plugin/PostFxPlugin.hpp"
-#include "Plugin/RendererPlugin.hpp"
-#include "Plugin/TechniquePlugin.hpp"
-#include "Plugin/ToneMappingPlugin.hpp"
-#include "Miscellaneous/VersionException.hpp"
+#include "Castor3D/Plugin/DividerPlugin.hpp"
+#include "Castor3D/Plugin/GeneratorPlugin.hpp"
+#include "Castor3D/Plugin/GenericPlugin.hpp"
+#include "Castor3D/Plugin/ImporterPlugin.hpp"
+#include "Castor3D/Plugin/ParticlePlugin.hpp"
+#include "Castor3D/Plugin/PostFxPlugin.hpp"
+#include "Castor3D/Plugin/RendererPlugin.hpp"
+#include "Castor3D/Plugin/TechniquePlugin.hpp"
+#include "Castor3D/Plugin/ToneMappingPlugin.hpp"
+#include "Castor3D/Miscellaneous/VersionException.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

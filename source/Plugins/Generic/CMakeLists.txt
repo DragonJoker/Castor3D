@@ -25,7 +25,7 @@ function( GenericBuild )
 	endif ()
 endfunction( GenericBuild )
 
-function( GenericSummary msg msgtest )
+function( GenericSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
 		set( msg_tmp "\n\nGeneric :" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )

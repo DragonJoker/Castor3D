@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_IblTextures_H___
 #define ___C3D_IblTextures_H___
 
-#include "PBR/BrdfPrefilter.hpp"
-#include "PBR/RadianceComputer.hpp"
-#include "PBR/EnvironmentPrefilter.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/PBR/BrdfPrefilter.hpp"
+#include "Castor3D/PBR/RadianceComputer.hpp"
+#include "Castor3D/PBR/EnvironmentPrefilter.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 namespace castor3d
 {

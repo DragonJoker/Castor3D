@@ -1,21 +1,21 @@
-#include "ShadowMapPassDirectional.hpp"
+#include "Castor3D/ShadowMap/ShadowMapPassDirectional.hpp"
 
-#include "Cache/MaterialCache.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "ShadowMap/ShadowMapDirectional.hpp"
-#include "Technique/RenderTechniquePass.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
-#include "Texture/TextureView.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Descriptor/DescriptorSet.hpp>
 #include <Ashes/Descriptor/DescriptorSetLayout.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

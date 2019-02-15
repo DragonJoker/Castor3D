@@ -1,6 +1,6 @@
-#include "SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/SpecularGlossinessPbrPass.hpp"
 
-#include "Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 using namespace castor;
 

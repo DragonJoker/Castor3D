@@ -1,12 +1,12 @@
-#include "Light.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Scene/Light/LightFactory.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Scene/Light/SpotLight.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Scene/Light/LightFactory.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

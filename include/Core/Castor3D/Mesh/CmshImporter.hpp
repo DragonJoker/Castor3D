@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D__CMSH_IMPORTER_H___
 #define ___C3D__CMSH_IMPORTER_H___
 
-#include "Importer.hpp"
+#include "Castor3D/Mesh/Importer.hpp"
 
 namespace castor3d
 {

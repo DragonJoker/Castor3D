@@ -1,14 +1,14 @@
-#include "TextureUnit.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "TextureLayout.hpp"
-#include "Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
-#include "Render/RenderTarget.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

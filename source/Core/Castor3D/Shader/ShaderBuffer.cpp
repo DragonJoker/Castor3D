@@ -1,7 +1,7 @@
-#include "ShaderBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Buffer/Buffer.hpp>
 #include <Ashes/Buffer/UniformBuffer.hpp>

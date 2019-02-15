@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_PCH_H___
 #define ___GUICOMMON_PCH_H___
 
-#include <config.hpp>
-#include <Castor3DPrerequisites.hpp>
+#include <CastorUtils/config.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 
 #if CU_UsePCH
 #	ifdef CU_PlatformWindows
@@ -61,54 +61,54 @@ See LICENSE file in root folder
 #	include <wx/treectrl.h>
 #	include <wx/aui/framemanager.h>
 
-#	include <CastorUtils.hpp>
-#	include <Miscellaneous/StringUtils.hpp>
-#	include <Design/Templates.hpp>
-#	include <FileParser/FileParser.hpp>
-#	include <Log/Logger.hpp>
-#	include <Miscellaneous/PreciseTimer.hpp>
-#	include <Data/File.hpp>
-#	include <Math/Point.hpp>
-#	include <Math/Quaternion.hpp>
-#	include <Design/Named.hpp>
-#	include <Data/Path.hpp>
-#	include <Math/Math.hpp>
-#	include <Graphics/Colour.hpp>
-#	include <Math/Angle.hpp>
+#	include <CastorUtils/CastorUtils.hpp>
+#	include <CastorUtils/Miscellaneous/StringUtils.hpp>
+#	include <CastorUtils/Design/Templates.hpp>
+#	include <CastorUtils/FileParser/FileParser.hpp>
+#	include <CastorUtils/Log/Logger.hpp>
+#	include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
+#	include <CastorUtils/Data/File.hpp>
+#	include <CastorUtils/Math/Point.hpp>
+#	include <CastorUtils/Math/Quaternion.hpp>
+#	include <CastorUtils/Design/Named.hpp>
+#	include <CastorUtils/Data/Path.hpp>
+#	include <CastorUtils/Math/Math.hpp>
+#	include <CastorUtils/Graphics/Colour.hpp>
+#	include <CastorUtils/Math/Angle.hpp>
 
-#	include <Engine.hpp>
-#	include <Cache/ShaderCache.hpp>
-#	include <Animation/Animation.hpp>
-#	include <Animation/AnimationKeyFrame.hpp>
-#	include <Event/Frame/FrameListener.hpp>
-#	include <Material/Material.hpp>
-#	include <Material/Pass.hpp>
-#	include <Mesh/Mesh.hpp>
-#	include <Mesh/Submesh.hpp>
-#	include <Miscellaneous/Ray.hpp>
-#	include <Overlay/Overlay.hpp>
-#	include <Plugin/Plugin.hpp>
-#	include <Render/RenderWindow.hpp>
-#	include <Render/RenderSystem.hpp>
-#	include <Scene/Camera.hpp>
-#	include <Scene/Geometry.hpp>
-#	include <Scene/Scene.hpp>
-#	include <Scene/SceneFileParser.hpp>
-#	include <Scene/SceneNode.hpp>
-#	include <Scene/Animation/AnimatedObjectGroup.hpp>
-#	include <Scene/Light/Light.hpp>
-#	include <Scene/Light/PointLight.hpp>
-#	include <Scene/Light/DirectionalLight.hpp>
-#	include <Scene/Light/SpotLight.hpp>
-#	include <Texture/TextureUnit.hpp>
-#	include <Texture/TextureLayout.hpp>
+#	include <Castor3D/Engine.hpp>
+#	include <Castor3D/Cache/ShaderCache.hpp>
+#	include <Castor3D/Animation/Animation.hpp>
+#	include <Castor3D/Animation/AnimationKeyFrame.hpp>
+#	include <Castor3D/Event/Frame/FrameListener.hpp>
+#	include <Castor3D/Material/Material.hpp>
+#	include <Castor3D/Material/Pass.hpp>
+#	include <Castor3D/Mesh/Mesh.hpp>
+#	include <Castor3D/Mesh/Submesh.hpp>
+#	include <Castor3D/Miscellaneous/Ray.hpp>
+#	include <Castor3D/Overlay/Overlay.hpp>
+#	include <Castor3D/Plugin/Plugin.hpp>
+#	include <Castor3D/Render/RenderWindow.hpp>
+#	include <Castor3D/Render/RenderSystem.hpp>
+#	include <Castor3D/Scene/Camera.hpp>
+#	include <Castor3D/Scene/Geometry.hpp>
+#	include <Castor3D/Scene/Scene.hpp>
+#	include <Castor3D/Scene/SceneFileParser.hpp>
+#	include <Castor3D/Scene/SceneNode.hpp>
+#	include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#	include <Castor3D/Scene/Light/Light.hpp>
+#	include <Castor3D/Scene/Light/PointLight.hpp>
+#	include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#	include <Castor3D/Scene/Light/SpotLight.hpp>
+#	include <Castor3D/Texture/TextureUnit.hpp>
+#	include <Castor3D/Texture/TextureLayout.hpp>
 
 #	include <iostream>
 #	include <string>
 #	include <vector>
 #	include <cmath>
 #else
-#	include <Castor3DPrerequisites.hpp>
+#	include <Castor3D/Castor3DPrerequisites.hpp>
 #endif
 
 #endif

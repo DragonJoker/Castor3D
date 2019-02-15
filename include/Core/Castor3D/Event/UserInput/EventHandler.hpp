@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_EVENT_HANDLER_H___
 #define ___C3D_EVENT_HANDLER_H___
 
-#include <Design/Signal.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
-#include "KeyboardEvent.hpp"
-#include "MouseEvent.hpp"
-#include "HandlerEvent.hpp"
+#include "Castor3D/Event/UserInput/KeyboardEvent.hpp"
+#include "Castor3D/Event/UserInput/MouseEvent.hpp"
+#include "Castor3D/Event/UserInput/HandlerEvent.hpp"
 
 #include <deque>
 #include <mutex>

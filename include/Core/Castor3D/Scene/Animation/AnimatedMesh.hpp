@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_MESH_H___
 #define ___C3D_ANIMATED_MESH_H___
 
-#include "AnimatedObject.hpp"
+#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 
 namespace castor3d
 {

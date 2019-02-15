@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_KEYBOARD_EVENT_H___
 #define ___C3D_KEYBOARD_EVENT_H___
 
-#include "UserInputEvent.hpp"
+#include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
 namespace castor3d
 {

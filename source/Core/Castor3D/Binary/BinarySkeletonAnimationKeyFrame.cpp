@@ -1,9 +1,9 @@
-#include "BinarySkeletonAnimationKeyFrame.hpp"
+#include "Castor3D/Binary/BinarySkeletonAnimationKeyFrame.hpp"
 
-#include "Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Animation/Skeleton/SkeletonAnimationBone.hpp"
-#include "Animation/Skeleton/SkeletonAnimationNode.hpp"
-#include "Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
+#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
+#include "Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp"
+#include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
+#include "Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
 
 using namespace castor;
 

@@ -1,7 +1,7 @@
-#include "Engine.hpp"
-#include "Overlay/PanelOverlay.hpp"
-#include "Overlay/TextOverlay.hpp"
-#include "Render/RenderPassTimer.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include <iomanip>
 

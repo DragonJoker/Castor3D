@@ -1,6 +1,6 @@
-#include "Animable.hpp"
+#include "Castor3D/Animation/Animable.hpp"
 
-#include "Animation.hpp"
+#include "Castor3D/Animation/Animation.hpp"
 
 using namespace castor;
 

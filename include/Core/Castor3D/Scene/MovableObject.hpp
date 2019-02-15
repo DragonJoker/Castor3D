@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_MOVABLE_OBJECT_H___
 #define ___C3D_MOVABLE_OBJECT_H___
 
-#include "SceneNode.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
-#include "Animation/Animable.hpp"
+#include "Castor3D/Animation/Animable.hpp"
 
-#include <Design/Named.hpp>
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

@@ -4,16 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_RENDERER_H___
 #define ___C3D_OVERLAY_RENDERER_H___
 
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include "Render/RenderNode/PassRenderNode.hpp"
-#include "Render/RenderPassTimer.hpp"
-#include "Shader/Ubos/MatrixUbo.hpp"
-#include "Shader/Ubos/OverlayUbo.hpp"
-#include "Castor3DPrerequisites.hpp"
-#include "TextOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
-#include <Design/OwnedBy.hpp>
-#include <Miscellaneous/Hash.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
+#include <Ashes/Pipeline/VertexLayout.hpp>
 
 #ifdef drawText
 #	undef drawText

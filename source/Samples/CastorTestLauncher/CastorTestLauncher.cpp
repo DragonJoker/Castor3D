@@ -1,15 +1,15 @@
-#include "CastorTestLauncher.hpp"
-#include "MainFrame.hpp"
+#include "CastorTestLauncher/CastorTestLauncher.hpp"
+#include "CastorTestLauncher/MainFrame.hpp"
 
 #include <wx/cmdline.h>
 #include <wx/image.h>
 
-#include <Engine.hpp>
-#include <Plugin/RendererPlugin.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Plugin/RendererPlugin.hpp>
 
-#include <Data/File.hpp>
-#include <Exception/Exception.hpp>
-#include <Miscellaneous/StringUtils.hpp>
+#include <CastorUtils/Data/File.hpp>
+#include <CastorUtils/Exception/Exception.hpp>
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 using namespace castor;
 using namespace castor3d;

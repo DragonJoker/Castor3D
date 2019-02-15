@@ -1,35 +1,33 @@
-#include "PropertiesContainer.hpp"
+#include "GuiCommon/PropertiesContainer.hpp"
 
-#include "CameraTreeItemProperty.hpp"
-#include "GeometryTreeItemProperty.hpp"
-#include "LightTreeItemProperty.hpp"
-#include "NodeTreeItemProperty.hpp"
-#include "OverlayTreeItemProperty.hpp"
-#include "SubmeshTreeItemProperty.hpp"
-#include "MaterialTreeItemProperty.hpp"
-#include "PassTreeItemProperty.hpp"
-#include "TextureTreeItemProperty.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
+#include "GuiCommon/CameraTreeItemProperty.hpp"
+#include "GuiCommon/GeometryTreeItemProperty.hpp"
+#include "GuiCommon/LightTreeItemProperty.hpp"
+#include "GuiCommon/NodeTreeItemProperty.hpp"
+#include "GuiCommon/OverlayTreeItemProperty.hpp"
+#include "GuiCommon/SubmeshTreeItemProperty.hpp"
+#include "GuiCommon/MaterialTreeItemProperty.hpp"
+#include "GuiCommon/PassTreeItemProperty.hpp"
+#include "GuiCommon/TextureTreeItemProperty.hpp"
 
-#include "AdditionalProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Overlay/PanelOverlay.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Engine.hpp>
-#include <Cache/MaterialCache.hpp>
-
-#include <Material/Pass.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Texture/TextureUnit.hpp>
-
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 #include <wx/propgrid/advprops.h>
 

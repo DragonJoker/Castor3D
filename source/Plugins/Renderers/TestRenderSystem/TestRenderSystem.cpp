@@ -1,14 +1,14 @@
-#include "TestRenderSystem.hpp"
+#include "TestRenderSystem/TestRenderSystem.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
-#include <Core/Renderer.hpp>
+#include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
-#include <Core/TestCreateRenderer.hpp>
+#include <TestRenderer/Core/TestCreateRenderer.hpp>
 
 using namespace castor;
 
@@ -20,7 +20,7 @@ namespace TestRender
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, castor::String const & appName
 		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true, true )
+		: castor3d::RenderSystem( engine, Name, true, true, true )
 	{
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{

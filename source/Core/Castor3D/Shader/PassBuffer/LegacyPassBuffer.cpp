@@ -1,6 +1,6 @@
-#include "LegacyPassBuffer.hpp"
+#include "Castor3D/Shader/PassBuffer/LegacyPassBuffer.hpp"
 
-#include "Material/LegacyPass.hpp"
+#include "Castor3D/Material/LegacyPass.hpp"
 
 using namespace castor;
 

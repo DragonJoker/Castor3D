@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryCache_H___
 #define ___C3D_GeometryCache_H___
 
-#include "Buffer/UniformBufferPool.hpp"
-#include "Cache/ObjectCache.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Shader/Ubos/ModelUbo.hpp"
-#include "Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 
 namespace castor3d
 {

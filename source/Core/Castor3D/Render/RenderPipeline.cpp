@@ -1,13 +1,13 @@
-#include "RenderPipeline.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 
-#include "Engine.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Camera.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 #include <Ashes/Descriptor/DescriptorSetLayout.hpp>
 #include <Ashes/Pipeline/InputAssemblyState.hpp>

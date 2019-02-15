@@ -1,4 +1,4 @@
-#include "RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <Ashes/Core/Renderer.hpp>
 

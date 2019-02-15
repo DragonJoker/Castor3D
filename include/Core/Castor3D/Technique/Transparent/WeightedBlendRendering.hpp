@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_WeightedBlendRendering_H___
 #define ___C3D_WeightedBlendRendering_H___
 
-#include "Technique/Transparent/FinalCombinePass.hpp"
-#include "Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Technique/Transparent/FinalCombinePass.hpp"
+#include "Castor3D/Technique/Transparent/TransparentPass.hpp"
 
 namespace castor3d
 {

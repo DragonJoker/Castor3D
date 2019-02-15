@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMapSpot_H___
 #define ___C3D_ShadowMapSpot_H___
 
-#include "Miscellaneous/GaussianBlur.hpp"
-#include "ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Miscellaneous/GaussianBlur.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
 
 namespace castor3d
 {

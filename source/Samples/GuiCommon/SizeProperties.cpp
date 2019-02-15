@@ -1,4 +1,4 @@
-#include "SizeProperties.hpp"
+#include "GuiCommon/SizeProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

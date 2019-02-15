@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_FRAME_EVENT_H___
 #define ___C3D_FRAME_EVENT_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Miscellaneous/Debug.hpp>
+#include <CastorUtils/Miscellaneous/Debug.hpp>
 
 namespace castor3d
 {

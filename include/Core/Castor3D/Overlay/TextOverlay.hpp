@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_TEXT_OVERLAY_H___
 #define ___C3D_TEXT_OVERLAY_H___
 
-#include "OverlayCategory.hpp"
-#include "FontTexture.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
+#include "Castor3D/Overlay/FontTexture.hpp"
 
 namespace castor3d
 {

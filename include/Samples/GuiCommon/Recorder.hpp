@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_RECORDER_H___
 #define ___GC_RECORDER_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 namespace GuiCommon
 {

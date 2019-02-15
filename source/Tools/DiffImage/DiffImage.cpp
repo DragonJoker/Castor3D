@@ -1,5 +1,5 @@
-#include <Graphics/Image.hpp>
-#include <Multithreading/ThreadPool.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <vector>
 #include <string>

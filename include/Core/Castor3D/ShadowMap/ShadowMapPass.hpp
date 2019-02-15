@@ -4,12 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_H___
 #define ___C3D_SHADOW_MAP_PASS_H___
 
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
+
 #include <Ashes/Pipeline/VertexLayout.hpp>
-#include "Render/RenderPass.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Geometry.hpp"
-#include "Texture/TextureUnit.hpp"
 
 namespace castor3d
 {

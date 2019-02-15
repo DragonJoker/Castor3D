@@ -1,10 +1,10 @@
-#include "TargetCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "GeometryCache.hpp"
-#include "Render/RenderTarget.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 

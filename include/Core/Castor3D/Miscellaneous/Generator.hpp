@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_GENERATOR_H___
 #define ___C3D_GENERATOR_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Graphics/Pixel.hpp>
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/Pixel.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 namespace castor3d
 {

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_POSITION_PROPERTIES_H___
 #define ___GUICOMMON_POSITION_PROPERTIES_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( castor, Position );
 

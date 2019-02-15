@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_LANGUAGE_INFO_H___
 #define ___GUICOMMON_LANGUAGE_INFO_H___
 
-#include "GuiCommonPrerequisites.hpp"
-#include "StyleInfo.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
+#include "GuiCommon/StyleInfo.hpp"
 
 #include <wx/stc/stc.h>
 

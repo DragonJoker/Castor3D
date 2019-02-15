@@ -88,7 +88,7 @@ function( InteropBuild )
 	endif ()
 endfunction( InteropBuild )
 
-function( InteropSummary msg msgtest )
+function( InteropSummary msg )
 	if ( ${CASTOR_BUILDGRP_INTEROP} )
 		set( msg_tmp "\n\nInteroperability :" )
 		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )

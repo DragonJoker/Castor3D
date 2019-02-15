@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffectVisitor_HPP___
 #define ___C3D_PostEffectVisitor_HPP___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/ChangeTracked.hpp>
-#include <Math/RangedValue.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
 {

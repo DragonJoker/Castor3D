@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ColourBackground_H___
 #define ___C3D_ColourBackground_H___
 
-#include "Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 
 #include <Ashes/Buffer/Buffer.hpp>
-#include <Design/ChangeTracked.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 
 namespace castor3d
 {

@@ -1,4 +1,4 @@
-#include "HdrConfig.hpp"
+#include "Castor3D/HDR/HdrConfig.hpp"
 
 using namespace castor;
 

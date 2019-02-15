@@ -2,25 +2,25 @@
 #	pragma warning( disable:4503 )
 #endif
 
-#include "RenderQueue.hpp"
+#include "Castor3D/Render/RenderQueue.hpp"
 
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Skeleton/Skeleton.hpp"
-#include "Render/RenderPass.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Geometry.hpp"
-#include "Scene/Animation/AnimatedMesh.hpp"
-#include "Scene/Animation/AnimatedObjectGroup.hpp"
-#include "Scene/Animation/AnimatedSkeleton.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
-#include "Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
+#include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
+#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

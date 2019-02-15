@@ -1,8 +1,8 @@
-#include "Program.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
-#include "Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Stream/StreamPrefixManipulators.hpp>
+#include <CastorUtils/Stream/StreamPrefixManipulators.hpp>
 
 using namespace castor;
 

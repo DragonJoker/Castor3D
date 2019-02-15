@@ -1,7 +1,7 @@
-#include "LanguageFileContext.hpp"
-#include "StcContext.hpp"
-#include "StyleInfo.hpp"
-#include "LanguageInfo.hpp"
+#include "GuiCommon/LanguageFileContext.hpp"
+#include "GuiCommon/StcContext.hpp"
+#include "GuiCommon/StyleInfo.hpp"
+#include "GuiCommon/LanguageInfo.hpp"
 
 using namespace castor;
 

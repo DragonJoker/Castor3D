@@ -1,14 +1,14 @@
-#include "TextureView.hpp"
+#include "Castor3D/Texture/TextureView.hpp"
 
-#include "Engine.hpp"
-#include "TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/StagingTexture.hpp>
 #include <Ashes/Core/Device.hpp>
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Miscellaneous/BufferImageCopy.hpp>
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 #define C3D_HasNonPOT 1
 

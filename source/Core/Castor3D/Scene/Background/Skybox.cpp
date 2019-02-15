@@ -1,17 +1,17 @@
-#include "Skybox.hpp"
+#include "Castor3D/Scene/Background/Skybox.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Render/RenderPipeline.hpp"
-#include "RenderToTexture/EquirectangularToCube.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Background/Visitor.hpp"
-#include "EnvironmentMap/EnvironmentMap.hpp"
-#include "Scene/Background/Visitor.hpp"
-#include "Shader/Program.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/RenderToTexture/EquirectangularToCube.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Image/TextureView.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>
@@ -22,7 +22,7 @@
 #include <Ashes/Sync/Fence.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 
-#include "Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 using namespace castor;
 using namespace sdw;

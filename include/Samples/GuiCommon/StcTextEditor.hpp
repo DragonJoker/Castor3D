@@ -10,8 +10,8 @@ See LICENSE file in root folder
 #endif
 #include <set>
 
-#include "GuiCommonPrerequisites.hpp"
-#include "StcContext.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
+#include "GuiCommon/StcContext.hpp"
 
 namespace GuiCommon
 {

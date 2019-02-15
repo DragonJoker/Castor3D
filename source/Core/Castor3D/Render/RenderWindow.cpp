@@ -1,11 +1,11 @@
-#include "RenderWindow.hpp"
+#include "Castor3D/Render/RenderWindow.hpp"
 
-#include "Miscellaneous/PickingPass.hpp"
-#include "Render/RenderLoop.hpp"
-#include "Render/RenderTarget.hpp"
-#include "RenderToTexture/RenderQuad.hpp"
-#include "Technique/RenderTechnique.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/PickingPass.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Technique/RenderTechnique.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/StagingBuffer.hpp>
 #include <Ashes/Image/StagingTexture.hpp>
@@ -13,11 +13,11 @@
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
 #include <Ashes/RenderPass/RenderSubpass.hpp>
 #include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Design/BlockGuard.hpp>
+#include <CastorUtils/Design/BlockGuard.hpp>
 
 using namespace castor;
 

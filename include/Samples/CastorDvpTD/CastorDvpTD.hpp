@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CastorApplication.hpp>
+#include <GuiCommon/CastorApplication.hpp>
 
 #include "CastorDvpTDPrerequisites.hpp"
 

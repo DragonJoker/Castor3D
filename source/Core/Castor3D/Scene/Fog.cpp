@@ -1,4 +1,4 @@
-#include "Fog.hpp"
+#include "Castor3D/Scene/Fog.hpp"
 
 using namespace castor;
 using namespace sdw;

@@ -1,10 +1,10 @@
-#include "SkinningUbo.hpp"
+#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Animation/AnimatedSkeleton.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
 

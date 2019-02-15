@@ -1,12 +1,12 @@
-#include "Gl3RenderSystem.hpp"
+#include "Gl3RenderSystem/Gl3RenderSystem.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 #include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <Gl3Renderer/Core/GlCreateRenderer.hpp>
 

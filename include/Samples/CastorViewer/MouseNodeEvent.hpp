@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "RenderPanel.hpp"
 
-#include <Event/Frame/FrameEvent.hpp>
-#include <Math/RangedValue.hpp>
+#include <Castor3D/Event/Frame/FrameEvent.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace CastorViewer
 {

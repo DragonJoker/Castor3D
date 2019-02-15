@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "ReflectionPass.hpp"
+#include "Castor3D/Technique/Opaque/ReflectionPass.hpp"
 
 namespace castor3d
 {

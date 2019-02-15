@@ -1,6 +1,6 @@
-#include "ImporterPlugin.hpp"
+#include "Castor3D/Plugin/ImporterPlugin.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

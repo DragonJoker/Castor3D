@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_PRECOMPILED_HEADER_H___
 #define ___C3D_PRECOMPILED_HEADER_H___
 
-#include <config.hpp>
+#include <CastorUtils/config.hpp>
 
 #if CU_UsePCH
-#	include "Castor3DPrerequisites.hpp"
+#	include "Castor3D/Castor3DPrerequisites.hpp"
 
-#	include <RequiredVersion.hpp>
+#	include "Castor3D/RequiredVersion.hpp"
 
 // STL
 #	include <string>
@@ -32,47 +32,47 @@ See LICENSE file in root folder
 #	include <cstdint>
 
 // Utils
-#	include <CastorUtils.hpp>
-#	include <Config/MultiThreadConfig.hpp>
-#	include <Data/BinaryFile.hpp>
-#	include <Data/BinaryLoader.hpp>
-#	include <Data/Path.hpp>
-#	include <Data/TextFile.hpp>
-#	include <Data/TextLoader.hpp>
-#	include <Design/Collection.hpp>
-#	include <Design/Factory.hpp>
-#	include <Design/FlagCombination.hpp>
-#	include <Design/Named.hpp>
-#	include <Design/NonCopyable.hpp>
-#	include <Design/OwnedBy.hpp>
-#	include <Design/Resource.hpp>
-#	include <Design/Templates.hpp>
-#	include <Design/Unique.hpp>
-#	include <Graphics/Colour.hpp>
-#	include <Graphics/BoundingBox.hpp>
-#	include <Graphics/BoundingSphere.hpp>
-#	include <Graphics/Font.hpp>
-#	include <Graphics/Image.hpp>
-#	include <Graphics/Pixel.hpp>
-#	include <Graphics/Rectangle.hpp>
-#	include <Graphics/Size.hpp>
-#	include <Log/Logger.hpp>
-#	include <Math/Angle.hpp>
-#	include <Math/Line2D.hpp>
-#	include <Math/Line3D.hpp>
-#	include <Math/Math.hpp>
-#	include <Math/Matrix.hpp>
-#	include <Math/PlaneEquation.hpp>
-#	include <Math/Point.hpp>
-#	include <Math/Quaternion.hpp>
-#	include <Math/SphericalVertex.hpp>
-#	include <Math/SquareMatrix.hpp>
-#	include <Math/TransformationMatrix.hpp>
-#	include <Miscellaneous/BlockTimer.hpp>
-#	include <Miscellaneous/DynamicLibrary.hpp>
-#	include <Miscellaneous/PreciseTimer.hpp>
-#	include <Miscellaneous/StringUtils.hpp>
-#	include <Miscellaneous/Utils.hpp>
+#	include <CastorUtils/CastorUtils.hpp>
+#	include <CastorUtils/Config/MultiThreadConfig.hpp>
+#	include <CastorUtils/Data/BinaryFile.hpp>
+#	include <CastorUtils/Data/BinaryLoader.hpp>
+#	include <CastorUtils/Data/Path.hpp>
+#	include <CastorUtils/Data/TextFile.hpp>
+#	include <CastorUtils/Data/TextLoader.hpp>
+#	include <CastorUtils/Design/Collection.hpp>
+#	include <CastorUtils/Design/Factory.hpp>
+#	include <CastorUtils/Design/FlagCombination.hpp>
+#	include <CastorUtils/Design/Named.hpp>
+#	include <CastorUtils/Design/NonCopyable.hpp>
+#	include <CastorUtils/Design/OwnedBy.hpp>
+#	include <CastorUtils/Design/Resource.hpp>
+#	include <CastorUtils/Design/Templates.hpp>
+#	include <CastorUtils/Design/Unique.hpp>
+#	include <CastorUtils/Graphics/Colour.hpp>
+#	include <CastorUtils/Graphics/BoundingBox.hpp>
+#	include <CastorUtils/Graphics/BoundingSphere.hpp>
+#	include <CastorUtils/Graphics/Font.hpp>
+#	include <CastorUtils/Graphics/Image.hpp>
+#	include <CastorUtils/Graphics/Pixel.hpp>
+#	include <CastorUtils/Graphics/Rectangle.hpp>
+#	include <CastorUtils/Graphics/Size.hpp>
+#	include <CastorUtils/Log/Logger.hpp>
+#	include <CastorUtils/Math/Angle.hpp>
+#	include <CastorUtils/Math/Line2D.hpp>
+#	include <CastorUtils/Math/Line3D.hpp>
+#	include <CastorUtils/Math/Math.hpp>
+#	include <CastorUtils/Math/Matrix.hpp>
+#	include <CastorUtils/Math/PlaneEquation.hpp>
+#	include <CastorUtils/Math/Point.hpp>
+#	include <CastorUtils/Math/Quaternion.hpp>
+#	include <CastorUtils/Math/SphericalVertex.hpp>
+#	include <CastorUtils/Math/SquareMatrix.hpp>
+#	include <CastorUtils/Math/TransformationMatrix.hpp>
+#	include <CastorUtils/Miscellaneous/BlockTimer.hpp>
+#	include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
+#	include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
+#	include <CastorUtils/Miscellaneous/StringUtils.hpp>
+#	include <CastorUtils/Miscellaneous/Utils.hpp>
 
 // ShaderWriter
 #	include <ShaderWriter/Source.hpp>

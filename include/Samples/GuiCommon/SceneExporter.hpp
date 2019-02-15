@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CV_SCENE_EXPORTER_H___
 #define ___CV_SCENE_EXPORTER_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
-#include <Data/Path.hpp>
+#include <CastorUtils/Data/Path.hpp>
 
 namespace GuiCommon
 {

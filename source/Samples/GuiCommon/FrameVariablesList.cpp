@@ -1,20 +1,20 @@
-#include "FrameVariablesList.hpp"
+#include "GuiCommon/FrameVariablesList.hpp"
 
-#include "ImagesLoader.hpp"
-#include "FrameVariableBufferTreeItemProperty.hpp"
-#include "FrameVariableTreeItemProperty.hpp"
-#include "PropertiesContainer.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
+#include "GuiCommon/FrameVariableBufferTreeItemProperty.hpp"
+#include "GuiCommon/FrameVariableTreeItemProperty.hpp"
+#include "GuiCommon/PropertiesContainer.hpp"
 
-#include <Engine.hpp>
-#include <Render/RenderPipeline.hpp>
-#include <Render/RenderSystem.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderPipeline.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
 #include <wx/imaglist.h>
 
-#include "xpms/frame_variable.xpm"
-#include "xpms/frame_variable_sel.xpm"
-#include "xpms/frame_variable_buffer.xpm"
-#include "xpms/frame_variable_buffer_sel.xpm"
+#include "GuiCommon/xpms/frame_variable.xpm"
+#include "GuiCommon/xpms/frame_variable_sel.xpm"
+#include "GuiCommon/xpms/frame_variable_buffer.xpm"
+#include "GuiCommon/xpms/frame_variable_buffer_sel.xpm"
 
 #ifdef LoadImage
 #	undef LoadImage

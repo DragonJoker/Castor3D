@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GC_ToneMappingTreeItemProperty_HPP___
 #define ___GC_ToneMappingTreeItemProperty_HPP___
 
-#include "TreeItemProperty.hpp"
+#include "GuiCommon/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {

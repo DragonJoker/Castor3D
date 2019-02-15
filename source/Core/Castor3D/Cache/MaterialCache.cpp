@@ -1,16 +1,16 @@
-#include "MaterialCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 
-#include "Engine.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Shader/PassBuffer/LegacyPassBuffer.hpp"
-#include "Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
-#include "Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
-#include "Texture/Sampler.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Shader/PassBuffer/LegacyPassBuffer.hpp"
+#include "Castor3D/Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
+#include "Castor3D/Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
-#include "Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 

@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffectSurface_H___
 #define ___C3D_PostEffectSurface_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <Ashes/RenderPass/FrameBuffer.hpp>
 

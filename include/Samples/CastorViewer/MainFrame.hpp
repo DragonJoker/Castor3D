@@ -4,19 +4,19 @@ See LICENSE file in root folder
 #ifndef ___MainFrame___
 #define ___MainFrame___
 
-#include <GuiCommonPrerequisites.hpp>
+#include <GuiCommon/GuiCommonPrerequisites.hpp>
+
+#include <GuiCommon/Recorder.hpp>
+#include <GuiCommon/SceneObjectsList.hpp>
+
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Data/Path.hpp>
 
 #include <wx/frame.h>
 #include <wx/listctrl.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
 #include <wx/aui/auibar.h>
-
-#include <SceneObjectsList.hpp>
-#include <Log/Logger.hpp>
-#include <Data/Path.hpp>
-
-#include <Recorder.hpp>
 
 namespace CastorViewer
 {

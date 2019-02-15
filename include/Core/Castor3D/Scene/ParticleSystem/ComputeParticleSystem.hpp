@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ComputeParticleSystem_H___
 #define ___C3D_ComputeParticleSystem_H___
 
-#include "ParticleSystemImpl.hpp"
-
-#include "Scene/ParticleSystem/ParticleDeclaration.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <Ashes/Pipeline/ShaderStageState.hpp>
 #include <Ashes/Pipeline/VertexLayout.hpp>

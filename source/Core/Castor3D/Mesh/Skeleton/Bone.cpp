@@ -1,11 +1,11 @@
-#include "Bone.hpp"
+#include "Castor3D/Mesh/Skeleton/Bone.hpp"
 
-#include "BonedVertex.hpp"
-#include "Skeleton.hpp"
-#include "Mesh/Mesh.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Mesh/Skeleton/BonedVertex.hpp"
+#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
 
 using namespace castor;
 

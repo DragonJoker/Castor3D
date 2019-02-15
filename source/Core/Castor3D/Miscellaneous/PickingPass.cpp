@@ -1,16 +1,16 @@
-#include "PickingPass.hpp"
+#include "Castor3D/Miscellaneous/PickingPass.hpp"
 
-#include "Cache/MaterialCache.hpp"
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Render/RenderNode/RenderNode_Render.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Shaders/GlslMaterial.hpp"
-#include "Shader/Ubos/PickingUbo.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderNode/RenderNode_Render.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/RenderPass/FrameBuffer.hpp>
@@ -21,7 +21,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

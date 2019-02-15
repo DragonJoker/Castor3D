@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_PREREQUISITES_ANIMTION_H___
 #define ___C3D_PREREQUISITES_ANIMTION_H___
 
-#include "Mesh/VertexGroup.hpp"
+#include "Castor3D/Mesh/VertexGroup.hpp"
 
-#include <Graphics/BoundingBox.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d
 {

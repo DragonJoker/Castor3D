@@ -5,11 +5,11 @@ See LICENSE file in root folder
 #define ___GC_CubeBoxManager_HPP___
 #pragma once
 
-#include <Castor3DPrerequisites.hpp>
-#include <Math/Angle.hpp>
-#include <Math/Point.hpp>
-#include <Math/Quaternion.hpp>
-#include <Math/RangedValue.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/Point.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Math/RangedValue.hpp>
 
 namespace GuiCommon
 {

@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_MeshAnimationKeyFrame_H___
 #define ___C3D_MeshAnimationKeyFrame_H___
 
-#include "Animation/AnimationKeyFrame.hpp"
-#include "Mesh/Submesh.hpp"
+#include "Castor3D/Animation/AnimationKeyFrame.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

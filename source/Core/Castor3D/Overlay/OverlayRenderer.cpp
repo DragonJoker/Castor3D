@@ -1,17 +1,17 @@
-#include "OverlayRenderer.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
 
-#include "Engine.hpp"
-
-#include "BorderPanelOverlay.hpp"
-#include "PanelOverlay.hpp"
-
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Scene/Camera.hpp"
-#include "Shader/PassBuffer/PassBuffer.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Buffer/Buffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>
@@ -24,13 +24,11 @@
 #include <Ashes/Pipeline/PipelineLayout.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
 #include <Ashes/Sync/Fence.hpp>
 
-#include <Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 

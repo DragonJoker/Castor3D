@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_AnimationKeyFrame_H___
 #define ___C3D_AnimationKeyFrame_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Graphics/BoundingBox.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d
 {

@@ -1,8 +1,8 @@
-#include "AnimatedObjectGroupTreeItemProperty.hpp"
+#include "GuiCommon/AnimatedObjectGroupTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 
 #include <wx/propgrid/advprops.h>
 

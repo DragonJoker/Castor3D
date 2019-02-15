@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderQueue_H___
 #define ___C3D_RenderQueue_H___
 
-#include "Render/RenderNode/RenderNode.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Render/RenderNode/RenderNode.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #if defined( CU_CompilerMSVC )
 #	pragma warning( push )

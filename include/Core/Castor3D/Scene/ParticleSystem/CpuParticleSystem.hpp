@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_CpuParticleSystem_H___
 #define ___C3D_CpuParticleSystem_H___
 
-#include "Particle.hpp"
-#include "ParticleDeclaration.hpp"
-#include "ParticleSystemImpl.hpp"
+#include "Castor3D/Scene/ParticleSystem/Particle.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 
 namespace castor3d
 {

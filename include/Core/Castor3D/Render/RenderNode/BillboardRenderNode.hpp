@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardRenderNode_H___
 #define ___C3D_BillboardRenderNode_H___
 
-#include "ObjectRenderNode.hpp"
-#include "Shader/Ubos/BillboardUbo.hpp"
+#include "Castor3D/Render/RenderNode/ObjectRenderNode.hpp"
+#include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 
 namespace castor3d
 {

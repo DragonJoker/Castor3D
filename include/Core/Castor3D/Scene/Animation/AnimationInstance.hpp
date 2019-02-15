@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATION_INSTANCE_H___
 #define ___C3D_ANIMATION_INSTANCE_H___
 
-#include "Animation/Animation.hpp"
+#include "Castor3D/Animation/Animation.hpp"
 
 namespace castor3d
 {

@@ -1,15 +1,14 @@
-#include "TextOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "OverlayRenderer.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Material/Material.hpp"
-#include "Texture/TextureLayout.hpp"
-
-#include <Graphics/Font.hpp>
-#include <Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

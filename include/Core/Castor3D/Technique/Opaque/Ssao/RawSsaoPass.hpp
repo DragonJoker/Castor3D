@@ -4,11 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_RawSsaoPass_H___
 #define ___C3D_RawSsaoPass_H___
 
-#include "Render/RenderInfo.hpp"
-#include "Technique/RenderTechniqueVisitor.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Technique/Opaque/LightPass.hpp"
-#include "Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Texture/TextureUnit.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 

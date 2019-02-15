@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PARTICLE_SYSTEM_CACHE_H___
 #define ___C3D_PARTICLE_SYSTEM_CACHE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 namespace castor3d
 {
@@ -33,6 +33,6 @@ namespace castor3d
 }
 
 // included after because it depends on CacheTraits
-#include "Cache/ObjectCache.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 
 #endif

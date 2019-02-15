@@ -1,8 +1,8 @@
-#include "Sampler.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/RenderTarget.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 
 #include <Ashes/Core/Device.hpp>
 #include <Ashes/Core/PhysicalDevice.hpp>

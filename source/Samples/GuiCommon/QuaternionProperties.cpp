@@ -1,4 +1,4 @@
-﻿#include "QuaternionProperties.hpp"
+#include "GuiCommon/QuaternionProperties.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredStencilPass_H___
 #define ___C3D_DeferredStencilPass_H___
 
-#include "LightPass.hpp"
+#include "Castor3D/Technique/Opaque/LightPass.hpp"
 
 #include <Ashes/Command/CommandBuffer.hpp>
 #include <Ashes/Descriptor/DescriptorSet.hpp>

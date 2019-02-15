@@ -16,9 +16,9 @@ See LICENSE file in root folder
 
 #include <list>
 
-#include <Design/Named.hpp>
+#include <CastorUtils/Design/Named.hpp>
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 namespace castor3d
 {

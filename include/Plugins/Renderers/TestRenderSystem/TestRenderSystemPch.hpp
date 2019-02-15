@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___Test_PrecompiledHeader___
 #define ___Test_PrecompiledHeader___
 
-#include <config.hpp>
+#include <CastorUtils/config.hpp>
 
 #if CASTOR_USE_PCH
 #include <cstdlib>
@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <iomanip>
 #include <iostream>
 
-#include "TestRenderSystemPrerequisites.hpp"
+#include "TestRenderSystem/TestRenderSystemPrerequisites.hpp"
 
 #endif
 

@@ -1,11 +1,11 @@
-#include "SpotLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Light/Light.hpp"
-#include "Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Technique/Opaque/LightPass.hpp"
 
-#include <Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 using namespace castor;
 

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_LOOP_ASYNC_H___
 #define ___C3D_RENDER_LOOP_ASYNC_H___
 
-#include "RenderLoop.hpp"
+#include "Castor3D/Render/RenderLoop.hpp"
 
 #include <atomic>
 

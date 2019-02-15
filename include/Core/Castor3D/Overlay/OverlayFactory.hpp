@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_OVERLAY_FACTORY_H___
 #define ___C3D_OVERLAY_FACTORY_H___
 
-#include "OverlayCategory.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
 
-#include <Design/Factory.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {

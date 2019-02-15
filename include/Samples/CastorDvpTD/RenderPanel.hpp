@@ -3,9 +3,9 @@
 #include <wx/panel.h>
 #include <wx/timer.h>
 
-#include <NodeState.hpp>
+#include <GuiCommon/NodeState.hpp>
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 #include "TowerCategory.hpp"
 

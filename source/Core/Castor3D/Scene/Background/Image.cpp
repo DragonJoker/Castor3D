@@ -1,20 +1,20 @@
-#include "Scene/Background/Image.hpp"
+#include "Castor3D/Scene/Background/Image.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include "Render/RenderPassTimer.hpp"
-#include "Render/RenderPipeline.hpp"
-#include "Event/Frame/FrameListener.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
-#include "Scene/Background/Visitor.hpp"
-#include "EnvironmentMap/EnvironmentMap.hpp"
-#include "RenderToTexture/TextureProjectionToCube.hpp"
-#include "Shader/Program.hpp"
-#include "Shader/Shaders/GlslUtils.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/RenderToTexture/TextureProjectionToCube.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
 #include <Ashes/Miscellaneous/PushConstantRange.hpp>
@@ -22,7 +22,7 @@
 #include <Ashes/RenderPass/FrameBufferAttachment.hpp>
 #include <Ashes/RenderPass/RenderPass.hpp>
 #include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Shader/GlslToSpv.hpp>
+#include "Castor3D/Shader/GlslToSpv.hpp"
 #include <Ashes/Shader/ShaderModule.hpp>
 #include <Ashes/Sync/ImageMemoryBarrier.hpp>
 

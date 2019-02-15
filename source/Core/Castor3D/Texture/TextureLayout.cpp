@@ -1,8 +1,8 @@
-#include "TextureLayout.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
 
-#include "Engine.hpp"
+#include "Castor3D/Engine.hpp"
 
-#include <Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Miscellaneous/BitSize.hpp>
 
 #include <Ashes/Image/Texture.hpp>
 #include <Ashes/Image/TextureView.hpp>

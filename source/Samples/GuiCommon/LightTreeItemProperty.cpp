@@ -1,14 +1,15 @@
-#include "LightTreeItemProperty.hpp"
+#include "GuiCommon/LightTreeItemProperty.hpp"
 
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/PointLight.hpp>
+#include "GuiCommon/PointProperties.hpp"
 
-#include "PointProperties.hpp"
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;

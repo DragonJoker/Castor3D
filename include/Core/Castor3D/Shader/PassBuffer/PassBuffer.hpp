@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_PassBuffer_H___
 #define ___C3D_PassBuffer_H___
 
-#include "Material/Pass.hpp"
-#include "Shader/ShaderBuffer.hpp"
+#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Shader/ShaderBuffer.hpp"
 
-#include <Design/ArrayView.hpp>
+#include <CastorUtils/Design/ArrayView.hpp>
 
 #define C3D_MaterialsStructOfArrays 0
 

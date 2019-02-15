@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_MOUSE_EVENT_H___
 #define ___C3D_MOUSE_EVENT_H___
 
-#include "UserInputEvent.hpp"
+#include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
-#include <Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
 
 namespace castor3d
 {

@@ -1,6 +1,6 @@
-#include "ParticlePlugin.hpp"
+#include "Castor3D/Plugin/ParticlePlugin.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

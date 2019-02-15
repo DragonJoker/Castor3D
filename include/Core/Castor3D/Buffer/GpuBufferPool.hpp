@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBufferPool_HPP___
 #define ___C3D_GpuBufferPool_HPP___
 
-#include "Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

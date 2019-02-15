@@ -1,6 +1,6 @@
-#include "SkeletonAnimationInstanceNode.hpp"
+#include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
-#include "Animation/Skeleton/SkeletonAnimationNode.hpp"
+#include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
 
 using namespace castor;
 

@@ -1,13 +1,13 @@
-#include "D3D11RenderSystem.hpp"
+#include "D3D11RenderSystem/D3D11RenderSystem.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 #include <Ashes/Core/Renderer.hpp>
 
 #include <CompilerHlsl/compileHlsl.hpp>
 //#include <CompilerSpirV/compileSpirV.hpp>
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 #include <D3D11Renderer/Core/D3D11CreateRenderer.hpp>
 

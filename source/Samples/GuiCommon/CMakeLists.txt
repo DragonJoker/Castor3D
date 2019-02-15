@@ -27,92 +27,100 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${Castor3DIncludeDirs} )
+include_directories(
+	${Castor3DIncludeDirs}
+	${CASTOR_SOURCE_DIR}/include/Samples
+	${CASTOR_BINARY_DIR}/include/Samples
+	${CASTOR_SOURCE_DIR}/source/Samples
+	${CASTOR_BINARY_DIR}/source/Samples
+)
 
 add_target(
 	${PROJECT_NAME}
 	lib
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}
 	"Castor3D"
 	"${CastorBinLibraries}"
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/GuiCommonPch.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/GuiCommonPch.cpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )
 
 file( GLOB ${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*TreeItem*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*TreeItem*.inl
 )
 file( GLOB ${PROJECT_NAME}_TREE_ITEMS_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*TreeItem*.cpp
 )
 source_group( "Header Files\\Properties\\Tree Items" FILES ${${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES} )
 source_group( "Source Files\\Properties\\Tree Items" FILES ${${PROJECT_NAME}_TREE_ITEMS_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_PROPERTIES_MATH_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Properties*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Properties*.inl
 )
 file( GLOB ${PROJECT_NAME}_PROPERTIES_MATH_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Properties*.cpp
 )
 source_group( "Header Files\\Properties\\Math" FILES ${${PROJECT_NAME}_PROPERTIES_MATH_HEADER_FILES} )
 source_group( "Source Files\\Properties\\Math" FILES ${${PROJECT_NAME}_PROPERTIES_MATH_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_SHADER_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Language*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Language*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Lexer*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Lexer*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Stc*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Stc*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Style*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Style*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Uniform*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Uniform*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Shader*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Shader*.inl
 )
 file( GLOB ${PROJECT_NAME}_SHADER_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Uniform*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Language*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Lexer*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Stc*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Style*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Uniform*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Shader*.cpp
 )
 source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_SHADER_HEADER_FILES} )
 source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_SHADER_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_SYSTEM_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Loader*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Loader*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Screen*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Screen*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Renderer*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Renderer*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*List*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*List*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Application*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Application*.inl
 )
 file( GLOB ${PROJECT_NAME}_SYSTEM_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Loader*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Screen*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Renderer*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*List*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Application*.cpp
 )
 source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_HEADER_FILES} )
 source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_AUI_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.inl
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Aui*.hpp
+	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*Aui*.inl
 )
 file( GLOB ${PROJECT_NAME}_AUI_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.cpp
+	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/*Aui*.cpp
 )
 source_group( "Header Files\\Aui" FILES ${${PROJECT_NAME}_AUI_HEADER_FILES} )
 source_group( "Source Files\\Aui" FILES ${${PROJECT_NAME}_AUI_SOURCE_FILES} )

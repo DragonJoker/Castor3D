@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GENERIC_PLUGIN_H___
 #define ___C3D_GENERIC_PLUGIN_H___
 
-#include "Plugin.hpp"
-#include "PluginException.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
+#include "Castor3D/Plugin/PluginException.hpp"
 
 namespace castor3d
 {

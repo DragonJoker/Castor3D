@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_DOCK_ART_H___
 #define ___GUICOMMON_DOCK_ART_H___
 
-#include "GuiCommonPrerequisites.hpp"
+#include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <wx/aui/aui.h>
 #include <wx/aui/dockart.h>

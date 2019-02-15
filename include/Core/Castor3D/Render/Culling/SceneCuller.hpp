@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneCuller_H___
 #define ___C3D_SceneCuller_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include <Design/Signal.hpp>
+#include "Castor3D/Castor3DPrerequisites.hpp"
+#include <CastorUtils/Design/Signal.hpp>
 
 namespace castor3d
 {

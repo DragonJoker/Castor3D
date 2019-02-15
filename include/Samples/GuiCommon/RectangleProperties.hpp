@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_RECTANGLE_PROPERTIES_H___
 #define ___GUICOMMON_RECTANGLE_PROPERTIES_H___
 
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Graphics/Rectangle.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
 
 namespace GuiCommon
 {

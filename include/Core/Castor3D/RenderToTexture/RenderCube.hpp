@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderCube_H___
 #pragma once
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 #include <Ashes/Buffer/VertexBuffer.hpp>

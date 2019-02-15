@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBuffer_H___
 #define ___C3D_UniformBuffer_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 
@@ -177,6 +177,6 @@ namespace castor3d
 	};
 }
 
-#include "UniformBuffer.inl"
+#include "Castor3D/Buffer/UniformBuffer.inl"
 
 #endif

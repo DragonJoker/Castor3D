@@ -1,52 +1,50 @@
-#include "SceneObjectsList.hpp"
+#include "GuiCommon/SceneObjectsList.hpp"
 
-#include "AnimatedObjectGroupTreeItemProperty.hpp"
-#include "AnimatedObjectTreeItemProperty.hpp"
-#include "AnimationTreeItemProperty.hpp"
-#include "BackgroundTreeItemProperty.hpp"
-#include "BillboardTreeItemProperty.hpp"
-#include "BoneTreeItemProperty.hpp"
-#include "CameraTreeItemProperty.hpp"
-#include "GeometryTreeItemProperty.hpp"
-#include "LightTreeItemProperty.hpp"
-#include "NodeTreeItemProperty.hpp"
-#include "OverlayTreeItemProperty.hpp"
-#include "PostEffectTreeItemProperty.hpp"
-#include "PropertiesContainer.hpp"
-#include "RenderTargetTreeItemProperty.hpp"
-#include "RenderWindowTreeItemProperty.hpp"
-#include "SceneTreeItemProperty.hpp"
-#include "SkeletonAnimationTreeItemProperty.hpp"
-#include "SkeletonTreeItemProperty.hpp"
-#include "SubmeshTreeItemProperty.hpp"
-#include "ToneMappingTreeItemProperty.hpp"
-#include "ViewportTreeItemProperty.hpp"
+#include "GuiCommon/AnimatedObjectGroupTreeItemProperty.hpp"
+#include "GuiCommon/AnimatedObjectTreeItemProperty.hpp"
+#include "GuiCommon/AnimationTreeItemProperty.hpp"
+#include "GuiCommon/BackgroundTreeItemProperty.hpp"
+#include "GuiCommon/BillboardTreeItemProperty.hpp"
+#include "GuiCommon/BoneTreeItemProperty.hpp"
+#include "GuiCommon/CameraTreeItemProperty.hpp"
+#include "GuiCommon/GeometryTreeItemProperty.hpp"
+#include "GuiCommon/LightTreeItemProperty.hpp"
+#include "GuiCommon/NodeTreeItemProperty.hpp"
+#include "GuiCommon/OverlayTreeItemProperty.hpp"
+#include "GuiCommon/PostEffectTreeItemProperty.hpp"
+#include "GuiCommon/PropertiesContainer.hpp"
+#include "GuiCommon/RenderTargetTreeItemProperty.hpp"
+#include "GuiCommon/RenderWindowTreeItemProperty.hpp"
+#include "GuiCommon/SceneTreeItemProperty.hpp"
+#include "GuiCommon/SkeletonAnimationTreeItemProperty.hpp"
+#include "GuiCommon/SkeletonTreeItemProperty.hpp"
+#include "GuiCommon/SubmeshTreeItemProperty.hpp"
+#include "GuiCommon/ToneMappingTreeItemProperty.hpp"
+#include "GuiCommon/ViewportTreeItemProperty.hpp"
 
-#include "ImagesLoader.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
 
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
-#include <Engine.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <HDR/ToneMapping.hpp>
-#include <Material/Material.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Skeleton/Skeleton.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/BillboardList.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Scene/Light/Light.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Animation/Animation.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/HDR/ToneMapping.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/BillboardList.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 
-#include <Scene/BillboardList.hpp>
-
-#include <Animation/Animation.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
 
 using namespace castor3d;
 using namespace castor;

@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_NODE_CACHE_H___
 #define ___C3D_SCENE_NODE_CACHE_H___
 
-#include "Scene/SceneNode.hpp"
-#include "Cache/ObjectCache.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Cache/ObjectCache.hpp"
 
 namespace castor3d
 {

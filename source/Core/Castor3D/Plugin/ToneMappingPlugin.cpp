@@ -1,6 +1,6 @@
-#include "ToneMappingPlugin.hpp"
+#include "Castor3D/Plugin/ToneMappingPlugin.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

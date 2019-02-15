@@ -1,10 +1,10 @@
-#include "SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Render/Viewport.hpp"
-#include "Scene/Camera.hpp"
-#include "Scene/Scene.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <Ashes/Buffer/UniformBuffer.hpp>
 

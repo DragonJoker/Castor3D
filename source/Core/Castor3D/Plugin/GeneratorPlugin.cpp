@@ -1,6 +1,6 @@
-#include "GeneratorPlugin.hpp"
+#include "Castor3D/Plugin/GeneratorPlugin.hpp"
 
-#include <Miscellaneous/DynamicLibrary.hpp>
+#include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
 using namespace castor;
 

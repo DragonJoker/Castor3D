@@ -4,16 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_FILE_PARSER_H___
 #define ___C3D_SCENE_FILE_PARSER_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <FileParser/FileParser.hpp>
-#include <FileParser/FileParserContext.hpp>
+#include <CastorUtils/FileParser/FileParser.hpp>
+#include <CastorUtils/FileParser/FileParserContext.hpp>
 
-#include "Mesh/Submesh.hpp"
-#include "Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Material/SubsurfaceScattering.hpp"
+#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Material/SubsurfaceScattering.hpp"
 
-#include <Design/OwnedBy.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

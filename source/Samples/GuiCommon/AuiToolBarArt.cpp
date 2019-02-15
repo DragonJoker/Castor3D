@@ -1,4 +1,4 @@
-#include "AuiToolBarArt.hpp"
+#include "GuiCommon/AuiToolBarArt.hpp"
 
 namespace GuiCommon
 {

@@ -1,10 +1,9 @@
-#include "Overlay.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 
-#include "Engine.hpp"
-
-#include "BorderPanelOverlay.hpp"
-#include "PanelOverlay.hpp"
-#include "TextOverlay.hpp"
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
 
 using namespace castor;
 

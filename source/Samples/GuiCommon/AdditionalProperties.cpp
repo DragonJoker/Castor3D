@@ -1,6 +1,6 @@
-#include "AdditionalProperties.hpp"
+#include "GuiCommon/AdditionalProperties.hpp"
 
-#include "GradientButton.hpp"
+#include "GuiCommon/GradientButton.hpp"
 
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>

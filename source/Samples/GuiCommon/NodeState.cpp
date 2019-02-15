@@ -1,8 +1,8 @@
-#include "NodeState.hpp"
+#include "GuiCommon/NodeState.hpp"
 
-#include <Event/Frame/FrameListener.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Scene/SceneNode.hpp>
+#include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 using namespace castor;
 using namespace castor3d;

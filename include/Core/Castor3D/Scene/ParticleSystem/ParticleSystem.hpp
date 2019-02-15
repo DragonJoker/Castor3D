@@ -4,12 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleSystem_H___
 #define ___C3D_ParticleSystem_H___
 
-#include "Scene/MovableObject.hpp"
-#include "Scene/ParticleSystem/ParticleDeclaration.hpp"
+#include "Castor3D/Scene/MovableObject.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
 #include <Ashes/Pipeline/VertexLayout.hpp>
 
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {

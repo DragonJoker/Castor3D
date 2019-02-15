@@ -10,6 +10,8 @@ include_directories( ${Castor3DIncludeDirs} )
 add_target(
 	${PROJECT_NAME}
 	bin_dos
+	${CASTOR_SOURCE_DIR}/include/Tools/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Tools/${PROJECT_NAME}
 	"Castor3D"
 	"Castor3D"
 	""

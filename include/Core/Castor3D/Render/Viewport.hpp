@@ -4,17 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_VIEWPORT_H___
 #define ___C3D_VIEWPORT_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Design/GroupChangeTracked.hpp"
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 #include <Ashes/Pipeline/Scissor.hpp>
 #include <Ashes/Pipeline/Viewport.hpp>
 
-#include <Math/Angle.hpp>
-#include <Math/PlaneEquation.hpp>
-#include <Design/OwnedBy.hpp>
-#include <Graphics/Position.hpp>
-#include <Graphics/Size.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/PlaneEquation.hpp>
 
 namespace castor3d
 {

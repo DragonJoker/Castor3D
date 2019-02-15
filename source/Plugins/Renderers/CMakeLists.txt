@@ -70,7 +70,7 @@ function( RenderersBuild )
 	)
 endfunction( RenderersBuild )
 
-function( RenderersSummary msg_in msgtest_in )
+function( RenderersSummary msg_in )
 	set( msg_tmp "\n\nRenderers :" )
 
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
