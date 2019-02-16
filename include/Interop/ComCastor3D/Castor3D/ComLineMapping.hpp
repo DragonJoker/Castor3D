@@ -2,10 +2,10 @@
 #ifndef __COMC3D_ComLinesMapping_H__
 #define __COMC3D_ComLinesMapping_H__
 
-#include "ComTextureLayout.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 
-#include <Mesh/Submesh.hpp>
-#include <Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
 
 namespace CastorCom
 {

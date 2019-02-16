@@ -2,9 +2,9 @@
 #ifndef __COMC3D_ComSceneBackground_H__
 #define __COMC3D_ComSceneBackground_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Scene/Background/Background.hpp>
+#include <Castor3D/Scene/Background/Background.hpp>
 
 namespace CastorCom
 {

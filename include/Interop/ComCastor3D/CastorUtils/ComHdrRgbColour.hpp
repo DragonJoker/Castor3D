@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_HDRRGBCOLOUR_H__
 #define __COMC3D_COM_HDRRGBCOLOUR_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Graphics/Colour.hpp>
+#include <CastorUtils/Graphics/Colour.hpp>
 
 namespace CastorCom
 {

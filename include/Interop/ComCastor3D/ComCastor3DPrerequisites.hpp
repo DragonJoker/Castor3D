@@ -12,7 +12,7 @@
 #	endif
 #endif
 
-#include <Castor3DPrerequisites.hpp>
+#include <Castor3D/Castor3DPrerequisites.hpp>
 
 // Include all the standard header *after* all the configuration
 // settings have been made
@@ -66,8 +66,8 @@ namespace CastorCom
 	}
 }
 
-#include "ComCastorUtils.hpp"
-#include "Castor3D_h.h"
-#include "resource.h"
+#include "ComCastor3D/ComCastorUtils.hpp"
+#include "ComCastor3D/Castor3D_h.h"
+#include "ComCastor3D/Win32/resource.h"
 
 #endif

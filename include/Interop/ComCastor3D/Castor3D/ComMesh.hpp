@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_MESH_H__
 #define __COMC3D_COM_MESH_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
 
 namespace CastorCom
 {

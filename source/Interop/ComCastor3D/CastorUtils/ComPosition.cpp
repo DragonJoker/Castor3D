@@ -1,5 +1,5 @@
-#include "ComPosition.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/CastorUtils/ComPosition.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

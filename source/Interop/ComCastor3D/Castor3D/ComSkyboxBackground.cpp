@@ -1,4 +1,4 @@
-#include "ComSkyboxBackground.hpp"
+#include "ComCastor3D/Castor3D/ComSkyboxBackground.hpp"
 
 namespace CastorCom
 {

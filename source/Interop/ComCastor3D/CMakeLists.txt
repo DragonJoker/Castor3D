@@ -10,18 +10,18 @@ if ( MSVC )
 		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 		configure_file( 
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/ComCastorUtils.hpp.in
-			${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/ComCastorUtils.hpp.in
+			${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp
 			NEWLINE_STYLE LF
 		)
 
-		include_directories( ${Castor3DIncludeDirs} )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3D )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtils )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src/Win32 )
+		include_directories(
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Interop
+			${CASTOR_SOURCE_DIR}/source/Interop
+			${CASTOR_BINARY_DIR}/include/Interop
+			${CASTOR_BINARY_DIR}/source/Interop
+		)
 		include_directories( ${ATL_INCLUDE_DIR} )
 
 		#ATL Libs
@@ -104,22 +104,28 @@ if ( MSVC )
 
 		# Add RGS files to the sources
 		file( GLOB COMCASTOR3D_RGS_FILES
-			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/*.rgs
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/*.rgs
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/*.rgs
+			${CMAKE_CURRENT_BINARY_DIR}/Win32/*.rgs
 		)
 		source_group( "Registry Files" FILES ${COMCASTOR3D_RGS_FILES} )
 
 		# Update resources IDs
 		configure_file( 
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/resource.h.in
-			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/resource.h
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/resource.h.in
+			${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/Win32/resource.h
 			NEWLINE_STYLE LF
 		)
 
 		# Define IDL files
-		file( GLOB COMCASTOR3D_IDL_FILES Src/*.idl )
-		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE Src/${PROJECT_NAME}.def )
-		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG Src/${PROJECT_NAME}d.def )
+		file( GLOB COMCASTOR3D_IDL_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/*.idl
+		)
+		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}.def
+		)
+		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}d.def
+		)
 
 		if ( MSVC )
 		  set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${COMCASTOR3D_DEF_FILES_DEBUG}")
@@ -141,45 +147,27 @@ if ( MSVC )
 		add_target( 
 			${PROJECT_NAME}
 			dll
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
 			"CastorUtils;Castor3D"
 			"CastorUtils;Castor3D;${AtlLibraries}"
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DPch.hpp
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/ComCastor3DPch.cpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 			""
 			""
 			""
-			"${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
+			"${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
 		)
 
-		file( GLOB COMCASTOR_HEADER_FILES
-			Src/CastorUtils/*.hpp
-			Src/CastorUtils/*.h
-			Src/CastorUtils/*.inl
-		)
-		file( GLOB COMCASTOR_SOURCE_FILES
-			Src/CastorUtils/*.cpp
-			Src/CastorUtils/*.c
-		)
-		source_group( "Header Files\\CastorUtils" FILES ${COMCASTOR_HEADER_FILES} )
-		source_group( "Source Files\\CastorUtils" FILES ${COMCASTOR_SOURCE_FILES} )
-		
-		file( GLOB COMCASTOR3D_HEADER_FILES
-			Src/Castor3D/*.hpp
-			Src/Castor3D/*.h
-			Src/Castor3D/*.inl
-		)
-		file( GLOB COMCASTOR3D_SOURCE_FILES
-			Src/Castor3D/*.cpp
-			Src/Castor3D/*.c
-		)
-		source_group( "Source Files\\Castor3D" FILES ${COMCASTOR3D_SOURCE_FILES} )
-		source_group( "Header Files\\Castor3D" FILES ${COMCASTOR3D_HEADER_FILES} )
+		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )
+		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop Castor3D "Castor3D" )
 
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
+				${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
+				${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
 
 		# install tlb files

@@ -2,10 +2,10 @@
 #ifndef __COMC3D_COM_TEXTURE_UNIT_H__
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
-#include "ComTextureLayout.hpp"
-#include "ComRgbaColour.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
 
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 namespace CastorCom
 {

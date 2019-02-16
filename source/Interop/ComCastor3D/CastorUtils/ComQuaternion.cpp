@@ -1,7 +1,7 @@
-#include "ComQuaternion.hpp"
+#include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
 
-#include "ComVector3D.hpp"
-#include "ComAngle.hpp"
+#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
+#include "ComCastor3D/CastorUtils/ComAngle.hpp"
 
 namespace CastorCom
 {

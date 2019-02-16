@@ -2,11 +2,12 @@
 #ifndef __COMC3D_COM_IMAGE_H__
 #define __COMC3D_COM_IMAGE_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include "ComPixelBuffer.hpp"
-#include <Graphics/Image.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+#include "ComCastor3D/CastorUtils/ComPixelBuffer.hpp"
+
+#include <CastorUtils/Graphics/Image.hpp>
 
 namespace CastorCom
 {
@@ -50,7 +51,7 @@ namespace CastorCom
 
 		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_image.get(), &castor::Image::getPixels ) );
 
-		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val );
+		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha );
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );
 		STDMETHOD( Resample )( /* [in] */ ISize * val );
 		STDMETHOD( Fill )( /* [in] */ IRgbaColour * val );

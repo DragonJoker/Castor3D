@@ -1,8 +1,8 @@
-#include "ComSceneNode.hpp"
-#include "ComMovableObject.hpp"
-#include "ComAngle.hpp"
-#include "ComQuaternion.hpp"
-#include "ComVector3D.hpp"
+#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
+#include "ComCastor3D/Castor3D/ComMovableObject.hpp"
+#include "ComCastor3D/CastorUtils/ComAngle.hpp"
+#include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
+#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
 
 namespace CastorCom
 {

@@ -1,4 +1,4 @@
-#include "ComTriFaceMapping.hpp"
+#include "ComCastor3D/Castor3D/ComTriFaceMapping.hpp"
 
 namespace CastorCom
 {

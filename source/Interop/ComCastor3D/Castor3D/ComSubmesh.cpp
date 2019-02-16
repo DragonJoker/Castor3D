@@ -1,5 +1,5 @@
-#include "ComSubmesh.hpp"
-#include "ComVector3D.hpp"
+#include "ComCastor3D/Castor3D/ComSubmesh.hpp"
+#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
 
 namespace CastorCom
 {

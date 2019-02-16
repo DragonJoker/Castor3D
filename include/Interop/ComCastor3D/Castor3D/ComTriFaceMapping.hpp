@@ -2,9 +2,9 @@
 #ifndef __COMC3D_ComTriFaceMapping_H__
 #define __COMC3D_ComTriFaceMapping_H__
 
-#include "ComTextureLayout.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 
-#include <Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
 
 namespace CastorCom
 {

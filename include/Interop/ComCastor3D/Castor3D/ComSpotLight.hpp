@@ -2,10 +2,10 @@
 #ifndef __COMC3D_COM_SPOT_OLIGHT_H__
 #define __COMC3D_COM_SPOT_OLIGHT_H__
 
-#include "ComLightCategory.hpp"
-#include "ComAngle.hpp"
+#include "ComCastor3D/Castor3D/ComLightCategory.hpp"
+#include "ComCastor3D/CastorUtils/ComAngle.hpp"
 
-#include <Scene/Light/SpotLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
 
 namespace CastorCom
 {

@@ -1,4 +1,4 @@
-#include "ComRenderTarget.hpp"
+#include "ComCastor3D/Castor3D/ComRenderTarget.hpp"
 
 namespace CastorCom
 {

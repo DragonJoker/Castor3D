@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_SAMPLER_H__
 #define __COMC3D_COM_SAMPLER_H__
 
-#include "ComRgbaColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
 
-#include <Texture/Sampler.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
 
 namespace CastorCom
 {

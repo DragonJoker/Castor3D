@@ -2,11 +2,12 @@
 #ifndef __COMC3D_COM_QUATERNION_H__
 #define __COMC3D_COM_QUATERNION_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include "ComMatrix4x4.hpp"
-#include <Math/Quaternion.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+#include "ComCastor3D/CastorUtils/ComMatrix4x4.hpp"
+
+#include <CastorUtils/Math/Quaternion.hpp>
 
 namespace CastorCom
 {

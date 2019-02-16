@@ -1,6 +1,6 @@
-#include "ComError.hpp"
+#include "ComCastor3D/ComError.hpp"
 
-#include <Log/Logger.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 
 namespace CastorCom
 {

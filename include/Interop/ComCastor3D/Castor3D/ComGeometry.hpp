@@ -2,10 +2,10 @@
 #ifndef __COMC3D_COM_GEOMETRY_H__
 #define __COMC3D_COM_GEOMETRY_H__
 
-#include "ComMesh.hpp"
-#include "ComSubmesh.hpp"
+#include "ComCastor3D/Castor3D/ComMesh.hpp"
+#include "ComCastor3D/Castor3D/ComSubmesh.hpp"
 
-#include <Scene/Geometry.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
 
 namespace CastorCom
 {

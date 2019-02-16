@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_ENGINE_H__
 #define __COMC3D_COM_ENGINE_H__
 
-#include "ComSize.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
 
-#include <Engine.hpp>
+#include <Castor3D/Engine.hpp>
 
 namespace CastorCom
 {

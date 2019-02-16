@@ -1,4 +1,4 @@
-#include "PyCastor3DPrerequisites.hpp"
+#include "PyCastor3D/PyCastor3DPrerequisites.hpp"
 
 using namespace castor;
 using namespace castor3d;

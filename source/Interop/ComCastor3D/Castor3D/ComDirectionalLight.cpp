@@ -1,4 +1,4 @@
-#include "ComDirectionalLight.hpp"
+#include "ComCastor3D/Castor3D/ComDirectionalLight.hpp"
 
 namespace CastorCom
 {

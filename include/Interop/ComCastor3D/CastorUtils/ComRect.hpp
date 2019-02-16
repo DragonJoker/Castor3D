@@ -2,10 +2,11 @@
 #ifndef __COMC3D_COM_RECT_H__
 #define __COMC3D_COM_RECT_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include <Graphics/Rectangle.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+
+#include <CastorUtils/Graphics/Rectangle.hpp>
 
 namespace CastorCom
 {

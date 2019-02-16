@@ -2,7 +2,7 @@
 #ifndef ___C3DCOM_COM_VARIABLE_GETTER_H___
 #define ___C3DCOM_COM_VARIABLE_GETTER_H___
 
-#include "ComParameterCast.hpp"
+#include "ComCastor3D/ComParameterCast.hpp"
 
 namespace CastorCom
 {

@@ -1,5 +1,5 @@
-#include "ComLogger.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/CastorUtils/ComLogger.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

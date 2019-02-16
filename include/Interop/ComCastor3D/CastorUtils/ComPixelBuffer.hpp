@@ -2,11 +2,12 @@
 #ifndef __COMC3D_COM_PIXEL_BUFFER_H__
 #define __COMC3D_COM_PIXEL_BUFFER_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include "ComSize.hpp"
-#include <Graphics/PixelBuffer.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
+
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
 
 namespace CastorCom
 {

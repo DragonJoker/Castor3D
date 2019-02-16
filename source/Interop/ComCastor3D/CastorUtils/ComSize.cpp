@@ -1,5 +1,5 @@
-#include "ComSize.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

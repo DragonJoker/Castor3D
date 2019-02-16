@@ -1,5 +1,5 @@
-#include "ComTextureLayout.hpp"
-#include "ComLogger.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/CastorUtils/ComLogger.hpp"
 
 namespace CastorCom
 {

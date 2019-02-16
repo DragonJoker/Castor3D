@@ -1,5 +1,5 @@
-#include "ComCamera.hpp"
-#include "ComSceneNode.hpp"
+#include "ComCastor3D/Castor3D/ComCamera.hpp"
+#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {

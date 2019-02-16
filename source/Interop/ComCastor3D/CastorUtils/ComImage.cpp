@@ -1,9 +1,9 @@
-#include "ComImage.hpp"
-#include "ComRgbaColour.hpp"
-#include "ComRect.hpp"
-#include "ComSize.hpp"
-#include "ComUtils.hpp"
-#include "ComEngine.hpp"
+#include "ComCastor3D/CastorUtils/ComImage.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRect.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
+#include "ComCastor3D/Castor3D/ComEngine.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {
@@ -20,7 +20,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CImage::LoadFromFile( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val )
+	STDMETHODIMP CImage::LoadFromFile( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -44,7 +44,9 @@ namespace CastorCom
 					l_pathImage = l_engine->getDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
-				m_image = l_engine->getImageCache().add( l_name, l_pathImage );
+				m_image = l_engine->getImageCache().add( l_name
+					, l_pathImage
+					, dropAlpha );
 
 				if ( !m_image )
 				{

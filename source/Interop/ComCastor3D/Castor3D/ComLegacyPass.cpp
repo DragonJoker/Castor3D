@@ -1,6 +1,6 @@
-#include "ComLegacyPass.hpp"
-#include "ComLogger.hpp"
-#include "ComSize.hpp"
+#include "ComCastor3D/Castor3D/ComLegacyPass.hpp"
+#include "ComCastor3D/CastorUtils/ComLogger.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
 
 namespace CastorCom
 {

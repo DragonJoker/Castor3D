@@ -1,5 +1,5 @@
-#include "ComVector4D.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/CastorUtils/ComVector4D.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

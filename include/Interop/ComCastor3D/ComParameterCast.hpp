@@ -2,10 +2,10 @@
 #ifndef ___C3DCOM_COM_PARAMETER_CAST_H___
 #define ___C3DCOM_COM_PARAMETER_CAST_H___
 
-#include "ComCastor3DPrerequisites.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
-#include <Graphics/ColourComponent.hpp>
+#include <CastorUtils/Graphics/ColourComponent.hpp>
 
 namespace CastorCom
 {

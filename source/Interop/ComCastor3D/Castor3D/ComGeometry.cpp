@@ -1,7 +1,7 @@
-#include "ComGeometry.hpp"
-#include "ComSceneNode.hpp"
-#include "ComMaterial.hpp"
-#include "ComSubmesh.hpp"
+#include "ComCastor3D/Castor3D/ComGeometry.hpp"
+#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
+#include "ComCastor3D/Castor3D/ComMaterial.hpp"
+#include "ComCastor3D/Castor3D/ComSubmesh.hpp"
 
 namespace CastorCom
 {

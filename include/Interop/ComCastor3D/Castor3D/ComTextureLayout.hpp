@@ -2,11 +2,9 @@
 #ifndef __COMC3D_COM_TEXTURE_LAYOUT_H__
 #define __COMC3D_COM_TEXTURE_LAYOUT_H__
 
-#include "ComSampler.hpp"
-#include "ComPixelBuffer.hpp"
-#include "ComTextureImage.hpp"
+#include "ComCastor3D/Castor3D/ComTextureImage.hpp"
 
-#include <Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
 
 namespace CastorCom
 {
@@ -48,7 +46,7 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureView *, makeIndexedGetter( m_internal.get(), &castor3d::TextureLayout::getImage ) );
+		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureView *, makeIndexedGetter( m_internal.get(), &castor3d::TextureLayout::getView ) );
 
 		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
 

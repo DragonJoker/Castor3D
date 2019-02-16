@@ -76,7 +76,7 @@ BEGIN
     END
 END
 
-IDR_Castor3D            REGISTRY	"${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/ComCastor3D.rgs"
+IDR_Castor3D            REGISTRY	"${CMAKE_CURRENT_SOURCE_DIR}/Win32/ComCastor3D.rgs"
 ${RESRC_LIST}
 
 #endif    // Français (France) resources

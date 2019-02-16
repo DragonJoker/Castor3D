@@ -1,8 +1,8 @@
-#include "ComRenderWindow.hpp"
+#include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
 
-#include <Event/UserInput/UserInputListener.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
 
-#include <Core/PlatformWindowHandle.hpp>
+#include <Ashes/Core/PlatformWindowHandle.hpp>
 
 namespace CastorCom
 {
@@ -27,7 +27,7 @@ namespace CastorCom
 				try
 				{
 					*pVal = m_internal->initialise( *static_cast< CSize * >( size )
-						, renderer::WindowHandle{ std::make_unique< renderer::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( val ) ) } )
+						, ashes::WindowHandle{ std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( val ) ) } )
 							? VARIANT_TRUE
 							: VARIANT_FALSE;
 					hr = S_OK;

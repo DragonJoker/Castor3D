@@ -1,5 +1,5 @@
-#include "ComLightCategory.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/Castor3D/ComLightCategory.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

@@ -1,5 +1,5 @@
-#include "ComMaterial.hpp"
-#include "ComPass.hpp"
+#include "ComCastor3D/Castor3D/ComMaterial.hpp"
+#include "ComCastor3D/Castor3D/ComPass.hpp"
 
 namespace CastorCom
 {

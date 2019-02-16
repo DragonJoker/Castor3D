@@ -1,7 +1,7 @@
-#include "ComFont.hpp"
-#include "ComUtils.hpp"
-#include "ComGlyph.hpp"
-#include "ComEngine.hpp"
+#include "ComCastor3D/CastorUtils/ComFont.hpp"
+#include "ComCastor3D/CastorUtils/ComGlyph.hpp"
+#include "ComCastor3D/Castor3D/ComEngine.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
 {

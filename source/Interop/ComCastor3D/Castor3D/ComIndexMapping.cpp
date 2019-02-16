@@ -1,4 +1,4 @@
-#include "ComIndexMapping.hpp"
+#include "ComCastor3D/Castor3D/ComIndexMapping.hpp"
 
 namespace CastorCom
 {

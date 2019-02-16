@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_SUBMESH_H__
 #define __COMC3D_COM_SUBMESH_H__
 
-#include "ComIndexMapping.hpp"
+#include "ComCastor3D/Castor3D/ComIndexMapping.hpp"
 
-#include <Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
 
 namespace CastorCom
 {

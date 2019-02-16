@@ -2,10 +2,11 @@
 #ifndef __COMC3D_COM_FONT_H__
 #define __COMC3D_COM_FONT_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include <Graphics/Font.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+
+#include <CastorUtils/Graphics/Font.hpp>
 
 namespace CastorCom
 {

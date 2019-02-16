@@ -1,4 +1,4 @@
-#include "ComGlyph.hpp"
+#include "ComCastor3D/CastorUtils/ComGlyph.hpp"
 
 namespace CastorCom
 {

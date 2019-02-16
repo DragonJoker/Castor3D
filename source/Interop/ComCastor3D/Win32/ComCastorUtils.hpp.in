@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___C3DCOM_CASTOR_UTILS_H___
 
 #include <Windows.h>
-#include <Data/Path.hpp>
+#include <CastorUtils/Data/Path.hpp>
 
 namespace CastorCom
 {

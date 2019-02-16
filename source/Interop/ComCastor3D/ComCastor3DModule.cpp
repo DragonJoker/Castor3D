@@ -1,6 +1,6 @@
-#include "ComCastor3DModule.hpp"
-#include "ComPosition.hpp"
-#include "ComSize.hpp"
+#include "ComCastor3D/ComCastor3DModule.hpp"
+#include "ComCastor3D/CastorUtils/ComPosition.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
 
 #include <objbase.h>
 

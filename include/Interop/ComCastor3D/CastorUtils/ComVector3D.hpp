@@ -2,11 +2,11 @@
 #ifndef __COMC3D_COM_VECTOR_3D_H__
 #define __COMC3D_COM_VECTOR_3D_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Math/Point.hpp>
+#include <CastorUtils/Math/Point.hpp>
 
 namespace CastorCom
 {

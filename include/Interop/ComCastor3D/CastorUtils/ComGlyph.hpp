@@ -2,11 +2,12 @@
 #ifndef __COMC3D_COM_GLYPH_H__
 #define __COMC3D_COM_GLYPH_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComSize.hpp"
-#include "ComPosition.hpp"
-#include <Graphics/Glyph.hpp>
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
+#include "ComCastor3D/CastorUtils/ComPosition.hpp"
+
+#include <CastorUtils/Graphics/Glyph.hpp>
 
 namespace CastorCom
 {

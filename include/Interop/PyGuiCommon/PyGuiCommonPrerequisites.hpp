@@ -2,14 +2,14 @@
 #ifndef ___GUIPY_PREREQUISITES_H___
 #define ___GUIPY_PREREQUISITES_H___
 
-#include <Render/RenderWindow.hpp>
-#include <GuiCommonPrerequisites.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <GuiCommon/GuiCommonPrerequisites.hpp>
 
 namespace cpy
 {
 	struct WindowHandleCreatorFromWindow
 	{
-		renderer::WindowHandle operator()( wxWindow * p_window )
+		ashes::WindowHandle operator()( wxWindow * p_window )
 		{
 			return GuiCommon::makeWindowHandle( p_window );
 		}
@@ -17,7 +17,7 @@ namespace cpy
 
 	struct WindowHandleCreatorFromFrame
 	{
-		renderer::WindowHandle operator()( wxFrame * p_window )
+		ashes::WindowHandle operator()( wxFrame * p_window )
 		{
 			return GuiCommon::makeWindowHandle( p_window );
 		}
@@ -32,16 +32,16 @@ namespace boost
 	{
 		namespace detail
 		{
-			inline boost::mpl::vector< renderer::WindowHandle, wxWindow * >
+			inline boost::mpl::vector< ashes::WindowHandle, wxWindow * >
 			get_signature( cpy::WindowHandleCreatorFromWindow, void * = 0 )
 			{
-				return boost::mpl::vector< renderer::WindowHandle, wxWindow * >();
+				return boost::mpl::vector< ashes::WindowHandle, wxWindow * >();
 			}
 
-			inline boost::mpl::vector< renderer::WindowHandle, wxFrame * >
+			inline boost::mpl::vector< ashes::WindowHandle, wxFrame * >
 			get_signature( cpy::WindowHandleCreatorFromFrame, void * = 0 )
 			{
-				return boost::mpl::vector< renderer::WindowHandle, wxFrame * >();
+				return boost::mpl::vector< ashes::WindowHandle, wxFrame * >();
 			}
 		}
 	}

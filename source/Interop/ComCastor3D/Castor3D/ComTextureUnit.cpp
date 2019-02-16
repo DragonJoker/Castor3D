@@ -1,8 +1,8 @@
-#include "ComTextureUnit.hpp"
-#include "ComTextureLayout.hpp"
-#include "ComUtils.hpp"
+#include "ComCastor3D/Castor3D/ComTextureUnit.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/ComUtils.hpp"
 
-#include <Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 
 namespace CastorCom
 {
@@ -66,23 +66,25 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			renderer::ImageCreateInfo imageInfo
+			ashes::ImageCreateInfo imageInfo
 			{
 				0u,
-				renderer::TextureType::e2D,
-				renderer::Format::eUndefined,
+				ashes::TextureType::e2D,
+				ashes::Format::eUndefined,
 				{ 1u, 1u, 1u },
 				0u,
 				1u,
-				renderer::SampleCountFlag::e1,
-				renderer::ImageTiling::eOptimal,
-				renderer::ImageUsageFlag::eSampled | renderer::ImageUsageFlag::eTransferDst
+				ashes::SampleCountFlag::e1,
+				ashes::ImageTiling::eOptimal,
+				ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst
 			};
 			auto texture = std::make_shared< castor3d::TextureLayout >( *m_internal->getEngine()->getRenderSystem()
 				, imageInfo
-				, renderer::MemoryPropertyFlag::eDeviceLocal );
+				, ashes::MemoryPropertyFlag::eDeviceLocal );
 			castor::Path filePath{ fromBstr( path ) };
-			texture->setSource( filePath.getPath(), filePath.getFileName( true ) );
+			texture->setSource( filePath.getPath()
+				, filePath.getFileName( true )
+				, castor3d::ImageComponents::eAll );
 			m_internal->setTexture( texture );
 
 			hr = S_OK;

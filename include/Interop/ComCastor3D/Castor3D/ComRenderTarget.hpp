@@ -2,11 +2,11 @@
 #ifndef __COMC3D_COM_RENDER_TARGET_H__
 #define __COMC3D_COM_RENDER_TARGET_H__
 
-#include "ComSize.hpp"
-#include "ComCamera.hpp"
-#include "ComScene.hpp"
+#include "ComCastor3D/CastorUtils/ComSize.hpp"
+#include "ComCastor3D/Castor3D/ComCamera.hpp"
+#include "ComCastor3D/Castor3D/ComScene.hpp"
 
-#include <Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 
 namespace CastorCom
 {

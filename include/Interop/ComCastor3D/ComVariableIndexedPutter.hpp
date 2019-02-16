@@ -2,10 +2,10 @@
 #ifndef ___C3DCOM_COM_VARIABLE_INDEXED_PUTTER_H___
 #define ___C3DCOM_COM_VARIABLE_INDEXED_PUTTER_H___
 
-#include "ComParameterCast.hpp"
+#include "ComCastor3D/ComParameterCast.hpp"
 
-#include <Engine.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 
 namespace CastorCom
 {

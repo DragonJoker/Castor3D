@@ -1,4 +1,4 @@
-#include "ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
 namespace CastorCom
 {

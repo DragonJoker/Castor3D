@@ -2,10 +2,11 @@
 #ifndef __COMC3D_COM_ANGLE_H__
 #define __COMC3D_COM_ANGLE_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include <Math/Angle.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+
+#include <CastorUtils/Math/Angle.hpp>
 
 namespace CastorCom
 {

@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_PASS_H__
 #define __COMC3D_COM_PASS_H__
 
-#include "ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Material/Pass.hpp>
+#include <Castor3D/Material/Pass.hpp>
 
 namespace CastorCom
 {

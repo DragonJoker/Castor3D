@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_METALLIC_ROUGHNESS_PBR_PASS_H__
 #define __COMC3D_COM_METALLIC_ROUGHNESS_PBR_PASS_H__
 
-#include "ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Material/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
 
 namespace CastorCom
 {

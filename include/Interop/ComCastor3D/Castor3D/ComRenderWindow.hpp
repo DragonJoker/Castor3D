@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_RENDER_WINDOW_H__
 #define __COMC3D_COM_RENDER_WINDOW_H__
 
-#include "ComRenderTarget.hpp"
+#include "ComCastor3D/Castor3D/ComRenderTarget.hpp"
 
-#include <Render/RenderWindow.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
 
 namespace CastorCom
 {

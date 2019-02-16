@@ -2,7 +2,7 @@
 #ifndef ___C3DCOM_CASTOR3D_COM_MODULE_H___
 #define ___C3DCOM_CASTOR3D_COM_MODULE_H___
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
 namespace CastorCom
 {

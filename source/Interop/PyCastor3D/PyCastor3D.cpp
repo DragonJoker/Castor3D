@@ -1,12 +1,11 @@
-#include "PyCastor3DPch.hpp"
+#include "PyCastor3D/PyCastor3DPch.hpp"
 
-#include "PyCastor3DPrerequisites.hpp"
+#include "PyCastor3D/PyCastor3DPrerequisites.hpp"
 
-#include "Scene/Background/Colour.hpp"
-#include "Scene/Background/Image.hpp"
-#include "Scene/Background/Skybox.hpp"
-
-#include <Cache/LightCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
+#include "Castor3D/Scene/Background/Colour.hpp"
+#include "Castor3D/Scene/Background/Image.hpp"
+#include "Castor3D/Scene/Background/Skybox.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -71,49 +70,49 @@ void ExportCastor3D()
 	//@}
 	/**@group_name TextureType */
 	//@{
-	py::enum_< renderer::TextureType >( "TextureType" )
-		.value( "1D", renderer::TextureType::e1D )
-		.value( "2D", renderer::TextureType::e2D )
-		.value( "3D", renderer::TextureType::e3D )
+	py::enum_< ashes::TextureType >( "TextureType" )
+		.value( "1D", ashes::TextureType::e1D )
+		.value( "2D", ashes::TextureType::e2D )
+		.value( "3D", ashes::TextureType::e3D )
 		;
 	//@}
 	/**@group_name WrapMode */
 	//@{
-	py::enum_< renderer::WrapMode >( "WrapMode" )
-		.value( "REPEAT", renderer::WrapMode::eRepeat )
-		.value( "MIRRORED_REPEAT", renderer::WrapMode::eMirroredRepeat )
-		.value( "CLAMP_TO_BORDER", renderer::WrapMode::eClampToBorder )
-		.value( "CLAMP_TO_EDGE", renderer::WrapMode::eClampToEdge )
+	py::enum_< ashes::WrapMode >( "WrapMode" )
+		.value( "REPEAT", ashes::WrapMode::eRepeat )
+		.value( "MIRRORED_REPEAT", ashes::WrapMode::eMirroredRepeat )
+		.value( "CLAMP_TO_BORDER", ashes::WrapMode::eClampToBorder )
+		.value( "CLAMP_TO_EDGE", ashes::WrapMode::eClampToEdge )
 		;
 	//@}
 	/**@group_name Filter */
 	//@{
-	py::enum_< renderer::Filter >( "Filter" )
-		.value( "NEAREST", renderer::Filter::eNearest )
-		.value( "LINEAR", renderer::Filter::eLinear )
+	py::enum_< ashes::Filter >( "Filter" )
+		.value( "NEAREST", ashes::Filter::eNearest )
+		.value( "LINEAR", ashes::Filter::eLinear )
 		;
 	//@}
 	/**@group_name MipmapMode */
 	//@{
-	py::enum_< renderer::MipmapMode >( "MipmapMode" )
-		.value( "NEAREST", renderer::MipmapMode::eNearest )
-		.value( "LINEAR", renderer::MipmapMode::eLinear )
+	py::enum_< ashes::MipmapMode >( "MipmapMode" )
+		.value( "NEAREST", ashes::MipmapMode::eNearest )
+		.value( "LINEAR", ashes::MipmapMode::eLinear )
 		;
 	//@}
 	/**@group_name PrimitiveTopology */
 	//@{
-	py::enum_< renderer::PrimitiveTopology >( "PrimitiveTopology" )
-		.value( "POINT_LIST", renderer::PrimitiveTopology::ePointList )
-		.value( "LINE_LIST", renderer::PrimitiveTopology::eLineList )
-		.value( "LINE_STRIP", renderer::PrimitiveTopology::eLineStrip )
-		.value( "TRIANGLE_LIST", renderer::PrimitiveTopology::eTriangleList )
-		.value( "TRIANGLE_STRIP", renderer::PrimitiveTopology::eTriangleStrip )
-		.value( "TRIANGLE_FAN", renderer::PrimitiveTopology::eTriangleFan )
-		.value( "LINE_LIST_ADJACENCY", renderer::PrimitiveTopology::eLineListWithAdjacency )
-		.value( "LINE_STRIP_ADJACENCY", renderer::PrimitiveTopology::eLineStripWithAdjacency )
-		.value( "TRIANGLE_LIST_ADJACENCY", renderer::PrimitiveTopology::eTriangleListWithAdjacency )
-		.value( "TRIANGLE_STRIP_ADJACENCY", renderer::PrimitiveTopology::eTriangleStripWithAdjacency )
-		.value( "PATCH_LIST", renderer::PrimitiveTopology::ePatchList )
+	py::enum_< ashes::PrimitiveTopology >( "PrimitiveTopology" )
+		.value( "POINT_LIST", ashes::PrimitiveTopology::ePointList )
+		.value( "LINE_LIST", ashes::PrimitiveTopology::eLineList )
+		.value( "LINE_STRIP", ashes::PrimitiveTopology::eLineStrip )
+		.value( "TRIANGLE_LIST", ashes::PrimitiveTopology::eTriangleList )
+		.value( "TRIANGLE_STRIP", ashes::PrimitiveTopology::eTriangleStrip )
+		.value( "TRIANGLE_FAN", ashes::PrimitiveTopology::eTriangleFan )
+		.value( "LINE_LIST_ADJACENCY", ashes::PrimitiveTopology::eLineListWithAdjacency )
+		.value( "LINE_STRIP_ADJACENCY", ashes::PrimitiveTopology::eLineStripWithAdjacency )
+		.value( "TRIANGLE_LIST_ADJACENCY", ashes::PrimitiveTopology::eTriangleListWithAdjacency )
+		.value( "TRIANGLE_STRIP_ADJACENCY", ashes::PrimitiveTopology::eTriangleStripWithAdjacency )
+		.value( "PATCH_LIST", ashes::PrimitiveTopology::ePatchList )
 		;
 	//@}
 	/**@group_name Sampler */
@@ -138,7 +137,7 @@ void ExportCastor3D()
 	/**@group_name TextureView */
 	//@{
 	void ( TextureView::*dynamicTextureImagesetter )( PxBufferBaseSPtr ) = &TextureView::initialiseSource;
-	void ( TextureView::*staticTextureImagesetter )( Path const &, Path const & ) = &TextureView::initialiseSource;
+	void ( TextureView::*staticTextureImagesetter )( Path const &, Path const &, ImageComponents ) = &TextureView::initialiseSource;
 	py::class_< TextureView, boost::noncopyable >( "TextureImage", py::no_init )
 		.add_property( "buffer", &TextureView::getBuffer, "The texture image buffer" )
 		.def( "set_source", staticTextureImagesetter, "Sets the texture image" )

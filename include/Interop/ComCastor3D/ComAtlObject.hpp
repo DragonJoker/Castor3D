@@ -2,11 +2,11 @@
 #ifndef ___C3DCOM_COM_ATL_OBJECT_H___
 #define ___C3DCOM_COM_ATL_OBJECT_H___
 
-#include "ComVariableGetter.hpp"
-#include "ComVariablePutter.hpp"
-#include "ComVariableIndexedGetter.hpp"
-#include "ComVariableIndexedPutter.hpp"
-#include "ComError.hpp"
+#include "ComCastor3D/ComVariableGetter.hpp"
+#include "ComCastor3D/ComVariablePutter.hpp"
+#include "ComCastor3D/ComVariableIndexedGetter.hpp"
+#include "ComCastor3D/ComVariableIndexedPutter.hpp"
+#include "ComCastor3D/ComError.hpp"
 
 namespace CastorCom
 {

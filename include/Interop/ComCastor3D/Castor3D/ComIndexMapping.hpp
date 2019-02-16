@@ -2,11 +2,11 @@
 #ifndef __COMC3D_ComIndexMapping_H__
 #define __COMC3D_ComIndexMapping_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Mesh/SubmeshComponent/IndexMapping.hpp>
-#include <Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
 
 namespace CastorCom
 {

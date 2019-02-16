@@ -1,11 +1,10 @@
-/* See LICENSE file in root folder */
 #ifndef __COMC3D_COM_CAMERA_H__
 #define __COMC3D_COM_CAMERA_H__
 
-#include "ComAtlObject.hpp"
-#include "ComScene.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
+#include "ComCastor3D/Castor3D/ComScene.hpp"
 
-#include <Scene/Camera.hpp>
+#include <Castor3D/Scene/Camera.hpp>
 
 namespace CastorCom
 {

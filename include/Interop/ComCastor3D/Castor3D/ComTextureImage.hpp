@@ -2,10 +2,10 @@
 #ifndef __COMC3D_COM_TEXTURE_IMAGE_H__
 #define __COMC3D_COM_TEXTURE_IMAGE_H__
 
-#include "ComSampler.hpp"
-#include "ComPixelBuffer.hpp"
+#include "ComCastor3D/Castor3D/ComSampler.hpp"
+#include "ComCastor3D/CastorUtils/ComPixelBuffer.hpp"
 
-#include <Texture/TextureView.hpp>
+#include <Castor3D/Texture/TextureView.hpp>
 
 namespace CastorCom
 {

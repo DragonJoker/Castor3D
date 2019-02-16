@@ -2,9 +2,9 @@
 #ifndef __COMC3D_ComSkyboxBackground_H__
 #define __COMC3D_ComSkyboxBackground_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Scene/Background/Skybox.hpp>
+#include <Castor3D/Scene/Background/Skybox.hpp>
 
 namespace CastorCom
 {

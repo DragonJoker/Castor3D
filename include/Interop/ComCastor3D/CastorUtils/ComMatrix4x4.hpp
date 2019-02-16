@@ -2,10 +2,11 @@
 #ifndef __COMC3D_COM_SQUARE_MATRIX_H__
 #define __COMC3D_COM_SQUARE_MATRIX_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
-#include "ComAtlObject.hpp"
-#include <Math/SquareMatrix.hpp>
+#include "ComCastor3D/ComAtlObject.hpp"
+
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace CastorCom
 {

@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_DIRECTIONAL_LIGHT_H__
 #define __COMC3D_COM_DIRECTIONAL_LIGHT_H__
 
-#include "ComLightCategory.hpp"
+#include "ComCastor3D/Castor3D/ComLightCategory.hpp"
 
-#include <Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
 
 namespace CastorCom
 {

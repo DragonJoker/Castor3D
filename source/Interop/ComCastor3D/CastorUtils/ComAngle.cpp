@@ -1,4 +1,4 @@
-#include "ComAngle.hpp"
+#include "ComCastor3D/CastorUtils/ComAngle.hpp"
 
 namespace CastorCom
 {

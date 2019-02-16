@@ -2,7 +2,7 @@
 #ifndef __C3DCOM_COM_ERROR_H__
 #define __C3DCOM_COM_ERROR_H__
 
-#include "ComCastor3DPrerequisites.hpp"
+#include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
 namespace CastorCom
 {

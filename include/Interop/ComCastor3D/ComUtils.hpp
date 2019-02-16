@@ -2,7 +2,7 @@
 #ifndef __C3DCOM_COM_UTILS_H__
 #define __C3DCOM_COM_UTILS_H__
 
-#include "ComError.hpp"
+#include "ComCastor3D/ComError.hpp"
 
 #include <atlsafe.h>
 

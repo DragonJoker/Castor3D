@@ -2,13 +2,13 @@
 #ifndef __COMC3D_COM_SCENE_NODE_H__
 #define __COMC3D_COM_SCENE_NODE_H__
 
-#include "ComTextureLayout.hpp"
-#include "ComRgbColour.hpp"
-#include "ComVector3D.hpp"
-#include "ComQuaternion.hpp"
+#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
+#include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
 
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 namespace CastorCom
 {

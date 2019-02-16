@@ -1,5 +1,5 @@
-#include "ComMovableObject.hpp"
-#include "ComSceneNode.hpp"
+#include "ComCastor3D/Castor3D/ComMovableObject.hpp"
+#include "ComCastor3D/Castor3D/ComSceneNode.hpp"
 
 namespace CastorCom
 {

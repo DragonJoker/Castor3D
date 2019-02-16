@@ -829,7 +829,7 @@ interface IImage
 	[propget, id( 1 ), helpstring( "The image pixels buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
 
 	// Methods
-	[id( 2 ), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR name, [in] BSTR val );
+	[id( 2 ), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR name, [in] BSTR val, [in] boolean dropAlpha );
 	[id( 3 ), helpstring( "method LoadFromFormat" )] HRESULT LoadFromFormat( [in] IEngine * engine, [in] BSTR name, [in] ePIXEL_FORMAT fmt, [in] ISize * size );
 	[id( 4 ), helpstring( "method Resample" )] HRESULT Resample( [in] ISize * val );
 	[id( 5 ), helpstring( "method Fill" )] HRESULT Fill( [in] IRgbaColour * val );

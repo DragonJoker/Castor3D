@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_SPECULAR_GLOSSINESS_PBR_PASS_H__
 #define __COMC3D_COM_SPECULAR_GLOSSINESS_PBR_PASS_H__
 
-#include "ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
 
 namespace CastorCom
 {

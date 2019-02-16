@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_LIGHT_CATEGORY_H__
 #define __COMC3D_COM_LIGHT_CATEGORY_H__
 
-#include "ComVector3D.hpp"
+#include "ComCastor3D/CastorUtils/ComVector3D.hpp"
 
-#include <Scene/Light/LightCategory.hpp>
+#include <Castor3D/Scene/Light/LightCategory.hpp>
 
 namespace CastorCom
 {

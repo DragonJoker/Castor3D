@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_MOVABLE_OBJECT_H__
 #define __COMC3D_COM_MOVABLE_OBJECT_H__
 
-#include "ComAtlObject.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
-#include <Scene/MovableObject.hpp>
+#include <Castor3D/Scene/MovableObject.hpp>
 
 namespace CastorCom
 {

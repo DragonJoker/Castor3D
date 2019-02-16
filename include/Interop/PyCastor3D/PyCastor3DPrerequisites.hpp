@@ -2,69 +2,69 @@
 #ifndef ___C3DPY_PREREQUISITES_H___
 #define ___C3DPY_PREREQUISITES_H___
 
-#include <Log/Logger.hpp>
-#include <Math/Angle.hpp>
-#include <Graphics/Glyph.hpp>
-#include <Graphics/Font.hpp>
-#include <Math/Quaternion.hpp>
-#include <Graphics/Position.hpp>
-#include <Graphics/Size.hpp>
-#include <Graphics/Rectangle.hpp>
-#include <Graphics/Image.hpp>
-#include <Graphics/PixelBuffer.hpp>
-#include <Math/SquareMatrix.hpp>
-#include <Math/Quaternion.hpp>
+#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Graphics/Glyph.hpp>
+#include <CastorUtils/Graphics/Font.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
+#include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
 
-#include <Engine.hpp>
-#include <Cache/AnimatedObjectGroupCache.hpp>
-#include <Cache/BillboardCache.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/GeometryCache.hpp>
-#include <Cache/LightCache.hpp>
-#include <Cache/MaterialCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/OverlayCache.hpp>
-#include <Cache/PluginCache.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-#include <Cache/WindowCache.hpp>
-#include <Animation/Animable.hpp>
-#include <Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Animation/Mesh/MeshAnimation.hpp>
-#include <Material/Material.hpp>
-#include <Material/LegacyPass.hpp>
-#include <Mesh/Mesh.hpp>
-#include <Mesh/Submesh.hpp>
-#include <Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Mesh/SubmeshComponent/TriFaceMapping.hpp>
-#include <Overlay/BorderPanelOverlay.hpp>
-#include <Overlay/Overlay.hpp>
-#include <Overlay/PanelOverlay.hpp>
-#include <Overlay/TextOverlay.hpp>
-#include <Plugin/Plugin.hpp>
-#include <Render/RenderWindow.hpp>
-#include <Scene/BillboardList.hpp>
-#include <Scene/Camera.hpp>
-#include <Scene/Geometry.hpp>
-#include <Scene/Scene.hpp>
-#include <Scene/SceneNode.hpp>
-#include <Scene/Animation/AnimatedObject.hpp>
-#include <Scene/Animation/AnimatedSkeleton.hpp>
-#include <Scene/Animation/AnimatedMesh.hpp>
-#include <Scene/Animation/AnimatedObjectGroup.hpp>
-#include <Scene/Animation/AnimationInstance.hpp>
-#include <Scene/Animation/Mesh/MeshAnimationInstance.hpp>
-#include <Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/Light.hpp>
-#include <Scene/Light/PointLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
-#include <Shader/ShaderProgram.hpp>
-#include <Texture/Sampler.hpp>
-#include <Texture/TextureView.hpp>
-#include <Texture/TextureLayout.hpp>
-#include <Texture/TextureUnit.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Cache/BillboardCache.hpp>
+#include <Castor3D/Cache/CameraCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/OverlayCache.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
+#include <Castor3D/Animation/Animable.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
+#include <Castor3D/Material/Material.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
+#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
+#include <Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp>
+#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
+#include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Overlay/PanelOverlay.hpp>
+#include <Castor3D/Overlay/TextOverlay.hpp>
+#include <Castor3D/Plugin/Plugin.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/BillboardList.hpp>
+#include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
+#include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObject.hpp>
+#include <Castor3D/Scene/Animation/AnimatedSkeleton.hpp>
+#include <Castor3D/Scene/Animation/AnimatedMesh.hpp>
+#include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Castor3D/Scene/Animation/AnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
+#include <Castor3D/Scene/Light/DirectionalLight.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/PointLight.hpp>
+#include <Castor3D/Scene/Light/SpotLight.hpp>
+#include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureView.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
 
 namespace cpy
 {
@@ -781,12 +781,12 @@ namespace cpy
 		{
 			auto it = x.find( i );
 
-			if ( it != x.end() )
+			if ( it == x.end() )
 			{
-				return it->second;
+				KeyError();
 			}
 
-			KeyError();
+			return it->second;
 		}
 
 		static inline void set( map_type & x, key_type const & i, mapped_type const & v )

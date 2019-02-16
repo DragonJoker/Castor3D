@@ -2,11 +2,11 @@
 #ifndef __COMC3D_COM_LIGHT_H__
 #define __COMC3D_COM_LIGHT_H__
 
-#include "ComDirectionalLight.hpp"
-#include "ComPointLight.hpp"
-#include "ComSpotLight.hpp"
+#include "ComCastor3D/Castor3D/ComDirectionalLight.hpp"
+#include "ComCastor3D/Castor3D/ComPointLight.hpp"
+#include "ComCastor3D/Castor3D/ComSpotLight.hpp"
 
-#include <Scene/Light/Light.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 
 namespace CastorCom
 {

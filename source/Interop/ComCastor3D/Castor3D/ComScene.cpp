@@ -1,20 +1,19 @@
-#include "ComScene.hpp"
-#include "ComGeometry.hpp"
-#include "ComCamera.hpp"
-#include "ComLight.hpp"
-#include "ComMesh.hpp"
-#include "ComRenderWindow.hpp"
+#include "ComCastor3D/Castor3D/ComScene.hpp"
+#include "ComCastor3D/Castor3D/ComGeometry.hpp"
+#include "ComCastor3D/Castor3D/ComCamera.hpp"
+#include "ComCastor3D/Castor3D/ComLight.hpp"
+#include "ComCastor3D/Castor3D/ComMesh.hpp"
+#include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
 
-#include <Cache/BillboardCache.hpp>
-#include <Cache/CameraCache.hpp>
-#include <Cache/GeometryCache.hpp>
-#include <Cache/LightCache.hpp>
-#include <Cache/SceneNodeCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/WindowCache.hpp>
-#include <Miscellaneous/Parameter.hpp>
-
-#include <Render/Viewport.hpp>
+#include <Castor3D/Cache/BillboardCache.hpp>
+#include <Castor3D/Cache/CameraCache.hpp>
+#include <Castor3D/Cache/GeometryCache.hpp>
+#include <Castor3D/Cache/LightCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/Viewport.hpp>
 
 namespace CastorCom
 {

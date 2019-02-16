@@ -1,25 +1,24 @@
-#include "ComEngine.hpp"
-#include "ComLogger.hpp"
-#include "ComMesh.hpp"
-#include "ComSampler.hpp"
-#include "ComRenderWindow.hpp"
-#include "ComScene.hpp"
+#include "ComCastor3D/Castor3D/ComEngine.hpp"
+#include "ComCastor3D/Castor3D/ComMesh.hpp"
+#include "ComCastor3D/Castor3D/ComSampler.hpp"
+#include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
+#include "ComCastor3D/Castor3D/ComScene.hpp"
+#include "ComCastor3D/CastorUtils/ComLogger.hpp"
 
 #undef max
 #undef min
 #undef abs
 
-#include <Cache/MaterialCache.hpp>
-#include <Cache/MeshCache.hpp>
-#include <Cache/PluginCache.hpp>
-#include <Cache/SamplerCache.hpp>
-#include <Cache/SceneCache.hpp>
-#include <Cache/WindowCache.hpp>
-
-#include <Event/Frame/FunctorEvent.hpp>
-#include <Event/Frame/InitialiseEvent.hpp>
-#include <Render/RenderLoop.hpp>
-#include <Scene/SceneFileParser.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Scene/SceneFileParser.hpp>
 
 #define CASTOR3D_THREADED false
 

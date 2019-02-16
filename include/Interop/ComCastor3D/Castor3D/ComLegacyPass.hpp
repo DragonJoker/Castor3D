@@ -2,9 +2,9 @@
 #ifndef __COMC3D_COM_LEGACY_PASS_H__
 #define __COMC3D_COM_LEGACY_PASS_H__
 
-#include "ComRgbColour.hpp"
+#include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 
-#include <Material/LegacyPass.hpp>
+#include <Castor3D/Material/LegacyPass.hpp>
 
 namespace CastorCom
 {

@@ -119,6 +119,11 @@ namespace castor3d
 			return *m_texture;
 		}
 
+		inline TextureView const & getView( size_t index = 0u )const
+		{
+			return getImage( index );
+		}
+
 		inline TextureView const & getImage( size_t index = 0u )const
 		{
 			CU_Require( index < m_views.size() && m_views[index] );
