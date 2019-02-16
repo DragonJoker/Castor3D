@@ -20,12 +20,12 @@ configuration:
 
 install:
   - git submodule init
-  - git submodule update --init -- "source/CMake"
-  - git submodule update --recursive --init -- "source/external/Ashes"
-  - git submodule update --init -- "source/external/FreeType"
-  - git submodule update --init -- "source/external/zlib"
-  - git submodule update --recursive --init -- "source/external/ShaderWriter"
-  - git submodule update --init -- "source/external/glslang"
+  - git submodule update --init -- "CMake"
+  - git submodule update --recursive --init -- "external/Ashes"
+  - git submodule update --init -- "external/FreeType"
+  - git submodule update --init -- "external/zlib"
+  - git submodule update --recursive --init -- "external/ShaderWriter"
+  - git submodule update --init -- "external/glslang"
   - git submodule update --init -- "dependencies"
   - ps: $PLATFORM_NAME="x64"
   - ps: $OS_NAME="linux"
