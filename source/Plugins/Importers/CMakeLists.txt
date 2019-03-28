@@ -12,6 +12,16 @@ endfunction( ImportersInit )
 function( ImportersBuild )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( BUILTIN_NEEDED ON )
+		set( ImporterLibraries ${CastorMinLibraries} )
+
+		set( ImporterIncludes
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Importers
+			${CASTOR_BINARY_DIR}/include/Plugins/Importers
+			${CASTOR_SOURCE_DIR}/source/Plugins/Importers
+			${CASTOR_BINARY_DIR}/source/Plugins/Importers
+		)
+
 
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( Build ${Assimp} )
@@ -37,14 +47,14 @@ function( ImportersBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( ImportersBuild )
 
-function( ImportersSummary msg msgtest )
+function( ImportersSummary msg )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( msg_tmp "\n\nImporters :" )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )

@@ -1,3 +1,105 @@
+2019-02-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorUtils: Fixed doxygen warnings.
+	* CastorUtils: Removed all p_ prefix in headers.
+	* Castor3D: Fixed doxygen warnings.
+	* Castor3D: Removed all p_ prefix in headers.
+
+2019-02-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed vtx_instance to a uint.
+	* Fixed compilation with GCC 6.3.
+	* Fixed environment map prefiltering with VkRenderer (problem came from the use of Arithmetic LShift instead of Logical Left Shift).
+
+2019-01-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Updated error messages in image loading.
+
+2019-01-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed point light shadows with Vulkan
+	* Fixed multipass materials.
+	* Fixes to make environment mapping compile in HLSL.
+	* Reworked a bit fog function.
+	* Fixed overlays rendering.
+
+2019-01-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Fixed matrix initialisation from another different size matrix.
+	* Fixed pixel buffer flip.
+
+2019-01-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ShaderWriter library integration.
+	* Allowed only one directional light.
+	* Reviewed frame time measurements.
+	* COM interop has been updated.
+	* Python interop has been updated.
+	* Removed RendererLib submodule and switched to Ashes.
+	* Fixed overlays rendering by rendering them in their own framebuffer.
+	* Using texture arrays for shadow maps.
+	* Minor fixes to make Castor3D "work" on Intel HD4000.
+	* Renamed CastorUtils macros.
+
+2019-01-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Cascaded shadow maps are implemented and functional.
+	* Added some viewport related functions to Camera.
+	* Added support for custom projection matrix, to Camera.
+	* Added zlib as an external project.
+
+2018-06-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Review render queue
+	* Added support for RangedValues to PipelineVisitor and GuiCommon.
+	* Implemented TestRenderSystem using test renderer from RendererLib.
+	* It allowed reenabling Castor3DTest.
+	* Added FreeImage as a submodule, it is now compiled as a dependency.
+	* MatrixUbo is now a reference, in RenderPass, hence is owned by owner classes.
+	* Created LinearMotionBlur post effect.
+	* Fixed some bugs related to instanced nodes and frustum culling.
+	* FreeImage submodule now points to my own fork.
+	* Upgraded scene files, meshes can now hold a default material.
+	* Post effects are now written properly, when they hold sections.
+	* Added DummyCuller class, that culls nothing.
+	* Small readability update in Frustum.
+	* Render queue now uses SceneCuller from its render pass.
+	* Disabled build of FreeImage on Linux.
+
+2018-06-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Simplified lexer management, it now only supports C/C++ lexer.
+
+2018-06-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D now uses RendererLib.
+	* Added mandatory locations to GlslWriter, for declAttribute, declInput, declOutput and declUniform.
+	* Added support for cross skyboxes.
+	* Some artifacts remain, probably due to synchronisation between render passes.
+	* Fixed some crashes in release due to locale.
+	* There is room for optimisation though.
+	* Enabled anisotropic filtering control from scene file.
+	* Removed CastorShape, added CastorTestLauncher, and DiffImage.
+	* Created Gl3RenderSystem.
+	* Removed most calls to std::bind.
+	* Reviewed includes in CMakeLists.
+	* Added Raw and PCF shadow maps.
+	* Added sendEvent function to Engine, to be able to execute an event directly if there is an enabled device.
+	* Using gl_PerVertex everywhere gl_Position were used.
+	* Reworked castor::Matrix and castor::Point to make them hold static data, and reduce memory footprint of Matrix.
+	* Dropped SSE2 for them.
+	* Rehabilitated ShaderDialog, it now can be used to display tone mapping and post effect shaders.
+	* ShaderDialog now displays all the shaders for the pipeline used to display a pass.
+	* Extracted binary write/parse classes to new files, to reduce include dependencies.
+	* Reviewed a bit scene file writing.
+	* Force load image in A8R8G8B8 and not R8G8B8.
+	* CastorMeshConverter can now split mesh's submeshes into new meshes, and optionally center them on their bounding box's center.
+	* Reviewed mip level management for textures loaded from files.
+	* Added volumetric light scattering.
+	* Directional light's shadow now follow the viewing camera.
+	* Integrated the original SMAA.hlsl file content to the plugin, to avoid copy paste problems.
+	* Selected submesh's bounding box now appears in yellow.
+
+2018-01-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Few fixes to OBJ importer, but I really need to rework it, it's too memory consuming.
+	* Fixed counts.
+	* Added CastorMeshConverter project.
+	* Removed Depth pre-pass.
+	* Reenabled PoT, for image files, and fixed resampling, due to something that looks like a bug driver.
+
+2018-01-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Implemented CastorMeshUpgrader.
+
 2017-12-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
 	* Re-enabled depth pre-pass, that works, now.
 	* Reworked a bit the way debug symbols are loaded.

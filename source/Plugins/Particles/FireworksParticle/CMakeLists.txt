@@ -1,14 +1,14 @@
 project( FireworksParticle )
 
-set( CastorBinsDependencies 
-	${CastorBinsDependencies}
+set( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Fireworks Particle" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 add_definitions( ${ParticlesDefinitions} )
@@ -17,6 +17,8 @@ include_directories( ${ParticlesIncludes} )
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Particles/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Particles/${PROJECT_NAME}
 	"Castor3D"
 	"${ParticlesLibraries}"
 )

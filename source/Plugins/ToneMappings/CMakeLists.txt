@@ -2,7 +2,6 @@ option( CASTOR_BUILDGRP_TONEMAPS "Build Castor3D Tone mapping plug-ins" TRUE )
 option( CASTOR_BUILD_TONEMAP_HAARM "Build Haarm Pieter Duiker Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_HEJL "Build Hejl Burgess Dawson Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_REINHARD "Build Reinhard Tone mapping plug-in" TRUE )
-option( CASTOR_BUILD_TONEMAP_LINEAR "Build Linear Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_UNCHARTED2 "Build Uncharted 2 Tone mapping plug-in" TRUE )
 
 function( ToneMappingsInit )
@@ -17,19 +16,18 @@ function( ToneMappingsBuild )
 	set( ToneMappingLibraries ${CastorMinLibraries} )
 
 	set( ToneMappingIncludes
-		${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-		${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
-		${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
-		${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+		${Castor3DIncludeDirs}
+		${CASTOR_SOURCE_DIR}/include/Plugins/ToneMappings
+		${CASTOR_BINARY_DIR}/include/Plugins/ToneMappings
+		${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings
+		${CASTOR_BINARY_DIR}/source/Plugins/ToneMappings
 	)
 
-	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
-		if ( ${CASTOR_BUILD_TONEMAP_LINEAR} )
-			set( Build ${Linear} )
-			add_subdirectory( Plugins/ToneMappings/LinearToneMapping )
-			set( Linear ${Build} PARENT_SCOPE )
-		endif ()
+	set( Build ${Linear} )
+	add_subdirectory( Plugins/ToneMappings/LinearToneMapping )
+	set( Linear ${Build} PARENT_SCOPE )
 
+	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			set( Build ${Haarm} )
 			add_subdirectory( Plugins/ToneMappings/HaarmPieterDuikerToneMapping )
@@ -60,18 +58,16 @@ function( ToneMappingsBuild )
 		PARENT_SCOPE
 	)
 
-	set( CastorBinsDependencies
-		${CastorBinsDependencies}
+	set( Castor3DBinsDependencies
+		${Castor3DBinsDependencies}
 		PARENT_SCOPE
 	)
 endfunction( ToneMappingsBuild )
 
-function( ToneMappingsSummary msg msgtest )
+function( ToneMappingsSummary msg )
+	set( msg_tmp "\n\nToneMappings :" )
+	set( msg_tmp "${msg_tmp}\n    Linear               ${Linear}" )
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
-		set( msg_tmp "\n\nToneMappings :" )
-		if ( ${CASTOR_BUILD_TONEMAP_LINEAR} )
-			set( msg_tmp "${msg_tmp}\n    Linear               ${Linear}" )
-		endif ()
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			set( msg_tmp "${msg_tmp}\n    Haarm Pieter Duiker  ${Haarm}" )
 		endif ()

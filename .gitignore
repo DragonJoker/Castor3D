@@ -14,15 +14,9 @@
 /CMake
 /external
 /.gitattributes
-/package
 *.csproj
 *.user
 *.suo
 *.gch
-*.aps
-*.lnk
 *.*~
 *.exe
-/.vs
-CMakeSettings.json
-.DS_Store

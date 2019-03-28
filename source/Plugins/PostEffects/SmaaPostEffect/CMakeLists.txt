@@ -1,14 +1,14 @@
 project( SmaaPostEffect )
 
-set( CastorBinsDependencies 
-	${CastorBinsDependencies}
+set( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "SMAA Post Effect" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 1 )
+set( ${PROJECT_NAME}_VERSION_MINOR 2 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 add_definitions( ${PostEffectDefinitions} )
@@ -17,6 +17,8 @@ include_directories( ${PostEffectIncludes} )
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/PostEffects/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects/${PROJECT_NAME}
 	"Castor3D"
 	"${PostEffectLibraries}"
 )

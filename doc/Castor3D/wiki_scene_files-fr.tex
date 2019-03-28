@@ -1,0 +1,1341 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\part{Introduction}
+
+Les fichiers CSCN sont au format texte et sont donc modifiables assez
+facilement (pour peu que l'on comprenne quelque chose à  la syntaxe
+:P)
+
+\part{Types de données}
+
+Les types de données qui apparaissent dans les fichiers de scène sont
+les suivants :
+
+\emph{booléen} : un booléen (\emph{true} ou \emph{false}).
+
+\emph{entier} : un entier.
+
+\emph{réel} : un nombre réel, le séparateur des décimales est le point
+( . ).
+
+\emph{2, 3, 4 entiers} : 2, 3 ou 4 entiers, séparés par des virgules
+( , ) ou des espaces ( ).
+
+\emph{2, 3, 4 réels} : 2, 3 ou 4 réels, séparés par des virgules (
+, ) ou des espaces ( ).
+
+\emph{taille} : 2 entiers supérieurs ou égaux à 0.
+
+\emph{matrice de 2x2, 3x3, 4x4 réels} : 2, 3 ou 4 groupes séparés
+par des points virgules ( ; ) de 2, 3 ou 4 réels séparés par des virgules
+( , ) ou des espaces ( )
+
+\emph{couleur\_rvb} : les composantes RVB d'une couleur, exprimées
+en réels compris entre 0.0 et 1.0.
+
+\emph{couleur\_rvba} : les composantes RVBA d'une couleur, exprimées
+en réels compris entre 0.0 et 1.0.
+
+\emph{couleur\_hdr\_rvb} : les composantes RVB d'une couleur, exprimées
+en réels supérieurs ou égaux à 0.0.
+
+\emph{couleur\_hdr\_rvba} : les composantes RVBA d'une couleur, exprimées
+en réels supérieurs ou égaux à 0.0.
+
+\emph{valeur} : chaîne de caractère représentant une valeur prédéfinie.
+
+\emph{nom} : chaîne de caractères, entourée de guillemets ( \char`\"{}
+). 
+
+\emph{fichier} : chaîne de caractères représentant un chemin d'accès
+à un fichier, entourée de guillemets ( \char`\"{} ).
+
+\emph{dossier} : chaîne de caractères représentant un chemin d'accès
+à un dossier, entourée de guillemets ( \char`\"{} ).
+
+\part{Sections}
+
+\section{Description}
+
+Le fichier est décomposé en sections décrites de la manière suivante:
+
+\begin{lstlisting}
+[section_type] "[section_name]"
+{
+	// Section description
+}
+\end{lstlisting}
+
+Exemple:
+
+\begin{lstlisting}
+light "Light0"
+{
+	type directional
+	colour 1.0 1.0 1.0
+	intensity 0.8 1.0
+}
+\end{lstlisting}
+
+Certaines sections peuvent avoir des sous-sections :
+
+\begin{lstlisting}
+material "Bronze"
+{
+	pass
+	{
+		ambient 0.2125 0.1275 0.054
+		diffuse 0.714 0.4284 0.12144
+		emissive 0.0
+		specular 0.393548 0.271906 0.166721
+		shininess 25.6
+	}
+}
+\end{lstlisting}
+
+\subsection{Liste des sections}
+
+Les différentes sections possibles sont les suivantes :
+\begin{enumerate}
+\item 'sampler'
+
+Permet de définir un objet d'échantillonnage de texture. 
+\item 'material'
+
+Permet la définition d'un matériau. 
+\item 'mesh'
+
+Permet la définition d'un maillage. 
+\item 'font'
+
+Permet la définition d'une police utilisée dans les incrustations
+texte. 
+\item 'window'
+
+Permet la définition d'une fenêtre de rendu. 
+\item 'panel\_overlay'
+
+Permet de définir une incrustation globale de type panneau simple. 
+\item 'border\_panel\_overlay'
+
+Permet de définir une incrustation globale de type panneau avec bordure. 
+\item 'text\_overlay'
+
+Permet de définir une incrustation globale de type panneau avec texte. 
+\item 'scene'
+
+Permet de définir une scène. 
+\end{enumerate}
+
+\section{Section 'sampler'}
+\begin{enumerate}
+\item 'min\_filter' : \emph{valeur}
+
+Valeur pour la fonction de minification. Les valeurs possibles sont
+: 
+\begin{itemize}
+\item \emph{linear} : interpolation linéaire. 
+\item \emph{nearest} : aucune interpolation. 
+\end{itemize}
+\item 'mag\_filter' : \emph{valeur}
+
+Valeur pour la fonction de magnification. Les valeurs possibles sont
+: 
+\begin{itemize}
+\item \emph{linear} : interpolation linéaire. 
+\item \emph{nearest} : aucune interpolation. 
+\end{itemize}
+\item 'mip\_filter' : \emph{valeur}
+
+Valeur pour la fonction de mipmapping. Les valeurs possibles sont
+: 
+\begin{itemize}
+\item \emph{linear} : interpolation linéaire. 
+\item \emph{nearest} : aucune interpolation. 
+\end{itemize}
+\item 'min\_lod' : \emph{réel}
+
+Définit la valeur minimale du niveau de détail. 
+\item 'max\_lod' : \emph{réel}
+
+Définit la valeur maximale du niveau de détail. 
+\item 'lod\_bias' : \emph{réel}
+
+Définit le MIP-Level. 
+\item 'u\_wrap\_mode' : \emph{valeur}
+
+Définit le paramètre d'enveloppement de la texture en U. Peut prendre
+les valeurs suivantes :
+\begin{itemize}
+\item \emph{repeat} : La texture est répétée. 
+\item \emph{mirrored\_repeat} : La texture est répétée, une instance sur
+2 en miroir de la précédente. 
+\item \emph{clamp\_to\_border} : La texture est étirée, la couleur des arêtes
+au bord de la texture est celle du bord de la texture. 
+\item \emph{clamp\_to\_edge} : La texture est étirée, la couleur des arêtes
+au bord de la texture est un mélange de celle du bord de la texture
+et de celle du bord. 
+\end{itemize}
+\item 'v\_wrap\_mode' : \emph{valeur}
+
+Définit le paramètre d'enveloppement de la texture en V. Peut prendre
+les valeurs suivantes :
+\begin{itemize}
+\item \emph{repeat} : La texture est répétée. 
+\item \emph{mirrored\_repeat} : La texture est répétée, une instance sur
+2 en miroir de la précédente. 
+\item \emph{clamp\_to\_border} : La texture est étirée, la couleur des arêtes
+au bord de la texture est celle du bord de la texture. 
+\item \emph{clamp\_to\_edge} : La texture est étirée, la couleur des arêtes
+au bord de la texture est un mélange de celle du bord de la texture
+et de celle du bord. 
+\end{itemize}
+\item 'w\_wrap\_mode' : \emph{valeur}
+
+Définit le paramètre d'enveloppement de la texture en W. Peut prendre
+les valeurs suivantes :
+\begin{itemize}
+\item \emph{repeat} : La texture est répétée. 
+\item \emph{mirrored\_repeat} : La texture est répétée, une instance sur
+2 en miroir de la précédente. 
+\item \emph{clamp\_to\_border} : La texture est étirée, la couleur des arêtes
+au bord de la texture est celle du bord de la texture. 
+\item \emph{clamp\_to\_edge} : La texture est étirée, la couleur des arêtes
+au bord de la texture est un mélange de celle du bord de la texture
+et de celle du bord. 
+\end{itemize}
+\item 'border\_colour' : \emph{couleur\_rvba}
+
+Définit la couleur des bords non texturés. 
+\item 'max\_anisotropy' : \emph{réel}
+
+Définit le degré maximal d'anisotropie. 
+\end{enumerate}
+
+\section{Section 'material'}
+
+Les matériaux pouvant être multi-passes, il est possible de définir
+plusieurs sous-sections de passe.
+\begin{enumerate}
+\item 'pass' : \emph{nouvelle section}
+
+Commence un nouvelle section décrivant les propriétés de la passe. 
+\end{enumerate}
+
+\subsection{Section 'pass'}
+\begin{enumerate}
+\item 'diffuse' : \emph{couleur\_rvb}
+
+Définit la couleur diffuse de cette passe (matériaux legacy uniquement). 
+\item 'albedo' : \emph{couleur\_rvb}
+
+Defines la couleur d'albédo de cette passe (non disponible pour les
+matériaux legacy). 
+\item 'specular' : \emph{couleur\_rvb}
+
+Définit la couleur réfléchie par cette passe (non disponible pour
+les matériaux metallic/roughness). 
+\item 'metallic' : \emph{réel (entre 0 et 1)}
+
+Definit la metallitude de cette pass (matériaux metallic/roughness
+uniquement).
+\item 'shininess' : \emph{réel (entre 0 et 128)}
+
+Définit la façon dont la lumière est réfléchie (matériaux legacy uniquement). 
+\item 'glossiness' : \emph{réel (entre 0 et 1)}
+
+Définit l'éclat de la surface (matériaux specular/glossiness materials
+uniquement). 
+\item 'roughness' : \emph{réel (entre 0 et 1)}
+
+Définit la rugosité de la surface (matériaux metallic/roughness uniquement).
+\item 'ambient' : \emph{réel (entre 0 et 1)}
+
+Définit la couleur ambiante de cette passe (matériaux legacy seulement). 
+\item 'emissive' : \emph{réel (entre 0 et 1)}
+
+Définit la couleur émise par cette passe. 
+\item 'alpha' : \emph{réel (entre 0 et 1)}
+
+Définit la valeur d'alpha des couleurs du material. 
+\item 'two\_sided' : \emph{booléen}
+
+Définit si le material est double face (true) ou pas (false). 
+\item 'blend\_func' : \emph{nom-src, nom-dst}
+
+Nom des 2 fonctions (source et destination) utilisées pour l'alpha
+blending, au choix parmi :
+\begin{itemize}
+\item \emph{zero} : la cible (src ou dst) ne sera pas considérée pour l'alpha
+blending. 
+\item \emph{one} : la cible (src ou dst) sera la seule visible. 
+\item \emph{src\_colour} : la couleur de la cible sera la couleur de la
+source (dst seulement). 
+\item \emph{inv\_src\_colour} : la couleur de la cible sera 1 moins la couleur
+de la source (dst seulement). 
+\item \emph{dst\_colour} : la couleur de la cible sera la couleur de la
+destination (src seulement). 
+\item \emph{inv\_dst\_colour} : la couleur de la cible sera 1 moins la couleur
+de la destination (src seulement). 
+\item \emph{src\_alpha} : l'alpha de la cible sera l'alpha de la source
+(dst seulement). 
+\item \emph{inv\_src\_alpha} : l'alpha de la cible sera 1 moins l'alpha
+de la source (dst seulement). 
+\item \emph{dst\_alpha} : l'alpha de la cible sera l'alpha de la destination
+(src seulement). 
+\item \emph{inv\_dst\_alpha} : l'alpha de la cible sera 1 moins l'alpha
+de la destination (src seulement). 
+\item \emph{src\_alpha\_sat} : met l'alpha de la source à 1. 
+\end{itemize}
+\item 'texture\_unit' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant une texture. 
+\item 'alpha\_blend\_mode' : \emph{valeur}
+
+Nom du mode de mélange alpha, au choix parmi :
+\begin{itemize}
+\item \emph{none} : Pas de mélange alpha. 
+\item \emph{additive} : Les alphas de la source et de la destination s'additionnent. 
+\item \emph{multiplicative} : Les alphas de la source et de la destination
+se multiplient. 
+\end{itemize}
+\item 'colour\_blend\_mode' : \emph{valeur}
+
+Nom du mode de mélange couleur, au choix parmi :
+\begin{itemize}
+\item \emph{none} : Pas de mélange couleur. 
+\item \emph{additive} : Les couleurs de la source et de la destination s'additionnent. 
+\item \emph{multiplicative} : Les couleurs de la source et de la destination
+se multiplient. 
+\end{itemize}
+\item 'alpha\_func' : func : \emph{valeur} ref-val : \emph{réel}
+
+Définit la fonction de gestion de l'alpha rejection pour la texture.
+Le second paramètre est la valeur de référence pour les calculs de
+transparence. Les valeurs possibles pour le premier paramètre sont
+:
+\begin{itemize}
+\item \emph{always} : la couleur de l'échantillon est toujours appliquée. 
+\item \emph{less} : La couleur de l'échantillon est appliquée si sa transparence
+est inférieure au 2ème paramètre. 
+\item \emph{less\_or\_equal} : La couleur de l'échantillon est appliquée
+si sa transparence est inférieure ou égal au 2ème paramètre. 
+\item \emph{equal} : La couleur de l'échantillon est appliquée si sa transparence
+est égale au 2ème paramètre. 
+\item \emph{not\_equal} : La couleur de l'échantillon est appliquée si sa
+transparence est différente du 2ème paramètre. 
+\item \emph{greater\_or\_equal} : La couleur de l'échantillon est appliquée
+si sa transparence est supérieure ou égal au 2ème paramètre. 
+\item \emph{greater} : La couleur de l'échantillon est appliquée si sa transparence
+est supérieure au 2ème paramètre. 
+\item \emph{never} : La couleur de l'échantillon n'est jamais appliquée. 
+\end{itemize}
+\item 'refraction\_ratio' : \emph{réel}
+
+Définit le ratio de réfraction de la passe. Notez que même s'il n'y
+a pas de refraction map, la réfraction sera appliquée tout de même,
+en utilisant seulement la skybox. 
+\item 'subsurface\_scattering' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant le subsurface scattering pour
+cette passe. 
+\item 'parallax\_occlusion' : \emph{booléen}
+
+Active ou désactive le parallax occlusion mapping (nécessite une normal
+map et une height map). 
+\end{enumerate}
+
+\subsubsection{Section 'texture\_unit'}
+\begin{enumerate}
+\item 'image' : \emph{fichier}
+
+Définit le chemin où trouver l'image. 
+\item 'render\_target' : \emph{nouvelle section}
+
+Permet de définir la texture en cible de rendu et de configurer cette
+cible. 
+\item 'colour' : \emph{couleur}
+
+Définit la couleur de base. 
+\item 'map\_type' : \emph{valeur}
+
+Définit la façon dont l'image est appliquée sur l'objet :
+\begin{itemize}
+\item \emph{none} : aucun effet particulier. 
+\item \emph{reflexion} : reflexion mapping. 
+\item \emph{sphere} : sphere mapping. 
+\end{itemize}
+\item 'rgb\_blend' : func : \emph{valeur} Arg0 : \emph{valeur} Arg1 : \emph{valeur}
+
+Définit le comportement de la texture lors du mélange des couleurs.
+Le premier paramètre est la fonction de mélange, les 2ème et 3ème
+paramètres sont les opérandes (Arg0 et Arg1) de la fonction. Le premier
+paramètre peut prendre les valeurs suivantes :
+\begin{itemize}
+\item \emph{none} : Aucun des 2 opérandes n'est utilisé. 
+\item \emph{first\_arg} : Retourne Arg0. 
+\item \emph{add} : Retourne Arg0 + Arg1. 
+\item \emph{add\_signed} : Retourne Arg0 + Arg1 - 0.5. 
+\item \emph{modulate} : Retourne Arg0 x Arg1. 
+\item \emph{subtract} : Retourne Arg0 - Arg1. 
+\item \emph{dot3\_rgb} : Retourne 4 x {[}((Arg0r - 0.5) x (Arg1r - 0.5))
++ ((Arg0g - 0.5) x (Arg1g - 0.5)) + ((Arg0b - 0.5) x (Arg1b - 0.5)){]}. 
+\item \emph{dot3\_rgba} : Retourne 4 x {[}((Arg0r - 0.5) x (Arg1r - 0.5))
++ ((Arg0g - 0.5) x (Arg1g - 0.5)) + ((Arg0b - 0.5) x (Arg1b - 0.5)){]}. 
+\end{itemize}
+Les 2 autres paramètres peuvent prendre une valeur parmi les suivantes
+:
+\begin{itemize}
+\item \emph{texture} : La texture courante 
+\item \emph{texture0} : La première texture 
+\item \emph{texture1} : La seconde texture 
+\item \emph{texture2} : La troisième texture 
+\item \emph{texture3} : La quatrième texture 
+\item \emph{constant} : 
+\item \emph{diffuse} : 
+\item \emph{previous} : 
+\end{itemize}
+\item 'alpha\_blend' : func : \emph{valeur} Arg0 : \emph{valeur} Arg1 :
+\emph{valeur}
+
+Définit le comportement de la texture lors du mélange de la transparence.
+Le premier paramètre est la fonction de mélange, les 2ème et 3ème
+paramètres sont les opérandes de la fonction. Le premier paramètre
+peut prendre les valeurs suivantes :
+\begin{itemize}
+\item \emph{none} : Aucun des 2 opérandes n'est utilisé. 
+\item \emph{first\_arg} : Retourne Arg0. 
+\item \emph{add} : Retourne Arg0 + Arg1. 
+\item \emph{add\_signed} : Retourne Arg0 + Arg1 - 0.5. 
+\item \emph{modulate} : Retourne Arg0 x Arg1. 
+\item \emph{subtract} : Retourne Arg0 - Arg1. 
+\end{itemize}
+Les 2 autres paramètres peuvent prendre une valeur parmi les suivantes
+:
+\begin{itemize}
+\item \emph{texture} : La texture courante 
+\item \emph{texture0} : La première texture 
+\item \emph{texture1} : La seconde texture 
+\item \emph{texture2} : La troisième texture 
+\item \emph{texture3} : La quatrième texture 
+\item \emph{constant} : 
+\item \emph{diffuse} : 
+\item \emph{previous} : 
+\end{itemize}
+\item 'channel' : \emph{valeur}
+
+Le canal auquel est associée la texture. Peut prendre les valeurs
+suivantes :
+\begin{itemize}
+\item \emph{colour} : Couleur de base. 
+\item \emph{ambient} : Eclairage ambiante de base. 
+\item \emph{diffuse} : Eclairage diffus de base. 
+\item \emph{normal} : Normales. 
+\item \emph{specular} : Eclairage spéculaire. 
+\item \emph{opacity} : Opacité. 
+\item \emph{gloss} : Exposant lumineux pour les calculs de spéculaire. 
+\end{itemize}
+\item 'sampler' : \emph{nom}
+
+Définit l'échantillonneur pour la texture. 
+\end{enumerate}
+
+\subsubsection{Section 'shader\_program'}
+\begin{enumerate}
+\item 'vertex\_program' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant le vertex program. 
+\item 'pixel\_program' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant le pixel program. 
+\item 'geometry\_program' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant le geometry program. 
+\item 'hull\_program' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant le hull (tessellation control)
+program. 
+\item 'domain\_program' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant le domain (tessellation evaluation)
+program. 
+\item 'constants\_buffer' : \emph{nouvelle section}
+
+Définit une nouvelle section concernant les tampons de constantes
+(uniform buffers). 
+\end{enumerate}
+
+\subsubsection{Section 'vertex/pixel/geometry/hull/domain\_program'}
+\begin{enumerate}
+\item 'file' : \emph{fichier}
+
+Nom du fichier où se trouve le programme. 
+\item 'sampler' : \emph{nom}
+
+Crée une nouvelle variable de type sampler (1D, 2D, \ldots{}) pour
+le pixel shader. 
+\item 'input\_type' : \emph{valeur}
+
+Définit le type de données de faces en entrée du geometry shader.
+Peut ptrendre les valeurs suivantes :
+\begin{itemize}
+\item \emph{points} : Des points. 
+\item \emph{lines} : Des lignes disjointes. 
+\item \emph{line\_loop} : Une boucle formée de lignes jointes. 
+\item \emph{line\_strip} : Des lignes jointes. 
+\item \emph{triangles} : Des triangles disjoints. 
+\item \emph{triangle\_strip} : Des triangles joints. 
+\item \emph{triangle\_fan} : Des triangles joints par le premier point. 
+\item \emph{quads} : Des quadrilatères disjoints. 
+\item \emph{quad\_strip} : Des quadrilatères joints. 
+\item \emph{polygon} : Des polygones. 
+\end{itemize}
+\item 'output\_type' : \emph{valeur}
+
+Définit le type de données de faces en sortie du geometry shader.
+Peut ptrendre les valeurs suivantes :
+\begin{itemize}
+\item \emph{points} : Des points. 
+\item \emph{line\_strip} : Des lignes jointes. 
+\item \emph{triangle\_strip} : Des triangles joints. 
+\item \emph{quad\_strip} : Des quadrilatères joints. 
+\end{itemize}
+\item 'output\_vtx\_count' : \emph{entier}
+
+Définit le nombre de sommets en sortie du geometry shader. 
+\item 'variable' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant une variable uniforme. 
+\end{enumerate}
+
+\subsubsection{Section 'constants\_buffer'}
+\begin{enumerate}
+\item 'shaders' : \emph{combinaison binaire de valeurs}
+
+Types de shaders pour lesquels ce tampon s'applique, parmi :
+\begin{itemize}
+\item \emph{vertex} 
+\item \emph{hull} 
+\item \emph{domain} 
+\item \emph{geometry} 
+\item \emph{pixel} 
+\item \emph{compute} 
+\end{itemize}
+\item 'variable' : \emph{nom}, \emph{nouvelle section}
+
+Définit une section de propriétés d'une variable à ajouter au tampon. 
+\end{enumerate}
+
+\subsubsection{Section 'variable'}
+\begin{enumerate}
+\item 'type' : \emph{valeur}
+
+Nom du type de la variable, peut être :
+\begin{itemize}
+\item \emph{int} : 1 entier signé. 
+\item \emph{uint} : 1 entier non signé. 
+\item \emph{float} : 1 nombre flottant en simple précision. 
+\item \emph{double} : 1 nombre flottant en double précision. 
+\item \emph{vec2i} : 2 entiers signés. 
+\item \emph{vec3i} : 3 entiers signés. 
+\item \emph{vec4i} : 4 entiers signés. 
+\item \emph{vec2f} : 2 nombres flottants en simple précision. 
+\item \emph{vec3f} : 3 nombres flottants en simple précision. 
+\item \emph{vec4f} : 4 nombres flottants en simple précision. 
+\item \emph{vec2d} : 2 nombres flottants en double précision. 
+\item \emph{vec3d} : 3 nombres flottants en double précision. 
+\item \emph{vec4d} : 4 nombres flottants en double précision. 
+\item \emph{mat2x2i} : Matrice 2x2 d'entiers signés. 
+\item \emph{mat2x3i} : Matrice 2x3 d'entiers signés. 
+\item \emph{mat2x4i} : Matrice 2x4 d'entiers signés. 
+\item \emph{mat3x2i} : Matrice 3x2 d'entiers signés. 
+\item \emph{mat3x3i} : Matrice 3x3 d'entiers signés. 
+\item \emph{mat3x4i} : Matrice 3x4 d'entiers signés. 
+\item \emph{mat4x2i} : Matrice 4x2 d'entiers signés. 
+\item \emph{mat4x3i} : Matrice 4x3 d'entiers signés. 
+\item \emph{mat4x4i} : Matrice 4x4 d'entiers signés. 
+\item \emph{mat2x2f} : Matrice 2x2 de nombres flottants simple précision. 
+\item \emph{mat2x3f} : Matrice 2x3 de nombres flottants simple précision. 
+\item \emph{mat2x4f} : Matrice 2x4 de nombres flottants simple précision. 
+\item \emph{mat3x2f} : Matrice 3x2 de nombres flottants simple précision. 
+\item \emph{mat3x3f} : Matrice 3x3 de nombres flottants simple précision. 
+\item \emph{mat3x4f} : Matrice 3x4 de nombres flottants simple précision. 
+\item \emph{mat4x2f} : Matrice 4x2 de nombres flottants simple précision. 
+\item \emph{mat4x3f} : Matrice 4x3 de nombres flottants simple précision. 
+\item \emph{mat4x4f} : Matrice 4x4 de nombres flottants simple précision. 
+\item \emph{mat2x2d} : Matrice 2x2 de nombres flottants double précision. 
+\item \emph{mat2x3d} : Matrice 2x3 de nombres flottants double précision. 
+\item \emph{mat2x4d} : Matrice 2x4 de nombres flottants double précision. 
+\item \emph{mat3x2d} : Matrice 3x2 de nombres flottants double précision. 
+\item \emph{mat3x3d} : Matrice 3x3 de nombres flottants double précision. 
+\item \emph{mat3x4d} : Matrice 3x4 de nombres flottants double précision. 
+\item \emph{mat4x2d} : Matrice 4x2 de nombres flottants double précision. 
+\item \emph{mat4x3d} : Matrice 4x3 de nombres flottants double précision. 
+\item \emph{mat4x4d} : Matrice 4x4 de nombres flottants double précision. 
+\end{itemize}
+\item 'count' : \emph{entier}
+
+Nombre d'occurences de la variable (taille du tableau). 
+\item 'value' :
+
+Valeur de la variable, fonction du type choisi. 
+\end{enumerate}
+
+\subsubsection{Section 'subsurface\_scattering'}
+\begin{enumerate}
+\item 'strength' : \emph{réel}
+
+Définit la force de l'effet. 
+\item 'gaussian\_width' : \emph{réel}
+
+Définit la largeur du flo Gaussien. 
+\item 'transmittance\_profile' : \emph{new section}
+
+Définit une nouvelle section décrivant le profil de transmission. 
+\end{enumerate}
+
+\subsubsection{Section 'transmittance\_profile'}
+\begin{enumerate}
+\item 'factor' : \emph{vec4f}
+
+Définit les trois composantes RVB de la couleur, la quatrième composante
+définissant le facteur de multiplication de cette couleur. 
+\end{enumerate}
+
+\section{Section 'font'}
+\begin{enumerate}
+\item 'file' : \emph{fichier}
+
+Définit le fichier contenant la police. 
+\item 'height' : \emph{entier}
+
+Définit la hauteur des caractères (la précision). 
+\end{enumerate}
+
+\section{Section 'scene'}
+\begin{enumerate}
+\item 'ambient\_light' : \emph{couleur}
+
+Définit la couleur de l'éclairage ambiant. 
+\item 'background\_colour' : \emph{couleur}
+
+Définit la couleur de fond de la scène. 
+\item 'background\_image' : \emph{fichier}
+
+Définit l'image de fond de la scène. 
+\item 'import' : \emph{fichier}
+
+Permet l'import d'une scène à partir d'un fichier de scène CSCN ou
+autre, supporté par les plug-ins d'import Castor3D. 
+\item 'scene\_node' : \emph{nouvelle section}
+
+Définit un noeud de scène. 
+\item 'camera\_node' : \emph{nouvelle section}
+
+Définit un noeud de scène spécifique aux caméras. 
+\item 'light' : \emph{nouvelle section}
+
+Définit une source lumineuse. 
+\item 'object' : \emph{nouvelle section}
+
+Définit un objet. 
+\item 'billboard' : \emph{nouvelle section}
+
+Définit des billboards. 
+\item 'camera' : \emph{nouvelle section}
+
+Définit une caméra. 
+\item 'panel\_overlay' : \emph{nouvelle section}
+
+Définit une incrustation de type panneau simple. 
+\item 'border\_panel\_overlay' : \emph{nouvelle section}
+
+Définit une incrustation de type panneau avec bordure. 
+\item 'text\_overlay' : \emph{nouvelle section}
+
+Définit une incrustation de type panneau avec texte. 
+\item 'animated\_object\_group' : \emph{nouvelle section}
+
+Définit un groupe d'objets animés avec des animations communes. 
+\item 'mesh' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant un maillage, pouvant être utilisé
+pou un ou plusieurs objets. 
+\item 'particle\_system' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant un système de particules. 
+\item 'skybox' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant la skybox.
+\item 'include' : \emph{fichier}
+
+Inclut un fichier de scène, permettant de découper une scène en de
+multiples fichiers. 
+\item 'sampler' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant un échantillonneur. 
+\item 'fog\_type' : \emph{valeur}
+
+Définit le type de brouillard pour la scène. Les valeurs possibles
+sont :
+\begin{itemize}
+\item \emph{linear} : L'intensité du brouillard augmente linéairement, avec
+la distance à la caméra. 
+\item \emph{exponential} : L'intensité du brouillard augmente exponentiellement,
+avec la distance à la caméra. 
+\item \emph{squared\_exponential} : L'intensité du brouillard augmente encore
+plus, avec la distance à la caméra. 
+\end{itemize}
+\item 'fog\_density' : \emph{réel}
+
+Définit la densité du brouillard, qui est multipliée par la distance,
+en fonction du type de brouillard. 
+\item 'hdr\_config' : \emph{réel}
+
+Définit une nouvelle section, décrivant la configuration HDR. 
+\end{enumerate}
+
+\subsection{'hdr\_config' section}
+\begin{enumerate}
+\item 'exposure' : \emph{réel}
+
+Définit l'exposition de la scène. 
+\item 'gamma' : \emph{réel}
+
+Définit la correction gamma de la scène. 
+\end{enumerate}
+
+\subsection{Sections 'scene\_node' et 'camera\_node'}
+\begin{enumerate}
+\item 'parent' : \emph{nom}
+
+Définit le Node parent de celui-ci. Par défaut le parent est le RootNode.
+Le fait de transformer (tranlate, rotate, scale) un node parent transforme
+ses enfants. 
+\item 'position' : \emph{3 réels}
+
+La position du node par rapport à son parent. 
+\item 'orientation' : \emph{4 réels}
+
+Quaternion représentant l'orientation du node par rapport à son parent. 
+\item 'scale' : \emph{3 réels}
+
+Echelle du node par rapport à son parent. 
+\end{enumerate}
+
+\subsection{Section 'light'}
+\begin{enumerate}
+\item 'type' : \emph{valeur}
+
+3 types de sources lumineuses existent dans Castor3D :
+\begin{itemize}
+\item \emph{directional} : lumière directionnelle (telle le soleil). 
+\item \emph{point\_light} : une source située à un endroit et émettant dans
+toutes les directions. 
+\item \emph{spot\_light} : une source située à un endroit et émettant dans
+un cône orienté dans une direction. 
+\end{itemize}
+\item 'colour' : \emph{3 réels}
+
+Définit la couleur de la source lumineuse, au format RGB. 
+\item 'intensity' : \emph{2 réels}
+
+Définit les intensités diffuse et spéculaire de la source lumineuse. 
+\item 'attenuation' : \emph{3 réels}
+
+Définit les 3 composantes d'atténuation de la source lumineuse en
+fonction de l'éloignement de la source : constante, linéaire et quadratique.
+
+spot\_light et point\_light uniquement. 
+\item 'cut\_off' : \emph{réel}
+
+Ouverture de l'angle du cône du spot.
+
+spot\_light uniquement. 
+\item 'exponent' : \emph{réel}
+
+Attenuation fonction de la distance entre le point éclairé et le centre
+du cône lumineux.
+
+spot\_light uniquement. 
+\item 'parent' : \emph{nom}
+
+Définit le nom du SceneNode auquel la source lumineuse est attachée. 
+\item 'shadow\_producer' : \emph{booléen}
+
+Définit si la source lumineuse produit des ombres (\emph{true}) ou
+pas (\emph{false}, valeur par défaut). 
+\end{enumerate}
+
+\subsection{Section 'object'}
+\begin{enumerate}
+\item 'parent' : \emph{nom}
+
+Nom du SceneNode auquel la géométrie est attachée. 
+\item 'mesh' : \emph{nom}
+
+Définit le maillage utilisé par cet objet. 
+\item 'mesh' : \emph{nom}, \emph{nouvelle section}
+
+Définit une section décrivant un maillage, avec le nom donné. 
+\item 'material' : \emph{nom}
+
+Nom d'un materiau défini dans un fichier .cmtl ou dans ce fichier.
+Applique le materiau à tous les sous-maillages. 
+\item 'materials' : \emph{nouvelle section}
+
+Permet de définir le matériau pour chaque sous-maillage. 
+\item 'cast\_shadows' : \emph{booléen}
+
+Définit si l'objet projette des ombres (\emph{true}, valeur par défaut)
+ou pas (\emph{false}). 
+\item 'receive\_shadows' : \emph{booléen}
+
+Définit si l'objet reçoit des ombres (\emph{true}, valeur par défaut)
+ou pas (\emph{false}). 
+\end{enumerate}
+
+\subsubsection{Section 'materials'}
+\begin{enumerate}
+\item 'material' : \emph{entier}, \emph{nom}
+
+Index du sous-maillage et nom du matériau à utiliser. 
+\end{enumerate}
+
+\subsection{Section 'billboard'}
+
+Permet de définir des billboards partageant le même matériau et faisant
+les mêmes dimensions.
+\begin{enumerate}
+\item 'parent' : \emph{nom}
+
+Définit le SceneNode auquel ces billboards seront attachés. 
+\item 'positions' : \emph{nouvelle section}
+
+Permet de définir les positions relatives des différentes instances
+des billboards. 
+\item 'material' : \emph{nom}
+
+Définit le mtatériau utilisé pour l'affichage des billboards. 
+\item 'dimensions' : \emph{taille}
+
+Définit la taille des billboards. 
+\item 'type' : \emph{valeur}
+
+Définit le type de billboards. Les valeurs possibles sont : 
+\begin{itemize}
+\item \emph{cylindrical}: Les billboards font face à la caméra, sauf pour
+leur axe Y, qui reste fixe. 
+\item \emph{spherical}: Les billboards font face à la caméra sur tous les
+axes. 
+\end{itemize}
+\item 'size' : \emph{valeur}
+
+Définit le redimensionnement des billboards. Les valeurs possibles
+sont : 
+\begin{itemize}
+\item \emph{dynamic}: La taille varie, en fonction de la distance de la
+caméra. 
+\item \emph{fixed}: La taille est fixe, quelle que soit la distance à la
+caméra. 
+\end{itemize}
+\end{enumerate}
+
+\subsubsection{Section 'positions'}
+\begin{enumerate}
+\item 'pos' : \emph{3 réels}
+
+Définit la position relative d'un billboard. 
+\end{enumerate}
+
+\subsection{Section 'camera'}
+\begin{enumerate}
+\item 'parent' : \emph{nom}
+
+Définit le CameraNode auquel la caméra est attachée. 
+\item 'primitive' : \emph{valeur}
+
+Définit le type d'affichage de la caméra, peut prendre les valeurs
+suivantes :
+\begin{itemize}
+\item \emph{points} : Des points. 
+\item \emph{lines} : Des lignes disjointes. 
+\item \emph{line\_loop} : Une boucle formée de lignes jointes. 
+\item \emph{line\_strip} : Des lignes jointes. 
+\item \emph{triangles} : Des triangles disjoints. 
+\item \emph{triangle\_strip} : Des triangles joints. 
+\item \emph{triangle\_fan} : Des triangles joints par le premier point. 
+\item \emph{quads} : Des quadrilatères disjoints. 
+\item \emph{quad\_strip} : Des quadrilatères joints. 
+\item \emph{polygon} : Des polygones. 
+\end{itemize}
+\item 'viewport' : \emph{nouvelle section}
+
+Définit la fenêtre d'affichage de la caméra. 
+\end{enumerate}
+
+\subsubsection{Section 'viewport'}
+\begin{enumerate}
+\item 'type' : \emph{valeur}
+
+Type d'affichage de la fenêtre, peut valoir 2d ou 3d. 
+\item 'left' : \emph{réel}
+
+Définit la coordonnée X minimale affichée. 
+\item 'right' : \emph{réel}
+
+Définit la coordonnée X maximale affichée. 
+\item 'top' : \emph{réel}
+
+Définit la coordonnée Y minimale affichée. 
+\item 'bottom' : \emph{réel}
+
+Définit la coordonnée Y maximale affichée. 
+\item 'near' : \emph{réel}
+
+Définit la coordonnée Z minimale affichée. 
+\item 'far' : \emph{réel}
+
+Définit la coordonnée Z maximale affichée. 
+\item 'size' : \emph{taille}
+
+Définit la taille de la fenêtre d'affichage (en pixels). 
+\item 'fov\_y' : \emph{réel}
+
+Définit l'angle d'ouverture vertical, en radians. 
+\item 'aspect\_ratio' : \emph{réel}
+
+Définit l'aspect global de la fenêtre (1.33333 pour 4/3, 1.77777 pour
+16/9 \ldots{} ). 
+\end{enumerate}
+
+\subsection{Section 'animated\_object\_group'}
+\begin{enumerate}
+\item 'animated\_object' : \emph{nom}
+
+Définit le nom d'un objet à ajouter dans le groupe. 
+\item 'animation' : \emph{nom}
+
+Ajoute l'animation dont le nom est donné à la liste d'animations communes. 
+\item 'start\_animation' : \emph{nom}
+
+Démarre l'animation donnée. 
+\item 'pause\_animation' : \emph{nom}
+
+Met l'animation donnée en pause (elle doit avoir été démarrée au préalable).
+\end{enumerate}
+
+\subsubsection{'animation' section}
+\begin{enumerate}
+\item 'looped' : \emph{booléen}
+
+Définit si l'animation est bouclée (\emph{true}) ou pas (\emph{false},
+valeur par défaut). 
+\item 'scale' : \emph{réel}
+
+Définit la vitesse de l'animation (peut être négative, l'animation
+sera alors jouée à l'envers). 
+\end{enumerate}
+
+\section{Section 'mesh'}
+\begin{enumerate}
+\item 'type' : \emph{nom}
+
+Nom du type de maillage. Peut être :
+\begin{itemize}
+\item \emph{custom} : maillage défini manuellement ou maillage importé. 
+\item \emph{cube} : cube, il faut définir ses 3 dimensions par la suite. 
+\item \emph{cone} : cône, il faut définir son rayon et sa hauteur par la
+suite. 
+\item \emph{cylinder} : cylindre, dont il faut entrer ensuite le rayon et
+la hauteur. 
+\item \emph{sphere} : sphère à faces ``carrées'', il faut définir le nombre
+de subdivision et le rayon. 
+\item \emph{icosahedron} : sphère à faces triangulaires, il faut définir
+le nombre de subdivision et le rayon. 
+\item \emph{torus} : torre, il est nécessaire de définir le nombre de subdivisions
+internes, externes et les rayons interne et externe. 
+\item \emph{plane} : un plan, il est nécessaire de définir le nombre de
+subdivisions en largeur et en profondeur ainsi que la largeur et la
+profondeur. 
+\end{itemize}
+\item 'submesh' : \emph{nouvelle section}
+
+Définit un sous-maillage, uniquement si le type du maillage est 'custom'. 
+\item 'import' : \emph{fichier} \textless{}\emph{options}\textgreater{}
+
+Permet l'import d'un fichier contenant les données du maillage. Ce
+fichier peut être au format cmsh ou tout autre format supporté par
+Castor3D. Uniquement si le type du maillage est 'custom'. Cette directive
+peut de plus prendre plusieurs options parmi les suivantes :
+\begin{itemize}
+\item \emph{smooth\_normals} : Génère les normales par sommet lors de l'import. 
+\item \emph{flat\_normals} : Génère les normales par face lors de l'import. 
+\item \emph{tangent\_space} : Génère les informations d'espace tangent (tangente
+et bitangente) lors de l'import. 
+\item \emph{rescale}=\emph{réel} : Met le maillage à l'échelle, sur les
+trois axes. 
+\end{itemize}
+\item 'morph\_import' : \emph{fichier} \textless{}\emph{options}\textgreater{}
+
+Permet l'import d'un fichier contenant les données du maillage, pour
+ajouter une animation par sommet. Ce fichier peut être au format cmsh
+ou tout autre format supporté par Castor3D. Uniquement si le type
+du maillage est 'custom'. Cette directive peut de plus prendre plusieurs
+options parmi les suivantes :
+\begin{itemize}
+\item \emph{smooth\_normals} : Génère les normales par sommet lors de l'import. 
+\item \emph{flat\_normals} : Génère les normales par face lors de l'import. 
+\item \emph{tangent\_space} : Génère les informations d'espace tangent (tangente
+et bitangente) lors de l'import. 
+\item \emph{rescale}=\emph{réel} : Met le maillage à l'échelle, sur les
+trois axes. 
+\end{itemize}
+\item 'division' : \emph{nom} \emph{entier}
+
+Permet la subdivision du maillage en utilisant un algorithm défini
+par le nom donné (support en fonction des plugins). Le second paramètre
+est le nombre de fois où la division est effectuée (récursivement). 
+\end{enumerate}
+
+\subsection{Section 'submesh'}
+\begin{enumerate}
+\item 'vertex' : \emph{3 réels}
+
+Ajoute le sommet défini par les coordonnées au sous-maillage. 
+\item 'uv' : \emph{2 réels}
+
+Définit les uv à utiliser pour le sommet déclaré précédemment. 
+\item 'uvw' : \emph{3 réels}
+
+Définit les uvw à utiliser pour le sommet déclaré précédemment. 
+\item 'normal' : \emph{3 réels}
+
+Définit la normale à utiliser pour le sommet déclaré précédemment. 
+\item 'tangent' : \emph{3 réels}
+
+Définit la tangente à utiliser pour le sommet déclaré précédemment. 
+\item 'face' : \emph{3 ou 4 entiers}
+
+Définit une face qui utilise les 3 ou 4 indices de sommet. S'il y
+a plus de 3 indices, crée autant de faces triangulaires que nécessaire. 
+\item 'face\_uv' : \emph{autant d'uv que d'indices de la face}
+
+Définit les uv à utiliser pour la face déclarée précédemment. 
+\item 'face\_uvw' : \emph{autant d'uvw que d'indices de la face}
+
+Définit les uvw à utiliser pour la face déclarée précédemment. 
+\item 'face\_normals' : \emph{autant de groupes de 3 réels que d'indices
+de la face}
+
+Définit les normales à utiliser pour la face déclarée précédemment. 
+\item 'face\_tangents' : \emph{autant de groupes de 3 réels que d'indices
+de la face}
+
+Définit les tangentes à utiliser pour la face déclarée précédemment. 
+\end{enumerate}
+
+\section{Section 'panel\_overlay'}
+\begin{enumerate}
+\item 'material' : \emph{nom}
+
+Définit le matériau utilisé par le panneau. 
+\item 'position' : \emph{2 réels}
+
+Définit la position de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'size' : \emph{2 réels}
+
+Définit la taille de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'pxl\_position' : \emph{2 entiers}
+
+Définit la position absolue de l'incrustation, en pixels. 
+\item 'pxl\_size' : \emph{2 entiers}
+
+Définit la taille absolue de l'incrustation, en pixels. 
+\item 'uv' : \emph{4 réels}
+
+Définit les UV pour l'incrustation (gauche, haut, droit, bas). 
+\item 'panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau simple. 
+\item 'border\_panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec bordure. 
+\item 'text\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec texte. 
+\end{enumerate}
+
+\section{Section 'border\_panel\_overlay'}
+\begin{enumerate}
+\item 'material' : \emph{nom}
+
+Définit le matériau utilisé par le panneau. 
+\item 'position' : \emph{2 réels}
+
+Définit la position de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'size' : \emph{2 réels}
+
+Définit la taille de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'pxl\_position' : \emph{2 réels}
+
+Définit la position absolue de l'incrustation, en pixels. 
+\item 'pxl\_size' : \emph{2 réels}
+
+Définit la taille absolue de l'incrustation, en pixels. 
+\item 'center\_uv' : \emph{4 réels}
+
+Définit les UV pour le centre de l'incrustation (gauche, haut, droit,
+bas). 
+\item 'border\_material' : \emph{nom}
+
+Définit le matériau utilisé par la bordure du panneau. 
+\item 'border\_position' : \emph{valeur}
+
+Définit la position de la bordure de l'incrustation, parmi les valeurs
+suivantes :
+\begin{itemize}
+\item \emph{internal} : La bordure à l'intérieur de l'inscrustation (elle
+ne dépasse pas de l'incrustation). 
+\item \emph{middle} : La bordure est à moitié à l'intérieur et à moitié
+à l'extérieur de l'incrustation (elle dépasse de l'incrustation). 
+\item \emph{external} : La bordure est à l'extérieur de l'incrustation (elle
+n'empiète pas sur le contenu de l'incrustation). 
+\end{itemize}
+\item 'border\_size' : \emph{4 réels}
+
+Définit la taille des bords (gauche, droite, haut , bas), par rapport
+au parent (ou à l'écran). 
+\item 'pxl\_border\_size' : \emph{2 entiers}
+
+Définit la taille absolue de l'incrustation, en pixels. 
+\item 'border\_inner\_uv' : \emph{4 réels}
+
+Définit les UV pour la bordure de l'incrustation, côté intérieur (gauche,
+haut, droit, bas). 
+\item 'border\_outer\_uv' : \emph{4 réels}
+
+Définit les UV pour la bordure de l'incrustation, côté extérieur (gauche,
+haut, droit, bas). 
+\item 'panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau simple. 
+\item 'border\_panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec bordure. 
+\item 'text\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec texte.
+\end{enumerate}
+
+\section{Section 'text\_overlay'}
+\begin{enumerate}
+\item 'material' : \emph{nom}
+
+Définit le matériau utilisé par le panneau. 
+\item 'position' : \emph{2 réels}
+
+Définit la position de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'size' : \emph{2 réels}
+
+Définit la taille de l'incrustation, par rapport à son parent (ou
+à l'écran). 
+\item 'pxl\_position' : \emph{2 entiers}
+
+Définit la position absolue de l'incrustation, en pixels. 
+\item 'pxl\_size' : \emph{2 entiers}
+
+Définit la taille absolue de l'incrustation, en pixels. 
+\item 'font' : \emph{nom}
+
+Définit la police utilisée par l'incrustation. 
+\item 'text' : \emph{texte}
+
+Définit le texte affiché. 
+\item 'text\_wrapping' : \emph{valeur}
+
+Définit la manière dont le texte est découpé dans le cas où une ligne
+dépasse les dimensions de l'incrustation :
+\begin{itemize}
+\item \emph{none} : Le texte n'est pas découpé (ce qui dépasse n'est pas
+affiché). 
+\item \emph{break} : Le texte est découpé à la lettre (les mots sont coupés). 
+\item \emph{break\_words} : Le texte est découpé au mot (les mots restent
+entiers). 
+\end{itemize}
+\item 'vertical\_align' : \emph{valeur}
+
+Définit la manière dont le texte est aligné verticalement, dans son
+incrustation :
+\begin{itemize}
+\item \emph{top} : Le texte est aligné en haut. 
+\item \emph{center} : Le texte est centré. 
+\item \emph{bottom} : Le texte est aligné en bas. 
+\end{itemize}
+\item 'horizontal\_align' : \emph{valeur}
+
+Définit la manière dont le texte est aligné horizontalement, dans
+son incrustation :
+\begin{itemize}
+\item \emph{left} : Le texte est aligné à gauche. 
+\item \emph{center} : Le texte est centré. 
+\item \emph{right} : Le texte est aligné à droite. 
+\end{itemize}
+\item 'texturing\_mode' : \emph{valeur}
+
+Définit la manière dont la texture est appliquée : 
+\begin{itemize}
+\item \emph{letter} : La texture est appliquée sur chaque lettre. 
+\item \emph{text} : La texture est appliquée sur tout le texte.
+\end{itemize}
+\item 'line\_spacing\_mode' : \emph{valeur}
+
+Définit la hauteur des lignes : 
+\begin{itemize}
+\item \emph{own\_height} : Chaque ligne a pour hauteur sa propre hauteur. 
+\item \emph{max\_lines\_height} : Chaque ligne a pour hauteur la hauteur
+de la plus haute ligne. 
+\item \emph{max\_font\_height} : Chaque ligne a pour hauteur la hauteur
+du plus haut caractère de la police. 
+\end{itemize}
+\item 'panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau simple. 
+\item 'border\_panel\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec bordure. 
+\item 'text\_overlay' : \emph{nom} \emph{nouvelle section}
+
+Permet de définir une incrustation fille de type panneau avec texte. 
+\end{enumerate}
+
+\section{Section 'window'}
+\begin{enumerate}
+\item 'render\_target' : \emph{nouvelle section}
+
+Permet de définir une nouvelle section décrivant la cible de rendu. 
+\item 'vsync' : \emph{booléen}
+
+Permet de dire si on veut activer la synchronisation verticale. 
+\item 'fullscreen' : \emph{booléen}
+
+Permet d'activer ou non l'affichage plein écran. 
+\end{enumerate}
+
+\section{Section 'render\_target'}
+\begin{enumerate}
+\item 'scene' : \emph{nom}
+
+Permet de définir la scène rendue dans cette cible. 
+\item 'camera' : \emph{nom}
+
+Permet de définir la caméra utilisée pour rendre la scène. 
+\item 'size' : \emph{taille}
+
+Définit la taille du buffer interne de la cible de rendu. 
+\item 'format' : \emph{valeur}
+
+Définit le format des pixels du buffer couleur de la cible de rendu.
+Peut valoir :
+\begin{itemize}
+\item \emph{l8} : Luminance 8 bits, 1 nombre entier 8 bits. 
+\item \emph{l16f} : Luminance 16 bits, 1 nombre en virgule flottante 16
+bits (half float). 
+\item \emph{l32f} : Luminance 32 bits, 1 nombre en virgule flottante 32
+bits (float). 
+\item \emph{al16} : Transparence + Luminance, 2 nombres entiers 8 bits. 
+\item \emph{al16f} : Transparence + Luminance, 2 nombres en virgule flottante
+16 bits (half float). 
+\item \emph{al32f} : Transparence + Luminance, 2 nombres en virgule flottante
+32 bits (float). 
+\item \emph{argb1555} : ARGB 16 bits, 1 bit alpha et chaque composante sur
+un entier 5 bits. 
+\item \emph{rgb565} : RGB 16 bits, R sur un entier 5 bits, G sur un entier
+6 bits et B sur un entier 5 bits. 
+\item \emph{argb16} : ARGB 16 bits, chaque composante sur un entier 4 bits. 
+\item \emph{rgb24} : RGB 24 bits, chaque composante sur un entier 8 bits. 
+\item \emph{argb32} : ARGB 32 bits, chaque composante sur un entier 8 bits. 
+\item \emph{argb16f} : ARGB 64 bits, chaque composante sur un flottant 16
+bits (half float). 
+\item \emph{rgb32f} : RGB 96 bits, chaque composante sur un flottant 32
+bits (float). 
+\item \emph{argb32f} : ARGB 128 bits, chaque composante sur un flottant
+32 bits (float). 
+\end{itemize}
+\item 'depth' : \emph{valeur}
+
+Définit le format des pixels du buffer profondeur de la cible de rendu.
+Peut valoir :
+\begin{itemize}
+\item \emph{depth16} : Profondeur sur un entier en 16 bits. 
+\item \emph{depth24} : Profondeur sur un entier en 24 bits. 
+\item \emph{depth24s8} : Profondeur sur un entier en 24 bits + Stencil sur
+un entier 8 bits. 
+\item \emph{depth32fs8} : Profondeur sur un nombre en virgule flottante
+en 32 bits + Stencil sur un entier 8 bits. 
+\item \emph{depth32} : Profondeur sur un entier en 32 bits. 
+\item \emph{depth32f} : Profondeur sur un nombre en virgule flottante en
+32 bits. 
+\item \emph{stencil1} : Stencil sur un bit. 
+\item \emph{stencil8} : Stencil sur un entier en 8 bits. 
+\end{itemize}
+\item 'postfx' : \emph{nom}, \emph{parametres optionnels}
+
+Définit un effet post-rendu à utiliser. Les paramètres optionnels
+dépendent de l'effet choisi. 
+\item 'stereo' : \emph{booléen}
+
+Définit si on utilise l'affichage stéréoscopique. 
+\item 'tone\_mapping' : \emph{nom}
+
+Définit l'opérateur de mappage de ton, à utiliser avec la cible de
+rendu. 
+\item 'ssao' : \emph{nouvelle section}
+
+Définit une nouvelle section décrivant le Screen Space Ambient Occlusion.
+\end{enumerate}
+
+\subsection{'ssao' section}
+\begin{enumerate}
+\item 'enabled' : \emph{booléen}
+
+Définit le statut d'activation du SSAO. 
+\item 'high\_quality' : \emph{booléen}
+
+Définit la qalité de l'effet. 
+\item 'radius' : \emph{réel}
+
+Définit le rayon de l'effet (exprimé en mètres). 
+\item 'bias' : \emph{réel}
+
+Définit le bias de l'effet. 
+\item 'intensity' : \emph{réel}
+
+Définit l'intensité de l'effet. 
+\item 'num\_samples' : \emph{entier}
+
+Définit le nombre d'échantillons par pixel. 
+\item 'edge\_sharpness' : \emph{réel}
+
+Définit la netteté des contours lors de la passe de flou. 
+\item 'blur\_step\_size' : \emph{entier}
+
+Définit la taille d'une étape, durant la passe de flou. 
+\item 'blur\_radius' : \emph{entier}
+
+Définit le rayon du flou. 
+\end{enumerate}
+
+\end{document}

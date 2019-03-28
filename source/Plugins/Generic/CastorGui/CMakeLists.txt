@@ -1,7 +1,7 @@
 project( CastorGui )
 
-set( CastorBinsDependencies 
-	${CastorBinsDependencies}
+set( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
@@ -11,17 +11,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 10 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${GenericIncludes} )
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}
 	"Castor3D"
-	"${CastorMinLibraries}"
-	"CastorGuiPch.hpp"
-	"CastorGuiPch.cpp"
+	"${GenericLibraries}"
+	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )

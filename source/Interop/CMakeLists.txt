@@ -68,12 +68,6 @@ function( InteropBuild )
 			set( Build ${ComC3D} )
 			add_subdirectory( Interop/ComCastor3D )
 			set( ComC3D ${Build} PARENT_SCOPE )
-
-			if( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_TEST_INTEROP_COM} )
-				set( Build ${ComC3DT} )
-				add_subdirectory( Interop/ComCastor3D/Test )
-				set( ComC3DT ${Build} PARENT_SCOPE )
-			endif()
 		endif()
 
 		set( CastorMinLibraries
@@ -81,14 +75,14 @@ function( InteropBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( InteropBuild )
 
-function( InteropSummary msg msgtest )
+function( InteropSummary msg )
 	if ( ${CASTOR_BUILDGRP_INTEROP} )
 		set( msg_tmp "\n\nInteroperability :" )
 		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
@@ -110,8 +104,8 @@ function( InteropSummary msg msgtest )
 endfunction( InteropSummary )
 
 function( InteropSetup )
-if ( ${CASTOR_BUILDGRP_INTEROP} )
-	cpack_add_component_group( Interoperability
+	if ( ${CASTOR_BUILDGRP_INTEROP} )
+		cpack_add_component_group( Interoperability
 			DESCRIPTION "Bindings to use Castor3D in other languages (C# and Python yet)"
 		)
 

@@ -1,0 +1,50 @@
+/*
+See LICENSE file in root folder
+*/
+#ifndef ___C3D_TECHNIQUE_PLUGIN_H___
+#define ___C3D_TECHNIQUE_PLUGIN_H___
+
+#include "Castor3D/Plugin/Plugin.hpp"
+
+namespace castor3d
+{
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date		19/08/2012
+	\~english
+	\brief		Render technique plug-in class
+	\~french
+	\brief		Classe de plug-in de techniques de rendu
+	*/
+	class TechniquePlugin
+		: public Plugin
+	{
+	private:
+		friend class Plugin;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	library	The shared library holding the plug-in
+		 *\param[in]	engine	The engine
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
+		 *\param[in]	engine	Le moteur
+		 */
+		C3D_API TechniquePlugin( castor::DynamicLibrarySPtr library
+			, Engine * engine );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API virtual ~TechniquePlugin();
+	};
+}
+
+#endif
+

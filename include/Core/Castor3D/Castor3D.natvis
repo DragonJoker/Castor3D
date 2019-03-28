@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="ast::var::Variable">
+    <DisplayString>{{name={m_name}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+      <Item Name="type">m_type</Item>
+      <Item Name="outer">m_outer</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>

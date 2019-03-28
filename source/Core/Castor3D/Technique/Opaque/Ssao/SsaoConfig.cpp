@@ -1,0 +1,132 @@
+#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+
+using namespace castor;
+
+namespace castor3d
+{
+	SsaoConfig::TextWriter::TextWriter( String const & tabs )
+		: castor::TextWriter< SsaoConfig >{ tabs }
+	{
+	}
+
+	bool SsaoConfig::TextWriter::operator()( SsaoConfig const & object, TextFile & file )
+	{
+		bool result{ true };
+
+		if ( object.enabled )
+		{
+			Logger::logInfo( m_tabs + cuT( "Writing SsaoConfig" ) );
+			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "ssao\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tenabled " ) + ( object.enabled ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig enabled" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\thigh_quality " ) + ( object.highQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig high quality" );
+			}
+
+			//if ( result )
+			//{
+			//	result = file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( object.useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
+			//}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tintensity " ) + string::toString( object.intensity, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig intensity" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tradius " ) + string::toString( object.radius, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig radius" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tbias " ) + string::toString( object.bias, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig bias" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tnum_samples " ) + string::toString( object.numSamples, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig num samples" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tedge_sharpness " ) + string::toString( object.edgeSharpness, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
+			}
+
+			//if ( result )
+			//{
+			//	result = file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
+			//}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( object.blurStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur step size" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( object.blurRadius.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
+			}
+
+			file.writeText( m_tabs + cuT( "}\n" ) );
+		}
+
+		return result;
+	}
+
+	void SsaoConfig::accept( castor::String const & name
+		, RenderTechniqueVisitor & visitor )
+	{
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Radius" )
+			, radius );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Bias" )
+			, bias );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Intensity" )
+			, intensity );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Samples" )
+			, numSamples );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Edge Sharpness" )
+			, edgeSharpness );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Blur Step Size" )
+			, blurStepSize );
+		visitor.visit( name
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "SSAO" )
+			, cuT( "Blur Radius" )
+			, blurRadius );
+	}
+}

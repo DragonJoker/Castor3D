@@ -7,6 +7,16 @@ endfunction( GenericInit )
 
 function( GenericBuild )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
+		set( GenericLibraries ${CastorMinLibraries} )
+
+		set( GenericIncludes
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Generic
+			${CASTOR_BINARY_DIR}/include/Plugins/Generic
+			${CASTOR_SOURCE_DIR}/source/Plugins/Generic
+			${CASTOR_BINARY_DIR}/source/Plugins/Generic
+		)
+
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
 			set( Build ${Cgui} )
 			add_subdirectory( Plugins/Generic/CastorGui )
@@ -18,14 +28,14 @@ function( GenericBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( GenericBuild )
 
-function( GenericSummary msg msgtest )
+function( GenericSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
 		set( msg_tmp "\n\nGeneric :" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )

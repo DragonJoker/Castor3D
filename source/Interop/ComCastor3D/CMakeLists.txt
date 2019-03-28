@@ -6,24 +6,22 @@ if ( MSVC )
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
 		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 		configure_file( 
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/ComCastorUtils.hpp.in
-			${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/ComCastorUtils.hpp.in
+			${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp
 			NEWLINE_STYLE LF
 		)
 
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-		include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3D )
-		include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/Src/CastorUtils )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
-		include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src/Win32 )
+		include_directories(
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Interop
+			${CASTOR_SOURCE_DIR}/source/Interop
+			${CASTOR_BINARY_DIR}/include/Interop
+			${CASTOR_BINARY_DIR}/source/Interop
+		)
 		include_directories( ${ATL_INCLUDE_DIR} )
 
 		#ATL Libs
@@ -62,6 +60,9 @@ if ( MSVC )
 
 		# Castor3D interfaces
 		add_interface( "557E0DD9-00E5-48A2-AE26-B78CC6031956" RESRC_LIST RESH_LIST RESOURCE_ID "Engine" )
+		add_interface( "56FAEA93-D2BC-4845-9F7C-A225044C7626" RESRC_LIST RESH_LIST RESOURCE_ID "IndexMapping" )
+		add_interface( "3357AAE2-E50A-47AB-A0FE-83833CE2944C" RESRC_LIST RESH_LIST RESOURCE_ID "TriFaceMapping" )
+		add_interface( "93151A09-8DC0-491F-BCDE-1B58954B97C2" RESRC_LIST RESH_LIST RESOURCE_ID "LinesMapping" )
 		add_interface( "E59360F1-2F5B-4011-A61F-32E1A77207C8" RESRC_LIST RESH_LIST RESOURCE_ID "Submesh" )
 		add_interface( "C5053069-A376-4E0E-AA0A-5CCE3A78C205" RESRC_LIST RESH_LIST RESOURCE_ID "Mesh" )
 		add_interface( "C36B1CB1-9623-4DE9-B5D8-108AC6D32D54" RESRC_LIST RESH_LIST RESOURCE_ID "MovableObject" )
@@ -81,17 +82,17 @@ if ( MSVC )
 		add_interface( "F9185125-9460-4039-A0B0-EB2295AC6AB1" RESRC_LIST RESH_LIST RESOURCE_ID "Animable" )
 		add_interface( "F31A778F-F9E5-4619-A35B-2EE8325BF1D2" RESRC_LIST RESH_LIST RESOURCE_ID "AnimatedObject" )
 		add_interface( "7180F914-17E1-45A1-A2AB-F195F0724AD7" RESRC_LIST RESH_LIST RESOURCE_ID "AnimatedObjectGroup" )
+		add_interface( "5CA94585-1FBC-466A-8A59-90733AD8DF1D" RESRC_LIST RESH_LIST RESOURCE_ID "SceneBackground" )
+		add_interface( "F75EA477-3EFF-4254-B995-32A606A861F8" RESRC_LIST RESH_LIST RESOURCE_ID "ColourBackground" )
+		add_interface( "829D988E-BE04-421D-BE4B-DCE72A6C1E4E" RESRC_LIST RESH_LIST RESOURCE_ID "ImageBackground" )
+		add_interface( "391A6B49-95D3-4B92-ACFC-058083FC06D2" RESRC_LIST RESH_LIST RESOURCE_ID "SkyboxBackground" )
 		add_interface( "C2669704-BF96-4D28-9627-7E625EA2EC99" RESRC_LIST RESH_LIST RESOURCE_ID "Scene" )
 		add_interface( "5B26DE5C-FFE8-42AE-A07C-837D5164CAFE" RESRC_LIST RESH_LIST RESOURCE_ID "Animation" )
 		add_interface( "53A552B5-8524-4DDD-987C-AC68AA87233E" RESRC_LIST RESH_LIST RESOURCE_ID "Skeleton" )
 		add_interface( "AD82930D-4682-4CF1-B9E8-EDFD869E7AF7" RESRC_LIST RESH_LIST RESOURCE_ID "RenderTarget" )
 		add_interface( "68E4373D-24BB-45FE-9717-CB512111A984" RESRC_LIST RESH_LIST RESOURCE_ID "RenderWindow" )
-		add_interface( "CA7E6B72-3130-4888-83D3-33BFBBA2B3FD" RESRC_LIST RESH_LIST RESOURCE_ID "BlendState" )
-		add_interface( "8699BD20-FDE7-4FA9-9265-60B539CCE45D" RESRC_LIST RESH_LIST RESOURCE_ID "DepthStencilState" )
-		add_interface( "3720BBC7-6B1D-454B-A062-677C4E2B365E" RESRC_LIST RESH_LIST RESOURCE_ID "MultisampleState" )
-		add_interface( "5880CD0C-969C-471D-8FD0-3F271A492D33" RESRC_LIST RESH_LIST RESOURCE_ID "RasteriserState" )
 		add_interface( "98978C6B-C6FB-447C-A874-15068F900011" RESRC_LIST RESH_LIST RESOURCE_ID "Sampler" )
-		add_interface( "3CA68187-BD17-4E78-8D5C-B994DDA134BA" RESRC_LIST RESH_LIST RESOURCE_ID "TextureImage" )
+		add_interface( "3CA68187-BD17-4E78-8D5C-B994DDA134BA" RESRC_LIST RESH_LIST RESOURCE_ID "TextureView" )
 		add_interface( "0FF08968-9937-4771-8949-0E86E3615F98" RESRC_LIST RESH_LIST RESOURCE_ID "TextureLayout" )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "B62FE384-D806-4DA7-B091-A7E260D95D7F" RESRC_LIST RESH_LIST RESOURCE_ID "ShaderProgram" )
@@ -103,22 +104,28 @@ if ( MSVC )
 
 		# Add RGS files to the sources
 		file( GLOB COMCASTOR3D_RGS_FILES
-			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/*.rgs
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/*.rgs
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/*.rgs
+			${CMAKE_CURRENT_BINARY_DIR}/Win32/*.rgs
 		)
 		source_group( "Registry Files" FILES ${COMCASTOR3D_RGS_FILES} )
 
 		# Update resources IDs
 		configure_file( 
-			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/resource.h.in
-			${CMAKE_CURRENT_BINARY_DIR}/Src/Win32/resource.h
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/resource.h.in
+			${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/Win32/resource.h
 			NEWLINE_STYLE LF
 		)
 
 		# Define IDL files
-		file( GLOB COMCASTOR3D_IDL_FILES Src/*.idl )
-		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE Src/${PROJECT_NAME}.def )
-		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG Src/${PROJECT_NAME}d.def )
+		file( GLOB COMCASTOR3D_IDL_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/*.idl
+		)
+		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}.def
+		)
+		file( GLOB COMCASTOR3D_DEF_FILES_DEBUG
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}d.def
+		)
 
 		if ( MSVC )
 		  set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${COMCASTOR3D_DEF_FILES_DEBUG}")
@@ -140,45 +147,27 @@ if ( MSVC )
 		add_target( 
 			${PROJECT_NAME}
 			dll
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
 			"CastorUtils;Castor3D"
 			"CastorUtils;Castor3D;${AtlLibraries}"
-			"ComCastor3DPch.hpp"
-			"ComCastor3DPch.cpp"
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 			""
 			""
 			""
-			"${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
+			"${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
 		)
 
-		file( GLOB COMCASTOR_HEADER_FILES
-			Src/CastorUtils/*.hpp
-			Src/CastorUtils/*.h
-			Src/CastorUtils/*.inl
-		)
-		file( GLOB COMCASTOR_SOURCE_FILES
-			Src/CastorUtils/*.cpp
-			Src/CastorUtils/*.c
-		)
-		source_group( "Header Files\\CastorUtils" FILES ${COMCASTOR_HEADER_FILES} )
-		source_group( "Source Files\\CastorUtils" FILES ${COMCASTOR_SOURCE_FILES} )
-		
-		file( GLOB COMCASTOR3D_HEADER_FILES
-			Src/Castor3D/*.hpp
-			Src/Castor3D/*.h
-			Src/Castor3D/*.inl
-		)
-		file( GLOB COMCASTOR3D_SOURCE_FILES
-			Src/Castor3D/*.cpp
-			Src/Castor3D/*.c
-		)
-		source_group( "Source Files\\Castor3D" FILES ${COMCASTOR3D_SOURCE_FILES} )
-		source_group( "Header Files\\Castor3D" FILES ${COMCASTOR3D_HEADER_FILES} )
+		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )
+		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop Castor3D "Castor3D" )
 
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
+				${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
+				${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
 
 		# install tlb files

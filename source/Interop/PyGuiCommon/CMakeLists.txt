@@ -2,7 +2,7 @@ project( PyGuiCommon )
 
 set( ${PROJECT_NAME}_DESCRIPTION "GuiCommon Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 #we look for wxWidgets
@@ -15,10 +15,10 @@ else ()
 endif()
 
 if ( wxWidgets_FOUND AND GTK2_FOUND )
-	include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-	include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-	include_directories( ${CMAKE_SOURCE_DIR}/Samples/GuiCommon/Src )
+	include_directories( ${Castor3DIncludeDirs} )
+	include_directories( ${CASTOR_SOURCE_DIR}/include/Samples )
+	include_directories( ${CASTOR_SOURCE_DIR}/include/Interop )
+	include_directories( ${CASTOR_BINARY_DIR}/include/Interop )
 	include_directories( ${Boost_INCLUDE_DIR} )
 	include_directories( ${PYTHON_INCLUDE_DIR} )
 	include_directories( ${GTK2_INCLUDE_DIRS} )
@@ -65,12 +65,12 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 	endif()
 	
 	link_directories( ${Boost_LIBRARY_DIR} )
-	#link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
-	#link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
 
 	add_target( 
 		${PROJECT_NAME}
 		dll
+		${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
 		"CastorUtils;Castor3D;GuiCommon"
 		"CastorUtils;Castor3D;GuiCommon;${PythonLibraries};${wxWidgetsLibraries}"
 	)

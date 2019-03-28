@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="castor::Point&lt;*, 2&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Point&lt;*, 3&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Point&lt;*, 4&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+      <Item Name="w">m_coords[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::ColourT&lt;*&gt;">
+    <DisplayString>{{r={m_arrayValues[0]} g={m_arrayValues[1]} b={m_arrayValues[2]} a={m_arrayValues[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="r">m_arrayValues[0]</Item>
+      <Item Name="g">m_arrayValues[1]</Item>
+      <Item Name="b">m_arrayValues[2]</Item>
+      <Item Name="a">m_arrayValues[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Coords&lt;*, 2&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Coords&lt;*, 3&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Coords&lt;*, 4&gt;">
+    <DisplayString>{{x={m_coords[0]} y={m_coords[1]} z={m_coords[2]} w={m_coords[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="x">m_coords[0]</Item>
+      <Item Name="y">m_coords[1]</Item>
+      <Item Name="z">m_coords[2]</Item>
+      <Item Name="w">m_coords[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Matrix&lt;*, 2, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Matrix&lt;*, 3, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+      <Item Name="col 2">m_columns[2]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Matrix&lt;*, 4, *&gt;">
+    <Expand>
+      <Item Name="col 0">m_columns[0]</Item>
+      <Item Name="col 1">m_columns[1]</Item>
+      <Item Name="col 2">m_columns[2]</Item>
+      <Item Name="col 3">m_columns[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Resource&lt;*&gt;">
+    <DisplayString>{{name={m_name}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Image">
+    <DisplayString>{{name={m_name}}}</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+      <Item Name="buffers">m_buffers</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::PxBufferBase">
+    <DisplayString>{{format={m_pixelFormat}}}</DisplayString>
+    <Expand>
+      <Item Name="format">m_pixelFormat</Item>
+      <Item Name="size">m_size</Item>
+      <Item Name="buffer">m_buffer</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::BoundingBox">
+    <Expand>
+      <Item Name="center">m_center</Item>
+      <Item Name="dimensions">m_dimensions</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::BoundingSphere">
+    <Expand>
+      <Item Name="center">m_center</Item>
+      <Item Name="radius">m_radius</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::PlaneEquation">
+    <Expand>
+      <Item Name="normal">m_normal</Item>
+      <Item Name="d">m_d</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::ChangeTracked&lt;*&gt;">
+    <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value</Item>
+      <Item Name="dirty">m_dirty</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::GroupChangeTracked&lt;*&gt;">
+    <DisplayString>{{value={m_value}, dirty={m_dirty}}}</DisplayString>
+    <Expand>
+      <Item Name="value">m_value</Item>
+      <Item Name="dirty">m_dirty</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>

@@ -1,25 +1,25 @@
 project( PnTrianglesDivider )
 
-set( CastorBinsDependencies 
-	${CastorBinsDependencies}
+set( Castor3DBinsDependencies 
+	${Castor3DBinsDependencies}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "PN-Triangles Tessellation Divider" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
+set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${DividerIncludes} )
 
 add_target(
 	${PROJECT_NAME}
 	plugin
+	${CASTOR_SOURCE_DIR}/include/Plugins/Dividers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
 	"Castor3D"
-	"${CastorMinLibraries}"
+	"${DividerLibraries}"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Dividers" )

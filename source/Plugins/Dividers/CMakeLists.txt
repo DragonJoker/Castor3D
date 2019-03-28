@@ -11,6 +11,16 @@ endfunction( DividersInit )
 
 function( DividersBuild )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
+		set( DividerLibraries ${CastorMinLibraries} )
+
+		set( DividerIncludes
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Dividers
+			${CASTOR_BINARY_DIR}/include/Plugins/Dividers
+			${CASTOR_SOURCE_DIR}/source/Plugins/Dividers
+			${CASTOR_BINARY_DIR}/source/Plugins/Dividers
+		)
+
 		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )
 			set( Build ${PNTri} )
 			add_subdirectory( Plugins/Dividers/PnTrianglesDivider )
@@ -34,14 +44,14 @@ function( DividersBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( DividersBuild )
 
-function( DividersSummary msg msgtest )
+function( DividersSummary msg )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
 		set( msg_tmp "\n\nSubdividers :" )
 		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )

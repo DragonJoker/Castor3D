@@ -7,6 +7,16 @@ endfunction( GeneratorInit )
 
 function( GeneratorBuild )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
+		set( GeneratorLibraries ${CastorMinLibraries} )
+
+		set( GeneratorIncludes
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Generators
+			${CASTOR_BINARY_DIR}/include/Plugins/Generators
+			${CASTOR_SOURCE_DIR}/source/Plugins/Generators
+			${CASTOR_BINARY_DIR}/source/Plugins/Generators
+		)
+
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )
 			set( Build ${Dst} )
 			add_subdirectory( Plugins/Generators/DiamondSquareTerrain )
@@ -18,14 +28,14 @@ function( GeneratorBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( GeneratorBuild )
 
-function( GeneratorSummary msg msgtest )
+function( GeneratorSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
 		set( msg_tmp "\n\nGenerator :" )
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )

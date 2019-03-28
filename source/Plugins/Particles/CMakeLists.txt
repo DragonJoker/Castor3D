@@ -10,10 +10,11 @@ function( ParticlesBuild )
 		set( ParticlesLibraries ${CastorMinLibraries} )
 
 		set( ParticlesIncludes
-			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
-			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Plugins/Particles
+			${CASTOR_BINARY_DIR}/include/Plugins/Particles
+			${CASTOR_SOURCE_DIR}/source/Plugins/Particles
+			${CASTOR_BINARY_DIR}/source/Plugins/Particles
 		)
 
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
@@ -27,14 +28,14 @@ function( ParticlesBuild )
 			PARENT_SCOPE
 		)
 
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
+		set( Castor3DBinsDependencies
+			${Castor3DBinsDependencies}
 			PARENT_SCOPE
 		)
 	endif ()
 endfunction( ParticlesBuild )
 
-function( ParticlesSummary msg msgtest )
+function( ParticlesSummary msg )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
 		set( msg_tmp "\n\nParticles :" )
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )

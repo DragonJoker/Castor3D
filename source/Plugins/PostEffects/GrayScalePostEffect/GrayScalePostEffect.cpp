@@ -1,0 +1,295 @@
+#include "GrayScalePostEffect/GrayScalePostEffect.hpp"
+
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/SamplerCache.hpp>
+#include <Castor3D/Cache/ShaderCache.hpp>
+#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
+#include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Render/RenderPipeline.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
+#include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Render/Viewport.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Texture/TextureUnit.hpp>
+
+#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <Ashes/Pipeline/ColourBlendState.hpp>
+#include <Ashes/Pipeline/DepthStencilState.hpp>
+#include <Ashes/Pipeline/Pipeline.hpp>
+#include <Ashes/Pipeline/PipelineLayout.hpp>
+#include <Ashes/Pipeline/RasterisationState.hpp>
+#include <Ashes/Pipeline/ShaderStageState.hpp>
+#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <Ashes/RenderPass/RenderPass.hpp>
+#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+
+#include <ShaderWriter/Source.hpp>
+
+#include <numeric>
+
+namespace GrayScale
+{
+	namespace
+	{
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
+		{
+			using namespace sdw;
+			VertexWriter writer;
+
+			// Shader inputs
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
+
+			// Shader outputs
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto out = writer.getOut();
+
+			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			utils.declareInvertVec2Y();
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					vtx_texture = utils.bottomUpToTopDown( uv );
+					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		}
+
+		std::unique_ptr< sdw::Shader > getFragmentProgram()
+		{
+			using namespace sdw;
+			FragmentWriter writer;
+
+			// Shader inputs
+			auto configUbo = Ubo{ writer, "Configuration", 0u, 0u };
+			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
+			configUbo.end();
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+
+			// Shader outputs
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					auto colour = writer.declLocale( "colour"
+						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0 );
+				} );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		}
+	}
+
+	//*********************************************************************************************
+
+	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+		, ashes::UniformBuffer< castor::Point3f > const & configUbo )
+		: castor3d::RenderQuad{ renderSystem, true }
+		, m_configUbo{ configUbo }
+	{
+	}
+
+	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+		, ashes::DescriptorSet & descriptorSet )
+	{
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+			, m_configUbo
+			, 0u );
+	}
+
+	//*********************************************************************************************
+
+	castor::String PostEffect::Type = cuT( "grayscale" );
+	castor::String PostEffect::Name = cuT( "GrayScale PostEffect" );
+
+	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+		: castor3d::PostEffect{ PostEffect::Type
+			, PostEffect::Name
+			, renderTarget
+			, renderSystem
+			, params
+			, false }
+		, m_surface{ *renderSystem.getEngine(), cuT( "GrayScale" ) }
+		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "GrayScale" }
+		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "GrayScale" }
+	{
+	}
+
+	PostEffect::~PostEffect()
+	{
+	}
+
+	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+		, castor3d::RenderSystem & renderSystem
+		, castor3d::Parameters const & params )
+	{
+		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
+	}
+
+	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
+	{
+		if ( m_factors.isDirty() )
+		{
+			m_configUbo->getData() = m_factors.value();
+			m_configUbo->upload();
+			m_factors.reset();
+		}
+	}
+
+	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( cuT( "GrayScale" )
+			, ashes::ShaderStageFlag::eVertex
+			, *m_vertexShader.shader );
+		visitor.visit( cuT( "GrayScale" )
+			, ashes::ShaderStageFlag::eFragment
+			, *m_pixelShader.shader );
+		visitor.visit( cuT( "GrayScale" )
+			, ashes::ShaderStageFlag::eFragment
+			, cuT( "Configuration" )
+			, cuT( "Factors" )
+			, m_factors );
+	}
+
+	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
+	{
+		auto & renderSystem = *getRenderSystem();
+		auto & device = getCurrentDevice( *this );
+		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		m_vertexShader.shader = getVertexProgram( renderSystem );
+		m_pixelShader.shader = getFragmentProgram();
+		ashes::ShaderStageStateArray stages;
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
+		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
+		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
+		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
+
+		m_configUbo = ashes::makeUniformBuffer< castor::Point3f >( device
+			, 1u
+			, 0u
+			, ashes::MemoryPropertyFlag::eHostVisible );
+		device.debugMarkerSetObjectName(
+			{
+				ashes::DebugReportObjectType::eBuffer,
+				&m_configUbo->getUbo().getBuffer(),
+				"GrayScaleUbo"
+			} );
+		m_configUbo->getData() = m_factors.value();
+		m_configUbo->upload();
+		m_factors.reset();
+
+		// Create the render pass.
+		ashes::RenderPassCreateInfo renderPass;
+		renderPass.flags = 0u;
+
+		renderPass.attachments.resize( 1u );
+		renderPass.attachments[0].format = m_target->getPixelFormat();
+		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
+		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
+		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
+		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
+		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
+		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
+
+		renderPass.subpasses.resize( 1u );
+		renderPass.subpasses[0].flags = 0u;
+		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
+		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
+
+		renderPass.dependencies.resize( 2u );
+		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[0].dstSubpass = 0u;
+		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
+
+		renderPass.dependencies[1].srcSubpass = 0u;
+		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
+		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
+		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
+		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
+		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
+		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
+
+		m_renderPass = device.createRenderPass( renderPass );
+
+		ashes::DescriptorSetLayoutBindingArray bindings
+		{
+			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment }
+		};
+		m_quad = std::make_unique< Quad >( renderSystem, *m_configUbo );
+		m_quad->createPipeline( size
+			, castor::Position{}
+			, stages
+			, m_target->getDefaultView()
+			, *m_renderPass
+			, bindings
+			, {} );
+
+		auto result = m_surface.initialise( *m_renderPass
+			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
+			, m_target->getPixelFormat() );
+		castor3d::CommandsSemaphore commands
+		{
+			device.getGraphicsCommandPool().createCommandBuffer(),
+			device.createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
+
+		if ( result )
+		{
+			cmd.begin();
+			timer.beginPass( cmd );
+
+			// Put target image in shader input layout.
+			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
+				, ashes::PipelineStageFlag::eFragmentShader
+				, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+
+			cmd.beginRenderPass( *m_renderPass
+				, *m_surface.frameBuffer
+				, { ashes::ClearColorValue{} }
+				, ashes::SubpassContents::eInline );
+			m_quad->registerFrame( cmd );
+			cmd.endRenderPass();
+
+			timer.endPass( cmd );
+			cmd.end();
+			m_commands.emplace_back( std::move( commands ) );
+		}
+
+		m_result = m_surface.colourTexture.get();
+		return result;
+	}
+
+	void PostEffect::doCleanup()
+	{
+		m_quad.reset();
+		m_renderPass.reset();
+		m_surface.cleanup();
+		m_configUbo.reset();
+	}
+
+	bool PostEffect::doWriteInto( castor::TextFile & file, castor::String const & tabs )
+	{
+		return file.writeText( tabs + cuT( "postfx \"" ) + Type + cuT( "\"" ) ) > 0;
+	}
+
+	//*********************************************************************************************
+}
