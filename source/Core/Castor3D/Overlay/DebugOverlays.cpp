@@ -6,8 +6,8 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Miscellaneous/QueryPool.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Miscellaneous/QueryPool.hpp>
 
 #include <iomanip>
 

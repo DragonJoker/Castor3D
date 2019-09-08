@@ -96,16 +96,16 @@ namespace castor3d
 
 	bool Pass::TextWriter::operator()( Pass const & pass, TextFile & file )
 	{
-		static std::map< ashes::CompareOp, String > strAlphaFuncs
+		static std::map< VkCompareOp, String > strAlphaFuncs
 		{
-			{ ashes::CompareOp::eAlways, cuT( "always" ) },
-			{ ashes::CompareOp::eLess, cuT( "less" ) },
-			{ ashes::CompareOp::eLessEqual, cuT( "less_or_equal" ) },
-			{ ashes::CompareOp::eEqual, cuT( "equal" ) },
-			{ ashes::CompareOp::eNotEqual, cuT( "not_equal" ) },
-			{ ashes::CompareOp::eGreaterEqual, cuT( "greater_or_equal" ) },
-			{ ashes::CompareOp::eGreater, cuT( "greater" ) },
-			{ ashes::CompareOp::eNever, cuT( "never" ) },
+			{ VK_COMPARE_OP_ALWAYS, cuT( "always" ) },
+			{ VK_COMPARE_OP_LESS, cuT( "less" ) },
+			{ VK_COMPARE_OP_LESS_OR_EQUAL, cuT( "less_or_equal" ) },
+			{ VK_COMPARE_OP_EQUAL, cuT( "equal" ) },
+			{ VK_COMPARE_OP_NOT_EQUAL, cuT( "not_equal" ) },
+			{ VK_COMPARE_OP_GREATER_OR_EQUAL, cuT( "greater_or_equal" ) },
+			{ VK_COMPARE_OP_GREATER, cuT( "greater" ) },
+			{ VK_COMPARE_OP_NEVER, cuT( "never" ) },
 		};
 		static const String StrBlendModes[uint32_t( BlendMode::eCount )] =
 		{
@@ -151,7 +151,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( pass.getAlphaFunc() != ashes::CompareOp::eAlways )
+			if ( pass.getAlphaFunc() != VK_COMPARE_OP_ALWAYS )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_func " )
 					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
@@ -303,7 +303,7 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textures, TextureFlag::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == ashes::CompareOp::eAlways;
+			&& getAlphaFunc() == VK_COMPARE_OP_ALWAYS;
 	}
 
 	void Pass::prepareTextures()
@@ -346,7 +346,7 @@ namespace castor3d
 
 		if ( m_opacity < 1.0f
 			&& m_alphaBlendMode == BlendMode::eNoBlend
-			&& m_alphaFunc == ashes::CompareOp::eAlways )
+			&& m_alphaFunc == VK_COMPARE_OP_ALWAYS )
 		{
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}
@@ -365,7 +365,7 @@ namespace castor3d
 			result |= PassFlag::eAlphaBlending;
 		}
 
-		if ( getAlphaFunc() != ashes::CompareOp::eAlways )
+		if ( getAlphaFunc() != VK_COMPARE_OP_ALWAYS )
 		{
 			result |= PassFlag::eAlphaTest;
 		}

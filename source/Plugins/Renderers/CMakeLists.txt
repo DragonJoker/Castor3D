@@ -78,12 +78,22 @@ function( RenderersBuild )
 		${Castor3DBinsDependencies}
 		PARENT_SCOPE
 	)
+
+	set( AshesLibraries
+		${AshesLibraries}
+		PARENT_SCOPE
+	)
+
+	set( ShaderWriterLibraries
+		${ShaderWriterLibraries}
+		PARENT_SCOPE
+	)
 endfunction( RenderersBuild )
 
 function( RenderersSummary msg_in )
-	set( msg_tmp "\n\nRenderers :" )
-
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
+		set( msg_tmp "\n\nRenderers :" )
+
 		set( msg_tmp "${msg_tmp}\n    OpenGL 4.X           ${Ogl4}" )
 		set( msg_tmp "${msg_tmp}\n    OpenGL 3.X           ${Ogl3}" )
 		set( msg_tmp "${msg_tmp}\n    Vulkan               ${Vkn}" )
@@ -91,10 +101,10 @@ function( RenderersSummary msg_in )
 			set( msg_tmp "${msg_tmp}\n    Direct3D 11          ${D3d11}" )
 		endif ()
 		set( msg_tmp "${msg_tmp}\n    Test                 ${Trs}" )
-	endif ()
 
-	SET( msg "${msg_in}${msg_tmp}" PARENT_SCOPE )
-	SET( msgtest "${msgtest_in}${msgtest_tmp}" PARENT_SCOPE )
+		set( msg "${msg_in}${msg_tmp}" PARENT_SCOPE )
+		set( msgtest "${msgtest_in}${msgtest_tmp}" PARENT_SCOPE )
+	endif ()
 endfunction( RenderersSummary )
 
 function( RenderersSetup )

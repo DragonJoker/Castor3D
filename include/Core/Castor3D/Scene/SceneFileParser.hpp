@@ -124,14 +124,14 @@ namespace castor3d
 		castor::PxBufferBaseSPtr buffer;
 		castor::Path folder;
 		castor::Path relative;
-		ashes::ShaderStageFlag shaderStage;
+		VkShaderStageFlagBits shaderStage;
 		ashes::UniformBufferBasePtr uniformBuffer;
 		OverlaySPtr overlay;
 		BillboardListSPtr billboards;
 		int face1;
 		int face2;
 		LightType lightType;
-		ashes::PrimitiveTopology primitiveType;
+		VkPrimitiveTopology primitiveType;
 		ViewportSPtr viewport;
 		castor::String strName;
 		castor::String strName2;

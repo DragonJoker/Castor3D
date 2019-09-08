@@ -63,7 +63,7 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTopologyChange( ashes::PrimitiveTopology value );
+		void OnTopologyChange( VkPrimitiveTopology value );
 
 	private:
 		castor3d::Camera & m_camera;

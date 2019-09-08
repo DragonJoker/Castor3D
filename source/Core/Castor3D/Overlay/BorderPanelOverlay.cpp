@@ -111,7 +111,7 @@ namespace castor3d
 				totalSize[1] = parentSize[1] * totalSize[1];
 			}
 
-			Rectangle sizes = getBorderPixelSize();
+			castor::Rectangle sizes = getBorderPixelSize();
 			Point4d ptSizes = getBorderSize();
 			bool changed = m_borderChanged;
 
@@ -146,11 +146,11 @@ namespace castor3d
 		}
 	}
 
-	Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
+	castor::Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
 	{
 		Point4d absoluteSize = getAbsoluteBorderSize();
 
-		return Rectangle(
+		return castor::Rectangle(
 				   int32_t( absoluteSize[0] * size.getWidth() ),
 				   int32_t( absoluteSize[1] * size.getHeight() ),
 				   int32_t( absoluteSize[2] * size.getWidth() ),
@@ -178,7 +178,7 @@ namespace castor3d
 	void BorderPanelOverlay::doUpdateBuffer( Size const & size )
 	{
 		Size absoluteSize = getAbsoluteSize( size );
-		Rectangle absoluteBorderSize = getAbsoluteBorderSize( size );
+		castor::Rectangle absoluteBorderSize = getAbsoluteBorderSize( size );
 
 		int32_t centerL = 0;
 		int32_t centerT = 0;

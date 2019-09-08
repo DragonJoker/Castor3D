@@ -51,8 +51,8 @@ namespace smaa
 		 */
 		bool doWriteInto( castor::TextFile & file, castor::String const & tabs )override;
 
-		ashes::Texture const * doGetPredicationTexture();
-		ashes::TextureView const * doGetVelocityView();
+		ashes::Image const * doGetPredicationTexture();
+		ashes::ImageView const * doGetVelocityView();
 		void doBuildCommandBuffers( castor3d::RenderPassTimer const & timer );
 		castor3d::CommandsSemaphoreArray doBuildCommandBuffer( castor3d::RenderPassTimer const & timer
 			, uint32_t index );
@@ -71,12 +71,12 @@ namespace smaa
 		std::vector< std::unique_ptr< Reproject > > m_reproject;
 		std::vector< castor3d::CommandsSemaphoreArray > m_commandBuffers;
 		// sRGB view.
-		ashes::TextureView const * m_srgbTextureView{ nullptr };
+		ashes::ImageView const * m_srgbTextureView{ nullptr };
 		// Gamma view.
-		ashes::TextureView const * m_hdrTextureView{ nullptr };
+		ashes::ImageView const * m_hdrTextureView{ nullptr };
 		castor3d::TextureLayout * m_smaaResult{ nullptr };
 
-		ashes::ShaderStageStateArray m_copyProgram;
+		ashes::PipelineShaderStageCreateInfoArray m_copyProgram;
 		ashes::RenderPassPtr m_copyRenderPass;
 		ashes::FrameBufferPtr m_copyFrameBuffer;
 		std::vector< castor3d::RenderQuadSPtr > m_copyQuads;

@@ -55,22 +55,22 @@ namespace test_launcher
 
 			if ( parser.Found( wxT( "opengl3" ) ) )
 			{
-				m_rendererType = cuT( "opengl3" );
+				m_rendererType = cuT( "gl3" );
 				m_outputFileSuffix = m_rendererType;
 			}
 			else if ( parser.Found( wxT( "opengl4" ) ) )
 			{
-				m_rendererType = cuT( "opengl4" );
+				m_rendererType = cuT( "gl4" );
 				m_outputFileSuffix = m_rendererType;
 			}
 			else if ( parser.Found( wxT( "vulkan" ) ) )
 			{
-				m_rendererType = cuT( "vulkan" );
+				m_rendererType = cuT( "vk" );
 				m_outputFileSuffix = m_rendererType;
 			}
 			else if ( parser.Found( wxT( "direct3d11" ) ) )
 			{
-				m_rendererType = cuT( "direct3d11" );
+				m_rendererType = cuT( "d3d11" );
 				m_outputFileSuffix = m_rendererType;
 			}
 			else if ( parser.Found( wxT( "test" ) ) )
@@ -80,7 +80,7 @@ namespace test_launcher
 			}
 			else if ( parser.Found( wxT( "generate" ) ) )
 			{
-				m_rendererType = cuT( "vulkan" );
+				m_rendererType = cuT( "vk" );
 				m_outputFileSuffix = cuT( "ref" );
 			}
 
@@ -100,7 +100,7 @@ namespace test_launcher
 			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" ), false );
+		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" ), castor3d::Version{}, false );
 		PathArray arrayFiles;
 		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
 

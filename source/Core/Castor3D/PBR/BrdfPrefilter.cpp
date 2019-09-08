@@ -1,22 +1,19 @@
 #include "Castor3D/PBR/BrdfPrefilter.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Pipeline/InputAssemblyState.hpp>
-#include <Ashes/Pipeline/Scissor.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/RenderSubpass.hpp>
-#include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -26,24 +23,19 @@ namespace castor3d
 {
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
 		, castor::Size const & size
-		, ashes::TextureView const & dstTexture )
+		, ashes::ImageView const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 
 		// Initialise the vertex buffer.
-		m_vertexBuffer = ashes::makeVertexBuffer< TexturedQuad >( device
+		m_vertexBuffer = makeVertexBuffer< TexturedQuad >( device
 			, 1u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_vertexBuffer->getBuffer(),
-				"BrdfPrefilterVbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "BrdfPrefilter" );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 1u, 0u ) )
 		{
 			*buffer =
 			{
@@ -61,105 +53,130 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
-		m_vertexLayout = ashes::makeLayout< TexturedQuad::Vertex >( 0u );
-		m_vertexLayout->createAttribute( 0u
-			, ashes::Format::eR32G32_SFLOAT
-			, offsetof( TexturedQuad::Vertex, position ) );
-		m_vertexLayout->createAttribute( 1u
-			, ashes::Format::eR32G32_SFLOAT
-			, offsetof( TexturedQuad::Vertex, texture ) );
+		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			, ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+			}
+			, ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
+				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) },
+			} );
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo createInfo{};
-		createInfo.flags = 0u;
-
-		createInfo.attachments.resize( 1u );
-		createInfo.attachments[0].format = dstTexture.getFormat();
-		createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
-		createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-		createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		createInfo.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		ashes::AttachmentReference colourReference;
-		colourReference.attachment = 0u;
-		colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		createInfo.subpasses.resize( 1u );
-		createInfo.subpasses[0].flags = 0u;
-		createInfo.subpasses[0].colorAttachments = { colourReference };
-
-		createInfo.dependencies.resize( 2u );
-		createInfo.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		createInfo.dependencies[0].dstSubpass = 0u;
-		createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		createInfo.dependencies[1].srcSubpass = 0u;
-		createInfo.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		createInfo.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		createInfo.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		createInfo.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		createInfo.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		createInfo.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( createInfo );
+		ashes::VkAttachmentDescriptionArray attaches
+		{
+			{
+				0u,
+				dstTexture.getFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+			}
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				std::nullopt,
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			}
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attaches ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "BrdfPrefilterRenderPass" );
 
 		// Initialise the frame buffer.
-		ashes::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), dstTexture );
-		m_frameBuffer = m_renderPass->createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
-			, std::move( attaches ) );
+		ashes::ImageViewCRefArray views;
+		views.emplace_back( dstTexture );
+		m_frameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+			, std::move( views ) );
+		setDebugObjectName( device, *m_frameBuffer, "BrdfPrefilterFrameBuffer" );
 
 		// Initialise the pipeline.
-		m_pipelineLayout = device.createPipelineLayout();
-		m_pipeline = m_pipelineLayout->createPipeline( ashes::GraphicsPipelineCreateInfo{
-			doCreateProgram(),
-			*m_renderPass,
-			ashes::VertexInputState::create( *m_vertexLayout ),
-			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
-			ashes::RasterisationState{},
-			ashes::MultisampleState{},
-			ashes::ColourBlendState::createDefault(),
-			{},
-			ashes::DepthStencilState{ 0u, false, false },
-			ashes::nullopt,
-			ashes::Viewport{ size.getWidth(), size.getHeight(), 0, 0, },
-			ashes::Scissor{ 0, 0, size.getWidth(), size.getHeight() },
-		} );
+		m_pipelineLayout = device->createPipelineLayout();
+		setDebugObjectName( device, *m_pipelineLayout, "BrdfPrefilterPipelineLayout" );
+		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			{
+				0u,
+				doCreateProgram(),
+				std::move( *m_vertexLayout ),
+				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+				std::nullopt,
+				ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.getWidth() ), float( size.getHeight() ), 0.0f, 1.0f } }, 1u, { VkRect2D{ 0, 0, size.getWidth(), size.getHeight() } } },
+				ashes::PipelineRasterizationStateCreateInfo{},
+				ashes::PipelineMultisampleStateCreateInfo{},
+				ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false },
+				ashes::PipelineColorBlendStateCreateInfo{},
+				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				*m_pipelineLayout,
+				*m_renderPass
+			} );
+		setDebugObjectName( device, *m_pipeline, "BrdfPrefilterPipeline" );
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_commandBuffer, "BrdfPrefilterCommandBuffer" );
 	}
 
 	void BrdfPrefilter::render()
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
-		auto fence = device.createFence();
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		auto fence = device->createFence();
 
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
-		fence->wait( ashes::FenceTimeout );
-		device.getGraphicsQueue().waitIdle();
+		device.graphicsQueue->submit( *m_commandBuffer, fence.get() );
+		fence->wait( ashes::MaxTimeout );
+		device.graphicsQueue->waitIdle();
 	}
 
-	ashes::ShaderStageStateArray BrdfPrefilter::doCreateProgram()
+	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()
 	{
-		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "BRDFPrefilter" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "BRDFPrefilter" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -181,7 +198,7 @@ namespace castor3d
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "BRDFPrefilter" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "BRDFPrefilter" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -360,13 +377,11 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::ShaderStageStateArray program
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		return ashes::PipelineShaderStageCreateInfoArray
 		{
-			{ getCurrentDevice( m_renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
-			{ getCurrentDevice( m_renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
+			makeShaderState( device, vtx ),
+			makeShaderState( device, pxl ),
 		};
-		program[0].module->loadShader( m_renderSystem.compileShader( vtx ) );
-		program[1].module->loadShader( m_renderSystem.compileShader( pxl ) );
-		return program;
 	}
 }

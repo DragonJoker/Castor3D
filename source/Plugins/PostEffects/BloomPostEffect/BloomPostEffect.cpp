@@ -13,15 +13,11 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/SubpassDependency.hpp>
-#include <Ashes/RenderPass/SubpassDescription.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -80,32 +76,32 @@ namespace Bloom
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "HiPass" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_hiPass->getVertexShader().shader );
 		visitor.visit( cuT( "HiPass" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_hiPass->getPixelShader().shader );
 
 #if !Bloom_DebugHiPass
 		visitor.visit( cuT( "BlurX" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_blurXPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurX" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_blurXPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "BlurY" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_blurYPass->getVertexShader().shader );
 		visitor.visit( cuT( "BlurY" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_blurYPass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Combine" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_combinePass->getVertexShader().shader );
 		visitor.visit( cuT( "Combine" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_combinePass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Kernel Size" )
@@ -115,23 +111,18 @@ namespace Bloom
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
-		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 #if !Bloom_DebugHiPass
-		auto & device = getCurrentDevice( *this );
+		auto & device = getCurrentRenderDevice( *this );
 		// Create vertex buffer
-		m_vertexBuffer = ashes::makeVertexBuffer< castor3d::NonTexturedQuad >( device
+		m_vertexBuffer = castor3d::makeVertexBuffer< castor3d::NonTexturedQuad >( device
 			, 1u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_vertexBuffer->getBuffer(),
-				"PostEffectVbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "PostEffect" );
 
-		if ( auto data = m_vertexBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto data = m_vertexBuffer->lock( 0u, 1u, 0u ) )
 		{
 			castor3d::NonTexturedQuad buffer
 			{
@@ -150,35 +141,33 @@ namespace Bloom
 		}
 
 		auto format = m_target->getPixelFormat();
-		ashes::ImageCreateInfo image{};
-		image.flags = 0u;
-		image.arrayLayers = 1u;
-		image.extent.width = size.width >> 1;
-		image.extent.height = size.height >> 1;
-		image.extent.depth = 1u;
-		image.format = format;
-		image.imageType = ashes::TextureType::e2D;
-		image.initialLayout = ashes::ImageLayout::eUndefined;
-		image.mipLevels = m_blurPassesCount;
-		image.samples = ashes::SampleCountFlag::e1;
-		image.sharingMode = ashes::SharingMode::eExclusive;
-		image.tiling = ashes::ImageTiling::eOptimal;
-		image.usage = ashes::ImageUsageFlag::eColourAttachment
-			| ashes::ImageUsageFlag::eSampled;
+		ashes::ImageCreateInfo image
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			format,
+			{ size.width >> 1, size.height >> 1, 1u },
+			m_blurPassesCount,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT ),
+		};
 		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
 			, image
-			, ashes::MemoryPropertyFlag::eDeviceLocal
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "BloomBlur" ) );
 		m_blurTexture->initialise();
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
+		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()->getCurrentRenderDevice()
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView()
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
-		m_blurXPass = std::make_unique< BlurPass >( *getRenderSystem()
+		m_blurXPass = std::make_unique< BlurPass >( *getRenderSystem()->getCurrentRenderDevice()
 			, m_target->getPixelFormat()
 			, m_hiPass->getResult()
 			, *m_blurTexture
@@ -186,7 +175,7 @@ namespace Bloom
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, false );
-		m_blurYPass = std::make_unique< BlurPass >( *getRenderSystem()
+		m_blurYPass = std::make_unique< BlurPass >( *getRenderSystem()->getCurrentRenderDevice()
 			, m_target->getPixelFormat()
 			, *m_blurTexture
 			, m_hiPass->getResult()
@@ -194,7 +183,7 @@ namespace Bloom
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, true );
-		m_combinePass = std::make_unique< CombinePass >( *getRenderSystem()
+		m_combinePass = std::make_unique< CombinePass >( *getRenderSystem()->getCurrentRenderDevice()
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView()
 			, m_hiPass->getResult().getDefaultView()

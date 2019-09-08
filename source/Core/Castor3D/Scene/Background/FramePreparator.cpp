@@ -4,7 +4,7 @@
 #include "Castor3D/Scene/Background/Image.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
 
 namespace castor3d
 {

@@ -1050,9 +1050,10 @@ namespace castor
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( String & params )
 	{
+		static uint32_t constexpr Infinite = ~( 0u );
 		bool result = false;
 		m_value = 0u;
-		StringArray parameters = string::split( params, cuT( "|" ), ~( 0u ), false );
+		StringArray parameters = string::split( params, cuT( "|" ), Infinite, false );
 		params.clear();
 
 		if ( !parameters.empty() )
@@ -1126,9 +1127,10 @@ namespace castor
 
 	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( String & params )
 	{
+		static uint32_t constexpr Infinite = ~( 0u );
 		bool result = false;
 		m_value = 0ull;
-		StringArray parameters = string::split( params, cuT( "|" ), ~( 0u ), false );
+		StringArray parameters = string::split( params, cuT( "|" ), Infinite, false );
 		params.clear();
 
 		if ( !parameters.empty() )

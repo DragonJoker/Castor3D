@@ -18,7 +18,7 @@ namespace GuiCommon
 		ShaderEditorPage( castor3d::Engine * engine
 			, bool canEdit
 			, StcContext & stcContext
-			, ashes::ShaderStageFlag type
+			, VkShaderStageFlagBits type
 			, castor::String const & source
 			, std::vector< UniformBufferValues > & ubos
 			, wxWindow * parent
@@ -41,7 +41,7 @@ namespace GuiCommon
 		StcTextEditor * m_editor;
 		FrameVariablesList * m_frameVariablesList;
 		PropertiesContainer * m_frameVariablesProperties;
-		ashes::ShaderStageFlag m_stage;
+		VkShaderStageFlagBits m_stage;
 		wxString m_source;
 		std::vector< UniformBufferValues > & m_ubos;
 		bool m_canEdit;

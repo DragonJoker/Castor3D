@@ -169,7 +169,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API void doCopyResultToTarget( ashes::TextureView const & result
+		C3D_API void doCopyResultToTarget( ashes::ImageView const & result
 			, ashes::CommandBuffer & commandBuffer );
 
 	private:

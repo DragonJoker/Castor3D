@@ -5,7 +5,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Texture/TextureConfiguration.hpp"
 
-#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -58,7 +58,7 @@ namespace castor3d
 #else
 
 		TextureConfigurationBuffer::TextureConfigurationsData doBindData( uint8_t * buffer
-			, ashes::DeviceSize size
+			, VkDeviceSize size
 			, uint32_t count )
 		{
 			CU_Require( ( count * sizeof( TextureConfigurationBuffer::Data ) ) <= size );
@@ -194,13 +194,13 @@ namespace castor3d
 		}
 	}
 
-	ashes::DescriptorSetLayoutBinding TextureConfigurationBuffer::createLayoutBinding()const
+	VkDescriptorSetLayoutBinding TextureConfigurationBuffer::createLayoutBinding()const
 	{
 		return m_buffer.createLayoutBinding( TexturesBufferIndex );
 	}
 
 	void TextureConfigurationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, ashes::DescriptorSetLayoutBinding const & binding )const
+		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
 	}

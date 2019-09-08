@@ -55,7 +55,7 @@ namespace CastorGui
 			, p_visible )
 		, m_caption( p_caption )
 	{
-		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 		EventHandler::connect( MouseEventType::eEnter, [this]( MouseEvent const & p_event )
 		{
 			onMouseEnter( p_event );

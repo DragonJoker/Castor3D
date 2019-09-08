@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 namespace castor3d
 {
@@ -309,7 +309,7 @@ namespace castor3d
 		 *\brief		Définit la topologie.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void setTopology( ashes::PrimitiveTopology value );
+		inline void setTopology( VkPrimitiveTopology value );
 		/**
 		*\~english
 		*name
@@ -333,7 +333,7 @@ namespace castor3d
 		inline InterleavedVertexArray & getPoints();
 		inline ashes::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		inline ashes::VertexBuffer< InterleavedVertex > & getVertexBuffer();
-		inline ashes::VertexLayout const & getVertexLayout()const;
+		inline ashes::PipelineVertexInputStateCreateInfo const & getVertexLayout()const;
 		inline ashes::Buffer< uint32_t > const & getIndexBuffer()const;
 		inline ashes::Buffer< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;
@@ -349,7 +349,7 @@ namespace castor3d
 		inline BonesInstantiationComponent & getInstantiatedBones();
 		inline BonesInstantiationComponent const & getInstantiatedBones()const;
 		inline SubmeshComponentStrMap const & getComponents()const;
-		inline ashes::PrimitiveTopology getTopology()const;
+		inline VkPrimitiveTopology getTopology()const;
 
 	private:
 		void doGenerateVertexBuffer();
@@ -376,9 +376,9 @@ namespace castor3d
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };
-		ashes::PrimitiveTopology m_topology{ ashes::PrimitiveTopology::eTriangleList };
+		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ashes::VertexBufferPtr< InterleavedVertex > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::BufferPtr< uint32_t > m_indexBuffer;
 		mutable std::map< MaterialSPtr, GeometryBuffers > m_geometryBuffers;
 

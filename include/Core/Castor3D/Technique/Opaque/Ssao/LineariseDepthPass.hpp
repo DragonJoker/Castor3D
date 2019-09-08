@@ -12,8 +12,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
-#include <Ashes/Buffer/PushConstantsBuffer.hpp>
-#include <Ashes/Miscellaneous/PushConstantRange.hpp>
+#include <ashespp/Buffer/PushConstantsBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {
@@ -45,9 +45,9 @@ namespace castor3d
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
 		 */
 		LineariseDepthPass( Engine & engine
-			, ashes::Extent2D const & size
+			, VkExtent2D const & size
 			, SsaoConfigUbo & ssaoConfigUbo
-			, ashes::TextureView const & depthBuffer );
+			, ashes::ImageView const & depthBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -105,13 +105,13 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		ashes::TextureView const & m_depthBuffer;
-		ashes::Extent2D m_size;
+		ashes::ImageView const & m_depthBuffer;
+		VkExtent2D m_size;
 		TextureUnit m_result;
 		RenderPassTimerSPtr m_timer;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::SamplerPtr m_lineariseSampler;
 		ashes::SamplerPtr m_minifySampler;
 		ashes::CommandBufferPtr m_commandBuffer;
@@ -123,14 +123,14 @@ namespace castor3d
 		/**@{*/
 		ShaderModule m_lineariseVertexShader;
 		ShaderModule m_linearisePixelShader;
-		ashes::ShaderStageStateArray m_lineariseProgram;
-		ashes::TextureViewPtr m_linearisedView;
+		ashes::PipelineShaderStageCreateInfoArray m_lineariseProgram;
+		ashes::ImageView m_linearisedView;
 		ashes::FrameBufferPtr m_lineariseFrameBuffer;
 		ashes::DescriptorSetLayoutPtr m_lineariseDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_lineariseDescriptorPool;
 		ashes::DescriptorSetPtr m_lineariseDescriptor;
 		ashes::PipelineLayoutPtr m_linearisePipelineLayout;
-		ashes::PipelinePtr m_linearisePipeline;
+		ashes::GraphicsPipelinePtr m_linearisePipeline;
 		ashes::UniformBufferPtr< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		/**@}*/
@@ -146,17 +146,17 @@ namespace castor3d
 		};
 		struct MinifyPipeline
 		{
-			ashes::TextureView const * sourceView;
-			ashes::TextureViewPtr targetView;
+			ashes::ImageView const * sourceView;
+			ashes::ImageView targetView;
 			ashes::DescriptorSetPtr descriptor;
 			ashes::FrameBufferPtr frameBuffer;
-			ashes::PipelinePtr pipeline;
+			ashes::GraphicsPipelinePtr pipeline;
 		};
 
 		ashes::UniformBufferPtr< MinifyConfiguration > m_previousLevel;
 		ShaderModule m_minifyVertexShader;
 		ShaderModule m_minifyPixelShader;
-		ashes::ShaderStageStateArray m_minifyProgram;
+		ashes::PipelineShaderStageCreateInfoArray m_minifyProgram;
 		ashes::DescriptorSetLayoutPtr m_minifyDescriptorLayout;
 		ashes::PipelineLayoutPtr m_minifyPipelineLayout;
 		ashes::DescriptorSetPoolPtr m_minifyDescriptorPool;

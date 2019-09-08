@@ -185,7 +185,7 @@ namespace castor3d
 			 *\param[in]	alpha		La valeur d'opacité.
 			 *\param[in]	alphaRef	La valeur de référence pour la comparaison alpha.
 			 */
-			C3D_API void applyAlphaFunc( ashes::CompareOp alphaFunc
+			C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
 				, sdw::Float & alpha
 				, sdw::Float const & alphaRef );
 

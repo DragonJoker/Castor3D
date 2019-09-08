@@ -4,7 +4,7 @@
 #include <Castor3D/Scene/BillboardList.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 #include <random>
 
@@ -231,7 +231,7 @@ namespace Fireworks
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
 		auto stride = m_inputs.stride();
 
-		if ( auto dst = vbo.getBuffer().lock( 0u, m_firstUnused * stride, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto dst = vbo.getBuffer().lock( 0u, m_firstUnused * stride, 0u ) )
 		{
 			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{

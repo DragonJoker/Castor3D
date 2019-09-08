@@ -158,20 +158,21 @@ namespace castor3d
 			{
 				result = std::make_shared< TextureUnit >( *getEngine() );
 				result->setAutoMipmaps( true );
-				ashes::ImageCreateInfo createInfo{};
-				createInfo.flags = 0u;
-				createInfo.arrayLayers = 1u;
-				createInfo.imageType = ashes::TextureType::e2D;
-				createInfo.initialLayout = ashes::ImageLayout::eUndefined;
-				createInfo.mipLevels = 20u;
-				createInfo.samples = ashes::SampleCountFlag::e1;
-				createInfo.sharingMode = ashes::SharingMode::eExclusive;
-				createInfo.tiling = ashes::ImageTiling::eOptimal;
-				createInfo.usage = ashes::ImageUsageFlag::eSampled
-					| ashes::ImageUsageFlag::eTransferDst;
+				ashes::ImageCreateInfo createInfo
+				{
+					0u,
+					VK_IMAGE_TYPE_2D,
+					VK_FORMAT_D24_UNORM_S8_UINT,
+					{ 1u, 1u, 1u },
+					20u,
+					1u,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_IMAGE_TILING_OPTIMAL,
+					VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+				};
 				auto texture = std::make_shared < TextureLayout >( *getEngine()->getRenderSystem()
 					, createInfo
-					, ashes::MemoryPropertyFlag::eDeviceLocal
+					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 					, relative );
 				texture->setSource( folder
 					, relative );

@@ -5,6 +5,8 @@
 #include "Castor3D/Material/Pass.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderNode/RenderNode_Render.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -15,12 +17,10 @@
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Sync/BufferMemoryBarrier.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -183,44 +183,54 @@ namespace castor3d
 			}
 		}
 
-		ashes::TexturePtr createTexture( ashes::Device const & device
+		ashes::ImagePtr createTexture( RenderDevice const & device
 			, Size const & size
-			, ashes::Format format
-			, ashes::ImageUsageFlags usage
-			, ashes::MemoryPropertyFlag memory )
+			, VkFormat format
+			, VkImageUsageFlags usage
+			, VkMemoryPropertyFlagBits memory
+			, std::string const & name )
 		{
-			ashes::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
-			image.mipLevels = 1u;
-			image.extent.width = size.getWidth();
-			image.extent.height = size.getHeight();
-			image.extent.depth = 1u;
-			image.flags = 0u;
-			image.format = format;
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.sharingMode = ashes::SharingMode::eExclusive;
-			image.tiling = ashes::ImageTiling::eOptimal;
-			image.usage = usage;
-			return device.createTexture( image, memory );
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				format,
+				{ size[0], size[1], 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				usage,
+			};
+			return makeImage( device
+				, std::move( image )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "PickingPass" + name );
 		}
 
-		ashes::TextureViewPtr createView( ashes::Texture const & texture )
+		ashes::ImageView createView( RenderDevice const & device
+			, ashes::Image const & texture
+			, std::string const & name )
 		{
-			ashes::ImageViewCreateInfo view;
-			view.format = texture.getFormat();
-			view.viewType = ashes::TextureViewType::e2D;
-			view.components.r = ashes::ComponentSwizzle::eIdentity;
-			view.components.g = ashes::ComponentSwizzle::eIdentity;
-			view.components.b = ashes::ComponentSwizzle::eIdentity;
-			view.components.a = ashes::ComponentSwizzle::eIdentity;
-			view.subresourceRange.aspectMask = ashes::getAspectMask( view.format );
-			view.subresourceRange.baseArrayLayer = 0u;
-			view.subresourceRange.layerCount = 1u;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = 1u;
-			return texture.createView( view );
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				texture,
+				VK_IMAGE_VIEW_TYPE_2D,
+				texture.getFormat(),
+				VkComponentMapping{},
+				VkImageSubresourceRange
+				{
+					ashes::getAspectMask( texture.getFormat() ),
+					0u,
+					1u,
+					0u,
+					1u
+				}
+			};
+			auto result = texture.createView( view );
+			setDebugObjectName( device, result, "PickingPass" + name + "View" );
+			return result;
 		}
 
 		static uint32_t constexpr PickingWidth = 50u;
@@ -286,17 +296,17 @@ namespace castor3d
 		, Camera const & camera
 		, ashes::CommandBuffer const & commandBuffer )
 	{
-		static ashes::ClearValueArray clearValues
+		static ashes::VkClearValueArray clearValues
 		{
-			ashes::ClearColorValue{ 0.0, 0.0, 0.0, 1.0 },
-			ashes::DepthStencilClearValue{ 1.0f, 0 }
+			ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 1.0 } ),
+			ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0u } ),
 		};
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
-			, ashes::SubpassContents::eSecondaryCommandBuffers );
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_commandBuffer->executeCommands( { commandBuffer } );
 		m_commandBuffer->endRenderPass();
 
@@ -304,27 +314,27 @@ namespace castor3d
 		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eTransfer
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eTransfer
-			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eMemoryRead ) );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_MEMORY_READ_BIT ) );
 #endif
 
 		m_commandBuffer->end();
 
-		auto & device = getCurrentDevice( *this );
-		ashes::FencePtr fence = device.createFence();
-		device.getGraphicsQueue().submit( *m_commandBuffer, fence.get() );
-		fence->wait( ashes::FenceTimeout );
-		device.waitIdle();
+		auto & device = getCurrentRenderDevice( *this );
+		ashes::FencePtr fence = device->createFence();
+		device.graphicsQueue->submit( *m_commandBuffer, fence.get() );
+		fence->wait( ashes::MaxTimeout );
+		device->waitIdle();
 
 #if !C3D_DebugPicking
-		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), ashes::MemoryMapFlag::eRead ) )
+		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), 0u ) )
 		{
 			std::copy( data, data + m_stagingBuffer->getCount(), m_buffer.begin() );
 			m_stagingBuffer->unlock();
@@ -457,23 +467,20 @@ namespace castor3d
 
 	bool PickingPass::doInitialise( Size const & size )
 	{
-		auto & device = getCurrentDevice( *this );
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		auto & device = getCurrentRenderDevice( *this );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		m_colourTexture = createTexture( device
 			, size
-			, ashes::Format::eR32G32B32A32_SFLOAT
-			, ashes::ImageUsageFlag::eColourAttachment
-				| ashes::ImageUsageFlag::eTransferSrc
-				| ashes::ImageUsageFlag::eSampled
-			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eImage,
-				m_colourTexture.get(),
-				"PickingPassColour"
-			} );
-		m_colourView = createView( *m_colourTexture );
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "Colour" );
+		m_colourView = createView( device
+			, *m_colourTexture
+			, "Colour" );
 
 		m_copyRegion.bufferImageHeight = 0u;
 		m_copyRegion.bufferOffset = 0u;
@@ -482,88 +489,100 @@ namespace castor3d
 		m_copyRegion.imageExtent.height = PickingWidth;
 		m_copyRegion.imageExtent.depth = 1u;
 		m_copyRegion.imageOffset.z = 0u;
-		m_copyRegion.imageSubresource.aspectMask = m_colourView->getSubResourceRange().aspectMask;
+		m_copyRegion.imageSubresource.aspectMask = m_colourView->subresourceRange.aspectMask;
 		m_copyRegion.imageSubresource.baseArrayLayer = 0u;
 		m_copyRegion.imageSubresource.layerCount = 1u;
 		m_copyRegion.imageSubresource.mipLevel = 0u;
 
 		m_depthTexture = createTexture( device
 			, size
-			, ashes::Format::eD32_SFLOAT
-			, ashes::ImageUsageFlag::eDepthStencilAttachment
-			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		m_depthView = createView( *m_depthTexture );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eImage,
-				m_depthTexture.get(),
-				"PickingPassDepth"
-			} );
+			, VK_FORMAT_D32_SFLOAT
+			, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "Depth" );
+		m_depthView = createView( device
+			, *m_depthTexture
+			, "Depth" );
 
-		m_stagingBuffer = ashes::makeBuffer< Point4f >( device
+		m_stagingBuffer = makeBuffer< Point4f >( device
 			, PickingWidth * PickingWidth
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_stagingBuffer->getBuffer(),
-				"PickingPassStagingBuffer"
-			} );
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "PickingPassStagingBuffer" );
 
 		m_buffer.resize( PickingWidth * PickingWidth );
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
+		ashes::VkAttachmentDescriptionArray attaches
+		{
+			{
+				0u,
+				m_colourTexture->getFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+			},
+			{
+				1u,
+				m_depthTexture->getFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+			},
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_ACCESS_MEMORY_READ_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			}
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attaches ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "PickingPassRenderPass" );
 
-		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].format = m_colourTexture->getFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eTransferSrcOptimal;
-
-		renderPass.attachments[1].format = m_depthTexture->getFormat();
-		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-		renderPass.subpasses[0].depthStencilAttachment = { 1u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eTopOfPipe;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eMemoryRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
-
-		ashes::FrameBufferAttachmentArray attachments;
-		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 0u ), *m_colourView );
-		attachments.emplace_back( *( m_renderPass->getAttachments().begin() + 1u ), *m_depthView );
+		ashes::ImageViewCRefArray attachments;
+		attachments.emplace_back( m_colourView );
+		attachments.emplace_back( m_depthView );
 		m_frameBuffer = m_renderPass->createFrameBuffer( { size.getWidth(), size.getHeight() }
 			, std::move( attachments ) );
 
@@ -576,8 +595,6 @@ namespace castor3d
 		m_scenes.clear();
 		m_stagingBuffer.reset();
 		m_frameBuffer.reset();
-		m_colourView.reset();
-		m_depthView.reset();
 		m_depthTexture.reset();
 		m_colourTexture.reset();
 	}
@@ -817,48 +834,52 @@ namespace castor3d
 	{
 	}
 
-	ashes::DescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		ashes::DescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
-		result.emplace_back( UboBindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
+		ashes::VkDescriptorSetLayoutBindingArray result = RenderPass::doCreateUboBindings( flags );
+		result.push_back( makeDescriptorSetLayoutBinding( UboBindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			result.emplace_back( BillboardUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
+			result.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
 		return result;
 	}
 
-	ashes::DescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinTextureIndex;
-		ashes::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
 		{
-			textureBindings.emplace_back( index
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment
-				, flags.texturesCount );
+			textureBindings.push_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, flags.texturesCount ) );
 			index += flags.texturesCount;
 		}
 
 		return textureBindings;
 	}
 
-	ashes::DepthStencilState PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::PipelineDepthStencilStateCreateInfo PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::DepthStencilState{ 0u, true, true };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
 	}
 
-	ashes::ColourBlendState PickingPass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
 	void PickingPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::VertexLayoutCRefArray const & layouts
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 	}

@@ -86,47 +86,47 @@ namespace GuiCommon
 
 		switch ( m_submesh.getTopology() )
 		{
-		case ashes::PrimitiveTopology::ePointList:
+		case VK_PRIMITIVE_TOPOLOGY_POINT_LIST:
 			selected = PROPERTY_TOPOLOGY_POINT_LIST;
 			break;
 
-		case ashes::PrimitiveTopology::eLineList:
+		case VK_PRIMITIVE_TOPOLOGY_LINE_LIST:
 			selected = PROPERTY_TOPOLOGY_LINE_LIST;
 			break;
 
-		case ashes::PrimitiveTopology::eLineStrip:
+		case VK_PRIMITIVE_TOPOLOGY_LINE_STRIP:
 			selected = PROPERTY_TOPOLOGY_LINE_STRIP;
 			break;
 
-		case ashes::PrimitiveTopology::eTriangleList:
+		case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_LIST;
 			break;
 
-		case ashes::PrimitiveTopology::eTriangleStrip:
+		case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
 			break;
 
-		case ashes::PrimitiveTopology::eTriangleFan:
+		case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
 			break;
 
-		case ashes::PrimitiveTopology::eLineListWithAdjacency:
+		case VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY:
 			selected = PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY;
 			break;
 
-		case ashes::PrimitiveTopology::eLineStripWithAdjacency:
+		case VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY:
 			selected = PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY;
 			break;
 
-		case ashes::PrimitiveTopology::eTriangleListWithAdjacency:
+		case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY;
 			break;
 
-		case ashes::PrimitiveTopology::eTriangleStripWithAdjacency:
+		case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY:
 			selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY;
 			break;
 
-		case ashes::PrimitiveTopology::ePatchList:
+		case VK_PRIMITIVE_TOPOLOGY_PATCH_LIST:
 			selected = PROPERTY_TOPOLOGY_PATCH_LIST;
 			break;
 		}
@@ -158,47 +158,47 @@ namespace GuiCommon
 			{
 				if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_POINT_LIST )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::ePointList );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LIST )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eLineList );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eLineStrip );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_LIST )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eTriangleList );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eTriangleStrip );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eTriangleFan );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LIST_WITH_ADJACENCY )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eLineListWithAdjacency );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eLineStripWithAdjacency );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eTriangleListWithAdjacency );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::eTriangleStripWithAdjacency );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
 				}
 				else if ( property->GetValueAsString() == PROPERTY_TOPOLOGY_PATCH_LIST )
 				{
-					OnTopologyChange( ashes::PrimitiveTopology::ePatchList );
+					OnTopologyChange( VK_PRIMITIVE_TOPOLOGY_PATCH_LIST );
 				}
 			}
 		}
@@ -219,7 +219,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void SubmeshTreeItemProperty::OnTopologyChange( ashes::PrimitiveTopology value )
+	void SubmeshTreeItemProperty::OnTopologyChange( VkPrimitiveTopology value )
 	{
 		doApplyChange( [value, this]()
 		{

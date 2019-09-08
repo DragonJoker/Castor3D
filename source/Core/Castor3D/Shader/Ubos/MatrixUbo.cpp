@@ -1,10 +1,10 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Ashes/Buffer/StagingBuffer.hpp>
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
 
 using namespace castor;
 
@@ -23,7 +23,7 @@ namespace castor3d
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		if ( engine.getRenderSystem()->getCurrentRenderDevice() )
 		{
 			initialise();
 		}
@@ -37,17 +37,12 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentDevice( m_engine );
-			m_ubo = ashes::makeUniformBuffer< Configuration >( device
+			auto & device = getCurrentRenderDevice( m_engine );
+			m_ubo = makeUniformBuffer< Configuration >( device
 				, 1u
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_ubo->getUbo().getBuffer(),
-					"MatrixUbo"
-				} );
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "MatrixUbo" );
 		}
 	}
 

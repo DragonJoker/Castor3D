@@ -42,7 +42,7 @@ namespace castor3d
 		C3D_API void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::VertexLayoutCRefArray & layouts )override;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The VertexBuffer.
@@ -93,7 +93,7 @@ namespace castor3d
 
 	private:
 		ashes::VertexBufferPtr< InterleavedVertex > m_animBuffer;
-		ashes::VertexLayoutPtr m_animLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_animLayout;
 		InterleavedVertexArray m_data;
 	};
 }

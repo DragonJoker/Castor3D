@@ -20,28 +20,26 @@ namespace castor3d
 		uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 
 		SamplerSPtr sampler = getEngine()->getSamplerCache().add( font->getName() );
-		sampler->setWrapS( ashes::WrapMode::eClampToEdge );
-		sampler->setWrapT( ashes::WrapMode::eClampToEdge );
-		sampler->setMinFilter( ashes::Filter::eLinear );
-		sampler->setMagFilter( ashes::Filter::eLinear );
+		sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+		sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+		sampler->setMinFilter( VK_FILTER_LINEAR );
+		sampler->setMagFilter( VK_FILTER_LINEAR );
 		m_sampler = sampler;
-		ashes::ImageCreateInfo image{};
-		image.flags = 0u;
-		image.arrayLayers = 1u;
-		image.extent.width = maxWidth * 16;
-		image.extent.height = maxHeight * count;
-		image.extent.depth = 1u;
-		image.format = ashes::Format::eR8_UNORM;
-		image.imageType = ashes::TextureType::e2D;
-		image.initialLayout = ashes::ImageLayout::eUndefined;
-		image.mipLevels = 1u;
-		image.samples = ashes::SampleCountFlag::e1;
-		image.sharingMode = ashes::SharingMode::eExclusive;
-		image.tiling = ashes::ImageTiling::eOptimal;
-		image.usage = ashes::ImageUsageFlag::eTransferDst | ashes::ImageUsageFlag::eSampled;
+		ashes::ImageCreateInfo image
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_R8_UNORM,
+			{ maxWidth * 16, maxHeight * count, 1u },
+			1u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+		};
 		m_texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, image
-			, ashes::MemoryPropertyFlag::eDeviceLocal
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "FontTexture_" ) + font->getFaceName() );
 		m_texture->getDefaultImage().initialiseSource();
 	}

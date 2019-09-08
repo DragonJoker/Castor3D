@@ -6,6 +6,18 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
+set( AshesLibraries
+	${AshesLibraries}
+	D3D11Renderer
+	PARENT_SCOPE
+)
+
+set( ShaderWriterLibraries
+	${ShaderWriterLibraries}
+	CompilerHlsl
+	PARENT_SCOPE
+)
+
 set( ${PROJECT_NAME}_DESCRIPTION "Direct3D 11 Renderer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )

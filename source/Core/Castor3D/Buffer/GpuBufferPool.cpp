@@ -2,8 +2,8 @@
 
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Ashes/Buffer/Buffer.hpp>
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -11,8 +11,8 @@ namespace castor3d
 {
 	namespace
 	{
-		uint32_t doMakeKey( ashes::BufferTarget target
-			, ashes::MemoryPropertyFlags flags )
+		uint32_t doMakeKey( VkBufferUsageFlagBits target
+			, VkMemoryPropertyFlags flags )
 		{
 			return ( uint32_t( target ) << 0u )
 				| ( uint32_t( flags ) << 16u );
@@ -33,20 +33,20 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	GpuBufferOffset GpuBufferPool::getGpuBuffer( ashes::BufferTarget target
+	GpuBufferOffset GpuBufferPool::getGpuBuffer( VkBufferUsageFlagBits target
 		, uint32_t size
-		, ashes::MemoryPropertyFlags flags )
+		, VkMemoryPropertyFlags flags )
 	{
 		GpuBufferOffset result;
 
-		if ( target != ashes::BufferTarget::eIndexBuffer
-			&& target != ashes::BufferTarget::eVertexBuffer )
+		if ( target != VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+			&& target != VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
 		{
 			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-			buffer->doInitialiseStorage( getCurrentDevice( *getRenderSystem() )
+			buffer->doInitialiseStorage( getCurrentRenderDevice( *getRenderSystem() )
 				, size
-				, target | ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eHostVisible );
+				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
 			m_nonSharedBuffers.emplace_back( std::move( buffer ) );
 			result.buffer = &m_nonSharedBuffers.back()->getBuffer().getBuffer();
 			result.offset = 0u;
@@ -78,7 +78,7 @@ namespace castor3d
 				CU_Require( maxSize >= size );
 
 				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-				buffer->initialiseStorage( getCurrentDevice( *getRenderSystem() )
+				buffer->initialiseStorage( getCurrentRenderDevice( *getRenderSystem() )
 					, level
 					, 96u
 					, target
@@ -99,11 +99,11 @@ namespace castor3d
 		return result;
 	}
 
-	void GpuBufferPool::putGpuBuffer( ashes::BufferTarget target
+	void GpuBufferPool::putGpuBuffer( VkBufferUsageFlagBits target
 		, GpuBufferOffset const & bufferOffset )
 	{
-		if ( target != ashes::BufferTarget::eIndexBuffer
-			&& target != ashes::BufferTarget::eVertexBuffer )
+		if ( target != VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+			&& target != VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
 		{
 			auto it = std::find_if( m_nonSharedBuffers.begin()
 				, m_nonSharedBuffers.end()

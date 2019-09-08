@@ -1,16 +1,17 @@
 #include "Castor3D/EnvironmentMap/EnvironmentMapPass.hpp"
 
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Command/Queue.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Command/Queue.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 using namespace castor;
 
@@ -29,17 +30,18 @@ namespace castor3d
 			return camera;
 		}
 
-		ashes::TextureViewPtr doCreateView( TextureView const & image
+		ashes::ImageView doCreateView( TextureView const & image
 			, uint32_t face )
 		{
-			ashes::ImageViewCreateInfo view{};
-			view.format = image.getView().getFormat();
-			view.viewType = ashes::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eColour;
-			view.subresourceRange.baseArrayLayer = face;
-			view.subresourceRange.layerCount = 1u;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = 1u;
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				image.getOwner()->getTexture(),
+				VK_IMAGE_VIEW_TYPE_2D,
+				image.getView().getFormat(),
+				VkComponentMapping{},
+				{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, face, 1u }
+			};
 			return image.getOwner()->getTexture().createView( view );
 		}
 	}
@@ -81,17 +83,18 @@ namespace castor3d
 		, SceneBackground const & background
 		, ashes::DescriptorSetPool const & pool )
 	{
-		auto & device = getCurrentDevice( *getOwner() );
-		real const aspect = real( size.getWidth() ) / size.getHeight();
-		real const near = 0.1_r;
-		real const far = 1000.0_r;
+		auto & renderSystem = *getOwner()->getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
+		float const aspect = float( size.getWidth() ) / size.getHeight();
+		float const nearZ = 0.1f;
+		float const farZ = 1000.0f;
 		m_camera->getViewport().setPerspective( 90.0_degrees
 			, aspect
-			, near
-			, far );
+			, nearZ
+			, farZ );
 		m_camera->resize( size );
 
-		static Matrix4x4r const projection = convert( device.perspective( ( 45.0_degrees ).radians()
+		static Matrix4x4r const projection = convert( device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.initialise();
@@ -100,25 +103,29 @@ namespace castor3d
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
 		m_envView = doCreateView( environmentLayout->getImage( face ), face );
+		setDebugObjectName( device, m_envView, "EnvironmentMapPass" + castor::string::toString( face ) + "ColourView" );
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
-		m_opaquePass->initialiseRenderPass( *m_envView
+		m_opaquePass->initialiseRenderPass( m_envView
 			, getOwner()->getDepthView()
 			, size
 			, true );
 		m_opaquePass->initialise( size );
 
 		// Create custom background pass.
-		ashes::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 0u ), depthView );
-		attaches.emplace_back( *( renderPass.getAttachments().begin() + 1u ), *m_envView );
-		m_frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size[0], size[1] }
+		ashes::ImageViewCRefArray attaches;
+		attaches.emplace_back( depthView );
+		attaches.emplace_back( m_envView );
+		m_frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size[0], size[1] }
 			, std::move( attaches ) );
-		m_backgroundCommands = device.getGraphicsCommandPool().createCommandBuffer( false );
+		setDebugObjectName( device, *m_frameBuffer, "EnvironmentMapPass" + castor::string::toString( face ) + "FrameBuffer" );
+		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( false );
+		setDebugObjectName( device, *m_frameBuffer, "EnvironmentMapPass" + castor::string::toString( face ) + "CommandBuffer" );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
 		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_backgroundDescriptorSet, "EnvironmentMapPass" + castor::string::toString( face ) + "DescriptorSet" );
 		background.initialiseDescriptorSet( m_matrixUbo
 			, m_modelMatrixUbo
 			, m_hdrConfigUbo
@@ -130,15 +137,15 @@ namespace castor3d
 			, *m_backgroundDescriptorSet );
 
 		// Initialise transparent pass.
-		m_transparentPass->initialiseRenderPass( *m_envView
+		m_transparentPass->initialiseRenderPass( m_envView
 			, getOwner()->getDepthView()
 			, size
 			, false );
 		m_transparentPass->initialise( size );
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		m_finished = device.createSemaphore();
-		m_fence = device.createFence( ashes::FenceCreateFlag::eSignaled );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_finished = device->createSemaphore();
+		m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		return true;
 	}
 
@@ -152,7 +159,6 @@ namespace castor3d
 		m_frameBuffer.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
-		m_envView.reset();
 		m_hdrConfigUbo.cleanup();
 		m_modelMatrixUbo.cleanup();
 		m_matrixUbo.cleanup();
@@ -173,7 +179,8 @@ namespace castor3d
 
 	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentDevice( *getOwner() );
+		auto & renderSystem = *getOwner()->getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
@@ -182,14 +189,14 @@ namespace castor3d
 		m_modelMatrixUbo.update( m_mtxModel );
 		ashes::Semaphore const * result = &toWait;
 
-		static ashes::ClearColorValue const black{};
-		static ashes::DepthStencilClearValue const depth{ 1.0, 0 };
+		static VkClearColorValue const black{};
+		static VkClearDepthStencilValue const depth{ 1.0, 0 };
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { depth, black }
-			, ashes::SubpassContents::eSecondaryCommandBuffers );
+			, { ashes::makeClearValue( depth ), ashes::makeClearValue( black ) }
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		ashes::CommandBufferCRefArray commandBuffers;
 
 		if ( m_opaquePass->hasNodes() )
@@ -208,9 +215,9 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.getGraphicsQueue().submit( *m_commandBuffer
+		device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
-			, ashes::PipelineStageFlag::eColourAttachmentOutput
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
 			, nullptr );
 		result = m_finished.get();

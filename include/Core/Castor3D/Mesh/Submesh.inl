@@ -184,7 +184,7 @@ namespace castor3d
 		return *m_vertexBuffer;
 	}
 
-	inline ashes::VertexLayout const & Submesh::getVertexLayout()const
+	inline ashes::PipelineVertexInputStateCreateInfo const & Submesh::getVertexLayout()const
 	{
 		return *m_vertexLayout;
 	}
@@ -306,12 +306,12 @@ namespace castor3d
 		return m_components;
 	}
 
-	inline ashes::PrimitiveTopology Submesh::getTopology()const
+	inline VkPrimitiveTopology Submesh::getTopology()const
 	{
 		return m_topology;
 	}
 
-	inline void Submesh::setTopology( ashes::PrimitiveTopology value )
+	inline void Submesh::setTopology( VkPrimitiveTopology value )
 	{
 		m_topology = value;
 	}

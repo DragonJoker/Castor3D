@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3DFXAA_FxaaUbo_H___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace fxaa
 {

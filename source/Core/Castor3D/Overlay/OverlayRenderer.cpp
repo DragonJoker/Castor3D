@@ -1,8 +1,10 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -16,18 +18,18 @@
 #include "Castor3D/Texture/Sampler.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Buffer/Buffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Pipeline/InputAssemblyState.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 
@@ -258,7 +260,7 @@ namespace castor3d
 				, ( fontTexture
 					? m_renderer.doGetTextNode( pass, *fontTexture->getTexture(), *fontTexture->getSampler() )
 					: m_renderer.doGetPanelNode( pass ) )
-				, getCurrentDevice( m_renderer )
+				, getCurrentRenderDevice( m_renderer )
 				, ( fontTexture
 					? *m_renderer.m_textDeclaration
 					: *m_renderer.m_declaration )
@@ -308,7 +310,7 @@ namespace castor3d
 			auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
 			auto & commandBuffer = *m_renderer.m_commandBuffer;
 			commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-			commandBuffer.setViewport( { m_renderer.m_size.getWidth(), m_renderer.m_size.getHeight(), 0, 0 } );
+			commandBuffer.setViewport( { 0.0f, 0.0f, float( m_renderer.m_size.getWidth() ), float( m_renderer.m_size.getHeight() ), 0.0f, 1.0f } );
 			commandBuffer.setScissor( { position[0], position[1], size[0], size[1] } );
 			commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
 				, *bufferIndex.node.pipeline.pipelineLayout );
@@ -325,44 +327,28 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename VertexT, uint32_t CountT >
-	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( ashes::Device const & device
-		, ashes::VertexLayout const & declaration
+	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( RenderDevice const & device
+		, ashes::PipelineVertexInputStateCreateInfo const & declaration
 		, uint32_t count )
 		: maxCount{ count }
 		, data{ count, Quad{} }
 		, declaration{ declaration }
-		, buffer{ ashes::makeVertexBuffer< Quad >( device
+		, buffer{ makeVertexBuffer< Quad >( device
 			, count
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
-		, overlayUbo{ ashes::makeUniformBuffer< Configuration >( device
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "OverlayRenderer" ) }
+		, overlayUbo{ makeUniformBuffer< Configuration >( device
 			, count
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
-		, texturesUbo{ ashes::makeUniformBuffer< TexturesUbo::Configuration >( device
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "OverlayRendererOv" ) }
+		, texturesUbo{ makeUniformBuffer< TexturesUbo::Configuration >( device
 			, count
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "OverlayRendererTx" ) }
 	{
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&texturesUbo->getUbo().getBuffer(),
-				"OverlayTexturesUbo"
-			} );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&overlayUbo->getUbo().getBuffer(),
-				"OverlayOverlayUbo"
-			} );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&buffer->getBuffer(),
-				"OverlayVbo"
-			} );
-
 		for ( auto i = 0u; i < count; ++i )
 		{
 			free.insert( i );
@@ -372,17 +358,17 @@ namespace castor3d
 	template< typename VertexT, uint32_t CountT >
 	OverlayRenderer::VertexBufferIndex< VertexT, CountT > OverlayRenderer::VertexBufferPool< VertexT, CountT >::allocate( OverlayRenderNode & node )
 	{
-		OverlayRenderer::VertexBufferIndex< VertexT, CountT > result{ *this, node, ~( 0u ) };
+		OverlayRenderer::VertexBufferIndex< VertexT, CountT > result{ *this, node, InvalidIndex };
 
 		if ( !free.empty() )
 		{
 			result.index = *free.begin();
-			result.geometryBuffers.noTexture.vbo = { buffer->getBuffer() };
-			result.geometryBuffers.noTexture.layouts = { declaration };
-			result.geometryBuffers.noTexture.vboOffsets = { result.index };
-			result.geometryBuffers.textured.vbo = { buffer->getBuffer() };
-			result.geometryBuffers.textured.layouts = { declaration };
-			result.geometryBuffers.textured.vboOffsets = { result.index };
+			result.geometryBuffers.noTexture.vbo.emplace_back( buffer->getBuffer() );
+			result.geometryBuffers.noTexture.layouts.emplace_back( declaration );
+			result.geometryBuffers.noTexture.vboOffsets.emplace_back( result.index );
+			result.geometryBuffers.textured.vbo.emplace_back( buffer->getBuffer() );
+			result.geometryBuffers.textured.layouts.emplace_back( declaration );
+			result.geometryBuffers.textured.vboOffsets.emplace_back( result.index );
 			free.erase( free.begin() );
 		}
 
@@ -393,6 +379,12 @@ namespace castor3d
 	void OverlayRenderer::VertexBufferPool< VertexT, CountT >::deallocate( OverlayRenderer::VertexBufferIndex< VertexT, CountT > const & index )
 	{
 		CU_Require( &index.pool == this );
+		index.geometryBuffers.noTexture.vbo.clear();
+		index.geometryBuffers.noTexture.layouts.clear();
+		index.geometryBuffers.noTexture.vboOffsets.clear();
+		index.geometryBuffers.textured.vbo.clear();
+		index.geometryBuffers.textured.layouts.clear();
+		index.geometryBuffers.textured.vboOffsets.clear();
 		free.insert( index.index );
 	}
 
@@ -401,7 +393,7 @@ namespace castor3d
 	{
 		if ( auto bufferData = buffer->lock( 0u
 			, buffer->getCount()
-			, ashes::MemoryMapFlag::eWrite ) )
+			, 0u ) )
 		{
 			std::memcpy( bufferData, data.data(), buffer->getSize() );
 			buffer->flush( 0u, buffer->getCount() );
@@ -415,7 +407,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OverlayRenderer::OverlayRenderer( RenderSystem & renderSystem
-		, ashes::TextureView const & target )
+		, ashes::ImageView const & target )
 		: OwnedBy< RenderSystem >( renderSystem )
 		, m_target{ target }
 		, m_matrixUbo{ *renderSystem.getEngine() }
@@ -428,7 +420,8 @@ namespace castor3d
 
 	void OverlayRenderer::initialise()
 	{
-		auto & device = getCurrentDevice( *this );
+		auto & renderSystem = *getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 
 		if ( !m_renderPass )
 		{
@@ -437,34 +430,38 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-			m_finished = device.createSemaphore();
-			m_fence = device.createFence( ashes::FenceCreateFlag::eSignaled );
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+			m_finished = device->createSemaphore();
+			m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		}
 
 		if ( !m_declaration )
 		{
-			m_declaration = ashes::makeLayout< OverlayCategory::Vertex >( 0u );
-			m_declaration->createAttribute( 0u
-				, ashes::Format::eR32G32_SFLOAT
-				, offsetof( OverlayCategory::Vertex, coords ) );
-			m_declaration->createAttribute( 1u
-				, ashes::Format::eR32G32_SFLOAT
-				, offsetof( OverlayCategory::Vertex, texture ) );
+			m_declaration = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray
+				{
+					{ 0u, sizeof( OverlayCategory::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+				}
+				, ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) },
+					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) },
+				} );
 		}
 
 		if ( !m_textDeclaration )
 		{
-			m_textDeclaration = ashes::makeLayout< TextOverlay::Vertex >( 0u );
-			m_textDeclaration->createAttribute( 0u
-				, ashes::Format::eR32G32_SFLOAT
-				, offsetof( TextOverlay::Vertex, coords ) );
-			m_textDeclaration->createAttribute( 1u
-				, ashes::Format::eR32G32_SFLOAT
-				, offsetof( TextOverlay::Vertex, texture ) );
-			m_textDeclaration->createAttribute( 2u
-				, ashes::Format::eR32G32_SFLOAT
-				, offsetof( TextOverlay::Vertex, text ) );
+			m_textDeclaration = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray
+				{
+					{ 0u, sizeof( TextOverlay::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+				}
+				, ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) },
+					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) },
+					{ 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) },
+				} );
 		}
 
 		// Create one panel overlays buffer pool
@@ -524,14 +521,14 @@ namespace castor3d
 				, 1.0f ) );
 		}
 
-		static ashes::ClearColorValue clear{ 0.0f, 0.0f, 0.0f, 0.0f };
+		static VkClearColorValue clear{ 0.0f, 0.0f, 0.0f, 0.0f };
 		m_toWait = &toWait;
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { clear }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( clear ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 	}
 
 	void OverlayRenderer::endPrepare( RenderPassTimer const & timer )
@@ -560,11 +557,13 @@ namespace castor3d
 
 	void OverlayRenderer::render( RenderPassTimer & timer )
 	{
-		auto & queue = getCurrentDevice( *this ).getGraphicsQueue();
+		auto & renderSystem = *getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & queue = *device.graphicsQueue;
 		timer.notifyPassRender();
 		queue.submit( *m_commandBuffer
 			, *m_toWait
-			, ashes::PipelineStageFlag::eColourAttachmentOutput
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
 			, nullptr );
 	}
@@ -641,7 +640,7 @@ namespace castor3d
 				result->createBinding( pipeline.descriptorLayout->getBinding( MapsBinding )
 					, unit->getTexture()->getDefaultView()
 					, unit->getSampler()->getSampler()
-					, ashes::ImageLayout::eShaderReadOnlyOptimal
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, texIndex++ );
 			}
 		}
@@ -679,49 +678,66 @@ namespace castor3d
 
 	void OverlayRenderer::doCreateRenderPass()
 	{
-		auto & device = getCurrentDevice( *this );
+		ashes::VkAttachmentDescriptionArray attaches
+		{
+			{
+				0u,
+				m_target.getFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			}
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				std::nullopt,
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			}
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attaches ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		auto & device = getCurrentRenderDevice( *this );
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].format = m_target.getFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
-
-		ashes::FrameBufferAttachmentArray attaches;
-		attaches.emplace_back( *m_renderPass->getAttachments().begin(), m_target );
-		m_frameBuffer = m_renderPass->createFrameBuffer( { m_target.getTexture().getDimensions().width, m_target.getTexture().getDimensions().height }
-			, std::move( attaches ) );
+		ashes::ImageViewCRefArray fbAttaches;
+		fbAttaches.emplace_back( m_target );
+		m_frameBuffer = m_renderPass->createFrameBuffer( { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
+			, std::move( fbAttaches ) );
 	}
 
 	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( Pass const & pass
@@ -746,47 +762,54 @@ namespace castor3d
 		if ( it == pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
-			auto & device = getCurrentDevice( *this );
+			auto & device = getCurrentRenderDevice( *this );
 			auto program = doCreateOverlayProgram( textures
 				, count
 				, text );
 
-			ashes::ColourBlendState blState{};
-			blState.attachs.push_back( ashes::ColourBlendStateAttachment{
-				true,
-				ashes::BlendFactor::eSrcAlpha,
-				ashes::BlendFactor::eInvSrcAlpha,
-				ashes::BlendOp::eAdd,
-				ashes::BlendFactor::eSrcAlpha,
-				ashes::BlendFactor::eInvSrcAlpha,
-				ashes::BlendOp::eAdd
-			} );
-			ashes::DescriptorSetLayoutBindingArray bindings;
+			ashes::VkPipelineColorBlendAttachmentStateArray attachments
+			{
+				VkPipelineColorBlendAttachmentState
+				{
+					true,
+					VK_BLEND_FACTOR_SRC_ALPHA,
+					VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+					VK_BLEND_OP_ADD,
+					VK_BLEND_FACTOR_SRC_ALPHA,
+					VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+					VK_BLEND_OP_ADD
+				},
+			};
+			ashes::PipelineColorBlendStateCreateInfo blState
+			{
+				0u,
+				VK_FALSE,
+				VK_LOGIC_OP_COPY,
+				std::move( attachments ),
+			};
+			auto & materials = getRenderSystem()->getEngine()->getMaterialCache();
+			ashes::VkDescriptorSetLayoutBindingArray bindings;
 
-			// Pass buffer
-			bindings.emplace_back( getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
-			// Textures buffer
-			bindings.emplace_back( getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
-			// Matrix UBO
-			bindings.emplace_back( MatrixUboBinding
-				, ashes::DescriptorType::eUniformBuffer
-				, ashes::ShaderStageFlag::eVertex );
-			// Overlay UBO
-			bindings.emplace_back( OverlayUboBinding
-				, ashes::DescriptorType::eUniformBuffer
-				, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
-			// Textures UBO
-			bindings.emplace_back( TexturesUboBinding
-				, ashes::DescriptorType::eUniformBuffer
-				, ashes::ShaderStageFlag::eFragment );
+			bindings.emplace_back( materials.getPassBuffer().createLayoutBinding() );
+			bindings.emplace_back( materials.getTextureBuffer().createLayoutBinding() );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUboBinding
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( OverlayUboBinding
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUboBinding
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+
 			auto vertexLayout = m_declaration.get();
 
 			if ( text )
 			{
 				vertexLayout = m_textDeclaration.get();
-				bindings.emplace_back( TextMapBinding
-					, ashes::DescriptorType::eCombinedImageSampler
-					, ashes::ShaderStageFlag::eFragment );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( TextMapBinding
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 
 			auto count = uint32_t( std::count_if( pass.begin()
@@ -801,26 +824,31 @@ namespace castor3d
 
 			if ( count )
 			{
-				bindings.emplace_back( MapsBinding
-					, ashes::DescriptorType::eCombinedImageSampler
-					, ashes::ShaderStageFlag::eFragment
-					, count );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( MapsBinding
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT
+					, count ) );
 			}
 
-			auto descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
+			auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
 			auto descriptorPool = descriptorLayout->createPool( 1000u );
-			auto pipelineLayout = device.createPipelineLayout( *descriptorLayout );
-			auto pipeline = pipelineLayout->createPipeline( {
-				program,
-				*m_renderPass,
-				ashes::VertexInputState::create( *vertexLayout ),
-				{ ashes::PrimitiveTopology::eTriangleList },
-				ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
-				ashes::MultisampleState{},
-				blState,
-				{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
-				ashes::DepthStencilState{ 0u, false, false },
-			} );
+			auto pipelineLayout = device->createPipelineLayout( *descriptorLayout );
+			auto pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+				{
+					0u,
+					std::move( program ),
+					*vertexLayout,
+					ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+					std::nullopt,
+					ashes::PipelineViewportStateCreateInfo{},
+					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+					ashes::PipelineMultisampleStateCreateInfo{},
+					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
+					std::move( blState ),
+					ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+					*pipelineLayout,
+					*m_renderPass,
+				} );
 			it = pipelines.emplace( key
 				, Pipeline{ std::move( descriptorLayout )
 					, std::move( descriptorPool )
@@ -832,7 +860,7 @@ namespace castor3d
 		return it->second;
 	}
 
-	ashes::ShaderStageStateArray OverlayRenderer::doCreateOverlayProgram( TextureFlags const & textures
+	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( TextureFlags const & textures
 		, uint32_t texturesCount
 		, bool textOverlay )
 	{
@@ -841,7 +869,7 @@ namespace castor3d
 		bool hasTexture = textures != TextureFlag::eNone;
 
 		// Vertex shader
-		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "Overlay" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Overlay" };
 		{
 			VertexWriter writer;
 
@@ -875,7 +903,7 @@ namespace castor3d
 		}
 
 		// Pixel shader
-		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "Overlay" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Overlay" };
 		{
 			FragmentWriter writer;
 
@@ -955,12 +983,13 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::ShaderStageStateArray result;
-		result.push_back( { getCurrentDevice( *this ).createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		result.push_back( { getCurrentDevice( *this ).createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( getRenderSystem()->compileShader( vtx ) );
-		result[1].module->loadShader( getRenderSystem()->compileShader( pxl ) );
-		return result;
+		auto & renderSystem = *getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
+		return ashes::PipelineShaderStageCreateInfoArray
+		{
+			makeShaderState( device, vtx ),
+			makeShaderState( device, pxl ),
+		};
 	}
 
 	//*********************************************************************************************

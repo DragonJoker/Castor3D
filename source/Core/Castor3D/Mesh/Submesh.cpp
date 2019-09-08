@@ -9,11 +9,12 @@
 #include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
 #include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
 #include "Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -38,17 +39,12 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer();
-			auto & device = getCurrentDevice( *this );
-			m_indexBuffer = ashes::makeBuffer< uint32_t >( device
+			auto & device = getCurrentRenderDevice( *this );
+			m_indexBuffer = makeBuffer< uint32_t >( device
 				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
-				, ashes::BufferTarget::eIndexBuffer
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_indexBuffer->getBuffer(),
-					"SubmeshIndexBuffer"
-				} );
+				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, m_parentMesh.getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );
 
 			for ( auto & component : m_components )
 			{
@@ -59,20 +55,18 @@ namespace castor3d
 
 			if ( !m_vertexLayout )
 			{
-				m_vertexLayout = ashes::makeLayout< InterleavedVertex >( 0u
-					, ashes::VertexInputRate::eVertex );
-				m_vertexLayout->createAttribute( RenderPass::VertexInputs::PositionLocation
-					, ashes::Format::eR32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, pos ) );
-				m_vertexLayout->createAttribute( RenderPass::VertexInputs::NormalLocation
-					, ashes::Format::eR32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, nml ) );
-				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TangentLocation
-					, ashes::Format::eR32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tan ) );
-				m_vertexLayout->createAttribute( RenderPass::VertexInputs::TextureLocation
-					, ashes::Format::eR32G32B32_SFLOAT
-					, offsetof( InterleavedVertex, tex ) );
+				m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+					, ashes::VkVertexInputBindingDescriptionArray
+					{
+						{ 0u, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+					}
+					, ashes::VkVertexInputAttributeDescriptionArray
+					{
+						{ RenderPass::VertexInputs::PositionLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+						{ RenderPass::VertexInputs::NormalLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+						{ RenderPass::VertexInputs::TangentLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tan ) },
+						{ RenderPass::VertexInputs::TextureLocation, 0u, VK_FORMAT_R32G32B32_SFLOAT, offsetof( InterleavedVertex, tex ) },
+					} );
 			}
 
 			m_generated = true;
@@ -114,7 +108,7 @@ namespace castor3d
 
 			if ( auto buffer = m_vertexBuffer->lock( 0u
 				, size
-				, ashes::MemoryMapFlag::eWrite ) )
+				, 0u ) )
 			{
 				std::copy( m_points.begin(), m_points.end(), buffer );
 				m_vertexBuffer->flush( 0u, size );
@@ -174,23 +168,23 @@ namespace castor3d
 
 			switch ( getTopology() )
 			{
-			case ashes::PrimitiveTopology::ePointList:
+			case VK_PRIMITIVE_TOPOLOGY_POINT_LIST:
 				break;
 
-			case ashes::PrimitiveTopology::eLineList:
+			case VK_PRIMITIVE_TOPOLOGY_LINE_LIST:
 				result /= 2;
 				break;
 
-			case ashes::PrimitiveTopology::eLineStrip:
+			case VK_PRIMITIVE_TOPOLOGY_LINE_STRIP:
 				result -= 1u;
 				break;
 
-			case ashes::PrimitiveTopology::eTriangleList:
+			case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST:
 				result /= 3u;
 				break;
 
-			case ashes::PrimitiveTopology::eTriangleStrip:
-			case ashes::PrimitiveTopology::eTriangleFan:
+			case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP:
+			case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN:
 				result -= 2u;
 				break;
 			}
@@ -202,7 +196,7 @@ namespace castor3d
 	uint32_t Submesh::getPointsCount()const
 	{
 		return std::max< uint32_t >( uint32_t( m_points.size() )
-			, ( m_vertexBuffer ? m_vertexBuffer->getCount() : 0u ) );
+			, ( m_vertexBuffer ? uint32_t( m_vertexBuffer->getCount() ) : 0u ) );
 	}
 
 	int Submesh::isInMyPoints( Point3r const & vertex
@@ -304,7 +298,7 @@ namespace castor3d
 		{
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
-			ashes::VertexLayoutCRefArray layouts;
+			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			buffers.emplace_back( m_vertexBuffer->getBuffer() );
 			offsets.emplace_back( 0u );
 			layouts.emplace_back( *m_vertexLayout );
@@ -320,7 +314,7 @@ namespace castor3d
 			result.layouts = layouts;
 			result.ibo = &m_indexBuffer->getBuffer();
 			result.iboOffset = 0u;
-			result.idxCount = m_indexBuffer->getCount();
+			result.idxCount = uint32_t( m_indexBuffer->getCount() );
 			result.vtxCount = 0u;
 			it = m_geometryBuffers.emplace( material, std::move( result ) ).first;
 		}
@@ -330,7 +324,7 @@ namespace castor3d
 
 	void Submesh::doGenerateVertexBuffer()
 	{
-		auto & device = getCurrentDevice( *this );
+		auto & device = getCurrentRenderDevice( *this );
 		uint32_t size = uint32_t( m_points.size() );
 
 		if ( size )
@@ -338,21 +332,16 @@ namespace castor3d
 			if ( !m_vertexBuffer
 				|| size != m_vertexBuffer->getCount() )
 			{
-				m_vertexBuffer = ashes::makeVertexBuffer< InterleavedVertex >( device
+				m_vertexBuffer = makeVertexBuffer< InterleavedVertex >( device
 					, size
 					, 0u
-					, ashes::MemoryPropertyFlag::eHostVisible );
-				device.debugMarkerSetObjectName(
-					{
-						ashes::DebugReportObjectType::eBuffer,
-						&m_vertexBuffer->getBuffer(),
-						"SubmeshVbo"
-					} );
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, m_parentMesh.getName() + "Submesh" + castor::string::toString( m_id ) + "VertexBuffer" );
 			}
 
 			if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
 				, ~( 0ull )
-				, ashes::MemoryMapFlag::eWrite ) )
+				, 0u ) )
 			{
 				std::memcpy( buffer, m_points.data(), m_points.size() * sizeof( InterleavedVertex ) );
 				m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );

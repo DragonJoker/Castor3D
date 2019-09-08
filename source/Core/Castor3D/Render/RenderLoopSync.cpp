@@ -2,8 +2,6 @@
 
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Ashes/Core/Exception.hpp>
-
 #include <CastorUtils/Design/BlockGuard.hpp>
 
 using namespace castor;
@@ -42,11 +40,6 @@ namespace castor3d
 			{
 				doRenderFrame();
 			}
-			catch ( ashes::Exception & exc )
-			{
-				Logger::logError( String{ cuT( "RenderLoop - " ) } +exc.what() );
-				m_active = false;
-			}
 			catch ( castor::Exception & exc )
 			{
 				Logger::logError( exc.getFullDescription() );
@@ -80,7 +73,7 @@ namespace castor3d
 		CU_Exception( CALL_END_RENDERING );
 	}
 
-	ashes::DevicePtr RenderLoopSync::doCreateMainDevice( ashes::WindowHandle && handle
+	RenderDeviceSPtr RenderLoopSync::doCreateMainDevice( ashes::WindowHandle handle
 		, RenderWindow & window )
 	{
 		auto result = doCreateDevice( std::move( handle ), window );
@@ -91,11 +84,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this, &result]()
 				{
-					m_renderSystem.setCurrentDevice( result.get() );
+					m_renderSystem.setCurrentRenderDevice( result.get() );
 				},
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( nullptr );
+					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			GpuInformations info;
 			m_renderSystem.initialise( std::move( info ) );

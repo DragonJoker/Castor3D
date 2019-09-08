@@ -9,8 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/PushConstantsBuffer.hpp>
-#include <Ashes/Miscellaneous/PushConstantRange.hpp>
+#include <ashespp/Buffer/PushConstantsBuffer.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 
@@ -52,12 +51,12 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
-			, ashes::Extent2D const & size
+			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
-			, ashes::TextureView const & normals );
+			, ashes::ImageView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -106,7 +105,7 @@ namespace castor3d
 		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
 
 	public:
-		static ashes::Format constexpr ResultFormat = ashes::Format::eR8G8B8A8_UNORM;
+		static VkFormat constexpr ResultFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
 	private:
 		struct Configuration
@@ -119,12 +118,12 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
-		ashes::TextureView const & m_normals;
+		ashes::ImageView const & m_normals;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		SsaoConfig const & m_config;
-		ashes::ShaderStageStateArray m_program;
-		ashes::Extent2D m_size;
+		ashes::PipelineShaderStageCreateInfoArray m_program;
+		VkExtent2D m_size;
 		TextureUnit m_result;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_fbo;

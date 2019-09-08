@@ -516,7 +516,7 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Tests.log" ) );
-		castor3d::Engine engine{ cuT( "MeshConverter" ), false };
+		castor3d::Engine engine{ cuT( "MeshConverter" ), castor3d::Version{}, false };
 
 		if ( doInitialiseEngine( engine ) )
 		{

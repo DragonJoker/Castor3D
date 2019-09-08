@@ -6,15 +6,14 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Pipeline/ColourBlendState.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Pipeline/MultisampleState.hpp>
-#include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Ashes/Pipeline/Scissor.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineRasterizationStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -72,10 +71,10 @@ namespace castor3d
 		*	Les indicateurs de création.
 		*/
 		C3D_API explicit RenderPipeline( RenderSystem & renderSystem
-			, ashes::DepthStencilState && dsState
-			, ashes::RasterisationState && rsState
-			, ashes::ColourBlendState && blState
-			, ashes::MultisampleState && msState
+			, ashes::PipelineDepthStencilStateCreateInfo dsState
+			, ashes::PipelineRasterizationStateCreateInfo rsState
+			, ashes::PipelineColorBlendStateCreateInfo blState
+			, ashes::PipelineMultisampleStateCreateInfo msState
 			, ShaderProgramSPtr program
 			, PipelineFlags const & flags );
 		/**
@@ -135,32 +134,32 @@ namespace castor3d
 		*	Ils doivent être appelés avant l'appel à initialise().
 		**/
 		/**@{*/
-		C3D_API void setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts );
+		C3D_API void setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 		C3D_API void setDescriptorSetLayouts( std::vector< ashes::DescriptorSetLayoutPtr > && layouts );
 
-		inline void setVertexLayouts( std::vector< ashes::VertexLayout > layouts )
+		inline void setVertexLayouts( std::vector< ashes::PipelineVertexInputStateCreateInfo > layouts )
 		{
 			CU_Require( !m_pipeline );
 			m_vertexLayouts = std::move( layouts );
 		}
 
 
-		inline void setPushConstantRanges( ashes::PushConstantRangeArray const & pushConstantRanges )
+		inline void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )
 		{
 			CU_Require( !m_pipeline );
 			m_pushConstantRanges = pushConstantRanges;
 		}
 
-		inline void setViewport( ashes::Viewport const & viewport )
+		inline void setViewport( VkViewport const & viewport )
 		{
 			CU_Require( !m_pipeline );
-			m_viewport = std::make_unique< ashes::Viewport >( viewport );
+			m_viewport = std::make_unique< VkViewport >( viewport );
 		}
 
-		inline void setScissor( ashes::Scissor const & scissor )
+		inline void setScissor( VkRect2D const & scissor )
 		{
 			CU_Require( !m_pipeline );
-			m_scissor = std::make_unique< ashes::Scissor >( scissor );
+			m_scissor = std::make_unique< VkRect2D >( scissor );
 		}
 		/**@}*/
 		/**
@@ -177,7 +176,7 @@ namespace castor3d
 			return m_flags;
 		}
 
-		inline ashes::Pipeline const & getPipeline()const
+		inline ashes::GraphicsPipeline const & getPipeline()const
 		{
 			CU_Require( m_pipeline );
 			return *m_pipeline;
@@ -208,20 +207,20 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::DepthStencilState m_dsState;
-		ashes::RasterisationState m_rsState;
-		ashes::ColourBlendState m_blState;
-		ashes::MultisampleState m_msState;
+		ashes::PipelineDepthStencilStateCreateInfo m_dsState;
+		ashes::PipelineRasterizationStateCreateInfo m_rsState;
+		ashes::PipelineColorBlendStateCreateInfo m_blState;
+		ashes::PipelineMultisampleStateCreateInfo m_msState;
 		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
-		std::vector< ashes::VertexLayout > m_vertexLayouts;
+		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		std::vector< ashes::DescriptorSetLayoutPtr > m_descriptorLayouts;
 		std::vector< ashes::DescriptorSetPoolPtr > m_descriptorPools;
-		ashes::PushConstantRangeArray m_pushConstantRanges;
-		std::unique_ptr< ashes::Viewport > m_viewport;
-		std::unique_ptr< ashes::Scissor > m_scissor;
+		ashes::VkPushConstantRangeArray m_pushConstantRanges;
+		std::unique_ptr< VkViewport > m_viewport;
+		std::unique_ptr< VkRect2D > m_scissor;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 	};
 }
 

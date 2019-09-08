@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/GaussianBlur.hpp"
 #include "Castor3D/ShadowMap/ShadowMap.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -88,22 +90,22 @@ namespace castor3d
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
-		static ashes::Format constexpr VarianceFormat = ashes::Format::eR32G32_SFLOAT;
-		static ashes::Format constexpr LinearDepthFormat = ashes::Format::eR32_SFLOAT;
-		static ashes::Format constexpr RawDepthFormat = ashes::Format::eD24_UNORM_S8_UINT;
+		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
+		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
+		static VkFormat constexpr RawDepthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
 
 	private:
 		struct FrameBuffer
 		{
 			ashes::FrameBufferPtr frameBuffer;
-			ashes::TextureViewPtr depthView;
-			ashes::TextureViewPtr varianceView;
-			ashes::TextureViewPtr linearView;
+			ashes::ImageView depthView;
+			ashes::ImageView varianceView;
+			ashes::ImageView linearView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
-		ashes::TexturePtr m_depthTexture;
+		ashes::ImagePtr m_depthTexture;
 		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType;
 		uint32_t m_cascades;

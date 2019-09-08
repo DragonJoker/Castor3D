@@ -7,9 +7,9 @@ See LICENSE file in root folder
 
 #include "Castor3D/Texture/TextureConfiguration.hpp"
 
-#include <Ashes/Descriptor/WriteDescriptorSet.hpp>
-
 #include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace castor3d
 {
@@ -113,7 +113,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::TextureType getType()const;
+		C3D_API VkImageType getType()const;
 
 		inline TextureLayoutSPtr getTexture()const
 		{
@@ -145,7 +145,7 @@ namespace castor3d
 			return m_renderTarget.lock();
 		}
 
-		inline ashes::WriteDescriptorSet getDescriptor()const
+		inline VkWriteDescriptorSet getDescriptor()const
 		{
 			return m_descriptor;
 		}

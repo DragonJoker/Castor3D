@@ -6,10 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Image/ImageViewCreateInfo.hpp>
-#include <Ashes/Image/ImageSubresourceRange.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/Miscellaneous/Extent3D.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Image/ImageViewCreateInfo.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
@@ -100,7 +98,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les dimensions de la source.
 		 */
-		inline ashes::Extent3D getDimensions()const
+		inline VkExtent3D getDimensions()const
 		{
 			return m_size;
 		}
@@ -110,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la source.
 		 */
-		inline ashes::Format getPixelFormat()const
+		inline VkFormat getPixelFormat()const
 		{
 			return m_format;
 		}
@@ -136,7 +134,7 @@ namespace castor3d
 		 *\param[in,out]	size	La taille.
 		 *\return			\p true si les dimensions ont changé.
 		 */
-		bool doAdjustDimensions( ashes::Extent3D & size );
+		bool doAdjustDimensions( VkExtent3D & size );
 
 	protected:
 		//!\~english	The engine.
@@ -144,10 +142,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		ashes::Format m_format;
+		VkFormat m_format;
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		ashes::Extent3D m_size;
+		VkExtent3D m_size;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -311,7 +309,7 @@ namespace castor3d
 
 		inline uint32_t getBaseMipLevel()const
 		{
-			return m_info.subresourceRange.baseMipLevel;
+			return m_info->subresourceRange.baseMipLevel;
 		}
 
 		inline uint32_t getLevelCount()const
@@ -324,10 +322,9 @@ namespace castor3d
 			return m_needsMipmapsGeneration;
 		}
 
-		inline ashes::TextureView const & getView()const
+		inline ashes::ImageView const & getView()const
 		{
-			CU_Require( m_view );
-			return *m_view;
+			return m_view;
 		}
 		/**@}*/
 
@@ -338,7 +335,7 @@ namespace castor3d
 		uint32_t m_index;
 		ashes::ImageViewCreateInfo m_info;
 		std::unique_ptr< TextureSource > m_source;
-		ashes::TextureViewPtr m_view;
+		ashes::ImageView m_view;
 		bool m_needsMipmapsGeneration{ true };
 	};
 }

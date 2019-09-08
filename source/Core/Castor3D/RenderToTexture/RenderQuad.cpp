@@ -1,26 +1,27 @@
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Descriptor/WriteDescriptorSet.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Pipeline/InputAssemblyState.hpp>
-#include <Ashes/Pipeline/MultisampleState.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Ashes/Pipeline/Scissor.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Pipeline/PipelineRasterizationStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -30,15 +31,15 @@ namespace castor3d
 {
 	namespace
 	{
-		SamplerSPtr doCreateSampler( RenderSystem & renderSystem, bool nearest )
+		SamplerSPtr doCreateSampler( RenderDevice const & device, bool nearest )
 		{
 			String const name = nearest
 				? String{ cuT( "RenderQuad_Nearest" ) }
 			: String{ cuT( "RenderQuad_Linear" ) };
-			ashes::Filter const filter = nearest
-				? ashes::Filter::eNearest
-				: ashes::Filter::eLinear;
-			auto & cache = renderSystem.getEngine()->getSamplerCache();
+			VkFilter const filter = nearest
+				? VK_FILTER_NEAREST
+				: VK_FILTER_LINEAR;
+			auto & cache = device.renderSystem.getEngine()->getSamplerCache();
 			SamplerSPtr sampler;
 
 			if ( cache.has( name ) )
@@ -50,19 +51,19 @@ namespace castor3d
 				sampler = cache.add( name );
 				sampler->setMinFilter( filter );
 				sampler->setMagFilter( filter );
-				sampler->setWrapS( ashes::WrapMode::eClampToEdge );
-				sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			}
 
 			return sampler;
 		}
 	}
 
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
+	RenderQuad::RenderQuad( RenderDevice const & device
 		, bool nearest
 		, bool invertU
 		, bool invertV )
-		: m_renderSystem{ renderSystem }
+		: m_device{ device }
 		, m_vertexData
 		{
 			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 1.0 : 0.0 ) } },
@@ -70,12 +71,12 @@ namespace castor3d
 			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 1.0 : 0.0 ) } },
 			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 0.0 : 1.0 ) } },
 		}
-		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
+		, m_sampler{ doCreateSampler( m_device, nearest ) }
 	{
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )
-		: m_renderSystem{ rhs.m_renderSystem }
+		: m_device{ rhs.m_device }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
@@ -105,13 +106,13 @@ namespace castor3d
 		m_vertexBuffer.reset();
 	}
 
-	void RenderQuad::createPipeline( ashes::Extent2D const & size
+	void RenderQuad::createPipeline( VkExtent2D const & size
 		, castor::Position const & position
-		, ashes::ShaderStageStateArray const & program
-		, ashes::TextureView const & view
+		, ashes::PipelineShaderStageCreateInfoArray const & program
+		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
-		, ashes::DescriptorSetLayoutBindingArray bindings
-		, ashes::PushConstantRangeArray const & pushRanges )
+		, ashes::VkDescriptorSetLayoutBindingArray bindings
+		, ashes::VkPushConstantRangeArray const & pushRanges )
 	{
 		createPipeline( size
 			, position
@@ -120,34 +121,29 @@ namespace castor3d
 			, renderPass
 			, bindings
 			, pushRanges
-			, ashes::DepthStencilState{ 0u, false, false } );
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 	}
 
-	void RenderQuad::createPipeline( ashes::Extent2D const & size
+	void RenderQuad::createPipeline( VkExtent2D const & size
 		, castor::Position const & position
-		, ashes::ShaderStageStateArray const & program
-		, ashes::TextureView const & view
+		, ashes::PipelineShaderStageCreateInfoArray const & program
+		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
-		, ashes::DescriptorSetLayoutBindingArray bindings
-		, ashes::PushConstantRangeArray const & pushRanges
-		, ashes::DepthStencilState dsState )
+		, ashes::VkDescriptorSetLayoutBindingArray bindings
+		, ashes::VkPushConstantRangeArray const & pushRanges
+		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
 		m_sourceView = &view;
 		m_sampler->initialise();
-		auto & device = getCurrentDevice( m_renderSystem );
+		auto & device = getCurrentRenderDevice( m_device );
 		// Initialise the vertex buffer.
-		m_vertexBuffer = ashes::makeVertexBuffer< TexturedQuad::Vertex >( device
+		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( device
 			, 4u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_vertexBuffer->getBuffer(),
-				"RenderQuadVbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "RenderQuad" );
 
-		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
 			std::copy( m_vertexData.begin(), m_vertexData.end(), buffer );
 			m_vertexBuffer->flush( 0u, 4u );
@@ -155,24 +151,19 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
-		ashes::VertexInputState vertexState;
-		vertexState.vertexBindingDescriptions.push_back( {
+		ashes::PipelineVertexInputStateCreateInfo vertexState
+		{
 			0u,
-			sizeof( TexturedQuad::Vertex ),
-			ashes::VertexInputRate::eVertex
-		} );
-		vertexState.vertexAttributeDescriptions.push_back( {
-			0u,
-			0u,
-			ashes::Format::eR32G32_SFLOAT,
-			offsetof( TexturedQuad::Vertex, position )
-		} );
-		vertexState.vertexAttributeDescriptions.push_back( {
-			1u,
-			0u,
-			ashes::Format::eR32G32_SFLOAT,
-			offsetof( TexturedQuad::Vertex, texture )
-		} );
+			ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+			},
+			ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
+				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) },
+			},
+		};
 
 		// Initialise the descriptor set.
 		auto textureBindingPoint = uint32_t( bindings.size() );
@@ -183,17 +174,17 @@ namespace castor3d
 
 			for ( auto & binding : bindings )
 			{
-				textureBindingPoint = std::max( textureBindingPoint, binding.getBindingPoint() );
+				textureBindingPoint = std::max( textureBindingPoint, binding.binding );
 			}
 
 			++textureBindingPoint;
 		}
 
-		bindings.emplace_back( textureBindingPoint
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );
-		m_descriptorSetLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device.createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		m_descriptorSetLayout = m_device->createDescriptorSetLayout( std::move( bindings ) );
+		m_pipelineLayout = m_device->createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
@@ -203,31 +194,46 @@ namespace castor3d
 		m_descriptorSet->update();
 
 		// Initialise the pipeline.
-		auto bdState = ashes::ColourBlendState::createDefault();
-		m_pipeline = m_pipelineLayout->createPipeline( 
+		VkViewport viewport{ float( position.x() ), float( position.y() ), float( size.width ), float( size.height ) };
+		VkRect2D scissor{ position.x(), position.y(), size.width, size.height };
+		ashes::PipelineViewportStateCreateInfo vpState
 		{
-			program,
-			renderPass,
-			vertexState,
-			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleStrip },
-			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
-			ashes::MultisampleState{},
-			std::move( bdState ),
-			{},
-			dsState,
-			ashes::nullopt,
-			ashes::Viewport{ size.width, size.height, position.x(), position.y() },
-			ashes::Scissor{ position.x(), position.y(), size.width, size.height }
-		} );
+			0u,
+			1u,
+			ashes::VkViewportArray{ viewport },
+			1u,
+			ashes::VkScissorArray{ scissor },
+		};
+		m_pipeline = m_device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			(
+				0u,
+				program,
+				std::move( vertexState ),
+				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP },
+				std::nullopt,
+				std::move( vpState ),
+				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+				ashes::PipelineMultisampleStateCreateInfo{},
+				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
+				ashes::PipelineColorBlendStateCreateInfo{},
+				ashes::nullopt,
+				*m_pipelineLayout,
+				static_cast< VkRenderPass const & >( renderPass )
+			) );
 	}
 
 	void RenderQuad::prepareFrame( ashes::RenderPass const & renderPass
 		, uint32_t subpassIndex )
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
-			, ashes::CommandBufferInheritanceInfo{ &renderPass, subpassIndex, nullptr, false, 0u, 0u } );
+		auto & device = getCurrentRenderDevice( m_device );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( false );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
+				, subpassIndex
+				, VkFramebuffer( VK_NULL_HANDLE )
+				, VkBool32( VK_FALSE )
+				, 0u
+				, 0u ) );
 		registerFrame( *m_commandBuffer );
 		m_commandBuffer->end();
 	}

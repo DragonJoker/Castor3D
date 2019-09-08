@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <ShaderWriter/Shader.hpp>
@@ -46,9 +46,9 @@ namespace castor3d
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
-			, ashes::TextureView const & texture
-			, ashes::Extent2D const & textureSize
-			, ashes::Format format
+			, ashes::ImageView const & texture
+			, VkExtent2D const & textureSize
+			, VkFormat format
 			, uint32_t kernelSize );
 		/**
 		 *\~english
@@ -144,24 +144,24 @@ namespace castor3d
 		{
 		public:
 			RenderQuad( RenderSystem & renderSystem
-				, ashes::TextureView const & src
-				, ashes::TextureView const & dst
+				, ashes::ImageView const & src
+				, ashes::ImageView const & dst
 				, ashes::UniformBuffer< Configuration > const & blurUbo
-				, ashes::Format format
-				, ashes::Extent2D const & size );
+				, VkFormat format
+				, VkExtent2D const & size );
 
 		private:
 			virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 				, ashes::DescriptorSet & descriptorSet );
 
-			ashes::TextureView const & m_srcView;
-			ashes::TextureView const & m_dstView;
+			ashes::ImageView const & m_srcView;
+			ashes::ImageView const & m_dstView;
 			ashes::UniformBuffer< Configuration > const & m_blurUbo;
 		};
 
-		ashes::TextureView const & m_source;
-		ashes::Extent2D m_size;
-		ashes::Format m_format;
+		ashes::ImageView const & m_source;
+		VkExtent2D m_size;
+		VkFormat m_format;
 		TextureUnit m_intermediate;
 
 		std::vector< float > m_kernel;

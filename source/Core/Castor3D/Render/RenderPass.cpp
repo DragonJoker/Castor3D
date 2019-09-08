@@ -19,8 +19,8 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
-#include <Ashes/Buffer/Buffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -271,15 +271,15 @@ namespace castor3d
 
 	PipelineFlags RenderPass::prepareBackPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, ashes::CompareOp alphaFunc
+		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureFlags const & textures
 		, uint32_t texturesCount
 		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ashes::PrimitiveTopology topology
-		, ashes::VertexLayoutCRefArray const & layouts )
+		, VkPrimitiveTopology topology
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
 	{
 		auto flags = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
@@ -312,15 +312,15 @@ namespace castor3d
 
 	PipelineFlags RenderPass::prepareFrontPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, ashes::CompareOp alphaFunc
+		, VkCompareOp alphaFunc
 		, PassFlags const & passFlags
 		, TextureFlags const & textures
 		, uint32_t texturesCount
 		, uint32_t heightMapIndex
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
-		, ashes::PrimitiveTopology topology
-		, ashes::VertexLayoutCRefArray const & layouts )
+		, VkPrimitiveTopology topology
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
 	{
 		auto flags = PipelineFlags{ colourBlendMode
 			, alphaBlendMode
@@ -502,90 +502,89 @@ namespace castor3d
 		doUpdateFlags( flags );
 	}
 
-	ashes::ColourBlendState RenderPass::createBlendState( BlendMode colourBlendMode
+	ashes::PipelineColorBlendStateCreateInfo RenderPass::createBlendState( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, uint32_t attachesCount )
 	{
-		ashes::ColourBlendStateAttachment attach;
+		VkPipelineColorBlendAttachmentState attach;
 
 		switch ( colourBlendMode )
 		{
 		case BlendMode::eNoBlend:
-			attach.srcColorBlendFactor = ashes::BlendFactor::eOne;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eZero;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eOne;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eOne;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eZero;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		case BlendMode::eInterpolative:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 
 		default:
 			attach.blendEnable = true;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcColour;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcColour;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_COLOR;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
 			break;
 		}
 
 		switch ( alphaBlendMode )
 		{
 		case BlendMode::eNoBlend:
-			attach.srcAlphaBlendFactor = ashes::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = ashes::BlendFactor::eZero;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
 			break;
 
 		case BlendMode::eAdditive:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = ashes::BlendFactor::eOne;
-			attach.dstAlphaBlendFactor = ashes::BlendFactor::eOne;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
 			break;
 
 		case BlendMode::eMultiplicative:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = ashes::BlendFactor::eZero;
-			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eZero;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 
 		case BlendMode::eInterpolative:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = ashes::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 
 		default:
 			attach.blendEnable = true;
-			attach.srcAlphaBlendFactor = ashes::BlendFactor::eSrcAlpha;
-			attach.dstAlphaBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
-			attach.srcColorBlendFactor = ashes::BlendFactor::eSrcAlpha;
-			attach.dstColorBlendFactor = ashes::BlendFactor::eInvSrcAlpha;
+			attach.srcAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+			attach.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+			attach.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
 			break;
 		}
 
-		ashes::ColourBlendState state;
-
-		for ( auto i = 0u; i < attachesCount; ++i )
+		return ashes::PipelineColorBlendStateCreateInfo
 		{
-			state.attachs.push_back( attach );
-		}
-
-		return state;
+			0u,
+			VK_FALSE,
+			VK_LOGIC_OP_COPY,
+			ashes::VkPipelineColorBlendAttachmentStateArray{ size_t( attachesCount ), attach },
+		};
 	}
 
 	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
@@ -1205,7 +1204,7 @@ namespace castor3d
 	}
 
 	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program
-		, ashes::VertexLayoutCRefArray const & layouts
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetFrontPipelines();
@@ -1217,22 +1216,23 @@ namespace castor3d
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
-					, ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eFront }
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT }
 					, std::move( bdState )
-					, ashes::MultisampleState{}
+					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setViewport( { 0.0f, 0.0f, float( m_size.getWidth() ), float( m_size.getHeight() ), 0.0f, 1.0f } );
 			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
+					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
 					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
@@ -1243,7 +1243,7 @@ namespace castor3d
 	}
 
 	void RenderPass::doPrepareBackPipeline( ShaderProgramSPtr program
-		, ashes::VertexLayoutCRefArray const & layouts
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 		, PipelineFlags const & flags )
 	{
 		auto & pipelines = doGetBackPipelines();
@@ -1255,22 +1255,23 @@ namespace castor3d
 			auto & pipeline = *pipelines.emplace( flags
 				, std::make_unique< RenderPipeline >( *getEngine()->getRenderSystem()
 					, std::move( dsState )
-					, ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eBack }
+					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT }
 					, std::move( bdState )
-					, ashes::MultisampleState{}
+					, ashes::PipelineMultisampleStateCreateInfo{}
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { m_size.getWidth(), m_size.getHeight(), 0, 0 } );
+			pipeline.setViewport( { 0.0f, 0.0f, float( m_size.getWidth() ), float( m_size.getHeight() ), 0.0f, 1.0f } );
 			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
 				{
+					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = getCurrentDevice( *this ).createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
+					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
 					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
@@ -1280,41 +1281,60 @@ namespace castor3d
 		}
 	}
 
-	ashes::DescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray RenderPass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		ashes::DescriptorSetLayoutBindingArray uboBindings;
+		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
 		{
-			uboBindings.emplace_back( LightBufferIndex, ashes::DescriptorType::eUniformTexelBuffer, ashes::ShaderStageFlag::eFragment );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LightBufferIndex
+				, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		uboBindings.emplace_back( MatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( SceneUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
-		uboBindings.emplace_back( ModelMatrixUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
-		uboBindings.emplace_back( ModelUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment );
-		uboBindings.emplace_back( TexturesUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT )  );
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint, flags.programFlags ) );
+			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint
+				, flags.programFlags ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 		{
-			uboBindings.emplace_back( MorphingUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
 		{
-			uboBindings.emplace_back( PickingUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( PickingUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
 		{
-			uboBindings.emplace_back( BillboardUbo::BindingPoint, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex );
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
 		return uboBindings;

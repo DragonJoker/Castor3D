@@ -122,7 +122,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialiseShader
 		*/
-		ashes::ShaderStageStateArray doInitialiseShader()override;
+		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader()override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doInitialise
 		*/

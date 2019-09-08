@@ -31,7 +31,7 @@ namespace castor3d
 	};
 	//!\~english	The weighted blend pass result.
 	//!\~french		Le résultat de la passe de weighted blend.
-	using WeightedBlendTextures = std::array< ashes::TextureViewCRef, size_t( WbTexture::eCount ) >;
+	using WeightedBlendTextures = std::array< ashes::ImageView, size_t( WbTexture::eCount ) >;
 	/**
 	 *\~english
 	 *\brief		Retrieve the name for given texture enum value.
@@ -53,7 +53,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	ashes::Format getTextureFormat( WbTexture texture );
+	VkFormat getTextureFormat( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment point for given texture enum value.
@@ -64,7 +64,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	ashes::ImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
+	VkImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -149,7 +149,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline void setDepthFormat( ashes::Format value )
+		inline void setDepthFormat( VkFormat value )
 		{
 			m_depthFormat = value;
 		}
@@ -163,11 +163,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
@@ -185,7 +185,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
@@ -208,9 +208,10 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
-		ashes::Format m_depthFormat;
+		VkFormat m_depthFormat;
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::VkDescriptorImageInfoArray m_shadowMapWrites;
 	};
 }
 

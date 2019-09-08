@@ -51,7 +51,7 @@ namespace castor3d
 		C3D_API void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::VertexLayoutCRefArray & layouts )override;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\return		The skeleton.

@@ -84,7 +84,7 @@ namespace castor
 			}
 
 			m_oldCodePage = ::GetConsoleOutputCP();
-			::EnumSystemCodePages( &doCodePageProc, CP_INSTALLED );
+			::EnumSystemCodePagesA( &doCodePageProc, CP_INSTALLED );
 			return m_screenBuffer != INVALID_HANDLE_VALUE;
 		}
 

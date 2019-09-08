@@ -4,8 +4,8 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Miscellaneous/QueryPool.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Miscellaneous/QueryPool.hpp>
 
 using namespace castor;
 
@@ -53,7 +53,7 @@ namespace castor3d
 		, m_engine{ engine }
 		, m_passesCount{ passesCount }
 		, m_category{ category }
-		, m_timerQuery{ getCurrentDevice( engine ).createQueryPool( ashes::QueryType::eTimestamp
+		, m_timerQuery{ getCurrentRenderDevice( engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
 			, 2u * passesCount
 			, 0u ) }
 		, m_cpuTime{ 0_ns }
@@ -102,7 +102,7 @@ namespace castor3d
 		cmd.resetQueryPool( *m_timerQuery
 			, passIndex * 2u
 			, 2u );
-		cmd.writeTimestamp( ashes::PipelineStageFlag::eBottomOfPipe
+		cmd.writeTimestamp( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
 			, *m_timerQuery
 			, passIndex * 2u + 0u );
 	}
@@ -111,14 +111,14 @@ namespace castor3d
 		, uint32_t passIndex )const
 	{
 		CU_Require( passIndex < m_passesCount );
-		cmd.writeTimestamp( ashes::PipelineStageFlag::eBottomOfPipe
+		cmd.writeTimestamp( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
 			, *m_timerQuery
 			, passIndex * 2u + 1u );
 	}
 
 	void RenderPassTimer::retrieveGpuTime()
 	{
-		static float const period = float( getCurrentDevice( m_engine ).getTimestampPeriod() );
+		static float const period = float( getCurrentRenderDevice( m_engine )->getTimestampPeriod() );
 		m_gpuTime = 0_ns;
 
 		for ( uint32_t i = 0; i < m_passesCount; ++i )
@@ -129,7 +129,7 @@ namespace castor3d
 				m_timerQuery->getResults( i * 2u
 					, 2u
 					, 0u
-					, ashes::QueryResultFlag::eWait
+					, VK_QUERY_RESULT_WAIT_BIT
 					, values );
 				m_gpuTime += Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
 				m_startedPasses[i] = false;
@@ -140,7 +140,7 @@ namespace castor3d
 	void RenderPassTimer::updateCount( uint32_t count )
 	{
 		m_passesCount = count;
-		m_timerQuery = getCurrentDevice( m_engine ).createQueryPool( ashes::QueryType::eTimestamp
+		m_timerQuery = getCurrentRenderDevice( m_engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
 			, 2u * m_passesCount
 			, 0u );
 		m_startedPasses.resize( m_passesCount );

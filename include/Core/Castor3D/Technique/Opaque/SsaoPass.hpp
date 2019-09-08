@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	gpResult	Le résultat de la geometry pass.
 		 */
 		SsaoPass( Engine & engine
-			, ashes::Extent2D const & size
+			, VkExtent2D const & size
 			, SsaoConfig & config
 			, GeometryPassResult const & gpResult );
 		/**

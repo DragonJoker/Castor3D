@@ -8,16 +8,18 @@ See LICENSE file in root folder
 #include <Castor3D/PostEffect/PostEffect.hpp>
 #include <Castor3D/Texture/TextureUnit.hpp>
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace Bloom
 {
 	class CombinePass
 	{
 	public:
-		CombinePass( castor3d::RenderSystem & renderSystem
-			, ashes::Format format
-			, ashes::TextureView const & sceneView
-			, ashes::TextureView const & blurView
-			, ashes::Extent2D const & size
+		CombinePass( castor3d::RenderDevice const & device
+			, VkFormat format
+			, ashes::ImageView const & sceneView
+			, ashes::ImageView const & blurView
+			, VkExtent2D const & size
 			, uint32_t blurPassesCount );
 		castor3d::CommandsSemaphore getCommands( castor3d::RenderPassTimer const & timer
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
@@ -42,16 +44,16 @@ namespace Bloom
 		static castor::String const CombineMapScene;
 
 	private:
-		ashes::Device const & m_device;
+		castor3d::RenderDevice const & m_device;
 		castor3d::TextureLayoutSPtr m_image;
-		ashes::TextureViewPtr m_view;
+		ashes::ImageView m_view;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::SamplerPtr m_sceneSampler;
 		ashes::SamplerPtr m_blurSampler;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;

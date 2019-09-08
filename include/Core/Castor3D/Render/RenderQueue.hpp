@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

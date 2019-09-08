@@ -6,6 +6,18 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
+set( AshesLibraries
+	${AshesLibraries}
+	Gl3Renderer
+	PARENT_SCOPE
+)
+
+set( ShaderWriterLibraries
+	${ShaderWriterLibraries}
+	CompilerGlsl
+	PARENT_SCOPE
+)
+
 set( ${PROJECT_NAME}_DESCRIPTION "OpenGL 3.2 Renderer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )

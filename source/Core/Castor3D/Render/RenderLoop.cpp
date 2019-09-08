@@ -39,11 +39,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
+					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
 				},
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( nullptr );
+					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
 				{
@@ -69,7 +69,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::createDevice( ashes::WindowHandle && handle
+	void RenderLoop::createDevice( ashes::WindowHandle handle
 		, RenderWindow & window )
 	{
 		if ( !m_renderSystem.hasMainDevice() )
@@ -116,10 +116,10 @@ namespace castor3d
 		return m_debugOverlays->isShown();
 	}
 
-	ashes::DevicePtr RenderLoop::doCreateDevice( ashes::WindowHandle && handle
+	RenderDeviceSPtr RenderLoop::doCreateDevice( ashes::WindowHandle handle
 		, RenderWindow & window )
 	{
-		ashes::DevicePtr result;
+		RenderDeviceSPtr result;
 
 		try
 		{
@@ -167,11 +167,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
+					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
 				},
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( nullptr );
+					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			doProcessEvents( EventType::ePreRender );
 			getEngine()->getSceneCache().forEach( []( Scene & scene )
@@ -194,11 +194,11 @@ namespace castor3d
 			auto guard = makeBlockGuard(
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( m_renderSystem.getMainDevice().get() );
+					m_renderSystem.setCurrentRenderDevice( m_renderSystem.getMainRenderDevice().get() );
 				},
 				[this]()
 				{
-					m_renderSystem.setCurrentDevice( nullptr );
+					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
 			m_debugOverlays->endGpuTask();
 		}

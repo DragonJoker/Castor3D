@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/CastorUtilsPrerequisites.hpp>
 #include <Castor3D/Castor3DPrerequisites.hpp>
-#include <VkRenderer/VkRendererPrerequisites.hpp>
 
 #ifdef CU_PlatformWindows
 #	ifdef VkRenderSystem_EXPORTS

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
-#include <Ashes/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace castor3d
 {

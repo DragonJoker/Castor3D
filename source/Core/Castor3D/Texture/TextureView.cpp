@@ -3,10 +3,9 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Image/StagingTexture.hpp>
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Miscellaneous/BufferImageCopy.hpp>
+#include <ashespp/Image/StagingTexture.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Image/Image.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -55,7 +54,7 @@ namespace castor3d
 				CU_Require( level < m_buffers.size() );
 				m_buffers[level] = buffer;
 				m_format = convert( buffer->getFormat() );
-				m_size = ashes::Extent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
+				m_size = VkExtent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
 			}
 
 		protected:
@@ -72,7 +71,7 @@ namespace castor3d
 				, PxBufferBaseSPtr buffer )
 				: StaticTextureSource{ engine }
 			{
-				auto size = ashes::Extent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
+				auto size = VkExtent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
 
 				if ( doAdjustDimensions( size ) )
 				{
@@ -86,7 +85,7 @@ namespace castor3d
 
 				auto & myBuffer = m_buffers.front();
 				m_format = convert( myBuffer->getFormat() );
-				m_size = ashes::Extent3D{ myBuffer->getWidth(), myBuffer->getHeight(), 1u };
+				m_size = VkExtent3D{ myBuffer->getWidth(), myBuffer->getHeight(), 1u };
 			}
 
 			virtual uint32_t getDepth()const
@@ -97,7 +96,7 @@ namespace castor3d
 			String toString()const override
 			{
 				auto stream = castor::makeStringStream();
-				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "_" ) << getName( m_format );
+				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "_" ) << ashes::getName( m_format );
 				return stream.str();
 			}
 		};
@@ -219,7 +218,7 @@ namespace castor3d
 				{
 					auto & myBuffer = m_buffers.front();
 					m_format = convert( myBuffer->getFormat() );
-					m_size = ashes::Extent3D{ myBuffer->getWidth(), myBuffer->getHeight(), 1u };
+					m_size = VkExtent3D{ myBuffer->getWidth(), myBuffer->getHeight(), 1u };
 				}
 			}
 
@@ -239,7 +238,7 @@ namespace castor3d
 				, PxBufferBaseSPtr buffer )
 				: StaticTextureSource{ engine }
 			{
-				auto size = ashes::Extent3D{ dimensions[0], dimensions[1], dimensions[2] };
+				auto size = VkExtent3D{ dimensions[0], dimensions[1], dimensions[2] };
 
 				if ( doAdjustDimensions( size ) )
 				{
@@ -264,7 +263,7 @@ namespace castor3d
 			String toString()const override
 			{
 				auto stream = castor::makeStringStream();
-				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "x" ) << m_size.depth << cuT( "_" ) << getName( m_format );
+				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "x" ) << m_size.depth << cuT( "_" ) << ashes::getName( m_format );
 				return stream.str();
 			}
 		};
@@ -277,11 +276,11 @@ namespace castor3d
 		public:
 			DynamicTextureSource( Engine & engine
 				, Size const & dimensions
-				, ashes::Format format )
+				, VkFormat format )
 				: TextureSource{ engine }
 			{
 				m_format = format;
-				m_size = ashes::Extent3D{ dimensions[0], dimensions[1], 1u };
+				m_size = VkExtent3D{ dimensions[0], dimensions[1], 1u };
 			}
 
 			bool isStatic()const override
@@ -291,12 +290,14 @@ namespace castor3d
 
 			inline PxBufferBaseSPtr getBuffer( uint32_t level )const override
 			{
+				using ashes::operator!=;
+
 				CU_Require( level == 0u );
 
 				if ( !m_buffers.empty() )
 				{
 					auto & myBuffer = m_buffers.front();
-					auto size = ashes::Extent3D{ myBuffer->getWidth()
+					auto size = VkExtent3D{ myBuffer->getWidth()
 						, myBuffer->getHeight()
 						, 1u };
 
@@ -330,7 +331,7 @@ namespace castor3d
 			{
 				CU_Require( level == 0u );
 				m_format = convert( buffer->getFormat() );
-				m_size = ashes::Extent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
+				m_size = VkExtent3D{ buffer->getWidth(), buffer->getHeight(), 1u };
 			}
 
 		protected:
@@ -345,7 +346,7 @@ namespace castor3d
 		public:
 			Dynamic2DTextureSource( Engine & engine
 				, Size const & dimensions
-				, ashes::Format format )
+				, VkFormat format )
 				: DynamicTextureSource{ engine, dimensions, format }
 			{
 				doAdjustDimensions( m_size );
@@ -359,7 +360,7 @@ namespace castor3d
 			String toString()const override
 			{
 				auto stream = castor::makeStringStream();
-				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "_" ) << getName( m_format );
+				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "_" ) << ashes::getName( m_format );
 				return stream.str();
 			}
 		};
@@ -372,7 +373,7 @@ namespace castor3d
 		public:
 			Dynamic3DTextureSource( Engine & engine
 				, Point3ui const & dimensions
-				, ashes::Format format )
+				, VkFormat format )
 				: DynamicTextureSource{ engine, Size{ dimensions[0], dimensions[1] }, format }
 			{
 				m_size.depth = dimensions[2];
@@ -387,7 +388,7 @@ namespace castor3d
 			String toString()const override
 			{
 				auto stream = castor::makeStringStream();
-				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "x" ) << m_size.depth << cuT( "_" ) << getName( m_format );
+				stream << m_size.width << cuT( "x" ) << m_size.height << cuT( "x" ) << m_size.depth << cuT( "_" ) << ashes::getName( m_format );
 				return stream.str();
 			}
 		};
@@ -395,13 +396,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	bool TextureSource::doAdjustDimensions( ashes::Extent3D & extent )
+	bool TextureSource::doAdjustDimensions( VkExtent3D & extent )
 	{
 		bool result = false;
 
 #if !C3D_HasNonPOT
 
-		ashes::Extent3D adjustedExtent{ getNext2Pow( extent.width )
+		VkExtent3D adjustedExtent{ getNext2Pow( extent.width )
 			, getNext2Pow( extent.height )
 			, getNext2Pow( extent.depth ) };
 		result = adjustedExtent != extent;
@@ -437,44 +438,47 @@ namespace castor3d
 
 	bool TextureView::initialise()
 	{
-		auto & device = getCurrentDevice( *getOwner() );
-		m_info.subresourceRange.levelCount = std::min( m_info.subresourceRange.levelCount
+		auto & renderSystem = *getOwner()->getRenderSystem();
+		auto & device = getCurrentRenderDevice( *getOwner() );
+		m_info->subresourceRange.levelCount = std::min( m_info->subresourceRange.levelCount
 			, getOwner()->getTexture().getMipmapLevels() );
 		m_view = getOwner()->getTexture().createView( m_info );
 		m_needsMipmapsGeneration = false;
 
 		if ( m_source && m_source->isStatic() )
 		{
-			auto staging = device.createStagingTexture( m_source->getPixelFormat()
+			auto staging = device->createStagingTexture( m_source->getPixelFormat()
 				, { m_source->getDimensions().width, m_source->getDimensions().height } );
 			ashes::ImageViewCreateInfo viewInfo
 			{
-				m_view->getType(),
-				m_view->getFormat(),
-				m_view->getComponentMapping(),
-				m_view->getSubResourceRange()
+				0u,
+				m_info->image,
+				m_view->viewType,
+				m_view->format,
+				m_view->components,
+				m_view->subresourceRange
 			};
-			viewInfo.subresourceRange.baseMipLevel = 0u;
-			viewInfo.subresourceRange.levelCount = 1u;
+			viewInfo->subresourceRange.baseMipLevel = 0u;
+			viewInfo->subresourceRange.levelCount = 1u;
 
 			for ( auto & buffer : m_source->getBuffers() )
 			{
-				auto view = m_view->getTexture().createView( viewInfo );
-				auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+				auto view = m_view.image->createView( viewInfo );
+				auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 				staging->uploadTextureData( *commandBuffer
 					, m_source->getPixelFormat()
 					, buffer->getConstPtr()
-					, *view );
-				viewInfo.subresourceRange.baseMipLevel++;
+					, view );
+				viewInfo->subresourceRange.baseMipLevel++;
 			}
 
 			m_needsMipmapsGeneration = getLevelCount() <= 1u
 				|| ( getLevelCount() > 1
-					&& viewInfo.subresourceRange.baseMipLevel < getLevelCount() );
+					&& viewInfo->subresourceRange.baseMipLevel < getLevelCount() );
 		}
 		else
 		{
-			m_needsMipmapsGeneration = m_info.subresourceRange.levelCount > 1u;
+			m_needsMipmapsGeneration = m_info->subresourceRange.levelCount > 1u;
 		}
 
 		return m_view != nullptr;
@@ -482,7 +486,6 @@ namespace castor3d
 
 	void TextureView::cleanup()
 	{
-		m_view.reset();
 	}
 
 	void TextureView::initialiseSource( Path const & folder
@@ -491,7 +494,7 @@ namespace castor3d
 		m_source = std::make_unique< StaticFileTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 			, folder
 			, relative );
-		m_info.format = m_source->getPixelFormat();
+		m_info->format = m_source->getPixelFormat();
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
 			, m_source->getPixelFormat() );
 	}
@@ -505,13 +508,13 @@ namespace castor3d
 					, getOwner()->getHeight()
 					, getOwner()->getDepth() }
 				, buffer );
-			m_info.format = m_source->getPixelFormat();
+			m_info->format = m_source->getPixelFormat();
 		}
 		else
 		{
 			m_source = std::make_unique< Static2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, buffer );
-			m_info.format = m_source->getPixelFormat();
+			m_info->format = m_source->getPixelFormat();
 		}
 
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
@@ -520,21 +523,21 @@ namespace castor3d
 
 	void TextureView::initialiseSource()
 	{
-		if ( getOwner()->getType() == ashes::TextureType::e3D )
+		if ( getOwner()->getType() == VK_IMAGE_TYPE_3D )
 		{
 			m_source = std::make_unique< Dynamic3DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, Point3ui{ getOwner()->getWidth()
 					, getOwner()->getHeight()
 					, getOwner()->getDepth() }
 				, getOwner()->getPixelFormat() );
-			m_info.format = m_source->getPixelFormat();
+			m_info->format = m_source->getPixelFormat();
 		}
 		else
 		{
 			m_source = std::make_unique< Dynamic2DTextureSource >( *getOwner()->getRenderSystem()->getEngine()
 				, Size{ getOwner()->getWidth(), getOwner()->getHeight() }
 				, getOwner()->getPixelFormat() );
-			m_info.format = m_source->getPixelFormat();
+			m_info->format = m_source->getPixelFormat();
 		}
 
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
@@ -544,7 +547,7 @@ namespace castor3d
 	void TextureView::setBuffer( PxBufferBaseSPtr buffer )
 	{
 		m_source->setBuffer( buffer );
-		m_info.format = m_source->getPixelFormat();
+		m_info->format = m_source->getPixelFormat();
 		getOwner()->doUpdateFromFirstImage( { m_source->getDimensions().width, m_source->getDimensions().height }
 			, m_source->getPixelFormat() );
 	}
@@ -560,11 +563,11 @@ namespace castor3d
 		else
 		{
 			auto stream = castor::makeStringStream();
-			stream << getName( m_info.format )
-				<< cuT( "_" ) << m_info.subresourceRange.baseArrayLayer
-				<< cuT( "_" ) << m_info.subresourceRange.layerCount
-				<< cuT( "_" ) << m_info.subresourceRange.baseMipLevel
-				<< cuT( "_" ) << m_info.subresourceRange.levelCount;
+			stream << ashes::getName( m_info->format )
+				<< cuT( "_" ) << m_info->subresourceRange.baseArrayLayer
+				<< cuT( "_" ) << m_info->subresourceRange.layerCount
+				<< cuT( "_" ) << m_info->subresourceRange.baseMipLevel
+				<< cuT( "_" ) << m_info->subresourceRange.levelCount;
 			result = stream.str();
 		}
 

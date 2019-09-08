@@ -107,7 +107,7 @@ namespace castor3d
 		SceneNodeSPtr m_node;
 		CameraSPtr m_camera;
 		SceneCullerUPtr m_culler;
-		ashes::TextureViewPtr m_envView;
+		ashes::ImageView m_envView;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::RenderPass const * m_renderPass{ nullptr };
 		ashes::CommandBufferPtr m_backgroundCommands;

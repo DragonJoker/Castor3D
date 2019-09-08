@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 

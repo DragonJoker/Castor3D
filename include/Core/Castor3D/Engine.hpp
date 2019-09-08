@@ -30,6 +30,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/ImageWriter.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 
+#include <ashespp/Core/RendererList.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -54,6 +56,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 */
 		C3D_API Engine( castor::String const & appName
+			, Version const & appVersion
 			, bool enableValidation );
 		/**
 		 *\~english
@@ -244,6 +247,16 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		inline castor::String const & getAppName()const
+		{
+			return m_appName;
+		}
+		
+		inline Version const & getAppVersion()const
+		{
+			return m_appVersion;
+		}
+		
 		inline castor::ImageCache const & getImageCache()const
 		{
 			return m_imageCache;
@@ -388,6 +401,11 @@ namespace castor3d
 		{
 			return m_imageWriter;
 		}
+
+		inline ashes::RendererList const & getRenderersList()const
+		{
+			return m_rendererList;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -419,9 +437,11 @@ namespace castor3d
 
 	private:
 		castor::String const m_appName;
+		Version const m_appVersion;
 		std::recursive_mutex m_mutexResources;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
+		ashes::RendererList m_rendererList;
 		RenderSystemUPtr m_renderSystem;
 		bool m_cleaned;
 		bool m_threaded;

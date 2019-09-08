@@ -19,10 +19,8 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -38,27 +36,28 @@ namespace castor3d
 	{
 		TextureUnit doCreateTexture( Engine & engine
 			, Size const & size
-			, ashes::Format format
+			, VkFormat format
 			, bool depth
 			, castor::String debugName )
 		{
-			ashes::ImageUsageFlags usage = depth
-				? ashes::ImageUsageFlag::eDepthStencilAttachment | ashes::ImageUsageFlag::eTransferDst | ashes::ImageUsageFlag::eTransferSrc
-				: ashes::ImageUsageFlag::eColourAttachment;
-			ashes::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
-			image.extent.width = size.getWidth();
-			image.extent.height = size.getHeight();
-			image.extent.depth = 1u;
-			image.imageType = ashes::TextureType::e2D;
-			image.mipLevels = 1u;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.usage = usage | ashes::ImageUsageFlag::eSampled;
-			image.format = format;
-
+			VkImageUsageFlags usage = depth
+				? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				: VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				format,
+				{ size[0], size[1], 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				usage | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
-				, ashes::MemoryPropertyFlag::eDeviceLocal
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
 			texture->getDefaultImage().initialiseSource();
 
@@ -74,7 +73,7 @@ namespace castor3d
 		{
 			return doCreateTexture( engine
 				, size
-				, ashes::Format::eR16G16B16A16_SFLOAT
+				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, false
 				, cuT( "LightingPass_Colour" ) );
 		}
@@ -95,7 +94,7 @@ namespace castor3d
 		, Scene const & scene
 		, GeometryPassResult const & gpResult
 		, OpaquePass & opaque
-		, ashes::TextureView const & depthView
+		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
 		: m_engine{ engine }
@@ -156,44 +155,44 @@ namespace castor3d
 				, *m_timer );
 		}
 
-		auto & device = getCurrentDevice( engine );
-		ashes::ImageCopy copy
+		auto & device = getCurrentRenderDevice( engine );
+		VkImageCopy copy
 		{
-			{ depthView.getSubResourceRange().aspectMask, 0u, 0u, 1u },
-			ashes::Offset3D{ 0, 0, 0 },
-			{ depthView.getSubResourceRange().aspectMask, 0u, 0u, 1u },
-			ashes::Offset3D{ 0, 0, 0 },
-			depthView.getTexture().getDimensions(),
+			{ depthView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			VkOffset3D{ 0, 0, 0 },
+			{ depthView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			VkOffset3D{ 0, 0, 0 },
+			depthView.image->getDimensions(),
 		};
-		m_blitDepthSemaphore = device.createSemaphore();
-		m_blitDepthCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer( true );
+		m_blitDepthSemaphore = device->createSemaphore();
+		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
 		m_blitDepthCommandBuffer->begin();
 		// Src depth buffer from depth attach to transfer source
-		m_blitDepthCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
-			, ashes::PipelineStageFlag::eTransfer
-			, m_srcDepth.makeTransferSource( ashes::ImageLayout::eUndefined
+		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED
 				, 0u ) );
 		// Dst depth buffer from unknown to transfer destination
-		m_blitDepthCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eTransfer
-			, m_depth.getTexture()->getDefaultView().makeTransferDestination( ashes::ImageLayout::eUndefined
+		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_depth.getTexture()->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED
 				, 0u ) );
 		// Copy Src to Dst
 		m_blitDepthCommandBuffer->copyImage( copy
-			, m_srcDepth.getTexture()
-			, ashes::ImageLayout::eTransferSrcOptimal
+			, *m_srcDepth.image
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, m_depth.getTexture()->getTexture()
-			, ashes::ImageLayout::eTransferDstOptimal );
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 		// Dst depth buffer from transfer destination to depth attach
-		m_blitDepthCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eEarlyFragmentTests
-			, m_depth.getTexture()->getDefaultView().makeDepthStencilAttachment( ashes::ImageLayout::eTransferDstOptimal
-				, ashes::AccessFlag::eTransferWrite ) );
+		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, m_depth.getTexture()->getDefaultView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_ACCESS_TRANSFER_WRITE_BIT ) );
 		// Src depth buffer from transfer source to depth stencil read only
-		m_blitDepthCommandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_srcDepth.makeDepthStencilReadOnly( ashes::ImageLayout::eTransferSrcOptimal
-				, ashes::AccessFlag::eTransferRead ) );
+		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, VK_ACCESS_TRANSFER_READ_BIT ) );
 		m_blitDepthCommandBuffer->end();
 	}
 
@@ -241,10 +240,10 @@ namespace castor3d
 				m_timer->updateCount( count );
 			}
 
-			auto & device = getCurrentDevice( m_engine );
-			device.getGraphicsQueue().submit( *m_blitDepthCommandBuffer
+			auto & device = getCurrentRenderDevice( m_engine );
+			device.graphicsQueue->submit( *m_blitDepthCommandBuffer
 				, *result
-				, ashes::PipelineStageFlag::eColourAttachmentOutput
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, *m_blitDepthSemaphore
 				, nullptr );
 			result = m_blitDepthSemaphore.get();

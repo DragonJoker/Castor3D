@@ -317,7 +317,7 @@ namespace CastorGui
 			setHighlightedItemBackgroundMaterial( CreateMaterial( getEngine(), getBackgroundMaterial()->getName() + cuT( "_Highlight" ), colour ) );
 		}
 
-		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 		setSize( Size( getSize().getWidth(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )

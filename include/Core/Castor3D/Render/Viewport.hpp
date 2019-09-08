@@ -6,9 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Pipeline/Scissor.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
-
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
@@ -32,7 +29,7 @@ namespace castor3d
 	class Viewport
 	{
 	public:
-		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > string_type;
+		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > TypeName;
 
 		/*!
 		\author		Sylvain DOREMUS
@@ -71,13 +68,13 @@ namespace castor3d
 		C3D_API Viewport( Engine const & engine
 			, ViewportType type
 			, castor::Angle const & fovy
-			, real aspect
-			, real left
-			, real right
-			, real bottom
-			, real top
-			, real near
-			, real far );
+			, float aspect
+			, float left
+			, float right
+			, float bottom
+			, float top
+			, float nearZ
+			, float farZ );
 
 	public:
 		/**
@@ -122,9 +119,9 @@ namespace castor3d
 		 *\param[in]	far		Position du plan éloigné.
 		 */
 		C3D_API void setPerspective( castor::Angle const & fovy
-			, real aspect
-			, real near
-			, real far );
+			, float aspect
+			, float nearZ
+			, float farZ );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that Sets a non centered perspective projection from the given parameters.
@@ -143,12 +140,12 @@ namespace castor3d
 		 *\param[in]	near	Position du plan proche.
 		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API void setFrustum( real left
-			, real right
-			, real bottom
-			, real top
-			, real near
-			, real far );
+		C3D_API void setFrustum( float left
+			, float right
+			, float bottom
+			, float top
+			, float nearZ
+			, float farZ );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that Sets an orthogonal projection.
@@ -167,12 +164,12 @@ namespace castor3d
 		 *\param[in]	near	Position du plan proche.
 		 *\param[in]	far		Position du plan éloigné.
 		 */
-		C3D_API void setOrtho( real left
-			, real right
-			, real bottom
-			, real top
-			, real near
-			, real far );
+		C3D_API void setOrtho( float left
+			, float right
+			, float bottom
+			, float top
+			, float nearZ
+			, float farZ );
 		/**
 		 *\~english
 		 *\brief		Sets the viewport render size
@@ -213,17 +210,17 @@ namespace castor3d
 			return m_type;
 		}
 
-		inline real getRatio()const
+		inline float getRatio()const
 		{
 			return m_ratio;
 		}
 
-		inline real getNear()const
+		inline float getNear()const
 		{
 			return m_near.value();
 		}
 
-		inline real getFar()const
+		inline float getFar()const
 		{
 			return m_far.value();
 		}
@@ -233,22 +230,22 @@ namespace castor3d
 			return m_fovY.value();
 		}
 
-		inline real getLeft()const
+		inline float getLeft()const
 		{
 			return m_left.value();
 		}
 
-		inline real getRight()const
+		inline float getRight()const
 		{
 			return m_right.value();
 		}
 
-		inline real getTop()const
+		inline float getTop()const
 		{
 			return m_top.value();
 		}
 
-		inline real getBottom()const
+		inline float getBottom()const
 		{
 			return m_bottom.value();
 		}
@@ -273,12 +270,12 @@ namespace castor3d
 			return m_projection;
 		}
 
-		inline ashes::Viewport const & getViewport()const
+		inline VkViewport const & getViewport()const
 		{
 			return m_viewport;
 		}
 
-		inline ashes::Scissor const & getScissor()const
+		inline VkRect2D const & getScissor()const
 		{
 			return m_scissor;
 		}
@@ -307,17 +304,17 @@ namespace castor3d
 			m_type = value;
 		}
 
-		inline void updateRatio( real value )
+		inline void updateRatio( float value )
 		{
 			m_ratio = value;
 		}
 
-		inline void updateNear( real value )
+		inline void updateNear( float value )
 		{
 			m_near = value;
 		}
 
-		inline void updateFar( real value )
+		inline void updateFar( float value )
 		{
 			m_far = value;
 		}
@@ -327,22 +324,22 @@ namespace castor3d
 			m_fovY = value;
 		}
 
-		inline void updateLeft( real value )
+		inline void updateLeft( float value )
 		{
 			m_left = value;
 		}
 
-		inline void updateRight( real value )
+		inline void updateRight( float value )
 		{
 			m_right = value;
 		}
 
-		inline void updateTop( real value )
+		inline void updateTop( float value )
 		{
 			m_top = value;
 		}
 
-		inline void updateBottom( real value )
+		inline void updateBottom( float value )
 		{
 			m_bottom = value;
 		}
@@ -351,20 +348,20 @@ namespace castor3d
 	private:
 		Engine const & m_engine;
 		bool m_modified{ true };
-		castor::GroupChangeTracked< real > m_left;
-		castor::GroupChangeTracked< real > m_right;
-		castor::GroupChangeTracked< real > m_top;
-		castor::GroupChangeTracked< real > m_bottom;
-		castor::GroupChangeTracked< real > m_far;
-		castor::GroupChangeTracked< real > m_near;
+		castor::GroupChangeTracked< float > m_left;
+		castor::GroupChangeTracked< float > m_right;
+		castor::GroupChangeTracked< float > m_top;
+		castor::GroupChangeTracked< float > m_bottom;
+		castor::GroupChangeTracked< float > m_far;
+		castor::GroupChangeTracked< float > m_near;
 		castor::GroupChangeTracked< castor::Angle > m_fovY;
-		castor::GroupChangeTracked< real > m_ratio;
+		castor::GroupChangeTracked< float > m_ratio;
 		ViewportType m_type;
 		castor::Size m_size;
 		castor::Position m_position;
 		castor::Matrix4x4r m_projection;
-		ashes::Viewport m_viewport;
-		ashes::Scissor m_scissor;
+		VkViewport m_viewport;
+		VkRect2D m_scissor;
 	};
 }
 

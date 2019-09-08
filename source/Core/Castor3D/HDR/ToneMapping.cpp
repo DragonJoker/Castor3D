@@ -10,8 +10,8 @@
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -21,6 +21,11 @@ using namespace sdw;
 
 namespace castor3d
 {
+	namespace
+	{
+		static uint32_t constexpr HdrCfgUboIdx = 0u;
+	}
+
 	ToneMapping::ToneMapping( castor::String const & name
 		, castor::String const & fullName
 		, Engine & engine
@@ -28,12 +33,12 @@ namespace castor3d
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
-		, RenderQuad{ *engine.getRenderSystem(), true, false }
+		, RenderQuad{ getCurrentRenderDevice( engine ), true, false }
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "ToneMapping" }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "ToneMapping" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
 	{
 	}
 
@@ -46,8 +51,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		m_signalFinished = getCurrentDevice( renderSystem ).createSemaphore();
+		m_signalFinished = getCurrentRenderDevice( m_device )->createSemaphore();
 
 		{
 			VertexWriter writer;
@@ -71,24 +75,24 @@ namespace castor3d
 		}
 
 		m_pixelShader.shader = doCreate();
-		auto & device = getCurrentDevice( renderSystem );
-		ashes::ShaderStageStateArray program
+		auto & device = getCurrentRenderDevice( m_device );
+		ashes::PipelineShaderStageCreateInfoArray program
 		{
-			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
-			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
+			makeShaderState( device, m_vertexShader ),
+			makeShaderState( device, m_pixelShader ),
 		};
-		program[0].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_vertexShader ) );
-		program[1].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_pixelShader ) );
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
+			makeDescriptorSetLayoutBinding( HdrCfgUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		createPipeline( { size[0], size[1] }
 			, Position{}
 			, program
 			, source.getDefaultView()
 			, renderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 		return true;
 	}
@@ -108,13 +112,13 @@ namespace castor3d
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
 		visitor.visit( cuT( "ToneMapping" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 		visitor.visit( cuT( "ToneMapping" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, m_config );
 	}
 

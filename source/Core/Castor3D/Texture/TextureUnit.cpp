@@ -1,12 +1,10 @@
 #include "Castor3D/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Texture/Sampler.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -228,6 +226,13 @@ namespace castor3d
 		, m_autoMipmaps{ false }
 		, m_changed{ false }
 		, m_sampler{ engine.getDefaultSampler() }
+		, m_descriptor
+		{
+			0u,
+			0u,
+			1u,
+			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+		}
 	{
 		m_transformations.setIdentity();
 	}
@@ -275,13 +280,12 @@ namespace castor3d
 			{
 				0u,
 				0u,
-				1u,
-				ashes::DescriptorType::eCombinedImageSampler,
+				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 				{
 					{
-						std::ref( sampler->getSampler() ),
-						std::ref( m_texture->getDefaultView() ),
-						ashes::ImageLayout::eShaderReadOnlyOptimal,
+						sampler->getSampler(),
+						m_texture->getDefaultView(),
+						VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					}
 				}
 			};
@@ -305,7 +309,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::TextureType TextureUnit::getType()const
+	VkImageType TextureUnit::getType()const
 	{
 		CU_Require( m_texture );
 		return m_texture->getType();

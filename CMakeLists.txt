@@ -54,7 +54,7 @@ else ()
 	set( CASTOR_USE_SYSTEM_LIBS FALSE )
 endif ()
 
-option( CASTOR3D_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
+option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
 
 set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
@@ -143,7 +143,7 @@ set( Castor3DBinsDependencies
 	${CastorBinsDependencies}
 	ShaderAST
 	ShaderWriter
-	Ashes
+	ashespp
 	Castor3D
 )
 
@@ -163,9 +163,11 @@ if( MSVC )
 endif()
 
 add_definitions(
- -DC3D_VERSION_MAJOR=${VERSION_MAJOR}
- -DC3D_VERSION_MINOR=${VERSION_MINOR}
- -DC3D_VERSION_BUILD=${VERSION_BUILD}
+	-DC3D_VERSION_MAJOR=${VERSION_MAJOR}
+	-DC3D_VERSION_MINOR=${VERSION_MINOR}
+	-DC3D_VERSION_BUILD=${VERSION_BUILD}
+	-D_UNICODE
+	-DUNICODE
 )
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
@@ -173,57 +175,55 @@ option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 
 # Small macro to add subdirectory files to current target source and header files
-macro( c3d_parse_subdir_files _BASE_DIR _FOLDER _SUBFOLDER _GROUP )
-	if ( NOT "${_FOLDER}" STREQUAL "" )
-		set( _FOLDER_NAME "${_FOLDER}/" )
+macro( parse_subdir_files_ex _BASE_DIR _PROJGROUP _FOLDER _GROUP )
+	set( __PROJGROUP "${_PROJGROUP}" )
+	if ( NOT "${__PROJGROUP}" STREQUAL "" )
+		set( __PROJGROUP "${__PROJGROUP}/" )
 	endif ()
 	file( GLOB _FOLDER_HEADER_FILES
-		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.h
-		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.hpp
-		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.inl
+		${_BASE_DIR}/include/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.h
+		${_BASE_DIR}/include/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.hpp
+		${_BASE_DIR}/include/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.inl
 	)
 	file( GLOB _FOLDER_ENUM_FILES
-		${_BASE_DIR}/include/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.enum
+		${_BASE_DIR}/include/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.enum
 	)
 	file( GLOB _FOLDER_SCRIPT_FILES
-		${_BASE_DIR}/script/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.py
+		${_BASE_DIR}/script/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.py
+	)
+	file( GLOB _FOLDER_NATVIS_FILES
+		${_BASE_DIR}/include/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.natvis
 	)
 	file( GLOB _FOLDER_SOURCE_FILES
-		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.h
-		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.hpp
-		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.inl
-		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.c
-		${_BASE_DIR}/source/${_FOLDER_NAME}${PROJECT_NAME}/${_SUBFOLDER}/*.cpp
+		${_BASE_DIR}/source/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.h
+		${_BASE_DIR}/source/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.hpp
+		${_BASE_DIR}/source/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.inl
+		${_BASE_DIR}/source/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.c
+		${_BASE_DIR}/source/${__PROJGROUP}${PROJECT_NAME}/${_FOLDER}/*.cpp
 	)
-	source_group( "Script Files\\${_GROUP}" FILES ${_FOLDER_SCRIPT_FILES} )
-	source_group( "Enum Files\\${_GROUP}" FILES ${_FOLDER_ENUM_FILES} )
-	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
-	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+	if ( NOT "${_FOLDER_SCRIPT_FILES}" STREQUAL "" )
+		source_group( "Script Files\\${_GROUP}" FILES ${_FOLDER_SCRIPT_FILES} )
+	endif ()
+	if ( NOT "${_FOLDER_ENUM_FILES}" STREQUAL "" )
+		source_group( "Enum Files\\${_GROUP}" FILES ${_FOLDER_ENUM_FILES} )
+	endif ()
+	if ( NOT "${_FOLDER_HEADER_FILES}" STREQUAL "" )
+		source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
+	endif ()
+	if ( NOT "${_FOLDER_SOURCE_FILES}" STREQUAL "" )
+		source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+	endif ()
+	if ( NOT "${_FOLDER_NATVIS_FILES}" STREQUAL "" )
+		source_group( "Natvis Files\\${_GROUP}" FILES ${_FOLDER_NATVIS_FILES} )
+	endif ()
+endmacro()
+
+macro( c3d_parse_subdir_files _BASE_DIR _FOLDER _SUBFOLDER _GROUP )
+	parse_subdir_files_ex( ${_BASE_DIR} ${_FOLDER} ${_SUBFOLDER} ${_GROUP} )
 endmacro()
 
 macro( parse_subdir_files _BASE_DIR _FOLDER _GROUP )
-	file( GLOB _FOLDER_HEADER_FILES
-		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.h
-		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.hpp
-		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.inl
-	)
-	file( GLOB _FOLDER_ENUM_FILES
-		${_BASE_DIR}/include/${PROJECT_NAME}/${_FOLDER}/*.enum
-	)
-	file( GLOB _FOLDER_SCRIPT_FILES
-		${_BASE_DIR}/script/${PROJECT_NAME}/${_FOLDER}/*.py
-	)
-	file( GLOB _FOLDER_SOURCE_FILES
-		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.h
-		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.hpp
-		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.inl
-		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.c
-		${_BASE_DIR}/source/${PROJECT_NAME}/${_FOLDER}/*.cpp
-	)
-	source_group( "Script Files\\${_GROUP}" FILES ${_FOLDER_SCRIPT_FILES} )
-	source_group( "Enum Files\\${_GROUP}" FILES ${_FOLDER_ENUM_FILES} )
-	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
-	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+	parse_subdir_files_ex( ${_BASE_DIR} "" ${_FOLDER} ${_GROUP} )
 endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
@@ -238,88 +238,6 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 
 		add_subdirectory( external/FreeType )
 		set_property( TARGET FreeType PROPERTY FOLDER "External" )
-	endif ()
-
-	if ( ${CASTOR_BUILD_CASTOR3D} )
-		# Ashes external library
-		if ( NOT CASTOR_BUILDGRP_RENDERER )
-			set( ASHES_BUILD_RENDERER_PLUGINS FALSE )
-		else ()
-			set( ASHES_BUILD_RENDERER_PLUGINS TRUE )
-			set( ASHES_STATIC_RENDERER_PLUGINS TRUE )
-			set( ASHES_BUILD_RENDERER_OGL3 ${CASTOR_BUILD_RENDERER_OGL3} )
-			set( ASHES_BUILD_RENDERER_OGL4 ${CASTOR_BUILD_RENDERER_OGL4} )
-			set( ASHES_BUILD_RENDERER_VKN ${CASTOR_BUILD_RENDERER_VKN} )
-			set( ASHES_BUILD_RENDERER_D3D11 ${CASTOR_BUILD_RENDERER_D3D11} )
-			set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILD_RENDERER_TEST} )
-		endif ()
-		add_subdirectory( ${ASHES_DIR}/source )
-		set_property( TARGET Ashes PROPERTY FOLDER "External/Ashes" )
-		if ( CASTOR_BUILDGRP_RENDERER )
-			if ( TARGET Gl3Renderer )
-				set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
-			endif ()
-			if ( TARGET Gl4Renderer )
-				set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
-			endif ()
-			if ( TARGET VkRenderer )
-				set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
-			endif ()
-			if ( TARGET D3D11Renderer )
-				set_property( TARGET D3D11Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
-			endif ()
-			if ( TARGET TestRenderer )
-				set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
-			endif ()
-		endif ()
-
-		if ( CASTOR3D_USE_GLSLANG )
-			set( ENABLE_GLSLANG_BINARIES FALSE CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
-			set( ENABLE_AMD_EXTENSIONS FALSE CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
-			set( ENABLE_NV_EXTENSIONS FALSE CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
-			set( ENABLE_HLSL FALSE CACHE BOOL "Enables HLSL input support" FORCE )
-			set( BUILD_TESTING OFF )
-			set( SKIP_GLSLANG_INSTALL ON )
-			add_subdirectory( external/glslang )
-			set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
-			set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
-			set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )
-			set_property( TARGET SPIRV PROPERTY FOLDER "External/glslang" )
-			set_property( TARGET SPVRemapper PROPERTY FOLDER "External/glslang" )
-		endif ()
-
-		# ShaderWriter external library
-		if ( NOT CASTOR_BUILDGRP_RENDERER )
-			set( SDW_BUILD_EXPORTERS FALSE )
-		else ()
-			set( SDW_BUILD_EXPORTERS TRUE )
-			if ( CASTOR_BUILD_RENDERER_OGL3 OR CASTOR_BUILD_RENDERER_OGL4 )
-				set( SDW_BUILD_EXPORTER_GLSL ON )
-			else ()
-				set( SDW_BUILD_EXPORTER_GLSL OFF )
-			endif ()
-			set( SDW_BUILD_EXPORTER_SPIRV ${CASTOR_BUILD_RENDERER_VKN} )
-			if ( WIN32 )
-				set( SDW_BUILD_EXPORTER_HLSL ${CASTOR_BUILD_RENDERER_D3D11} )
-			else ()
-				set( SDW_BUILD_EXPORTER_HLSL FALSE )
-			endif ()
-		endif ()
-		set( SDW_BUILD_SDW FALSE )
-		add_subdirectory( ${SHADERWRITER_DIR}/source )
-		set_property( TARGET ShaderAST PROPERTY FOLDER "External/ShaderWriter" )
-		set_property( TARGET ShaderWriter PROPERTY FOLDER "External/ShaderWriter" )
-		if ( CASTOR_BUILDGRP_RENDERER )
-			if ( TARGET CompilerGlsl )
-				set_property( TARGET CompilerGlsl PROPERTY FOLDER "External/ShaderWriter/Exporters" )
-			endif ()
-			if ( TARGET CompilerHlsl )
-				set_property( TARGET CompilerHlsl PROPERTY FOLDER "External/ShaderWriter/Exporters" )
-			endif ()
-			if ( TARGET CompilerSpirV )
-				set_property( TARGET CompilerSpirV PROPERTY FOLDER "External/ShaderWriter/Exporters" )
-			endif ()
-		endif ()
 	endif ()
 
 	add_subdirectory( source )

@@ -112,17 +112,17 @@ namespace castor3d
 			return m_environmentMap;
 		}
 
-		inline ashes::TextureView & getDepthView()
+		inline ashes::ImageView & getDepthView()
 		{
-			return *m_depthBufferView;
+			return m_depthBufferView;
 		}
 
-		inline ashes::TextureView const & getDepthView()const
+		inline ashes::ImageView const & getDepthView()const
 		{
-			return *m_depthBufferView;
+			return m_depthBufferView;
 		}
 
-		inline ashes::Extent3D const & getSize()const
+		inline VkExtent3D const & getSize()const
 		{
 			return m_environmentMap.getTexture()->getDimensions();
 		}
@@ -136,8 +136,8 @@ namespace castor3d
 	private:
 		static uint32_t m_count;
 		TextureUnit m_environmentMap;
-		ashes::TexturePtr m_depthBuffer;
-		ashes::TextureViewPtr m_depthBufferView;
+		ashes::ImagePtr m_depthBuffer;
+		ashes::ImageView m_depthBufferView;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::DescriptorSetPoolPtr m_backgroundDescriptorPool;
 		SceneNode const & m_node;

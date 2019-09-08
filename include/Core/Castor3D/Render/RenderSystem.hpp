@@ -1,20 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RENDER_SYSTEM_H___
-#define ___C3D_RENDER_SYSTEM_H___
+#ifndef ___C3D_RenderSystem_H___
+#define ___C3D_RenderSystem_H___
 
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 
 #include <stack>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
-
-#include <Ashes/Miscellaneous/PhysicalDeviceFeatures.hpp>
-#include <Ashes/Miscellaneous/PhysicalDeviceMemoryProperties.hpp>
-#include <Ashes/Miscellaneous/PhysicalDeviceProperties.hpp>
 
 namespace castor3d
 {
@@ -41,7 +38,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
-		 *\param[in]	name			The renderer name.
+		 *\param[in]	desc			The Ashes plugin description.
 		 *\param[in]	hasSsbo			Tells if the render API supports SSBO.
 		 *\param[in]	topDown			Tells if the renderer's clip space is top down.
 		 *\param[in]	zeroToOneDepth	Tells if the renderer's clip space uses [0,1] depth range.
@@ -49,15 +46,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	name			Le nom du renderer.
+		 *\param[in]	desc			The Ashes plugin description.
 		 *\param[in]	hasSsbo			Dit si l'API de rendu supporte les SSBO.
 		 *\param[in]	topDown			Dit si le clip space du renderer est top down.
 		 *\param[in]	zeroToOneDepth	Dit si le clip space du renderer utilise l'intervalle [0,1] pour la profondeur.
 		 *\param[in]	invertedNormals	Dit si le renderer nécessite une inversion des normales.
 		 */
 		C3D_API RenderSystem( Engine & engine
-			, castor::String const & name
-			, bool hasSsbo
+			, AshPluginDescription desc
 			, bool topDown
 			, bool zeroToOneDepth
 			, bool invertedNormals );
@@ -76,7 +72,7 @@ namespace castor3d
 		 *\brief		Initialise le render system
 		 *\param[in]	informations	Les informations deu GPU.
 		 */
-		C3D_API void initialise( GpuInformations && informations );
+		C3D_API void initialise( GpuInformations informations );
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
@@ -117,7 +113,7 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API virtual UInt32Array compileShader( ShaderModule const & module ) = 0;
+		C3D_API virtual UInt32Array compileShader( ShaderModule const & module )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -132,9 +128,9 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon créé.
 		 */
-		C3D_API GpuBufferOffset getBuffer( ashes::BufferTarget target
+		C3D_API GpuBufferOffset getBuffer( VkBufferUsageFlagBits target
 			, uint32_t size
-			, ashes::MemoryPropertyFlags flags );
+			, VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -145,7 +141,7 @@ namespace castor3d
 		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( ashes::BufferTarget target
+		C3D_API void putBuffer( VkBufferUsageFlagBits target
 			, GpuBufferOffset const & bufferOffset );
 		/**
 		 *\~english
@@ -166,8 +162,8 @@ namespace castor3d
 		 *\param[in]	gpu		L'indice du GPU.
 		 *\return		Le périphérique logique créé.
 		 */
-		C3D_API ashes::DevicePtr createDevice( ashes::WindowHandle && handle
-			, uint32_t gpu = 0u );
+		C3D_API RenderDeviceSPtr createDevice( ashes::WindowHandle handle
+			, uint32_t gpuIndex = 0u );
 		/**
 		*\~english
 		*\brief
@@ -271,6 +267,19 @@ namespace castor3d
 			, float aspect
 			, float zNear )const;
 		/**
+		*\~french
+		*\brief
+		*	Ajoute les couches de l'instance aux noms d�j� pr�sents dans la liste donn�e.
+		*\param[in,out] names
+		*	La liste � compl�ter.
+		*\~english
+		*\brief
+		*	Adds the instance layers names to the given names.
+		*\param[in,out] names
+		*	The liste to fill.
+		*/
+		void completeLayerNames( ashes::StringArray & names )const;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -279,33 +288,13 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::PhysicalDeviceProperties const & getProperties()const
-		{
-			return m_properties;
-		}
-
-		inline ashes::PhysicalDeviceMemoryProperties const & getMemoryProperties()const
-		{
-			return m_memoryProperties;
-		}
-
-		inline ashes::PhysicalDeviceFeatures const & getFeatures()const
-		{
-			return m_features;
-		}
-
-		inline ashes::Device const * getCurrentDevice()const
+		inline RenderDevice const * getCurrentRenderDevice()const
 		{
 			CU_Require( m_currentDevice );
 			return m_currentDevice;
 		}
 
-		inline void setCurrentDevice( ashes::Device const * device )
-		{
-			m_currentDevice = device;
-		}
-
-		inline bool hasCurrentDevice()const
+		inline bool hasCurrentRenderDevice()const
 		{
 			return m_currentDevice != nullptr;
 		}
@@ -322,21 +311,21 @@ namespace castor3d
 
 		inline castor::String const & getRendererType()const
 		{
-			return m_name;
+			return m_desc.name;
 		}
 
-		inline bool hasMainDevice()
+		inline bool hasMainDevice()const
 		{
 			return m_mainDevice != nullptr;
 		}
 
-		inline ashes::DevicePtr getMainDevice()
+		inline RenderDeviceSPtr getMainRenderDevice()const
 		{
 			CU_Require( hasMainDevice() );
 			return m_mainDevice;
 		}
 
-		inline OverlayRendererSPtr getOverlayRenderer()
+		inline OverlayRendererSPtr getOverlayRenderer()const
 		{
 			return m_overlayRenderer;
 		}
@@ -348,7 +337,7 @@ namespace castor3d
 
 		inline bool hasSsbo()const
 		{
-			return m_hasSsbo;
+			return m_desc.features.hasStorageBuffers;
 		}
 
 		inline bool isTopDown()const
@@ -365,6 +354,21 @@ namespace castor3d
 		{
 			return m_invertedNormals;
 		}
+
+		inline ashes::Instance const & getInstance()const
+		{
+			return *m_instance;
+		}
+
+		inline ashes::StringArray const & getLayerNames()const
+		{
+			return m_layerNames;
+		}
+
+		inline ashes::StringArray const & getExtensionNames()const
+		{
+			return m_extensionNames;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -375,9 +379,14 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setMainDevice( ashes::DevicePtr device )
+		inline void setMainDevice( RenderDeviceSPtr device )
 		{
 			m_mainDevice = device;
+		}
+
+		inline void setCurrentRenderDevice( RenderDevice const * device )
+		{
+			m_currentDevice = device;
 		}
 
 		template< class Rep, class Period >
@@ -395,22 +404,26 @@ namespace castor3d
 	protected:
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
-		bool const m_hasSsbo;
+		AshPluginDescription const m_desc;
 		bool const m_topDown;
 		bool const m_zeroToOneDepth;
 		bool const m_invertedNormals;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
-		ashes::RendererPtr m_renderer;
-		ashes::DevicePtr m_mainDevice;
-		ashes::Device const * m_currentDevice{ nullptr };
+		ashes::InstancePtr m_instance;
+		VkDebugReportCallbackEXT m_debugCallback{};
+		ashes::PhysicalDevicePtrArray m_gpus;
+		VkLayerProperties m_globalLayer{};
+		ashes::VkLayerPropertiesArray m_layers;
+		ashes::StringArray m_layerNames;
+		ashes::StringArray m_extensionNames;
+		ashes::VkExtensionPropertiesArray m_globalLayerExtensions;
+		std::map< std::string, ashes::VkExtensionPropertiesArray > m_layersExtensions;
+		RenderDeviceSPtr m_mainDevice;
+		RenderDevice const * m_currentDevice{ nullptr };
 		std::stack< SceneRPtr > m_stackScenes;
-		castor::String m_name;
 		castor::Nanoseconds m_gpuTime;
 		GpuBufferPool m_gpuBufferPool;
-		ashes::PhysicalDeviceMemoryProperties m_memoryProperties{};
-		ashes::PhysicalDeviceFeatures m_features{};
-		ashes::PhysicalDeviceProperties m_properties{};
 
 #if C3D_TRACE_OBJECTS
 

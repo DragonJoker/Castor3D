@@ -5,7 +5,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
-#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -72,13 +72,13 @@ namespace castor3d
 		}
 	}
 
-	ashes::DescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
+	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
 	{
 		return m_buffer.createLayoutBinding( PassBufferIndex );
 	}
 
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet
-		, ashes::DescriptorSetLayoutBinding const & binding )const
+		, VkDescriptorSetLayoutBinding const & binding )const
 	{
 		m_buffer.createBinding( descriptorSet, binding );
 	}

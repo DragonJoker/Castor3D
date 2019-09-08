@@ -13,8 +13,6 @@
 #include <CastorUtils/Data/BinaryFile.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 
-#include <VkRenderer/Core/VkCreateRenderer.hpp>
-
 #if C3DVkRenderer_HasSPIRVCross
 #	include "spirv_cpp.hpp"
 #	include "spirv_cross_util.hpp"
@@ -55,28 +53,28 @@ namespace VkRender
 			std::locale m_prvLoc;
 		};
 
-		spv::ExecutionModel getExecutionModel( ashes::ShaderStageFlag stage )
+		spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
 		{
 			spv::ExecutionModel result{};
 
 			switch ( stage )
 			{
-			case ashes::ShaderStageFlag::eVertex:
+			case VK_SHADER_STAGE_VERTEX_BIT:
 				result = spv::ExecutionModelVertex;
 				break;
-			case ashes::ShaderStageFlag::eGeometry:
+			case VK_SHADER_STAGE_GEOMETRY_BIT:
 				result = spv::ExecutionModelGeometry;
 				break;
-			case ashes::ShaderStageFlag::eTessellationControl:
+			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
 				result = spv::ExecutionModelTessellationControl;
 				break;
-			case ashes::ShaderStageFlag::eTessellationEvaluation:
+			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
 				result = spv::ExecutionModelTessellationEvaluation;
 				break;
-			case ashes::ShaderStageFlag::eFragment:
+			case VK_SHADER_STAGE_FRAGMENT_BIT:
 				result = spv::ExecutionModelFragment;
 				break;
-			case ashes::ShaderStageFlag::eCompute:
+			case VK_SHADER_STAGE_COMPUTE_BIT:
 				result = spv::ExecutionModelGLCompute;
 				break;
 			default:
@@ -87,7 +85,7 @@ namespace VkRender
 			return result;
 		}
 
-		void doSetEntryPoint( ashes::ShaderStageFlag stage
+		void doSetEntryPoint( VkShaderStageFlagBits stage
 			, spirv_cross::CompilerGLSL & compiler )
 		{
 			auto model = getExecutionModel( stage );
@@ -103,17 +101,17 @@ namespace VkRender
 
 			if ( entryPoint.empty() )
 			{
-				throw std::runtime_error{ "Could not find an entry point with stage: " + getName( stage ) };
+				throw std::runtime_error{ "Could not find an entry point with stage: " + ashes::getName( stage ) };
 			}
 
 			compiler.set_entry_point( entryPoint, model );
 		}
 
-		void doSetupOptions( ashes::Device const & device
+		void doSetupOptions( castor3d::RenderDevice const & device
 			, spirv_cross::CompilerGLSL & compiler )
 		{
 			auto options = compiler.get_common_options();
-			options.version = device.getShaderVersion();
+			options.version = device->getShaderVersion();
 			options.es = false;
 			options.separate_shader_objects = true;
 			options.enable_420pack_extension = true;
@@ -123,9 +121,9 @@ namespace VkRender
 			compiler.set_common_options( options );
 		}
 
-		std::string compileSpvToGlsl( ashes::Device const & device
+		std::string compileSpvToGlsl( castor3d::RenderDevice const & device
 			, ashes::UInt32Array const & spv
-			, ashes::ShaderStageFlag stage )
+			, VkShaderStageFlagBits stage )
 		{
 			BlockLocale guard;
 			auto compiler = std::make_unique< spirv_cross::CompilerGLSL >( spv );
@@ -138,12 +136,11 @@ namespace VkRender
 #endif
 
 	String RenderSystem::Name = cuT( "Vulkan Renderer" );
-	String RenderSystem::Type = cuT( "vulkan" );
+	String RenderSystem::Type = cuT( "vk" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true, true, true, false )
+		, AshPluginDescription desc )
+		: castor3d::RenderSystem{ engine, std::move( desc ), true, true, false }
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
@@ -200,18 +197,8 @@ namespace VkRender
 					Logger::logErrorNoNL( msg );
 				}
 			} );
-		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-			{
-				string::stringCast< char >( appName ),
-				"Castor3D",
-				enableValidation,
-			} ) );
+		getEngine()->getRenderersList().selectPlugin( m_desc.name );
 		Logger::logInfo( cuT( "Using " ) + Name );
-		auto & gpu = m_renderer->getPhysicalDevice( 0u );
-		m_memoryProperties = gpu.getMemoryProperties();
-		m_properties = gpu.getProperties();
-		m_features = gpu.getFeatures();
-		castor3d::initialiseGlslang();
 	}
 
 	RenderSystem::~RenderSystem()
@@ -220,15 +207,13 @@ namespace VkRender
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
+		, AshPluginDescription desc )
 	{
 		return std::make_unique< RenderSystem >( engine
-			, appName
-			, enableValidation );
+			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		castor3d::UInt32Array result;
 
@@ -261,11 +246,11 @@ namespace VkRender
 
 #	if C3DVkRenderer_HasSPIRVCross && C3DVkRenderer_DebugSpirV
 
-			std::string name = module.name + "_" + getName( module.stage );
+			std::string name = module.name + "_" + ashes::getName( module.stage );
 
 			try
 			{
-				auto glsl2 = compileSpvToGlsl( *getMainDevice()
+				auto glsl2 = compileSpvToGlsl( *getMainRenderDevice()
 					, result
 					, module.stage );
 				const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glsl2;
@@ -281,7 +266,7 @@ namespace VkRender
 						, result.size() );
 				}
 
-				auto ref = castor3d::compileGlslToSpv( *getMainDevice()
+				auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
 					, module.stage
 					, glsl );
 				{
@@ -302,7 +287,7 @@ namespace VkRender
 		else
 		{
 			assert( !module.source.empty() );
-			result = castor3d::compileGlslToSpv( *getMainDevice()
+			result = castor3d::compileGlslToSpv( *getMainRenderDevice()
 				, module.stage
 				, module.source );
 		}

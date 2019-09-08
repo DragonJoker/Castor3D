@@ -1,6 +1,8 @@
 #include "LinearMotionBlurPostEffect/LinearMotionBlurPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Mesh/Vertex.hpp>
@@ -21,19 +23,12 @@
 #include <Castor3D/Texture/TextureLayout.hpp>
 #include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Pipeline/ColourBlendState.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Ashes/Pipeline/ShaderStageState.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -114,10 +109,10 @@ namespace motion_blur
 
 	//*********************************************************************************************
 
-	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+	PostEffect::Quad::Quad( castor3d::RenderDevice const & device
 		, castor3d::TextureUnit const & velocity
 		, ashes::UniformBuffer< Configuration > const & ubo )
-		: castor3d::RenderQuad{ renderSystem, true }
+		: castor3d::RenderQuad{ device, true }
 		, m_velocityView{ velocity.getTexture()->getDefaultView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
 		, m_ubo{ ubo }
@@ -150,8 +145,8 @@ namespace motion_blur
 			, parameters
 			, false }
 		, m_surface{ *renderSystem.getEngine(), cuT( "LinearMotionBlur" ) }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "LinearMotionBlur" }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "LinearMotionBlur" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur" }
 	{
 		parameters.get( cuT( "vectorDivider" ), m_configuration.vectorDivider );
 		parameters.get( cuT( "samplesCount" ), m_configuration.samplesCount );
@@ -190,84 +185,101 @@ namespace motion_blur
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "MotionBlur" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
 		visitor.visit( cuT( "MotionBlur" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
-		auto & device = getCurrentDevice( *this );
-		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & renderSystem = *getRenderSystem();
+		auto & device = getCurrentRenderDevice( *this );
+		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_target->getRenderSystem()->compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( m_target->getRenderSystem()->compileShader( m_pixelShader ) );
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
+		ashes::VkAttachmentDescriptionArray attachments
+		{
+			{
+				0u,
+				m_target->getPixelFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+			}
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				std::nullopt,
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attachments ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "LinearMotionBlur" );
 
-		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
-
-		m_ubo = ashes::makeUniformBuffer< Configuration >( device
+		m_ubo = castor3d::makeUniformBuffer< Configuration >( device
 			, 1u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_ubo->getUbo().getBuffer(),
-				"LinearMotionBlurUbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "LinearMotionBlurCfg" );
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.samplesCount = m_configuration.samplesCount;
 		configuration.vectorDivider = m_configuration.vectorDivider;
 		m_ubo->upload( 0u );
 
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
-			{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			castor3d::makeDescriptorSetLayoutBinding( 0u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			castor3d::makeDescriptorSetLayoutBinding( 1u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_quad = std::make_unique< Quad >( *getRenderSystem()
+		m_quad = std::make_unique< Quad >( device
 			, m_renderTarget.getVelocity()
 			, *m_ubo );
 		m_quad->createPipeline( size
@@ -283,8 +295,8 @@ namespace motion_blur
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -294,14 +306,14 @@ namespace motion_blur
 			timer.beginPass( cmd );
 
 			// Put target image in shader input layout.
-			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-				, ashes::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { ashes::ClearColorValue{} }
-				, ashes::SubpassContents::eInline );
+				, { ashes::makeClearValue( VkClearColorValue{} ) }
+				, VK_SUBPASS_CONTENTS_INLINE );
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 

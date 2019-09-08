@@ -7,8 +7,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/RenderToTexture/RenderCube.hpp"
 
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 namespace castor3d
 {
@@ -17,20 +17,19 @@ namespace castor3d
 	{
 	public:
 		TextureProjectionToCube( TextureLayout const & equiRectangular
-			, RenderSystem & renderSystem
+			, RenderDevice const & device
 			, TextureLayout const & target );
 		void render();
 
 	private:
 		struct FrameBuffer
 		{
-			ashes::TextureViewPtr view;
+			ashes::ImageView view;
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		std::array< FrameBuffer, 6u > m_frameBuffers;
-		ashes::Device const & m_device;
 		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::TextureView const & m_view;
+		ashes::ImageView const & m_view;
 		ashes::RenderPassPtr m_renderPass;
 	};
 }

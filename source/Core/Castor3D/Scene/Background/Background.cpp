@@ -1,14 +1,15 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/Buffer/StagingBuffer.hpp>
-#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
+#include <ashespp/Core/Device.hpp>
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -16,6 +17,14 @@
 
 namespace castor3d
 {
+	namespace
+	{
+		static uint32_t constexpr MtxUboIdx = 0u;
+		static uint32_t constexpr MdlMtxUboIdx = 1u;
+		static uint32_t constexpr HdrCfgUboIdx = 2u;
+		static uint32_t constexpr SkyBoxImgIdx = 3u;
+	}
+
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
 		, BackgroundType type )
@@ -34,7 +43,7 @@ namespace castor3d
 	bool SceneBackground::initialise( ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		m_semaphore = getCurrentDevice( *this ).createSemaphore();
+		m_semaphore = getCurrentRenderDevice( *this )->createSemaphore();
 		m_initialised = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
@@ -47,17 +56,17 @@ namespace castor3d
 		else
 		{
 			sampler = getEngine()->getSamplerCache().add( name );
-			sampler->setMinFilter( ashes::Filter::eLinear );
-			sampler->setMagFilter( ashes::Filter::eLinear );
-			sampler->setWrapS( ashes::WrapMode::eClampToEdge );
-			sampler->setWrapT( ashes::WrapMode::eClampToEdge );
-			sampler->setWrapR( ashes::WrapMode::eClampToEdge );
+			sampler->setMinFilter( VK_FILTER_LINEAR );
+			sampler->setMagFilter( VK_FILTER_LINEAR );
+			sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			sampler->setMinLod( 0.0f );
 			sampler->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
 
 			if ( m_texture->getMipmapCount() > 1u )
 			{
-				sampler->setMipFilter( ashes::MipmapMode::eLinear );
+				sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 			}
 		}
 
@@ -135,14 +144,14 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer )
 	{
 		CU_Require( m_initialised );
-		ashes::ClearColorValue colour;
-		ashes::DepthStencilClearValue depth{ 1.0, 0 };
+		VkClearColorValue colour{};
+		VkClearDepthStencilValue depth{ 1.0, 0 };
 		commandBuffer.begin();
 		m_timer->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( renderPass
 			, frameBuffer
-			, { depth, colour }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( depth ), ashes::makeClearValue( colour ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 		doPrepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -171,16 +180,13 @@ namespace castor3d
 		, ashes::DescriptorSet const & descriptorSet )const
 	{
 		CU_Require( m_initialised );
-		commandBuffer.begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
-			, ashes::CommandBufferInheritanceInfo
-			{
-				&renderPass,
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass,
 				0u,
-				nullptr,
-				false,
+				VkFramebuffer( VK_NULL_HANDLE ),
+				VkBool32( VK_FALSE ),
 				0u,
-				0u
-			} );
+				0u ) );
 		doPrepareFrame( commandBuffer
 			, size
 			, renderPass
@@ -232,27 +238,27 @@ namespace castor3d
 	{
 		CU_Require( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
-		commandBuffer.setViewport( { size.getWidth(), size.getHeight(), 0, 0 } );
+		commandBuffer.setViewport( { 0.0f, 0.0f, float( size.getWidth() ), float( size.getHeight() ), 0.0f, 1.0f } );
 		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
 		commandBuffer.bindDescriptorSet( descriptorSet, *m_pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, ashes::IndexType::eUInt16 );
-		commandBuffer.drawIndexed( m_indexBuffer->getCount() );
+		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
+		commandBuffer.drawIndexed( uint32_t( m_indexBuffer->getCount() ) );
 	}
 
-	ashes::ShaderStageStateArray SceneBackground::doInitialiseShader()
+	ashes::PipelineShaderStageCreateInfoArray SceneBackground::doInitialiseShader()
 	{
 		using namespace sdw;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "Background" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Background" };
 		{
 			VertexWriter writer;
 
 			// Inputs
 			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
-			UBO_MATRIX( writer, 0, 0 );
-			UBO_MODEL_MATRIX( writer, 1, 0 );
+			UBO_MATRIX( writer, MtxUboIdx, 0 );
+			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, 0 );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
@@ -268,14 +274,14 @@ namespace castor3d
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "Background" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Background" };
 		{
 			FragmentWriter writer;
 
 			// Inputs
-			UBO_HDR_CONFIG( writer, 2, 0 );
+			UBO_HDR_CONFIG( writer, HdrCfgUboIdx, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), 3u, 0u );
+			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), SkyBoxImgIdx, 0u );
 			shader::Utils utils{ writer };
 
 			if ( !m_hdr )
@@ -305,35 +311,42 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentDevice( renderSystem );
-		ashes::ShaderStageStateArray result;
-		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		result.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		result[0].module->loadShader( renderSystem.compileShader( vtx ) );
-		result[1].module->loadShader( renderSystem.compileShader( pxl ) );
-		return result;
+		auto & device = getCurrentRenderDevice( renderSystem );
+		return ashes::PipelineShaderStageCreateInfoArray
+		{
+			makeShaderState( device, vtx ),
+			makeShaderState( device, pxl ),
+		};
 	}
 
 	void SceneBackground::doInitialiseDescriptorLayout()
 	{
-		auto & device = getCurrentDevice( *this );
-		ashes::DescriptorSetLayoutBindingArray setLayoutBindings
+		auto & device = getCurrentRenderDevice( *this );
+		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Matrix UBO
-			{ 1u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },			// Model Matrix UBO
-			{ 2u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },			// HDR Config UBO
-			{ 3u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },	// Skybox Map
+			makeDescriptorSetLayoutBinding( MtxUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ),
+			makeDescriptorSetLayoutBinding( MdlMtxUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ),
+			makeDescriptorSetLayoutBinding( HdrCfgUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			makeDescriptorSetLayoutBinding( SkyBoxImgIdx
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_descriptorLayout = device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_descriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
 
 	bool SceneBackground::doInitialiseVertexBuffer()
 	{
 		using castor::Point3f;
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentDevice( renderSystem );
-		ashes::StagingBuffer stagingBuffer{ device, 0u, sizeof( Cube ) };
-		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		auto & device = getCurrentRenderDevice( renderSystem );
+		ashes::StagingBuffer stagingBuffer{ *device.device, 0u, sizeof( Cube ) };
+		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		// Vertex Buffer
 		std::vector< Cube > vertexData
@@ -356,16 +369,11 @@ namespace castor3d
 				}
 			}
 		};
-		m_vertexBuffer = ashes::makeVertexBuffer< Cube >( device
+		m_vertexBuffer = makeVertexBuffer< Cube >( device
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_vertexBuffer->getBuffer(),
-				"BackgroundVbo"
-			} );
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "Background");
 		stagingBuffer.uploadVertexData( *commandBuffer
 			, vertexData
 			, *m_vertexBuffer );
@@ -386,16 +394,11 @@ namespace castor3d
 			// Left
 			20, 21, 22, 22, 21, 23,
 		};
-		m_indexBuffer = ashes::makeBuffer< uint16_t >( device
+		m_indexBuffer = makeBuffer< uint16_t >( device
 			, uint32_t( indexData.size() )
-			, ashes::BufferTarget::eIndexBuffer | ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eDeviceLocal );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_indexBuffer->getBuffer(),
-				"BackgroundIndexBuffer"
-			} );
+			, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "BackgroundIndexBuffer" );
 		stagingBuffer.uploadBufferData( *commandBuffer
 			, indexData
 			, *m_indexBuffer );
@@ -403,14 +406,14 @@ namespace castor3d
 		return true;
 	}
 
-	bool SceneBackground::doInitialisePipeline( ashes::ShaderStageStateArray program
+	bool SceneBackground::doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray program
 		, ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		auto & device = getCurrentDevice( *this );
+		auto & device = getCurrentRenderDevice( *this );
 		m_pipelineLayout.reset();
 		doInitialiseDescriptorLayout();
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
@@ -423,22 +426,29 @@ namespace castor3d
 			, hdrConfigUbo
 			, *m_descriptorSet );
 		m_descriptorSet->update();
-		ashes::VertexInputState vertexInput;
-		vertexInput.vertexBindingDescriptions.push_back( { 0u, sizeof( castor::Point3f ), ashes::VertexInputRate::eVertex } );
-		vertexInput.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32B32_SFLOAT, 0u } );
-
-		m_pipeline = m_pipelineLayout->createPipeline(
+		ashes::PipelineVertexInputStateCreateInfo vertexInput
 		{
-			std::move( program ),
-			renderPass,
-			vertexInput,
-			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
-			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
-			ashes::MultisampleState{},
-			ashes::ColourBlendState::createDefault(),
-			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
-			ashes::DepthStencilState{ 0u, false, false, ashes::CompareOp::eLessEqual }
-		} );
+			0u,
+			{ 1u, { 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } },
+			{ 1u, { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } },
+		};
+
+		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			{
+				0u,
+				std::move( program ),
+				std::move( vertexInput ),
+				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+				std::nullopt,
+				ashes::PipelineViewportStateCreateInfo{},
+				ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+				ashes::PipelineMultisampleStateCreateInfo{},
+				ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false, VK_COMPARE_OP_LESS_OR_EQUAL },
+				ashes::PipelineColorBlendStateCreateInfo{},
+				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				*m_pipelineLayout,
+				renderPass,
+			} );
 		return true;
 	}
 }

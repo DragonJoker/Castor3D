@@ -100,14 +100,14 @@ namespace GuiCommon
 
 	void ShaderDialog::doLoadPages()
 	{
-		std::map< ashes::ShaderStageFlag, wxString > const texts
+		std::map< VkShaderStageFlagBits, wxString > const texts
 		{
-			{ ashes::ShaderStageFlag::eVertex, _( "Vertex" ) },
-			{ ashes::ShaderStageFlag::eTessellationControl, _( "Tessellation Control" ) },
-			{ ashes::ShaderStageFlag::eTessellationEvaluation, _( "Tessellation Evaluation" ) },
-			{ ashes::ShaderStageFlag::eGeometry, _( "Geometry" ) },
-			{ ashes::ShaderStageFlag::eFragment, _( "Fragment" ) },
-			{ ashes::ShaderStageFlag::eCompute, _( "Compute" ) },
+			{ VK_SHADER_STAGE_VERTEX_BIT, _( "Vertex" ) },
+			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, _( "Tessellation Control" ) },
+			{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, _( "Tessellation Evaluation" ) },
+			{ VK_SHADER_STAGE_GEOMETRY_BIT, _( "Geometry" ) },
+			{ VK_SHADER_STAGE_FRAGMENT_BIT, _( "Fragment" ) },
+			{ VK_SHADER_STAGE_COMPUTE_BIT, _( "Compute" ) },
 		};
 
 		for ( auto & sources : m_sources )

@@ -12,13 +12,10 @@
 #include <Castor3D/Texture/TextureLayout.hpp>
 #include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/RenderSubpass.hpp>
-#include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -152,10 +149,10 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
+	RenderQuad::RenderQuad( castor3d::RenderDevice const & device
 		, Size const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
-		, m_fxaaUbo{ *renderSystem.getEngine(), size }
+		: castor3d::RenderQuad{ device, false, false }
+		, m_fxaaUbo{ *device.renderSystem.getEngine(), size }
 	{
 	}
 
@@ -189,8 +186,8 @@ namespace fxaa
 			, renderSystem
 			, parameters }
 		, m_surface{ *renderSystem.getEngine(), cuT( "Fxaa" ) }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "Fxaa" }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "Fxaa" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa" }
 	{
 		String param;
 
@@ -214,11 +211,11 @@ namespace fxaa
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( ashes::Filter::eNearest );
-			m_sampler->setMagFilter( ashes::Filter::eNearest );
-			m_sampler->setWrapS( ashes::WrapMode::eClampToBorder );
-			m_sampler->setWrapT( ashes::WrapMode::eClampToBorder );
-			m_sampler->setWrapR( ashes::WrapMode::eClampToBorder );
+			m_sampler->setMinFilter( VK_FILTER_NEAREST );
+			m_sampler->setMagFilter( VK_FILTER_NEAREST );
+			m_sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
+			m_sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
+			m_sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
 		}
 		else
 		{
@@ -240,23 +237,23 @@ namespace fxaa
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "FXAA" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
 		visitor.visit( cuT( "FXAA" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 		visitor.visit( cuT( "FXAA" )
-			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FXAA" )
 			, cuT( "SubPixShift" )
 			, m_subpixShift );
 		visitor.visit( cuT( "FXAA" )
-			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FXAA" )
 			, cuT( "SpanMax" )
 			, m_spanMax );
 		visitor.visit( cuT( "FXAA" )
-			, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FXAA" )
 			, cuT( "ReduceMul" )
 			, m_reduceMul );
@@ -282,68 +279,88 @@ namespace fxaa
 		m_sampler->initialise();
 
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentDevice( *this );
-		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & device = getCurrentRenderDevice( *this );
+		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
+		ashes::VkAttachmentDescriptionArray attachments
+		{
+			{
+				0u,
+				m_target->getPixelFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+			}
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				std::nullopt,
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attachments ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "Fxaa" );
 
 		// Create the FXAA quad renderer.
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment },
+			castor3d::makeDescriptorSetLayoutBinding( 0u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_vertexShader.shader = getFxaaVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFxaaFragmentProgram( getRenderSystem() );
 
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
-		m_fxaaQuad = std::make_unique< RenderQuad >( *getRenderSystem()
+		m_fxaaQuad = std::make_unique< RenderQuad >( device
 			, castor::Size{ size.width, size.height } );
 		m_fxaaQuad->createPipeline( size
 			, Position{}
 			, stages
 			, m_target->getDefaultView()
 			, *m_renderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 
 		// Initialise the surface.
@@ -352,8 +369,8 @@ namespace fxaa
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -366,15 +383,15 @@ namespace fxaa
 			timer.beginPass( cmd );
 
 			// Put target image in shader input layout.
-			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-				, ashes::PipelineStageFlag::eFragmentShader
-				, targetView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, targetView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 			// Render the effect.
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { ashes::ClearColorValue{} }
-				, ashes::SubpassContents::eInline );
+				, { ashes::makeClearValue( VkClearColorValue{} ) }
+				, VK_SUBPASS_CONTENTS_INLINE );
 			m_fxaaQuad->registerFrame( cmd );
 			cmd.endRenderPass();
 

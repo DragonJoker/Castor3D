@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d
 {
@@ -100,7 +100,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	private:
 		/**

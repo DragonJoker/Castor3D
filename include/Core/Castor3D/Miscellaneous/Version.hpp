@@ -41,11 +41,27 @@ namespace castor3d
 			, int build = CASTOR_VERSION_BUILD );
 		/**
 		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	vk	The Vulkan compatible version number.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	vk	Le numéro de version pour Vulkan.
+		 */
+		C3D_API Version( uint32_t vk );
+		/**
+		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~Version();
+		/**
+		 *\~english
+		 *\return		The Vulkan compatible version number.
+		 *\~french
+		 *\return		Le numéro de version pour Vulkan.
+		 */
+		uint32_t getVkVersion()const;
 		/**
 		 *\~english
 		 *\return		The major version number.

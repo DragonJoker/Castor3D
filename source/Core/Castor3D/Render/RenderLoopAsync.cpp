@@ -5,7 +5,6 @@
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 #include <CastorUtils/Design/ScopeGuard.hpp>
 #include <CastorUtils/Design/BlockGuard.hpp>
-#include <Ashes/Core/Exception.hpp>
 
 using namespace castor;
 
@@ -137,10 +136,10 @@ namespace castor3d
 		}
 	}
 
-	ashes::DevicePtr RenderLoopAsync::doCreateMainDevice( ashes::WindowHandle && handle
+	RenderDeviceSPtr RenderLoopAsync::doCreateMainDevice( ashes::WindowHandle handle
 		, RenderWindow & window )
 	{
-		ashes::DevicePtr result;
+		RenderDeviceSPtr result;
 
 		if ( !m_createContext )
 		{
@@ -155,7 +154,7 @@ namespace castor3d
 
 			m_createContext = false;
 			doSetWindow( nullptr );
-			result = m_renderSystem.getMainDevice();
+			result = m_renderSystem.getMainRenderDevice();
 		}
 
 		return result;
@@ -193,11 +192,11 @@ namespace castor3d
 						auto guard = makeBlockGuard(
 							[this, &device]()
 							{
-								m_renderSystem.setCurrentDevice( device.get() );
+								m_renderSystem.setCurrentRenderDevice( device.get() );
 							},
 							[this]()
 							{
-								m_renderSystem.setCurrentDevice( nullptr );
+								m_renderSystem.setCurrentRenderDevice( nullptr );
 							} );
 						GpuInformations info;
 						m_renderSystem.initialise( std::move( info ) );
@@ -229,12 +228,6 @@ namespace castor3d
 				m_ended = true;
 			}
 		}
-		catch ( ashes::Exception & exc )
-		{
-			Logger::logError( String{ cuT( "RenderLoop - " ) } + exc.what() );
-			m_frameEnded = true;
-			m_ended = true;
-		}
 		catch ( castor::Exception & exc )
 		{
 			Logger::logError( cuT( "RenderLoop - " ) + exc.getFullDescription() );
@@ -249,7 +242,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoopAsync::doSetHandle( ashes::WindowHandle && handle )
+	void RenderLoopAsync::doSetHandle( ashes::WindowHandle handle )
 	{
 		auto lock = makeUniqueLock( m_mutexWindow );
 		m_handle = std::move( handle );

@@ -755,20 +755,20 @@ namespace castor3d
 			}
 		}
 
-		void Utils::applyAlphaFunc( ashes::CompareOp alphaFunc
+		void Utils::applyAlphaFunc( VkCompareOp alphaFunc
 			, sdw::Float & alpha
 			, sdw::Float const & alphaRef )
 		{
-			if ( alphaFunc != ashes::CompareOp::eAlways )
+			if ( alphaFunc != VK_COMPARE_OP_ALWAYS )
 			{
 				using namespace sdw;
 
 				switch ( alphaFunc )
 				{
-				case ashes::CompareOp::eNever:
+				case VK_COMPARE_OP_NEVER:
 					m_writer.discard();
 					break;
-				case ashes::CompareOp::eLess:
+				case VK_COMPARE_OP_LESS:
 					IF( m_writer, alpha >= alphaRef )
 					{
 						m_writer.discard();
@@ -776,7 +776,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eEqual:
+				case VK_COMPARE_OP_EQUAL:
 					IF( m_writer, alpha != alphaRef )
 					{
 						m_writer.discard();
@@ -784,7 +784,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eLessEqual:
+				case VK_COMPARE_OP_LESS_OR_EQUAL:
 					IF( m_writer, alpha > alphaRef )
 					{
 						m_writer.discard();
@@ -792,7 +792,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eGreater:
+				case VK_COMPARE_OP_GREATER:
 					IF( m_writer, alpha <= alphaRef )
 					{
 						m_writer.discard();
@@ -800,7 +800,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eNotEqual:
+				case VK_COMPARE_OP_NOT_EQUAL:
 					IF( m_writer, alpha == alphaRef )
 					{
 						m_writer.discard();
@@ -808,7 +808,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eGreaterEqual:
+				case VK_COMPARE_OP_GREATER_OR_EQUAL:
 					IF( m_writer, alpha < alphaRef )
 					{
 						m_writer.discard();
@@ -816,7 +816,7 @@ namespace castor3d
 					FI;
 					alpha = 1.0_f;
 					break;
-				case ashes::CompareOp::eAlways:
+				case VK_COMPARE_OP_ALWAYS:
 					break;
 				}
 			}
@@ -1105,7 +1105,7 @@ namespace castor3d
 			if ( flags.texturesCount > 1
 				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
 				&& checkFlag( flags.textures, TextureFlag::eHeight )
-				&& flags.heightMapIndex != ~( 0u ) )
+				&& flags.heightMapIndex != InvalidIndex )
 			{
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
 					, textureConfigs.getTextureConfiguration( textureConfig[flags.heightMapIndex / 4][flags.heightMapIndex % 4] ) );

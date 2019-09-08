@@ -144,18 +144,18 @@ namespace castor3d
 					auto & vertices = getOwner()->getVertexBuffer();
 
 					m_cameraPosition = cameraPosition;
-					uint32_t indexSize = indices.getCount();
+					auto indexSize = uint32_t( indices.getCount() );
 
 					if ( uint32_t * index = reinterpret_cast< uint32_t * >( indices.getBuffer().lock( 0
 						, uint32_t( indexSize * sizeof( uint32_t ) )
-						, ashes::MemoryMapFlag::eRead | ashes::MemoryMapFlag::eWrite ) ) )
+						, 0u ) ) )
 					{
 						FaceDistArray arraySorted;
 						arraySorted.reserve( indexSize / 3 );
 
 						if ( InterleavedVertex * vertex = vertices.lock( 0
 							, vertices.getCount()
-							, ashes::MemoryMapFlag::eRead ) )
+							, 0u ) )
 						{
 							for ( uint32_t * it = index + 0; it < index + indexSize; it += 3 )
 							{
@@ -211,7 +211,7 @@ namespace castor3d
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 
-			if ( auto * buffer = indexBuffer.lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = indexBuffer.lock( 0, count, 0u ) )
 			{
 				for ( auto const & face : m_faces )
 				{

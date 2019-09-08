@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/ShadowMap/ShadowMap.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -59,8 +61,8 @@ namespace castor3d
 		void debugDisplay( ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
-		C3D_API ashes::TextureView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::TextureView const & getVarianceView( uint32_t index )const override;
+		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
+		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -105,27 +107,27 @@ namespace castor3d
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
-		static ashes::Format constexpr VarianceFormat = ashes::Format::eR32G32_SFLOAT;
-		static ashes::Format constexpr LinearDepthFormat = ashes::Format::eR32_SFLOAT;
-		static ashes::Format constexpr RawDepthFormat = ashes::Format::eD24_UNORM_S8_UINT;
+		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
+		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
+		static VkFormat constexpr RawDepthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
 
 	private:
 		struct FrameBuffer
 		{
 			ashes::FrameBufferPtr frameBuffer;
-			ashes::TextureViewPtr varianceView;
-			ashes::TextureViewPtr linearView;
+			ashes::ImageView varianceView;
+			ashes::ImageView linearView;
 		};
 		struct PassData
 		{
 			ashes::CommandBufferPtr commandBuffer;
-			ashes::TexturePtr depthTexture;
-			ashes::TextureViewPtr depthView;
+			ashes::ImagePtr depthTexture;
+			ashes::ImageView depthView;
 			std::array< FrameBuffer, 6u > frameBuffers;
 			ashes::SemaphorePtr finished;
 			ShadowType shadowType;
-			ashes::TextureViewPtr varianceView;
-			ashes::TextureViewPtr linearView;
+			ashes::ImageView varianceView;
+			ashes::ImageView linearView;
 		};
 		std::vector< PassData > m_passesData;
 	};

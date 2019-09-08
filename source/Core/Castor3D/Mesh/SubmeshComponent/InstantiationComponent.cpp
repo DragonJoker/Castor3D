@@ -1,7 +1,9 @@
 #include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -106,7 +108,7 @@ namespace castor3d
 	void InstantiationComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::VertexLayoutCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		auto it = m_instances.find( material );
 
@@ -141,41 +143,32 @@ namespace castor3d
 		{
 			if ( !m_matrixLayout )
 			{
-				m_matrixLayout = ashes::makeLayout< InstantiationData >( BindingPoint
-					, ashes::VertexInputRate::eInstance );
-				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 0u
-					, ashes::Format::eR32G32B32A32_SFLOAT
-					, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 1u
-					, ashes::Format::eR32G32B32A32_SFLOAT
-					, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 2u
-					, ashes::Format::eR32G32B32A32_SFLOAT
-					, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( RenderPass::VertexInputs::TransformLocation + 3u
-					, ashes::Format::eR32G32B32A32_SFLOAT
-					, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) );
-				m_matrixLayout->createAttribute( RenderPass::VertexInputs::MaterialLocation
-					, ashes::Format::eR32_SINT
-					, offsetof( InstantiationData, m_material ) );
+				m_matrixLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+					, ashes::VkVertexInputBindingDescriptionArray
+					{
+						{ BindingPoint, sizeof( InstantiationData ), VK_VERTEX_INPUT_RATE_INSTANCE },
+					}
+					, ashes::VkVertexInputAttributeDescriptionArray
+					{
+						{ RenderPass::VertexInputs::TransformLocation + 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 1u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 2u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 3u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::MaterialLocation, 0u, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
+					} );
 			}
 
-			auto & device = getCurrentDevice( *getOwner() );
+			auto & device = getCurrentRenderDevice( *getOwner() );
 
 			for ( auto & data : m_instances )
 			{
 				if ( doCheckInstanced( data.second.count ) )
 				{
-					data.second.buffer = ashes::makeVertexBuffer< InstantiationData >( device
+					data.second.buffer = makeVertexBuffer< InstantiationData >( device
 						, data.second.count
 						, 0u
-						, ashes::MemoryPropertyFlag::eHostVisible );
-					device.debugMarkerSetObjectName(
-						{
-							ashes::DebugReportObjectType::eBuffer,
-							&data.second.buffer->getBuffer(),
-							"InstantiationComponentVbo"
-						} );
+						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+						, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "InstantiationComponentBuffer" );
 				}
 			}
 		}
@@ -210,7 +203,7 @@ namespace castor3d
 			{
 				if ( auto * buffer = reinterpret_cast< InstantiationData * >( data.second.buffer->getBuffer().lock( 0
 					, ~( 0ull )
-					, ashes::MemoryMapFlag::eWrite ) ) )
+					, 0u ) ) )
 				{
 					std::copy( data.second.data.begin(), data.second.data.end(), buffer );
 					data.second.buffer->getBuffer().flush( 0u, ~( 0ull ) );

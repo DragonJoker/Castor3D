@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -90,15 +90,15 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static castor::String const ShadowMapUbo;

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 
-#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 namespace castor3d
 {
@@ -36,7 +36,7 @@ namespace castor3d
 		 */
 		C3D_API explicit BrdfPrefilter( Engine & engine
 			, castor::Size const & size
-			, ashes::TextureView const & dstTexture );
+			, ashes::ImageView const & dstTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
@@ -52,16 +52,16 @@ namespace castor3d
 		 *\~french
 		 *\brief		Crée le programme shader de convolution.
 		 */
-		ashes::ShaderStageStateArray doCreateProgram();
+		ashes::PipelineShaderStageCreateInfoArray doCreateProgram();
 
 	private:
 		RenderSystem & m_renderSystem;
 		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
 	};
 }

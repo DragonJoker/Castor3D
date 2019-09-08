@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Particle_H___
 
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d
 {

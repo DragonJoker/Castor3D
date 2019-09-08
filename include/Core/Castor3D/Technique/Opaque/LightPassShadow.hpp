@@ -331,9 +331,9 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & diffuseView
-			, ashes::TextureView const & specularView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & diffuseView
+			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
 				, depthView

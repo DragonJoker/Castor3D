@@ -12,12 +12,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 
@@ -65,7 +65,7 @@ namespace castor3d
 	 *\param[in]	texture	La valeur.
 	 *\return		Le nom.
 	 */
-	ashes::Format getTextureFormat( DsTexture texture );
+	VkFormat getTextureFormat( DsTexture texture );
 	/**
 	 *\~english
 	 *\brief		Retrieve the attachment index for given texture enum value.
@@ -125,9 +125,9 @@ namespace castor3d
 		struct RenderPass
 		{
 			RenderPass( ashes::RenderPassPtr && renderPass
-				, ashes::TextureView const & depthView
-				, ashes::TextureView const & diffuseView
-				, ashes::TextureView const & specularView );
+				, ashes::ImageView const & depthView
+				, ashes::ImageView const & diffuseView
+				, ashes::ImageView const & specularView );
 			ashes::RenderPassPtr renderPass;
 			ashes::FrameBufferPtr frameBuffer;
 		};
@@ -191,7 +191,7 @@ namespace castor3d
 			 *\param[in]	modelMatrixUbo	L'UBO optionnel de matrices modèle.
 			 */
 			void initialise( ashes::VertexBufferBase & vbo
-				, ashes::VertexLayout const & vertexLayout
+				, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 				, ashes::RenderPass const & firstRenderPass
 				, ashes::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
@@ -287,7 +287,7 @@ namespace castor3d
 			 *\param[in]	blend			Dit si le pipeline doit activer le blending.
 			 *\return		Le pipeline créé.
 			 */
-			virtual ashes::PipelinePtr doCreatePipeline( ashes::VertexLayout const & vertexLayout
+			virtual ashes::GraphicsPipelinePtr doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 				, ashes::RenderPass const & renderPass
 				, bool blend ) = 0;
 			/**
@@ -302,14 +302,14 @@ namespace castor3d
 
 		public:
 			Engine & m_engine;
-			ashes::ShaderStageStateArray m_program;
+			ashes::PipelineShaderStageCreateInfoArray m_program;
 			ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 			ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
 			ashes::DescriptorSetLayoutPtr m_textureDescriptorLayout;
 			ashes::DescriptorSetPoolPtr m_textureDescriptorPool;
 			ashes::PipelineLayoutPtr m_pipelineLayout;
-			ashes::PipelinePtr m_blendPipeline;
-			ashes::PipelinePtr m_firstPipeline;
+			ashes::GraphicsPipelinePtr m_blendPipeline;
+			ashes::GraphicsPipelinePtr m_firstPipeline;
 			bool m_shadows;
 		};
 		using ProgramPtr = std::unique_ptr< Program >;
@@ -446,9 +446,9 @@ namespace castor3d
 		LightPass( Engine & engine
 			, ashes::RenderPassPtr && firstRenderPass
 			, ashes::RenderPassPtr && blendRenderPass
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & diffuseView
-			, ashes::TextureView const & specularView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & diffuseView
+			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**
@@ -477,7 +477,7 @@ namespace castor3d
 			, GeometryPassResult const & gp
 			, LightType type
 			, ashes::VertexBufferBase & vbo
-			, ashes::VertexLayout const & vertexLayout
+			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 			, SceneUbo & sceneUbo
 			, ModelMatrixUbo * modelMatrixUbo
 			, RenderPassTimer & timer );
@@ -643,7 +643,7 @@ namespace castor3d
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< float > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
 		ashes::SemaphorePtr m_signalReady;

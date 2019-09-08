@@ -8,6 +8,7 @@
 #include "NoiseLayer6.xpm"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
@@ -19,14 +20,10 @@
 #include <Castor3D/Texture/TextureLayout.hpp>
 #include <Castor3D/Texture/TextureUnit.hpp>
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Image/StagingTexture.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/RenderSubpass.hpp>
-#include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/StagingTexture.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -146,65 +143,62 @@ namespace film_grain
 
 	//*********************************************************************************************
 
-	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
-		, ashes::Extent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
+	RenderQuad::RenderQuad( castor3d::RenderDevice const & device
+		, VkExtent2D const & size )
+		: castor3d::RenderQuad{ device, false, false }
 		, m_size{ size }
 	{
+		auto & renderSystem = m_device.renderSystem;
+		auto & engine = *renderSystem.getEngine();
 		auto name = cuT( "FilmGrain_Noise" );
 		castor3d::SamplerSPtr sampler;
 
-		if ( !m_renderSystem.getEngine()->getSamplerCache().has( name ) )
+		if ( !engine.getSamplerCache().has( name ) )
 		{
-			m_sampler = m_renderSystem.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( ashes::Filter::eLinear );
-			m_sampler->setMagFilter( ashes::Filter::eLinear );
-			m_sampler->setMipFilter( ashes::MipmapMode::eLinear );
-			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
-			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
-			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
+			m_sampler = engine.getSamplerCache().add( name );
+			m_sampler->setMinFilter( VK_FILTER_LINEAR );
+			m_sampler->setMagFilter( VK_FILTER_LINEAR );
+			m_sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+			m_sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 			m_sampler->initialise();
 		}
 		else
 		{
-			m_sampler = m_renderSystem.getEngine()->getSamplerCache().find( name );
+			m_sampler = engine.getSamplerCache().find( name );
 		}
+		
+		ashes::ImageCreateInfo image
+		{
+			0u,
+			VK_IMAGE_TYPE_3D,
+			VK_FORMAT_R8G8B8A8_UNORM,
+			{ 512u, 512u, NoiseMapCount },
+			1u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
+		};
+		m_noise = castor3d::makeImage( m_device
+			, std::move( image )
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "FilmGrainNoise" );
 
-		auto & device = getCurrentDevice( m_renderSystem );
-
-		ashes::ImageCreateInfo image{};
-		image.flags = 0u;
-		image.arrayLayers = 1u;
-		image.extent.width = 512u;
-		image.extent.height = 512u;
-		image.extent.depth = NoiseMapCount;
-		image.format = ashes::Format::eR8G8B8A8_UNORM;
-		image.imageType = ashes::TextureType::e3D;
-		image.initialLayout = ashes::ImageLayout::eUndefined;
-		image.mipLevels = 1u;
-		image.samples = ashes::SampleCountFlag::e1;
-		image.sharingMode = ashes::SharingMode::eExclusive;
-		image.tiling = ashes::ImageTiling::eOptimal;
-		image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
-		m_noise = device.createTexture( image, ashes::MemoryPropertyFlag::eDeviceLocal );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eImage,
-				m_noise.get(),
-				"FilmGrainNoise"
-			} );
-
-		ashes::ImageViewCreateInfo imageView{};
-		imageView.format = image.format;
-		imageView.viewType = ashes::TextureViewType::e3D;
-		imageView.subresourceRange.aspectMask = ashes::getAspectMask( imageView.format );
-		imageView.subresourceRange.baseMipLevel = 0u;
-		imageView.subresourceRange.levelCount = 1u;
-		imageView.subresourceRange.baseArrayLayer = 0u;
-		imageView.subresourceRange.layerCount = 1u;
+		ashes::ImageViewCreateInfo imageView
+		{
+			0u,
+			*m_noise,
+			VK_IMAGE_VIEW_TYPE_3D,
+			m_noise->getFormat(),
+			VkComponentMapping{},
+			{ ashes::getAspectMask( m_noise->getFormat() ), 0u, 1u, 0u, 1u }
+		};
 		m_noiseView = m_noise->createView( imageView );
 
-		auto & loader = m_renderSystem.getEngine()->getImageLoader();
+		auto & loader = engine.getImageLoader();
 		//XpmLoader loader;
 		std::array< PxBufferBaseSPtr, NoiseMapCount > buffers
 		{
@@ -219,36 +213,31 @@ namespace film_grain
 		uint32_t maxSize = buffers[0]->getSize();
 		auto dim = buffers[0]->getDimensions();
 		auto format = castor3d::convert( buffers[0]->getFormat() );
-		auto staging = device.createStagingTexture( format
-			, ashes::Extent2D{ dim.getWidth(), dim.getHeight() } );
-		ashes::CommandBufferPtr cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+		auto staging = m_device->createStagingTexture( format
+			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
+		ashes::CommandBufferPtr cmdCopy = m_device.graphicsCommandPool->createCommandBuffer( true );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
 			staging->uploadTextureData( *cmdCopy
 				, {
-					m_noiseView->getSubResourceRange().aspectMask,
-					m_noiseView->getSubResourceRange().baseMipLevel,
-					m_noiseView->getSubResourceRange().baseArrayLayer,
-					m_noiseView->getSubResourceRange().layerCount,
+					m_noiseView->subresourceRange.aspectMask,
+					m_noiseView->subresourceRange.baseMipLevel,
+					m_noiseView->subresourceRange.baseArrayLayer,
+					m_noiseView->subresourceRange.layerCount,
 				}
 				, format
 				, { 0, 0, int32_t( i ) }
-				, { image.extent.width, image.extent.height }
+				, { image->extent.width, image->extent.height }
 				, buffers[i]->getConstPtr()
-				, *m_noiseView );
+				, m_noiseView );
 		}
 
-		m_configUbo = ashes::makeUniformBuffer< Configuration >( getCurrentDevice( m_renderSystem )
+		m_configUbo = castor3d::makeUniformBuffer< Configuration >( m_device
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		getCurrentDevice( m_renderSystem ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_configUbo->getUbo().getBuffer(),
-				"FilmGrainUbo"
-			} );
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "FilmGrainCfg" );
 		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
@@ -269,7 +258,7 @@ namespace film_grain
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, *m_noiseView
+			, m_noiseView
 			, m_sampler->getSampler() );
 	}
 
@@ -288,19 +277,19 @@ namespace film_grain
 			, params
 			, false }
 		, m_surface{ *renderSystem.getEngine(), cuT( "FilmGrain" ) }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "FilmGrain" }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "FilmGrain" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "FilmGrain" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FilmGrain" }
 	{
 		String name = cuT( "FilmGrain2D" );
 
 		if ( !m_renderTarget.getEngine()->getSamplerCache().has( name ) )
 		{
 			m_sampler = m_renderTarget.getEngine()->getSamplerCache().add( name );
-			m_sampler->setMinFilter( ashes::Filter::eLinear );
-			m_sampler->setMagFilter( ashes::Filter::eLinear );
-			m_sampler->setWrapS( ashes::WrapMode::eRepeat );
-			m_sampler->setWrapT( ashes::WrapMode::eRepeat );
-			m_sampler->setWrapR( ashes::WrapMode::eRepeat );
+			m_sampler->setMinFilter( VK_FILTER_LINEAR );
+			m_sampler->setMagFilter( VK_FILTER_LINEAR );
+			m_sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 		}
 		else
 		{
@@ -324,18 +313,18 @@ namespace film_grain
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "FilmGrain" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 		visitor.visit( cuT( "FilmGrain" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "Exposure" )
 			, m_quad->getUbo().getData().m_exposure );
 		visitor.visit( cuT( "FilmGrain" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "NoiseIntensity" )
 			, m_quad->getUbo().getData().m_noiseIntensity );
@@ -349,69 +338,90 @@ namespace film_grain
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		auto & renderSystem = *getRenderSystem();
-		auto & device = getCurrentDevice( *this );
-		ashes::Extent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & device = getCurrentRenderDevice( *this );
+		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
 		m_sampler->initialise();
 		m_vertexShader.shader = getVertexProgram( getRenderSystem() );
 		m_pixelShader.shader = getFragmentProgram( getRenderSystem() );
 
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( 1u );
-		renderPass.attachments[0].format = m_target->getPixelFormat();
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
-
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkAttachmentDescriptionArray attachments
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment },
-			{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+			{
+				0u,
+				m_target->getPixelFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+			}
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				std::nullopt,
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attachments ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "FilmGrain" );
+
+		ashes::VkDescriptorSetLayoutBindingArray bindings
+		{
+			castor3d::makeDescriptorSetLayoutBinding( 0u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			castor3d::makeDescriptorSetLayoutBinding( 1u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 
-		m_quad = std::make_unique< RenderQuad >( *getRenderSystem(), size );
+		m_quad = std::make_unique< RenderQuad >( device, size );
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
 			, m_target->getDefaultView()
 			, *m_renderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 
 		auto result = m_surface.initialise( *m_renderPass
@@ -419,8 +429,8 @@ namespace film_grain
 			, m_target->getPixelFormat() );
 		castor3d::CommandsSemaphore commands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -429,14 +439,14 @@ namespace film_grain
 			cmd.begin();
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.
-			cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-				, ashes::PipelineStageFlag::eFragmentShader
-				, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { ashes::ClearColorValue{} }
-				, ashes::SubpassContents::eInline );
+				, { ashes::makeClearValue( VkClearColorValue{} ) }
+				, VK_SUBPASS_CONTENTS_INLINE );
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 			timer.endPass( cmd );

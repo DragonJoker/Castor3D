@@ -6,15 +6,15 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 
 namespace castor3d
 {
@@ -55,7 +55,7 @@ namespace castor3d
 		*\param[in] invertV
 		*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
 		*/
-		C3D_API explicit RenderQuad( RenderSystem & renderSystem
+		C3D_API explicit RenderQuad( castor3d::RenderDevice const & device
 			, bool nearest
 			, bool invertU = false
 			, bool invertV = false );
@@ -95,13 +95,13 @@ namespace castor3d
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
 		*/
-		C3D_API void createPipeline( ashes::Extent2D const & size
+		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
-			, ashes::ShaderStageStateArray const & program
-			, ashes::TextureView const & view
+			, ashes::PipelineShaderStageCreateInfoArray const & program
+			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSetLayoutBindingArray bindings
-			, ashes::PushConstantRangeArray const & pushRanges );
+			, ashes::VkDescriptorSetLayoutBindingArray bindings
+			, ashes::VkPushConstantRangeArray const & pushRanges );
 		/**
 		*\~english
 		*\brief
@@ -142,14 +142,14 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipeline( ashes::Extent2D const & size
+		C3D_API void createPipeline( VkExtent2D const & size
 			, castor::Position const & position
-			, ashes::ShaderStageStateArray const & program
-			, ashes::TextureView const & view
+			, ashes::PipelineShaderStageCreateInfoArray const & program
+			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSetLayoutBindingArray bindings
-			, ashes::PushConstantRangeArray const & pushRanges
-			, ashes::DepthStencilState dsState );
+			, ashes::VkDescriptorSetLayoutBindingArray bindings
+			, ashes::VkPushConstantRangeArray const & pushRanges
+			, ashes::PipelineDepthStencilStateCreateInfo dsState );
 		/**
 		*\~english
 		*\brief
@@ -210,9 +210,9 @@ namespace castor3d
 		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const;
 
 	protected:
-		RenderSystem & m_renderSystem;
+		castor3d::RenderDevice const & m_device;
 		SamplerSPtr m_sampler;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::CommandBufferPtr m_commandBuffer;
 
@@ -222,7 +222,7 @@ namespace castor3d
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
-		ashes::TextureView const * m_sourceView{ nullptr };
+		ashes::ImageView const * m_sourceView{ nullptr };
 	};
 }
 

@@ -3,25 +3,20 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Shader/GlslToSpv.hpp>
 
-#include <Ashes/Core/Renderer.hpp>
-
 #include <CompilerGlsl/compileGlsl.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
-
-#include <Gl4Renderer/Core/GlCreateRenderer.hpp>
 
 using namespace castor;
 
 namespace Gl4Render
 {
 	String RenderSystem::Name = cuT( "OpenGL 4.x Renderer" );
-	String RenderSystem::Type = cuT( "opengl4" );
+	String RenderSystem::Type = cuT( "gl4" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, true, false, false, false )
+		, AshPluginDescription desc )
+		: castor3d::RenderSystem{ engine, std::move( desc ), false, false, false }
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
@@ -78,17 +73,8 @@ namespace Gl4Render
 					Logger::logErrorNoNL( msg );
 				}
 			} );
-		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-			{
-				string::stringCast< char >( appName ),
-				"Castor3D",
-				enableValidation,
-			} ) );
+		getEngine()->getRenderersList().selectPlugin( m_desc.name );
 		Logger::logInfo( cuT( "Using " ) + Name );
-		auto & gpu = m_renderer->getPhysicalDevice( 0u );
-		m_memoryProperties = gpu.getMemoryProperties();
-		m_properties = gpu.getProperties();
-		m_features = gpu.getFeatures();
 	}
 
 	RenderSystem::~RenderSystem()
@@ -96,15 +82,13 @@ namespace Gl4Render
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
+		, AshPluginDescription desc )
 	{
 		return std::make_unique< RenderSystem >( engine
-			, appName
-			, enableValidation );
+			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		castor3d::UInt32Array result;
 		std::string glsl;
@@ -116,7 +100,7 @@ namespace Gl4Render
 				, glsl::GlslConfig
 				{
 					module.shader->getType(),
-					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					m_gpus[0]->getShaderVersion(),
 					false,
 					true,
 					true,
@@ -138,7 +122,7 @@ namespace Gl4Render
 			glsl = module.source;
 		}
 
-		//result = castor3d::compileGlslToSpv( *getCurrentDevice()
+		//result = castor3d::compileGlslToSpv( *getCurrentRenderDevice()
 		//	, module.stage
 		//	, glsl );
 

@@ -1,8 +1,10 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
-#include <Ashes/Buffer/StagingBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Core/Device.hpp>
+#include "Castor3D/Render/RenderDevice.hpp"
+
+#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -16,17 +18,17 @@ namespace castor3d
 	{
 	}
 
-	void GpuBuffer::initialiseStorage( ashes::Device const & device
+	void GpuBuffer::initialiseStorage( RenderDevice const & device
 		, uint32_t level
 		, uint32_t minBlockSize
-		, ashes::BufferTargets targets
-		, ashes::MemoryPropertyFlags memoryFlags )
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags memoryFlags )
 	{
 		m_device = &device;
 		m_allocator = std::make_unique< GpuBufferBuddyAllocator >( level, minBlockSize );
 		doInitialiseStorage( device
 			, uint32_t( m_allocator->getSize() )
-			, targets
+			, usage
 			, memoryFlags );
 	}
 
@@ -47,10 +49,10 @@ namespace castor3d
 
 	uint8_t * GpuBuffer::lock( uint32_t offset
 		, uint32_t size
-		, ashes::MemoryMapFlags const & flags )const
+		, VkMemoryMapFlags const & flags )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
+			, uint32_t( m_device->properties.limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
@@ -64,7 +66,7 @@ namespace castor3d
 		, uint32_t size )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
+			, uint32_t( m_device->properties.limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
@@ -78,7 +80,7 @@ namespace castor3d
 		, uint32_t size )const
 	{
 		auto size64 = ashes::getAlignedSize( size
-			, uint32_t( m_device->getProperties().limits.nonCoherentAtomSize ) );
+			, uint32_t( m_device->properties.limits.nonCoherentAtomSize ) );
 
 		if ( size64 > m_buffer->getBuffer().getSize() )
 		{
@@ -99,7 +101,7 @@ namespace castor3d
 		, uint32_t dstOffset
 		, uint32_t size )const
 	{
-		commandBuffer.begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		commandBuffer.copyBuffer( src.getBuffer().getBuffer()
 			, getBuffer().getBuffer()
 			, size
@@ -120,33 +122,45 @@ namespace castor3d
 			, getBuffer() );
 	}
 
-	void GpuBuffer::download( ashes::StagingBuffer & stagingBuffer
-		, ashes::CommandBuffer const & commandBuffer
+	void GpuBuffer::upload( ashes::StagingBuffer & stagingBuffer
+		, ashes::Queue const & queue
+		, ashes::CommandPool const & commandPool
 		, uint32_t offset
 		, uint32_t count
-		, uint8_t * buffer )const
+		, uint8_t const * buffer )const
 	{
-		stagingBuffer.downloadBufferData( commandBuffer
+		stagingBuffer.uploadBufferData( queue
+			, commandPool
 			, buffer
 			, count
 			, offset
 			, getBuffer() );
 	}
 
-	void GpuBuffer::doInitialiseStorage( ashes::Device const & device
-		, uint32_t size
-		, ashes::BufferTargets targets
-		, ashes::MemoryPropertyFlags memoryFlags )
+	void GpuBuffer::download( ashes::StagingBuffer & stagingBuffer
+		, ashes::Queue const & queue
+		, ashes::CommandPool const & commandPool
+		, uint32_t offset
+		, uint32_t count
+		, uint8_t * buffer )const
 	{
-		m_buffer = ashes::makeBuffer< uint8_t >( device
+		stagingBuffer.downloadBufferData( queue
+			, commandPool
+			, buffer
+			, count
+			, offset
+			, getBuffer() );
+	}
+
+	void GpuBuffer::doInitialiseStorage( RenderDevice const & device
+		, uint32_t size
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags memoryFlags )
+	{
+		m_buffer = makeBuffer< uint8_t >( device
 			, size
-			, targets
-			, memoryFlags );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_buffer->getBuffer(),
-				"GpuBuffer"
-			} );
+			, usage
+			, memoryFlags
+			, "GpuBuffer" );
 	}
 }

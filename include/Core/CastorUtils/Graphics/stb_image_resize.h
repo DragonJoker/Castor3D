@@ -276,7 +276,7 @@ STBIRDEF int stbir_resize_uint8_srgb_edgemode(const unsigned char *input_pixels 
 //       * If alpha_channel is not STBIR_ALPHA_CHANNEL_NONE
 //         * Alpha channel will not be gamma corrected (unless flags&STBIR_FLAG_GAMMA_CORRECT)
 //         * Filters will be weighted by alpha channel (unless flags&STBIR_FLAG_ALPHA_PREMULTIPLIED)
-//     * Filter can be selected explicitly
+//     * VkFilter can be selected explicitly
 //     * uint16 image type
 //     * sRGB colorspace available for all types
 //     * context parameter for passing to STBIR_MALLOC

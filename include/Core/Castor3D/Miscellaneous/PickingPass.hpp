@@ -8,8 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #define C3D_DebugPicking 0
 
@@ -105,9 +105,9 @@ namespace castor3d
 			return m_face;
 		}
 
-		inline ashes::TextureView const & getResult()const
+		inline ashes::ImageView const & getResult()const
 		{
-			return *m_colourView;
+			return m_colourView;
 		}
 		/**@}*/
 
@@ -209,24 +209,24 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doPrepareFrontPipeline
 		 */
 		void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, ashes::VertexLayoutCRefArray const & layouts
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 			, PipelineFlags const & flags )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
@@ -239,12 +239,12 @@ namespace castor3d
 
 	private:
 		std::map< castor::String, GeometryWPtr > m_pickable;
-		ashes::TexturePtr m_colourTexture;
-		ashes::TexturePtr m_depthTexture;
-		ashes::TextureViewPtr m_colourView;
-		ashes::TextureViewPtr m_depthView;
+		ashes::ImagePtr m_colourTexture;
+		ashes::ImagePtr m_depthTexture;
+		ashes::ImageView m_colourView;
+		ashes::ImageView m_depthView;
 		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::BufferImageCopy m_copyRegion;
+		VkBufferImageCopy m_copyRegion;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;

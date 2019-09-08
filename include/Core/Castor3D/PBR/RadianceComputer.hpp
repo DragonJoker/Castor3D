@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "Castor3D/RenderToTexture/RenderCube.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <array>
 
@@ -42,7 +42,7 @@ namespace castor3d
 		 */
 		C3D_API explicit RadianceComputer( Engine & engine
 			, castor::Size const & size
-			, ashes::Texture const & srcTexture );
+			, ashes::Image const & srcTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the radiance map.
@@ -59,9 +59,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::TextureView const & getResult()const
+		inline ashes::ImageView const & getResult()const
 		{
-			return *m_resultView;
+			return m_resultView;
 		}
 
 		inline ashes::Sampler const & getSampler()const
@@ -73,16 +73,15 @@ namespace castor3d
 	private:
 		struct RenderPass
 		{
-			ashes::TextureViewPtr dstView;
+			ashes::ImageView dstView;
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		using RenderPasses = std::array< RenderPass, 6 >;
 
-		RenderSystem & m_renderSystem;
-		ashes::TexturePtr m_result;
-		ashes::TextureViewPtr m_resultView;
+		ashes::ImagePtr m_result;
+		ashes::ImageView m_resultView;
 		SamplerSPtr m_sampler;
-		ashes::TextureViewPtr m_srcView;
+		ashes::ImageView m_srcView;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPasses m_renderPasses;
 		ashes::CommandBufferPtr m_commandBuffer;

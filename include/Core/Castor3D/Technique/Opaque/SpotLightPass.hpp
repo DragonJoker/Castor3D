@@ -93,9 +93,9 @@ namespace castor3d
 		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		SpotLightPass( Engine & engine
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & diffuseView
-			, ashes::TextureView const & specularView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & diffuseView
+			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, bool hasShadows );
 		/**

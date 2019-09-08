@@ -9,6 +9,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
 
 using namespace castor;
 
@@ -221,7 +222,7 @@ namespace castor3d
 
 	void TextOverlay::doUpdateBuffer( Size const & p_size
 		, std::function< void( Point2d const & p_size
-			, Rectangle const & p_absolute
+			, castor::Rectangle const & p_absolute
 			, Point4r const & p_fontUV
 			, real & p_uvLeft
 			, real & p_uvTop
@@ -337,7 +338,7 @@ namespace castor3d
 		case TextTexturingMode::eLetter:
 			doUpdateBuffer( p_size
 				, [this]( Point2d const & p_size
-					, Rectangle const & p_absolute
+					, castor::Rectangle const & p_absolute
 					, Point4r const & p_fontUV
 					, real & p_uvLeft
 					, real & p_uvTop
@@ -354,7 +355,7 @@ namespace castor3d
 		case TextTexturingMode::eText:
 			doUpdateBuffer( p_size
 				, [this]( Point2d const & p_size
-					, Rectangle const & p_absolute
+					, castor::Rectangle const & p_absolute
 					, Point4r const & p_fontUV
 					, real & p_uvLeft
 					, real & p_uvTop

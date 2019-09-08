@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/BufferView.hpp>
+#include <ashespp/Buffer/BufferView.hpp>
 
 namespace castor3d
 {

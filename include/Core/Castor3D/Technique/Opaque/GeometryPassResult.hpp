@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "Castor3D/Technique/Opaque/LightPass.hpp"
 
-#include <Ashes/Image/Sampler.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
+#include <ashespp/Image/Sampler.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {
@@ -23,8 +23,8 @@ namespace castor3d
 	*/
 	class GeometryPassResult
 	{
-		using Textures = std::array< ashes::Texture const *, size_t( DsTexture::eCount ) >;
-		using Views = std::array< ashes::TextureViewPtr, size_t( DsTexture::eCount ) >;
+		using Textures = std::array< ashes::Image const *, size_t( DsTexture::eCount ) >;
+		using Views = std::array< ashes::ImageView, size_t( DsTexture::eCount ) >;
 	public:
 		/**
 		*\~english
@@ -47,8 +47,8 @@ namespace castor3d
 		*	La texture de vélocité.
 		*/
 		C3D_API GeometryPassResult( Engine & engine
-			, ashes::Texture const & depthTexture
-			, ashes::Texture const & velocityTexture );
+			, ashes::Image const & depthTexture
+			, ashes::Image const & velocityTexture );
 		/**
 		*\~english
 		*name
@@ -58,7 +58,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Texture const & operator[]( size_t index )const
+		inline ashes::Image const & operator[]( size_t index )const
 		{
 			return *m_result[index];
 		}
@@ -78,9 +78,9 @@ namespace castor3d
 			return m_samplableViews;
 		}
 
-		inline ashes::TextureView const & getDepthStencilView()const
+		inline ashes::ImageView const & getDepthStencilView()const
 		{
-			return *m_depthStencilView;
+			return m_depthStencilView;
 		}
 
 		inline ashes::Sampler const & getSampler()const
@@ -92,9 +92,9 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		Textures m_result;
-		std::vector< ashes::TexturePtr > m_owned;
+		std::vector< ashes::ImagePtr > m_owned;
 		Views m_samplableViews;
-		ashes::TextureViewPtr m_depthStencilView;
+		ashes::ImageView m_depthStencilView;
 		ashes::SamplerPtr m_sampler;
 	};
 }

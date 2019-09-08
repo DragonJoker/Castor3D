@@ -5,8 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_UniformBuffer_H___
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -40,7 +42,7 @@ namespace castor3d
 		 */
 		inline UniformBuffer( RenderSystem const & renderSystem
 			, uint32_t count
-			, ashes::MemoryPropertyFlags flags
+			, VkMemoryPropertyFlags flags
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -108,10 +110,37 @@ namespace castor3d
 		 *\param[in]	timer			Le timer de passe de rendu.
 		 *\param[in]	index			L'indice de passe de rendu.
 		 */
-		inline void upload( ashes::StagingBuffer & stagingBuffer
+		inline void upload( ashes::BufferBase const & stagingBuffer
+			, ashes::Queue const & queue
+			, ashes::CommandPool const & commandPool
+			, uint32_t offset
+			, VkPipelineStageFlags flags
+			, RenderPassTimer const & timer
+			, uint32_t index )const;
+		/**
+		 *\~english
+		 *\brief		Transfers data to the GPU buffer from RAM.
+		 *\remarks		Transfers data from buffer[offset*sizeof( T )] to buffer[(offset+count-1)*sizeof( T )].
+		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
+		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
+		 *\param[in]	offset			The start offset.
+		 *\param[in]	flags			The pipeline stage flags for the out memory barrier.
+		 *\param[in]	timer			The render pass timer.
+		 *\param[in]	index			The render pass index.
+		 *\~french
+		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
+		 *\remarks		Transfère les données de tampon[offset*sizeof( T )] à tampon[(offset+count-1) * sizeof( T )].
+		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
+		 *\param[in]	offset			L'offset de départ.
+		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
+		 *\param[in]	timer			Le timer de passe de rendu.
+		 *\param[in]	index			L'indice de passe de rendu.
+		 */
+		inline void upload( ashes::BufferBase const & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer
 			, uint32_t offset
-			, ashes::PipelineStageFlags flags
+			, VkPipelineStageFlags flags
 			, RenderPassTimer const & timer
 			, uint32_t index )const;
 		/**
@@ -130,10 +159,13 @@ namespace castor3d
 		 *\param[in]	offset			L'offset de départ.
 		 *\param[in]	flags			Les indicateurs de pipeline stage pour la barrière mémoire de sortie.
 		 */
-		inline void download( ashes::StagingBuffer & stagingBuffer
-			, ashes::CommandBuffer const & commandBuffer
+		inline void download( ashes::BufferBase const & stagingBuffer
+			, ashes::Queue const & queue
+			, ashes::CommandPool const & commandPool
 			, uint32_t offset
-			, ashes::PipelineStageFlags flags )const;
+			, VkPipelineStageFlags flags
+			, RenderPassTimer const & timer
+			, uint32_t index )const;
 		/**
 		*\~english
 		*\return
@@ -176,9 +208,41 @@ namespace castor3d
 		uint32_t m_count;
 		ashes::UniformBufferPtr< T > m_buffer;
 		std::set< uint32_t > m_available;
-		ashes::MemoryPropertyFlags m_flags;
+		VkMemoryPropertyFlags m_flags;
 		castor::String m_debugName;
 	};
+
+	template< typename T >
+	inline ashes::UniformBufferPtr< T > makeUniformBuffer( castor3d::RenderDevice const & device
+		, VkDeviceSize count
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags flags
+		, std::string const & name )
+	{
+		auto result = ashes::makeUniformBuffer< T >( *device.device
+			, count
+			, usage );
+		ashes::BufferBase & buffer = result->getUbo().getBuffer();
+		setDebugObjectName( device, buffer, name + "Ubo" );
+		result->bindMemory( setupMemory( device, buffer, flags, name + "Ubo" ) );
+		return result;
+	}
+
+	inline ashes::UniformBufferBasePtr makeUniformBufferBase( castor3d::RenderDevice const & device
+		, VkDeviceSize count
+		, VkDeviceSize size
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags flags
+		, std::string const & name )
+	{
+		auto result = ashes::makeUniformBufferBase( *device.device
+			, count
+			, size
+			, usage );
+		setDebugObjectName( device, *result, name + "Ubo" );
+		result->bindMemory( setupMemory( device, *result, flags, name + "Ubo" ) );
+		return result;
+	}
 }
 
 #include "Castor3D/Buffer/UniformBuffer.inl"

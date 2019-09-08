@@ -7,17 +7,17 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Image/Sampler.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Image/Sampler.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 
 #include <array>
 
@@ -55,7 +55,7 @@ namespace castor3d
 		*\param[in] sampler
 		*	Le sampler à utiliser.
 		*/
-		C3D_API explicit RenderCube( RenderSystem & renderSystem
+		C3D_API explicit RenderCube( RenderDevice const & device
 			, bool nearest
 			, SamplerSPtr sampler = nullptr );
 		/**
@@ -90,12 +90,12 @@ namespace castor3d
 		*\param[in] pushRanges
 		*	Les intervalles de push constants.
 		*/
-		C3D_API void createPipelines( ashes::Extent2D const & size
+		C3D_API void createPipelines( VkExtent2D const & size
 			, castor::Position const & position
-			, ashes::ShaderStageStateArray const & program
-			, ashes::TextureView const & view
+			, ashes::PipelineShaderStageCreateInfoArray const & program
+			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
-			, ashes::PushConstantRangeArray const & pushRanges );
+			, ashes::VkPushConstantRangeArray const & pushRanges );
 		/**
 		*\~english
 		*\brief
@@ -132,13 +132,13 @@ namespace castor3d
 		*\param[in] dsState
 		*	L'état de profondeur et stencil à utiliser.
 		*/
-		C3D_API void createPipelines( ashes::Extent2D const & size
+		C3D_API void createPipelines( VkExtent2D const & size
 			, castor::Position const & position
-			, ashes::ShaderStageStateArray const & program
-			, ashes::TextureView const & view
+			, ashes::PipelineShaderStageCreateInfoArray const & program
+			, ashes::ImageView const & view
 			, ashes::RenderPass const & renderPass
-			, ashes::PushConstantRangeArray const & pushRanges
-			, ashes::DepthStencilState const & dsState );
+			, ashes::VkPushConstantRangeArray const & pushRanges
+			, ashes::PipelineDepthStencilStateCreateInfo const & dsState );
 		/**
 		*\~english
 		*\brief
@@ -204,7 +204,7 @@ namespace castor3d
 		}
 
 	private:
-		C3D_API virtual void doFillDescriptorLayoutBindings( ashes::DescriptorSetLayoutBindingArray & bindings );
+		C3D_API virtual void doFillDescriptorLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings );
 		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 			, ashes::DescriptorSet & descriptorSet
 			, uint32_t face );
@@ -212,21 +212,21 @@ namespace castor3d
 			, uint32_t face )const;
 
 	protected:
-		RenderSystem & m_renderSystem;
+		RenderDevice const & m_device;
 		SamplerSPtr m_sampler;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 
 	private:
 		struct FacePipeline
 		{
-			ashes::PipelinePtr pipeline;
+			ashes::GraphicsPipelinePtr pipeline;
 			ashes::DescriptorSetPtr descriptorSet;
 		};
 
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::UniformBufferPtr< castor::Matrix4x4f > m_matrixUbo;
 		ashes::VertexBufferPtr< castor::Point4f > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		std::array< FacePipeline, 6u > m_faces;

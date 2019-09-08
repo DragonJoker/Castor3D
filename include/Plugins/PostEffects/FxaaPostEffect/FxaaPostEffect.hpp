@@ -23,7 +23,7 @@ namespace fxaa
 		: public castor3d::RenderQuad
 	{
 	public:
-		explicit RenderQuad( castor3d::RenderSystem & renderSystem
+		explicit RenderQuad( castor3d::RenderDevice const & device
 			, castor::Size const & size );
 		void update( float subpixShift
 			, float spanMax

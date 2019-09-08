@@ -3,6 +3,7 @@
 #include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 using namespace castor3d;
@@ -23,16 +24,11 @@ namespace light_streaks
 
 	void KawaseUbo::initialise()
 	{
-		m_ubo = ashes::makeUniformBuffer< Configuration >( getCurrentDevice( m_engine )
+		m_ubo = castor3d::makeUniformBuffer< Configuration >( getCurrentRenderDevice( m_engine )
 			, PostEffect::Count * 3u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		getCurrentDevice( m_engine ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_ubo->getUbo().getBuffer(),
-				"KawaseUbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "KawaseCfg" );
 	}
 
 	void KawaseUbo::cleanup()
@@ -41,7 +37,7 @@ namespace light_streaks
 	}
 
 	void KawaseUbo::update( uint32_t index
-		, ashes::Extent2D const & size
+		, VkExtent2D const & size
 		, castor::Point2f const & direction
 		, uint32_t pass )
 	{

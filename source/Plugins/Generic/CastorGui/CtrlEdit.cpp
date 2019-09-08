@@ -58,7 +58,7 @@ namespace CastorGui
 	{
 		m_caretIt = m_caption.end();
 		m_cursor = MouseCursor::eText;
-		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 
 		EventHandler::connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
 		{

@@ -25,7 +25,7 @@ namespace GuiCommon
 	ShaderEditorPage::ShaderEditorPage( Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
-		, ashes::ShaderStageFlag type
+		, VkShaderStageFlagBits type
 		, castor::String const & source
 		, std::vector< UniformBufferValues > & ubos
 		, wxWindow * parent

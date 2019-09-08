@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Background/Colour.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -10,10 +11,8 @@
 #include "Castor3D/Texture/Sampler.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Image/StagingTexture.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/StagingTexture.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -31,22 +30,18 @@ namespace castor3d
 
 		ashes::ImageCreateInfo doGetImageCreate()
 		{
-			Size size{ Dim, Dim };
-			ashes::ImageCreateInfo result;
-			result.flags = ashes::ImageCreateFlag::eCubeCompatible;
-			result.arrayLayers = 6u;
-			result.extent.width = Dim;
-			result.extent.height = Dim;
-			result.extent.depth = 1u;
-			result.format = ashes::Format::eR32G32B32A32_SFLOAT;
-			result.imageType = ashes::TextureType::e2D;
-			result.initialLayout = ashes::ImageLayout::eUndefined;
-			result.mipLevels = 1u;
-			result.samples = ashes::SampleCountFlag::e1;
-			result.sharingMode = ashes::SharingMode::eExclusive;
-			result.tiling = ashes::ImageTiling::eOptimal;
-			result.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
-			return result;
+			return ashes::ImageCreateInfo
+			{
+				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+				VK_IMAGE_TYPE_2D,
+				VK_FORMAT_R32G32B32A32_SFLOAT,
+				{ Dim, Dim, 1u },
+				1u,
+				6u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
 		}
 	}
 
@@ -60,7 +55,7 @@ namespace castor3d
 		m_hdr = false;
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, doGetImageCreate()
-			, ashes::MemoryPropertyFlag::eDeviceLocal
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ColourBackground_Colour" ) );
 	}
 
@@ -77,8 +72,8 @@ namespace castor3d
 	{
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
-		auto & device = getCurrentDevice( *this );
-		m_stagingTexture = device.createStagingTexture( ashes::Format::eR32G32B32A32_SFLOAT 
+		auto & device = getCurrentRenderDevice( *this );
+		m_stagingTexture = device->createStagingTexture( VK_FORMAT_R32G32B32A32_SFLOAT 
 			, { Dim, Dim } );
 
 		m_texture->getImage( 0u ).initialiseSource();
@@ -92,13 +87,13 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_cmdCopy = device.getGraphicsCommandPool().createCommandBuffer( true );
+			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( true );
 			m_cmdCopy->begin();
 
 			for ( uint32_t i = 0; i < 6u; ++i )
 			{
 				m_stagingTexture->copyTextureData( *m_cmdCopy
-					, ashes::Format::eR32G32B32A32_SFLOAT
+					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, m_texture->getImage( i ).getView() );
 			}
 
@@ -137,9 +132,10 @@ namespace castor3d
 
 	void ColourBackground::doUpdateColour()
 	{
-		ashes::Extent2D lockExtent{ Dim, Dim };
+		auto & device = getCurrentRenderDevice( *this );
+		VkDeviceSize lockSize = Dim * Dim;
 
-		if ( auto * buffer = reinterpret_cast< Point4f * >( m_stagingTexture->lock( lockExtent, ashes::MemoryMapFlag::eWrite ) ) )
+		if ( auto * buffer = reinterpret_cast< Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )
 		{
 			Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
 
@@ -149,12 +145,12 @@ namespace castor3d
 				++buffer;
 			}
 
-			m_stagingTexture->flush( lockExtent );
+			m_stagingTexture->flush( 0u, lockSize );
 			m_stagingTexture->unlock();
-			auto & device = getCurrentDevice( *this );
+			auto & renderSystem = *getEngine()->getRenderSystem();
 
-			device.getGraphicsQueue().submit( *m_cmdCopy, nullptr );
-			device.getGraphicsQueue().waitIdle();
+			device.graphicsQueue->submit( *m_cmdCopy, nullptr );
+			device.graphicsQueue->waitIdle();
 
 			m_colour.reset();
 		}

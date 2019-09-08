@@ -76,11 +76,11 @@ namespace castor3d
 		/**
 		*\copydoc		castor3d::RenderPass::doCreateUboBindings
 		*/
-		ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
@@ -108,11 +108,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	private:
 		static castor::String const Output1;

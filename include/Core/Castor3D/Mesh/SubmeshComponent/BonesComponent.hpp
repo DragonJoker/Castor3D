@@ -65,7 +65,7 @@ namespace castor3d
 		C3D_API void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::VertexLayoutCRefArray & layouts )override;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override;
 		/**
 		 *\~english
 		 *\brief		adds bone datas.
@@ -153,7 +153,7 @@ namespace castor3d
 
 	private:
 		ashes::VertexBufferPtr< VertexBoneData > m_bonesBuffer;
-		ashes::VertexLayoutPtr m_bonesLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_bonesLayout;
 		VertexBoneDataArray m_bones;
 
 		friend class BinaryWriter< BonesComponent >;

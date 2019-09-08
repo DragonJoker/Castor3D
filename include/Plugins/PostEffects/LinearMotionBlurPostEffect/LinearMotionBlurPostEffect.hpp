@@ -31,7 +31,7 @@ namespace motion_blur
 			: public castor3d::RenderQuad
 		{
 		public:
-			Quad( castor3d::RenderSystem & renderSystem
+			Quad( castor3d::RenderDevice const & device
 				, castor3d::TextureUnit const & velocity
 				, ashes::UniformBuffer< Configuration > const & ubo );
 
@@ -40,7 +40,7 @@ namespace motion_blur
 				, ashes::DescriptorSet & descriptorSet );
 
 		private:
-			ashes::TextureView const & m_velocityView;
+			ashes::ImageView const & m_velocityView;
 			ashes::Sampler const & m_velocitySampler;
 			ashes::UniformBuffer< Configuration > const & m_ubo;
 		};

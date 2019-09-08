@@ -35,14 +35,14 @@ namespace castor3d
 		return *this;
 	}
 
-	ShaderModule::ShaderModule( ashes::ShaderStageFlag stage
+	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
 		, std::string const & name )
 		: stage{ stage }
 		, name{ name }
 	{
 	}
 
-	ShaderModule::ShaderModule( ashes::ShaderStageFlag stage
+	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
 		, std::string const & name
 		, std::string source )
 		: stage{ stage }
@@ -51,7 +51,7 @@ namespace castor3d
 	{
 	}
 
-	ShaderModule::ShaderModule( ashes::ShaderStageFlag stage
+	ShaderModule::ShaderModule( VkShaderStageFlagBits stage
 		, std::string const & name
 		, ShaderPtr shader )
 		: stage{ stage }

@@ -6,8 +6,7 @@
 #include "Castor3D/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 using namespace castor;
 
@@ -30,11 +29,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().add( cuT( "TextureProjection" ) );
-				result->setMinFilter( ashes::Filter::eNearest );
-				result->setMagFilter( ashes::Filter::eNearest );
-				result->setWrapS( ashes::WrapMode::eClampToEdge );
-				result->setWrapT( ashes::WrapMode::eClampToEdge );
-				result->setWrapR( ashes::WrapMode::eClampToEdge );
+				result->setMinFilter( VK_FILTER_NEAREST );
+				result->setMagFilter( VK_FILTER_NEAREST );
+				result->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				result->initialise();
 			}
 
@@ -71,7 +70,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo );
 		m_ssao = std::make_unique< SsaoPass >( engine
-			, ashes::Extent2D{ m_size.getWidth(), m_size.getHeight() }
+			, VkExtent2D{ m_size.getWidth(), m_size.getHeight() }
 			, m_ssaoConfig
 			, m_geometryPassResult );
 		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine

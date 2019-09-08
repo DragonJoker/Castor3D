@@ -29,8 +29,8 @@ namespace castor
 		{
 			CU_Require( !folderPath.empty() );
 			bool result = false;
-			WIN32_FIND_DATA findData;
-			HANDLE handle = ::FindFirstFile( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
+			WIN32_FIND_DATAA findData;
+			HANDLE handle = ::FindFirstFileA( ( folderPath / cuT( "*.*" ) ).c_str(), &findData );
 
 			if ( handle != INVALID_HANDLE_VALUE )
 			{
@@ -49,7 +49,7 @@ namespace castor
 					}
 				}
 
-				while ( result && ::FindNextFile( handle, &findData ) == TRUE )
+				while ( result && ::FindNextFileA( handle, &findData ) == TRUE )
 				{
 					if ( findData.cFileName != name )
 					{
@@ -79,7 +79,7 @@ namespace castor
 		{
 #if defined( CU_CompilerMSVC )
 
-			bool result = _trmdir( p_path.c_str() ) == 0;
+			bool result = _rmdir( p_path.c_str() ) == 0;
 
 #else
 
@@ -182,7 +182,7 @@ namespace castor
 	{
 		Path pathReturn;
 		xchar path[FILENAME_MAX];
-		DWORD result = ::GetModuleFileName( nullptr, path, _countof( path ) );
+		DWORD result = ::GetModuleFileNameA( nullptr, path, _countof( path ) );
 
 		if ( result != 0 )
 		{
@@ -197,7 +197,7 @@ namespace castor
 	{
 		Path pathReturn;
 		xchar path[FILENAME_MAX];
-		HRESULT hr = SHGetFolderPath( nullptr, CSIDL_PROFILE, nullptr, 0, path );
+		HRESULT hr = SHGetFolderPathA( nullptr, CSIDL_PROFILE, nullptr, 0, path );
 
 		if ( SUCCEEDED( hr ) )
 		{
@@ -225,7 +225,7 @@ namespace castor
 
 #if defined( CU_CompilerMSVC )
 
-		return _tmkdir( p_path.c_str() ) == 0;
+		return _mkdir( p_path.c_str() ) == 0;
 
 #else
 

@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -44,8 +44,9 @@ namespace castor3d
 		 */
 		C3D_API BillboardBase( Scene & scene
 			, SceneNodeSPtr node
-			, ashes::VertexLayoutPtr && vertexLayout
-			, ashes::VertexBufferBasePtr && vertexBuffer = nullptr );
+			, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout
+			, uint32_t vertexStride
+			, ashes::VertexBufferBasePtr vertexBuffer = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -201,7 +202,7 @@ namespace castor3d
 	private:
 		void doGatherBuffers( ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::VertexLayoutCRefArray & layouts );
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts );
 
 	public:
 		struct Vertex
@@ -218,9 +219,10 @@ namespace castor3d
 		castor::Point2f m_dimensions;
 		castor::Point3r m_cameraPosition;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
+		uint32_t m_vertexStride;
 		ashes::VertexBufferPtr< Quad > m_quadBuffer;
-		ashes::VertexLayoutPtr m_quadLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_quadLayout;
 		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };
 		bool m_initialised{ false };

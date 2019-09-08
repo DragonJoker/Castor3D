@@ -1,12 +1,13 @@
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
-#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -21,7 +22,7 @@ namespace castor3d
 	SkinningUbo::SkinningUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->hasCurrentDevice() )
+		if ( engine.getRenderSystem()->getCurrentRenderDevice() )
 		{
 			initialise();
 		}
@@ -35,17 +36,12 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentDevice( m_engine );
-			m_ubo = ashes::makeUniformBuffer< Configuration >( device
+			auto & device = getCurrentRenderDevice( m_engine );
+			m_ubo = makeUniformBuffer< Configuration >( device
 				, 1u
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_ubo->getUbo().getBuffer(),
-					"SkinningUbo"
-				} );
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "SkinningUbo" );
 		}
 	}
 
@@ -95,17 +91,17 @@ namespace castor3d
 		return result;
 	}
 
-	ashes::DescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
+	VkDescriptorSetLayoutBinding SkinningUbo::createLayoutBinding( uint32_t binding
 		, ProgramFlags const & flags )
 	{
 		CU_Require( checkFlag( flags, ProgramFlag::eSkinning ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			return ashes::DescriptorSetLayoutBinding{ binding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eVertex };
+			return VkDescriptorSetLayoutBinding{ binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT };
 		}
 
-		return ashes::DescriptorSetLayoutBinding{ binding, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex };
+		return VkDescriptorSetLayoutBinding{ binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT };
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( SkinningData & data

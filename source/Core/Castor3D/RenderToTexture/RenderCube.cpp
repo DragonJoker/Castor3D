@@ -1,21 +1,20 @@
 #include "Castor3D/RenderToTexture/RenderCube.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/Buffer/StagingBuffer.hpp>
-#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Core/Renderer.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayoutBinding.hpp>
-#include <Ashes/Descriptor/WriteDescriptorSet.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Pipeline/InputAssemblyState.hpp>
-#include <Ashes/Pipeline/MultisampleState.hpp>
-#include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Ashes/Pipeline/Scissor.hpp>
-#include <Ashes/Pipeline/Viewport.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineRasterizationStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -25,15 +24,18 @@ namespace castor3d
 {
 	namespace
 	{
+		static uint32_t constexpr MtxUboIdx = 0u;
+		static uint32_t constexpr InputImgIdx = 1u;
+
 		SamplerSPtr doCreateSampler( RenderSystem & renderSystem
 			, bool nearest )
 		{
 			String const name = nearest
 				? String{ cuT( "RenderCube_Nearest" ) }
 			: String{ cuT( "RenderCube_Linear" ) };
-			ashes::Filter const filter = nearest
-				? ashes::Filter::eNearest
-				: ashes::Filter::eLinear;
+			VkFilter const filter = nearest
+				? VK_FILTER_NEAREST
+				: VK_FILTER_LINEAR;
 			auto & cache = renderSystem.getEngine()->getSamplerCache();
 			SamplerSPtr sampler;
 
@@ -46,31 +48,27 @@ namespace castor3d
 				sampler = cache.add( name );
 				sampler->setMinFilter( filter );
 				sampler->setMagFilter( filter );
-				sampler->setWrapS( ashes::WrapMode::eClampToEdge );
-				sampler->setWrapT( ashes::WrapMode::eClampToEdge );
-				sampler->setWrapR( ashes::WrapMode::eClampToEdge );
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			}
 
 			return sampler;
 		}
 
-		ashes::UniformBufferPtr< castor::Matrix4x4f > doCreateMatrixUbo( ashes::Device const & device
+		ashes::UniformBufferPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::CommandBuffer const & commandBuffer
-			, bool srcIsCube )
+			, bool srcIsCube
+			, bool isTopDown )
 		{
-			static castor::Matrix4x4f const projection = convert( device.perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
+			static castor::Matrix4x4f const projection = convert( device->perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
 
-			auto result = ashes::makeUniformBuffer< castor::Matrix4x4f >( device
+			auto result = makeUniformBuffer< castor::Matrix4x4f >( device
 				, 6u
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eDeviceLocal );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&result->getUbo().getBuffer(),
-					"RenderCubeMatrixUbo"
-				} );
-			static std::array< castor::Matrix4x4f, 6u > const views = [&device]()
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "RenderCubeMatrix" );
+			static std::array< castor::Matrix4x4f, 6u > const views = [isTopDown, &device]()
 			{
 				std::array< castor::Matrix4x4f, 6u > result
 				{
@@ -82,7 +80,7 @@ namespace castor3d
 					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
 				};
 
-				if ( device.getRenderer().getClipDirection() == ashes::ClipDirection::eBottomUp )
+				if ( !isTopDown )
 				{
 					std::swap( result[2], result[3] );
 				}
@@ -97,8 +95,8 @@ namespace castor3d
 			result->getData( 4u ) = projection * views[4];
 			result->getData( 5u ) = projection * views[5];
 
-			ashes::StagingBuffer stagingBuffer{ device
-				, ashes::BufferTarget::eTransferSrc
+			ashes::StagingBuffer stagingBuffer{ *device.device
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, 6u * result->getAlignedSize() };
 			stagingBuffer.uploadUniformData( commandBuffer
 				, result->getDatas()
@@ -106,7 +104,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( ashes::Device const & device
+		ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
 			, ashes::CommandBuffer const & commandBuffer )
 		{
 			std::vector< castor::Point4f > vertexData
@@ -118,19 +116,14 @@ namespace castor3d
 				castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ +1, +1, -1, +1 }, castor::Point4f{ +1, +1, +1, +1 }, castor::Point4f{ -1, +1, -1, +1 }, castor::Point4f{ -1, +1, +1, +1 },// Top
 				castor::Point4f{ -1, -1, -1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ -1, -1, +1, +1 }, castor::Point4f{ +1, -1, -1, +1 }, castor::Point4f{ +1, -1, +1, +1 }, castor::Point4f{ -1, -1, +1, +1 },// Bottom
 			};
-			auto result = ashes::makeVertexBuffer< castor::Point4f >( device
+			auto result = makeVertexBuffer< castor::Point4f >( device
 				, uint32_t( vertexData.size() )
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eDeviceLocal );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&result->getBuffer(),
-					"RenderCubeVbo"
-				} );
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "RenderCube" );
 
-			ashes::StagingBuffer stagingBuffer{ device
-				, ashes::BufferTarget::eTransferSrc
+			ashes::StagingBuffer stagingBuffer{ *device.device
+				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, result->getBuffer().getSize() };
 			stagingBuffer.uploadVertexData( commandBuffer
 				, vertexData
@@ -138,39 +131,26 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::VertexInputState doCreateVertexLayout()
+		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout()
 		{
-			ashes::VertexInputState result;
-			result.vertexBindingDescriptions.push_back( {
-				0u,
-				uint32_t( sizeof( castor::Point4f ) ),
-				ashes::VertexInputRate::eVertex
-			} );
-			result.vertexAttributeDescriptions.push_back( {
-				0u,
-				0u,
-				ashes::Format::eR32G32B32A32_SFLOAT,
-				0u
-			} );
-			return result;
-		}
-
-		ashes::DescriptorSetLayoutPtr doCreateDescriptorSetLayout( ashes::Device const & device )
-		{
-			ashes::DescriptorSetLayoutBindingArray bindings
+			return ashes::PipelineVertexInputStateCreateInfo
 			{
-				{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eVertex },
-				{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
+				0u,
+				{
+					{ 0u, uint32_t( sizeof( castor::Point4f ) ), VK_VERTEX_INPUT_RATE_VERTEX },
+				},
+				{
+					{ 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, 0u }
+				},
 			};
-			return device.createDescriptorSetLayout( std::move( bindings ) );
 		}
 	}
 
-	RenderCube::RenderCube( RenderSystem & renderSystem
+	RenderCube::RenderCube( RenderDevice const & device
 		, bool nearest
 		, SamplerSPtr sampler )
-		: m_renderSystem{ renderSystem }
-		, m_sampler{ sampler ? std::move( sampler ) : doCreateSampler( m_renderSystem, nearest ) }
+		: m_device{ device }
+		, m_sampler{ sampler ? std::move( sampler ) : doCreateSampler( m_device.renderSystem, nearest ) }
 	{
 	}
 
@@ -179,12 +159,12 @@ namespace castor3d
 		cleanup();
 	}
 
-	void RenderCube::createPipelines( ashes::Extent2D const & size
+	void RenderCube::createPipelines( VkExtent2D const & size
 		, castor::Position const & position
-		, ashes::ShaderStageStateArray const & program
-		, ashes::TextureView const & view
+		, ashes::PipelineShaderStageCreateInfoArray const & program
+		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
-		, ashes::PushConstantRangeArray const & pushRanges )
+		, ashes::VkPushConstantRangeArray const & pushRanges )
 	{
 		createPipelines( size
 			, position
@@ -192,57 +172,64 @@ namespace castor3d
 			, view
 			, renderPass
 			, pushRanges
-			, ashes::DepthStencilState{ 0u, false, false } );
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
 	}
 
-	void RenderCube::createPipelines( ashes::Extent2D const & size
+	void RenderCube::createPipelines( VkExtent2D const & size
 		, castor::Position const & position
-		, ashes::ShaderStageStateArray const & program
-		, ashes::TextureView const & view
+		, ashes::PipelineShaderStageCreateInfoArray const & program
+		, ashes::ImageView const & view
 		, ashes::RenderPass const & renderPass
-		, ashes::PushConstantRangeArray const & pushRanges
-		, ashes::DepthStencilState const & dsState )
+		, ashes::VkPushConstantRangeArray const & pushRanges
+		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
 		m_sampler->initialise();
-		auto & device = getCurrentDevice( m_renderSystem );
-		auto commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		m_matrixUbo = doCreateMatrixUbo( device, *commandBuffer, view.getType() == ashes::TextureViewType::eCube );
-		m_vertexBuffer = doCreateVertexBuffer( device, *commandBuffer );
+		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		m_matrixUbo = doCreateMatrixUbo( m_device, *commandBuffer, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE, m_device.renderSystem.isTopDown() );
+		m_vertexBuffer = doCreateVertexBuffer( m_device, *commandBuffer );
 		auto vertexLayout = doCreateVertexLayout();
 
 		// Initialise the descriptor set.
-		ashes::DescriptorSetLayoutBindingArray bindings;
-		bindings.emplace_back( 0u
-			, ashes::DescriptorType::eUniformBuffer
-			, ashes::ShaderStageFlag::eVertex );
-		bindings.emplace_back( 1u
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );
+		ashes::VkDescriptorSetLayoutBindingArray bindings
+		{
+			makeDescriptorSetLayoutBinding( MtxUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ),
+			makeDescriptorSetLayoutBinding( InputImgIdx
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+		};
 		doFillDescriptorLayoutBindings( bindings );
-		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device.createPipelineLayout( { *m_descriptorLayout }, pushRanges );
+		m_descriptorLayout = m_device->createDescriptorSetLayout( std::move( bindings ) );
+		setDebugObjectName( m_device, *m_descriptorLayout, "RenderCubeDescriptorSetLayout" );
+		m_pipelineLayout = m_device->createPipelineLayout( { *m_descriptorLayout }, pushRanges );
+		setDebugObjectName( m_device, *m_pipelineLayout,"RenderCubePipelineLayout" );
 		m_descriptorPool = m_descriptorLayout->createPool( 6u );
+		setDebugObjectName( m_device, m_descriptorPool->getPool(), "RenderCubeDescriptorPool" );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_faces )
 		{
-			facePipeline.pipeline = m_pipelineLayout->createPipeline( ashes::GraphicsPipelineCreateInfo
-			{
-				program,
-				renderPass,
-				vertexLayout,
-				ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
-				ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
-				ashes::MultisampleState{},
-				ashes::ColourBlendState::createDefault(),
-				{},
-				ashes::DepthStencilState{ 0u, false, false },
-				ashes::TessellationState{},
-				ashes::Viewport{ size.width, size.height, 0, 0 },
-				ashes::Scissor{ 0, 0, size.width, size.height }
-			} );
+			facePipeline.pipeline = m_device->createPipeline( ashes::GraphicsPipelineCreateInfo
+				{
+					0u,
+					program,
+					std::move( vertexLayout ),
+					ashes::PipelineInputAssemblyStateCreateInfo{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+					std::nullopt,
+					ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.width ), float( size.height ) } }, 1u, { VkRect2D{ 0, 0, size.width, size.height } } },
+					ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+					ashes::PipelineMultisampleStateCreateInfo{},
+					ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false },
+					ashes::PipelineColorBlendStateCreateInfo{},
+					std::nullopt,
+					*m_pipelineLayout,
+					renderPass,
+				} );
+			setDebugObjectName( m_device, *facePipeline.pipeline, "RenderCubeFace" + castor::string::toString( face ) + "Pipeline" );
 
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet();
+			setDebugObjectName( m_device, *facePipeline.descriptorSet, "RenderCubeFace" + castor::string::toString( face ) + "DescriptorSet" );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 				, *m_matrixUbo
 				, face
@@ -277,15 +264,17 @@ namespace castor3d
 		, uint32_t subpassIndex
 		, uint32_t face )
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer( false );
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
-			, ashes::CommandBufferInheritanceInfo
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( false );
+		setDebugObjectName( m_device, *m_commandBuffer, "RenderCubeCommandBuffer" );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, VkCommandBufferInheritanceInfo
 			{
-				&renderPass,
-				subpassIndex,
+				VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
 				nullptr,
-				false,
+				renderPass,
+				subpassIndex,
+				VK_NULL_HANDLE,
+				VK_FALSE,
 				0u,
 				0u
 			} );
@@ -304,7 +293,7 @@ namespace castor3d
 		commandBuffer.draw( 36u );
 	}
 
-	void RenderCube::doFillDescriptorLayoutBindings( ashes::DescriptorSetLayoutBindingArray & bindings )
+	void RenderCube::doFillDescriptorLayoutBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )
 	{
 	}
 

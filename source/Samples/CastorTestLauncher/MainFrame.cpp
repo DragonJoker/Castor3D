@@ -11,8 +11,8 @@
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-#include <Ashes/Core/PlatformWindowHandle.hpp>
-#include <Ashes/Core/WindowHandle.hpp>
+#include <ashespp/Core/PlatformWindowHandle.hpp>
+#include <ashespp/Core/WindowHandle.hpp>
 
 #include <wx/display.h>
 #include <wx/mstream.h>

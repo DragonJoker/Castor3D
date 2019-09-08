@@ -6,19 +6,18 @@
 #include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Texture/Sampler.hpp>
 #include <Castor3D/Texture/TextureLayout.hpp>
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -828,81 +827,73 @@ namespace smaa
 		ashes::SamplerPtr doCreateSampler( castor3d::Engine & engine
 			, castor::String const & name )
 		{
-			auto & device = getCurrentDevice( engine );
+			auto & device = getCurrentRenderDevice( engine );
 			ashes::SamplerCreateInfo sampler
 			{
-				ashes::Filter::eNearest,
-				ashes::Filter::eNearest,
-				ashes::MipmapMode::eNone,
-				ashes::WrapMode::eClampToEdge,
-				ashes::WrapMode::eClampToEdge,
-				ashes::WrapMode::eClampToEdge,
+				0u,
+				VK_FILTER_NEAREST,
+				VK_FILTER_NEAREST,
+				VK_SAMPLER_MIPMAP_MODE_NEAREST,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
 				0.0f,
-				false,
+				VK_FALSE,
 				1.0f,
-				false,
-				ashes::CompareOp::eNever,
+				VK_FALSE,
+				VK_COMPARE_OP_NEVER,
 				-1000.0f,
 				1000.0f,
-				ashes::BorderColour::eFloatOpaqueBlack,
-				false
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+				VK_FALSE
 			};
-			return device.createSampler( sampler );
+			return device->createSampler( sampler );
 		}
 	}
 
 	//*********************************************************************************************
 
 	BlendingWeightCalculation::BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
-		, ashes::TextureView const & edgeDetectionView
+		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
+		: castor3d::RenderQuad{ getCurrentRenderDevice( renderTarget ), false, false }
 		, m_edgeDetectionView{ edgeDetectionView }
 		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaBlendingWeightCalculation" ) }
 		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "SmaaBlendingWeightCalculation" }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "SmaaBlendingWeightCalculation" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeightCalculation" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeightCalculation" }
 	{
-		ashes::Extent2D size{ m_edgeDetectionView.getTexture().getDimensions().width
-			, m_edgeDetectionView.getTexture().getDimensions().height };
-		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
-		auto & device = getCurrentDevice( renderSystem );
+		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
+			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = ashes::makeUniformBuffer< castor::Point4i >( device
+		m_ubo = castor3d::makeUniformBuffer< castor::Point4i >( m_device
 			, 1u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_ubo->getUbo().getBuffer(),
-				"SmaaBlendingWeightCalculationUbo"
-			} );
-
-		ashes::ImageCreateInfo image{};
-		image.flags = 0u;
-		image.arrayLayers = 1u;
-		image.extent.width = size.width;
-		image.extent.height = size.height;
-		image.extent.depth = 1u;
-		image.format = ashes::Format::eR8G8_UNORM;
-		image.imageType = ashes::TextureType::e2D;
-		image.initialLayout = ashes::ImageLayout::eUndefined;
-		image.mipLevels = 1u;
-		image.samples = ashes::SampleCountFlag::e1;
-		image.sharingMode = ashes::SharingMode::eExclusive;
-		image.tiling = ashes::ImageTiling::eOptimal;
-		image.usage = ashes::ImageUsageFlag::eSampled
-			| ashes::ImageUsageFlag::eTransferDst;
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SmaaBlendingWeightCalculation" );
+		
+		ashes::ImageCreateInfo image
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_R8G8_UNORM,
+			{ size.width, size.height, 1u },
+			1u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			( VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
+		};
 
 		auto areaTexBuffer = PxBufferBase::create( Size{ AREATEX_WIDTH, AREATEX_HEIGHT }
 			, PixelFormat::eR8A8_UNORM
 			, areaTexBytes
 			, PixelFormat::eR8A8_UNORM );
-		m_areaTex = std::make_shared< castor3d::TextureLayout >( renderSystem
+		m_areaTex = std::make_shared< castor3d::TextureLayout >( m_device.renderSystem
 			, image
-			, ashes::MemoryPropertyFlag::eDeviceLocal
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
 		m_areaTex->getDefaultImage().initialiseSource( areaTexBuffer );
 		m_areaTex->initialise();
@@ -911,60 +902,81 @@ namespace smaa
 			, PixelFormat::eR8_UNORM
 			, searchTexBytes
 			, PixelFormat::eR8_UNORM );
-		image.format = ashes::Format::eR8_UNORM;
-		m_searchTex = std::make_shared< castor3d::TextureLayout >( renderSystem
+		image->format = VK_FORMAT_R8_UNORM;
+		m_searchTex = std::make_shared< castor3d::TextureLayout >( m_device.renderSystem
 			, image
-			, ashes::MemoryPropertyFlag::eDeviceLocal
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
 		m_searchTex->getDefaultImage().initialiseSource( searchTexBuffer );
 		m_searchTex->initialise();
 
 		// Create the render pass.
-		ashes::RenderPassCreateInfo renderPass;
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( 2u );
-		renderPass.attachments[0].format = ashes::Format::eR8G8B8A8_UNORM;
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-		renderPass.attachments[1].format = ashes::Format::eS8_UINT;
-		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eLoad;
-		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-		renderPass.subpasses[0].depthStencilAttachment = { 1u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
-		renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass = device.createRenderPass( renderPass );
+		ashes::VkAttachmentDescriptionArray attachments
+		{
+			{
+				0u,
+				VK_FORMAT_R8G8B8A8_UNORM,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
+			{
+				1u,
+				VK_FORMAT_S8_UINT,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_ATTACHMENT_LOAD_OP_LOAD,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+			},
+		};
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{},
+				VkAttachmentReference{ 1u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attachments ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = m_device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( m_device, *m_renderPass, "BlendingWeightCalculation" );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
@@ -974,58 +986,64 @@ namespace smaa
 			, pixelSize
 			, config );
 
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( renderTarget.getEngine()->getRenderSystem()->compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( renderTarget.getEngine()->getRenderSystem()->compileShader( m_pixelShader ) );
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
-		ashes::DepthStencilState dsstate{ 0u, false, false };
-		dsstate.stencilTestEnable = true;
-		dsstate.front.compareOp = ashes::CompareOp::eEqual;
-		dsstate.front.reference = 1u;
-		dsstate.back = dsstate.front;
-		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment );
-		setLayoutBindings.emplace_back( 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
-		setLayoutBindings.emplace_back( 2u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
+		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
+		dsstate->stencilTestEnable = VK_TRUE;
+		dsstate->front.compareOp = VK_COMPARE_OP_EQUAL;
+		dsstate->front.reference = 1u;
+		dsstate->back = dsstate->front;
+		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
+		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 1u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 2u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		createPipeline( size
 			, castor::Position{}
 			, stages
 			, m_edgeDetectionView
 			, *m_renderPass
-			, setLayoutBindings
+			, std::move( setLayoutBindings )
 			, {}
-			, dsstate );
+			, std::move( dsstate ) );
 		m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, ashes::Format::eR8G8B8A8_UNORM
+			, VK_FORMAT_R8G8B8A8_UNORM
 			, depthView );
 	}
 
 	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			m_device.graphicsCommandPool->createCommandBuffer(),
+			m_device->createSemaphore()
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
 		blendingWeightCmd.begin();
 		timer.beginPass( blendingWeightCmd, passIndex );
 		// Put edge detection image in shader input layout.
-		blendingWeightCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_edgeDetectionView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		blendingWeightCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_edgeDetectionView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 		blendingWeightCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::ClearColorValue{}, ashes::DepthStencilClearValue{ 1.0f, 0 } }
-			, ashes::SubpassContents::eInline );
+			, {
+				ashes::makeClearValue( VkClearColorValue{} ),
+				ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } ),
+			}
+			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( blendingWeightCmd );
 		blendingWeightCmd.endRenderPass();
 		timer.endPass( blendingWeightCmd, passIndex );
@@ -1037,10 +1055,10 @@ namespace smaa
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, ashes::ShaderStageFlag::eVertex
+			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
 		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 	}
 

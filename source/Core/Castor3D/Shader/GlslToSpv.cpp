@@ -4,7 +4,7 @@ See LICENSE file in root folder.
 */
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Core/Device.hpp>
 
 #if C3D_UseGLSLANG
 
@@ -141,26 +141,26 @@ namespace castor3d
 			resources.minProgramTexelOffset = -8;
 		}
 
-		EShLanguage doGetLanguage( ashes::ShaderStageFlag stage )
+		EShLanguage doGetLanguage( VkShaderStageFlagBits stage )
 		{
 			switch ( stage )
 			{
-			case ashes::ShaderStageFlag::eVertex:
+			case VK_SHADER_STAGE_VERTEX_BIT:
 				return EShLangVertex;
 
-			case ashes::ShaderStageFlag::eTessellationControl:
+			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
 				return EShLangTessControl;
 
-			case ashes::ShaderStageFlag::eTessellationEvaluation:
+			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
 				return EShLangTessEvaluation;
 
-			case ashes::ShaderStageFlag::eGeometry:
+			case VK_SHADER_STAGE_GEOMETRY_BIT:
 				return EShLangGeometry;
 
-			case ashes::ShaderStageFlag::eFragment:
+			case VK_SHADER_STAGE_FRAGMENT_BIT:
 				return EShLangFragment;
 
-			case ashes::ShaderStageFlag::eCompute:
+			case VK_SHADER_STAGE_COMPUTE_BIT:
 				return EShLangCompute;
 
 			default:
@@ -180,13 +180,13 @@ namespace castor3d
 		glslang::FinalizeProcess();
 	}
 
-	UInt32Array compileGlslToSpv( ashes::Device const & device
-		, ashes::ShaderStageFlag stage
+	UInt32Array compileGlslToSpv( RenderDevice const & device
+		, VkShaderStageFlagBits stage
 		, std::string const & shader )
 	{
 		BlockLocale guard;
 		TBuiltInResource resources;
-		doInitResources( device, resources );
+		doInitResources( *device.device, resources );
 
 		// Enable SPIR-V and Vulkan rules when parsing GLSL
 		auto messages = ( EShMessages )( EShMsgSpvRules | EShMsgVulkanRules );
@@ -298,8 +298,8 @@ namespace castor3d
 	{
 	}
 
-	UInt32Array compileGlslToSpv( ashes::Device const & device
-		, ashes::ShaderStageFlag stage
+	UInt32Array compileGlslToSpv( RenderDevice const & device
+		, VkShaderStageFlagBits stage
 		, std::string const & shader )
 	{
 		CU_Exception( "glslang is unavailable." );

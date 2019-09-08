@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
@@ -114,7 +114,7 @@ namespace castor3d
 		 *\param[in]	binding	L'index d'attache du descripteur.
 		 *\param[in]	flags	Les indicateurs du programme.
 		 */
-		C3D_API static ashes::DescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
+		C3D_API static VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t binding
 			, ProgramFlags const & flags );
 		/**
 		 *\~english

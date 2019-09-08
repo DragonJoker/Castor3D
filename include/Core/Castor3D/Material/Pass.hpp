@@ -261,7 +261,7 @@ namespace castor3d
 			return m_id;
 		}
 
-		inline ashes::CompareOp getAlphaFunc()const
+		inline VkCompareOp getAlphaFunc()const
 		{
 			return m_alphaFunc;
 		}
@@ -376,7 +376,7 @@ namespace castor3d
 			m_id = value;
 		}
 
-		inline void setAlphaFunc( ashes::CompareOp value )
+		inline void setAlphaFunc( VkCompareOp value )
 		{
 			m_alphaFunc = value;
 			onChanged( *this );
@@ -423,12 +423,12 @@ namespace castor3d
 		BlendMode m_alphaBlendMode{ BlendMode::eNoBlend };
 		BlendMode m_colourBlendMode{ BlendMode::eNoBlend };
 		float m_alphaValue{ 0.0f };
-		ashes::CompareOp m_alphaFunc{ ashes::CompareOp::eAlways };
+		VkCompareOp m_alphaFunc{ VK_COMPARE_OP_ALWAYS };
 		bool m_texturesReduced{ false };
 		bool m_parallaxOcclusion{ false };
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
-		uint32_t m_heightTextureIndex{ ~( 0u ) };
+		uint32_t m_heightTextureIndex{ InvalidIndex };
 	};
 }
 

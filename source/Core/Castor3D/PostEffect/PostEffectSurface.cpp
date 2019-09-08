@@ -5,8 +5,7 @@
 #include "Castor3D/Texture/Sampler.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 using namespace castor;
 
@@ -16,50 +15,47 @@ namespace castor3d
 	{
 		TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
 			, Size const & size
-			, ashes::Format format
+			, VkFormat format
 			, uint32_t mipLevels
 			, bool isDepthStencil
 			, castor::String name )
 		{
-			TextureLayoutSPtr result;
-			ashes::ImageCreateInfo image{};
-			image.flags = 0u;
-			image.arrayLayers = 1u;
-			image.extent.width = size[0];
-			image.extent.height = size[1];
-			image.extent.depth = 1u;
-			image.format = format;
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.mipLevels = mipLevels;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.sharingMode = ashes::SharingMode::eExclusive;
-			image.tiling = ashes::ImageTiling::eOptimal;
-			image.usage = ashes::ImageUsageFlag::eTransferSrc;
-			
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				format,
+				{ size[0], size[1], 1u },
+				mipLevels,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+			};
+
 			if ( isDepthStencil )
 			{
-				image.usage |= ashes::ImageUsageFlag::eDepthStencilAttachment;
+				image->usage |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
 				if ( !ashes::isDepthOrStencilFormat( format ) )
 				{
-					image.usage |= ashes::ImageUsageFlag::eSampled;
+					image->usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
 				}
 			}
 			else
 			{
-				image.usage |= ashes::ImageUsageFlag::eColourAttachment
-					| ashes::ImageUsageFlag::eSampled;
+				image->usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT;
 			}
 
 			if ( mipLevels > 1 )
 			{
-				image.usage |= ashes::ImageUsageFlag::eTransferDst;
+				image->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 			}
 
 			return std::make_shared< TextureLayout >( renderSystem
 				, image
-				, ashes::MemoryPropertyFlag::eDeviceLocal
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( name ) );
 		}
 	}
@@ -73,7 +69,7 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, Size const & size
-		, ashes::Format format
+		, VkFormat format
 		, uint32_t mipLevels )
 	{
 		return initialise( renderPass
@@ -89,8 +85,8 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, Size const & size
-		, ashes::Format colourFormat
-		, ashes::Format depthFormat )
+		, VkFormat colourFormat
+		, VkFormat depthFormat )
 	{
 		return initialise( renderPass
 			, size
@@ -121,7 +117,7 @@ namespace castor3d
 	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, castor::Size const & size
 		, TextureLayoutSPtr colourTexture
-		, ashes::Format depthFormat )
+		, VkFormat depthFormat )
 	{
 		return initialise( renderPass
 			, size
@@ -136,7 +132,7 @@ namespace castor3d
 
 	bool PostEffectSurface::initialise( ashes::RenderPass const & renderPass
 		, castor::Size const & size
-		, ashes::Format colourFormat
+		, VkFormat colourFormat
 		, TextureLayoutSPtr depthTexture )
 	{
 		return initialise( renderPass
@@ -156,14 +152,14 @@ namespace castor3d
 		, TextureLayoutSPtr depthTexture )
 	{
 		this->size = size;
-		ashes::FrameBufferAttachmentArray attaches;
+		ashes::ImageViewCRefArray attaches;
 		uint32_t index = 0u;
 
 		if ( colourTexture )
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
-			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), colourTexture->getImage().getView() );
+			attaches.emplace_back( colourTexture->getImage().getView() );
 			++index;
 		}
 
@@ -172,36 +168,47 @@ namespace castor3d
 			this->depthTexture = depthTexture;
 			this->depthTexture->initialise();
 			auto format = this->depthTexture->getPixelFormat();
-
-			ashes::ImageViewCreateInfo view{};
-			view.format = format;
-			view.viewType = ashes::TextureViewType::e2D;
 			auto & texture = this->depthTexture->getTexture();
-			view.subresourceRange.levelCount = texture.getMipmapLevels();
-
-			if ( isDepthStencilFormat( format ) )
+			auto aspectMask = ashes::getAspectMask( format );
+			ashes::ImageViewCreateInfo view
 			{
-				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+				0u,
+				texture,
+				VK_IMAGE_VIEW_TYPE_2D,
+				format,
+				VkComponentMapping{},
+				{
+					aspectMask,
+					0u,
+					texture.getMipmapLevels(),
+					0u,
+					1u
+				},
+			};
+
+			if ( ashes::isDepthStencilFormat( format ) )
+			{
+				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
 				depthView = texture.createView( view );
-				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eStencil;
+				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
 				stencilView = texture.createView( view );
 			}
-			else if ( isDepthFormat( format ) )
+			else if ( ashes::isDepthFormat( format ) )
 			{
-				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
+				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
 				depthView = texture.createView( view );
 			}
-			else if ( isStencilFormat( format ) )
+			else if ( ashes::isStencilFormat( format ) )
 			{
-				view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eStencil;
+				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
 				stencilView = texture.createView( view );
 			}
 
-			attaches.emplace_back( *( renderPass.getAttachments().begin() + index ), depthTexture->getDefaultView() );
+			attaches.emplace_back( depthTexture->getDefaultView() );
 		}
 
-		frameBuffer = renderPass.createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
-		, std::move( attaches ) );
+		frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+			, std::move( attaches ) );
 		return true;
 	}
 

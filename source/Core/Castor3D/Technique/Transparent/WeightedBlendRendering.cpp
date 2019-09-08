@@ -5,12 +5,11 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 using namespace castor;
 
@@ -18,55 +17,53 @@ namespace castor3d
 {
 	namespace
 	{
-		ashes::TexturePtr doCreateTexture( Engine & engine
+		ashes::ImagePtr doCreateTexture( Engine & engine
 			, Size const & size
 			, WbTexture texture )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto & device = getCurrentDevice( renderSystem );
-
-			ashes::ImageCreateInfo image{};
-			image.arrayLayers = 1u;
-			image.extent.width = size.getWidth();
-			image.extent.height = size.getHeight();
-			image.extent.depth = 1u;
-			image.format = getTextureFormat( texture );
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.mipLevels = 1u;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
-
-			auto result = device.createTexture( image, ashes::MemoryPropertyFlag::eDeviceLocal );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eImage,
-					result.get(),
-					"AccumulationResult_" + getTextureName( texture )
-				} );
+			auto & device = getCurrentRenderDevice( renderSystem );
+			
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				getTextureFormat( texture ),
+				{ size.getWidth(), size.getHeight(), 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ),
+			};
+			auto result = makeImage( device
+				, image
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "AccumulationResult_" + getTextureName( texture ) );
 			return result;
 		}
 
-		ashes::TextureViewPtr doCreateDepthView( Engine & engine
-			, ashes::TextureView const & depthView )
+		ashes::ImageView doCreateDepthView( Engine & engine
+			, ashes::ImageView const & depthView )
 		{
-			auto & depth = depthView.getTexture();
-			ashes::ImageViewCreateInfo view{};
-			view.format = depth.getFormat();
-			view.viewType = ashes::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
-			view.subresourceRange.baseArrayLayer = 0u;
-			view.subresourceRange.layerCount = 1u;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = 1u;
-			return depth.createView( view );
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				depthView->image,
+				VK_IMAGE_VIEW_TYPE_2D,
+				depthView.image->getFormat(),
+				VkComponentMapping{},
+				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u },
+			};
+			return depthView.image->createView( view );
 		}
 	}
 
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
-		, ashes::TextureView const & depthView
-		, ashes::TextureView const & colourView
+		, ashes::ImageView const & depthView
+		, ashes::ImageView const & colourView
 		, TextureLayoutSPtr velocityTexture
 		, castor::Size const & size
 		, Scene const & scene
@@ -76,10 +73,10 @@ namespace castor3d
 		, m_size{ size }
 		, m_depthView{ doCreateDepthView( engine, depthView ) }
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
-		, m_accumulationView{ m_accumulation->createView( ashes::TextureViewType::e2D, m_accumulation->getFormat() ) }
+		, m_accumulationView{ m_accumulation->createView( VK_IMAGE_VIEW_TYPE_2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
-		, m_revealageView{ m_revealage->createView( ashes::TextureViewType::e2D, m_revealage->getFormat() ) }
-		, m_weightedBlendPassResult{ { *m_depthView, *m_accumulationView, *m_revealageView, velocityTexture->getDefaultView() } }
+		, m_revealageView{ m_revealage->createView( VK_IMAGE_VIEW_TYPE_2D, m_revealage->getFormat() ) }
+		, m_weightedBlendPassResult{ { m_depthView, m_accumulationView, m_revealageView, velocityTexture->getDefaultView() } }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, m_weightedBlendPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );

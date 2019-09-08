@@ -1,7 +1,9 @@
 #include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/Skeleton/BonedVertex.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -36,7 +38,7 @@ namespace castor3d
 	void BonesComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::VertexLayoutCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
@@ -45,34 +47,28 @@ namespace castor3d
 
 	bool BonesComponent::doInitialise()
 	{
-		auto & device = getCurrentDevice( *getOwner() );
+		auto & device = getCurrentRenderDevice( *getOwner() );
 
 		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
 		{
-			m_bonesBuffer = ashes::makeVertexBuffer< VertexBoneData >( device
+			m_bonesBuffer = makeVertexBuffer< VertexBoneData >( device
 				, uint32_t( m_bones.size() )
 				, 0u
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "BonesComponentBuffer" );
+			
+			m_bonesLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray
 				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_bonesBuffer->getBuffer(),
-					"BonesComponentVbo"
+					{ BindingPoint, sizeof( VertexBoneData ), VK_VERTEX_INPUT_RATE_VERTEX },
+				}
+				, ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ RenderPass::VertexInputs::BoneIds0Location, 0u, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id0 ) },
+					{ RenderPass::VertexInputs::BoneIds1Location, 0u, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id1 ) },
+					{ RenderPass::VertexInputs::Weights0Location, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight0 ) },
+					{ RenderPass::VertexInputs::Weights1Location, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight1 ) },
 				} );
-			m_bonesLayout = ashes::makeLayout< VertexBoneData >( BindingPoint
-				, ashes::VertexInputRate::eVertex );
-			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds0Location
-				, ashes::Format::eR32G32B32A32_SINT
-				, offsetof( VertexBoneData::Ids::ids, id0 ) );
-			m_bonesLayout->createAttribute( RenderPass::VertexInputs::BoneIds1Location
-				, ashes::Format::eR32G32B32A32_SINT
-				, offsetof( VertexBoneData::Ids::ids, id1 ) );
-			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights0Location
-				, ashes::Format::eR32G32B32A32_SFLOAT
-				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) );
-			m_bonesLayout->createAttribute( RenderPass::VertexInputs::Weights1Location
-				, ashes::Format::eR32G32B32A32_SFLOAT
-				, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) );
 		}
 
 		return m_bonesBuffer != nullptr;
@@ -95,7 +91,7 @@ namespace castor3d
 
 		if ( count )
 		{
-			if ( auto * buffer = m_bonesBuffer->lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_bonesBuffer->lock( 0, count, 0u ) )
 			{
 				std::copy( m_bones.begin(), m_bones.end(), buffer );
 				m_bonesBuffer->flush( 0u, count );

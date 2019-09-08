@@ -10,8 +10,8 @@ See LICENSE file in root folder
 #include "Castor3D/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 
@@ -142,7 +142,7 @@ namespace castor3d
 				, TextureUnit const & source
 				, TextureUnit const & destination
 				, bool isVertic
-				, ashes::ShaderStageStateArray const & shaderStages );
+				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Blur( Blur && rhs );
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
@@ -171,7 +171,7 @@ namespace castor3d
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination
-				, ashes::ShaderStageStateArray const & shaderStages );
+				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
 			Combine( Combine && rhs );
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
@@ -198,15 +198,15 @@ namespace castor3d
 		TextureUnit m_result;
 		ShaderModule m_blurHorizVertexShader;
 		ShaderModule m_blurHorizPixelShader;
-		ashes::ShaderStageStateArray m_blurHorizProgram;
+		ashes::PipelineShaderStageCreateInfoArray m_blurHorizProgram;
 		Blur m_blurX[3];
 		ShaderModule m_blurVerticVertexShader;
 		ShaderModule m_blurVerticPixelShader;
-		ashes::ShaderStageStateArray m_blurVerticProgram;
+		ashes::PipelineShaderStageCreateInfoArray m_blurVerticProgram;
 		Blur m_blurY[3];
 		ShaderModule m_combineVertexShader;
 		ShaderModule m_combinePixelShader;
-		ashes::ShaderStageStateArray m_combineProgram;
+		ashes::PipelineShaderStageCreateInfoArray m_combineProgram;
 		Combine m_combine;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;

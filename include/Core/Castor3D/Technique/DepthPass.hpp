@@ -85,11 +85,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */

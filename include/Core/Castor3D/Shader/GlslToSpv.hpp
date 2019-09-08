@@ -34,7 +34,7 @@ namespace castor3d
 	*\brief
 	*	Transpiles a GLSL shader to SPIR-V.
 	*/
-	C3D_API UInt32Array compileGlslToSpv( ashes::Device const & device
-		, ashes::ShaderStageFlag stage
+	C3D_API UInt32Array compileGlslToSpv( RenderDevice const & device
+		, VkShaderStageFlagBits stage
 		, std::string const & shader );
 }

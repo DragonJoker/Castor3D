@@ -9,6 +9,7 @@
 #include "Castor3D/Mesh/Mesh.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -24,7 +25,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Ashes/Command/CommandBufferInheritanceInfo.hpp>
+#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 
 using namespace castor;
 
@@ -140,7 +141,7 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, Pass & pass
 			, NodesType & nodes
-			, ashes::PrimitiveTopology topology
+			, VkPrimitiveTopology topology
 			, CulledType const & culled
 			, CreatorFunc creator )
 		{
@@ -322,7 +323,7 @@ namespace castor3d
 				, flags
 				, pass
 				, nodes
-				, ashes::PrimitiveTopology::eTriangleStrip
+				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 				, culled
 				, [&renderPass, &pass, &billboard]( RenderPipeline & pipeline )
 				{
@@ -592,7 +593,7 @@ namespace castor3d
 					, pass->getHeightTextureIndex()
 					, programFlags
 					, sceneFlags
-					, ashes::PrimitiveTopology::eTriangleStrip
+					, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 					, billboard.getGeometryBuffers().layouts );
 
 				if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != opaque
@@ -641,7 +642,7 @@ namespace castor3d
 
 				for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
 				{
-					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().vertexBindingDescriptions[0].binding
 						, geometryBuffers.vbo[i]
 						, geometryBuffers.vboOffsets[i] );
 				}
@@ -650,7 +651,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, ashes::IndexType::eUInt32 );
+						, VK_INDEX_TYPE_UINT32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -685,7 +686,7 @@ namespace castor3d
 
 				for ( uint32_t i = 0; i < geometryBuffers.vbo.size(); ++i )
 				{
-					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().getBindingSlot()
+					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[i].get().vertexBindingDescriptions[0].binding
 						, geometryBuffers.vbo[i]
 						, geometryBuffers.vboOffsets[i] );
 				}
@@ -694,7 +695,7 @@ namespace castor3d
 				{
 					commandBuffer.bindIndexBuffer( *geometryBuffers.ibo
 						, geometryBuffers.iboOffset
-						, ashes::IndexType::eUInt32 );
+						, VK_INDEX_TYPE_UINT32 );
 					commandBuffer.drawIndexed( geometryBuffers.idxCount
 						, instanceCount );
 				}
@@ -821,9 +822,11 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
+		auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
+
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = getOwner()->getEngine()->getRenderSystem()->getMainDevice()->getGraphicsCommandPool().createCommandBuffer( false );
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
 		}
 
 		if ( m_allChanged )
@@ -849,16 +852,13 @@ namespace castor3d
 	{
 		auto & culledNodes = getCulledRenderNodes();
 
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eRenderPassContinue
-			, ashes::CommandBufferInheritanceInfo
-			{
-				&getOwner()->getRenderPass(),
-				0u,
-				nullptr,
-				false,
-				0u,
-				0u
-			} );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkType< VkCommandBufferInheritanceInfo >( VkRenderPass( getOwner()->getRenderPass() )
+				, 0u
+				, VkFramebuffer( VK_NULL_HANDLE )
+				, VkBool32( VK_FALSE )
+				, 0u
+				, 0u ) );
 
 		doTraverseNodes( culledNodes.instancedStaticNodes.frontCulled
 			, [this]( RenderPipeline & pipeline

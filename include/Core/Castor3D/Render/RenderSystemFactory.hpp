@@ -23,8 +23,7 @@ namespace castor3d
 		, castor::String
 		, RenderSystemUPtr
 		, std::function< RenderSystemUPtr( Engine &
-			, castor::String const &
-			, bool ) > >;
+			, AshPluginDescription ) > >;
 }
 
 #endif

@@ -13,13 +13,13 @@ See LICENSE file in root folder
 #include "Castor3D/Texture/TextureLayout.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -322,13 +322,13 @@ namespace castor3d
 			return *m_texture;
 		}
 
-		inline ashes::Texture const & getImage()const
+		inline ashes::Image const & getImage()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
-		inline ashes::TextureView const & getView()const
+		inline ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getDefaultView();
@@ -351,7 +351,7 @@ namespace castor3d
 			return *m_pipelineLayout;
 		}
 
-		inline ashes::Pipeline const & getPipeline()const
+		inline ashes::GraphicsPipeline const & getPipeline()const
 		{
 			CU_Require( m_pipeline );
 			return *m_pipeline;
@@ -413,7 +413,7 @@ namespace castor3d
 		*\brief
 		*	Le programme shader utilisé pour dessiner le fond.
 		*/
-		virtual ashes::ShaderStageStateArray doInitialiseShader();
+		virtual ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
 		/**
 		*\~english
 		*\return
@@ -468,7 +468,7 @@ namespace castor3d
 
 	private:
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ashes::ShaderStageStateArray program
+		bool doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray program
 			, ashes::RenderPass const & renderPass
 			, HdrConfigUbo const & hdrConfigUbo );
 
@@ -485,7 +485,7 @@ namespace castor3d
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
 		ashes::BufferPtr< uint16_t > m_indexBuffer;
 		RenderPassTimerSPtr m_timer;

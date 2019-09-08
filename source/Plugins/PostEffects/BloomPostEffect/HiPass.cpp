@@ -14,15 +14,12 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/SubpassDependency.hpp>
-#include <Ashes/RenderPass/SubpassDescription.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/RenderPass/SubpassDescription.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -89,68 +86,85 @@ namespace Bloom
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
-			, ashes::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
+			, VkFormat format )
 		{
-			ashes::RenderPassCreateInfo renderPass;
-			renderPass.flags = 0u;
-
-			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].format = format;
-			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].flags = 0u;
-			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-			renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( renderPass );
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				}
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{},
+					std::nullopt,
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "LineariseDepthRenderPass" );
+			return result;
 		}
 	}
 
 	//*********************************************************************************************
 
-	HiPass::HiPass( castor3d::RenderSystem & renderSystem
-		, ashes::Format format
-		, ashes::TextureView const & sceneView
-		, ashes::Extent2D size
+	HiPass::HiPass( castor3d::RenderDevice const & device
+		, VkFormat format
+		, ashes::ImageView const & sceneView
+		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ renderSystem, true }
-		, m_device{ getCurrentDevice( renderSystem ) }
+		: castor3d::RenderQuad{ device, true }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "BloomHiPass", getVertexProgram( renderSystem ) }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "BloomHiPass", getPixelProgram( renderSystem ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram( device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram( device.renderSystem ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_surface{ *renderSystem.getEngine(), cuT( "BloomHiPass" ) }
+		, m_surface{ *device.renderSystem.getEngine(), cuT( "BloomHiPass" ) }
 	{
-		ashes::ShaderStageStateArray shaderStages;
-		shaderStages.push_back( { m_device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		shaderStages.push_back( { m_device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		shaderStages[0].module->loadShader( renderSystem.compileShader( m_vertexShader ) );
-		shaderStages[1].module->loadShader( renderSystem.compileShader( m_pixelShader ) );
+		ashes::PipelineShaderStageCreateInfoArray shaderStages;
+		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
 #if !Bloom_DebugHiPass
 		size.width >>= 1;
@@ -159,7 +173,7 @@ namespace Bloom
 		blurPassesCount = 1u;
 #endif
 
-		ashes::DescriptorSetLayoutBindingArray bindings;
+		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		this->createPipeline( size
 			, {}
 			, shaderStages
@@ -177,8 +191,8 @@ namespace Bloom
 	{
 		castor3d::CommandsSemaphore commands
 		{
-			m_device.getGraphicsCommandPool().createCommandBuffer(),
-			m_device.createSemaphore()
+			m_device.graphicsCommandPool->createCommandBuffer(),
+			m_device->createSemaphore()
 		};
 		auto & cmd = *commands.commandBuffer;
 
@@ -186,14 +200,14 @@ namespace Bloom
 		timer.beginPass( cmd, 0u );
 
 		// Put target image in shader input layout.
-		cmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_sceneView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_sceneView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 		cmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::ClearColorValue{} }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( cmd );
 		cmd.endRenderPass();
 #if !Bloom_DebugHiPass

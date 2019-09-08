@@ -45,8 +45,8 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & colourView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & colourView
 			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
@@ -100,11 +100,11 @@ namespace castor3d
 		Engine & m_engine;
 		TransparentPass & m_transparentPass;
 		castor::Size m_size;
-		ashes::TextureViewPtr m_depthView;
-		ashes::TexturePtr m_accumulation;
-		ashes::TextureViewPtr m_accumulationView;
-		ashes::TexturePtr m_revealage;
-		ashes::TextureViewPtr m_revealageView;
+		ashes::ImageView m_depthView;
+		ashes::ImagePtr m_accumulation;
+		ashes::ImageView m_accumulationView;
+		ashes::ImagePtr m_revealage;
+		ashes::ImageView m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
 		FinalCombinePass m_finalCombinePass;
 	};

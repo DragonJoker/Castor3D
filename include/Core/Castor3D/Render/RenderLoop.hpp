@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Castor3DPrerequisites.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 
-#include <Ashes/Core/WindowHandle.hpp>
+#include <ashespp/Core/WindowHandle.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <chrono>
@@ -70,7 +70,7 @@ namespace castor3d
 		 *\param[in]	handle	Le handle de la fenêtre native.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API void createDevice( ashes::WindowHandle && handle
+		C3D_API void createDevice( ashes::WindowHandle handle
 			, RenderWindow & window );
 		/**
 		 *\~english
@@ -195,7 +195,7 @@ namespace castor3d
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 *\return		Le contexte créé, ou l'existant.
 		 */
-		C3D_API ashes::DevicePtr doCreateDevice( ashes::WindowHandle && handle
+		C3D_API RenderDeviceSPtr doCreateDevice( ashes::WindowHandle handle
 			, RenderWindow & window );
 		/**
 		 *\~english
@@ -214,7 +214,7 @@ namespace castor3d
 		 *\param[in]	handle	Le handle de la fenêtre native.
 		 *\param[in]	window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
-		C3D_API virtual ashes::DevicePtr doCreateMainDevice( ashes::WindowHandle && handle
+		C3D_API virtual RenderDeviceSPtr doCreateMainDevice( ashes::WindowHandle handle
 			, RenderWindow & window ) = 0;
 
 	private:

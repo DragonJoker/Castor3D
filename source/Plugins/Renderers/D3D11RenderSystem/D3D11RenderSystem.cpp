@@ -2,26 +2,21 @@
 
 #include <Castor3D/Engine.hpp>
 
-#include <Ashes/Core/Renderer.hpp>
-
 #include <CompilerHlsl/compileHlsl.hpp>
 //#include <CompilerSpirV/compileSpirV.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
-
-#include <D3D11Renderer/Core/D3D11CreateRenderer.hpp>
 
 using namespace castor;
 
 namespace D3D11Render
 {
 	String RenderSystem::Name = cuT( "Direct3D 11 Renderer" );
-	String RenderSystem::Type = cuT( "direct3d11" );
+	String RenderSystem::Type = cuT( "d3d11" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, false, true, true, true )
+		, AshPluginDescription desc )
+		: castor3d::RenderSystem( engine, std::move( desc ), true, true, true )
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 		{
@@ -78,17 +73,8 @@ namespace D3D11Render
 					Logger::logErrorNoNL( msg );
 				}
 			} );
-		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-			{
-				string::stringCast< char >( appName ),
-				"Castor3D",
-				enableValidation,
-			} ) );
+		getEngine()->getRenderersList().selectPlugin( m_desc.name );
 		Logger::logInfo( cuT( "Using " ) + Name );
-		auto & gpu = m_renderer->getPhysicalDevice( 0u );
-		m_memoryProperties = gpu.getMemoryProperties();
-		m_properties = gpu.getProperties();
-		m_features = gpu.getFeatures();
 	}
 
 	RenderSystem::~RenderSystem()
@@ -96,15 +82,13 @@ namespace D3D11Render
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
+		, AshPluginDescription desc )
 	{
 		return std::make_unique< RenderSystem >( engine
-			, appName
-			, enableValidation );
+			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		castor3d::UInt32Array result;
 		std::string hlsl;

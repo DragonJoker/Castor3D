@@ -270,10 +270,10 @@ namespace castor3d
 			geometry,
 			submesh,
 			pass,
-			m_modelUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
-			m_modelMatrixUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
-			m_pickingUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
-			m_texturesUboPool.getBuffer( ashes::MemoryPropertyFlag::eHostVisible ),
+			m_modelUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			m_modelMatrixUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			m_pickingUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
+			m_texturesUboPool.getBuffer( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ),
 		};
 	}
 

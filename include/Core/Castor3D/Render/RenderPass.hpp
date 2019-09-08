@@ -18,8 +18,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <unordered_map>
 
@@ -233,15 +233,15 @@ namespace castor3d
 		 */
 		C3D_API PipelineFlags prepareBackPipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, ashes::CompareOp alphaFunc
+			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, uint32_t texturesCount
 			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ashes::PrimitiveTopology topology
-			, ashes::VertexLayoutCRefArray const & layouts );
+			, VkPrimitiveTopology topology
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
@@ -272,15 +272,15 @@ namespace castor3d
 		 */
 		C3D_API PipelineFlags prepareFrontPipeline( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, ashes::CompareOp alphaFunc
+			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
 			, TextureFlags const & textures
 			, uint32_t texturesCount
 			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
-			, ashes::PrimitiveTopology topology
-			, ashes::VertexLayoutCRefArray const & layouts );
+			, VkPrimitiveTopology topology
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pipeline matching the given flags, for front face culling.
@@ -580,7 +580,7 @@ namespace castor3d
 		 *\param[in]	attachesCount	Le nombre d'attaches de mélange voulues.
 		 *\return		
 		 */
-		C3D_API static ashes::ColourBlendState createBlendState( BlendMode colourBlendMode
+		C3D_API static ashes::PipelineColorBlendStateCreateInfo createBlendState( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, uint32_t attachesCount );
 		/**
@@ -960,7 +960,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareFrontPipeline( ShaderProgramSPtr program
-			, ashes::VertexLayoutCRefArray const & layouts
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
@@ -975,7 +975,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doPrepareBackPipeline( ShaderProgramSPtr program
-			, ashes::VertexLayoutCRefArray const & layouts
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts
 			, PipelineFlags const & flags );
 		/**
 		 *\~english
@@ -985,7 +985,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les UBO.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
+		C3D_API virtual ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Creates the common textures descriptor layout bindings.
@@ -994,7 +994,7 @@ namespace castor3d
 		 *\brief		Crée les attaches de layout de descripteurs communs pour les textures.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates the depth stencil state.
@@ -1003,7 +1003,7 @@ namespace castor3d
 		 *\brief		Crée l'attache de profondeur et stencil.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates the colour blend state.
@@ -1012,7 +1012,7 @@ namespace castor3d
 		 *\brief		Crée l'attache de mélange des couleurs.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.

@@ -47,11 +47,11 @@ namespace castor3d
 		 *\param[in]	normals					Le tampon de normales.
 		 */
 		RawSsaoPass( Engine & engine
-			, ashes::Extent2D const & size
+			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, TextureUnit const & linearisedDepthBuffer
-			, ashes::TextureView const & normals );
+			, ashes::ImageView const & normals );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -89,18 +89,18 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		static ashes::Format constexpr ResultFormat = ashes::Format::eR32G32B32A32_SFLOAT;
+		static VkFormat constexpr ResultFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
 
 	private:
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
-		ashes::TextureView const & m_normals;
-		ashes::Extent2D m_size;
+		ashes::ImageView const & m_normals;
+		VkExtent2D m_size;
 		TextureUnit m_result;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
-		ashes::ShaderStageStateArray m_program;
+		ashes::PipelineShaderStageCreateInfoArray m_program;
 		ashes::SamplerPtr m_sampler;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
@@ -109,8 +109,8 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;

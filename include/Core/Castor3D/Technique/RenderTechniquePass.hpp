@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -210,17 +210,17 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateDepthStencilState
 		 */
-		ashes::DepthStencilState doCreateDepthStencilState( PipelineFlags const & flags )const override;
+		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
-		ashes::ColourBlendState doCreateBlendState( PipelineFlags const & flags )const override;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	protected:
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 
 	protected:
 		Scene const & m_scene;

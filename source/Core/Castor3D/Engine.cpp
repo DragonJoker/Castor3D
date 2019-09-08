@@ -36,6 +36,7 @@ namespace castor3d
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
 	Engine::Engine( castor::String const & appName
+		, Version const & appVersion
 		, bool enableValidation )
 		: Unique< Engine >( this )
 		, m_renderSystem( nullptr )
@@ -44,6 +45,7 @@ namespace castor3d
 		, m_threaded( false )
 		, m_materialType{ MaterialType::ePhong }
 		, m_appName{ appName }
+		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
 		, m_imageCache{ m_imageLoader }
 	{
@@ -254,18 +256,18 @@ namespace castor3d
 		if ( m_renderSystem )
 		{
 			m_defaultSampler = m_samplerCache->add( cuT( "Default" ) );
-			m_defaultSampler->setMinFilter( ashes::Filter::eLinear );
-			m_defaultSampler->setMagFilter( ashes::Filter::eLinear );
-			m_defaultSampler->setWrapS( ashes::WrapMode::eRepeat );
-			m_defaultSampler->setWrapT( ashes::WrapMode::eRepeat );
-			m_defaultSampler->setWrapR( ashes::WrapMode::eRepeat );
+			m_defaultSampler->setMinFilter( VK_FILTER_LINEAR );
+			m_defaultSampler->setMagFilter( VK_FILTER_LINEAR );
+			m_defaultSampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_defaultSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_defaultSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
 
 			m_lightsSampler = m_samplerCache->add( cuT( "LightsSampler" ) );
-			m_lightsSampler->setMinFilter( ashes::Filter::eNearest );
-			m_lightsSampler->setMagFilter( ashes::Filter::eNearest );
-			m_lightsSampler->setWrapS( ashes::WrapMode::eClampToEdge );
-			m_lightsSampler->setWrapT( ashes::WrapMode::eClampToEdge );
-			m_lightsSampler->setWrapR( ashes::WrapMode::eClampToEdge );
+			m_lightsSampler->setMinFilter( VK_FILTER_NEAREST );
+			m_lightsSampler->setMagFilter( VK_FILTER_NEAREST );
+			m_lightsSampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			m_lightsSampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			m_lightsSampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 
 			doLoadCoreData();
 		}
@@ -349,16 +351,21 @@ namespace castor3d
 
 	bool Engine::loadRenderer( String const & type )
 	{
-		m_renderSystem = m_renderSystemFactory.create( type
-			, *this
-			, m_appName
-			, m_enableValidation );
+		auto it = m_rendererList.find( type );
+
+		if ( it != m_rendererList.end() )
+		{
+			m_renderSystem = m_renderSystemFactory.create( type
+				, *this
+				, *it );
+		}
+
 		return m_renderSystem != nullptr;
 	}
 
 	void Engine::sendEvent( FrameEventUPtr && event )
 	{
-		if ( m_renderSystem && m_renderSystem->hasCurrentDevice() )
+		if ( m_renderSystem && m_renderSystem->getCurrentRenderDevice() )
 		{
 			event->apply();
 		}

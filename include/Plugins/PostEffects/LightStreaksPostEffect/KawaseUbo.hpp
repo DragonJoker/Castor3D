@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace light_streaks
 {
@@ -27,7 +27,7 @@ namespace light_streaks
 		void initialise();
 		void cleanup();
 		void update( uint32_t index
-			, ashes::Extent2D const & size
+			, VkExtent2D const & size
 			, castor::Point2f const & direction
 			, uint32_t pass );
 		void upload();

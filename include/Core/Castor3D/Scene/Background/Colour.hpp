@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Background/Background.hpp"
 
-#include <Ashes/Buffer/Buffer.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
 namespace castor3d
@@ -77,13 +77,13 @@ namespace castor3d
 			return *m_texture;
 		}
 
-		inline ashes::Texture const & getImage()const
+		inline ashes::Image const & getImage()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getTexture();
 		}
 
-		inline ashes::TextureView const & getView()const
+		inline ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
 			return m_texture->getDefaultView();

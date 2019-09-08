@@ -20,7 +20,7 @@
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 #include <iomanip>
 

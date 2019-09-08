@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	sampler	Le sampler utilisé pour la texture d'environnement.
 		 */
 		C3D_API explicit IblTextures( Scene & scene
-			, ashes::Texture const & source
+			, ashes::Image const & source
 			, SamplerSPtr sampler );
 		/**
 		 *\~english
@@ -71,19 +71,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::TextureView const & getIrradianceTexture()const
+		inline ashes::ImageView const & getIrradianceTexture()const
 		{
 			return m_radianceComputer.getResult();
 		}
 
-		inline ashes::TextureView const & getPrefilteredEnvironmentTexture()const
+		inline ashes::ImageView const & getPrefilteredEnvironmentTexture()const
 		{
 			return m_environmentPrefilter.getResult();
 		}
 
-		inline ashes::TextureView const & getPrefilteredBrdfTexture()const
+		inline ashes::ImageView const & getPrefilteredBrdfTexture()const
 		{
-			return *m_prefilteredBrdfView;
+			return m_prefilteredBrdfView;
 		}
 
 		inline ashes::Sampler const & getIrradianceSampler()const
@@ -103,8 +103,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::TexturePtr m_prefilteredBrdf;
-		ashes::TextureViewPtr m_prefilteredBrdfView;
+		ashes::ImagePtr m_prefilteredBrdf;
+		ashes::ImageView m_prefilteredBrdfView;
 		SamplerSPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;

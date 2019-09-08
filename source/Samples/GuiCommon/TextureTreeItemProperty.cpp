@@ -417,17 +417,23 @@ namespace GuiCommon
 			{
 				// Absolute path
 				unit->setAutoMipmaps( true );
-
-				ashes::ImageCreateInfo image{};
-				image.imageType = ashes::TextureType::e2D;
-				image.extent.depth = 1u;
-				image.arrayLayers = 1u;
-				image.mipLevels = 1u;
-				image.usage = ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst;
-
+				
+				ashes::ImageCreateInfo image
+				{
+					0u,
+					VK_IMAGE_TYPE_2D,
+					VK_FORMAT_R32_SFLOAT,
+					{ 1u, 1u, 1u },
+					1u,
+					1u,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_IMAGE_TILING_OPTIMAL,
+					( VK_IMAGE_USAGE_SAMPLED_BIT
+						| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
+				};
 				auto texture = std::make_shared< TextureLayout >( *unit->getEngine()->getRenderSystem()
 					, image
-					, ashes::MemoryPropertyFlag::eHostVisible
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, path );
 				texture->getImage().initialiseSource( Path{}, path );
 				unit->setTexture( texture );

@@ -24,7 +24,7 @@ namespace GrayScale
 			: public castor3d::RenderQuad
 		{
 		public:
-			Quad( castor3d::RenderSystem & renderSystem
+			Quad( castor3d::RenderDevice const & device
 				, ashes::UniformBuffer< castor::Point3f > const & configUbo );
 
 		private:

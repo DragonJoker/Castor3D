@@ -1,18 +1,32 @@
 #include "Castor3D/Miscellaneous/Version.hpp"
 
+#include <ashes/ashes.hpp>
+
 using namespace castor;
 
 namespace castor3d
 {
-	Version::Version( int p_iMajor, int p_iMinor, int p_iBuild )
-		: m_major( p_iMajor )
-		, m_minor( p_iMinor )
-		, m_build( p_iBuild )
+	Version::Version( int major, int minor, int build )
+		: m_major( major )
+		, m_minor( minor )
+		, m_build( build )
+	{
+	}
+	
+	Version::Version( uint32_t vk )
+		: m_major( ashes::getMajor( vk ) )
+		, m_minor( ashes::getMinor( vk ) )
+		, m_build( ashes::getPatch( vk ) )
 	{
 	}
 
 	Version::~Version()
 	{
+	}
+
+	uint32_t Version::getVkVersion()const
+	{
+		return ashes::makeVersion( m_major, m_minor, m_build );
 	}
 
 	bool operator==( Version const & p_a, Version const & p_b )

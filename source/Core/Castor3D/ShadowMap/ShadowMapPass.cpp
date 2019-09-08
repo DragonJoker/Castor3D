@@ -48,17 +48,17 @@ namespace castor3d
 		}
 	}
 
-	ashes::DescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinTextureIndex;
-		ashes::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
 		{
-			textureBindings.emplace_back( index
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment
-				, flags.texturesCount );
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, flags.texturesCount ) );
 			index += flags.texturesCount;
 		}
 

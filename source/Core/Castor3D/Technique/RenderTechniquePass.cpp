@@ -146,7 +146,7 @@ namespace castor3d
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
-		m_finished = getCurrentDevice( *this ).createSemaphore();
+		m_finished = getCurrentRenderDevice( *this )->createSemaphore();
 		return true;
 	}
 
@@ -181,27 +181,27 @@ namespace castor3d
 		m_sceneUbo.update( m_scene, m_camera );
 	}
 
-	ashes::DepthStencilState RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::DepthStencilState{ 0u, true, m_opaque };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, m_opaque };
 	}
 
-	ashes::ColourBlendState RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	ashes::DescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinTextureIndex;
-		ashes::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
 		{
-			textureBindings.emplace_back( index
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment
-				, flags.texturesCount );
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, flags.texturesCount ) );
 			index += flags.texturesCount;
 		}
 

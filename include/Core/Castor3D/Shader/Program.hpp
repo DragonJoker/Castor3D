@@ -5,12 +5,14 @@ See LICENSE file in root folder
 #define ___C3D_ShaderProgram_H___
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <Ashes/Pipeline/ShaderStageState.hpp>
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
 namespace castor3d
 {
@@ -112,7 +114,7 @@ namespace castor3d
 		 *\param[in]	target		Le module shader concerné.
 		 *\param[in]	pathFile	Le nom du fichier.
 		 */
-		C3D_API void setFile( ashes::ShaderStageFlag target, castor::Path const & pathFile );
+		C3D_API void setFile( VkShaderStageFlagBits target, castor::Path const & pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader file.
@@ -123,7 +125,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		Le nom du fichier.
 		 */
-		C3D_API castor::Path getFile( ashes::ShaderStageFlag target )const;
+		C3D_API castor::Path getFile( VkShaderStageFlagBits target )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file.
@@ -134,7 +136,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		\p true si le shader a un fichier source.
 		 */
-		C3D_API bool hasFile( ashes::ShaderStageFlag target )const;
+		C3D_API bool hasFile( VkShaderStageFlagBits target )const;
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -145,7 +147,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	source	Le code de la source.
 		 */
-		C3D_API void setSource( ashes::ShaderStageFlag target, castor::String const & source );
+		C3D_API void setSource( VkShaderStageFlagBits target, castor::String const & source );
 		/**
 		 *\~english
 		 *\brief		Sets the shader source.
@@ -156,7 +158,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\param[in]	shader	Le shader de la source.
 		 */
-		C3D_API void setSource( ashes::ShaderStageFlag target, ShaderPtr shader );
+		C3D_API void setSource( VkShaderStageFlagBits target, ShaderPtr shader );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source.
@@ -167,7 +169,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		Le code de la source.
 		 */
-		C3D_API ShaderModule const & getSource( ashes::ShaderStageFlag target )const;
+		C3D_API ShaderModule const & getSource( VkShaderStageFlagBits target )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code.
@@ -178,7 +180,7 @@ namespace castor3d
 		 *\param[in]	target	Le shader object concerné.
 		 *\return		\p true si le shader a un code source.
 		 */
-		C3D_API bool hasSource( ashes::ShaderStageFlag target )const;
+		C3D_API bool hasSource( VkShaderStageFlagBits target )const;
 		/**
 		*\~english
 		*name
@@ -188,7 +190,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::ShaderStageStateArray const & getStates()const
+		inline ashes::PipelineShaderStageCreateInfoArray const & getStates()const
 		{
 			return m_states;
 		}
@@ -323,10 +325,47 @@ namespace castor3d
 		//@}
 
 	protected:
-		std::map< ashes::ShaderStageFlag, castor::Path > m_files;
-		std::map< ashes::ShaderStageFlag, ShaderModule > m_modules;
-		ashes::ShaderStageStateArray m_states;
+		std::map< VkShaderStageFlagBits, castor::Path > m_files;
+		std::map< VkShaderStageFlagBits, ShaderModule > m_modules;
+		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
+
+	C3D_API UInt32Array compileShader( RenderDevice const & device
+		, ShaderModule const & module );
+	C3D_API UInt32Array compileShader( RenderSystem const & renderSystem
+		, ShaderModule const & module );
+
+	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
+		, VkShaderStageFlagBits stage
+		, UInt32Array code
+		, std::string const & name
+		, std::string mainFuncName = "main"
+		, ashes::Optional< ashes::SpecializationInfo > specialization = std::nullopt )
+	{
+		auto module = device->createShaderModule( code );
+		setDebugObjectName( device, *module, name + "ShdMod" + "_" + ashes::getName( stage ) );
+		return ashes::PipelineShaderStageCreateInfo
+		{
+			0u,
+			stage,
+			std::move( module ),
+			std::move( mainFuncName ),
+			std::move( specialization ),
+		};
+	}
+
+	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
+		, ShaderModule const & shaderModule
+		, std::string mainFuncName = "main"
+		, ashes::Optional< ashes::SpecializationInfo > specialization = std::nullopt )
+	{
+		return makeShaderState( device
+			, shaderModule.stage
+			, compileShader( device, shaderModule )
+			, shaderModule.name
+			, std::move( mainFuncName )
+			, std::move( specialization ) );
+	}
 }
 
 #endif

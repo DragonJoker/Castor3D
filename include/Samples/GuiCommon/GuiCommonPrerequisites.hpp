@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___GUICOMMON_PREREQUISITES_H___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
-#include <Ashes/Core/WindowHandle.hpp>
+#include <ashespp/Core/WindowHandle.hpp>
 #include <wx/wx.h>
 
 namespace GuiCommon
@@ -282,7 +282,7 @@ namespace GuiCommon
 	 */
 	wxSize make_wxSize( castor::Size const & p_value );
 
-	ast::ShaderStage convert( ashes::ShaderStageFlag stage );
+	ast::ShaderStage convert( VkShaderStageFlagBits stage );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

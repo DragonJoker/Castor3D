@@ -152,10 +152,10 @@ namespace castor3d
 		/**@{*/
 		C3D_API ashes::Sampler const & getLinearSampler()const;
 		C3D_API ashes::Sampler const & getVarianceSampler()const;
-		C3D_API ashes::TextureView const & getLinearView()const;
-		C3D_API ashes::TextureView const & getVarianceView()const;
-		C3D_API virtual ashes::TextureView const & getLinearView( uint32_t index )const;
-		C3D_API virtual ashes::TextureView const & getVarianceView( uint32_t index )const;
+		C3D_API ashes::ImageView const & getLinearView()const;
+		C3D_API ashes::ImageView const & getVarianceView()const;
+		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index )const;
+		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index )const;
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;

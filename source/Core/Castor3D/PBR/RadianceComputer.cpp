@@ -1,16 +1,17 @@
 #include "Castor3D/PBR/RadianceComputer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -22,26 +23,26 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::TexturePtr doCreateRadianceTexture( RenderSystem const & renderSystem
+		ashes::ImagePtr doCreateRadianceTexture( RenderDevice const & device
 			, Size const & size )
 		{
-			auto & device = getCurrentDevice( renderSystem );
-			ashes::ImageCreateInfo image{};
-			image.flags = ashes::ImageCreateFlag::eCubeCompatible;
-			image.arrayLayers = 6u;
-			image.extent.width = size.getWidth();
-			image.extent.height = size.getHeight();
-			image.extent.depth = 1u;
-			image.format = ashes::Format::eR32G32B32A32_SFLOAT;
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.mipLevels = 1u;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.sharingMode = ashes::SharingMode::eExclusive;
-			image.tiling = ashes::ImageTiling::eOptimal;
-			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
-			return device.createTexture( image
-				, ashes::MemoryPropertyFlag::eDeviceLocal );
+			ashes::ImageCreateInfo image
+			{
+				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+				VK_IMAGE_TYPE_2D,
+				VK_FORMAT_R32G32B32A32_SFLOAT,
+				{ size[0], size[1], 1u },
+				1u,
+				6u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
+			auto result = makeImage( device
+				, std::move( image )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "RadianceComputerResult" );
+			return result;
 		}
 
 		SamplerSPtr doCreateSampler( Engine & engine )
@@ -56,11 +57,11 @@ namespace castor3d
 			else
 			{
 				result = engine.getSamplerCache().create( name );
-				result->setMinFilter( ashes::Filter::eLinear );
-				result->setMagFilter( ashes::Filter::eLinear );
-				result->setWrapS( ashes::WrapMode::eClampToEdge );
-				result->setWrapT( ashes::WrapMode::eClampToEdge );
-				result->setWrapR( ashes::WrapMode::eClampToEdge );
+				result->setMinFilter( VK_FILTER_LINEAR );
+				result->setMagFilter( VK_FILTER_LINEAR );
+				result->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				result->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				engine.getSamplerCache().add( name, result );
 			}
 
@@ -68,9 +69,9 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::TextureViewPtr doCreateSrcView( ashes::Texture const & texture )
+		ashes::ImageView doCreateSrcView( ashes::Image const & texture )
 		{
-			return texture.createView( ashes::TextureViewType::eCube
+			return texture.createView( VK_IMAGE_VIEW_TYPE_CUBE
 				, texture.getFormat()
 				, 0u
 				, 1u
@@ -78,9 +79,9 @@ namespace castor3d
 				, 6u );
 		}
 
-		ashes::ShaderStageStateArray doCreateProgram( RenderSystem & renderSystem )
+		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
-			ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RadianceCompute" };
+			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RadianceCompute" };
 			{
 				using namespace sdw;
 				VertexWriter writer;
@@ -104,7 +105,7 @@ namespace castor3d
 				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RadianceCompute" };
+			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "RadianceCompute" };
 			{
 				using namespace sdw;
 				FragmentWriter writer;
@@ -163,51 +164,63 @@ namespace castor3d
 				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
 
-			ashes::ShaderStageStateArray program
+			return ashes::PipelineShaderStageCreateInfoArray
 			{
-				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eVertex ) },
-				{ getCurrentDevice( renderSystem ).createShaderModule( ashes::ShaderStageFlag::eFragment ) }
+				makeShaderState( device, vtx ),
+				makeShaderState( device, pxl ),
 			};
-			program[0].module->loadShader( renderSystem.compileShader( vtx ) );
-			program[1].module->loadShader( renderSystem.compileShader( pxl ) );
-			return program;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
-			, ashes::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+			, VkFormat format )
 		{
-			auto & device = getCurrentDevice( renderSystem );
-			ashes::RenderPassCreateInfo createInfo{};
-			createInfo.flags = 0u;
-
-			createInfo.attachments.resize( 1u );
-			createInfo.attachments[0].format = format;
-			createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-			ashes::AttachmentReference colourReference;
-			colourReference.attachment = 0u;
-			colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-			createInfo.subpasses.resize( 1u );
-			createInfo.subpasses[0].flags = 0u;
-			createInfo.subpasses[0].colorAttachments = { colourReference };
-
-			createInfo.dependencies.resize( 1u );
-			createInfo.dependencies[0].srcSubpass = 0u;
-			createInfo.dependencies[0].dstSubpass = ashes::ExternalSubpass;
-			createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( createInfo );
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				}
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{},
+					std::nullopt,
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "RadianceComputerRenderPass" );
+			return result;
 		}
 	}
 
@@ -215,51 +228,44 @@ namespace castor3d
 
 	RadianceComputer::RadianceComputer( Engine & engine
 		, Size const & size
-		, ashes::Texture const & srcTexture )
-		: RenderCube{ *engine.getRenderSystem(), false }
-		, m_renderSystem{ *engine.getRenderSystem() }
-		, m_result{ doCreateRadianceTexture( m_renderSystem, size ) }
-		, m_resultView{ m_result->createView( ashes::TextureViewType::eCube, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, ashes::Image const & srcTexture )
+		: RenderCube{ *engine.getRenderSystem()->getCurrentRenderDevice(), false }
+		, m_result{ doCreateRadianceTexture( m_device, size ) }
+		, m_resultView{ m_result->createView( VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine ) }
 		, m_srcView{ doCreateSrcView( srcTexture ) }
-		, m_renderPass{ doCreateRenderPass( m_renderSystem, m_result->getFormat() ) }
+		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
 	{
-		getCurrentDevice( engine ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eImage,
-				m_result.get(),
-				"Radiance"
-			} );
 		auto & dstTexture = *m_result;
-		auto & device = getCurrentDevice( m_renderSystem );
+		auto & device = getCurrentRenderDevice( m_device );
 		
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
 
 			// Create the views.
-			facePass.dstView = dstTexture.createView( ashes::TextureViewType::e2D
+			facePass.dstView = dstTexture.createView( VK_IMAGE_VIEW_TYPE_2D
 				, dstTexture.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
 			// Initialise the frame buffer.
-			ashes::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( m_renderPass->getAttachments().begin() ), *facePass.dstView );
-			facePass.frameBuffer = m_renderPass->createFrameBuffer( ashes::Extent2D{ size.getWidth(), size.getHeight() }
+			ashes::ImageViewCRefArray attaches;
+			attaches.emplace_back( facePass.dstView );
+			facePass.frameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 
-		auto program = doCreateProgram( m_renderSystem );
+		auto program = doCreateProgram( m_device );
 		createPipelines( { size.getWidth(), size.getHeight() }
 			, Position{}
 			, program
-			, *m_srcView
+			, m_srcView
 			, *m_renderPass
 			, {} );
 
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 		m_commandBuffer->begin();
 
 		for ( auto face = 0u; face < 6u; ++face )
@@ -267,8 +273,8 @@ namespace castor3d
 			auto & facePass = m_renderPasses[face];
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *facePass.frameBuffer
-				, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
-				, ashes::SubpassContents::eInline );
+				, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+				, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();
 		}
@@ -278,9 +284,8 @@ namespace castor3d
 
 	void RadianceComputer::render()
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-		device.getGraphicsQueue().waitIdle();
+		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		m_device.graphicsQueue->waitIdle();
 	}
 
 	//*********************************************************************************************

@@ -2,6 +2,8 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
@@ -26,13 +28,11 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Ashes/Pipeline/ColourBlendState.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {
@@ -40,7 +40,7 @@ namespace castor3d
 
 	namespace
 	{
-		void doBindTexture( ashes::TextureView const & view
+		void doBindTexture( ashes::ImageView const & view
 			, ashes::Sampler const & sampler
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
@@ -49,41 +49,40 @@ namespace castor3d
 				{
 					index++,
 					0u,
-					1u,
-					ashes::DescriptorType::eCombinedImageSampler,
-				{
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 					{
-						sampler,
-						view,
-						ashes::ImageLayout::eShaderReadOnlyOptimal
-					},
-				}
+						1u,
+						{
+							sampler,
+							view,
+							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						},
+					}
 				} );
 		}
 
 		void doBindShadowMap( ShadowMapRefArray const & shadowMaps
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t mapIndex
-			, uint32_t & index )
-		{
-			std::vector< ashes::DescriptorImageInfo > shadowMapWrites;
+			, uint32_t & index
+			, ashes::VkDescriptorImageInfoArray & shadowMapWrites )
+		{;
 			auto & shadowMap = shadowMaps[0u];
 			shadowMapWrites.push_back( {
 				shadowMap.first.get().getLinearSampler(),
 				shadowMap.first.get().getLinearView(),
-				ashes::ImageLayout::eShaderReadOnlyOptimal
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				} );
 			shadowMapWrites.push_back( {
 				shadowMap.first.get().getVarianceSampler(),
 				shadowMap.first.get().getVarianceView(),
-				ashes::ImageLayout::eShaderReadOnlyOptimal
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				} );
 			writes.push_back( ashes::WriteDescriptorSet
 				{
 					index,
 					0u,
-					uint32_t( shadowMapWrites.size() ),
-					ashes::DescriptorType::eCombinedImageSampler,
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 					shadowMapWrites
 				} );
 			index += uint32_t( shadowMapWrites.size() );
@@ -107,15 +106,15 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
-	ashes::Format getTextureFormat( WbTexture texture )
+	VkFormat getTextureFormat( WbTexture texture )
 	{
-		static std::array< ashes::Format, size_t( WbTexture::eCount ) > Values
+		static std::array< VkFormat, size_t( WbTexture::eCount ) > Values
 		{
 			{
-				ashes::Format::eD24_UNORM_S8_UINT,
-				ashes::Format::eR16G16B16A16_SFLOAT,
-				ashes::Format::eR16_SFLOAT,
-				ashes::Format::eR16G16B16A16_SFLOAT,
+				VK_FORMAT_D24_UNORM_S8_UINT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
+				VK_FORMAT_R16_SFLOAT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};
 
@@ -144,91 +143,111 @@ namespace castor3d
 
 	void TransparentPass::initialiseRenderPass( WeightedBlendTextures const & wbpResult )
 	{
-		auto & device = getCurrentDevice( *this );
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 
-		ashes::RenderPassCreateInfo renderPass{};
-		renderPass.flags = 0u;
-
-		renderPass.attachments.resize( uint32_t( WbTexture::eCount ) );
-		renderPass.attachments[0].format = wbpResult[0].get().getFormat();
-		renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eLoad;
-		renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-		renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-
-		renderPass.attachments[1].format = wbpResult[1].get().getFormat();
-		renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[1].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[1].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-		renderPass.attachments[2].format = wbpResult[2].get().getFormat();
-		renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[2].loadOp = ashes::AttachmentLoadOp::eClear;
-		renderPass.attachments[2].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[2].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[2].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-		renderPass.attachments[3].format = wbpResult[3].get().getFormat();
-		renderPass.attachments[3].samples = ashes::SampleCountFlag::e1;
-		renderPass.attachments[3].loadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[3].storeOp = ashes::AttachmentStoreOp::eStore;
-		renderPass.attachments[3].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-		renderPass.attachments[3].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-		renderPass.attachments[3].initialLayout = ashes::ImageLayout::eUndefined;
-		renderPass.attachments[3].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-		ashes::AttachmentReference colourReference;
-		colourReference.attachment = 0u;
-		colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-		renderPass.subpasses.resize( 1u );
-		renderPass.subpasses[0].flags = 0u;
-		renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
-		renderPass.subpasses[0].colorAttachments =
+		ashes::VkAttachmentDescriptionArray attaches
 		{
-			{ 1u, ashes::ImageLayout::eColourAttachmentOptimal },
-			{ 2u, ashes::ImageLayout::eColourAttachmentOptimal },
-			{ 3u, ashes::ImageLayout::eColourAttachmentOptimal },
+			{
+				0u,
+				wbpResult[0]->format,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+			},
+			{
+				1u,
+				wbpResult[1]->format,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
+			{
+				2u,
+				wbpResult[2]->format,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
+			{
+				3u,
+				wbpResult[3]->format,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
 		};
-
-		renderPass.dependencies.resize( 2u );
-		renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[0].dstSubpass = 0u;
-		renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		renderPass.dependencies[1].srcSubpass = 0u;
-		renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-		renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-		renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-		renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-		renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-		renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-		m_renderPass =  device.createRenderPass( renderPass );
-		ashes::FrameBufferAttachmentArray attaches;
+		ashes::SubpassDescriptionArray subpasses;
+		subpasses.emplace_back( ashes::SubpassDescription
+			{
+				0u,
+				VK_PIPELINE_BIND_POINT_GRAPHICS,
+				{},
+				{
+					{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
+				},
+				{},
+				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
+				{},
+			} );
+		ashes::VkSubpassDependencyArray dependencies
+		{
+			{
+				VK_SUBPASS_EXTERNAL,
+				0u,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			},
+			{
+				0u,
+				VK_SUBPASS_EXTERNAL,
+				VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+				VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+				VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+				VK_ACCESS_SHADER_READ_BIT,
+				VK_DEPENDENCY_BY_REGION_BIT,
+			}
+		};
+		ashes::RenderPassCreateInfo createInfo
+		{
+			0u,
+			std::move( attaches ),
+			std::move( subpasses ),
+			std::move( dependencies ),
+		};
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		ashes::ImageViewCRefArray fbAttaches;
 
 		for ( size_t i = 0u; i < wbpResult.size(); ++i )
 		{
-			attaches.emplace_back( *( m_renderPass->getAttachments().begin() + i ), wbpResult[i].get() );
+			fbAttaches.emplace_back( wbpResult[i] );
 		}
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { wbpResult[0].get().getTexture().getDimensions().width, wbpResult[0].get().getTexture().getDimensions().height }
-			, std::move( attaches ) );
+		m_frameBuffer = m_renderPass->createFrameBuffer( { wbpResult[0].image->getDimensions().width, wbpResult[0].image->getDimensions().height }
+			, std::move( fbAttaches ) );
 
-		m_nodesCommands = getCurrentDevice( *this ).getGraphicsCommandPool().createCommandBuffer();
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
 	}
 
 	void TransparentPass::update( RenderInfo & info
@@ -256,50 +275,48 @@ namespace castor3d
 
 	ashes::Semaphore const & TransparentPass::render( ashes::Semaphore const & toWait )
 	{
-		static ashes::ClearValueArray const clearValues
+		static ashes::VkClearValueArray const clearValues
 		{
-			ashes::DepthStencilClearValue{ 1.0, 0 },
-			ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 },
-			ashes::ClearColorValue{ 1.0, 1.0, 1.0, 1.0 },
-			ashes::ClearColorValue{},
+			ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 0 } ),
+			ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ),
+			ashes::makeClearValue( VkClearColorValue{ 1.0, 1.0, 1.0, 1.0 } ),
+			ashes::makeClearValue( VkClearColorValue{} ),
 		};
 
 		auto * result = &toWait;
 		auto & timer = getTimer();
-		auto & device = getCurrentDevice( *this );
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		auto timerBlock = timer.start();
 
 		m_nodesCommands->begin();
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();
-		auto & view = m_frameBuffer->begin()->getView();
-		auto subresource = view.getSubResourceRange();
-		subresource.aspectMask = ashes::getAspectMask( view.getFormat() );
-		m_nodesCommands->memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eEarlyFragmentTests
-			, ashes::ImageMemoryBarrier
-			{
-				0u,
-				ashes::AccessFlag::eDepthStencilAttachmentRead,
-				ashes::ImageLayout::eUndefined,
-				ashes::ImageLayout::eDepthStencilAttachmentOptimal,
-				~( 0u ),
-				~( 0u ),
-				view.getTexture(),
-				subresource
-			} );
+		auto & view = m_frameBuffer->begin()->get();
+		auto subresource = view->subresourceRange;
+		subresource.aspectMask = ashes::getAspectMask( view->format );
+		m_nodesCommands->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( 0u )
+				, VkAccessFlags( VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT )
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, view->image
+				, subresource ) );
 		m_nodesCommands->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
-			, ashes::SubpassContents::eSecondaryCommandBuffers );
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
 		timer.endPass( *m_nodesCommands );
 		m_nodesCommands->end();
 
-		device.getGraphicsQueue().submit( *m_nodesCommands
+		device.graphicsQueue->submit( *m_nodesCommands
 			, *result
-			, ashes::PipelineStageFlag::eColourAttachmentOutput
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, getSemaphore()
 			, nullptr );
 		result = &getSemaphore();
@@ -312,58 +329,66 @@ namespace castor3d
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
 		visitor.visit( cuT( "Object" )
-			, ashes::ShaderStageFlag::eVertex
-			, *shaderProgram->getSource( ashes::ShaderStageFlag::eVertex ).shader );
+			, VK_SHADER_STAGE_VERTEX_BIT
+			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
 		visitor.visit( cuT( "Object" )
-			, ashes::ShaderStageFlag::eFragment
-			, *shaderProgram->getSource( ashes::ShaderStageFlag::eFragment ).shader );
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
 	}
 
 	bool TransparentPass::doInitialise( Size const & size )
 	{
-		m_finished = getCurrentDevice( *this ).createSemaphore();
+		m_finished = getCurrentRenderDevice( *this )->createSemaphore();
 		return true;
 	}
 
-	ashes::DepthStencilState TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	ashes::PipelineDepthStencilStateCreateInfo TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::DepthStencilState{ 0u, true, false };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, false };
 	}
 
-	ashes::ColourBlendState TransparentPass::doCreateBlendState( PipelineFlags const & flags )const
+	ashes::PipelineColorBlendStateCreateInfo TransparentPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		ashes::ColourBlendState bdState;
-		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
+		ashes::VkPipelineColorBlendAttachmentStateArray attachments
+		{
+			VkPipelineColorBlendAttachmentState
 			{
 				true,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eOne,
-				ashes::BlendOp::eAdd,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eOne,
-				ashes::BlendOp::eAdd,
-			} );
-		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_OP_ADD,
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_OP_ADD,
+			},
+			VkPipelineColorBlendAttachmentState
 			{
 				true,
-				ashes::BlendFactor::eZero,
-				ashes::BlendFactor::eInvSrcColour,
-				ashes::BlendOp::eAdd,
-				ashes::BlendFactor::eZero,
-				ashes::BlendFactor::eInvSrcAlpha,
-				ashes::BlendOp::eAdd,
-			} );
-		bdState.attachs.push_back( ashes::ColourBlendStateAttachment
+				VK_BLEND_FACTOR_ZERO,
+				VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
+				VK_BLEND_OP_ADD,
+				VK_BLEND_FACTOR_ZERO,
+				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+				VK_BLEND_OP_ADD,
+			},
+			VkPipelineColorBlendAttachmentState
 			{
 				false,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eZero,
-				ashes::BlendOp::eAdd,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eZero,
-				ashes::BlendOp::eAdd,
-			} );
-		return bdState;
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_FACTOR_ZERO,
+				VK_BLEND_OP_ADD,
+				VK_BLEND_FACTOR_ONE,
+				VK_BLEND_FACTOR_ZERO,
+				VK_BLEND_OP_ADD,
+			},
+		};
+		return ashes::PipelineColorBlendStateCreateInfo
+		{
+			0u,
+			VK_FALSE,
+			VK_LOGIC_OP_COPY,
+			std::move( attachments ),
+		};
 	}
 
 	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -407,9 +432,9 @@ namespace castor3d
 			}
 		}
 
-		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index );
-		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index );
-		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index, m_shadowMapWrites );
+		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index, m_shadowMapWrites );
+		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index, m_shadowMapWrites );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
@@ -454,66 +479,66 @@ namespace castor3d
 			}
 		}
 
-		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index );
-		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index );
-		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index );
+		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index, m_shadowMapWrites );
+		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index, m_shadowMapWrites );
+		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index, m_shadowMapWrites );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	ashes::DescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = MinTextureIndex;
-		ashes::DescriptorSetLayoutBindingArray textureBindings;
+		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
 		{
-			textureBindings.emplace_back( index
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment
-				, flags.texturesCount );
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, flags.texturesCount ) );
 			index += flags.texturesCount;
 		}
 
 		if ( checkFlag( flags.textures, TextureFlag::eReflection )
 			|| checkFlag( flags.textures, TextureFlag::eRefraction ) )
 		{
-			textureBindings.emplace_back( index++
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment );
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
 			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
 		{
-			textureBindings.emplace_back( index++
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment );	// c3d_mapIrradiance
-			textureBindings.emplace_back( index++
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment );	// c3d_mapPrefiltered
-			textureBindings.emplace_back( index++
-				, ashes::DescriptorType::eCombinedImageSampler
-				, ashes::ShaderStageFlag::eFragment );	// c3d_mapBrdf
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Directional linear shadow map.
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Directional VSM shadow map.
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Spot linear shadow map.
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Spot VSM shadow map.
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Point linear shadow map.
-		textureBindings.emplace_back( index++
-			, ashes::DescriptorType::eCombinedImageSampler
-			, ashes::ShaderStageFlag::eFragment );	// Point VSM shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Directional linear shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Directional VSM shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Spot linear shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Spot VSM shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Point linear shadow map.
+		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Point VSM shadow map.
 
 		return textureBindings;
 	}

@@ -97,12 +97,12 @@ namespace castor3d
 		inline GpuInformations()
 			: m_useShader
 			{
-				{ ashes::ShaderStageFlag::eVertex, false },
-				{ ashes::ShaderStageFlag::eTessellationControl, false },
-				{ ashes::ShaderStageFlag::eTessellationEvaluation, false },
-				{ ashes::ShaderStageFlag::eGeometry, false },
-				{ ashes::ShaderStageFlag::eFragment, false },
-				{ ashes::ShaderStageFlag::eCompute, false },
+				{ VK_SHADER_STAGE_VERTEX_BIT, false },
+				{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, false },
+				{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, false },
+				{ VK_SHADER_STAGE_GEOMETRY_BIT, false },
+				{ VK_SHADER_STAGE_FRAGMENT_BIT, false },
+				{ VK_SHADER_STAGE_COMPUTE_BIT, false },
 			}
 		{
 			for ( auto i = 0u; i < uint32_t( GpuMax::eCount ); ++i )
@@ -180,7 +180,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		inline bool hasShaderType( ashes::ShaderStageFlag type )const
+		inline bool hasShaderType( VkShaderStageFlagBits type )const
 		{
 			return m_useShader.at( type );
 		}
@@ -194,7 +194,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de shader.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		inline void useShaderType( ashes::ShaderStageFlag type, bool value )
+		inline void useShaderType( VkShaderStageFlagBits type, bool value )
 		{
 			m_useShader[type] = value;
 		}
@@ -328,7 +328,7 @@ namespace castor3d
 	private:
 		GpuFeatures m_features{ 0u };
 		uint32_t m_shaderLanguageVersion{ 0 };
-		std::map< ashes::ShaderStageFlag, bool > m_useShader;
+		std::map< VkShaderStageFlagBits, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
 		uint32_t m_totalMemorySize;
 		castor::String m_vendor;

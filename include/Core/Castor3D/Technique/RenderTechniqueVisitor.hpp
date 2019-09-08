@@ -42,7 +42,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		virtual void visit( castor::String const & name
-			, ashes::ShaderStageFlag type
+			, VkShaderStageFlagBits type
 			, castor::String const & shader )
 		{
 		}

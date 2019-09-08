@@ -1,16 +1,17 @@
 #include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -30,76 +31,99 @@ namespace castor3d
 		static constexpr uint32_t VertexCount = 6u;
 
 		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & diffuseView
-			, ashes::TextureView const & specularView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & diffuseView
+			, ashes::ImageView const & specularView
 			, bool first )
 		{
-			auto & device = getCurrentDevice( engine );
-			ashes::ImageLayout layout = first
-				? ashes::ImageLayout::eUndefined
-				: ashes::ImageLayout::eShaderReadOnlyOptimal;
-			ashes::AttachmentLoadOp loadOp = first
-				? ashes::AttachmentLoadOp::eClear
-				: ashes::AttachmentLoadOp::eLoad;
-			ashes::RenderPassCreateInfo renderPass;
-			renderPass.flags = 0u;
-
-			renderPass.attachments.resize( 3u );
-			renderPass.attachments[0].format = depthView.getFormat();
-			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eLoad;
-			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eDepthStencilAttachmentOptimal;
-
-			renderPass.attachments[1].format = diffuseView.getFormat();
-			renderPass.attachments[1].loadOp = loadOp;
-			renderPass.attachments[1].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[1].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[1].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[1].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[1].initialLayout = layout;
-			renderPass.attachments[1].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderPass.attachments[2].format = specularView.getFormat();
-			renderPass.attachments[2].loadOp = loadOp;
-			renderPass.attachments[2].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[2].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[2].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[2].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[2].initialLayout = layout;
-			renderPass.attachments[2].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-			renderPass.subpasses[0].depthStencilAttachment = { 0u, ashes::ImageLayout::eDepthStencilAttachmentOptimal };
-			renderPass.subpasses[0].colorAttachments = 
+			auto & device = getCurrentRenderDevice( engine );
+			VkImageLayout layout = first
+				? VK_IMAGE_LAYOUT_UNDEFINED
+				: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			VkAttachmentLoadOp loadOp = first
+				? VK_ATTACHMENT_LOAD_OP_CLEAR
+				: VK_ATTACHMENT_LOAD_OP_LOAD;
+			ashes::VkAttachmentDescriptionArray attaches
 			{
-				{ 1u, ashes::ImageLayout::eColourAttachmentOptimal },
-				{ 2u, ashes::ImageLayout::eColourAttachmentOptimal },
+				{
+					0u,
+					depthView.getFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_LOAD,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+				},
+				{
+					1u,
+					diffuseView.getFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					loadOp,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					layout,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
+				{
+					2u,
+					specularView.getFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					loadOp,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					layout,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
 			};
-
-			return device.createRenderPass( renderPass );
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{
+						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					},
+					{},
+					VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				}
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "DirectionalLightPassRenderPass" );
+			return result;
 		}
 	}
 
@@ -119,49 +143,58 @@ namespace castor3d
 	{
 	}
 
-	ashes::PipelinePtr DirectionalLightPass::Program::doCreatePipeline( ashes::VertexLayout const & vertexLayout
+	ashes::GraphicsPipelinePtr DirectionalLightPass::Program::doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, ashes::RenderPass const & renderPass
 		, bool blend )
 	{
-		ashes::DepthStencilState dsstate
+		ashes::PipelineDepthStencilStateCreateInfo dsstate
 		{
 			0u,
 			false,
 			false
 		};
-		ashes::ColourBlendState blstate;
+		ashes::VkPipelineColorBlendAttachmentStateArray attachs;
+		ashes::PipelineColorBlendStateCreateInfo blstate;
 
 		if ( blend )
 		{
-			blstate.attachs.push_back( ashes::ColourBlendStateAttachment
-			{
-				true,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eOne,
-				ashes::BlendOp::eAdd,
-				ashes::BlendFactor::eOne,
-				ashes::BlendFactor::eOne,
-				ashes::BlendOp::eAdd,
-			} );
-		}
-		else
-		{
-			blstate = ashes::ColourBlendState::createDefault();
+			attachs.push_back( VkPipelineColorBlendAttachmentState
+				{
+					true,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_OP_ADD,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_OP_ADD,
+				} );
+			blstate = ashes::PipelineColorBlendStateCreateInfo
+			{ 
+				0u,
+				VK_FALSE,
+				VK_LOGIC_OP_COPY,
+				std::move( attachs )
+			};
 		}
 
-		blstate.attachs.push_back( blstate.attachs.back() );
-		return m_pipelineLayout->createPipeline(
-		{
-			m_program,
-			renderPass,
-			ashes::VertexInputState::create( vertexLayout ),
-			ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
-			ashes::RasterisationState{ 0u, false, false, ashes::PolygonMode::eFill, ashes::CullModeFlag::eNone },
-			ashes::MultisampleState{},
-			std::move( blstate ),
-			{ ashes::DynamicStateEnable::eViewport, ashes::DynamicStateEnable::eScissor },
-			std::move( dsstate ),
-		} );
+		blstate.attachments.push_back( blstate.attachments.back() );
+		auto & device = getCurrentRenderDevice( m_engine );
+		return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			{
+				0u,
+				m_program,
+				vertexLayout,
+				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+				std::nullopt,
+				ashes::PipelineViewportStateCreateInfo{},
+				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+				ashes::PipelineMultisampleStateCreateInfo{},
+				std::move( dsstate ),
+				std::move( blstate ),
+				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				*m_pipelineLayout,
+				renderPass
+			} );
 	}
 
 	void DirectionalLightPass::Program::doBind( Light const & light )
@@ -174,9 +207,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DirectionalLightPass::DirectionalLightPass( Engine & engine
-		, ashes::TextureView const & depthView
-		, ashes::TextureView const & diffuseView
-		, ashes::TextureView const & specularView
+		, ashes::ImageView const & depthView
+		, ashes::ImageView const & diffuseView
+		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: LightPass{ engine
@@ -187,19 +220,14 @@ namespace castor3d
 			, specularView
 			, gpInfoUbo
 			, hasShadows }
-		, m_ubo{ ashes::makeUniformBuffer< Config >( getCurrentDevice( engine )
+		, m_ubo{ makeUniformBuffer< Config >( getCurrentRenderDevice( engine )
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SsaoConfigUbo" ) }
 		, m_viewport{ engine }
 	{
 		m_baseUbo = &m_ubo->getUbo();
-		getCurrentDevice( engine ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_baseUbo->getBuffer(),
-				"SsaoConfigUbo"
-			} );
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
 	}
 
@@ -209,21 +237,16 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
-		auto & device = getCurrentDevice( renderSystem );
-		m_vertexBuffer = ashes::makeVertexBuffer< float >( device
+		auto & device = getCurrentRenderDevice( renderSystem );
+		m_vertexBuffer = makeVertexBuffer< float >( device
 			, 12u
 			, 0u
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_vertexBuffer->getBuffer(),
-				"DirectionalLightPassVbo"
-			} );
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "DirectionalLightPassVbo" );
 
 		if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
 			, ~( 0ull )
-			, ashes::MemoryMapFlag::eInvalidateRange | ashes::MemoryMapFlag::eWrite ) )
+			, 0u ) )
 		{
 			float data[] =
 			{
@@ -238,9 +261,16 @@ namespace castor3d
 			m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
 			m_vertexBuffer->getBuffer().unlock();
 		}
-
-		m_vertexLayout = ashes::makeLayout< Point2f >( 0u );
-		m_vertexLayout->createAttribute( 0u, ashes::Format::eR32G32_SFLOAT, 0u );
+		
+		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			, ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( Point2f ), VK_VERTEX_INPUT_RATE_VERTEX },
+			}
+			, ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, 0u },
+			} );
 		doInitialise( scene
 			, gp
 			, LightType::eDirectional
@@ -269,7 +299,7 @@ namespace castor3d
 		}
 
 		visitor.visit( name
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 	}
 

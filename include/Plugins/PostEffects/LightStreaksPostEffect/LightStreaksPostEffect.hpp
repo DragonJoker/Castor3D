@@ -76,8 +76,8 @@ namespace light_streaks
 		struct Surface
 		{
 			Surface( castor3d::RenderSystem & renderSystem
-				, ashes::Format format
-				, ashes::Extent2D const & size
+				, VkFormat format
+				, VkExtent2D const & size
 				, ashes::RenderPass const & renderPass
 				, castor::String debugName );
 			castor3d::TextureLayoutSPtr image;
@@ -91,14 +91,14 @@ namespace light_streaks
 			castor3d::ShaderModule pixelShader;
 			Layout layout;
 			std::vector< Surface > surfaces;
-			ashes::PipelinePtr pipeline;
+			ashes::GraphicsPipelinePtr pipeline;
 		};
 
 		castor3d::SamplerSPtr m_linearSampler;
 		castor3d::SamplerSPtr m_nearestSampler;
 		ashes::RenderPassPtr m_renderPass;
 		KawaseUbo m_kawaseUbo;
-		std::vector< ashes::TextureViewPtr > m_hiPassViews;
+		std::vector< ashes::ImageView > m_hiPassViews;
 		ashes::VertexBufferPtr< castor3d::NonTexturedQuad > m_vertexBuffer;
 
 		struct

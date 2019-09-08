@@ -65,7 +65,7 @@ namespace castor3d
 		{
 			dstPass->setImplicit();
 			dstPass->setTwoSided( true );
-			dstPass->setAlphaFunc( ashes::CompareOp::eGreater );
+			dstPass->setAlphaFunc( VK_COMPARE_OP_GREATER );
 			dstPass->setAlphaValue( 0.95f );
 			dstPass->setEmissive( srcPass->getEmissive() );
 			dstPass->setOpacity( srcPass->getOpacity() );
@@ -590,7 +590,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setMinFilter( ashes::Filter( uiMode ) );
+			parsingContext->sampler->setMinFilter( VkFilter( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -607,7 +607,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setMagFilter( ashes::Filter( uiMode ) );
+			parsingContext->sampler->setMagFilter( VkFilter( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -624,7 +624,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setMipFilter( ashes::MipmapMode( uiMode ) );
+			parsingContext->sampler->setMipFilter( VkSamplerMipmapMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -716,7 +716,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setWrapS( ashes::WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapS( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -733,7 +733,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setWrapT( ashes::WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapT( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -750,7 +750,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setWrapR( ashes::WrapMode( uiMode ) );
+			parsingContext->sampler->setWrapR( VkSamplerAddressMode( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -767,7 +767,7 @@ namespace castor3d
 		{
 			uint32_t colour;
 			params[0]->get( colour );
-			parsingContext->sampler->setBorderColour( ashes::BorderColour( colour ) );
+			parsingContext->sampler->setBorderColour( VkBorderColor( colour ) );
 		}
 	}
 	CU_EndAttribute()
@@ -835,7 +835,7 @@ namespace castor3d
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
-			parsingContext->sampler->setCompareOp( ashes::CompareOp( uiMode ) );
+			parsingContext->sampler->setCompareOp( VkCompareOp( uiMode ) );
 		}
 	}
 	CU_EndAttribute()
@@ -1420,7 +1420,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderProgram.reset();
-		parsingContext->shaderStage = ashes::ShaderStageFlag( 0u );
+		parsingContext->shaderStage = VkShaderStageFlagBits( 0u );
 		parsingContext->bBool1 = false;
 		
 		if ( !parsingContext->scene )
@@ -3257,7 +3257,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->shaderProgram.reset();
-		parsingContext->shaderStage = ashes::ShaderStageFlag( 0u );
+		parsingContext->shaderStage = VkShaderStageFlagBits( 0u );
 
 		if ( parsingContext->pass )
 		{
@@ -3318,7 +3318,7 @@ namespace castor3d
 			float fFloat;
 			params[0]->get( uiFunc );
 			params[1]->get( fFloat );
-			parsingContext->pass->setAlphaFunc( ashes::CompareOp( uiFunc ) );
+			parsingContext->pass->setAlphaFunc( VkCompareOp( uiFunc ) );
 			parsingContext->pass->setAlphaValue( fFloat );
 		}
 	}
@@ -3455,7 +3455,7 @@ namespace castor3d
 		}
 		else
 		{
-			params[0]->get( parsingContext->imageInfo.mipLevels );
+			params[0]->get( parsingContext->imageInfo->mipLevels );
 		}
 	}
 	CU_EndAttribute()
@@ -3987,9 +3987,9 @@ namespace castor3d
 				}
 				else
 				{
-					if ( parsingContext->imageInfo.mipLevels == 1u )
+					if ( parsingContext->imageInfo->mipLevels == 1u )
 					{
-						parsingContext->imageInfo.mipLevels = 20;
+						parsingContext->imageInfo->mipLevels = 20;
 					}
 
 					if ( parsingContext->createUnit
@@ -3997,7 +3997,7 @@ namespace castor3d
 					{
 						auto texture = std::make_shared< TextureLayout >( *parsingContext->m_pParser->getEngine()->getRenderSystem()
 							, parsingContext->imageInfo
-							, ashes::MemoryPropertyFlag::eDeviceLocal
+							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 							, parsingContext->relative );
 						texture->setSource( parsingContext->folder
 							, parsingContext->relative );
@@ -4010,14 +4010,14 @@ namespace castor3d
 				parsingContext->imageInfo =
 				{
 					0u,
-					ashes::TextureType::e2D,
-					ashes::Format::eUndefined,
+					VK_IMAGE_TYPE_2D,
+					VK_FORMAT_UNDEFINED,
 					{ 1u, 1u, 1u },
 					1u,
 					1u,
-					ashes::SampleCountFlag::e1,
-					ashes::ImageTiling::eOptimal,
-					ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_IMAGE_TILING_OPTIMAL,
+					VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				};
 				parsingContext->textureConfiguration = TextureConfiguration{};
 			}
@@ -4032,42 +4032,42 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserVertexShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eVertex;
+		parsingContext->shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
 	CU_ImplementAttributeParser( parserPixelShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eFragment;
+		parsingContext->shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
 	CU_ImplementAttributeParser( parserGeometryShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eGeometry;
+		parsingContext->shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
 	CU_ImplementAttributeParser( parserHullShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eTessellationControl;
+		parsingContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
 	CU_ImplementAttributeParser( parserdomainShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eTessellationEvaluation;
+		parsingContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
 	CU_ImplementAttributeParser( parserComputeShader )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->shaderStage = ashes::ShaderStageFlag::eCompute;
+		parsingContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;
 	}
 	CU_EndAttributePush( CSCNSection::shaderStage )
 
@@ -4122,7 +4122,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext->shaderStage != ashes::ShaderStageFlag( 0u ) )
+			if ( parsingContext->shaderStage != VkShaderStageFlagBits( 0u ) )
 			{
 				Path path;
 				params[0]->get( path );
@@ -4147,7 +4147,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext->shaderStage != ashes::ShaderStageFlag( 0u ) )
+			if ( parsingContext->shaderStage != VkShaderStageFlagBits( 0u ) )
 			{
 				Point3i sizes;
 				params[0]->get( sizes );
@@ -4477,7 +4477,7 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			Rectangle size;
+			castor::Rectangle size;
 			params[0]->get( size );
 			overlay->getBorderPanelOverlay()->setBorderPixelSize( size );
 		}
@@ -4759,7 +4759,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		uint32_t uiType;
-		parsingContext->primitiveType = ashes::PrimitiveTopology( params[0]->get( uiType ) );
+		parsingContext->primitiveType = VkPrimitiveTopology( params[0]->get( uiType ) );
 	}
 	CU_EndAttribute()
 

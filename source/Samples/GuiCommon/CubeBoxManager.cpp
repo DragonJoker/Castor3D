@@ -44,7 +44,7 @@ namespace GuiCommon
 				InterleavedVertex::createP( Point3f{ +1, +1, +1 } ),
 				InterleavedVertex::createP( Point3f{ +1, -1, +1 } ),
 			};
-			submesh->setTopology( ashes::PrimitiveTopology::eLineList );
+			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
 			auto mapping = std::make_shared< LinesMapping >( *submesh );
 			LineIndices lines[]

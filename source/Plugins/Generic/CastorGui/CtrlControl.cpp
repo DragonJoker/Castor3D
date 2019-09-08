@@ -82,7 +82,7 @@ namespace CastorGui
 		doDestroy();
 	}
 
-	void Control::setBackgroundBorders( Rectangle const & p_value )
+	void Control::setBackgroundBorders( castor::Rectangle const & p_value )
 	{
 		m_borders = p_value;
 		BorderPanelOverlaySPtr panel = getBackground();

@@ -33,7 +33,7 @@ namespace castor3d
 			, RenderPassTimer & timer
 			, ashes::DescriptorSetLayout const & uboLayout
 			, ashes::DescriptorSetLayout const & texLayout
-			, ashes::VertexLayout const & vtxLayout
+			, ashes::PipelineVertexInputStateCreateInfo const & vtxLayout
 			, FogType fogType );
 		~FinalCombineProgram();
 		void prepare( ashes::FrameBuffer const & frameBuffer
@@ -53,7 +53,7 @@ namespace castor3d
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
 	};
 	//!\~english	An array of FinalCombineProgram, one per fog type.
@@ -94,7 +94,7 @@ namespace castor3d
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo & hdrConfigUbo
 			, WeightedBlendTextures const & wbResult
-			, ashes::TextureView const & colourView );
+			, ashes::ImageView const & colourView );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -144,7 +144,7 @@ namespace castor3d
 		GpInfoUbo m_gpInfo;
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
-		ashes::VertexLayoutPtr m_vertexLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
 		ashes::DescriptorSetPtr m_uboDescriptorSet;

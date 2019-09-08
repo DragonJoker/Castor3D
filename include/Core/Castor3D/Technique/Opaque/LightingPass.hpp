@@ -51,7 +51,7 @@ namespace castor3d
 			, Scene const & scene
 			, GeometryPassResult const & gpResult
 			, OpaquePass & opaque
-			, ashes::TextureView const & depthView
+			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo );
 		/**
@@ -126,7 +126,7 @@ namespace castor3d
 		LightPasses m_lightPassShadow;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
-		ashes::TextureView const & m_srcDepth;
+		ashes::ImageView const & m_srcDepth;
 		ashes::CommandBufferPtr m_blitDepthCommandBuffer;
 		ashes::SemaphorePtr m_blitDepthSemaphore;
 	};

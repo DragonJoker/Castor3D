@@ -19,9 +19,9 @@ namespace smaa
 	{
 	public:
 		NeighbourhoodBlending( castor3d::RenderTarget & renderTarget
-			, ashes::TextureView const & sourceView
-			, ashes::TextureView const & blendView
-			, ashes::TextureView const * velocityView
+			, ashes::ImageView const & sourceView
+			, ashes::ImageView const & blendView
+			, ashes::ImageView const * velocityView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex
@@ -40,9 +40,9 @@ namespace smaa
 	private:
 		ashes::RenderPassPtr m_renderPass;
 		std::vector< castor3d::PostEffectSurface > m_surfaces;
-		ashes::TextureView const & m_sourceView;
-		ashes::TextureView const & m_blendView;
-		ashes::TextureView const * m_velocityView;
+		ashes::ImageView const & m_sourceView;
+		ashes::ImageView const & m_blendView;
+		ashes::ImageView const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 	};

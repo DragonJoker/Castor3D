@@ -8,7 +8,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
 
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -29,12 +29,12 @@ namespace castor3d
 			// Compute camera inverse view transform.
 			auto cameraVP = camera.getProjection() * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
-			auto near = camera.getNear();
-			auto far = camera.getFar();
+			auto nearZ = camera.getNear();
+			auto farZ = camera.getFar();
 
-			float clipRange = far - near;
-			float minZ = near;
-			float maxZ = near + clipRange;
+			float clipRange = farZ - nearZ;
+			float minZ = nearZ;
+			float maxZ = nearZ + clipRange;
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
@@ -49,7 +49,7 @@ namespace castor3d
 				float log = minZ * std::pow( ratio, p );
 				float uniform = minZ + range * p;
 				float d = cascadeSplitLambda * ( log - uniform ) + uniform;
-				cascadeSplits[i] = ( d - near ) / clipRange;
+				cascadeSplits[i] = ( d - nearZ ) / clipRange;
 			}
 
 			// Calculate orthographic projection matrix for each cascade
@@ -113,7 +113,7 @@ namespace castor3d
 					, minExtents[1], maxExtents[1]
 					, minCastersZ * 100.0f, maxExtents[2] - minExtents[2] );
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-				cascade.splitDepth = ( near + splitDist * clipRange ) * -1.0f;
+				cascade.splitDepth = ( nearZ + splitDist * clipRange ) * -1.0f;
 				lastSplitDist = cascadeSplits[i];
 			}
 

@@ -2,10 +2,11 @@
 
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 
@@ -26,7 +27,7 @@ namespace castor3d
 	void MorphComponent::gather( MaterialSPtr material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
-		, ashes::VertexLayoutCRefArray & layouts )
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		buffers.emplace_back( m_animBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
@@ -40,31 +41,24 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
-			auto & device = getCurrentDevice( *getOwner() );
-			m_animBuffer = ashes::makeVertexBuffer< InterleavedVertex >( device
+			auto & device = getCurrentRenderDevice( *getOwner() );
+			m_animBuffer = makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, getOwner()->getParent().getName() + "Submesh" + castor::string::toString( getOwner()->getId() ) + "MorphComponentBuffer" );
+			m_animLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray
 				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_animBuffer->getBuffer(),
-					"MorphComponentVbo"
+					{ BindingPoint, sizeof( InterleavedVertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+				}
+				, ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ RenderPass::VertexInputs::Position2Location + 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, pos ) },
+					{ RenderPass::VertexInputs::Normal2Location + 1u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, nml ) },
+					{ RenderPass::VertexInputs::Tangent2Location + 2u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tan ) },
+					{ RenderPass::VertexInputs::Texture2Location + 3u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InterleavedVertex, tex ) },
 				} );
-			m_animLayout = ashes::makeLayout< InterleavedVertex >( BindingPoint
-				, ashes::VertexInputRate::eVertex );
-			m_animLayout->createAttribute( RenderPass::VertexInputs::Position2Location
-				, ashes::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, pos ) );
-			m_animLayout->createAttribute( RenderPass::VertexInputs::Normal2Location
-				, ashes::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, nml ) );
-			m_animLayout->createAttribute( RenderPass::VertexInputs::Tangent2Location
-				, ashes::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, tan ) );
-			m_animLayout->createAttribute( RenderPass::VertexInputs::Texture2Location
-				, ashes::Format::eR32G32B32_SFLOAT
-				, offsetof( InterleavedVertex, tex ) );
 		}
 
 		return m_animBuffer != nullptr;
@@ -83,11 +77,11 @@ namespace castor3d
 	void MorphComponent::doUpload()
 	{
 		auto & vertexBuffer = getOwner()->getVertexBuffer();
-		uint32_t count = vertexBuffer.getCount();
+		auto count = uint32_t( vertexBuffer.getCount() );
 
 		if ( count )
 		{
-			if ( auto * buffer = m_animBuffer->lock( 0, count, ashes::MemoryMapFlag::eWrite ) )
+			if ( auto * buffer = m_animBuffer->lock( 0, count, 0u ) )
 			{
 				std::copy( m_data.begin(), m_data.end(), buffer );
 				m_animBuffer->flush( 0u, count );

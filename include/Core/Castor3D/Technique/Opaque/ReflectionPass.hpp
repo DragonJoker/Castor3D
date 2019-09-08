@@ -10,14 +10,14 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 
@@ -65,13 +65,13 @@ namespace castor3d
 		ReflectionPass( Engine & engine
 			, Scene & scene
 			, GeometryPassResult const & gp
-			, ashes::TextureView const & lightDiffuse
-			, ashes::TextureView const & lightSpecular
-			, ashes::TextureView const & result
+			, ashes::ImageView const & lightDiffuse
+			, ashes::ImageView const & lightSpecular
+			, ashes::ImageView const & result
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
 			, HdrConfigUbo & hdrConfigUbo
-			, ashes::TextureView const * ssao );
+			, ashes::ImageView const * ssao );
 		/**
 		 *\~english
 		 *\brief		Updates the configuration UBO.
@@ -107,8 +107,8 @@ namespace castor3d
 				, ashes::DescriptorSetLayout const & uboLayout
 				, ashes::DescriptorSetLayout const & texLayout
 				, ashes::RenderPass const & renderPass
-				, ashes::TextureView const * ssao
-				, ashes::Extent2D const & size
+				, ashes::ImageView const * ssao
+				, VkExtent2D const & size
 				, FogType fogType
 				, MaterialType matType );
 			void updateCommandBuffer( ashes::VertexBufferBase & vbo
@@ -122,23 +122,23 @@ namespace castor3d
 			ashes::RenderPass const * m_renderPass;
 			castor3d::ShaderModule m_vertexShader;
 			castor3d::ShaderModule m_pixelShader;
-			ashes::ShaderStageStateArray m_program;
+			ashes::PipelineShaderStageCreateInfoArray m_program;
 			ashes::PipelineLayoutPtr m_pipelineLayout;
-			ashes::PipelinePtr m_pipeline;
+			ashes::GraphicsPipelinePtr m_pipeline;
 			ashes::CommandBufferPtr m_commandBuffer;
 		};
 		using ReflectionPrograms = std::array< ProgramPipeline, size_t( FogType::eCount ) >;
 
 	private:
-		ashes::Device const & m_device;
+		RenderDevice const & m_device;
 		Scene const & m_scene;
-		ashes::TextureView const * m_ssaoResult;
-		ashes::Extent2D m_size;
+		ashes::ImageView const * m_ssaoResult;
+		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
 		GeometryPassResult const & m_geometryPassResult;
-		ashes::TextureView const & m_lightDiffuse;
-		ashes::TextureView const & m_lightSpecular;
+		ashes::ImageView const & m_lightDiffuse;
+		ashes::ImageView const & m_lightSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;

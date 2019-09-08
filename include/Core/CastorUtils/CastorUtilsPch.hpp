@@ -53,30 +53,6 @@ FT_BEGIN_HEADER
 #	include FT_TYPES_H
 FT_END_HEADER
 
-#	if defined( CU_PlatformWindows )
-#		if defined( CU_CompilerMSVC )
-#			include <tchar.h>
-#		endif
-#		include <windows.h>
-#		include <direct.h>
-#	else
-#		include <sys/time.h>
-#		if defined( CU_PlatformAndroid ) || defined( CU_PlatformLinux )
-#			include <dlfcn.h>
-#		endif
-#	endif
-
-#	if defined( CU_CompilerGNUC )
-#		include <sys/time.h>
-#		include <errno.h>
-#		include <iostream>
-#		include <unistd.h>
-#		include <cerrno>
-#		if defined( CU_PlatformLinux )
-#			include <X11/Xlib.h>
-#		endif
-#	endif
-
 #endif
 
 #endif

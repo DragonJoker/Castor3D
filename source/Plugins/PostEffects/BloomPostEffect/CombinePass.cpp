@@ -9,21 +9,19 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
+#include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Texture/Sampler.hpp>
 #include <Castor3D/Texture/TextureLayout.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/SubpassDependency.hpp>
-#include <Ashes/RenderPass/SubpassDescription.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/RenderPass/SubpassDescription.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -96,141 +94,175 @@ namespace Bloom
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		castor3d::TextureLayoutSPtr doCreateTexture( castor3d::RenderSystem & renderSystem
-			, ashes::Extent2D const & size
-			, ashes::Format format )
+		castor3d::TextureLayoutSPtr doCreateTexture( castor3d::RenderDevice const & device
+			, VkExtent2D const & size
+			, VkFormat format )
 		{
-			ashes::ImageCreateInfo image{};
-			image.flags = 0u;
-			image.arrayLayers = 1u;
-			image.extent.width = size.width;
-			image.extent.height = size.height;
-			image.extent.depth = 1u;
-			image.format = format;
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.sharingMode = ashes::SharingMode::eExclusive;
-			image.tiling = ashes::ImageTiling::eOptimal;
-			image.mipLevels = 1u;
-			image.usage = ashes::ImageUsageFlag::eColourAttachment
-				| ashes::ImageUsageFlag::eSampled
-				| ashes::ImageUsageFlag::eTransferSrc;
-			auto texture = std::make_shared< castor3d::TextureLayout >( renderSystem
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				format,
+				{ size.width, size.height, 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ),
+			};
+			auto texture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
 				, image
-				, ashes::MemoryPropertyFlag::eDeviceLocal
-					, cuT( "BloomCombineResult" ) );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, cuT( "BloomCombineResult" ) );
 			texture->initialise();
 			return texture;
 		}
 
-		ashes::TextureViewPtr doCreateView( ashes::Texture const & texture )
+		ashes::ImageView doCreateView( ashes::Image const & texture )
 		{
-			ashes::ImageViewCreateInfo imageView{};
-			imageView.format = texture.getFormat();
-			imageView.viewType = ashes::TextureViewType::e2D;
-			imageView.subresourceRange.aspectMask = ashes::getAspectMask( imageView.format );
-			imageView.subresourceRange.baseMipLevel = 0u;
-			imageView.subresourceRange.levelCount = 1u;
-			imageView.subresourceRange.baseArrayLayer = 0u;
-			imageView.subresourceRange.layerCount = 1u;
+			ashes::ImageViewCreateInfo imageView
+			{
+				0u,
+				texture,
+				VK_IMAGE_VIEW_TYPE_2D,
+				texture.getFormat(),
+				VkComponentMapping{},
+				{ ashes::getAspectMask( texture.getFormat() ), 0u, 1u, 0u, 1u },
+			};
 			return texture.createView( imageView );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
-			, ashes::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
+			, VkFormat format )
 		{
-			ashes::RenderPassCreateInfo renderPass{};
-			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].format = format;
-			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].colorAttachments = { { 0u, ashes::ImageLayout::eColourAttachmentOptimal } };
-
-			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eHostWrite;
-			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eHost;
-			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-
-			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-
-			return device.createRenderPass( renderPass );
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				}
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{},
+					std::nullopt,
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_HOST_BIT,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_ACCESS_HOST_WRITE_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "BloomCombineRenderPass" );
+			return result;
 		}
 
 		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, ashes::TextureView const & view
-			, ashes::Extent2D const & size )
+			, ashes::ImageView const & view
+			, VkExtent2D const & size )
 		{
-			ashes::FrameBufferAttachmentArray attachments{ { *renderPass.getAttachments().begin(), view } };
+			ashes::ImageViewCRefArray attachments{ view };
 			return renderPass.createFrameBuffer( size, std::move( attachments ) );
 		}
 
-		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( ashes::Device const & device )
+		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor3d::RenderDevice const & device )
 		{
-			ashes::DescriptorSetLayoutBindingArray setLayoutBindings
+			ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings
 			{
-				{ 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment },
-				{ 1u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment }
+				castor3d::makeDescriptorSetLayoutBinding( 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ),
+				castor3d::makeDescriptorSetLayoutBinding( 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
-			return device.createDescriptorSetLayout( std::move( setLayoutBindings ) );
+			return device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		}
 
-		ashes::PipelinePtr doCreatePipeline( castor3d::RenderSystem & renderSystem
-			, ashes::Device const & device
+		ashes::GraphicsPipelinePtr doCreatePipeline( castor3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
 			, castor3d::ShaderModule const & vertexShader
 			, castor3d::ShaderModule const & pixelShader
 			, ashes::RenderPass const & renderPass
-			, ashes::Extent2D const & size )
+			, VkExtent2D const & size )
 		{
-			ashes::VertexInputState inputState;
-			inputState.vertexBindingDescriptions.push_back( { 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), ashes::VertexInputRate::eVertex } );
-			inputState.vertexAttributeDescriptions.push_back( { 0u, 0u, ashes::Format::eR32G32_SFLOAT, 0u } );
-
-			ashes::ShaderStageStateArray stages;
-			stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-			stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-			stages[0].module->loadShader( renderSystem.compileShader( vertexShader ) );
-			stages[1].module->loadShader( renderSystem.compileShader( pixelShader ) );
-
-			ashes::GraphicsPipelineCreateInfo pipeline
+			ashes::PipelineVertexInputStateCreateInfo inputState
 			{
-				stages,
-				renderPass,
-				inputState,
-				ashes::InputAssemblyState{ ashes::PrimitiveTopology::eTriangleList },
-				ashes::RasterisationState{},
-				ashes::MultisampleState{},
-				ashes::ColourBlendState::createDefault(),
-				{},
-				ashes::DepthStencilState{ 0u, false, false },
-				ashes::nullopt,
-				ashes::Viewport{ { 0, 0 }, size },
-				ashes::Scissor{ { 0, 0 }, size }
+				0u,
+				ashes::VkVertexInputBindingDescriptionArray
+				{
+					{ 0u, sizeof( castor3d::NonTexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+				},
+				ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( castor3d::NonTexturedQuad::Vertex, position ) },
+				}
 			};
-			return pipelineLayout.createPipeline( pipeline );
+
+			ashes::PipelineShaderStageCreateInfoArray stages;
+			stages.push_back( castor3d::makeShaderState( device, vertexShader ) );
+			stages.push_back( castor3d::makeShaderState( device, pixelShader ) );
+
+			return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+				{
+					0u,
+					stages,
+					inputState,
+					ashes::PipelineInputAssemblyStateCreateInfo{},
+					std::nullopt,
+					ashes::PipelineViewportStateCreateInfo
+					{
+						0u,
+						{ 1u, ashes::makeViewport( size ) },
+						{ 1u, ashes::makeScissor( size ) },
+					},
+					ashes::PipelineRasterizationStateCreateInfo{},
+					ashes::PipelineMultisampleStateCreateInfo{},
+					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
+					ashes::PipelineColorBlendStateCreateInfo{},
+					std::nullopt,
+					pipelineLayout,
+					renderPass,
+				} );
 		}
 
 		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool const & pool
-			, ashes::TextureView const & sceneView
-			, ashes::TextureView const & blurView
+			, ashes::ImageView const & sceneView
+			, ashes::ImageView const & blurView
 			, ashes::Sampler const & sceneSampler
 			, ashes::Sampler const & blurSampler )
 		{
@@ -239,11 +271,11 @@ namespace Bloom
 			result->createBinding( layout.getBinding( 0u )
 				, blurView
 				, blurSampler
-				, ashes::ImageLayout::eShaderReadOnlyOptimal );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result->createBinding( layout.getBinding( 1u )
 				, sceneView
 				, sceneSampler
-				, ashes::ImageLayout::eShaderReadOnlyOptimal );
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result->update();
 			return result;
 		}
@@ -254,33 +286,33 @@ namespace Bloom
 	String const CombinePass::CombineMapPasses = cuT( "c3d_mapPasses" );
 	String const CombinePass::CombineMapScene = cuT( "c3d_mapScene" );
 
-	CombinePass::CombinePass( castor3d::RenderSystem & renderSystem
-		, ashes::Format format
-		, ashes::TextureView const & sceneView
-		, ashes::TextureView const & blurView
-		, ashes::Extent2D const & size
+	CombinePass::CombinePass( castor3d::RenderDevice const & device
+		, VkFormat format
+		, ashes::ImageView const & sceneView
+		, ashes::ImageView const & blurView
+		, VkExtent2D const & size
 		, uint32_t blurPassesCount )
-		: m_device{ getCurrentDevice( renderSystem ) }
-		, m_image{ doCreateTexture( renderSystem, size, format ) }
+		: m_device{ device }
+		, m_image{ doCreateTexture( device, size, format ) }
 		, m_view{ doCreateView( m_image->getTexture() ) }
-		, m_vertexShader{ ashes::ShaderStageFlag::eVertex, "BloomCombine", getVertexProgram( renderSystem ) }
-		, m_pixelShader{ ashes::ShaderStageFlag::eFragment, "BloomCombine", getPixelProgram( renderSystem, blurPassesCount ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomCombine", getVertexProgram( device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomCombine", getPixelProgram( device.renderSystem, blurPassesCount ) }
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, *m_view, size ) }
+		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_view, size ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ m_device.createPipelineLayout( *m_descriptorLayout ) }
-		, m_pipeline{ doCreatePipeline( renderSystem, m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
-		, m_sceneSampler{ m_device.createSampler( ashes::WrapMode::eClampToEdge
-			, ashes::WrapMode::eClampToEdge
-			, ashes::WrapMode::eClampToEdge
-			, ashes::Filter::eLinear
-			, ashes::Filter::eLinear ) }
-		, m_blurSampler{ m_device.createSampler( ashes::WrapMode::eClampToEdge
-			, ashes::WrapMode::eClampToEdge
-			, ashes::WrapMode::eClampToEdge
-			, ashes::Filter::eLinear
-			, ashes::Filter::eLinear
-			, ashes::MipmapMode::eNearest
+		, m_pipelineLayout{ m_device->createPipelineLayout( *m_descriptorLayout ) }
+		, m_pipeline{ doCreatePipeline( m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
+		, m_sceneSampler{ m_device->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR ) }
+		, m_blurSampler{ m_device->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, 0.0f
 			, float( blurPassesCount ) ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
@@ -292,15 +324,15 @@ namespace Bloom
 	castor3d::CommandsSemaphore CombinePass::getCommands( castor3d::RenderPassTimer const & timer
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
-		auto result = m_device.getGraphicsCommandPool().createCommandBuffer( true );
+		auto result = m_device.graphicsCommandPool->createCommandBuffer( true );
 		auto & cmd = *result;
 
 		cmd.begin();
 		timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 } }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		cmd.bindVertexBuffer( 0u, vertexBuffer.getBuffer(), 0u );
@@ -309,6 +341,6 @@ namespace Bloom
 		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.end();
 
-		return { std::move( result ), m_device.createSemaphore() };
+		return { std::move( result ), m_device->createSemaphore() };
 	}
 }

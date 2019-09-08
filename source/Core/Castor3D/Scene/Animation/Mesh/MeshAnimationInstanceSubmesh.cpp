@@ -10,7 +10,7 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 
-#include <Ashes/Buffer/VertexBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 
 using namespace castor;
 
@@ -63,14 +63,14 @@ namespace castor3d
 					auto & vertexBuffer = m_animationObject.getSubmesh().getVertexBuffer();
 					auto & animBuffer = m_animationObject.getComponent().getAnimationBuffer();
 
-					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), ashes::MemoryMapFlag::eWrite ) )
+					if ( auto * buffer = vertexBuffer.lock( 0u, vertexBuffer.getCount(), 0u ) )
 					{
 						std::memcpy( buffer, prv.m_buffer.data(), vertexBuffer.getSize() );
 						vertexBuffer.flush( 0u, vertexBuffer.getCount() );
 						vertexBuffer.unlock();
 					}
 
-					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), ashes::MemoryMapFlag::eWrite ) )
+					if ( auto * buffer = animBuffer.lock( 0u, animBuffer.getCount(), 0u ) )
 					{
 						std::memcpy( buffer, prv.m_buffer.data(), animBuffer.getSize() );
 						animBuffer.flush( 0u, animBuffer.getCount() );

@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/GaussianBlur.hpp"
 #include "Castor3D/ShadowMap/ShadowMap.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -59,8 +61,8 @@ namespace castor3d
 		void debugDisplay( ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
-		C3D_API ashes::TextureView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::TextureView const & getVarianceView( uint32_t index )const override;
+		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
+		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
 
 	private:
 		/**
@@ -85,9 +87,9 @@ namespace castor3d
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
-		static ashes::Format constexpr VarianceFormat = ashes::Format::eR32G32_SFLOAT;
-		static ashes::Format constexpr LinearDepthFormat = ashes::Format::eR32_SFLOAT;
-		static ashes::Format constexpr RawDepthFormat = ashes::Format::eD24_UNORM_S8_UINT;
+		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
+		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
+		static VkFormat constexpr RawDepthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
 
 	private:
 		struct PassData
@@ -95,8 +97,8 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::SemaphorePtr finished;
-			ashes::TexturePtr depthTexture;
-			ashes::TextureViewPtr depthView;
+			ashes::ImagePtr depthTexture;
+			ashes::ImageView depthView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		std::vector< PassData > m_passesData;

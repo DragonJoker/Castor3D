@@ -90,12 +90,12 @@ namespace castor3d
 	{
 #if !C3D_DisableFrustumCulling
 		// Retrieve near and far planes' dimensions
-		real farH{ 0.0_r };
-		real farW{ 0.0_r };
-		real nearH{ 0.0_r };
-		real nearW{ 0.0_r };
-		real const near{ m_viewport.getNear() };
-		real const far{ m_viewport.getFar() };
+		float farH{ 0.0f };
+		float farW{ 0.0f };
+		float nearH{ 0.0f };
+		float nearW{ 0.0f };
+		float const nearZ{ m_viewport.getNear() };
+		float const farZ{ m_viewport.getFar() };
 
 		if ( m_viewport.getType() == ViewportType::eOrtho )
 		{
@@ -107,16 +107,16 @@ namespace castor3d
 		else
 		{
 			auto ratio = m_viewport.getRatio();
-			real const tan = real( m_viewport.getFovY().tan() );
-			nearH = near * tan;
+			float const tan = float( m_viewport.getFovY().tan() );
+			nearH = nearZ * tan;
 			nearW = nearH * ratio;
-			farH = far * tan;
+			farH = farZ * tan;
 			farW = farH * ratio;
 		}
 
 		// Compute planes' corners
-		Point3r nearC{ position + front * near };
-		Point3r farC{ position + front * far };
+		Point3r nearC{ position + front * nearZ };
+		Point3r farC{ position + front * farZ };
 		std::array< castor::Point3r, size_t( FrustumCorner::eCount ) > corners;
 		corners[size_t( FrustumCorner::eFarLeftBottom )] = farC - up * farH - right * farW;
 		corners[size_t( FrustumCorner::eFarLeftTop )] = farC + up * farH - right * farW;

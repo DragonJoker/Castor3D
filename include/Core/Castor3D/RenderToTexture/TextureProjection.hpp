@@ -7,18 +7,17 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
-#include <Ashes/Buffer/PushConstantsBuffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/Miscellaneous/PushConstantRange.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/Buffer/PushConstantsBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -50,9 +49,9 @@ namespace castor3d
 		*	Initialisation / Cleanup.
 		*/
 		/**@{*/
-		C3D_API void initialise( ashes::TextureView const & source
-			, ashes::Format targetColour
-			, ashes::Format targetDepth );
+		C3D_API void initialise( ashes::ImageView const & source
+			, VkFormat targetColour
+			, VkFormat targetDepth );
 		C3D_API void cleanup();
 		/**@}*/
 		/**
@@ -81,10 +80,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		ashes::ShaderStageStateArray doInitialiseShader();
+		ashes::PipelineShaderStageCreateInfoArray doInitialiseShader();
 		bool doInitialiseVertexBuffer();
-		bool doInitialisePipeline( ashes::ShaderStageStateArray & program
-			, ashes::TextureView const & texture
+		bool doInitialisePipeline( ashes::PipelineShaderStageCreateInfoArray & program
+			, ashes::ImageView const & texture
 			, ashes::RenderPass const & renderPass );
 		void doPrepareFrame();
 
@@ -99,7 +98,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_descriptorSet;
 		ashes::VertexBufferPtr< NonTexturedCube > m_vertexBuffer;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
-		ashes::PipelinePtr m_pipeline;
+		ashes::GraphicsPipelinePtr m_pipeline;
 		SamplerSPtr m_sampler;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;

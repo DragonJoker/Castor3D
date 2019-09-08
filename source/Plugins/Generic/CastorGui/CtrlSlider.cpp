@@ -50,7 +50,7 @@ namespace CastorGui
 		, m_value( p_value )
 		, m_scrolling( false )
 	{
-		setBackgroundBorders( Rectangle() );
+		setBackgroundBorders( castor::Rectangle() );
 
 		EventHandler::connect( MouseEventType::eMove, [this]( MouseEvent const & p_event )
 		{
@@ -75,7 +75,7 @@ namespace CastorGui
 			, cuT( "" )
 			, Position()
 			, Size() );
-		line->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		line->setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 		line->setVisible( p_visible );
 		line->connectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
@@ -89,7 +89,7 @@ namespace CastorGui
 			, cuT( "" )
 			, Position()
 			, Size() );
-		tick->setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		tick->setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 		tick->setVisible( p_visible );
 		tick->setCatchesMouseEvents( true );
 		tick->connectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )

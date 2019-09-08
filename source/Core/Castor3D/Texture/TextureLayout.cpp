@@ -1,11 +1,15 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
+#include <ashes/ashes.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
 
 using namespace castor;
 
@@ -15,60 +19,68 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::TextureViewType getSubviewType( ashes::TextureType type
-			, ashes::ImageCreateFlags flags
+		VkImageViewType getSubviewType( VkImageType type
+			, VkImageCreateFlags flags
 			, uint32_t arrayLayers )
 		{
-			ashes::TextureType result = type;
+			VkImageType result = type;
 
 			switch ( result )
 			{
-			case ashes::TextureType::e1D:
+			case VK_IMAGE_TYPE_1D:
 				if ( arrayLayers > 1 )
 				{
-					return ashes::TextureViewType::e1DArray;
+					return VK_IMAGE_VIEW_TYPE_1D_ARRAY;
 				}
-				return ashes::TextureViewType::e1D;
+				return VK_IMAGE_VIEW_TYPE_1D;
 
-			case ashes::TextureType::e2D:
+			case VK_IMAGE_TYPE_2D:
 				if ( arrayLayers > 1 )
 				{
-					if ( checkFlag( flags, ashes::ImageCreateFlag::eCubeCompatible ) )
+					if ( checkFlag( flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 					{
 						CU_Require( ( arrayLayers % 6 ) == 0 );
 						return arrayLayers == 6u
-							? ashes::TextureViewType::eCube
-							: ashes::TextureViewType::eCubeArray;
+							? VK_IMAGE_VIEW_TYPE_CUBE
+							: VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
 					}
 
-					return ashes::TextureViewType::e2DArray;
+					return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
 				}
 
-				return ashes::TextureViewType::e2D;
+				return VK_IMAGE_VIEW_TYPE_2D;
 
-			case ashes::TextureType::e3D:
-				return ashes::TextureViewType::e3D;
+			case VK_IMAGE_TYPE_3D:
+				return VK_IMAGE_VIEW_TYPE_3D;
 
 			default:
 				CU_Failure( "Unsupported texture type." );
-				return ashes::TextureViewType::e2D;
+				return VK_IMAGE_VIEW_TYPE_2D;
 			}
 		}
 
 		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
+			, ashes::Image const & image
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers
 			, uint32_t baseMipLevel
 			, uint32_t levelCount )
 		{
-			ashes::ImageViewCreateInfo view{};
-			view.format = info.format;
-			view.viewType = getSubviewType( info.imageType, info.flags, arrayLayers );
-			view.subresourceRange.aspectMask = ashes::getAspectMask( info.format );
-			view.subresourceRange.baseArrayLayer = baseArrayLayer;
-			view.subresourceRange.layerCount = arrayLayers;
-			view.subresourceRange.baseMipLevel = baseMipLevel;
-			view.subresourceRange.levelCount = levelCount;
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				image,
+				getSubviewType( info->imageType, info->flags, arrayLayers ),
+				info->format,
+				VkComponentMapping{},
+				{
+					ashes::getAspectMask( info->format ),
+					baseMipLevel,
+					levelCount,
+					baseArrayLayer,
+					arrayLayers,
+				}
+			};
 			return view;
 		}
 
@@ -78,10 +90,12 @@ namespace castor3d
 			, uint32_t arrayLayers )
 		{
 			return std::make_unique< TextureView >( layout
-				, getSubviewCreateInfos( info, baseArrayLayer
+				, getSubviewCreateInfos( info
+					, layout.getTexture()
+					, baseArrayLayer
 					, arrayLayers
 					, 0u
-					, std::max( info.mipLevels, 1u ) )
+					, std::max( info->mipLevels, 1u ) )
 				, 0u );
 		}
 
@@ -91,12 +105,16 @@ namespace castor3d
 			, uint32_t levelCount )
 		{
 			return std::make_unique< TextureView >( layout
-				, getSubviewCreateInfos( info, 0u, info.arrayLayers, baseMipLevel, levelCount )
+				, getSubviewCreateInfos( info
+					, layout.getTexture()
+					, 0u
+					, info->arrayLayers
+					, baseMipLevel, levelCount )
 				, 0u );
 		}
 
 		uint32_t getMaxMipLevels( uint32_t mipLevels
-			, ashes::Extent3D const & extent )
+			, VkExtent3D const & extent )
 		{
 			auto min = std::min( extent.width, extent.height );
 			auto bitSize = uint32_t( castor::getBitSize( min ) );
@@ -108,16 +126,16 @@ namespace castor3d
 
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ashes::ImageCreateInfo info
-		, ashes::MemoryPropertyFlags memoryProperties
+		, VkMemoryPropertyFlags memoryProperties
 		, castor::String debugName )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_defaultView{ createSubview( *this, m_info, 0u, m_info.arrayLayers ) }
+		, m_defaultView{ createSubview( *this, m_info, 0u, m_info->arrayLayers ) }
 		, m_debugName{ std::move( debugName ) }
 	{
-		m_info.mipLevels = std::max( 1u, m_info.mipLevels );
-		uint32_t max = std::max( m_info.arrayLayers, m_info.extent.depth );
+		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
+		uint32_t max = std::max( m_info->arrayLayers, m_info->extent.depth );
 
 		if ( max > 1u )
 		{
@@ -130,9 +148,9 @@ namespace castor3d
 				++index;
 			}
 		}
-		else if ( info.mipLevels > 1u )
+		else if ( info->mipLevels > 1u )
 		{
-			m_views.resize( info.mipLevels );
+			m_views.resize( info->mipLevels );
 			uint32_t index = 0u;
 
 			for ( auto & view : m_views )
@@ -156,24 +174,21 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			m_info.usage |= ashes::ImageUsageFlag::eTransferDst;
+			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
-			if ( m_info.mipLevels > 1u )
+			if ( m_info->mipLevels > 1u )
 			{
-				m_info.usage |= ashes::ImageUsageFlag::eTransferSrc;
+				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 			}
-			else if ( m_info.mipLevels == 0 )
+			else if ( m_info->mipLevels == 0 )
 			{
-				m_info.mipLevels = 1u;
+				m_info->mipLevels = 1u;
 			}
 
-			m_texture = getCurrentDevice( *this ).createTexture( m_info, m_properties );
-			getCurrentDevice( *this ).debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eImage,
-					m_texture.get(),
-					m_debugName
-				} );
+			m_texture = makeImage( getCurrentRenderDevice( *this )
+				, m_info
+				, m_properties
+				, m_debugName );
 			m_defaultView->initialise();
 
 			for ( auto & view : m_views )
@@ -205,11 +220,12 @@ namespace castor3d
 
 	void TextureLayout::generateMipmaps()const
 	{
-		if ( m_info.mipLevels > 1u
+		if ( m_info->mipLevels > 1u
 			&& m_defaultView->needsMipmapsGeneration() )
 		{
 			CU_Require( m_texture );
-			m_texture->generateMipmaps();
+			auto commandBuffer = getCurrentRenderDevice( *this ).transferCommandPool->createCommandBuffer();
+			m_texture->generateMipmaps( *commandBuffer );
 		}
 	}
 
@@ -237,40 +253,42 @@ namespace castor3d
 	}
 
 	void TextureLayout::doUpdateFromFirstImage( castor::Size const & size
-		, ashes::Format format )
+		, VkFormat format )
 	{
-		if ( m_info.extent == ashes::Extent3D{}
-			|| m_info.extent.width != size.getWidth()
-			|| m_info.extent.height != size.getHeight()
-			|| m_info.format != format )
-		{
-			m_info.extent.width = size.getWidth();
-			m_info.extent.height = size.getHeight();
-			m_info.extent.depth = 1u;
-			m_info.format = format;
-			auto mipLevels = m_info.mipLevels;
+		using ashes::operator==;
 
-			if ( m_info.mipLevels > 1u )
+		if ( m_info->extent == VkExtent3D{}
+			|| m_info->extent.width != size.getWidth()
+			|| m_info->extent.height != size.getHeight()
+			|| m_info->format != format )
+		{
+			m_info->extent.width = size.getWidth();
+			m_info->extent.height = size.getHeight();
+			m_info->extent.depth = 1u;
+			m_info->format = format;
+			auto mipLevels = m_info->mipLevels;
+
+			if ( m_info->mipLevels > 1u )
 			{
-				m_info.mipLevels = getMaxMipLevels( m_info.mipLevels
-					, m_info.extent );
+				m_info->mipLevels = getMaxMipLevels( m_info->mipLevels
+					, m_info->extent );
 			}
 
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, 0u, m_info.arrayLayers, 0u, m_info.mipLevels ) );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, m_info->arrayLayers, 0u, m_info->mipLevels ) );
 
 			if ( m_views.size() == 1 )
 			{
-				m_views.back()->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, 0u, 1u ) );
+				m_views.back()->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, 0u, 1u ) );
 			}
 			else if ( mipLevels > 1u )
 			{
-				m_info.usage |= ashes::ImageUsageFlag::eTransferSrc;
-				m_info.mipLevels = std::min( m_info.mipLevels
+				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+				m_info->mipLevels = std::min( m_info->mipLevels
 					, ( m_defaultView->getLevelCount() > 1u
 						? m_defaultView->getLevelCount()
-						: m_info.mipLevels ) );
+						: m_info->mipLevels ) );
 
-				if ( m_info.mipLevels != mipLevels )
+				if ( m_info->mipLevels != mipLevels )
 				{
 					auto it = m_views.begin();
 					uint32_t index = 0u;
@@ -279,13 +297,13 @@ namespace castor3d
 					{
 						auto & view = *it;
 
-						if ( view->getBaseMipLevel() >= m_info.mipLevels )
+						if ( view->getBaseMipLevel() >= m_info->mipLevels )
 						{
 							it = m_views.erase( it );
 						}
 						else
 						{
-							view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+							view->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, index++, 1u ) );
 							++it;
 						}
 					}
@@ -296,7 +314,7 @@ namespace castor3d
 
 					for ( auto & view : m_views )
 					{
-						view->doUpdate( getSubviewCreateInfos( m_info, 0u, 1u, index++, 1u ) );
+						view->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, index++, 1u ) );
 					}
 				}
 			}

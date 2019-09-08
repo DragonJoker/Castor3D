@@ -7,9 +7,9 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
 
 using namespace castor;
 
@@ -26,7 +26,7 @@ namespace castor3d
 			descriptorSet.createBinding( layout.getBinding( index )
 				, texture.getTexture()->getDefaultView()
 				, texture.getSampler()->getSampler()
-				, ashes::ImageLayout::eShaderReadOnlyOptimal
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, texIndex++ );
 		}
 
@@ -38,7 +38,7 @@ namespace castor3d
 				{
 					texture.getSampler()->getSampler(),
 					texture.getTexture()->getDefaultView(),
-					ashes::ImageLayout::eShaderReadOnlyOptimal
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				} );
 		}
 	}
@@ -112,10 +112,7 @@ namespace castor3d
 					index,
 					0u,
 					1u,
-					ashes::DescriptorType::eCombinedImageSampler,
-					{},
-					{},
-					{}
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 				};
 				doBindTexture( *( *it )
 					, layout
@@ -135,10 +132,7 @@ namespace castor3d
 					index,
 					0u,
 					count,
-					ashes::DescriptorType::eCombinedImageSampler,
-					{},
-					{},
-					{}
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 				};
 
 				for ( auto & unit : pass )

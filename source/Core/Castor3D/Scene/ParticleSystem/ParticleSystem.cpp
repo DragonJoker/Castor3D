@@ -8,8 +8,7 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -58,37 +57,63 @@ namespace castor3d
 			}
 		}
 
-		ashes::Format convert( ParticleFormat format )
+		uint32_t getSize( ParticleFormat format )
 		{
 			switch ( format )
 			{
 			case castor3d::ParticleFormat::eInt:
-				return ashes::Format::eR32_SINT;
-			case castor3d::ParticleFormat::eVec2i:
-				return ashes::Format::eR32G32_SINT;
-			case castor3d::ParticleFormat::eVec3i:
-				return ashes::Format::eR32G32B32_SINT;
-			case castor3d::ParticleFormat::eVec4i:
-				return ashes::Format::eR32G32B32A32_SINT;
 			case castor3d::ParticleFormat::eUInt:
-				return ashes::Format::eR32_UINT;
-			case castor3d::ParticleFormat::eVec2ui:
-				return ashes::Format::eR32G32_UINT;
-			case castor3d::ParticleFormat::eVec3ui:
-				return ashes::Format::eR32G32B32_UINT;
-			case castor3d::ParticleFormat::eVec4ui:
-				return ashes::Format::eR32G32B32A32_UINT;
 			case castor3d::ParticleFormat::eFloat:
-				return ashes::Format::eR32_SFLOAT;
+				return 8u;
+			case castor3d::ParticleFormat::eVec2i:
+			case castor3d::ParticleFormat::eVec2ui:
 			case castor3d::ParticleFormat::eVec2f:
-				return ashes::Format::eR32G32_SFLOAT;
+				return 16u;
+			case castor3d::ParticleFormat::eVec3i:
+			case castor3d::ParticleFormat::eVec3ui:
 			case castor3d::ParticleFormat::eVec3f:
-				return ashes::Format::eR32G32B32_SFLOAT;
+				return 24u;
+			case castor3d::ParticleFormat::eVec4i:
+			case castor3d::ParticleFormat::eVec4ui:
 			case castor3d::ParticleFormat::eVec4f:
-				return ashes::Format::eR32G32B32A32_SFLOAT;
+				return 32u;
+			default:
+				return 8u;
+				break;
+			}
+		}
+
+		VkFormat convert( ParticleFormat format )
+		{
+			switch ( format )
+			{
+			case castor3d::ParticleFormat::eInt:
+				return VK_FORMAT_R32_SINT;
+			case castor3d::ParticleFormat::eVec2i:
+				return VK_FORMAT_R32G32_SINT;
+			case castor3d::ParticleFormat::eVec3i:
+				return VK_FORMAT_R32G32B32_SINT;
+			case castor3d::ParticleFormat::eVec4i:
+				return VK_FORMAT_R32G32B32A32_SINT;
+			case castor3d::ParticleFormat::eUInt:
+				return VK_FORMAT_R32_UINT;
+			case castor3d::ParticleFormat::eVec2ui:
+				return VK_FORMAT_R32G32_UINT;
+			case castor3d::ParticleFormat::eVec3ui:
+				return VK_FORMAT_R32G32B32_UINT;
+			case castor3d::ParticleFormat::eVec4ui:
+				return VK_FORMAT_R32G32B32A32_UINT;
+			case castor3d::ParticleFormat::eFloat:
+				return VK_FORMAT_R32_SFLOAT;
+			case castor3d::ParticleFormat::eVec2f:
+				return VK_FORMAT_R32G32_SFLOAT;
+			case castor3d::ParticleFormat::eVec3f:
+				return VK_FORMAT_R32G32B32_SFLOAT;
+			case castor3d::ParticleFormat::eVec4f:
+				return VK_FORMAT_R32G32B32A32_SFLOAT;
 			default:
 				assert( false );
-				return ashes::Format::eR32G32B32A32_SFLOAT;
+				return VK_FORMAT_R32G32B32A32_SFLOAT;
 				break;
 			}
 		}
@@ -191,44 +216,56 @@ namespace castor3d
 
 	bool ParticleSystem::initialise()
 	{
-		auto & device = getCurrentDevice( *this );
-		auto vertexLayout = std::make_unique< ashes::VertexLayout >( 1u, m_inputs.stride(), ashes::VertexInputRate::eInstance );
+		auto & device = getCurrentRenderDevice( *this );
+		ashes::VkVertexInputBindingDescriptionArray bindings
+		{
+			{ 1u, m_inputs.stride(), VK_VERTEX_INPUT_RATE_INSTANCE }
+		};
 		uint32_t index{ 2u };
+		uint32_t stride{ 0u };
+		ashes::VkVertexInputAttributeDescriptionArray attributes;
 
 		for ( auto & attribute : m_inputs )
 		{
 			if ( attribute.m_dataType == ParticleFormat::eMat2f )
 			{
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32_SFLOAT, attribute.m_offset );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32_SFLOAT, attribute.m_offset + 8u );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32_SFLOAT, attribute.m_offset + 0u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32_SFLOAT, attribute.m_offset + 8u } );
+				stride += 16u;
 			}
 			else if ( attribute.m_dataType == ParticleFormat::eMat3f )
 			{
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32_SFLOAT, attribute.m_offset );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32_SFLOAT, attribute.m_offset + 12u );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32_SFLOAT, attribute.m_offset + 24u );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 0u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 12u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 24u } );
+				stride += 36u;
 			}
 			else if ( attribute.m_dataType == ParticleFormat::eMat4f )
 			{
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32A32_SFLOAT, attribute.m_offset );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 16u );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 32u );
-				vertexLayout->createAttribute( index++, ashes::Format::eR32G32B32A32_SFLOAT, attribute.m_offset + 48u );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 0u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 16u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 32u } );
+				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 48u } );
+				stride += 64u;
 			}
 			else
 			{
-				vertexLayout->createAttribute( index++, convert( attribute.m_dataType ), attribute.m_offset );
+				attributes.push_back( { index++, 1u, convert( attribute.m_dataType ), attribute.m_offset + 0u } );
+				stride += getSize( attribute.m_dataType );
 			}
 		}
 
-		auto stride = vertexLayout->getStride();
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
-			, std::move( vertexLayout )
-			, std::make_unique< ashes::VertexBufferBase >( device
+			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, bindings
+				, attributes )
+			, stride
+			, makeVertexBufferBase( device
 				, stride * m_particlesCount
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eHostVisible ) );
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "ParticleSystemBillboards" ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
 		m_particlesBillboard->setMaterial( m_material.lock() );

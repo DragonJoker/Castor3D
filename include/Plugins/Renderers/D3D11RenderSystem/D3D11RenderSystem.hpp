@@ -17,17 +17,15 @@ namespace D3D11Render
 	{
 	public:
 		RenderSystem( castor3d::Engine & engine
-			, castor::String const & appName
-			, bool enableValidation );
+			, AshPluginDescription desc );
 		~RenderSystem();
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
-			, castor::String const & appName
-			, bool enableValidation );
+			, AshPluginDescription desc );
 		/**
 		*\copydoc		castor3d::RenderSystem::compileShader
 		*/
-		castor3d::UInt32Array compileShader( castor3d::ShaderModule const & module )override;
+		castor3d::UInt32Array compileShader( castor3d::ShaderModule const & module )const override;
 
 	public:
 		C3D_D3D11_API static castor::String Name;

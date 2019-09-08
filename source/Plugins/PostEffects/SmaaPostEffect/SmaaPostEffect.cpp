@@ -14,15 +14,11 @@
 #include <Castor3D/Technique/RenderTechnique.hpp>
 #include <Castor3D/Texture/Sampler.hpp>
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Pipeline/ColourBlendState.hpp>
-#include <Ashes/Pipeline/RasterisationState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -92,52 +88,73 @@ namespace smaa
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
-			, ashes::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
+			, VkFormat format )
 		{
-			ashes::RenderPassCreateInfo renderPass;
-			renderPass.flags = 0u;
-
-			renderPass.attachments.resize( 1u );
-			renderPass.attachments[0].format = format;
-			renderPass.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-			renderPass.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			renderPass.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			renderPass.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			renderPass.attachments[0].samples = ashes::SampleCountFlag::e1;
-			renderPass.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			renderPass.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-			renderPass.subpasses.resize( 1u );
-			renderPass.subpasses[0].pipelineBindPoint = ashes::PipelineBindPoint::eGraphics;
-			renderPass.subpasses[0].colorAttachments.push_back( { 0u, ashes::ImageLayout::eColourAttachmentOptimal } );
-
-			renderPass.dependencies.resize( 2u );
-			renderPass.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[0].dstSubpass = 0u;
-			renderPass.dependencies[0].srcAccessMask = ashes::AccessFlag::eMemoryRead;
-			renderPass.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-			renderPass.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			renderPass.dependencies[1].srcSubpass = 0u;
-			renderPass.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-			renderPass.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite | ashes::AccessFlag::eColourAttachmentRead;
-			renderPass.dependencies[1].dstAccessMask = ashes::AccessFlag::eMemoryRead;
-			renderPass.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			renderPass.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eBottomOfPipe;
-			renderPass.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( renderPass );
+			ashes::VkAttachmentDescriptionArray attachments
+			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{},
+					std::nullopt,
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_ACCESS_MEMORY_READ_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_MEMORY_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attachments ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "LineariseDepth" );
+			return result;
 		}
 
 		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
 			, castor3d::TextureLayout const & texture )
 		{
-			ashes::FrameBufferAttachmentArray attaches
+			ashes::ImageViewCRefArray attaches
 			{
-				{ *renderPass.getAttachments().begin(), texture.getDefaultView() }
+				{ texture.getDefaultView() }
 			};
 			return renderPass.createFrameBuffer( { texture.getWidth(), texture.getHeight() }
 				, std::move( attaches ) );
@@ -363,11 +380,9 @@ namespace smaa
 #	endif
 #endif
 
-		auto & device = getCurrentDevice( *this );
-		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		m_copyProgram.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		m_copyProgram[0].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eVertex, "SmaaCopy", doGetCopyVertexShader() } ) );
-		m_copyProgram[1].module->loadShader( getRenderSystem()->compileShader( { ashes::ShaderStageFlag::eFragment, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
+		auto & device = getCurrentRenderDevice( *this );
+		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() } ) );
+		m_copyProgram.push_back( castor3d::makeShaderState( device, { VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) } ) );
 		m_copyRenderPass = doCreateRenderPass( device, m_target->getPixelFormat() );
 		m_copyFrameBuffer = doCreateFrameBuffer( *m_copyRenderPass, *m_target );
 
@@ -445,34 +460,34 @@ namespace smaa
 			m_smaaResult = m_renderTarget.getVelocity().getTexture().get();
 		}
 
-		auto & device = getCurrentDevice( m_renderTarget );
-		ashes::DescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), true );
+		auto & device = getCurrentRenderDevice( m_renderTarget );
+		ashes::VkDescriptorSetLayoutBindingArray bindings;
+		auto copyQuad = std::make_shared< castor3d::RenderQuad >( device, true );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram
 			, m_smaaResult->getDefaultView()
 			, *m_copyRenderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 		m_copyQuads.push_back( copyQuad );
 
 		castor3d::CommandsSemaphore copyCommands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();
 		timer.beginPass( copyCmd, passIndex );
-		copyCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_smaaResult->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_smaaResult->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
-			, { ashes::ClearColorValue{} }
-			, ashes::SubpassContents::eInline );
+			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, VK_SUBPASS_CONTENTS_INLINE );
 		copyQuad->registerFrame( copyCmd );
 		copyCmd.endRenderPass();
 		timer.endPass( copyCmd, passIndex );
@@ -564,9 +579,9 @@ namespace smaa
 		return result;
 	}
 
-	ashes::Texture const * PostEffect::doGetPredicationTexture()
+	ashes::Image const * PostEffect::doGetPredicationTexture()
 	{
-		ashes::Texture const * predication = nullptr;
+		ashes::Image const * predication = nullptr;
 
 		if ( m_config.data.enablePredication )
 		{
@@ -576,9 +591,9 @@ namespace smaa
 		return predication;
 	}
 
-	ashes::TextureView const * PostEffect::doGetVelocityView()
+	ashes::ImageView const * PostEffect::doGetVelocityView()
 	{
-		ashes::TextureView const * velocityView = nullptr;
+		ashes::ImageView const * velocityView = nullptr;
 
 		switch ( m_config.data.mode )
 		{

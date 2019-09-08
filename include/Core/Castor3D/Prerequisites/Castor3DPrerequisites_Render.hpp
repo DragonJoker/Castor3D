@@ -69,7 +69,7 @@ namespace castor3d
 		ashes::BufferCRefArray vbo;
 		ashes::UInt64Array vboOffsets;
 		uint32_t vtxCount;
-		ashes::VertexLayoutCRefArray layouts;
+		ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 		ashes::BufferBase const * ibo{ nullptr };
 		uint64_t iboOffset;
 		uint32_t idxCount;
@@ -216,16 +216,18 @@ namespace castor3d
 		PassFlags passFlags{ PassFlag::eNone };
 		TextureFlags textures{ TextureFlag::eNone };
 		uint32_t texturesCount{ 0u };
-		uint32_t heightMapIndex{ ~( 0u ) };
+		uint32_t heightMapIndex{ InvalidIndex };
 		ProgramFlags programFlags{ ProgramFlag::eNone };
 		SceneFlags sceneFlags{ SceneFlag::eNone };
-		ashes::PrimitiveTopology topology{ ashes::PrimitiveTopology::eTriangleList };
-		ashes::CompareOp alphaFunc{ ashes::CompareOp::eAlways };
+		VkPrimitiveTopology topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
+		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
 	};
 	C3D_API bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs );
 
 	template< typename T >
 	class CpuBuffer;
+
+	struct RenderDevice;
 
 	class Context;
 	class EnvironmentMap;
@@ -285,6 +287,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( RenderDepthCubeToTexture );
 	CU_DeclareSmartPtr( RenderDepthLayerToTexture );
 	CU_DeclareSmartPtr( RenderDepthToCube );
+	CU_DeclareSmartPtr( RenderDevice );
 	CU_DeclareSmartPtr( RenderLoop );
 	CU_DeclareSmartPtr( RenderPipeline );
 	CU_DeclareSmartPtr( RenderSystem );
@@ -302,6 +305,22 @@ namespace castor3d
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
 	using ShadowMapRefArray = std::vector< std::pair< std::reference_wrapper< ShadowMap >, UInt32Array > >;
 	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
+
+	inline VkDescriptorSetLayoutBinding makeDescriptorSetLayoutBinding( uint32_t binding
+		, VkDescriptorType descriptorType
+		, VkShaderStageFlags stageFlags
+		, uint32_t descriptorCount = 1u
+		, VkSampler const * pImmutableSamplers = nullptr )
+	{
+		return
+		{
+			binding,
+			descriptorType,
+			descriptorCount,
+			stageFlags,
+			pImmutableSamplers,
+		};
+	}
 
 	//@}
 }

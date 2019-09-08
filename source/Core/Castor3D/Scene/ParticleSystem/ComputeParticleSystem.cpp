@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -10,8 +11,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Sync/BufferMemoryBarrier.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
 
@@ -57,17 +57,12 @@ namespace castor3d
 
 		if ( result )
 		{
-			auto & device = getCurrentDevice( getParent() );
-			m_ubo = ashes::makeUniformBuffer< Configuration >( device
+			auto & device = getCurrentRenderDevice( getParent() );
+			m_ubo = makeUniformBuffer< Configuration >( device
 				, 1u
-				, ashes::BufferTarget::eTransferDst
-				, ashes::MemoryPropertyFlag::eHostVisible );
-			device.debugMarkerSetObjectName(
-				{
-					ashes::DebugReportObjectType::eBuffer,
-					&m_ubo->getUbo().getBuffer(),
-					"ComputeParticleSystemUbo"
-				} );
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, "ComputeParticleSystemUbo" );
 			m_ubo->getData( 0u ).maxParticleCount = uint32_t( m_parent.getMaxParticlesCount() );
 		}
 
@@ -125,7 +120,8 @@ namespace castor3d
 		, Milliseconds const & totalTime
 		, uint32_t index )
 	{
-		auto & device = getCurrentDevice( getParent() );
+		auto & renderSystem = *getParent().getScene()->getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		auto & data = m_ubo->getData( 0u );
 		data.deltaTime = float( time.count() );
 		data.time = float( totalTime.count() );
@@ -136,7 +132,7 @@ namespace castor3d
 
 		uint32_t counts[]{ 0u, 0u };
 
-		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 2u, ashes::MemoryMapFlag::eWrite ) )
+		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 2u, 0u ) )
 		{
 			buffer[0] = counts[0];
 			buffer[1] = counts[1];
@@ -144,45 +140,45 @@ namespace castor3d
 			m_generatedCountBuffer->unlock();
 		}
 
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		timer.beginPass( *m_commandBuffer, index + 0u );
 		// Put buffers in appropriate state for compute
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eHost
-			, ashes::PipelineStageFlag::eComputeShader
-			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eShaderRead | ashes::AccessFlag::eShaderWrite ) );
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eComputeShader
-			, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eShaderRead ) );
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eComputeShader
-			, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eShaderWrite ) );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
 		// Dispatch compute
-		m_commandBuffer->bindPipeline( *m_pipeline, ashes::PipelineBindPoint::eCompute );
+		m_commandBuffer->bindPipeline( *m_pipeline, VK_PIPELINE_BIND_POINT_COMPUTE );
 		m_commandBuffer->bindDescriptorSet( *m_descriptorSets[m_in]
 			, *m_pipelineLayout
-			, ashes::PipelineBindPoint::eCompute );
+			, VK_PIPELINE_BIND_POINT_COMPUTE );
 		auto dispatch = doDispatch( particlesCount, m_worgGroupSizes );
 		m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
 		// Put counts buffer to host visible state
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eComputeShader
-			, ashes::PipelineStageFlag::eHost
-			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( ashes::AccessFlag::eHostRead ) );
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eComputeShader
-			, ashes::PipelineStageFlag::eTransfer
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
-		m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eComputeShader
-			, ashes::PipelineStageFlag::eTransfer
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
 		timer.endPass( *m_commandBuffer, index + 0u );
 		m_commandBuffer->end();
 
-		device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
-		m_fence->wait( ashes::FenceTimeout );
+		device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
+		m_fence->wait( ashes::MaxTimeout );
 		m_fence->reset();
 		m_commandBuffer->reset();
 
 		// Retrieve counts
-		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, ashes::MemoryMapFlag::eRead ) )
+		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, 0u ) )
 		{
 			particlesCount = buffer[0];
 			m_generatedCountBuffer->unlock();
@@ -191,24 +187,24 @@ namespace castor3d
 
 		if ( m_particlesCount )
 		{
-			m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			timer.beginPass( *m_commandBuffer, index + 1u );
 			// Copy output storage to billboard's vertex buffer
-			m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eVertexInput
-				, ashes::PipelineStageFlag::eTransfer
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
 				, m_particlesCount * m_inputs.stride() );
-			m_commandBuffer->memoryBarrier( ashes::PipelineStageFlag::eTransfer
-				, ashes::PipelineStageFlag::eVertexInput
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
 			timer.endPass( *m_commandBuffer, index + 1u );
 			m_commandBuffer->end();
 
 			m_fence->reset();
-			device.getComputeQueue().submit( *m_commandBuffer, m_fence.get() );
-			m_fence->wait( ashes::FenceTimeout );
+			device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
+			m_fence->wait( ashes::MaxTimeout );
 			m_fence->reset();
 
 			m_commandBuffer->reset();
@@ -233,43 +229,27 @@ namespace castor3d
 	bool ComputeParticleSystem::doInitialiseParticleStorage()
 	{
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
-		auto & device = getCurrentDevice( getParent() );
-		m_generatedCountBuffer = ashes::makeBuffer< uint32_t >( device
+		auto & device = getCurrentRenderDevice( getParent() );
+		m_generatedCountBuffer = makeBuffer< uint32_t >( device
 			, 2u
-			, ashes::BufferTarget::eStorageBuffer | ashes::BufferTarget::eTransferDst | ashes::BufferTarget::eTransferSrc
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_generatedCountBuffer->getBuffer(),
-				"ComputeParticleSystemCountBuffer"
-			} );
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, "ComputeParticleSystemCountBuffer" );
 
-		m_particlesStorages[0] = ashes::makeBuffer< uint8_t >( device
+		m_particlesStorages[0] = makeBuffer< uint8_t >( device
 			, size
-			, ashes::BufferTarget::eStorageBuffer | ashes::BufferTarget::eTransferDst | ashes::BufferTarget::eTransferSrc
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_particlesStorages[0]->getBuffer(),
-				"ComputeParticleSystemParticles0"
-			} );
-		m_particlesStorages[1] = ashes::makeBuffer< uint8_t >( device
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "ComputeParticleSystemParticles0" );
+		m_particlesStorages[1] = makeBuffer< uint8_t >( device
 			, size
-			, ashes::BufferTarget::eStorageBuffer | ashes::BufferTarget::eTransferDst | ashes::BufferTarget::eTransferSrc
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_particlesStorages[1]->getBuffer(),
-				"ComputeParticleSystemParticles1"
-			} );
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "ComputeParticleSystemParticles1" );
 		Particle particle{ m_inputs, m_parent.getDefaultValues() };
 
 		auto initialise = [this, &size, &particle]( ashes::Buffer< uint8_t > & buffer )
 		{
-			if ( auto data = buffer.lock( 0u, size, ashes::MemoryMapFlag::eWrite ) )
+			if ( auto data = buffer.lock( 0u, size, 0u ) )
 			{
 				for ( uint32_t i = 0u; i < m_parent.getMaxParticlesCount(); ++i )
 				{
@@ -288,24 +268,19 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doCreateRandomStorage()
 	{
-		auto & device = getCurrentDevice( getParent() );
+		auto & device = getCurrentRenderDevice( getParent() );
 		uint32_t size = 1024u;
-		m_randomStorage = ashes::makeBuffer< castor::Point4f >( device
+		m_randomStorage = makeBuffer< castor::Point4f >( device
 			, 1024
-			, ashes::BufferTarget::eStorageBuffer | ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_randomStorage->getBuffer(),
-				"ComputeParticleSystemRandom"
-			} );
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "ComputeParticleSystemRandom" );
 		std::random_device rddevice;
 		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
 
 		if ( auto buffer = m_randomStorage->lock( 0u
 			, size
-			, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateRange ) )
+			, 0u ) )
 		{
 			for ( auto i = 0u; i < size; ++i )
 			{
@@ -325,22 +300,34 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doInitialisePipeline()
 	{
-		auto & device = getCurrentDevice( getParent() );
-		ashes::DescriptorSetLayoutBindingArray bindings
+		auto & device = getCurrentRenderDevice( getParent() );
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ IndexBufferBinding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eCompute },
-			{ RandomBufferBinding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eCompute },
-			{ InParticlesBufferBinding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eCompute },
-			{ OutParticlesBufferBinding, ashes::DescriptorType::eStorageBuffer, ashes::ShaderStageFlag::eCompute },
-			{ ParticleSystemBufferBinding, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eCompute },
+			makeDescriptorSetLayoutBinding( IndexBufferBinding
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ),
+			makeDescriptorSetLayoutBinding( RandomBufferBinding
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ),
+			makeDescriptorSetLayoutBinding( InParticlesBufferBinding
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ),
+			makeDescriptorSetLayoutBinding( OutParticlesBufferBinding
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ),
+			makeDescriptorSetLayoutBinding( ParticleSystemBufferBinding
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_COMPUTE_BIT ),
 		};
-		m_descriptorLayout = device.createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device.createPipelineLayout( *m_descriptorLayout );
+		m_descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
+		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
 
-		m_pipeline = m_pipelineLayout->createPipeline( ashes::ComputePipelineCreateInfo
-		{
-			m_program->getStates()[0]
-		} );
+		m_pipeline = device->createPipeline( ashes::ComputePipelineCreateInfo
+			{
+				0u,
+				m_program->getStates()[0],
+				*m_pipelineLayout
+			} );
 
 		auto initialiseDescriptor = [this]( ashes::DescriptorSet & descriptorSet
 			, uint32_t inIndex
@@ -349,19 +336,19 @@ namespace castor3d
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( IndexBufferBinding )
 				, *m_generatedCountBuffer
 				, 0u
-				, m_generatedCountBuffer->getCount() );
+				, uint32_t( m_generatedCountBuffer->getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( RandomBufferBinding )
 				, *m_randomStorage
 				, 0u
-				, m_randomStorage->getCount() );
+				, uint32_t( m_randomStorage->getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( InParticlesBufferBinding )
 				, *m_particlesStorages[inIndex]
 				, 0u
-				, m_particlesStorages[inIndex]->getCount() );
+				, uint32_t( m_particlesStorages[inIndex]->getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( OutParticlesBufferBinding )
 				, *m_particlesStorages[outIndex]
 				, 0u
-				, m_particlesStorages[outIndex]->getCount() );
+				, uint32_t( m_particlesStorages[outIndex]->getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( ParticleSystemBufferBinding )
 				, *m_ubo
 				, 0u
@@ -379,8 +366,9 @@ namespace castor3d
 
 	void ComputeParticleSystem::doPrepareCommandBuffers()
 	{
-		auto & device = getCurrentDevice( getParent() );
-		m_commandBuffer = device.getComputeCommandPool().createCommandBuffer();
-		m_fence = device.createFence();
+		auto & renderSystem = *getParent().getScene()->getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
+		m_commandBuffer = device.computeCommandPool->createCommandBuffer();
+		m_fence = device->createFence();
 	}
 }

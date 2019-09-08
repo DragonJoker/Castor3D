@@ -61,9 +61,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SpotLightPass::SpotLightPass( Engine & engine
-		, ashes::TextureView const & depthView
-		, ashes::TextureView const & diffuseView
-		, ashes::TextureView const & specularView
+		, ashes::ImageView const & depthView
+		, ashes::ImageView const & diffuseView
+		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
@@ -73,18 +73,12 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::eSpot
 			, hasShadows }
-		, m_ubo{ ashes::makeUniformBuffer< Config >( getCurrentDevice( m_engine )
+		, m_ubo{ castor3d::makeUniformBuffer< Config >( getCurrentRenderDevice( m_engine )
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SpotLightPassUbo" ) }
 	{
-		m_baseUbo = &m_ubo->getUbo();
-		getCurrentDevice( engine ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_baseUbo->getBuffer(),
-				"SpotLightPassUbo"
-			} );
 	}
 
 	SpotLightPass::~SpotLightPass()
@@ -101,7 +95,7 @@ namespace castor3d
 		}
 
 		visitor.visit( name
-			, ashes::ShaderStageFlag::eFragment
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 	}
 
@@ -115,9 +109,9 @@ namespace castor3d
 	{
 		auto lightPos = light.getParent()->getDerivedPosition();
 		auto camPos = camera.getParent()->getDerivedPosition();
-		auto far = camera.getFar();
+		auto farZ = camera.getFar();
 		auto scale = doCalcSpotLightBCone( *light.getSpotLight()
-			, float( far - point::distance( lightPos, camPos ) - ( far / 50.0f ) ) );
+			, float( farZ - point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
 		Matrix4x4r model{ 1.0f };
 		matrix::setTransform( model
 			, lightPos

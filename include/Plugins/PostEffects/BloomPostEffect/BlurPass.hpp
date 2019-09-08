@@ -12,11 +12,11 @@ namespace Bloom
 	class BlurPass
 	{
 	public:
-		BlurPass( castor3d::RenderSystem & renderSystem
-			, ashes::Format format
+		BlurPass( castor3d::RenderDevice const & device
+			, VkFormat format
 			, castor3d::TextureLayout const & srcImage
 			, castor3d::TextureLayout const & dstImage
-			, ashes::Extent2D dimensions
+			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical );
@@ -38,15 +38,14 @@ namespace Bloom
 
 		struct Subpass
 		{
-			Subpass( castor3d::RenderSystem & renderSystem
-				, ashes::Device const & device
-				, ashes::Format format
-				, ashes::TextureView const & srcView
-				, ashes::TextureView const & dstView
+			Subpass( castor3d::RenderDevice const & device
+				, VkFormat format
+				, ashes::ImageView const & srcView
+				, ashes::ImageView const & dstView
 				, ashes::RenderPass const & renderPass
 				, ashes::DescriptorSetPool const & descriptorPool
 				, ashes::PipelineLayout const & pipelineLayout
-				, ashes::Extent2D dimensions
+				, VkExtent2D dimensions
 				, castor3d::ShaderModule const & vertexShader
 				, castor3d::ShaderModule const & pixelShader
 				, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
@@ -54,12 +53,12 @@ namespace Bloom
 
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::DescriptorSetPtr descriptorSet;
-			ashes::PipelinePtr pipeline;
+			ashes::GraphicsPipelinePtr pipeline;
 			ashes::SamplerPtr sampler;
 		};
 
 	private:
-		ashes::Device const & m_device;
+		castor3d::RenderDevice const & m_device;
 		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
 		ashes::UniformBufferPtr< castor3d::GaussianBlur::Configuration > m_blurUbo;

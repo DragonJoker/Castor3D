@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/CastorUtilsPrerequisites.hpp>
 #include <Castor3D/Castor3DPrerequisites.hpp>
-#include <Gl4Renderer/GlRendererPrerequisites.hpp>
 
 #ifdef CU_PlatformWindows
 #	ifdef Gl4RenderSystem_EXPORTS

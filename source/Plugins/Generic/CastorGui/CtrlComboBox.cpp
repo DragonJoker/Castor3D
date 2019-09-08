@@ -195,7 +195,7 @@ namespace CastorGui
 	{
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		setBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
 
 		m_expand->setForegroundMaterial( getForegroundMaterial() );
 		m_expand->setPosition( Position( getSize().getWidth() - getSize().getHeight(), 0 ) );

@@ -6,6 +6,7 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -16,8 +17,8 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 #include "Castor3D/Texture/TextureView.hpp"
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Image/Texture.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Image/Image.hpp>
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
@@ -120,21 +121,17 @@ namespace castor3d
 		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
-				auto & device = getCurrentDevice( *getScene() );
-				m_textureBuffer = ashes::makeBuffer< castor::Point4f >( device
+				auto & device = getCurrentRenderDevice( *getScene() );
+				m_textureBuffer = makeBuffer< castor::Point4f >( device
 					, uint32_t( m_lightsBuffer.size() )
-					, ashes::BufferTarget::eUniformTexelBuffer | ashes::BufferTarget::eTransferDst
-					, ashes::MemoryPropertyFlag::eHostVisible );
-				device.debugMarkerSetObjectName(
-					{
-						ashes::DebugReportObjectType::eBuffer,
-						&m_textureBuffer->getBuffer(),
-						"LightsBuffer"
-					} );
-				m_textureView = device.createBufferView( m_textureBuffer->getBuffer()
-					, ashes::Format::eR32G32B32A32_SFLOAT
+					, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, "LightsBuffer" );
+				m_textureView = device->createBufferView( m_textureBuffer->getBuffer()
+					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, 0u
 					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
+				setDebugObjectName( device, *m_textureView, "LightsBufferView" );
 			} ) );
 	}
 
@@ -274,7 +271,7 @@ namespace castor3d
 		{
 			if ( auto * locked = m_textureBuffer->lock( 0u
 				, index
-				, ashes::MemoryMapFlag::eWrite | ashes::MemoryMapFlag::eInvalidateBuffer ) )
+				, 0u ) )
 			{
 				std::copy( m_lightsBuffer.begin(), m_lightsBuffer.begin() + index, locked );
 				m_textureBuffer->flush( 0u, index );

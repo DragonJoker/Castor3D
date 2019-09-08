@@ -66,7 +66,7 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::LightPass::Program::doCreatePipeline
 			 */
-			ashes::PipelinePtr doCreatePipeline( ashes::VertexLayout const & vertexLayout
+			ashes::GraphicsPipelinePtr doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 				, ashes::RenderPass const & renderPass
 				, bool blend )override;
 		};
@@ -93,9 +93,9 @@ namespace castor3d
 		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		MeshLightPass( Engine & engine
-			, ashes::TextureView const & depthView
-			, ashes::TextureView const & diffuseView
-			, ashes::TextureView const & specularView
+			, ashes::ImageView const & depthView
+			, ashes::ImageView const & diffuseView
+			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo
 			, LightType type
 			, bool hasShadows );

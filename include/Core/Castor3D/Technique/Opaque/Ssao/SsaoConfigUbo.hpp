@@ -68,7 +68,7 @@ namespace castor3d
 			// unobjectionable after shading was applied but eliminated most temporal incoherence
 			// from using small numbers of sample taps.
 			int32_t blurStepSize;
-			// Filter radius in pixels. This will be multiplied by blurStepSize.
+			// VkFilter radius in pixels. This will be multiplied by blurStepSize.
 			int32_t blurRadius;
 		};
 

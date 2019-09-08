@@ -19,7 +19,7 @@ namespace smaa
 	{
 	public:
 		BlendingWeightCalculation( castor3d::RenderTarget & renderTarget
-			, ashes::TextureView const & edgeDetectionView
+			, ashes::ImageView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
@@ -37,7 +37,7 @@ namespace smaa
 			, ashes::DescriptorSet & descriptorSet )override;
 
 	private:
-		ashes::TextureView const & m_edgeDetectionView;
+		ashes::ImageView const & m_edgeDetectionView;
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		ashes::SamplerPtr m_pointSampler;

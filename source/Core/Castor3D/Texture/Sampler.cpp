@@ -1,11 +1,12 @@
 #include "Castor3D/Texture/Sampler.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Core/PhysicalDevice.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Core/PhysicalDevice.hpp>
 
 using namespace castor;
 
@@ -40,7 +41,7 @@ namespace castor3d
 				castor::TextWriter< Sampler >::checkError( result, "Sampler mag filter" );
 			}
 
-			if ( result && sampler.getMipFilter() != ashes::MipmapMode::eNone )
+			if ( result && sampler.getMipFilter() != VK_SAMPLER_MIPMAP_MODE_NEAREST )
 			{
 				result = file.writeText( m_tabs + cuT( "\tmip_filter " ) + ashes::getName( sampler.getMipFilter() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler mip filter" );
@@ -83,8 +84,8 @@ namespace castor3d
 			}
 
 			if ( result
-				&& sampler.getCompareOp() != ashes::CompareOp::eNever
-				&& sampler.getCompareOp() != ashes::CompareOp::eAlways )
+				&& sampler.getCompareOp() != VK_COMPARE_OP_NEVER
+				&& sampler.getCompareOp() != VK_COMPARE_OP_ALWAYS )
 			{
 				result = file.writeText( m_tabs + cuT( "\tcomparison_mode ref_to_texture\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler comparison mode" );
@@ -96,7 +97,7 @@ namespace castor3d
 				}
 			}
 
-			if ( result && sampler.getBorderColour() != ashes::BorderColour::eFloatOpaqueBlack )
+			if ( result && sampler.getBorderColour() != VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
 			{
 				result = file.writeText( m_tabs + cuT( "\tborder_colour " ) + ashes::getName( sampler.getBorderColour() ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler border colour" );
@@ -133,9 +134,10 @@ namespace castor3d
 	{
 		if ( !m_sampler )
 		{
-			auto & device = getCurrentDevice( *this );
-			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.getPhysicalDevice().getProperties().limits.maxSamplerAnisotropy );
-			m_sampler = device.createSampler( m_info );
+			auto & device = getCurrentRenderDevice( *this );
+			m_info->maxAnisotropy = std::min( m_info->maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
+			m_sampler = device->createSampler( m_info );
+			setDebugObjectName( device, *m_sampler, getName() + "Sampler" );
 		}
 
 		return true;

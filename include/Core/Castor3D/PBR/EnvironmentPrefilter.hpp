@@ -7,10 +7,10 @@ See LICENSE file in root folder
 #include "Castor3D/RenderToTexture/RenderCube.hpp"
 #include "Castor3D/Texture/Sampler.hpp"
 
-#include <Ashes/Buffer/PushConstantsBuffer.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
+#include <ashespp/Buffer/PushConstantsBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <array>
 
@@ -32,13 +32,13 @@ namespace castor3d
 			: public RenderCube
 		{
 		public:
-			MipRenderCube( RenderSystem & renderSystem
+			MipRenderCube( RenderDevice const & device
 				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
-				, ashes::Extent2D const & originalSize
-				, ashes::Extent2D const & size
-				, ashes::TextureView const & srcView
-				, ashes::Texture const & dstTexture
+				, VkExtent2D const & originalSize
+				, VkExtent2D const & size
+				, ashes::ImageView const & srcView
+				, ashes::Image const & dstTexture
 				, SamplerSPtr sampler );
 			void registerFrames();
 			void render();
@@ -46,10 +46,9 @@ namespace castor3d
 		private:
 			struct FrameBuffer
 			{
-				ashes::TextureViewPtr dstView;
+				ashes::ImageView dstView;
 				ashes::FrameBufferPtr frameBuffer;
 			};
-			ashes::Device const & m_device;
 			ashes::RenderPass const & m_renderPass;
 			ashes::CommandBufferPtr m_commandBuffer;
 			ashes::FencePtr m_fence;
@@ -74,7 +73,7 @@ namespace castor3d
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, castor::Size const & size
-			, ashes::Texture const & srcTexture
+			, ashes::Image const & srcTexture
 			, SamplerSPtr sampler );
 		/**
 		 *\~english
@@ -92,9 +91,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::TextureView const & getResult()const
+		inline ashes::ImageView const & getResult()const
 		{
-			return *m_resultView;
+			return m_resultView;
 		}
 
 		inline ashes::Sampler const & getSampler()const
@@ -104,10 +103,10 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		RenderSystem & m_renderSystem;
-		ashes::TextureViewPtr m_srcView;
-		ashes::TexturePtr m_result;
-		ashes::TextureViewPtr m_resultView;
+		RenderDevice const & m_device;
+		ashes::ImageView m_srcView;
+		ashes::ImagePtr m_result;
+		ashes::ImageView m_resultView;
 		SamplerSPtr m_sampler;
 		ashes::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;

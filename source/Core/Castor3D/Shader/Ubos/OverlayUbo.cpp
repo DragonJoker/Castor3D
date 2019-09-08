@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 using namespace castor;
@@ -15,17 +16,12 @@ namespace castor3d
 
 	OverlayUbo::OverlayUbo( Engine & engine )
 		: m_engine{ engine }
-		, m_ubo{ ashes::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
+		, m_ubo{ makeUniformBuffer< Configuration >( getCurrentRenderDevice( engine )
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "OverlayUbo" ) }
 	{
-		getCurrentDevice( engine ).debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_ubo->getUbo().getBuffer(),
-				"OverlayUbo"
-			} );
 	}
 
 	OverlayUbo::~OverlayUbo()

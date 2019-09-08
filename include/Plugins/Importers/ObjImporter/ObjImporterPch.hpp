@@ -22,7 +22,7 @@ See LICENSE file in root folder
 #	include <Castor3D/Texture/TextureLayout.hpp>
 #	include <Castor3D/Texture/TextureUnit.hpp>
 
-#	include <Ashes/Buffer/Buffer.hpp>
+#	include <ashespp/Buffer/Buffer.hpp>
 #endif
 
 #endif

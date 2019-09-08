@@ -158,7 +158,7 @@ namespace castor
 		{
 			va_list vaList;
 			va_start( vaList, p_pFormat );
-			cvsnprintf( text, std::size_t( p_uiMaxSize ), std::size_t( p_uiMaxSize ), p_pFormat, vaList );
+			vsnprintf( text, std::size_t( p_uiMaxSize ), p_pFormat, vaList );
 			va_end( vaList );
 			uiReturn = writeText( text );
 		}

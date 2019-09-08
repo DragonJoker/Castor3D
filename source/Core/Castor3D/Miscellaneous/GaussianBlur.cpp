@@ -1,6 +1,10 @@
 #include "Castor3D/Miscellaneous/GaussianBlur.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -13,18 +17,12 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
-#include <Ashes/Buffer/VertexBuffer.hpp>
-#include <Ashes/Core/Renderer.hpp>
-#include <Ashes/Descriptor/DescriptorSet.hpp>
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Descriptor/DescriptorSetPool.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/RenderPass/RenderSubpass.hpp>
-#include <Ashes/RenderPass/RenderSubpassState.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -37,6 +35,9 @@ namespace castor3d
 {
 	namespace
 	{
+		static uint32_t constexpr GaussCfgIdx = 0u;
+		static uint32_t constexpr DifImgIdx = 1u;
+
 		ShaderPtr getVertexProgram( RenderSystem & renderSystem )
 		{
 			using namespace sdw;
@@ -65,13 +66,13 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
+			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -109,13 +110,13 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
+			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DArrayRgba32 >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DArrayRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -150,13 +151,13 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo config{ writer, GaussianBlur::Config, 0u, 0u };
+			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
 			config.end();
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 1u, 0u );
+			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -235,39 +236,37 @@ namespace castor3d
 			else
 			{
 				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( ashes::Filter::eNearest );
-				sampler->setMagFilter( ashes::Filter::eNearest );
-				sampler->setWrapS( ashes::WrapMode::eClampToEdge );
-				sampler->setWrapT( ashes::WrapMode::eClampToEdge );
+				sampler->setMinFilter( VK_FILTER_NEAREST );
+				sampler->setMagFilter( VK_FILTER_NEAREST );
+				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			}
 
 			return sampler;
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
-			, ashes::Extent2D const & size
-			, ashes::Format format
+			, VkExtent2D const & size
+			, VkFormat format
 			, String const & name )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			ashes::ImageCreateInfo image{};
-			image.flags = 0u;
-			image.arrayLayers = 1u;
-			image.extent.width = size.width;
-			image.extent.height = size.height;
-			image.extent.depth = 1u;
-			image.format = format;
-			image.imageType = ashes::TextureType::e2D;
-			image.initialLayout = ashes::ImageLayout::eUndefined;
-			image.mipLevels = 1u;
-			image.samples = ashes::SampleCountFlag::e1;
-			image.sharingMode = ashes::SharingMode::eExclusive;
-			image.tiling = ashes::ImageTiling::eOptimal;
-			image.usage = ashes::ImageUsageFlag::eColourAttachment | ashes::ImageUsageFlag::eSampled;
 			auto sampler = doCreateSampler( engine, name );
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				format,
+				{ size.width, size.height, 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
 			auto texture = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, ashes::MemoryPropertyFlag::eDeviceLocal
+				, std::move( image )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
 			texture->getDefaultImage().initialiseSource();
 			TextureUnit unit{ engine };
@@ -277,56 +276,73 @@ namespace castor3d
 			return unit;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( ashes::Device const & device
-			, ashes::Format format )
+		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+			, VkFormat format )
 		{
-			ashes::RenderPassCreateInfo createInfo{};
-			createInfo.flags = 0u;
-
-			createInfo.attachments.resize( 1u );
-			createInfo.attachments[0].format = format;
-			createInfo.attachments[0].samples = ashes::SampleCountFlag::e1;
-			createInfo.attachments[0].loadOp = ashes::AttachmentLoadOp::eClear;
-			createInfo.attachments[0].storeOp = ashes::AttachmentStoreOp::eStore;
-			createInfo.attachments[0].stencilLoadOp = ashes::AttachmentLoadOp::eDontCare;
-			createInfo.attachments[0].stencilStoreOp = ashes::AttachmentStoreOp::eDontCare;
-			createInfo.attachments[0].initialLayout = ashes::ImageLayout::eUndefined;
-			createInfo.attachments[0].finalLayout = ashes::ImageLayout::eShaderReadOnlyOptimal;
-
-			ashes::AttachmentReference colourReference;
-			colourReference.attachment = 0u;
-			colourReference.layout = ashes::ImageLayout::eColourAttachmentOptimal;
-
-			createInfo.subpasses.resize( 1u );
-			createInfo.subpasses[0].flags = 0u;
-			createInfo.subpasses[0].colorAttachments = { colourReference };
-
-			createInfo.dependencies.resize( 2u );
-			createInfo.dependencies[0].srcSubpass = ashes::ExternalSubpass;
-			createInfo.dependencies[0].dstSubpass = 0u;
-			createInfo.dependencies[0].srcStageMask = ashes::PipelineStageFlag::eHost;
-			createInfo.dependencies[0].dstStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[0].srcAccessMask = ashes::AccessFlag::eHostWrite;
-			createInfo.dependencies[0].dstAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[0].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			createInfo.dependencies[1].srcSubpass = 0u;
-			createInfo.dependencies[1].dstSubpass = ashes::ExternalSubpass;
-			createInfo.dependencies[1].srcStageMask = ashes::PipelineStageFlag::eColourAttachmentOutput;
-			createInfo.dependencies[1].dstStageMask = ashes::PipelineStageFlag::eFragmentShader;
-			createInfo.dependencies[1].srcAccessMask = ashes::AccessFlag::eColourAttachmentWrite;
-			createInfo.dependencies[1].dstAccessMask = ashes::AccessFlag::eShaderRead;
-			createInfo.dependencies[1].dependencyFlags = ashes::DependencyFlag::eByRegion;
-
-			return device.createRenderPass( createInfo );
+			ashes::VkAttachmentDescriptionArray attaches
+			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				}
+			};
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.emplace_back( ashes::SubpassDescription
+				{
+					0u,
+					VK_PIPELINE_BIND_POINT_GRAPHICS,
+					{},
+					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{},
+					std::nullopt,
+					{},
+				} );
+			ashes::VkSubpassDependencyArray dependencies
+			{
+				{
+					VK_SUBPASS_EXTERNAL,
+					0u,
+					VK_PIPELINE_STAGE_HOST_BIT,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_ACCESS_HOST_WRITE_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				},
+				{
+					0u,
+					VK_SUBPASS_EXTERNAL,
+					VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+					VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+					VK_ACCESS_SHADER_READ_BIT,
+					VK_DEPENDENCY_BY_REGION_BIT,
+				}
+			};
+			ashes::RenderPassCreateInfo createInfo
+			{
+				0u,
+				std::move( attaches ),
+				std::move( subpasses ),
+				std::move( dependencies ),
+			};
+			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device, *result, "GaussianBlurRenderPass" );
+			return result;
 		}
 
 		ashes::FrameBufferPtr doCreateFbo( ashes::RenderPass const & renderPass
-			, ashes::TextureView const & view
-			, ashes::Extent2D const & size )
+			, ashes::ImageView const & view
+			, VkExtent2D const & size )
 		{
-			ashes::FrameBufferAttachmentArray attaches;
-			attaches.emplace_back( *( renderPass.getAttachments().begin() ), view );
+			ashes::ImageViewCRefArray attaches;
+			attaches.emplace_back( view );
 			return renderPass.createFrameBuffer( size, std::move( attaches ) );
 		}
 	}
@@ -334,12 +350,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	GaussianBlur::RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, ashes::TextureView const & src
-		, ashes::TextureView const & dst
+		, ashes::ImageView const & src
+		, ashes::ImageView const & dst
 		, ashes::UniformBuffer< Configuration > const & blurUbo
-		, ashes::Format format
-		, ashes::Extent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
+		, VkFormat format
+		, VkExtent2D const & size )
+		: castor3d::RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
 		, m_srcView{ src }
 		, m_dstView{ dst }
 		, m_blurUbo{ blurUbo }
@@ -356,27 +372,28 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
-
+	
 	String const GaussianBlur::Config = cuT( "Config" );
 	String const GaussianBlur::Coefficients = cuT( "c3d_coefficients" );
 	String const GaussianBlur::CoefficientsCount = cuT( "c3d_coefficientsCount" );
 	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
 	GaussianBlur::GaussianBlur( Engine & engine
-		, ashes::TextureView const & texture
-		, ashes::Extent2D const & textureSize
-		, ashes::Format format
+		, ashes::ImageView const & texture
+		, VkExtent2D const & textureSize
+		, VkFormat format
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
 		, m_source{ texture }
 		, m_size{ textureSize }
 		, m_format{ format }
 		, m_intermediate{ doCreateTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentDevice( engine ), m_format ) }
-		, m_blurUbo{ ashes::makeUniformBuffer< Configuration >( getCurrentDevice( engine )
+		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( engine ), m_format ) }
+		, m_blurUbo{ makeUniformBuffer< Configuration >( getCurrentRenderDevice( engine )
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible ) }
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
+			, "GaussianBlurCfg" ) }
 		, m_blurXQuad
 		{
 			*engine.getRenderSystem(),
@@ -396,18 +413,13 @@ namespace castor3d
 			textureSize
 		}
 		, m_kernel{ getHalfPascal( kernelSize ) }
-		, m_blurXVertexShader{ ashes::ShaderStageFlag::eVertex, "GaussianBlurX" }
-		, m_blurXPixelShader{ ashes::ShaderStageFlag::eFragment, "GaussianBlurX" }
-		, m_blurYVertexShader{ ashes::ShaderStageFlag::eVertex, "GaussianBlurY" }
-		, m_blurYPixelShader{ ashes::ShaderStageFlag::eFragment, "GaussianBlurY" }
+		, m_blurXVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GaussianBlurX" }
+		, m_blurXPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GaussianBlurX" }
+		, m_blurYVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GaussianBlurY" }
+		, m_blurYPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GaussianBlurY" }
 	{
-		auto & device = getCurrentDevice( engine );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_blurUbo->getUbo().getBuffer(),
-				"GaussianBlurUBO"
-			} );
+		auto & renderSystem = *engine.getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		CU_Require( kernelSize < MaxCoefficients );
 		auto & data = m_blurUbo->getData( 0u );
 		data.blurCoeffsCount = uint32_t( m_kernel.size() );
@@ -418,18 +430,18 @@ namespace castor3d
 		data.textureSize[0] = float( textureSize.width );
 		data.textureSize[1] = float( textureSize.height );
 		m_blurUbo->upload();
-		m_horizCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		m_verticCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-		m_horizSemaphore = device.createSemaphore();
-		m_verticSemaphore = device.createSemaphore();
+		m_horizCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_verticCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_horizSemaphore = device->createSemaphore();
+		m_verticSemaphore = device->createSemaphore();
 		doInitialiseBlurXProgram();
 		doInitialiseBlurYProgram();
 
 		m_horizCommandBuffer->begin();
 		m_horizCommandBuffer->beginRenderPass( *m_renderPass
 			, *m_blurXFbo
-			, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
-		, ashes::SubpassContents::eSecondaryCommandBuffers );
+			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+		, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
 		m_horizCommandBuffer->endRenderPass();
 		m_horizCommandBuffer->end();
@@ -437,8 +449,8 @@ namespace castor3d
 		m_verticCommandBuffer->begin();
 		m_verticCommandBuffer->beginRenderPass( *m_renderPass
 			, *m_blurYFbo
-			, { ashes::ClearColorValue{ 0, 0, 0, 0 } }
-		, ashes::SubpassContents::eSecondaryCommandBuffers );
+			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+		, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
 		m_verticCommandBuffer->endRenderPass();
 		m_verticCommandBuffer->end();
@@ -447,18 +459,19 @@ namespace castor3d
 	ashes::Semaphore const & GaussianBlur::blur( ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		auto & device = getCurrentDevice( *this );
+		auto & renderSystem = *getEngine()->getRenderSystem();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 
-		device.getGraphicsQueue().submit( *m_horizCommandBuffer
+		device.graphicsQueue->submit( *m_horizCommandBuffer
 			, *result
-			, ashes::PipelineStageFlag::eColourAttachmentOutput
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_horizSemaphore
 			, nullptr );
 		result = m_horizSemaphore.get();
 
-		device.getGraphicsQueue().submit( *m_verticCommandBuffer
+		device.graphicsQueue->submit( *m_verticCommandBuffer
 			, *result
-			, ashes::PipelineStageFlag::eColourAttachmentOutput
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_verticSemaphore
 			, nullptr );
 		result = m_verticSemaphore.get();
@@ -469,40 +482,40 @@ namespace castor3d
 	bool GaussianBlur::doInitialiseBlurXProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		m_blurXVertexShader.shader = getVertexProgram( renderSystem );
 
-		if ( m_source.getTexture().getLayerCount() > 1u
-			&& !device.getRenderer().getFeatures().hasImageTexture )
+		if ( m_source->subresourceRange.layerCount > 1u
+			/*&& !device.getRenderer().getFeatures().hasImageTexture*/ )
 		{
 			m_blurXPixelShader.shader = getBlurXProgramLayer( *getEngine()->getRenderSystem()
 				, ashes::isDepthFormat( m_format )
-				, m_source.getSubResourceRange().baseArrayLayer );
+				, m_source->subresourceRange.baseArrayLayer );
 		}
 		else
 		{
 			m_blurXPixelShader.shader = getBlurXProgram( *getEngine()->getRenderSystem(), ashes::isDepthFormat( m_format ) );
 		}
 
-		ashes::ShaderStageStateArray program
+		ashes::PipelineShaderStageCreateInfoArray program
 		{
-			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
-			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
+			makeShaderState( device, m_blurXVertexShader ),
+			makeShaderState( device, m_blurXVertexShader ),
 		};
-		program[0].module->loadShader( renderSystem.compileShader( m_blurXVertexShader ) );
-		program[1].module->loadShader( renderSystem.compileShader( m_blurXPixelShader ) );
 
 		m_blurXFbo = doCreateFbo( *m_renderPass, m_intermediate.getTexture()->getDefaultView(), m_size );
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment }
+			makeDescriptorSetLayoutBinding( GaussCfgIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
 		m_blurXQuad.createPipeline( m_size
 			, Position{}
 			, program
 			, m_source
 			, *m_renderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 		m_blurXQuad.prepareFrame( *m_renderPass, 0u );
 		return true;
@@ -511,29 +524,29 @@ namespace castor3d
 	bool GaussianBlur::doInitialiseBlurYProgram()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentDevice();
+		auto & device = *renderSystem.getCurrentRenderDevice();
 		m_blurYVertexShader.shader = getVertexProgram( renderSystem );
 		m_blurYPixelShader.shader = getBlurYProgram( renderSystem, ashes::isDepthFormat( m_format ) );
 
-		ashes::ShaderStageStateArray program
+		ashes::PipelineShaderStageCreateInfoArray program
 		{
-			{ device.createShaderModule( ashes::ShaderStageFlag::eVertex ) },
-			{ device.createShaderModule( ashes::ShaderStageFlag::eFragment ) }
+			makeShaderState( device, m_blurXVertexShader ),
+			makeShaderState( device, m_blurXVertexShader ),
 		};
-		program[0].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_blurYVertexShader ) );
-		program[1].module->loadShader( getEngine()->getRenderSystem()->compileShader( m_blurYPixelShader ) );
 
 		m_blurYFbo = doCreateFbo( *m_renderPass, m_source, m_size );
-		ashes::DescriptorSetLayoutBindingArray bindings
+		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
-			{ 0u, ashes::DescriptorType::eUniformBuffer, ashes::ShaderStageFlag::eFragment }
+			makeDescriptorSetLayoutBinding( GaussCfgIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
 		m_blurYQuad.createPipeline( m_size
 			, Position{}
 			, program
 			, m_intermediate.getTexture()->getDefaultView()
 			, *m_renderPass
-			, bindings
+			, std::move( bindings )
 			, {} );
 		m_blurYQuad.prepareFrame( *m_renderPass, 0u );
 		return true;

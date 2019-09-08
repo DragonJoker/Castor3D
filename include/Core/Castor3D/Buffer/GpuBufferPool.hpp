@@ -22,7 +22,7 @@ namespace castor3d
 	struct GpuBufferOffset
 	{
 		ashes::BufferBase const * buffer;
-		ashes::MemoryPropertyFlags flags;
+		VkMemoryPropertyFlags flags;
 		uint32_t offset;
 	};
 	/*!
@@ -78,9 +78,9 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon GPU.
 		 */
-		GpuBufferOffset getGpuBuffer( ashes::BufferTarget target
+		GpuBufferOffset getGpuBuffer( VkBufferUsageFlagBits target
 			, uint32_t size
-			, ashes::MemoryPropertyFlags flags );
+			, VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\param[in]	target			Le type de tampon.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		void putGpuBuffer( ashes::BufferTarget target
+		void putGpuBuffer( VkBufferUsageFlagBits target
 			, GpuBufferOffset const & bufferOffset );
 
 	private:

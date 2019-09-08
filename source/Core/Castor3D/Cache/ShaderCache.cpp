@@ -10,7 +10,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#include <Ashes/Core/Device.hpp>
+#include <ashespp/Core/Device.hpp>
 
 using namespace castor;
 
@@ -114,18 +114,18 @@ namespace castor3d
 	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
-		ashes::ShaderStageFlags matrixUboShaderMask = ashes::ShaderStageFlag::eVertex | ashes::ShaderStageFlag::eFragment;
+		VkShaderStageFlags matrixUboShaderMask = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
-		result->setSource( ashes::ShaderStageFlag::eVertex
+		result->setSource( VK_SHADER_STAGE_VERTEX_BIT
 			, renderPass.getVertexShaderSource( flags ) );
-		result->setSource( ashes::ShaderStageFlag::eFragment
+		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT
 			, renderPass.getPixelShaderSource( flags ) );
 		auto geometry = renderPass.getGeometryShaderSource( flags );
 
 		if ( geometry )
 		{
-			addFlag( matrixUboShaderMask, ashes::ShaderStageFlag::eGeometry );
-			result->setSource( ashes::ShaderStageFlag::eGeometry
+			matrixUboShaderMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
+			result->setSource( VK_SHADER_STAGE_GEOMETRY_BIT
 				, std::move( geometry ) );
 		}
 
@@ -257,11 +257,11 @@ namespace castor3d
 				} );
 
 			auto & vtxShader = writer.getShader();
-			result->setSource( ashes::ShaderStageFlag::eVertex, std::make_unique< sdw::Shader >( std::move( vtxShader ) ) );
+			result->setSource( VK_SHADER_STAGE_VERTEX_BIT, std::make_unique< sdw::Shader >( std::move( vtxShader ) ) );
 		}
 
 		auto pxlShader = renderPass.getPixelShaderSource( flags );
-		result->setSource( ashes::ShaderStageFlag::eFragment, std::move( pxlShader ) );
+		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT, std::move( pxlShader ) );
 		return result;
 	}
 

@@ -18,7 +18,7 @@ using namespace castor3d;
 namespace castor3d
 {
 	SsaoPass::SsaoPass( Engine & engine
-		, ashes::Extent2D const & size
+		, VkExtent2D const & size
 		, SsaoConfig & config
 		, GeometryPassResult const & gpResult )
 		: m_engine{ engine }
@@ -28,14 +28,14 @@ namespace castor3d
 		, m_linearisePass{ std::make_shared< LineariseDepthPass >( engine
 			, size
 			, *m_ssaoConfigUbo
-			, *gpResult.getViews()[size_t( DsTexture::eDepth )] ) }
+			, gpResult.getViews()[size_t( DsTexture::eDepth )] ) }
 #if !C3D_DebugLinearisePass
 		, m_rawSsaoPass{ std::make_shared< RawSsaoPass >( engine
 			, size
 			, config
 			, *m_ssaoConfigUbo
 			, m_linearisePass->getResult()
-			, *gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #	if !C3D_DebugRawPass
 		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, size
@@ -43,14 +43,14 @@ namespace castor3d
 			, *m_ssaoConfigUbo
 			, Point2i{ 1, 0 }
 			, m_rawSsaoPass->getResult()
-			, *gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, size
 			, config
 			, *m_ssaoConfigUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
-			, *gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #	endif
 #endif
 	{

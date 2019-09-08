@@ -190,8 +190,8 @@ namespace castor3d
 	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
 	using OnMaterialChangedConnection = OnMaterialChanged::connection;
 
-	C3D_API ashes::Format convert( castor::PixelFormat format );
-	C3D_API castor::PixelFormat convert( ashes::Format format );
+	C3D_API VkFormat convert( castor::PixelFormat format );
+	C3D_API castor::PixelFormat convert( VkFormat format );
 	//@}
 }
 

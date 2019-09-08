@@ -4,19 +4,18 @@
 #include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Miscellaneous/makeVkType.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Texture/Sampler.hpp>
 #include <Castor3D/Texture/TextureLayout.hpp>
 
-#include <Ashes/Core/Renderer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -283,16 +282,17 @@ namespace smaa
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::TextureViewPtr doCreatePredicationView( ashes::Texture const & texture )
+		ashes::ImageView doCreatePredicationView( ashes::Image const & texture )
 		{
-			ashes::ImageViewCreateInfo view{};
-			view.format = texture.getFormat();
-			view.viewType = ashes::TextureViewType::e2D;
-			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
-			view.subresourceRange.baseArrayLayer = 0u;
-			view.subresourceRange.layerCount = 1u;
-			view.subresourceRange.baseMipLevel = 0u;
-			view.subresourceRange.levelCount = 1u;
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				texture,
+				VK_IMAGE_VIEW_TYPE_2D,
+				texture.getFormat(),
+				VkComponentMapping{},
+				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u },
+			};
 			return texture.createView( view );
 		}
 	}
@@ -300,14 +300,14 @@ namespace smaa
 	//*********************************************************************************************
 
 	LumaEdgeDetection::LumaEdgeDetection( castor3d::RenderTarget & renderTarget
-		, ashes::TextureView const & colourView
-		, ashes::Texture const * predication
+		, ashes::ImageView const & colourView
+		, ashes::Image const * predication
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, config }
 		, m_colourView{ colourView }
-		, m_predicationView{ predication ? doCreatePredicationView( *predication ) : nullptr }
+		, m_predicationView{ predication ? std::make_unique< ashes::ImageView >( doCreatePredicationView( *predication ) ) : nullptr }
 	{
-		ashes::Extent2D size{ renderTarget.getSize().getWidth()
+		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_pixelShader.shader = predication
@@ -323,45 +323,45 @@ namespace smaa
 	castor3d::CommandsSemaphore LumaEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			m_device.graphicsCommandPool->createCommandBuffer(),
+			m_device->createSemaphore()
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
 		edgeDetectionCmd.begin();
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.
-		edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_colourView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_colourView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 		if ( m_predicationView )
 		{
-			auto subresource = m_predicationView->getSubResourceRange();
-			subresource.aspectMask = getAspectMask( m_predicationView->getFormat() );
-			ashes::ImageMemoryBarrier barrier
-			{
-				0u,
-				ashes::AccessFlag::eShaderRead,
-				ashes::ImageLayout::eUndefined,
-				ashes::ImageLayout::eShaderReadOnlyOptimal,
-				~( 0u ),
-				~( 0u ),
-				m_predicationView->getTexture(),
-				subresource
-			};
-			edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-				, ashes::PipelineStageFlag::eFragmentShader
+			auto & view = *m_predicationView;
+			auto subresource = view->subresourceRange;
+			subresource.aspectMask = ashes::getAspectMask( view->format );
+			auto barrier = castor3d::makeVkType< VkImageMemoryBarrier >( VkAccessFlags( 0u )
+				, VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, *view.image
+				, subresource );
+			edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, barrier );
 		}
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, ashes::DepthStencilClearValue{ 1.0f, 0 } }
-			, ashes::SubpassContents::eInline );
+			, {
+				ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ),
+				ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } )
+			}
+			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
@@ -372,26 +372,47 @@ namespace smaa
 
 	void LumaEdgeDetection::doInitialisePipeline()
 	{
-		ashes::Extent2D size{ m_colourView.getTexture().getDimensions().width
-			, m_colourView.getTexture().getDimensions().height };
-		auto & device = getCurrentDevice( m_renderSystem );
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_renderSystem.compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( m_renderSystem.compileShader( m_pixelShader ) );
+		VkExtent2D size{ m_colourView.image->getDimensions().width
+			, m_colourView.image->getDimensions().height };
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
-		ashes::DepthStencilState dsstate{ 0u, false, false };
-		dsstate.stencilTestEnable = true;
-		dsstate.front.passOp = ashes::StencilOp::eReplace;
-		dsstate.front.reference = 1u;
-		dsstate.back = dsstate.front;
-		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
+		ashes::PipelineDepthStencilStateCreateInfo dsstate
+		{
+			0u,
+			VK_FALSE,
+			VK_FALSE,
+			VK_COMPARE_OP_LESS,
+			VK_FALSE,
+			VK_TRUE,
+			{
+				VK_STENCIL_OP_KEEP,
+				VK_STENCIL_OP_REPLACE,
+				VK_STENCIL_OP_KEEP,
+				VK_COMPARE_OP_ALWAYS,
+				0xFFFFFFFFu,
+				0xFFFFFFFFu,
+				1u,
+			},
+			{
+				VK_STENCIL_OP_KEEP,
+				VK_STENCIL_OP_REPLACE,
+				VK_STENCIL_OP_KEEP,
+				VK_COMPARE_OP_ALWAYS,
+				0xFFFFFFFFu,
+				0xFFFFFFFFu,
+				1u,
+			},
+		};
+		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		auto * view = &m_colourView;
 
 		if ( m_predicationView )
 		{
-			setLayoutBindings.emplace_back( 0u, ashes::DescriptorType::eCombinedImageSampler, ashes::ShaderStageFlag::eFragment );
+			setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			view = m_predicationView.get();
 		}
 
@@ -400,9 +421,9 @@ namespace smaa
 			, stages
 			, *view
 			, *m_renderPass
-			, setLayoutBindings
+			, std::move( setLayoutBindings )
 			, {}
-			, dsstate );
+			, std::move( dsstate ) );
 	}
 
 	void LumaEdgeDetection::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

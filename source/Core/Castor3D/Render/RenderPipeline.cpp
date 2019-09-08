@@ -3,17 +3,20 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
-#include <Ashes/Descriptor/DescriptorSetLayout.hpp>
-#include <Ashes/Pipeline/InputAssemblyState.hpp>
-#include <Ashes/Pipeline/Pipeline.hpp>
-#include <Ashes/Pipeline/PipelineLayout.hpp>
-#include <Ashes/Pipeline/ShaderStageState.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -22,10 +25,10 @@ using namespace castor;
 namespace castor3d
 {
 	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
-		, ashes::DepthStencilState && dsState
-		, ashes::RasterisationState && rsState
-		, ashes::ColourBlendState && blState
-		, ashes::MultisampleState && msState
+		, ashes::PipelineDepthStencilStateCreateInfo dsState
+		, ashes::PipelineRasterizationStateCreateInfo rsState
+		, ashes::PipelineColorBlendStateCreateInfo blState
+		, ashes::PipelineMultisampleStateCreateInfo msState
 		, ShaderProgramSPtr program
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
@@ -44,11 +47,17 @@ namespace castor3d
 
 	void RenderPipeline::initialise( ashes::RenderPass const & renderPass )
 	{
-		ashes::VertexLayoutCRefArray vertexLayouts;
+		ashes::VkVertexInputBindingDescriptionArray bindings;
+		ashes::VkVertexInputAttributeDescriptionArray attributes;
 
 		for ( auto & layout : m_vertexLayouts )
 		{
-			vertexLayouts.emplace_back( layout );
+			bindings.insert( bindings.end()
+				, layout.vertexBindingDescriptions.begin()
+				, layout.vertexBindingDescriptions.end() );
+			attributes.insert( attributes.end()
+				, layout.vertexAttributeDescriptions.begin()
+				, layout.vertexAttributeDescriptions.end() );
 		}
 
 		ashes::DescriptorSetLayoutCRefArray descriptorLayouts;
@@ -62,50 +71,57 @@ namespace castor3d
 		}
 
 		m_program->initialise();
-
-		ashes::GraphicsPipelineCreateInfo createInfo
-		{
-			m_program->getStates(),
-			renderPass,
-			ashes::VertexInputState::create( vertexLayouts ),
-			ashes::InputAssemblyState{ m_flags.topology },
-			m_rsState,
-			m_msState,
-			m_blState,
-		};
-		createInfo.depthStencilState = m_dsState;
-		ashes::DynamicStateEnableArray dynamicStates;
+		ashes::VkDynamicStateArray dynamicStates;
+		ashes::VkViewportArray viewports;
+		ashes::VkScissorArray scissors;
 
 		if ( m_viewport )
 		{
-			createInfo.viewportState.viewports.push_back( *m_viewport );
+			viewports.push_back( *m_viewport );
 		}
 		else
 		{
-			dynamicStates.push_back( ashes::DynamicStateEnable::eViewport );
+			dynamicStates.push_back( VK_DYNAMIC_STATE_VIEWPORT );
 		}
 
 		if ( m_scissor )
 		{
-			createInfo.viewportState.scissors.push_back( *m_scissor );
+			scissors.push_back( *m_scissor );
 		}
 		else
 		{
-			dynamicStates.push_back( ashes::DynamicStateEnable::eScissor );
+			dynamicStates.push_back( VK_DYNAMIC_STATE_SCISSOR );
 		}
+
+		ashes::Optional< ashes::PipelineDynamicStateCreateInfo > dynamicState;
 
 		if ( !dynamicStates.empty() )
 		{
-			createInfo.dynamicState = ashes::DynamicState
-			{
-				0u,
-				dynamicStates,
-			};
+			dynamicState = ashes::PipelineDynamicStateCreateInfo{ 0u, std::move( dynamicStates ) };
 		}
 
-		m_pipelineLayout = getCurrentDevice( *this ).createPipelineLayout( descriptorLayouts
+		auto & device = getCurrentRenderDevice( *this );
+		m_pipelineLayout = device->createPipelineLayout( descriptorLayouts
 			, m_pushConstantRanges );
-		m_pipeline = m_pipelineLayout->createPipeline( createInfo );
+		setDebugObjectName( device, *m_pipelineLayout, "RenderPipelinePipelineLayout" );
+		ashes::GraphicsPipelineCreateInfo createInfo
+		(
+			0u,
+			m_program->getStates(),
+			ashes::PipelineVertexInputStateCreateInfo{ 0u, std::move( bindings ), std::move( attributes ) },
+			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, m_flags.topology },
+			std::nullopt,
+			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, std::move( viewports ), 1u, std::move( scissors ) },
+			std::move( m_rsState ),
+			std::move( m_msState ),
+			std::move( m_dsState ),
+			std::move( m_blState ),
+			std::move( dynamicState ),
+			*m_pipelineLayout,
+			renderPass
+		);
+		m_pipeline = device->createPipeline( std::move( createInfo ) );
+		setDebugObjectName( device, *m_pipeline, "RenderPipelinePipeline" );
 	}
 
 	void RenderPipeline::cleanup()
@@ -117,26 +133,28 @@ namespace castor3d
 	void RenderPipeline::createDescriptorPools( uint32_t maxSets )
 	{
 		m_descriptorPools.clear();
+		auto & device = getCurrentRenderDevice( *this );
 
 		for ( auto & layout : m_descriptorLayouts )
 		{
 			auto & bindings = layout->getBindings();
 			auto it = std::find_if( bindings.begin()
 				, bindings.end()
-				, []( ashes::DescriptorSetLayoutBinding const & lookup )
+				, []( VkDescriptorSetLayoutBinding const & lookup )
 				{
-					return lookup.getDescriptorsCount() == 0u;
+					return lookup.descriptorCount == 0u;
 				} );
 
 			if ( it == bindings.end()
 				&& !layout->getBindings().empty() )
 			{
 				m_descriptorPools.emplace_back( layout->createPool( maxSets ) );
+				setDebugObjectName( device, *m_descriptorPools.back(), "RenderPipelineDescriptorPool" );
 			}
 		}
 	}
 
-	void RenderPipeline::setVertexLayouts( ashes::VertexLayoutCRefArray const & layouts )
+	void RenderPipeline::setVertexLayouts( ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
 	{
 		CU_Require( !m_pipeline );
 

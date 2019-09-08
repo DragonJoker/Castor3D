@@ -11,13 +11,11 @@
 #include <Castor3D/Texture/Sampler.hpp>
 #include <Castor3D/Texture/TextureLayout.hpp>
 
-#include <Ashes/Core/Renderer.hpp>
-#include <Ashes/Image/Texture.hpp>
-#include <Ashes/Image/TextureView.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/RenderPass/RenderPassCreateInfo.hpp>
-#include <Ashes/Pipeline/DepthStencilState.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -105,28 +103,32 @@ namespace smaa
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ashes::TextureViewPtr doCreateDepthView( ashes::TextureView const & depthView )
+		ashes::ImageView doCreateDepthView( ashes::ImageView const & depthView )
 		{
-			ashes::ImageViewCreateInfo view{};
-			view.format = depthView.getFormat();
-			view.viewType = ashes::TextureViewType::e2D;
-			auto & texture = depthView.getTexture();
-			view.subresourceRange.aspectMask = ashes::ImageAspectFlag::eDepth;
-			return texture.createView( view );
+			ashes::ImageViewCreateInfo view
+			{
+				0u,
+				*depthView.image,
+				VK_IMAGE_VIEW_TYPE_2D,
+				depthView.getFormat(),
+				VkComponentMapping{},
+				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u }
+			};
+			return depthView.image->createView( view );
 		}
 	}
 
 	//*********************************************************************************************
 
 	DepthEdgeDetection::DepthEdgeDetection( castor3d::RenderTarget & renderTarget
-		, ashes::TextureView const & depthView
+		, ashes::ImageView const & depthView
 		, SmaaConfig const & config )
 		: EdgeDetection{ renderTarget, config }
 		, m_depthView{ doCreateDepthView( depthView ) }
 		, m_sourceView{ depthView }
 	{
-		ashes::Extent2D size{ m_depthView->getTexture().getDimensions().width
-			, m_depthView->getTexture().getDimensions().height };
+		VkExtent2D size{ m_depthView.image->getDimensions().width
+			, m_depthView.image->getDimensions().height };
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_pixelShader.shader = doGetEdgeDetectionFP( *renderTarget.getEngine()->getRenderSystem()
 			, pixelSize
@@ -137,25 +139,27 @@ namespace smaa
 	castor3d::CommandsSemaphore DepthEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
-		auto & device = getCurrentDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.getGraphicsCommandPool().createCommandBuffer(),
-			device.createSemaphore()
+			m_device.graphicsCommandPool->createCommandBuffer(),
+			m_device->createSemaphore()
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
 		edgeDetectionCmd.begin();
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.
-		edgeDetectionCmd.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_sourceView.makeShaderInputResource( ashes::ImageLayout::eUndefined, 0u ) );
+		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_sourceView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::ClearColorValue{ 0.0, 0.0, 0.0, 0.0 }, ashes::DepthStencilClearValue{ 1.0f, 0 } }
-			, ashes::SubpassContents::eInline );
+			, {
+				ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ),
+				ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } ),
+			}
+			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
@@ -166,28 +170,25 @@ namespace smaa
 
 	void DepthEdgeDetection::doInitialisePipeline()
 	{
-		ashes::Extent2D size{ m_depthView->getTexture().getDimensions().width
-			, m_depthView->getTexture().getDimensions().height };
-		auto & device = getCurrentDevice( m_renderSystem );
-		ashes::ShaderStageStateArray stages;
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eVertex ) } );
-		stages.push_back( { device.createShaderModule( ashes::ShaderStageFlag::eFragment ) } );
-		stages[0].module->loadShader( m_renderSystem.compileShader( m_vertexShader ) );
-		stages[1].module->loadShader( m_renderSystem.compileShader( m_pixelShader ) );
+		VkExtent2D size{ m_depthView.image->getDimensions().width
+			, m_depthView.image->getDimensions().height };
+		ashes::PipelineShaderStageCreateInfoArray stages;
+		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
+		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
 
-		ashes::DepthStencilState dsstate{ 0u, false, false };
-		dsstate.stencilTestEnable = true;
-		dsstate.front.passOp = ashes::StencilOp::eReplace;
-		dsstate.front.reference = 1u;
-		dsstate.back = dsstate.front;
-		ashes::DescriptorSetLayoutBindingArray setLayoutBindings;
+		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
+		dsstate->stencilTestEnable = true;
+		dsstate->front.passOp = VK_STENCIL_OP_REPLACE;
+		dsstate->front.reference = 1u;
+		dsstate->back = dsstate->front;
+		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		createPipeline( size
 			, castor::Position{}
 			, stages
-			, *m_depthView
+			, m_depthView
 			, *m_renderPass
-			, setLayoutBindings
+			, std::move( setLayoutBindings )
 			, {}
-			, dsstate );
+			, std::move( dsstate ) );
 	}
 }

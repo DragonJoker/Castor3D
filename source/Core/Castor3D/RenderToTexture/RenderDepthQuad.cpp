@@ -3,9 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/RenderPass/ClearValue.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -14,10 +13,10 @@ using namespace castor;
 namespace castor3d
 {
 	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ renderSystem, false, false }
+		: RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
 		, m_program{ renderSystem }
 	{
-		ShaderModule vtx{ ashes::ShaderStageFlag::eVertex, "RenderDepthQuad" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -38,7 +37,7 @@ namespace castor3d
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ ashes::ShaderStageFlag::eFragment, "RenderDepthQuad" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "RenderDepthQuad" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -59,8 +58,8 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_program.setSource( ashes::ShaderStageFlag::eVertex, std::move( vtx.shader ) );
-		m_program.setSource( ashes::ShaderStageFlag::eFragment, std::move( pxl.shader ) );
+		m_program.setSource( VK_SHADER_STAGE_VERTEX_BIT, std::move( vtx.shader ) );
+		m_program.setSource( VK_SHADER_STAGE_FRAGMENT_BIT, std::move( pxl.shader ) );
 	}
 
 	RenderDepthQuad::~RenderDepthQuad()
@@ -78,10 +77,9 @@ namespace castor3d
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		static ashes::ClearColorValue const clear{ 0.0, 0.0, 0.0, 0.0 };
+		static VkClearValue const clear{ ashes::makeClearValue( { 0.0, 0.0, 0.0, 0.0 } ) };
 		cleanup();
-		auto & device = getCurrentDevice( m_renderSystem );
-		m_commandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
@@ -89,17 +87,17 @@ namespace castor3d
 			, renderPass
 			, {}
 			, {}
-			, ashes::DepthStencilState{ 0u, false, false } );
-		m_commandBuffer->begin( ashes::CommandBufferUsageFlag::eOneTimeSubmit );
+			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false } );
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( renderPass
 			, frameBuffer
 			, { clear }
-			, ashes::SubpassContents::eInline );
+			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.getGraphicsQueue().submit( *m_commandBuffer, nullptr );
-		device.getGraphicsQueue().waitIdle();
+		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		m_device.graphicsQueue->waitIdle();
 	}
 }

@@ -23,7 +23,7 @@ namespace castor3d
 	struct UniformBufferOffset
 	{
 		UniformBuffer< T > * buffer;
-		ashes::MemoryPropertyFlags flags;
+		VkMemoryPropertyFlags flags;
 		uint32_t offset;
 
 		explicit operator bool()const
@@ -106,7 +106,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateurs de mémoire du tampon.
 		 *\return		Le tampon d'uniformes.
 		 */
-		UniformBufferOffset< T > getBuffer( ashes::MemoryPropertyFlags flags );
+		UniformBufferOffset< T > getBuffer( VkMemoryPropertyFlags flags );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.
@@ -131,8 +131,6 @@ namespace castor3d
 		uint32_t m_maxCount{ 0u };
 		uint32_t m_maxSize{ 0u };
 		ashes::StagingBufferPtr m_stagingBuffer;
-		ashes::CommandBufferPtr m_uploadCommandBuffer;
-		ashes::FencePtr m_uploadFence;
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
 	};

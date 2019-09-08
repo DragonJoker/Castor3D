@@ -28,8 +28,8 @@ namespace film_grain
 		};
 
 	public:
-		explicit RenderQuad( castor3d::RenderSystem & renderSystem
-			, ashes::Extent2D const & size );
+		explicit RenderQuad( castor3d::RenderDevice const & device
+			, VkExtent2D const & size );
 		void update( castor::Nanoseconds const & time );
 
 		inline ashes::UniformBuffer< Configuration > const & getUbo()const
@@ -48,11 +48,11 @@ namespace film_grain
 
 	private:
 		uint64_t m_time{ 0ull };
-		ashes::Extent2D m_size;
+		VkExtent2D m_size;
 		ashes::UniformBufferPtr< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
-		ashes::TexturePtr m_noise;
-		ashes::TextureViewPtr m_noiseView;
+		ashes::ImagePtr m_noise;
+		ashes::ImageView m_noiseView;
 	};
 
 	class PostEffect

@@ -1,9 +1,9 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Sync/Fence.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {
@@ -24,38 +24,35 @@ namespace castor3d
 	void UniformBufferPool< T >::cleanup()
 	{
 		m_buffers.clear();
-		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
 	}
 
 	template< typename T >
 	void UniformBufferPool< T >::upload( RenderPassTimer & timer, uint32_t index )const
 	{
+		RenderDevice const & device = *getRenderSystem()->getCurrentRenderDevice();
+
 		for ( auto & bufferIt : m_buffers )
 		{
 			for ( auto & buffer : bufferIt.second )
 			{
-				buffer->upload( *m_stagingBuffer
-					, *m_uploadCommandBuffer
+				buffer->upload( m_stagingBuffer->getBuffer()
+					, *device.transferQueue
+					, *device.transferCommandPool
 					, 0u
-					, ashes::PipelineStageFlag::eVertexShader
+					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, timer
 					, index );
 				timer.notifyPassRender( index );
-				m_uploadFence->reset();
-
-				getCurrentDevice( *getRenderSystem() ).getGraphicsQueue().submit( *m_uploadCommandBuffer
-					, m_uploadFence.get() );
-				m_uploadFence->wait( ashes::FenceTimeout );
-
 				++index;
 			}
 		}
 	}
 
 	template< typename T >
-	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( ashes::MemoryPropertyFlags flags )
+	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( VkMemoryPropertyFlags flags )
 	{
+		RenderDevice const & device = *getRenderSystem()->getCurrentRenderDevice();
 		UniformBufferOffset< T > result;
 
 		auto key = uint32_t( flags );
@@ -72,8 +69,8 @@ namespace castor3d
 		{
 			if ( !m_maxCount )
 			{
-				uint32_t maxSize = getRenderSystem()->getProperties().limits.maxUniformBufferRange;
-				uint32_t minOffset = uint32_t( getRenderSystem()->getProperties().limits.minUniformBufferOffsetAlignment );
+				uint32_t maxSize = device.properties.limits.maxUniformBufferRange;
+				uint32_t minOffset = uint32_t( device.properties.limits.minUniformBufferOffsetAlignment );
 				uint32_t elementSize = 0u;
 				uint32_t size = uint32_t( sizeof( T ) );
 
@@ -90,16 +87,14 @@ namespace castor3d
 				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
-						auto & device = getCurrentDevice( *getRenderSystem() );
-						m_uploadCommandBuffer = device.getGraphicsCommandPool().createCommandBuffer();
-						m_uploadFence = device.createFence( ashes::FenceCreateFlag::eSignaled );
-						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( device
-							, ashes::BufferTarget::eTransferSrc
+						auto & device = *getRenderSystem()->getCurrentRenderDevice();
+						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
+							, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 							, m_maxSize );
 					} ) );
 			}
 
-			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
+			auto buffer = std::make_unique< UniformBuffer< T > >( device.renderSystem
 				, m_maxCount
 				, flags
 				, m_debugName );

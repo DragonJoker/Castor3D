@@ -12,8 +12,8 @@ See LICENSE file in root folder
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/Sync/Semaphore.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -92,7 +92,7 @@ namespace castor3d
 		public:
 			explicit TargetFbo( RenderTarget & renderTarget );
 			bool initialise( ashes::RenderPass & renderPass
-				, ashes::Format format
+				, VkFormat format
 				, castor::Size const & size );
 			void cleanup();
 
@@ -118,15 +118,15 @@ namespace castor3d
 			: public RenderQuad
 		{
 		public:
-			explicit CombineQuad( RenderSystem & renderSystem
-				, ashes::TextureView const & ovView );
+			explicit CombineQuad( RenderDevice const & device
+				, ashes::ImageView const & ovView );
 
 		private:
 			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 				, ashes::DescriptorSet & descriptorSet )override;
 
 		private:
-			ashes::TextureView const & m_ovView;
+			ashes::ImageView const & m_ovView;
 		};
 
 	public:
@@ -300,7 +300,7 @@ namespace castor3d
 			return m_velocityTexture;
 		}
 
-		inline ashes::Format getPixelFormat()const
+		inline VkFormat getPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -372,7 +372,7 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
-		inline void setPixelFormat( ashes::Format value )
+		inline void setPixelFormat( VkFormat value )
 		{
 			m_pixelFormat = value;
 		}
@@ -400,8 +400,8 @@ namespace castor3d
 		C3D_API bool doInitialiseTechnique();
 		C3D_API bool doInitialiseToneMapping();
 		C3D_API void doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
-			, ashes::TextureView const & source
-			, ashes::TextureView const & target );
+			, ashes::ImageView const & source
+			, ashes::ImageView const & target );
 		C3D_API void doInitialiseFlip();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
@@ -433,7 +433,7 @@ namespace castor3d
 		TargetFbo m_objectsFrameBuffer;
 		TargetFbo m_overlaysFrameBuffer;
 		TargetFbo m_combinedFrameBuffer;
-		ashes::Format m_pixelFormat;
+		VkFormat m_pixelFormat;
 		uint32_t m_index;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;

@@ -22,16 +22,16 @@ namespace castor3d
 		C3D_API ShaderModule( ShaderModule && rhs );
 		C3D_API ShaderModule & operator=( ShaderModule && rhs );
 
-		C3D_API ShaderModule( ashes::ShaderStageFlag stage
+		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name );
-		C3D_API ShaderModule( ashes::ShaderStageFlag stage
+		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name
 			, std::string source );
-		C3D_API ShaderModule( ashes::ShaderStageFlag stage
+		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name
 			, ShaderPtr shader );
 
-		ashes::ShaderStageFlag stage;
+		VkShaderStageFlagBits stage;
 		std::string name;
 		std::string source;
 		ShaderPtr shader;

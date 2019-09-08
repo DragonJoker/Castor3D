@@ -8,7 +8,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <Ashes/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
 
 namespace castor3d
 {
@@ -54,7 +55,7 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, ashes::Format format = ashes::Format::eR32G32B32A32_SFLOAT
+			, VkFormat format = VK_FORMAT_R32G32B32A32_SFLOAT
 			, uint32_t mipLevels = 1u );
 		/**
 		 *\~english
@@ -72,8 +73,8 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, ashes::Format colourFormat
-			, ashes::Format depthFormat );
+			, VkFormat colourFormat
+			, VkFormat depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -106,7 +107,7 @@ namespace castor3d
 		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, TextureLayoutSPtr colourTexture
-			, ashes::Format depthFormat );
+			, VkFormat depthFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -123,7 +124,7 @@ namespace castor3d
 		 */
 		C3D_API bool initialise( ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, ashes::Format colourFormat
+			, VkFormat colourFormat
 			, TextureLayoutSPtr depthTexture );
 		/**
 		 *\~english
@@ -162,10 +163,10 @@ namespace castor3d
 		TextureLayoutSPtr depthTexture;
 		//!\~english	The surface depth view.
 		//!\~french		La vie profondeur de la surface.
-		ashes::TextureViewPtr depthView;
+		ashes::ImageView depthView;
 		//!\~english	The surface stencil view.
 		//!\~french		La vie stencil de la surface.
-		ashes::TextureViewPtr stencilView;
+		ashes::ImageView stencilView;
 		//!\~english	The surface dimensions.
 		//!\~french		Les dimensions de la surface.
 		castor::Size size;

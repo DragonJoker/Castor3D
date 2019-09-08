@@ -5,11 +5,9 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Texture/TextureLayout.hpp"
 
-#include <Ashes/Command/CommandBuffer.hpp>
-#include <Ashes/RenderPass/FrameBuffer.hpp>
-#include <Ashes/RenderPass/FrameBufferAttachment.hpp>
-#include <Ashes/RenderPass/RenderPass.hpp>
-#include <Ashes/Sync/ImageMemoryBarrier.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 using namespace castor;
 
@@ -77,25 +75,25 @@ namespace castor3d
 	{
 	}
 
-	void PostEffect::doCopyResultToTarget( ashes::TextureView const & result
+	void PostEffect::doCopyResultToTarget( ashes::ImageView const & result
 		, ashes::CommandBuffer & commandBuffer )
 	{
 		// Put result image in transfer source layout.
-		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eColourAttachmentOutput
-			, ashes::PipelineStageFlag::eTransfer
-			, result.makeTransferSource( ashes::ImageLayout::eColourAttachmentOptimal
-				, ashes::AccessFlag::eColourAttachmentWrite ) );
+		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, result.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT ) );
 		// Put target image in transfer destination layout.
-		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eFragmentShader
-			, ashes::PipelineStageFlag::eTransfer
-			, m_target->getDefaultView().makeTransferDestination( ashes::ImageLayout::eUndefined, 0u ) );
+		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_target->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
 		// Copy result to target.
 		commandBuffer.copyImage( result
 			, m_target->getDefaultView() );
 		// Put target image in fragment shader input layout.
-		commandBuffer.memoryBarrier( ashes::PipelineStageFlag::eTransfer
-			, ashes::PipelineStageFlag::eFragmentShader
-			, m_target->getDefaultView().makeShaderInputResource( ashes::ImageLayout::eTransferDstOptimal
-				, ashes::AccessFlag::eTransferWrite ) );
+		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_ACCESS_TRANSFER_WRITE_BIT ) );
 	}
 }

@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/BufferView.hpp>
 
 namespace castor3d
 {
@@ -41,7 +42,7 @@ namespace castor3d
 		C3D_API ShaderBuffer( Engine & engine
 			, uint32_t size
 			, castor::String name
-			, ashes::Format tboFormat = ashes::Format::eR32G32B32A32_SFLOAT );
+			, VkFormat tboFormat = VK_FORMAT_R32G32B32A32_SFLOAT );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -66,8 +67,8 @@ namespace castor3d
 		 *\param[in]	offset	L'offset de départ.
 		 *\param[in]	size	L'intervalle à mettre à jour.
 		 */
-		C3D_API void update( ashes::DeviceSize offset
-			, ashes::DeviceSize size );
+		C3D_API void update( VkDeviceSize offset
+			, VkDeviceSize size );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
@@ -76,7 +77,7 @@ namespace castor3d
 		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
 		 *\param[in]	index	L'indice du point d'attache.
 		 */
-		C3D_API ashes::DescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
 		/**
 		 *\~english
 		 *\brief			Creates the descriptor set binding at given point.
@@ -88,7 +89,7 @@ namespace castor3d
 		 *\param[in]		binding			L'attache de layout de set de descripteurs.
 		 */
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
-			, ashes::DescriptorSetLayoutBinding const & binding )const;
+			, VkDescriptorSetLayoutBinding const & binding )const;
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -105,18 +106,18 @@ namespace castor3d
 		 *\~french
 		 *\brief		La taille du tampon.
 		 */
-		inline ashes::DeviceSize getSize()
+		inline VkDeviceSize getSize()
 		{
 			return m_size;
 		}
 
 	private:
-		void doUpdate( ashes::DeviceSize offset
-			, ashes::DeviceSize size );
+		void doUpdate( VkDeviceSize offset
+			, VkDeviceSize size );
 
 	private:
 		Engine & m_engine;
-		ashes::DeviceSize m_size;
+		VkDeviceSize m_size;
 		ashes::BufferBasePtr m_buffer;
 		ashes::BufferViewPtr m_bufferView;
 		ashes::ByteArray m_data;

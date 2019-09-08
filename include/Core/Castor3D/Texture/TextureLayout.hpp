@@ -4,10 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_TEXTURE_LAYOUT_H___
 #define ___C3D_TEXTURE_LAYOUT_H___
 
+#include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Texture/TextureView.hpp"
 
-#include <Ashes/Image/ImageCreateInfo.hpp>
-#include <Ashes/Image/Texture.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageCreateInfo.hpp>
 
 namespace castor3d
 {
@@ -41,7 +43,7 @@ namespace castor3d
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImageCreateInfo info
-			, ashes::MemoryPropertyFlags memoryProperties
+			, VkMemoryPropertyFlags memoryProperties
 			, castor::String debugName );
 		/**
 		 *\~english
@@ -110,12 +112,12 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline ashes::TextureType getType()const
+		inline VkImageType getType()const
 		{
-			return m_info.imageType;
+			return m_info->imageType;
 		}
 
-		inline ashes::Texture const & getTexture()const
+		inline ashes::Image const & getTexture()const
 		{
 			CU_Require( m_texture );
 			return *m_texture;
@@ -160,44 +162,44 @@ namespace castor3d
 			return *m_defaultView;
 		}
 
-		inline ashes::TextureView const & getDefaultView()const
+		inline ashes::ImageView const & getDefaultView()const
 		{
 			return m_defaultView->getView();
 		}
 
 		inline uint32_t getWidth()const
 		{
-			return m_info.extent.width;
+			return m_info->extent.width;
 		}
 
 		inline uint32_t getHeight()const
 		{
-			return m_info.extent.height;
+			return m_info->extent.height;
 		}
 
 		inline uint32_t getDepth()const
 		{
-			return m_info.extent.depth;
+			return m_info->extent.depth;
 		}
 
 		inline uint32_t getMipmapCount()const
 		{
-			return m_info.mipLevels;
+			return m_info->mipLevels;
 		}
 
-		inline ashes::Extent3D const & getDimensions()const
+		inline VkExtent3D const & getDimensions()const
 		{
-			return m_info.extent;
+			return m_info->extent;
 		}
 
-		inline ashes::Format getPixelFormat()const
+		inline VkFormat getPixelFormat()const
 		{
-			return m_info.format;
+			return m_info->format;
 		}
 
 		inline uint32_t getLayersCount()const
 		{
-			return m_info.arrayLayers;
+			return m_info->arrayLayers;
 		}
 
 		inline auto begin()
@@ -222,17 +224,33 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpdateFromFirstImage( castor::Size const & size, ashes::Format format );
+		void doUpdateFromFirstImage( castor::Size const & size, VkFormat format );
 
 	private:
 		bool m_initialised{ false };
 		ashes::ImageCreateInfo m_info;
-		ashes::MemoryPropertyFlags m_properties;
+		VkMemoryPropertyFlags m_properties;
 		std::vector< TextureViewUPtr > m_views;
 		TextureViewUPtr m_defaultView;
-		ashes::TexturePtr m_texture;
+		ashes::ImagePtr m_texture;
 		castor::String m_debugName;
 	};
+
+	inline ashes::ImagePtr makeImage( RenderDevice const & device
+		, ashes::ImageCreateInfo createInfo
+		, VkMemoryPropertyFlags flags
+		, std::string const & name )
+	{
+		auto result = device->createImage( std::move( createInfo ) );
+		setDebugObjectName( device, *result, name + "Map" );
+		auto requirements = result->getMemoryRequirements();
+		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
+			, flags );
+		auto memory = device->allocateMemory( VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
+		setDebugObjectName( device, *memory, name + "MapMem" );
+		result->bindMemory( std::move( memory ) );
+		return result;
+	}
 }
 
 #endif

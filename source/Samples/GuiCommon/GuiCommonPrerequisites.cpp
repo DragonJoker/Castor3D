@@ -29,7 +29,7 @@ using Bool = int;
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-#include <Ashes/Core/PlatformWindowHandle.hpp>
+#include <ashespp/Core/PlatformWindowHandle.hpp>
 
 #include <wx/window.h>
 #include <wx/rawbmp.h>
@@ -457,24 +457,24 @@ namespace GuiCommon
 		return wxSize( p_value.getWidth(), p_value.getHeight() );
 	}
 
-	ast::ShaderStage convert( ashes::ShaderStageFlag stage )
+	ast::ShaderStage convert( VkShaderStageFlagBits stage )
 	{
 		switch ( stage )
 		{
-		case ashes::ShaderStageFlag::eVertex:
+		case VK_SHADER_STAGE_VERTEX_BIT:
 			return ast::ShaderStage::eVertex;
-		case ashes::ShaderStageFlag::eTessellationControl:
+		case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
 			return ast::ShaderStage::eTessellationControl;
-		case ashes::ShaderStageFlag::eTessellationEvaluation:
+		case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
 			return ast::ShaderStage::eTessellationEvaluation;
-		case ashes::ShaderStageFlag::eGeometry:
+		case VK_SHADER_STAGE_GEOMETRY_BIT:
 			return ast::ShaderStage::eGeometry;
-		case ashes::ShaderStageFlag::eFragment:
+		case VK_SHADER_STAGE_FRAGMENT_BIT:
 			return ast::ShaderStage::eFragment;
-		case ashes::ShaderStageFlag::eCompute:
+		case VK_SHADER_STAGE_COMPUTE_BIT:
 			return ast::ShaderStage::eCompute;
 		default:
-			assert( false && "Unsupported ashes::ShaderStageFlag" );
+			assert( false && "Unsupported VkShaderStageFlagBits" );
 			return ast::ShaderStage::eVertex;
 		}
 	}

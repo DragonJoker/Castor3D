@@ -19,9 +19,9 @@ namespace smaa
 	{
 	public:
 		Reproject( castor3d::RenderTarget & renderTarget
-			, ashes::TextureView const & currentColourView
-			, ashes::TextureView const & previousColourView
-			, ashes::TextureView const * velocityView
+			, ashes::ImageView const & currentColourView
+			, ashes::ImageView const & previousColourView
+			, ashes::ImageView const * velocityView
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
@@ -39,9 +39,9 @@ namespace smaa
 	private:
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
-		ashes::TextureView const & m_currentColourView;
-		ashes::TextureView const & m_previousColourView;
-		ashes::TextureView const * m_velocityView;
+		ashes::ImageView const & m_currentColourView;
+		ashes::ImageView const & m_previousColourView;
+		ashes::ImageView const * m_velocityView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 	};

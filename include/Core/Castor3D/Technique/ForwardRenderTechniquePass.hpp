@@ -97,8 +97,8 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la passe.
 		 *\param[in]	clear		Dit si les attaches doivent être vidées au début de la passe.
 		 */
-		void initialiseRenderPass( ashes::TextureView const & colourView
-			, ashes::TextureView const & depthView
+		void initialiseRenderPass( ashes::ImageView const & colourView
+			, ashes::ImageView const & depthView
 			, castor::Size const & size
 			, bool clear );
 		/**
@@ -130,11 +130,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
 		 */
-		C3D_API ashes::DescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
-		C3D_API ashes::DescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
+		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */

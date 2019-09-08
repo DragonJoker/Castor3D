@@ -50,7 +50,7 @@ namespace CastorGui
 			, p_visible )
 		, m_caption( p_caption )
 	{
-		setBackgroundBorders( Rectangle() );
+		setBackgroundBorders( castor::Rectangle() );
 
 		TextOverlaySPtr text = getEngine().getOverlayCache().add( cuT( "T_CtrlStatic_" ) + string::toString( getId() )
 			, OverlayType::eText

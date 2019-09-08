@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <Ashes/Image/SamplerCreateInfo.hpp>
-#include <Ashes/Image/Sampler.hpp>
+#include <ashespp/Image/SamplerCreateInfo.hpp>
+#include <ashespp/Image/Sampler.hpp>
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -107,64 +107,64 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		inline ashes::WrapMode getWrapS()const
+		inline VkSamplerAddressMode getWrapS()const
 		{
-			return m_info.addressModeU;
+			return m_info->addressModeU;
 		}
 
-		inline ashes::WrapMode getWrapT()const
+		inline VkSamplerAddressMode getWrapT()const
 		{
-			return m_info.addressModeV;
+			return m_info->addressModeV;
 		}
 
-		inline ashes::WrapMode getWrapR()const
+		inline VkSamplerAddressMode getWrapR()const
 		{
-			return m_info.addressModeW;
+			return m_info->addressModeW;
 		}
 
-		inline ashes::Filter getMinFilter()const
+		inline VkFilter getMinFilter()const
 		{
-			return m_info.minFilter;
+			return m_info->minFilter;
 		}
 
-		inline ashes::Filter getMagFilter()const
+		inline VkFilter getMagFilter()const
 		{
-			return m_info.magFilter;
+			return m_info->magFilter;
 		}
 
-		inline ashes::MipmapMode getMipFilter()const
+		inline VkSamplerMipmapMode getMipFilter()const
 		{
-			return m_info.mipmapMode;
+			return m_info->mipmapMode;
 		}
 
 		inline float getMinLod()const
 		{
-			return m_info.minLod;
+			return m_info->minLod;
 		}
 
 		inline float getMaxLod()const
 		{
-			return m_info.maxLod;
+			return m_info->maxLod;
 		}
 
 		inline float getLodBias()const
 		{
-			return m_info.mipLodBias;
+			return m_info->mipLodBias;
 		}
 
-		inline ashes::BorderColour getBorderColour()const
+		inline VkBorderColor getBorderColour()const
 		{
-			return m_info.borderColor;
+			return m_info->borderColor;
 		}
 
 		inline float getMaxAnisotropy()const
 		{
-			return m_info.maxAnisotropy;
+			return m_info->maxAnisotropy;
 		}
 
-		inline ashes::CompareOp getCompareOp()const
+		inline VkCompareOp getCompareOp()const
 		{
-			return m_info.compareOp;
+			return m_info->compareOp;
 		}
 
 		inline ashes::Sampler const & getSampler()const
@@ -186,95 +186,96 @@ namespace castor3d
 		*	ils ont un effet jusqu'à ce que initialise() soit appelée.
 		**/
 		/**@{*/
-		inline void setWrapS( ashes::WrapMode value )
+		inline void setWrapS( VkSamplerAddressMode value )
 		{
-			m_info.addressModeU = value;
+			m_info->addressModeU = value;
 		}
 
-		inline void setWrapT( ashes::WrapMode value )
+		inline void setWrapT( VkSamplerAddressMode value )
 		{
-			m_info.addressModeV = value;
+			m_info->addressModeV = value;
 		}
 
-		inline void setWrapR( ashes::WrapMode value )
+		inline void setWrapR( VkSamplerAddressMode value )
 		{
-			m_info.addressModeW = value;
+			m_info->addressModeW = value;
 		}
 
-		inline void setMinFilter( ashes::Filter value )
+		inline void setMinFilter( VkFilter value )
 		{
-			m_info.minFilter = value;
+			m_info->minFilter = value;
 		}
 
-		inline void setMagFilter( ashes::Filter value )
+		inline void setMagFilter( VkFilter value )
 		{
-			m_info.magFilter = value;
+			m_info->magFilter = value;
 		}
 
-		inline void setMipFilter( ashes::MipmapMode value )
+		inline void setMipFilter( VkSamplerMipmapMode value )
 		{
 			m_mipmapIsSet = true;
-			m_info.mipmapMode = value;
+			m_info->mipmapMode = value;
 		}
 
 		inline void setMinLod( float value )
 		{
-			m_info.minLod = value;
+			m_info->minLod = value;
 		}
 
 		inline void setMaxLod( float value )
 		{
-			m_info.maxLod = value;
+			m_info->maxLod = value;
 		}
 
 		inline void setLodBias( float value )
 		{
-			m_info.mipLodBias = value;
+			m_info->mipLodBias = value;
 		}
 
-		inline void setBorderColour( ashes::BorderColour value )
+		inline void setBorderColour( VkBorderColor value )
 		{
-			m_info.borderColor = value;
+			m_info->borderColor = value;
 		}
 
 		inline void enableAnisotropicFiltering( bool value )
 		{
-			m_info.anisotropyEnable = value;
+			m_info->anisotropyEnable = value;
 		}
 
 		inline void setMaxAnisotropy( float value )
 		{
-			m_info.maxAnisotropy = value;
+			m_info->maxAnisotropy = value;
 		}
 
-		inline void setCompareOp( ashes::CompareOp value )
+		inline void setCompareOp( VkCompareOp value )
 		{
-			m_info.compareOp = value;
+			m_info->compareOp = value;
 		}
 
 		inline void enableCompare( bool value )
 		{
-			m_info.compareEnable = value;
+			m_info->compareEnable = value;
 		}
 		/**@}*/
 
 	private:
 		ashes::SamplerCreateInfo m_info
 		{
-			ashes::Filter::eNearest,
-			ashes::Filter::eNearest,
-			ashes::MipmapMode::eNone,
-			ashes::WrapMode::eClampToEdge,
-			ashes::WrapMode::eClampToEdge,
-			ashes::WrapMode::eClampToEdge,
+			0u,
+			VK_FILTER_NEAREST,
+			VK_FILTER_NEAREST,
+			VK_SAMPLER_MIPMAP_MODE_NEAREST,
+			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
 			0.0f,
-			false,
+			VK_FALSE,
 			1.0f,
-			false,
-			ashes::CompareOp::eNever,
+			VK_FALSE,
+			VK_COMPARE_OP_NEVER,
 			-1000.0f,
 			1000.0f,
-			ashes::BorderColour::eFloatOpaqueBlack,
+			VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 			false
 		};
 		bool m_mipmapIsSet{ false };

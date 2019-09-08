@@ -8,8 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
 
-#include <Ashes/Pipeline/ShaderStageState.hpp>
-#include <Ashes/Pipeline/VertexLayout.hpp>
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d
 {

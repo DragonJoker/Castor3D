@@ -1,12 +1,13 @@
 #include "Castor3D/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
-#include <Ashes/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 
@@ -14,7 +15,7 @@ namespace castor3d
 {
 	namespace
 	{
-		castor::Matrix4x4f getProjectUnitMatrix( ashes::Device const & device
+		castor::Matrix4x4f getProjectUnitMatrix( RenderDevice const & device
 			, Viewport const & viewport )
 		{
 			// Uses double precision because the division operations may otherwise 
@@ -34,7 +35,7 @@ namespace castor3d
 			auto t = float( y );
 			auto b = float( -y );
 
-			return convert( device.frustum( l, r, b, t, n, f ) );
+			return convert( device->frustum( l, r, b, t, n, f ) );
 		}
 	}
 
@@ -59,7 +60,7 @@ namespace castor3d
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( m_engine.getRenderSystem()->hasCurrentDevice() )
+		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			initialise();
 		}
@@ -67,7 +68,7 @@ namespace castor3d
 
 	SsaoConfigUbo::~SsaoConfigUbo()
 	{
-		if ( m_engine.getRenderSystem()->hasCurrentDevice() )
+		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			cleanup();
 		}
@@ -75,17 +76,12 @@ namespace castor3d
 
 	void SsaoConfigUbo::initialise()
 	{
-		auto & device = getCurrentDevice( m_engine );
-		m_ubo = ashes::makeUniformBuffer< Configuration >( device
+		auto & device = getCurrentRenderDevice( m_engine );
+		m_ubo = makeUniformBuffer< Configuration >( device
 			, 1u
-			, ashes::BufferTarget::eTransferDst
-			, ashes::MemoryPropertyFlag::eHostVisible );
-		device.debugMarkerSetObjectName(
-			{
-				ashes::DebugReportObjectType::eBuffer,
-				&m_ubo->getUbo().getBuffer(),
-				"SsaoConfigUbo"
-			} );
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SsaoConfig" );
 	}
 
 	void SsaoConfigUbo::cleanup()
@@ -96,7 +92,7 @@ namespace castor3d
 	void SsaoConfigUbo::update( SsaoConfig const & config
 		, Camera const & camera )
 	{
-		auto & device = getCurrentDevice( m_engine );
+		auto & device = getCurrentRenderDevice( m_engine );
 		auto & viewport = camera.getViewport();
 		int numSpiralTurns = 0;
 

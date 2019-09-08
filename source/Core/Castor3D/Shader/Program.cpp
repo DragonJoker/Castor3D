@@ -25,9 +25,9 @@ namespace castor3d
 			return stream;
 		}
 
-		auto doAddModule( ashes::ShaderStageFlag stage
+		auto doAddModule( VkShaderStageFlagBits stage
 			, std::string const & name
-			, std::map< ashes::ShaderStageFlag, ShaderModule > & modules )
+			, std::map< VkShaderStageFlagBits, ShaderModule > & modules )
 		{
 			auto it = modules.find( stage );
 
@@ -151,10 +151,18 @@ namespace castor3d
 	{
 		if ( m_states.empty() )
 		{
-			auto & device = getCurrentDevice( *this );
+			auto & device = getCurrentRenderDevice( *this );
 
-			auto loadShader = [this, &device]( ashes::ShaderStageFlag stage )
+			auto loadShader = [this, &device]( VkShaderStageFlagBits stage )
 			{
+				static std::map< VkShaderStageFlagBits, std::string > type
+				{
+					{ VK_SHADER_STAGE_VERTEX_BIT, "Vtx" },
+					{ VK_SHADER_STAGE_GEOMETRY_BIT, "Geo" },
+					{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, "Tsc" },
+					{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, "Tse" },
+					{ VK_SHADER_STAGE_FRAGMENT_BIT, "Pxl" },
+				};
 				auto itModule = m_modules.find( stage );
 
 				if ( itModule != m_modules.end() )
@@ -170,24 +178,23 @@ namespace castor3d
 
 					if ( module.shader || !module.source.empty() )
 					{
-						m_states.push_back( { device.createShaderModule( stage ) } );
-						m_states.back().module->loadShader( getRenderSystem()->compileShader( module ) );
+						m_states.push_back( makeShaderState( device, module ) );
 					}
 				}
 			};
 
-			if ( hasSource( ashes::ShaderStageFlag::eCompute )
-				|| hasFile( ashes::ShaderStageFlag::eCompute ) )
+			if ( hasSource( VK_SHADER_STAGE_COMPUTE_BIT )
+				|| hasFile( VK_SHADER_STAGE_COMPUTE_BIT ) )
 			{
-				loadShader( ashes::ShaderStageFlag::eCompute );
+				loadShader( VK_SHADER_STAGE_COMPUTE_BIT );
 			}
 			else
 			{
-				loadShader( ashes::ShaderStageFlag::eVertex );
-				loadShader( ashes::ShaderStageFlag::eGeometry );
-				loadShader( ashes::ShaderStageFlag::eTessellationControl );
-				loadShader( ashes::ShaderStageFlag::eTessellationEvaluation );
-				loadShader( ashes::ShaderStageFlag::eFragment );
+				loadShader( VK_SHADER_STAGE_VERTEX_BIT );
+				loadShader( VK_SHADER_STAGE_GEOMETRY_BIT );
+				loadShader( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
+				loadShader( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
+				loadShader( VK_SHADER_STAGE_FRAGMENT_BIT );
 			}
 		}
 
@@ -199,27 +206,27 @@ namespace castor3d
 		m_states.clear();
 	}
 
-	void ShaderProgram::setFile( ashes::ShaderStageFlag target, Path const & pathFile )
+	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
 	{
 		m_files[target] = pathFile;
 		doAddModule( target, "", m_modules );
 	}
 
-	Path ShaderProgram::getFile( ashes::ShaderStageFlag target )const
+	Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
 	{
 		auto it = m_files.find( target );
 		CU_Require( it != m_files.end() );
 		return it->second;
 	}
 
-	bool ShaderProgram::hasFile( ashes::ShaderStageFlag target )const
+	bool ShaderProgram::hasFile( VkShaderStageFlagBits target )const
 	{
 		auto it = m_files.find( target );
 		return it != m_files.end()
 			&& !it->second.empty();
 	}
 
-	void ShaderProgram::setSource( ashes::ShaderStageFlag target, String const & source )
+	void ShaderProgram::setSource( VkShaderStageFlagBits target, String const & source )
 	{
 		m_files[target].clear();
 		auto it = doAddModule( target, "", m_modules );
@@ -227,7 +234,7 @@ namespace castor3d
 		it->second.shader = nullptr;
 	}
 
-	void ShaderProgram::setSource( ashes::ShaderStageFlag target, ShaderPtr shader )
+	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
 	{
 		m_files[target].clear();
 		auto it = doAddModule( target, "", m_modules );
@@ -235,17 +242,29 @@ namespace castor3d
 		it->second.shader = std::move( shader );
 	}
 
-	ShaderModule const & ShaderProgram::getSource( ashes::ShaderStageFlag target )const
+	ShaderModule const & ShaderProgram::getSource( VkShaderStageFlagBits target )const
 	{
 		auto it = m_modules.find( target );
 		CU_Require( it != m_modules.end() );
 		return it->second;
 	}
 
-	bool ShaderProgram::hasSource( ashes::ShaderStageFlag target )const
+	bool ShaderProgram::hasSource( VkShaderStageFlagBits target )const
 	{
 		auto it = m_modules.find( target );
 		return it != m_modules.end()
 			&& ( !it->second.source.empty() || it->second.shader != nullptr );
+	}
+
+	UInt32Array compileShader( RenderSystem const & renderSystem
+		, ShaderModule const & module )
+	{
+		return renderSystem.compileShader( module );
+	}
+
+	UInt32Array compileShader( RenderDevice const & device
+		, ShaderModule const & module )
+	{
+		return compileShader( device.renderSystem, module );
 	}
 }

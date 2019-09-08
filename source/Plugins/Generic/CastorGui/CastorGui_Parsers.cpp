@@ -922,7 +922,7 @@ namespace CastorGui
 
 		if ( control )
 		{
-			Rectangle size;
+			castor::Rectangle size;
 			params[0]->get( size );
 			control->setBackgroundBorders( size );
 		}

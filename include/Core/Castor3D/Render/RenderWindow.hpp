@@ -12,8 +12,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
-#include <Ashes/Core/Device.hpp>
-#include <Ashes/Core/SwapChain.hpp>
+#include <ashespp/Core/Device.hpp>
+#include <ashespp/Core/SwapChain.hpp>
+#include <ashespp/Sync/Fence.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -32,6 +34,39 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
+	private:
+		struct RenderingResources
+		{
+			RenderingResources( ashes::SemaphorePtr imageAvailableSemaphore
+				, ashes::SemaphorePtr finishedRenderingSemaphore
+				, ashes::FencePtr fence
+				, ashes::CommandBufferPtr commandBuffer
+				, uint32_t imageIndex )
+				: imageAvailableSemaphore{ std::move( imageAvailableSemaphore ) }
+				, finishedRenderingSemaphore{ std::move( finishedRenderingSemaphore ) }
+				, fence{ std::move( fence ) }
+				, commandBuffer{ std::move( commandBuffer ) }
+				, imageIndex{ imageIndex }
+			{
+			}
+
+			~RenderingResources()
+			{
+				imageAvailableSemaphore.reset();
+				finishedRenderingSemaphore.reset();
+				fence.reset();
+				commandBuffer.reset();
+			}
+
+			ashes::SemaphorePtr imageAvailableSemaphore;
+			ashes::SemaphorePtr finishedRenderingSemaphore;
+			ashes::FencePtr fence;
+			ashes::CommandBufferPtr commandBuffer;
+			uint32_t imageIndex{ 0u };
+		};
+		using RenderingResourcesPtr = std::unique_ptr< RenderingResources >;
+		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
+
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -98,7 +133,7 @@ namespace castor3d
 		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
 		C3D_API bool initialise( castor::Size const & size
-			, ashes::WindowHandle && handle );
+			, ashes::WindowHandle handle );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -237,7 +272,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le format des pixels de la fenêtre.
 		 */
-		C3D_API ashes::Format getPixelFormat()const;
+		C3D_API VkFormat getPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format.
@@ -246,7 +281,7 @@ namespace castor3d
 		 *\brief		Définit le format des pixels de la fenêtre.
 		 *\param[in]	value	Le nouveau format des pixels de la fenêtre.
 		 */
-		C3D_API void setPixelFormat( ashes::Format value );
+		C3D_API void setPixelFormat( VkFormat value );
 		/**
 		 *\~english
 		 *\brief		Adds a scene that can be picked.
@@ -291,7 +326,7 @@ namespace castor3d
 			return m_listener.lock();
 		}
 
-		inline ashes::Device const & getDevice()const
+		inline RenderDevice const & getDevice()const
 		{
 			CU_Require( m_device );
 			return *m_device;
@@ -336,7 +371,7 @@ namespace castor3d
 			m_renderTarget = value;
 		}
 
-		inline void setDevice( ashes::DevicePtr value )
+		inline void setDevice( RenderDeviceSPtr value )
 		{
 			m_device = std::move( value );
 		}
@@ -358,24 +393,39 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doCreateSwapchain();
+		void doCreateRenderingResources();
+		void doCreateRenderPass();
+		void doCreateCommandBuffers();
+		void doCreateFrameBuffers();
+		ashes::ImageViewCRefArray doPrepareAttaches( uint32_t backBuffer );
 		void doCreateProgram();
 		void doCreateSwapChainDependent();
 		bool doPrepareFrames();
 		void doResetSwapChain();
+		RenderingResources * getResources();
+		bool doCheckNeedReset( VkResult errCode
+			, bool acquisition
+			, char const * const action );
 		void doCleanup( bool enableDevice );
 
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index;
-		ashes::DevicePtr m_device;
+		RenderDeviceSPtr m_device;
+		ashes::Surface const * m_surface;
 		ashes::SwapChainPtr m_swapChain;
+		ashes::ImageArray m_swapChainImages;
+		ashes::CommandPoolPtr m_commandPool;
+		RenderingResourcesArray m_renderingResources;
+		size_t m_resourceIndex{ 0u };
 		ashes::RenderPassPtr m_renderPass;
 		ashes::StagingTexturePtr m_stagingTexture;
 		ashes::CommandBufferPtr m_transferCommandBuffer;
+		ashes::ImageViewArray m_views;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		ashes::CommandBufferPtrArray m_commandBuffers;
-		ashes::SignalConnection< ashes::SwapChain::OnReset > m_swapChainReset;
-		ashes::ShaderStageStateArray m_program;
+		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetWPtr m_renderTarget;
 		OverlayRendererSPtr m_overlayRenderer;

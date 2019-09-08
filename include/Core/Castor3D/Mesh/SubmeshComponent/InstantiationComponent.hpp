@@ -110,7 +110,7 @@ namespace castor3d
 		C3D_API void gather( MaterialSPtr material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
-			, ashes::VertexLayoutCRefArray & layouts )override;
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )override;
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::setMaterial
 		 */
@@ -177,7 +177,7 @@ namespace castor3d
 
 	private:
 		std::map< MaterialSPtr, Data > m_instances;
-		ashes::VertexLayoutPtr m_matrixLayout;
+		ashes::PipelineVertexInputStateCreateInfoPtr m_matrixLayout;
 		uint32_t m_threshold;
 	};
 }
