@@ -52,7 +52,6 @@ namespace castor3d
 	template< typename T >
 	UniformBufferOffset< T > UniformBufferPool< T >::getBuffer( VkMemoryPropertyFlags flags )
 	{
-		RenderDevice const & device = *getRenderSystem()->getCurrentRenderDevice();
 		UniformBufferOffset< T > result;
 
 		auto key = uint32_t( flags );
@@ -69,32 +68,31 @@ namespace castor3d
 		{
 			if ( !m_maxCount )
 			{
-				uint32_t maxSize = device.properties.limits.maxUniformBufferRange;
-				uint32_t minOffset = uint32_t( device.properties.limits.minUniformBufferOffsetAlignment );
-				uint32_t elementSize = 0u;
-				uint32_t size = uint32_t( sizeof( T ) );
-
-				while ( size > minOffset )
-				{
-					size -= minOffset;
-					elementSize += minOffset;
-				}
-
-				elementSize += minOffset;
-				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
-				m_maxSize = uint32_t( m_maxCount * elementSize );
-
 				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
 						auto & device = *getRenderSystem()->getCurrentRenderDevice();
+						uint32_t maxSize = device.properties.limits.maxUniformBufferRange;
+						uint32_t minOffset = uint32_t( device.properties.limits.minUniformBufferOffsetAlignment );
+						uint32_t elementSize = 0u;
+						uint32_t size = uint32_t( sizeof( T ) );
+
+						while ( size > minOffset )
+						{
+							size -= minOffset;
+							elementSize += minOffset;
+						}
+
+						elementSize += minOffset;
+						m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
+						m_maxSize = uint32_t( m_maxCount * elementSize );
 						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
 							, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 							, m_maxSize );
 					} ) );
 			}
 
-			auto buffer = std::make_unique< UniformBuffer< T > >( device.renderSystem
+			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
 				, m_maxCount
 				, flags
 				, m_debugName );

@@ -365,7 +365,7 @@ namespace castor3d
 
 	void Engine::sendEvent( FrameEventUPtr && event )
 	{
-		if ( m_renderSystem && m_renderSystem->getCurrentRenderDevice() )
+		if ( m_renderSystem && m_renderSystem->hasCurrentRenderDevice() )
 		{
 			event->apply();
 		}

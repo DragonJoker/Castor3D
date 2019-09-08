@@ -315,7 +315,12 @@ int main( int argc, char * argv[] )
 #endif
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshUpgrader.log" ) );
-		castor3d::Engine engine{ cuT( "CastorMeshUpgrader" ), castor3d::Version{}, false };
+		castor3d::Engine engine
+		{
+			cuT( "CastorMeshUpgrader" ),
+			castor3d::Version{ CastorMeshUpgrader_VERSION_MAJOR, CastorMeshUpgrader_VERSION_MINOR, CastorMeshUpgrader_VERSION_BUILD },
+			false
+		};
 
 		if ( doInitialiseEngine( engine ) )
 		{

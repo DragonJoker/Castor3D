@@ -18,7 +18,7 @@ namespace castor3d
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->getCurrentRenderDevice() )
+		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			initialise();
 		}

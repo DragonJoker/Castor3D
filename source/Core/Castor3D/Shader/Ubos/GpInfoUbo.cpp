@@ -23,7 +23,7 @@ namespace castor3d
 	GpInfoUbo::GpInfoUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->getCurrentRenderDevice() )
+		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			initialise();
 		}

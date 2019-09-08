@@ -60,7 +60,7 @@ namespace castor3d
 		}
 
 		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
-			, ashes::Image const & image
+			, VkImage image
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers
 			, uint32_t baseMipLevel
@@ -91,7 +91,7 @@ namespace castor3d
 		{
 			return std::make_unique< TextureView >( layout
 				, getSubviewCreateInfos( info
-					, layout.getTexture()
+					, VK_NULL_HANDLE
 					, baseArrayLayer
 					, arrayLayers
 					, 0u
@@ -106,7 +106,7 @@ namespace castor3d
 		{
 			return std::make_unique< TextureView >( layout
 				, getSubviewCreateInfos( info
-					, layout.getTexture()
+					, VK_NULL_HANDLE
 					, 0u
 					, info->arrayLayers
 					, baseMipLevel, levelCount )
@@ -262,6 +262,13 @@ namespace castor3d
 			|| m_info->extent.height != size.getHeight()
 			|| m_info->format != format )
 		{
+			VkImage texture = VK_NULL_HANDLE;
+
+			if ( m_texture )
+			{
+				texture = *m_texture;
+			}
+
 			m_info->extent.width = size.getWidth();
 			m_info->extent.height = size.getHeight();
 			m_info->extent.depth = 1u;
@@ -274,11 +281,21 @@ namespace castor3d
 					, m_info->extent );
 			}
 
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, m_info->arrayLayers, 0u, m_info->mipLevels ) );
+			m_defaultView->doUpdate( getSubviewCreateInfos( m_info
+				, texture
+				, 0u
+				, m_info->arrayLayers
+				, 0u
+				, m_info->mipLevels ) );
 
 			if ( m_views.size() == 1 )
 			{
-				m_views.back()->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, 0u, 1u ) );
+				m_views.back()->doUpdate( getSubviewCreateInfos( m_info
+					, texture
+					, 0u
+					, 1u
+					, 0u
+					, 1u ) );
 			}
 			else if ( mipLevels > 1u )
 			{
@@ -303,7 +320,12 @@ namespace castor3d
 						}
 						else
 						{
-							view->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, index++, 1u ) );
+							view->doUpdate( getSubviewCreateInfos( m_info
+								, texture
+								, 0u
+								, 1u
+								, index++
+								, 1u ) );
 							++it;
 						}
 					}
@@ -314,7 +336,12 @@ namespace castor3d
 
 					for ( auto & view : m_views )
 					{
-						view->doUpdate( getSubviewCreateInfos( m_info, *m_texture, 0u, 1u, index++, 1u ) );
+						view->doUpdate( getSubviewCreateInfos( m_info
+							, texture
+							, 0u
+							, 1u
+							, index++
+							, 1u ) );
 					}
 				}
 			}

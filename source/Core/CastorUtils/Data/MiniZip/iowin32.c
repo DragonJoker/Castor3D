@@ -95,7 +95,7 @@ voidpf ZCALLBACK win32_open_file_func (opaque, filename, mode)
     }
 
     if ((filename!=NULL) && (dwDesiredAccess != 0))
-        hFile = CreateFile((LPCTSTR)filename, dwDesiredAccess, dwShareMode, NULL,
+        hFile = CreateFileA((LPCSTR)filename, dwDesiredAccess, dwShareMode, NULL,
                       dwCreationDisposition, dwFlagsAndAttributes, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)

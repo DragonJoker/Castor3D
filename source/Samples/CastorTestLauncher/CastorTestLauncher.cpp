@@ -100,7 +100,9 @@ namespace test_launcher
 			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" ), castor3d::Version{}, false );
+		castor3d::EngineSPtr castor = std::make_shared< Engine >( cuT( "CastorTestLauncher" )
+			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
+			, false );
 		PathArray arrayFiles;
 		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
 

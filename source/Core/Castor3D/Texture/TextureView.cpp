@@ -442,6 +442,7 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *getOwner() );
 		m_info->subresourceRange.levelCount = std::min( m_info->subresourceRange.levelCount
 			, getOwner()->getTexture().getMipmapLevels() );
+		m_info->image = getOwner()->getTexture();
 		m_view = getOwner()->getTexture().createView( m_info );
 		m_needsMipmapsGeneration = false;
 

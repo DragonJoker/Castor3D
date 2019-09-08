@@ -16,7 +16,7 @@ namespace castor3d
 	TexturesUbo::TexturesUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->getCurrentRenderDevice() )
+		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			initialise();
 		}

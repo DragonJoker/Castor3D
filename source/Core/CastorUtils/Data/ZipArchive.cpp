@@ -2,6 +2,7 @@
 
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Data/BinaryFile.hpp"
+#include "CastorUtils/Miscellaneous/Utils.hpp"
 
 #ifdef WIN32
 #	undef HAVE_UNISTD_H
@@ -31,10 +32,10 @@ namespace castor
 
 	namespace zlib
 	{
-		std::string getError( int p_error )
+		std::string getError( int error )
 		{
 			//std::string error( zError( p_error ) );
-			return "(code " + string::toString( p_error ) + ")";
+			return "(code " + string::toString( error ) + ")";
 		}
 
 		struct ZipImpl
@@ -50,19 +51,19 @@ namespace castor
 			{
 			}
 
-			virtual void open( Path const & p_path, File::OpenMode p_mode )
+			virtual void open( Path const & path, File::OpenMode mode )
 			{
-				if ( p_mode == File::OpenMode::eWrite )
+				if ( mode == File::OpenMode::eWrite )
 				{
 #ifdef USEWIN32IOAPI
 
 					zlib_filefunc_def ffunc;
 					fill_win32_filefunc( &ffunc );
-					m_zip = zipOpen2( string::stringCast< char >( p_path ).c_str(), 0, NULL, &ffunc );
+					m_zip = zipOpen2( string::stringCast< char >( path ).c_str(), 0, NULL, &ffunc );
 
 #else
 
-					m_zip = zipOpen( string::stringCast< char >( p_path ).c_str(), 0 );
+					m_zip = zipOpen( string::stringCast< char >( path ).c_str(), 0 );
 
 #endif
 
@@ -77,17 +78,17 @@ namespace castor
 
 					zlib_filefunc_def ffunc;
 					fill_win32_filefunc( &ffunc );
-					m_unzip = unzOpen2( string::stringCast< char >( p_path ).c_str(), &ffunc );
+					m_unzip = unzOpen2( string::stringCast< char >( path ).c_str(), &ffunc );
 
 #else
 
-					m_unzip = unzOpen( string::stringCast< char >( p_path ).c_str() );
+					m_unzip = unzOpen( string::stringCast< char >( path ).c_str() );
 
 #endif
 
 					if ( !m_unzip )
 					{
-						CU_Exception( "Couldn't open archive file" );
+						CU_Exception( "Couldn't open archive file: " + System::getLastErrorText() );
 					}
 				}
 			}
@@ -119,10 +120,10 @@ namespace castor
 				}
 			}
 
-			virtual bool findFolder( String const & p_folder )
+			virtual bool findFolder( String const & infolder )
 			{
 				bool result = false;
-				//std::string folder = string::stringCast< char >( p_folder );
+				//std::string folder = string::stringCast< char >( infolder );
 
 				////Search for the folder
 				//struct zip_stat stat = { 0 };
@@ -142,10 +143,10 @@ namespace castor
 				return result;
 			}
 
-			virtual bool findFile( String const & p_file )
+			virtual bool findFile( String const & infile )
 			{
 				bool result = false;
-				//std::string file = string::stringCast< char >( p_file );
+				//std::string file = string::stringCast< char >( infile );
 
 				////Search for the folder
 				//struct zip_stat stat = { 0 };
@@ -165,21 +166,21 @@ namespace castor
 				return result;
 			}
 
-			virtual void deflate( ZipArchive::Folder const & p_folder )
+			virtual void deflate( ZipArchive::Folder const & infolder )
 			{
-				for ( auto folder : p_folder.folders )
+				for ( auto folder : infolder.folders )
 				{
 					doDeflate( cuT( "" ), folder );
 				}
 
-				doDeflateFiles( cuT( "" ), p_folder.files );
+				doDeflateFiles( cuT( "" ), infolder.files );
 			}
 
-			virtual StringArray inflate( Path const & p_outFolder, ZipArchive::Folder & p_folder )
+			virtual StringArray inflate( Path const & outFolder, ZipArchive::Folder & folder )
 			{
-				if ( !File::directoryExists( p_outFolder ) )
+				if ( !File::directoryExists( outFolder ) )
 				{
-					File::directoryCreate( p_outFolder );
+					File::directoryCreate( outFolder );
 				}
 
 				StringArray result;
@@ -201,7 +202,7 @@ namespace castor
 
 				for ( uLong i = 0; i < gi.number_entry; ++i )
 				{
-					doInflateCurrentFile( p_outFolder, result );
+					doInflateCurrentFile( outFolder, result );
 
 					if ( ( i + 1 ) < gi.number_entry )
 					{
@@ -218,11 +219,18 @@ namespace castor
 			}
 
 		private:
-			virtual void doInflateCurrentFile( Path const & p_outFolder, StringArray & p_result )
+			virtual void doInflateCurrentFile( Path const & outFolder, StringArray & result )
 			{
 				std::array< char, 256 > fileNameInZip;
 				unz_file_info fileInfo;
-				auto error = unzGetCurrentFileInfo( m_unzip, &fileInfo, fileNameInZip.data(), sizeof( fileNameInZip ), NULL, 0, NULL, 0 );
+				auto error = unzGetCurrentFileInfo( m_unzip
+					, &fileInfo
+					, fileNameInZip.data()
+					, sizeof( fileNameInZip )
+					, NULL
+					, 0
+					, NULL
+					, 0 );
 
 				if ( error != UNZ_OK )
 				{
@@ -234,7 +242,7 @@ namespace castor
 
 				if ( !folders.empty() )
 				{
-					Path path = p_outFolder;
+					Path path = outFolder;
 
 					if ( !File::directoryExists( path ) )
 					{
@@ -263,14 +271,16 @@ namespace castor
 						CU_Exception( "Error in unzOpenCurrentFilePassword: " + zlib::getError( error ) );
 					}
 
-					BinaryFile file( p_outFolder / name, File::OpenMode::eWrite );
+					BinaryFile file( outFolder / name, File::OpenMode::eWrite );
 					std::vector< uint8_t > buffer( CHUNK );
 
 					try
 					{
 						do
 						{
-							error = unzReadCurrentFile( m_unzip, buffer.data(), static_cast< unsigned int >( buffer.size() ) );
+							error = unzReadCurrentFile( m_unzip
+								, buffer.data()
+								, static_cast< unsigned int >( buffer.size() ) );
 
 							if ( error < 0 )
 							{
@@ -285,7 +295,7 @@ namespace castor
 						while ( error > 0 );
 
 						unzCloseCurrentFile( m_unzip ); /* don't lose the error */
-						p_result.push_back( p_outFolder / name );
+						result.push_back( outFolder / name );
 					}
 					catch ( Exception & )
 					{
@@ -299,32 +309,32 @@ namespace castor
 				}
 			}
 
-			virtual void doDeflate( String const & p_path, ZipArchive::Folder const & p_folder )
+			virtual void doDeflate( String const & path, ZipArchive::Folder const & folder )
 			{
-				String path;
+				String filePath;
 
-				if ( p_path.empty() )
+				if ( path.empty() )
 				{
-					path = p_folder.name;
+					filePath = folder.name;
 				}
 				else
 				{
-					path = p_path + cuT( "/" ) + p_folder.name;
+					filePath = path + cuT( "/" ) + folder.name;
 				}
 
-				for ( auto folder : p_folder.folders )
+				for ( auto folder : folder.folders )
 				{
-					doDeflate( path, folder );
+					doDeflate( filePath, folder );
 				}
 
-				doDeflateFiles( path, p_folder.files );
+				doDeflateFiles( filePath, folder.files );
 			}
 
-			virtual void doDeflateFiles( String const & p_path, std::list< String > const & p_files )
+			virtual void doDeflateFiles( String const & path, std::list< String > const & files )
 			{
-				for ( auto name : p_files )
+				for ( auto name : files )
 				{
-					std::string filePath = string::stringCast< char >( p_path + cuT( "/" ) + name );
+					std::string filePath = string::stringCast< char >( path + cuT( "/" ) + name );
 
 					if ( !File::fileExists( Path{ string::stringCast< xchar >( filePath ) } ) )
 					{
