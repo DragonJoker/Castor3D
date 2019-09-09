@@ -418,8 +418,7 @@ namespace castor3d
 		, m_blurYVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GaussianBlurY" }
 		, m_blurYPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GaussianBlurY" }
 	{
-		auto & renderSystem = *engine.getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( engine );
 		CU_Require( kernelSize < MaxCoefficients );
 		auto & data = m_blurUbo->getData( 0u );
 		data.blurCoeffsCount = uint32_t( m_kernel.size() );
@@ -459,8 +458,7 @@ namespace castor3d
 	ashes::Semaphore const & GaussianBlur::blur( ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 
 		device.graphicsQueue->submit( *m_horizCommandBuffer
 			, *result
@@ -481,20 +479,20 @@ namespace castor3d
 
 	bool GaussianBlur::doInitialiseBlurXProgram()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
-		m_blurXVertexShader.shader = getVertexProgram( renderSystem );
+		auto & device = getCurrentRenderDevice( *this );
+		m_blurXVertexShader.shader = getVertexProgram( device.renderSystem );
 
 		if ( m_source->subresourceRange.layerCount > 1u
 			/*&& !device.getRenderer().getFeatures().hasImageTexture*/ )
 		{
-			m_blurXPixelShader.shader = getBlurXProgramLayer( *getEngine()->getRenderSystem()
+			m_blurXPixelShader.shader = getBlurXProgramLayer( device.renderSystem
 				, ashes::isDepthFormat( m_format )
 				, m_source->subresourceRange.baseArrayLayer );
 		}
 		else
 		{
-			m_blurXPixelShader.shader = getBlurXProgram( *getEngine()->getRenderSystem(), ashes::isDepthFormat( m_format ) );
+			m_blurXPixelShader.shader = getBlurXProgram( device.renderSystem
+				, ashes::isDepthFormat( m_format ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray program
@@ -523,10 +521,9 @@ namespace castor3d
 
 	bool GaussianBlur::doInitialiseBlurYProgram()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
-		m_blurYVertexShader.shader = getVertexProgram( renderSystem );
-		m_blurYPixelShader.shader = getBlurYProgram( renderSystem, ashes::isDepthFormat( m_format ) );
+		auto & device = getCurrentRenderDevice( *this );
+		m_blurYVertexShader.shader = getVertexProgram( device.renderSystem );
+		m_blurYPixelShader.shader = getBlurYProgram( device.renderSystem, ashes::isDepthFormat( m_format ) );
 
 		ashes::PipelineShaderStageCreateInfoArray program
 		{

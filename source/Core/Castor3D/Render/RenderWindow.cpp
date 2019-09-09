@@ -277,7 +277,7 @@ namespace castor3d
 		if ( m_device )
 		{
 			auto & engine = *getEngine();
-			bool hasCurrent = engine.getRenderSystem()->getCurrentRenderDevice();
+			bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 			if ( hasCurrent
 				&& &getCurrentRenderDevice( *this ) != m_device.get() )

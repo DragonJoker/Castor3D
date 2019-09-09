@@ -122,7 +122,7 @@ namespace Gl4Render
 			glsl = module.source;
 		}
 
-		//result = castor3d::compileGlslToSpv( *getCurrentRenderDevice()
+		//result = castor3d::compileGlslToSpv( getCurrentRenderDevice()
 		//	, module.stage
 		//	, glsl );
 

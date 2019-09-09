@@ -83,8 +83,7 @@ namespace castor3d
 		, SceneBackground const & background
 		, ashes::DescriptorSetPool const & pool )
 	{
-		auto & renderSystem = *getOwner()->getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *getOwner() );
 		float const aspect = float( size.getWidth() ) / size.getHeight();
 		float const nearZ = 0.1f;
 		float const farZ = 1000.0f;
@@ -179,8 +178,7 @@ namespace castor3d
 
 	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
 	{
-		auto & renderSystem = *getOwner()->getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *getOwner() );
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );

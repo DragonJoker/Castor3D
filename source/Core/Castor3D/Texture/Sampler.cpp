@@ -8,20 +8,19 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/PhysicalDevice.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	Sampler::TextWriter::TextWriter( String const & tabs )
+	Sampler::TextWriter::TextWriter( castor::String const & tabs )
 		: castor::TextWriter< Sampler >{ tabs }
 	{
 	}
 
-	bool Sampler::TextWriter::operator()( Sampler const & sampler, TextFile & file )
+	bool Sampler::TextWriter::operator()( Sampler const & sampler
+		, castor::TextFile & file )
 	{
 		bool result = true;
 
-		Logger::logInfo( m_tabs + cuT( "Writing Sampler " ) + sampler.getName() );
+		castor::Logger::logInfo( m_tabs + cuT( "Writing Sampler " ) + sampler.getName() );
 
 		if ( sampler.getName() != cuT( "LightsSampler" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
 		{
@@ -67,19 +66,19 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmin_lod " ) + string::toString( sampler.getMinLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmin_lod " ) + castor::string::toString( sampler.getMinLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler min lod" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmax_lod " ) + string::toString( sampler.getMaxLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmax_lod " ) + castor::string::toString( sampler.getMaxLod(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler max lod" );
 			}
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tlod_bias " ) + string::toString( sampler.getLodBias(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tlod_bias " ) + castor::string::toString( sampler.getLodBias(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler lod bias" );
 			}
 
@@ -105,7 +104,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "\tmax_anisotropy " ) + string::toString( sampler.getMaxAnisotropy(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				result = file.writeText( m_tabs + cuT( "\tmax_anisotropy " ) + castor::string::toString( sampler.getMaxAnisotropy(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Sampler >::checkError( result, "Sampler max anisotropy" );
 			}
 
@@ -120,9 +119,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( Engine & engine, String const & name )
-		: OwnedBy< Engine >{ engine }
-		, Named{ name }
+	Sampler::Sampler( Engine & engine
+		, castor::String const & name )
+		: castor::OwnedBy< Engine >{ engine }
+		, castor::Named{ name }
 	{
 	}
 

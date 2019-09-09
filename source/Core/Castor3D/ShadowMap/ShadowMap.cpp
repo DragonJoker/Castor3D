@@ -55,8 +55,7 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
-			auto & renderSystem = *getEngine()->getRenderSystem();
-			auto & device = *renderSystem.getCurrentRenderDevice();
+			auto & device = getCurrentRenderDevice( *this );
 
 			{
 				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer();

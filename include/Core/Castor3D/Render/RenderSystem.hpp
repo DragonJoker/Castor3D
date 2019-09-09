@@ -288,10 +288,10 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline RenderDevice const * getCurrentRenderDevice()const
+		inline RenderDevice const & getCurrentRenderDevice()const
 		{
 			CU_Require( m_currentDevice );
-			return m_currentDevice;
+			return *m_currentDevice;
 		}
 
 		inline bool hasCurrentRenderDevice()const
@@ -309,7 +309,7 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		inline castor::String const & getRendererType()const
+		inline castor::String getRendererType()const
 		{
 			return m_desc.name;
 		}
@@ -369,6 +369,21 @@ namespace castor3d
 		{
 			return m_extensionNames;
 		}
+
+		inline VkPhysicalDeviceProperties const & getProperties()const
+		{
+			return m_properties;
+		}
+
+		inline VkPhysicalDeviceMemoryProperties const & getMemoryProperties()const
+		{
+			return m_memoryProperties;
+		}
+
+		inline VkPhysicalDeviceFeatures const & getFeatures()const
+		{
+			return m_features;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -413,6 +428,13 @@ namespace castor3d
 		ashes::InstancePtr m_instance;
 		VkDebugReportCallbackEXT m_debugCallback{};
 		ashes::PhysicalDevicePtrArray m_gpus;
+		VkPhysicalDeviceMemoryProperties m_memoryProperties;
+		VkPhysicalDeviceProperties m_properties;
+		VkPhysicalDeviceFeatures m_features;
+		uint32_t presentQueueFamilyIndex;
+		uint32_t graphicsQueueFamilyIndex;
+		uint32_t computeQueueFamilyIndex;
+		uint32_t transferQueueFamilyIndex;
 		VkLayerProperties m_globalLayer{};
 		ashes::VkLayerPropertiesArray m_layers;
 		ashes::StringArray m_layerNames;
@@ -430,6 +452,7 @@ namespace castor3d
 		GpuObjectTracker m_tracker;
 
 #endif
+
 	};
 }
 

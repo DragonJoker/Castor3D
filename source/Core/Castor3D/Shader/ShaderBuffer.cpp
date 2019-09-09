@@ -26,7 +26,7 @@ namespace castor3d
 			VkBufferUsageFlagBits target = renderSystem.getGpuInformations().hasFeature( GpuFeature::eShaderStorageBuffers )
 					? VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 					: VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
-			auto & device = *renderSystem.getCurrentRenderDevice();
+			auto & device = getCurrentRenderDevice( engine );
 			result = makeBufferBase( device
 				, size
 				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT

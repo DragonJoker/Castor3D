@@ -204,7 +204,7 @@ namespace castor3d
 
 	RenderDevice const & getCurrentRenderDevice( RenderSystem const & obj )
 	{
-		return *obj.getCurrentRenderDevice();
+		return obj.getCurrentRenderDevice();
 	}
 
 	RenderDevice const & getCurrentRenderDevice( Engine const & obj )

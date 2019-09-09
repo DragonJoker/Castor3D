@@ -610,8 +610,7 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseToneMapping()
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto result = m_toneMapping->initialise( getSize()
 			, m_renderTechnique->getResult()
 			, *m_renderPass );
@@ -648,8 +647,7 @@ namespace castor3d
 		, ashes::ImageView const & source
 		, ashes::ImageView const & target )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		commandBuffer->begin();
@@ -741,7 +739,7 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto program = ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),
@@ -835,8 +833,7 @@ namespace castor3d
 
 		if ( !effects.empty() )
 		{
-			auto & renderSystem = *getEngine()->getRenderSystem();
-			auto & device = *renderSystem.getCurrentRenderDevice();
+			auto & device = getCurrentRenderDevice( *this );
 			auto & queue = *device.graphicsQueue;
 
 			for ( auto effect : effects )
@@ -870,8 +867,7 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doApplyToneMapping( ashes::Semaphore const & toWait )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		auto timerBlock = m_toneMappingTimer->start();
 		m_toneMappingTimer->notifyPassRender();
@@ -921,8 +917,7 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		auto * result = &toWait;
 

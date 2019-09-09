@@ -112,9 +112,9 @@ namespace Bloom
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
 		VkExtent2D size{ m_target->getWidth(), m_target->getHeight() };
+		auto & device = getCurrentRenderDevice( *this );
 
 #if !Bloom_DebugHiPass
-		auto & device = getCurrentRenderDevice( *this );
 		// Create vertex buffer
 		m_vertexBuffer = castor3d::makeVertexBuffer< castor3d::NonTexturedQuad >( device
 			, 1u
@@ -154,20 +154,20 @@ namespace Bloom
 			( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ),
 		};
-		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
+		m_blurTexture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "BloomBlur" ) );
 		m_blurTexture->initialise();
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()->getCurrentRenderDevice()
+		m_hiPass = std::make_unique< HiPass >( device
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView()
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
-		m_blurXPass = std::make_unique< BlurPass >( *getRenderSystem()->getCurrentRenderDevice()
+		m_blurXPass = std::make_unique< BlurPass >( device
 			, m_target->getPixelFormat()
 			, m_hiPass->getResult()
 			, *m_blurTexture
@@ -175,7 +175,7 @@ namespace Bloom
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, false );
-		m_blurYPass = std::make_unique< BlurPass >( *getRenderSystem()->getCurrentRenderDevice()
+		m_blurYPass = std::make_unique< BlurPass >( device
 			, m_target->getPixelFormat()
 			, *m_blurTexture
 			, m_hiPass->getResult()
@@ -183,7 +183,7 @@ namespace Bloom
 			, m_blurKernelSize
 			, m_blurPassesCount
 			, true );
-		m_combinePass = std::make_unique< CombinePass >( *getRenderSystem()->getCurrentRenderDevice()
+		m_combinePass = std::make_unique< CombinePass >( device
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView()
 			, m_hiPass->getResult().getDefaultView()

@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_FUNCTOR_EVENT_H___
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Miscellaneous/Version.hpp"
 #include "Castor3D/Event/Frame/FrameEvent.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>

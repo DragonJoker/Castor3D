@@ -62,7 +62,8 @@ namespace castor3d
 			, uint32_t numLevels
 			, uint32_t minBlockSize
 			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags );
+			, VkMemoryPropertyFlags memoryFlags
+			, ashes::QueueShare sharingMode = {} );
 		/**
 		 *\~english
 		 *\param[in]	size	The requested memory size.
@@ -261,7 +262,8 @@ namespace castor3d
 		void doInitialiseStorage( RenderDevice const & device
 			, uint32_t size
 			, VkBufferUsageFlags usage
-			, VkMemoryPropertyFlags memoryFlags );
+			, VkMemoryPropertyFlags memoryFlags
+			, ashes::QueueShare sharingMode );
 
 	private:
 		RenderDevice const * m_device{ nullptr };
@@ -274,11 +276,13 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		ashes::BufferPtr< T > result = ashes::makeBuffer< T >( *device.device
 			, count
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		ashes::BufferBase & buffer = result->getBuffer();
 		setDebugObjectName( device, buffer, name + "Buf" );
 		result->bindMemory( setupMemory( device, buffer, flags, name + "Buf" ) );
@@ -289,11 +293,13 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeBufferBase( *device.device
 			, size
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		setDebugObjectName( device, *result, name + "Buf" );
 		result->bindMemory( setupMemory( device, *result, flags, name + "Buf" ) );
 		return result;
@@ -304,11 +310,13 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		ashes::VertexBufferPtr< T > result = ashes::makeVertexBuffer< T >( *device.device
 			, count
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		ashes::BufferBase & buffer = result->getBuffer();
 		setDebugObjectName( device, buffer, name + "Vbo" );
 		result->bindMemory( setupMemory( device, buffer, flags, name + "Vbo" ) );
@@ -319,11 +327,13 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeVertexBufferBase( *device.device
 			, size
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		setDebugObjectName( device, *result, name + "Vbo" );
 		result->bindMemory( setupMemory( device, *result, flags, name + "Vbo" ) );
 		return result;

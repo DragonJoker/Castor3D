@@ -43,7 +43,8 @@ namespace castor3d
 		inline UniformBuffer( RenderSystem const & renderSystem
 			, uint32_t count
 			, VkMemoryPropertyFlags flags
-			, castor::String debugName );
+			, castor::String debugName
+			, ashes::QueueShare sharingMode = {} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -57,7 +58,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le tampon GPU.
 		 */
-		inline void initialise();
+		inline uint32_t initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the GPU buffer.
@@ -206,6 +207,7 @@ namespace castor3d
 	private:
 		RenderSystem const & m_renderSystem;
 		uint32_t m_count;
+		ashes::QueueShare m_sharingMode;
 		ashes::UniformBufferPtr< T > m_buffer;
 		std::set< uint32_t > m_available;
 		VkMemoryPropertyFlags m_flags;
@@ -217,11 +219,13 @@ namespace castor3d
 		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeUniformBuffer< T >( *device.device
 			, count
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		ashes::BufferBase & buffer = result->getUbo().getBuffer();
 		setDebugObjectName( device, buffer, name + "Ubo" );
 		result->bindMemory( setupMemory( device, buffer, flags, name + "Ubo" ) );
@@ -233,12 +237,14 @@ namespace castor3d
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
-		, std::string const & name )
+		, std::string const & name
+		, ashes::QueueShare sharingMode = {} )
 	{
 		auto result = ashes::makeUniformBufferBase( *device.device
 			, count
 			, size
-			, usage );
+			, usage
+			, std::move( sharingMode ) );
 		setDebugObjectName( device, *result, name + "Ubo" );
 		result->bindMemory( setupMemory( device, *result, flags, name + "Ubo" ) );
 		return result;

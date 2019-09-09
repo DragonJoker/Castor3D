@@ -243,40 +243,23 @@ namespace castor3d
 
 			VkBool32 result = VK_FALSE;
 
-#if ASHES_ANDROID
-
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
 			{
-				LOGE( "%s", stream.str().c_str() );
-			}
-			else
-			{
-				LOGD( "%s", stream.str().c_str() );
-			}
-
-			fflush( stdout );
-
-#else
-
-			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
-			{
-				ashes::Logger::logError( stream );
+				castor::Logger::logError( stream );
 			}
 			else if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_WARNING_BIT_EXT )
 				|| ashes::checkFlag( flags, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) )
 			{
-				ashes::Logger::logWarning( stream );
+				castor::Logger::logWarning( stream );
 			}
 			else if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) )
 			{
-				ashes::Logger::logTrace( stream );
+				castor::Logger::logTrace( stream );
 			}
 			else
 			{
-				ashes::Logger::logDebug( stream );
+				castor::Logger::logDebug( stream );
 			}
-
-#endif
 
 			// The return value of this callback controls wether the Vulkan call that caused
 			// the validation message will be aborted or not
@@ -383,6 +366,16 @@ namespace castor3d
 #endif
 
 		m_gpus = m_instance->enumeratePhysicalDevices();
+
+		if ( m_gpus.empty() )
+		{
+			CU_Exception( "No Physical device found." );
+		}
+
+		auto & gpu = m_gpus[0];
+		m_memoryProperties = gpu.getMemoryProperties();
+		m_properties = gpu.getProperties();
+		m_features = gpu.getFeatures();
 	}
 
 	RenderSystem::~RenderSystem()

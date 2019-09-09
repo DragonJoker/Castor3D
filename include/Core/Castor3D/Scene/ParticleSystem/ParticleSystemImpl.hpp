@@ -142,6 +142,12 @@ namespace castor3d
 		//!\~french		Le type d'implémentation.
 		Type m_type;
 	};
+	C3D_API RenderDevice const & getCurrentRenderDevice( ParticleSystem const & object );
+
+	inline RenderDevice const & getCurrentRenderDevice( ParticleSystemImpl const & object )
+	{
+		return getCurrentRenderDevice( object.getParent() );
+	}
 }
 
 #endif

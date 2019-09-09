@@ -42,11 +42,19 @@ namespace castor3d
 		if ( target != VK_BUFFER_USAGE_INDEX_BUFFER_BIT
 			&& target != VK_BUFFER_USAGE_VERTEX_BUFFER_BIT )
 		{
+			auto & device = getCurrentRenderDevice( *this );
 			std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
-			buffer->doInitialiseStorage( getCurrentRenderDevice( *getRenderSystem() )
+			buffer->doInitialiseStorage( device
 				, size
 				, target | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, {
+					{
+						device.graphicsQueueFamilyIndex,
+						device.computeQueueFamilyIndex,
+						device.transferQueueFamilyIndex,
+					}
+				} );
 			m_nonSharedBuffers.emplace_back( std::move( buffer ) );
 			result.buffer = &m_nonSharedBuffers.back()->getBuffer().getBuffer();
 			result.offset = 0u;

@@ -485,7 +485,6 @@ BEGIN_EVENT_TABLE( StcTextEditor, wxStyledTextCtrl )
 	EVT_MENU( gcID_CONVERTLF, StcTextEditor::onConvertEOL )
 	EVT_STC_MARGINCLICK( wxID_ANY, StcTextEditor::onMarginClick )
 	EVT_STC_CHARADDED( wxID_ANY, StcTextEditor::onCharAdded )
-	EVT_STC_KEY( wxID_ANY , StcTextEditor::onKey )
 END_EVENT_TABLE()
 
 

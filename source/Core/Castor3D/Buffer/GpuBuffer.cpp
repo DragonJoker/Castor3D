@@ -22,14 +22,16 @@ namespace castor3d
 		, uint32_t level
 		, uint32_t minBlockSize
 		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags memoryFlags )
+		, VkMemoryPropertyFlags memoryFlags
+		, ashes::QueueShare sharingMode )
 	{
 		m_device = &device;
 		m_allocator = std::make_unique< GpuBufferBuddyAllocator >( level, minBlockSize );
 		doInitialiseStorage( device
 			, uint32_t( m_allocator->getSize() )
 			, usage
-			, memoryFlags );
+			, memoryFlags
+			, std::move( sharingMode ) );
 	}
 
 	bool GpuBuffer::hasAvailable( size_t size )const
@@ -155,12 +157,14 @@ namespace castor3d
 	void GpuBuffer::doInitialiseStorage( RenderDevice const & device
 		, uint32_t size
 		, VkBufferUsageFlags usage
-		, VkMemoryPropertyFlags memoryFlags )
+		, VkMemoryPropertyFlags memoryFlags
+		, ashes::QueueShare sharingMode )
 	{
 		m_buffer = makeBuffer< uint8_t >( device
 			, size
 			, usage
 			, memoryFlags
-			, "GpuBuffer" );
+			, "GpuBuffer"
+			, std::move( sharingMode ) );
 	}
 }

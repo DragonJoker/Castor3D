@@ -229,7 +229,7 @@ namespace castor3d
 	RadianceComputer::RadianceComputer( Engine & engine
 		, Size const & size
 		, ashes::Image const & srcTexture )
-		: RenderCube{ *engine.getRenderSystem()->getCurrentRenderDevice(), false }
+		: RenderCube{ getCurrentRenderDevice( engine ), false }
 		, m_result{ doCreateRadianceTexture( m_device, size ) }
 		, m_resultView{ m_result->createView( VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine ) }

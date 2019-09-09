@@ -143,9 +143,6 @@ namespace castor3d
 
 	void TransparentPass::initialiseRenderPass( WeightedBlendTextures const & wbpResult )
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
-
 		ashes::VkAttachmentDescriptionArray attaches
 		{
 			{
@@ -236,6 +233,7 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
+		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
@@ -285,8 +283,6 @@ namespace castor3d
 
 		auto * result = &toWait;
 		auto & timer = getTimer();
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
 		auto timerBlock = timer.start();
 
 		m_nodesCommands->begin();
@@ -314,6 +310,7 @@ namespace castor3d
 		timer.endPass( *m_nodesCommands );
 		m_nodesCommands->end();
 
+		auto & device = getCurrentRenderDevice( *this );
 		device.graphicsQueue->submit( *m_nodesCommands
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT

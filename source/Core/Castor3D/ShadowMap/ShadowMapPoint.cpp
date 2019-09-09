@@ -246,11 +246,11 @@ namespace castor3d
 	{
 		//Size displaySize{ 128u, 128u };
 		//Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
-		//getEngine()->getRenderSystem()->getCurrentRenderDevice()->renderVarianceCube( position
+		//getCurrentRenderDevice( *this )->renderVarianceCube( position
 		//	, displaySize
 		//	, *m_shadowMap.getTexture() );
 		//position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
-		//getEngine()->getRenderSystem()->getCurrentRenderDevice()->renderDepthCube( position
+		//getCurrentRenderDevice( *this )->renderDepthCube( position
 		//	, displaySize
 		//	, *m_linearMap.getTexture() );
 	}

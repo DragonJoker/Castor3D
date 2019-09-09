@@ -262,8 +262,8 @@ namespace castor3d
 					: m_renderer.doGetPanelNode( pass ) )
 				, getCurrentRenderDevice( m_renderer )
 				, ( fontTexture
-					? *m_renderer.m_textDeclaration
-					: *m_renderer.m_declaration )
+					? m_renderer.m_textDeclaration
+					: m_renderer.m_declaration )
 				, MaxPanelsPerBuffer );
 			doUpdateUbo( *bufferIndex.pool.overlayUbo
 				, *bufferIndex.pool.texturesUbo
@@ -411,6 +411,33 @@ namespace castor3d
 		: OwnedBy< RenderSystem >( renderSystem )
 		, m_target{ target }
 		, m_matrixUbo{ *renderSystem.getEngine() }
+		, m_declaration
+		{
+			0u,
+			ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( OverlayCategory::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+			},
+			ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) },
+				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) },
+			},
+		}
+		, m_textDeclaration
+		{
+			0u,
+			ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( TextOverlay::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
+			},
+			ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) },
+				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) },
+				{ 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) },
+			},
+		}
 	{
 	}
 
@@ -420,8 +447,7 @@ namespace castor3d
 
 	void OverlayRenderer::initialise()
 	{
-		auto & renderSystem = *getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 
 		if ( !m_renderPass )
 		{
@@ -435,48 +461,20 @@ namespace castor3d
 			m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		}
 
-		if ( !m_declaration )
-		{
-			m_declaration = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray
-				{
-					{ 0u, sizeof( OverlayCategory::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-				}
-				, ashes::VkVertexInputAttributeDescriptionArray
-				{
-					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) },
-					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) },
-				} );
-		}
-
-		if ( !m_textDeclaration )
-		{
-			m_textDeclaration = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, ashes::VkVertexInputBindingDescriptionArray
-				{
-					{ 0u, sizeof( TextOverlay::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
-				}
-				, ashes::VkVertexInputAttributeDescriptionArray
-				{
-					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) },
-					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) },
-					{ 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) },
-				} );
-		}
 
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( device
-			, *m_declaration
+			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// Create one border overlays buffer pool
 		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( device
-			, *m_declaration
+			, m_declaration
 			, MaxPanelsPerBuffer ) );
 
 		// create one text overlays buffer
 		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( device
-			, *m_textDeclaration
+			, m_textDeclaration
 			, MaxPanelsPerBuffer ) );
 	}
 
@@ -495,8 +493,6 @@ namespace castor3d
 		m_textVertexBuffers.clear();
 		m_fence.reset();
 		m_commandBuffer.reset();
-		m_declaration.reset();
-		m_textDeclaration.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();
 		m_toWait = nullptr;
@@ -557,8 +553,7 @@ namespace castor3d
 
 	void OverlayRenderer::render( RenderPassTimer & timer )
 	{
-		auto & renderSystem = *getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		timer.notifyPassRender();
 		queue.submit( *m_commandBuffer
@@ -802,11 +797,11 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-			auto vertexLayout = m_declaration.get();
+			auto vertexLayout = &m_declaration;
 
 			if ( text )
 			{
-				vertexLayout = m_textDeclaration.get();
+				vertexLayout = &m_textDeclaration;
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( TextMapBinding
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -866,6 +861,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		using namespace shader;
+		auto & renderSystem = *getRenderSystem();
 		bool hasTexture = textures != TextureFlag::eNone;
 
 		// Vertex shader
@@ -909,7 +905,7 @@ namespace castor3d
 
 			std::unique_ptr< Materials > materials;
 
-			switch ( getRenderSystem()->getEngine()->getMaterialsType() )
+			switch ( renderSystem.getEngine()->getMaterialsType() )
 			{
 			case MaterialType::ePhong:
 				materials = std::make_unique< shader::LegacyMaterials >( writer );
@@ -924,9 +920,9 @@ namespace castor3d
 				break;
 			}
 
-			materials->declare( getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			shader::TextureConfigurations textureConfigs{ writer };
-			textureConfigs.declare( getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
 			UBO_TEXTURES( writer, TexturesUboBinding, 0u );
 
@@ -983,8 +979,7 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & renderSystem = *getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),

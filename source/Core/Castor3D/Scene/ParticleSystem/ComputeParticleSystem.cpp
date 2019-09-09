@@ -120,8 +120,7 @@ namespace castor3d
 		, Milliseconds const & totalTime
 		, uint32_t index )
 	{
-		auto & renderSystem = *getParent().getScene()->getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		auto & data = m_ubo->getData( 0u );
 		data.deltaTime = float( time.count() );
 		data.time = float( totalTime.count() );
@@ -366,8 +365,7 @@ namespace castor3d
 
 	void ComputeParticleSystem::doPrepareCommandBuffers()
 	{
-		auto & renderSystem = *getParent().getScene()->getEngine()->getRenderSystem();
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		m_commandBuffer = device.computeCommandPool->createCommandBuffer();
 		m_fence = device->createFence();
 	}

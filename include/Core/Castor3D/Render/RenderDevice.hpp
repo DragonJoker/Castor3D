@@ -47,19 +47,19 @@ namespace castor3d
 		VkPhysicalDeviceMemoryProperties memoryProperties{};
 		VkPhysicalDeviceFeatures features{};
 		VkPhysicalDeviceProperties properties{};
-		ashes::DevicePtr device;
-		std::vector< ashes::CommandPoolPtr > commandPools;
 		uint32_t presentQueueFamilyIndex;
 		uint32_t graphicsQueueFamilyIndex;
 		uint32_t computeQueueFamilyIndex;
 		uint32_t transferQueueFamilyIndex;
+		ashes::DevicePtr device;
+		std::vector< ashes::CommandPoolPtr > commandPools;
+		ashes::CommandPool * presentCommandPool{ nullptr };
 		ashes::CommandPool * graphicsCommandPool{ nullptr };
 		ashes::CommandPool * computeCommandPool{ nullptr };
-		ashes::CommandPool * presentCommandPool{ nullptr };
 		ashes::CommandPool * transferCommandPool{ nullptr };
+		ashes::QueuePtr presentQueue{ nullptr };
 		ashes::QueuePtr graphicsQueue{ nullptr };
 		ashes::QueuePtr computeQueue{ nullptr };
-		ashes::QueuePtr presentQueue{ nullptr };
 		ashes::QueuePtr transferQueue{ nullptr };
 	};
 }

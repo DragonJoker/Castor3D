@@ -72,10 +72,12 @@ namespace castor3d
 	inline UniformBuffer< T >::UniformBuffer( RenderSystem const & renderSystem
 		, uint32_t count
 		, VkMemoryPropertyFlags flags
-		, castor::String debugName )
+		, castor::String debugName
+		, ashes::QueueShare sharingMode )
 		: m_renderSystem{ renderSystem }
 		, m_flags{ flags }
 		, m_count{ count }
+		, m_sharingMode{ std::move( sharingMode ) }
 	{
 		for ( uint32_t i = 0; i < count; ++i )
 		{
@@ -89,15 +91,17 @@ namespace castor3d
 	}
 
 	template< typename T >
-	inline void UniformBuffer< T >::initialise()
+	inline uint32_t UniformBuffer< T >::initialise()
 	{
 		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_buffer = makeUniformBuffer< T >( device
 			, m_count
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, m_flags
-			, m_debugName );
+			, m_debugName
+			, m_sharingMode );
+		return uint32_t( m_buffer->getUbo().getBuffer().getSize() );
 	}
 
 	template< typename T >

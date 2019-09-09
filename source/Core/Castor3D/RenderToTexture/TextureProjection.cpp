@@ -238,7 +238,7 @@ namespace castor3d
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = *renderSystem.getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 		return ashes::PipelineShaderStageCreateInfoArray
 		{
 			makeShaderState( device, vtx ),

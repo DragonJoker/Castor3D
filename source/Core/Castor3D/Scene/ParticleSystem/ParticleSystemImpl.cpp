@@ -1,5 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+
 using namespace castor;
 
 namespace castor3d
@@ -12,5 +14,10 @@ namespace castor3d
 
 	ParticleSystemImpl::~ParticleSystemImpl()
 	{
+	}
+
+	RenderDevice const & getCurrentRenderDevice( ParticleSystem const & object )
+	{
+		return getCurrentRenderDevice( static_cast< MovableObject const & >( object ) );
 	}
 }

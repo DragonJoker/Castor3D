@@ -37,19 +37,7 @@ namespace castor3d
 						if ( graphicsQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
 						{
 							graphicsQueueFamilyIndex = i;
-						}
-
-						// Si la file supporte aussi les calculs, on la choisit en compute queue
-						if ( ashes::checkFlag( queueProps[i].queueFlags, VK_QUEUE_COMPUTE_BIT )
-							&& computeQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
-						{
 							computeQueueFamilyIndex = i;
-						}
-
-						// Si la file supporte aussi les transferts, on la choisit en compute queue
-						if ( ashes::checkFlag( queueProps[i].queueFlags, VK_QUEUE_TRANSFER_BIT )
-							&& transferQueueFamilyIndex == std::numeric_limits< uint32_t >::max() )
-						{
 							transferQueueFamilyIndex = i;
 						}
 
@@ -170,31 +158,32 @@ namespace castor3d
 		, memoryProperties{ gpu.getMemoryProperties() }
 		, properties{ gpu.getProperties() }
 		, features{ gpu.getFeatures() }
-	{
-		renderSystem.getInstance().createDevice( gpu
+		, device{ renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
 				, *surface
 				, gpu
 				, presentQueueFamilyIndex
 				, graphicsQueueFamilyIndex
 				, computeQueueFamilyIndex
-				, transferQueueFamilyIndex ) );
-		commandPools.push_back( device->createCommandPool( presentQueueFamilyIndex
-			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
-		presentCommandPool = commandPools.back().get();
-		graphicsCommandPool = commandPools.back().get();
-		computeCommandPool = commandPools.back().get();
-		transferCommandPool = commandPools.back().get();
-		presentQueue = device->getQueue( presentQueueFamilyIndex, 0u );
-		graphicsQueue = device->getQueue( presentQueueFamilyIndex, 0u );
-		computeQueue = device->getQueue( presentQueueFamilyIndex, 0u );
-		transferQueue = device->getQueue( presentQueueFamilyIndex, 0u );
-
+				, transferQueueFamilyIndex ) ) }
+		, commandPools{ 1u
+			, device->createCommandPool( presentQueueFamilyIndex
+				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
+		, presentCommandPool{ commandPools.back().get() }
+		, graphicsCommandPool{ presentCommandPool }
+		, computeCommandPool{ presentCommandPool }
+		, transferCommandPool{ presentCommandPool }
+		, presentQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
+		, graphicsQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
+		, computeQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
+		, transferQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
+	{
 		if ( graphicsQueueFamilyIndex != presentQueueFamilyIndex )
 		{
 			commandPools.push_back( device->createCommandPool( graphicsQueueFamilyIndex
 				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
 			graphicsCommandPool = commandPools.back().get();
+			graphicsQueue = device->getQueue( graphicsQueueFamilyIndex, 0u );
 		}
 
 		if ( computeQueueFamilyIndex != presentQueueFamilyIndex )
@@ -202,6 +191,7 @@ namespace castor3d
 			commandPools.push_back( device->createCommandPool( computeQueueFamilyIndex
 				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
 			computeCommandPool = commandPools.back().get();
+			computeQueue = device->getQueue( computeQueueFamilyIndex, 0u );
 		}
 
 		if ( transferQueueFamilyIndex != presentQueueFamilyIndex )
@@ -209,6 +199,7 @@ namespace castor3d
 			commandPools.push_back( device->createCommandPool( transferQueueFamilyIndex
 				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
 			transferCommandPool = commandPools.back().get();
+			transferQueue = device->getQueue( transferQueueFamilyIndex, 0u );
 		}
 	}
 }

@@ -128,6 +128,7 @@ namespace castor3d
 			, FogType fogType
 			, bool hasSsao )
 		{
+			auto & renderSystem = device.renderSystem;
 			using namespace sdw;
 			FragmentWriter writer;
 
@@ -151,9 +152,9 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::LegacyMaterials materials{ writer };
-			materials.declare( device.renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			
-			shader::Utils utils{ writer, device.renderSystem.isTopDown(), device.renderSystem.isZeroToOneDepth() };
+			shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
 			utils.declareRemoveGamma();
 			utils.declareCalcWSPosition();
 			utils.declareCalcVSPosition();

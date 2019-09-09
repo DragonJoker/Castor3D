@@ -1,4 +1,5 @@
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -30,7 +31,7 @@ namespace castor3d
 	template< typename T >
 	void UniformBufferPool< T >::upload( RenderPassTimer & timer, uint32_t index )const
 	{
-		RenderDevice const & device = *getRenderSystem()->getCurrentRenderDevice();
+		auto & device = getCurrentRenderDevice( *this );
 
 		for ( auto & bufferIt : m_buffers )
 		{
@@ -66,44 +67,63 @@ namespace castor3d
 
 		if ( itB == it->second.end() )
 		{
+			auto & renderSystem = *getRenderSystem();
+
 			if ( !m_maxCount )
 			{
-				getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				auto & properties = renderSystem.getProperties();
+				auto maxSize = properties.limits.maxUniformBufferRange;
+				auto elementSize = ashes::getAlignedSize( sizeof( T )
+					, properties.limits.minUniformBufferOffsetAlignment );
+				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
+				m_maxSize = uint32_t( m_maxCount * elementSize );
+
+				renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
 					{
-						auto & device = *getRenderSystem()->getCurrentRenderDevice();
-						uint32_t maxSize = device.properties.limits.maxUniformBufferRange;
-						uint32_t minOffset = uint32_t( device.properties.limits.minUniformBufferOffsetAlignment );
-						uint32_t elementSize = 0u;
-						uint32_t size = uint32_t( sizeof( T ) );
-
-						while ( size > minOffset )
-						{
-							size -= minOffset;
-							elementSize += minOffset;
-						}
-
-						elementSize += minOffset;
-						m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
-						m_maxSize = uint32_t( m_maxCount * elementSize );
+						auto & device = getCurrentRenderDevice( *this );
 						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
 							, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-							, m_maxSize );
+							, m_maxSize
+							, ashes::QueueShare
+							{
+								{
+									device.graphicsQueueFamilyIndex,
+									device.computeQueueFamilyIndex,
+									device.transferQueueFamilyIndex,
+								}
+							} );
 					} ) );
 			}
 
-			auto buffer = std::make_unique< UniformBuffer< T > >( *getRenderSystem()
+			ashes::QueueShare sharingMode;
+
+			if ( renderSystem.hasMainDevice() )
+			{
+				auto & device = *renderSystem.getMainRenderDevice();
+				sharingMode =
+				{
+					{
+						device.graphicsQueueFamilyIndex,
+						device.computeQueueFamilyIndex,
+						device.transferQueueFamilyIndex,
+					}
+				};
+			}
+
+			auto buffer = std::make_unique< UniformBuffer< T > >( renderSystem
 				, m_maxCount
 				, flags
-				, m_debugName );
+				, m_debugName
+				, sharingMode );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = it->second.begin() + it->second.size() - 1;
 			auto & ubuffer = *it->second.back();
 
-			getRenderSystem()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&ubuffer]()
+			renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [&ubuffer, this]()
 				{
-					ubuffer.initialise();
+					m_maxSize = ubuffer.initialise();
 				} ) );
 		}
 
