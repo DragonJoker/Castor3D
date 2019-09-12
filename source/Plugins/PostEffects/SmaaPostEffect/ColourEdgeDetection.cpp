@@ -340,10 +340,11 @@ namespace smaa
 	castor3d::CommandsSemaphore ColourEdgeDetection::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			m_device.graphicsCommandPool->createCommandBuffer(),
-			m_device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
@@ -391,9 +392,10 @@ namespace smaa
 	{
 		VkExtent2D size{ m_colourView.image->getDimensions().width
 			, m_colourView.image->getDimensions().height };
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
 		dsstate->stencilTestEnable = true;

@@ -1,7 +1,5 @@
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
-
 using namespace castor;
 
 namespace castor3d

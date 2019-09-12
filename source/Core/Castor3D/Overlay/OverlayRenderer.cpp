@@ -68,8 +68,8 @@ namespace castor3d
 		}
 
 		template< typename T >
-		void doUpdateUbo( ashes::UniformBuffer< T > & overlayUbo
-			, ashes::UniformBuffer< TexturesUbo::Configuration > & texturesUbo
+		void doUpdateUbo( UniformBuffer< T > & overlayUbo
+			, UniformBuffer< TexturesUbo::Configuration > & texturesUbo
 			, uint32_t index
 			, OverlayCategory const & overlay
 			, Pass const & pass
@@ -338,12 +338,12 @@ namespace castor3d
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "OverlayRenderer" ) }
-		, overlayUbo{ makeUniformBuffer< Configuration >( device
+		, overlayUbo{ makeUniformBuffer< Configuration >( device.renderSystem
 			, count
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "OverlayRendererOv" ) }
-		, texturesUbo{ makeUniformBuffer< TexturesUbo::Configuration >( device
+		, texturesUbo{ makeUniformBuffer< TexturesUbo::Configuration >( device.renderSystem
 			, count
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -594,8 +594,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, ashes::UniformBuffer< Configuration > const & overlayUbo
-		, ashes::UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBuffer< Configuration > const & overlayUbo
+		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, bool update )
 	{
@@ -651,8 +651,8 @@ namespace castor3d
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 		, TextureFlags textures
 		, Pass const & pass
-		, ashes::UniformBuffer< Configuration > const & overlayUbo
-		, ashes::UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+		, UniformBuffer< Configuration > const & overlayUbo
+		, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
 		, uint32_t index
 		, TextureLayout const & texture
 		, Sampler const & sampler )

@@ -18,7 +18,7 @@ namespace Bloom
 		: public castor3d::RenderQuad
 	{
 	public:
-		HiPass( castor3d::RenderDevice const & device
+		HiPass( castor3d::RenderSystem & renderSystem
 			, VkFormat format
 			, ashes::ImageView const & sceneView
 			, VkExtent2D size

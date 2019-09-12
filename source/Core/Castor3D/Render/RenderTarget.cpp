@@ -180,9 +180,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	RenderTarget::CombineQuad::CombineQuad( RenderDevice const & device
+	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
 		, ashes::ImageView const & ovView )
-		: RenderQuad{ device, true }
+		: RenderQuad{ renderSystem, true }
 		, m_ovView{ ovView }
 	{
 	}
@@ -748,7 +748,7 @@ namespace castor3d
 
 		m_combineCommands = device.graphicsCommandPool->createCommandBuffer();
 		m_combineFinished = device->createSemaphore();
-		m_combineQuad = std::make_unique< CombineQuad >( device
+		m_combineQuad = std::make_unique< CombineQuad >( *getEngine()->getRenderSystem()
 			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{

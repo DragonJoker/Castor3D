@@ -208,8 +208,8 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfo const & declaration;
 			ashes::VertexBufferPtr< Quad > buffer;
 			std::set< uint32_t > free;
-			ashes::UniformBufferPtr< Configuration > overlayUbo;
-			ashes::UniformBufferPtr< TexturesUbo::Configuration > texturesUbo;
+			UniformBufferUPtr< Configuration > overlayUbo;
+			UniformBufferUPtr< TexturesUbo::Configuration > texturesUbo;
 		};
 
 		template< typename VertexT, uint32_t CountT >
@@ -248,15 +248,15 @@ namespace castor3d
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
 			, Pass const & pass
-			, ashes::UniformBuffer< Configuration > const & overlayUbo
-			, ashes::UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+			, UniformBuffer< Configuration > const & overlayUbo
+			, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, bool update = true );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, TextureFlags textures
 			, Pass const & pass
-			, ashes::UniformBuffer< Configuration > const & overlayUbo
-			, ashes::UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
+			, UniformBuffer< Configuration > const & overlayUbo
+			, UniformBuffer< TexturesUbo::Configuration > const & texturesUbo
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );

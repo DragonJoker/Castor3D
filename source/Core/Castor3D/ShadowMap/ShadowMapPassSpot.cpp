@@ -141,7 +141,7 @@ namespace castor3d
 		};
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 
-		m_shadowConfig = makeUniformBuffer< Configuration >( device
+		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
@@ -161,15 +161,15 @@ namespace castor3d
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
-			, *m_shadowConfig );
+		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
+			, m_shadowConfig->getBuffer() );
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
-			, *m_shadowConfig );
+		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
+			, m_shadowConfig->getBuffer() );
 	}
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )

@@ -658,7 +658,7 @@ namespace light_streaks
 			{
 				surface.descriptorSets.emplace_back( m_pipelines.kawase.layout.descriptorPool->createDescriptorSet( 0u ) );
 				auto & descriptorSet = *surface.descriptorSets.back();
-				descriptorSet.createBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 0u )
+				descriptorSet.createSizedBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 0u )
 					, m_kawaseUbo.getUbo()
 					, index );
 				descriptorSet.createBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 1u )

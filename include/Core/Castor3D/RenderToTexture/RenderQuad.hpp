@@ -55,7 +55,7 @@ namespace castor3d
 		*\param[in] invertV
 		*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
 		*/
-		C3D_API explicit RenderQuad( castor3d::RenderDevice const & device
+		C3D_API explicit RenderQuad( RenderSystem & renderSystem
 			, bool nearest
 			, bool invertU = false
 			, bool invertV = false );
@@ -210,7 +210,7 @@ namespace castor3d
 		C3D_API virtual void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const;
 
 	protected:
-		castor3d::RenderDevice const & m_device;
+		RenderSystem & m_renderSystem;
 		SamplerSPtr m_sampler;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

@@ -31,8 +31,7 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			auto & device = getCurrentRenderDevice( m_engine );
-			m_ubo = makeUniformBuffer< Configuration >( device
+			m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
 				, 1u
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT

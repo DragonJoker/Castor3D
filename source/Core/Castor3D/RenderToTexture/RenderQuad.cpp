@@ -31,7 +31,7 @@ namespace castor3d
 {
 	namespace
 	{
-		SamplerSPtr doCreateSampler( RenderDevice const & device, bool nearest )
+		SamplerSPtr doCreateSampler( RenderSystem const & renderSystem, bool nearest )
 		{
 			String const name = nearest
 				? String{ cuT( "RenderQuad_Nearest" ) }
@@ -39,7 +39,7 @@ namespace castor3d
 			VkFilter const filter = nearest
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
-			auto & cache = device.renderSystem.getEngine()->getSamplerCache();
+			auto & cache = renderSystem.getEngine()->getSamplerCache();
 			SamplerSPtr sampler;
 
 			if ( cache.has( name ) )
@@ -59,11 +59,11 @@ namespace castor3d
 		}
 	}
 
-	RenderQuad::RenderQuad( RenderDevice const & device
+	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, bool nearest
 		, bool invertU
 		, bool invertV )
-		: m_device{ device }
+		: m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
 			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 1.0 : 0.0 ) } },
@@ -71,12 +71,12 @@ namespace castor3d
 			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 1.0 : 0.0 ) } },
 			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 0.0 : 1.0 ) } },
 		}
-		, m_sampler{ doCreateSampler( m_device, nearest ) }
+		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
 	{
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )
-		: m_device{ rhs.m_device }
+		: m_renderSystem{ rhs.m_renderSystem }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
@@ -135,7 +135,7 @@ namespace castor3d
 	{
 		m_sourceView = &view;
 		m_sampler->initialise();
-		auto & device = getCurrentRenderDevice( m_device );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		// Initialise the vertex buffer.
 		m_vertexBuffer = makeVertexBuffer< TexturedQuad::Vertex >( device
 			, 4u
@@ -183,8 +183,8 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_descriptorSetLayout = m_device->createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = m_device->createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
+		m_descriptorSetLayout = device->createDescriptorSetLayout( std::move( bindings ) );
+		m_pipelineLayout = device->createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
 		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
@@ -204,7 +204,7 @@ namespace castor3d
 			1u,
 			ashes::VkScissorArray{ scissor },
 		};
-		m_pipeline = m_device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
 			(
 				0u,
 				program,
@@ -225,8 +225,8 @@ namespace castor3d
 	void RenderQuad::prepareFrame( ashes::RenderPass const & renderPass
 		, uint32_t subpassIndex )
 	{
-		auto & device = getCurrentRenderDevice( m_device );
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( false );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
 				, subpassIndex

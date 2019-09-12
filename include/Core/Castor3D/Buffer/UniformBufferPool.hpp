@@ -33,12 +33,12 @@ namespace castor3d
 
 		T const & getData()const
 		{
-			return buffer->getBuffer().getData( offset );
+			return buffer->getData( offset );
 		}
 
 		T & getData()
 		{
-			return buffer->getBuffer().getData( offset );
+			return buffer->getData( offset );
 		}
 	};
 	/*!
@@ -55,7 +55,7 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< std::unique_ptr< UniformBuffer< T > > >;
+		using BufferArray = std::vector< UniformBufferUPtr< T > >;
 
 	public:
 		/**

@@ -469,18 +469,18 @@ namespace castor3d
 			pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( 0u );
 			auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 			m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
-			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
 				, m_matrixUbo.getUbo() );
-			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
-			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
 				, m_gpInfoUbo.getUbo() );
 			if ( modelMatrixUbo )
 			{
-				pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
+				pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
 					, modelMatrixUbo->getUbo() );
 			}
-			pipeline.uboDescriptorSet->createBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
 				, *m_baseUbo
 				, 0u
 				, uint32_t( m_baseUbo->getElementSize() ) );

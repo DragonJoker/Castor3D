@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/HDR/HdrConfig.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -33,7 +34,7 @@ namespace castor3d
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
-		, RenderQuad{ getCurrentRenderDevice( engine ), true, false }
+		, RenderQuad{ *engine.getRenderSystem(), true, false }
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }
@@ -51,7 +52,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
-		m_signalFinished = getCurrentRenderDevice( m_device )->createSemaphore();
+		m_signalFinished = getCurrentRenderDevice( m_renderSystem )->createSemaphore();
 
 		{
 			VertexWriter writer;
@@ -75,7 +76,7 @@ namespace castor3d
 		}
 
 		m_pixelShader.shader = doCreate();
-		auto & device = getCurrentRenderDevice( m_device );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
 			makeShaderState( device, m_vertexShader ),
@@ -125,8 +126,8 @@ namespace castor3d
 	void ToneMapping::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_hdrConfigUbo.getUbo()
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
+			, m_hdrConfigUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
 	}

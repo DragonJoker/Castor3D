@@ -48,7 +48,7 @@ namespace Bloom
 				, VkExtent2D dimensions
 				, castor3d::ShaderModule const & vertexShader
 				, castor3d::ShaderModule const & pixelShader
-				, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+				, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 				, uint32_t index );
 
 			ashes::FrameBufferPtr frameBuffer;
@@ -61,7 +61,7 @@ namespace Bloom
 		castor3d::RenderDevice const & m_device;
 		uint32_t m_blurKernelSize;
 		uint32_t m_blurPassesCount;
-		ashes::UniformBufferPtr< castor3d::GaussianBlur::Configuration > m_blurUbo;
+		castor3d::UniformBufferUPtr< castor3d::GaussianBlur::Configuration > m_blurUbo;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

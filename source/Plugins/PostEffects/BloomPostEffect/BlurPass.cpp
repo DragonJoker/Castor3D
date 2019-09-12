@@ -6,7 +6,6 @@
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Mesh/Vertex.hpp>
-#include <Castor3D/Miscellaneous/GaussianBlur.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
@@ -135,13 +134,13 @@ namespace Bloom
 			return result;
 		}
 
-		ashes::UniformBufferPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( castor3d::RenderDevice const & device
+		castor3d::UniformBufferUPtr< castor3d::GaussianBlur::Configuration > doCreateUbo( castor3d::RenderDevice const & device
 			, VkExtent2D dimensions
 			, uint32_t blurKernelSize
 			, uint32_t blurPassesCount
 			, bool isVertical )
 		{
-			auto result = castor3d::makeUniformBuffer< castor3d::GaussianBlur::Configuration >( device
+			auto result = castor3d::makeUniformBuffer< castor3d::GaussianBlur::Configuration >( device.renderSystem
 				, blurPassesCount
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -269,7 +268,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t index )
 	{
 		dimensions.width >>= ( index + 1 );
@@ -286,7 +285,7 @@ namespace Bloom
 
 		auto & descriptorLayout = descriptorPool.getLayout();
 		descriptorSet = descriptorPool.createDescriptorSet();
-		descriptorSet->createBinding( descriptorLayout.getBinding( 0u )
+		descriptorSet->createSizedBinding( descriptorLayout.getBinding( 0u )
 			, blurUbo
 			, index );
 		descriptorSet->createBinding( descriptorLayout.getBinding( 1u )
@@ -347,7 +346,7 @@ namespace Bloom
 		, VkExtent2D dimensions
 		, castor3d::ShaderModule const & vertexShader
 		, castor3d::ShaderModule const & pixelShader
-		, ashes::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
+		, castor3d::UniformBuffer< castor3d::GaussianBlur::Configuration > const & blurUbo
 		, uint32_t blurPassesCount )
 	{
 		std::vector< BlurPass::Subpass > result;

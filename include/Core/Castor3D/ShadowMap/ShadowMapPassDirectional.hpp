@@ -109,7 +109,7 @@ namespace castor3d
 		};
 
 	private:
-		ashes::UniformBufferPtr< Configuration > m_shadowConfig;
+		UniformBufferUPtr< Configuration > m_shadowConfig;
 		float m_farPlane;
 	};
 }

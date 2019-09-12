@@ -201,11 +201,11 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, ashes::DescriptorSet & descriptorSet )const
 	{
-		descriptorSet.createBinding( m_descriptorLayout->getBinding( 0u )
+		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 0u )
 			, matrixUbo.getUbo() );
-		descriptorSet.createBinding( m_descriptorLayout->getBinding( 1u )
+		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 1u )
 			, modelMatrixUbo.getUbo() );
-		descriptorSet.createBinding( m_descriptorLayout->getBinding( 2u )
+		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 2u )
 			, hdrConfigUbo.getUbo() );
 		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
 			, m_texture->getDefaultView()

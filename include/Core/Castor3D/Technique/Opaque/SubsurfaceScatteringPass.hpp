@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Shader.hpp>
@@ -137,7 +138,7 @@ namespace castor3d
 				, castor::Size const & size
 				, GpInfoUbo & gpInfoUbo
 				, SceneUbo & sceneUbo
-				, ashes::UniformBuffer< BlurConfiguration > const & blurUbo
+				, UniformBuffer< BlurConfiguration > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, TextureUnit const & destination
@@ -155,7 +156,7 @@ namespace castor3d
 			GeometryPassResult const & m_geometryBufferResult;
 			GpInfoUbo & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
-			ashes::UniformBuffer< BlurConfiguration > const & m_blurUbo;
+			UniformBuffer< BlurConfiguration > const & m_blurUbo;
 			ashes::RenderPassPtr m_renderPass;
 			ashes::FrameBufferPtr m_frameBuffer;
 		};
@@ -166,7 +167,7 @@ namespace castor3d
 		public:
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
-				, ashes::UniformBuffer< BlurWeights > const & blurUbo
+				, UniformBuffer< BlurWeights > const & blurUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
@@ -181,7 +182,7 @@ namespace castor3d
 
 		private:
 			RenderSystem & m_renderSystem;
-			ashes::UniformBuffer< BlurWeights > const & m_blurUbo;
+			UniformBuffer< BlurWeights > const & m_blurUbo;
 			GeometryPassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			std::array< TextureUnit, 3u > const & m_blurResults;
@@ -191,8 +192,8 @@ namespace castor3d
 
 	private:
 		castor::Size m_size;
-		ashes::UniformBufferPtr< BlurConfiguration > m_blurConfigUbo;
-		ashes::UniformBufferPtr< BlurWeights > m_blurWeightsUbo;
+		UniformBufferUPtr< BlurConfiguration > m_blurConfigUbo;
+		UniformBufferUPtr< BlurWeights > m_blurWeightsUbo;
 		TextureUnit m_intermediate;
 		std::array< TextureUnit, 3u > m_blurResults;
 		TextureUnit m_result;

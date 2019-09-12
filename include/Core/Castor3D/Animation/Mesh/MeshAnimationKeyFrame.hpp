@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_MeshAnimationKeyFrame_H___
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -51,10 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tampon de sous-maillage correspondant au sous-maillage donné.
 		 */
-		inline SubmeshAnimationBufferMap::const_iterator find( Submesh const & submesh )const
-		{
-			return m_submeshesBuffers.find( submesh.getId() );
-		}
+		C3D_API SubmeshAnimationBufferMap::const_iterator find( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\return		The beginning of the submeshes buffers.

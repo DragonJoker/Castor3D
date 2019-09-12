@@ -7,7 +7,6 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
-#include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Texture/Sampler.hpp>
 #include <Castor3D/Texture/TextureLayout.hpp>
 

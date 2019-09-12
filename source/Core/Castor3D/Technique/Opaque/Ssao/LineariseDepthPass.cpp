@@ -374,7 +374,7 @@ namespace castor3d
 			, VK_FILTER_NEAREST ) }
 		, m_commandBuffer{ getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer() }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
-		, m_clipInfo{ makeUniformBuffer< Point3f >( getCurrentRenderDevice( m_engine )
+		, m_clipInfo{ makeUniformBuffer< Point3f >( *m_engine.getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -485,7 +485,7 @@ namespace castor3d
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
 			, m_depthBuffer
 			, *m_lineariseSampler );
-		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 1u )
+		m_lineariseDescriptor->createSizedBinding( m_lineariseDescriptorLayout->getBinding( 1u )
 			, *m_clipInfo
 			, 0u );
 		m_lineariseDescriptor->update();
@@ -550,7 +550,7 @@ namespace castor3d
 			},
 		};
 
-		m_previousLevel = makeUniformBuffer< MinifyConfiguration >( device
+		m_previousLevel = makeUniformBuffer< MinifyConfiguration >( *m_engine.getRenderSystem()
 			, MaxMipLevel
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -570,8 +570,8 @@ namespace castor3d
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )
 				, *pipeline.sourceView
 				, *m_minifySampler );
-			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 1u )
-				, *m_previousLevel
+			pipeline.descriptor->createSizedBinding( m_minifyDescriptorLayout->getBinding( 1u )
+				, m_previousLevel->getBuffer()
 				, index );
 			pipeline.descriptor->update();
 			ashes::ImageViewCRefArray attaches;

@@ -631,7 +631,7 @@ namespace castor3d
 		Engine & m_engine;
 		Scene const * m_scene{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
-		ashes::UniformBufferBase const * m_baseUbo{ nullptr };
+		UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;

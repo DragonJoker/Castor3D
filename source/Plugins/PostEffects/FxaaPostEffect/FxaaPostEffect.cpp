@@ -149,10 +149,10 @@ namespace fxaa
 
 	//*********************************************************************************************
 
-	RenderQuad::RenderQuad( castor3d::RenderDevice const & device
+	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, Size const & size )
-		: castor3d::RenderQuad{ device, false, false }
-		, m_fxaaUbo{ *device.renderSystem.getEngine(), size }
+		: castor3d::RenderQuad{ renderSystem, false, false }
+		, m_fxaaUbo{ *renderSystem.getEngine(), size }
 	{
 	}
 
@@ -168,7 +168,7 @@ namespace fxaa
 	void RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, m_fxaaUbo.getUbo() );
 	}
 
@@ -353,7 +353,7 @@ namespace fxaa
 		stages.push_back( makeShaderState( device, m_vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
-		m_fxaaQuad = std::make_unique< RenderQuad >( device
+		m_fxaaQuad = std::make_unique< RenderQuad >( renderSystem
 			, castor::Size{ size.width, size.height } );
 		m_fxaaQuad->createPipeline( size
 			, Position{}

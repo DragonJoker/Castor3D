@@ -4,9 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Bloom_CombinePass_HPP___
 #define ___C3D_Bloom_CombinePass_HPP___
 
-#include <Castor3D/Miscellaneous/GaussianBlur.hpp>
 #include <Castor3D/PostEffect/PostEffect.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
 
 #include <ashespp/Image/ImageView.hpp>
 

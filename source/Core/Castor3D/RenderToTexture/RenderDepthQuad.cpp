@@ -13,7 +13,7 @@ using namespace castor;
 namespace castor3d
 {
 	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
+		: RenderQuad{ renderSystem, false, false }
 		, m_program{ renderSystem }
 	{
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };
@@ -79,7 +79,8 @@ namespace castor3d
 	{
 		static VkClearValue const clear{ ashes::makeClearValue( { 0.0, 0.0, 0.0, 0.0 } ) };
 		cleanup();
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
@@ -97,7 +98,7 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		m_device.graphicsQueue->submit( *m_commandBuffer, nullptr );
-		m_device.graphicsQueue->waitIdle();
+		device.graphicsQueue->submit( *m_commandBuffer, nullptr );
+		device.graphicsQueue->waitIdle();
 	}
 }

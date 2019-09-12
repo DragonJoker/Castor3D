@@ -136,7 +136,7 @@ namespace castor3d
 			//!\~french		La variable contenant l'atténuation de la lumière (RGB) et son index (A).
 			castor::Point4f attenuation;
 		};
-		ashes::UniformBufferPtr< Config > m_ubo;
+		UniformBufferUPtr< Config > m_ubo;
 	};
 }
 

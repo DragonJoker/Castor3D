@@ -3,6 +3,9 @@
 #include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+
 using namespace castor;
 
 namespace castor3d

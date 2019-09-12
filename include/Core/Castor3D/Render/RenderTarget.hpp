@@ -118,7 +118,7 @@ namespace castor3d
 			: public RenderQuad
 		{
 		public:
-			explicit CombineQuad( RenderDevice const & device
+			explicit CombineQuad( RenderSystem & renderSystem
 				, ashes::ImageView const & ovView );
 
 		private:

@@ -160,7 +160,7 @@ namespace castor3d
 			//!\~french		La variable contenant les matrices de transformations de la lumière.
 			std::array< castor::Matrix4x4f, shader::DirectionalMaxCascadesCount > transform;
 		};
-		ashes::UniformBufferPtr< Config > m_ubo;
+		UniformBufferUPtr< Config > m_ubo;
 		Viewport m_viewport;
 	};
 }

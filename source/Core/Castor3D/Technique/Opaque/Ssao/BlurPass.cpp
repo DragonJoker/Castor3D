@@ -477,7 +477,7 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ getCurrentRenderDevice( engine ), true }
+		: RenderQuad{ *engine.getRenderSystem(), true }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_input{ input }
@@ -489,8 +489,8 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
-		, m_finished{ m_device->createSemaphore() }
-		, m_configurationUbo{ makeUniformBuffer< Configuration >( m_device
+		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore() }
+		, m_configurationUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -521,7 +521,8 @@ namespace castor3d
 			, std::move( bindings )
 			, {} );
 		static VkClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		m_timer->beginPass( *m_commandBuffer );
@@ -602,7 +603,8 @@ namespace castor3d
 		m_timer->notifyPassRender();
 		auto * result = &toWait;
 
-		m_device.graphicsQueue->submit( *m_commandBuffer
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		device.graphicsQueue->submit( *m_commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
@@ -642,12 +644,12 @@ namespace castor3d
 	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ssaoConfigUbo.getUbo()
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
+			, m_ssaoConfigUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, *m_configurationUbo
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
+			, m_configurationUbo->getBuffer()
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BINARY_PARSER_H___
-#define ___C3D_BINARY_PARSER_H___
+#ifndef ___C3D_BinaryParser_H___
+#define ___C3D_BinaryParser_H___
 
 #include "Castor3D/Binary/ChunkParser.hpp"
 

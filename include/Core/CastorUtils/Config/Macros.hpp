@@ -63,6 +63,12 @@ typedef wchar_t ychar;
 	using class_name##UPtr = std::unique_ptr< class_name >;\
 	using class_name##RPtr = class_name *
 
+#define CU_DeclareTemplateSmartPtr( class_name )\
+	template< typename T > using class_name##SPtr = std::shared_ptr< class_name< T > >;\
+	template< typename T > using class_name##WPtr = std::weak_ptr< class_name< T > >;\
+	template< typename T > using class_name##UPtr = std::unique_ptr< class_name< T > >;\
+	template< typename T > using class_name##RPtr = class_name< T > *
+
 #define CU_DeclareMap( key, value, name )\
 	using name##Map = std::map< key, value >;\
 	using name##MapIt = name##Map::iterator;\

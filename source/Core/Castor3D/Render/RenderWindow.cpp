@@ -767,7 +767,7 @@ namespace castor3d
 	void RenderWindow::doCreateSwapChainDependent()
 	{
 		RenderTargetSPtr target = getRenderTarget();
-		m_renderQuad = std::make_unique< RenderQuad >( getCurrentRenderDevice( *getEngine() )
+		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
 			, false );
 		doCreateProgram();

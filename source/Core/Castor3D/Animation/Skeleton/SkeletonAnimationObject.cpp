@@ -1,11 +1,5 @@
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
-
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
-
 using namespace castor;
 
 namespace castor3d

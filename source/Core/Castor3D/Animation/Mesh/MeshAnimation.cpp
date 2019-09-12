@@ -1,8 +1,6 @@
 #include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Mesh/Mesh.hpp"
 
 using namespace castor;
 
@@ -20,7 +18,7 @@ namespace castor3d
 	{
 	}
 
-	void MeshAnimation::addChild( MeshAnimationSubmesh && object )
+	void MeshAnimation::addChild( MeshAnimationSubmesh object )
 	{
 		m_submeshes.push_back( std::move( object ) );
 	}

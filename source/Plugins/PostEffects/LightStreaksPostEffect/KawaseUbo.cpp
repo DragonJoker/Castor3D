@@ -24,7 +24,7 @@ namespace light_streaks
 
 	void KawaseUbo::initialise()
 	{
-		m_ubo = castor3d::makeUniformBuffer< Configuration >( getCurrentRenderDevice( m_engine )
+		m_ubo = castor3d::makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
 			, PostEffect::Count * 3u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT

@@ -446,20 +446,20 @@ namespace castor3d
 		, castor::Size const & size
 		, GpInfoUbo & gpInfoUbo
 		, SceneUbo & sceneUbo
-		, ashes::UniformBuffer< BlurConfiguration > const & blurUbo
+		, UniformBuffer< BlurConfiguration > const & blurUbo
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
+		: RenderQuad{ renderSystem, false, false }
 		, m_renderSystem{ renderSystem }
 		, m_geometryBufferResult{ gp }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
 		, m_blurUbo{ blurUbo }
-		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( m_device, *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringBlur" ) }
+		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringBlur" ) }
 	{
 		// Initialise the frame buffer.
 		VkExtent2D extent{ size.getWidth(), size.getHeight() };
@@ -529,16 +529,16 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_sceneUbo.getUbo()
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 2u )
+			, m_sceneUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
-			, m_gpInfoUbo.getUbo()
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 3u )
+			, m_gpInfoUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
-			, m_blurUbo
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 4u )
+			, m_blurUbo.getBuffer()
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
@@ -556,20 +556,20 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
-		, ashes::UniformBuffer< BlurWeights > const & blurUbo
+		, UniformBuffer< BlurWeights > const & blurUbo
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
+		: RenderQuad{ renderSystem, false, false }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
 		, m_geometryBufferResult{ gp }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
-		, m_renderPass{ doCreateRenderPass( m_device, destination.getTexture()->getPixelFormat(), "SubscatteringCombine" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( m_device, *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringCombine" ) }
+		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringCombine" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringCombine" ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -632,8 +632,8 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_blurUbo );
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
+			, m_blurUbo.getBuffer() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
@@ -668,12 +668,12 @@ namespace castor3d
 		, TextureUnit const & lightDiffuse )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ textureSize }
-		, m_blurConfigUbo{ castor3d::makeUniformBuffer< BlurConfiguration >( getCurrentRenderDevice( engine )
+		, m_blurConfigUbo{ makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SubsurfaceScatteringBlurConfig" ) }
-		, m_blurWeightsUbo{ castor3d::makeUniformBuffer< BlurWeights >( getCurrentRenderDevice( engine )
+		, m_blurWeightsUbo{ makeUniformBuffer< BlurWeights >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT

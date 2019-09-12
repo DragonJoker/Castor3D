@@ -1,135 +1,26 @@
-#include "Castor3D/Render/RenderSystem.hpp"
-
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
-
-#include <ashespp/Buffer/StagingBuffer.hpp>
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Core/Device.hpp>
-
-#include <algorithm>
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
 namespace castor3d
 {
-	namespace
-	{
-		inline void copyBuffer( ashes::BufferBase const & src
-			, ashes::BufferBase const & dst
-			, ashes::BufferBase const * ubo
-			, ashes::CommandBuffer const & commandBuffer
-			, VkDeviceSize elemAlignedSize
-			, VkDeviceSize count
-			, VkDeviceSize offset
-			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
-			, uint32_t index )
-		{
-			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			timer.beginPass( commandBuffer, index );
-			commandBuffer.memoryBarrier( src.getCompatibleStageFlags()
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, src.makeTransferSource() );
-			commandBuffer.memoryBarrier( dst.getCompatibleStageFlags()
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, dst.makeTransferDestination() );
-			commandBuffer.copyBuffer( src
-				, dst
-				, uint32_t( elemAlignedSize * count )
-				, uint32_t( elemAlignedSize * offset ) );
-
-			if ( ubo == &src )
-			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, flags
-					, src.makeUniformBufferInput() );
-			}
-			else
-			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, src.makeHostWrite() );
-			}
-
-			if ( ubo == &dst )
-			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, flags
-					, dst.makeUniformBufferInput() );
-			}
-			else
-			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, dst.makeHostRead() );
-			}
-
-			timer.endPass( commandBuffer, index );
-			commandBuffer.end();
-		}
-	}
-
 	template< typename T >
 	inline UniformBuffer< T >::UniformBuffer( RenderSystem const & renderSystem
 		, uint32_t count
+		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName
 		, ashes::QueueShare sharingMode )
-		: m_renderSystem{ renderSystem }
-		, m_flags{ flags }
-		, m_count{ count }
-		, m_sharingMode{ std::move( sharingMode ) }
-	{
-		for ( uint32_t i = 0; i < count; ++i )
+		: UniformBufferBase
 		{
-			m_available.insert( i );
+			renderSystem,
+			count,
+			sizeof( T ),
+			usage,
+			flags,
+			std::move( debugName ),
+			std::move( sharingMode ),
 		}
-	}
-
-	template< typename T >
-	inline UniformBuffer< T >::~UniformBuffer()
+		, m_data( count, T{} )
 	{
-	}
-
-	template< typename T >
-	inline uint32_t UniformBuffer< T >::initialise()
-	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_buffer = makeUniformBuffer< T >( device
-			, m_count
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, m_flags
-			, m_debugName
-			, m_sharingMode );
-		return uint32_t( m_buffer->getUbo().getBuffer().getSize() );
-	}
-
-	template< typename T >
-	inline void UniformBuffer< T >::cleanup()
-	{
-		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
-		m_buffer.reset();
-	}
-
-	template< typename T >
-	inline bool UniformBuffer< T >::hasAvailable()const
-	{
-		return !m_available.empty();
-	}
-
-	template< typename T >
-	inline uint32_t UniformBuffer< T >::allocate()
-	{
-		CU_Require( hasAvailable() );
-		uint32_t result = *m_available.begin();
-		m_available.erase( m_available.begin() );
-		return result;
-	}
-
-	template< typename T >
-	inline void UniformBuffer< T >::deallocate( uint32_t offset )
-	{
-		m_available.insert( offset );
 	}
 
 	template< typename T >
@@ -141,18 +32,15 @@ namespace castor3d
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto commandBuffer = commandPool.createCommandBuffer( true );
-		upload( stagingBuffer
-			, *commandBuffer
+		UniformBufferBase::upload( stagingBuffer
+			, queue
+			, commandPool
+			, getDatas().data()
+			, getDatas().size() * sizeof( T )
 			, offset
 			, flags
 			, timer
 			, index );
-		auto fence = device->createFence();
-		queue.submit( *commandBuffer
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
 	}
 
 	template< typename T >
@@ -163,35 +51,36 @@ namespace castor3d
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		auto elemAlignedSize = getBuffer().getAlignedSize();
-		auto data = getBuffer().getDatas().data();
-
-		if ( auto dest = stagingBuffer.lock( 0u
-			, m_count * elemAlignedSize
-			, 0u ) )
-		{
-			auto buffer = dest;
-
-			for ( auto & data : getBuffer().getDatas() )
-			{
-				std::memcpy( buffer, &data, sizeof( T ) );
-				buffer += elemAlignedSize;
-			}
-
-			stagingBuffer.flush( 0u, m_count * elemAlignedSize );
-			stagingBuffer.unlock();
-		}
-
-		copyBuffer( stagingBuffer
-			, getBuffer().getUbo().getBuffer()
-			, &getBuffer().getUbo().getBuffer()
+		UniformBufferBase::upload( stagingBuffer
 			, commandBuffer
-			, elemAlignedSize
-			, m_count
+			, getDatas().data()
+			, getDatas().size() * sizeof( T )
 			, offset
 			, flags
 			, timer
 			, index );
+	}
+
+	template< typename T >
+	inline void UniformBuffer< T >::upload( VkDeviceSize offset
+		, VkDeviceSize range )const
+	{
+		assert( range + offset <= m_data.size() );
+		auto size = getBuffer().getAlignedSize();
+
+		if ( auto buffer = getBuffer().getBuffer().lock( offset * size
+			, range * size
+			, 0u ) )
+		{
+			for ( auto i = 0u; i < range; ++i )
+			{
+				std::memcpy( buffer, &m_data[offset + i], sizeof( T ) );
+				buffer += size;
+			}
+
+			getBuffer().getBuffer().flush( offset * size, range * size );
+			getBuffer().getBuffer().unlock();
+		}
 	}
 
 	template< typename T >
@@ -201,39 +90,16 @@ namespace castor3d
 		, uint32_t offset
 		, VkPipelineStageFlags flags
 		, RenderPassTimer const & timer
-		, uint32_t index )const
+		, uint32_t index )
 	{
-		auto elemAlignedSize = getBuffer().getAlignedSize();
-		auto commandBuffer = commandPool.createCommandBuffer( true );
-		copyBuffer( getBuffer().getUbo().getBuffer()
-			, stagingBuffer
-			, &getBuffer().getUbo().getBuffer()
-			, commandBuffer
-			, elemAlignedSize
-			, m_count
+		UniformBufferBase::upload( stagingBuffer
+			, queue
+			, commandPool
+			, getDatas().data()
+			, getDatas().size() * sizeof( T )
 			, offset
 			, flags
 			, timer
 			, index );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto fence = device->createFence();
-		queue.submit( *commandBuffer
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
-
-		if ( auto dest = stagingBuffer.lock( 0u
-			, m_count * elemAlignedSize
-			, 0u ) )
-		{
-			auto buffer = dest;
-
-			for ( auto & data : getBuffer().getDatas() )
-			{
-				std::memcpy( &data, buffer, sizeof( T ) );
-				buffer += elemAlignedSize;
-			}
-
-			stagingBuffer.unlock();
-		}
 	}
 }

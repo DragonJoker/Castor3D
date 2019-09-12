@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SKELETON_ANIMATION_BONE___
-#define ___C3D_SKELETON_ANIMATION_BONE___
+#ifndef ___C3D_SkeletonAnimationBone_H___
+#define ___C3D_SkeletonAnimationBone_H___
 
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp"
 

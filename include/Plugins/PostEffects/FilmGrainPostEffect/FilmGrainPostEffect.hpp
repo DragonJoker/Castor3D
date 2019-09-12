@@ -28,16 +28,16 @@ namespace film_grain
 		};
 
 	public:
-		explicit RenderQuad( castor3d::RenderDevice const & device
+		explicit RenderQuad( castor3d::RenderSystem & renderSystem
 			, VkExtent2D const & size );
 		void update( castor::Nanoseconds const & time );
 
-		inline ashes::UniformBuffer< Configuration > const & getUbo()const
+		inline castor3d::UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_configUbo;
 		}
 
-		inline ashes::UniformBuffer< Configuration > & getUbo()
+		inline castor3d::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_configUbo;
 		}
@@ -49,7 +49,7 @@ namespace film_grain
 	private:
 		uint64_t m_time{ 0ull };
 		VkExtent2D m_size;
-		ashes::UniformBufferPtr< Configuration > m_configUbo;
+		castor3d::UniformBufferUPtr< Configuration > m_configUbo;
 		castor3d::SamplerSPtr m_sampler;
 		ashes::ImagePtr m_noise;
 		ashes::ImageView m_noiseView;

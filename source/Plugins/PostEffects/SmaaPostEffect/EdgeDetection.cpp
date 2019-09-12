@@ -26,7 +26,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -75,7 +75,7 @@ namespace smaa
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ getCurrentRenderDevice( renderTarget ), false, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaEdgeDetection" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdgeDetection" }
@@ -149,8 +149,9 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = m_device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( m_device, *m_renderPass, "EdgeDetection" );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "EdgeDetection" );
 
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()
@@ -158,7 +159,7 @@ namespace smaa
 			, VK_FORMAT_D24_UNORM_S8_UINT );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doGetEdgeDetectionVP( m_device.renderSystem
+		m_vertexShader.shader = doGetEdgeDetectionVP( m_renderSystem
 			, pixelSize
 			, m_config );
 	}

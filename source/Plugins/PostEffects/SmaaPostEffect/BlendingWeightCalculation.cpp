@@ -857,7 +857,7 @@ namespace smaa
 		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ getCurrentRenderDevice( renderTarget ), false, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_edgeDetectionView{ edgeDetectionView }
 		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaBlendingWeightCalculation" ) }
 		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
@@ -867,7 +867,7 @@ namespace smaa
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = castor3d::makeUniformBuffer< castor::Point4i >( m_device
+		m_ubo = castor3d::makeUniformBuffer< castor::Point4i >( m_renderSystem
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -891,7 +891,7 @@ namespace smaa
 			, PixelFormat::eR8A8_UNORM
 			, areaTexBytes
 			, PixelFormat::eR8A8_UNORM );
-		m_areaTex = std::make_shared< castor3d::TextureLayout >( m_device.renderSystem
+		m_areaTex = std::make_shared< castor3d::TextureLayout >( m_renderSystem
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
@@ -903,7 +903,7 @@ namespace smaa
 			, searchTexBytes
 			, PixelFormat::eR8_UNORM );
 		image->format = VK_FORMAT_R8_UNORM;
-		m_searchTex = std::make_shared< castor3d::TextureLayout >( m_device.renderSystem
+		m_searchTex = std::make_shared< castor3d::TextureLayout >( m_renderSystem
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
@@ -975,8 +975,9 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = m_device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( m_device, *m_renderPass, "BlendingWeightCalculation" );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "BlendingWeightCalculation" );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
@@ -987,8 +988,8 @@ namespace smaa
 			, config );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate{ 0u, VK_FALSE, VK_FALSE };
 		dsstate->stencilTestEnable = VK_TRUE;
@@ -1023,10 +1024,11 @@ namespace smaa
 	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			m_device.graphicsCommandPool->createCommandBuffer(),
-			m_device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
@@ -1072,7 +1074,7 @@ namespace smaa
 	void BlendingWeightCalculation::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_ubo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
 			, m_areaTex->getDefaultView()

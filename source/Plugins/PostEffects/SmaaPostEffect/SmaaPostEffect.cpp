@@ -460,9 +460,8 @@ namespace smaa
 			m_smaaResult = m_renderTarget.getVelocity().getTexture().get();
 		}
 
-		auto & device = getCurrentRenderDevice( m_renderTarget );
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = std::make_shared< castor3d::RenderQuad >( device, true );
+		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), true );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram
@@ -472,6 +471,7 @@ namespace smaa
 			, {} );
 		m_copyQuads.push_back( copyQuad );
 
+		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore copyCommands
 		{
 			device.graphicsCommandPool->createCommandBuffer(),

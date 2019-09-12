@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ANIMATION_H___
-#define ___C3D_ANIMATION_H___
+#ifndef ___C3D_Animation_H___
+#define ___C3D_Animation_H___
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
@@ -69,7 +69,7 @@ namespace castor3d
 		 *\brief		Ajoute une keyframe à l'animation.
 		 *\param[in]	keyFrame	La keyframe.
 		 */
-		C3D_API void addKeyFrame( AnimationKeyFrameUPtr && keyFrame );
+		C3D_API void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.

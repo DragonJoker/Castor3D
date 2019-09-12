@@ -88,9 +88,9 @@ namespace GrayScale
 
 	//*********************************************************************************************
 
-	PostEffect::Quad::Quad( castor3d::RenderDevice const & device
-		, ashes::UniformBuffer< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ device, true }
+	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
+		, castor3d::UniformBuffer< castor::Point3f > const & configUbo )
+		: castor3d::RenderQuad{ renderSystem, true }
 		, m_configUbo{ configUbo }
 	{
 	}
@@ -98,9 +98,8 @@ namespace GrayScale
 	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_configUbo
-			, 0u );
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
+			, m_configUbo );
 	}
 
 	//*********************************************************************************************
@@ -170,7 +169,7 @@ namespace GrayScale
 		stages.push_back( makeShaderState( device, m_vertexShader ) );
 		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
-		m_configUbo = castor3d::makeUniformBuffer< castor::Point3f >( device
+		m_configUbo = castor3d::makeUniformBuffer< castor::Point3f >( renderSystem
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -242,7 +241,7 @@ namespace GrayScale
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
-		m_quad = std::make_unique< Quad >( device, *m_configUbo );
+		m_quad = std::make_unique< Quad >( renderSystem, *m_configUbo );
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages

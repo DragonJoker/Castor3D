@@ -372,7 +372,7 @@ namespace castor3d
 			CU_Exception( "No Physical device found." );
 		}
 
-		auto & gpu = m_gpus[0];
+		auto & gpu = *m_gpus[0];
 		m_memoryProperties = gpu.getMemoryProperties();
 		m_properties = gpu.getProperties();
 		m_features = gpu.getFeatures();

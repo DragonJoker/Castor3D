@@ -166,18 +166,18 @@ namespace castor3d
 				, graphicsQueueFamilyIndex
 				, computeQueueFamilyIndex
 				, transferQueueFamilyIndex ) ) }
-		, commandPools{ 1u
-			, device->createCommandPool( presentQueueFamilyIndex
-				, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
-		, presentCommandPool{ commandPools.back().get() }
-		, graphicsCommandPool{ presentCommandPool }
-		, computeCommandPool{ presentCommandPool }
-		, transferCommandPool{ presentCommandPool }
-		, presentQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
-		, graphicsQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
-		, computeQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
-		, transferQueue{ device->getQueue( presentQueueFamilyIndex, 0u ) }
 	{
+		commandPools.push_back( device->createCommandPool( presentQueueFamilyIndex
+			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) );
+		presentCommandPool = commandPools.back().get();
+		graphicsCommandPool = presentCommandPool;
+		computeCommandPool = presentCommandPool;
+		transferCommandPool = presentCommandPool;
+		presentQueue = device->getQueue( presentQueueFamilyIndex, 0u );
+		graphicsQueue = device->getQueue( presentQueueFamilyIndex, 0u );
+		computeQueue = device->getQueue( presentQueueFamilyIndex, 0u );
+		transferQueue = device->getQueue( presentQueueFamilyIndex, 0u );
+
 		if ( graphicsQueueFamilyIndex != presentQueueFamilyIndex )
 		{
 			commandPools.push_back( device->createCommandPool( graphicsQueueFamilyIndex

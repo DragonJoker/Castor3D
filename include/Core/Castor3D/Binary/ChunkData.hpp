@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CHUNK_DATA_H___
-#define ___C3D_CHUNK_DATA_H___
+#ifndef ___C3D_ChunkData_H___
+#define ___C3D_ChunkData_H___
 
 #include "Castor3D/Mesh/VertexGroup.hpp"
 #include "Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp"

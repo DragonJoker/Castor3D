@@ -74,7 +74,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct AshesTypeTraits< ashes::UniformBufferBase >
+	struct AshesTypeTraits< ashes::UniformBuffer >
 	{
 		using VkType = VkBuffer;
 	};
@@ -263,7 +263,7 @@ namespace castor3d
 	};
 
 	template<>
-	struct AshesDebugTypeTraits< ashes::UniformBufferBase >
+	struct AshesDebugTypeTraits< ashes::UniformBuffer >
 	{
 		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
 	};

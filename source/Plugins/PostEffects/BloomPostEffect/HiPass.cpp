@@ -31,7 +31,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -53,7 +53,7 @@ namespace Bloom
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -150,21 +150,22 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	HiPass::HiPass( castor3d::RenderDevice const & device
+	HiPass::HiPass( castor3d::RenderSystem & renderSystem
 		, VkFormat format
 		, ashes::ImageView const & sceneView
 		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ device, true }
+		: castor3d::RenderQuad{ renderSystem, true }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram( device.renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram( device.renderSystem ) }
-		, m_renderPass{ doCreateRenderPass( m_device, format ) }
-		, m_surface{ *device.renderSystem.getEngine(), cuT( "BloomHiPass" ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram( renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram( renderSystem ) }
+		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), format ) }
+		, m_surface{ *renderSystem.getEngine(), cuT( "BloomHiPass" ) }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
-		shaderStages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		shaderStages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
+		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
 
 #if !Bloom_DebugHiPass
 		size.width >>= 1;
@@ -189,10 +190,11 @@ namespace Bloom
 
 	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer )const
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			m_device.graphicsCommandPool->createCommandBuffer(),
-			m_device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & cmd = *commands.commandBuffer;
 

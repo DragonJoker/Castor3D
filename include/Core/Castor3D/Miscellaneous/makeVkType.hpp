@@ -4,12 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_makeVkType_H___
 #define ___C3D_makeVkType_H___
 
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-
-#include <ashespp/Core/Device.hpp>
-#include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/Image.hpp>
+#include "Castor3D/Castor3DPrerequisites.hpp"
 
 namespace castor3d
 {

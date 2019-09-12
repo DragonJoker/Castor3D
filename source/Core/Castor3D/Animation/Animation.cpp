@@ -1,9 +1,5 @@
 #include "Castor3D/Animation/Animation.hpp"
 
-#include "Castor3D/Animation/AnimationKeyFrame.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
-
 using namespace castor;
 
 namespace castor3d
@@ -21,7 +17,7 @@ namespace castor3d
 	{
 	}
 
-	void Animation::addKeyFrame( AnimationKeyFrameUPtr && keyFrame )
+	void Animation::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()

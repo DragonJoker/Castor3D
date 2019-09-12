@@ -217,7 +217,7 @@ namespace smaa
 		, ashes::ImageView const & blendView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ getCurrentRenderDevice( renderTarget ), false, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
@@ -225,7 +225,7 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhoodBlending" }
 	{
 		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
-		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
+		auto & renderSystem = m_renderSystem;
 		auto & device = getCurrentRenderDevice( renderSystem );
 
 		// Create the render pass.
@@ -295,8 +295,8 @@ namespace smaa
 			, velocityView != nullptr );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
@@ -334,10 +334,11 @@ namespace smaa
 		, uint32_t passIndex
 		, uint32_t index )
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
 		{
-			m_device.graphicsCommandPool->createCommandBuffer(),
-			m_device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 

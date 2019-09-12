@@ -32,7 +32,7 @@ namespace light_streaks
 			, uint32_t pass );
 		void upload();
 
-		inline ashes::UniformBuffer< Configuration > & getUbo()
+		inline castor3d::UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
@@ -47,7 +47,7 @@ namespace light_streaks
 
 	private:
 		castor3d::Engine & m_engine;
-		ashes::UniformBufferPtr< Configuration > m_ubo;
+		castor3d::UniformBufferUPtr< Configuration > m_ubo;
 	};
 }
 

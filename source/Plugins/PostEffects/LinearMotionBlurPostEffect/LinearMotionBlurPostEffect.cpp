@@ -109,10 +109,10 @@ namespace motion_blur
 
 	//*********************************************************************************************
 
-	PostEffect::Quad::Quad( castor3d::RenderDevice const & device
+	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::TextureUnit const & velocity
-		, ashes::UniformBuffer< Configuration > const & ubo )
-		: castor3d::RenderQuad{ device, true }
+		, castor3d::UniformBuffer< Configuration > const & ubo )
+		: castor3d::RenderQuad{ renderSystem, true }
 		, m_velocityView{ velocity.getTexture()->getDefaultView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
 		, m_ubo{ ubo }
@@ -122,7 +122,7 @@ namespace motion_blur
 	void PostEffect::Quad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, m_ubo
 			, 0u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
@@ -260,7 +260,7 @@ namespace motion_blur
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 		setDebugObjectName( device, *m_renderPass, "LinearMotionBlur" );
 
-		m_ubo = castor3d::makeUniformBuffer< Configuration >( device
+		m_ubo = castor3d::makeUniformBuffer< Configuration >( renderSystem
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -279,7 +279,7 @@ namespace motion_blur
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_quad = std::make_unique< Quad >( device
+		m_quad = std::make_unique< Quad >( renderSystem
 			, m_renderTarget.getVelocity()
 			, *m_ubo );
 		m_quad->createPipeline( size

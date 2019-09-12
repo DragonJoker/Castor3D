@@ -1,6 +1,5 @@
 #include "Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp"
 
-#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/SubmeshComponent/MorphComponent.hpp"
 

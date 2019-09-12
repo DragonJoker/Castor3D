@@ -31,9 +31,9 @@ namespace motion_blur
 			: public castor3d::RenderQuad
 		{
 		public:
-			Quad( castor3d::RenderDevice const & device
+			Quad( castor3d::RenderSystem & renderSystem
 				, castor3d::TextureUnit const & velocity
-				, ashes::UniformBuffer< Configuration > const & ubo );
+				, castor3d::UniformBuffer< Configuration > const & ubo );
 
 		private:
 			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -42,7 +42,7 @@ namespace motion_blur
 		private:
 			ashes::ImageView const & m_velocityView;
 			ashes::Sampler const & m_velocitySampler;
-			ashes::UniformBuffer< Configuration > const & m_ubo;
+			castor3d::UniformBuffer< Configuration > const & m_ubo;
 		};
 
 	public:
@@ -87,7 +87,7 @@ namespace motion_blur
 		ashes::RenderPassPtr m_renderPass;
 		std::unique_ptr< Quad > m_quad;
 		Configuration m_configuration;
-		ashes::UniformBufferPtr< Configuration > m_ubo;
+		castor3d::UniformBufferUPtr< Configuration > m_ubo;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		TimePoint m_saved;

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BINARY_WRITER_H___
-#define ___C3D_BINARY_WRITER_H___
+#ifndef ___C3D_BinaryWriter_H___
+#define ___C3D_BinaryWriter_H___
 
 #include "Castor3D/Binary/ChunkWriter.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"

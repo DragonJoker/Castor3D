@@ -121,9 +121,15 @@ namespace castor3d
 	class ShaderBuffer;
 	class ShaderProgram;
 	class TextureConfigurationBuffer;
+	class UniformBufferBase;
+
+	template< typename T >
+	class UniformBuffer;
 
 	CU_DeclareSmartPtr( ShaderBuffer );
 	CU_DeclareSmartPtr( ShaderProgram );
+	CU_DeclareSmartPtr( UniformBufferBase );
+	CU_DeclareTemplateSmartPtr( UniformBuffer );
 
 	//@}
 

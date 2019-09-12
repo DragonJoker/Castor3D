@@ -28,7 +28,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetReprojectVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectVP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -55,7 +55,7 @@ namespace smaa
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doGetReprojectFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< sdw::Shader > doGetReprojectFP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
@@ -133,7 +133,7 @@ namespace smaa
 		, ashes::ImageView const & previousColourView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ getCurrentRenderDevice( renderTarget ), true, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), true, false }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
@@ -197,21 +197,22 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = m_device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( m_device, *m_renderPass, "Reproject" );
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "Reproject" );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
-		m_vertexShader.shader = doGetReprojectVP( *renderTarget.getEngine()->getRenderSystem()
+		m_vertexShader.shader = doGetReprojectVP( m_renderSystem
 			, pixelSize
 			, config );
-		m_pixelShader.shader = doGetReprojectFP( *renderTarget.getEngine()->getRenderSystem()
+		m_pixelShader.shader = doGetReprojectFP( m_renderSystem
 			, pixelSize
 			, config
 			, velocityView != nullptr );
 
 		ashes::PipelineShaderStageCreateInfoArray stages;
-		stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-		stages.push_back( makeShaderState( m_device, m_pixelShader ) );
+		stages.push_back( makeShaderState( device, m_vertexShader ) );
+		stages.push_back( makeShaderState( device, m_pixelShader ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
 		setLayoutBindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( 0u
@@ -242,10 +243,11 @@ namespace smaa
 	castor3d::CommandsSemaphore Reproject::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore reprojectCommands
 		{
-			m_device.graphicsCommandPool->createCommandBuffer(),
-			m_device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
 		};
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 

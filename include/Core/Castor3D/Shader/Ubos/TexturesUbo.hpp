@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
 namespace castor3d
 {
@@ -88,12 +88,12 @@ namespace castor3d
 		 *	Accesseurs.
 		 */
 		/**@{*/
-		inline ashes::UniformBuffer< Configuration > & getUbo()
+		inline UniformBuffer< Configuration > & getUbo()
 		{
 			return *m_ubo;
 		}
 
-		inline ashes::UniformBuffer< Configuration > const & getUbo()const
+		inline UniformBuffer< Configuration > const & getUbo()const
 		{
 			return *m_ubo;
 		}
@@ -110,7 +110,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		ashes::UniformBufferPtr< Configuration > m_ubo;
+		UniformBufferUPtr< Configuration > m_ubo;
 	};
 }
 

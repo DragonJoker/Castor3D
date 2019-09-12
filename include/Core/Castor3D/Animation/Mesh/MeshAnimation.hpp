@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MESH_ANIMATION_H___
-#define ___C3D_MESH_ANIMATION_H___
+#ifndef ___C3D_MeshAnimation_H___
+#define ___C3D_MeshAnimation_H___
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void addChild( MeshAnimationSubmesh && object );
+		C3D_API void addChild( MeshAnimationSubmesh object );
 		/**
 		 *\~english
 		 *\param[in]	index	The index.

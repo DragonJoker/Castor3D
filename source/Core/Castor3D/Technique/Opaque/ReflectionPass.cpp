@@ -962,11 +962,11 @@ namespace castor3d
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
 			passBuffer.createBinding( *result, layout.getBinding( PassBufferIndex ) );
-			result->createBinding( layout.getBinding( SceneUbo::BindingPoint )
+			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
-			result->createBinding( layout.getBinding( GpInfoUbo::BindingPoint )
+			result->createSizedBinding( layout.getBinding( GpInfoUbo::BindingPoint )
 				, gpInfoUbo.getUbo() );
-			result->createBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
+			result->createSizedBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
 				, hdrConfigUbo.getUbo() );
 			result->update();
 			return result;

@@ -3,6 +3,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
@@ -72,7 +73,7 @@ namespace castor3d
 			if ( !m_maxCount )
 			{
 				auto & properties = renderSystem.getProperties();
-				auto maxSize = properties.limits.maxUniformBufferRange;
+				auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
 				auto elementSize = ashes::getAlignedSize( sizeof( T )
 					, properties.limits.minUniformBufferOffsetAlignment );
 				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
@@ -111,19 +112,27 @@ namespace castor3d
 				};
 			}
 
-			auto buffer = std::make_unique< UniformBuffer< T > >( renderSystem
+			auto buffer = makeUniformBuffer< T >( renderSystem
 				, m_maxCount
+				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, flags
-				, m_debugName
-				, sharingMode );
+				, m_debugName );
 			it->second.emplace_back( std::move( buffer ) );
 			itB = it->second.begin() + it->second.size() - 1;
 			auto & ubuffer = *it->second.back();
 
 			renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [&ubuffer, this]()
+				, [&ubuffer, sharingMode, this]()
 				{
-					m_maxSize = ubuffer.initialise();
+					auto & device = getCurrentRenderDevice( *this );
+					m_maxSize = ubuffer.initialise( 
+						{
+							{
+								device.graphicsQueueFamilyIndex,
+								device.computeQueueFamilyIndex,
+								device.transferQueueFamilyIndex,
+							}
+						} );
 				} ) );
 		}
 
@@ -141,7 +150,7 @@ namespace castor3d
 		CU_Require( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
-			, [&bufferOffset]( std::unique_ptr< UniformBuffer< T > > const & lookup )
+			, [&bufferOffset]( UniformBufferUPtr< T > const & lookup )
 			{
 				return lookup.get() == bufferOffset.buffer;
 			} );

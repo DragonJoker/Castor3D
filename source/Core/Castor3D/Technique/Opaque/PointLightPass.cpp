@@ -69,13 +69,13 @@ namespace castor3d
 			, gpInfoUbo
 			, LightType::ePoint
 		, p_shadows }
-		, m_ubo{ castor3d::makeUniformBuffer< Config >( getCurrentRenderDevice( engine )
+		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "PointLightPassUbo" ) }
 	{
-		m_baseUbo = &m_ubo->getUbo();
+		m_baseUbo = m_ubo.get();
 	}
 
 	PointLightPass::~PointLightPass()

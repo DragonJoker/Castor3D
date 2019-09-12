@@ -58,7 +58,7 @@ namespace castor3d
 		if ( result )
 		{
 			auto & device = getCurrentRenderDevice( getParent() );
-			m_ubo = makeUniformBuffer< Configuration >( device
+			m_ubo = makeUniformBuffer< Configuration >( *getParent().getScene()->getEngine()->getRenderSystem()
 				, 1u
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -348,8 +348,8 @@ namespace castor3d
 				, *m_particlesStorages[outIndex]
 				, 0u
 				, uint32_t( m_particlesStorages[outIndex]->getCount() ) );
-			descriptorSet.createBinding( m_descriptorLayout->getBinding( ParticleSystemBufferBinding )
-				, *m_ubo
+			descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( ParticleSystemBufferBinding )
+				, m_ubo->getBuffer()
 				, 0u
 				, 1u );
 			descriptorSet.update();

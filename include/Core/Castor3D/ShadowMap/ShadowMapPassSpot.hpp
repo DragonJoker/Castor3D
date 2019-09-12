@@ -120,7 +120,7 @@ namespace castor3d
 		};
 
 	private:
-		ashes::UniformBufferPtr< Configuration > m_shadowConfig;
+		UniformBufferUPtr< Configuration > m_shadowConfig;
 		ShadowType m_shadowType;
 		castor::Matrix4x4r m_view;
 	};

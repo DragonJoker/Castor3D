@@ -384,6 +384,11 @@ namespace castor3d
 		{
 			return m_features;
 		}
+
+		inline AshPluginDescription const & getDescription()const
+		{
+			return m_desc;
+		}
 		/**@}*/
 		/**
 		*\~english

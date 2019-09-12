@@ -1,11 +1,8 @@
 #include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
 
-#include "Castor3D/Engine.hpp"
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
 #include "Castor3D/Mesh/Skeleton/Bone.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 
 using namespace castor;
 
@@ -47,7 +44,7 @@ namespace castor3d
 	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( BoneSPtr bone
 		, SkeletonAnimationObjectSPtr parent )
 	{
-		std::shared_ptr< SkeletonAnimationBone > result = std::make_shared< SkeletonAnimationBone >( *this );
+		auto result = std::make_shared< SkeletonAnimationBone >( *this );
 		result->setBone( bone );
 		auto added = addObject( result, parent );
 		return result;
@@ -88,7 +85,7 @@ namespace castor3d
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( Bone const & bone )const
 	{
-		return getObject( SkeletonAnimationObjectType::eNode, bone.getName() );
+		return getObject( SkeletonAnimationObjectType::eBone, bone.getName() );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::getObject( String const & name )const

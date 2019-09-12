@@ -56,14 +56,14 @@ namespace castor3d
 			return sampler;
 		}
 
-		ashes::UniformBufferPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
+		UniformBufferUPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::CommandBuffer const & commandBuffer
 			, bool srcIsCube
 			, bool isTopDown )
 		{
 			static castor::Matrix4x4f const projection = convert( device->perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
 
-			auto result = makeUniformBuffer< castor::Matrix4x4f >( device
+			auto result = makeUniformBuffer< castor::Matrix4x4f >( device.renderSystem
 				, 6u
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -230,8 +230,8 @@ namespace castor3d
 
 			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet();
 			setDebugObjectName( m_device, *facePipeline.descriptorSet, "RenderCubeFace" + castor::string::toString( face ) + "DescriptorSet" );
-			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-				, *m_matrixUbo
+			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
+				, m_matrixUbo->getBuffer()
 				, face
 				, 1u );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )

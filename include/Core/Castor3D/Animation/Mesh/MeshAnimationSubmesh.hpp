@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MESH_ANIMATION_SUBMESH_H___
-#define ___C3D_MESH_ANIMATION_SUBMESH_H___
+#ifndef ___C3D_MeshAnimationSubmesh_H___
+#define ___C3D_MeshAnimationSubmesh_H___
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 

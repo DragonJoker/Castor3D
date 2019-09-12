@@ -143,12 +143,12 @@ namespace film_grain
 
 	//*********************************************************************************************
 
-	RenderQuad::RenderQuad( castor3d::RenderDevice const & device
+	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ device, false, false }
+		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_size{ size }
 	{
-		auto & renderSystem = m_device.renderSystem;
+		auto & device = getCurrentRenderDevice( renderSystem );
 		auto & engine = *renderSystem.getEngine();
 		auto name = cuT( "FilmGrain_Noise" );
 		castor3d::SamplerSPtr sampler;
@@ -182,7 +182,7 @@ namespace film_grain
 			( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
 		};
-		m_noise = castor3d::makeImage( m_device
+		m_noise = castor3d::makeImage( device
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "FilmGrainNoise" );
@@ -213,9 +213,9 @@ namespace film_grain
 		uint32_t maxSize = buffers[0]->getSize();
 		auto dim = buffers[0]->getDimensions();
 		auto format = castor3d::convert( buffers[0]->getFormat() );
-		auto staging = m_device->createStagingTexture( format
+		auto staging = device->createStagingTexture( format
 			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-		ashes::CommandBufferPtr cmdCopy = m_device.graphicsCommandPool->createCommandBuffer( true );
+		ashes::CommandBufferPtr cmdCopy = device.graphicsCommandPool->createCommandBuffer( true );
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
@@ -233,7 +233,7 @@ namespace film_grain
 				, m_noiseView );
 		}
 
-		m_configUbo = castor3d::makeUniformBuffer< Configuration >( m_device
+		m_configUbo = castor3d::makeUniformBuffer< Configuration >( device.renderSystem
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -415,7 +415,7 @@ namespace film_grain
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 
-		m_quad = std::make_unique< RenderQuad >( device, size );
+		m_quad = std::make_unique< RenderQuad >( renderSystem, size );
 		m_quad->createPipeline( size
 			, Position{}
 			, stages

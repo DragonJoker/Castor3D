@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_FILE_PARSER_H___
 #define ___C3D_SCENE_FILE_PARSER_H___
 
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/SubsurfaceScattering.hpp"
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
@@ -125,7 +126,7 @@ namespace castor3d
 		castor::Path folder;
 		castor::Path relative;
 		VkShaderStageFlagBits shaderStage;
-		ashes::UniformBufferBasePtr uniformBuffer;
+		UniformBufferBaseUPtr uniformBuffer;
 		OverlaySPtr overlay;
 		BillboardListSPtr billboards;
 		int face1;

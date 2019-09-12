@@ -186,6 +186,29 @@ namespace castor3d
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
+		ShaderPtr getPixelProgram( RenderSystem & renderSystem
+			, uint32_t baseArrayLayer
+			, uint32_t layerCount
+			, bool isHorizontal
+			, bool isDepth )
+		{
+			if ( isHorizontal )
+			{
+				if ( layerCount > 1u
+					&& !renderSystem.getDescription().features.hasImageTexture )
+				{
+					return getBlurXProgramLayer( renderSystem
+						, isDepth
+						, baseArrayLayer );
+				}
+
+				return getBlurXProgram( renderSystem
+					, isDepth );
+			}
+
+			return getBlurYProgram( renderSystem, isDepth );
+		}
+
 		std::vector< float > getHalfPascal( uint32_t height )
 		{
 			std::vector< float > result;
@@ -224,7 +247,7 @@ namespace castor3d
 			return result;
 		}
 
-		SamplerSPtr doCreateSampler( Engine & engine
+		SamplerSPtr createSampler( Engine & engine
 			, String const & name )
 		{
 			SamplerSPtr sampler;
@@ -245,13 +268,13 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
+		TextureUnit createTexture( Engine & engine
 			, VkExtent2D const & size
 			, VkFormat format
 			, String const & name )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name );
+			auto sampler = createSampler( engine, name );
 			ashes::ImageCreateInfo image
 			{
 				0u,
@@ -276,7 +299,7 @@ namespace castor3d
 			return unit;
 		}
 
-		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -337,7 +360,7 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFbo( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr createFbo( ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view
 			, VkExtent2D const & size )
 		{
@@ -352,10 +375,10 @@ namespace castor3d
 	GaussianBlur::RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, ashes::ImageView const & src
 		, ashes::ImageView const & dst
-		, ashes::UniformBuffer< Configuration > const & blurUbo
+		, UniformBuffer< Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ getCurrentRenderDevice( renderSystem ), false, false }
+		: castor3d::RenderQuad{ renderSystem, false, false }
 		, m_srcView{ src }
 		, m_dstView{ dst }
 		, m_blurUbo{ blurUbo }
@@ -369,6 +392,91 @@ namespace castor3d
 			, m_blurUbo
 			, 0u
 			, 1u );
+	}
+
+	//*********************************************************************************************
+
+	castor::String Names[2]
+	{
+		"GaussianBlurY",
+		"GaussianBlurX"
+	};
+
+	GaussianBlur::BlurPass::BlurPass( Engine & engine
+		, ashes::ImageView const & input
+		, ashes::ImageView const & output
+		, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
+		, VkFormat format
+		, VkExtent2D const & textureSize
+		, ashes::RenderPass const & renderPass
+		, bool isHorizontal )
+		: quad
+		{
+			*engine.getRenderSystem(),
+			input,
+			output,
+			blurUbo,
+			format,
+			textureSize,
+		}
+		, vertexShader
+		{
+			VK_SHADER_STAGE_VERTEX_BIT,
+			( isHorizontal ? Names[1] : Names[0] ),
+			getVertexProgram( *engine.getRenderSystem() ),
+		}
+		, pixelShader
+		{
+			VK_SHADER_STAGE_FRAGMENT_BIT,
+			( isHorizontal ? Names[1] : Names[0] ),
+			getPixelProgram( *engine.getRenderSystem()
+				, input->subresourceRange.baseArrayLayer
+				, input->subresourceRange.layerCount
+				, isHorizontal
+				, ashes::isDepthFormat( format ) ),
+		}
+		, semaphore{ getCurrentRenderDevice( engine )->createSemaphore() }
+		, fbo{ createFbo( renderPass, output, textureSize ) }
+	{
+		auto & device = getCurrentRenderDevice( engine );
+
+		ashes::PipelineShaderStageCreateInfoArray program
+		{
+			makeShaderState( device, vertexShader ),
+			makeShaderState( device, pixelShader ),
+		};
+
+		ashes::VkDescriptorSetLayoutBindingArray bindings
+		{
+			makeDescriptorSetLayoutBinding( GaussCfgIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT )
+		};
+
+		quad.createPipeline( textureSize
+			, Position{}
+			, program
+			, input
+			, renderPass
+			, std::move( bindings )
+			, {} );
+		quad.prepareFrame( renderPass, 0u );
+		commandBuffer = doGenerateCommandBuffer( device, renderPass );
+	}
+	
+	ashes::CommandBufferPtr GaussianBlur::BlurPass::doGenerateCommandBuffer( RenderDevice const & device
+		, ashes::RenderPass const & renderPass )
+	{
+		auto result = device.graphicsCommandPool->createCommandBuffer();
+		result->begin();
+		result->beginRenderPass( renderPass
+			, *fbo
+			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+		result->executeCommands( { quad.getCommandBuffer() } );
+		result->endRenderPass();
+		result->end();
+		return result;
 	}
 
 	//*********************************************************************************************
@@ -387,36 +495,36 @@ namespace castor3d
 		, m_source{ texture }
 		, m_size{ textureSize }
 		, m_format{ format }
-		, m_intermediate{ doCreateTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( engine ), m_format ) }
-		, m_blurUbo{ makeUniformBuffer< Configuration >( getCurrentRenderDevice( engine )
+		, m_intermediate{ createTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
+		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_format ) }
+		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
 			, "GaussianBlurCfg" ) }
-		, m_blurXQuad
+		, m_blurX
 		{
-			*engine.getRenderSystem(),
+			engine,
 			texture,
 			m_intermediate.getTexture()->getDefaultView(),
 			*m_blurUbo,
 			format,
-			textureSize
+			textureSize,
+			*m_renderPass,
+			true,
 		}
-		, m_blurYQuad
+		, m_blurY
 		{
-			*engine.getRenderSystem(),
+			engine,
 			m_intermediate.getTexture()->getDefaultView(),
 			texture,
 			*m_blurUbo,
 			format,
-			textureSize
+			textureSize,
+			*m_renderPass,
+			false,
 		}
 		, m_kernel{ getHalfPascal( kernelSize ) }
-		, m_blurXVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GaussianBlurX" }
-		, m_blurXPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GaussianBlurX" }
-		, m_blurYVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GaussianBlurY" }
-		, m_blurYPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GaussianBlurY" }
 	{
 		auto & device = getCurrentRenderDevice( engine );
 		CU_Require( kernelSize < MaxCoefficients );
@@ -429,30 +537,6 @@ namespace castor3d
 		data.textureSize[0] = float( textureSize.width );
 		data.textureSize[1] = float( textureSize.height );
 		m_blurUbo->upload();
-		m_horizCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		m_verticCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		m_horizSemaphore = device->createSemaphore();
-		m_verticSemaphore = device->createSemaphore();
-		doInitialiseBlurXProgram();
-		doInitialiseBlurYProgram();
-
-		m_horizCommandBuffer->begin();
-		m_horizCommandBuffer->beginRenderPass( *m_renderPass
-			, *m_blurXFbo
-			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
-		, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-		m_horizCommandBuffer->executeCommands( { m_blurXQuad.getCommandBuffer() } );
-		m_horizCommandBuffer->endRenderPass();
-		m_horizCommandBuffer->end();
-
-		m_verticCommandBuffer->begin();
-		m_verticCommandBuffer->beginRenderPass( *m_renderPass
-			, *m_blurYFbo
-			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
-		, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-		m_verticCommandBuffer->executeCommands( { m_blurYQuad.getCommandBuffer() } );
-		m_verticCommandBuffer->endRenderPass();
-		m_verticCommandBuffer->end();
 	}
 
 	ashes::Semaphore const & GaussianBlur::blur( ashes::Semaphore const & toWait )
@@ -460,92 +544,20 @@ namespace castor3d
 		auto * result = &toWait;
 		auto & device = getCurrentRenderDevice( *this );
 
-		device.graphicsQueue->submit( *m_horizCommandBuffer
+		device.graphicsQueue->submit( *m_blurX.commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_horizSemaphore
+			, *m_blurX.semaphore
 			, nullptr );
-		result = m_horizSemaphore.get();
+		result = m_blurX.semaphore.get();
 
-		device.graphicsQueue->submit( *m_verticCommandBuffer
+		device.graphicsQueue->submit( *m_blurY.commandBuffer
 			, *result
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_verticSemaphore
+			, *m_blurY.semaphore
 			, nullptr );
-		result = m_verticSemaphore.get();
+		result = m_blurY.semaphore.get();
 
 		return *result;
-	}
-
-	bool GaussianBlur::doInitialiseBlurXProgram()
-	{
-		auto & device = getCurrentRenderDevice( *this );
-		m_blurXVertexShader.shader = getVertexProgram( device.renderSystem );
-
-		if ( m_source->subresourceRange.layerCount > 1u
-			/*&& !device.getRenderer().getFeatures().hasImageTexture*/ )
-		{
-			m_blurXPixelShader.shader = getBlurXProgramLayer( device.renderSystem
-				, ashes::isDepthFormat( m_format )
-				, m_source->subresourceRange.baseArrayLayer );
-		}
-		else
-		{
-			m_blurXPixelShader.shader = getBlurXProgram( device.renderSystem
-				, ashes::isDepthFormat( m_format ) );
-		}
-
-		ashes::PipelineShaderStageCreateInfoArray program
-		{
-			makeShaderState( device, m_blurXVertexShader ),
-			makeShaderState( device, m_blurXVertexShader ),
-		};
-
-		m_blurXFbo = doCreateFbo( *m_renderPass, m_intermediate.getTexture()->getDefaultView(), m_size );
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( GaussCfgIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT )
-		};
-		m_blurXQuad.createPipeline( m_size
-			, Position{}
-			, program
-			, m_source
-			, *m_renderPass
-			, std::move( bindings )
-			, {} );
-		m_blurXQuad.prepareFrame( *m_renderPass, 0u );
-		return true;
-	}
-
-	bool GaussianBlur::doInitialiseBlurYProgram()
-	{
-		auto & device = getCurrentRenderDevice( *this );
-		m_blurYVertexShader.shader = getVertexProgram( device.renderSystem );
-		m_blurYPixelShader.shader = getBlurYProgram( device.renderSystem, ashes::isDepthFormat( m_format ) );
-
-		ashes::PipelineShaderStageCreateInfoArray program
-		{
-			makeShaderState( device, m_blurXVertexShader ),
-			makeShaderState( device, m_blurXVertexShader ),
-		};
-
-		m_blurYFbo = doCreateFbo( *m_renderPass, m_source, m_size );
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( GaussCfgIdx
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT )
-		};
-		m_blurYQuad.createPipeline( m_size
-			, Position{}
-			, program
-			, m_intermediate.getTexture()->getDefaultView()
-			, *m_renderPass
-			, std::move( bindings )
-			, {} );
-		m_blurYQuad.prepareFrame( *m_renderPass, 0u );
-		return true;
 	}
 }
