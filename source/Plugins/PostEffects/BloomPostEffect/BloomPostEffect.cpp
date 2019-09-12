@@ -153,14 +153,14 @@ namespace Bloom
 			( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ),
 		};
-		m_blurTexture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
+		m_blurTexture = std::make_shared< castor3d::TextureLayout >( *getRenderSystem()
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "BloomBlur" ) );
 		m_blurTexture->initialise();
 #endif
 
-		m_hiPass = std::make_unique< HiPass >( device
+		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
 			, m_target->getPixelFormat()
 			, m_target->getDefaultView()
 			, size

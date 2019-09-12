@@ -182,14 +182,14 @@ namespace GuiCommon
 	{
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
-		parser.AddSwitch( wxT( "v" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
+		parser.AddSwitch( wxT( "a" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
 		parser.AddSwitch( wxT( "u" ), wxT( "unlimited" ), _( "Disables FPS limit." ) );
 		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-		parser.AddSwitch( wxT( "opengl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
-		parser.AddSwitch( wxT( "opengl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
-		parser.AddSwitch( wxT( "vulkan" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
-		parser.AddSwitch( wxT( "direct3d11" ), wxEmptyString, _( "Defines the renderer to Direct3D 11." ) );
+		parser.AddSwitch( wxT( "gl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
+		parser.AddSwitch( wxT( "gl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
+		parser.AddSwitch( wxT( "vk" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
+		parser.AddSwitch( wxT( "d3d11" ), wxEmptyString, _( "Defines the renderer to Direct3D 11." ) );
 		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
 		bool result = parser.Parse( false ) == 0;
 
@@ -215,24 +215,24 @@ namespace GuiCommon
 			}
 
 			Logger::initialise( eLogLevel );
-			m_validation = parser.Found( wxT( 'v' ) );
+			m_validation = parser.Found( wxT( 'a' ) );
 			m_unlimitedFps = parser.Found( wxT( 'u' ) );
 
-			if ( parser.Found( wxT( "opengl3" ) ) )
+			if ( parser.Found( wxT( "gl3" ) ) )
 			{
-				m_rendererType = cuT( "opengl3" );
+				m_rendererType = cuT( "gl3" );
 			}
-			else if ( parser.Found( wxT( "opengl4" ) ) )
+			else if ( parser.Found( wxT( "gl4" ) ) )
 			{
-				m_rendererType = cuT( "opengl4" );
+				m_rendererType = cuT( "gl4" );
 			}
-			else if ( parser.Found( wxT( "vulkan" ) ) )
+			else if ( parser.Found( wxT( "vk" ) ) )
 			{
-				m_rendererType = cuT( "vulkan" );
+				m_rendererType = cuT( "vk" );
 			}
-			else if ( parser.Found( wxT( "direct3d11" ) ) )
+			else if ( parser.Found( wxT( "d3d11" ) ) )
 			{
-				m_rendererType = cuT( "direct3d11" );
+				m_rendererType = cuT( "d3d11" );
 			}
 			else if ( parser.Found( wxT( "test" ) ) )
 			{

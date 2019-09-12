@@ -174,10 +174,14 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+			if ( !ashes::isDepthOrStencilFormat( m_info->format ) )
+			{
+				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+			}
 
 			if ( m_info->mipLevels > 1u )
 			{
+				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 			}
 			else if ( m_info->mipLevels == 0 )
@@ -299,6 +303,7 @@ namespace castor3d
 			}
 			else if ( mipLevels > 1u )
 			{
+				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 				m_info->mipLevels = std::min( m_info->mipLevels
 					, ( m_defaultView->getLevelCount() > 1u

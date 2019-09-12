@@ -225,12 +225,12 @@ namespace castor3d
 		if ( handle )
 		{
 			auto & engine = *getEngine();
-			m_surface = &handle.getSurface();
 			engine.getRenderLoop().createDevice( std::move( handle ), *this );
 			m_initialised = m_device != nullptr;
 
 			if ( m_initialised )
 			{
+				m_surface = m_device->surface.get();
 				auto guard = makeBlockGuard(
 					[this, &engine]()
 					{

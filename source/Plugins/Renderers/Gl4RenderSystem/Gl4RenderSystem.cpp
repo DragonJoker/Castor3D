@@ -100,7 +100,7 @@ namespace Gl4Render
 				, glsl::GlslConfig
 				{
 					module.shader->getType(),
-					m_gpus[0]->getShaderVersion(),
+					450,
 					false,
 					true,
 					true,

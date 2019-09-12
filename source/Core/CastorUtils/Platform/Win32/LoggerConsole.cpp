@@ -137,7 +137,9 @@ namespace castor
 
 			CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 
-			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
+			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo )
+				&& csbiInfo.dwSize.X > 0
+				&& csbiInfo.dwSize.Y > 0 )
 			{
 				// Manually managed screen buffer.
 				csbiInfo.dwCursorPosition.X = 0;

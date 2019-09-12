@@ -295,6 +295,7 @@ namespace castor3d
 				, depth
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "SpotShadowMapDepth" );
+			view->image = *depthTexture;
 			auto depthView = depthTexture->createView( view );
 
 			auto & renderPass = m_passes[i].pass->getRenderPass();

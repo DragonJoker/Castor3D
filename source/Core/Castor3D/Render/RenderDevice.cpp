@@ -160,7 +160,7 @@ namespace castor3d
 		, features{ gpu.getFeatures() }
 		, device{ renderSystem.getInstance().createDevice( gpu
 			, getDeviceCreateInfo( renderSystem.getInstance()
-				, *surface
+				, *this->surface
 				, gpu
 				, presentQueueFamilyIndex
 				, graphicsQueueFamilyIndex

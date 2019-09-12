@@ -302,6 +302,7 @@ namespace castor3d
 				, depth
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "PointShadowMapDepth" );
+			view->image = *data.depthTexture;
 			data.depthView = data.depthTexture->createView( view );
 			data.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_CUBE
 				, variance.getFormat()

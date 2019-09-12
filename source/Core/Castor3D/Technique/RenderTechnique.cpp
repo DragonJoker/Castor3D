@@ -140,8 +140,9 @@ namespace castor3d
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
-				( usage
-					| VK_IMAGE_USAGE_SAMPLED_BIT ),
+				( ashes::isDepthOrStencilFormat( format )
+					? usage
+					: ( usage | VK_IMAGE_USAGE_SAMPLED_BIT ) ),
 			};
 			auto result = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -245,7 +246,7 @@ namespace castor3d
 			m_depthBuffer = doCreateTexture( *getEngine()
 				, m_size
 				, VK_FORMAT_D24_UNORM_S8_UINT
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT/* | VK_IMAGE_USAGE_TRANSFER_SRC_BIT*/
 				, cuT( "RenderTechnique_Depth" ) );
 			m_signalFinished = device->createSemaphore();
 			m_hdrConfigUbo.initialise();
