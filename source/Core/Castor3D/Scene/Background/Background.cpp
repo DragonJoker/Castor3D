@@ -346,7 +346,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		ashes::StagingBuffer stagingBuffer{ *device.device, 0u, sizeof( Cube ) };
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		// Vertex Buffer
 		std::vector< Cube > vertexData
@@ -374,7 +373,8 @@ namespace castor3d
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "Background");
-		stagingBuffer.uploadVertexData( *commandBuffer
+		stagingBuffer.uploadVertexData( *device.graphicsQueue
+			, *device.graphicsCommandPool
 			, vertexData
 			, *m_vertexBuffer );
 
@@ -399,7 +399,8 @@ namespace castor3d
 			, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "BackgroundIndexBuffer" );
-		stagingBuffer.uploadBufferData( *commandBuffer
+		stagingBuffer.uploadBufferData( *device.graphicsQueue
+			, *device.graphicsCommandPool
 			, indexData
 			, *m_indexBuffer );
 

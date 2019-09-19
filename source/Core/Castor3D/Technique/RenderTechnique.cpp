@@ -140,9 +140,7 @@ namespace castor3d
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
-				( ashes::isDepthOrStencilFormat( format )
-					? usage
-					: ( usage | VK_IMAGE_USAGE_SAMPLED_BIT ) ),
+				usage | VK_IMAGE_USAGE_SAMPLED_BIT,
 			};
 			auto result = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -195,16 +193,7 @@ namespace castor3d
 		, m_initialised{ false }
 		, m_ssaoConfig{ config }
 	{
-		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( *renderTarget.getEngine()
-			, *renderTarget.getScene()
-			, renderTarget.getScene()->getDirectionalShadowCascades() );
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
-		m_spotShadowMap = std::make_unique< ShadowMapSpot >( *renderTarget.getEngine()
-			, *renderTarget.getScene() );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
-		m_pointShadowMap = std::make_unique< ShadowMapPoint >( *renderTarget.getEngine()
-			, *renderTarget.getScene() );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		doCreateShadowMaps();
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -243,10 +232,14 @@ namespace castor3d
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
+
 			m_depthBuffer = doCreateTexture( *getEngine()
 				, m_size
-				, VK_FORMAT_D24_UNORM_S8_UINT
-				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT/* | VK_IMAGE_USAGE_TRANSFER_SRC_BIT*/
+				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
+				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
 			m_signalFinished = device->createSemaphore();
 			m_hdrConfigUbo.initialise();
@@ -290,14 +283,27 @@ namespace castor3d
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
 		m_initialised = false;
-		m_depthBuffer->cleanup();
-		m_colourTexture->cleanup();
-		m_depthBuffer.reset();
-		m_colourTexture.reset();
 
-		m_renderTarget.getScene()->getGeometryCache().cleanupUbos();
-		m_renderTarget.getScene()->getBillboardPools().cleanupUbos();
-		m_renderTarget.getScene()->getAnimatedObjectGroupCache().cleanupUbos();
+		if ( m_depthBuffer )
+		{
+			m_depthBuffer->cleanup();
+			m_depthBuffer.reset();
+		}
+
+		if ( m_colourTexture )
+		{
+			m_colourTexture->cleanup();
+			m_colourTexture.reset();
+		}
+
+		auto scene = m_renderTarget.getScene();
+
+		if ( scene )
+		{
+			scene->getGeometryCache().cleanupUbos();
+			scene->getBillboardPools().cleanupUbos();
+			scene->getAnimatedObjectGroupCache().cleanupUbos();
+		}
 	}
 
 	void RenderTechnique::update( RenderQueueArray & queues )
@@ -330,9 +336,7 @@ namespace castor3d
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()
 			, camera.getProjection()
-			, jitterProjSpace
-			, *m_stagingBuffer
-			, *m_uploadCommandBuffer );
+			, jitterProjSpace );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 		auto * semaphore = &doRenderBackground( waitSemaphores );
 		semaphore = &doRenderEnvironmentMaps( *semaphore );
@@ -399,10 +403,14 @@ namespace castor3d
 #endif
 
 #if C3D_DisplayDebugEnvironmentMaps || C3D_DisplayDebugShadowMaps
+
 		uint32_t index = 0u;
+		auto & scene = *m_renderTarget.getScene();
+
 #endif
 
 #if C3D_DisplayDebugEnvironmentMaps
+
 		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
 		{
 			map.get().debugDisplay( *m_debugRenderPass
@@ -416,14 +424,17 @@ namespace castor3d
 #endif
 #if C3D_DisplayDebugShadowMaps
 
-		for ( auto & maps : m_activeShadowMaps )
+		if ( scene.hasShadows() )
 		{
-			for ( auto & map : maps )
+			for ( auto & maps : m_activeShadowMaps )
 			{
-				map.get().debugDisplay( *m_debugRenderPass
-					, *m_debugFrameBuffer
-					, size
-					, index++ );
+				for ( auto & map : maps )
+				{
+					map.get().debugDisplay( *m_debugRenderPass
+						, *m_debugFrameBuffer
+						, size
+						, index++ );
+				}
 			}
 		}
 
@@ -450,11 +461,35 @@ namespace castor3d
 		}
 	}
 
+	void RenderTechnique::doCreateShadowMaps()
+	{
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasShadows() )
+		{
+			auto & engine = *m_renderTarget.getEngine();
+			m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
+				, scene );
+			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+			m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
+				, scene );
+			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+			m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
+				, scene );
+			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		}
+	}
+
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		m_directionalShadowMap->initialise();
-		m_spotShadowMap->initialise();
-		m_pointShadowMap->initialise();
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasShadows() )
+		{
+			m_directionalShadowMap->initialise();
+			m_spotShadowMap->initialise();
+			m_pointShadowMap->initialise();
+		}
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()
@@ -478,7 +513,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
-				1u,
+				0u,
 				m_colourTexture->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
@@ -670,40 +705,48 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupShadowMaps()
 	{
-		m_directionalShadowMap->cleanup();
-		m_spotShadowMap->cleanup();
-		m_pointShadowMap->cleanup();
+		auto & scene = *m_renderTarget.getScene();
+
+		if ( scene.hasShadows() )
+		{
+			m_directionalShadowMap->cleanup();
+			m_spotShadowMap->cleanup();
+			m_pointShadowMap->cleanup();
+		}
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
 	{
 		auto & scene = *m_renderTarget.getScene();
-		auto & camera = *m_renderTarget.getCamera();
-		auto & cache = scene.getLightCache();
 
-		for ( auto & array : m_activeShadowMaps )
+		if ( scene.hasShadows() )
 		{
-			array.clear();
-		}
+			for ( auto & array : m_activeShadowMaps )
+			{
+				array.clear();
+			}
 
-		doPrepareShadowMap( cache
-			, LightType::eDirectional
-			, camera
-			, m_directionalShadowMap
-			, m_activeShadowMaps
-			, queues );
-		doPrepareShadowMap( cache
-			, LightType::ePoint
-			, camera
-			, m_pointShadowMap
-			, m_activeShadowMaps
-			, queues );
-		doPrepareShadowMap( cache
-			, LightType::eSpot
-			, camera
-			, m_spotShadowMap
-			, m_activeShadowMaps
-			, queues );
+			auto & camera = *m_renderTarget.getCamera();
+			auto & cache = scene.getLightCache();
+			doPrepareShadowMap( cache
+				, LightType::eDirectional
+				, camera
+				, m_directionalShadowMap
+				, m_activeShadowMaps
+				, queues );
+			doPrepareShadowMap( cache
+				, LightType::ePoint
+				, camera
+				, m_pointShadowMap
+				, m_activeShadowMaps
+				, queues );
+			doPrepareShadowMap( cache
+				, LightType::eSpot
+				, camera
+				, m_spotShadowMap
+				, m_activeShadowMaps
+				, queues );
+		}
 	}
 	
 	void RenderTechnique::doUpdateParticles( RenderInfo & info )
@@ -735,14 +778,18 @@ namespace castor3d
 	ashes::Semaphore const & RenderTechnique::doRenderShadowMaps( ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
+		auto & scene = *m_renderTarget.getScene();
 
-		for ( auto & array : m_activeShadowMaps )
+		if ( scene.hasShadows() )
 		{
-			for ( auto & shadowMap : array )
+			for ( auto & array : m_activeShadowMaps )
 			{
-				for ( auto & index : shadowMap.second )
+				for ( auto & shadowMap : array )
 				{
-					result = &shadowMap.first.get().render( *result, index );
+					for ( auto & index : shadowMap.second )
+					{
+						result = &shadowMap.first.get().render( *result, index );
+					}
 				}
 			}
 		}

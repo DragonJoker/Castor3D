@@ -321,16 +321,23 @@ namespace castor3d
 			m_combineFinished.reset();
 
 			m_toneMappingCommandBuffer.reset();
-			m_overlayRenderer->cleanup();
-			m_overlayRenderer.reset();
+
+			if ( m_overlayRenderer )
+			{
+				m_overlayRenderer->cleanup();
+				m_overlayRenderer.reset();
+			}
 
 			for ( auto effect : m_srgbPostEffects )
 			{
 				effect->cleanup();
 			}
 
-			m_toneMapping->cleanup();
-			m_toneMapping.reset();
+			if ( m_toneMapping )
+			{
+				m_toneMapping->cleanup();
+				m_toneMapping.reset();
+			}
 
 			for ( auto effect : m_hdrPostEffects )
 			{

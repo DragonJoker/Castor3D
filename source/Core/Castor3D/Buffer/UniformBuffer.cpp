@@ -27,39 +27,43 @@ namespace castor3d
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			timer.beginPass( commandBuffer, index );
-			commandBuffer.memoryBarrier( src.getCompatibleStageFlags()
+			auto srcSrcStage = src.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( srcSrcStage
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, src.makeTransferSource() );
-			commandBuffer.memoryBarrier( dst.getCompatibleStageFlags()
+			auto dstSrcStage = dst.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( dstSrcStage
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, dst.makeTransferDestination() );
 			commandBuffer.copyBuffer( src
 				, dst
 				, uint32_t( elemAlignedSize * count )
 				, uint32_t( elemAlignedSize * offset ) );
+			srcSrcStage = src.getCompatibleStageFlags();
+			dstSrcStage = dst.getCompatibleStageFlags();
 
 			if ( ubo == &src )
 			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				commandBuffer.memoryBarrier( srcSrcStage
 					, flags
 					, src.makeUniformBufferInput() );
 			}
 			else
 			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				commandBuffer.memoryBarrier( srcSrcStage
 					, VK_PIPELINE_STAGE_HOST_BIT
 					, src.makeHostWrite() );
 			}
 
 			if ( ubo == &dst )
 			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				commandBuffer.memoryBarrier( dstSrcStage
 					, flags
 					, dst.makeUniformBufferInput() );
 			}
 			else
 			{
-				commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				commandBuffer.memoryBarrier( dstSrcStage
 					, VK_PIPELINE_STAGE_HOST_BIT
 					, dst.makeHostRead() );
 			}
@@ -179,7 +183,7 @@ namespace castor3d
 		auto src = reinterpret_cast< const int * >( data );
 		CU_Require( ( size % m_elemSize ) == 0 );
 		auto count = size / m_elemSize;
-		CU_Require( count < m_elemCount - offset );
+		CU_Require( count <= m_elemCount - offset );
 
 		if ( auto dest = stagingBuffer.lock( 0u
 			, count * elemAlignedSize

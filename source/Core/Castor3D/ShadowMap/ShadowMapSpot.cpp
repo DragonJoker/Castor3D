@@ -164,6 +164,8 @@ namespace castor3d
 		}
 	}
 
+	VkFormat ShadowMapSpot::RawDepthFormat = VK_FORMAT_UNDEFINED;
+
 	ShadowMapSpot::ShadowMapSpot( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
@@ -261,6 +263,16 @@ namespace castor3d
 		return m_shadowMap.getTexture()->getImage( index ).getView();
 	}
 
+	void ShadowMapSpot::doInitialiseDepthFormat()
+	{
+		auto & device = getCurrentRenderDevice( *this );
+
+		if ( RawDepthFormat == VK_FORMAT_UNDEFINED )
+		{
+			RawDepthFormat = device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		}
+	}
+
 	void ShadowMapSpot::doInitialise()
 	{
 		VkExtent2D size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
@@ -291,12 +303,16 @@ namespace castor3d
 
 		for ( auto i = 0u; i < m_passes.size(); ++i )
 		{
+			std::string debugName = "SpotShadowMap" + std::to_string( i );
 			auto depthTexture = makeImage( device
 				, depth
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, "SpotShadowMapDepth" );
+				, debugName + "Depth" );
 			view->image = *depthTexture;
 			auto depthView = depthTexture->createView( view );
+			setDebugObjectName( device
+				, depthView
+				, debugName + "Depth" );
 
 			auto & renderPass = m_passes[i].pass->getRenderPass();
 			ashes::ImageViewCRefArray attaches;

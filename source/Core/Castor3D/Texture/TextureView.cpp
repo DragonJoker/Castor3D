@@ -465,8 +465,8 @@ namespace castor3d
 			for ( auto & buffer : m_source->getBuffers() )
 			{
 				auto view = m_view.image->createView( viewInfo );
-				auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-				staging->uploadTextureData( *commandBuffer
+				staging->uploadTextureData( *device.graphicsQueue
+					, *device.graphicsCommandPool
 					, m_source->getPixelFormat()
 					, buffer->getConstPtr()
 					, view );

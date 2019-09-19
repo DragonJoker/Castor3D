@@ -174,14 +174,17 @@ namespace castor3d
 	{
 		if ( !m_initialised )
 		{
-			if ( !ashes::isDepthOrStencilFormat( m_info->format ) )
+			auto & device = getCurrentRenderDevice( *this );
+			auto props = device->getPhysicalDevice().getFormatProperties( m_info->format );
+
+			if ( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_DST_BIT ) )
 			{
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 			}
 
 			if ( m_info->mipLevels > 1u )
 			{
-				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+				CU_Require( checkFlag( props.optimalTilingFeatures, VK_FORMAT_FEATURE_TRANSFER_SRC_BIT ) );
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 			}
 			else if ( m_info->mipLevels == 0 )
@@ -189,7 +192,7 @@ namespace castor3d
 				m_info->mipLevels = 1u;
 			}
 
-			m_texture = makeImage( getCurrentRenderDevice( *this )
+			m_texture = makeImage( device
 				, m_info
 				, m_properties
 				, m_debugName );
@@ -228,8 +231,13 @@ namespace castor3d
 			&& m_defaultView->needsMipmapsGeneration() )
 		{
 			CU_Require( m_texture );
-			auto commandBuffer = getCurrentRenderDevice( *this ).transferCommandPool->createCommandBuffer();
+			auto & device = getCurrentRenderDevice( *this );
+			auto commandBuffer = device.transferCommandPool->createCommandBuffer();
+			commandBuffer->begin();
 			m_texture->generateMipmaps( *commandBuffer );
+			commandBuffer->end();
+			device.transferQueue->submit( *commandBuffer, nullptr );
+			device.transferQueue->waitIdle();
 		}
 	}
 

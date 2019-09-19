@@ -161,6 +161,8 @@ namespace castor3d
 		}
 	}
 
+	VkFormat ShadowMapPoint::RawDepthFormat = VK_FORMAT_UNDEFINED;
+
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
@@ -265,10 +267,20 @@ namespace castor3d
 		return m_passesData[index].varianceView;
 	}
 
+	void ShadowMapPoint::doInitialiseDepthFormat()
+	{
+		auto & device = getCurrentRenderDevice( *this );
+
+		if ( RawDepthFormat == VK_FORMAT_UNDEFINED )
+		{
+			RawDepthFormat = device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		}
+	}
+
 	void ShadowMapPoint::doInitialise()
 	{
-		VkExtent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
 		auto & device = getCurrentRenderDevice( *this );
+		VkExtent2D size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize };
 
 		ashes::ImageCreateInfo depth
 		{
@@ -280,7 +292,7 @@ namespace castor3d
 			6u * shader::PointShadowMapCount,
 			VK_SAMPLE_COUNT_1_BIT,
 			VK_IMAGE_TILING_OPTIMAL,
-			VK_SAMPLE_COUNT_1_BIT,
+			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT,
 		};
 		ashes::ImageViewCreateInfo view
 		{
@@ -294,6 +306,7 @@ namespace castor3d
 
 		for ( auto i = 0u; i < shader::PointShadowMapCount; ++i )
 		{
+			std::string debugName = "ShadowMapPoint" + std::to_string( i );
 			auto & variance = m_shadowMap.getTexture()->getTexture();
 			auto & linear = m_linearMap.getTexture()->getTexture();
 			uint32_t face = i * 6u;
@@ -304,21 +317,31 @@ namespace castor3d
 				, "PointShadowMapDepth" );
 			view->image = *data.depthTexture;
 			data.depthView = data.depthTexture->createView( view );
+			setDebugObjectName( device
+				, data.depthView
+				, debugName + "Depth" );
 			data.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_CUBE
 				, variance.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 6u );
+			setDebugObjectName( device
+				, data.varianceView
+				, debugName + "Variance" );
 			data.linearView = linear.createView( VK_IMAGE_VIEW_TYPE_CUBE
 				, linear.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 6u );
+			setDebugObjectName( device
+				, data.linearView
+				, debugName + "Linear" );
 
 			for ( auto & frameBuffer : data.frameBuffers )
 			{
+				auto fbDebugName = debugName + "x" + std::to_string( face );
 				auto & pass = m_passes[face];
 				auto & renderPass = pass.pass->getRenderPass();
 				frameBuffer.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_2D
@@ -327,17 +350,26 @@ namespace castor3d
 					, 1u
 					, face
 					, 1u );
+				setDebugObjectName( device
+					, frameBuffer.linearView
+					, fbDebugName + "Variance" );
 				frameBuffer.linearView = linear.createView( VK_IMAGE_VIEW_TYPE_2D
 					, linear.getFormat()
 					, 0u
 					, 1u
 					, face
 					, 1u );
+				setDebugObjectName( device
+					, frameBuffer.linearView
+					, fbDebugName + "Linear" );
 				ashes::ImageViewCRefArray attaches;
 				attaches.emplace_back( data.depthView );
 				attaches.emplace_back( frameBuffer.linearView );
 				attaches.emplace_back( frameBuffer.varianceView );
 				frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+				setDebugObjectName( device
+					, *frameBuffer.frameBuffer
+					, fbDebugName + "Fbo" );
 				++face;
 			}
 

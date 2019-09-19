@@ -57,7 +57,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				},
 				{
-					1u,
+					0u,
 					diffuseView.getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
@@ -68,7 +68,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
-					2u,
+					0u,
 					specularView.getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,

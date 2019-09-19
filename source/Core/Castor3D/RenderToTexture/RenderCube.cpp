@@ -57,7 +57,8 @@ namespace castor3d
 		}
 
 		UniformBufferUPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
-			, ashes::CommandBuffer const & commandBuffer
+			, ashes::Queue const & queue
+			, ashes::CommandPool const & pool
 			, bool srcIsCube
 			, bool isTopDown )
 		{
@@ -98,14 +99,16 @@ namespace castor3d
 			ashes::StagingBuffer stagingBuffer{ *device.device
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, 6u * result->getAlignedSize() };
-			stagingBuffer.uploadUniformData( commandBuffer
+			stagingBuffer.uploadUniformData( queue
+				, pool
 				, result->getDatas()
 				, *result );
 			return result;
 		}
 
 		ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
-			, ashes::CommandBuffer const & commandBuffer )
+			, ashes::Queue const & queue
+			, ashes::CommandPool const & pool )
 		{
 			std::vector< castor::Point4f > vertexData
 			{
@@ -125,7 +128,8 @@ namespace castor3d
 			ashes::StagingBuffer stagingBuffer{ *device.device
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, result->getBuffer().getSize() };
-			stagingBuffer.uploadVertexData( commandBuffer
+			stagingBuffer.uploadVertexData( queue
+				, pool
 				, vertexData
 				, *result );
 			return result;
@@ -185,8 +189,14 @@ namespace castor3d
 	{
 		m_sampler->initialise();
 		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
-		m_matrixUbo = doCreateMatrixUbo( m_device, *commandBuffer, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE, m_device.renderSystem.isTopDown() );
-		m_vertexBuffer = doCreateVertexBuffer( m_device, *commandBuffer );
+		m_matrixUbo = doCreateMatrixUbo( m_device
+			, *m_device.graphicsQueue
+			, *m_device.graphicsCommandPool
+			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE
+			, m_device.renderSystem.isTopDown() );
+		m_vertexBuffer = doCreateVertexBuffer( m_device
+			, *m_device.graphicsQueue
+			, *m_device.graphicsCommandPool );
 		auto vertexLayout = doCreateVertexLayout();
 
 		// Initialise the descriptor set.

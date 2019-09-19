@@ -14,6 +14,8 @@
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Exception/Exception.hpp>
 
+#include <ashespp/Core/RendererList.hpp>
+
 #include "GuiCommon/xpms/animated_object_group.xpm"
 #include "GuiCommon/xpms/animated_object_group_sel.xpm"
 #include "GuiCommon/xpms/animated_object.xpm"
@@ -78,26 +80,23 @@
 #	include <X11/Xlib.h>
 #endif
 
-using namespace castor;
-using namespace castor3d;
-
 namespace GuiCommon
 {
 #if defined( NDEBUG )
 
-	static const LogType ELogType_DEFAULT = LogType::eInfo;
+	static const castor::LogType DefaultLogType = castor::LogType::eInfo;
 
 #else
 
-	static const LogType ELogType_DEFAULT = LogType::eDebug;
+	static const castor::LogType DefaultLogType = castor::LogType::eDebug;
 
 #endif
 
-	CastorApplication::CastorApplication( String const & p_internalName
-		, String const & p_displayName
+	CastorApplication::CastorApplication( castor::String const & p_internalName
+		, castor::String const & p_displayName
 		, uint32_t p_steps
-		, Version const & p_version
-		, String const & p_rendererType )
+		, castor3d::Version const & p_version
+		, castor::String const & p_rendererType )
 		: m_internalName{ p_internalName }
 		, m_displayName{ p_displayName }
 		, m_castor{ nullptr }
@@ -145,15 +144,15 @@ namespace GuiCommon
 					result = window != nullptr;
 				}
 			}
-			catch ( Exception & exc )
+			catch ( castor::Exception & exc )
 			{
-				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.getFullDescription() );
+				castor::Logger::logError( std::stringstream() << castor::string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.getFullDescription() );
 				doCleanupCastor();
 				result = false;
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::logError( std::stringstream() << string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
+				castor::Logger::logError( std::stringstream() << castor::string::stringCast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
 				doCleanupCastor();
 				result = false;
 			}
@@ -173,7 +172,7 @@ namespace GuiCommon
 
 	int CastorApplication::OnExit()
 	{
-		Logger::logInfo( m_internalName + cuT( " - Exit" ) );
+		castor::Logger::logInfo( m_internalName + cuT( " - Exit" ) );
 		doCleanup();
 		return wxApp::OnExit();
 	}
@@ -181,16 +180,23 @@ namespace GuiCommon
 	bool CastorApplication::doParseCommandLine()
 	{
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
-		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
+		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ), wxCMD_LINE_OPTION_HELP );
 		parser.AddSwitch( wxT( "a" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
 		parser.AddSwitch( wxT( "u" ), wxT( "unlimited" ), _( "Disables FPS limit." ) );
 		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
-		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
-		parser.AddSwitch( wxT( "gl3" ), wxEmptyString, _( "Defines the renderer to OpenGl 3.x." ) );
-		parser.AddSwitch( wxT( "gl4" ), wxEmptyString, _( "Defines the renderer to OpenGl 4.x." ) );
-		parser.AddSwitch( wxT( "vk" ), wxEmptyString, _( "Defines the renderer to Vulkan." ) );
-		parser.AddSwitch( wxT( "d3d11" ), wxEmptyString, _( "Defines the renderer to Direct3D 11." ) );
-		parser.AddSwitch( wxT( "test" ), wxEmptyString, _( "Defines the renderer to Test." ) );
+		parser.AddParam( _( "The initial scene file." ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
+
+		ashes::RendererList list;
+
+		for ( auto & plugin : list )
+		{
+			auto desc = make_wxString( plugin.description );
+			desc.Replace( " renderer for Ashes", "" );
+			parser.AddSwitch( make_wxString( plugin.name )
+				, wxEmptyString
+				, _( "Defines the renderer to " ) + desc + wxT( "." ) );
+		}
+
 		bool result = parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -202,41 +208,28 @@ namespace GuiCommon
 
 		if ( result )
 		{
-			LogType eLogLevel = LogType::eCount;
+			castor::LogType logLevel = castor::LogType::eCount;
 			long log;
 
 			if ( !parser.Found( wxT( "l" ), &log ) )
 			{
-				eLogLevel = ELogType_DEFAULT;
+				logLevel = DefaultLogType;
 			}
 			else
 			{
-				eLogLevel = LogType( log );
+				logLevel = castor::LogType( log );
 			}
 
-			Logger::initialise( eLogLevel );
+			castor::Logger::initialise( logLevel );
 			m_validation = parser.Found( wxT( 'a' ) );
 			m_unlimitedFps = parser.Found( wxT( 'u' ) );
 
-			if ( parser.Found( wxT( "gl3" ) ) )
+			for ( auto & plugin : list )
 			{
-				m_rendererType = cuT( "gl3" );
-			}
-			else if ( parser.Found( wxT( "gl4" ) ) )
-			{
-				m_rendererType = cuT( "gl4" );
-			}
-			else if ( parser.Found( wxT( "vk" ) ) )
-			{
-				m_rendererType = cuT( "vk" );
-			}
-			else if ( parser.Found( wxT( "d3d11" ) ) )
-			{
-				m_rendererType = cuT( "d3d11" );
-			}
-			else if ( parser.Found( wxT( "test" ) ) )
-			{
-				m_rendererType = cuT( "test" );
+				if ( parser.Found( make_wxString( plugin.name ) ) )
+				{
+					m_rendererType = plugin.name;
+				}
 			}
 
 			wxString strFileName;
@@ -286,19 +279,19 @@ namespace GuiCommon
 	{
 		bool result = true;
 
-		if ( !File::directoryExists( Engine::getEngineDirectory() ) )
+		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
-			File::directoryCreate( Engine::getEngineDirectory() );
+			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		Logger::setFileName( Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
-		Logger::logInfo( m_internalName + cuT( " - Start" ) );
+		castor::Logger::setFileName( castor3d::Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
+		castor::Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = new Engine{ m_internalName, m_version, m_validation };
+		m_castor = new castor3d::Engine{ m_internalName, m_version, m_validation };
 		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto renderers = m_castor->getPluginCache().getPlugins( PluginType::eRenderer );
+		auto renderers = m_castor->getPluginCache().getPlugins( castor3d::PluginType::eRenderer );
 
 		if ( renderers.empty() )
 		{
@@ -306,10 +299,10 @@ namespace GuiCommon
 		}
 		else if ( renderers.size() == 1 )
 		{
-			m_rendererType = std::static_pointer_cast< RendererPlugin >( renderers.begin()->second )->getRendererType();
+			m_rendererType = std::static_pointer_cast< castor3d::RendererPlugin >( renderers.begin()->second )->getRendererType();
 		}
 
-		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
+		if ( m_rendererType == castor3d::RENDERER_TYPE_UNDEFINED )
 		{
 			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
 			int iReturn = m_dialog.ShowModal();
@@ -414,13 +407,17 @@ namespace GuiCommon
 		doCleanupCastor();
 		m_locale.reset();
 		ImagesLoader::cleanup();
-		Logger::cleanup();
+		castor::Logger::cleanup();
 		wxImage::CleanUpHandlers();
 	}
 
 	void CastorApplication::doCleanupCastor()
 	{
-		delete m_castor;
-		m_castor = nullptr;
+		if ( m_castor )
+		{
+			m_castor->cleanup();
+			delete m_castor;
+			m_castor = nullptr;
+		}
 	}
 }

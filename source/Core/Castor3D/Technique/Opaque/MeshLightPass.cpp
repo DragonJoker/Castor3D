@@ -54,7 +54,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
-					1u,
+					0u,
 					diffuseView.getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,

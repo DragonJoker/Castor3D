@@ -81,9 +81,13 @@ namespace castor3d
 		TextureUnit doCreateDepthTexture( Engine & engine
 			, Size const & size )
 		{
+			auto & device = getCurrentRenderDevice( engine );
 			return doCreateTexture( engine
 				, size
-				, getTextureFormat( DsTexture::eDepth )
+				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, true
 				, cuT( "LightingPass_Depth" ) );
 		}

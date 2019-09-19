@@ -68,7 +68,7 @@ namespace castor3d
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
 					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, 0u },
-					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, 8u },
+					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, 8u },
 				} );
 		}
 

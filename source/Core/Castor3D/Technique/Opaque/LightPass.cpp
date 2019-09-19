@@ -83,7 +83,8 @@ namespace castor3d
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};
-
+		CU_Require( texture != DsTexture::eDepth
+			&& "You can't use this function for depth texture format" );
 		return Values[size_t( texture )];
 	}
 
@@ -494,8 +495,6 @@ namespace castor3d
 			auto & texLayout = pipeline.program->getTextureDescriptorLayout();
 			auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
 			{
-				ashes::SamplerCRef sampler = std::ref( gp.getSampler() );
-				ashes::ImageViewCRef view = std::cref( gp.getViews()[index - MinBufferIndex] );
 				return ashes::WriteDescriptorSet
 				{
 					index,

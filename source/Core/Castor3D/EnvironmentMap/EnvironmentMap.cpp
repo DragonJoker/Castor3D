@@ -170,7 +170,7 @@ namespace castor3d
 		{
 			0u,
 			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_D24_UNORM_S8_UINT,
+			device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT ),
 			{ MapSize[0], MapSize[1], 1u },
 			1u,
 			1u,

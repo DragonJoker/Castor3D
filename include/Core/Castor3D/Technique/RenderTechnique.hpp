@@ -206,6 +206,7 @@ namespace castor3d
 		using ShadowMapArray = std::vector< ShadowMapUPtr >;
 
 	private:
+		void doCreateShadowMaps();
 		void doInitialiseShadowMaps();
 		void doInitialiseBackgroundPass();
 		void doInitialiseOpaquePass();

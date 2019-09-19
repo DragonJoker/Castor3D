@@ -18,6 +18,7 @@ namespace D3D11Render
 		, AshPluginDescription desc )
 		: castor3d::RenderSystem( engine, std::move( desc ), true, true, true )
 	{
+		const_cast< AshPluginDescription & >( m_desc ).features.hasStorageBuffers = VK_FALSE;
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )

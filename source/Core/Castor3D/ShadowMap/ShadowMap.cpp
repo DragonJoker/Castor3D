@@ -66,26 +66,22 @@ namespace castor3d
 				{
 					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 						, VK_PIPELINE_STAGE_TRANSFER_BIT
-						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED
-							, 0u ) );
+						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 					cmdBuffer->clear( view->getView(), clearColour );
 					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, 0u ) );
+						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 				}
 
 				for ( auto & view : *m_linearMap.getTexture() )
 				{
 					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 						, VK_PIPELINE_STAGE_TRANSFER_BIT
-						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED
-							, 0u ) );
+						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 					cmdBuffer->clear( view->getView(), clearColour );
 					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-							, 0u ) );
+						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 				}
 
 				cmdBuffer->end();
@@ -94,6 +90,7 @@ namespace castor3d
 				fence->wait( ashes::MaxTimeout );
 			}
 
+			doInitialiseDepthFormat();
 			auto size = m_shadowMap.getTexture()->getDimensions();
 
 			for ( auto & pass : m_passes )
@@ -123,13 +120,10 @@ namespace castor3d
 			pass.matrixUbo->cleanup();
 		}
 
-		if ( m_initialised )
-		{
-			m_initialised = false;
-			doCleanup();
-			m_shadowMap.cleanup();
-			m_linearMap.cleanup();
-		}
+		m_initialised = false;
+		doCleanup();
+		m_shadowMap.cleanup();
+		m_linearMap.cleanup();
 	}
 
 	void ShadowMap::updateFlags( PipelineFlags & flags )const

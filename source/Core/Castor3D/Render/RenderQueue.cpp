@@ -822,11 +822,14 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
-		auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
-
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+			getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+				, [this]()
+				{
+					auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
+					m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+				} ) );
 		}
 
 		if ( m_allChanged )

@@ -202,4 +202,45 @@ namespace castor3d
 			transferQueue = device->getQueue( transferQueueFamilyIndex, 0u );
 		}
 	}
+
+	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > depthFormats
+		{
+			VK_FORMAT_D32_SFLOAT,
+			VK_FORMAT_X8_D24_UNORM_PACK32,
+			VK_FORMAT_D16_UNORM,
+		};
+		return selectSuitableFormat( depthFormats, requiredFeatures );
+	}
+
+	VkFormat RenderDevice::selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > depthFormats
+		{
+			VK_FORMAT_D32_SFLOAT_S8_UINT,
+			VK_FORMAT_D24_UNORM_S8_UINT,
+			VK_FORMAT_D16_UNORM_S8_UINT,
+		};
+		return selectSuitableFormat( depthFormats, requiredFeatures );
+	}
+
+	VkFormat RenderDevice::selectSuitableFormat( std::vector< VkFormat > const & formats
+		, VkFormatFeatureFlags requiredFeatures )const
+	{
+		auto it = std::find_if( formats.begin()
+			, formats.end()
+			, [this, &requiredFeatures]( VkFormat lookup )
+			{
+				auto props = device->getPhysicalDevice().getFormatProperties( lookup );
+				return castor::checkFlag( props.optimalTilingFeatures, requiredFeatures );
+			} );
+
+		if ( it == formats.end() )
+		{
+			CU_Exception( "Could not find a suitable format." );
+		}
+
+		return *it;
+	}
 }

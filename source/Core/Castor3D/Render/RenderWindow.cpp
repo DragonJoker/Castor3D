@@ -897,8 +897,13 @@ namespace castor3d
 		}
 
 		getDevice()->waitIdle();
-		m_pickingPass->cleanup();
-		m_pickingPass.reset();
+
+		if ( m_pickingPass )
+		{
+			m_pickingPass->cleanup();
+			m_pickingPass.reset();
+		}
+
 		m_overlayRenderer.reset();
 		RenderTargetSPtr target = getRenderTarget();
 

@@ -15,10 +15,15 @@ namespace castor3d
 {
 	struct RenderDevice
 	{
-		RenderDevice( RenderSystem & renderSystem
+		C3D_API RenderDevice( RenderSystem & renderSystem
 			, ashes::PhysicalDevice const & gpu
 			, AshPluginDescription const & desc
 			, ashes::SurfacePtr surface );
+
+		C3D_API VkFormat selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API VkFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats
+			, VkFormatFeatureFlags requiredFeatures )const;
 
 		inline ashes::Device const * operator->()const
 		{

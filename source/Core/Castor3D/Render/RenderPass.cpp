@@ -506,7 +506,7 @@ namespace castor3d
 		, BlendMode alphaBlendMode
 		, uint32_t attachesCount )
 	{
-		VkPipelineColorBlendAttachmentState attach;
+		VkPipelineColorBlendAttachmentState attach{};
 
 		switch ( colourBlendMode )
 		{

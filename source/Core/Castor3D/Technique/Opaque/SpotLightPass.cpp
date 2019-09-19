@@ -79,6 +79,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SpotLightPassUbo" ) }
 	{
+		m_baseUbo = m_ubo.get();
 	}
 
 	SpotLightPass::~SpotLightPass()

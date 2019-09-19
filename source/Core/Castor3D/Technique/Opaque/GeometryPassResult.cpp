@@ -75,6 +75,7 @@ namespace castor3d
 
 		for ( auto & texture : m_result )
 		{
+			view->image = *texture;
 			view->format = texture->getFormat();
 			view->subresourceRange.aspectMask = ashes::getAspectMask( view->format );
 

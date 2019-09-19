@@ -61,7 +61,7 @@ namespace castor3d
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
 					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
-					{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) },
+					{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) },
 				} );
 		}
 

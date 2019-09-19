@@ -305,7 +305,8 @@ namespace castor3d
 		{
 			setCleaned();
 
-			if ( m_threaded )
+			if ( m_threaded
+				&& !static_cast< RenderLoopAsync const & >( *m_renderLoop ).isPaused() )
 			{
 				m_renderLoop->pause();
 			}

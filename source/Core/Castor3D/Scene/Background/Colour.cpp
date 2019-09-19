@@ -133,7 +133,7 @@ namespace castor3d
 	void ColourBackground::doUpdateColour()
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		VkDeviceSize lockSize = Dim * Dim;
+		VkDeviceSize lockSize = Dim * Dim * sizeof( Point4f );
 
 		if ( auto * buffer = reinterpret_cast< Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )
 		{

@@ -139,11 +139,14 @@ namespace castor3d
 
 	void RenderPassTimer::updateCount( uint32_t count )
 	{
-		m_passesCount = count;
-		m_timerQuery = getCurrentRenderDevice( m_engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
-			, 2u * m_passesCount
-			, 0u );
-		m_startedPasses.resize( m_passesCount );
+		if ( m_passesCount != count )
+		{
+			m_passesCount = count;
+			m_timerQuery = getCurrentRenderDevice( m_engine )->createQueryPool( VK_QUERY_TYPE_TIMESTAMP
+				, 2u * m_passesCount
+				, 0u );
+			m_startedPasses.resize( m_passesCount );
+		}
 	}
 
 	//*********************************************************************************************

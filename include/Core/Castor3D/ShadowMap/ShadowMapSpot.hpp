@@ -66,6 +66,10 @@ namespace castor3d
 
 	private:
 		/**
+		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
+		 */
+		void doInitialiseDepthFormat()override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
 		void doInitialise()override;
@@ -89,7 +93,7 @@ namespace castor3d
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
 		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-		static VkFormat constexpr RawDepthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
+		static VkFormat RawDepthFormat;
 
 	private:
 		struct PassData

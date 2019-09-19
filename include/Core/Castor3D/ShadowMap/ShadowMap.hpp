@@ -185,6 +185,13 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
+		 *\brief		Initialises the shadow map's depth raw format.
+		 *\~french
+		 *\brief		Initialise le format de profondeur brute de la shadow map.
+		 */
+		C3D_API virtual void doInitialiseDepthFormat() = 0;
+		/**
+		 *\~english
 		 *\brief		Initialises the light type specific data.
 		 *\~french
 		 *\brief		Initialise les données spécifiques au type de source lumineuse.

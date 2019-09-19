@@ -116,7 +116,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
-				1u,
+				0u,
 				ShadowMapPoint::LinearDepthFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
@@ -127,7 +127,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 			{
-				2u,
+				0u,
 				ShadowMapPoint::VarianceFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,

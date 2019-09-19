@@ -565,6 +565,7 @@ namespace castor3d
 			size.height >>= 1;
 			pipeline.sourceView = sourceView;
 			viewInfo->subresourceRange.baseMipLevel = index + 1u;
+			viewInfo->image = m_result.getTexture()->getTexture();
 			pipeline.targetView = m_result.getTexture()->getTexture().createView( viewInfo );
 			pipeline.descriptor = m_minifyDescriptorPool->createDescriptorSet();
 			pipeline.descriptor->createBinding( m_minifyDescriptorLayout->getBinding( 0u )

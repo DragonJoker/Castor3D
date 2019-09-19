@@ -314,13 +314,13 @@ namespace castor3d
 		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_commandBuffer->memoryBarrier( m_stagingBuffer->getBuffer().getCompatibleStageFlags()
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_commandBuffer->memoryBarrier( m_stagingBuffer->getBuffer().getCompatibleStageFlags()
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_MEMORY_READ_BIT ) );
 #endif
@@ -527,7 +527,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
 			},
 			{
-				1u,
+				0u,
 				m_depthTexture->getFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,

@@ -118,6 +118,8 @@ namespace castor3d
 			}
 		};
 
+		CU_Require( texture != WbTexture::eDepth
+			&& "You can't use this function for depth texture format" );
 		return Values[size_t( texture )];
 	}
 
@@ -157,7 +159,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
-				1u,
+				0u,
 				wbpResult[1]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
@@ -168,7 +170,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 			{
-				2u,
+				0u,
 				wbpResult[2]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
@@ -179,7 +181,7 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 			{
-				3u,
+				0u,
 				wbpResult[3]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,

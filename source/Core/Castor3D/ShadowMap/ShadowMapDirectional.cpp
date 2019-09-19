@@ -178,16 +178,17 @@ namespace castor3d
 		}
 	}
 
+	VkFormat ShadowMapDirectional::RawDepthFormat = VK_FORMAT_UNDEFINED;
+
 	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
-		, Scene & scene
-		, uint32_t cascades )
+		, Scene & scene )
 		: ShadowMap{ engine
-			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, cascades )
-			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, cascades )
-			, createPasses( engine, scene, *this, cascades )
+			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, scene.getDirectionalShadowCascades() )
+			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, scene.getDirectionalShadowCascades() )
+			, createPasses( engine, scene, *this, scene.getDirectionalShadowCascades() )
 			, 1u }
 		, m_frameBuffers( m_passes.size() )
-		, m_cascades{ cascades }
+		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
 	}
 
@@ -281,6 +282,16 @@ namespace castor3d
 			, *m_linearMap.getTexture() );
 	}
 
+	void ShadowMapDirectional::doInitialiseDepthFormat()
+	{
+		auto & device = getCurrentRenderDevice( *this );
+
+		if ( RawDepthFormat == VK_FORMAT_UNDEFINED )
+		{
+			RawDepthFormat = device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		}
+	}
+
 	void ShadowMapDirectional::doInitialiseDepth()
 	{
 		VkExtent2D const size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
@@ -305,6 +316,7 @@ namespace castor3d
 
 	void ShadowMapDirectional::doInitialiseFramebuffers()
 	{
+		auto & device = getCurrentRenderDevice( *this );
 		VkExtent2D const size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize };
 		auto & variance = m_shadowMap.getTexture()->getTexture();
 		auto & linear = m_linearMap.getTexture()->getTexture();
@@ -339,6 +351,7 @@ namespace castor3d
 
 		for ( uint32_t cascade = 0u; cascade < m_passes.size(); ++cascade )
 		{
+			std::string debugName = "ShadowMapDirectionalCascade" + std::to_string( cascade );
 			auto & pass = m_passes[cascade];
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
@@ -346,13 +359,25 @@ namespace castor3d
 			varianceView->subresourceRange.baseArrayLayer = cascade;
 			linearView->subresourceRange.baseArrayLayer = cascade;
 			frameBuffer.depthView = depth.createView( depthView );
+			setDebugObjectName( device
+				, frameBuffer.depthView
+				, debugName + "Depth" );
 			frameBuffer.varianceView = variance.createView( varianceView );
+			setDebugObjectName( device
+				, frameBuffer.varianceView
+				, debugName + "Variance" );
 			frameBuffer.linearView = linear.createView( linearView );
+			setDebugObjectName( device
+				, frameBuffer.linearView
+				, debugName + "Linear" );
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( frameBuffer.depthView );
 			attaches.emplace_back( frameBuffer.linearView );
 			attaches.emplace_back( frameBuffer.varianceView );
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
+			setDebugObjectName( device
+				, *frameBuffer.frameBuffer
+				, debugName + "Fbo" );
 
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
 				, frameBuffer.varianceView

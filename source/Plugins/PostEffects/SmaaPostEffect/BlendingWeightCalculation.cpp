@@ -925,7 +925,7 @@ namespace smaa
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 			{
-				1u,
+				0u,
 				VK_FORMAT_S8_UINT,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,

@@ -70,33 +70,37 @@ namespace castor3d
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
 			}
 		};
+		ashes::VkAttachmentReferenceArray colorAttachments;
+
+		// Colour attachments.
+		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
+		{
+			attachments.push_back(
+				{
+					0u,
+					gpResult.getViews()[i]->format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				} );
+			colorAttachments.push_back( { uint32_t( i ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+		}
+		
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription
 			{
 				0u,
 				VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
-				{},
+				std::move( colorAttachments ),
 				{},
 				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 				{},
 			} );
-
-		// Colour attachments.
-		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
-		{
-			attachments[i].format = gpResult.getViews()[i]->format;
-			attachments[i].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-			attachments[i].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-			attachments[i].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-			attachments[i].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-			attachments[i].samples = VK_SAMPLE_COUNT_1_BIT;
-			attachments[i].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-			attachments[i].finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-			subpasses[0].colorAttachments.push_back( { uint32_t( i ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
-		}
-
 		ashes::VkSubpassDependencyArray dependencies
 		{
 			{

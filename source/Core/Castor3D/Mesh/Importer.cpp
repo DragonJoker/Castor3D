@@ -162,7 +162,7 @@ namespace castor3d
 				{
 					0u,
 					VK_IMAGE_TYPE_2D,
-					VK_FORMAT_D24_UNORM_S8_UINT,
+					VK_FORMAT_UNDEFINED,
 					{ 1u, 1u, 1u },
 					20u,
 					1u,
