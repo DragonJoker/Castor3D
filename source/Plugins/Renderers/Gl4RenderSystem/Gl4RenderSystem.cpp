@@ -100,7 +100,7 @@ namespace Gl4Render
 				, glsl::GlslConfig
 				{
 					module.shader->getType(),
-					450,
+					430,
 					false,
 					true,
 					true,
