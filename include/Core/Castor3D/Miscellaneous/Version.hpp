@@ -36,9 +36,9 @@ namespace castor3d
 		 *\param[in]	minor	Le numéro mineur.
 		 *\param[in]	build	Le numéro de build.
 		 */
-		C3D_API Version( int major = CASTOR_VERSION_MAJOR
-			, int minor = CASTOR_VERSION_MINOR
-			, int build = CASTOR_VERSION_BUILD );
+		C3D_API Version( int major = C3D_VersionMajor
+			, int minor = C3D_VersionMinor
+			, int build = C3D_VersionBuild );
 		/**
 		 *\~english
 		 *\brief		Constructor

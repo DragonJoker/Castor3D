@@ -247,10 +247,10 @@ namespace Bloom
 
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor3d::RenderDevice const & device )
 		{
-			std::vector< VkDescriptorSetLayoutBinding > bindings
+			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
-				VkDescriptorSetLayoutBinding{ 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT },
-				VkDescriptorSetLayoutBinding{ 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT },
+				castor3d::makeDescriptorSetLayoutBinding( 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT ),
+				castor3d::makeDescriptorSetLayoutBinding( 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			return device->createDescriptorSetLayout( std::move( bindings ) );
 		}

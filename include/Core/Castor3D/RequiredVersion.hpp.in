@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RequiredVersion___
 #define ___C3D_RequiredVersion___
 
-#define CASTOR_VERSION_MAJOR	${${PROJECT_NAME}_VERSION_MAJOR}
-#define CASTOR_VERSION_MINOR	${${PROJECT_NAME}_VERSION_MINOR}
-#define CASTOR_VERSION_BUILD	${${PROJECT_NAME}_VERSION_BUILD}
-#define C3D_UseGLSLANG			${C3D_USE_GLSLANG}
+#define C3D_VersionMajor ${${PROJECT_NAME}_VERSION_MAJOR}
+#define C3D_VersionMinor ${${PROJECT_NAME}_VERSION_MINOR}
+#define C3D_VersionBuild ${${PROJECT_NAME}_VERSION_BUILD}
+#define C3D_UseGLSLANG ${C3D_USE_GLSLANG}
 
 #endif

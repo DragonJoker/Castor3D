@@ -97,10 +97,10 @@ namespace castor3d
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			return VkDescriptorSetLayoutBinding{ binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT };
+			return makeDescriptorSetLayoutBinding( binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
 		}
 
-		return VkDescriptorSetLayoutBinding{ binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT };
+		return makeDescriptorSetLayoutBinding( binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT );
 	}
 
 	sdw::Mat4 SkinningUbo::computeTransform( SkinningData & data

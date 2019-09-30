@@ -482,9 +482,7 @@ namespace castor3d
 					, modelMatrixUbo->getUbo() );
 			}
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
-				, *m_baseUbo
-				, 0u
-				, uint32_t( m_baseUbo->getElementSize() ) );
+				, *m_baseUbo );
 			pipeline.uboDescriptorSet->update();
 
 			pipeline.firstCommandBuffer = device.graphicsCommandPool->createCommandBuffer( false );

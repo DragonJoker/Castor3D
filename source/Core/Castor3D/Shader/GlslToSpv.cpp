@@ -3,10 +3,13 @@ This file belongs to Ashes.
 See LICENSE file in root folder.
 */
 #include "Castor3D/Shader/GlslToSpv.hpp"
-
-#include <ashespp/Core/Device.hpp>
+#include "Castor3D/RequiredVersion.hpp"
 
 #if C3D_UseGLSLANG
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+
+#include <ashespp/Core/Device.hpp>
 
 #include <glslang/Public/ShaderLang.h>
 #include <SPIRV/GlslangToSpv.h>
@@ -121,18 +124,18 @@ namespace castor3d
 			resources.maxTessGenLevel = int( limits.maxTessellationGenerationLevel );
 			resources.maxTessPatchComponents = int( limits.maxTessellationControlPerPatchOutputComponents );
 			resources.maxTextureCoords = 32;
-			resources.maxTextureImageUnits = 32;
-			resources.maxTextureUnits = 32;
+			resources.maxTextureImageUnits = int( limits.maxDescriptorSetStorageImages );
+			resources.maxTextureUnits = int( limits.maxDescriptorSetSampledImages );
 			resources.maxTransformFeedbackBuffers = 4;
 			resources.maxTransformFeedbackInterleavedComponents = 64;
-			resources.maxVaryingComponents = 60;
-			resources.maxVaryingFloats = 64;
+			resources.maxVaryingComponents = int( limits.maxVertexOutputComponents );
+			resources.maxVaryingFloats = int( limits.maxVertexOutputComponents );
 			resources.maxVaryingVectors = 8;
 			resources.maxVertexAtomicCounterBuffers = 0;
 			resources.maxVertexAtomicCounters = 0;
 			resources.maxVertexAttribs = 64;
 			resources.maxVertexImageUniforms = 0;
-			resources.maxVertexOutputComponents = 64;
+			resources.maxVertexOutputComponents = int( limits.maxVertexOutputComponents );
 			resources.maxVertexOutputVectors = 16;
 			resources.maxVertexTextureImageUnits = 32;
 			resources.maxVertexUniformComponents = 4096;
@@ -196,7 +199,7 @@ namespace castor3d
 
 		if ( source.find( "ashesTopDownToBottomUp" ) != std::string::npos )
 		{
-			if ( device.getClipDirection() == ashes::ClipDirection::eTopDown )
+			if ( device.renderSystem.isTopDown() )
 			{
 				std::regex regex{ R"(void[ ]*main)" };
 				source = std::regex_replace( source.data()
@@ -226,7 +229,7 @@ $&)" );
 
 		if ( source.find( "ashesBottomUpToTopDown" ) != std::string::npos )
 		{
-			if ( device.getClipDirection() == ashes::ClipDirection::eTopDown )
+			if ( device.renderSystem.isTopDown() )
 			{
 				std::regex regex{ R"(void[ ]*main)" };
 				source = std::regex_replace( source.data()
@@ -263,7 +266,7 @@ $&)" );
 			castor::Logger::logError( glshader.getInfoLog() );
 			castor::Logger::logError( glshader.getInfoDebugLog() );
 			castor::Logger::logError( source );
-			throw std::runtime_error{ "Shader compilation failed." };
+			CU_Exception( "Shader compilation failed." );
 		}
 
 		glslang::TProgram glprogram;
@@ -274,7 +277,7 @@ $&)" );
 			castor::Logger::logError( glprogram.getInfoLog() );
 			castor::Logger::logError( glprogram.getInfoDebugLog() );
 			castor::Logger::logError( source );
-			throw std::runtime_error{ "Shader linkage failed." };
+			CU_Exception( "Shader linkage failed." );
 		}
 
 		ashes::UInt32Array spirv;

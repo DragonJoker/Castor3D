@@ -15,6 +15,7 @@ set( AshesLibraries
 set( ShaderWriterLibraries
 	${ShaderWriterLibraries}
 	CompilerSpirV
+	CompilerGlsl
 	PARENT_SCOPE
 )
 
@@ -58,7 +59,7 @@ add_target(
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	"Castor3D"
-	"${RendererLibraries};VkRenderer;CompilerSpirV"
+	"${RendererLibraries};VkRenderer;CompilerSpirV;CompilerGlsl"
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DVkRenderer_STATIC"

@@ -459,14 +459,14 @@ namespace castor3d
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+			, m_crossTexture->getDefaultView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		uint32_t index{ 0u };
 
 		for ( auto & copyInfo : copyInfos )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_texture->getImage( index ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, m_texture->getImage( index ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->copyImage( copyInfo
 				, m_crossTexture->getTexture()
 				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -474,8 +474,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_texture->getImage( index ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, VK_ACCESS_TRANSFER_WRITE_BIT ) );
+				, m_texture->getImage( index ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			++index;
 		}
 

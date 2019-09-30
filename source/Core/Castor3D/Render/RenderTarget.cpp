@@ -632,7 +632,7 @@ namespace castor3d
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
 				, { ashes::makeClearValue( clear ) }
@@ -642,7 +642,7 @@ namespace castor3d
 			// Put render technique image back in colour attachment layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->end();
 		}
@@ -664,11 +664,11 @@ namespace castor3d
 			// Put source image in transfer source layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, source.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, source.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			// Put target image in transfer destination layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, target.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			// Copy source to target.
 			commandBuffer->copyImage( source, target );
 		}
@@ -676,7 +676,7 @@ namespace castor3d
 		// Put target image in fragment shader input layout.
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		commandBuffer->end();
 	}
 

@@ -36,7 +36,7 @@ namespace castor3d
 		static uint32_t constexpr SsaoCfgUboIdx = 0u;
 		static uint32_t constexpr BlurCfgUboIdx = 1u;
 		static uint32_t constexpr NmlImgIdx = 2u;
-		static uint32_t constexpr InpImgIdx = 1u;
+		static uint32_t constexpr InpImgIdx = 3u;
 
 		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
@@ -644,15 +644,15 @@ namespace castor3d
 	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( SsaoCfgUboIdx )
 			, m_ssaoConfigUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurCfgUboIdx )
 			, m_configurationUbo->getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( NmlImgIdx )
 			, m_normals
 			, m_sampler->getSampler() );
 	}

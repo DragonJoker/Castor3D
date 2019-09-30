@@ -152,7 +152,7 @@ namespace smaa
 		// Put source image in shader input layout.
 		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_sourceView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+			, m_sourceView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer

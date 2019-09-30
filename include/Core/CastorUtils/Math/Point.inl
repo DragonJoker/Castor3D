@@ -8,33 +8,6 @@ namespace castor
 
 	namespace details
 	{
-		template< typename T, uint32_t TCount, uint32_t Index, typename U, typename ... Values >
-		void construct( Point< T, TCount > & result, U current, Values ... );
-
-		template< typename T, uint32_t TCount, uint32_t Index >
-		void construct( Point< T, TCount > & result )
-		{
-		}
-
-		template< typename T, uint32_t TCount, uint32_t Index, typename U >
-		void construct( Point< T, TCount > & result, U last )
-		{
-			if ( Index < TCount )
-			{
-				result[Index] = T( last );
-			}
-		}
-
-		template< typename T, uint32_t TCount, uint32_t Index, typename U, typename ... Values >
-		void construct( Point< T, TCount > & result, U current, Values ... values )
-		{
-			if ( Index < TCount )
-			{
-				result[Index] = T( current );
-				construct< T, TCount, Index + 1, Values... >( result, values... );
-			}
-		}
-
 		template< typename SrcType, typename DstType, uint32_t SrcCount, uint32_t DstCount >
 		struct DataCopier
 		{
@@ -214,11 +187,25 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	template< typename ValueA, typename ValueB, typename ... Values >
-	Point< T, TCount >::Point( ValueA a, ValueB b, Values ... values )
-		: m_coords{}
+	template< typename ValueA, typename ValueB >
+	Point< T, TCount >::Point( ValueA a, ValueB b )
+		: m_coords{ T( a ), T( b ) }
 	{
-		details::construct< T, TCount, 0, ValueA, ValueB, Values... >( *this, a, b, values... );
+
+	}
+
+	template< typename T, uint32_t TCount >
+	template< typename ValueA, typename ValueB, typename ValueC >
+	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c )
+		: m_coords{ T( a ), T( b ), T( c ) }
+	{
+	}
+
+	template< typename T, uint32_t TCount >
+	template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
+	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c, ValueD d )
+		: m_coords{ T( a ), T( b ), T( c ), T( d ) }
+	{
 	}
 
 	template< typename T, uint32_t TCount >

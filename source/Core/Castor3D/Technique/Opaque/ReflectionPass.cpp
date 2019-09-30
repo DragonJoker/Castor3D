@@ -1279,7 +1279,7 @@ namespace castor3d
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_geometryPassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+			, m_geometryPassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, frameBuffer
 			, { clear }

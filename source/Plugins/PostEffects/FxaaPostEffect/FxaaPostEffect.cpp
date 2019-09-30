@@ -385,7 +385,7 @@ namespace fxaa
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, targetView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, targetView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			// Render the effect.
 			cmd.beginRenderPass( *m_renderPass

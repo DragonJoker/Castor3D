@@ -5,7 +5,7 @@
 
 #include <CompilerSpirV/compileSpirV.hpp>
 
-#define C3DVkRenderer_HasGLSL 0
+#define C3DVkRenderer_HasGLSL 1
 #if C3DVkRenderer_HasGLSL
 #	include <CompilerGlsl/compileGlsl.hpp>
 #endif
@@ -203,7 +203,6 @@ namespace VkRender
 
 	RenderSystem::~RenderSystem()
 	{
-		castor3d::cleanupGlslang();
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine

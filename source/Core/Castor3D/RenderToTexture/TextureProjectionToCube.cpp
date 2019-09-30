@@ -210,7 +210,7 @@ namespace castor3d
 			{
 				m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+					, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			}
 
 			m_commandBuffer->beginRenderPass( *m_renderPass

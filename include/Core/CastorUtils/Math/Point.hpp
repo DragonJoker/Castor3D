@@ -136,8 +136,12 @@ namespace castor
 		explicit Point( Coords< U, UCount > const & rhs );
 		template< typename U >
 		explicit Point( U const * rhs );
-		template< typename ValueA, typename ValueB, typename ... Values >
-		explicit Point( ValueA a, ValueB b, Values ... values );
+		template< typename ValueA, typename ValueB >
+		Point( ValueA a, ValueB b );
+		template< typename ValueA, typename ValueB, typename ValueC >
+		Point( ValueA a, ValueB b, ValueC c );
+		template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
+		Point( ValueA a, ValueB b, ValueC c, ValueD d );
 		/**@}*/
 		/**
 		 *\~english

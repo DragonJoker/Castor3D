@@ -174,13 +174,11 @@ namespace castor3d
 		// Src depth buffer from depth attach to transfer source
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED
-				, 0u ) );
+			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Dst depth buffer from unknown to transfer destination
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_depth.getTexture()->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED
-				, 0u ) );
+			, m_depth.getTexture()->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy Src to Dst
 		m_blitDepthCommandBuffer->copyImage( copy
 			, *m_srcDepth.image
@@ -190,13 +188,11 @@ namespace castor3d
 		// Dst depth buffer from transfer destination to depth attach
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_depth.getTexture()->getDefaultView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, VK_ACCESS_TRANSFER_WRITE_BIT ) );
+			, m_depth.getTexture()->getDefaultView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		// Src depth buffer from transfer source to depth stencil read only
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, VK_ACCESS_TRANSFER_READ_BIT ) );
+			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_blitDepthCommandBuffer->end();
 	}
 

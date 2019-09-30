@@ -65,7 +65,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
 				{
-					2u,
+					0u,
 					specularView.getFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
@@ -160,11 +160,10 @@ namespace castor3d
 			},
 		};
 
-		ashes::PipelineColorBlendStateCreateInfo blstate;
+		ashes::VkPipelineColorBlendAttachmentStateArray blattaches;
 
 		if ( blend )
 		{
-			ashes::VkPipelineColorBlendAttachmentStateArray blattaches;
 			blattaches.push_back( VkPipelineColorBlendAttachmentState
 			{
 				true,
@@ -175,9 +174,22 @@ namespace castor3d
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_OP_ADD,
 			} );
-			blstate = ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, std::move( blattaches ) };
+		}
+		else
+		{
+			blattaches.push_back( VkPipelineColorBlendAttachmentState
+				{
+					true,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_FACTOR_ZERO,
+					VK_BLEND_OP_ADD,
+					VK_BLEND_FACTOR_ONE,
+					VK_BLEND_FACTOR_ZERO,
+					VK_BLEND_OP_ADD,
+				} );
 		}
 
+		blattaches.push_back( blattaches.back() );
 		auto & device = getCurrentRenderDevice( m_engine );
 		return device->createPipeline( ashes::GraphicsPipelineCreateInfo
 			{
@@ -190,8 +202,8 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				std::move( dsstate ),
-				std::move( blstate ),
-				ashes::PipelineDynamicStateCreateInfo{ 2u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, std::move( blattaches ) },
+				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 				*m_pipelineLayout,
 				renderPass,
 			} );

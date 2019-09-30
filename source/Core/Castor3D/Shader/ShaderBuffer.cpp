@@ -92,11 +92,11 @@ namespace castor3d
 	{
 		if ( m_bufferView )
 		{
-			return { index, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT };
+			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
 		}
 		else
 		{
-			return { index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT };
+			return makeDescriptorSetLayoutBinding( index, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT );
 		}
 	}
 

@@ -308,7 +308,7 @@ namespace motion_blur
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

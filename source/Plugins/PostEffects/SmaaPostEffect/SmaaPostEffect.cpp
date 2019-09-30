@@ -483,7 +483,7 @@ namespace smaa
 		timer.beginPass( copyCmd, passIndex );
 		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_smaaResult->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED, 0u ) );
+			, m_smaaResult->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
 			, { ashes::makeClearValue( VkClearColorValue{} ) }

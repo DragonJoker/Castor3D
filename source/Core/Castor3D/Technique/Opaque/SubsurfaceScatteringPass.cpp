@@ -62,6 +62,14 @@ namespace castor3d
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
+		uint32_t constexpr BlurSceneUboId = 2u;
+		uint32_t constexpr BlurGpInfoUboId = 3u;
+		uint32_t constexpr BlurSssUboId = 4u;
+		uint32_t constexpr BlurDepthImgId = 5u;
+		uint32_t constexpr BlurData4ImgId = 6u;
+		uint32_t constexpr BlurData5ImgId = 7u;
+		uint32_t constexpr BlurLgtDiffImgId = 8u;
+
 		ShaderPtr doGetBlurProgram( Engine & engine
 			, bool isVertic )
 		{
@@ -77,16 +85,16 @@ namespace castor3d
 						? PassFlag::eSpecularGlossiness
 						: PassFlag( 0u ) ) ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
-			UBO_SCENE( writer, 2u, 0u );
-			UBO_GPINFO( writer, 3u, 0u );
-			Ubo config{ writer, SubsurfaceScatteringPass::Config, 4u, 0u };
+			UBO_SCENE( writer, BlurSceneUboId, 0u );
+			UBO_GPINFO( writer, BlurGpInfoUboId, 0u );
+			Ubo config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), 5u, 0u );
-			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), 6u, 0u );
-			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), 7u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), 8u, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), BlurDepthImgId, 0u );
+			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
+			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), BlurData5ImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), BlurLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
@@ -190,6 +198,13 @@ namespace castor3d
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
+		uint32_t constexpr CombData4ImgId = 2u;
+		uint32_t constexpr CombData5ImgId = 3u;
+		uint32_t constexpr CombBlur1ImgId = 4u;
+		uint32_t constexpr CombBlur2ImgId = 5u;
+		uint32_t constexpr CombBlur3ImgId = 6u;
+		uint32_t constexpr CombLgtDiffImgId = 7u;
+
 		ShaderPtr doGetCombineProgram( Engine & engine )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -205,12 +220,12 @@ namespace castor3d
 						: PassFlag( 0u ) ) ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
-			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), 2u, 0u );
-			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), 3u, 0u );
-			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur1" ), 4u, 0u );
-			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur2" ), 5u, 0u );
-			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur3" ), 6u, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), 7u, 0u );
+			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
+			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
+			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur1" ), CombBlur1ImgId, 0u );
+			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur2" ), CombBlur2ImgId, 0u );
+			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur3" ), CombBlur3ImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), CombLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
@@ -471,22 +486,22 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			makeDescriptorSetLayoutBinding( 2u
+			makeDescriptorSetLayoutBinding( BlurSceneUboId
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Scene UBO
-			makeDescriptorSetLayoutBinding( 3u
+			makeDescriptorSetLayoutBinding( BlurGpInfoUboId
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // GpInfo UBO
-			makeDescriptorSetLayoutBinding( 4u
+			makeDescriptorSetLayoutBinding( BlurSssUboId
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Blur UBO
-			makeDescriptorSetLayoutBinding( 5u
+			makeDescriptorSetLayoutBinding( BlurDepthImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Depth map
-			makeDescriptorSetLayoutBinding( 6u
+			makeDescriptorSetLayoutBinding( BlurData4ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // Translucency map
-			makeDescriptorSetLayoutBinding( 7u
+			makeDescriptorSetLayoutBinding( BlurData5ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // MaterialIndex map
 		};
@@ -529,25 +544,25 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 2u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSceneUboId )
 			, m_sceneUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 3u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurGpInfoUboId )
 			, m_gpInfoUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 4u )
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSssUboId )
 			, m_blurUbo.getBuffer()
 			, 0u
 			, 1u );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurDepthImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eDepth )]
 			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData4ImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 7u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData5ImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
 			, m_sampler->getSampler() );
 	}
@@ -574,22 +589,22 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			makeDescriptorSetLayoutBinding( 1u
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur weights
-			makeDescriptorSetLayoutBinding( 2u
+			//makeDescriptorSetLayoutBinding( 1u
+			//	, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			//	, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur weights
+			makeDescriptorSetLayoutBinding( CombData4ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Translucency map
-			makeDescriptorSetLayoutBinding( 3u
+			makeDescriptorSetLayoutBinding( CombData5ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// MaterialIndex map
-			makeDescriptorSetLayoutBinding( 4u
+			makeDescriptorSetLayoutBinding( CombBlur1ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 0
-			makeDescriptorSetLayoutBinding( 5u
+			makeDescriptorSetLayoutBinding( CombBlur2ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 1
-			makeDescriptorSetLayoutBinding( 6u
+			makeDescriptorSetLayoutBinding( CombBlur3ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur result 2
 		};
@@ -632,21 +647,21 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( PassBufferIndex ) );
-		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
-			, m_blurUbo.getBuffer() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
+		//descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
+		//	, m_blurUbo.getBuffer() );
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData4ImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 3u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData5ImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
 			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 4u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur1ImgId )
 			, m_blurResults[0].getTexture()->getDefaultView()
 			, m_blurResults[0].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 5u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur2ImgId )
 			, m_blurResults[1].getTexture()->getDefaultView()
 			, m_blurResults[1].getSampler()->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 6u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur3ImgId )
 			, m_blurResults[2].getTexture()->getDefaultView()
 			, m_blurResults[2].getSampler()->getSampler() );
 	}

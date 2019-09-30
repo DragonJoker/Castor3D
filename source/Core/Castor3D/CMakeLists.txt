@@ -9,7 +9,7 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 set( C3D_USE_GLSLANG 0 )
 
-if ( CASTOR3D_USE_GLSLANG )
+if ( CASTOR_USE_GLSLANG )
 	set( GlslangLibraries 
 		glslang
 		OGLCompiler
