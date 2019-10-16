@@ -201,6 +201,9 @@ namespace castor3d
 			transferCommandPool = commandPools.back().get();
 			transferQueue = device->getQueue( transferQueueFamilyIndex, 0u );
 		}
+
+		transferCommandPool = graphicsCommandPool;
+		transferQueue = device->getQueue( graphicsQueueFamilyIndex, 0u );
 	}
 
 	VkFormat RenderDevice::selectSuitableDepthFormat( VkFormatFeatureFlags requiredFeatures )const

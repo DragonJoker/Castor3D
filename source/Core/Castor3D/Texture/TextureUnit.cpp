@@ -315,6 +315,19 @@ namespace castor3d
 		return m_texture->getType();
 	}
 
+	castor::String TextureUnit::toString()const
+	{
+		auto renderTarget = m_renderTarget.lock();
+
+		if ( renderTarget )
+		{
+			return cuT( "RT_" ) + castor::string::toString( renderTarget->getIndex() );
+		}
+
+		CU_Require( m_texture );
+		return m_texture->getDefaultImage().toString();
+	}
+
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
 		m_configuration = std::move( value );

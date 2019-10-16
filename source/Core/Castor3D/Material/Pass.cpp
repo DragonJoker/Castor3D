@@ -247,12 +247,12 @@ namespace castor3d
 		}
 		else
 		{
-			auto image = unit->getTexture()->getDefaultImage().toString();
+			auto image = unit->toString();
 			auto it = std::find_if( m_textureUnits.begin()
 				, m_textureUnits.end()
 				, [&image]( TextureUnitSPtr lookup )
 				{
-					return lookup->getTexture()->getDefaultImage().toString() == image;
+					return lookup->toString() == image;
 				} );
 
 			if ( it == m_textureUnits.end() )
