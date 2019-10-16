@@ -766,6 +766,7 @@ namespace castor3d
 
 	void RenderWindow::doCreateSwapChainDependent()
 	{
+		doCreateRenderingResources();
 		RenderTargetSPtr target = getRenderTarget();
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
@@ -818,7 +819,6 @@ namespace castor3d
 		m_swapChainImages.clear();
 		m_swapChain.reset();
 		doCreateSwapchain();
-		doCreateRenderingResources();
 		doCreateSwapChainDependent();
 		doPrepareFrames();
 	}
