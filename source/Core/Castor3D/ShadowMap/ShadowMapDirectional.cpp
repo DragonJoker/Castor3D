@@ -214,7 +214,6 @@ namespace castor3d
 		, uint32_t index )
 	{
 		static VkClearValue const black{ ashes::makeClearValue( VkClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f } ) };
-		static VkClearValue const zero{ ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } ) };
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 
@@ -236,7 +235,7 @@ namespace castor3d
 			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *frameBuffer.frameBuffer
-				, { zero, black, black }
+				, { defaultClearDepthStencilValue, black, black }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();

@@ -223,10 +223,10 @@ namespace castor3d
 	{
 		static ashes::VkClearValueArray const clearValues
 		{
-			ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 0 } ),
-			ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ),
-			ashes::makeClearValue( VkClearColorValue{ 1.0, 1.0, 1.0, 1.0 } ),
-			ashes::makeClearValue( VkClearColorValue{} ),
+			defaultClearDepthStencilValue,
+			makeClearValue( 0.0, 0.0, 0.0, 0.0 ),
+			makeClearValue( 1.0, 1.0, 1.0, 1.0 ),
+			makeClearValue( 0.0, 0.0, 0.0, 0.0 ),
 		};
 
 		auto * result = &toWait;

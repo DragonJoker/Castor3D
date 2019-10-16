@@ -144,13 +144,11 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer )
 	{
 		CU_Require( m_initialised );
-		VkClearColorValue colour{};
-		VkClearDepthStencilValue depth{ 1.0, 0 };
 		commandBuffer.begin();
 		m_timer->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( renderPass
 			, frameBuffer
-			, { ashes::makeClearValue( depth ), ashes::makeClearValue( colour ) }
+			, { defaultClearDepthStencilValue, defaultClearColorValue }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		doPrepareFrame( commandBuffer
 			, size

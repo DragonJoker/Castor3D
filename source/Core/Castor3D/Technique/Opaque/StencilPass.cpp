@@ -195,7 +195,7 @@ namespace castor3d
 			, m_depthView.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 0 } ) }
+			, { defaultClearDepthStencilValue }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );

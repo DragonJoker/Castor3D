@@ -188,13 +188,10 @@ namespace castor3d
 		m_modelMatrixUbo.update( m_mtxModel );
 		ashes::Semaphore const * result = &toWait;
 
-		static VkClearColorValue const black{};
-		static VkClearDepthStencilValue const depth{ 1.0, 0 };
-
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::makeClearValue( depth ), ashes::makeClearValue( black ) }
+			, { defaultClearDepthStencilValue, defaultClearColorValue }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		ashes::CommandBufferCRefArray commandBuffers;
 

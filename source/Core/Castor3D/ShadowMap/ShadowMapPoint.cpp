@@ -197,7 +197,6 @@ namespace castor3d
 	{
 		static float constexpr component = std::numeric_limits< float >::max();
 		static auto const white{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
-		static auto const zero{ ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } ) };
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 		auto * result = &toWait;
@@ -223,7 +222,7 @@ namespace castor3d
 			timer.beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
-				, { zero, white, white }
+				, { defaultClearDepthStencilValue, white, white }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
 			commandBuffer.endRenderPass();
