@@ -359,8 +359,8 @@ namespace smaa
 		edgeDetectionCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, {
-				ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ),
-				ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } )
+				castor3d::makeClearValue( 0.0, 0.0, 0.0, 0.0 ),
+				castor3d::defaultClearDepthStencilValue,
 			}
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( edgeDetectionCmd );

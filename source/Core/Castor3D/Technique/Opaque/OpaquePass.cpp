@@ -221,74 +221,26 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
-		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
-		uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
-
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-		{
-			uboBindings.push_back( SkinningUbo::createLayoutBinding( SkinningUbo::BindingPoint
-				, flags.programFlags ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
-		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
-		}
-
-		return uboBindings;
-	}
-
-	ashes::VkDescriptorSetLayoutBindingArray OpaquePass::doCreateTextureBindings( PipelineFlags const & flags )const
-	{
-		auto index = MinTextureIndex;
-		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
-
-		if ( flags.texturesCount )
-		{
-			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, flags.texturesCount ) );
-			index += flags.texturesCount;
-		}
-
-		return textureBindings;
+		return RenderPass::doCreateUboBindings( flags );
 	}
 
 	void OpaquePass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
+	}
+
+	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )const
+	{
+	}
+
+	ashes::PipelineDepthStencilStateCreateInfo OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+	}
+
+	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 
 	ShaderPtr OpaquePass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -475,7 +427,7 @@ namespace castor3d
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr OpaquePass::doGetLegacyPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -514,7 +466,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -652,7 +604,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -790,7 +742,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -887,19 +839,5 @@ namespace castor3d
 		} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
-	}
-
-	void OpaquePass::doUpdatePipeline( RenderPipeline & pipeline )const
-	{
-	}
-
-	ashes::PipelineDepthStencilStateCreateInfo OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
-	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
-	}
-
-	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
-	{
-		return RenderPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 5u );
 	}
 }

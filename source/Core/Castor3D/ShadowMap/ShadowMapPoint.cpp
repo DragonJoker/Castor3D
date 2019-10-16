@@ -171,6 +171,7 @@ namespace castor3d
 			, createPasses( engine, scene, *this )
 			, shader::PointShadowMapCount }
 	{
+		castor::Logger::logTrace( "Created ShadowMapPoint" );
 	}
 
 	ShadowMapPoint::~ShadowMapPoint()
@@ -522,7 +523,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( cuT( "c3d_maps" )
-			, MinTextureIndex
+			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
 			, flags.texturesCount > 0u ) );

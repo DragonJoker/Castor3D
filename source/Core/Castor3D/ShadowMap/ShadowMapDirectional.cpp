@@ -190,6 +190,7 @@ namespace castor3d
 		, m_frameBuffers( m_passes.size() )
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
+		castor::Logger::logTrace( "Created ShadowMapDirectional" );
 	}
 
 	ShadowMapDirectional::~ShadowMapDirectional()
@@ -539,7 +540,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( cuT( "c3d_maps" )
-			, MinTextureIndex
+			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
 			, flags.texturesCount > 0u ) );

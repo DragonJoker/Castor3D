@@ -1042,8 +1042,8 @@ namespace smaa
 		blendingWeightCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
 			, {
-				ashes::makeClearValue( VkClearColorValue{} ),
-				ashes::makeClearValue( VkClearDepthStencilValue{ 1.0f, 0 } ),
+				castor3d::makeClearValue( 0.0, 0.0, 0.0, 0.0 ),
+				castor3d::defaultClearDepthStencilValue,
 			}
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( blendingWeightCmd );

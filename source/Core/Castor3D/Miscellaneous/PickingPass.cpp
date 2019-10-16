@@ -747,7 +747,7 @@ namespace castor3d
 		return ShaderPtr{};
 	}
 
-	ShaderPtr PickingPass::doGetLegacyPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr PickingPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetPixelShaderSource( flags );
 	}
@@ -785,7 +785,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, MinTextureIndex
+			, getMinTextureIndex()
 			, 0u
 			, std::max( 1u, flags.texturesCount )
 			, flags.texturesCount > 0u ) );
@@ -853,7 +853,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray PickingPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )

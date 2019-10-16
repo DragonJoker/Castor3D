@@ -310,8 +310,8 @@ namespace castor3d
 			auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
 			auto & commandBuffer = *m_renderer.m_commandBuffer;
 			commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-			commandBuffer.setViewport( { 0.0f, 0.0f, float( m_renderer.m_size.getWidth() ), float( m_renderer.m_size.getHeight() ), 0.0f, 1.0f } );
-			commandBuffer.setScissor( { position[0], position[1], size[0], size[1] } );
+			commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
+			commandBuffer.setScissor( makeScissor( position, size ) );
 			commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
 				, *bufferIndex.node.pipeline.pipelineLayout );
 			commandBuffer.bindVertexBuffer( 0u
@@ -604,10 +604,10 @@ namespace castor3d
 
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( PassBufferIndex ) );
+			, pipeline.descriptorLayout->getBinding( getPassBufferIndex() ) );
 		// Textures buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getTextureBuffer().createBinding( *result
-			, pipeline.descriptorLayout->getBinding( TexturesBufferIndex ) );
+			, pipeline.descriptorLayout->getBinding( getTexturesBufferIndex() ) );
 		// Matrix UBO
 		result->createBinding( pipeline.descriptorLayout->getBinding( MatrixUboBinding )
 			, m_matrixUbo.getUbo()
@@ -836,7 +836,7 @@ namespace castor3d
 					ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 					std::nullopt,
 					ashes::PipelineViewportStateCreateInfo{},
-					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+					ashes::PipelineRasterizationStateCreateInfo{},
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
 					std::move( blState ),

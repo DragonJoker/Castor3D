@@ -55,7 +55,7 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr c_phongEnvironmentCount = 5u;
-		static uint32_t constexpr c_brdfTexturesCount = 2u;
+		static uint32_t constexpr c_brdfTexturesCount = 3u;
 		static uint32_t constexpr c_pbrEnvironmentCount = c_phongEnvironmentCount - c_brdfTexturesCount;
 
 		ashes::PipelineVertexInputStateCreateInfoPtr doCreateVertexLayout()
@@ -961,7 +961,7 @@ namespace castor3d
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
-			passBuffer.createBinding( *result, layout.getBinding( PassBufferIndex ) );
+			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
 			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
 			result->createSizedBinding( layout.getBinding( GpInfoUbo::BindingPoint )

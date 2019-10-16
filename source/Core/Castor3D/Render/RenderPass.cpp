@@ -34,103 +34,38 @@ namespace castor3d
 
 	namespace
 	{
-		template< typename MapType, typename FuncType >
-		inline void doTraverseNodes( RenderPass const & pass
-			, MapType & nodes
-			, FuncType function )
+		template< typename MapType, typename SubFuncType >
+		inline void doSubTraverseNodes( MapType & nodes
+			, SubFuncType subFunction )
 		{
 			for ( auto & itPipelines : nodes )
 			{
 				for ( auto & itPass : itPipelines.second )
 				{
+					subFunction( *itPipelines.first, itPass );
+				}
+			}
+		}
+
+		template< typename MapType, typename FuncType >
+		inline void doTraverseNodes( MapType & nodes
+			, FuncType function )
+		{
+			doSubTraverseNodes( nodes
+				, [&function]( auto & first
+					, auto & itPass )
+				{
 					for ( auto & itSubmeshes : itPass.second )
 					{
-						function( *itPipelines.first
+						function( first
 							, *itPass.first
 							, *itSubmeshes.first
 							, itSubmeshes.first->getInstantiation()
 							, itSubmeshes.second );
 					}
-				}
-			}
+				} );
 		}
 
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, MapType & nodes )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-			}
-		}
-
-		template< typename MapType >
-		inline void doRenderNonInstanced( RenderPass const & pass
-			, MapType & nodes
-			, RenderInfo & info )
-		{
-			for ( auto & itPipelines : nodes )
-			{
-				pass.updatePipeline( *itPipelines.first );
-
-				for ( auto & renderNode : itPipelines.second )
-				{
-					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode->data );
-					info.m_visibleVertexCount += details::getVertexCount( renderNode->data );
-					++info.m_drawCalls;
-					++info.m_visibleObjectsCount;
-				}
-			}
-		}
-
-		template< typename NodeT >
-		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )
-		{
-			auto const mtxSize = sizeof( float ) * 16;
-			auto const stride = sizeof( InstantiationData );
-			auto const count = std::min( uint32_t( matrixBuffer.size() )
-				, uint32_t( renderNodes.size() ) );
-			auto buffer = matrixBuffer.data();
-			auto it = renderNodes.begin();
-			auto i = 0u;
-
-			while ( i < count )
-			{
-				auto & node = *it;
-				buffer->m_matrix = node.sceneNode.getDerivedTransformationMatrix();
-				buffer->m_material = node.passNode.pass.getId();
-				++buffer;
-				++i;
-				++it;
-			}
-
-			return count;
-		}
-
-		template< typename NodeT >
-		uint32_t copyNodesMatrices( std::vector< NodeT * > const & renderNodes
-			, std::vector< InstantiationData > & matrixBuffer )
-		{
-			auto const count = std::min( uint32_t( matrixBuffer.size() )
-				, uint32_t( renderNodes.size() ) );
-			auto buffer = matrixBuffer.data();
-			auto it = renderNodes.begin();
-			auto i = 0u;
-
-			while ( i < count )
-			{
-				auto & node = *it;
-				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
-				buffer->m_material = node->passNode.pass.getId();
-				++buffer;
-				++i;
-				++it;
-			}
-
-			return count;
-		}
 	}
 
 	//*********************************************************************************************
@@ -263,7 +198,7 @@ namespace castor3d
 		}
 		else
 		{
-			result = doGetLegacyPixelShaderSource( flags );
+			result = doGetPhongPixelShaderSource( flags );
 		}
 
 		return result;
@@ -578,6 +513,8 @@ namespace castor3d
 			break;
 		}
 
+		attach.colorWriteMask = defaultColorWriteMask;
+
 		return ashes::PipelineColorBlendStateCreateInfo
 		{
 			0u,
@@ -587,51 +524,68 @@ namespace castor3d
 		};
 	}
 
+	namespace
+	{
+		template< typename RenderNodeT >
+		void initialiseCommonUboDescriptor( Engine & engine
+			, ashes::DescriptorSetLayout const & layout
+			, RenderNodeT & node
+			, MatrixUbo const & matrixUbo
+			, SceneUbo const & sceneUbo )
+		{
+			engine.getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+				, layout.getBinding( getPassBufferIndex() ) );
+
+			if ( node.pipeline.getFlags().texturesCount )
+			{
+				engine.getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
+					, layout.getBinding( getTexturesBufferIndex() ) );
+			}
+
+			if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
+			{
+				node.uboDescriptorSet->createBinding( layout.getBinding( getLightBufferIndex() )
+					, node.sceneNode.getScene()->getLightCache().getBuffer()
+					, node.sceneNode.getScene()->getLightCache().getView() );
+			}
+
+			node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
+				, matrixUbo.getUbo() );
+			node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
+				, sceneUbo.getUbo() );
+
+			if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
+			{
+				node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+					, *node.modelMatrixUbo.buffer
+					, node.modelMatrixUbo.offset
+					, 1u );
+			}
+
+			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
+				, *node.modelUbo.buffer
+				, node.modelUbo.offset
+				, 1u );
+			node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
+				, *node.texturesUbo.buffer
+				, node.texturesUbo.offset
+				, 1u );
+		}
+	}
+
 	void RenderPass::initialiseUboDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( PassBufferIndex ) );
-
-		if ( node.pipeline.getFlags().texturesCount )
-		{
-			getEngine()->getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
-				, layout.getBinding( TexturesBufferIndex ) );
-		}
-
-		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
-		{
-			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-				, node.sceneNode.getScene()->getLightCache().getBuffer()
-				, node.sceneNode.getScene()->getLightCache().getView() );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-			, m_sceneUbo.getUbo() );
-
-		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-		{
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-				, *node.modelMatrixUbo.buffer
-				, node.modelMatrixUbo.offset
-				, 1u );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
-			, *node.modelUbo.buffer
-			, node.modelUbo.offset
-			, 1u );
+		initialiseCommonUboDescriptor( *getEngine()
+			, layout
+			, node
+			, m_matrixUbo
+			, m_sceneUbo );
 		node.uboDescriptorSet->createSizedBinding( layout.getBinding( BillboardUbo::BindingPoint )
 			, *node.billboardUbo.buffer
 			, node.billboardUbo.offset
-			, 1u );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-			, *node.texturesUbo.buffer
-			, node.texturesUbo.offset
 			, 1u );
 		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
@@ -642,46 +596,14 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( PassBufferIndex ) );
-
-		if ( node.pipeline.getFlags().texturesCount )
-		{
-			getEngine()->getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
-				, layout.getBinding( TexturesBufferIndex ) );
-		}
-
-		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
-		{
-			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-				, node.sceneNode.getScene()->getLightCache().getBuffer()
-				, node.sceneNode.getScene()->getLightCache().getView() );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-			, m_sceneUbo.getUbo() );
-
-		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-		{
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-				, *node.modelMatrixUbo.buffer
-				, node.modelMatrixUbo.offset
-				, 1u );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
-			, *node.modelUbo.buffer
-			, node.modelUbo.offset
-			, 1u );
+		initialiseCommonUboDescriptor( *getEngine()
+			, layout
+			, node
+			, m_matrixUbo
+			, m_sceneUbo );
 		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MorphingUbo::BindingPoint )
 			, *node.morphingUbo.buffer
 			, node.morphingUbo.offset
-			, 1u );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-			, *node.texturesUbo.buffer
-			, node.texturesUbo.offset
 			, 1u );
 		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
@@ -692,43 +614,11 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( PassBufferIndex ) );
-
-		if ( node.pipeline.getFlags().texturesCount )
-		{
-			getEngine()->getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
-				, layout.getBinding( TexturesBufferIndex ) );
-		}
-
-		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
-		{
-			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-				, node.sceneNode.getScene()->getLightCache().getBuffer()
-				, node.sceneNode.getScene()->getLightCache().getView() );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-			, m_sceneUbo.getUbo() );
-
-		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-		{
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-				, *node.modelMatrixUbo.buffer
-				, node.modelMatrixUbo.offset
-				, 1u );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
-			, *node.modelUbo.buffer
-			, node.modelUbo.offset
-			, 1u );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-			, *node.texturesUbo.buffer
-			, node.texturesUbo.offset
-			, 1u );
+		initialiseCommonUboDescriptor( *getEngine()
+			, layout
+			, node
+			, m_matrixUbo
+			, m_sceneUbo );
 
 		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 		{
@@ -752,43 +642,11 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
-		getEngine()->getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
-			, layout.getBinding( PassBufferIndex ) );
-
-		if ( node.pipeline.getFlags().texturesCount )
-		{
-			getEngine()->getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
-				, layout.getBinding( TexturesBufferIndex ) );
-		}
-
-		if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
-		{
-			node.uboDescriptorSet->createBinding( layout.getBinding( LightBufferIndex )
-				, node.sceneNode.getScene()->getLightCache().getBuffer()
-				, node.sceneNode.getScene()->getLightCache().getView() );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
-			, m_sceneUbo.getUbo() );
-
-		if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
-		{
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
-				, *node.modelMatrixUbo.buffer
-				, node.modelMatrixUbo.offset
-				, 1u );
-		}
-
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
-			, *node.modelUbo.buffer
-			, node.modelUbo.offset
-			, 1u );
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-			, *node.texturesUbo.buffer
-			, node.texturesUbo.offset
-			, 1u );
+		initialiseCommonUboDescriptor( *getEngine()
+			, layout
+			, node
+			, m_matrixUbo
+			, m_sceneUbo );
 		doFillUboDescriptor( layout, node );
 		node.uboDescriptorSet->update();
 	}
@@ -822,7 +680,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = MinTextureIndex;
+		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
@@ -833,7 +691,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = MinTextureIndex;
+		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
@@ -844,7 +702,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = MinTextureIndex;
+		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
@@ -855,50 +713,54 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto & layout = descriptorPool.getLayout();
-		uint32_t index = MinTextureIndex;
+		uint32_t index = getMinTextureIndex();
 		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
+	}
+
+	namespace
+	{
+		template< typename MapType >
+		void initialiseTextureDescriptors( RenderPass & renderPass
+			, ashes::DescriptorSetPool const & descriptorPool
+			, MapType & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )
+		{
+			doSubTraverseNodes( nodes
+				, [&renderPass, &descriptorPool, &shadowMaps]( Pass & pass1
+					, auto & itPass )
+				{
+					Pass & pass = itPass.second.begin()->second.passNode.pass;
+
+					if ( itPass.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
+					{
+						renderPass.initialiseTextureDescriptor( descriptorPool
+							, itPass.second.begin()->second
+							, shadowMaps );
+					}
+				} );
+		}
 	}
 
 	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshSkinninRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				Pass & pass = submeshNodes.second.begin()->second.passNode.pass;
-
-				if ( submeshNodes.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
-				{
-					initialiseTextureDescriptor( descriptorPool
-						, submeshNodes.second.begin()->second
-						, shadowMaps );
-				}
-			}
-		}
+		initialiseTextureDescriptors( *this
+			, descriptorPool
+			, nodes
+			, shadowMaps );
 	}
 
 	void RenderPass::initialiseTextureDescriptor( ashes::DescriptorSetPool const & descriptorPool
 		, SubmeshStaticRenderNodesByPassMap & nodes
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		for ( auto & passNodes : nodes )
-		{
-			for ( auto & submeshNodes : passNodes.second )
-			{
-				Pass & pass = submeshNodes.second.begin()->second.passNode.pass;
-
-				if ( submeshNodes.second.begin()->second.pipeline.hasDescriptorPool( 1u ) )
-				{
-					initialiseTextureDescriptor( descriptorPool
-						, submeshNodes.second.begin()->second
-						, shadowMaps );
-				}
-			}
-		}
+		initialiseTextureDescriptors( *this
+			, descriptorPool
+			, nodes
+			, shadowMaps );
 	}
 
 	PassRenderNode RenderPass::doCreatePassRenderNode( Pass & pass
@@ -922,19 +784,68 @@ namespace castor3d
 			, flags );
 	}
 
+	namespace
+	{
+		template< typename NodeT >
+		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
+			, std::vector< InstantiationData > & matrixBuffer )
+		{
+			auto const mtxSize = sizeof( float ) * 16;
+			auto const stride = sizeof( InstantiationData );
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
+			auto buffer = matrixBuffer.data();
+			auto it = renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < count )
+			{
+				auto & node = *it;
+				buffer->m_matrix = node.sceneNode.getDerivedTransformationMatrix();
+				buffer->m_material = node.passNode.pass.getId();
+				++buffer;
+				++i;
+				++it;
+			}
+
+			return count;
+		}
+
+		template< typename NodeT >
+		uint32_t copyNodesMatrices( std::vector< NodeT * > const & renderNodes
+			, std::vector< InstantiationData > & matrixBuffer )
+		{
+			auto const count = std::min( uint32_t( matrixBuffer.size() )
+				, uint32_t( renderNodes.size() ) );
+			auto buffer = matrixBuffer.data();
+			auto it = renderNodes.begin();
+			auto i = 0u;
+
+			while ( i < count )
+			{
+				auto & node = *it;
+				buffer->m_matrix = node->sceneNode.getDerivedTransformationMatrix();
+				buffer->m_material = node->passNode.pass.getId();
+				++buffer;
+				++i;
+				++it;
+			}
+
+			return count;
+		}
+	}
+
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
-		return copyNodesMatrices( renderNodes
-			, matrixBuffer );
+		return copyNodesMatrices( renderNodes, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( StaticRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
-		auto count = copyNodesMatrices( renderNodes
-			, matrixBuffer );
+		auto count = this->doCopyNodesMatrices( renderNodes, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -942,16 +853,14 @@ namespace castor3d
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer )const
 	{
-		return copyNodesMatrices( renderNodes
-			, matrixBuffer );
+		return copyNodesMatrices( renderNodes, matrixBuffer );
 	}
 
 	uint32_t RenderPass::doCopyNodesMatrices( SkinningRenderNodePtrArray const & renderNodes
 		, std::vector< InstantiationData > & matrixBuffer
 		, RenderInfo & info )const
 	{
-		auto count = copyNodesMatrices( renderNodes
-			, matrixBuffer );
+		auto count = this->doCopyNodesMatrices( renderNodes, matrixBuffer );
 		info.m_visibleObjectsCount += count;
 		return count;
 	}
@@ -991,8 +900,7 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes )const
 	{
-		doTraverseNodes( *this
-			, nodes
+		doTraverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1014,8 +922,7 @@ namespace castor3d
 	void RenderPass::doUpdate( SubmeshStaticRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )const
 	{
-		doTraverseNodes( *this
-			, nodes
+		doTraverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1036,6 +943,38 @@ namespace castor3d
 					++info.m_drawCalls;
 				}
 			} );
+	}
+
+	namespace
+	{
+		template< typename MapType >
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, MapType & nodes )
+		{
+			for ( auto & itPipelines : nodes )
+			{
+				pass.updatePipeline( *itPipelines.first );
+			}
+		}
+
+		template< typename MapType >
+		inline void doRenderNonInstanced( RenderPass const & pass
+			, MapType & nodes
+			, RenderInfo & info )
+		{
+			for ( auto & itPipelines : nodes )
+			{
+				pass.updatePipeline( *itPipelines.first );
+
+				for ( auto & renderNode : itPipelines.second )
+				{
+					info.m_visibleFaceCount += details::getPrimitiveCount( renderNode->data );
+					info.m_visibleVertexCount += details::getVertexCount( renderNode->data );
+					++info.m_drawCalls;
+					++info.m_visibleObjectsCount;
+				}
+			}
+		}
 	}
 
 	void RenderPass::doUpdate( StaticRenderNodesPtrByPipelineMap & nodes )const
@@ -1068,8 +1007,7 @@ namespace castor3d
 
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes )const
 	{
-		doTraverseNodes( *this
-			, nodes
+		doTraverseNodes( nodes
 			, [this]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1094,8 +1032,7 @@ namespace castor3d
 	void RenderPass::doUpdate( SubmeshSkinningRenderNodesPtrByPipelineMap & nodes
 		, RenderInfo & info )const
 	{
-		doTraverseNodes( *this
-			, nodes
+		doTraverseNodes( nodes
 			, [this, &info]( RenderPipeline & pipeline
 				, Pass & pass
 				, Submesh & submesh
@@ -1222,8 +1159,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { 0.0f, 0.0f, float( m_size.getWidth() ), float( m_size.getHeight() ), 0.0f, 1.0f } );
-			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+			pipeline.setViewport( makeViewport( m_size ) );
+			pipeline.setScissor( makeScissor( m_size ) );
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
@@ -1261,8 +1198,8 @@ namespace castor3d
 					, program
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
-			pipeline.setViewport( { 0.0f, 0.0f, float( m_size.getWidth() ), float( m_size.getHeight() ), 0.0f, 1.0f } );
-			pipeline.setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+			pipeline.setViewport( makeViewport( m_size ) );
+			pipeline.setScissor( makeScissor( m_size ) );
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
@@ -1285,11 +1222,15 @@ namespace castor3d
 	{
 		ashes::VkDescriptorSetLayoutBindingArray uboBindings;
 		uboBindings.emplace_back( getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding() );
-		uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
+
+		if ( flags.texturesCount )
+		{
+			uboBindings.emplace_back( getEngine()->getMaterialCache().getTextureBuffer().createLayoutBinding() );
+		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::eLighting ) )
 		{
-			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( LightBufferIndex
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( getLightBufferIndex()
 				, VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
@@ -1300,9 +1241,14 @@ namespace castor3d
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
+
+		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+		{
+			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+		}
+
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );

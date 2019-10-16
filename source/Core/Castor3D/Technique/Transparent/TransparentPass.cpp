@@ -31,64 +31,10 @@
 #include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-
 using namespace castor;
 
 namespace castor3d
 {
-	//************************************************************************************************
-
-	namespace
-	{
-		void doBindTexture( ashes::ImageView const & view
-			, ashes::Sampler const & sampler
-			, ashes::WriteDescriptorSetArray & writes
-			, uint32_t & index )
-		{
-			writes.push_back( ashes::WriteDescriptorSet
-				{
-					index++,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{
-						1u,
-						{
-							sampler,
-							view,
-							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						},
-					}
-				} );
-		}
-
-		void doBindShadowMap( ShadowMapRefArray const & shadowMaps
-			, ashes::WriteDescriptorSetArray & writes
-			, uint32_t mapIndex
-			, uint32_t & index
-			, ashes::VkDescriptorImageInfoArray & shadowMapWrites )
-		{;
-			auto & shadowMap = shadowMaps[0u];
-			shadowMapWrites.push_back( {
-				shadowMap.first.get().getLinearSampler(),
-				shadowMap.first.get().getLinearView(),
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				} );
-			shadowMapWrites.push_back( {
-				shadowMap.first.get().getVarianceSampler(),
-				shadowMap.first.get().getVarianceView(),
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				} );
-			writes.push_back( ashes::WriteDescriptorSet
-				{
-					index,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					shadowMapWrites
-				} );
-			index += uint32_t( shadowMapWrites.size() );
-		}
-	}
-
 	//************************************************************************************************
 
 	String getTextureName( WbTexture texture )
@@ -390,51 +336,74 @@ namespace castor3d
 		};
 	}
 
+	namespace
+	{
+		template< typename DataTypeT, typename InstanceTypeT >
+		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
+			, ShadowMapLightTypeArray const & shadowMaps
+			, Scene const & scene )
+		{
+			ashes::WriteDescriptorSetArray writes;
+			node.passNode.fillDescriptor( layout
+				, index
+				, writes );
+
+			if ( node.passNode.pass.hasEnvironmentMapping() )
+			{
+				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView()
+					, envMap.getTexture().getSampler()->getSampler()
+					, writes
+					, index );
+			}
+
+			if ( node.passNode.pass.getType() != MaterialType::ePhong )
+			{
+				auto & background = *node.sceneNode.getScene()->getBackground();
+
+				if ( background.hasIbl() )
+				{
+					auto & ibl = background.getIbl();
+					bindTexture( ibl.getIrradianceTexture()
+						, ibl.getIrradianceSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredEnvironmentTexture()
+						, ibl.getPrefilteredEnvironmentSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredBrdfTexture()
+						, ibl.getPrefilteredBrdfSampler()
+						, writes
+						, index );
+				}
+			}
+
+			bindShadowMaps( shadowMaps[size_t( LightType::eDirectional )]
+				, writes
+				, index );
+			bindShadowMaps( shadowMaps[size_t( LightType::eSpot )]
+				, writes
+				, index );
+			bindShadowMaps( shadowMaps[size_t( LightType::ePoint )]
+				, writes
+				, index );
+			node.texDescriptorSet->setBindings( writes );
+		}
+	}
+
 	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( layout
+		fillTexDescriptor( layout
 			, index
-			, writes );
-
-		if ( node.passNode.pass.hasEnvironmentMapping() )
-		{
-			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
-			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
-				, envMap.getTexture().getSampler()->getSampler()
-				, writes
-				, index );
-		}
-
-		if ( node.passNode.pass.getType() != MaterialType::ePhong )
-		{
-			auto & background = *node.sceneNode.getScene()->getBackground();
-
-			if ( background.hasIbl() )
-			{
-				auto & ibl = background.getIbl();
-				doBindTexture( ibl.getIrradianceTexture()
-					, ibl.getIrradianceSampler()
-					, writes
-					, index );
-				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
-					, ibl.getPrefilteredEnvironmentSampler()
-					, writes
-					, index );
-				doBindTexture( ibl.getPrefilteredBrdfTexture()
-					, ibl.getPrefilteredBrdfSampler()
-					, writes
-					, index );
-			}
-		}
-
-		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index, m_shadowMapWrites );
-		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index, m_shadowMapWrites );
-		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index, m_shadowMapWrites );
-		node.texDescriptorSet->setBindings( writes );
+			, node
+			, shadowMaps
+			, m_scene );
 	}
 
 	void TransparentPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -442,51 +411,16 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		ashes::WriteDescriptorSetArray writes;
-		node.passNode.fillDescriptor( layout
+		fillTexDescriptor( layout
 			, index
-			, writes );
-
-		if ( node.passNode.pass.hasEnvironmentMapping() )
-		{
-			auto & envMap = m_scene.getEnvironmentMap( node.sceneNode );
-			doBindTexture( envMap.getTexture().getTexture()->getDefaultView()
-				, envMap.getTexture().getSampler()->getSampler()
-				, writes
-				, index );
-		}
-
-		if ( node.passNode.pass.getType() != MaterialType::ePhong )
-		{
-			auto & background = *node.sceneNode.getScene()->getBackground();
-
-			if ( background.hasIbl() )
-			{
-				auto & ibl = background.getIbl();
-				doBindTexture( ibl.getIrradianceTexture()
-					, ibl.getIrradianceSampler()
-					, writes
-					, index );
-				doBindTexture( ibl.getPrefilteredEnvironmentTexture()
-					, ibl.getPrefilteredEnvironmentSampler()
-					, writes
-					, index );
-				doBindTexture( ibl.getPrefilteredBrdfTexture()
-					, ibl.getPrefilteredBrdfSampler()
-					, writes
-					, index );
-			}
-		}
-
-		doBindShadowMap( shadowMaps[size_t( LightType::eDirectional )], writes, 0, index, m_shadowMapWrites );
-		doBindShadowMap( shadowMaps[size_t( LightType::eSpot )], writes, 0, index, m_shadowMapWrites );
-		doBindShadowMap( shadowMaps[size_t( LightType::ePoint )], writes, 0, index, m_shadowMapWrites );
-		node.texDescriptorSet->setBindings( writes );
+			, node
+			, shadowMaps
+			, m_scene );
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray TransparentPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
@@ -730,7 +664,7 @@ namespace castor3d
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr TransparentPass::doGetLegacyPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr TransparentPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -769,11 +703,11 @@ namespace castor3d
 
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightBufferIndex, 0u );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -988,11 +922,11 @@ namespace castor3d
 
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightBufferIndex, 0u );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u
@@ -1266,11 +1200,11 @@ namespace castor3d
 
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
-		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightBufferIndex, 0u );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, index
 			, 1u

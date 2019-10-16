@@ -238,8 +238,8 @@ namespace castor3d
 	{
 		CU_Require( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
-		commandBuffer.setViewport( { 0.0f, 0.0f, float( size.getWidth() ), float( size.getHeight() ), 0.0f, 1.0f } );
-		commandBuffer.setScissor( { 0, 0, size.getWidth(), size.getHeight() } );
+		commandBuffer.setViewport( makeViewport( size ) );
+		commandBuffer.setScissor( makeScissor( size ) );
 		commandBuffer.bindDescriptorSet( descriptorSet, *m_pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
