@@ -180,7 +180,7 @@ namespace castor3d
 		, uint32_t index )const
 	{
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
-		auto src = reinterpret_cast< const int * >( data );
+		auto src = reinterpret_cast< const uint8_t * >( data );
 		CU_Require( ( size % m_elemSize ) == 0 );
 		auto count = size / m_elemSize;
 		CU_Require( count <= m_elemCount - offset );

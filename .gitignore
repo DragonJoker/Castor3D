@@ -22,3 +22,4 @@
 *.*~
 *.exe
 /.vs
+CMakeSettings.json
