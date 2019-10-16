@@ -173,6 +173,7 @@ namespace castor3d
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_OP_ADD,
+				defaultColorWriteMask,
 			} );
 		}
 		else
@@ -186,6 +187,7 @@ namespace castor3d
 					VK_BLEND_FACTOR_ONE,
 					VK_BLEND_FACTOR_ZERO,
 					VK_BLEND_OP_ADD,
+					defaultColorWriteMask,
 				} );
 		}
 

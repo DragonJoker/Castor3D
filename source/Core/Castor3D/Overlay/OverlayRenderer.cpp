@@ -766,13 +766,14 @@ namespace castor3d
 			{
 				VkPipelineColorBlendAttachmentState
 				{
-					true,
+					VK_TRUE,
 					VK_BLEND_FACTOR_SRC_ALPHA,
 					VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
 					VK_BLEND_OP_ADD,
 					VK_BLEND_FACTOR_SRC_ALPHA,
 					VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-					VK_BLEND_OP_ADD
+					VK_BLEND_OP_ADD,
+					defaultColorWriteMask,
 				},
 			};
 			ashes::PipelineColorBlendStateCreateInfo blState

@@ -305,6 +305,7 @@ namespace castor3d
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_OP_ADD,
+				defaultColorWriteMask,
 			},
 			VkPipelineColorBlendAttachmentState
 			{
@@ -315,6 +316,7 @@ namespace castor3d
 				VK_BLEND_FACTOR_ZERO,
 				VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
 				VK_BLEND_OP_ADD,
+				defaultColorWriteMask,
 			},
 			VkPipelineColorBlendAttachmentState
 			{
@@ -325,6 +327,7 @@ namespace castor3d
 				VK_BLEND_FACTOR_ONE,
 				VK_BLEND_FACTOR_ZERO,
 				VK_BLEND_OP_ADD,
+				defaultColorWriteMask,
 			},
 		};
 		return ashes::PipelineColorBlendStateCreateInfo
