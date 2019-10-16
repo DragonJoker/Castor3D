@@ -35,12 +35,12 @@ namespace CastorViewer
 		: public wxFrame
 	{
 	public:
-		MainFrame( GuiCommon::SplashScreen * p_splashScreen, wxString const & title );
+		MainFrame( wxString const & title );
 		~MainFrame();
 
-		bool initialise();
-		void loadScene( wxString const & p_strFileName = wxEmptyString );
-		void toggleFullScreen( bool p_fullscreen );
+		bool initialise( GuiCommon::SplashScreen & splashScreen );
+		void loadScene( wxString const & fileName = wxEmptyString );
+		void toggleFullScreen( bool fullscreen );
 		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
 
 	private:
@@ -48,9 +48,9 @@ namespace CastorViewer
 		bool doInitialise3D();
 		bool doInitialiseImages();
 		void doPopulateStatusBar();
-		void doPopulateToolBar();
+		void doPopulateToolBar( GuiCommon::SplashScreen & splashScreen );
 		void doInitialisePerspectives();
-		void doLogCallback( castor::String const & p_strLog, castor::LogType p_eLogType, bool p_newLine );
+		void doLogCallback( castor::String const & log, castor::LogType type, bool newLine );
 		void doCleanupScene();
 		void doSaveFrame();
 		bool doStartRecord();
@@ -59,24 +59,24 @@ namespace CastorViewer
 
 	private:
 		DECLARE_EVENT_TABLE()
-		void OnRenderTimer( wxTimerEvent  & p_event );
-		void OnTimer( wxTimerEvent  & p_event );
-		void OnPaint( wxPaintEvent  & p_event );
-		void OnSize( wxSizeEvent  & p_event );
-		void OnInit( wxInitDialogEvent & p_event );
-		void OnClose( wxCloseEvent  & p_event );
-		void OnEnterWindow( wxMouseEvent & p_event );
-		void OnLeaveWindow( wxMouseEvent & p_event );
-		void OnEraseBackground( wxEraseEvent & p_event );
-		void OnKeyUp( wxKeyEvent & p_event );
-		void OnLoadScene( wxCommandEvent & p_event );
-		void OnExportScene( wxCommandEvent & p_event );
-		void OnShowLogs( wxCommandEvent & p_event );
-		void OnShowLists( wxCommandEvent & p_event );
-		void OnShowProperties( wxCommandEvent & p_event );
-		void OnPrintScreen( wxCommandEvent & p_event );
-		void OnRecord( wxCommandEvent & p_event );
-		void OnStop( wxCommandEvent & p_event );
+		void OnRenderTimer( wxTimerEvent & event );
+		void OnTimer( wxTimerEvent & event );
+		void OnPaint( wxPaintEvent & event );
+		void OnSize( wxSizeEvent & event );
+		void OnInit( wxInitDialogEvent & event );
+		void OnClose( wxCloseEvent  & event );
+		void OnEnterWindow( wxMouseEvent & event );
+		void OnLeaveWindow( wxMouseEvent & event );
+		void OnEraseBackground( wxEraseEvent & event );
+		void OnKeyUp( wxKeyEvent & event );
+		void OnLoadScene( wxCommandEvent & event );
+		void OnExportScene( wxCommandEvent & event );
+		void OnShowLogs( wxCommandEvent & event );
+		void OnShowLists( wxCommandEvent & event );
+		void OnShowProperties( wxCommandEvent & event );
+		void OnPrintScreen( wxCommandEvent & event );
+		void OnRecord( wxCommandEvent & event );
+		void OnStop( wxCommandEvent & event );
 
 	private:
 		int m_logsHeight;
@@ -91,7 +91,6 @@ namespace CastorViewer
 		GuiCommon::PropertiesContainer * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
-		GuiCommon::SplashScreen * m_splashScreen;
 		GuiCommon::SceneObjectsList * m_sceneObjectsList;
 		GuiCommon::MaterialsList * m_materialsList;
 		castor3d::SceneWPtr m_mainScene;

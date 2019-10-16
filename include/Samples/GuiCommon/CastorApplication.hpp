@@ -21,27 +21,25 @@ namespace GuiCommon
 	\version	0.8.0
 	\~english
 	\brief		Base class for Castor applications, initialise the locale and the logger, takes care of command line parameters.
-	\argv		T	Must derivate from wxApp.
-	\remarks	Command line options can be given with -abr, /abr, or --long
-				<br />Supported options are:
+	\remarks	Command line options can be given with -abr, /abr, or --long.<br />
+				Supported options are:
 				<ul>
-				<li>h (--help)	Displays the help
-				<li>l (--log)	Defines log level
-				<li>f (--file)	Defines a scene file to load at startup
-				<li>opengl"		Defines the renderer to OpenGl (the renderer selection dialog will not be displayed)
-				<li>directx" )	Defines the renderer to Direct3D 11 (the renderer selection dialog will not be displayed)
+				<li>-h (--help)			Displays the help.
+				<li>-l (--log)			Defines log level.
+				<li>-f (--file)			Defines a scene file to load at startup.
+				<li>-a (--validate)		Enables rendering API validation.
+				<li>-u (--unlimited)	Disables FPS limit.
 				</ul>
 	\~french
 	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les paramètres en ligne de commande.
-	\args		T	doit àtre un descendant de wxApp.
-	\remarks	Les options en ligne de commande peuvent àtre passàes ainsi : -abr, /abr, --long.
-				<br />Les options supportàes sont les suivantes :
+	\remarks	Les options en ligne de commande peuvent être passées ainsi : -abr, /abr, --long.<br />
+				Les options supportées sont les suivantes :
 				<ul>
-				<li>h (--help)	Affiche l'aide.
-				<li>l (--log)	Dàfinit le niveau de log.
-				<li>f (--file)	Dàfinit un fichier de scène à charger au lancement.
-				<li>opengl"		Dàfinit l'API de rendu à OpenGl (la fenêtre de choix du renderer ne sera pas affichée).
-				<li>directx		Dàfinit l'API de rendu à Direct3D 11 (la fenêtre de choix du renderer ne sera pas affichée).
+				<li>-h (--help)			Affiche l'aide.
+				<li>-l (--log)			Définit le niveau de log.
+				<li>-f (--file)			Définit un fichier de scène à charger au lancement.
+				<li>-a (--validate)		Active la validation via l'API de rendu.
+				<li>-u (--unlimited)	Désactive la limite de FPS.
 				</ul>
 	*/
 	class CastorApplication
@@ -51,22 +49,22 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_internalName	The application name, used to look for language files and printed in logs.
-		 *\param[in]	p_displayName	The displayed application name.
-		 *\param[in]	p_steps			The initialisation steps count, used for splash screen.
-		 *\param[in]	p_version		The application version.
+		 *\param[in]	internalName	The application name, used to look for language files and printed in logs.
+		 *\param[in]	displayName		The displayed application name.
+		 *\param[in]	steps			The initialisation steps count, used for splash screen.
+		 *\param[in]	version			The application version.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_internalName	Le nom de l'application, utilisà pour rechercher les fichiers de langages, et àcrit dans les logs.
-		 *\param[in]	p_displayName	Le nom de l'application, affiché dans les fenêtres.
-		 *\param[in]	p_steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
-		 *\param[in]	p_version		La version de l'application.
+		 *\param[in]	internalName	Le nom de l'application, utilisà pour rechercher les fichiers de langages, et àcrit dans les logs.
+		 *\param[in]	displayName		Le nom de l'application, affiché dans les fenêtres.
+		 *\param[in]	steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
+		 *\param[in]	version			La version de l'application.
 		 */
-		CastorApplication( castor::String const & p_internalName
-						   , castor::String const & p_displayName
-						   , uint32_t p_steps
-						   , castor3d::Version const & p_version
-						   , castor::String const & p_rendererType = castor3d::RENDERER_TYPE_UNDEFINED );
+		CastorApplication( castor::String internalName
+			, castor::String displayName
+			, uint32_t steps
+			, castor3d::Version version
+			, castor::String rendererType = castor3d::RENDERER_TYPE_UNDEFINED );
 		/**
 		 *\~english
 		 *\return		The application name.
@@ -89,9 +87,9 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The file name given in command line with -f option
+		 *\return		The file name given in command line with -f option.
 		 *\~french
-		 *\return		Le nom du fichier donné en ligne de commande via l'option -f
+		 *\return		Le nom du fichier donné en ligne de commande via l'option -f.
 		 */
 		inline castor::String const & getFileName()const
 		{
@@ -99,9 +97,9 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The renderer type given in command line, castor3d::RENDERER_TYPE_UNDEFINED if none was given
+		 *\return		The renderer type given in command line, castor3d::RENDERER_TYPE_UNDEFINED if none was given.
 		 *\~french
-		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donné
+		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RENDERER_TYPE_UNDEFINED si aucun n'a été donné.
 		 */
 		inline castor::String const & getRendererType()const
 		{
@@ -109,13 +107,13 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The Castor3D engine
+		 *\return		The Castor3D engine.
 		 *\~french
-		 *\return		Le moteur Castor3D
+		 *\return		Le moteur Castor3D.
 		 */
 		inline castor3d::Engine * getCastor()const
 		{
-			return m_castor;
+			return m_castor.get();
 		}
 		/**
 		 *\~english
@@ -129,9 +127,9 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The splash screen
+		 *\return		The splash screen.
 		 *\~french
-		 *\return		Le splash screen
+		 *\return		Le splash screen.
 		 */
 		inline SplashScreen * getSplashScreen()const
 		{
@@ -157,7 +155,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Initialise l'application.
 		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plug-ins.
-		 *\return		Si false, l'application s'arràtera.
+		 *\return		Si false, l'application s'arrêtera.
 		 */
 		virtual bool OnInit();
 		/**
@@ -169,35 +167,35 @@ namespace GuiCommon
 		virtual int OnExit();
 		/**
 		 *\~english
-		 *\brief		Used to add application specific images to ImagesLoader
+		 *\brief		Used to add application specific images to ImagesLoader.
 		 *\~french
-		 *\brief		Utilisà afin d'ajouter à ImagesLoader des images spécifiques à l'application
+		 *\brief		Utilisà afin d'ajouter à ImagesLoader des images spécifiques à l'application.
 		 */
 		virtual void doLoadAppImages() = 0;
 		/**
 		 *\~english
 		 *\brief		Should contain the application main frame initialisation code.
-		 *\param[in]	p_splashScreen	The splash screen.
+		 *\param[in]	splashScreen	The splash screen.
 		 *\return		The main frame. If nullptr, the application will stop.
 		 *\~french
 		 *\brief		Devrait contenir le code d'initialisation de la fenêtre principale de l'application.
-		 *\param[in]	p_splashScreen	Le splash screen.
-		 *\return		La fenêtre principale. Si nullptr, l'application s'arràtera.
+		 *\param[in]	splashScreen	Le splash screen.
+		 *\return		La fenêtre principale. Si nullptr, l'application s'arrêtera.
 		 */
-		virtual wxWindow * doInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
+		virtual wxWindow * doInitialiseMainFrame( SplashScreen & splashScreen ) = 0;
 
 		bool doParseCommandLine();
-		bool doInitialiseLocale( SplashScreen & p_splashScreen );
-		bool doInitialiseCastor( SplashScreen & p_splashScreen );
-		void doloadPlugins( SplashScreen & p_splashScreen );
-		void doLoadImages( SplashScreen & p_splashScreen );
+		bool doInitialiseLocale( SplashScreen & splashScreen );
+		bool doInitialiseCastor( SplashScreen & splashScreen );
+		void doloadPlugins( SplashScreen & splashScreen );
+		void doLoadImages( SplashScreen & splashScreen );
 		void doCleanup();
 		void doCleanupCastor();
 
 	protected:
 		castor::String m_internalName;
 		castor::String m_displayName;
-		castor3d::Engine * m_castor;
+		std::shared_ptr< castor3d::Engine > m_castor;
 
 	private:
 		castor::String m_fileName;

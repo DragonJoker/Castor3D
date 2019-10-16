@@ -19,7 +19,7 @@ namespace castortd
 
 	private:
 		void doLoadAppImages()override;
-		wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )override;
+		wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )override;
 
 	private:
 		MainFrame * m_mainFrame{ nullptr };

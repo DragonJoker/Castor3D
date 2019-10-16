@@ -77,44 +77,39 @@ namespace castor3d
 
 #if C3D_MaterialsStructOfArrays
 
-		m_data.diffAmb[index].r = pass.getDiffuse().red();
-		m_data.diffAmb[index].g = pass.getDiffuse().green();
-		m_data.diffAmb[index].b = pass.getDiffuse().blue();
-		m_data.diffAmb[index].a = pass.getAmbient();
-		m_data.specShin[index].r = pass.getSpecular().red();
-		m_data.specShin[index].g = pass.getSpecular().green();
-		m_data.specShin[index].b = pass.getSpecular().blue();
-		m_data.specShin[index].a = pass.getShininess();
-		m_data.common[index].r = pass.getOpacity();
-		m_data.common[index].g = pass.getEmissive();
-		m_data.common[index].b = pass.getAlphaValue();
-		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.reflRefr[index].r = pass.getRefractionRatio();
-		m_data.reflRefr[index].g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, m_data.extended );
+		auto & diffAmb = m_data.diffAmb[index];
+		auto & specShin = m_data.specShin[index];
+		auto & common = m_data.common[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended[index];
 
 #else
 
-		m_data[index].diffAmb.r = pass.getDiffuse().red();
-		m_data[index].diffAmb.g = pass.getDiffuse().green();
-		m_data[index].diffAmb.b = pass.getDiffuse().blue();
-		m_data[index].diffAmb.a = pass.getAmbient();
-		m_data[index].specShin.r = pass.getSpecular().red();
-		m_data[index].specShin.g = pass.getSpecular().green();
-		m_data[index].specShin.b = pass.getSpecular().blue();
-		m_data[index].specShin.a = pass.getShininess();
-		m_data[index].common.r = pass.getOpacity();
-		m_data[index].common.g = pass.getEmissive();
-		m_data[index].common.b = pass.getAlphaValue();
-		m_data[index].common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data[index].reflRefr.r = pass.getRefractionRatio();
-		m_data[index].reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, m_data[index].extended );
+		auto & data = m_data[index];
+		auto & diffAmb = data.diffAmb;
+		auto & specShin = data.specShin;
+		auto & common = data.common;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
 
 #endif
+
+		diffAmb.r = pass.getDiffuse().red();
+		diffAmb.g = pass.getDiffuse().green();
+		diffAmb.b = pass.getDiffuse().blue();
+		diffAmb.a = pass.getAmbient();
+		specShin.r = pass.getSpecular().red();
+		specShin.g = pass.getSpecular().green();
+		specShin.b = pass.getSpecular().blue();
+		specShin.a = pass.getShininess();
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
+		reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
+		reflRefr.a = float( pass.getBWAccumulationOperator() );
+		doVisitExtended( pass, extended );
 	}
 }

@@ -15,8 +15,6 @@
 #include <GuiCommon/xpms/properties.xpm>
 #include <GuiCommon/xpms/scene_blanc.xpm>
 
-using namespace castor;
-using namespace castor3d;
 using namespace GuiCommon;
 
 #if CHECK_MEMORYLEAKS && defined( VLD_AVAILABLE ) && USE_VLD
@@ -27,11 +25,21 @@ wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 
 namespace CastorViewer
 {
+	castor3d::Version getVersion()
+	{
+		return castor3d::Version
+		{
+			CastorViewer_VERSION_MAJOR,
+			CastorViewer_VERSION_MINOR,
+			CastorViewer_VERSION_BUILD
+		};
+	}
+
 	CastorViewerApp::CastorViewerApp()
 		: CastorApplication{ cuT( "CastorViewer" )
 			, cuT( "Castor Viewer" )
 			, 7
-			, Version{ CastorViewer_VERSION_MAJOR, CastorViewer_VERSION_MINOR, CastorViewer_VERSION_BUILD } }
+			, CastorViewer::getVersion() }
 		, m_mainFrame( nullptr )
 	{
 	}
@@ -45,7 +53,7 @@ namespace CastorViewer
 		ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
 	}
 
-	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
+	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )
 	{
 		wxAppConsole::SetAppName( wxT( "castor_viewer" ) );
 		wxAppConsole::SetVendorName( wxT( "dragonjoker" ) );
@@ -57,14 +65,11 @@ namespace CastorViewer
 
 #endif
 
-		m_mainFrame = new MainFrame( p_splashScreen, make_wxString( m_displayName ) );
-		m_mainFrame->Maximize();
-		bool result = m_mainFrame->initialise();
+		m_mainFrame = new MainFrame{ make_wxString( m_displayName ) };
+		bool result = m_mainFrame->initialise( splashScreen );
 
 		if ( result )
 		{
-			SetTopWindow( m_mainFrame );
-
 			if ( !getFileName().empty() )
 			{
 				m_mainFrame->loadScene( getFileName() );

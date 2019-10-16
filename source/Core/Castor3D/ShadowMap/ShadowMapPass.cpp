@@ -50,7 +50,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )
@@ -106,7 +106,7 @@ namespace castor3d
 		return m_shadowMap.getGeometryShaderSource( flags );
 	}
 
-	ShaderPtr ShadowMapPass::doGetLegacyPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr ShadowMapPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		return m_shadowMap.getPixelShaderSource( flags );
 	}

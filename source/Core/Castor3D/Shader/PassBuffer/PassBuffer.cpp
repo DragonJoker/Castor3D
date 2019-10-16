@@ -74,7 +74,7 @@ namespace castor3d
 
 	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding()const
 	{
-		return m_buffer.createLayoutBinding( PassBufferIndex );
+		return m_buffer.createLayoutBinding( getPassBufferIndex() );
 	}
 
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet

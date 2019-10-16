@@ -1106,6 +1106,24 @@ namespace castor3d
 		C3D_API virtual void doUpdate( RenderQueueArray & queues ) = 0;
 		/**
 		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	flags	The pipeline flags.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	flags	Les flags de pipeline.
+		 */
+		C3D_API virtual void doUpdateFlags( PipelineFlags & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the pipeline.
+		 *\param[in]	pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Met à jour le pipeline.
+		 *\param[in]	pipeline	Le pipeline de rendu.
+		 */
+		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline )const = 0;
+		/**
+		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
@@ -1130,7 +1148,7 @@ namespace castor3d
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les flags de pipeline.
 		 */
-		C3D_API virtual ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -1149,24 +1167,6 @@ namespace castor3d
 		 *\param[in]	flags	Les flags de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const = 0;
-		/**
-		 *\~english
-		 *\brief			Modifies the given flags to make them match the render pass requirements.
-		 *\param[in,out]	flags	The pipeline flags.
-		 *\~french
-		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	flags	Les flags de pipeline.
-		 */
-		C3D_API virtual void doUpdateFlags( PipelineFlags & flags )const = 0;
-		/**
-		 *\~english
-		 *\brief		Updates the pipeline.
-		 *\param[in]	pipeline	The render pipeline.
-		 *\~french
-		 *\brief		Met à jour le pipeline.
-		 *\param[in]	pipeline	Le pipeline de rendu.
-		 */
-		C3D_API virtual void doUpdatePipeline( RenderPipeline & pipeline )const = 0;
 
 	public:
 		struct VertexInputs

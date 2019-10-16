@@ -61,14 +61,14 @@ namespace castor3d
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
-		, bool p_shadows )
+		, bool hasShadows )
 		: MeshLightPass{ engine
 			, depthView
 			, diffuseView
 			, specularView
 			, gpInfoUbo
 			, LightType::ePoint
-		, p_shadows }
+			, hasShadows }
 		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -76,6 +76,7 @@ namespace castor3d
 			, "PointLightPassUbo" ) }
 	{
 		m_baseUbo = m_ubo.get();
+		castor::Logger::logTrace( castor::makeStringStream() << cuT( "Created PointLightPass" ) << hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString );
 	}
 
 	PointLightPass::~PointLightPass()

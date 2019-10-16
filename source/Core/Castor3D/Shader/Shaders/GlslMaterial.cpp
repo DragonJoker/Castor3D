@@ -176,12 +176,12 @@ namespace castor3d
 				m_ssbo = std::make_unique< ArraySsboT< LegacyMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, PassBufferIndex
+					, getPassBufferIndex()
 					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), PassBufferIndex, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
 				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( UInt const & index )
 					{
@@ -241,12 +241,12 @@ namespace castor3d
 				m_ssbo = std::make_unique< ArraySsboT< MetallicRoughnessMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, PassBufferIndex
+					, getPassBufferIndex()
 					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), PassBufferIndex, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
 				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( UInt const & index )
 					{
@@ -306,12 +306,12 @@ namespace castor3d
 				m_ssbo = std::make_unique< ArraySsboT< SpecularGlossinessMaterial > >( m_writer
 					, PassBufferName
 					, m_type->getType()
-					, PassBufferIndex
+					, getPassBufferIndex()
 					, 0u );
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), PassBufferIndex, 0u );
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
 				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
 					, [this, &c3d_materials]( UInt const & index )
 					{

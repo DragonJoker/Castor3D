@@ -22,8 +22,8 @@ namespace CastorViewer
 		}
 
 	private:
-		virtual void doLoadAppImages();
-		virtual wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen );
+		void doLoadAppImages()override;
+		wxWindow * doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )override;
 
 	private:
 		MainFrame * m_mainFrame;

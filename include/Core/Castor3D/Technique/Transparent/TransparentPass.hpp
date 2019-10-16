@@ -191,9 +191,9 @@ namespace castor3d
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
-		ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */
@@ -211,7 +211,6 @@ namespace castor3d
 		VkFormat m_depthFormat;
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::VkDescriptorImageInfoArray m_shadowMapWrites;
 	};
 }
 

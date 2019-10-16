@@ -546,7 +546,7 @@ namespace castor3d
 		 *\param[in]	volumetric	Dit si le volumetric light scattering doit être activé.
 		 *\return		Le source.
 		 */
-		virtual ShaderPtr doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+		virtual ShaderPtr doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
 			, bool volumetric )const;

@@ -136,7 +136,7 @@ namespace light_streaks
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto index = castor3d::MinBufferIndex;
+			auto index = castor3d::getMinBufferIndex();
 			auto c3d_mapScene = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapScene, 0u, 0u );
 			auto c3d_mapKawase1 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase1, 1u, 0u );
 			auto c3d_mapKawase2 = writer.declSampledImage< FImg2DRgba32 >( PostEffect::CombineMapKawase2, 2u, 0u );
@@ -779,8 +779,8 @@ namespace light_streaks
 			, *hiPassSurface.frameBuffer
 			, clearValues[0]
 			, VK_SUBPASS_CONTENTS_INLINE );
-		hiPassCmd.setViewport( ashes::makeViewport( VkExtent2D{ hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } ) );
-		hiPassCmd.setScissor( ashes::makeScissor( VkExtent2D{ hiPassSurface.image->getWidth(), hiPassSurface.image->getHeight() } ) );
+		hiPassCmd.setViewport( ashes::makeViewport( hiPassSurface.image->getDimensions() ) );
+		hiPassCmd.setScissor( ashes::makeScissor( hiPassSurface.image->getDimensions() ) );
 		hiPassCmd.bindPipeline( *m_pipelines.hiPass.pipeline );
 		hiPassCmd.bindDescriptorSet( *hiPassSurface.descriptorSets.back(),
 			*m_pipelines.hiPass.layout.pipelineLayout );
@@ -848,8 +848,8 @@ namespace light_streaks
 					, *destination->frameBuffer
 					, clearValues[i]
 					, VK_SUBPASS_CONTENTS_INLINE );
-				kawaseCmd.setViewport( ashes::makeViewport( VkExtent2D{ destination->image->getWidth(), destination->image->getHeight() } ) );
-				kawaseCmd.setScissor( ashes::makeScissor( VkExtent2D{ destination->image->getWidth(), destination->image->getHeight() } ) );
+				kawaseCmd.setViewport( ashes::makeViewport( destination->image->getDimensions() ) );
+				kawaseCmd.setScissor( ashes::makeScissor( destination->image->getDimensions() ) );
 				kawaseCmd.bindPipeline( *m_pipelines.kawase.pipeline );
 				kawaseCmd.bindDescriptorSet( *kawaseSurface.descriptorSets[j],
 					*m_pipelines.kawase.layout.pipelineLayout );

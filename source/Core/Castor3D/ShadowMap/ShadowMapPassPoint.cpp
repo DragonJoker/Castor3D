@@ -52,6 +52,7 @@ namespace castor3d
 		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 		, m_viewport{ engine }
 	{
+		castor::Logger::logTrace( "Created ShadowMapPassPoint" );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()

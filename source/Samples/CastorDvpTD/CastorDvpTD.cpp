@@ -18,7 +18,7 @@ namespace castortd
 	{
 	}
 
-	wxWindow * CastorDvpTD::doInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen )
+	wxWindow * CastorDvpTD::doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )
 	{
 		wxAppConsole::SetAppName( wxT( "CastorDvpTD" ) );
 		wxAppConsole::SetVendorName( wxT( "dragonjoker" ) );

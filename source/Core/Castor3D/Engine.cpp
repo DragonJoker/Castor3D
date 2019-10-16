@@ -49,10 +49,6 @@ namespace castor3d
 		, m_enableValidation{ enableValidation }
 		, m_imageCache{ m_imageLoader }
 	{
-#if defined( NDEBUG )
-		m_enableValidation = false;
-#endif
-
 		auto dummy = []( auto element )
 		{
 		};
@@ -86,6 +82,17 @@ namespace castor3d
 		DdsImageLoader::registerLoader( m_imageLoader );
 		XpmImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
+		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+		{
+			if ( newLine )
+			{
+				Logger::logTrace( msg );
+			}
+			else
+			{
+				Logger::logTraceNoNL( msg );
+			}
+		} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 		{
 			if ( newLine )

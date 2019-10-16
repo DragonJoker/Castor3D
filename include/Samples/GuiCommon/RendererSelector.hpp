@@ -16,34 +16,34 @@ namespace GuiCommon
 		:	public wxDialog
 	{
 	private:
-		typedef enum eID
+		enum ID
 		{
-			eID_BUTTON_OK,
-			eID_BUTTON_CANCEL,
-			eID_LIST_RENDERERS,
-		}	eID;
+			ID_LIST_RENDERERS,
+		};
 
 	public:
-		RendererSelector( castor3d::Engine * engine, wxWindow * p_parent, wxString const & p_strTitle );
+		RendererSelector( castor3d::Engine & engine
+			, wxWindow * parent
+			, wxString const & title );
 		virtual ~RendererSelector();
 
 		castor::String getSelectedRenderer()const;
 
 	private:
-		void doDraw( wxDC * p_pDC );
+		void doDraw( wxDC * dc );
 		void doSelect();
 
 	protected:
 		DECLARE_EVENT_TABLE()
-		void OnPaint( wxPaintEvent & p_event );
-		void OnKeyUp( wxKeyEvent & p_event );
-		void OnButtonOk( wxCommandEvent & p_event );
-		void OnButtonCancel( wxCommandEvent & p_event );
+		void OnPaint( wxPaintEvent & event );
+		void OnKeyUp( wxKeyEvent & event );
+		void OnButtonOk( wxCommandEvent & event );
+		void OnButtonCancel( wxCommandEvent & event );
 
 	private:
-		wxImage * m_pImgCastor;
-		wxListBox * m_pListRenderers;
-		castor3d::Engine * m_engine;
+		wxImage * m_castorImg;
+		wxListBox * m_renderers;
+		castor3d::Engine & m_engine;
 	};
 }
 

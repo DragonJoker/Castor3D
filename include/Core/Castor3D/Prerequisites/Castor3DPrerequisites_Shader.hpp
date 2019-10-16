@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	static uint32_t constexpr PassBufferIndex = 0u;
-	static uint32_t constexpr TexturesBufferIndex = 1u;
-	static uint32_t constexpr LightBufferIndex = 2u;
-	static uint32_t constexpr MinBufferIndex = 3u;
-	static uint32_t constexpr MinTextureIndex = 3u;
+	C3D_API constexpr uint32_t getPassBufferIndex()noexcept;
+	C3D_API constexpr uint32_t getTexturesBufferIndex()noexcept;
+	C3D_API constexpr uint32_t getLightBufferIndex()noexcept;
+	C3D_API constexpr uint32_t getMinBufferIndex()noexcept;
+	C3D_API constexpr uint32_t getMinTextureIndex()noexcept;
+
 	using ShaderPtr = std::unique_ptr< sdw::Shader >;
 	/**@name Shader */
 	//@{

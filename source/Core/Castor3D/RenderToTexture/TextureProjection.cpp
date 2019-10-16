@@ -162,8 +162,8 @@ namespace castor3d
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT );
 		m_commandBuffer->bindPipeline( *m_pipeline );
-		m_commandBuffer->setViewport( { 0.0f, 0.0f, float( m_size.getWidth() ), float( m_size.getHeight() ), 0.0f, 1.0f } );
-		m_commandBuffer->setScissor( { 0, 0, m_size.getWidth(), m_size.getHeight() } );
+		m_commandBuffer->setViewport( makeViewport( m_size ) );
+		m_commandBuffer->setScissor( makeScissor( m_size ) );
 		m_commandBuffer->bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
 		m_commandBuffer->pushConstants( *m_pipelineLayout, m_sizePushConstant );
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );

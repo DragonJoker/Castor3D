@@ -7,11 +7,16 @@ See LICENSE file in root folder
 #include "Castor3D/Texture/TextureConfiguration.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
+#include <CastorUtils/Math/Coords.hpp>
 
 namespace castor3d
 {
 	/**@name Render */
 	//@{
+
+	static VkClearValue const defaultClearDepthStencilValue{ ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 0 } ) };
+	static VkClearValue const defaultClearColorValue{ ashes::makeClearValue( VkClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f } ) };
+	static VkColorComponentFlags const defaultColorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
 
 	struct NonTexturedQuad
 	{
@@ -320,6 +325,98 @@ namespace castor3d
 			stageFlags,
 			pImmutableSamplers,
 		};
+	}
+
+	template< template< typename, size_t > typename SizeT >
+	inline VkExtent2D makeExtent2D( SizeT< uint32_t, 2 > const & size )
+	{
+		return VkExtent2D
+		{
+			size[0],
+			size[1],
+		};
+	}
+
+	template< template< typename, size_t > typename SizeT >
+	inline VkExtent3D makeExtent3D( SizeT< uint32_t, 2 > const & size )
+	{
+		return VkExtent3D
+		{
+			size[0],
+			size[1],
+			1u,
+		};
+	}
+
+	template< template< typename, size_t > typename PosT >
+	inline VkOffset2D makeOffset2D( PosT< int32_t, 2 > const & pos )
+	{
+		return VkOffset2D
+		{
+			pos[0],
+			pos[1],
+		};
+	}
+
+	template< template< typename, size_t > typename PosT >
+	inline VkOffset3D makeOffset3D( PosT< int32_t, 2 > const & pos )
+	{
+		return VkOffset3D
+		{
+			pos[0],
+			pos[1],
+			0u,
+		};
+	}
+
+	template< template< typename, size_t > typename SizeT >
+	inline VkViewport makeViewport( SizeT< uint32_t, 2 > const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( {}
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	template< template< typename, size_t > typename PosT
+		, template< typename, size_t > typename SizeT >
+	inline VkViewport makeViewport( PosT< int32_t, 2 > const & pos
+		, SizeT< uint32_t, 2 > const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( makeOffset2D( pos )
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	template< template< typename, size_t > typename SizeT >
+	inline VkRect2D makeScissor( SizeT< uint32_t, 2 > const & size )
+	{
+		return ashes::makeScissor( {}
+		, makeExtent2D( size ) );
+	}
+
+	template< template< typename, size_t > typename PosT
+		, template< typename, size_t > typename SizeT >
+	inline VkRect2D makeScissor( PosT< int32_t, 2 > const & pos
+		, SizeT< uint32_t, 2 > const & size )
+	{
+		return ashes::makeScissor( makeOffset2D( pos )
+			, makeExtent2D( size ) );
+	}
+
+	inline VkClearValue makeClearValue( float depth, uint32_t stencil = 0 )
+	{
+		return ashes::makeClearValue( VkClearDepthStencilValue{ depth, stencil } );
+	}
+
+	inline VkClearValue makeClearValue( float r, float g, float b, float a = 1.0f )
+	{
+		return ashes::makeClearValue( { r, g, b, a } );
 	}
 
 	//@}

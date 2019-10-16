@@ -128,10 +128,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateUboBindings
-		 */
-		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
 		 */
 		C3D_API ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
@@ -154,9 +150,9 @@ namespace castor3d
 		 */
 		C3D_API ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
-		C3D_API ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const override;
+		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */

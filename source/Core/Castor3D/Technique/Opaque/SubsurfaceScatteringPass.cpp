@@ -543,7 +543,7 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
-			, descriptorSetLayout.getBinding( PassBufferIndex ) );
+			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurSceneUboId )
 			, m_sceneUbo.getUbo().getBuffer()
 			, 0u
@@ -646,7 +646,7 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
-			, descriptorSetLayout.getBinding( PassBufferIndex ) );
+			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
 		//descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
 		//	, m_blurUbo.getBuffer() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData4ImgId )

@@ -312,6 +312,11 @@ namespace castor3d
 			return m_version;
 		}
 
+		inline bool isValidationEnabled()const
+		{
+			return m_enableValidation;
+		}
+
 		inline bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;

@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/ShadowMap/ShadowMap.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -15,6 +16,8 @@ using namespace castor;
 
 namespace castor3d
 {
+	//*************************************************************************************************
+
 	namespace
 	{
 		template< typename MapType >
@@ -34,6 +37,43 @@ namespace castor3d
 					output.emplace( point::lengthSquared( meshCameraPosition ), makeDistanceNode( renderNode ) );
 				}
 			}
+		}
+	}
+
+	//*************************************************************************************************
+
+	void bindTexture( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		writes.push_back( ashes::WriteDescriptorSet
+			{
+				index++,
+				0u,
+				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ {
+					sampler,
+					view,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				} }
+			} );
+	}
+
+	void bindShadowMaps( ShadowMapRefArray const & shadowMaps
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		for ( auto & shadowMap : shadowMaps )
+		{
+			bindTexture( shadowMap.first.get().getLinearView()
+				, shadowMap.first.get().getLinearSampler()
+				, writes
+				, index );
+			bindTexture( shadowMap.first.get().getVarianceView()
+				, shadowMap.first.get().getVarianceSampler()
+				, writes
+				, index );
 		}
 	}
 
@@ -193,7 +233,7 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderTechniquePass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
-		auto index = MinTextureIndex;
+		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
 		if ( flags.texturesCount )

@@ -9,6 +9,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
 #include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
@@ -19,9 +21,6 @@
 #include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
-
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
@@ -135,7 +134,7 @@ namespace castor3d
 				0u,
 				VK_IMAGE_TYPE_2D,
 				format,
-				{ size.getWidth(), size.getHeight(), 1u },
+				makeExtent3D( size ),
 				1u,
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
@@ -465,7 +464,9 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 
+#if C3D_UseDeferredRendering
 		if ( scene.hasShadows() )
+#endif
 		{
 			auto & engine = *m_renderTarget.getEngine();
 			m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
@@ -484,7 +485,9 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 
+#if C3D_UseDeferredRendering
 		if ( scene.hasShadows() )
+#endif
 		{
 			m_directionalShadowMap->initialise();
 			m_spotShadowMap->initialise();
@@ -707,7 +710,9 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 
+#if C3D_UseDeferredRendering
 		if ( scene.hasShadows() )
+#endif
 		{
 			m_directionalShadowMap->cleanup();
 			m_spotShadowMap->cleanup();

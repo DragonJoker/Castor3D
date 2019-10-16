@@ -11,69 +11,66 @@ using namespace castor3d;
 
 namespace GuiCommon
 {
-	RendererSelector::RendererSelector( Engine * engine, wxWindow * p_parent, wxString const & p_strTitle )
-		: wxDialog( p_parent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
-		, m_pImgCastor( ImagesLoader::getBitmap( CV_IMG_CASTOR ) )
-		, m_engine( engine )
+	RendererSelector::RendererSelector( Engine & engine
+		, wxWindow * parent
+		, wxString const & title )
+		: wxDialog{ parent, wxID_ANY, title + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE }
+		, m_castorImg{ ImagesLoader::getBitmap( CV_IMG_CASTOR ) }
+		, m_engine{ engine }
 	{
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
-		wxStaticText * pTitle;
-		wxStaticText * pStatic;
-		wxSize size = GetClientSize();
-		wxFont font = wxFont( 30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) );
-		int iCount = 0;
-		wxString strSelect = _( "Select your renderer in the list below" );
-		wxString strOk = _( "OK" );
-		wxString strCancel = _( "Cancel" );
-		pTitle = new wxStaticText( this, wxID_ANY, p_strTitle );
-		pTitle->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		pTitle->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_renderers = new wxListBox( this, ID_LIST_RENDERERS, wxDefaultPosition, wxSize( 400, 100 ) );
+		m_renderers->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_renderers->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
-		pStatic = new wxStaticText( this, wxID_ANY, strSelect );
-		pStatic->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		pStatic->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		int count = 0;
 
-		m_pListRenderers = new wxListBox( this, eID_LIST_RENDERERS, wxDefaultPosition, wxSize( 400, 100 ) );
-		m_pListRenderers->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		m_pListRenderers->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-
-		GradientButton * ok = new GradientButton( this, wxID_OK, strOk );
-		GradientButton * cancel = new GradientButton( this, wxID_CANCEL, strCancel );
-		pTitle->SetFont( font );
-
-		for ( auto it : m_engine->getPluginCache().getPlugins( PluginType::eRenderer ) )
+		for ( auto it : m_engine.getPluginCache().getPlugins( PluginType::eRenderer ) )
 		{
 			if ( it.second )
 			{
-				m_pListRenderers->Insert( it.second->getName(), iCount++, it.second.get() );
+				m_renderers->Insert( it.second->getName(), count++, it.second.get() );
 			}
 		}
 
-		if ( m_pListRenderers->GetCount() > 0 )
+		if ( !m_renderers->IsEmpty() )
 		{
-			m_pListRenderers->Select( 0 );
+			m_renderers->Select( 0 );
 		}
 
-		wxBoxSizer * pSizer = new wxBoxSizer( wxVERTICAL );
-		wxBoxSizer * pButtonSizer = new wxBoxSizer( wxHORIZONTAL );
-		wxBoxSizer * pTitleSizer = new wxBoxSizer( wxHORIZONTAL );
-		wxBoxSizer * pDescSizer = new wxBoxSizer( wxHORIZONTAL );
-		pTitleSizer->Add( 50, 0, 1 );
-		pTitleSizer->Add( pTitle, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
-		pDescSizer->Add( 50, 0, 1 );
-		pDescSizer->Add( pStatic, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
-		pButtonSizer->Add( ok, wxSizerFlags( 0 ).Border( wxLEFT, 5 ) );
-		pButtonSizer->Add( 200, 0, 1 );
-		pButtonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
-		pSizer->Add( pTitleSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
-		pSizer->Add( pDescSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
-		pSizer->Add( 0, 60, 0 );
-		pSizer->Add( m_pListRenderers, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand() );
-		pSizer->Add( pButtonSizer, wxSizerFlags( 0 ).Border( wxALL,  5 ).Expand() );
-		SetSizer( pSizer );
-		pSizer->SetSizeHints( this );
+		wxBoxSizer * sizer = new wxBoxSizer( wxVERTICAL );
+
+		wxBoxSizer * titleSizer = new wxBoxSizer( wxHORIZONTAL );
+		titleSizer->Add( 50, 0, 1 );
+		auto titleTxt = new wxStaticText( this, wxID_ANY, title );
+		titleTxt->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		titleTxt->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		titleTxt->SetFont( wxFont{ 30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) } );
+		titleSizer->Add( titleTxt, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
+		sizer->Add( titleSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+
+		wxBoxSizer * descSizer = new wxBoxSizer( wxHORIZONTAL );
+		descSizer->Add( 50, 0, 1 );
+		auto staticTxt = new wxStaticText( this, wxID_ANY, _( "Select your renderer in the list below" ) );
+		staticTxt->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		staticTxt->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		descSizer->Add( staticTxt, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
+		sizer->Add( descSizer, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+
+		wxBoxSizer * buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+		GradientButton * ok = new GradientButton( this, wxID_OK, _( "OK" ) );
+		buttonSizer->Add( ok, wxSizerFlags( 0 ).Border( wxLEFT, 5 ) );
+		buttonSizer->Add( 200, 0, 1 );
+		GradientButton * cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ) );
+		buttonSizer->Add( cancel, wxSizerFlags( 0 ).Border( wxRIGHT, 5 ) );
+
+		sizer->Add( 0, 60, 0 );
+		sizer->Add( m_renderers, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand() );
+		sizer->Add( buttonSizer, wxSizerFlags( 0 ).Border( wxALL,  5 ).Expand() );
+		SetSizer( sizer );
+		sizer->SetSizeHints( this );
 		wxClientDC clientDC( this );
 		doDraw( & clientDC );
 	}
@@ -85,24 +82,24 @@ namespace GuiCommon
 	castor::String RendererSelector::getSelectedRenderer()const
 	{
 		castor::String result = RENDERER_TYPE_UNDEFINED;
-		uint32_t selected = m_pListRenderers->GetSelection();
+		uint32_t selected = m_renderers->GetSelection();
 
-		if ( selected < m_pListRenderers->GetCount() )
+		if ( selected < m_renderers->GetCount() )
 		{
-			result = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( selected ) )->getRendererType();
+			result = static_cast< RendererPlugin * >( m_renderers->GetClientData( selected ) )->getRendererType();
 		}
 
 		return result;
 	}
 
-	void RendererSelector::doDraw( wxDC * p_pDC )
+	void RendererSelector::doDraw( wxDC * dc )
 	{
-		p_pDC->DrawBitmap( *m_pImgCastor, wxPoint( 0, 0 ), true );
+		dc->DrawBitmap( *m_castorImg, wxPoint( 0, 0 ), true );
 	}
 
 	void RendererSelector::doSelect()
 	{
-		if ( m_pListRenderers->GetCount() > 0 )
+		if ( m_renderers->GetCount() > 0 )
 		{
 			EndModal( wxID_OK );
 		}
@@ -117,37 +114,37 @@ namespace GuiCommon
 		EVT_KEY_UP(	RendererSelector::OnKeyUp )
 		EVT_BUTTON(	wxID_OK, RendererSelector::OnButtonOk )
 		EVT_BUTTON(	wxID_CANCEL, RendererSelector::OnButtonCancel )
-		EVT_LISTBOX_DCLICK( eID_LIST_RENDERERS,	RendererSelector::OnButtonOk )
+		EVT_LISTBOX_DCLICK( ID_LIST_RENDERERS,	RendererSelector::OnButtonOk )
 	END_EVENT_TABLE()
 
-	void RendererSelector::OnPaint( wxPaintEvent & p_event )
+	void RendererSelector::OnPaint( wxPaintEvent & event )
 	{
 		wxPaintDC paintDC( this );
 		doDraw( & paintDC );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RendererSelector::OnKeyUp( wxKeyEvent & p_event )
+	void RendererSelector::OnKeyUp( wxKeyEvent & event )
 	{
-		switch ( p_event.GetKeyCode() )
+		switch ( event.GetKeyCode() )
 		{
 		case WXK_RETURN:
 			doSelect();
 			break;
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RendererSelector::OnButtonOk( wxCommandEvent & p_event )
+	void RendererSelector::OnButtonOk( wxCommandEvent & event )
 	{
 		doSelect();
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RendererSelector::OnButtonCancel( wxCommandEvent & p_event )
+	void RendererSelector::OnButtonCancel( wxCommandEvent & event )
 	{
 		EndModal( wxID_CANCEL );
-		p_event.Skip();
+		event.Skip();
 	}
 }

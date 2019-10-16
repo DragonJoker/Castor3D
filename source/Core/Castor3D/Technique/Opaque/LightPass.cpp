@@ -224,7 +224,7 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_uboDescriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
-		uint32_t index = MinBufferIndex;
+		uint32_t index = getMinBufferIndex();
 
 		setLayoutBindings = ashes::VkDescriptorSetLayoutBindingArray
 		{
@@ -452,7 +452,7 @@ namespace castor3d
 			}
 			else
 			{
-				m_pixelShader.shader = doGetLegacyPixelShaderSource( sceneFlags
+				m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
 					, lightType
 					, shadowType
 					, volumetric );
@@ -498,10 +498,10 @@ namespace castor3d
 					index,
 					0u,
 					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{ { gp.getSampler(), gp.getViews()[index - MinBufferIndex], layout } }
+					{ { gp.getSampler(), gp.getViews()[index - getMinBufferIndex()], layout } }
 				};
 			};
-			uint32_t index = MinBufferIndex;
+			uint32_t index = getMinBufferIndex();
 			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
@@ -588,15 +588,15 @@ namespace castor3d
 				, VkBool32( VK_FALSE )
 				, 0u
 				, 0u ) );
-		commandBuffer.setViewport( { 0.0f, 0.0f, float( dimensions.width ), float( dimensions.height ), 0.0f, 1.0f } );
-		commandBuffer.setScissor( { 0, 0, dimensions.width, dimensions.height } );
+		commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
+		commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
 		commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		pipeline.program->render( commandBuffer, getCount(), first, m_offset );
 		commandBuffer.end();
 	}
 	
-	ShaderPtr LightPass::doGetLegacyPixelShaderSource( SceneFlags const & sceneFlags
+	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
 		, bool volumetric )const
@@ -608,7 +608,7 @@ namespace castor3d
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = MinBufferIndex;
+		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -803,7 +803,7 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = MinBufferIndex;
+		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );
@@ -1058,7 +1058,7 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto index = MinBufferIndex;
+		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
 		auto c3d_mapData2 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), index++, 1u );

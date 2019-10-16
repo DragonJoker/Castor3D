@@ -78,29 +78,9 @@ namespace castor3d
 		*/
 		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doCreateTextureBindings
-		 */
-		ashes::VkDescriptorSetLayoutBindingArray doCreateTextureBindings( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
-		 */
-		ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
@@ -113,6 +93,22 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 */
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
+		 */
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
+		 */
+		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:
 		static castor::String const Output1;

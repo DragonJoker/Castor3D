@@ -205,187 +205,342 @@ namespace castor3d
 	template<>
 	struct AshesDebugTypeTraits< ashes::Instance >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_INSTANCE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::PhysicalDevice >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PHYSICAL_DEVICE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Device >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PHYSICAL_DEVICE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< RenderDevice >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PHYSICAL_DEVICE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Queue >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_QUEUE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Semaphore >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_SEMAPHORE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::CommandBuffer >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_COMMAND_BUFFER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Fence >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_FENCE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::DeviceMemory >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_DEVICE_MEMORY;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::BufferBase >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_BUFFER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::UniformBuffer >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_BUFFER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::VertexBufferBase >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_BUFFER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Image >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_IMAGE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Event >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_EVENT;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::QueryPool >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_QUERY_POOL;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::BufferView >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_BUFFER_VIEW;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::ImageView >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_IMAGE_VIEW;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::ShaderModule >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_SHADER_MODULE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::PipelineLayout >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PIPELINE_LAYOUT;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::RenderPass >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_RENDER_PASS;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::GraphicsPipeline >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PIPELINE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::ComputePipeline >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_PIPELINE;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::DescriptorSetLayout >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Sampler >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_SAMPLER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::DescriptorSetPool >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_DESCRIPTOR_POOL;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::DescriptorPool >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_DESCRIPTOR_POOL;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::DescriptorSet >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_DESCRIPTOR_SET;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::FrameBuffer >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_FRAMEBUFFER;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::CommandPool >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_COMMAND_POOL;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::Surface >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_SURFACE_KHR;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
+#endif
 	};
 
 	template<>
 	struct AshesDebugTypeTraits< ashes::SwapChain >
 	{
-		static VkDebugReportObjectTypeEXT constexpr Value = VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
+#if VK_EXT_debug_utils
+		static VkObjectType constexpr UtilsValue = VK_OBJECT_TYPE_SWAPCHAIN_KHR;
+#endif
+#if VK_EXT_debug_report || VK_EXT_debug_marker
+		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
+#endif
 	};
 
 	template< typename AshesType >
@@ -396,14 +551,37 @@ namespace castor3d
 		using VkType = typename AshesTypeTraits< AshesType >::VkType;
 		using DebugTypeTraits = typename AshesDebugTypeTraits< AshesType >;
 
-		device.device->debugMarkerSetObjectName(
-			{
-				VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
-				nullptr,
-				DebugTypeTraits::Value,
-				uint64_t( VkType( object ) ),
-				name.c_str()
-			} );
+#if VK_EXT_debug_utils
+
+		if ( device.device->hasDebugUtils() )
+		{
+			device.device->setDebugUtilsObjectName(
+				{
+					VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT,
+					nullptr,
+					DebugTypeTraits::UtilsValue,
+					uint64_t( VkType( object ) ),
+					name.c_str()
+				} );
+		}
+		else
+
+#endif
+#if VK_EXT_debug_marker
+
+		if ( device.device->hasDebugMarker() )
+		{
+			device.device->debugMarkerSetObjectName(
+				{
+					VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
+					nullptr,
+					DebugTypeTraits::ReportValue,
+					uint64_t( VkType( object ) ),
+					name.c_str()
+				} );
+		}
+
+#endif
 	}
 
 	template< typename ResT >

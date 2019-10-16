@@ -12,6 +12,25 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/**
+	 *\~english
+	 *\brief		Writes the image view and sampler descriptor to the given writes.
+	 *\~french
+	 *\brief		Ecrit le descripteur de la vue et du sampler dans les writes donnés.
+	 */
+	void bindTexture( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	/**
+	 *\~english
+	 *\brief		Writes the shadow maps descriptors to the given writes.
+	 *\~french
+	 *\brief		Ecrit les descripteurs des shadow maps dans les writes donnés.
+	 */
+	void bindShadowMaps( ShadowMapRefArray const & shadowMaps
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0

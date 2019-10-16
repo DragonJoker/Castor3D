@@ -141,9 +141,9 @@ namespace castor3d
 		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
-		ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */

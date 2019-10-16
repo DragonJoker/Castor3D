@@ -15,6 +15,24 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class DebugCallbacks
+	{
+	public:
+		DebugCallbacks( ashes::Instance const & instance
+			, void * userData );
+		~DebugCallbacks();
+
+	private:
+		ashes::Instance const & m_instance;
+		void * m_userData;
+#if VK_EXT_debug_utils
+		VkDebugUtilsMessengerEXT m_messenger{ VK_NULL_HANDLE };
+#endif
+#if VK_EXT_debug_report
+		VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
+#endif
+	};
+	using DebugCallbacksPtr = std::unique_ptr< DebugCallbacks >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -431,7 +449,7 @@ namespace castor3d
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::InstancePtr m_instance;
-		VkDebugReportCallbackEXT m_debugCallback{};
+		DebugCallbacksPtr m_debug;
 		ashes::PhysicalDevicePtrArray m_gpus;
 		VkPhysicalDeviceMemoryProperties m_memoryProperties;
 		VkPhysicalDeviceProperties m_properties;
@@ -451,13 +469,6 @@ namespace castor3d
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
 		GpuBufferPool m_gpuBufferPool;
-
-#if C3D_TRACE_OBJECTS
-
-		GpuObjectTracker m_tracker;
-
-#endif
-
 	};
 }
 

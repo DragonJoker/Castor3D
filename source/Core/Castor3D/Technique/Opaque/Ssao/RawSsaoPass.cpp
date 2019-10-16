@@ -68,7 +68,7 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-			auto index = MinBufferIndex;
+			auto index = getMinBufferIndex();
 
 			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
 			// miplevel to maintain reasonable spatial locality in the cache

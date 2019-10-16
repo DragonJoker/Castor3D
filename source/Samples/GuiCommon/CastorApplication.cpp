@@ -92,18 +92,18 @@ namespace GuiCommon
 
 #endif
 
-	CastorApplication::CastorApplication( castor::String const & p_internalName
-		, castor::String const & p_displayName
-		, uint32_t p_steps
-		, castor3d::Version const & p_version
-		, castor::String const & p_rendererType )
-		: m_internalName{ p_internalName }
-		, m_displayName{ p_displayName }
+	CastorApplication::CastorApplication( castor::String internalName
+		, castor::String displayName
+		, uint32_t steps
+		, castor3d::Version version
+		, castor::String rendererType )
+		: m_internalName{ std::move( internalName ) }
+		, m_displayName{ std::move( displayName ) }
 		, m_castor{ nullptr }
-		, m_rendererType{ p_rendererType }
-		, m_steps{ p_steps + 4 }
+		, m_rendererType{ std::move( rendererType ) }
+		, m_steps{ steps + 4 }
 		, m_splashScreen{ nullptr }
-		, m_version{ p_version }
+		, m_version{ std::move( version ) }
 	{
 #if defined( __WXGTK__ )
 		XInitThreads();
@@ -121,7 +121,16 @@ namespace GuiCommon
 		bool result = doParseCommandLine();
 		wxDisplay display;
 		wxRect rect = display.GetClientArea();
-		SplashScreen splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 ), m_steps, m_version );
+		SplashScreen splashScreen
+		{
+			m_displayName,
+			wxPoint{ 10, 230 },
+			wxPoint{ 200, 300 },
+			wxPoint{ 180, 260 },
+			wxPoint{ ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 },
+			int( m_steps ),
+			m_version
+		};
 		m_splashScreen = &splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
 		wxWindow * window = nullptr;
@@ -140,7 +149,7 @@ namespace GuiCommon
 
 				if ( result )
 				{
-					window = doInitialiseMainFrame( &splashScreen );
+					window = doInitialiseMainFrame( splashScreen );
 					result = window != nullptr;
 				}
 			}
@@ -156,11 +165,17 @@ namespace GuiCommon
 				doCleanupCastor();
 				result = false;
 			}
+			catch ( ... )
+			{
+				castor::Logger::logError( std::stringstream() << castor::string::stringCast< char >( m_internalName ) << " - Initialisation failed : Unknown error." );
+				doCleanupCastor();
+				result = false;
+			}
 		}
 
 		wxApp::SetTopWindow( window );
-		splashScreen.Close();
 		m_splashScreen = nullptr;
+		splashScreen.Close();
 
 		if ( !result )
 		{
@@ -191,16 +206,17 @@ namespace GuiCommon
 		for ( auto & plugin : list )
 		{
 			auto desc = make_wxString( plugin.description );
-			desc.Replace( " renderer for Ashes", "" );
+			desc.Replace( wxT( " renderer for Ashes" ), wxEmptyString );
 			parser.AddSwitch( make_wxString( plugin.name )
 				, wxEmptyString
 				, _( "Defines the renderer to " ) + desc + wxT( "." ) );
 		}
 
-		bool result = parser.Parse( false ) == 0;
+		auto parseResult = parser.Parse( false );
+		bool result = parseResult == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
-		if ( !result || parser.Found( wxT( 'h' ) ) )
+		if ( parseResult > 0 || parser.Found( wxT( 'h' ) ) )
 		{
 			parser.Usage();
 			result = false;
@@ -287,7 +303,7 @@ namespace GuiCommon
 		castor::Logger::setFileName( castor3d::Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		castor::Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = new castor3d::Engine{ m_internalName, m_version, m_validation };
+		m_castor = std::make_shared< castor3d::Engine >( m_internalName, m_version, m_validation );
 		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
@@ -304,7 +320,7 @@ namespace GuiCommon
 
 		if ( m_rendererType == castor3d::RENDERER_TYPE_UNDEFINED )
 		{
-			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
+			RendererSelector m_dialog( *m_castor, nullptr, m_displayName );
 			int iReturn = m_dialog.ShowModal();
 
 			if ( iReturn == wxID_OK )
@@ -416,8 +432,7 @@ namespace GuiCommon
 		if ( m_castor )
 		{
 			m_castor->cleanup();
-			delete m_castor;
-			m_castor = nullptr;
+			m_castor.reset();
 		}
 	}
 }

@@ -61,23 +61,13 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
+		*\copydoc		castor3d::RenderPass::doCreateUboBindings
+		*/
+		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, BillboardListRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
-		 */
-		C3D_API void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-			, uint32_t & index
-			, SubmeshRenderNode & nodes
-			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
@@ -99,9 +89,9 @@ namespace castor3d
 		 */
 		C3D_API ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetLegacyPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
-		C3D_API ShaderPtr doGetLegacyPixelShaderSource( PipelineFlags const & flags )const override;
+		C3D_API ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
 		 */

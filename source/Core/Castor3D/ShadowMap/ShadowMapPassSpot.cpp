@@ -25,6 +25,7 @@ namespace castor3d
 		, ShadowMap const & shadowMap )
 		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 	{
+		castor::Logger::logTrace( "Created ShadowMapPassSpot" );
 	}
 
 	ShadowMapPassSpot::~ShadowMapPassSpot()

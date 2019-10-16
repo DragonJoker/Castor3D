@@ -106,25 +106,24 @@ namespace CastorViewer
 		}
 	}
 
-	MainFrame::MainFrame( SplashScreen * splashScreen, wxString const & title )
+	MainFrame::MainFrame( wxString const & title )
 		: wxFrame( nullptr, wxID_ANY, title, wxDefaultPosition, wxSize( 800, 700 ) )
-		, m_renderPanel( nullptr )
-		, m_timer( nullptr )
-		, m_timerMsg( nullptr )
-		, m_timerErr( nullptr )
-		, m_logTabsContainer( nullptr )
-		, m_messageLog( nullptr )
-		, m_errorLog( nullptr )
-		, m_logsHeight( 100 )
-		, m_propertiesWidth( 240 )
-		, m_sceneObjectsList( nullptr )
-		, m_materialsList( nullptr )
-		, m_propertiesContainer( nullptr )
-		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
-		, m_toolBar( nullptr )
-		, m_splashScreen( splashScreen )
-		, m_recorder()
-		, m_recordFps( CASTOR_RECORD_FPS )
+		, m_renderPanel{ nullptr }
+		, m_timer{ nullptr }
+		, m_timerMsg{ nullptr }
+		, m_timerErr{ nullptr }
+		, m_logTabsContainer{ nullptr }
+		, m_messageLog{ nullptr }
+		, m_errorLog{ nullptr }
+		, m_logsHeight{ 100 }
+		, m_propertiesWidth{ 240 }
+		, m_sceneObjectsList{ nullptr }
+		, m_materialsList{ nullptr }
+		, m_propertiesContainer{ nullptr }
+		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
+		, m_toolBar{ nullptr }
+		, m_recorder{}
+		, m_recordFps{ CASTOR_RECORD_FPS }
 	{
 	}
 
@@ -133,7 +132,7 @@ namespace CastorViewer
 		m_auiManager.UnInit();
 	}
 
-	bool MainFrame::initialise()
+	bool MainFrame::initialise( SplashScreen & splashScreen )
 	{
 		Logger::registerCallback( [this]( String const & logText, LogType logType, bool newLine )
 			{
@@ -144,7 +143,7 @@ namespace CastorViewer
 		if ( result )
 		{
 			doPopulateStatusBar();
-			doPopulateToolBar();
+			doPopulateToolBar( splashScreen );
 			wxIcon icon = wxIcon( castor_xpm );
 			SetIcon( icon );
 			doInitialiseGUI();
@@ -224,7 +223,7 @@ namespace CastorViewer
 							Maximize( false );
 							SetClientSize( size );
 							m_renderPanel->enableWindowResize();
-							Maximize();
+							//Maximize();
 						}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -492,24 +491,24 @@ namespace CastorViewer
 		statusBar->SetForegroundColour( INACTIVE_TEXT_COLOUR );
 	}
 
-	void MainFrame::doPopulateToolBar()
+	void MainFrame::doPopulateToolBar( SplashScreen & splashScreen )
 	{
-		m_splashScreen->Step( _( "Loading toolbar" ), 1 );
+		splashScreen.Step( _( "Loading toolbar" ), 1 );
 		m_toolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_PLAIN_BACKGROUND | wxAUI_TB_HORIZONTAL );
 		m_toolBar->SetArtProvider( new AuiToolBarArt );
 		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
 		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "open a new scene" ) );
-		m_splashScreen->Step( 1 );
+		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
-		m_splashScreen->Step( 1 );
+		splashScreen.Step( 1 );
 		m_toolBar->AddSeparator();
 		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *ImagesLoader::getBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
-		m_splashScreen->Step( 1 );
+		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *ImagesLoader::getBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
-		m_splashScreen->Step( 1 );
+		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *ImagesLoader::getBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
-		m_splashScreen->Step( 1 );
+		splashScreen.Step( 1 );
 
 		wxMemoryInputStream isPrint( print_screen_png, sizeof( print_screen_png ) );
 		wxImage imgPrint( isPrint, wxBITMAP_TYPE_PNG );

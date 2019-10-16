@@ -15,6 +15,40 @@ using namespace sdw;
 
 namespace castor3d
 {
+	namespace
+	{
+		static uint32_t constexpr PassBufferIndex = 0u;
+		static uint32_t constexpr TexturesBufferIndex = 1u;
+		static uint32_t constexpr LightBufferIndex = 2u;
+		static uint32_t constexpr MinBufferIndex = 3u;
+		static uint32_t constexpr MinTextureIndex = 3u;
+	}
+
+	constexpr uint32_t getPassBufferIndex()noexcept
+	{
+		return PassBufferIndex;
+	}
+
+	constexpr uint32_t getTexturesBufferIndex()noexcept
+	{
+		return TexturesBufferIndex;
+	}
+
+	constexpr uint32_t getLightBufferIndex()noexcept
+	{
+		return LightBufferIndex;
+	}
+
+	constexpr uint32_t getMinBufferIndex()noexcept
+	{
+		return MinBufferIndex;
+	}
+
+	constexpr uint32_t getMinTextureIndex()noexcept
+	{
+		return MinTextureIndex;
+	}
+
 	//*************************************************************************
 
 	ShaderModule::ShaderModule( ShaderModule && rhs )

@@ -119,6 +119,11 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
+	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateUboBindings( PipelineFlags const & flags )const
+	{
+		return RenderPass::doCreateUboBindings( flags );
+	}
+
 	void DepthPass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
@@ -128,28 +133,6 @@ namespace castor3d
 		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
 			? 1u
 			: 0u;
-	}
-
-	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, BillboardListRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.texDescriptorSet
-			, true );
-	}
-
-	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
-		, uint32_t & index
-		, SubmeshRenderNode & node
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.texDescriptorSet
-			, true );
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
@@ -291,7 +274,7 @@ namespace castor3d
 		return ShaderPtr{};
 	}
 
-	ShaderPtr DepthPass::doGetLegacyPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr DepthPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetPixelShaderSource( flags );
 	}
@@ -322,7 +305,7 @@ namespace castor3d
 		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( cuT( "c3d_maps" )
-			, MinTextureIndex
+			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
 			, flags.texturesCount > 0u ) );

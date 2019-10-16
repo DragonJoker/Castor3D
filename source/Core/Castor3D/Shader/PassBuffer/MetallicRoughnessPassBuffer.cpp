@@ -78,39 +78,38 @@ namespace castor3d
 
 #if C3D_MaterialsStructOfArrays
 
-		m_data.albRough[index].r = pass.getDiffuse().red();
-		m_data.albRough[index].g = pass.getDiffuse().green();
-		m_data.albRough[index].b = pass.getDiffuse().blue();
-		m_data.albRough[index].a = ( 255.0f - pass.getShininess() ) / 255.0f;
-		m_data.metDiv[index].r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( Point3r{ 1, 1, 1 } ) );
-		m_data.common[index].r = pass.getOpacity();
-		m_data.common[index].g = pass.getEmissive();
-		m_data.common[index].b = pass.getAlphaValue();
-		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.reflRefr[index].r = pass.getRefractionRatio();
-		m_data.reflRefr[index].g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = 1.0f;
-		doVisitExtended( pass, m_data.extended );
+		auto & diffAmb = m_data.diffAmb[index];
+		auto & albRough = m_data.albRough[index];
+		auto & metDiv = m_data.metDiv[index];
+		auto & common = data.common[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
 
 #else
 
-		m_data[index].albRough.r = pass.getDiffuse().red();
-		m_data[index].albRough.g = pass.getDiffuse().green();
-		m_data[index].albRough.b = pass.getDiffuse().blue();
-		m_data[index].albRough.a = ( 255.0f - pass.getShininess() ) / 255.0f;
-		m_data[index].metDiv.r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( Point3r{ 1, 1, 1 } ) );
-		m_data[index].common.r = pass.getOpacity();
-		m_data[index].common.g = pass.getEmissive();
-		m_data[index].common.b = pass.getAlphaValue();
-		m_data[index].common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data[index].reflRefr.r = pass.getRefractionRatio();
-		m_data[index].reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.a = 1.0f;
-		doVisitExtended( pass, m_data[index].extended );
+		auto & data = m_data[index];
+		auto & albRough = data.albRough;
+		auto & metDiv = data.metDiv;
+		auto & common = data.common;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
 
 #endif
+
+		albRough.r = pass.getDiffuse().red();
+		albRough.g = pass.getDiffuse().green();
+		albRough.b = pass.getDiffuse().blue();
+		albRough.a = ( 255.0f - pass.getShininess() ) / 255.0f;
+		metDiv.r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( Point3r{ 1, 1, 1 } ) );
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
+		reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
+		reflRefr.a = 1.0f;
+		doVisitExtended( pass, extended );
 	}
 
 	void MetallicRoughnessPassBuffer::visit( MetallicRoughnessPbrPass const & pass )
@@ -120,39 +119,37 @@ namespace castor3d
 
 #if C3D_MaterialsStructOfArrays
 
-		m_data.albRough[index].r = pass.getAlbedo().red();
-		m_data.albRough[index].g = pass.getAlbedo().green();
-		m_data.albRough[index].b = pass.getAlbedo().blue();
-		m_data.albRough[index].a = pass.getRoughness();
-		m_data.metDiv[index].r = pass.getMetallic();
-		m_data.common[index].r = pass.getOpacity();
-		m_data.common[index].g = pass.getEmissive();
-		m_data.common[index].b = pass.getAlphaValue();
-		m_data.common[index].a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data.reflRefr[index].r = pass.getRefractionRatio();
-		m_data.reflRefr[index].g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data.reflRefr[index].a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, m_data.extended );
+		auto & diffAmb = m_data.diffAmb[index];
+		auto & albRough = m_data.albRough[index];
+		auto & metDiv = m_data.metDiv[index];
+		auto & reflRefr = m_data.reflRefr[index];
+		auto & extended = m_data.extended;
 
 #else
 
-		m_data[index].albRough.r = pass.getAlbedo().red();
-		m_data[index].albRough.g = pass.getAlbedo().green();
-		m_data[index].albRough.b = pass.getAlbedo().blue();
-		m_data[index].albRough.a = pass.getRoughness();
-		m_data[index].metDiv.r = pass.getMetallic();
-		m_data[index].common.r = pass.getOpacity();
-		m_data[index].common.g = pass.getEmissive();
-		m_data[index].common.b = pass.getAlphaValue();
-		m_data[index].common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
-		m_data[index].reflRefr.r = pass.getRefractionRatio();
-		m_data[index].reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
-		m_data[index].reflRefr.a = float( pass.getBWAccumulationOperator() );
-		doVisitExtended( pass, m_data[index].extended );
+		auto & data = m_data[index];
+		auto & albRough = data.albRough;
+		auto & metDiv = data.metDiv;
+		auto & common = data.common;
+		auto & reflRefr = data.reflRefr;
+		auto & extended = data.extended;
 
 #endif
+
+		albRough.r = pass.getAlbedo().red();
+		albRough.g = pass.getAlbedo().green();
+		albRough.b = pass.getAlbedo().blue();
+		albRough.a = pass.getRoughness();
+		metDiv.r = pass.getMetallic();
+		common.r = pass.getOpacity();
+		common.g = pass.getEmissive();
+		common.b = pass.getAlphaValue();
+		common.a = pass.needsGammaCorrection() ? 2.2f : 1.0f;
+		reflRefr.r = pass.getRefractionRatio();
+		reflRefr.g = checkFlag( pass.getTextures(), TextureFlag::eRefraction ) ? 1.0f : 0.0f;
+		reflRefr.b = checkFlag( pass.getTextures(), TextureFlag::eReflection ) ? 1.0f : 0.0f;
+		reflRefr.a = float( pass.getBWAccumulationOperator() );
+		doVisitExtended( pass, extended );
 	}
 
 	//*********************************************************************************************

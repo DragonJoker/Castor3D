@@ -196,7 +196,7 @@ namespace castor3d
 
 	VkDescriptorSetLayoutBinding TextureConfigurationBuffer::createLayoutBinding()const
 	{
-		return m_buffer.createLayoutBinding( TexturesBufferIndex );
+		return m_buffer.createLayoutBinding( getTexturesBufferIndex() );
 	}
 
 	void TextureConfigurationBuffer::createBinding( ashes::DescriptorSet & descriptorSet
