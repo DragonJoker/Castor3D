@@ -1,7 +1,6 @@
 option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." FALSE )
 option( CASTOR_BUILD_SAMPLE_GUICOMMON "Build GuiCommon library (needs wxWidgets library)" TRUE )
 option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER "Build CastorViewer (needs GuiCommon library)" TRUE )
-option( CASTOR_BUILD_SAMPLE_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" FALSE )
 option( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING "Build Ocean Lighting FFT sample (needs wxWidgets library)" FALSE )
 option( CASTOR_BUILD_SAMPLE_CASTOR_TD "Build Castor Tower Defense (needs GuiCommon library)" TRUE )
 if ( MSVC )
@@ -12,7 +11,6 @@ option( CASTOR_SAMPLE_CASTOR_VIEWER_RECORDS "Allow video recording from CastorVi
 function( SamplesInit )
 	set( GuiCmn "no (Not wanted)" PARENT_SCOPE )
 	set( CViewer "no (Not wanted)" PARENT_SCOPE )
-	set( CTestLcr "no (Not wanted)" PARENT_SCOPE )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
 	set( Ocean "no (Not wanted)" PARENT_SCOPE )
 	set( CTd "no (Not wanted)" PARENT_SCOPE )
@@ -28,7 +26,6 @@ function( SamplesBuild )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}libwxgtk3.0 (>= 3.0)" )
 		if( ${CASTOR_BUILD_SAMPLE_GUICOMMON}
 			OR ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER}
-			OR ${CASTOR_BUILD_SAMPLE_CASTOR_TEST_LAUNCHER}
 			OR ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING}
 			OR ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
 			if( NOT WIN32 )
@@ -104,12 +101,6 @@ function( SamplesBuild )
 
 				if( IsWxDebug )
 					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXDEBUG__" )
-				endif()
-
-				if( ${CASTOR_BUILD_SAMPLE_CASTOR_TEST_LAUNCHER} )
-					set( Build ${CTestLcr} )
-					add_subdirectory( Samples/CastorTestLauncher )
-					set( CTestLcr ${Build} PARENT_SCOPE )
 				endif()
 
 				if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} )
@@ -203,9 +194,6 @@ function( SamplesSummary msg )
 		endif ()
 		if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 			set( msg_tmp "${msg_tmp}\n    CastorViewer         ${CViewer}" )
-		endif ()
-		if( ${CASTOR_BUILD_SAMPLE_CASTOR_TEST_LAUNCHER} )
-			set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${CTestLcr}" )
 		endif ()
 		if( ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
 			set( msg_tmp "${msg_tmp}\n    OceanLighting        ${Ocean}" )

@@ -31,16 +31,30 @@ namespace test_launcher
 
 	bool CastorTestLauncher::doParseCommandLine()
 	{
+		ashes::RendererList list;
+
+		auto result = !list.empty();
+
+		if ( !result )
+		{
+			CU_Exception( "No renderer plug-ins" );
+		}
+
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ) );
-		parser.AddSwitch( wxT( "gl3" ), wxT( "opengl3" ), _( "Defines the renderer to OpenGl 3.x." ) );
-		parser.AddSwitch( wxT( "gl4" ), wxT( "opengl4" ), _( "Defines the renderer to OpenGl 4.x." ) );
-		parser.AddSwitch( wxT( "v" ), wxT( "vulkan" ), _( "Defines the renderer to Vulkan." ) );
-		parser.AddSwitch( wxT( "d11" ), wxT( "direct3d11" ), _( "Defines the renderer to Direct3D 11." ) );
-		parser.AddSwitch( wxT( "t" ), wxT( "test" ), _( "Defines the renderer to Test." ) );
 		parser.AddSwitch( wxT( "g" ), wxT( "generate" ), _( "Generates the reference image, using Vulkan renderer." ) );
 		parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
-		bool result = parser.Parse( false ) == 0;
+
+		for ( auto & plugin : list )
+		{
+			auto desc = wxString{ plugin.description };
+			desc.Replace( wxT( " renderer for Ashes" ), wxEmptyString );
+			parser.AddSwitch( wxString{ plugin.name }
+				, wxEmptyString
+				, _( "Defines the renderer to " ) + desc + wxT( "." ) );
+		}
+
+		result = parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
 		if ( !result || parser.Found( wxT( 'h' ) ) )
@@ -53,35 +67,28 @@ namespace test_launcher
 		{
 			Logger::initialise( LogType::eInfo );
 
-			if ( parser.Found( wxT( "opengl3" ) ) )
-			{
-				m_rendererType = cuT( "gl3" );
-				m_outputFileSuffix = m_rendererType;
-			}
-			else if ( parser.Found( wxT( "opengl4" ) ) )
-			{
-				m_rendererType = cuT( "gl4" );
-				m_outputFileSuffix = m_rendererType;
-			}
-			else if ( parser.Found( wxT( "vulkan" ) ) )
-			{
-				m_rendererType = cuT( "vk" );
-				m_outputFileSuffix = m_rendererType;
-			}
-			else if ( parser.Found( wxT( "direct3d11" ) ) )
-			{
-				m_rendererType = cuT( "d3d11" );
-				m_outputFileSuffix = m_rendererType;
-			}
-			else if ( parser.Found( wxT( "test" ) ) )
-			{
-				m_rendererType = cuT( "test" );
-				m_outputFileSuffix = m_rendererType;
-			}
-			else if ( parser.Found( wxT( "generate" ) ) )
+			if ( parser.Found( wxT( "generate" ) ) )
 			{
 				m_rendererType = cuT( "vk" );
 				m_outputFileSuffix = cuT( "ref" );
+			}
+			else
+			{
+				for ( auto & plugin : list )
+				{
+					if ( parser.Found( wxString{ plugin.name } ) )
+					{
+						m_rendererType = plugin.name;
+						m_outputFileSuffix = m_rendererType;
+					}
+				}
+			}
+
+			if ( m_rendererType.empty() )
+			{
+				parser.AddUsageText( _( "Please select a renderer type." ) );
+				parser.Usage();
+				result = false;
 			}
 
 			if ( parser.GetParamCount() > 0 )
@@ -122,18 +129,6 @@ namespace test_launcher
 					}
 				}
 			}
-		}
-
-		auto renderers = castor->getPluginCache().getPlugins( PluginType::eRenderer );
-
-		if ( renderers.empty() )
-		{
-			CU_Exception( "No renderer plug-ins" );
-		}
-
-		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
-		{
-			CU_Exception( "Renderer plug-in was not selected" );
 		}
 
 		castor->loadRenderer( m_rendererType );

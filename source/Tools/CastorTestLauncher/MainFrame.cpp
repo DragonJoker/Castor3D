@@ -19,7 +19,7 @@
 #include <wx/renderer.h>
 #include <wx/rawbmp.h>
 
-#include <xpms/castor.xpm>
+#include <castor.xpm>
 
 using namespace castor3d;
 using namespace castor;

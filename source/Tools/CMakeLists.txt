@@ -3,17 +3,20 @@ option( CASTOR_BUILD_TOOL_IMG_CONVERTER "Build ImgConverter (needs wxWidgets lib
 option( CASTOR_BUILD_TOOL_DIFF_IMAGE "Build DiffImage" TRUE )
 option( CASTOR_BUILD_TOOL_MESH_UPGRADER "Build CastorMeshUpgrader" TRUE )
 option( CASTOR_BUILD_TOOL_MESH_CONVERTER "Build CastorMeshConverter" TRUE )
+option( CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER "Build CastorTestLauncher" TRUE )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
 	set( DiffImg "no (Not wanted)" PARENT_SCOPE )
 	set( MshUpgd "no (Not wanted)" PARENT_SCOPE )
 	set( MshConv "no (Not wanted)" PARENT_SCOPE )
+	set( TestLcr "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
 	if( ${CASTOR_BUILDGRP_TOOL} )
-		if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER} )
+		if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER}
+			OR ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
 			if( NOT WIN32 )
 				find_package( GTK2 )
 				include_directories( ${GTK2_INCLUDE_DIRS} )
@@ -56,18 +59,32 @@ function( ToolsBuild )
 					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXDEBUG__" )
 				endif()
 
-				set( Build ${ImgConv} )
-				add_subdirectory( Tools/ImgConverter )
-				set( CPACK_PACKAGE_EXECUTABLES
-					${CPACK_PACKAGE_EXECUTABLES}
-					ImgConverter "ImgConverter"
-					PARENT_SCOPE )
-				set( ImgConv ${Build} PARENT_SCOPE )
+				if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER} )
+					set( Build ${ImgConv} )
+					add_subdirectory( Tools/ImgConverter )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						ImgConverter "ImgConverter"
+						PARENT_SCOPE )
+					set( ImgConv ${Build} PARENT_SCOPE )
+				endif ()
+
+				if( ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
+					set( Build ${TestLcr} )
+					add_subdirectory( Tools/CastorTestLauncher )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						CastorTestLauncher "CastorTestLauncher"
+						PARENT_SCOPE )
+					set( TestLcr ${Build} PARENT_SCOPE )
+				endif ()
 			else()
 				if( NOT wxWidgets_FOUND )
 					set( ImgConv "no (wxWidgets libraries not found)" PARENT_SCOPE )
+					set( TestLcr "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
 					set( ImgConv "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( TestLcr "no (GTK2 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()
@@ -129,6 +146,9 @@ function( ToolsSummary msg )
 		if( ${CASTOR_BUILD_TOOL_MESH_CONVERTER} )
 			set( msg_tmp "${msg_tmp}\n    CastorMeshConverter  ${MshConv}" )
 		endif ()
+		if( ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
+			set( msg_tmp "${msg_tmp}\n    CastorTestLauncher   ${TestLcr}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( ToolsSummary )
@@ -162,12 +182,11 @@ function( ToolsSetup )
 			)
 		endif()
 
-		if( ${CASTOR_BUILD_TOOL_TESTING} )
-			cpack_add_component( CastorUtilsTest
-				DISPLAY_NAME "CastorUtilsTest application"
-				DESCRIPTION "A test application, to test CastorUtils classes and functions."
+		if( ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
+			cpack_add_component( CastorTestLauncher
+				DISPLAY_NAME "CastorTestLauncher application"
+				DESCRIPTION "An application used to run Castor3D render tests."
 				GROUP Tools
-				DEPENDS CastorUtils CastorUtils_dev
 				INSTALL_TYPES Full Developer
 			)
 		endif()
