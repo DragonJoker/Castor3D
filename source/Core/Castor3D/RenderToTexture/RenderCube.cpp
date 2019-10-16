@@ -224,7 +224,7 @@ namespace castor3d
 				{
 					0u,
 					program,
-					std::move( vertexLayout ),
+					vertexLayout,
 					ashes::PipelineInputAssemblyStateCreateInfo{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 					std::nullopt,
 					ashes::PipelineViewportStateCreateInfo{ 0u, 1u, { VkViewport{ 0.0f, 0.0f, float( size.width ), float( size.height ) } }, 1u, { VkRect2D{ 0, 0, size.width, size.height } } },
