@@ -89,9 +89,7 @@ namespace castor3d
 				( ( clear && ashes::isDepthStencilFormat( depthView.getFormat() ) )
 					? VK_ATTACHMENT_LOAD_OP_CLEAR
 					: VK_ATTACHMENT_LOAD_OP_DONT_CARE ),
-				( ashes::isDepthStencilFormat( depthView.getFormat() )
-					? VK_ATTACHMENT_STORE_OP_STORE
-					: VK_ATTACHMENT_STORE_OP_DONT_CARE ),
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				( clear
 					? VK_IMAGE_LAYOUT_UNDEFINED
 					: VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ),
