@@ -811,6 +811,12 @@ namespace castor3d
 		, m_renderNodes{ std::make_unique< SceneRenderNodes >( m_culler.getScene() ) }
 		, m_culledRenderNodes{ std::make_unique< SceneCulledRenderNodes >( m_culler.getScene() ) }
 	{
+		getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
+				m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+			} ) );
 	}
 
 	void RenderQueue::cleanup()
@@ -822,16 +828,6 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
-		if ( !m_commandBuffer )
-		{
-			getOwner()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
-				, [this]()
-				{
-					auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
-					m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
-				} ) );
-		}
-
 		if ( m_allChanged )
 		{
 			doParseAllRenderNodes( shadowMaps );
