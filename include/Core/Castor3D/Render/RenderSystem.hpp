@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderSystem_H___
 #define ___C3D_RenderSystem_H___
 
+#include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
@@ -15,24 +16,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class DebugCallbacks
-	{
-	public:
-		DebugCallbacks( ashes::Instance const & instance
-			, void * userData );
-		~DebugCallbacks();
-
-	private:
-		ashes::Instance const & m_instance;
-		void * m_userData;
-#if VK_EXT_debug_utils
-		VkDebugUtilsMessengerEXT m_messenger{ VK_NULL_HANDLE };
-#endif
-#if VK_EXT_debug_report
-		VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
-#endif
-	};
-	using DebugCallbacksPtr = std::unique_ptr< DebugCallbacks >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010

@@ -211,6 +211,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkInstance" };
+			return result;
+		}
 	};
 
 	template<>
@@ -222,6 +227,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkPhysicalDevice" };
+			return result;
+		}
 	};
 
 	template<>
@@ -233,6 +243,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDevice" };
+			return result;
+		}
 	};
 
 	template<>
@@ -244,6 +259,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "C3dRenderDevice" };
+			return result;
+		}
 	};
 
 	template<>
@@ -255,6 +275,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkQueue" };
+			return result;
+		}
 	};
 
 	template<>
@@ -266,6 +291,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkSemaphore" };
+			return result;
+		}
 	};
 
 	template<>
@@ -277,6 +307,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkCommandBuffer" };
+			return result;
+		}
 	};
 
 	template<>
@@ -288,6 +323,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkFence" };
+			return result;
+		}
 	};
 
 	template<>
@@ -299,6 +339,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDeviceMemory" };
+			return result;
+		}
 	};
 
 	template<>
@@ -310,6 +355,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkBuffer" };
+			return result;
+		}
 	};
 
 	template<>
@@ -321,6 +371,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkUniformBuffer" };
+			return result;
+		}
 	};
 
 	template<>
@@ -332,6 +387,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkVertexBuffer" };
+			return result;
+		}
 	};
 
 	template<>
@@ -343,6 +403,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkImage" };
+			return result;
+		}
 	};
 
 	template<>
@@ -354,6 +419,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkEvent" };
+			return result;
+		}
 	};
 
 	template<>
@@ -365,6 +435,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkQueryPool" };
+			return result;
+		}
 	};
 
 	template<>
@@ -376,6 +451,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkBufferView" };
+			return result;
+		}
 	};
 
 	template<>
@@ -387,6 +467,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkImageView" };
+			return result;
+		}
 	};
 
 	template<>
@@ -398,6 +483,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkShaderModule" };
+			return result;
+		}
 	};
 
 	template<>
@@ -409,6 +499,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkPipelineLayout" };
+			return result;
+		}
 	};
 
 	template<>
@@ -420,6 +515,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkRenderPass" };
+			return result;
+		}
 	};
 
 	template<>
@@ -431,6 +531,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkGraphicsPipeline" };
+			return result;
+		}
 	};
 
 	template<>
@@ -442,6 +547,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkComputePipeline" };
+			return result;
+		}
 	};
 
 	template<>
@@ -453,6 +563,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDescriptorSetLayout" };
+			return result;
+		}
 	};
 
 	template<>
@@ -464,6 +579,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkSampler" };
+			return result;
+		}
 	};
 
 	template<>
@@ -475,6 +595,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDescriptorSetPool" };
+			return result;
+		}
 	};
 
 	template<>
@@ -486,6 +611,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDecriptorPool" };
+			return result;
+		}
 	};
 
 	template<>
@@ -497,6 +627,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkDescriptorSet" };
+			return result;
+		}
 	};
 
 	template<>
@@ -508,6 +643,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkFramebuffer" };
+			return result;
+		}
 	};
 
 	template<>
@@ -519,6 +659,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkCommandPool" };
+			return result;
+		}
 	};
 
 	template<>
@@ -530,6 +675,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkSurfaceKHR" };
+			return result;
+		}
 	};
 
 	template<>
@@ -541,6 +691,11 @@ namespace castor3d
 #if VK_EXT_debug_report || VK_EXT_debug_marker
 		static VkDebugReportObjectTypeEXT constexpr ReportValue = VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT;
 #endif
+		static std::string const & getName()
+		{
+			static std::string result{ "VkSwapchainKHR" };
+			return result;
+		}
 	};
 
 	template< typename AshesType >
@@ -550,6 +705,7 @@ namespace castor3d
 	{
 		using VkType = typename AshesTypeTraits< AshesType >::VkType;
 		using DebugTypeTraits = typename AshesDebugTypeTraits< AshesType >;
+		castor::Logger::logTrace( "Created object [" + name + "] of type " + DebugTypeTraits::getName() );
 
 #if VK_EXT_debug_utils
 
