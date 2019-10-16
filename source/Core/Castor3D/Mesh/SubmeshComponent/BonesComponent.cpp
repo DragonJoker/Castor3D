@@ -64,10 +64,10 @@ namespace castor3d
 				}
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
-					{ RenderPass::VertexInputs::BoneIds0Location, 0u, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id0 ) },
-					{ RenderPass::VertexInputs::BoneIds1Location, 0u, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id1 ) },
-					{ RenderPass::VertexInputs::Weights0Location, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight0 ) },
-					{ RenderPass::VertexInputs::Weights1Location, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight1 ) },
+					{ RenderPass::VertexInputs::BoneIds0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id0 ) },
+					{ RenderPass::VertexInputs::BoneIds1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id1 ) },
+					{ RenderPass::VertexInputs::Weights0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight0 ) },
+					{ RenderPass::VertexInputs::Weights1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight1 ) },
 				} );
 		}
 

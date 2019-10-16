@@ -150,11 +150,11 @@ namespace castor3d
 					}
 					, ashes::VkVertexInputAttributeDescriptionArray
 					{
-						{ RenderPass::VertexInputs::TransformLocation + 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 1u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 2u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::TransformLocation + 3u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
-						{ RenderPass::VertexInputs::MaterialLocation, 0u, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
+						{ RenderPass::VertexInputs::TransformLocation + 0u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 0u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 1u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 1u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 2u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 2u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::TransformLocation + 3u, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( InstantiationData, m_matrix ) + 3u * sizeof( Point4f ) },
+						{ RenderPass::VertexInputs::MaterialLocation, BindingPoint, VK_FORMAT_R32_SINT, offsetof( InstantiationData, m_material ) },
 					} );
 			}
 
