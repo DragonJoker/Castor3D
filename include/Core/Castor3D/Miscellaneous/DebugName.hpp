@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DPrerequisites.hpp"
 
-#include <ashespp/Core/Device.hpp>
-
 namespace castor3d
 {
 	template< typename AshesType >
@@ -698,6 +696,12 @@ namespace castor3d
 		}
 	};
 
+	C3D_API void setDebugObjectName( RenderDevice const & device
+		, uint64_t object
+		, uint32_t type
+		, std::string const & name
+		, std::string const & typeName );
+
 	template< typename AshesType >
 	void setDebugObjectName( RenderDevice const & device
 		, AshesType const & object
@@ -705,40 +709,21 @@ namespace castor3d
 	{
 		using VkType = typename AshesTypeTraits< AshesType >::VkType;
 		using DebugTypeTraits = typename AshesDebugTypeTraits< AshesType >;
-		castor::Logger::logTrace( "Created object [" + name + "] of type " + DebugTypeTraits::getName() );
-
+		setDebugObjectName( device
+			, uint64_t( VkType( object ) )
 #if VK_EXT_debug_utils
-
-		if ( device.device->hasDebugUtils() )
-		{
-			device.device->setDebugUtilsObjectName(
-				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT,
-					nullptr,
-					DebugTypeTraits::UtilsValue,
-					uint64_t( VkType( object ) ),
-					name.c_str()
-				} );
-		}
-		else
-
+			, uint32_t( DebugTypeTraits::UtilsValue )
+#elif VK_EXT_debug_marker
+			, uint32_t( DebugTypeTraits::ReportValue )
 #endif
-#if VK_EXT_debug_marker
-
-		if ( device.device->hasDebugMarker() )
-		{
-			device.device->debugMarkerSetObjectName(
-				{
-					VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
-					nullptr,
-					DebugTypeTraits::ReportValue,
-					uint64_t( VkType( object ) ),
-					name.c_str()
-				} );
-		}
-
-#endif
+			, name
+			, DebugTypeTraits::getName() );
 	}
+
+	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
+		, VkMemoryRequirements const & requirements
+		, VkMemoryPropertyFlags flags
+		, std::string const & name );
 
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
@@ -746,12 +731,10 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		VkMemoryRequirements requirements = resource.getMemoryRequirements();
-		uint32_t deduced = device.device->deduceMemoryType( requirements.memoryTypeBits
-			, flags );
-		auto memory = device.device->allocateMemory( VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		setDebugObjectName( device, *memory, name + "Mem" );
-		return memory;
+		return setupMemory( device
+			, resource.getMemoryRequirements()
+			, flags
+			, name );
 	}
 }
 
