@@ -282,8 +282,8 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		auto result = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *result, "NeighbourhoodBlending" );
+		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "NeighbourhoodBlending" );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
