@@ -463,36 +463,23 @@ namespace castor3d
 	void RenderTechnique::doCreateShadowMaps()
 	{
 		auto & scene = *m_renderTarget.getScene();
-
-#if C3D_UseDeferredRendering
-		if ( scene.hasShadows() )
-#endif
-		{
-			auto & engine = *m_renderTarget.getEngine();
-			m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
-				, scene );
-			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
-			m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
-				, scene );
-			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
-			m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
-				, scene );
-			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
-		}
+		auto & engine = *m_renderTarget.getEngine();
+		m_directionalShadowMap = std::make_unique< ShadowMapDirectional >( engine
+			, scene );
+		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		m_spotShadowMap = std::make_unique< ShadowMapSpot >( engine
+			, scene );
+		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		m_pointShadowMap = std::make_unique< ShadowMapPoint >( engine
+			, scene );
+		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
 	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		auto & scene = *m_renderTarget.getScene();
-
-#if C3D_UseDeferredRendering
-		if ( scene.hasShadows() )
-#endif
-		{
-			m_directionalShadowMap->initialise();
-			m_spotShadowMap->initialise();
-			m_pointShadowMap->initialise();
-		}
+		m_directionalShadowMap->initialise();
+		m_spotShadowMap->initialise();
+		m_pointShadowMap->initialise();
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()
@@ -708,16 +695,9 @@ namespace castor3d
 
 	void RenderTechnique::doCleanupShadowMaps()
 	{
-		auto & scene = *m_renderTarget.getScene();
-
-#if C3D_UseDeferredRendering
-		if ( scene.hasShadows() )
-#endif
-		{
-			m_directionalShadowMap->cleanup();
-			m_spotShadowMap->cleanup();
-			m_pointShadowMap->cleanup();
-		}
+		m_directionalShadowMap->cleanup();
+		m_spotShadowMap->cleanup();
+		m_pointShadowMap->cleanup();
 	}
 
 	void RenderTechnique::doUpdateShadowMaps( RenderQueueArray & queues )
