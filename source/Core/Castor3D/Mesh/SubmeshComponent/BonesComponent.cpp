@@ -66,8 +66,8 @@ namespace castor3d
 				{
 					{ RenderPass::VertexInputs::BoneIds0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id0 ) },
 					{ RenderPass::VertexInputs::BoneIds1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SINT, offsetof( VertexBoneData::Ids::ids, id1 ) },
-					{ RenderPass::VertexInputs::Weights0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight0 ) },
-					{ RenderPass::VertexInputs::Weights1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof( VertexBoneData::Weights::weights, weight1 ) },
+					{ RenderPass::VertexInputs::Weights0Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight0 ) },
+					{ RenderPass::VertexInputs::Weights1Location, BindingPoint, VK_FORMAT_R32G32B32A32_SFLOAT, sizeof( VertexBoneData::Ids ) + offsetof( VertexBoneData::Weights::weights, weight1 ) },
 				} );
 		}
 
