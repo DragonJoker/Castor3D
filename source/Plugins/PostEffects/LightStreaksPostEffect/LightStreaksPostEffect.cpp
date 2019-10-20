@@ -754,11 +754,11 @@ namespace light_streaks
 		// Fill command buffer.
 		static ashes::VkClearValueArray const clearValues[Count + 1]
 		{
-			{ ashes::makeClearValue( VkClearColorValue{ 1.0, 0.0, 0.0, 1.0 } ) },
-			{ ashes::makeClearValue( VkClearColorValue{ 0.0, 1.0, 0.0, 1.0 } ) },
-			{ ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 1.0, 1.0 } ) },
-			{ ashes::makeClearValue( VkClearColorValue{ 1.0, 1.0, 0.0, 1.0 } ) },
-			{ ashes::makeClearValue( VkClearColorValue{ 0.0, 1.0, 1.0, 1.0 } ) },
+			{ 1u, castor3d::opaqueBlackClearColor },
+			{ 1u, castor3d::opaqueBlackClearColor },
+			{ 1u, castor3d::opaqueBlackClearColor },
+			{ 1u, castor3d::opaqueBlackClearColor },
+			{ 1u, castor3d::opaqueBlackClearColor },
 		};
 		auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
 		castor3d::CommandsSemaphore hiPassCommands

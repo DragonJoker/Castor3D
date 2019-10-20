@@ -331,7 +331,7 @@ namespace Bloom
 		timer.beginPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ) }
+			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );

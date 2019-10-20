@@ -189,7 +189,7 @@ namespace castor3d
 		m_commandBuffer->begin();
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { defaultClearDepthStencilValue, defaultClearColorValue }
+			, { defaultClearDepthStencil, opaqueBlackClearColor }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		ashes::CommandBufferCRefArray commandBuffers;
 

@@ -736,13 +736,11 @@ namespace castor3d
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
-		static auto const colour{ ashes::makeClearValue( VkClearColorValue{ 1.0, 1.0, 1.0, 1.0 } ) };
-
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { colour }
+			, { opaqueWhiteClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindDescriptorSet( *m_descriptor, *m_pipelineLayout );

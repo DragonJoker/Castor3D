@@ -486,7 +486,7 @@ namespace smaa
 			, m_smaaResult->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		copyQuad->registerFrame( copyCmd );
 		copyCmd.endRenderPass();

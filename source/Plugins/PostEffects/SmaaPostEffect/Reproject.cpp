@@ -263,7 +263,7 @@ namespace smaa
 
 		reprojectCmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( reprojectCmd );
 		reprojectCmd.endRenderPass();

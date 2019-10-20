@@ -1273,8 +1273,6 @@ namespace castor3d
 		, ashes::FrameBuffer const & frameBuffer
 		, RenderPassTimer & timer )
 	{
-		static auto const clear{ ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ) };
-
 		m_commandBuffer->begin();
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -1282,7 +1280,7 @@ namespace castor3d
 			, m_geometryPassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, frameBuffer
-			, { clear }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindDescriptorSets( { uboSet, texSet }, *m_pipelineLayout );

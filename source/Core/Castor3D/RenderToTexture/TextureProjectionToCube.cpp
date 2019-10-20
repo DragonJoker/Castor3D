@@ -215,7 +215,7 @@ namespace castor3d
 
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *frameBuffer.frameBuffer
-				, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+				, { transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			registerFrame( *m_commandBuffer, face );
 			m_commandBuffer->endRenderPass();

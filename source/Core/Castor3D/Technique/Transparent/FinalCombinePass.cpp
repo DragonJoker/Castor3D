@@ -465,7 +465,7 @@ namespace castor3d
 		m_timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( m_renderPass
 			, frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->setViewport( ashes::makeViewport( frameBuffer.getDimensions() ) );

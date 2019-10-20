@@ -359,7 +359,7 @@ namespace smaa
 
 		neighbourhoodBlendingCmd.beginRenderPass( *m_renderPass
 			, *m_surfaces[index].frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( neighbourhoodBlendingCmd );
 		neighbourhoodBlendingCmd.endRenderPass();

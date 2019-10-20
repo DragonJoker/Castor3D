@@ -77,7 +77,6 @@ namespace castor3d
 		, Size const & size
 		, TextureLayout const & texture )
 	{
-		static VkClearValue const clear{ ashes::makeClearValue( { 0.0, 0.0, 0.0, 0.0 } ) };
 		cleanup();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
@@ -92,7 +91,7 @@ namespace castor3d
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( renderPass
 			, frameBuffer
-			, { clear }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();

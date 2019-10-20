@@ -529,11 +529,9 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::Blur::prepareFrame( ashes::CommandBuffer & commandBuffer )const
 	{
-		static auto const black{ ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 1 } ) };
-
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { black }
+			, { opaqueBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( commandBuffer );
 		commandBuffer.endRenderPass();
@@ -632,8 +630,7 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::Combine::prepareFrame( ashes::CommandBuffer & commandBuffer )const
 	{
-		static auto const red{ ashes::makeClearValue( VkClearColorValue{ 0, 1, 0, 1 } ) };
-
+		static auto const red{ makeClearValue( 0, 1, 0, 1 ) };
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { red }

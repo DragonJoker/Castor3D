@@ -635,8 +635,6 @@ namespace castor3d
 
 	void LineariseDepthPass::doPrepareFrame()
 	{
-		static auto const colour{ ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 0.0 } ) };
-
 		m_commandBuffer->begin();
 		m_timer->beginPass( *m_commandBuffer );
 
@@ -655,7 +653,7 @@ namespace castor3d
 				, subresource ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_lineariseFrameBuffer
-			, { colour }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_linearisePipeline );
 		m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
@@ -678,7 +676,7 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( *m_renderPass
 				, *pipeline.frameBuffer
-				, { colour }
+				, { transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_commandBuffer->bindPipeline( *pipeline.pipeline );
 			m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );

@@ -361,8 +361,6 @@ namespace castor3d
 	ashes::Semaphore const & LightPass::render( uint32_t index
 		, ashes::Semaphore const & toWait )
 	{
-		static auto const clearDepthStencil{ ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 1 } ) };
-		static auto const clearColour{ ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 1.0 } ) };
 		CU_Require( m_pipeline );
 		auto result = &toWait;
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -376,7 +374,7 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( *m_firstRenderPass.renderPass
 				, *m_firstRenderPass.frameBuffer
-				, { clearDepthStencil, clearColour, clearColour }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { *m_pipeline->firstCommandBuffer } );
 		}
@@ -384,7 +382,7 @@ namespace castor3d
 		{
 			m_commandBuffer->beginRenderPass( *m_blendRenderPass.renderPass
 				, *m_blendRenderPass.frameBuffer
-				, { clearDepthStencil, clearColour, clearColour }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { *m_pipeline->blendCommandBuffer } );
 		}

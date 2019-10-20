@@ -799,7 +799,7 @@ namespace castor3d
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			commandBuffer.beginRenderPass( *m_renderPass
 				, frameBuffer
-				, { ashes::makeClearValue( VkClearColorValue{ { 1.0f, 1.0f, 1.0f, 1.0f } } ) }
+				, { opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad->registerFrame( commandBuffer );
 			commandBuffer.endRenderPass();

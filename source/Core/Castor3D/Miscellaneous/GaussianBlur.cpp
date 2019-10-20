@@ -471,7 +471,7 @@ namespace castor3d
 		result->begin();
 		result->beginRenderPass( renderPass
 			, *fbo
-			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		result->executeCommands( { quad.getCommandBuffer() } );
 		result->endRenderPass();

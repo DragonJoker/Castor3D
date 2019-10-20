@@ -14,9 +14,22 @@ namespace castor3d
 	/**@name Render */
 	//@{
 
-	static VkClearValue const defaultClearDepthStencilValue{ ashes::makeClearValue( VkClearDepthStencilValue{ 1.0, 0 } ) };
-	static VkClearValue const defaultClearColorValue{ ashes::makeClearValue( VkClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f } ) };
-	static VkColorComponentFlags const defaultColorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	inline VkClearValue makeClearValue( float depth, uint32_t stencil = 0u )
+	{
+		return ashes::makeClearValue( VkClearDepthStencilValue{ depth, stencil } );
+	}
+
+	inline VkClearValue makeClearValue( float r, float g, float b, float a = 1.0f )
+	{
+		return ashes::makeClearValue( { r, g, b, a } );
+	}
+
+	static VkClearValue const defaultClearDepthStencil{ makeClearValue( 1.0f, 0u ) };
+	static VkClearValue const opaqueBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 1.0f ) };
+	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
+	static VkClearValue const opaqueWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 1.0f ) };
+	static VkClearValue const transparentWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 0.0f ) };
+	static VkColorComponentFlags const defaultColorWriteMask{ VK_COLOR_COMPONENT_R_BIT| VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
 
 	struct NonTexturedQuad
 	{
@@ -308,7 +321,8 @@ namespace castor3d
 	CU_DeclareMap( RenderWindow *, ContextSPtr, ContextPtr );
 	CU_DeclareMap( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
-	using ShadowMapRefArray = std::vector< std::pair< std::reference_wrapper< ShadowMap >, UInt32Array > >;
+	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
+	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
 	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 
 	inline VkDescriptorSetLayoutBinding makeDescriptorSetLayoutBinding( uint32_t binding
@@ -407,16 +421,6 @@ namespace castor3d
 	{
 		return ashes::makeScissor( makeOffset2D( pos )
 			, makeExtent2D( size ) );
-	}
-
-	inline VkClearValue makeClearValue( float depth, uint32_t stencil = 0 )
-	{
-		return ashes::makeClearValue( VkClearDepthStencilValue{ depth, stencil } );
-	}
-
-	inline VkClearValue makeClearValue( float r, float g, float b, float a = 1.0f )
-	{
-		return ashes::makeClearValue( { r, g, b, a } );
 	}
 
 	//@}

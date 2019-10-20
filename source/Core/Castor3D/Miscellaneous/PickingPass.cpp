@@ -304,8 +304,8 @@ namespace castor3d
 	{
 		static ashes::VkClearValueArray clearValues
 		{
-			ashes::makeClearValue( VkClearColorValue{ 0.0, 0.0, 0.0, 1.0 } ),
-			defaultClearDepthStencilValue,
+			opaqueBlackClearColor,
+			defaultClearDepthStencil,
 		};
 
 		m_commandBuffer->begin();

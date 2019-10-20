@@ -410,7 +410,6 @@ namespace Bloom
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
 		castor3d::CommandsSemaphoreArray result;
-		static auto const clearValue{ ashes::makeClearValue( VkClearColorValue{ 0.0f, 0.0f, 0.0f, 0.0f } ) };
 
 		for ( auto i = 0u; i < m_blurPassesCount; ++i )
 		{
@@ -423,7 +422,7 @@ namespace Bloom
 			timer.beginPass( cmd, 1u + ( m_isVertical ? 1u : 0u ) * m_blurPassesCount + i );
 			cmd.beginRenderPass( *m_renderPass
 				, *blur.frameBuffer
-				, { clearValue }
+				, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 			cmd.bindPipeline( *blur.pipeline );
 			cmd.bindDescriptorSet( *blur.descriptorSet, *m_pipelineLayout );

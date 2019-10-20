@@ -621,7 +621,7 @@ namespace castor3d
 			, *m_renderPass );
 
 		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		VkClearColorValue const clear{ 0.0f, 0.0f, 1.0f, 1.0f };
+		auto const clear{ makeClearValue( 0.0f, 0.0f, 1.0f, 1.0f ) };
 
 		if ( result )
 		{
@@ -633,7 +633,7 @@ namespace castor3d
 				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
-				, { ashes::makeClearValue( clear ) }
+				, { clear }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_toneMapping->registerFrame( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endRenderPass();
@@ -772,7 +772,7 @@ namespace castor3d
 		m_combineCommands->begin();
 		m_combineCommands->beginRenderPass( *m_renderPass
 			, *m_combinedFrameBuffer.frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_combineQuad->registerFrame( *m_combineCommands );
 		m_combineCommands->endRenderPass();

@@ -161,7 +161,7 @@ namespace castor3d
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{ 0, 0, 0, 0 } ) }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_commandBuffer->bindPipeline( *m_pipeline );
 		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );

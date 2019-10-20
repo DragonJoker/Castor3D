@@ -208,7 +208,7 @@ namespace Bloom
 
 		cmd.beginRenderPass( *m_renderPass
 			, *m_surface.frameBuffer
-			, { ashes::makeClearValue( VkClearColorValue{} ) }
+			, { castor3d::transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( cmd );
 		cmd.endRenderPass();

@@ -272,7 +272,7 @@ namespace GrayScale
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer
-				, { ashes::makeClearValue( VkClearColorValue{} ) }
+				, { castor3d::transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();

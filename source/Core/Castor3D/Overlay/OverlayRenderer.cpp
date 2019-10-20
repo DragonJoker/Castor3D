@@ -515,13 +515,12 @@ namespace castor3d
 				, 1.0f ) );
 		}
 
-		static VkClearColorValue clear{ 0.0f, 0.0f, 0.0f, 0.0f };
 		m_toWait = &toWait;
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { ashes::makeClearValue( clear ) }
+			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 	}
 

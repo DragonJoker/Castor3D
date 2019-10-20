@@ -213,7 +213,6 @@ namespace castor3d
 	ashes::Semaphore const & ShadowMapDirectional::render( ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
-		static VkClearValue const black{ ashes::makeClearValue( VkClearColorValue{ 0.0f, 0.0f, 0.0f, 1.0f } ) };
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 
@@ -235,7 +234,7 @@ namespace castor3d
 			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencilValue, black, black }
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();

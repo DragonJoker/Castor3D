@@ -520,7 +520,6 @@ namespace castor3d
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
-		static VkClearColorValue const colour{ 1.0, 1.0, 1.0, 1.0 };
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
@@ -528,7 +527,7 @@ namespace castor3d
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_fbo
-			, { ashes::makeClearValue( colour ) }
+			, { opaqueWhiteClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
