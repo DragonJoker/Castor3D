@@ -285,6 +285,13 @@ namespace castor3d
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
+						CASE( 7 )
+						{
+							// (yet another one)
+							weight = max( min( 1.0_f, max( max( colour.r(), colour.g() ), colour.b() ) * alpha ), alpha ) * clamp( 0.03_f / ( 0.00001_f + pow( depth / 200.0_f, 4.0_f ) ), 0.01_f, 3000.0_f );
+							m_writer.caseBreakStmt();
+						}
+						ESAC;
 					}
 					HCTIWS;
 

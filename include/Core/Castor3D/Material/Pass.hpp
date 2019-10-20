@@ -415,7 +415,7 @@ namespace castor3d
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
 		float m_opacity{ 1.0f };
-		castor::RangedValue< uint32_t > m_bwAccumulationOperator{ castor::makeRangedValue( 1u, 0u, 7u ) };
+		castor::RangedValue< uint32_t > m_bwAccumulationOperator{ castor::makeRangedValue( 1u, 0u, 8u ) };
 		float m_emissive{ 0.0f };
 		float m_refractionRatio{ 0.0f };
 		bool m_twoSided{ false };
