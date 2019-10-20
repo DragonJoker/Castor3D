@@ -251,6 +251,12 @@ namespace castor3d
 			, culler
 			, nullptr }
 	{
+		engine.sendEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				auto & device = getCurrentRenderDevice( *this );
+				m_transferFence = device->createFence();
+			} ) );
 	}
 
 	PickingPass::~PickingPass()
@@ -328,9 +334,9 @@ namespace castor3d
 		m_commandBuffer->end();
 
 		auto & device = getCurrentRenderDevice( *this );
-		ashes::FencePtr fence = device->createFence();
-		device.graphicsQueue->submit( *m_commandBuffer, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+		device.graphicsQueue->submit( *m_commandBuffer, m_transferFence.get() );
+		m_transferFence->wait( ashes::MaxTimeout );
+		m_transferFence->reset();
 		device->waitIdle();
 
 #if !C3D_DebugPicking

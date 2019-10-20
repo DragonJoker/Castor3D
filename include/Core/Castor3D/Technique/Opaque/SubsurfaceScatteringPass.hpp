@@ -211,7 +211,6 @@ namespace castor3d
 		Combine m_combine;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		ashes::FencePtr m_fence;
 		RenderPassTimerSPtr m_timer;
 	};
 }

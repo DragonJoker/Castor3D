@@ -458,7 +458,6 @@ namespace castor3d
 		{
 			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 			m_finished = device->createSemaphore();
-			m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		}
 
 
@@ -491,7 +490,6 @@ namespace castor3d
 		m_panelVertexBuffers.clear();
 		m_borderVertexBuffers.clear();
 		m_textVertexBuffers.clear();
-		m_fence.reset();
 		m_commandBuffer.reset();
 		m_frameBuffer.reset();
 		m_renderPass.reset();

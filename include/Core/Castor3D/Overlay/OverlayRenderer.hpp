@@ -328,7 +328,6 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		ashes::Semaphore const * m_toWait{ nullptr };
 		ashes::SemaphorePtr m_finished;
-		ashes::FencePtr m_fence;
 	};
 }
 

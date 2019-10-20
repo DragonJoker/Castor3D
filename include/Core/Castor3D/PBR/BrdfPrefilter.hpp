@@ -63,6 +63,7 @@ namespace castor3d
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
+		ashes::FencePtr m_fence;
 	};
 }
 

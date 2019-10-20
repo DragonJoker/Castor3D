@@ -168,7 +168,6 @@ namespace castor3d
 			, std::move( fbAttaches ) );
 
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
-		m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 	}
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
@@ -231,7 +230,6 @@ namespace castor3d
 
 	void ForwardRenderTechniquePass::doCleanup()
 	{
-		m_fence.reset();
 		m_nodesCommands.reset();
 		m_frameBuffer.reset();
 		RenderTechniquePass::doCleanup();

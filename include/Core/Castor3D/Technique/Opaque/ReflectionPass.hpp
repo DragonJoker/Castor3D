@@ -150,7 +150,6 @@ namespace castor3d
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::SemaphorePtr m_finished;
-		ashes::FencePtr m_fence;
 		RenderPassTimerSPtr m_timer;
 		ReflectionPrograms m_programs;
 		bool m_ssaoEnabled{ false };

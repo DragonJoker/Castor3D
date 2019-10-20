@@ -742,7 +742,6 @@ namespace castor3d
 
 		auto & device = getCurrentRenderDevice( engine );
 		m_finished = device->createSemaphore();
-		m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 		prepare();
 	}

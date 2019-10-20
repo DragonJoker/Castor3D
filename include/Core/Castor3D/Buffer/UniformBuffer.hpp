@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {
@@ -344,6 +345,7 @@ namespace castor3d
 		std::set< uint32_t > m_available;
 		ashes::UniformBufferPtr m_buffer;
 		castor::String m_debugName;
+		ashes::FencePtr m_transferFence;
 	};
 
 	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
@@ -364,7 +366,6 @@ namespace castor3d
 			, std::move( name )
 			, std::move( sharingMode ) );
 	}
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.5.0

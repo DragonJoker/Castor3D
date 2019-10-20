@@ -117,7 +117,6 @@ namespace castor3d
 		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		ashes::FencePtr m_fence;
 		castor::Matrix4x4f m_mtxView;
 		castor::Matrix4x4f m_mtxModel;
 		ModelMatrixUbo m_modelMatrixUbo;

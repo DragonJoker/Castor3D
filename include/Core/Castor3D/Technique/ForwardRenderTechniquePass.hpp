@@ -165,7 +165,6 @@ namespace castor3d
 	protected:
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::CommandBufferPtr m_nodesCommands;
-		ashes::FencePtr m_fence;
 	};
 }
 

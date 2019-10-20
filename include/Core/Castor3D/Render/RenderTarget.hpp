@@ -455,7 +455,6 @@ namespace castor3d
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
 		ashes::Semaphore const * m_signalFinished{ nullptr };
-		ashes::FencePtr m_fence;
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
 	};

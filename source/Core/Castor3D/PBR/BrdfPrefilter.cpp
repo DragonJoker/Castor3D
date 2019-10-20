@@ -151,12 +151,12 @@ namespace castor3d
 
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 		setDebugObjectName( device, *m_commandBuffer, "BrdfPrefilterCommandBuffer" );
+		m_fence = device->createFence();
 	}
 
 	void BrdfPrefilter::render()
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto fence = device->createFence();
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginRenderPass( *m_renderPass
@@ -169,9 +169,9 @@ namespace castor3d
 		m_commandBuffer->endRenderPass();
 		m_commandBuffer->end();
 
-		device.graphicsQueue->submit( *m_commandBuffer, fence.get() );
-		fence->wait( ashes::MaxTimeout );
-		device.graphicsQueue->waitIdle();
+		device.graphicsQueue->submit( *m_commandBuffer, m_fence.get() );
+		m_fence->wait( ashes::MaxTimeout );
+		m_fence->reset();
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()

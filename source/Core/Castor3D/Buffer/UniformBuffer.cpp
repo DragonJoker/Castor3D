@@ -117,6 +117,7 @@ namespace castor3d
 			, m_sharingMode );
 		setDebugObjectName( device, *m_buffer, m_debugName + "Ubo" );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
+		m_transferFence = device.device->createFence();
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
@@ -164,10 +165,10 @@ namespace castor3d
 			, flags
 			, timer
 			, index );
-		auto fence = device->createFence();
 		queue.submit( *commandBuffer
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+			, m_transferFence.get() );
+		m_transferFence->wait( ashes::MaxTimeout );
+		m_transferFence->reset();
 	}
 
 	inline void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
@@ -239,10 +240,10 @@ namespace castor3d
 			, timer
 			, index );
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto fence = device->createFence();
 		queue.submit( *commandBuffer
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+			, m_transferFence.get() );
+		m_transferFence->wait( ashes::MaxTimeout );
+		m_transferFence->reset();
 		auto dst = reinterpret_cast< uint8_t * >( data );
 
 		if ( auto src = stagingBuffer.lock( 0u

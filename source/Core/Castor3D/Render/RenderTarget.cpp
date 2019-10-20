@@ -302,7 +302,6 @@ namespace castor3d
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device->createSemaphore();
-			m_fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 		}
 	}
 
@@ -313,7 +312,6 @@ namespace castor3d
 			m_initialised = false;
 			m_culler.reset();
 
-			m_fence.reset();
 			m_signalReady.reset();
 
 			m_combineQuad.reset();

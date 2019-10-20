@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #define C3D_DebugPicking 0
 
@@ -253,6 +254,7 @@ namespace castor3d
 		SubmeshWPtr m_submesh;
 		uint32_t m_face{ 0u };
 		std::vector< castor::Point4f > m_buffer;
+		ashes::FencePtr m_transferFence;
 	};
 }
 

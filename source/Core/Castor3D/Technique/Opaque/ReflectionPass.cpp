@@ -1334,7 +1334,6 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
 		, m_finished{ m_device->createSemaphore() }
-		, m_fence{ m_device->createFence( VK_FENCE_CREATE_SIGNALED_BIT ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
 		, m_programs
 		{
