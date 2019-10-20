@@ -90,9 +90,9 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
-				, { buffer->getWidth(), buffer->getHeight() } );
-			auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-			staging->uploadTextureData( *commandBuffer
+				, makeExtent2D( buffer->getDimensions() ) );
+			staging->uploadTextureData( *device.graphicsQueue
+				, *device.graphicsCommandPool
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, result );
