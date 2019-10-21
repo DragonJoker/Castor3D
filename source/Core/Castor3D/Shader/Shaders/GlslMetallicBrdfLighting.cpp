@@ -18,8 +18,9 @@ namespace castor3d
 		const String MetallicBrdfLightingModel::Name = cuT( "pbr_mr" );
 
 		MetallicBrdfLightingModel::MetallicBrdfLightingModel( ShaderWriter & m_writer
-			, Utils & utils )
-			: LightingModel{ m_writer, utils }
+			, Utils & utils
+			, bool isOpaqueProgram )
+			: LightingModel{ m_writer, utils, isOpaqueProgram }
 		{
 		}
 
@@ -143,9 +144,10 @@ namespace castor3d
 		std::shared_ptr< MetallicBrdfLightingModel > MetallicBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, uint32_t & index
-			, uint32_t maxCascades )
+			, uint32_t maxCascades
+			, bool isOpaqueProgram )
 		{
-			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils, isOpaqueProgram );
 			result->declareModel( index, maxCascades );
 			return result;
 		}
@@ -157,7 +159,7 @@ namespace castor3d
 			, uint32_t & index
 			, uint32_t maxCascades )
 		{
-			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils, true );
 			result->declareDirectionalModel( shadows
 				, volumetric
 				, index
@@ -172,7 +174,7 @@ namespace castor3d
 			, bool volumetric
 			, uint32_t & index )
 		{
-			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< MetallicBrdfLightingModel >( writer, utils, true );
 
 			switch ( lightType )
 			{
@@ -346,25 +348,28 @@ namespace castor3d
 						, fragmentIn
 						, output );
 
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) )
-						&& light.m_lightBase.m_volumetricSteps != 0_u )
+					if ( m_isOpaqueProgram )
 					{
-						m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
-							, light.m_lightBase.m_shadowOffsets
-							, light.m_lightBase.m_shadowVariance
-							, fragmentIn.m_clipVertex
-							, fragmentIn.m_worldVertex
-							, worldEye
-							, light.m_transforms[cascadeIndex]
-							, -lightDirection
-							, cascadeIndex
-							, light.m_lightBase.m_colour
-							, light.m_lightBase.m_intensity
-							, light.m_lightBase.m_volumetricSteps
-							, light.m_lightBase.m_volumetricScattering
-							, output );
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) )
+							&& light.m_lightBase.m_volumetricSteps != 0_u )
+						{
+							m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
+								, light.m_lightBase.m_shadowOffsets
+								, light.m_lightBase.m_shadowVariance
+								, fragmentIn.m_clipVertex
+								, fragmentIn.m_worldVertex
+								, worldEye
+								, light.m_transforms[cascadeIndex]
+								, -lightDirection
+								, cascadeIndex
+								, light.m_lightBase.m_colour
+								, light.m_lightBase.m_intensity
+								, light.m_lightBase.m_volumetricSteps
+								, light.m_lightBase.m_volumetricScattering
+								, output );
+						}
+						FI;
 					}
-					FI;
 
 #if C3D_DebugCascades
 					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )

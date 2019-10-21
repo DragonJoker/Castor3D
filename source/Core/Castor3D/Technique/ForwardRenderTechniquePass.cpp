@@ -624,7 +624,8 @@ namespace castor3d
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades() );
+			, getCuller().getScene().getDirectionalShadowCascades()
+			, m_opaque );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs
@@ -840,7 +841,8 @@ namespace castor3d
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades() );
+			, getCuller().getScene().getDirectionalShadowCascades()
+			, m_opaque );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
 
@@ -1119,7 +1121,8 @@ namespace castor3d
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades() );
+			, getCuller().getScene().getDirectionalShadowCascades()
+			, m_opaque );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
 		// Fragment Outputs

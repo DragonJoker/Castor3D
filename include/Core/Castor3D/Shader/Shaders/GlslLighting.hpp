@@ -41,7 +41,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API LightingModel( sdw::ShaderWriter & writer
-				, Utils & utils );
+				, Utils & utils
+				, bool isOpaqueProgram );
 			C3D_API void declareModel( uint32_t & index
 				, uint32_t maxCascades );
 			C3D_API void declareDirectionalModel( ShadowType shadows
@@ -94,6 +95,7 @@ namespace castor3d
 
 		protected:
 			sdw::ShaderWriter & m_writer;
+			bool m_isOpaqueProgram;
 			std::shared_ptr< Shadow > m_shadowModel;
 			sdw::Function< shader::Light
 				, sdw::InInt > m_getBaseLight;

@@ -17,7 +17,8 @@ namespace castor3d
 		{
 		public:
 			C3D_API PhongLightingModel( sdw::ShaderWriter & writer
-				, Utils & utils );
+				, Utils & utils
+				, bool isOpaqueProgram );
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
 				, sdw::Float const & shininess
 				, sdw::Int const & receivesShadows
@@ -44,7 +45,8 @@ namespace castor3d
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, uint32_t & index
-				, uint32_t maxCascades );
+				, uint32_t maxCascades
+				, bool isOpaqueProgram );
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, ShadowType shadows

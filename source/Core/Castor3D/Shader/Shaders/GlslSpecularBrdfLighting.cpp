@@ -16,8 +16,9 @@ namespace castor3d
 		const String SpecularBrdfLightingModel::Name = cuT( "pbr_sg" );
 
 		SpecularBrdfLightingModel::SpecularBrdfLightingModel( ShaderWriter & writer
-			, Utils & utils )
-			: LightingModel{ writer, utils }
+			, Utils & utils
+			, bool isOpaqueProgram )
+			: LightingModel{ writer, utils, isOpaqueProgram }
 		{
 		}
 
@@ -141,9 +142,10 @@ namespace castor3d
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
 			, uint32_t & index
-			, uint32_t maxCascades )
+			, uint32_t maxCascades
+			, bool isOpaqueProgram )
 		{
-			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, isOpaqueProgram );
 			result->declareModel( index, maxCascades );
 			return result;
 		}
@@ -155,7 +157,7 @@ namespace castor3d
 			, uint32_t & index
 			, uint32_t maxCascades )
 		{
-			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, true );
 			result->declareDirectionalModel( shadows
 				, volumetric
 				, index
@@ -170,7 +172,7 @@ namespace castor3d
 			, bool volumetric
 			, uint32_t & index )
 		{
-			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils );
+			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, true );
 
 			switch ( lightType )
 			{
@@ -347,25 +349,28 @@ namespace castor3d
 						, fragmentIn
 						, output );
 
-					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) )
-						&& light.m_lightBase.m_volumetricSteps != 0_u )
+					if ( m_isOpaqueProgram )
 					{
-						m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
-							, light.m_lightBase.m_shadowOffsets
-							, light.m_lightBase.m_shadowVariance
-							, fragmentIn.m_clipVertex
-							, fragmentIn.m_worldVertex
-							, worldEye
-							, light.m_transforms[cascadeIndex]
-							, light.m_direction
-							, cascadeIndex
-							, light.m_lightBase.m_colour
-							, light.m_lightBase.m_intensity
-							, light.m_lightBase.m_volumetricSteps
-							, light.m_lightBase.m_volumetricScattering
-							, output );
+						IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) )
+							&& light.m_lightBase.m_volumetricSteps != 0_u )
+						{
+							m_shadowModel->computeVolumetric( light.m_lightBase.m_shadowType
+								, light.m_lightBase.m_shadowOffsets
+								, light.m_lightBase.m_shadowVariance
+								, fragmentIn.m_clipVertex
+								, fragmentIn.m_worldVertex
+								, worldEye
+								, light.m_transforms[cascadeIndex]
+								, light.m_direction
+								, cascadeIndex
+								, light.m_lightBase.m_colour
+								, light.m_lightBase.m_intensity
+								, light.m_lightBase.m_volumetricSteps
+								, light.m_lightBase.m_volumetricScattering
+								, output );
+						}
+						FI;
 					}
-					FI;
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;

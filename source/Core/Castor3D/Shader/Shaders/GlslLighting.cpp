@@ -105,8 +105,10 @@ namespace castor3d
 		uint32_t const LightingModel::UboBindingPoint = 7u;
 
 		LightingModel::LightingModel( ShaderWriter & writer
-			, Utils & utils )
+			, Utils & utils
+			, bool isOpaqueProgram )
 			: m_writer{ writer }
+			, m_isOpaqueProgram{ isOpaqueProgram }
 			, m_shadowModel{ std::make_shared< Shadow >( writer, utils ) }
 		{
 		}
