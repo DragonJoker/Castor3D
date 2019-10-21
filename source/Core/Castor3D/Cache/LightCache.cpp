@@ -117,7 +117,7 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::initialise()
 	{
-		m_lightsBuffer.resize( 300u * shader::MaxLightComponentsCount );
+		m_lightsBuffer.resize( 300u * shader::getMaxLightComponentsCount() );
 		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
@@ -261,8 +261,8 @@ namespace castor3d
 						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
 					light->bind( data );
-					data += shader::MaxLightComponentsCount;
-					index += shader::MaxLightComponentsCount;
+					data += shader::getMaxLightComponentsCount();
+					index += shader::getMaxLightComponentsCount();
 				}
 			}
 		}

@@ -62,7 +62,7 @@ namespace castor3d
 				ShadowMapSpot::VarianceFormat,
 				{ size[0], size[1], 1u },
 				1u,
-				shader::SpotShadowMapCount,
+				shader::getSpotShadowMapCount(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -111,7 +111,7 @@ namespace castor3d
 				ShadowMapSpot::LinearDepthFormat,
 				{ size[0], size[1], 1u },
 				1u,
-				shader::SpotShadowMapCount,
+				shader::getSpotShadowMapCount(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -140,7 +140,7 @@ namespace castor3d
 			Viewport viewport{ engine };
 			viewport.resize( Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } );
 
-			for ( auto i = 0u; i < shader::SpotShadowMapCount; ++i )
+			for ( auto i = 0u; i < shader::getSpotShadowMapCount(); ++i )
 			{
 				ShadowMap::PassData passData
 				{
@@ -172,7 +172,7 @@ namespace castor3d
 			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, createPasses( engine, scene, *this )
-			, shader::SpotShadowMapCount }
+			, shader::getSpotShadowMapCount() }
 	{
 		castor::Logger::logTrace( "Created ShadowMapSpot" );
 	}

@@ -269,7 +269,7 @@ namespace castor3d
 					result.m_intensityFarPlane = vec4( 0.8_f, 1.0, 1.0, 0.0 );
 #else
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );
-					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( getMaxLightComponentsCount() ) );
 					result.m_colourIndex = texelFetch( c3d_sLights, offset++ );
 					result.m_intensityFarPlane = texelFetch( c3d_sLights, offset++ );
 					result.m_volumetric = texelFetch( c3d_sLights, offset++ );
@@ -297,7 +297,7 @@ namespace castor3d
 #else
 
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );
-					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( int( MaxLightComponentsCount ) ) + Int( int( BaseLightComponentsCount ) ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( int( getMaxLightComponentsCount() ) ) + Int( int( getBaseLightComponentsCount() ) ) );
 					auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( cuT( "c3d_maxCascadeCount" ) );
 					result.m_directionCount = texelFetch( c3d_sLights, offset++ );
 					result.m_direction = normalize( result.m_direction );
@@ -329,7 +329,7 @@ namespace castor3d
 					auto result = m_writer.declLocale< PointLight >( "result", *m_pointLightType );
 					result.m_lightBase = getBaseLight( index );
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );
-					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( getMaxLightComponentsCount() ) + Int( getBaseLightComponentsCount() ) );
 					result.m_position4 = texelFetch( c3d_sLights, offset++ );
 					result.m_attenuation4 = texelFetch( c3d_sLights, offset++ );
 					m_writer.returnStmt( result );
@@ -345,7 +345,7 @@ namespace castor3d
 					auto result = m_writer.declLocale< SpotLight >( "result", *m_spotLightType );
 					result.m_lightBase = getBaseLight( index );
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
-					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
+					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( getMaxLightComponentsCount() ) + Int( getBaseLightComponentsCount() ) );
 					result.m_position4 = texelFetch( c3d_sLights, offset++ );
 					result.m_attenuation4 = texelFetch( c3d_sLights, offset++ );
 					result.m_direction4 = normalize( texelFetch( c3d_sLights, offset++ ) );

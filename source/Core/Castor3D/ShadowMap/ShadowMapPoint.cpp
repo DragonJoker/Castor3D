@@ -65,7 +65,7 @@ namespace castor3d
 				ShadowMapPoint::VarianceFormat,
 				{ size[0], size[1], 1u },
 				1u,
-				6u * shader::PointShadowMapCount,
+				6u * shader::getPointShadowMapCount(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -114,7 +114,7 @@ namespace castor3d
 				ShadowMapPoint::LinearDepthFormat,
 				{ size[0], size[1], 1u },
 				1u,
-				6u * shader::PointShadowMapCount,
+				6u * shader::getPointShadowMapCount(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -141,7 +141,7 @@ namespace castor3d
 		{
 			std::vector< ShadowMap::PassData > result;
 
-			for ( auto i = 0u; i < 6u * shader::PointShadowMapCount; ++i )
+			for ( auto i = 0u; i < 6u * shader::getPointShadowMapCount(); ++i )
 			{
 				ShadowMap::PassData passData
 				{
@@ -169,7 +169,7 @@ namespace castor3d
 			, doInitialiseVariance( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, createPasses( engine, scene, *this )
-			, shader::PointShadowMapCount }
+			, shader::getPointShadowMapCount() }
 	{
 		castor::Logger::logTrace( "Created ShadowMapPoint" );
 	}
@@ -289,7 +289,7 @@ namespace castor3d
 			ShadowMapPoint::RawDepthFormat,
 			{ size.height, size.height, 1u },
 			1u,
-			6u * shader::PointShadowMapCount,
+			6u * shader::getPointShadowMapCount(),
 			VK_SAMPLE_COUNT_1_BIT,
 			VK_IMAGE_TILING_OPTIMAL,
 			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT,
@@ -304,7 +304,7 @@ namespace castor3d
 			{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u },
 		};
 
-		for ( auto i = 0u; i < shader::PointShadowMapCount; ++i )
+		for ( auto i = 0u; i < shader::getPointShadowMapCount(); ++i )
 		{
 			std::string debugName = "ShadowMapPoint" + std::to_string( i );
 			auto & variance = m_shadowMap.getTexture()->getTexture();

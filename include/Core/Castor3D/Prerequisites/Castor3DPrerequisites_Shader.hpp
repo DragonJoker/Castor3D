@@ -149,14 +149,12 @@ namespace castor3d
 			eTextureConfigData,
 		};
 
-		static constexpr uint32_t SpotShadowMapCount = 10u;
-		static constexpr uint32_t PointShadowMapCount = 6u;
-		static constexpr uint32_t BaseLightComponentsCount = 4u;
-		static constexpr uint32_t DirectionalMaxCascadesCount = 4u;
-		// DirectionalLight => BaseLightComponentsCount + 18
-		// PointLight => BaseLightComponentsCount + 2
-		// SpotLight => BaseLightComponentsCount + 8
-		static constexpr uint32_t MaxLightComponentsCount = 22u;
+		constexpr uint32_t DirectionalMaxCascadesCount = 4u;
+
+		C3D_API uint32_t getSpotShadowMapCount();
+		C3D_API uint32_t getPointShadowMapCount();
+		C3D_API uint32_t getBaseLightComponentsCount();
+		C3D_API uint32_t getMaxLightComponentsCount();
 
 		class Utils;
 		class Shadow;

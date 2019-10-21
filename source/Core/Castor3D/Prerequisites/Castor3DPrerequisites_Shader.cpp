@@ -98,6 +98,37 @@ namespace castor3d
 	{
 		//*********************************************************************
 
+		namespace
+		{
+			static constexpr uint32_t SpotShadowMapCount = 10u;
+			static constexpr uint32_t PointShadowMapCount = 6u;
+			static constexpr uint32_t BaseLightComponentsCount = 4u;
+			// DirectionalLight => BaseLightComponentsCount + 18
+			// PointLight => BaseLightComponentsCount + 2
+			// SpotLight => BaseLightComponentsCount + 8
+			static constexpr uint32_t MaxLightComponentsCount = 22u;
+		}
+
+		uint32_t getSpotShadowMapCount()
+		{
+			return SpotShadowMapCount;
+		}
+
+		uint32_t getPointShadowMapCount()
+		{
+			return PointShadowMapCount;
+		}
+
+		uint32_t getBaseLightComponentsCount()
+		{
+			return BaseLightComponentsCount;
+		}
+
+		uint32_t getMaxLightComponentsCount()
+		{
+			return MaxLightComponentsCount;
+		}
+
 		std::unique_ptr< Materials > createMaterials( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags )
 		{
