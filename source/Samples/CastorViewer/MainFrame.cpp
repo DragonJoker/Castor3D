@@ -107,7 +107,7 @@ namespace CastorViewer
 	}
 
 	MainFrame::MainFrame( wxString const & title )
-		: wxFrame( nullptr, wxID_ANY, title, wxDefaultPosition, wxSize( 800, 700 ) )
+		: wxFrame( nullptr, wxID_ANY, title, wxPoint{}, wxSize{ 800, 700 } )
 		, m_renderPanel{ nullptr }
 		, m_timer{ nullptr }
 		, m_timerMsg{ nullptr }
