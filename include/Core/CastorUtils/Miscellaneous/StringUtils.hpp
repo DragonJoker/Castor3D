@@ -33,7 +33,7 @@ namespace castor
 		 *\param[in]	locale	La locale (inutilisée)
 		 *\return		\p false si toTest contient n'importe quel caractère autre que '0123456789'
 		 */
-		CU_API bool isInteger( String const & toTest, std::locale const & locale = std::locale() );
+		CU_API bool isInteger( String const & toTest, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String represents a floating number
@@ -46,7 +46,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée pour déterminer le format du séparateur '.'
 		 *\return		\p false si toTest contient n'importe quel caractère autre que '0123456789.,' ou plus d'un '.'/','
 		 */
-		CU_API bool isFloating( String const & toTest, std::locale const & locale = std::locale() );
+		CU_API bool isFloating( String const & toTest, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -59,7 +59,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		CU_API short toShort( String const & str, std::locale const & locale = std::locale() );
+		CU_API short toShort( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves an int from a given String
@@ -72,7 +72,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		L'int contenu dans le String
 		 */
-		CU_API int toInt( String const & str, std::locale const & locale = std::locale() );
+		CU_API int toInt( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long from a given String
@@ -85,7 +85,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le long contenu dans le String
 		 */
-		CU_API long toLong( String const & str, std::locale const & locale = std::locale() );
+		CU_API long toLong( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long long from a given String
@@ -98,7 +98,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le long long contenu dans le String
 		 */
-		CU_API long long toLongLong( String const & str, std::locale const & locale = std::locale() );
+		CU_API long long toLongLong( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves an unsigned short from a given String
@@ -111,7 +111,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		L'unsigned short contenu dans le String
 		 */
-		CU_API unsigned short toUShort( String const & str, std::locale const & locale = std::locale() );
+		CU_API unsigned short toUShort( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves an unsigned int from a given String
@@ -124,7 +124,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		L'unsigned int contenu dans le String
 		 */
-		CU_API unsigned int toUInt( String const & str, std::locale const & locale = std::locale() );
+		CU_API unsigned int toUInt( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves an unsigned long from a given String
@@ -137,7 +137,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		L'unsigned long contenu dans le String
 		 */
-		CU_API unsigned long toULong( String const & str, std::locale const & locale = std::locale() );
+		CU_API unsigned long toULong( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves an unsigned long long from a given String
@@ -150,7 +150,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		L'unsigned long long contenu dans le String
 		 */
-		CU_API unsigned long long toULongLong( String const & str, std::locale const & locale = std::locale() );
+		CU_API unsigned long long toULongLong( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a float from a given String
@@ -163,7 +163,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le float contenu dans le String
 		 */
-		CU_API float toFloat( String const & str, std::locale const & locale = std::locale() );
+		CU_API float toFloat( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -176,7 +176,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		CU_API double toDouble( String const & str, std::locale const & locale = std::locale() );
+		CU_API double toDouble( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -189,7 +189,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		CU_API long double toLongDouble( String const & str, std::locale const & locale = std::locale() );
+		CU_API long double toLongDouble( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -202,7 +202,7 @@ namespace castor
 		 *\param[in]	locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		CU_API real toReal( String const & str, std::locale const & locale = std::locale() );
+		CU_API real toReal( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String is upper case
@@ -363,6 +363,111 @@ namespace castor
 		CU_API String & trim( String & str, bool left = true, bool right = true );
 		/**
 		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( uint8_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( int16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( uint16_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( int32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( uint32_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( int64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	base	The numeric base
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	base	La base numérique
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		CU_API String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
 		 *\brief		Retrieves a value from the given String
 		 *\param[in]	str		The String supposedly containing the value
 		 *\param[in]	locale	The locale used in the conversion
@@ -376,7 +481,7 @@ namespace castor
 		 *\return
 		 */
 		template< typename T >
-		inline void parse( String const & str, T & value, std::locale const & locale = std::locale() );
+		inline void parse( String const & str, T & value, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from the given String
@@ -392,7 +497,7 @@ namespace castor
 		 *\return
 		 */
 		template< typename T >
-		inline void extract( String & str, T & value, std::locale const & locale = std::locale() );
+		inline void extract( String & str, T & value, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String
@@ -406,112 +511,7 @@ namespace castor
 		 *\return		Le String contenant la valeur
 		 */
 		template< typename T >
-		inline String toString( T const & value, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( uint8_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( int16_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( uint16_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( int32_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( uint32_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( int64_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
-		/**
-		 *\~english
-		 *\brief		Puts a value into a String
-		 *\param[in]	value	The value
-		 *\param[in]	base	The numeric base
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The String containing the value
-		 *\~french
-		 *\brief		Met une valeur dans un String
-		 *\param[in]	value	La valeur
-		 *\param[in]	base	La base numérique
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le String contenant la valeur
-		 */
-		inline String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale(), new manip::BaseNumPut< xchar >() ) );
+		inline String toString( T const & value, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type

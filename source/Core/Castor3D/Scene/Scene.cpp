@@ -121,20 +121,6 @@ namespace castor3d
 
 	bool Scene::TextWriter::operator()( Scene const & scene, TextFile & file )
 	{
-		static std::map< FogType, castor::String > const FogTypes
-		{
-			{ FogType::eLinear, cuT( "linear" ) },
-			{ FogType::eExponential, cuT( "exponential" ) },
-			{ FogType::eSquaredExponential, cuT( "squared_exponential" ) },
-		};
-
-		static std::map< MaterialType, castor::String > const MaterialTypes
-		{
-			{ MaterialType::ePhong, cuT( "phong" ) },
-			{ MaterialType::eMetallicRoughness, cuT( "pbr_metallic_roughness" ) },
-			{ MaterialType::eSpecularGlossiness, cuT( "pbr_specular_glossiness" ) },
-		};
-
 		Logger::logInfo( cuT( "Scene::write - Scene Name" ) );
 
 		bool result = file.writeText( m_tabs + cuT( "// Global configuration\n" ) ) > 0;
@@ -147,7 +133,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = file.writeText( m_tabs + cuT( "materials " ) + MaterialTypes.find( scene.getMaterialsType() )->second + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "materials " ) + castor3d::getName( scene.getMaterialsType() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Materials type" );
 		}
 
@@ -200,7 +186,7 @@ namespace castor3d
 		if ( result && scene.getFog().getType() != FogType::eDisabled )
 		{
 			Logger::logInfo( cuT( "Scene::write - Fog type" ) );
-			result = file.writeText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( scene.getFog().getType() )->second + cuT( "\n" ) ) > 0;
+			result = file.writeText( m_tabs + cuT( "\tfog_type " ) + castor3d::getName( scene.getFog().getType() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene fog type" );
 
 			if ( result )

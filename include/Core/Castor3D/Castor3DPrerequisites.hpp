@@ -69,46 +69,7 @@ namespace castor3d
 	//@{
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Movable object types enumerator
-	\remark		There are four movable object types : camera, geometry, light and billboard.
-	\~french
-	\brief		Enumération des types de MovableObject
-	\remark		Il y a quatre types d'objets déplaçables : caméra, géométrie, lumière et billboard
-	*/
-	enum class MovableType
-		: uint8_t
-	{
-		eCamera,
-		eGeometry,
-		eLight,
-		eBillboard,
-		eParticleEmitter,
-		CU_ScopedEnumBounds( eCamera )
-	};
-	/*!
-	\author		Sylvain DOREMUS
 	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		RenderTarget supported types
-	\~french
-	\brief		Types de RenderTarget supportés
-	*/
-	enum class TargetType
-		: uint8_t
-	{
-		eWindow,
-		eTexture,
-		CU_ScopedEnumBounds( eWindow )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
 	\~english
 	\brief		Plugin types enumeration
 	\~french
@@ -145,110 +106,6 @@ namespace castor3d
 		//!\~french		Plug-in de particule.
 		eParticle,
 		CU_ScopedEnumBounds( eRenderer )
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\~english
-	\brief		The  viewport projection types enumeration
-	\~french
-	\brief		Enumération des types de projection de viewport
-	*/
-	enum class ViewportType
-		: uint8_t
-	{
-		eOrtho,
-		ePerspective,
-		eFrustum,
-		CU_ScopedEnumBounds( eOrtho )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		10/06/2013
-	\version	0.7.0
-	\~english
-	\brief		Frustum view planes enumeration
-	\~french
-	\brief		Enumération des plans du frustum de vue
-	*/
-	enum class FrustumPlane
-	{
-		//!\~english	Near plane.
-		//!\~french		Plan proche.
-		eNear,
-		//!\~english	Far plane.
-		//!\~french		Plan éloigné.
-		eFar,
-		//!\~english	Left plane.
-		//!\~french		Plan gauche.
-		eLeft,
-		//!\~english	Right plane.
-		//!\~french		Plan droit.
-		eRight,
-		//!\~english	Top plane.
-		//!\~french		Plan haut.
-		eTop,
-		//!\~english	Bottom plane.
-		//!\~french		Plan bas.
-		eBottom,
-		CU_ScopedEnumBounds( eNear )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		10/06/2013
-	\version	0.7.0
-	\~english
-	\brief		Frustum view planes enumeration
-	\~french
-	\brief		Enumération des plans du frustum de vue
-	*/
-	enum class FrustumCorner
-	{
-		//!\~english	Far left bottom corner.
-		//!\~french		Coin éloigné bas gauche.
-		eFarLeftBottom,
-		//!\~english	Far left top corner.
-		//!\~french		Coin éloigné haut gauche.
-		eFarLeftTop,
-		//!\~english	Far right top corner.
-		//!\~french		Coin éloigné haut droit.
-		eFarRightTop,
-		//!\~english	Far right bottom corner.
-		//!\~french		Coin éloigné bas droit.
-		eFarRightBottom,
-		//!\~english	Near left bottom corner.
-		//!\~french		Coin proche bas gauche.
-		eNearLeftBottom,
-		//!\~english	Near left top corner.
-		//!\~french		Coin proche haut gauche.
-		eNearLeftTop,
-		//!\~english	Near right top corner.
-		//!\~french		Coin proche haut droit.
-		eNearRightTop,
-		//!\~english	Near right bottom corner.
-		//!\~french		Coin proche bas droit.
-		eNearRightBottom,
-		CU_ScopedEnumBounds( eFarLeftBottom )
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Frame Event Type enumeration
-	\~french
-	\brief		Enumération des types d'évènement de frame
-	*/
-	enum class EventType
-		: uint8_t
-	{
-		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
-		//!\~french		Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		ePreRender,
-		//!\~english	This kind of event happens after the render, before buffers' swap.
-		//!\~french		Ce type d'évènement est traité après le rendu, avant l'échange des tampons.
-		eQueueRender,
-		//!\~english	This kind of event happens after the buffer' swap.
-		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
-		ePostRender,
-		CU_ScopedEnumBounds( ePreRender )
 	};
 
 	template< class TParsed >
@@ -300,10 +157,6 @@ namespace castor3d
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
-	*\author
-	*	Sylvain DOREMUS
-	*\date
-	*	04/02/2016
 	*\version
 	*	0.8.0
 	*\~english
@@ -368,10 +221,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( RenderWindowCache );
 
 	/*!
-	*\author
-	*	Sylvain DOREMUS
-	*\date
-	*	04/02/2016
 	*\version
 	*	0.8.0
 	*\~english

@@ -9,14 +9,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
-	namespace
-	{
-	}
-
-	//*************************************************************************************************
-
 	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
 		, SkeletonAnimationObject & animationObject
 		, SkeletonAnimationInstanceObjectPtrArray & allObjects )
@@ -64,6 +56,4 @@ namespace castor3d
 		m_cumulativeTransform = current;
 		doApply();
 	}
-
-	//*************************************************************************************************
 }

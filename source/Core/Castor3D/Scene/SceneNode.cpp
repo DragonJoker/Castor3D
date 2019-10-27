@@ -11,6 +11,23 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		bool isIgnored( castor::String const & name )
+		{
+			return name == cuT( "RootNode" )
+				|| name == cuT( "ObjectRootNode" )
+				|| name == cuT( "CameraRootNode" )
+				|| name.find( cuT( "_REye" ) ) != String::npos
+				|| name.find( cuT( "_LEye" ) ) != String::npos;
+		}
+
+		bool isIgnored( SceneNode const & node )
+		{
+			return isIgnored( node.getName() );
+		}
+	}
+
 	SceneNode::TextWriter::TextWriter( String const & tabs )
 		: castor::TextWriter< SceneNode >{ tabs }
 	{
@@ -18,13 +35,9 @@ namespace castor3d
 
 	bool SceneNode::TextWriter::operator()( SceneNode const & node, TextFile & file )
 	{
-		bool result = node.getName() == cuT( "RootNode" )
-			|| node.getName() == cuT( "ObjectRootNode" )
-			|| node.getName() == cuT( "CameraRootNode" );
+		bool result = !isIgnored( node );
 
-		if ( node.getName() != cuT( "RootNode" )
-			&& node.getName() != cuT( "ObjectRootNode" )
-			&& node.getName() != cuT( "CameraRootNode" ) )
+		if ( result )
 		{
 			Logger::logInfo( m_tabs + cuT( "Writing Node " ) + node.getName() );
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + node.getName() + cuT( "\"\n" ) ) > 0
@@ -33,9 +46,7 @@ namespace castor3d
 
 			if ( result
 				&& node.getParent()
-				&& node.getParent()->getName() != cuT( "RootNode" )
-				&& node.getParent()->getName() != cuT( "ObjectRootNode" )
-				&& node.getParent()->getName() != cuT( "CameraRootNode" ) )
+				&& !isIgnored( *node.getParent() ) )
 			{
 				result = file.writeText( m_tabs + cuT( "\tparent \"" ) + node.getParent()->getName() + cuT( "\"\n" ) ) > 0;
 				castor::TextWriter< SceneNode >::checkError( result, "Node parent name" );
@@ -76,9 +87,7 @@ namespace castor3d
 		{
 			for ( auto const & it : node.m_children )
 			{
-				if ( result
-					 && it.first.find( cuT( "_REye" ) ) == String::npos
-					 && it.first.find( cuT( "_LEye" ) ) == String::npos )
+				if ( result && !isIgnored( it.first ) )
 				{
 					SceneNodeSPtr node = it.second.lock();
 

@@ -33,6 +33,7 @@ namespace castor3d
 		eSpecularGlossiness,
 		CU_ScopedEnumBounds( ePhong )
 	};
+	castor::String getName( MaterialType value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -63,6 +64,7 @@ namespace castor3d
 		eDepthPeeling,
 		CU_ScopedEnumBounds( eNoBlend )
 	};
+	castor::String getName( BlendMode value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/09/2017

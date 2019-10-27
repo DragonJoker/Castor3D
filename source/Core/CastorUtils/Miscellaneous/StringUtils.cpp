@@ -332,6 +332,62 @@ namespace castor
 			return text;
 		}
 
+		String toString( uint8_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( int16_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( uint16_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( int32_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( uint32_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( int64_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
+		String toString( uint64_t value, int base, std::locale const & locale )
+		{
+			StringStream result;
+			result.imbue( locale );
+			result << manip::xbase( base ) << value;
+			return result.str();
+		}
+
 		String & replace( String & text, xchar lookup, xchar replacement )
 		{
 			return replace( text

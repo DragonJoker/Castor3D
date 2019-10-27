@@ -27,40 +27,6 @@ namespace castor3d
 
 	bool TextOverlay::TextWriter::operator()( TextOverlay const & p_overlay, TextFile & p_file )
 	{
-		static String const TexturingModes[]
-		{
-			cuT( "letter" ),
-			cuT( "text" ),
-		};
-
-		static String const LineSpacingModes[]
-		{
-			cuT( "own_height" ),
-			cuT( "max_lines_height" ),
-			cuT( "max_font_height" ),
-		};
-
-		static String const TextWrappingModes[]
-		{
-			cuT( "none" ),
-			cuT( "break" ),
-			cuT( "break_words" ),
-		};
-
-		static String const VerticalAligns[]
-		{
-			cuT( "top" ),
-			cuT( "center" ),
-			cuT( "bottom" ),
-		};
-
-		static String const HorizontalAligns[]
-		{
-			cuT( "left" ),
-			cuT( "center" ),
-			cuT( "right" ),
-		};
-
 		Logger::logInfo( m_tabs + cuT( "Writing TextOverlay " ) + p_overlay.getOverlayName() );
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.getOverlayName() + cuT( "\"\n" ) ) > 0
 						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
@@ -80,31 +46,31 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[size_t( p_overlay.getTextWrappingMode() )] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\ttext_wrapping " ) + castor3d::getName( p_overlay.getTextWrappingMode() ) + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "TextOverlay text wrapping" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[size_t( p_overlay.getVAlign() )] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\tvertical_align " ) + castor3d::getName( p_overlay.getVAlign() ) + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "TextOverlay text vertical align" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[size_t( p_overlay.getHAlign() )] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\thorizontal_align " ) + castor3d::getName( p_overlay.getHAlign() ) + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "TextOverlay text horizontal align" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[size_t( p_overlay.getTexturingMode() )] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\ttexturing_mode " ) + castor3d::getName( p_overlay.getTexturingMode() ) + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "TextOverlay text texturing mode" );
 		}
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[size_t( p_overlay.getLineSpacingMode() )] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\tline_spacing_mode " ) + castor3d::getName( p_overlay.getLineSpacingMode() ) + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::checkError( result, "TextOverlay line spacing mode" );
 		}
 
@@ -303,7 +269,6 @@ namespace castor3d
 										castor::Rectangle{ left, top, right, bottom },
 										Point4r{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
 										texUvLeft, texUvTop, texUvRight, texUvBottom );
-
 
 									//
 									// Fill buffer

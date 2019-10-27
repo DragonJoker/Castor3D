@@ -16,19 +16,6 @@ namespace castor3d
 
 	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		static std::map< LightType, String > type
-		{
-			{ LightType::eDirectional, cuT( "directional" ) },
-			{ LightType::ePoint, cuT( "point" ) },
-			{ LightType::eSpot, cuT( "spot" ) },
-		};
-		static std::map< ShadowType, String > filter
-		{
-			{ ShadowType::eRaw, cuT( "raw" ) },
-			{ ShadowType::ePCF, cuT( "pcf" ) },
-			{ ShadowType::eVariance, cuT( "variance" ) },
-		};
-
 		Logger::logInfo( m_tabs + cuT( "Writing Light " ) + p_light.getLight().getName() );
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.getLight().getName() + cuT( "\"\n" ) ) > 0
 			&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
@@ -41,7 +28,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\ttype " ) + type[p_light.getLightType()] + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\ttype " ) + castor3d::getName( p_light.getLightType() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory type" );
 		}
 
@@ -66,7 +53,7 @@ namespace castor3d
 			result = p_file.writeText( m_tabs + cuT( "\tshadows\n" ) ) > 0
 				&& p_file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
 				&& p_file.writeText( m_tabs + cuT( "\t\tproducer true\n" ) ) > 0
-				&& p_file.writeText( m_tabs + cuT( "\t\tfilter " ) + filter[p_light.getLight().getShadowType()] + cuT( "\n" ) ) > 0;
+				&& p_file.writeText( m_tabs + cuT( "\t\tfilter " ) + castor3d::getName( p_light.getLight().getShadowType() ) + cuT( "\n" ) ) > 0;
 
 			if ( result && p_light.getVolumetricSteps() )
 			{

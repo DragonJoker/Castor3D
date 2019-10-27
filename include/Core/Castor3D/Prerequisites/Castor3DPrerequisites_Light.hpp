@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PREREQUISITES_LIGHT_H___
@@ -29,6 +29,7 @@ namespace castor3d
 		eSpot,
 		CU_ScopedEnumBounds( eDirectional )
 	};
+	castor::String getName( LightType value );
 
 	class Light;
 	class LightCategory;

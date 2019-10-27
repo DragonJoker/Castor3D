@@ -16,47 +16,6 @@ namespace castor3d
 {
 	namespace
 	{
-		String getFormatName( ParticleFormat format )
-		{
-			switch ( format )
-			{
-			case castor3d::ParticleFormat::eInt:
-				return cuT( "int" );
-			case castor3d::ParticleFormat::eVec2i:
-				return cuT( "vec2i" );
-			case castor3d::ParticleFormat::eVec3i:
-				return cuT( "vec3i" );
-			case castor3d::ParticleFormat::eVec4i:
-				return cuT( "vec4i" );
-			case castor3d::ParticleFormat::eUInt:
-				return cuT( "uint" );
-			case castor3d::ParticleFormat::eVec2ui:
-				return cuT( "vec2ui" );
-			case castor3d::ParticleFormat::eVec3ui:
-				return cuT( "vec3ui" );
-			case castor3d::ParticleFormat::eVec4ui:
-				return cuT( "vec4ui" );
-			case castor3d::ParticleFormat::eFloat:
-				return cuT( "float" );
-			case castor3d::ParticleFormat::eVec2f:
-				return cuT( "vec2f" );
-			case castor3d::ParticleFormat::eVec3f:
-				return cuT( "vec3f" );
-			case castor3d::ParticleFormat::eVec4f:
-				return cuT( "vec4f" );
-			case castor3d::ParticleFormat::eMat2f:
-				return cuT( "mat2x2f" );
-			case castor3d::ParticleFormat::eMat3f:
-				return cuT( "mat3x3f" );
-			case castor3d::ParticleFormat::eMat4f:
-				return cuT( "mat4x4f" );
-			default:
-				assert( false );
-				return cuT( "vec4f" );
-				break;
-			}
-		}
-
 		uint32_t getSize( ParticleFormat format )
 		{
 			switch ( format )
@@ -173,7 +132,7 @@ namespace castor3d
 			{
 				if ( result )
 				{
-					result = file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + getFormatName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
+					result = file.writeText( m_tabs + cuT( "\t\tvariable \"" ) + var.m_name + cuT( "\" " ) + castor3d::getName( var.m_dataType ) + cuT( " " ) + values[cuT( "out_" ) + var.m_name] + cuT( "\n" ) ) > 0;
 					MovableObject::TextWriter::checkError( result, "ParticleSystem particle variable" );
 				}
 			}

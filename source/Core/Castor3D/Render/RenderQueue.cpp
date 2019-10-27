@@ -634,8 +634,7 @@ namespace castor3d
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 
-				if ( node.texDescriptorSet
-					/*&& !node.texDescriptorSet->empty()*/ )
+				if ( node.texDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}
@@ -678,8 +677,7 @@ namespace castor3d
 				commandBuffer.bindPipeline( pipeline.getPipeline() );
 				commandBuffer.bindDescriptorSet( *node.uboDescriptorSet, pipeline.getPipelineLayout() );
 
-				if ( node.texDescriptorSet
-					/*&& !node.texDescriptorSet->empty()*/ )
+				if ( node.texDescriptorSet )
 				{
 					commandBuffer.bindDescriptorSet( *node.texDescriptorSet, pipeline.getPipelineLayout() );
 				}

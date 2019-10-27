@@ -324,6 +324,11 @@ namespace castor3d
 			return cuT( "RT_" ) + castor::string::toString( renderTarget->getIndex() );
 		}
 
+		if ( m_configuration.environment )
+		{
+			return cuT( "EnvMap_" ) + castor::string::toString( m_configuration.environment );
+		}
+
 		CU_Require( m_texture );
 		return m_texture->getDefaultImage().toString();
 	}

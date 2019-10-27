@@ -93,6 +93,102 @@ namespace castor3d
 		uint32_t idxCount;
 	};
 	/*!
+	\version	0.6.1.0
+	\~english
+	\brief		RenderTarget supported types
+	\~french
+	\brief		Types de RenderTarget supportés
+	*/
+	enum class TargetType
+		: uint8_t
+	{
+		eWindow,
+		eTexture,
+		CU_ScopedEnumBounds( eWindow )
+	};
+	castor::String getName( TargetType value );
+	/*!
+	\version	0.7.0
+	\~english
+	\brief		Frustum view planes enumeration
+	\~french
+	\brief		Enumération des plans du frustum de vue
+	*/
+	enum class FrustumCorner
+	{
+		//!\~english	Far left bottom corner.
+		//!\~french		Coin éloigné bas gauche.
+		eFarLeftBottom,
+		//!\~english	Far left top corner.
+		//!\~french		Coin éloigné haut gauche.
+		eFarLeftTop,
+		//!\~english	Far right top corner.
+		//!\~french		Coin éloigné haut droit.
+		eFarRightTop,
+		//!\~english	Far right bottom corner.
+		//!\~french		Coin éloigné bas droit.
+		eFarRightBottom,
+		//!\~english	Near left bottom corner.
+		//!\~french		Coin proche bas gauche.
+		eNearLeftBottom,
+		//!\~english	Near left top corner.
+		//!\~french		Coin proche haut gauche.
+		eNearLeftTop,
+		//!\~english	Near right top corner.
+		//!\~french		Coin proche haut droit.
+		eNearRightTop,
+		//!\~english	Near right bottom corner.
+		//!\~french		Coin proche bas droit.
+		eNearRightBottom,
+		CU_ScopedEnumBounds( eFarLeftBottom )
+	};
+	castor::String getName( FrustumCorner value );
+	/*!
+	\version	0.7.0
+	\~english
+	\brief		Frustum view planes enumeration
+	\~french
+	\brief		Enumération des plans du frustum de vue
+	*/
+	enum class FrustumPlane
+	{
+		//!\~english	Near plane.
+		//!\~french		Plan proche.
+		eNear,
+		//!\~english	Far plane.
+		//!\~french		Plan éloigné.
+		eFar,
+		//!\~english	Left plane.
+		//!\~french		Plan gauche.
+		eLeft,
+		//!\~english	Right plane.
+		//!\~french		Plan droit.
+		eRight,
+		//!\~english	Top plane.
+		//!\~french		Plan haut.
+		eTop,
+		//!\~english	Bottom plane.
+		//!\~french		Plan bas.
+		eBottom,
+		CU_ScopedEnumBounds( eNear )
+	};
+	castor::String getName( FrustumPlane value );
+	/*!
+	\~english
+	\brief		The  viewport projection types enumeration
+	\~french
+	\brief		Enumération des types de projection de viewport
+	*/
+	enum class ViewportType
+		: uint8_t
+	{
+		eOrtho,
+		ePerspective,
+		eFrustum,
+		CU_ScopedEnumBounds( eOrtho )
+	};
+	castor::String getName( ViewportType value );
+	/*!
 	\version	0.11.0
 	\~english
 	\brief		The picking node types.
@@ -110,10 +206,9 @@ namespace castor3d
 		eMorphing,
 		eBillboard
 	};
+	castor::String getName( PickNodeType value );
 	/*!
-	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
-	\date		03/01/2011
 	\~english
 	\brief		Element usage enumeration
 	\~french
@@ -150,6 +245,7 @@ namespace castor3d
 		eMatIndex = 0x800,
 	};
 	CU_ImplementFlags( ElementUsage )
+	castor::String getName( ElementUsage value );
 	/*!
 	\~english
 	\brief		Texture channels flags.
@@ -218,10 +314,10 @@ namespace castor3d
 		eAll = eAllButOpacity | eOpacity,
 	};
 	CU_ImplementFlags( TextureFlag )
+	castor::String getName( TextureFlag value
+		, MaterialType material );
 	/*!
-	\author 	Sylvain DOREMUS
 	\version	0.9.0
-	\date		03/09/2016
 	\~english
 	\brief		Pipeline flags.
 	\~french

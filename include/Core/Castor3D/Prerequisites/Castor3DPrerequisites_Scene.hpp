@@ -9,6 +9,28 @@ namespace castor3d
 	/**@name Scene */
 	//@{
 
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Movable object types enumerator
+	\remark		There are four movable object types : camera, geometry, light and billboard.
+	\~french
+	\brief		Enumération des types de MovableObject
+	\remark		Il y a quatre types d'objets déplaçables : caméra, géométrie, lumière et billboard
+	*/
+	enum class MovableType
+		: uint8_t
+	{
+		eCamera,
+		eGeometry,
+		eLight,
+		eBillboard,
+		eParticleEmitter,
+		CU_ScopedEnumBounds( eCamera )
+	};
+	castor::String getName( MovableType value );
 	/**
 	*\version
 	*	0.9.0
@@ -35,6 +57,7 @@ namespace castor3d
 		eVariance,
 		CU_ScopedEnumBounds( eNone )
 	};
+	castor::String getName( ShadowType value );
 	/**
 	*\version
 	*	0.9.0
@@ -55,13 +78,13 @@ namespace castor3d
 		eLinear,
 		//!\~english	Fog intensity increases exponentially with distance to camera.
 		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
-		//!\~french		
 		eExponential,
 		//!\~english	Fog intensity increases even more with distance to camera.
 		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
 		eSquaredExponential,
 		CU_ScopedEnumBounds( eDisabled )
 	};
+	castor::String getName( FogType value );
 	/**
 	*\version
 	*	0.9.0
@@ -126,6 +149,7 @@ namespace castor3d
 		eSkybox,
 		CU_ScopedEnumBounds( eColour )
 	};
+	castor::String getName( BackgroundType value );
 	/**
 	*\version
 	*	0.9.0
@@ -146,6 +170,7 @@ namespace castor3d
 		eCylindrical,
 		CU_ScopedEnumBounds( eSpherical )
 	};
+	castor::String getName( BillboardType value );
 	/**
 	*\version
 	*	0.9.0
@@ -166,6 +191,7 @@ namespace castor3d
 		eFixed,
 		CU_ScopedEnumBounds( eDynamic )
 	};
+	castor::String getName( BillboardSize value );
 
 	enum class ParticleFormat
 	{
@@ -185,6 +211,7 @@ namespace castor3d
 		eMat3f,
 		eMat4f,
 	};
+	castor::String getName( ParticleFormat value );
 
 	class Scene;
 	class SceneLoader;

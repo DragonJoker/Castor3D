@@ -24,29 +24,36 @@ namespace castor3d
 		static uint32_t constexpr MinTextureIndex = 3u;
 	}
 
-	constexpr uint32_t getPassBufferIndex()noexcept
+	uint32_t getPassBufferIndex()noexcept
 	{
 		return PassBufferIndex;
 	}
 
-	constexpr uint32_t getTexturesBufferIndex()noexcept
+	uint32_t getTexturesBufferIndex()noexcept
 	{
 		return TexturesBufferIndex;
 	}
 
-	constexpr uint32_t getLightBufferIndex()noexcept
+	uint32_t getLightBufferIndex()noexcept
 	{
 		return LightBufferIndex;
 	}
 
-	constexpr uint32_t getMinBufferIndex()noexcept
+	uint32_t getMinBufferIndex()noexcept
 	{
 		return MinBufferIndex;
 	}
 
-	constexpr uint32_t getMinTextureIndex()noexcept
+	uint32_t getMinTextureIndex()noexcept
 	{
 		return MinTextureIndex;
+	}
+
+	bool isShadowMapProgram( ProgramFlags const & flags )
+	{
+		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
+			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
+			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
 	}
 
 	//*************************************************************************
@@ -94,10 +101,10 @@ namespace castor3d
 	{
 	}
 
+	//*************************************************************************
+
 	namespace shader
 	{
-		//*********************************************************************
-
 		namespace
 		{
 			static constexpr uint32_t SpotShadowMapCount = 10u;

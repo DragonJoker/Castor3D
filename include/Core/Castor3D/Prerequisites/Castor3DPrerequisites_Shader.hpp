@@ -6,11 +6,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API constexpr uint32_t getPassBufferIndex()noexcept;
-	C3D_API constexpr uint32_t getTexturesBufferIndex()noexcept;
-	C3D_API constexpr uint32_t getLightBufferIndex()noexcept;
-	C3D_API constexpr uint32_t getMinBufferIndex()noexcept;
-	C3D_API constexpr uint32_t getMinTextureIndex()noexcept;
+	C3D_API uint32_t getPassBufferIndex()noexcept;
+	C3D_API uint32_t getTexturesBufferIndex()noexcept;
+	C3D_API uint32_t getLightBufferIndex()noexcept;
+	C3D_API uint32_t getMinBufferIndex()noexcept;
+	C3D_API uint32_t getMinTextureIndex()noexcept;
 
 	using ShaderPtr = std::unique_ptr< sdw::Shader >;
 	/**@name Shader */

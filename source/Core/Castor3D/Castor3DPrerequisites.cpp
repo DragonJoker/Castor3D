@@ -170,33 +170,6 @@ namespace castor3d
 		return result;
 	}
 
-	bool isShadowMapProgram( ProgramFlags const & flags )
-	{
-		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
-			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
-			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
-	}
-
-	FogType getFogType( SceneFlags const & flags )
-	{
-		FogType result = FogType::eDisabled;
-
-		if ( checkFlag( flags, SceneFlag::eFogLinear) )
-		{
-			result = FogType::eLinear;
-		}
-		else if ( checkFlag( flags, SceneFlag::eFogExponential) )
-		{
-			result = FogType::eExponential;
-		}
-		else if ( checkFlag( flags, SceneFlag::eFogSquaredExponential ) )
-		{
-			result = FogType::eSquaredExponential;
-		}
-
-		return result;
-	}
-
 	RenderDevice const & getCurrentRenderDevice( RenderDevice const & obj )
 	{
 		return getCurrentRenderDevice( obj.renderSystem );
@@ -215,44 +188,5 @@ namespace castor3d
 	RenderDevice const & getCurrentRenderDevice( Scene const & obj )
 	{
 		return getCurrentRenderDevice( *obj.getEngine() );
-	}
-
-	bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs )
-	{
-		return lhs.alphaFunc < rhs.alphaFunc
-			|| ( lhs.alphaFunc == rhs.alphaFunc
-				&& ( lhs.topology < rhs.topology
-					|| ( lhs.topology == rhs.topology
-						&& ( lhs.colourBlendMode < rhs.colourBlendMode
-							|| ( lhs.colourBlendMode == rhs.colourBlendMode
-								&& ( lhs.alphaBlendMode < rhs.alphaBlendMode
-									|| ( lhs.alphaBlendMode == rhs.alphaBlendMode
-										&& ( lhs.textures < rhs.textures
-											|| ( lhs.textures == rhs.textures
-												&& ( lhs.texturesCount < rhs.texturesCount
-													|| ( lhs.texturesCount == rhs.texturesCount
-														&& ( lhs.heightMapIndex < rhs.heightMapIndex
-															|| ( lhs.heightMapIndex == rhs.heightMapIndex
-																&& ( lhs.programFlags < rhs.programFlags
-																	|| ( lhs.programFlags == rhs.programFlags
-																		&& ( lhs.passFlags < rhs.passFlags
-																			|| ( lhs.passFlags == rhs.passFlags
-																				&& lhs.sceneFlags < rhs.sceneFlags )
-																			)
-																		)
-																	)
-																)
-															)
-														)
-													)
-												)
-											)
-										)
-									)
-								)
-							)
-						)
-					)
-				);
 	}
 }

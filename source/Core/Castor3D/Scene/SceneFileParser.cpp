@@ -121,179 +121,179 @@ SceneFileParser::SceneFileParser( Engine & engine )
 	: OwnedBy< Engine >( engine )
 	, FileParser( uint32_t( CSCNSection::eRoot ) )
 {
-	m_mapBlendFactors[cuT( "zero" )] = uint32_t( VK_BLEND_FACTOR_ZERO );
-	m_mapBlendFactors[cuT( "one" )] = uint32_t( VK_BLEND_FACTOR_ONE );
-	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( VK_BLEND_FACTOR_SRC_COLOR );
-	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR );
-	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( VK_BLEND_FACTOR_DST_COLOR );
-	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR );
-	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA );
-	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA );
-	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( VK_BLEND_FACTOR_DST_ALPHA );
-	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA );
-	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA_SATURATE );
-	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( VK_BLEND_FACTOR_SRC1_COLOR );
-	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR );
-	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( VK_BLEND_FACTOR_SRC1_ALPHA );
-	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ZERO )] = uint32_t( VK_BLEND_FACTOR_ZERO );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE )] = uint32_t( VK_BLEND_FACTOR_ONE );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_COLOR )] = uint32_t( VK_BLEND_FACTOR_SRC_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_DST_COLOR )] = uint32_t( VK_BLEND_FACTOR_DST_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_ALPHA )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_DST_ALPHA )] = uint32_t( VK_BLEND_FACTOR_DST_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC_ALPHA_SATURATE )] = uint32_t( VK_BLEND_FACTOR_SRC_ALPHA_SATURATE );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC1_COLOR )] = uint32_t( VK_BLEND_FACTOR_SRC1_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_SRC1_ALPHA )] = uint32_t( VK_BLEND_FACTOR_SRC1_ALPHA );
+	m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA )] = uint32_t( VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
 
-	m_mapTypes[cuT( "1d" )] = uint32_t( VK_IMAGE_TYPE_1D );
-	m_mapTypes[cuT( "2d" )] = uint32_t( VK_IMAGE_TYPE_2D );
-	m_mapTypes[cuT( "3d" )] = uint32_t( VK_IMAGE_TYPE_3D );
+	m_mapTypes[ashes::getName( VK_IMAGE_TYPE_1D )] = uint32_t( VK_IMAGE_TYPE_1D );
+	m_mapTypes[ashes::getName( VK_IMAGE_TYPE_2D )] = uint32_t( VK_IMAGE_TYPE_2D );
+	m_mapTypes[ashes::getName( VK_IMAGE_TYPE_3D )] = uint32_t( VK_IMAGE_TYPE_3D );
 
-	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( VK_COMPARE_OP_ALWAYS );
-	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( VK_COMPARE_OP_LESS );
-	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( VK_COMPARE_OP_LESS_OR_EQUAL );
-	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( VK_COMPARE_OP_EQUAL );
-	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( VK_COMPARE_OP_NOT_EQUAL );
-	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( VK_COMPARE_OP_GREATER_OR_EQUAL );
-	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( VK_COMPARE_OP_GREATER );
-	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( VK_COMPARE_OP_NEVER );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_ALWAYS )] = uint32_t( VK_COMPARE_OP_ALWAYS );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_LESS )] = uint32_t( VK_COMPARE_OP_LESS );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_LESS_OR_EQUAL )] = uint32_t( VK_COMPARE_OP_LESS_OR_EQUAL );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_EQUAL )] = uint32_t( VK_COMPARE_OP_EQUAL );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_NOT_EQUAL )] = uint32_t( VK_COMPARE_OP_NOT_EQUAL );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_GREATER_OR_EQUAL )] = uint32_t( VK_COMPARE_OP_GREATER_OR_EQUAL );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_GREATER )] = uint32_t( VK_COMPARE_OP_GREATER );
+	m_mapComparisonFuncs[ashes::getName( VK_COMPARE_OP_NEVER )] = uint32_t( VK_COMPARE_OP_NEVER );
 
-	m_mapTextureBlendModes[cuT( "add" )] = uint32_t( VK_BLEND_OP_ADD );
-	m_mapTextureBlendModes[cuT( "min" )] = uint32_t( VK_BLEND_OP_MIN );
-	m_mapTextureBlendModes[cuT( "max" )] = uint32_t( VK_BLEND_OP_MAX );
-	m_mapTextureBlendModes[cuT( "subtract" )] = uint32_t( VK_BLEND_OP_SUBTRACT );
-	m_mapTextureBlendModes[cuT( "rev_subtract" )] = uint32_t( VK_BLEND_OP_REVERSE_SUBTRACT );
+	m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_ADD )] = uint32_t( VK_BLEND_OP_ADD );
+	m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_MIN )] = uint32_t( VK_BLEND_OP_MIN );
+	m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_MAX )] = uint32_t( VK_BLEND_OP_MAX );
+	m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_SUBTRACT )] = uint32_t( VK_BLEND_OP_SUBTRACT );
+	m_mapTextureBlendModes[ashes::getName( VK_BLEND_OP_REVERSE_SUBTRACT )] = uint32_t( VK_BLEND_OP_REVERSE_SUBTRACT );
 
-	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureFlag::eDiffuse );
-	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureFlag::eNormal );
-	m_mapTextureChannels[cuT( "specular" )] = uint32_t( TextureFlag::eSpecular );
-	m_mapTextureChannels[cuT( "height" )] = uint32_t( TextureFlag::eHeight );
-	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureFlag::eOpacity );
-	m_mapTextureChannels[cuT( "glossiness" )] = uint32_t( TextureFlag::eGlossiness );
-	m_mapTextureChannels[cuT( "shininess" )] = uint32_t( TextureFlag::eShininess );
-	m_mapTextureChannels[cuT( "roughness" )] = uint32_t( TextureFlag::eRoughness );
-	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureFlag::eEmissive );
-	m_mapTextureChannels[cuT( "reflection" )] = uint32_t( TextureFlag::eReflection );
-	m_mapTextureChannels[cuT( "refraction" )] = uint32_t( TextureFlag::eRefraction );
-	m_mapTextureChannels[cuT( "roughness" )] = uint32_t( TextureFlag::eRoughness );
-	m_mapTextureChannels[cuT( "albedo" )] = uint32_t( TextureFlag::eAlbedo );
-	m_mapTextureChannels[cuT( "ambient_occlusion" )] = uint32_t( TextureFlag::eOcclusion );
-	m_mapTextureChannels[cuT( "occlusion" )] = uint32_t( TextureFlag::eOcclusion );
-	m_mapTextureChannels[cuT( "transmittance" )] = uint32_t( TextureFlag::eTransmittance );
-	m_mapTextureChannels[cuT( "metallic" )] = uint32_t( TextureFlag::eMetalness );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
+	m_mapPrimitiveTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN );
 
-	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::ePoint );
-	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::eSpot );
-	m_mapLightTypes[cuT( "directional" )] = uint32_t( LightType::eDirectional );
+	m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+	m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
+	m_mapPrimitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
 
-	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
-	m_mapPrimitiveTypes[cuT( "lines_adj" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY );
-	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-	m_mapPrimitiveTypes[cuT( "line_strip_adj" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY );
-	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST );
-	m_mapPrimitiveTypes[cuT( "triangles_adj" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY );
-	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-	m_mapPrimitiveTypes[cuT( "triangle_strip_adj" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
-	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN );
-
-	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-
-	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::eOrtho );
-	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::ePerspective );
-	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::eFrustum );
-
-	m_mapFilters[cuT( "nearest" )] = uint32_t( VK_FILTER_NEAREST );
-	m_mapFilters[cuT( "linear" )] = uint32_t( VK_FILTER_LINEAR );
+	m_mapFilters[ashes::getName( VK_FILTER_NEAREST )] = uint32_t( VK_FILTER_NEAREST );
+	m_mapFilters[ashes::getName( VK_FILTER_LINEAR )] = uint32_t( VK_FILTER_LINEAR );
 
 	m_mapMipmapModes[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-	m_mapMipmapModes[cuT( "nearest" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-	m_mapMipmapModes[cuT( "linear" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+	m_mapMipmapModes[ashes::getName( VK_SAMPLER_MIPMAP_MODE_NEAREST )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
+	m_mapMipmapModes[ashes::getName( VK_SAMPLER_MIPMAP_MODE_LINEAR )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 
-	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT );
-	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+	m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_REPEAT )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+	m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT );
+	m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
+	m_mapWrappingModes[ashes::getName( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE )] = uint32_t( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 
-	m_mapBorderColours[cuT( "float_transparent_black" )] = uint32_t( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
-	m_mapBorderColours[cuT( "int_transparent_black" )] = uint32_t( VK_BORDER_COLOR_INT_TRANSPARENT_BLACK );
-	m_mapBorderColours[cuT( "float_opaque_black" )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
-	m_mapBorderColours[cuT( "int_opaque_black" )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_BLACK );
-	m_mapBorderColours[cuT( "float_opaque_white" )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
-	m_mapBorderColours[cuT( "int_opaque_white" )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_WHITE );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK )] = uint32_t( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_TRANSPARENT_BLACK )] = uint32_t( VK_BORDER_COLOR_INT_TRANSPARENT_BLACK );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_OPAQUE_BLACK )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_BLACK );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE )] = uint32_t( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
+	m_mapBorderColours[ashes::getName( VK_BORDER_COLOR_INT_OPAQUE_WHITE )] = uint32_t( VK_BORDER_COLOR_INT_OPAQUE_WHITE );
 
-	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
-	m_mapShaderTypes[cuT( "tess_control" )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
-	m_mapShaderTypes[cuT( "tess_eval" )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
-	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
-	m_mapShaderTypes[cuT( "fragment" )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
-	m_mapShaderTypes[cuT( "compute" )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_VERTEX_BIT )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
+	m_mapShaderTypes[ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
 
-	m_mapVariableTypes[cuT( "int" )] = uint32_t( ParticleFormat::eInt );
-	m_mapVariableTypes[cuT( "uint" )] = uint32_t( ParticleFormat::eUInt );
-	m_mapVariableTypes[cuT( "float" )] = uint32_t( ParticleFormat::eFloat );
-	m_mapVariableTypes[cuT( "vec2i" )] = uint32_t( ParticleFormat::eVec2i );
-	m_mapVariableTypes[cuT( "vec3i" )] = uint32_t( ParticleFormat::eVec3i );
-	m_mapVariableTypes[cuT( "vec4i" )] = uint32_t( ParticleFormat::eVec4i );
-	m_mapVariableTypes[cuT( "vec2ui" )] = uint32_t( ParticleFormat::eVec2ui );
-	m_mapVariableTypes[cuT( "vec3ui" )] = uint32_t( ParticleFormat::eVec3ui );
-	m_mapVariableTypes[cuT( "vec4ui" )] = uint32_t( ParticleFormat::eVec4ui );
-	m_mapVariableTypes[cuT( "vec2f" )] = uint32_t( ParticleFormat::eVec2f );
-	m_mapVariableTypes[cuT( "vec3f" )] = uint32_t( ParticleFormat::eVec3f );
-	m_mapVariableTypes[cuT( "vec4f" )] = uint32_t( ParticleFormat::eVec4f );
-	m_mapVariableTypes[cuT( "mat2x2f" )] = uint32_t( ParticleFormat::eMat2f );
-	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( ParticleFormat::eMat3f );
-	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( ParticleFormat::eMat4f );
+	m_mapTextureChannels[getName( TextureFlag::eDiffuse, MaterialType::ePhong )] = uint32_t( TextureFlag::eDiffuse );
+	m_mapTextureChannels[getName( TextureFlag::eNormal, MaterialType::ePhong )] = uint32_t( TextureFlag::eNormal );
+	m_mapTextureChannels[getName( TextureFlag::eSpecular, MaterialType::ePhong )] = uint32_t( TextureFlag::eSpecular );
+	m_mapTextureChannels[getName( TextureFlag::eHeight, MaterialType::ePhong )] = uint32_t( TextureFlag::eHeight );
+	m_mapTextureChannels[getName( TextureFlag::eOpacity, MaterialType::ePhong )] = uint32_t( TextureFlag::eOpacity );
+	m_mapTextureChannels[getName( TextureFlag::eShininess, MaterialType::ePhong )] = uint32_t( TextureFlag::eShininess );
+	m_mapTextureChannels[getName( TextureFlag::eEmissive, MaterialType::ePhong )] = uint32_t( TextureFlag::eEmissive );
+	m_mapTextureChannels[getName( TextureFlag::eReflection, MaterialType::ePhong )] = uint32_t( TextureFlag::eReflection );
+	m_mapTextureChannels[getName( TextureFlag::eRefraction, MaterialType::ePhong )] = uint32_t( TextureFlag::eRefraction );
+	m_mapTextureChannels[getName( TextureFlag::eOcclusion, MaterialType::ePhong )] = uint32_t( TextureFlag::eOcclusion );
+	m_mapTextureChannels[getName( TextureFlag::eOcclusion, MaterialType::ePhong )] = uint32_t( TextureFlag::eOcclusion );
+	m_mapTextureChannels[getName( TextureFlag::eTransmittance, MaterialType::ePhong )] = uint32_t( TextureFlag::eTransmittance );
+	m_mapTextureChannels[getName( TextureFlag::eAlbedo, MaterialType::eSpecularGlossiness )] = uint32_t( TextureFlag::eAlbedo );
+	m_mapTextureChannels[getName( TextureFlag::eGlossiness, MaterialType::eSpecularGlossiness )] = uint32_t( TextureFlag::eGlossiness );
+	m_mapTextureChannels[getName( TextureFlag::eMetalness, MaterialType::eMetallicRoughness )] = uint32_t( TextureFlag::eMetalness );
+	m_mapTextureChannels[getName( TextureFlag::eRoughness, MaterialType::eMetallicRoughness )] = uint32_t( TextureFlag::eRoughness );
 
-	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::eCamera );
-	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::eLight );
-	m_mapMovables[cuT( "object" )] = uint32_t( MovableType::eGeometry );
-	m_mapMovables[cuT( "billboard" )] = uint32_t( MovableType::eBillboard );
+	m_mapLightTypes[getName( LightType::ePoint )] = uint32_t( LightType::ePoint );
+	m_mapLightTypes[getName( LightType::eSpot )] = uint32_t( LightType::eSpot );
+	m_mapLightTypes[getName( LightType::eDirectional )] = uint32_t( LightType::eDirectional );
 
-	m_mapTextWrappingModes[cuT( "none" )] = uint32_t( TextWrappingMode::eNone );
-	m_mapTextWrappingModes[cuT( "break" )] = uint32_t( TextWrappingMode::eBreak );
-	m_mapTextWrappingModes[cuT( "break_words" )] = uint32_t( TextWrappingMode::eBreakWords );
+	m_mapViewportModes[getName( ViewportType::eOrtho )] = uint32_t( ViewportType::eOrtho );
+	m_mapViewportModes[getName( ViewportType::ePerspective )] = uint32_t( ViewportType::ePerspective );
+	m_mapViewportModes[getName( ViewportType::eFrustum )] = uint32_t( ViewportType::eFrustum );
 
-	m_mapBorderPositions[cuT( "internal" )] = uint32_t( BorderPosition::eInternal );
-	m_mapBorderPositions[cuT( "middle" )] = uint32_t( BorderPosition::eMiddle );
-	m_mapBorderPositions[cuT( "external" )] = uint32_t( BorderPosition::eExternal );
+	m_mapVariableTypes[getName( ParticleFormat::eInt )] = uint32_t( ParticleFormat::eInt );
+	m_mapVariableTypes[getName( ParticleFormat::eUInt )] = uint32_t( ParticleFormat::eUInt );
+	m_mapVariableTypes[getName( ParticleFormat::eFloat )] = uint32_t( ParticleFormat::eFloat );
+	m_mapVariableTypes[getName( ParticleFormat::eVec2i )] = uint32_t( ParticleFormat::eVec2i );
+	m_mapVariableTypes[getName( ParticleFormat::eVec3i )] = uint32_t( ParticleFormat::eVec3i );
+	m_mapVariableTypes[getName( ParticleFormat::eVec4i )] = uint32_t( ParticleFormat::eVec4i );
+	m_mapVariableTypes[getName( ParticleFormat::eVec2ui )] = uint32_t( ParticleFormat::eVec2ui );
+	m_mapVariableTypes[getName( ParticleFormat::eVec3ui )] = uint32_t( ParticleFormat::eVec3ui );
+	m_mapVariableTypes[getName( ParticleFormat::eVec4ui )] = uint32_t( ParticleFormat::eVec4ui );
+	m_mapVariableTypes[getName( ParticleFormat::eVec2f )] = uint32_t( ParticleFormat::eVec2f );
+	m_mapVariableTypes[getName( ParticleFormat::eVec3f )] = uint32_t( ParticleFormat::eVec3f );
+	m_mapVariableTypes[getName( ParticleFormat::eVec4f )] = uint32_t( ParticleFormat::eVec4f );
+	m_mapVariableTypes[getName( ParticleFormat::eMat2f )] = uint32_t( ParticleFormat::eMat2f );
+	m_mapVariableTypes[getName( ParticleFormat::eMat3f )] = uint32_t( ParticleFormat::eMat3f );
+	m_mapVariableTypes[getName( ParticleFormat::eMat4f )] = uint32_t( ParticleFormat::eMat4f );
 
-	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::eNoBlend );
-	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::eAdditive );
-	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::eMultiplicative );
-	m_mapBlendModes[cuT( "interpolative" )] = uint32_t( BlendMode::eInterpolative );
-	m_mapBlendModes[cuT( "a_buffer" )] = uint32_t( BlendMode::eABuffer );
-	m_mapBlendModes[cuT( "depth_peeling" )] = uint32_t( BlendMode::eDepthPeeling );
+	m_mapMovables[getName( MovableType::eCamera )] = uint32_t( MovableType::eCamera );
+	m_mapMovables[getName( MovableType::eLight )] = uint32_t( MovableType::eLight );
+	m_mapMovables[getName( MovableType::eGeometry )] = uint32_t( MovableType::eGeometry );
+	m_mapMovables[getName( MovableType::eBillboard )] = uint32_t( MovableType::eBillboard );
+	m_mapMovables[getName( MovableType::eParticleEmitter )] = uint32_t( MovableType::eParticleEmitter );
 
-	m_mapVerticalAligns[cuT( "top" )] = uint32_t( VAlign::eTop );
-	m_mapVerticalAligns[cuT( "center" )] = uint32_t( VAlign::eCenter );
-	m_mapVerticalAligns[cuT( "bottom" )] = uint32_t( VAlign::eBottom );
+	m_mapBlendModes[getName( BlendMode::eNoBlend )] = uint32_t( BlendMode::eNoBlend );
+	m_mapBlendModes[getName( BlendMode::eAdditive )] = uint32_t( BlendMode::eAdditive );
+	m_mapBlendModes[getName( BlendMode::eMultiplicative )] = uint32_t( BlendMode::eMultiplicative );
+	m_mapBlendModes[getName( BlendMode::eInterpolative )] = uint32_t( BlendMode::eInterpolative );
+	m_mapBlendModes[getName( BlendMode::eABuffer )] = uint32_t( BlendMode::eABuffer );
+	m_mapBlendModes[getName( BlendMode::eDepthPeeling )] = uint32_t( BlendMode::eDepthPeeling );
 
-	m_mapHorizontalAligns[cuT( "left" )] = uint32_t( HAlign::eLeft );
-	m_mapHorizontalAligns[cuT( "center" )] = uint32_t( HAlign::eCenter );
-	m_mapHorizontalAligns[cuT( "right" )] = uint32_t( HAlign::eRight );
-
-	m_mapTextTexturingModes[cuT( "letter" )] = uint32_t( TextTexturingMode::eLetter );
-	m_mapTextTexturingModes[cuT( "text" )] = uint32_t( TextTexturingMode::eText );
-
-	m_mapLineSpacingModes[cuT( "own_height" )] = uint32_t( TextLineSpacingMode::eOwnHeight );
-	m_mapLineSpacingModes[cuT( "max_lines_height" )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
-	m_mapLineSpacingModes[cuT( "max_font_height" )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
-
-	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::eLinear );
-	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::eExponential );
-	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::eSquaredExponential );
+	m_fogTypes[getName( FogType::eLinear )] = uint32_t( FogType::eLinear );
+	m_fogTypes[getName( FogType::eExponential )] = uint32_t( FogType::eExponential );
+	m_fogTypes[getName( FogType::eSquaredExponential )] = uint32_t( FogType::eSquaredExponential );
 
 	m_mapComparisonModes[cuT( "none" )] = uint32_t( false );
 	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( true );
 
-	m_mapBillboardTypes[cuT( "cylindrical" )] = uint32_t( BillboardType::eCylindrical );
-	m_mapBillboardTypes[cuT( "spherical" )] = uint32_t( BillboardType::eSpherical );
+	m_mapBillboardTypes[getName( BillboardType::eCylindrical )] = uint32_t( BillboardType::eCylindrical );
+	m_mapBillboardTypes[getName( BillboardType::eSpherical )] = uint32_t( BillboardType::eSpherical );
 
-	m_mapBillboardSizes[cuT( "dynamic" )] = uint32_t( BillboardSize::eDynamic );
-	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
+	m_mapBillboardSizes[getName( BillboardSize::eDynamic )] = uint32_t( BillboardSize::eDynamic );
+	m_mapBillboardSizes[getName( BillboardSize::eFixed )] = uint32_t( BillboardSize::eFixed );
 
-	m_mapMaterialTypes[cuT( "phong" )] = uint32_t( MaterialType::ePhong );
-	m_mapMaterialTypes[cuT( "metallic_roughness" )] = uint32_t( MaterialType::eMetallicRoughness );
-	m_mapMaterialTypes[cuT( "specular_glossiness" )] = uint32_t( MaterialType::eSpecularGlossiness );
+	m_mapMaterialTypes[getName( MaterialType::ePhong )] = uint32_t( MaterialType::ePhong );
+	m_mapMaterialTypes[getName( MaterialType::eMetallicRoughness )] = uint32_t( MaterialType::eMetallicRoughness );
+	m_mapMaterialTypes[getName( MaterialType::eSpecularGlossiness )] = uint32_t( MaterialType::eSpecularGlossiness );
 
-	m_mapShadowFilters[cuT( "raw" )] = uint32_t( ShadowType::eRaw );
-	m_mapShadowFilters[cuT( "pcf" )] = uint32_t( ShadowType::ePCF );
-	m_mapShadowFilters[cuT( "variance" )] = uint32_t( ShadowType::eVariance );
+	m_mapShadowFilters[getName( ShadowType::eRaw )] = uint32_t( ShadowType::eRaw );
+	m_mapShadowFilters[getName( ShadowType::ePCF )] = uint32_t( ShadowType::ePCF );
+	m_mapShadowFilters[getName( ShadowType::eVariance )] = uint32_t( ShadowType::eVariance );
+
+	m_mapTextWrappingModes[getName( TextWrappingMode::eNone )] = uint32_t( TextWrappingMode::eNone );
+	m_mapTextWrappingModes[getName( TextWrappingMode::eBreak )] = uint32_t( TextWrappingMode::eBreak );
+	m_mapTextWrappingModes[getName( TextWrappingMode::eBreakWords )] = uint32_t( TextWrappingMode::eBreakWords );
+
+	m_mapBorderPositions[getName( BorderPosition::eInternal )] = uint32_t( BorderPosition::eInternal );
+	m_mapBorderPositions[getName( BorderPosition::eMiddle )] = uint32_t( BorderPosition::eMiddle );
+	m_mapBorderPositions[getName( BorderPosition::eExternal )] = uint32_t( BorderPosition::eExternal );
+
+	m_mapVerticalAligns[getName( VAlign::eTop )] = uint32_t( VAlign::eTop );
+	m_mapVerticalAligns[getName( VAlign::eCenter )] = uint32_t( VAlign::eCenter );
+	m_mapVerticalAligns[getName( VAlign::eBottom )] = uint32_t( VAlign::eBottom );
+
+	m_mapHorizontalAligns[getName( HAlign::eLeft )] = uint32_t( HAlign::eLeft );
+	m_mapHorizontalAligns[getName( HAlign::eCenter )] = uint32_t( HAlign::eCenter );
+	m_mapHorizontalAligns[getName( HAlign::eRight )] = uint32_t( HAlign::eRight );
+
+	m_mapTextTexturingModes[getName( TextTexturingMode::eLetter )] = uint32_t( TextTexturingMode::eLetter );
+	m_mapTextTexturingModes[getName( TextTexturingMode::eText )] = uint32_t( TextTexturingMode::eText );
+
+	m_mapLineSpacingModes[getName( TextLineSpacingMode::eOwnHeight )] = uint32_t( TextLineSpacingMode::eOwnHeight );
+	m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxLineHeight )] = uint32_t( TextLineSpacingMode::eMaxLineHeight );
+	m_mapLineSpacingModes[getName( TextLineSpacingMode::eMaxFontHeight )] = uint32_t( TextLineSpacingMode::eMaxFontHeight );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -313,11 +313,6 @@ bool SceneFileParser::parseFile( Path const & pathFile )
 	{
 		castor::ZipArchive archive( path, File::OpenMode::eRead );
 		path = Engine::getEngineDirectory() / pathFile.getFileName();
-
-		//if ( File::directoryExists( path ) )
-		//{
-		//	File::directoryDelete( path );
-		//}
 
 		bool ok = true;
 

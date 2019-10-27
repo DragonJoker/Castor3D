@@ -6,48 +6,50 @@ namespace castor
 	{
 		//*************************************************************************************************
 
-		namespace
+		namespace details
 		{
 			template< typename InChar, typename OutChar > struct StringConverter;
 
 			template<> struct StringConverter< char, wchar_t >
 			{
-				static void convert( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< char > const & strIn
+					, std::basic_string< wchar_t > & strOut
+					, std::locale const & locale = std::locale( "C" ) )
 				{
-					if ( !p_strIn.empty() )
+					if ( !strIn.empty() )
 					{
 						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						const facet_type & facet = std::use_facet< facet_type >( p_locale );
+						const facet_type & facet = std::use_facet< facet_type >( locale );
 						std::mbstate_t state = std::mbstate_t();
-						std::vector< wchar_t > dst( p_strIn.size() * facet.max_length(), 0 );
+						std::vector< wchar_t > dst( strIn.size() * facet.max_length(), 0 );
 						const char * endSrc = nullptr;
 						wchar_t * endDst = nullptr;
-						facet.in( state,
-								  p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
-								  &dst[0], &dst[0] + dst.size(), endDst
-								);
-						p_strOut = std::wstring( &dst.front(), endDst );
+						facet.in( state
+							, strIn.data(), strIn.data() + strIn.size(), endSrc
+							, &dst[0], &dst[0] + dst.size(), endDst );
+						strOut = std::wstring( &dst.front(), endDst );
 					}
 				}
 			};
 
 			template<> struct StringConverter< wchar_t, char >
 			{
-				static void convert( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< wchar_t > const & strIn
+					, std::basic_string< char > & strOut
+					, std::locale const & locale = std::locale() )
 				{
-					if ( !p_strIn.empty() )
+					if ( !strIn.empty() )
 					{
 						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						const facet_type & facet = std::use_facet< facet_type >( p_locale );
+						const facet_type & facet = std::use_facet< facet_type >( locale );
 						std::mbstate_t state = std::mbstate_t();
-						std::vector< char > dst( p_strIn.size() * facet.max_length(), 0 );
+						std::vector< char > dst( strIn.size() * facet.max_length(), 0 );
 						const wchar_t * endSrc = nullptr;
 						char * endDst = nullptr;
 						facet.out( state,
-								   p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
-								   &dst[0], &dst[0] + dst.size(), endDst
-								 );
-						p_strOut = std::string( &dst.front(), endDst );
+							strIn.data(), strIn.data() + strIn.size(), endSrc
+								, &dst[0], &dst[0] + dst.size(), endDst );
+						strOut = std::string( &dst.front(), endDst );
 					}
 				}
 			};
@@ -55,9 +57,11 @@ namespace castor
 			template< typename InChar >
 			struct StringConverter< InChar, InChar >
 			{
-				static void convert( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void convert( std::basic_string< InChar > const & strIn
+					, std::basic_string< InChar > & strOut
+					, std::locale const & locale = std::locale() )
 				{
-					p_strOut = p_strIn;
+					strOut = strIn;
 				}
 			};
 		}
@@ -65,121 +69,65 @@ namespace castor
 		//*************************************************************************************************
 
 		template< typename T >
-		inline void parse( String const & p_str, T & p_val, std::locale const & p_locale )
+		inline void parse( String const & str, T & val, std::locale const & locale )
 		{
-			StringStream out( p_str );
-			out.imbue( p_locale );
-			out >> p_val;
+			StringStream out( str );
+			out.imbue( locale );
+			out >> val;
 		}
 
 		template< typename T >
-		inline void extract( String & p_str, T & p_val, std::locale const & p_locale )
+		inline void extract( String & str, T & val, std::locale const & locale )
 		{
-			StringStream out( p_str );
-			out.imbue( p_locale );
-			out >> p_val;
-			p_str = out.str();
+			StringStream out( str );
+			out.imbue( locale );
+			out >> val;
+			str = out.str();
 		}
 
 		template< typename T >
-		inline String toString( T const & p_value, std::locale const & p_locale )
+		inline String toString( T const & value, std::locale const & locale )
 		{
 			StringStream result;
-			result.imbue( p_locale );
-			result << p_value;
-			return result.str();
-		}
-
-		inline String toString( uint8_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( int16_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( uint16_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( int32_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( uint32_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( int64_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
-			return result.str();
-		}
-
-		inline String toString( uint64_t p_value, int p_base, std::locale const & p_locale )
-		{
-			StringStream result;
-			result.imbue( p_locale );
-			result << manip::xbase( p_base ) << p_value;
+			result.imbue( locale );
+			result << value;
 			return result.str();
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > stringCast( std::basic_string< U > const & p_src )
+		std::basic_string< T > stringCast( std::basic_string< U > const & src )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::convert( p_src, result );
+			details::StringConverter< U, T >::convert( src, result );
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > stringCast( U const * p_src )
+		std::basic_string< T > stringCast( U const * src )
 		{
 			std::basic_string< T > result;
 
-			if ( p_src )
+			if ( src )
 			{
-				StringConverter< U, T >::convert( std::basic_string< U >( p_src ), result );
+				details::StringConverter< U, T >::convert( std::basic_string< U >( src ), result );
 			}
 
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > stringCast( U const * p_begin, U const * p_end )
+		std::basic_string< T > stringCast( U const * begin, U const * end )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::convert( std::basic_string< U >( p_begin, p_end ), result );
+			details::StringConverter< U, T >::convert( std::basic_string< U >( begin, end ), result );
 			return result;
 		}
 
 		template< typename T, typename U >
-		std::basic_string< T > stringCast( std::initializer_list< U > const & p_src )
+		std::basic_string< T > stringCast( std::initializer_list< U > const & src )
 		{
 			std::basic_string< T > result;
-			StringConverter< U, T >::convert( std::basic_string< U >( p_src ), result );
+			details::StringConverter< U, T >::convert( std::basic_string< U >( src ), result );
 			return result;
 		}
 
@@ -187,45 +135,48 @@ namespace castor
 		{
 			//*************************************************************************************************
 
-			template< typename IteratorType >
-			inline char32_t toUtf8( IteratorType p_value )
+			namespace details
 			{
-				static const unsigned char FirstBitMask = 0x80; // 1000000
-				static const unsigned char SecondBitMask = 0x40; // 0100000
-				static const unsigned char ThirdBitMask = 0x20; // 0010000
-				static const unsigned char FourthBitMask = 0x10; // 0001000
-				static const unsigned char FifthBitMask = 0x08; // 0000100
+				static constexpr unsigned char FirstBitMask = 0x80;
+				static constexpr unsigned char SecondBitMask = 0x40;
+				static constexpr unsigned char ThirdBitMask = 0x20;
+				static constexpr unsigned char FourthBitMask = 0x10;
+				static constexpr unsigned char FifthBitMask = 0x08;
+			}
 
+			template< typename IteratorType >
+			inline char32_t toUtf8( IteratorType value )
+			{
 				char32_t result;
-				char firstByte = *p_value;
+				char firstByte = *value;
 
-				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & details::FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
-					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
+					if ( firstByte & details::ThirdBitMask ) // This means that the first byte has a value greater than 191, and so it must be at least a three-octet code point.
 					{
-						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
+						if ( firstByte & details::FourthBitMask ) // This means that the first byte has a value greater than 224, and so it must be a four-octet code point.
 						{
 							result = ( firstByte & 0x07 ) << 18;
-							char secondByte = *( p_value + 1 );
+							char secondByte = *( value + 1 );
 							result += ( secondByte & 0x3f ) << 12;
-							char thirdByte = *( p_value + 2 );
+							char thirdByte = *( value + 2 );
 							result += ( thirdByte & 0x3f ) << 6;;
-							char fourthByte = *( p_value + 3 );
+							char fourthByte = *( value + 3 );
 							result += ( fourthByte & 0x3f );
 						}
 						else
 						{
 							result = ( firstByte & 0x0f ) << 12;
-							char secondByte = *( p_value + 1 );
+							char secondByte = *( value + 1 );
 							result += ( secondByte & 0x3f ) << 6;
-							char thirdByte = *( p_value + 2 );
+							char thirdByte = *( value + 2 );
 							result += ( thirdByte & 0x3f );
 						}
 					}
 					else
 					{
 						result = ( firstByte & 0x1f ) << 6;
-						char secondByte = *( p_value + 1 );
+						char secondByte = *( value + 1 );
 						result += ( secondByte & 0x3f );
 					}
 				}
@@ -239,17 +190,17 @@ namespace castor
 
 			//*************************************************************************************************
 
-			iterator::iterator( std::string::iterator const & p_it )
-				: m_it( p_it )
+			iterator::iterator( std::string::iterator const & rhs )
+				: m_it( rhs )
 				, m_lastCodePoint( 0 )
 				, m_dirty( true )
 			{
 			}
 
-			iterator::iterator( iterator const & p_it )
-				: m_it( p_it.m_it )
-				, m_lastCodePoint( p_it.m_lastCodePoint )
-				, m_dirty( p_it.m_dirty )
+			iterator::iterator( iterator const & rhs )
+				: m_it( rhs.m_it )
+				, m_lastCodePoint( rhs.m_lastCodePoint )
+				, m_dirty( rhs.m_dirty )
 			{
 			}
 
@@ -257,24 +208,24 @@ namespace castor
 			{
 			}
 
-			iterator & iterator::operator=( std::string::iterator const & p_it )
+			iterator & iterator::operator=( std::string::iterator const & rhs )
 			{
-				m_it = p_it;
+				m_it = rhs;
 				m_lastCodePoint = 0;
 				m_dirty = true;
 				return *this;
 			}
-			iterator & iterator::operator=( iterator const & p_it )
+			iterator & iterator::operator=( iterator const & rhs )
 			{
-				m_it = p_it.m_it;
-				m_lastCodePoint = p_it.m_lastCodePoint;
-				m_dirty = p_it.m_dirty;
+				m_it = rhs.m_it;
+				m_lastCodePoint = rhs.m_lastCodePoint;
+				m_dirty = rhs.m_dirty;
 				return *this;
 			}
 
-			iterator & iterator::operator+=( size_t p_offset )
+			iterator & iterator::operator+=( size_t rhs )
 			{
-				while ( p_offset-- )
+				while ( rhs-- )
 				{
 					++( *this );
 				}
@@ -282,9 +233,9 @@ namespace castor
 				return *this;
 			}
 
-			iterator & iterator::operator-=( size_t p_offset )
+			iterator & iterator::operator-=( size_t rhs )
 			{
-				while ( p_offset-- )
+				while ( rhs-- )
 				{
 					--( *this );
 				}
@@ -294,24 +245,18 @@ namespace castor
 
 			iterator & iterator::operator++()
 			{
-				static const unsigned char FirstBitMask = 0x80; // 1000000
-				static const unsigned char SecondBitMask = 0x40; // 0100000
-				static const unsigned char ThirdBitMask = 0x20; // 0010000
-				static const unsigned char FourthBitMask = 0x10; // 0001000
-				static const unsigned char FifthBitMask = 0x08; // 0000100
-
 				char firstByte = *m_it;
 				++m_it;
 
-				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & details::FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
 					++m_it;
 
-					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+					if ( firstByte & details::ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
 					{
 						++m_it;
 
-						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+						if ( firstByte & details::FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
 						{
 							++m_it;
 						}
@@ -331,23 +276,17 @@ namespace castor
 
 			iterator & iterator::operator--()
 			{
-				static const unsigned char FirstBitMask = 0x80; // 1000000
-				static const unsigned char SecondBitMask = 0x40; // 0100000
-				static const unsigned char ThirdBitMask = 0x20; // 0010000
-				static const unsigned char FourthBitMask = 0x10; // 0001000
-				static const unsigned char FifthBitMask = 0x08; // 0000100
-
 				--m_it;
 
-				if ( *m_it & FirstBitMask ) // This means that the previous byte is not an ASCII character.
+				if ( *m_it & details::FirstBitMask ) // This means that the previous byte is not an ASCII character.
 				{
 					--m_it;
 
-					if ( ( *m_it & SecondBitMask ) == 0 )
+					if ( ( *m_it & details::SecondBitMask ) == 0 )
 					{
 						--m_it;
 
-						if ( ( *m_it & SecondBitMask ) == 0 )
+						if ( ( *m_it & details::SecondBitMask ) == 0 )
 						{
 							--m_it;
 						}
@@ -371,24 +310,24 @@ namespace castor
 				return m_lastCodePoint;
 			}
 
-			bool iterator::operator==( const iterator & p_it )const
+			bool iterator::operator==( const iterator & rhs )const
 			{
-				return m_it == p_it.m_it;
+				return m_it == rhs.m_it;
 			}
 
-			bool iterator::operator==( const std::string::iterator & p_it )const
+			bool iterator::operator==( const std::string::iterator & rhs )const
 			{
-				return m_it == p_it;
+				return m_it == rhs;
 			}
 
-			bool iterator::operator!=( const iterator & p_it )const
+			bool iterator::operator!=( const iterator & rhs )const
 			{
-				return m_it != p_it.m_it;
+				return m_it != rhs.m_it;
 			}
 
-			bool iterator::operator!=( const std::string::iterator & p_it )const
+			bool iterator::operator!=( const std::string::iterator & rhs )const
 			{
-				return m_it != p_it;
+				return m_it != rhs;
 			}
 
 			std::string::iterator iterator::internal()const
@@ -407,33 +346,33 @@ namespace castor
 
 			//*************************************************************************************************
 
-			inline iterator operator+( iterator p_it, size_t p_offset )
+			inline iterator operator+( iterator lhs, size_t rhs )
 			{
-				iterator it( p_it );
-				it += p_offset;
+				iterator it( lhs );
+				it += rhs;
 				return it;
 			}
 
-			iterator operator-( iterator p_it, size_t p_offset )
+			iterator operator-( iterator lhs, size_t rhs )
 			{
-				iterator it( p_it );
-				it -= p_offset;
+				iterator it( lhs );
+				it -= rhs;
 				return it;
 			}
 
 			//*************************************************************************************************
 
-			const_iterator::const_iterator( std::string::const_iterator const & p_it )
-				: m_it( p_it )
+			const_iterator::const_iterator( std::string::const_iterator const & rhs )
+				: m_it( rhs )
 				, m_lastCodePoint( 0 )
 				, m_dirty( true )
 			{
 			}
 
-			const_iterator::const_iterator( const_iterator const & p_it )
-				: m_it( p_it.m_it )
-				, m_lastCodePoint( p_it.m_lastCodePoint )
-				, m_dirty( p_it.m_dirty )
+			const_iterator::const_iterator( const_iterator const & rhs )
+				: m_it( rhs.m_it )
+				, m_lastCodePoint( rhs.m_lastCodePoint )
+				, m_dirty( rhs.m_dirty )
 			{
 			}
 
@@ -441,25 +380,25 @@ namespace castor
 			{
 			}
 
-			const_iterator & const_iterator::operator=( std::string::const_iterator const & p_it )
+			const_iterator & const_iterator::operator=( std::string::const_iterator const & rhs )
 			{
-				m_it = p_it;
+				m_it = rhs;
 				m_lastCodePoint = 0;
 				m_dirty = true;
 				return *this;
 			}
 
-			const_iterator & const_iterator::operator=( const_iterator const & p_it )
+			const_iterator & const_iterator::operator=( const_iterator const & rhs )
 			{
-				m_it = p_it.m_it;
-				m_lastCodePoint = p_it.m_lastCodePoint;
-				m_dirty = p_it.m_dirty;
+				m_it = rhs.m_it;
+				m_lastCodePoint = rhs.m_lastCodePoint;
+				m_dirty = rhs.m_dirty;
 				return *this;
 			}
 
-			const_iterator & const_iterator::operator+=( size_t p_offset )
+			const_iterator & const_iterator::operator+=( size_t rhs )
 			{
-				while ( p_offset-- )
+				while ( rhs-- )
 				{
 					++( *this );
 				}
@@ -467,9 +406,9 @@ namespace castor
 				return *this;
 			}
 
-			const_iterator & const_iterator::operator-=( size_t p_offset )
+			const_iterator & const_iterator::operator-=( size_t rhs )
 			{
-				while ( p_offset-- )
+				while ( rhs-- )
 				{
 					--( *this );
 				}
@@ -479,24 +418,18 @@ namespace castor
 
 			const_iterator & const_iterator::operator++()
 			{
-				static const unsigned char FirstBitMask = 0x80; // 1000000
-				static const unsigned char SecondBitMask = 0x40; // 0100000
-				static const unsigned char ThirdBitMask = 0x20; // 0010000
-				static const unsigned char FourthBitMask = 0x10; // 0001000
-				static const unsigned char FifthBitMask = 0x08; // 0000100
-
 				char firstByte = *m_it;
 				++m_it;
 
-				if ( firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				if ( firstByte & details::FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
 				{
 					++m_it;
 
-					if ( firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+					if ( firstByte & details::ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
 					{
 						++m_it;
 
-						if ( firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+						if ( firstByte & details::FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
 						{
 							++m_it;
 						}
@@ -516,23 +449,17 @@ namespace castor
 
 			const_iterator & const_iterator::operator--()
 			{
-				static const unsigned char FirstBitMask = 0x80; // 1000000
-				static const unsigned char SecondBitMask = 0x40; // 0100000
-				static const unsigned char ThirdBitMask = 0x20; // 0010000
-				static const unsigned char FourthBitMask = 0x10; // 0001000
-				static const unsigned char FifthBitMask = 0x08; // 0000100
-
 				--m_it;
 
-				if ( *m_it & FirstBitMask ) // This means that the previous byte is not an ASCII character.
+				if ( *m_it & details::FirstBitMask ) // This means that the previous byte is not an ASCII character.
 				{
 					--m_it;
 
-					if ( ( *m_it & SecondBitMask ) == 0 )
+					if ( ( *m_it & details::SecondBitMask ) == 0 )
 					{
 						--m_it;
 
-						if ( ( *m_it & SecondBitMask ) == 0 )
+						if ( ( *m_it & details::SecondBitMask ) == 0 )
 						{
 							--m_it;
 						}
@@ -556,24 +483,24 @@ namespace castor
 				return m_lastCodePoint;
 			}
 
-			bool const_iterator::operator==( const const_iterator & p_it )const
+			bool const_iterator::operator==( const const_iterator & rhs )const
 			{
-				return m_it == p_it.m_it;
+				return m_it == rhs.m_it;
 			}
 
-			bool const_iterator::operator==( const std::string::const_iterator & p_it )const
+			bool const_iterator::operator==( const std::string::const_iterator & rhs )const
 			{
-				return m_it == p_it;
+				return m_it == rhs;
 			}
 
-			bool const_iterator::operator!=( const const_iterator & p_it )const
+			bool const_iterator::operator!=( const const_iterator & rhs )const
 			{
-				return m_it != p_it.m_it;
+				return m_it != rhs.m_it;
 			}
 
-			bool const_iterator::operator!=( const std::string::const_iterator & p_it )const
+			bool const_iterator::operator!=( const std::string::const_iterator & rhs )const
 			{
-				return m_it != p_it;
+				return m_it != rhs;
 			}
 
 			std::string::const_iterator const_iterator::internal()const
@@ -592,17 +519,17 @@ namespace castor
 
 			//*************************************************************************************************
 
-			inline const_iterator operator+( const_iterator p_it, size_t p_offset )
+			inline const_iterator operator+( const_iterator lhs, size_t rhs )
 			{
-				const_iterator it( p_it );
-				it += p_offset;
+				const_iterator it( lhs );
+				it += rhs;
 				return it;
 			}
 
-			const_iterator operator-( const_iterator p_it, size_t p_offset )
+			const_iterator operator-( const_iterator lhs, size_t rhs )
 			{
-				const_iterator it( p_it );
-				it -= p_offset;
+				const_iterator it( lhs );
+				it -= rhs;
 				return it;
 			}
 

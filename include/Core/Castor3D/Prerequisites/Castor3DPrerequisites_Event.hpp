@@ -9,6 +9,27 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/*!
+	\~english
+	\brief		Frame Event Type enumeration
+	\~french
+	\brief		Enumération des types d'évènement de frame
+	*/
+	enum class EventType
+		: uint8_t
+	{
+		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
+		//!\~french		Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
+		ePreRender,
+		//!\~english	This kind of event happens after the render, before buffers' swap.
+		//!\~french		Ce type d'évènement est traité après le rendu, avant l'échange des tampons.
+		eQueueRender,
+		//!\~english	This kind of event happens after the buffer' swap.
+		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
+		ePostRender,
+		CU_ScopedEnumBounds( ePreRender )
+	};
+	castor::String getName( EventType value );
+	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
 	*\version	0.9.0
@@ -25,11 +46,12 @@ namespace castor3d
 		//!\~english	Keyboard event type.
 		//!\~french		Type d'évènement de clavier.
 		eKeyboard,
-		//!\~english	Keyboard event type.
-		//!\~french		Type d'évènement de clavier.
+		//!\~english	Handle event type.
+		//!\~french		Type d'évènement de handler.
 		eHandler,
 		CU_ScopedEnumBounds( eMouse )
 	};
+	castor::String getName( UserInputEventType value );
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -65,6 +87,7 @@ namespace castor3d
 		eWheel,
 		CU_ScopedEnumBounds( eMove )
 	};
+	castor::String getName( MouseEventType value );
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -88,6 +111,7 @@ namespace castor3d
 		eChar,
 		CU_ScopedEnumBounds( ePushed )
 	};
+	castor::String getName( KeyboardEventType value );
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -108,6 +132,7 @@ namespace castor3d
 		eDeactivate,
 		CU_ScopedEnumBounds( eActivate )
 	};
+	castor::String getName( HandlerEventType value );
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -130,6 +155,7 @@ namespace castor3d
 		eRight,
 		CU_ScopedEnumBounds( eLeft )
 	};
+	castor::String getName( MouseButton value );
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016

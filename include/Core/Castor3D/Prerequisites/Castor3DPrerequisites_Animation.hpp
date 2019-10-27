@@ -36,6 +36,7 @@ namespace castor3d
 		eMesh,
 		CU_ScopedEnumBounds( eMovable )
 	};
+	castor::String getName( AnimationType value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -56,6 +57,7 @@ namespace castor3d
 		eLinear,
 		CU_ScopedEnumBounds( eNearest )
 	};
+	castor::String getName( InterpolatorType value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -78,6 +80,7 @@ namespace castor3d
 		ePaused,
 		CU_ScopedEnumBounds( ePlaying )
 	};
+	castor::String getName( AnimationState value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -100,6 +103,7 @@ namespace castor3d
 		eBone,
 		CU_ScopedEnumBounds( eNode )
 	};
+	castor::String getName( SkeletonAnimationObjectType value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0

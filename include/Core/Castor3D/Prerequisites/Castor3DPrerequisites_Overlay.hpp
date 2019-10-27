@@ -24,6 +24,7 @@ namespace castor3d
 		eText,
 		CU_ScopedEnumBounds( ePanel )
 	};
+	castor::String getName( OverlayType value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		28/11/2014
@@ -45,6 +46,7 @@ namespace castor3d
 		eBreakWords,
 		CU_ScopedEnumBounds( eNone )
 	};
+	castor::String getName( TextWrappingMode value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2016
@@ -63,6 +65,7 @@ namespace castor3d
 		eText,
 		CU_ScopedEnumBounds( eLetter )
 	};
+	castor::String getName( TextTexturingMode value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		16/04/2016
@@ -84,6 +87,7 @@ namespace castor3d
 		eMaxFontHeight,
 		CU_ScopedEnumBounds( eOwnHeight )
 	};
+	castor::String getName( TextLineSpacingMode value );
 	/*!
 	\author		Sylvain DOREMUS
 	\date		23/09/2015
@@ -106,6 +110,7 @@ namespace castor3d
 		eRight,
 		CU_ScopedEnumBounds( eLeft )
 	};
+	castor::String getName( HAlign value );
 	/*!
 	\author		Sylvain DOREMUS
 	\date		23/09/2015
@@ -128,6 +133,7 @@ namespace castor3d
 		eBottom,
 		CU_ScopedEnumBounds( eTop )
 	};
+	castor::String getName( VAlign value );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		28/11/2014
@@ -149,6 +155,7 @@ namespace castor3d
 		eExternal,
 		CU_ScopedEnumBounds( eInternal )
 	};
+	castor::String getName( BorderPosition value );
 
 	class Overlay;
 	class OverlayCategory;
