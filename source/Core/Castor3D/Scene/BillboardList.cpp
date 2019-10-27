@@ -335,11 +335,11 @@ namespace castor3d
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray
 				{
-					{ 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_INSTANCE },
+					{ 1u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_INSTANCE },
 				}
 				, ashes::VkVertexInputAttributeDescriptionArray
 				{
-					{ 2u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u },
+					{ 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u },
 				} )
 			, sizeof( castor::Point3f ) }
 	{

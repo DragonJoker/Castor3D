@@ -201,15 +201,20 @@ namespace castor3d
 					curToCamera = normalize( curToCamera );
 					auto right = writer.declLocale( cuT( "right" )
 						, vec3( c3d_curView[0][0], c3d_curView[1][0], c3d_curView[2][0] ) );
-					auto up = writer.declLocale( cuT( "up" )
-						, vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
 
-					if ( !checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
+					if ( checkFlag( flags.programFlags, ProgramFlag::eSpherical ) )
+					{
+						writer.declLocale( cuT( "up" )
+							, vec3( c3d_curView[0][1], c3d_curView[1][1], c3d_curView[2][1] ) );
+					}
+					else
 					{
 						right = normalize( vec3( right.x(), 0.0, right.z() ) );
-						up = vec3( 0.0_f, 1.0f, 0.0f );
+						writer.declLocale( cuT( "up" )
+							, vec3( 0.0_f, 1.0f, 0.0f ) );
 					}
 
+					auto up = writer.getVariable< Vec3 >( cuT( "up" ) );
 					vtx_material = writer.cast< UInt >( c3d_materialIndex );
 					vtx_normal = curToCamera;
 					vtx_tangent = up;
