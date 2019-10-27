@@ -18,12 +18,12 @@ namespace castor3d
 
 		for ( auto bone : obj.m_bones )
 		{
-			result &= BinaryWriter< Bone >{}.write( *bone, m_chunk );
+			result = result && BinaryWriter< Bone >{}.write( *bone, m_chunk );
 		}
 
 		for ( auto const & it : obj.m_animations )
 		{
-			result = BinaryWriter< Animation >{}.write( *it.second, m_chunk );
+			result = result && BinaryWriter< Animation >{}.write( *it.second, m_chunk );
 		}
 
 		return result;

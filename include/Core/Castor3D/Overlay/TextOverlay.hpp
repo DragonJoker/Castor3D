@@ -242,7 +242,7 @@ namespace castor3d
 		 */
 		inline void setTextWrappingMode( TextWrappingMode value )
 		{
-			m_textChanged |= m_wrappingMode != value;
+			m_textChanged = m_textChanged || ( m_wrappingMode != value );
 			m_wrappingMode = value;
 		}
 		/**
@@ -265,7 +265,7 @@ namespace castor3d
 		*/
 		inline void setHAlign( HAlign value )
 		{
-			m_textChanged |= m_hAlign != value;
+			m_textChanged = m_textChanged || ( m_hAlign != value );
 			m_hAlign = value;
 		}
 		/**
@@ -288,7 +288,7 @@ namespace castor3d
 		*/
 		inline void setVAlign( VAlign value )
 		{
-			m_textChanged |= m_vAlign != value;
+			m_textChanged = m_textChanged || ( m_vAlign != value );
 			m_vAlign = value;
 		}
 		/**
@@ -311,7 +311,7 @@ namespace castor3d
 		*/
 		inline void setTexturingMode( TextTexturingMode value )
 		{
-			m_textChanged |= m_texturingMode != value;
+			m_textChanged = m_textChanged || ( m_texturingMode != value );
 			m_texturingMode = value;
 		}
 		/**
@@ -334,7 +334,7 @@ namespace castor3d
 		*/
 		inline void setLineSpacingMode( TextLineSpacingMode value )
 		{
-			m_textChanged |= m_lineSpacingMode != value;
+			m_textChanged = m_textChanged || ( m_lineSpacingMode != value );
 			m_lineSpacingMode = value;
 		}
 

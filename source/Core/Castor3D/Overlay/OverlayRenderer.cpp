@@ -140,25 +140,33 @@ namespace castor3d
 			}
 		};
 
+		enum class OverlayTexture : uint32_t
+		{
+			eNone = 0x00,
+			eText = 0x01,
+			eColour = 0x02,
+			eOpacity = 0x04,
+		};
+		CU_ImplementFlags( OverlayTexture );
+
 		uint32_t makeKey( TextureFlags const & textures
 			, uint32_t texturesCount
 			, bool text )
 		{
-			uint32_t result{ text ? 0x01u : 0u };
+			OverlayTextures tex{ text ? OverlayTexture::eText : OverlayTexture::eNone };
 
 			if ( checkFlag( textures, TextureFlag::eDiffuse ) )
 			{
-				result |= 0x02u;
+				tex |= OverlayTexture::eColour;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eOpacity ) )
 			{
-				result |= 0x04u;
+				tex |= OverlayTexture::eOpacity;
 			}
 
-			result <<= 24;
+			uint32_t result{ tex << 24 };
 			result |= texturesCount;
-
 			return result;
 		}
 	}

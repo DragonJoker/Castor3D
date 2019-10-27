@@ -16,7 +16,7 @@ namespace castor3d
 
 		for ( auto const & keyframe : obj )
 		{
-			result &= BinaryWriter< MeshAnimationKeyFrame >{}.write( static_cast< MeshAnimationKeyFrame const & >( *keyframe ), m_chunk );
+			result = result && BinaryWriter< MeshAnimationKeyFrame >{}.write( static_cast< MeshAnimationKeyFrame const & >( *keyframe ), m_chunk );
 		}
 
 		return result;

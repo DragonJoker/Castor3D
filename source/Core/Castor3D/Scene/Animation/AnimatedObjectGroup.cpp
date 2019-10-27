@@ -53,7 +53,7 @@ namespace castor3d
 
 			if ( write )
 			{
-				result &= file.writeText( m_tabs + cuT( "\tanimated_object \"" ) + name + cuT( "\"\n" ) ) > 0;
+				result = result && ( file.writeText( m_tabs + cuT( "\tanimated_object \"" ) + name + cuT( "\"\n" ) ) > 0 );
 				written.insert( name );
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup object name" );
 			}
@@ -61,28 +61,29 @@ namespace castor3d
 
 		if ( !group.getAnimations().empty() )
 		{
-			result &= file.writeText( cuT( "\n" ) ) > 0;
+			result = result && ( file.writeText( cuT( "\n" ) ) > 0 );
 
 			for ( auto it : group.getAnimations() )
 			{
-				result &= file.writeText( m_tabs + cuT( "\tanimation \"" ) + it.first + cuT( "\"\n" ) ) > 0
-							&& file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0
-							&& file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-							&& file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0
-							&& file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				result = result
+					&& ( file.writeText( m_tabs + cuT( "\tanimation \"" ) + it.first + cuT( "\"\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t{\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t\tlooped " ) + String{ it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t\tscale " ) + string::toString( it.second.m_scale, std::locale{ "C" } ) + cuT( "\n" ) ) > 0 )
+					&& ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
 				castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup animation" );
 			}
 		}
 
 		if ( !group.getAnimations().empty() )
 		{
-			result &= file.writeText( cuT( "\n" ) ) > 0;
+			result = result && file.writeText( cuT( "\n" ) ) > 0;
 
 			for ( auto it : group.getAnimations() )
 			{
 				if ( it.second.m_state == AnimationState::ePlaying )
 				{
-					result &= file.writeText( m_tabs + cuT( "\tstart_animation \"" ) + it.first + cuT( "\"\n" ) ) > 0;
+					result = result && ( file.writeText( m_tabs + cuT( "\tstart_animation \"" ) + it.first + cuT( "\"\n" ) ) > 0 );
 					castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup started animation" );
 				}
 			}

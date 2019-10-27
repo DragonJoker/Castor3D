@@ -63,7 +63,7 @@ namespace castor3d
 						+ string::toString( p_light.getVolumetricScatteringFactor(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			}
 
-			result &= p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			result = result && p_file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			castor::TextWriter< LightCategory >::checkError( result, "LightCategory shadow producer" );
 		}
 

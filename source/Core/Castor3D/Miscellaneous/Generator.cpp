@@ -187,7 +187,7 @@ bool Generator::AllEnded()
 
 	for ( uint32_t i = 0; i < count && result; i++ )
 	{
-		result &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->isEnded();
+		result = result && ( m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->isEnded() );
 	}
 
 	return result;

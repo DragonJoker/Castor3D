@@ -65,7 +65,7 @@ namespace castor3d
 				MovableObject::TextWriter::checkError( result, "BillboardList position" );
 			}
 
-			result &= file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			result = result && ( file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0 );
 		}
 
 		if ( result )

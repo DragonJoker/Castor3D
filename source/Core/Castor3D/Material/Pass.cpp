@@ -175,7 +175,7 @@ namespace castor3d
 		{
 			for ( auto unit : pass )
 			{
-				result &= TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
+				result = result && TextureUnit::TextWriter{ m_tabs + cuT( "\t" ), pass.getType() }( *unit, file );
 			}
 		}
 

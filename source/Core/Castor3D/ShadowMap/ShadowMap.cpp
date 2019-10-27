@@ -96,7 +96,7 @@ namespace castor3d
 			for ( auto & pass : m_passes )
 			{
 				pass.matrixUbo->initialise();
-				result &= pass.pass->initialise( { size.width, size.height } );
+				result = result && pass.pass->initialise( { size.width, size.height } );
 			}
 
 			if ( result )

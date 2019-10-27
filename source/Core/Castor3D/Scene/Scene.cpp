@@ -69,7 +69,7 @@ namespace castor3d
 						for ( auto const & name : view )
 						{
 							auto elem = view.find( name );
-							result &= typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
+							result = result && typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
 						}
 					}
 			}
@@ -238,7 +238,7 @@ namespace castor3d
 
 					if ( !overlay->getParent() )
 					{
-						result &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, file );
+						result = result && Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay, file );
 					}
 				}
 			}
@@ -314,7 +314,7 @@ namespace castor3d
 
 				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
 				{
-					result &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
+					result = result && SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *it.second.lock(), file );
 				}
 			}
 		}
@@ -330,7 +330,7 @@ namespace castor3d
 
 				for ( auto const & it : scene.getLightCache() )
 				{
-					result &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					result = result && Light::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 				}
 			}
 		}
@@ -367,7 +367,7 @@ namespace castor3d
 
 				for ( auto const & it : scene.getParticleSystemCache() )
 				{
-					result &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					result = result && ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 				}
 			}
 		}
@@ -383,7 +383,7 @@ namespace castor3d
 
 				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
 				{
-					result &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
+					result = result && AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *it.second, file );
 				}
 			}
 		}
@@ -404,7 +404,7 @@ namespace castor3d
 			{
 				if ( it.second->getRenderTarget()->getScene()->getName() == scene.getName() )
 				{
-					result &= RenderWindow::TextWriter( m_tabs )( *it.second, file );
+					result = result && RenderWindow::TextWriter( m_tabs )( *it.second, file );
 				}
 			}
 		}

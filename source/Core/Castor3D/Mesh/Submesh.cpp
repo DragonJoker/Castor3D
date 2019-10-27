@@ -78,7 +78,7 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				m_initialised &= component.second->initialise();
+				m_initialised = m_initialised && component.second->initialise();
 			}
 
 			m_dirty = !m_initialised;

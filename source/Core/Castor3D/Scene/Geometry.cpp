@@ -74,7 +74,7 @@ namespace castor3d
 
 								if ( material != submesh->getDefaultMaterial() )
 								{
-									result &= file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( submesh->getId(), std::locale{ "C" } ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) ) > 0;
+									result = result && file.writeText( m_tabs + cuT( "\t\tmaterial " ) + string::toString( submesh->getId(), std::locale{ "C" } ) + cuT( " \"" ) + material->getName() + cuT( "\"\n" ) ) > 0;
 									castor::TextWriter< Geometry >::checkError( result, "Geometry material" );
 								}
 							}

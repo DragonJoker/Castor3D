@@ -18,7 +18,7 @@ namespace castor3d
 
 		for ( auto submesh : obj )
 		{
-			result &= BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
+			result = result && BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
 		}
 
 		return result;

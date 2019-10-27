@@ -27,21 +27,21 @@ namespace castor3d
 			case MaterialType::ePhong:
 				for ( auto pass : material )
 				{
-					result &= PhongPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< PhongPass >( pass ), file );
+					result = result && PhongPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< PhongPass >( pass ), file );
 				}
 				break;
 
 			case MaterialType::eMetallicRoughness:
 				for ( auto pass : material )
 				{
-					result &= MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
+					result = result && MetallicRoughnessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ), file );
 				}
 				break;
 
 			case MaterialType::eSpecularGlossiness:
 				for ( auto pass : material )
 				{
-					result &= SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
+					result = result && SpecularGlossinessPbrPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ), file );
 				}
 				break;
 

@@ -41,15 +41,15 @@ namespace castor3d
 			switch ( overlay->getType() )
 			{
 			case OverlayType::ePanel:
-				result &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), file );
+				result = result && PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getPanelOverlay(), file );
 				break;
 
 			case OverlayType::eBorderPanel:
-				result &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), file );
+				result = result && BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getBorderPanelOverlay(), file );
 				break;
 
 			case OverlayType::eText:
-				result &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), file );
+				result = result && TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *overlay->getTextOverlay(), file );
 				break;
 
 			default:
@@ -226,14 +226,14 @@ namespace castor3d
 
 			if ( pos.x() )
 			{
-				changed |= ptPos[0] != double( pos.x() ) / totalSize[0];
+				changed = changed || ( ptPos[0] != double( pos.x() ) / totalSize[0] );
 				ptPos[0] = pos.x() / totalSize[0];
 				m_computeSize[0] = uint32_t( renderSize[0] );
 			}
 
 			if ( pos.y() )
 			{
-				changed |= ptPos[1] != double( pos.y() ) / totalSize[1];
+				changed = changed || ( ptPos[1] != double( pos.y() ) / totalSize[1] );
 				ptPos[1] = pos.y() / totalSize[1];
 				m_computeSize[1] = uint32_t( renderSize[1] );
 			}
@@ -257,14 +257,14 @@ namespace castor3d
 
 			if ( size.getWidth() )
 			{
-				changed |= ptSize[0] != double( size.getWidth() ) / totalSize[0];
+				changed = changed || ( ptSize[0] != double( size.getWidth() ) / totalSize[0] );
 				ptSize[0] = size.getWidth() / totalSize[0];
 				m_computeSize[0] = uint32_t( renderSize[0] );
 			}
 
 			if ( size.getHeight() )
 			{
-				changed |=  ptSize[1] != double( size.getHeight() ) / totalSize[1];
+				changed = changed || ( ptSize[1] != double( size.getHeight() ) / totalSize[1] );
 				ptSize[1] = size.getHeight() / totalSize[1];
 				m_computeSize[1] = uint32_t( renderSize[1] );
 			}
