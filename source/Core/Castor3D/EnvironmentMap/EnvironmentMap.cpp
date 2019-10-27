@@ -62,8 +62,7 @@ namespace castor3d
 		}
 
 		TextureUnit doCreateTexture( Engine & engine
-			, Size const & size
-			, MaterialType type )
+			, Size const & size )
 		{
 			ashes::ImageCreateInfo colour
 			{
@@ -151,7 +150,7 @@ namespace castor3d
 	EnvironmentMap::EnvironmentMap( Engine & engine
 		, SceneNode & node )
 		: OwnedBy< Engine >{ engine }
-		, m_environmentMap{ doCreateTexture( engine, MapSize, node.getScene()->getMaterialsType() ) }
+		, m_environmentMap{ doCreateTexture( engine, MapSize ) }
 		, m_node{ node }
 		, m_index{ ++m_count }
 		, m_passes( doCreatePasses( *this, node ) )
@@ -218,7 +217,7 @@ namespace castor3d
 				0u,
 				VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+				{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
 				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 				{},
