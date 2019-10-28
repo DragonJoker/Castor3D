@@ -82,7 +82,7 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Engine * engine
+	void MaterialsList::loadMaterials( Engine * engine
 		, Scene & scene )
 	{
 		m_engine = engine;
@@ -96,9 +96,10 @@ namespace GuiCommon
 		}
 	}
 
-	void MaterialsList::UnloadMaterials()
+	void MaterialsList::unloadMaterials()
 	{
 		DeleteAllItems();
+		m_scene = nullptr;
 	}
 
 	void MaterialsList::doAddMaterial( wxTreeItemId id

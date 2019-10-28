@@ -273,23 +273,21 @@ namespace GuiCommon
 	}
 
 	RenderWindowSPtr loadScene( Engine & engine
-		, castor::Path const & p_fileName
-		, uint32_t p_wantedFps
-		, bool p_threaded )
+		, castor::Path const & fileName )
 	{
 		RenderWindowSPtr result;
 
-		if ( castor::File::fileExists( p_fileName ) )
+		if ( castor::File::fileExists( fileName ) )
 		{
-			castor::Logger::logInfo( cuT( "Loading scene file : " ) + p_fileName );
+			castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
-			if ( p_fileName.getExtension() == cuT( "cscn" ) || p_fileName.getExtension() == cuT( "zip" ) )
+			if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 			{
 				try
 				{
 					SceneFileParser parser( engine );
 
-					if ( parser.parseFile( p_fileName ) )
+					if ( parser.parseFile( fileName ) )
 					{
 						result = parser.getRenderWindow();
 					}
@@ -306,7 +304,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + p_fileName );
+			wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + fileName );
 		}
 
 		return result;
@@ -412,49 +410,49 @@ namespace GuiCommon
 #endif
 	}
 
-	castor::FontSPtr make_Font( Engine * engine, wxFont const & p_font )
+	castor::FontSPtr make_Font( Engine * engine, wxFont const & wxfont )
 	{
-		castor::String name = make_String( p_font.GetFaceName() ) + castor::string::toString( p_font.GetPointSize() );
+		castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
 		auto & cache = engine->getFontCache();
 		castor::FontSPtr font = cache.find( name );
 
 		if ( !font )
 		{
-			if ( p_font.IsOk() )
+			if ( wxfont.IsOk() )
 			{
-				//l_font = std::make_shared< castor::Font >( name, p_font.GetPointSize() );
-				//l_font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( p_font ) );
-				//Font::BinaryLoader()( *font, String( p_font.GetFaceName() ), uint32_t( std::abs( p_font.GetPointSize() ) ) );
-				//l_cache.insert( name, font );
+				//font = std::make_shared< castor::Font >( name, wxfont.GetPointSize() );
+				//font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( wxfont ) );
+				//Font::BinaryLoader()( *font, String( wxfont.GetFaceName() ), uint32_t( std::abs( wxfont.GetPointSize() ) ) );
+				//cache.insert( name, font );
 			}
 		}
 
 		return font;
 	}
 
-	castor::String make_String( wxString const & p_value )
+	castor::String make_String( wxString const & value )
 	{
-		return castor::String( p_value.mb_str( wxConvUTF8 ).data() );
+		return castor::String( value.mb_str( wxConvUTF8 ).data() );
 	}
 
-	castor::Path make_Path( wxString const & p_value )
+	castor::Path make_Path( wxString const & value )
 	{
-		return castor::Path( p_value.mb_str( wxConvUTF8 ).data() );
+		return castor::Path( value.mb_str( wxConvUTF8 ).data() );
 	}
 
-	wxString make_wxString( castor::String const & p_value )
+	wxString make_wxString( castor::String const & value )
 	{
-		return wxString( p_value.c_str(), wxConvUTF8 );
+		return wxString( value.c_str(), wxConvUTF8 );
 	}
 
-	castor::Size makeSize( wxSize const & p_value )
+	castor::Size makeSize( wxSize const & value )
 	{
-		return castor::Size( p_value.x, p_value.y );
+		return castor::Size( value.x, value.y );
 	}
 
-	wxSize make_wxSize( castor::Size const & p_value )
+	wxSize make_wxSize( castor::Size const & value )
 	{
-		return wxSize( p_value.getWidth(), p_value.getHeight() );
+		return wxSize( value.getWidth(), value.getHeight() );
 	}
 
 	ast::ShaderStage convert( VkShaderStageFlagBits stage )

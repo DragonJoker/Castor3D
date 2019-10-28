@@ -45,17 +45,17 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool CASTOR3D_THREADED = true;
+		static const bool isCastor3DThreaded = true;
 #if defined( NDEBUG )
-		static const int CASTOR_WANTED_FPS = 1000;
+		static const int wantedFPS = 1000;
 #else
-		static const int CASTOR_WANTED_FPS = 60;
+		static const int wantedFPS = 60;
 #endif
 
-		static const int CASTOR_RECORD_FPS = 30;
-		static const wxString OBJ_WILDCARD = wxT( " (*.obj)|*.obj|" );
+		static const int recordFPS = 30;
+		static const wxString objWildcard = wxT( " (*.obj)|*.obj|" );
 
-		typedef enum eID
+		enum eID
 		{
 			eID_TOOL_EXIT,
 			eID_TOOL_LOAD_SCENE,
@@ -70,18 +70,9 @@ namespace CastorViewer
 			eID_RENDER_TIMER,
 			eID_MSGLOG_TIMER,
 			eID_ERRLOG_TIMER,
-		}	eID;
+		};
 
-		void IndentPressedBitmap( wxRect * rect, int buttonState )
-		{
-			if ( buttonState == wxAUI_BUTTON_STATE_PRESSED )
-			{
-				rect->x++;
-				rect->y++;
-			}
-		}
-
-		void dooUpdateLog( std::vector< std::pair< wxString, bool > > & queue, std::mutex & mutex, wxListBox & log )
+		void updateLog( std::vector< std::pair< wxString, bool > > & queue, std::mutex & mutex, wxListBox & log )
 		{
 			std::vector< std::pair< wxString, bool > > flush;
 			{
@@ -123,7 +114,7 @@ namespace CastorViewer
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
 		, m_toolBar{ nullptr }
 		, m_recorder{}
-		, m_recordFps{ CASTOR_RECORD_FPS }
+		, m_recordFps{ recordFPS }
 	{
 	}
 
@@ -157,28 +148,33 @@ namespace CastorViewer
 
 	void MainFrame::doCleanupScene()
 	{
-		m_mainScene.reset();
 		auto scene = m_mainScene.lock();
 
 		if ( scene )
 		{
-			m_materialsList->UnloadMaterials();
+			m_materialsList->unloadMaterials();
 			m_sceneObjectsList->unloadScene();
 			m_mainCamera.reset();
 			m_sceneNode.reset();
-			wxGetApp().getCastor()->getRenderWindowCache().cleanup();
+			auto engine = wxGetApp().getCastor();
+			engine->getRenderWindowCache().cleanup();
 			scene->cleanup();
-			wxGetApp().getCastor()->getRenderLoop().cleanup();
-			wxGetApp().getCastor()->getSceneCache().remove( scene->getName() );
+			engine->getRenderLoop().renderSyncFrame();
+			engine->getRenderWindowCache().clear();
+			engine->getRenderLoop().cleanup();
+			engine->getSceneCache().remove( scene->getName() );
 			Logger::logDebug( cuT( "MainFrame::doCleanupScene - Scene related objects unloaded." ) );
 			scene.reset();
 		}
 
+		m_mainScene.reset();
 	}
 
 	void MainFrame::loadScene( wxString const & fileName )
 	{
-		if ( m_renderPanel && wxGetApp().getCastor() )
+		auto engine = wxGetApp().getCastor();
+
+		if ( m_renderPanel && engine )
 		{
 			if ( !fileName.empty() )
 			{
@@ -187,16 +183,14 @@ namespace CastorViewer
 
 			if ( !m_filePath.empty() )
 			{
-				if ( wxGetApp().getCastor()->isThreaded() )
+				if ( engine->isThreaded() )
 				{
-					wxGetApp().getCastor()->getRenderLoop().pause();
+					engine->getRenderLoop().pause();
 				}
 
-				Logger::logDebug( cuT( "MainFrame::loadScene - " ) + m_filePath );
+				m_renderPanel->resetRenderWindow();
 				doCleanupScene();
-
-				m_renderPanel->setRenderWindow( nullptr );
-				RenderWindowSPtr window = GuiCommon::loadScene( *wxGetApp().getCastor(), m_filePath, wxGetApp().getCastor()->getRenderLoop().getWantedFps(), wxGetApp().getCastor()->isThreaded() );
+				RenderWindowSPtr window = GuiCommon::loadScene( *engine, m_filePath );
 
 				if ( window )
 				{
@@ -223,7 +217,6 @@ namespace CastorViewer
 							Maximize( false );
 							SetClientSize( size );
 							m_renderPanel->enableWindowResize();
-							//Maximize();
 						}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -231,25 +224,23 @@ namespace CastorViewer
 						SetMinClientSize( size );
 
 #endif
-
-						Logger::logInfo( cuT( "Scene file read" ) );
 					}
 					else
 					{
 						wxMessageBox( _( "Can't initialise the render window.\nLook into CastorViewer.log for more details" ) );
 					}
 
-					if ( CASTOR3D_THREADED )
+					if ( isCastor3DThreaded )
 					{
-						wxGetApp().getCastor()->getRenderLoop().beginRendering();
+						engine->getRenderLoop().beginRendering();
 					}
 
 					auto scene = m_mainScene.lock();
 
 					if ( scene )
 					{
-						m_sceneObjectsList->loadScene( wxGetApp().getCastor(), scene );
-						m_materialsList->LoadMaterials( wxGetApp().getCastor(), *scene );
+						m_sceneObjectsList->loadScene( engine, scene );
+						m_materialsList->loadMaterials( engine, *scene );
 					}
 
 					m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
@@ -265,9 +256,9 @@ namespace CastorViewer
 						+ m_filePath.getFileName( true ) );
 				}
 
-				if ( wxGetApp().getCastor()->isThreaded() )
+				if ( engine->isThreaded() )
 				{
-					wxGetApp().getCastor()->getRenderLoop().resume();
+					engine->getRenderLoop().resume();
 				}
 			}
 			else
@@ -431,6 +422,7 @@ namespace CastorViewer
 
 	bool MainFrame::doInitialise3D()
 	{
+		auto engine = wxGetApp().getCastor();
 		bool result = true;
 		Logger::logInfo( cuT( "Initialising Castor3D" ) );
 
@@ -438,19 +430,19 @@ namespace CastorViewer
 		{
 			if ( !wxGetApp().isUnlimitedFps() )
 			{
-				wxGetApp().getCastor()->initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+				engine->initialise( wantedFPS, isCastor3DThreaded );
 			}
 			else
 			{
-				wxGetApp().getCastor()->initialise( 1000u, CASTOR3D_THREADED );
+				engine->initialise( 1000u, isCastor3DThreaded );
 			}
 
 			Logger::logInfo( cuT( "Castor3D Initialised" ) );
 
-			if ( !CASTOR3D_THREADED && !m_timer )
+			if ( !isCastor3DThreaded && !m_timer )
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / wxGetApp().getCastor()->getRenderLoop().getWantedFps() );
+				m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
 			}
 
 			if ( !m_timerMsg )
@@ -623,7 +615,9 @@ namespace CastorViewer
 
 	bool MainFrame::doStartRecord()
 	{
-		bool result = false;
+		bool result = true;
+
+#if defined( GUICOMMON_RECORDS )
 
 		if ( m_renderPanel )
 		{
@@ -638,11 +632,9 @@ namespace CastorViewer
 			}
 		}
 
-#if defined( GUICOMMON_RECORDS )
-
 		if ( result )
 		{
-			if ( CASTOR3D_THREADED )
+			if ( isCastor3DThreaded )
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
 				wxGetApp().getCastor()->getRenderLoop().pause();
@@ -653,6 +645,7 @@ namespace CastorViewer
 		}
 
 #endif
+
 		return result;
 	}
 
@@ -680,18 +673,19 @@ namespace CastorViewer
 
 	void MainFrame::doStopRecord()
 	{
-		m_recorder.StopRecord();
-
 #if defined( GUICOMMON_RECORDS )
+
+		auto engine = wxGetApp().getCastor();
+		m_recorder.StopRecord();
 
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
 		m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
 		if ( m_timer )
 		{
-			if ( CASTOR3D_THREADED )
+			if ( isCastor3DThreaded )
 			{
-				wxGetApp().getCastor()->getRenderLoop().resume();
+				engine->getRenderLoop().resume();
 				m_timer->Stop();
 				delete m_timer;
 				m_timer = nullptr;
@@ -699,7 +693,7 @@ namespace CastorViewer
 			else
 			{
 				m_timer->Stop();
-				m_timer->Start( 1000 / wxGetApp().getCastor()->getRenderLoop().getWantedFps() );
+				m_timer->Start( 1000 / engine->getRenderLoop().getWantedFps() );
 			}
 		}
 
@@ -756,11 +750,11 @@ namespace CastorViewer
 	{
 		if ( event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
 		{
-			dooUpdateLog( m_msgLogList, m_msgLogListMtx, *m_messageLog );
+			updateLog( m_msgLogList, m_msgLogListMtx, *m_messageLog );
 		}
 		else if ( event.GetId() == eID_ERRLOG_TIMER && m_errorLog )
 		{
-			dooUpdateLog( m_errLogList, m_errLogListMtx, *m_errorLog );
+			updateLog( m_errLogList, m_errLogListMtx, *m_errorLog );
 		}
 
 		event.Skip();
@@ -810,30 +804,34 @@ namespace CastorViewer
 		}
 
 		m_mainScene.reset();
+		auto castor = wxGetApp().getCastor();
+
+		if ( castor )
+		{
+			if ( m_renderPanel )
+			{
+				if ( castor->isThreaded() )
+				{
+					castor->getRenderLoop().pause();
+				}
+
+				m_renderPanel->resetRenderWindow();
+
+				if ( castor->isThreaded() )
+				{
+					castor->getRenderLoop().resume();
+				}
+			}
+
+			castor->cleanup();
+		}
+		else if ( m_renderPanel )
+		{
+			m_renderPanel->resetRenderWindow();
+		}
 
 		if ( m_renderPanel )
 		{
-			if ( wxGetApp().getCastor()->isThreaded() )
-			{
-				wxGetApp().getCastor()->getRenderLoop().pause();
-			}
-
-			m_renderPanel->setRenderWindow( nullptr );
-
-			if ( wxGetApp().getCastor()->isThreaded() )
-			{
-				wxGetApp().getCastor()->getRenderLoop().resume();
-			}
-		}
-
-		if ( wxGetApp().getCastor() )
-		{
-			wxGetApp().getCastor()->cleanup();
-		}
-
-		if ( m_renderPanel )
-		{
-			m_renderPanel->UnFocus();
 			m_renderPanel->Close( true );
 			m_renderPanel = nullptr;
 		}
@@ -867,7 +865,7 @@ namespace CastorViewer
 		wildcard << _( "Zip archive" );
 		wildcard << ZIP_WILDCARD;
 		wildcard << wxT( "|" );
-		wxFileDialog fileDialog( this, _( "open a scene" ), wxEmptyString, wxEmptyString, wildcard );
+		wxFileDialog fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, wildcard );
 
 		if ( fileDialog.ShowModal() == wxID_OK )
 		{
@@ -882,7 +880,7 @@ namespace CastorViewer
 		wxString wildcard = _( "Castor3D scene" );
 		wildcard += CSCN_WILDCARD;
 		wildcard += _( "Wavefront OBJ" );
-		wildcard += OBJ_WILDCARD;
+		wildcard += objWildcard;
 		wildcard += wxT( "|" );
 		wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 		SceneSPtr scene = m_mainScene.lock();
@@ -977,16 +975,15 @@ namespace CastorViewer
 
 	void MainFrame::OnRecord( wxCommandEvent & event )
 	{
-		if ( doStartRecord() )
-		{
 #if defined( GUICOMMON_RECORDS )
 
+		if ( doStartRecord() )
+		{
 			m_toolBar->EnableTool( eID_TOOL_STOP, true );
 			m_toolBar->EnableTool( eID_TOOL_RECORD, false );
-
-#endif
 		}
 
+#endif
 		event.Skip();
 	}
 

@@ -35,9 +35,9 @@ namespace castor3d
 
 	bool SceneNode::TextWriter::operator()( SceneNode const & node, TextFile & file )
 	{
-		bool result = !isIgnored( node );
+		bool result = true;
 
-		if ( result )
+		if ( !isIgnored( node ) )
 		{
 			Logger::logInfo( m_tabs + cuT( "Writing Node " ) + node.getName() );
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + node.getName() + cuT( "\"\n" ) ) > 0
@@ -87,7 +87,7 @@ namespace castor3d
 		{
 			for ( auto const & it : node.m_children )
 			{
-				if ( result && !isIgnored( it.first ) )
+				if ( result )
 				{
 					SceneNodeSPtr node = it.second.lock();
 

@@ -522,7 +522,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "metallic" ), parserPassMetallic, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "glossiness" ), parserPassGlossiness, { makeParameter< ParameterType::eFloat >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), parserPassAlpha, { makeParameter< ParameterType::eFloat >() } );
-	addParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), parserPassdoubleFace, { makeParameter< ParameterType::eBool >() } );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), parserPassTextureUnit );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), parserPassShader );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );

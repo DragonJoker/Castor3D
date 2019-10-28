@@ -50,10 +50,7 @@ namespace CastorViewer
 			, long style = wxDEFAULT_FRAME_STYLE );
 		virtual ~RenderPanel();
 
-		virtual void Focus();
-		virtual void UnFocus();
-
-		virtual void DrawOneFrame();
+		void resetRenderWindow();
 		void setRenderWindow( castor3d::RenderWindowSPtr window );
 
 		inline castor3d::RenderWindowSPtr getRenderWindow()const

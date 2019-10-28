@@ -234,6 +234,7 @@ namespace GuiCommon
 	void SceneObjectsList::unloadScene()
 	{
 		DeleteAllItems();
+		m_scene.reset();
 	}
 
 	void SceneObjectsList::select( castor3d::GeometrySPtr geometry

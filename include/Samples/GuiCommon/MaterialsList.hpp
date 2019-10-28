@@ -20,9 +20,9 @@ namespace GuiCommon
 			, wxSize const & size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( castor3d::Engine * engine
+		void loadMaterials( castor3d::Engine * engine
 			, castor3d::Scene & scene );
-		void UnloadMaterials();
+		void unloadMaterials();
 
 	private:
 		void doAddMaterial( wxTreeItemId id

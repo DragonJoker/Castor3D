@@ -67,9 +67,7 @@ namespace castortd
 	{
 		auto & engine = *wxGetApp().getCastor();
 		auto window = GuiCommon::loadScene( engine
-			, File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
-			, engine.getRenderLoop().getWantedFps()
-			, engine.isThreaded() );
+			, File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" ) );
 
 		if ( window )
 		{

@@ -174,7 +174,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserPassMetallic )
 	CU_DeclareAttributeParser( parserPassGlossiness )
 	CU_DeclareAttributeParser( parserPassAlpha )
-	CU_DeclareAttributeParser( parserPassdoubleFace )
+	CU_DeclareAttributeParser( parserPassDoubleFace )
 	CU_DeclareAttributeParser( parserPassTextureUnit )
 	CU_DeclareAttributeParser( parserPassShader )
 	CU_DeclareAttributeParser( parserPassAlphaBlendMode )

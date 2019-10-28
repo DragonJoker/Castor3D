@@ -177,20 +177,16 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Loads a scene.
-	 *\param[in]	engine	The engine.
-	 *\param[in]	p_fileName	The scene file name.
-	 *\param[in]	p_wantedFps	The wanted FPS.
-	 *\param[in]	p_threaded	Tells if the engine must initialise its threaded render loop.
+	 *\param[in]	engine		The engine.
+	 *\param[in]	fileName	The scene file name.
 	 *\return		true if everything is ok.
 	 *\~french
 	 *\brief		Charge une scène.
-	 *\param[in]	engine	Le moteur.
-	 *\param[in]	p_fileName	Le nom du fichier de scène.
-	 *\param[in]	p_wantedFps	Les FPS voulues.
-	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
+	 *\param[in]	engine		Le moteur.
+	 *\param[in]	fileName	Le nom du fichier de scène.
 	 *\return		true si tout s'est bien passé.
 	 */
-	castor3d::RenderWindowSPtr loadScene( castor3d::Engine & engine, castor::Path const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	castor3d::RenderWindowSPtr loadScene( castor3d::Engine & engine, castor::Path const & fileName );
 	/**
 	 *\~english
 	 *\brief		Loads the eingine plug-ins.

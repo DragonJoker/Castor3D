@@ -8,7 +8,7 @@ namespace castortd
 {
 	CastorDvpTD::CastorDvpTD()
 		: CastorApplication{ cuT( "CastorDvpTD" )
-			, cuT( "Castor Tower Defense" )
+			, cuT( "Castor TD" )
 			, 7
 			, castor3d::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD } }
 	{

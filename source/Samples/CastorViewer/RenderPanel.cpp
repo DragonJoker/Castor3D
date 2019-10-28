@@ -103,27 +103,29 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::Focus()
+	void RenderPanel::resetRenderWindow()
 	{
-	}
-
-	void RenderPanel::UnFocus()
-	{
-	}
-
-	void RenderPanel::DrawOneFrame()
-	{
-		wxClientDC dc( this );
+		doStopMovement();
+		m_selectedSubmesh.reset();
+		m_selectedGeometry.reset();
+		m_currentState = nullptr;
+		m_nodesStates.clear();
+		m_camera.reset();
+		m_scene.reset();
+		m_keyboardEvent.reset();
+		m_currentNode.reset();
+		m_lightsNode.reset();
+		m_listener.reset();
+		m_cubeManager.reset();
+		m_renderWindow.reset();
 	}
 
 	void RenderPanel::setRenderWindow( RenderWindowSPtr window )
 	{
-		m_cubeManager.reset();
-		m_renderWindow.reset();
-		doStopMovement();
+		CU_Require( window );
 		castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 
-		if ( window && window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
+		if ( window->initialise( sizeWnd, GuiCommon::makeWindowHandle( this ) ) )
 		{
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
@@ -172,10 +174,6 @@ namespace CastorViewer
 
 				m_scene = scene;
 			}
-		}
-		else if ( m_listener )
-		{
-			m_listener.reset();
 		}
 	}
 

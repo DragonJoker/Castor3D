@@ -396,17 +396,15 @@ namespace castor3d
 
 	Path Engine::getPluginsDirectory()
 	{
-		Path pathReturn;
-		Path pathBin = File::getExecutableDirectory();
+		Path binDir = File::getExecutableDirectory();
 
-		while ( pathBin.getFileName() != cuT( "bin" ) )
+		while ( binDir.getFileName() != cuT( "bin" ) )
 		{
-			pathBin = pathBin.getPath();
+			binDir = binDir.getPath();
 		}
 
-		Path pathUsr = pathBin.getPath();
-		pathReturn = pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
-		return pathReturn;
+		Path usrDir = binDir.getPath();
+		return usrDir / cuT( "lib" ) / cuT( "Castor3D" );
 	}
 
 	castor::Path Engine::getEngineDirectory()

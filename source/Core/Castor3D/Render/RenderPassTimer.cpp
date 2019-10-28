@@ -125,13 +125,26 @@ namespace castor3d
 		{
 			if ( m_startedPasses[i] )
 			{
-				ashes::UInt64Array values{ 0u, 0u };
-				m_timerQuery->getResults( i * 2u
-					, 2u
-					, 0u
-					, VK_QUERY_RESULT_WAIT_BIT
-					, values );
-				m_gpuTime += Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
+				try
+				{
+					ashes::UInt64Array values{ 0u, 0u, 0u, 0u };
+					m_timerQuery->getResults( i * 2u
+						, 2u
+						, 0u
+						, VK_QUERY_RESULT_WAIT_BIT
+						, values );
+
+					if ( values[1] && values[3] )
+					{
+						m_gpuTime += Nanoseconds{ uint64_t( ( values[2] - values[0] ) / period ) };
+
+					}
+				}
+				catch ( ashes::Exception & exc )
+				{
+					std::cerr << exc.what() << std::endl;
+				}
+
 				m_startedPasses[i] = false;
 			}
 		}

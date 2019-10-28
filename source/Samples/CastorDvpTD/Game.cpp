@@ -21,7 +21,7 @@ namespace castortd
 	namespace
 	{
 #if defined( NDEBUG )
-		constexpr uint32_t InitialLives = 5u;
+		constexpr uint32_t InitialLives = 50000u;
 		constexpr uint32_t InitialOre = 75000u;
 #else
 		constexpr uint32_t InitialLives = 1u;

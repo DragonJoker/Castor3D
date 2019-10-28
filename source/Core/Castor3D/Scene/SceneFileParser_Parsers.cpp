@@ -60,7 +60,7 @@ namespace castor3d
 {
 	namespace
 	{
-		void doCreateAlphaRejectionPass( PassSPtr srcPass
+		void createAlphaRejectionPass( PassSPtr srcPass
 			, PassSPtr dstPass )
 		{
 			dstPass->setImplicit();
@@ -84,7 +84,7 @@ namespace castor3d
 			}
 		}
 
-		void doCreateAlphaRejectionPass( MaterialSPtr material
+		void createAlphaRejectionPass( MaterialSPtr material
 			, PhongPassSPtr srcPass )
 		{
 			auto dstPass = std::static_pointer_cast< PhongPass >( material->createPass() );
@@ -92,27 +92,27 @@ namespace castor3d
 			dstPass->setDiffuse( srcPass->getDiffuse() );
 			dstPass->setShininess( srcPass->getShininess() );
 			dstPass->setSpecular( srcPass->getSpecular() );
-			doCreateAlphaRejectionPass( srcPass, dstPass );
+			createAlphaRejectionPass( srcPass, dstPass );
 		}
 
-		void doCreateAlphaRejectionPass( MaterialSPtr material
+		void createAlphaRejectionPass( MaterialSPtr material
 			, MetallicRoughnessPbrPassSPtr srcPass )
 		{
 			auto dstPass = std::static_pointer_cast< MetallicRoughnessPbrPass >( material->createPass() );
 			dstPass->setAlbedo( srcPass->getAlbedo() );
 			dstPass->setRoughness( srcPass->getRoughness() );
 			dstPass->setMetallic( srcPass->getMetallic() );
-			doCreateAlphaRejectionPass( srcPass, dstPass );
+			createAlphaRejectionPass( srcPass, dstPass );
 		}
 
-		void doCreateAlphaRejectionPass( MaterialSPtr material
+		void createAlphaRejectionPass( MaterialSPtr material
 			, SpecularGlossinessPbrPassSPtr srcPass )
 		{
 			auto dstPass = std::static_pointer_cast< SpecularGlossinessPbrPass >( material->createPass() );
 			dstPass->setDiffuse( srcPass->getDiffuse() );
 			dstPass->setGlossiness( srcPass->getGlossiness() );
 			dstPass->setSpecular( srcPass->getSpecular() );
-			doCreateAlphaRejectionPass( srcPass, dstPass );
+			createAlphaRejectionPass( srcPass, dstPass );
 		}
 
 		void mergeMasks( uint32_t toMerge
@@ -2957,13 +2957,13 @@ namespace castor3d
 					switch ( pass->getType() )
 					{
 					case MaterialType::ePhong:
-						doCreateAlphaRejectionPass( material, std::static_pointer_cast< PhongPass >( pass ) );
+						createAlphaRejectionPass( material, std::static_pointer_cast< PhongPass >( pass ) );
 						break;
 					case MaterialType::eMetallicRoughness:
-						doCreateAlphaRejectionPass( material, std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
+						createAlphaRejectionPass( material, std::static_pointer_cast< MetallicRoughnessPbrPass >( pass ) );
 						break;
 					case MaterialType::eSpecularGlossiness:
-						doCreateAlphaRejectionPass( material, std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
+						createAlphaRejectionPass( material, std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
 						break;
 					}
 				}
@@ -3208,7 +3208,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPassdoubleFace )
+	CU_ImplementAttributeParser( parserPassDoubleFace )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 
@@ -3237,6 +3237,7 @@ namespace castor3d
 			{
 				parsingContext->textureUnit = std::make_shared< TextureUnit >( *parsingContext->m_pParser->getEngine() );
 				parsingContext->createUnit = true;
+				parsingContext->imageInfo->mipLevels = ~uint32_t( 0u );
 			}
 			else
 			{
@@ -3987,7 +3988,7 @@ namespace castor3d
 				}
 				else
 				{
-					if ( parsingContext->imageInfo->mipLevels == 1u )
+					if ( parsingContext->imageInfo->mipLevels == ~uint32_t( 0u ) )
 					{
 						parsingContext->imageInfo->mipLevels = 20;
 					}
