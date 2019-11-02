@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SpecularBrdfLighting_H___
 #define ___C3D_SpecularBrdfLighting_H___
 
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 
 namespace castor3d
 {
@@ -98,47 +98,9 @@ namespace castor3d
 			void doDeclareComputeOneSpotLight( ShadowType shadowType
 				, bool volumetric )override;
 
-			void doComputeLight( Light const & light
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
-				, sdw::Vec3 const & diffuse
-				, sdw::Vec3 const & specular
-				, sdw::Float const & glossiness
-				, sdw::Float const & shadowFactor
-				, FragmentInput const & fragmentIn
-				, OutputComponents & output );
-
-			void doDeclareDistribution();
-			void doDeclareGeometry();
-			void doDeclareFresnelShlick();
-			void doDeclareComputeLight();
-
 		public:
 			C3D_API static const castor::String Name;
-			sdw::Function< sdw::Float
-				, sdw::InFloat
-				, sdw::InFloat > m_distributionGGX;
-			sdw::Function< sdw::Float
-				, sdw::InFloat
-				, sdw::InFloat > m_geometrySchlickGGX;
-			sdw::Function< sdw::Float
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InFloat > m_geometrySmith;
-			sdw::Function< sdw::Float
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat > m_smith;
-			sdw::Function< sdw::Vec3
-				, sdw::InFloat
-				, sdw::InVec3 > m_schlickFresnel;
-			sdw::Function< sdw::Vec3
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InVec3 > m_cookTorrance;
+			CookTorranceBRDF m_cookTorrance;
 			sdw::Function< sdw::Void
 				, InDirectionalLight
 				, sdw::InVec3
@@ -184,16 +146,6 @@ namespace castor3d
 				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOneSpot;
-			sdw::Function< sdw::Void
-				, InLight
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InVec3
-				, sdw::InFloat
-				, sdw::InFloat
-				, FragmentInput
-				, OutputComponents & > m_computeLight;
 		};
 	}
 }

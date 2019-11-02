@@ -4759,8 +4759,16 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserCameraPrimitive )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		uint32_t uiType;
-		parsingContext->primitiveType = VkPrimitiveTopology( params[0]->get( uiType ) );
+
+		if ( !params.empty() )
+		{
+			uint32_t uiType;
+			parsingContext->primitiveType = VkPrimitiveTopology( params[0]->get( uiType ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
 	}
 	CU_EndAttribute()
 

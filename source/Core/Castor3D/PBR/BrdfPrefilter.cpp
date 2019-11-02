@@ -282,12 +282,12 @@ namespace castor3d
 					auto k = writer.declLocale( "k"
 						, writer.paren( r * r ) / 2.0_f );
 
-					auto nominator = writer.declLocale( "num"
+					auto numerator = writer.declLocale( "num"
 						, product );
 					auto denominator = writer.declLocale( "denom"
 						, product * writer.paren( 1.0_f - k ) + k );
 
-					writer.returnStmt( nominator / denominator );
+					writer.returnStmt( numerator / denominator );
 				}
 				, InFloat( writer, "product" )
 				, InFloat( writer, "roughness" ) );
