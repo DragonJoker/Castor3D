@@ -93,23 +93,7 @@ Links
 - API Documentation [English](http://dragonjoker.github.com/Castor3D/doc/Castor3D/English), [French](http://dragonjoker.github.com/Castor3D/doc/Castor3D/French)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
 
-General Questions
------------------
+Contact
+-------
 
-1. I need a feature that Castor3D do not implement, what should I do ?  
-    There are two ways.  
-    First, Castor3D is a free software and library, so you are welcome to improve  
-    it yourself ;-) !  
-    Second, just ask the author :-) !  
-
-2. I implemented a cool feature, can I commit it ?  
-    Obviously you are welcome to send the author any improvement. But obviously  
-    the author is quite careful with readability, correctness and stability,  
-    and will read and check any contribution before including it.  
-    Thus, it can take time... There are few basic rules to write contributions:  
-    - Do never change the indentation of any part of the code that's not yours.  
-    - Do never send codes without a lot of comments in (bad or good) English.  
-    - Do never send codes with obscure and/or non-English variable names.  
-
-3. How can I ask the author ?  
-    Just send a mail to <dragonjoker59@hotmail.com> !
+You can rech me on the Discord server dedicated to my projects: [DragonJoker's Lair](https://discord.gg/jue8kW)

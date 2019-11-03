@@ -24,6 +24,7 @@ namespace GuiCommon
 		m_renderers = new wxListBox( this, ID_LIST_RENDERERS, wxDefaultPosition, wxSize( 400, 100 ) );
 		m_renderers->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_renderers->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_renderers->Bind( wxEVT_KEY_UP, [this]( wxKeyEvent & event ){ OnKeyUp( event ); } );
 
 		int count = 0;
 
