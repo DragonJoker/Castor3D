@@ -36,10 +36,12 @@ namespace castor3d
 				, 0_i );
 			auto end = m_writer.declLocale( "end"
 				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
+			auto it = m_writer.declLocale( "it"
+				, begin );
 
-			FOR( m_writer, Int, i, begin, i < end, ++i )
+			WHILE( m_writer, it < end )
 			{
-				m_computeDirectional( getDirectionalLight( i )
+				m_computeDirectional( getDirectionalLight( it )
 					, worldEye
 					, diffuse
 					, specular
@@ -47,15 +49,15 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				++it;
 			}
-			ROF;
+			ELIHW;
 
-			begin = end;
 			end += m_writer.cast< Int >( c3d_lightsCount.y() );
 
-			FOR( m_writer, Int, i, begin, i < end, ++i )
+			WHILE( m_writer, it < end )
 			{
-				m_computePoint( getPointLight( i )
+				m_computePoint( getPointLight( it )
 					, worldEye
 					, diffuse
 					, specular
@@ -63,15 +65,15 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				++it;
 			}
-			ROF;
+			ELIHW;
 
-			begin = end;
 			end += m_writer.cast< Int >( c3d_lightsCount.z() );
 
-			FOR( m_writer, Int, i, begin, i < end, ++i )
+			WHILE( m_writer, it < end )
 			{
-				m_computeSpot( getSpotLight( i )
+				m_computeSpot( getSpotLight( it )
 					, worldEye
 					, diffuse
 					, specular
@@ -79,8 +81,9 @@ namespace castor3d
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
+				++it;
 			}
-			ROF;
+			ELIHW;
 		}
 
 		void SpecularBrdfLightingModel::compute( DirectionalLight const & light
