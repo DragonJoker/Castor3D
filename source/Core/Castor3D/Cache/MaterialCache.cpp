@@ -50,6 +50,9 @@ namespace castor3d
 			case MaterialType::eSpecularGlossiness:
 				m_passBuffer = std::make_shared< SpecularGlossinessPassBuffer >( *getEngine(), shader::MaxMaterialsCount );
 				break;
+
+			default:
+				break;
 			}
 
 			m_textureBuffer = std::make_shared< TextureConfigurationBuffer >( *getEngine(), shader::MaxTextureConfigurationCount );

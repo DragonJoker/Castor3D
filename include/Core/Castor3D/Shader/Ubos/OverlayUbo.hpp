@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API OverlayUbo( OverlayUbo const & ) = delete;
 		C3D_API OverlayUbo & operator=( OverlayUbo const & ) = delete;
 		C3D_API OverlayUbo( OverlayUbo && ) = default;
-		C3D_API OverlayUbo & operator=( OverlayUbo && ) = default;
+		C3D_API OverlayUbo & operator=( OverlayUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

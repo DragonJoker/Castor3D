@@ -27,7 +27,7 @@ namespace castor3d
 		FinalCombineProgram( FinalCombineProgram const & rhs ) = delete;
 		FinalCombineProgram & operator=( FinalCombineProgram const & rhs ) = delete;
 		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
-		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = default;
+		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = delete;
 		FinalCombineProgram( Engine & engine
 			, ashes::RenderPass const & renderPass
 			, RenderPassTimer & timer

@@ -26,6 +26,7 @@ namespace castor3d
 			: public sdw::StructInstance
 		{
 			friend class Materials;
+			virtual ~BaseMaterial() = default;
 
 			C3D_API virtual sdw::Vec3 m_diffuse()const = 0;
 
@@ -134,6 +135,7 @@ namespace castor3d
 			C3D_API explicit Materials( sdw::ShaderWriter & writer );
 
 		public:
+			virtual ~Materials() = default;
 			C3D_API virtual void declare( bool hasSsbo ) = 0;
 			C3D_API virtual BaseMaterialUPtr getBaseMaterial( sdw::UInt const & index )const = 0;
 

@@ -41,6 +41,33 @@ if ( CASTOR_USE_SYSTEM_LIBS )
 			set(ZlibLibraries "${Lib}")
 		endif()
 	endforeach()
+elseif ( APPLE )
+	find_package( Freetype )
+	set( msg "no (missing: " )
+	if ( FREETYPE_FOUND )
+		message( STATUS "+ Found Freetype (version ${FREETYPE_VERSION_STRING})" )
+	else ()
+		set( msg "${msg} Freetype" )
+	endif()
+
+	include_directories( ${FREETYPE_INCLUDE_DIR_freetype2} )
+	include_directories( ${FREETYPE_INCLUDE_DIR_ft2build} )
+
+	#FreeType Libs
+	set( FreeTypeLibraries "")
+	foreach(Lib ${FREETYPE_LIBRARIES})
+		if (FreeTypeLibraries)
+			set(FreeTypeLibraries "${FreeTypeLibraries}|${Lib}")
+		else()
+			set(FreeTypeLibraries "${Lib}")
+		endif()
+	endforeach()
+
+	set( ZLIB_FOUND TRUE )
+	include_directories(
+		${CMAKE_SOURCE_DIR}/external/zlib
+		${CMAKE_BINARY_DIR}/external/zlib
+	)
 else ()
 	set( FREETYPE_FOUND TRUE )
 	set( ZLIB_FOUND TRUE )
@@ -53,10 +80,6 @@ else ()
 endif ()
 
 if ( ZLIB_FOUND AND FREETYPE_FOUND )
-	if( NOT WIN32 )
-		find_package( X11 )
-	endif()
-
 	if ( ANDROID )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
@@ -66,6 +89,10 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 			EGL
 			cpufeatures
 		)
+	elseif( APPLE )
+	elseif( WIN32 )
+	else ()
+		find_package( X11 )
 	endif ()
 
 	set( CASTOR_HAS_XINERAMA 0 )
@@ -101,6 +128,13 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 			${CastorMinLibraries}
 			${FreeTypeLibraries}
 			${ZlibLibraries}
+			${X11Libraries}
+		)
+	elseif ( APPLE )
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			zlib
+			${FreeTypeLibraries}
 			${X11Libraries}
 		)
 	else ()

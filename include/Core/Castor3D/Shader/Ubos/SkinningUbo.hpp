@@ -43,7 +43,7 @@ namespace castor3d
 		C3D_API SkinningUbo( SkinningUbo const & ) = delete;
 		C3D_API SkinningUbo & operator=( SkinningUbo const & ) = delete;
 		C3D_API SkinningUbo( SkinningUbo && ) = default;
-		C3D_API SkinningUbo & operator=( SkinningUbo && ) = default;
+		C3D_API SkinningUbo & operator=( SkinningUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

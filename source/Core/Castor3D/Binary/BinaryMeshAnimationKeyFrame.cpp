@@ -124,6 +124,9 @@ namespace castor3d
 					}
 				}
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -153,6 +156,9 @@ namespace castor3d
 						obj.addSubmeshBuffer( *submesh, buffer );
 					}
 				}
+				break;
+
+			default:
 				break;
 			}
 		}

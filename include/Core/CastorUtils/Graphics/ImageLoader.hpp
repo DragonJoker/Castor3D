@@ -17,6 +17,7 @@ namespace castor
 	class ImageLoaderImpl
 	{
 	public:
+		virtual ~ImageLoaderImpl() = default;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.

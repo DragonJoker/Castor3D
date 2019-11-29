@@ -67,6 +67,9 @@ namespace castor3d
 				}
 
 				break;
+
+			default:
+				break;
 			}
 		}
 

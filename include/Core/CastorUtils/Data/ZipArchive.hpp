@@ -40,6 +40,7 @@ namespace castor
 
 		struct ZipImpl
 		{
+			virtual ~ZipImpl() = default;
 			virtual void open( Path const & path, File::OpenMode mode ) = 0;
 			virtual void close() = 0;
 			virtual void deflate( Folder const & files ) = 0;

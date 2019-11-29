@@ -76,6 +76,9 @@ namespace castor3d
 			case ChunkType::eMeshAnimation:
 				createBinaryParser< MeshAnimation >().parse( static_cast< MeshAnimation & >( obj ), chunk );
 				break;
+
+			default:
+				break;
 			}
 		}
 

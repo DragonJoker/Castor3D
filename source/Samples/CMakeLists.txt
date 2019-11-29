@@ -28,10 +28,10 @@ function( SamplesBuild )
 			OR ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER}
 			OR ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING}
 			OR ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
-			if( NOT WIN32 )
-				find_package( GTK2 )
-			else()
+			if( APPLE OR WIN32 )
 				set( GTK2_FOUND TRUE )
+			else()
+				find_package( GTK2 )
 			endif()
 
 			set( GUICOMMON_C_FLAGS "" )
@@ -67,9 +67,6 @@ function( SamplesBuild )
 			endif()
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
-				if ( NOT WIN32 )
-					message( STATUS "+ Found GTK2" )
-				endif ()
 				message( STATUS "+ Found wxWidgets" )
 				include_directories( ${GTK2_INCLUDE_DIRS} )
 				include_directories( ${wxWidgets_INCLUDE_DIRS} )
@@ -90,18 +87,6 @@ function( SamplesBuild )
 						set( wxWidgetsLibraries "${Lib}" )
 					endif()
 				endforeach()
-
-				#Few more configuration for wxWidgets
-				string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
-				set( wxWidgets_CXXFLAGS "${wxWidgets_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES" )
-
-				if( NOT WIN32 )
-					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXGTK__" )
-				endif()
-
-				if( IsWxDebug )
-					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXDEBUG__" )
-				endif()
 
 				if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} )
 					set( Build ${GuiCmn} )

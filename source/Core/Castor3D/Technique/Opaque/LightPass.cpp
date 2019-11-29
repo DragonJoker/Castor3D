@@ -767,6 +767,9 @@ namespace castor3d
 #endif
 				}
 				break;
+
+			default:
+				break;
 			}
 
 			pxl_diffuse = lightDiffuse * diffuse;
@@ -1022,6 +1025,9 @@ namespace castor3d
 #endif
 				}
 				break;
+
+			default:
+				break;
 			}
 
 			pxl_diffuse = lightDiffuse;
@@ -1222,6 +1228,9 @@ namespace castor3d
 						, translucency );
 #endif
 				}
+				break;
+
+			default:
 				break;
 			}
 

@@ -50,7 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API SkeletonAnimationBone & operator=( SkeletonAnimationBone && rhs ) = default;
+		C3D_API SkeletonAnimationBone & operator=( SkeletonAnimationBone && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

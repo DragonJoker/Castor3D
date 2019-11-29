@@ -198,7 +198,7 @@ namespace castor3d
 			}
 		}
 
-		return !m_states.size() == m_modules.size();
+		return m_states.size() == m_modules.size();
 	}
 
 	void ShaderProgram::cleanup()

@@ -46,7 +46,7 @@ namespace castor3d
 		C3D_API MatrixUbo( MatrixUbo const & ) = delete;
 		C3D_API MatrixUbo & operator=( MatrixUbo const & ) = delete;
 		C3D_API MatrixUbo( MatrixUbo && ) = default;
-		C3D_API MatrixUbo & operator=( MatrixUbo && ) = default;
+		C3D_API MatrixUbo & operator=( MatrixUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

@@ -27,6 +27,9 @@ add_target(
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )
+target_compile_definitions( ${PROJECT_NAME} PRIVATE
+	${wxWidgets_DEFINITIONS}
+)
 # Copying internationalisation files (french, for now) for CastorViewer
 copy_languages( ${PROJECT_NAME} ${CASTOR_SOURCE_DIR}/internationalisation/${PROJECT_NAME} ${PROJECT_NAME} "fr" )
 

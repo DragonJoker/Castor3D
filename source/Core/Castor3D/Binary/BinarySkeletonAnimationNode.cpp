@@ -41,6 +41,9 @@ namespace castor3d
 			case ChunkType::eAnimationObject:
 				result = createBinaryParser< SkeletonAnimationObject >().parse( obj, chunk );
 				break;
+
+			default:
+				break;
 			}
 		}
 

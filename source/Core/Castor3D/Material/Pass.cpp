@@ -379,6 +379,9 @@ namespace castor3d
 		case MaterialType::eSpecularGlossiness:
 			result |= PassFlag::eSpecularGlossiness;
 			break;
+
+		default:
+			break;
 		}
 
 		if ( hasSubsurfaceScattering() )

@@ -38,7 +38,7 @@ namespace castor3d
 		C3D_API TexturesUbo( TexturesUbo const & ) = delete;
 		C3D_API TexturesUbo & operator=( TexturesUbo const & ) = delete;
 		C3D_API TexturesUbo( TexturesUbo && ) = default;
-		C3D_API TexturesUbo & operator=( TexturesUbo && ) = default;
+		C3D_API TexturesUbo & operator=( TexturesUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

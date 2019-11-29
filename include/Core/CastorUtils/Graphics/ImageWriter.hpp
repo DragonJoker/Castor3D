@@ -17,6 +17,7 @@ namespace castor
 	class ImageWriterImpl
 	{
 	public:
+		virtual ~ImageWriterImpl() = default;
 		/**
 		 *\~english
 		 *\brief		Saves an image data to a file.

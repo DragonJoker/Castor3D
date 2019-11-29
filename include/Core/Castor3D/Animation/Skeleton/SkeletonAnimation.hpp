@@ -55,7 +55,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && rhs ) = default;
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

@@ -58,6 +58,9 @@ namespace castor3d
 				}
 
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -90,6 +93,9 @@ namespace castor3d
 					obj.setSkeleton( skeleton );
 				}
 
+				break;
+
+			default:
 				break;
 			}
 		}

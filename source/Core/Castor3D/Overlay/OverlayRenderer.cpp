@@ -924,6 +924,9 @@ namespace castor3d
 			case MaterialType::eSpecularGlossiness:
 				materials = std::make_unique< PbrSGMaterials >( writer );
 				break;
+
+			default:
+				break;
 			}
 
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );

@@ -85,7 +85,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )
+		inline bool parse( String & params )override
 		{
 			return ValueParser< Type >::parse( params, m_value );
 		}
@@ -161,7 +161,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )
+		inline bool parse( String & params )override
 		{
 			return ValueParser< Type >::parse( params, m_value, m_range );
 		}
@@ -215,7 +215,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params );
+		inline bool parse( String & params )override;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -259,7 +259,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params );
+		inline bool parse( String & params )override;
 
 	public:
 		UInt32StrMap const & m_values;
@@ -306,7 +306,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params );
+		inline bool parse( String & params )override;
 
 	public:
 		UInt32StrMap const & m_values;
@@ -353,7 +353,7 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params );
+		inline bool parse( String & params )override;
 
 	public:
 		UInt64StrMap const & m_values;

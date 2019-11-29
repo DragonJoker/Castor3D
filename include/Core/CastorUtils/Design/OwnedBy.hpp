@@ -73,11 +73,11 @@ namespace castor
 		{\
 		private:\
 			OwnedBy & operator=( OwnedBy< Owner > const & rhs ) = delete;\
+			OwnedBy & operator=( OwnedBy< Owner > && rhs ) = delete;\
 		public:\
 			explicit OwnedBy( Owner & owner );\
 			OwnedBy( OwnedBy< Owner > const & rhs ) = default;\
 			OwnedBy( OwnedBy< Owner > && rhs ) = default;\
-			OwnedBy & operator=( OwnedBy< Owner > && rhs ) = default;\
 			~OwnedBy() = default;\
 			Owner * get##Name()const;\
 		private:\

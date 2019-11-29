@@ -77,6 +77,9 @@ namespace castor3d
 					}
 				}
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -116,6 +119,9 @@ namespace castor3d
 							, Matrix4x4r{ matrix } );
 					}
 
+					break;
+
+				default:
 					break;
 				}
 			}

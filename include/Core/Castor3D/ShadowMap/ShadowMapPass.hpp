@@ -108,13 +108,6 @@ namespace castor3d
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
 		/**
-		 *\~english
-		 *\brief		Cleans up the pass.
-		 *\~french
-		 *\brief		Nettoie la passe.
-		 */
-		virtual void doCleanup()= 0;
-		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout

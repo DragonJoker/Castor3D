@@ -38,7 +38,7 @@ namespace castor3d
 		C3D_API MorphingUbo( MorphingUbo const & ) = delete;
 		C3D_API MorphingUbo & operator=( MorphingUbo const & ) = delete;
 		C3D_API MorphingUbo( MorphingUbo && ) = default;
-		C3D_API MorphingUbo & operator=( MorphingUbo && ) = default;
+		C3D_API MorphingUbo & operator=( MorphingUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

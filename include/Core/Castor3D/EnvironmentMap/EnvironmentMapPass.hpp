@@ -26,7 +26,7 @@ namespace castor3d
 		EnvironmentMapPass( EnvironmentMapPass const & )=delete;
 		EnvironmentMapPass & operator=( EnvironmentMapPass const & )=delete;
 		EnvironmentMapPass( EnvironmentMapPass && )= default;
-		EnvironmentMapPass & operator=( EnvironmentMapPass && )=default;
+		EnvironmentMapPass & operator=( EnvironmentMapPass && )=delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.

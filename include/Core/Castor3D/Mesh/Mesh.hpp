@@ -97,7 +97,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API Mesh & operator=( Mesh && rhs ) = default;
+		C3D_API Mesh & operator=( Mesh && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

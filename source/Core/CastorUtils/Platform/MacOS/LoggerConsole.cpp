@@ -1,6 +1,6 @@
 #include "CastorUtils/Log/LoggerConsole.hpp"
 
-#if defined( CU_PlatformLinux )
+#if defined( CU_PlatformApple )
 
 #include <iomanip>
 

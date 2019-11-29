@@ -207,6 +207,9 @@ namespace GuiCommon
 		case BackgroundType::eSkybox:
 			selected = PROPERTY_BACKGROUND_SKYBOX;
 			break;
+
+		default:
+			break;
 		}
 
 		grid->Append( new wxPropertyCategory( selected + wxT( " " ) + PROPERTY_CATEGORY_BACKGROUND ) );

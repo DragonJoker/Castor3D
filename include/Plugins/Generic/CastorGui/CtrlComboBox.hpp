@@ -20,58 +20,60 @@ namespace CastorGui
 	public:
 		/** Constructor
 		 *\param[in]	engine	The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_id		The control ID
+		 *\param[in]	parent	The parent control, if any
+		 *\param[in]	id		The control ID
 		 */
-		ComboBoxCtrl( castor::String const & p_name
+		ComboBoxCtrl( castor::String const & name
 			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id );
+			, ControlRPtr parent
+			, uint32_t id );
 
 		/** Constructor
 		 *\param[in]	engine	The engine
-		 *\param[in]	p_parent	The parent control, if any
-		 *\param[in]	p_values	The list value
-		 *\param[in]	p_selected	The selected value
-		 *\param[in]	p_id		The control ID
-		 *\param[in]	p_position	The position
-		 *\param[in]	p_size		The size
-		 *\param[in]	p_style		The style
-		 *\param[in]	p_visible	Initial visibility status
+		 *\param[in]	parent	The parent control, if any
+		 *\param[in]	values	The list value
+		 *\param[in]	selected	The selected value
+		 *\param[in]	id		The control ID
+		 *\param[in]	position	The position
+		 *\param[in]	size		The size
+		 *\param[in]	style		The style
+		 *\param[in]	visible	Initial visibility status
 		 */
-		ComboBoxCtrl( castor::String const & p_name
+		ComboBoxCtrl( castor::String const & name
 			, castor3d::Engine & engine
-			, ControlRPtr p_parent
-			, uint32_t p_id
-			, castor::StringArray const & p_values
-			, int p_selected
-			, castor::Position const & p_position
-			, castor::Size const & p_size
-			, uint32_t p_style = 0
-			, bool p_visible = true );
+			, ControlRPtr parent
+			, uint32_t id
+			, castor::StringArray const & values
+			, int selected
+			, castor::Position const & position
+			, castor::Size const & size
+			, uint32_t style = 0
+			, bool visible = true );
 
 		/** Constructor
-		*\param[in]	p_parent		The parent control, if an
-		*\param[in]	p_values		The list value
-		*\param[in]	p_selected		The selected valu
-		*\param[in]	p_id		The I
-		*\param[in]	p_position		The positio
-		*\param[in]	p_size		The siz
-		*\param[in]	p_style		The styl
-		*\param[in]	p_visible		Initial visibility statu
+		*\param[in]	parent		The parent control, if an
+		*\param[in]	values		The list value
+		*\param[in]	selected		The selected valu
+		*\param[in]	id		The I
+		*\param[in]	position		The positio
+		*\param[in]	size		The siz
+		*\param[in]	style		The styl
+		*\param[in]	visible		Initial visibility statu
 		*/
 		template< size_t N >
-		ComboBoxCtrl( ControlSPtr p_parent
-			, castor::String const( & p_values )[N]
-			, int p_selected
-			, uint32_t p_id
-			, castor::Position const & p_position
-			, castor::Size const & p_size
-			, uint32_t p_style = 0
-			, bool p_visible = true )
-			: Control( ControlType::eComboBox, p_parent, p_id, p_position, p_size, p_style, p_visible )
-			, m_values( castor::StringArray( &p_values[0], &p_values[N] ) )
-			, m_selected( p_selected )
+		ComboBoxCtrl( castor::String const & name
+			, castor3d::Engine & engine
+			, ControlRPtr parent
+			, castor::String const( & values )[N]
+			, int selected
+			, uint32_t id
+			, castor::Position const & position
+			, castor::Size const & size
+			, uint32_t style = 0
+			, bool visible = true )
+			: Control( ControlType::eComboBox, name, engine, parent, id, position, size, style, visible )
+			, m_values( castor::StringArray( &values[0], &values[N] ) )
+			, m_selected( selected )
 		{
 		}
 
@@ -80,24 +82,24 @@ namespace CastorGui
 		virtual ~ComboBoxCtrl();
 
 		/** sets the background material for selected item
-		 *\param[in]	p_material		The new value
+		 *\param[in]	material		The new value
 		 */
-		void setSelectedItemBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setSelectedItemBackgroundMaterial( castor3d::MaterialSPtr material );
 
 		/** sets the foreground material for selected item
-		 *\param[in]	p_material		The new value
+		 *\param[in]	material		The new value
 		 */
-		void setSelectedItemForegroundMaterial( castor3d::MaterialSPtr p_material );
+		void setSelectedItemForegroundMaterial( castor3d::MaterialSPtr material );
 
 		/** sets the background material for an highlighted item
-		 *\param[in]	p_material	The new value
+		 *\param[in]	material	The new value
 		 */
-		void setHighlightedItemBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setHighlightedItemBackgroundMaterial( castor3d::MaterialSPtr material );
 
 		/** sets the background material for an unselected item
-		 *\param[in]	p_material	The new value
+		 *\param[in]	material	The new value
 		 */
-		void setItemBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		void setItemBackgroundMaterial( castor3d::MaterialSPtr material );
 
 		/** Retrieves the background material for selected item
 		 *\return		The value
@@ -120,29 +122,29 @@ namespace CastorGui
 		castor3d::MaterialSPtr getItemBackgroundMaterial()const;
 
 		/** Appends a new item
-		*\param[in]	p_value		The item
+		*\param[in]	value		The item
 		*/
-		void appendItem( castor::String  const & p_value );
+		void appendItem( castor::String  const & value );
 
 		/** Removes an item
-		*\param[in]	p_value		The item index
+		*\param[in]	value		The item index
 		*/
-		void removeItem( int p_value );
+		void removeItem( int value );
 
 		/** sets an item text
-		*\param[in]	p_index		The item index
-		*\param[in]	p_text		The item text
+		*\param[in]	index		The item index
+		*\param[in]	text		The item text
 		*/
-		void setItemText( int p_index, castor::String const & p_text );
+		void setItemText( int index, castor::String const & text );
 
 		/** Clears the items
 		*/
 		void clear();
 
 		/** sets the selected item
-		*\param[in]	p_value		The new value
+		*\param[in]	value		The new value
 		*/
-		void setSelected( int p_value );
+		void setSelected( int value );
 
 		/** Retrieves the items
 		 *\return		The value
@@ -160,18 +162,18 @@ namespace CastorGui
 		int getSelected()const;
 
 		/** sets the caption font.
-		*\param[in]	p_font	The new value.
+		*\param[in]	font	The new value.
 		*/
-		void setFont( castor::String const & p_font );
+		void setFont( castor::String const & font );
 
 		/** Connects a function to a combobox event
-		*\param[in]	p_event			The event type
-		*\param[in]	p_function		The function
+		*\param[in]	event			The event type
+		*\param[in]	function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline OnComboEventConnection connect( ComboBoxEvent p_event, OnComboEventFunction p_function )
+		inline OnComboEventConnection connect( ComboBoxEvent event, OnComboEventFunction function )
 		{
-			return m_signals[size_t( p_event )].connect( p_function );
+			return m_signals[size_t( event )].connect( function );
 		}
 
 	private:
@@ -185,19 +187,19 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		virtual void doSetPosition( castor::Position const & p_value );
+		virtual void doSetPosition( castor::Position const & value );
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		virtual void doSetSize( castor::Size const & p_value );
+		virtual void doSetSize( castor::Size const & value );
 
 		/** @copydoc CastorGui::Control::doSetBackgroundMaterial
 		*/
-		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr p_material );
+		virtual void doSetBackgroundMaterial( castor3d::MaterialSPtr material );
 
 		/** @copydoc CastorGui::Control::doSetForegroundMaterial
 		*/
-		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr p_material );
+		virtual void doSetForegroundMaterial( castor3d::MaterialSPtr material );
 
 		/** @copydoc CastorGui::Control::doCatchesMouseEvents
 		*/
@@ -205,22 +207,22 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		virtual void doSetVisible( bool p_visible );
+		virtual void doSetVisible( bool visible );
 
 		/** Event raised when an item is selected in the choices listbox
-		*\param[in]	p_selected		The item index
+		*\param[in]	selected		The item index
 		*/
-		void onSelected( int p_selected );
+		void onSelected( int selected );
 
 		/** Event when a keyboard key is pressed
-		*\param[in]	p_event		The keyboard event
+		*\param[in]	event		The keyboard event
 		*/
-		void onKeyDown( castor3d::KeyboardEvent const & p_event );
+		void onKeyDown( castor3d::KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
-		*\param[in]	p_event		The keyboard event
+		*\param[in]	event		The keyboard event
 		*/
-		void onNcKeyDown( ControlSPtr p_control, castor3d::KeyboardEvent const & p_event );
+		void onNcKeyDown( ControlSPtr control, castor3d::KeyboardEvent const & event );
 
 		/** Switch the combobox list
 		*/

@@ -187,6 +187,9 @@ namespace castor3d
 			case VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN:
 				result -= 2u;
 				break;
+
+			default:
+				break;
 			}
 		}
 

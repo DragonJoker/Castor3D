@@ -39,7 +39,7 @@ namespace castor3d
 		C3D_API PickingUbo( PickingUbo const & ) = delete;
 		C3D_API PickingUbo & operator=( PickingUbo const & ) = delete;
 		C3D_API PickingUbo( PickingUbo && ) = default;
-		C3D_API PickingUbo & operator=( PickingUbo && ) = default;
+		C3D_API PickingUbo & operator=( PickingUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

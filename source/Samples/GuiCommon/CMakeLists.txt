@@ -47,6 +47,9 @@ add_target(
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )
+target_compile_definitions( ${PROJECT_NAME} PRIVATE
+	${wxWidgets_DEFINITIONS}
+)
 
 file( GLOB ${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES
 	${CASTOR_SOURCE_DIR}/include/Samples/${PROJECT_NAME}/*TreeItem*.hpp

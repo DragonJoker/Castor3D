@@ -230,7 +230,7 @@ namespace castor3d
 			RenderPassOverlays( RenderPassOverlays const & ) = delete;
 			RenderPassOverlays & operator=( RenderPassOverlays const & ) = delete;
 			RenderPassOverlays( RenderPassOverlays && ) = default;
-			RenderPassOverlays & operator=( RenderPassOverlays && ) = default;
+			RenderPassOverlays & operator=( RenderPassOverlays && ) = delete;
 			RenderPassOverlays( castor::String const & category
 				, OverlayCache & cache );
 			~RenderPassOverlays();

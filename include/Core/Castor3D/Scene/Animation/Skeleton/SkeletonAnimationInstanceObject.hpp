@@ -47,7 +47,10 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject && rhs ) = default;
 		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject const & rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject & operator=( SkeletonAnimationInstanceObject && rhs ) = delete;
 
 	public:
 		/**

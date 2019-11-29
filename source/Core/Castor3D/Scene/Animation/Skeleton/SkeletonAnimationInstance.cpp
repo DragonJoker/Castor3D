@@ -57,6 +57,9 @@ namespace castor3d
 					m_toMove.push_back( instance );
 				}
 				break;
+
+			default:
+				break;
 			}
 		}
 

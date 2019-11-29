@@ -825,6 +825,9 @@ namespace castor3d
 					break;
 				case VK_COMPARE_OP_ALWAYS:
 					break;
+
+				default:
+					break;
 				}
 			}
 		}

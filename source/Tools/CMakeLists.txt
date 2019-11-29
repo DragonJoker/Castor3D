@@ -47,18 +47,6 @@ function( ToolsBuild )
 					endif()
 				endforeach()
 
-				#Few more configuration for wxWidgets
-				string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
-				set( wxWidgets_CXXFLAGS "${wxWidgets_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES" )
-
-				if( NOT WIN32 )
-					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXGTK__" )
-				endif()
-
-				if( IsWxDebug )
-					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXDEBUG__" )
-				endif()
-
 				if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER} )
 					set( Build ${ImgConv} )
 					add_subdirectory( Tools/ImgConverter )

@@ -9,6 +9,15 @@ include_directories(
 find_package( Vulkan )
 
 if( Vulkan_FOUND )
+	if ( APPLE )
+		add_definitions( -DVK_USE_PLATFORM_MACOS_MVK )
+	elseif ( WIN32 )
+		add_definitions( -DVK_USE_PLATFORM_WIN32_KHR )
+	elseif ( ANDROID )
+		add_definitions( -DVK_USE_PLATFORM_ANDROID_KHR )
+	else ()
+		add_definitions( -DVK_USE_PLATFORM_XLIB_KHR )
+	endif ()
 	set( Castor3DIncludeDirs
 		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include
 		${CASTOR_BINARY_DIR}/${ASHES_DIR}/include

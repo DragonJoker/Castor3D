@@ -2965,6 +2965,8 @@ namespace castor3d
 					case MaterialType::eSpecularGlossiness:
 						createAlphaRejectionPass( material, std::static_pointer_cast< SpecularGlossinessPbrPass >( pass ) );
 						break;
+					default:
+						break;
 					}
 				}
 			}
@@ -3515,6 +3517,8 @@ namespace castor3d
 					break;
 				case MaterialType::eMetallicRoughness:
 					parsingContext->textureConfiguration.specularMask[0] = 0x000000FF;
+					break;
+				default:
 					break;
 				}
 			}

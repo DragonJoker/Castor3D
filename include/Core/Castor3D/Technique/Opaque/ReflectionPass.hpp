@@ -101,7 +101,7 @@ namespace castor3d
 			ProgramPipeline( ProgramPipeline const & ) = delete;
 			ProgramPipeline( ProgramPipeline && ) = default;
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
-			ProgramPipeline & operator=( ProgramPipeline && ) = default;
+			ProgramPipeline & operator=( ProgramPipeline && ) = delete;
 			ProgramPipeline( Engine & engine
 				, GeometryPassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout

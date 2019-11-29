@@ -43,7 +43,7 @@ namespace castor3d
 		C3D_API SceneUbo( SceneUbo const & ) = delete;
 		C3D_API SceneUbo & operator=( SceneUbo const & ) = delete;
 		C3D_API SceneUbo( SceneUbo && ) = default;
-		C3D_API SceneUbo & operator=( SceneUbo && ) = default;
+		C3D_API SceneUbo & operator=( SceneUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

@@ -603,6 +603,9 @@ namespace smaa
 				velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView();
 			}
 			break;
+
+		default:
+			break;
 		}
 
 		return velocityView;

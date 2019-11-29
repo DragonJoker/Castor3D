@@ -104,6 +104,8 @@ namespace castor3d
 					case MaterialType::eSpecularGlossiness:
 						result = file.writeText( m_tabs + cuT( "\talbedo_mask " ) + writeMask( configuration.colourMask[0] ) + cuT( "\n" ) ) > 0;
 						break;
+					default:
+						break;
 					}
 
 					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit diffuse/albedo mask" );
@@ -119,6 +121,8 @@ namespace castor3d
 						break;
 					case MaterialType::eMetallicRoughness:
 						result = file.writeText( m_tabs + cuT( "\tmetalness_mask " ) + writeMask( configuration.specularMask[0] ) + cuT( "\n" ) ) > 0;
+						break;
+					default:
 						break;
 					}
 
@@ -137,6 +141,8 @@ namespace castor3d
 						break;
 					case MaterialType::eSpecularGlossiness:
 						result = file.writeText( m_tabs + cuT( "\tglossiness_mask " ) + writeMask( configuration.glossinessMask[0] ) + cuT( "\n" ) ) > 0;
+						break;
+					default:
 						break;
 					}
 

@@ -128,7 +128,6 @@ namespace castor3d
 							{
 								*index++ = line.m_index[0];
 								*index++ = line.m_index[1];
-								*index++ = line.m_index[2];
 							}
 
 							vertices.flush( 0u, vertices.getCount() );

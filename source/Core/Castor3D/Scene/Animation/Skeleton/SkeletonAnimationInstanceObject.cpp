@@ -38,6 +38,9 @@ namespace castor3d
 					allObjects.push_back( instance );
 				}
 				break;
+
+			default:
+				break;
 			}
 		}
 	}

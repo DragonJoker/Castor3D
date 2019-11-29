@@ -151,7 +151,7 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkIOSSurfaceCreateInfoMVK>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK; };
 #endif
 #ifdef VK_USE_PLATFORM_MACOS_MVK
-	template<> struct VkTypeTraits< VkMACOSSurfaceCreateInfoMVK>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK; };
+	template<> struct VkTypeTraits< VkMacOSSurfaceCreateInfoMVK>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK; };
 #endif
 #ifdef VK_USE_PLATFORM_VI_NN
 	template<> struct VkTypeTraits< VkViSurfaceCreateInfoNN>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_VI_SURFACE_CREATE_INFO_NN; };
@@ -161,6 +161,31 @@ namespace castor3d
 #endif
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 	template<> struct VkTypeTraits< VkWin32SurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkImportMemoryWin32HandleInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV; };
+	template<> struct VkTypeTraits< VkExportMemoryWin32HandleInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV; };
+#endif
+#if VK_KHR_external_memory_win32
+	template<> struct VkTypeTraits< VkImportMemoryWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkExportMemoryWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkMemoryWin32HandlePropertiesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR; };
+	template<> struct VkTypeTraits< VkMemoryGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_GET_WIN32_HANDLE_INFO_KHR; };
+#endif
+#if VK_KHR_win32_keyed_mutex
+	template<> struct VkTypeTraits< VkWin32KeyedMutexAcquireReleaseInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_KHR; };
+#endif
+#if VK_NV_win32_keyed_mutex
+	template<> struct VkTypeTraits< VkWin32KeyedMutexAcquireReleaseInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV; };
+#endif
+#if VK_KHR_external_semaphore_win32
+	template<> struct VkTypeTraits< VkImportSemaphoreWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkExportSemaphoreWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkD3D12FenceSubmitInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR; };
+	template<> struct VkTypeTraits< VkSemaphoreGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR; };
+#endif
+#if VK_KHR_external_fence_win32
+	template<> struct VkTypeTraits< VkImportFenceWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkExportFenceWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_FENCE_WIN32_HANDLE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkFenceGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR; };
 #endif
 #ifdef VK_USE_PLATFORM_XCB_KHR
 	template<> struct VkTypeTraits< VkXcbSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR; };
@@ -187,24 +212,12 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkPhysicalDeviceCornerSampledImageFeaturesNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_CORNER_SAMPLED_IMAGE_FEATURES_NV; };
 	template<> struct VkTypeTraits< VkExternalMemoryImageCreateInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV; };
 	template<> struct VkTypeTraits< VkExportMemoryAllocateInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV; };
-	template<> struct VkTypeTraits< VkImportMemoryWin32HandleInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV; };
-	template<> struct VkTypeTraits< VkExportMemoryWin32HandleInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV; };
-	template<> struct VkTypeTraits< VkWin32KeyedMutexAcquireReleaseInfoNV>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV; };
 	template<> struct VkTypeTraits< VkValidationFlagsEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT; };
 	template<> struct VkTypeTraits< VkImageViewASTCDecodeModeEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMAGE_VIEW_ASTC_DECODE_MODE_EXT; };
 	template<> struct VkTypeTraits< VkPhysicalDeviceASTCDecodeFeaturesEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ASTC_DECODE_FEATURES_EXT; };
-	template<> struct VkTypeTraits< VkImportMemoryWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkExportMemoryWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkMemoryWin32HandlePropertiesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR; };
-	template<> struct VkTypeTraits< VkMemoryGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_GET_WIN32_HANDLE_INFO_KHR; };
 	template<> struct VkTypeTraits< VkImportMemoryFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR; };
 	template<> struct VkTypeTraits< VkMemoryFdPropertiesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_FD_PROPERTIES_KHR; };
 	template<> struct VkTypeTraits< VkMemoryGetFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR; };
-	template<> struct VkTypeTraits< VkWin32KeyedMutexAcquireReleaseInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkImportSemaphoreWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkExportSemaphoreWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkD3D12FenceSubmitInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR; };
-	template<> struct VkTypeTraits< VkSemaphoreGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR; };
 	template<> struct VkTypeTraits< VkImportSemaphoreFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR; };
 	template<> struct VkTypeTraits< VkSemaphoreGetFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR; };
 	template<> struct VkTypeTraits< VkPhysicalDevicePushDescriptorPropertiesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PUSH_DESCRIPTOR_PROPERTIES_KHR; };
@@ -243,9 +256,6 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkSubpassBeginInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR; };
 	template<> struct VkTypeTraits< VkSubpassEndInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SUBPASS_END_INFO_KHR; };
 	template<> struct VkTypeTraits< VkSharedPresentSurfaceCapabilitiesKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR; };
-	template<> struct VkTypeTraits< VkImportFenceWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkExportFenceWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXPORT_FENCE_WIN32_HANDLE_INFO_KHR; };
-	template<> struct VkTypeTraits< VkFenceGetWin32HandleInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR; };
 	template<> struct VkTypeTraits< VkImportFenceFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR; };
 	template<> struct VkTypeTraits< VkFenceGetFdInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR; };
 	template<> struct VkTypeTraits< VkPhysicalDeviceSurfaceInfo2KHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR; };

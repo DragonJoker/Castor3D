@@ -182,7 +182,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
-		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const;
+		virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
 		 */

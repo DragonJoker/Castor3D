@@ -66,6 +66,11 @@ namespace castor
 
 			case EncodingMode::eUTF16:
 				mode += cuT( ", ccs=UTF-16LE" );
+				break;
+
+			default:
+				// Nothing to do here
+				break;
 			}
 		}
 
@@ -116,6 +121,10 @@ namespace castor
 			case OffsetMode::eEnd:
 				iReturn = castor::fileSeek( m_file, p_offset, SEEK_END );
 				m_cursor = getLength() - p_offset;
+				break;
+
+			default:
+				// Nothing to do here
 				break;
 			}
 		}

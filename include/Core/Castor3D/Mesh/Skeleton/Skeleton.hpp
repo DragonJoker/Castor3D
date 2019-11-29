@@ -31,7 +31,7 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API Skeleton( Skeleton && rhs ) = default;
-		C3D_API Skeleton & operator=( Skeleton && rhs ) = default;
+		C3D_API Skeleton & operator=( Skeleton && rhs ) = delete;
 		C3D_API Skeleton( Skeleton const & rhs ) = delete;
 		C3D_API Skeleton & operator=( Skeleton const & rhs ) = delete;
 		/**@}*/

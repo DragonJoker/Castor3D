@@ -1,3 +1,5 @@
+#include "Particle.hpp"
+
 namespace castor3d
 {
 	template< typename T, size_t Count >
@@ -385,6 +387,9 @@ namespace castor3d
 				auto value = parseValue< ParticleFormat::eVec4ui >( textValue );
 				particle.setValue< ParticleFormat::eVec4ui >( index, value );
 			}
+			break;
+
+		default:
 			break;
 		}
 	}

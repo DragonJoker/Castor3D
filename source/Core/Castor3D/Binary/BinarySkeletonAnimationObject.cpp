@@ -61,6 +61,9 @@ namespace castor3d
 			case SkeletonAnimationObjectType::eBone:
 				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -112,6 +115,9 @@ namespace castor3d
 					obj.getOwner()->addObject( node, obj.shared_from_this() );
 				}
 
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -179,6 +185,9 @@ namespace castor3d
 
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
+				break;
+
+			default:
 				break;
 			}
 		}

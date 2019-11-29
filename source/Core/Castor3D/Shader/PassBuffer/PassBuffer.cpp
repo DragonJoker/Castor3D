@@ -42,9 +42,8 @@ namespace castor3d
 		auto id = pass.getId();
 		CU_Require( id < m_passes.size() );
 		CU_Require( &pass == m_passes[id] );
-		auto it = m_passes.erase( m_passes.begin() + id );
 
-		for ( it; it != m_passes.end(); ++it )
+		for ( auto it = m_passes.erase( m_passes.begin() + id ); it != m_passes.end(); ++it )
 		{
 			( *it )->setId( id );
 			++id;

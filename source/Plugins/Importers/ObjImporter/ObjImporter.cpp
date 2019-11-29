@@ -295,10 +295,6 @@ namespace Obj
 		Point3f scale( 1, 1, 1 );
 		Point3f turbulence( 0, 0, 0 );
 		doParseTexParams( value, offset.ptr(), scale.ptr(), turbulence.ptr() );
-		Logger::logDebug( makeStringStream() << cuT( "-	Texture :    " ) + value );
-		Logger::logDebug( makeStringStream() << cuT( "-	Offset :     " ) << offset );
-		Logger::logDebug( makeStringStream() << cuT( "-	Scale :      " ) << scale );
-		Logger::logDebug( makeStringStream() << cuT( "-	Turbulence : " ) << turbulence );
 		castor3d::TextureUnitSPtr result;
 
 		if ( !value.empty() )

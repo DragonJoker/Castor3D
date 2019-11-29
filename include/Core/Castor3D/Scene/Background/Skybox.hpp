@@ -346,7 +346,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::doUpdate
 		*/
-		void doUpdate( Camera const & camera );
+		void doUpdate( Camera const & camera )override;
 
 	private:
 		bool doInitialiseTexture();

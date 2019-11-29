@@ -118,6 +118,9 @@ namespace GuiCommon
 				group->stopAnimation( m_name );
 				m_groupAnim.m_state = AnimationState::eStopped;
 				break;
+
+			default:
+				break;
 			}
 
 			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )] );

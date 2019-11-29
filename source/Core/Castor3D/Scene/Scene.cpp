@@ -923,6 +923,9 @@ namespace castor3d
 		case FogType::eSquaredExponential:
 			result |= SceneFlag::eFogSquaredExponential;
 			break;
+
+		default:
+			break;
 		}
 
 		return result;

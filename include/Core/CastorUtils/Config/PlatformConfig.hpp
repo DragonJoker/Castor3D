@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #	define CU_PlatformLinux
 #elif defined( _WIN32 )
 #	define CU_PlatformWindows
+#elif defined( __APPLE__ )
+#	define CU_PlatformApple
 #endif
 
 #if defined( CU_PlatformWindows )
@@ -20,12 +22,15 @@ See LICENSE file in root folder
 #	endif
 #	define CU_SharedLibExt cuT( "dll")
 #	define dlerror() ::getLastError()
+#elif defined( CU_PlatformApple )
+#	define CU_SharedLibExt cuT( "dylib")
+#	define CU_API
 #else
 #	define CU_SharedLibExt cuT( "so")
 #	define CU_API
 #endif
 
-#if !defined( CU_PlatformAndroid ) && !defined( CU_PlatformLinux ) && !defined( CU_PlatformWindows )
+#if !defined( CU_PlatformAndroid ) && !defined( CU_PlatformLinux ) && !defined( CU_PlatformWindows ) && !defined( CU_PlatformApple )
 #	error "Yet unsupported OS"
 #endif
 

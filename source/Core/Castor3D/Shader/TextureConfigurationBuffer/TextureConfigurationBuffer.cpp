@@ -137,9 +137,8 @@ namespace castor3d
 		auto id = unit.getId();
 		CU_Require( id < m_configurations.size() );
 		CU_Require( &unit == m_configurations[id] );
-		auto it = m_configurations.erase( m_configurations.begin() + id );
 
-		for ( it; it != m_configurations.end(); ++it )
+		for ( auto it = m_configurations.erase( m_configurations.begin() + id ); it != m_configurations.end(); ++it )
 		{
 			( *it )->setId( id );
 			++id;

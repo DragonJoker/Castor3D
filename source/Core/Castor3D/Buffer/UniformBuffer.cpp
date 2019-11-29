@@ -121,18 +121,18 @@ namespace castor3d
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
-	inline void UniformBufferBase::cleanup()
+	void UniformBufferBase::cleanup()
 	{
 		CU_Require( m_renderSystem.hasCurrentRenderDevice() );
 		m_buffer.reset();
 	}
 
-	inline bool UniformBufferBase::hasAvailable()const
+	bool UniformBufferBase::hasAvailable()const
 	{
 		return !m_available.empty();
 	}
 
-	inline uint32_t UniformBufferBase::allocate()
+	uint32_t UniformBufferBase::allocate()
 	{
 		CU_Require( hasAvailable() );
 		uint32_t result = *m_available.begin();
@@ -140,12 +140,12 @@ namespace castor3d
 		return result;
 	}
 
-	inline void UniformBufferBase::deallocate( uint32_t offset )
+	void UniformBufferBase::deallocate( uint32_t offset )
 	{
 		m_available.insert( offset );
 	}
 
-	inline void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
+	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, const void * data
@@ -171,7 +171,7 @@ namespace castor3d
 		m_transferFence->reset();
 	}
 
-	inline void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
+	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
 		, ashes::CommandBuffer const & commandBuffer
 		, const void * data
 		, size_t size
@@ -215,7 +215,7 @@ namespace castor3d
 			, index );
 	}
 
-	inline void UniformBufferBase::download( ashes::BufferBase const & stagingBuffer
+	void UniformBufferBase::download( ashes::BufferBase const & stagingBuffer
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, void * data

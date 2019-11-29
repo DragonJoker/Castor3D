@@ -38,7 +38,7 @@ namespace castor3d
 		C3D_API BillboardUbo( BillboardUbo const & ) = delete;
 		C3D_API BillboardUbo & operator=( BillboardUbo const & ) = delete;
 		C3D_API BillboardUbo( BillboardUbo && ) = default;
-		C3D_API BillboardUbo & operator=( BillboardUbo && ) = default;
+		C3D_API BillboardUbo & operator=( BillboardUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

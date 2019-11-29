@@ -23,6 +23,9 @@ add_target(
 	"${wxWidgets_CFLAGS}"
 	"${wxWidgets_CXXFLAGS}"
 )
+target_compile_definitions( ${PROJECT_NAME} PRIVATE
+	${wxWidgets_DEFINITIONS}
+)
 # Copying internationalisation files (french, for now) for ImgConverter
 copy_languages( ${PROJECT_NAME} ${CASTOR_SOURCE_DIR}/internationalisation/${PROJECT_NAME} ${PROJECT_NAME} "fr" )
 

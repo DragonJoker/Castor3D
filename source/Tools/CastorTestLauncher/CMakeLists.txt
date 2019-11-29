@@ -26,6 +26,9 @@ add_target(
 	"${wxWidgets_CFLAGS}"
 	"${wxWidgets_CXXFLAGS}"
 )
+target_compile_definitions( ${PROJECT_NAME} PRIVATE
+	${wxWidgets_DEFINITIONS}
+)
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tools" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

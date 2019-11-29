@@ -1,11 +1,12 @@
 #include "CastorUtils/Config/PlatformConfig.hpp"
 
-#if defined( CU_PlatformLinux )
+#if defined( CU_PlatformApple )
 
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Miscellaneous/CpuInformations.hpp"
 
 #include <cpuid.h>
+#include <sys/sysctl.h>
 
 namespace castor
 {
@@ -26,12 +27,29 @@ namespace castor
 
 		uint32_t getCoreCount()
 		{
-			char res[128];
-			FILE * fp = popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" );
-			auto read = fread( res, 1, sizeof( res ) - 1, fp );
-			CU_Ensure( read && read < sizeof( res ) );
-			pclose( fp );
-			return uint32_t( res[0] );
+			int mib[4];
+			int numCPU;
+			size_t len = sizeof( numCPU ); 
+
+			/* set the mib for hw.ncpu */
+			mib[0] = CTL_HW;
+			mib[1] = HW_AVAILCPU;
+
+			/* get the number of CPUs from the system */
+			sysctl( mib, 2, &numCPU, &len, NULL, 0 );
+
+			if ( numCPU < 1 )
+			{
+				mib[1] = HW_NCPU;
+				sysctl( mib, 2, &numCPU, &len, NULL, 0 );
+
+				if ( numCPU < 1 )
+				{
+					numCPU = 1;
+				}
+			}
+
+			return uint32_t( numCPU );
 		}
 	}
 }

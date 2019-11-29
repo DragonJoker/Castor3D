@@ -118,6 +118,7 @@ namespace castor
 		*/
 		struct SFontImpl
 		{
+			virtual ~SFontImpl() = default;
 			/**
 			 *\~english
 			 *\brief		Initialises the loader

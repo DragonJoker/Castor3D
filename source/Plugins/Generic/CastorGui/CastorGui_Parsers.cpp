@@ -86,6 +86,10 @@ namespace CastorGui
 				case ControlType::eButton:
 					m_button = std::static_pointer_cast< ButtonCtrl >( top );
 					break;
+
+				default:
+					CU_Failure( "Unsupported Control Type" );
+					break;
 				}
 			}
 		}

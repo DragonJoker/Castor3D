@@ -35,6 +35,10 @@ namespace CastorGui
 		case MaterialType::eSpecularGlossiness:
 			static_cast< SpecularGlossinessPbrPass & >( pass ).setDiffuse( colour );
 			break;
+
+		default:
+			CU_Failure( "Unsupported Material Type" );
+			break;
 		}
 	}
 
@@ -54,6 +58,10 @@ namespace CastorGui
 
 		case MaterialType::eSpecularGlossiness:
 			result = static_cast< SpecularGlossinessPbrPass const & >( pass ).getDiffuse();
+			break;
+
+		default:
+			CU_Failure( "Unsupported Material Type" );
 			break;
 		}
 

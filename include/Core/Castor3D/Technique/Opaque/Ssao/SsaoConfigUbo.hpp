@@ -83,7 +83,7 @@ namespace castor3d
 		C3D_API SsaoConfigUbo( SsaoConfigUbo const & ) = delete;
 		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo const & ) = delete;
 		C3D_API SsaoConfigUbo( SsaoConfigUbo && ) = default;
-		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && ) = default;
+		C3D_API SsaoConfigUbo & operator=( SsaoConfigUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

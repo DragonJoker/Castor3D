@@ -7,7 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Texture/TextureConfiguration.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
-#include <CastorUtils/Math/Coords.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {
@@ -437,8 +438,7 @@ namespace castor3d
 		};
 	}
 
-	template< template< typename, size_t > typename SizeT >
-	inline VkExtent2D makeExtent2D( SizeT< uint32_t, 2 > const & size )
+	inline VkExtent2D makeExtent2D( castor::Coords2ui const & size )
 	{
 		return VkExtent2D
 		{
@@ -447,8 +447,16 @@ namespace castor3d
 		};
 	}
 
-	template< template< typename, size_t > typename SizeT >
-	inline VkExtent3D makeExtent3D( SizeT< uint32_t, 2 > const & size )
+	inline VkExtent2D makeExtent2D( castor::Point2ui const & size )
+	{
+		return VkExtent2D
+		{
+			size[0],
+			size[1],
+		};
+	}
+
+	inline VkExtent3D makeExtent3D( castor::Coords2ui const & size )
 	{
 		return VkExtent3D
 		{
@@ -458,8 +466,17 @@ namespace castor3d
 		};
 	}
 
-	template< template< typename, size_t > typename PosT >
-	inline VkOffset2D makeOffset2D( PosT< int32_t, 2 > const & pos )
+	inline VkExtent3D makeExtent3D( castor::Point2ui const & size )
+	{
+		return VkExtent3D
+		{
+			size[0],
+			size[1],
+			1u,
+		};
+	}
+
+	inline VkOffset2D makeOffset2D( castor::Coords2i const & pos )
 	{
 		return VkOffset2D
 		{
@@ -468,8 +485,16 @@ namespace castor3d
 		};
 	}
 
-	template< template< typename, size_t > typename PosT >
-	inline VkOffset3D makeOffset3D( PosT< int32_t, 2 > const & pos )
+	inline VkOffset2D makeOffset2D( castor::Point2i const & pos )
+	{
+		return VkOffset2D
+		{
+			pos[0],
+			pos[1],
+		};
+	}
+
+	inline VkOffset3D makeOffset3D( castor::Coords2i const & pos )
 	{
 		return VkOffset3D
 		{
@@ -479,8 +504,17 @@ namespace castor3d
 		};
 	}
 
-	template< template< typename, size_t > typename SizeT >
-	inline VkViewport makeViewport( SizeT< uint32_t, 2 > const & size
+	inline VkOffset3D makeOffset3D( castor::Point2i const & pos )
+	{
+		return VkOffset3D
+		{
+			pos[0],
+			pos[1],
+			0u,
+		};
+	}
+
+	inline VkViewport makeViewport( castor::Coords2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -490,10 +524,18 @@ namespace castor3d
 			, zMax );
 	}
 
-	template< template< typename, size_t > typename PosT
-		, template< typename, size_t > typename SizeT >
-	inline VkViewport makeViewport( PosT< int32_t, 2 > const & pos
-		, SizeT< uint32_t, 2 > const & size
+	inline VkViewport makeViewport( castor::Point2ui const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( {}
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	inline VkViewport makeViewport( castor::Coords2i const & pos
+		, castor::Coords2ui const & size
 		, float zMin = 0.0f
 		, float zMax = 1.0f )
 	{
@@ -503,17 +545,74 @@ namespace castor3d
 			, zMax );
 	}
 
-	template< template< typename, size_t > typename SizeT >
-	inline VkRect2D makeScissor( SizeT< uint32_t, 2 > const & size )
+	inline VkViewport makeViewport( castor::Point2i const & pos
+		, castor::Coords2ui const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( makeOffset2D( pos )
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	inline VkViewport makeViewport( castor::Coords2i const & pos
+		, castor::Point2ui const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( makeOffset2D( pos )
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	inline VkViewport makeViewport( castor::Point2i const & pos
+		, castor::Point2ui const & size
+		, float zMin = 0.0f
+		, float zMax = 1.0f )
+	{
+		return ashes::makeViewport( makeOffset2D( pos )
+			, makeExtent2D( size )
+			, zMin
+			, zMax );
+	}
+
+	inline VkRect2D makeScissor( castor::Coords2ui const & size )
 	{
 		return ashes::makeScissor( {}
 		, makeExtent2D( size ) );
 	}
 
-	template< template< typename, size_t > typename PosT
-		, template< typename, size_t > typename SizeT >
-	inline VkRect2D makeScissor( PosT< int32_t, 2 > const & pos
-		, SizeT< uint32_t, 2 > const & size )
+	inline VkRect2D makeScissor( castor::Point2ui const & size )
+	{
+		return ashes::makeScissor( {}
+		, makeExtent2D( size ) );
+	}
+
+	inline VkRect2D makeScissor( castor::Coords2i const & pos
+		, castor::Coords2ui const & size )
+	{
+		return ashes::makeScissor( makeOffset2D( pos )
+			, makeExtent2D( size ) );
+	}
+
+	inline VkRect2D makeScissor( castor::Point2i const & pos
+		, castor::Coords2ui const & size )
+	{
+		return ashes::makeScissor( makeOffset2D( pos )
+			, makeExtent2D( size ) );
+	}
+
+	inline VkRect2D makeScissor( castor::Coords2i const & pos
+		, castor::Point2ui const & size )
+	{
+		return ashes::makeScissor( makeOffset2D( pos )
+			, makeExtent2D( size ) );
+	}
+
+	inline VkRect2D makeScissor( castor::Point2i const & pos
+		, castor::Point2ui const & size )
 	{
 		return ashes::makeScissor( makeOffset2D( pos )
 			, makeExtent2D( size ) );

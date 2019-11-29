@@ -407,6 +407,14 @@ namespace GuiCommon
 
 		return ashes::WindowHandle( std::make_unique< ashes::IXWindowHandle >( drawable, display ) );
 
+#elif defined( CU_PlatformApple )
+
+		return ashes::WindowHandle( std::make_unique< ashes::IMacOsWindowHandle >( window->GetHandle() ) );
+
+#else
+
+#	error "Yet unsupported platform"
+
 #endif
 	}
 

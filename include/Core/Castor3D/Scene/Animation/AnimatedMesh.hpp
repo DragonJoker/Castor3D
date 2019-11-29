@@ -29,7 +29,7 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API AnimatedMesh( AnimatedMesh && rhs ) = default;
-		C3D_API AnimatedMesh & operator=( AnimatedMesh && rhs ) = default;
+		C3D_API AnimatedMesh & operator=( AnimatedMesh && rhs ) = delete;
 		C3D_API AnimatedMesh( AnimatedMesh const & rhs ) = delete;
 		C3D_API AnimatedMesh & operator=( AnimatedMesh const & rhs ) = delete;
 		/**@}*/

@@ -708,7 +708,7 @@ namespace castor3d
 		, std::string const & name )
 	{
 		using VkType = typename AshesTypeTraits< AshesType >::VkType;
-		using DebugTypeTraits = typename AshesDebugTypeTraits< AshesType >;
+		using DebugTypeTraits = AshesDebugTypeTraits< AshesType >;
 		setDebugObjectName( device
 			, uint64_t( VkType( object ) )
 #if VK_EXT_debug_utils

@@ -333,6 +333,9 @@ namespace castor3d
 				p_uvBottom = real( p_absolute[3] / p_size[1] );
 			} );
 			break;
+
+		default:
+			break;
 		}
 	}
 

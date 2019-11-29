@@ -29,7 +29,7 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone && rhs ) = default;
-		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && rhs ) = default;
+		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone && rhs ) = delete;
 		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstanceBone const & rhs ) = delete;
 		C3D_API SkeletonAnimationInstanceBone & operator=( SkeletonAnimationInstanceBone const & rhs ) = delete;
 		/**@}*/

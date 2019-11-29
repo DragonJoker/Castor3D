@@ -34,7 +34,7 @@ namespace castor3d
 		C3D_API GpInfoUbo( GpInfoUbo const & ) = delete;
 		C3D_API GpInfoUbo & operator=( GpInfoUbo const & ) = delete;
 		C3D_API GpInfoUbo( GpInfoUbo && ) = default;
-		C3D_API GpInfoUbo & operator=( GpInfoUbo && ) = default;
+		C3D_API GpInfoUbo & operator=( GpInfoUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

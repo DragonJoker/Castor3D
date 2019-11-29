@@ -77,6 +77,8 @@ namespace castor3d
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
 				stream << "Verbose";
 				break;
+			default:
+				break;
 			}
 
 			if ( ashes::checkFlag( messageTypes, VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT ) )
@@ -115,6 +117,8 @@ namespace castor3d
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
 				castor::Logger::logDebug( stream );
+				break;
+			default:
 				break;
 			}
 

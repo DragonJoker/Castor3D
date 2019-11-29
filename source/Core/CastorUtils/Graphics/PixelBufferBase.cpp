@@ -225,6 +225,10 @@ namespace castor
 		case PixelFormat::eS8_UINT:
 			result = std::make_shared< PxBuffer< PixelFormat::eS8_UINT > >( size, buffer, bufferFormat );
 			break;
+
+		default:
+			CU_Failure( "Unsupported PixelFormat" );
+			break;
 		}
 
 		return result;

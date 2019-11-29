@@ -49,7 +49,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && rhs ) = default;
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

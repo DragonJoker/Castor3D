@@ -32,7 +32,7 @@ namespace castor3d
 		C3D_API HdrConfigUbo( HdrConfigUbo const & ) = delete;
 		C3D_API HdrConfigUbo & operator=( HdrConfigUbo const & ) = delete;
 		C3D_API HdrConfigUbo( HdrConfigUbo && ) = default;
-		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && ) = default;
+		C3D_API HdrConfigUbo & operator=( HdrConfigUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

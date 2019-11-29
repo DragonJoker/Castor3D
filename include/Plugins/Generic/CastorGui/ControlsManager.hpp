@@ -206,7 +206,7 @@ namespace CastorGui
 		*\param[in] p_position
 		*	The mouse position
 		*/
-		castor3d::EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & p_position )const;
+		castor3d::EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & p_position )const override;
 		/**
 		*\brief
 		*	Updates the z-index ordered controls array

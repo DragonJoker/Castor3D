@@ -36,15 +36,15 @@ namespace light_streaks
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		virtual bool doInitialise( castor3d::RenderPassTimer const & timer );
+		virtual bool doInitialise( castor3d::RenderPassTimer const & timer )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
-		virtual void doCleanup();
+		virtual void doCleanup()override;
 		/**
 		 *\copydoc		castor3d::PostEffect::doWriteInto
 		 */
-		virtual bool doWriteInto( castor::TextFile & file, castor::String const & tabs );
+		virtual bool doWriteInto( castor::TextFile & file, castor::String const & tabs )override;
 
 	public:
 		static castor::String const Type;

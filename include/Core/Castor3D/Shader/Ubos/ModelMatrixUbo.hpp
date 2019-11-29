@@ -41,7 +41,7 @@ namespace castor3d
 		C3D_API ModelMatrixUbo( ModelMatrixUbo const & ) = delete;
 		C3D_API ModelMatrixUbo & operator=( ModelMatrixUbo const & ) = delete;
 		C3D_API ModelMatrixUbo( ModelMatrixUbo && ) = default;
-		C3D_API ModelMatrixUbo & operator=( ModelMatrixUbo && ) = default;
+		C3D_API ModelMatrixUbo & operator=( ModelMatrixUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english

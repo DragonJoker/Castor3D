@@ -24,6 +24,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		virtual ~Importer() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor

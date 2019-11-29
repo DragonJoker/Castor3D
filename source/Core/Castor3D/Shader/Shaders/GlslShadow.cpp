@@ -142,6 +142,9 @@ namespace castor3d
 			case ShadowType::eVariance:
 				doDeclareChebyshevUpperBound();
 				break;
+
+			default:
+				break;
 			}
 
 			doDeclareGetLightSpacePosition();
@@ -176,6 +179,9 @@ namespace castor3d
 				doDeclareGetShadowOffset();
 				doDeclareChebyshevUpperBound();
 				break;
+
+			default:
+				break;
 			}
 
 			doDeclareComputeOnePointShadow( type );
@@ -206,6 +212,9 @@ namespace castor3d
 
 			case ShadowType::eVariance:
 				doDeclareChebyshevUpperBound();
+				break;
+
+			default:
 				break;
 			}
 

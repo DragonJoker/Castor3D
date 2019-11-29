@@ -35,7 +35,7 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API Animation( Animation && rhs ) = default;
-		C3D_API Animation & operator=( Animation && rhs ) = default;
+		C3D_API Animation & operator=( Animation && rhs ) = delete;
 		C3D_API Animation( Animation const & rhs ) = delete;
 		C3D_API Animation & operator=( Animation const & rhs ) = delete;
 		/**@}*/

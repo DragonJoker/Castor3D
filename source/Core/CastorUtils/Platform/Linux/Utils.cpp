@@ -10,10 +10,6 @@
 #	include <X11/extensions/Xinerama.h>
 #endif
 
-#define cpuid( func, ax, bx, cx, dx )\
-	__asm__ __volatile__ ( "cpuid":\
-	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
-
 namespace castor
 {
 	namespace System

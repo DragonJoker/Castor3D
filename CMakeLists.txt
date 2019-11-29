@@ -243,8 +243,10 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( external/zlib )
 		set_property( TARGET zlib PROPERTY FOLDER "External" )
 
-		add_subdirectory( external/FreeType )
-		set_property( TARGET FreeType PROPERTY FOLDER "External" )
+		if( NOT APPLE )
+			add_subdirectory( external/FreeType )
+			set_property( TARGET FreeType PROPERTY FOLDER "External" )
+		endif ()
 	endif ()
 
 	add_subdirectory( source )

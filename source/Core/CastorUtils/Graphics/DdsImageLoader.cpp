@@ -677,6 +677,8 @@ namespace castor
 						//case DXGI_FORMAT_R16G16B16A16_UINT:
 						//	format = PixelFormat::eR16G16BA16_UINT;
 						//	break;
+						default:
+							break;
 						}
 						break;
 					}

@@ -345,6 +345,9 @@ namespace castor3d
 
 					faceCount = 0u;
 					break;
+
+				default:
+					break;
 				}
 			}
 		}

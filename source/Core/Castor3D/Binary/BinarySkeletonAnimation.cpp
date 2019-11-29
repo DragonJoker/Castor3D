@@ -29,6 +29,9 @@ namespace castor3d
 			case SkeletonAnimationObjectType::eBone:
 				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -87,6 +90,9 @@ namespace castor3d
 					obj.addKeyFrame( std::move( keyFrame ) );
 				}
 
+				break;
+
+			default:
 				break;
 			}
 		}

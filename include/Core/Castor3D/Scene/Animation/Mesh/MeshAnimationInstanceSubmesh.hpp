@@ -31,7 +31,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh && rhs ) = default;
-		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = default;
+		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh && rhs ) = delete;
 		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstanceSubmesh const & rhs ) = delete;
 		C3D_API MeshAnimationInstanceSubmesh & operator=( MeshAnimationInstanceSubmesh const & rhs ) = delete;
 		/**@}*/

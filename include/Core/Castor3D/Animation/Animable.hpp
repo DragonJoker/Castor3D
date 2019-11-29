@@ -52,7 +52,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API Animable & operator=( Animable && rhs ) = default;
+		C3D_API Animable & operator=( Animable && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
