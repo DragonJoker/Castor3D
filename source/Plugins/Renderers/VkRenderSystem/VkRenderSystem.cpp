@@ -19,7 +19,7 @@
 #	include "spirv_glsl.hpp"
 #endif
 
-#define C3DVkRenderer_DebugSpirV 1
+#define C3DVkRenderer_DebugSpirV 0
 
 using namespace castor;
 

@@ -21,6 +21,10 @@ add_target(
 	"Castor3D"
 	"${GeneratorLibraries}"
 )
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
+)
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generators" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

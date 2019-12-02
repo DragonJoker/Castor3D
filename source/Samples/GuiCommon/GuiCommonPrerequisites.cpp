@@ -11,6 +11,8 @@
 #	undef Bool
 #	undef Always
 using Bool = int;
+#elif defined( CU_PlatformApple )
+#	include "GuiCommon/MetalLayer.h"
 #endif
 
 #include <Castor3D/Engine.hpp>
@@ -409,7 +411,9 @@ namespace GuiCommon
 
 #elif defined( CU_PlatformApple )
 
-		return ashes::WindowHandle( std::make_unique< ashes::IMacOsWindowHandle >( window->GetHandle() ) );
+		auto handle = window->GetHandle();
+		makeViewMetalCompatible( handle );
+		return ashes::WindowHandle( std::make_unique< ashes::IMacOsWindowHandle >( handle ) );
 
 #else
 

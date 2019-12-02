@@ -31,10 +31,14 @@ if( ASSIMP_FOUND )
 	add_target(
 		${PROJECT_NAME}
 		plugin
-	${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
 		"Castor3D"
 		"${ImporterLibraries};${ASSIMPLibraries}"
+	)
+	add_library( castor::${PROJECT_NAME}
+		ALIAS
+		${PROJECT_NAME}
 	)
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Importers" )

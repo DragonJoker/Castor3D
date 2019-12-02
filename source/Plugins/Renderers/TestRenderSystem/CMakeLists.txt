@@ -8,13 +8,13 @@ set( Castor3DBinsDependencies
 
 set( AshesLibraries
 	${AshesLibraries}
-	TestRenderer
+	ashes::TestRenderer
 	PARENT_SCOPE
 )
 
 set( ShaderWriterLibraries
 	${ShaderWriterLibraries}
-	CompilerGlsl
+	sdw::CompilerGlsl
 	PARENT_SCOPE
 )
 
@@ -40,6 +40,10 @@ add_target(
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DTestRenderer_STATIC"
 	"-DTestRenderer_STATIC"
+)
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

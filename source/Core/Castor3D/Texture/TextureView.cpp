@@ -201,7 +201,7 @@ namespace castor3d
 					dstFormat = PixelFormat::eR32G32B32A32_SFLOAT;
 					break;
 				default:
-					CU_Failure( "Unsupported VkFormat" );
+					// No conversion
 					break;
 				}
 

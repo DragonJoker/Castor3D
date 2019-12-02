@@ -192,6 +192,10 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		""
 		"${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp"
 	)
+	add_library( castor::${PROJECT_NAME}
+		ALIAS
+		${PROJECT_NAME}
+	)
 
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME} Dbghelp )

@@ -23,6 +23,10 @@ add_target(
 	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
+)
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

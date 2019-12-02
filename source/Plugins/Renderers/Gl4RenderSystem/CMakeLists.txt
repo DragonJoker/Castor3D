@@ -8,13 +8,13 @@ set( Castor3DBinsDependencies
 
 set( AshesLibraries
 	${AshesLibraries}
-	Gl4Renderer
+	ashes::Gl4Renderer
 	PARENT_SCOPE
 )
 
 set( ShaderWriterLibraries
 	${ShaderWriterLibraries}
-	CompilerGlsl
+	sdw::CompilerGlsl
 	PARENT_SCOPE
 )
 
@@ -40,6 +40,10 @@ add_target(
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"-DGl4Renderer_STATIC"
 	"-DGl4Renderer_STATIC"
+)
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

@@ -23,6 +23,10 @@ add_target(
 	${CASTOR_SOURCE_DIR}/include/Plugins/Dividers/${PROJECT_NAME}/LoopPch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}/LoopPch.cpp
 )
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
+)
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Dividers" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

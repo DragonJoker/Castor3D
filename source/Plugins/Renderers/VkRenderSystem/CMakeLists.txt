@@ -8,14 +8,14 @@ SET( Castor3DBinsDependencies
 
 set( AshesLibraries
 	${AshesLibraries}
-	VkRenderer
+	ashes::VkRenderer
 	PARENT_SCOPE
 )
 
 set( ShaderWriterLibraries
 	${ShaderWriterLibraries}
-	CompilerSpirV
-	CompilerGlsl
+	sdw::CompilerSpirV
+	sdw::CompilerGlsl
 	PARENT_SCOPE
 )
 
@@ -66,6 +66,10 @@ add_target(
 	"-DVkRenderer_STATIC"
 	""
 	"${SPIRV_FILES}"
+)
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

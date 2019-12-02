@@ -35,6 +35,13 @@ include_directories(
 	${CASTOR_BINARY_DIR}/source/Samples
 )
 
+if ( APPLE )
+	set( OBJC_SOURCE_FILES
+		MetalLayer.mm
+		MetalLayer.h
+	)
+endif ()
+
 add_target(
 	${PROJECT_NAME}
 	lib
@@ -46,6 +53,12 @@ add_target(
 	${CASTOR_SOURCE_DIR}/source/Samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
 	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
+	""
+	${OBJC_SOURCE_FILES}
+)
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
 )
 target_compile_definitions( ${PROJECT_NAME} PRIVATE
 	${wxWidgets_DEFINITIONS}

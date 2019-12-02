@@ -48,6 +48,10 @@ add_target(
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
+)
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/*Prerequisites*.hpp

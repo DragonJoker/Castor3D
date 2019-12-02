@@ -352,9 +352,9 @@ namespace castor3d
 
 						try
 						{
-							getDevice().presentQueue->present( ashes::SwapChainCRefArray{ *m_swapChain }
-								, ashes::UInt32Array{ size_t( 1u ), resources->imageIndex }
-								, ashes::SemaphoreCRefArray{ *resources->finishedRenderingSemaphore } );
+							getDevice().presentQueue->present( *m_swapChain
+								, resources->imageIndex
+								, *resources->finishedRenderingSemaphore );
 						}
 						catch ( ashes::Exception & exc )
 						{

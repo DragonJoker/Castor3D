@@ -17,11 +17,18 @@ function( ToolsBuild )
 	if( ${CASTOR_BUILDGRP_TOOL} )
 		if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER}
 			OR ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
-			if( NOT WIN32 )
+			if( APPLE )
+				set( GTK2_FOUND TRUE )
+				set( CastorMinLibraries
+					${CastorMinLibraries}
+					"-framework AppKit"
+					"-framework QuartzCore"
+				)				
+			elseif( WIN32 )
+				set( GTK2_FOUND TRUE )
+			else()
 				find_package( GTK2 )
 				include_directories( ${GTK2_INCLUDE_DIRS} )
-			else()
-				set( GTK2_FOUND TRUE )
 			endif()
 
 			#we look for wxWidgets

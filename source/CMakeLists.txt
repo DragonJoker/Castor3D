@@ -54,10 +54,11 @@ if( Vulkan_FOUND )
 		endif ()
 		add_subdirectory( ../${ASHES_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 		set( AshesLibraries
-			ashes
-			ashespp
+			ashes::common
+			ashes::ashes
+			ashes::ashespp
 		)
-		set_property( TARGET common PROPERTY FOLDER "External/Ashes/Core" )
+		set_property( TARGET ashes_common PROPERTY FOLDER "External/Ashes/Core" )
 		set_property( TARGET ashes PROPERTY FOLDER "External/Ashes/Core" )
 		set_property( TARGET ashespp PROPERTY FOLDER "External/Ashes/Core" )
 		if ( CASTOR_BUILDGRP_RENDERER )
@@ -78,6 +79,9 @@ if( Vulkan_FOUND )
 			endif ()
 			if ( TARGET RendererCommon )
 				set_property( TARGET RendererCommon PROPERTY FOLDER "External/Ashes/Renderers" )
+			endif ()
+			if ( TARGET GlRendererCommon )
+				set_property( TARGET ashes::GlRendererCommon PROPERTY FOLDER "External/Ashes/Renderers" )
 			endif ()
 		endif ()
 
@@ -101,7 +105,7 @@ if( Vulkan_FOUND )
 			set( SDW_BUILD_EXPORTERS FALSE )
 		else ()
 			set( SDW_BUILD_EXPORTERS TRUE )
-			if ( CASTOR_BUILD_RENDERER_OGL3 OR CASTOR_BUILD_RENDERER_OGL4 )
+			if ( CASTOR_BUILD_RENDERER_OGL3 OR CASTOR_BUILD_RENDERER_OGL4  OR CASTOR_BUILD_RENDERER_VKN )
 				set( SDW_BUILD_EXPORTER_GLSL ON )
 			else ()
 				set( SDW_BUILD_EXPORTER_GLSL OFF )
