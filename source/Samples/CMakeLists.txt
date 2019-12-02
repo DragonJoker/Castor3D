@@ -34,7 +34,7 @@ function( SamplesBuild )
 					${CastorMinLibraries}
 					"-framework AppKit"
 					"-framework QuartzCore"
-				)				
+				)
 			elseif ( WIN32 )
 				set( GTK2_FOUND TRUE )
 			else()

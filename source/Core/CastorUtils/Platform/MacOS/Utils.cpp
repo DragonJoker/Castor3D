@@ -5,16 +5,16 @@
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 #include "CastorUtils/Graphics/Size.hpp"
 
+extern void getDisplaySize( uint32_t * w, uint32_t * h );
+
 namespace castor
 {
 	namespace System
 	{
 		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
-			// auto id = CGMainDisplayID();
-			// auto w = CGDisplayPixelsWide( id );
-			// auto h = CGDisplayPixelsHigh( id );
-			// p_size = Size{ uint32_t( w), uint32_t( h ) };
+			uint32_t w, h;
+			getDisplaySize( &w, &h );
 			return false;
 		}
 

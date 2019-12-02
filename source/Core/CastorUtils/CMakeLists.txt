@@ -90,6 +90,10 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 			cpufeatures
 		)
 	elseif( APPLE )
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			"-framework CoreGraphics"
+		)
 	elseif( WIN32 )
 	else ()
 		find_package( X11 )
@@ -178,6 +182,17 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 
 	include_directories( ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME} )
 
+	set( ADDITIONAL_SOURCE_FILES
+		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
+	)
+
+	if ( APPLE )
+		set( ADDITIONAL_SOURCE_FILES
+			${ADDITIONAL_SOURCE_FILES}
+			Platform/MacOS/DisplaySize.mm
+		)
+	endif ()
+
 	add_target(
 		${PROJECT_NAME}
 		api_dll
@@ -190,7 +205,7 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		""
 		""
 		""
-		"${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp"
+		"${ADDITIONAL_SOURCE_FILES}"
 	)
 	add_library( castor::${PROJECT_NAME}
 		ALIAS
