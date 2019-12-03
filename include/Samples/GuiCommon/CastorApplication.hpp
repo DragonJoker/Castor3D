@@ -65,6 +65,12 @@ namespace GuiCommon
 			, uint32_t steps
 			, castor3d::Version version
 			, castor::String rendererType = castor3d::RENDERER_TYPE_UNDEFINED );
+
+		static void assertHandler( wxString const & file
+			, int line
+			, wxString const & func
+			, wxString const & cond
+			, wxString const & msg );
 		/**
 		 *\~english
 		 *\return		The application name.
@@ -157,14 +163,19 @@ namespace GuiCommon
 		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plug-ins.
 		 *\return		Si false, l'application s'arrêtera.
 		 */
-		virtual bool OnInit();
+		bool OnInit()override;
 		/**
 		 *\~english
 		 *\brief		Cleans up the application.
 		 *\~french
 		 *\brief		Nettoie l'application.
 		 */
-		virtual int OnExit();
+		int OnExit()override;
+		void OnAssertFailure( const wxChar * file
+			, int line
+			, const wxChar * func
+			, const wxChar * cond
+			, const wxChar * msg )override;
 		/**
 		 *\~english
 		 *\brief		Used to add application specific images to ImagesLoader.

@@ -12,6 +12,7 @@
 #include <GuiCommon/xpms/export.xpm>
 #include <GuiCommon/xpms/log.xpm>
 #include <GuiCommon/xpms/mat_blanc.xpm>
+#include <GuiCommon/xpms/print_screen.xpm>
 #include <GuiCommon/xpms/properties.xpm>
 #include <GuiCommon/xpms/scene_blanc.xpm>
 
@@ -42,6 +43,7 @@ namespace CastorViewer
 			, CastorViewer::getVersion() }
 		, m_mainFrame( nullptr )
 	{
+		wxSetAssertHandler( &CastorApplication::assertHandler );
 	}
 
 	void CastorViewerApp::doLoadAppImages()
@@ -51,6 +53,7 @@ namespace CastorViewer
 		ImagesLoader::addBitmap( eBMP_EXPORT, export_xpm );
 		ImagesLoader::addBitmap( eBMP_LOGS, log_xpm );
 		ImagesLoader::addBitmap( eBMP_PROPERTIES, properties_xpm );
+		ImagesLoader::addBitmap( eBMP_PRINTSCREEN, print_screen_xpm );
 	}
 
 	wxWindow * CastorViewerApp::doInitialiseMainFrame( GuiCommon::SplashScreen & splashScreen )

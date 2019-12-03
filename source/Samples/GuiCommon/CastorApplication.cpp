@@ -105,9 +105,19 @@ namespace GuiCommon
 		, m_splashScreen{ nullptr }
 		, m_version{ std::move( version ) }
 	{
+		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
 		XInitThreads();
 #endif
+	}
+
+	void CastorApplication::assertHandler( wxString const & file
+		, int line
+		, wxString const & func
+		, wxString const & cond
+		, wxString const & msg )
+	{
+		std::clog << file << ":" << line << "(" << func << ") Assrtion failed (" << cond << ") " << msg << std::endl;
 	}
 
 	bool CastorApplication::OnInit()
@@ -118,6 +128,7 @@ namespace GuiCommon
 
 #endif
 
+		wxSetAssertHandler( &CastorApplication::assertHandler );
 		bool result = doParseCommandLine();
 		wxDisplay display;
 		wxRect rect = display.GetClientArea();
@@ -190,6 +201,15 @@ namespace GuiCommon
 		castor::Logger::logInfo( m_internalName + cuT( " - Exit" ) );
 		doCleanup();
 		return wxApp::OnExit();
+	}
+
+	void CastorApplication::OnAssertFailure( const wxChar * file
+		, int line
+		, const wxChar * func
+		, const wxChar * cond
+		, const wxChar * msg )
+	{
+		assertHandler( file, line, func, cond, msg );
 	}
 
 	bool CastorApplication::doParseCommandLine()

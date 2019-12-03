@@ -47,25 +47,6 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 			set( wxWidgetsLibraries "${Lib}" )
 		endif()
 	endforeach()
-
-	#Few more configuration for wxWidgets
-	string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
-	add_definitions(
-		-D_FILE_OFFSET_BITS=64
-		-D_LARGE_FILES
-	)
-
-	if( NOT WIN32 )
-		add_definitions(
-			-D__WXGTK__
-		)
-	endif()
-
-	if( IsWxDebug )
-		add_definitions(
-			-D__WXDEBUG__
-		)
-	endif()
 	
 	link_directories( ${Boost_LIBRARY_DIR} )
 
