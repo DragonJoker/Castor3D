@@ -122,14 +122,7 @@ namespace GuiCommon
 			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 			for ( auto file : files )
 			{
-#if defined( NDEBUG )
-
-				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
-#else
-
-				if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
-
-#endif
+				if ( file.find( CU_SharedLibExt ) != castor::String::npos )
 				{
 					result.push_back( file );
 				}

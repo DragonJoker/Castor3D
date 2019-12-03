@@ -16,6 +16,14 @@ namespace castor
 {
 	namespace
 	{
+		bool isLink( Path const & filePath )
+		{
+			auto cfilePath = string::stringCast< char >( filePath );
+			struct stat buf;
+			auto x = lstat( cfilePath.c_str(), &buf );
+			return S_ISLNK( buf.st_mode );
+		}
+
 		template< typename DirectoryFuncType, typename FileFuncType >
 		bool TraverseDirectory( Path const & folderPath, DirectoryFuncType directoryFunction, FileFuncType fileFunction )
 		{
@@ -77,7 +85,7 @@ namespace castor
 						{
 							result = directoryFunction( folderPath / name );
 						}
-						else
+						else if ( !isLink( folderPath / name ) )
 						{
 							fileFunction( folderPath / name );
 						}

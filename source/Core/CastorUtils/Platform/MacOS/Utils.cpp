@@ -15,7 +15,7 @@ namespace castor
 		{
 			uint32_t w, h;
 			getDisplaySize( &w, &h );
-			return false;
+			return true;
 		}
 
 		String getLastErrorText()
