@@ -154,7 +154,7 @@ namespace castor3d
 							? depth
 							: depth * 2.0_f - 1.0_f ) );
 					z *= m_writer.paren( farPlane - nearPlane );
-					m_writer.returnStmt( 2.0 * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
+					m_writer.returnStmt( 2.0_f * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 				}
 				, InFloat{ m_writer, "depth" }
 				, InFloat{ m_writer, "nearPlane" }
@@ -355,7 +355,7 @@ namespace castor3d
 						, F );
 					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
-					kD *= 1.0 - metallic;
+					kD *= 1.0_f - metallic;
 
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, texture( irradianceMap, vec3( normal.x(), -normal.y(), normal.z() ) ).rgb() );
@@ -700,7 +700,7 @@ namespace castor3d
 							auto numLayers = m_writer.declLocale( "numLayers"
 								, mix( maxLayers
 									, minLayers
-									, sdw::abs( dot( vec3( 0.0_f, 0.0, 1.0 ), lightDir ) ) ) );
+									, sdw::abs( dot( vec3( 0.0_f, 0.0_f, 1.0_f ), lightDir ) ) ) );
 							auto layerHeight = m_writer.declLocale( "layerHeight"
 								, initialHeight / numLayers );
 							auto texStep = m_writer.declLocale( "deltaTexCoords"
@@ -1096,7 +1096,7 @@ namespace castor3d
 				{
 					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 					auto config = m_writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureConfig[i / 4][i % 4] ) ) );
+						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = m_writer.declLocale< Vec4 >( "sampled" + name
 						, texture( maps[i], texCoords.xy() ) );
 						opacity = config.getOpacity( m_writer, sampled, opacity );
@@ -1118,7 +1118,7 @@ namespace castor3d
 				&& flags.heightMapIndex != InvalidIndex )
 			{
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-					, textureConfigs.getTextureConfiguration( textureConfig[flags.heightMapIndex / 4][flags.heightMapIndex % 4] ) );
+					, textureConfigs.getTextureConfiguration( textureConfig[flags.heightMapIndex / 4u][flags.heightMapIndex % 4u] ) );
 				texCoords.xy() = m_parallaxMapping( texCoords.xy()
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[flags.heightMapIndex]

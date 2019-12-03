@@ -348,7 +348,6 @@ namespace castor3d
 							, { *resources->finishedRenderingSemaphore }
 							, resources->fence.get() );
 						resources->fence->wait( ashes::MaxTimeout );
-						//getDevice().graphicsQueue->waitIdle();
 
 						try
 						{
@@ -732,7 +731,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -752,7 +751,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0 );
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0_f );
 				} );
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

@@ -106,7 +106,7 @@ namespace smaa
 
 					// Calculate lumas:
 					auto weights = writer.declLocale( "weights"
-						, vec3( 0.2126_f, 0.7152, 0.0722 ) );
+						, vec3( 0.2126_f, 0.7152_f, 0.0722_f ) );
 					auto L = writer.declLocale( "L"
 						, dot( texture( c3d_colourTex, texcoord ).rgb(), weights ) );
 
@@ -122,7 +122,7 @@ namespace smaa
 						, step( vec2( threshold ), delta.xy() ) );
 
 					// Then discard if there is no edge:
-					IF( writer, dot( edges, vec2( 1.0_f, 1.0 ) ) == 0.0_f )
+					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
 						writer.discard();
 					}
@@ -220,7 +220,7 @@ namespace smaa
 
 					// Calculate lumas:
 					auto weights = writer.declLocale( "weights"
-						, vec3( 0.2126_f, 0.7152, 0.0722 ) );
+						, vec3( 0.2126_f, 0.7152_f, 0.0722_f ) );
 					auto L = writer.declLocale( "L"
 						, dot( texture( c3d_colourTex, texcoord ).rgb(), weights ) );
 
@@ -236,7 +236,7 @@ namespace smaa
 						, step( vec2( threshold ), delta.xy() ) );
 
 					// Then discard if there is no edge:
-					IF( writer, dot( edges, vec2( 1.0_f, 1.0 ) ) == 0.0_f )
+					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
 					{
 						writer.discard();
 					}

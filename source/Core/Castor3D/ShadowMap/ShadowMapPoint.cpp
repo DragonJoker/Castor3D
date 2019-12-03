@@ -457,7 +457,7 @@ namespace castor3d
 		std::function< void() > main = [&]()
 		{
 			auto vertexPosition = writer.declLocale( cuT( "vertexPosition" )
-				, vec4( position.xyz(), 1.0 ) );
+				, vec4( position.xyz(), 1.0_f ) );
 			vtx_texture = uv;
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
@@ -488,7 +488,7 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
-				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0 );
+				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0_f );
 				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 

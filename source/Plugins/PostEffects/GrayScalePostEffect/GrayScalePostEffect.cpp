@@ -55,7 +55,7 @@ namespace GrayScale
 				, [&]()
 				{
 					vtx_texture = utils.bottomUpToTopDown( uv );
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -80,7 +80,7 @@ namespace GrayScale
 				{
 					auto colour = writer.declLocale( "colour"
 						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
-					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0 );
+					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

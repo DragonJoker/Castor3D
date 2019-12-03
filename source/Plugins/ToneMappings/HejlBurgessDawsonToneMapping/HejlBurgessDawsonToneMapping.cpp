@@ -57,7 +57,7 @@ namespace HejlBurgessDawson
 				auto x = writer.declLocale( "x"
 					, max( hdrColor - 0.004_f, vec3( 0.0_f ) ) );
 				pxl_rgb = vec4( writer.paren( x * writer.paren( 6.2f * x + 0.5f ) )
-					/ writer.paren( x * writer.paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0 );
+					/ writer.paren( x * writer.paren( 6.2f * x + 1.7f ) + 0.06f ), 1.0_f );
 			} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

@@ -95,7 +95,7 @@ namespace castor3d
 					, [&]()
 					{
 						vtx_worldPosition = position;
-						out.gl_out.gl_Position = writer.paren( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
+						out.gl_out.gl_Position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
 					} );
 				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 			}
@@ -146,11 +146,11 @@ namespace castor3d
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto bits = writer.declLocale( "bits"
 						, inBits );
-					bits = writer.paren( bits << 16_u ) | writer.paren( bits >> 16_u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1_u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1_u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2_u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2_u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4_u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4_u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8_u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8_u );
+					bits = ( bits << 16_u ) | writer.paren( bits >> 16_u );
+					bits = ( ( bits & 0x55555555_u ) << 1_u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1_u );
+					bits = ( ( bits & 0x33333333_u ) << 2_u ) | ( ( bits & 0xCCCCCCCC_u ) >> 2_u );
+					bits = ( ( bits & 0x0F0F0F0F_u ) << 4_u ) | ( ( bits & 0xF0F0F0F0_u ) >> 4_u );
+					bits = ( ( bits & 0x00FF00FF_u ) << 8_u ) | ( ( bits & 0xFF00FF00_u ) >> 8_u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
 				, InUInt{ writer, "inBits" } );

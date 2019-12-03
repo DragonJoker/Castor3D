@@ -230,7 +230,7 @@ namespace castor3d
 				{
 					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 					auto config = writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4][i % 4] ) ) );
+						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
 						, texture( maps[i], texCoords.xy() ) );
 
@@ -306,7 +306,7 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-						, UInt( 0u ) );
+						, 0_u );
 
 					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
@@ -560,7 +560,7 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-						, UInt( 0u )
+						, 0_u
 						, shadowType != ShadowType::eNone );
 
 					if ( shadowType != ShadowType::eNone )

@@ -232,7 +232,7 @@ namespace castor3d
 				{
 					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 					auto config = writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4][i % 4] ) ) );
+						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
 						, texture( maps[i], texCoords.xy() ) );
 
@@ -308,7 +308,7 @@ namespace castor3d
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
-						, UInt( 0u ) );
+						, 0_u );
 
 					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
@@ -375,15 +375,15 @@ namespace castor3d
 #if C3D_DebugCascades
 					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
-						IF( m_writer, cascadeIndex == 0 )
+						IF( m_writer, cascadeIndex == 0_u )
 						{
 							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 1 )
+						ELSEIF( m_writer, cascadeIndex == 1_u )
 						{
 							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 2 )
+						ELSEIF( m_writer, cascadeIndex == 2_u )
 						{
 							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
 						}
@@ -639,17 +639,17 @@ namespace castor3d
 #if C3D_DebugCascades
 					if ( shadowType != ShadowType::eNone )
 					{
-						IF( m_writer, cascadeIndex == 0 )
+						IF( m_writer, cascadeIndex == 0_u )
 						{
 							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
 							output.m_specular.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 1 )
+						ELSEIF( m_writer, cascadeIndex == 1_u )
 						{
 							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
 							output.m_specular.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 2 )
+						ELSEIF( m_writer, cascadeIndex == 2_u )
 						{
 							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
 							output.m_specular.rgb() = vec3( 0.25_f, 0.25f, 1.0f );

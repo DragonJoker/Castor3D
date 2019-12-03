@@ -22,7 +22,7 @@ namespace castor3d
 						auto c3d_fogInfo = writer.getVariable< Vec4 >( "c3d_fogInfo" );
 						auto c3d_cameraPosition = writer.getVariable< Vec4 >( "c3d_cameraPosition" );
 
-						auto z = writer.declLocale( "z", dist / 100 );
+						auto z = writer.declLocale( "z", dist / 100.0_f );
 						auto density = writer.declLocale( "density", c3d_fogInfo.y() );
 
 						if ( flags == FogType::eLinear )

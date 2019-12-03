@@ -209,7 +209,7 @@ namespace castor3d
 					}
 					else
 					{
-						right = normalize( vec3( right.x(), 0.0, right.z() ) );
+						right = normalize( vec3( right.x(), 0.0_f, right.z() ) );
 						writer.declLocale( cuT( "up" )
 							, vec3( 0.0_f, 1.0f, 0.0f ) );
 					}
@@ -233,12 +233,12 @@ namespace castor3d
 						+ right * position.x() * width
 						+ up * position.y() * height;
 					auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-						, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0 ) );
+						, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
 
-					vtx_texture = vec3( uv, 0.0 );
+					vtx_texture = vec3( uv, 0.0_f );
 					vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
 					auto curPosition = writer.declLocale( cuT( "curPosition" )
-						, c3d_curView * vec4( vtx_worldPosition, 1.0 ) );
+						, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );
 					prvPosition = c3d_prvView * vec4( prvPosition );
 					curPosition = c3d_projection * curPosition;
 					prvPosition = c3d_projection * prvPosition;

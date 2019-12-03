@@ -52,7 +52,7 @@ namespace smaa
 					, Vec4 offset )
 				{
 					offset = fma( c3d_rtMetrics.xyxy()
-						, vec4( 1.0_f, 0.0, 0.0, 1.0 )
+						, vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f )
 						, vec4( texcoord.xy(), texcoord.xy() ) );
 				}
 				, InVec2{ writer, "texcoord" }
@@ -61,7 +61,7 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset );
 				} );
@@ -136,7 +136,7 @@ namespace smaa
 					a.wz() = texture( blendTex, texcoord ).xz(); // Bottom / Left
 
 					// Is there any blending weight with a value greater than 0.0?
-					IF ( writer, dot( a, vec4( 1.0_f, 1.0, 1.0, 1.0 ) ) < 1e-5_f )
+					IF ( writer, dot( a, vec4( 1.0_f, 1.0_f, 1.0_f, 1.0_f ) ) < 1e-5_f )
 					{
 						auto color = writer.declLocale( "color"
 							, textureLod( colorTex, texcoord, 0.0_f ) );
@@ -159,12 +159,12 @@ namespace smaa
 
 						// Calculate the blending offsets:
 						auto blendingOffset = writer.declLocale( "blendingOffset"
-							, vec4( 0.0_f, a.y(), 0.0, a.w() ) );
+							, vec4( 0.0_f, a.y(), 0.0_f, a.w() ) );
 						auto blendingWeight = writer.declLocale( "blendingWeight"
 							, a.yw() );
-						SMAAMovc4( bvec4( h, h, h, h ), blendingOffset, vec4( a.x(), 0.0, a.z(), 0.0 ) );
+						SMAAMovc4( bvec4( h, h, h, h ), blendingOffset, vec4( a.x(), 0.0_f, a.z(), 0.0_f ) );
 						SMAAMovc2( bvec2( h, h ), blendingWeight, a.xz() );
-						blendingWeight /= dot( blendingWeight, vec2( 1.0_f, 1.0 ) );
+						blendingWeight /= dot( blendingWeight, vec2( 1.0_f, 1.0_f ) );
 
 						// Calculate the texture coordinates:
 						auto blendingCoord = writer.declLocale( "blendingCoord"

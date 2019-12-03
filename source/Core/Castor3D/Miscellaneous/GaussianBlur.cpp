@@ -70,7 +70,7 @@ namespace castor3d
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -84,7 +84,7 @@ namespace castor3d
 				{
 					auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
+					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{
@@ -114,7 +114,7 @@ namespace castor3d
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DArrayRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -125,9 +125,9 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0 ) / c3d_textureSize );
-				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				pxl_fragColor = texture( c3d_mapDiffuse, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0][0];
+				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
+				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
+				pxl_fragColor = texture( c3d_mapDiffuse, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
 
 				FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 				{
@@ -155,7 +155,7 @@ namespace castor3d
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4 );
+			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
@@ -166,9 +166,9 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1 ) / c3d_textureSize );
-				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0 ) );
-				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
+				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
+				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
+				pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 				FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 				{

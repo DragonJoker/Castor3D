@@ -64,7 +64,7 @@ namespace film_grain
 				, [&]()
 				{
 					vtx_texture = utils.bottomUpToTopDown( uv );
-					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -117,7 +117,7 @@ namespace film_grain
 					auto noise = writer.declLocale( "noise"
 						, texture( c3d_noiseTex, vec3( coord, c3d_time ) ) );
 					auto exposureFactor = writer.declLocale( "exposureFactor"
-						, c3d_exposure / 2.0 );
+						, c3d_exposure / 2.0_f );
 					exposureFactor = sqrt( exposureFactor );
 					auto t = writer.declLocale( "t"
 						, mix( 3.5_f * c3d_noiseIntensity

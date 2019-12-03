@@ -48,7 +48,7 @@ namespace Bloom
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -68,7 +68,7 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0 );
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );

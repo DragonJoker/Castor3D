@@ -46,7 +46,7 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main", [&]()
 				{
 					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -61,7 +61,7 @@ namespace Bloom
 			auto c3d_pixelSize = config.declMember< Vec2 >( castor3d::GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( castor3d::GaussianBlur::CoefficientsCount );
 			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4 );
+			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -72,8 +72,8 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main", [&]()
 				{
 					auto offset = writer.declLocale( "offset"
-						, vec2( 0.0_f, 0 ) );
-					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0][0];
+						, vec2( 0.0_f, 0.0_f ) );
+					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{

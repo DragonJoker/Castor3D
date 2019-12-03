@@ -193,7 +193,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -214,12 +214,12 @@ namespace castor3d
 				{
 					auto bits = writer.declLocale( cuT( "bits" )
 						, inBits );
-					bits = writer.paren( bits << 16u ) | writer.paren( bits >> 16u );
-					bits = writer.paren( writer.paren( bits & 0x55555555_u ) << 1u ) | writer.paren( writer.paren( bits & 0xAAAAAAAA_u ) >> 1u );
-					bits = writer.paren( writer.paren( bits & 0x33333333_u ) << 2u ) | writer.paren( writer.paren( bits & 0xCCCCCCCC_u ) >> 2u );
-					bits = writer.paren( writer.paren( bits & 0x0F0F0F0F_u ) << 4u ) | writer.paren( writer.paren( bits & 0xF0F0F0F0_u ) >> 4u );
-					bits = writer.paren( writer.paren( bits & 0x00FF00FF_u ) << 8u ) | writer.paren( writer.paren( bits & 0xFF00FF00_u ) >> 8u );
-					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10 ); // / 0x100000000
+					bits = ( bits << 16u ) | ( bits >> 16u );
+					bits = ( ( bits & 0x55555555_u ) << 1u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1u );
+					bits = ( ( bits & 0x33333333_u ) << 2u ) | ( ( bits & 0xCCCCCCCC_u ) >> 2u );
+					bits = ( ( bits & 0x0F0F0F0F_u ) << 4u ) | ( ( bits & 0xF0F0F0F0_u ) >> 4u );
+					bits = ( ( bits & 0x00FF00FF_u ) << 8u ) | ( ( bits & 0xFF00FF00_u ) >> 8u );
+					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
 				, InUInt{ writer, cuT( "inBits" ) } );
 
@@ -244,7 +244,7 @@ namespace castor3d
 					auto phi = writer.declLocale( "phi"
 						, PiMult2< float > * xi.x() );
 					auto cosTheta = writer.declLocale( "cosTheta"
-						, sqrt( writer.paren( 1.0 - xi.y() ) / writer.paren( 1.0 + writer.paren( a * a - 1.0 ) * xi.y() ) ) );
+						, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a * a - 1.0_f ) * xi.y() ) ) );
 					auto sinTheta = writer.declLocale( "sinTheta"
 						, sqrt( 1.0 - cosTheta * cosTheta ) );
 
@@ -280,12 +280,12 @@ namespace castor3d
 					auto r = writer.declLocale( "r"
 						, roughness );
 					auto k = writer.declLocale( "k"
-						, writer.paren( r * r ) / 2.0_f );
+						, ( r * r ) / 2.0_f );
 
 					auto numerator = writer.declLocale( "num"
 						, product );
 					auto denominator = writer.declLocale( "denom"
-						, product * writer.paren( 1.0_f - k ) + k );
+						, product * ( 1.0_f - k ) + k );
 
 					writer.returnStmt( numerator / denominator );
 				}
@@ -315,11 +315,11 @@ namespace castor3d
 				{
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto V = writer.declLocale< Vec3 >( "V" );
-					V.x() = sqrt( 1.0 - NdotV * NdotV );
+					V.x() = sqrt( 1.0_f - NdotV * NdotV );
 					V.y() = 0.0_f;
 					V.z() = NdotV;
 					auto N = writer.declLocale( "N"
-						, vec3( 0.0_f, 0.0, 1.0 ) );
+						, vec3( 0.0_f, 0.0_f, 1.0_f ) );
 
 					auto A = writer.declLocale( "A"
 						, 0.0_f );
@@ -350,9 +350,9 @@ namespace castor3d
 							auto G = writer.declLocale( "G"
 								, geometrySmith( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
 							auto G_Vis = writer.declLocale( "G_Vis"
-								, writer.paren( G * VdotH ) / writer.paren( NdotH * NdotV ) );
+								, ( G * VdotH ) / ( NdotH * NdotV ) );
 							auto Fc = writer.declLocale( "Fc"
-								, pow( 1.0 - VdotH, 5.0_f ) );
+								, pow( 1.0_f - VdotH, 5.0_f ) );
 
 							A += writer.paren( 1.0_f - Fc ) * G_Vis;
 							B += Fc * G_Vis;

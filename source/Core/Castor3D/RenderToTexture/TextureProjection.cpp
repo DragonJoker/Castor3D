@@ -205,7 +205,7 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				out.gl_out.gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0 ) ).xyww();
+				out.gl_out.gl_Position = writer.paren( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
 			} );
 
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

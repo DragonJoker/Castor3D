@@ -32,7 +32,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
 				} );
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -53,7 +53,7 @@ namespace castor3d
 				{
 					auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDepth, vtx_texture.xy() ).x() );
 					depth = 1.0_f - writer.paren( 1.0_f - depth ) * 25.0f;
-					pxl_fragColor = vec4( depth, depth, depth, 1.0 );
+					pxl_fragColor = vec4( depth, depth, depth, 1.0_f );
 				} );
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

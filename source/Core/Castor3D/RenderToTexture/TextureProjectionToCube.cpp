@@ -86,7 +86,7 @@ namespace castor3d
 				std::function< void() > main = [&]()
 				{
 					auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
-					pxl_colour = vec4( texture( mapColour, utils.bottomUpToTopDown( uv ) ).rgb(), 1.0 );
+					pxl_colour = vec4( texture( mapColour, utils.bottomUpToTopDown( uv ) ).rgb(), 1.0_f );
 				};
 
 				writer.implementFunction< sdw::Void >( cuT( "main" ), main );

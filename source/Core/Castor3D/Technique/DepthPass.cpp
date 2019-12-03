@@ -205,7 +205,7 @@ namespace castor3d
 			, [&]()
 		{
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
-					, vec4( position.xyz(), 1.0 ) );
+					, vec4( position.xyz(), 1.0_f ) );
 				auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 					, uv );
 
@@ -238,7 +238,7 @@ namespace castor3d
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
-					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0 );
+					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
 					v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
 				}
 
@@ -262,8 +262,8 @@ namespace castor3d
 				// Positions in projection space are in [-1, 1] range, while texture
 				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
-				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
 			} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

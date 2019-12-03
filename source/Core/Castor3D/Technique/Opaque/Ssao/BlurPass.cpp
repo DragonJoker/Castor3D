@@ -173,7 +173,7 @@ namespace castor3d
 					// The key values are in scene-specific scale. To make them scale-invariant, factor in
 					// the AO radius, which should be based on the scene scale.
 					auto depthWeight = writer.declLocale( cuT( "depthWeight" )
-						, max( 0.0_f, 1.0_f - writer.paren( c3d_edgeSharpness * 2000.0 ) * abs( tapKey - key ) * scale ) );
+						, max( 0.0_f, 1.0_f - writer.paren( c3d_edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
 					auto k_normal = writer.declLocale( cuT( "k_normal" )
 						, 1.0_f );
 					auto k_plane = writer.declLocale( cuT( "k_plane" )
@@ -274,7 +274,7 @@ namespace castor3d
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
 					auto BASE = writer.declLocale( cuT( "BASE" )
-						, c3d_gaussian[0][0] );
+						, c3d_gaussian[0_u][0_u] );
 					auto totalWeight = writer.declLocale( cuT( "totalWeight" )
 						, BASE );
 					sum *= totalWeight;

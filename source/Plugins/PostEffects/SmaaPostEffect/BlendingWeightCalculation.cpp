@@ -63,12 +63,12 @@ namespace smaa
 					pixcoord = texCoord * c3d_rtMetrics.zw();
 
 					// We will use these offsets for the searches later on (see @PSEUDO_GATHER4):
-					offset[0] = fma( c3d_rtMetrics.xyxy(), vec4( -0.25_f, -0.125, 1.25, -0.125 ), vec4( texCoord.xy(), texCoord.xy() ) );
-					offset[1] = fma( c3d_rtMetrics.xyxy(), vec4( -0.125_f, -0.25, -0.125, 1.25 ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[0] = fma( c3d_rtMetrics.xyxy(), vec4( -0.25_f, -0.125f, 1.25f, -0.125f ), vec4( texCoord.xy(), texCoord.xy() ) );
+					offset[1] = fma( c3d_rtMetrics.xyxy(), vec4( -0.125_f, -0.25f, -0.125f, 1.25f ), vec4( texCoord.xy(), texCoord.xy() ) );
 
 					// And these for the searches, they indicate the ends of the loops:
 					offset[2] = fma( c3d_rtMetrics.xxyy()
-						, vec4( -2.0_f, 2.0, -2.0, 2.0 ) * writer.cast< Float >( c3d_maxSearchSteps )
+						, vec4( -2.0_f, 2.0_f, -2.0_f, 2.0_f ) * writer.cast< Float >( c3d_maxSearchSteps )
 						, vec4( offset[0].xz(), offset[1].yw() ) );
 				}
 				, InVec2{ writer, "texCoord" }
@@ -78,7 +78,7 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
 				} );
@@ -171,7 +171,7 @@ namespace smaa
 					//
 					// This function will unpack the values (mad + mul + round):
 					// wolframalpha.com: round(x * abs(5 * x - 5 * 0.75)) plot 0 to 1
-					e.r() = e.r() * abs( 5.0_f * e.r() - 5.0 * 0.75 );
+					e.r() = e.r() * abs( 5.0_f * e.r() - 5.0_f * 0.75_f );
 					writer.returnStmt( round( e ) );
 				}
 				, InVec2{ writer, "e" } );
@@ -179,7 +179,7 @@ namespace smaa
 			auto SMAADecodeDiagBilinearAccess4 = writer.implementFunction< Vec4 >( "SMAADecodeDiagBilinearAccess4"
 				, [&]( Vec4 const & e )
 				{
-					e.rb() = e.rb() * abs( 5.0_f * e.rb() - vec2( 5.0_f * 0.75 ) );
+					e.rb() = e.rb() * abs( 5.0_f * e.rb() - vec2( 5.0_f * 0.75_f ) );
 					writer.returnStmt( round( e ) );
 				}
 				, InVec4{ writer, "e" } );
@@ -194,16 +194,16 @@ namespace smaa
 					, Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
-						, vec4( texcoord, -1.0, 1.0 ) );
+						, vec4( texcoord, -1.0_f, 1.0_f ) );
 					auto t = writer.declLocale( "t"
-						, vec3( c3d_rtMetrics.xy(), 1.0 ) );
+						, vec3( c3d_rtMetrics.xy(), 1.0_f ) );
 
 					WHILE( writer, coord.z() < writer.cast< Float >( c3d_maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
-						coord.xyz() = fma( t, vec3( dir, 1.0 ), coord.xyz() );
+						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
 						e = textureLod( edgesTex, coord.xy(), 0.0_f ).rg();
-						coord.w() = dot( e, vec2( 0.5_f, 0.5 ) );
+						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
 					ELIHW;
 
@@ -221,15 +221,15 @@ namespace smaa
 					, Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
-						, vec4( texcoord, -1.0, 1.0 ) );
+						, vec4( texcoord, -1.0_f, 1.0_f ) );
 					coord.x() += 0.25_f * c3d_rtMetrics.x(); // See @SearchDiag2Optimization
 					auto t = writer.declLocale( "t"
-						, vec3( c3d_rtMetrics.xy(), 1.0 ) );
+						, vec3( c3d_rtMetrics.xy(), 1.0_f ) );
 
 					WHILE( writer, coord.z() < writer.cast< Float >( c3d_maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
-						coord.xyz() = fma( t, vec3( dir, 1.0 ), coord.xyz() );
+						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
 
 						// @SearchDiag2Optimization
 						// Fetch both edges at once using bilinear filtering:
@@ -240,7 +240,7 @@ namespace smaa
 						// e.g = textureLod(edgesTex, coord.xy, 0.0_f).g;
 						// e.r = textureLodOffset(edgesTex, coord.xy, 0.0_f, ivec2(1, 0)).r;
 
-						coord.w() = dot( e, vec2( 0.5_f, 0.5 ) );
+						coord.w() = dot( e, vec2( 0.5_f, 0.5_f ) );
 					}
 					ELIHW;
 
@@ -292,36 +292,36 @@ namespace smaa
 					, IVec4 const & subsampleIndices )
 				{
 					auto weights = writer.declLocale( "weights"
-						, vec2( 0.0_f, 0.0 ) );
+						, vec2( 0.0_f, 0.0_f ) );
 
 					// Search for the line ends:
 					auto d = writer.declLocale< Vec4 >( "d" );
 					auto end = writer.declLocale< Vec2 >( "end" );
 
-					IF( writer, e.r() > 0.0 )
+					IF( writer, e.r() > 0.0_f )
 					{
-						d.xz() = SMAASearchDiag1( edgesTex, texcoord, vec2( -1.0_f, 1.0 ), end );
+						d.xz() = SMAASearchDiag1( edgesTex, texcoord, vec2( -1.0_f, 1.0_f ), end );
 						d.x() += 1.0_f - step( end.y(), 0.9_f );// end.y > 0.9 ? 1.0 : 0.0
 						// step => 0.9 < end.y ? 0.0 : 1.0
 					}
 					ELSE
 					{
-						d.xz() = vec2( 0.0_f, 0.0 );
+						d.xz() = vec2( 0.0_f, 0.0_f );
 					}
 					FI;
 
-					d.yw() = SMAASearchDiag1( edgesTex, texcoord, vec2( 1.0_f, -1.0 ), end );
+					d.yw() = SMAASearchDiag1( edgesTex, texcoord, vec2( 1.0_f, -1.0_f ), end );
 
-					IF( writer, d.x() + d.y() > 2.0 )
+					IF( writer, d.x() + d.y() > 2.0_f )
 					{ // d.x + d.y + 1 > 3
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
-							, fma( vec4( -d.x() + 0.25, d.x(), d.y(), -d.y() - 0.25 )
+							, fma( vec4( -d.x() + 0.25_f, d.x(), d.y(), -d.y() - 0.25_f )
 								, c3d_rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
 						auto c = writer.declLocale< Vec4 >( "c" );
-						c.xy() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0 ) ).rg();
-						c.zw() = textureLodOffset( edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0 ) ).rg();
+						c.xy() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).rg();
+						c.zw() = textureLodOffset( edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0_i ) ).rg();
 						c.yxwz() = SMAADecodeDiagBilinearAccess4( c.xyzw() );
 
 						// Non-optimized version:
@@ -334,10 +334,10 @@ namespace smaa
 
 						// Merge crossing edges at each side into a single value:
 						auto cc = writer.declLocale( "cc"
-							, fma( vec2( 2.0_f, 2.0 ), c.xz(), c.yw() ) );
+							, fma( vec2( 2.0_f, 2.0_f ), c.xz(), c.yw() ) );
 
 						// Remove the crossing edge if we didn't found the end of the line:
-						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0 ) );
+						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0_f ) );
 
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, writer.cast< Float >( subsampleIndices.z() ) );
@@ -345,21 +345,21 @@ namespace smaa
 					FI;
 
 						// Search for the line ends:
-					d.xz() = SMAASearchDiag2( edgesTex, texcoord, vec2( -1.0_f, -1.0 ), end );
+					d.xz() = SMAASearchDiag2( edgesTex, texcoord, vec2( -1.0_f, -1.0_f ), end );
 
-					IF( writer, textureLodOffset( edgesTex, texcoord, 0.0_f, ivec2( 1_i, 0 ) ).r() > 0.0 )
+					IF( writer, textureLodOffset( edgesTex, texcoord, 0.0_f, ivec2( 1_i, 0_i ) ).r() > 0.0_f )
 					{
-						d.yw() = SMAASearchDiag2( edgesTex, texcoord, vec2( 1.0_f, 1.0 ), end );
+						d.yw() = SMAASearchDiag2( edgesTex, texcoord, vec2( 1.0_f, 1.0_f ), end );
 						d.y() += 1.0_f - step( end.y(), 0.9_f );// end.y > 0.9 ? 1.0 : 0.0
 						// step => 0.9 < end.y ? 0.0 : 1.0
 					}
 					ELSE
 					{
-						d.yw() = vec2( 0.0_f, 0.0 );
+						d.yw() = vec2( 0.0_f, 0.0_f );
 					}
 					FI;
 
-					IF( writer, d.x() + d.y() > 2.0 )
+					IF( writer, d.x() + d.y() > 2.0_f )
 					{ // d.x + d.y + 1 > 3
 						// Fetch the crossing edges:
 						auto coords = writer.declLocale( "coords"
@@ -367,14 +367,14 @@ namespace smaa
 								, c3d_rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
 						auto c = writer.declLocale< Vec4 >( "c" );
-						c.x() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0 ) ).g();
-						c.y() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( 0_i, -1 ) ).r();
-						c.zw() = textureLodOffset( edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0 ) ).gr();
+						c.x() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).g();
+						c.y() = textureLodOffset( edgesTex, coords.xy(), 0.0_f, ivec2( 0_i, -1_i ) ).r();
+						c.zw() = textureLodOffset( edgesTex, coords.zw(), 0.0_f, ivec2( 1_i, 0_i ) ).gr();
 						auto cc = writer.declLocale( "cc"
-							, fma( vec2( 2.0_f, 2.0 ), c.xz(), c.yw() ) );
+							, fma( vec2( 2.0_f, 2.0_f ), c.xz(), c.yw() ) );
 
 						// Remove the crossing edge if we didn't found the end of the line:
-						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0 ) );
+						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0_f ) );
 
 						// Fetch the areas for this line:
 						weights += SMAAAreaDiag( areaTex, d.xy(), cc, writer.cast< Float >( subsampleIndices.w() ) ).gr();
@@ -406,13 +406,13 @@ namespace smaa
 					// The texture is flipped vertically, with left and right cases taking half
 					// of the space horizontally:
 					auto scale = writer.declLocale( "scale"
-						, c3d_searchTexSize * vec2( 0.5_f, -1.0 ) );
+						, c3d_searchTexSize * vec2( 0.5_f, -1.0_f ) );
 					auto bias = writer.declLocale( "bias"
-						, c3d_searchTexSize * vec2( offset, 1.0 ) );
+						, c3d_searchTexSize * vec2( offset, 1.0_f ) );
 
 					// Scale and bias to access texel centers:
-					scale += vec2( -1.0_f, 1.0 );
-					bias += vec2( 0.5_f, -0.5 );
+					scale += vec2( -1.0_f, 1.0_f );
+					bias += vec2( 0.5_f, -0.5_f );
 
 					// Convert from pixel coordinates to texcoords:
 					// (We use SMAA_SEARCHTEX_PACKED_SIZE because the texture is cropped)
@@ -443,19 +443,19 @@ namespace smaa
 					 * which edges are active from the four fetched ones.
 					 */
 					auto e = writer.declLocale( "e"
-						, vec2( 0.0_f, 1.0 ) );
+						, vec2( 0.0_f, 1.0_f ) );
 
 					WHILE( writer, texcoord.x() > end
 						&& e.g() > 0.8281_f // Is there some edge not activated?
 						&& e.r() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = textureLod( edgesTex, texcoord, 0.0_f ).rg();
-						texcoord = fma( -vec2( 2.0_f, 0.0 ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( -vec2( 2.0_f, 0.0_f ), c3d_rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
-						, fma( -( 255.0_f / 127.0 ), SMAASearchLength( searchTex, e, 0.0_f ), 3.25_f ) );
+						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.0_f ), 3.25_f ) );
 					writer.returnStmt( fma( c3d_rtMetrics.x(), offset, texcoord.x() ) );
 
 					// Non-optimized version:
@@ -482,18 +482,18 @@ namespace smaa
 					, Float end )
 				 {
 					 auto e = writer.declLocale( "e"
-						 , vec2( 0.0_f, 1.0 ) );
+						 , vec2( 0.0_f, 1.0_f ) );
 					 WHILE ( writer, texcoord.x() < end
 						 && e.g() > 0.8281_f // Is there some edge not activated?
 						 && e.r() == 0.0_f )
 					 { // Or is there a crossing edge that breaks the line?
 						 e = textureLod( edgesTex, texcoord, 0.0_f ).rg();
-						 texcoord = fma( vec2( 2.0_f, 0.0 ), c3d_rtMetrics.xy(), texcoord );
+						 texcoord = fma( vec2( 2.0_f, 0.0_f ), c3d_rtMetrics.xy(), texcoord );
 					 }
 					 ELIHW;
 
 					 auto offset = writer.declLocale( "offset"
-						 , fma( -( 255.0_f / 127.0 ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
+						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
 					 writer.returnStmt( fma( -c3d_rtMetrics.x(), offset, texcoord.x() ) );
 				 }
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
@@ -508,18 +508,18 @@ namespace smaa
 					, Float end )
 				{
 					auto e = writer.declLocale( "e"
-						 , vec2( 1.0_f, 0.0 ) );
+						 , vec2( 1.0_f, 0.0_f ) );
 					WHILE ( writer, texcoord.y() > end
 						&& e.r() > 0.8281_f // Is there some edge not activated?
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = textureLod( edgesTex, texcoord, 0.0_f ).rg();
-						texcoord = fma( -vec2( 0.0_f, 2.0 ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( -vec2( 0.0_f, 2.0_f ), c3d_rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
-						, fma( -( 255.0_f / 127.0 ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
+						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
 					writer.returnStmt( fma( c3d_rtMetrics.y(), offset, texcoord.y() ) );
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
@@ -534,18 +534,18 @@ namespace smaa
 					, Float end )
 				{
 					auto e = writer.declLocale( "e"
-						 , vec2( 1.0_f, 0.0 ) );
+						 , vec2( 1.0_f, 0.0_f ) );
 					WHILE ( writer, texcoord.y() < end
 						&& e.r() > 0.8281_f // Is there some edge not activated?
 						&& e.g() == 0.0_f )
 					{ // Or is there a crossing edge that breaks the line?
 						e = textureLod( edgesTex, texcoord, 0.0_f ).rg();
-						texcoord = fma( vec2( 0.0_f, 2.0 ), c3d_rtMetrics.xy(), texcoord );
+						texcoord = fma( vec2( 0.0_f, 2.0_f ), c3d_rtMetrics.xy(), texcoord );
 					}
 					ELIHW;
 
 					auto offset = writer.declLocale( "offset"
-						, fma( -( 255.0_f / 127.0 ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
+						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
 					writer.returnStmt( fma( -c3d_rtMetrics.y(), offset, texcoord.y() ) );
 				}
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
@@ -602,11 +602,11 @@ namespace smaa
 						rounding /= leftRight.x() + leftRight.y(); // Reduce blending for pixels in the center of a line.
 
 						auto factor = writer.declLocale( "factor"
-							, vec2( 1.0_f, 1.0 ) );
-						factor.x() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, 1 ) ).r();
-						factor.x() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1 ) ).r();
-						factor.y() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, -2 ) ).r();
-						factor.y() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, -2 ) ).r();
+							, vec2( 1.0_f, 1.0_f ) );
+						factor.x() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, 1_i ) ).r();
+						factor.x() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1_i ) ).r();
+						factor.y() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 0_i, -2_i ) ).r();
+						factor.y() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, -2_i ) ).r();
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
@@ -632,11 +632,11 @@ namespace smaa
 						rounding /= leftRight.x() + leftRight.y();
 
 						auto factor = writer.declLocale( "factor"
-							, vec2( 1.0_f, 1.0 ) );
-						factor.x() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 1_i, 0 ) ).g();
-						factor.x() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1 ) ).g();
-						factor.y() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( -2_i, 0 ) ).g();
-						factor.y() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( -2_i, 1 ) ).g();
+							, vec2( 1.0_f, 1.0_f ) );
+						factor.x() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( 1_i, 0_i ) ).g();
+						factor.x() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( 1_i, 1_i ) ).g();
+						factor.y() -= rounding.x() * textureLodOffset( edgesTex, texcoord.xy(), 0.0_f, ivec2( -2_i, 0_i ) ).g();
+						factor.y() -= rounding.y() * textureLodOffset( edgesTex, texcoord.zw(), 0.0_f, ivec2( -2_i, 1_i ) ).g();
 
 						weights *= clamp( factor, vec2( 0.0_f ), vec2( 1.0_f ) );
 					}
@@ -656,7 +656,7 @@ namespace smaa
 					, IVec4 const & subsampleIndices )
 				{ // Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 					auto weights = writer.declLocale( "weights"
-						, vec4( 0.0_f, 0.0, 0.0, 0.0 ) );
+						, vec4( 0.0_f, 0.0_f, 0.0_f, 0.0_f ) );
 
 					auto e = writer.declLocale( "e"
 						, texture( edgesTex, texcoord ).rg() );
@@ -701,7 +701,7 @@ namespace smaa
 
 								// Fetch the right crossing edges:
 								auto e2 = writer.declLocale( "e2"
-									, textureLodOffset( edgesTex, coords.zy(), 0.0_f, ivec2( 1_i, 0 ) ).r() );
+									, textureLodOffset( edgesTex, coords.zy(), 0.0_f, ivec2( 1_i, 0_i ) ).r() );
 
 								// Ok, we know how this pattern looks like, now it is time for getting
 								// the actual area:
@@ -748,7 +748,7 @@ namespace smaa
 
 							// Fetch the right crossing edges:
 							auto e2 = writer.declLocale( "e2"
-								, textureLodOffset( edgesTex, coords.zy(), 0.0_f, ivec2( 1_i, 0 ) ).r() );
+								, textureLodOffset( edgesTex, coords.zy(), 0.0_f, ivec2( 1_i, 0_i ) ).r() );
 
 							// Ok, we know how this pattern looks like, now it is time for getting
 							// the actual area:
@@ -789,7 +789,7 @@ namespace smaa
 
 						// Fetch the bottom crossing edges:
 						auto e2 = writer.declLocale( "e2"
-							, textureLodOffset( edgesTex, coords.xz(), 0.0_f, ivec2( 0_i, 1 ) ).g() );
+							, textureLodOffset( edgesTex, coords.xz(), 0.0_f, ivec2( 0_i, 1_i ) ).g() );
 
 						// Get the area for this direction:
 						weights.ba() = SMAAArea( areaTex, sqrt_d, e1, e2, writer.cast< Float >( subsampleIndices.x() ) );

@@ -829,7 +829,7 @@ namespace castor3d
 							, -offset );
 						auto const samples = 4;
 						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5 ) );
+							, offset / ( samples * 0.5f ) );
 						auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
 
 						for( int i = 0; i < samples; ++i )
@@ -872,7 +872,7 @@ namespace castor3d
 							, -offset );
 						auto const samples = 4;
 						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5 ) );
+							, offset / ( samples * 0.5f ) );
 						auto moments = m_writer.declLocale< Vec2 >( "moments" );
 
 						for ( int i = 0; i < samples; ++i )
@@ -1199,7 +1199,7 @@ namespace castor3d
 							, -offset );
 						auto const samples = 4;
 						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5 ) );
+							, offset / ( samples * 0.5f ) );
 						auto shadowMapDepth = m_writer.declLocale< Float >( "shadowMapDepth" );
 
 						for ( int i = 0; i < samples; ++i )
@@ -1242,7 +1242,7 @@ namespace castor3d
 							, -offset );
 						auto const samples = 4;
 						auto inc = m_writer.declLocale( "inc"
-							, offset / ( samples * 0.5 ) );
+							, offset / ( samples * 0.5f ) );
 						auto moments = m_writer.declLocale< Vec2 >( "moments" );
 
 						for ( int i = 0; i < samples; ++i )

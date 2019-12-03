@@ -974,7 +974,7 @@ namespace castor3d
 						{
 							auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
 							auto config = writer.declLocale( "config" + name
-								, textureConfigs.getTextureConfiguration( writer.cast< UInt >( c3d_textureConfig[i / 4][i % 4] ) ) );
+								, textureConfigs.getTextureConfiguration( writer.cast< UInt >( c3d_textureConfig[i / 4u][i % 4u] ) ) );
 							auto sampled = writer.declLocale( "sampled" + name
 								, texture( c3d_maps[i], vtx_texture, 0.0_f ) );
 							diffuse = config.getDiffuse( writer, sampled, diffuse, 1.0_f );

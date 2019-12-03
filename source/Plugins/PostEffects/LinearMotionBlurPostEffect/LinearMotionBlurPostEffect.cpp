@@ -54,7 +54,7 @@ namespace motion_blur
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -87,21 +87,12 @@ namespace motion_blur
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( cuT( "offset" )
-							, blurVector * writer.paren( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1u ) - 0.5f ) );
+							, blurVector * writer.paren( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
 						pxl_fragColor += texture( c3d_mapDiffuse, vtx_texture + offset );
 					}
 					ROF;
 
 					pxl_fragColor /= writer.cast< Float >( c3d_samplesCount );
-					//IF( writer, vector == vec2( 0.0_f ) )
-					//{
-					//	pxl_fragColor = vec4( 1.0_f );
-					//}
-					//ELSE
-					//{
-					//	pxl_fragColor = vec4( vector, 0.0, 1.0 );
-					//}
-					//FI;
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

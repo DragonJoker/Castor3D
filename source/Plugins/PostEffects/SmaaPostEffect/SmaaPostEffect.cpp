@@ -53,7 +53,7 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -78,7 +78,7 @@ namespace smaa
 						&& config.data.enableReprojection
 						&& C3D_DebugVelocity )
 					{
-						pxl_fragColour = vec4( texture( c3d_map, vtx_texture ).xy(), 0.0, 1.0 );
+						pxl_fragColour = vec4( texture( c3d_map, vtx_texture ).xy(), 0.0_f, 1.0_f );
 					}
 					else
 					{

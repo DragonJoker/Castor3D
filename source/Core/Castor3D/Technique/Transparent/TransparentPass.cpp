@@ -566,11 +566,11 @@ namespace castor3d
 		std::function< void() > main = [&]()
 		{
 			auto curPosition = writer.declLocale( "curPosition"
-				, vec4( position.xyz(), 1.0 ) );
+				, vec4( position.xyz(), 1.0_f ) );
 			auto v4Normal = writer.declLocale( "v4Normal"
-				, vec4( normal, 0.0 ) );
+				, vec4( normal, 0.0_f ) );
 			auto v4Tangent = writer.declLocale( "v4Tangent"
-				, vec4( tangent, 0.0 ) );
+				, vec4( tangent, 0.0_f ) );
 			auto v3Texture = writer.declLocale( "v3Texture"
 				, uv );
 
@@ -612,9 +612,9 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
-				curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0 );
-				v4Normal = vec4( sdw::mix( v4Normal.xyz(), normal2.xyz(), vec3( c3d_time ) ), 1.0 );
-				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), tangent2.xyz(), vec3( c3d_time ) ), 1.0 );
+				curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Normal = vec4( sdw::mix( v4Normal.xyz(), normal2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), tangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
 				v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
 			}
 
@@ -659,8 +659,8 @@ namespace castor3d
 			// Positions in projection space are in [-1, 1] range, while texture
 			// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
 			// the scale (and flip the y axis):
-			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5 );
-			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5 );
+			vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
+			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );

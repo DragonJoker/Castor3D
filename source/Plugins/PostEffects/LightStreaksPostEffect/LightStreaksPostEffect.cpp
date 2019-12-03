@@ -46,7 +46,7 @@ namespace light_streaks
 				, [&]()
 				{
 					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
-					out.gl_out.gl_Position = vec4( position.xy(), 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
@@ -66,7 +66,7 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0 );
+					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );
@@ -109,7 +109,7 @@ namespace light_streaks
 
 					if ( !renderSystem->isTopDown() )
 					{
-						texcoords = vec2( texcoords.x(), 1.0 - texcoords.y() );
+						texcoords = vec2( texcoords.x(), 1.0_f - texcoords.y() );
 					}
 
 					FOR( writer, Int, s, 0, s < c3d_samples, ++s )

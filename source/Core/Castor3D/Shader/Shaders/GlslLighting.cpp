@@ -267,8 +267,8 @@ namespace castor3d
 				{
 					auto result = m_writer.declLocale< Light >( "result", *m_lightType );
 #if C3D_DebugLightBuffer
-					result.m_colourIndex = vec4( 1.0_f, 1.0, 1.0, -1.0 );
-					result.m_intensityFarPlane = vec4( 0.8_f, 1.0, 1.0, 0.0 );
+					result.m_colourIndex = vec4( 1.0_f, 1.0f, 1.0f, -1.0f );
+					result.m_intensityFarPlane = vec4( 0.8_f, 1.0f, 1.0f, 0.0f );
 #else
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );
 					auto offset = m_writer.declLocale( cuT( "offset" ), index * Int( getMaxLightComponentsCount() ) );
@@ -291,11 +291,11 @@ namespace castor3d
 					result.m_lightBase = getBaseLight( index );
 
 #if C3D_DebugLightBuffer
-					result.m_direction = vec3( 0.0_f, -0.7071068287, 0.7071067691 );
-					result.m_transform = mat4( vec4( 1.0_f, 0.0, 0.0, 0.0 )
-						, vec4( 0.0_f, 1.0, 0.0, 0.0 )
-						, vec4( 0.0_f, 0.0, 1.0, 0.0 )
-						, vec4( 0.0_f, 0.0, 0.0, 1.0 ) );
+					result.m_direction = vec3( 0.0_f, -0.7071068287_f, 0.7071067691_f );
+					result.m_transform = mat4( vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+						, vec4( 0.0_f, 1.0_f, 0.0_f, 0.0_f )
+						, vec4( 0.0_f, 0.0_f, 1.0_f, 0.0_f )
+						, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 #else
 
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( cuT( "c3d_sLights" ) );

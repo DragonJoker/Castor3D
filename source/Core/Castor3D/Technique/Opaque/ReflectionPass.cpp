@@ -308,7 +308,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( diffuse + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -586,7 +586,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( lightDiffuse * albedo + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{
@@ -866,7 +866,7 @@ namespace castor3d
 					}
 					FI;
 
-					pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0 );
+					pxl_fragColor = vec4( lightDiffuse * diffuse + lightSpecular + emissive + ambient, 1.0_f );
 
 					if ( fogType != FogType::eDisabled )
 					{

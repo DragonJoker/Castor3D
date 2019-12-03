@@ -1362,11 +1362,11 @@ namespace castor3d
 		std::function< void() > main = [&]()
 		{
 			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
-				, vec4( position.xyz(), 1.0 ) );
+				, vec4( position.xyz(), 1.0_f ) );
 			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
-				, vec4( normal, 0.0 ) );
+				, vec4( normal, 0.0_f ) );
 			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
-				, vec4( tangent, 0.0 ) );
+				, vec4( tangent, 0.0_f ) );
 			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
 				, uv );
 			auto curMtxModel = writer.declLocale< Mat4 >( cuT( "curMtxModel" ) );
@@ -1406,9 +1406,9 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" )
 					, vec3( 1.0_f - c3d_time ) );
-				v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0 );
-				v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0 );
-				v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0 );
+				v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0_f );
+				v4Normal = vec4( sdw::fma( v4Normal.xyz(), time, normal2.xyz() * c3d_time ), 1.0_f );
+				v4Tangent = vec4( sdw::fma( v4Tangent.xyz(), time, tangent2.xyz() * c3d_time ), 1.0_f );
 				v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
 			}
 

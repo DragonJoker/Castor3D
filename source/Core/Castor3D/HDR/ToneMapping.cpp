@@ -69,7 +69,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0, 1.0 );
+					out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
 				} );
 
 			m_vertexShader.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
