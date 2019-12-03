@@ -244,10 +244,18 @@ namespace CastorViewer
 					}
 
 					m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
+					m_toolBar->EnableTool( eID_TOOL_EXPORT_SCENE, true );
+#if defined( __WXOS_COCOA__ )
+					m_fileMenu->Enable( eID_TOOL_EXPORT_SCENE, true );
+					m_captureMenu->Enable( eID_TOOL_PRINT_SCREEN, true );
+#endif
 
 #if defined( GUICOMMON_RECORDS )
 
 					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
+#if defined( __WXOS_COCOA__ )
+					m_captureMenu->Enable( eID_TOOL_RECORD, true );
+#endif
 
 #endif
 					SetTitle( wxT( "Castor Viewer - " )
@@ -490,9 +498,10 @@ namespace CastorViewer
 		m_toolBar->SetArtProvider( new AuiToolBarArt );
 		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "open a new scene" ) );
+		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *ImagesLoader::getBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
+		m_toolBar->EnableTool( eID_TOOL_EXPORT_SCENE, false );
 		splashScreen.Step( 1 );
 		m_toolBar->AddSeparator();
 		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *ImagesLoader::getBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
@@ -501,11 +510,9 @@ namespace CastorViewer
 		splashScreen.Step( 1 );
 		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *ImagesLoader::getBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
 		splashScreen.Step( 1 );
-
-		wxMemoryInputStream isPrint( print_screen_png, sizeof( print_screen_png ) );
-		wxImage imgPrint( isPrint, wxBITMAP_TYPE_PNG );
-		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), imgPrint.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
+		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), wxImage( *ImagesLoader::getBitmap( eBMP_PRINTSCREEN ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
 		m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, false );
+		splashScreen.Step( 1 );
 
 #if defined( GUICOMMON_RECORDS )
 
@@ -526,6 +533,39 @@ namespace CastorViewer
 
 		m_toolBar->Realize();
 		m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
+
+#if defined( __WXOSX_COCOA__ )
+
+		m_fileMenu = new wxMenu;
+		m_fileMenu->Append( eID_TOOL_LOAD_SCENE, _( "Open a new scene" ) );
+		m_fileMenu->Append( eID_TOOL_EXPORT_SCENE, _( "Export the current scene" ) );
+		m_fileMenu->Enable( eID_TOOL_EXPORT_SCENE, false );
+		m_fileMenu->AppendSeparator();
+		m_fileMenu->Append( wxID_EXIT, _( "Exit" ) );
+
+		m_tabsMenu = new wxMenu;
+		m_tabsMenu->Append( eID_TOOL_SHOW_LOGS, _( "Display logs" ) );
+		m_tabsMenu->Append( eID_TOOL_SHOW_LISTS, _( "Display lists" ) );
+		m_tabsMenu->Append( eID_TOOL_SHOW_PROPERTIES, _( "Display properties" ) );
+
+		m_captureMenu = new wxMenu;
+		m_captureMenu->Append( eID_TOOL_PRINT_SCREEN, _( "Take a snapshot" ) );
+		m_captureMenu->Enable( eID_TOOL_PRINT_SCREEN, false );
+#if defined( GUICOMMON_RECORDS )
+		m_captureMenu->Append( eID_TOOL_RECORD, _( "Record a video" ) );
+		m_captureMenu->Enable( eID_TOOL_RECORD, false );
+		m_captureMenu->Append( eID_TOOL_STOP, _( "Stop recording" ) );
+		m_captureMenu->Enable( eID_TOOL_STOP, false );
+#endif
+
+		wxMenuBar * menuBar = new wxMenuBar;
+		menuBar->Append( m_fileMenu, _( "File" ) );
+		menuBar->Append( m_tabsMenu, _( "Tabs" ) );
+		menuBar->Append( m_captureMenu, _( "Capture" ) );
+
+		SetMenuBar( menuBar );
+
+#endif
 	}
 
 	void MainFrame::doInitialisePerspectives()
@@ -680,6 +720,10 @@ namespace CastorViewer
 
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
 		m_toolBar->EnableTool( eID_TOOL_RECORD, true );
+#if defined( __WXOS_COCOA__ )
+		m_captureMenu->Enable( eID_TOOL_STOP, false );
+		m_captureMenu->Enable( eID_TOOL_RECORD, true );
+#endif
 
 		if ( m_timer )
 		{
@@ -718,6 +762,16 @@ namespace CastorViewer
 		EVT_TOOL( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
 		EVT_TOOL( eID_TOOL_RECORD, MainFrame::OnRecord )
 		EVT_TOOL( eID_TOOL_STOP, MainFrame::OnStop )
+#if defined( __WXOSX_COCOA__ )
+		EVT_MENU( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
+		EVT_MENU( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
+		EVT_MENU( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
+		EVT_MENU( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
+		EVT_MENU( eID_TOOL_SHOW_PROPERTIES, MainFrame::OnShowProperties )
+		EVT_MENU( eID_TOOL_PRINT_SCREEN, MainFrame::OnPrintScreen )
+		EVT_MENU( eID_TOOL_RECORD, MainFrame::OnRecord )
+		EVT_MENU( eID_TOOL_STOP, MainFrame::OnStop )
+#endif
 	END_EVENT_TABLE()
 
 	void MainFrame::OnPaint( wxPaintEvent & event )
@@ -981,6 +1035,10 @@ namespace CastorViewer
 		{
 			m_toolBar->EnableTool( eID_TOOL_STOP, true );
 			m_toolBar->EnableTool( eID_TOOL_RECORD, false );
+#if defined( __WXOS_COCOA__ )
+			m_captureMenu->Enable( eID_TOOL_STOP, true );
+			m_captureMenu->Enable( eID_TOOL_RECORD, false );
+#endif
 		}
 
 #endif

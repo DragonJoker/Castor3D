@@ -29,6 +29,7 @@ namespace CastorViewer
 		eBMP_EXPORT,
 		eBMP_LOGS,
 		eBMP_PROPERTIES,
+		eBMP_PRINTSCREEN
 	}	eBMP;
 
 	class MainFrame
@@ -107,6 +108,11 @@ namespace CastorViewer
 		std::mutex m_msgLogListMtx;
 		GuiCommon::Recorder m_recorder;
 		int m_recordFps;
+#if defined( __WXOSX_COCOA__ )
+		wxMenu * m_fileMenu{ nullptr };
+		wxMenu * m_tabsMenu{ nullptr };
+		wxMenu * m_captureMenu{ nullptr };
+#endif
 	};
 }
 
