@@ -2,13 +2,9 @@
 
 #include <Castor3D/Engine.hpp>
 
-#include <Ashes/Core/Renderer.hpp>
-
 #include <CompilerGlsl/compileGlsl.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
-
-#include <Gl3Renderer/Core/GlCreateRenderer.hpp>
 
 using namespace castor;
 
@@ -18,9 +14,8 @@ namespace Gl3Render
 	String RenderSystem::Type = cuT( "opengl3" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
-		: castor3d::RenderSystem( engine, Name, false, false, false, false )
+		, AshPluginDescription desc )
+		: castor3d::RenderSystem{ engine, std::move( desc ), false, false, false }
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
@@ -77,17 +72,8 @@ namespace Gl3Render
 					Logger::logErrorNoNL( msg );
 				}
 			} );
-		m_renderer.reset( createRenderer( ashes::Renderer::Configuration
-			{
-				string::stringCast< char >( appName ),
-				"Castor3D",
-				enableValidation,
-			} ) );
+		getEngine()->getRenderersList().selectPlugin( m_desc.name );
 		Logger::logInfo( cuT( "Using " ) + Name );
-		auto & gpu = m_renderer->getPhysicalDevice( 0u );
-		m_memoryProperties = gpu.getMemoryProperties();
-		m_properties = gpu.getProperties();
-		m_features = gpu.getFeatures();
 	}
 
 	RenderSystem::~RenderSystem()
@@ -95,15 +81,13 @@ namespace Gl3Render
 	}
 
 	castor3d::RenderSystemUPtr RenderSystem::create( castor3d::Engine & engine
-		, castor::String const & appName
-		, bool enableValidation )
+		, AshPluginDescription desc )
 	{
 		return std::make_unique< RenderSystem >( engine
-			, appName
-			, enableValidation );
+			, desc );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )
+	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		castor3d::UInt32Array result;
 		std::string glsl;
@@ -115,7 +99,7 @@ namespace Gl3Render
 				, glsl::GlslConfig
 				{
 					module.shader->getType(),
-					m_renderer->getPhysicalDevice( 0u ).getShaderVersion(),
+					330,
 					false,
 					true,
 					true,
