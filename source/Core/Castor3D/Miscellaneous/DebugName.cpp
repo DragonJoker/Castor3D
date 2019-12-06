@@ -33,7 +33,6 @@ namespace castor3d
 					name.c_str()
 				} );
 		}
-		else
 
 #endif
 #if VK_EXT_debug_marker
