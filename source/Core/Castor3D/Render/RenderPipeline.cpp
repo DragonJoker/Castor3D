@@ -24,6 +24,20 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		ashes::PipelineRasterizationStateCreateInfo adjustRasterizationState( RenderSystem & renderSystem
+			, ashes::PipelineRasterizationStateCreateInfo state )
+		{
+			if ( !renderSystem.isTopDown() )
+			{
+				state->frontFace = VkFrontFace( VK_FRONT_FACE_END_RANGE - state->frontFace );
+			}
+
+			return state;
+		}
+	}
+
 	RenderPipeline::RenderPipeline( RenderSystem & renderSystem
 		, ashes::PipelineDepthStencilStateCreateInfo dsState
 		, ashes::PipelineRasterizationStateCreateInfo rsState
@@ -33,7 +47,7 @@ namespace castor3d
 		, PipelineFlags const & flags )
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_dsState{ std::move( dsState ) }
-		, m_rsState{ std::move( rsState ) }
+		, m_rsState{ adjustRasterizationState( renderSystem, std::move( rsState ) ) }
 		, m_blState{ std::move( blState ) }
 		, m_msState{ std::move( msState ) }
 		, m_program{ std::move( program ) }
