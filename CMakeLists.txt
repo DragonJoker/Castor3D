@@ -92,9 +92,10 @@ elseif ( MSVC )
 	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	endif ()
-	add_definitions(
-		-D_ENFORCE_MATCHING_ALLOCATORS=0
-		-DNOMINMAX
+	set( PROJECTS_COMPILE_DEFINITIONS
+		${PROJECTS_COMPILE_DEFINITIONS}
+		_ENFORCE_MATCHING_ALLOCATORS=0
+		NOMINMAX
 	)
 else ()
 	message( FATAL_ERROR "Unsupported compiler." )
@@ -117,34 +118,23 @@ set( SHADERWRITER_DIR external/ShaderWriter )
 #--------------------------------------------------------------------------------------------------
 #	Normalising libraries names
 #--------------------------------------------------------------------------------------------------
-#Boost Libs
-set( BoostLibraries "")
-foreach(Lib ${Boost_LIBRARIES})
-	if (BoostLibraries)
-		set(BoostLibraries "${BoostLibraries}|${Lib}")
-	else()
-		set(BoostLibraries "${Lib}")
-	endif()
-endforeach()
-
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )
 msg_debug( "CMAKE_CXX_FLAGS  : ${CMAKE_CXX_FLAGS}" )
 
-set( CastorMinLibraries
-	${BoostLibraries}
-)
-
 set( CastorBinsDependencies
-	CastorUtils
+	castor::CastorUtils
 )
 
 set( Castor3DBinsDependencies
-	${CastorBinsDependencies}
-	ShaderAST
-	ShaderWriter
-	ashespp
-	Castor3D
+	castor::CastorUtils
+)
+
+set( PROJECTS_COMPILE_DEFINITIONS
+	${PROJECTS_COMPILE_DEFINITIONS}
+	C3D_VERSION_MAJOR=${VERSION_MAJOR}
+	C3D_VERSION_MINOR=${VERSION_MINOR}
+	C3D_VERSION_BUILD=${VERSION_BUILD}
 )
 
 #--------------------------------------------------------------------------------------------------
@@ -159,16 +149,12 @@ if( MSVC )
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
 	file( COPY ${CMAKE_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
-	add_definitions( -D_CRT_SECURE_NO_WARNINGS )
+	# add_definitions( -D_CRT_SECURE_NO_WARNINGS )
+	set( PROJECTS_COMPILE_DEFINITIONS
+		${PROJECTS_COMPILE_DEFINITIONS}
+		_CRT_SECURE_NO_WARNINGS
+	)
 endif()
-
-add_definitions(
-	-DC3D_VERSION_MAJOR=${VERSION_MAJOR}
-	-DC3D_VERSION_MINOR=${VERSION_MINOR}
-	-DC3D_VERSION_BUILD=${VERSION_BUILD}
-	-D_UNICODE
-	-DUNICODE
-)
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
@@ -250,6 +236,12 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	endif ()
 
 	add_subdirectory( source )
+
+	if ( CASTOR_BUILD_CASTOR3D )
+		add_subdirectory( samples )
+	endif ()
+
+	add_subdirectory( tools )
 
 	if( CASTOR_BUILDGRP_TEST )
 		add_subdirectory( test )

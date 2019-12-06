@@ -7,10 +7,9 @@ endfunction( ParticlesInit )
 
 function( ParticlesBuild )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
-		set( ParticlesLibraries ${CastorMinLibraries} )
-
 		set( ParticlesIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/Particles
 			${CASTOR_BINARY_DIR}/include/Plugins/Particles
 			${CASTOR_SOURCE_DIR}/source/Plugins/Particles

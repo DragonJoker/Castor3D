@@ -19,10 +19,9 @@ endfunction( PostEffectsInit )
 
 function( PostEffectsBuild )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
-		set( PostEffectLibraries ${CastorMinLibraries} )
-
 		set( PostEffectIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/PostEffects
 			${CASTOR_BINARY_DIR}/include/Plugins/PostEffects
 			${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects

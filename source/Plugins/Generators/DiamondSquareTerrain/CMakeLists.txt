@@ -2,7 +2,7 @@ project( DiamondSquareTerrain )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	${PROJECT_NAME}
+	castor::${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
@@ -11,19 +11,25 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${GeneratorIncludes} )
-
 add_target(
 	${PROJECT_NAME}
 	plugin
 	${CASTOR_SOURCE_DIR}/include/Plugins/Generators/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${PROJECT_NAME}
-	"Castor3D"
-	"${GeneratorLibraries}"
+	""
+	""
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
+)
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${GeneratorIncludes}
+)
+target_link_libraries( ${PROJECT_NAME}
+	PUBLIC
+		castor::Castor3D
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generators" )

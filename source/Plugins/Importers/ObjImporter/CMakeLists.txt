@@ -2,7 +2,7 @@ project( ObjImporter )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	${PROJECT_NAME}
+	castor::${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
@@ -11,21 +11,27 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-include_directories( ${ImporterIncludes} )
-
 add_target(
 	${PROJECT_NAME}
 	plugin
 	${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
-	"Castor3D"
-	"${ImporterLibraries}"
+	""
+	""
 	${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
+)
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${ImporterIncludes}
+)
+target_link_libraries( ${PROJECT_NAME}
+	PUBLIC
+		castor::Castor3D
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Importers" )

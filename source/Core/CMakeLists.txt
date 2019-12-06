@@ -22,21 +22,11 @@ function( CoreBuild )
 		message( SEND_ERROR "CastorUtils : ${Build}" )
 	endif ()
 
-	set( CastorMinLibraries
-		${CastorMinLibraries}
-		PARENT_SCOPE
-	)
-
 	if ( CASTOR_BUILD_CASTOR3D )
 		set( Build ${C3D} )
 		add_subdirectory( Core/Castor3D )
 		set( C3D ${Build} PARENT_SCOPE )
 	endif ()
-
-	set( CastorMinLibraries
-		${CastorMinLibraries}
-		PARENT_SCOPE
-	)
 
 	set( CastorBinsDependencies
 		${CastorBinsDependencies}

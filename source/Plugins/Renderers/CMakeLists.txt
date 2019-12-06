@@ -27,10 +27,9 @@ endfunction( RenderersInit )
 
 function( RenderersBuild )
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
-		set( RendererLibraries ${CastorMinLibraries} )
-
 		set( RendererIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
 			${CASTOR_BINARY_DIR}/include/Plugins/Renderers
 			${CASTOR_SOURCE_DIR}/source/Plugins/Renderers

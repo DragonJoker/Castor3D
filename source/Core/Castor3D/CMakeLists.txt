@@ -16,7 +16,7 @@ if ( CASTOR_USE_GLSLANG )
 		OSDependent
 		SPVRemapper
 		SPIRV )
-	include_directories(
+	set( GlslangIncludes
 		${CASTOR_SOURCE_DIR}/external/glslang
 	)
 	set( C3D_USE_GLSLANG 1 )
@@ -30,12 +30,8 @@ configure_file(
 
 set( Castor3DBinsDependencies
 	${Castor3DBinsDependencies}
-	${PROJECT_NAME}
+	castor::${PROJECT_NAME}
 	PARENT_SCOPE
-)
-
-include_directories(
-	${Castor3DIncludeDirs}
 )
 
 add_target(
@@ -43,14 +39,33 @@ add_target(
 	api_dll
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}
-	"CastorUtils;ShaderAST;ShaderWriter;ashes;ashespp"
-	"${CastorMinLibraries};ShaderWriter;ashes;ashespp;${GlslangLibraries}"
+	""
+	""
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
+)
+target_include_directories( ${PROJECT_NAME}
+	PUBLIC
+		${Vulkan_INCLUDE_DIRS}
+	PRIVATE
+		${CASTOR_SOURCE_DIR}/include/Core
+		${CASTOR_BINARY_DIR}/include/Core
+		${CASTOR_SOURCE_DIR}/source/Core
+		${CASTOR_BINARY_DIR}/source/Core
+		${GlslangIncludes}
+)
+
+target_link_libraries( ${PROJECT_NAME}
+	PUBLIC
+		castor::CastorUtils
+		sdw::ShaderWriter
+		ashes::ashespp
+	PRIVATE
+		${GlslangLibraries}
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES
@@ -120,22 +135,6 @@ c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Opaque "Technique\\\
 c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Opaque/Ssao "Technique\\\\\\\\Opaque\\\\\\\\Ssao" )
 c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Technique/Transparent "Technique\\\\\\\\Transparent" )
 c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Texture "Texture" )
-
-set( CastorMinLibraries
-	${CastorMinLibraries}
-	ShaderWriter
-	ashespp
-	${PROJECT_NAME}
-	PARENT_SCOPE
-)
-
-set( CastorBinLibraries
-	${CastorBinLibraries}
-	ShaderWriter
-	ashespp
-	${PROJECT_NAME}
-	PARENT_SCOPE
-)
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

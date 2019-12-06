@@ -10,4 +10,15 @@
     </Expand>
   </Type>
 
+  <Type Name="ashes::ArrayView&lt;*&gt;">
+	<DisplayString>{{size = {m_end - m_begin}}}</DisplayString>
+	<Expand>
+		<Item Name="[size]">m_end - m_begin</Item>
+		<ArrayItems>
+			<Size>m_end - m_begin</Size>
+			<ValuePointer>m_begin</ValuePointer>
+		</ArrayItems>
+    </Expand>
+  </Type>
+
 </AutoVisualizer>

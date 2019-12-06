@@ -11,10 +11,9 @@ endfunction( DividersInit )
 
 function( DividersBuild )
 	if ( ${CASTOR_BUILDGRP_DIVIDER} )
-		set( DividerLibraries ${CastorMinLibraries} )
-
 		set( DividerIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/Dividers
 			${CASTOR_BINARY_DIR}/include/Plugins/Dividers
 			${CASTOR_SOURCE_DIR}/source/Plugins/Dividers

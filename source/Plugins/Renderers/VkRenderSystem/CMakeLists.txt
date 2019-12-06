@@ -2,7 +2,7 @@ project( VkRenderSystem )
 
 SET( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	${PROJECT_NAME}
+	castor::${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
@@ -24,12 +24,6 @@ set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-include_directories(
-	${RendererIncludes}
-	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include/VkRenderer
-	${CASTOR_BINARY_DIR}/${ASHES_DIR}/include/VkRenderer
-)
-
 if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross/spirv_glsl.cpp )
 	set( SPIRV_CROSS_DIR
 		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross
@@ -49,8 +43,7 @@ if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross/spirv_glsl.cp
 		${SPIRV_CROSS_DIR}/spirv_parser.cpp
 		${SPIRV_CROSS_DIR}/spirv_cross_parsed_ir.cpp
 	)
-	include_directories( ${SPIRV_CROSS_DIR} )
-	add_definitions( -DC3DVkRenderer_HasSPIRVCross )
+	set( COMPILE_DEFINITIONS C3DVkRenderer_HasSPIRVCross )
 endif ()
 
 add_target(
@@ -58,18 +51,35 @@ add_target(
 	plugin
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
-	"Castor3D"
-	"${RendererLibraries};VkRenderer;CompilerSpirV;CompilerGlsl"
+	""
+	""
 	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
-	"-DVkRenderer_STATIC"
-	"-DVkRenderer_STATIC"
+	""
+	""
 	""
 	"${SPIRV_FILES}"
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
+)
+target_include_directories( ${PROJECT_NAME}
+	PRIVATE
+		${RendererIncludes}
+		${SPIRV_CROSS_DIR}
+)
+target_compile_definitions( ${PROJECT_NAME}
+	PRIVATE
+		${COMPILE_DEFINITIONS}
+)
+target_link_libraries( ${PROJECT_NAME}
+	PUBLIC
+		castor::Castor3D
+	PRIVATE
+		ashes::VkRenderer
+		sdw::CompilerSpirV
+		sdw::CompilerGlsl
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )

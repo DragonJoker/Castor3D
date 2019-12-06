@@ -1,11 +1,6 @@
 get_filename_component( CASTOR_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY )
 get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY )
 
-include_directories(
-	${CASTOR_SOURCE_DIR}/include/Core
-	${CASTOR_BINARY_DIR}/include/Core
-)
-
 set( Vulkan_INCLUDE_DIR ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Headers/include )
 set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
 
@@ -18,27 +13,12 @@ elseif ( ANDROID )
 else ()
 	add_definitions( -DVK_USE_PLATFORM_XLIB_KHR )
 endif ()
-set( Castor3DIncludeDirs
-	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include
-	${CASTOR_BINARY_DIR}/${ASHES_DIR}/include
-	${CMAKE_BINARY_DIR}/include
-	${CASTOR_BINARY_DIR}/${ASHES_DIR}/source
-	${CASTOR_SOURCE_DIR}/${SHADERWRITER_DIR}/include
-	${CASTOR_BINARY_DIR}/${SHADERWRITER_DIR}/source
-	${CASTOR_SOURCE_DIR}/include/Core
-	${CASTOR_SOURCE_DIR}/include/Core
-	${CASTOR_BINARY_DIR}/include/Core
-	${CASTOR_BINARY_DIR}/source/Core
-	${Vulkan_INCLUDE_DIRS}
-)
 
 add_subdirectory( Core )
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	add_subdirectory( Plugins )
-	add_subdirectory( Samples )
 	add_subdirectory( Interop )
 endif ()
-add_subdirectory( Tools )
 
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	# Ashes external library
@@ -52,6 +32,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		set( ASHES_BUILD_RENDERER_D3D11 ${CASTOR_BUILD_RENDERER_D3D11} )
 		set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILDGRP_TEST} )
 	endif ()
+	get_filename_component( SPIRV_CROSS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/SPIRV-Cross REALPATH )
 	add_subdirectory( ../${ASHES_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 	set( AshesLibraries
 		ashes::common
@@ -62,11 +43,8 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	set_property( TARGET ashes PROPERTY FOLDER "External/Ashes/Core" )
 	set_property( TARGET ashespp PROPERTY FOLDER "External/Ashes/Core" )
 	if ( CASTOR_BUILDGRP_RENDERER )
-		if ( TARGET Gl3Renderer )
-			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
-		endif ()
-		if ( TARGET Gl4Renderer )
-			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
+		if ( TARGET RendererCommon )
+			set_property( TARGET RendererCommon PROPERTY FOLDER "External/Ashes/Renderers" )
 		endif ()
 		if ( TARGET VkRenderer )
 			set_property( TARGET VkRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
@@ -77,19 +55,22 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		if ( TARGET TestRenderer )
 			set_property( TARGET TestRenderer PROPERTY FOLDER "External/Ashes/Renderers" )
 		endif ()
-		if ( TARGET RendererCommon )
-			set_property( TARGET RendererCommon PROPERTY FOLDER "External/Ashes/Renderers" )
-		endif ()
 		if ( TARGET GlRendererCommon )
 			set_property( TARGET GlRendererCommon PROPERTY FOLDER "External/Ashes/Renderers" )
+		endif ()
+		if ( TARGET Gl3Renderer )
+			set_property( TARGET Gl3Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
+		endif ()
+		if ( TARGET Gl4Renderer )
+			set_property( TARGET Gl4Renderer PROPERTY FOLDER "External/Ashes/Renderers" )
 		endif ()
 	endif ()
 
 	if ( CASTOR_USE_GLSLANG )
-		set( ENABLE_GLSLANG_BINARIES FALSE CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
-		set( ENABLE_AMD_EXTENSIONS FALSE CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
-		set( ENABLE_NV_EXTENSIONS FALSE CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
-		set( ENABLE_HLSL FALSE CACHE BOOL "Enables HLSL input support" FORCE )
+		set( ENABLE_GLSLANG_BINARIES OFF CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
+		set( ENABLE_AMD_EXTENSIONS OFF CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
+		set( ENABLE_NV_EXTENSIONS OFF CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
+		set( ENABLE_HLSL OFF CACHE BOOL "Enables HLSL input support" FORCE )
 		set( BUILD_TESTING OFF )
 		set( SKIP_GLSLANG_INSTALL ON )
 		add_subdirectory( ../external/glslang ${CMAKE_BINARY_DIR}/external/glslang )
@@ -102,26 +83,26 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 
 	# ShaderWriter external library
 	if ( NOT CASTOR_BUILDGRP_RENDERER )
-		set( SDW_BUILD_EXPORTERS FALSE )
+		set( SDW_BUILD_EXPORTERS OFF )
 	else ()
-		set( SDW_BUILD_EXPORTERS TRUE )
+		set( SDW_BUILD_EXPORTERS ON )
+		set( SDW_BUILD_EXPORTER_SPIRV ON )
 		if ( CASTOR_BUILD_RENDERER_OGL3 OR CASTOR_BUILD_RENDERER_OGL4  OR CASTOR_BUILD_RENDERER_VKN )
 			set( SDW_BUILD_EXPORTER_GLSL ON )
 		else ()
 			set( SDW_BUILD_EXPORTER_GLSL OFF )
 		endif ()
-		set( SDW_BUILD_EXPORTER_SPIRV ${CASTOR_BUILD_RENDERER_VKN} )
 		if ( WIN32 )
 			set( SDW_BUILD_EXPORTER_HLSL ${CASTOR_BUILD_RENDERER_D3D11} )
 		else ()
-			set( SDW_BUILD_EXPORTER_HLSL FALSE )
+			set( SDW_BUILD_EXPORTER_HLSL OFF )
 		endif ()
 	endif ()
-	set( SDW_BUILD_SDW FALSE )
+	set( SDW_BUILD_SDW OFF )
 	add_subdirectory( ../${SHADERWRITER_DIR}/source ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
 	set( ShaderWriterLibraries
-		ShaderAST
-		ShaderWriter
+		sdw::ShaderAST
+		sdw::ShaderWriter
 	)
 	set_property( TARGET ShaderAST PROPERTY FOLDER "External/ShaderWriter/Core" )
 	set_property( TARGET ShaderWriter PROPERTY FOLDER "External/ShaderWriter/Core" )
@@ -141,25 +122,28 @@ endif ()
 CoreInit()
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	PluginsInit()
-	SamplesInit()
 	InteropInit()
 endif ()
-ToolsInit()
 
 CoreBuild()
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	PluginsBuild()
-	SamplesBuild()
 	InteropBuild()
 endif ()
-ToolsBuild()
 
 set( msg "\nCastor following projects will be built" )
 CoreSummary( ${msg} )
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	PluginsSummary( ${msg} )
-	SamplesSummary( ${msg} )
 	InteropSummary( ${msg} )
 endif ()
-ToolsSummary( ${msg} )
 message( STATUS "${msg}\n" )
+
+set( CastorBinsDependencies
+	${CastorBinsDependencies}
+	PARENT_SCOPE
+)
+set( Castor3DBinsDependencies
+	${Castor3DBinsDependencies}
+	PARENT_SCOPE
+)

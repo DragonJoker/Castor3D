@@ -7,10 +7,9 @@ endfunction( GeneratorInit )
 
 function( GeneratorBuild )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
-		set( GeneratorLibraries ${CastorMinLibraries} )
-
 		set( GeneratorIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/Generators
 			${CASTOR_BINARY_DIR}/include/Plugins/Generators
 			${CASTOR_SOURCE_DIR}/source/Plugins/Generators

@@ -3,152 +3,76 @@ project( CastorUtils )
 include( Doxygen )
 include( AndroidNdkModules )
 
-if ( CASTOR_USE_SYSTEM_LIBS )
-	find_package( ZLIB 1.2.7 )
+if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
 	find_package( Freetype )
-	set( msg "no (missing: " )
 	if ( FREETYPE_FOUND )
 		message( STATUS "+ Found Freetype (version ${FREETYPE_VERSION_STRING})" )
-	else ()
-		set( msg "${msg} Freetype" )
 	endif()
-	if( ZLIB_FOUND )
-		message( STATUS "+ Found zlib (version ${ZLIB_VERSION_STRING})" )
-	else ()
-		set( msg "${msg} zlib" )
-	endif()
-
-	include_directories( ${ZLIB_INCLUDE_DIR} )
-	include_directories( ${FREETYPE_INCLUDE_DIR_freetype2} )
-	include_directories( ${FREETYPE_INCLUDE_DIR_ft2build} )
-
-	#FreeType Libs
-	set( FreeTypeLibraries "")
-	foreach(Lib ${FREETYPE_LIBRARIES})
-		if (FreeTypeLibraries)
-			set(FreeTypeLibraries "${FreeTypeLibraries}|${Lib}")
-		else()
-			set(FreeTypeLibraries "${Lib}")
-		endif()
-	endforeach()
-
-	#Zlib Libs
-	set( ZlibLibraries "")
-	foreach(Lib ${ZLIB_LIBRARIES})
-		if (ZlibLibraries)
-			set(ZlibLibraries "${ZlibLibraries}|${Lib}")
-		else()
-			set(ZlibLibraries "${Lib}")
-		endif()
-	endforeach()
-elseif ( APPLE )
-	find_package( Freetype )
-	set( msg "no (missing: " )
-	if ( FREETYPE_FOUND )
-		message( STATUS "+ Found Freetype (version ${FREETYPE_VERSION_STRING})" )
-	else ()
-		set( msg "${msg} Freetype" )
-	endif()
-
-	include_directories( ${FREETYPE_INCLUDE_DIR_freetype2} )
-	include_directories( ${FREETYPE_INCLUDE_DIR_ft2build} )
-
-	#FreeType Libs
-	set( FreeTypeLibraries "")
-	foreach(Lib ${FREETYPE_LIBRARIES})
-		if (FreeTypeLibraries)
-			set(FreeTypeLibraries "${FreeTypeLibraries}|${Lib}")
-		else()
-			set(FreeTypeLibraries "${Lib}")
-		endif()
-	endforeach()
-
-	set( ZLIB_FOUND TRUE )
-	include_directories(
-		${CMAKE_SOURCE_DIR}/external/zlib
-		${CMAKE_BINARY_DIR}/external/zlib
-	)
 else ()
 	set( FREETYPE_FOUND TRUE )
+	set( FREETYPE_INCLUDE_DIR_freetype2 ${CMAKE_SOURCE_DIR}/external/FreeType/include/freetype )
+	set( FREETYPE_INCLUDE_DIR_ft2build ${CMAKE_SOURCE_DIR}/external/FreeType/include )
+	set( FREETYPE_LIBRARIES FreeType )
+endif ()
+
+if ( CASTOR_USE_SYSTEM_LIBS )
+	find_package( ZLIB 1.2.7 )
+	if( ZLIB_FOUND )
+		message( STATUS "+ Found zlib (version ${ZLIB_VERSION_STRING})" )
+	endif()
+else ()
 	set( ZLIB_FOUND TRUE )
-	include_directories(
+	set( ZLIB_INCLUDE_DIR
 		${CMAKE_SOURCE_DIR}/external/zlib
 		${CMAKE_BINARY_DIR}/external/zlib
-		${CMAKE_SOURCE_DIR}/external/FreeType/include
-		${CMAKE_SOURCE_DIR}/external/FreeType/include/freetype
 	)
+	set( ZLIB_LIBRARIES zlib )
 endif ()
 
 if ( ZLIB_FOUND AND FREETYPE_FOUND )
 	if ( ANDROID )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
-		set( CastorMinLibraries
-			${CastorMinLibraries}
+		set( PLATFORM_LIBRARIES
 			m
 			EGL
 			cpufeatures
 		)
 	elseif( APPLE )
-		set( CastorMinLibraries
-			${CastorMinLibraries}
+		set( PLATFORM_LIBRARIES
 			"-framework CoreGraphics"
 		)
 	elseif( WIN32 )
 	else ()
 		find_package( X11 )
-	endif ()
 
-	set( CASTOR_HAS_XINERAMA 0 )
-	if ( EXISTS "/usr/lib/X11/extensions/Xinerama.h" )
-		set( CASTOR_HAS_XINERAMA 1 )
-	elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
-		set( CASTOR_HAS_XINERAMA 1 )
+		set( CASTOR_HAS_XINERAMA 0 )
+		if ( EXISTS "/usr/lib/X11/extensions/Xinerama.h" )
+			set( CASTOR_HAS_XINERAMA 1 )
+			set( PLATFORM_LIBRARIES
+				Xinerama
+			)
+		elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
+			set( CASTOR_HAS_XINERAMA 1 )
+			set( PLATFORM_LIBRARIES
+				Xinerama
+			)
+		endif ()
+
+		set( PLATFORM_LIBRARIES
+			${PLATFORM_LIBRARIES}
+			${X11_LIBRARIES}
+		)
 	endif ()
 
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
-
-	#X11 Libs
-	set( X11Libraries "" )
-	foreach( Lib ${X11_LIBRARIES} )
-		if( X11Libraries )
-			set( X11Libraries "${X11Libraries}|${Lib}" )
-		elseif (${CASTOR_HAS_XINERAMA} EQUAL 1)
-			set( X11Libraries "Xinerama ${Lib}" )
-		else ()
-			set( X11Libraries "${Lib}" )
-		endif()
-	endforeach()
 
 	set( CastorBinsDependencies 
 		${CastorBinsDependencies}
 		${PROJECT_NAME}
 		PARENT_SCOPE
 	)
-
-	if ( CASTOR_USE_SYSTEM_LIBS )
-		set( CastorMinLibraries
-			${CastorMinLibraries}
-			${FreeTypeLibraries}
-			${ZlibLibraries}
-			${X11Libraries}
-		)
-	elseif ( APPLE )
-		set( CastorMinLibraries
-			${CastorMinLibraries}
-			zlib
-			${FreeTypeLibraries}
-			${X11Libraries}
-		)
-	else ()
-		set( CastorMinLibraries
-			${CastorMinLibraries}
-			zlib
-			FreeType
-			${X11Libraries}
-		)
-	endif ()
 
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
@@ -180,8 +104,6 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		NEWLINE_STYLE LF
 	)
 
-	include_directories( ${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME} )
-
 	set( ADDITIONAL_SOURCE_FILES
 		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 	)
@@ -199,7 +121,7 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}
 		""
-		"${CastorMinLibraries};${X11Libraries}"
+		""
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 		""
@@ -211,11 +133,42 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		ALIAS
 		${PROJECT_NAME}
 	)
+	target_compile_definitions( ${PROJECT_NAME} PUBLIC
+		_UNICODE
+		UNICODE
+	)
+	target_include_directories( ${PROJECT_NAME}
+		PUBLIC
+			${CASTOR_SOURCE_DIR}/include
+			${CASTOR_BINARY_DIR}/include
+		PRIVATE
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
+			${CASTOR_SOURCE_DIR}/source/Core
+			${CASTOR_BINARY_DIR}/source/Core
+			${ZLIB_INCLUDE_DIR}
+			${FREETYPE_INCLUDE_DIR_freetype2}
+			${FREETYPE_INCLUDE_DIR_ft2build}
+	)
 
 	if ( WIN32 )
-		target_link_libraries( ${PROJECT_NAME} Dbghelp )
+		target_link_libraries( ${PROJECT_NAME}
+			PUBLIC
+				Dbghelp
+			PRIVATE
+				${PLATFORM_LIBRARIES}
+				${FREETYPE_LIBRARIES}
+				${ZLIB_LIBRARIES}
+		)
 	else ()
-		target_link_libraries( ${PROJECT_NAME} dl )
+		target_link_libraries( ${PROJECT_NAME}
+			PUBLIC
+				dl
+			PRIVATE
+				${PLATFORM_LIBRARIES}
+				${FREETYPE_LIBRARIES}
+				${ZLIB_LIBRARIES}
+		)
 	endif ()
 
 	c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Core Align "Align" )

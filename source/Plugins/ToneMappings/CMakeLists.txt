@@ -13,10 +13,9 @@ function( ToneMappingsInit )
 endfunction( ToneMappingsInit )
 
 function( ToneMappingsBuild )
-	set( ToneMappingLibraries ${CastorMinLibraries} )
-
 	set( ToneMappingIncludes
-		${Castor3DIncludeDirs}
+		${CASTOR_SOURCE_DIR}/include/Core
+		${CASTOR_BINARY_DIR}/include/Core
 		${CASTOR_SOURCE_DIR}/include/Plugins/ToneMappings
 		${CASTOR_BINARY_DIR}/include/Plugins/ToneMappings
 		${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings

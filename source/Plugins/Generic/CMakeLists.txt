@@ -7,10 +7,9 @@ endfunction( GenericInit )
 
 function( GenericBuild )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
-		set( GenericLibraries ${CastorMinLibraries} )
-
 		set( GenericIncludes
-			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/include/Plugins/Generic
 			${CASTOR_BINARY_DIR}/include/Plugins/Generic
 			${CASTOR_SOURCE_DIR}/source/Plugins/Generic

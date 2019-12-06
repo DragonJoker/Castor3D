@@ -5,21 +5,9 @@ find_package( ASSIMP )
 if( ASSIMP_FOUND )
 	message( STATUS "+ Found Assimp" )
 
-	include_directories( ${ImporterIncludes} )
-	include_directories( ${ASSIMP_INCLUDE_DIR} )
-
-	set( ASSIMPLibraries "" )
-	foreach( Lib ${ASSIMP_LIBRARIES} )
-		if( ASSIMPLibraries )
-			set( ASSIMPLibraries "${ASSIMPLibraries}|${Lib}" )
-		else()
-			set( ASSIMPLibraries "${Lib}" )
-		endif()
-	endforeach()
-
 	set( Castor3DBinsDependencies 
 		${Castor3DBinsDependencies}
-		${PROJECT_NAME}
+		castor::${PROJECT_NAME}
 		PARENT_SCOPE
 	)
 
@@ -33,12 +21,23 @@ if( ASSIMP_FOUND )
 		plugin
 		${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
-		"Castor3D"
-		"${ImporterLibraries};${ASSIMPLibraries}"
+		""
+		""
 	)
 	add_library( castor::${PROJECT_NAME}
 		ALIAS
 		${PROJECT_NAME}
+	)
+	target_include_directories( ${PROJECT_NAME}
+		PRIVATE
+			${ImporterIncludes}
+			${ASSIMP_INCLUDE_DIR}
+	)
+	target_link_libraries( ${PROJECT_NAME}
+		PUBLIC
+			castor::Castor3D
+		PRIVATE
+			${ASSIMP_LIBRARIES}
 	)
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Importers" )
