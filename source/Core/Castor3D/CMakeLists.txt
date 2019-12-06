@@ -58,7 +58,10 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_BINARY_DIR}/source/Core
 		${GlslangIncludes}
 )
-
+target_compile_definitions( ${PROJECT_NAME}
+	PUBLIC
+		${Castor3DDefinitions}
+)
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils

@@ -14,7 +14,7 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/include/Plugins/Generators/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generators/${PROJECT_NAME}
 	""
 	""

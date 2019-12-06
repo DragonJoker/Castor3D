@@ -10,8 +10,6 @@ function( GenericBuild )
 		set( GenericIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/Generic
-			${CASTOR_BINARY_DIR}/include/Plugins/Generic
 			${CASTOR_SOURCE_DIR}/source/Plugins/Generic
 			${CASTOR_BINARY_DIR}/source/Plugins/Generic
 		)
@@ -36,7 +34,7 @@ endfunction( GenericBuild )
 
 function( GenericSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
-		set( msg_tmp "\n\nGeneric :" )
+		set( msg_tmp "\n\nGeneric plugins :" )
 		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
 			set( msg_tmp "${msg_tmp}\n    CastorGui            ${Cgui}" )
 		endif ()

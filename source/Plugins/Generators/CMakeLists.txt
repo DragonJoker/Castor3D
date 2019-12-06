@@ -10,8 +10,6 @@ function( GeneratorBuild )
 		set( GeneratorIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/Generators
-			${CASTOR_BINARY_DIR}/include/Plugins/Generators
 			${CASTOR_SOURCE_DIR}/source/Plugins/Generators
 			${CASTOR_BINARY_DIR}/source/Plugins/Generators
 		)
@@ -36,7 +34,7 @@ endfunction( GeneratorBuild )
 
 function( GeneratorSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERATOR} )
-		set( msg_tmp "\n\nGenerator :" )
+		set( msg_tmp "\n\nGenerator plugins :" )
 		if( ${CASTOR_BUILD_GENERATOR_DIAMOND_SQUARE_TERRAIN} )
 			set( msg_tmp "${msg_tmp}\n    DiamondSquareTerrain ${Dst}" )
 		endif ()

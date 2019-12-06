@@ -19,7 +19,7 @@ if( ASSIMP_FOUND )
 	add_target(
 		${PROJECT_NAME}
 		plugin
-		${CASTOR_SOURCE_DIR}/include/Plugins/Importers/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
 		""
 		""

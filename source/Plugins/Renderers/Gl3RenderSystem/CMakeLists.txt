@@ -6,18 +6,6 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( AshesLibraries
-	${AshesLibraries}
-	ashes::Gl3Renderer
-	PARENT_SCOPE
-)
-
-set( ShaderWriterLibraries
-	${ShaderWriterLibraries}
-	sdw::CompilerGlsl
-	PARENT_SCOPE
-)
-
 set( ${PROJECT_NAME}_DESCRIPTION "OpenGL 3.2 Renderer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
@@ -26,11 +14,11 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 add_library( castor::${PROJECT_NAME}

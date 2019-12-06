@@ -14,11 +14,11 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/include/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
 add_library( castor::${PROJECT_NAME}

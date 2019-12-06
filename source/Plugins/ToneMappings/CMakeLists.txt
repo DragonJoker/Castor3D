@@ -16,8 +16,6 @@ function( ToneMappingsBuild )
 	set( ToneMappingIncludes
 		${CASTOR_SOURCE_DIR}/include/Core
 		${CASTOR_BINARY_DIR}/include/Core
-		${CASTOR_SOURCE_DIR}/include/Plugins/ToneMappings
-		${CASTOR_BINARY_DIR}/include/Plugins/ToneMappings
 		${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings
 		${CASTOR_BINARY_DIR}/source/Plugins/ToneMappings
 	)
@@ -64,7 +62,7 @@ function( ToneMappingsBuild )
 endfunction( ToneMappingsBuild )
 
 function( ToneMappingsSummary msg )
-	set( msg_tmp "\n\nToneMappings :" )
+	set( msg_tmp "\n\nToneMapping plugins :" )
 	set( msg_tmp "${msg_tmp}\n    Linear               ${Linear}" )
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )

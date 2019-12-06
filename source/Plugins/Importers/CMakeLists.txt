@@ -14,8 +14,6 @@ function( ImportersBuild )
 		set( ImporterIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/Importers
-			${CASTOR_BINARY_DIR}/include/Plugins/Importers
 			${CASTOR_SOURCE_DIR}/source/Plugins/Importers
 			${CASTOR_BINARY_DIR}/source/Plugins/Importers
 		)
@@ -52,7 +50,7 @@ endfunction( ImportersBuild )
 
 function( ImportersSummary msg )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
-		set( msg_tmp "\n\nImporters :" )
+		set( msg_tmp "\n\nImporter plugins :" )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()

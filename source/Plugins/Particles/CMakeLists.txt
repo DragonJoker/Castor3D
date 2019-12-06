@@ -10,8 +10,6 @@ function( ParticlesBuild )
 		set( ParticlesIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/Particles
-			${CASTOR_BINARY_DIR}/include/Plugins/Particles
 			${CASTOR_SOURCE_DIR}/source/Plugins/Particles
 			${CASTOR_BINARY_DIR}/source/Plugins/Particles
 		)
@@ -36,7 +34,7 @@ endfunction( ParticlesBuild )
 
 function( ParticlesSummary msg )
 	if ( ${CASTOR_BUILDGRP_PARTICLES} )
-		set( msg_tmp "\n\nParticles :" )
+		set( msg_tmp "\n\nParticle plugins :" )
 		if( ${CASTOR_BUILD_PARTICLE_FIREWORKS} )
 			set( msg_tmp "${msg_tmp}\n    Fireworks            ${Frwks}" )
 		endif ()

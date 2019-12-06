@@ -22,8 +22,6 @@ function( PostEffectsBuild )
 		set( PostEffectIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/PostEffects
-			${CASTOR_BINARY_DIR}/include/Plugins/PostEffects
 			${CASTOR_SOURCE_DIR}/source/Plugins/PostEffects
 			${CASTOR_BINARY_DIR}/source/Plugins/PostEffects
 		)
@@ -84,7 +82,7 @@ endfunction( PostEffectsBuild )
 
 function( PostEffectsSummary msg )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
-		set( msg_tmp "\n\nPostEffects :" )
+		set( msg_tmp "\n\nPostEffect plugins :" )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( msg_tmp "${msg_tmp}\n    Bloom                ${Bloom}" )
 		endif ()

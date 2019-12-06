@@ -1,4 +1,4 @@
-#include "VkRenderSystem/VkRenderSystemPch.hpp"
+#include "VkRenderSystemPch.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>

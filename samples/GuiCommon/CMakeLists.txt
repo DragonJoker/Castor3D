@@ -17,7 +17,6 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-message( STATUS "      ${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}" )
 add_target(
 	${PROJECT_NAME}
 	lib

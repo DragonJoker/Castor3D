@@ -5,13 +5,25 @@ set( Vulkan_INCLUDE_DIR ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Header
 set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
 
 if ( APPLE )
-	add_definitions( -DVK_USE_PLATFORM_MACOS_MVK )
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		VK_USE_PLATFORM_MACOS_MVK
+	)
 elseif ( WIN32 )
-	add_definitions( -DVK_USE_PLATFORM_WIN32_KHR )
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		VK_USE_PLATFORM_WIN32_KHR
+	)
 elseif ( ANDROID )
-	add_definitions( -DVK_USE_PLATFORM_ANDROID_KHR )
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		VK_USE_PLATFORM_ANDROID_KHR
+	)
 else ()
-	add_definitions( -DVK_USE_PLATFORM_XLIB_KHR )
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		VK_USE_PLATFORM_XLIB_KHR
+	)
 endif ()
 
 add_subdirectory( Core )
@@ -23,9 +35,9 @@ endif ()
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	# Ashes external library
 	if ( NOT CASTOR_BUILDGRP_RENDERER )
-		set( ASHES_BUILD_RENDERER_PLUGINS FALSE )
+		set( ASHES_BUILD_RENDERER_PLUGINS OFF )
 	else ()
-		set( ASHES_BUILD_RENDERER_PLUGINS TRUE )
+		set( ASHES_BUILD_RENDERER_PLUGINS ON )
 		set( ASHES_BUILD_RENDERER_OGL3 ${CASTOR_BUILD_RENDERER_OGL3} )
 		set( ASHES_BUILD_RENDERER_OGL4 ${CASTOR_BUILD_RENDERER_OGL4} )
 		set( ASHES_BUILD_RENDERER_VKN ${CASTOR_BUILD_RENDERER_VKN} )
@@ -34,11 +46,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	endif ()
 	get_filename_component( SPIRV_CROSS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/SPIRV-Cross REALPATH )
 	add_subdirectory( ../${ASHES_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
-	set( AshesLibraries
-		ashes::common
-		ashes::ashes
-		ashes::ashespp
-	)
 	set_property( TARGET ashes_common PROPERTY FOLDER "External/Ashes/Core" )
 	set_property( TARGET ashes PROPERTY FOLDER "External/Ashes/Core" )
 	set_property( TARGET ashespp PROPERTY FOLDER "External/Ashes/Core" )
@@ -100,10 +107,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	endif ()
 	set( SDW_BUILD_SDW OFF )
 	add_subdirectory( ../${SHADERWRITER_DIR}/source ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
-	set( ShaderWriterLibraries
-		sdw::ShaderAST
-		sdw::ShaderWriter
-	)
 	set_property( TARGET ShaderAST PROPERTY FOLDER "External/ShaderWriter/Core" )
 	set_property( TARGET ShaderWriter PROPERTY FOLDER "External/ShaderWriter/Core" )
 	if ( CASTOR_BUILDGRP_RENDERER )

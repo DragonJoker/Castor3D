@@ -6,19 +6,6 @@ SET( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( AshesLibraries
-	${AshesLibraries}
-	ashes::VkRenderer
-	PARENT_SCOPE
-)
-
-set( ShaderWriterLibraries
-	${ShaderWriterLibraries}
-	sdw::CompilerSpirV
-	sdw::CompilerGlsl
-	PARENT_SCOPE
-)
-
 set( ${PROJECT_NAME}_DESCRIPTION "Vulkan Renderer" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
@@ -49,11 +36,11 @@ endif ()
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/include/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 	""
 	""

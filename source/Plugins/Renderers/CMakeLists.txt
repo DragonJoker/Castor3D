@@ -30,8 +30,6 @@ function( RenderersBuild )
 		set( RendererIncludes
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core
-			${CASTOR_SOURCE_DIR}/include/Plugins/Renderers
-			${CASTOR_BINARY_DIR}/include/Plugins/Renderers
 			${CASTOR_SOURCE_DIR}/source/Plugins/Renderers
 			${CASTOR_BINARY_DIR}/source/Plugins/Renderers
 		)
@@ -83,21 +81,11 @@ function( RenderersBuild )
 		${Castor3DBinsDependencies}
 		PARENT_SCOPE
 	)
-
-	set( AshesLibraries
-		${AshesLibraries}
-		PARENT_SCOPE
-	)
-
-	set( ShaderWriterLibraries
-		${ShaderWriterLibraries}
-		PARENT_SCOPE
-	)
 endfunction( RenderersBuild )
 
 function( RenderersSummary msg_in )
 	if ( ${CASTOR_BUILD_PLUGINS} AND ${CASTOR_BUILDGRP_RENDERER} )
-		set( msg_tmp "\n\nRenderers :" )
+		set( msg_tmp "\n\nRenderer plugins :" )
 
 		set( msg_tmp "${msg_tmp}\n    Vulkan               ${Vkn}" )
 		if ( NOT APPLE )

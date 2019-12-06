@@ -35,7 +35,7 @@ function( CoreBuild )
 endfunction( CoreBuild )
 
 function( CoreSummary msg )
-	set( msg_tmp "\nCore :" )
+	set( msg_tmp "\nCore libraries :" )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils          ${Cutils}" )
 	set( msg_tmp "${msg_tmp}\n    Castor3D             ${C3D}" )
 	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
@@ -132,7 +132,7 @@ function( CoreSetup )
 			DISPLAY_NAME "Ashes SDK"
 			DESCRIPTION "Development files for Ashes."
 			GROUP Development
-			DEPENDS CastorUtils CastorUtils_dev
+			DEPENDS Ashes
 			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( Ashes_French_Doc
@@ -160,7 +160,7 @@ function( CoreSetup )
 			DISPLAY_NAME "Castor3D SDK"
 			DESCRIPTION "Development files for Castor3D."
 			GROUP Development
-			DEPENDS CastorUtils CastorUtils_dev Castor3D Castor3D_dev
+			DEPENDS CastorUtils CastorUtils_dev Castor3D
 			INSTALL_TYPES Developer Full
 		)
 		cpack_add_component( Castor3D_French_Doc
@@ -174,13 +174,6 @@ function( CoreSetup )
 			DESCRIPTION "Castor3D English HTML documentation."
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
-		)
-		cpack_add_component( Castor3D_Samples
-			DISPLAY_NAME "Castor3D scenes"
-			DESCRIPTION "Sample scenes and data used to demonstrate the usage of Castor3D."
-			GROUP Samples
-			DEPENDS Castor3D
-			INSTALL_TYPES Full
 		)
 	endif ()
 endfunction( CoreSetup )
