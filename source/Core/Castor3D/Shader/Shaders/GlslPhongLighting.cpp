@@ -36,48 +36,45 @@ namespace castor3d
 				, 0_i );
 			auto end = m_writer.declLocale( "end"
 				, m_writer.cast< Int >( c3d_lightsCount.x() ) );
-			auto it = m_writer.declLocale( "it"
-				, begin );
 
-			WHILE( m_writer, it < end )
+			FOR( m_writer, Int, dir, begin, dir < end, ++dir )
 			{
-				m_computeDirectional( getDirectionalLight( it )
+				m_computeDirectional( getDirectionalLight( dir )
 					, worldEye
 					, shininess
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				++it;
 			}
-			ELIHW;
+			ROF;
 
+			begin = end;
 			end += m_writer.cast< Int >( c3d_lightsCount.y() );
 
-			WHILE( m_writer, it < end )
+			FOR( m_writer, Int, point, begin, point < end, ++point )
 			{
-				m_computePoint( getPointLight( it )
+				m_computePoint( getPointLight( point )
 					, worldEye
 					, shininess
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				++it;
 			}
-			ELIHW;
+			ROF;
 
+			begin = end;
 			end += m_writer.cast< Int >( c3d_lightsCount.z() );
 
-			WHILE( m_writer, it < end )
+			FOR( m_writer, Int, spot, begin, spot < end, ++spot )
 			{
-				m_computeSpot( getSpotLight( it )
+				m_computeSpot( getSpotLight( spot )
 					, worldEye
 					, shininess
 					, receivesShadows
 					, FragmentInput{ fragmentIn }
 					, parentOutput );
-				++it;
 			}
-			ELIHW;
+			ROF;
 		}
 
 		void PhongLightingModel::compute( DirectionalLight const & light
