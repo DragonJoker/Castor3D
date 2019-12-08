@@ -32,7 +32,7 @@ namespace CastorCom
 				{
 					hr = CComError::dispatchError( E_FAIL
 						, LIBID_Castor3D
-						, cuT( "Unsupported index mapping type" )
+						, _T( "Unsupported index mapping type" )
 						, ERROR_UNSUPPORTED_C3D_TYPE.c_str()
 						, 0
 						, nullptr );
@@ -43,7 +43,7 @@ namespace CastorCom
 		{
 			hr = CComError::dispatchError( E_FAIL
 				, LIBID_Castor3D
-				, cuT( "Null instance" )
+				, _T( "Null instance" )
 				, ERROR_UNINITIALISED_INSTANCE.c_str()
 				, 0
 				, nullptr );

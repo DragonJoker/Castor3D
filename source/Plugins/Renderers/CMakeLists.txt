@@ -64,6 +64,13 @@ function( RenderersBuild )
 				endif()
 			endif ()
 		endif ()
+	elseif ( ${CASTOR_BUILDGRP_TEST} )
+		set( RendererIncludes
+			${CASTOR_SOURCE_DIR}/include/Core
+			${CASTOR_BINARY_DIR}/include/Core
+			${CASTOR_SOURCE_DIR}/source/Plugins/Renderers
+			${CASTOR_BINARY_DIR}/source/Plugins/Renderers
+		)
 	endif ()
 
 	if ( ${CASTOR_BUILDGRP_TEST} )

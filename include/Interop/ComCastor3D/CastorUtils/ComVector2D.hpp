@@ -21,7 +21,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CVector2D
 		:	COM_ATL_OBJECT( Vector2D )
-		,	public castor::Point2r
+		,	public castor::Point2f
 	{
 	public:
 		/**
@@ -39,8 +39,8 @@ namespace CastorCom
 		 */
 		virtual ~CVector2D();
 
-		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point2r::operator[], 0 ), makePutter( this, &castor::Point2r::operator[], 0 ) );
-		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point2r::operator[], 1 ), makePutter( this, &castor::Point2r::operator[], 1 ) );
+		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point2f::operator[], 0 ), makePutter( this, &castor::Point2f::operator[], 0 ) );
+		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point2f::operator[], 1 ), makePutter( this, &castor::Point2f::operator[], 1 ) );
 
 		STDMETHOD( Negate )();
 		STDMETHOD( Normalise )();
@@ -50,8 +50,8 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Vector2D ), CVector2D );
 
-	DECLARE_VARIABLE_REF_GETTER( Vector2D, castor, Point2r );
-	DECLARE_VARIABLE_REF_PUTTER( Vector2D, castor, Point2r );
+	DECLARE_VARIABLE_REF_GETTER( Vector2D, castor, Point2f );
+	DECLARE_VARIABLE_REF_PUTTER( Vector2D, castor, Point2f );
 }
 
 #endif

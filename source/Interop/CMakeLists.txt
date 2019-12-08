@@ -18,6 +18,12 @@ endfunction( InteropInit )
 
 function( InteropBuild )
 	if( ${CASTOR_BUILDGRP_INTEROP} )
+		set( Castor3DIncludeDirs
+			${Castor3DIncludeDirs}
+			${CASTOR_BINARY_DIR}/include/Core
+			${CASTOR_SOURCE_DIR}/include/Core
+		)
+
 		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} OR ${CASTOR_BUILD_INTEROP_PYGUICOMMON} )
 			find_package( PythonLibs )
 
@@ -26,23 +32,6 @@ function( InteropBuild )
 				find_package( Boost OPTIONAL_COMPONENTS python )
 
 				if ( Boost_PYTHON_FOUND )
-					#Python Libs
-					set( PythonLibraries "" )
-					foreach( Lib ${Boost_PYTHON_LIBRARY} )
-						if ( PythonLibraries )
-							set( PythonLibraries "${PythonLibraries}|${Lib}" )
-						else ()
-							set( PythonLibraries "${Lib}" )
-						endif ()
-					endforeach()
-					foreach( Lib ${PYTHON_LIBRARY} )
-						if ( PythonLibraries )
-							set( PythonLibraries "${PythonLibraries}|${Lib}" )
-						else ()
-							set( PythonLibraries "${Lib}" )
-						endif ()
-					endforeach()
-
 					if( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
 						set( Build ${PyC3D} )
 						add_subdirectory( Interop/PyCastor3D )

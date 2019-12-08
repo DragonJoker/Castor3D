@@ -25,16 +25,8 @@ SOFTWARE.
 
 #define CU_UsePCH @CASTOR_USE_PCH@
 
-//! Tells whether or not to use doubles for type real (if not, floats are used)
-#undef CU_UseDouble
-#define CU_UseDouble @CASTOR_USE_DOUBLE@
-
 //! Tells whether or not use function tracking
 #undef CU_UseTrack
 #define CU_UseTrack @CASTOR_USE_TRACK@
-
-//! Tells whether or not the build has Xinerama.
-#undef CU_HasXinerama
-#define CU_HasXinerama @CASTOR_HAS_XINERAMA@
 
 #endif

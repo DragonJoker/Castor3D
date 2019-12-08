@@ -2,7 +2,7 @@
 #ifndef ___C3DCOM_PRECOMPILED_HEADER_H___
 #define ___C3DCOM_PRECOMPILED_HEADER_H___
 
-#include <CastorUtils/config.hpp>
+#include <CastorUtils/CastorUtilsPrerequisites.hpp>
 
 #if CASTOR_USE_PCH
 #	include "ComCastor3D/ComCastor3DPrerequisites.hpp"

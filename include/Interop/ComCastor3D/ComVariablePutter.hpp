@@ -35,7 +35,7 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, cuT( "Null instance" )
+					, _T( "Null instance" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
@@ -85,7 +85,7 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, cuT( "Null instance" )
+					, _T( "Null instance" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
@@ -129,7 +129,7 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, cuT( "Null instance" )
+					, _T( "Null instance" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
@@ -175,7 +175,7 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, cuT( "Null instance" )
+					, _T( "Null instance" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
@@ -221,7 +221,7 @@ namespace CastorCom
 			{
 				hr = CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, cuT( "Null instance" )
+					, _T( "Null instance" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
@@ -268,7 +268,7 @@ namespace CastorCom
 			{\
 				hr = CComError::dispatchError( E_FAIL\
 					, IID_I##ctype\
-					, cuT( "Null instance" )\
+					, _T( "Null instance" )\
 					, ERROR_UNINITIALISED_INSTANCE.c_str()\
 					, 0\
 					, nullptr );\
@@ -305,7 +305,7 @@ namespace CastorCom
 			{\
 				hr = CComError::dispatchError( E_FAIL\
 					, IID_I##ctype\
-					, cuT( "Null instance" )\
+					, _T( "Null instance" )\
 					, ERROR_UNINITIALISED_INSTANCE.c_str()\
 					, 0\
 					, nullptr );\

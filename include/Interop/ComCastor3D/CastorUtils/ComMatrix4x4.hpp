@@ -21,7 +21,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CMatrix4x4
 		: COM_ATL_OBJECT( Matrix4x4 )
-		, public castor::Matrix4x4r
+		, public castor::Matrix4x4f
 	{
 	public:
 		/**
@@ -45,9 +45,9 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Matrix4x4 ), CMatrix4x4 );
 
-	DECLARE_VARIABLE_REF_GETTER( Matrix4x4, castor, Matrix4x4r );
-	DECLARE_VARIABLE_REF_PUTTER( Matrix4x4, castor, Matrix4x4r );
-	DECLARE_VARIABLE_REF_PARAM_GETTER( Matrix4x4, castor, Matrix4x4r );
+	DECLARE_VARIABLE_REF_GETTER( Matrix4x4, castor, Matrix4x4f );
+	DECLARE_VARIABLE_REF_PUTTER( Matrix4x4, castor, Matrix4x4f );
+	DECLARE_VARIABLE_REF_PARAM_GETTER( Matrix4x4, castor, Matrix4x4f );
 }
 
 #endif

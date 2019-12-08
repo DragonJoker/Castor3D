@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The movable object must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
 
 	CMovableObject::CMovableObject()
 	{
@@ -27,7 +27,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
-					 cuT( "AttachTo" ),				// This is generally displayed as the title
+					 _T( "AttachTo" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -50,7 +50,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
-					 cuT( "Detach" ),				// This is generally displayed as the title
+					 _T( "Detach" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );

@@ -5,9 +5,9 @@
 
 namespace CastorCom
 {
-	static const TCHAR * ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
-	static const TCHAR * ERROR_FONT_EXISTS = _T( "The given font name already exists" );
-	static const TCHAR * ERROR_UNINITIALISED_FONT = _T( "The font must be initialised" );
+	static const tstring ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
+	static const tstring ERROR_FONT_EXISTS = _T( "The given font name already exists" );
+	static const tstring ERROR_UNINITIALISED_FONT = _T( "The font must be initialised" );
 
 	CFont::CFont()
 	{
@@ -38,12 +38,12 @@ namespace CastorCom
 
 			if ( !m_font )
 			{
-				hr = CComError::dispatchError( E_FAIL, IID_IFont, cuT( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, nullptr );
+				hr = CComError::dispatchError( E_FAIL, IID_IFont, _T( "LoadFromFile" ), ERROR_WRONG_FILE_NAME.c_str(), 0, nullptr );
 			}
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IFont, cuT( "LoadFromFile" ), ERROR_FONT_EXISTS, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IFont, _T( "LoadFromFile" ), ERROR_FONT_EXISTS.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -69,7 +69,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IFont, cuT( "GetGlyph" ), ERROR_UNINITIALISED_FONT, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IFont, _T( "GetGlyph" ), ERROR_UNINITIALISED_FONT.c_str(), 0, nullptr );
 		}
 
 		return hr;

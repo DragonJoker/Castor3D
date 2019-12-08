@@ -90,6 +90,22 @@ namespace castor3d
 			{
 				return data.size();
 			}
+			auto begin()const
+			{
+				return data.begin();
+			}
+			auto begin()
+			{
+				return data.begin();
+			}
+			auto end()const
+			{
+				return data.end();
+			}
+			auto end()
+			{
+				return data.end();
+			}
 		};
 		Ids m_ids;
 		//!\~english	The bones weights.
@@ -142,6 +158,22 @@ namespace castor3d
 			size_t size()const
 			{
 				return data.size();
+			}
+			auto begin()const
+			{
+				return data.begin();
+			}
+			auto begin()
+			{
+				return data.begin();
+			}
+			auto end()const
+			{
+				return data.end();
+			}
+			auto end()
+			{
+				return data.end();
 			}
 		};
 		Weights m_weights;

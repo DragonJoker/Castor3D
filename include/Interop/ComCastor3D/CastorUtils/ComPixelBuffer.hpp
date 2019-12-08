@@ -49,10 +49,10 @@ namespace CastorCom
 			return m_buffer;
 		}
 
-		COM_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, makeGetter( m_buffer.get(), &castor::PxBufferBase::format ) );
+		COM_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, makeGetter( m_buffer.get(), &castor::PxBufferBase::getFormat ) );
 		COM_PROPERTY_GET( Width, UINT, makeGetter( m_buffer.get(), &castor::PxBufferBase::getWidth ) );
 		COM_PROPERTY_GET( Height, UINT, makeGetter( m_buffer.get(), &castor::PxBufferBase::getHeight ) );
-		COM_PROPERTY_GET( Dimensions, ISize *, makeGetter( m_buffer.get(), &castor::PxBufferBase::dimensions ) );
+		COM_PROPERTY_GET( Dimensions, ISize *, makeGetter( m_buffer.get(), &castor::PxBufferBase::getDimensions ) );
 
 		STDMETHOD( Flip )();
 		STDMETHOD( Mirror )();

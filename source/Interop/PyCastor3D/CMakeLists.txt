@@ -1,25 +1,12 @@
 project( PyCastor3D )
 
-link_directories( ${BOOST_LIBRARY_DIR} )
-
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-
-include_directories( ${Castor3DIncludeDirs} )
-include_directories( ${CASTOR_SOURCE_DIR}/include/Interop )
-include_directories( ${CASTOR_BINARY_DIR}/include/Interop )
-include_directories( ${Boost_INCLUDE_DIR} )
-include_directories( ${PYTHON_INCLUDE_DIR} )
-
-link_directories( ${Boost_LIBRARY_DIR} )
-link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
-link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
-
 if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif()
 
 add_target( 
@@ -27,12 +14,36 @@ add_target(
 	dll
 	${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
 	${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
-	"CastorUtils;Castor3D"
-	"CastorUtils;Castor3D;${PythonLibraries}"
+	""
+	""
 	${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
-
+add_library( castor::${PROJECT_NAME}
+	ALIAS
+	${PROJECT_NAME}
+)
+target_include_directories( PyCastor3D
+	PUBLIC
+		${CASTOR_SOURCE_DIR}/include/Interop
+		${CASTOR_BINARY_DIR}/include/Interop
+		${Boost_INCLUDE_DIR}
+		${PYTHON_INCLUDE_DIR}
+	PRIVATE
+		${Castor3DIncludeDirs}
+)
+target_link_directories( PyCastor3D
+	PUBLIC
+		${Boost_LIBRARY_DIR}
+		${Boost_LIBRARY_DIR_RELEASE}
+		${Boost_LIBRARY_DIR_DEBUG}
+)
+target_link_libraries( PyCastor3D
+	PUBLIC
+		${Boost_PYTHON_LIBRARY}
+		${PYTHON_LIBRARY}
+		castor::Castor3D
+)
 set_target_properties( PyCastor3D
 	PROPERTIES
 		PREFIX ""

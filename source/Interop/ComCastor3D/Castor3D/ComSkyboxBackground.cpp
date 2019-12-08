@@ -2,7 +2,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The SkyboxBackground must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The SkyboxBackground must be initialised" );
 
 	CSkyboxBackground::CSkyboxBackground()
 	{
@@ -26,7 +26,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "LeftImage" ),				// This is generally displayed as the title
+				_T( "LeftImage" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -49,7 +49,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "RightImage" ),			// This is generally displayed as the title
+				_T( "RightImage" ),			// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -72,7 +72,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "TopImage" ),				// This is generally displayed as the title
+				_T( "TopImage" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -95,7 +95,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "BottomImage" ),			// This is generally displayed as the title
+				_T( "BottomImage" ),			// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -118,7 +118,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "FrontImage" ),			// This is generally displayed as the title
+				_T( "FrontImage" ),			// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -141,7 +141,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "BackImage" ),				// This is generally displayed as the title
+				_T( "BackImage" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -164,7 +164,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ISkyboxBackground,			// This is the GUID of PixelComponents throwing error
-				cuT( "CrossImage" ),			// This is generally displayed as the title
+				_T( "CrossImage" ),			// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -187,7 +187,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,								// This represents the error
 				IID_ISkyboxBackground,				// This is the GUID of PixelComponents throwing error
-				cuT( "LoadEquirectangularImage" ),	// This is generally displayed as the title
+				_T( "LoadEquirectangularImage" ),	// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),		// This is the description
 				0,									// This is the context in the help file
 				nullptr );

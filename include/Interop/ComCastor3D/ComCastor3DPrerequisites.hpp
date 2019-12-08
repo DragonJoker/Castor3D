@@ -46,10 +46,10 @@
 namespace CastorCom
 {
 	class ComPosition;
-	typedef std::basic_string< TCHAR > tstring;
+	using tstring = std::basic_string< TCHAR >;
 
-	static const castor::String ERROR_UNINITIALISED_INSTANCE = cuT( "The instance must be initialised" );
-	static const castor::String ERROR_UNSUPPORTED_C3D_TYPE = cuT( "The type is unsupported" );
+	static tstring const ERROR_UNINITIALISED_INSTANCE = _T( "The instance must be initialised" );
+	static tstring const ERROR_UNSUPPORTED_C3D_TYPE = _T( "The type is unsupported" );
 
 	template< typename T, typename FuncT >
 	HRESULT retrieveValue( T * pVal, FuncT p_func )

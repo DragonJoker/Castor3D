@@ -4,9 +4,4 @@
 
 #include "ComCastor3DTestPrerequisites.hpp"
 
-#import <ComCastor3D/Castor3D.tlb>
-
-#include <tchar.h>
-#include <iostream>
-
 #endif

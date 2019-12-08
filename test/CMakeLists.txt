@@ -7,14 +7,9 @@ include_directories(
 )
 
 set( Castor3DIncludeDirs
-	${CASTOR_SOURCE_DIR}/${ASHES_DIR}/include
-	${CASTOR_BINARY_DIR}/${ASHES_DIR}/source
-	${CASTOR_SOURCE_DIR}/${SHADERWRITER_DIR}/include
-	${CASTOR_BINARY_DIR}/${SHADERWRITER_DIR}/source
-	${CASTOR_SOURCE_DIR}/include/Core
-	${CASTOR_SOURCE_DIR}/include/Core
+	${Castor3DIncludeDirs}
 	${CASTOR_BINARY_DIR}/include/Core
-	${CASTOR_BINARY_DIR}/source/Core
+	${CASTOR_SOURCE_DIR}/include/Core
 )
 
 set( msgtest "Test projects :" )
@@ -38,7 +33,7 @@ endif()
 if( CASTOR_BUILD_TEST_INTEROP_COM )
 	set( Build ${ComC3DT} )
 	add_subdirectory( ComCastor3D )
-	set( ComC3DT ${Build} PARENT_SCOPE )
+	set( ComC3DT ${Build} )
 endif()
 
 set( msgtest_tmp "${msgtest_tmp}\n    CastorTest           ${CT}" )

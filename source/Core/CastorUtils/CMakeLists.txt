@@ -52,10 +52,18 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 			set( PLATFORM_LIBRARIES
 				Xinerama
 			)
+			set( ${PROJECT_NAME}_DEFINITIONS
+				${${PROJECT_NAME}_DEFINITIONS}
+				CU_HasXinerama
+			)
 		elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
 			set( CASTOR_HAS_XINERAMA 1 )
 			set( PLATFORM_LIBRARIES
 				Xinerama
+			)
+			set( ${PROJECT_NAME}_DEFINITIONS
+				${${PROJECT_NAME}_DEFINITIONS}
+				CU_HasXinerama
 			)
 		endif ()
 
@@ -65,7 +73,6 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		)
 	endif ()
 
-	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
 
 	set( CastorBinsDependencies 
@@ -85,11 +92,6 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		set( CASTOR_USE_PCH 1 )
 	else()
 		set( CASTOR_USE_PCH 0 )
-	endif()
-	if( CASTOR_USE_DOUBLE )
-		set( CASTOR_USE_DOUBLE 1 )
-	else()
-		set( CASTOR_USE_DOUBLE 0 )
 	endif()
 	if( CASTOR_USE_TRACK )
 		set( CASTOR_USE_TRACK 1 )
@@ -133,9 +135,12 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		ALIAS
 		${PROJECT_NAME}
 	)
-	target_compile_definitions( ${PROJECT_NAME} PUBLIC
-		_UNICODE
-		UNICODE
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			_UNICODE
+			UNICODE
+		PRIVATE
+			${${PROJECT_NAME}_DEFINITIONS}
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC

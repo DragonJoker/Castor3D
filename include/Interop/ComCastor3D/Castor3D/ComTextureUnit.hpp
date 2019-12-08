@@ -49,7 +49,6 @@ namespace CastorCom
 
 		COM_PROPERTY( Texture, ITextureLayout *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getTexture ), makePutter( m_internal.get(), &castor3d::TextureUnit::setTexture ) );
 		COM_PROPERTY( Sampler, ISampler *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getSampler ), makePutter( m_internal.get(), &castor3d::TextureUnit::setSampler ) );
-		COM_PROPERTY( Channel, eTEXTURE_CHANNEL, makeGetter( m_internal.get(), &castor3d::TextureUnit::getChannel ), makePutter( m_internal.get(), &castor3d::TextureUnit::setChannel ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

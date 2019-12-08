@@ -6,7 +6,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The texture unit must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The texture unit must be initialised" );
 
 	CTextureUnit::CTextureUnit()
 	{
@@ -27,12 +27,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
-					 cuT( "Initialise" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,						// This represents the error
+				IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
+				_T( "Initialise" ),			// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -49,12 +49,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
-					 cuT( "Cleanup" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,						// This represents the error
+				IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
+				_T( "Cleanup" ),				// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -69,22 +69,22 @@ namespace CastorCom
 			ashes::ImageCreateInfo imageInfo
 			{
 				0u,
-				ashes::TextureType::e2D,
-				ashes::Format::eUndefined,
+				VK_IMAGE_TYPE_2D,
+				VK_FORMAT_UNDEFINED,
 				{ 1u, 1u, 1u },
 				0u,
 				1u,
-				ashes::SampleCountFlag::e1,
-				ashes::ImageTiling::eOptimal,
-				ashes::ImageUsageFlag::eSampled | ashes::ImageUsageFlag::eTransferDst
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			};
 			auto texture = std::make_shared< castor3d::TextureLayout >( *m_internal->getEngine()->getRenderSystem()
 				, imageInfo
-				, ashes::MemoryPropertyFlag::eDeviceLocal );
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, "ComStaticImageView" );
 			castor::Path filePath{ fromBstr( path ) };
 			texture->setSource( filePath.getPath()
-				, filePath.getFileName( true )
-				, castor3d::ImageComponents::eAll );
+				, filePath.getFileName( true ) );
 			m_internal->setTexture( texture );
 
 			hr = S_OK;
@@ -92,12 +92,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
-					 cuT( "LoadTexture" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,							// This represents the error
+				IID_ITextureUnit,				// This is the GUID of PixelComponents throwing error
+				_T( "LoadTexture" ),			// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;

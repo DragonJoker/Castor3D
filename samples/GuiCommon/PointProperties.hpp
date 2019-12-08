@@ -99,16 +99,6 @@ namespace GuiCommon
 	typedef DoublePointProperty< 2 > Point2dProperty;
 	typedef DoublePointProperty< 3 > Point3dProperty;
 	typedef DoublePointProperty< 4 > Point4dProperty;
-
-#if CU_UseDouble
-	typedef Point2dProperty Point2rProperty;
-	typedef Point3dProperty Point3rProperty;
-	typedef Point4dProperty Point4rProperty;
-#else
-	typedef Point2fProperty Point2rProperty;
-	typedef Point3fProperty Point3rProperty;
-	typedef Point4fProperty Point4rProperty;
-#endif
 }
 
 #include "GuiCommon/PointProperties.inl"

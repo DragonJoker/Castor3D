@@ -19,7 +19,7 @@ namespace GuiCommon
 		: wxPGProperty{ label, name }
 	{
 		setValueI( value );
-		AddPrivateChild( new Point3rProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) );
+		AddPrivateChild( new Point3fProperty( wxT( "Center" ), wxPG_LABEL, value.getCenter() ) );
 		AddPrivateChild( new wxFloatProperty( wxT( "Radius" ), wxPG_LABEL, value.getRadius() ) );
 	}
 

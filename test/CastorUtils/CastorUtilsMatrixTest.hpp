@@ -69,8 +69,8 @@ namespace Testing
 		void MatrixCopyGlm();
 
 	private:
-		castor::Matrix4x4r m_mtx1;
-		castor::Matrix4x4r m_mtx2;
+		castor::Matrix4x4f m_mtx1;
+		castor::Matrix4x4f m_mtx2;
 
 #if defined( CASTOR_USE_GLM )
 

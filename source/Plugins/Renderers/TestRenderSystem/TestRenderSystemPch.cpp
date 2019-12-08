@@ -1,4 +1,4 @@
-#include "TestRenderSystem/TestRenderSystemPch.hpp"
+#include "TestRenderSystemPch.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>

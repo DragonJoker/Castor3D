@@ -191,13 +191,13 @@ namespace GuiCommon
 	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, PointLightSPtr light )
 	{
 		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POINT_LIGHT ) );
-		grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
+		grid->Append( new Point3fProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
 	}
 
 	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, SpotLightSPtr light )
 	{
 		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
-		grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
+		grid->Append( new Point3fProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( light->getAttenuation() ) );
 		grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( light->getCutOff().degrees() );
 		grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( light->getExponent() );
 	}

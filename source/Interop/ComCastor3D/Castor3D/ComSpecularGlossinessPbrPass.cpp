@@ -4,7 +4,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The pass must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The pass must be initialised" );
 
 	CSpecularGlossinessPbrPass::CSpecularGlossinessPbrPass()
 	{
@@ -24,12 +24,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IPass,						// This is the GUID of PixelComponents throwing error
-					 cuT( "CreateTextureUnit" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,							// This represents the error
+				IID_IPass,						// This is the GUID of PixelComponents throwing error
+				_T( "CreateTextureUnit" ),		// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -45,12 +45,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IPass,							// This is the GUID of PixelComponents throwing error
-					 cuT( "GetTextureUnitByIndex" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),		// This is the description
-					 0,									// This is the context in the help file
-					 nullptr );
+				E_FAIL,								// This represents the error
+				IID_IPass,							// This is the GUID of PixelComponents throwing error
+				_T( "GetTextureUnitByIndex" ),		// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),		// This is the description
+				0,									// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -66,12 +66,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IPass,						// This is the GUID of PixelComponents throwing error
-					 cuT( "DestroyTextureUnit" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,							// This represents the error
+				IID_IPass,						// This is the GUID of PixelComponents throwing error
+				_T( "DestroyTextureUnit" ),		// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -87,12 +87,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IPass,							// This is the GUID of PixelComponents throwing error
-					 cuT( "GetTextureUnitByChannel" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),		// This is the description
-					 0,									// This is the context in the help file
-					 nullptr );
+				E_FAIL,								// This represents the error
+				IID_IPass,							// This is the GUID of PixelComponents throwing error
+				_T( "GetTextureUnitByChannel" ),	// This is generally displayed as the title
+				ERROR_UNINITIALISED.c_str(),		// This is the description
+				0,									// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;

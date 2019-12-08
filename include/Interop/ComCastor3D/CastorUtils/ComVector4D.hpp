@@ -21,7 +21,7 @@ namespace CastorCom
 	*/
 	class ATL_NO_VTABLE CVector4D
 		:	COM_ATL_OBJECT( Vector4D )
-		,	public castor::Point4r
+		,	public castor::Point4f
 	{
 	public:
 		/**
@@ -39,10 +39,10 @@ namespace CastorCom
 		 */
 		virtual ~CVector4D();
 
-		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point4r::operator[], 0 ), makePutter( this, &castor::Point4r::operator[], 0 ) );
-		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point4r::operator[], 1 ), makePutter( this, &castor::Point4r::operator[], 1 ) );
-		COM_PROPERTY( Z, FLOAT, makeGetter( this, &castor::Point4r::operator[], 2 ), makePutter( this, &castor::Point4r::operator[], 2 ) );
-		COM_PROPERTY( W, FLOAT, makeGetter( this, &castor::Point4r::operator[], 3 ), makePutter( this, &castor::Point4r::operator[], 3 ) );
+		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point4f::operator[], 0 ), makePutter( this, &castor::Point4f::operator[], 0 ) );
+		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point4f::operator[], 1 ), makePutter( this, &castor::Point4f::operator[], 1 ) );
+		COM_PROPERTY( Z, FLOAT, makeGetter( this, &castor::Point4f::operator[], 2 ), makePutter( this, &castor::Point4f::operator[], 2 ) );
+		COM_PROPERTY( W, FLOAT, makeGetter( this, &castor::Point4f::operator[], 3 ), makePutter( this, &castor::Point4f::operator[], 3 ) );
 
 		STDMETHOD( Negate )();
 		STDMETHOD( Normalise )();
@@ -52,9 +52,9 @@ namespace CastorCom
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Vector4D ), CVector4D );
 
-	DECLARE_VARIABLE_VAL_GETTER( Vector4D, castor, Point4r );
-	DECLARE_VARIABLE_REF_GETTER( Vector4D, castor, Point4r );
-	DECLARE_VARIABLE_REF_PUTTER( Vector4D, castor, Point4r );
+	DECLARE_VARIABLE_VAL_GETTER( Vector4D, castor, Point4f );
+	DECLARE_VARIABLE_REF_GETTER( Vector4D, castor, Point4f );
+	DECLARE_VARIABLE_REF_PUTTER( Vector4D, castor, Point4f );
 }
 
 #endif

@@ -15,25 +15,6 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
-		include_directories(
-			${Castor3DIncludeDirs}
-			${CASTOR_SOURCE_DIR}/include/Interop
-			${CASTOR_SOURCE_DIR}/source/Interop
-			${CASTOR_BINARY_DIR}/include/Interop
-			${CASTOR_BINARY_DIR}/source/Interop
-		)
-		include_directories( ${ATL_INCLUDE_DIR} )
-
-		#ATL Libs
-		set( AtlLibraries "" )
-		FOREACH( Lib ${ATL_LIBRARIES} )
-			if ( AtlLibraries )
-				set( AtlLibraries "${AtlLibraries}|${Lib}" )
-			else ()
-				set( AtlLibraries "${Lib}" )
-			endif ()
-		ENDFOREACH()
-
 		# Define Interfaces and their RGS files
 		set( RESOURCE_ID 102 )
 		set( RESRC_LIST "" )
@@ -97,7 +78,7 @@ if ( MSVC )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "B62FE384-D806-4DA7-B091-A7E260D95D7F" RESRC_LIST RESH_LIST RESOURCE_ID "ShaderProgram" )
 		add_interface( "1B6D6829-C5D7-4B75-8A92-E016C63147B3" RESRC_LIST RESH_LIST RESOURCE_ID "Pass" )
-		add_interface( "2A4B5235-063A-454B-860C-CA91ED042E2D" RESRC_LIST RESH_LIST RESOURCE_ID "LegacyPass" )
+		add_interface( "2A4B5235-063A-454B-860C-CA91ED042E2D" RESRC_LIST RESH_LIST RESOURCE_ID "PhongPass" )
 		add_interface( "20C67D15-677C-43DE-98B5-E328293740AF" RESRC_LIST RESH_LIST RESOURCE_ID "MetallicRoughnessPbrPass" )
 		add_interface( "5ED10C5B-248B-427A-818F-C4F94A5FA54F" RESRC_LIST RESH_LIST RESOURCE_ID "SpecularGlossinessPbrPass" )
 		add_interface( "A9F3E2A5-A54C-4E4A-8448-0A663BE88E40" RESRC_LIST RESH_LIST RESOURCE_ID "Material" )
@@ -149,14 +130,32 @@ if ( MSVC )
 			dll
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
-			"CastorUtils;Castor3D"
-			"CastorUtils;Castor3D;${AtlLibraries}"
+			""
+			""
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 			""
 			""
 			""
 			"${CASTOR_BINARY_DIR}/source/Interop/${PROJECT_NAME}/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
+		)
+		add_library( castor::${PROJECT_NAME}
+			ALIAS
+			${PROJECT_NAME}
+		)
+		target_include_directories( ${PROJECT_NAME}
+			PRIVATE
+				${Castor3DIncludeDirs}
+				${CASTOR_SOURCE_DIR}/include/Interop
+				${CASTOR_SOURCE_DIR}/source/Interop
+				${CASTOR_BINARY_DIR}/include/Interop
+				${CASTOR_BINARY_DIR}/source/Interop
+				${ATL_INCLUDE_DIR}
+		)
+		target_link_libraries( ${PROJECT_NAME}
+			PRIVATE
+				${ATL_LIBRARIES}
+				castor::Castor3D
 		)
 
 		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )

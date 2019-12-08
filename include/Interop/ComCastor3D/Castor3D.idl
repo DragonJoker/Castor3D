@@ -963,8 +963,6 @@ interface ITextureUnit
 	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureLayout * val );
 	[propget, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
 	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
-	[propget, id( 3 ), helpstring( "The texture channel" )] HRESULT Channel( [out, retval] eTEXTURE_CHANNEL * pVal );
-	[propput, id( 3 ), helpstring( "The texture channel" )] HRESULT Channel( [in] eTEXTURE_CHANNEL val );
 	[id( 4 ), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
 	[id( 5 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
@@ -1000,14 +998,14 @@ interface IPass
 	[id( 12 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channel, [out, retval] ITextureUnit ** pVal );
 };
 
-// ILegacyPass
+// IPhongPass
 [
 	uuid( A9DD38BB-99D9-4251-B7CB-5148DC766B4F ),
-	helpstring( "Castor3D LegacyPass interface" ),
+	helpstring( "Castor3D PhongPass interface" ),
 	dual,
 	oleautomation
 ]
-interface ILegacyPass
+interface IPhongPass
 	: IPass
 {
 	[propget, id( 20 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [out, retval] IRgbColour ** pVal );
@@ -1852,13 +1850,13 @@ library Castor3D
 		[default] interface IPass;
 	}
 
-	// LegacyPass
+	// PhongPass
 	[
 		uuid( 2A4B5235-063A-454B-860C-CA91ED042E2D )
 	]
-	coclass LegacyPass
+	coclass PhongPass
 	{
-		[default] interface ILegacyPass;
+		[default] interface IPhongPass;
 	}
 
 	// MetallicRoughnessPbrPass

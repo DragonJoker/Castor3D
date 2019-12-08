@@ -17,20 +17,15 @@ namespace Testing
 	//*********************************************************************************************
 
 	namespace matrix = castor::matrix;
-	using castor::real;
 	using castor::Angle;
 	using castor::Logger;
 	using castor::Matrix4x4f;
-	using castor::Matrix4x4r;
 	using castor::Matrix4x4d;
 	using castor::Matrix3x3f;
-	using castor::Matrix3x3r;
 	using castor::Matrix3x3d;
 	using castor::Point3f;
-	using castor::Point3r;
 	using castor::Point3d;
 	using castor::Point4f;
-	using castor::Point4r;
 	using castor::Point4d;
 	using castor::Quaternion;
 	using castor::StringStream;
@@ -141,16 +136,16 @@ namespace Testing
 	{
 		for ( int i = 0; i < 10; ++i )
 		{
-			Matrix4x4r mtxA;
+			Matrix4x4f mtxA;
 			glm::mat4 glmA;
 			randomInit( mtxA.ptr(), &glmA[0][0], 16 );
-			Matrix4x4r mtxB;
+			Matrix4x4f mtxB;
 			glm::mat4 glmB;
 			randomInit( mtxB.ptr(), &glmB[0][0], 16 );
 			CT_EQUAL( mtxA, glmA );
 			CT_EQUAL( mtxB, glmB );
-			Matrix4x4r mtxC( mtxA * mtxB );
-			Matrix4x4r mtxD( mtxB * mtxA );
+			Matrix4x4f mtxC( mtxA * mtxB );
+			Matrix4x4f mtxD( mtxB * mtxA );
 			glm::mat4 glmC( glmA * glmB );
 			glm::mat4 glmD( glmB * glmA );
 			CT_EQUAL( mtxC, glmC );
@@ -165,10 +160,10 @@ namespace Testing
 	{
 		Logger::logInfo( cuT( "	Translate" ) );
 
-		for ( real r = 0; r < 100; r += 1 )
+		for ( float r = 0; r < 100; r += 1 )
 		{
-			Point3r pt( r, r, r );
-			Matrix4x4r mtx( 1 );
+			Point3f pt( r, r, r );
+			Matrix4x4f mtx( 1 );
 			matrix::translate( mtx, pt );
 			glm::vec3 vec( r, r, r );
 			glm::mat4 mat;
@@ -178,10 +173,10 @@ namespace Testing
 
 		Logger::logInfo( cuT( "	Scale" ) );
 
-		for ( real r = 0; r < 100; r += 1 )
+		for ( float r = 0; r < 100; r += 1 )
 		{
-			Point3r pt( r, r, r );
-			Matrix4x4r mtx( 1 );
+			Point3f pt( r, r, r );
+			Matrix4x4f mtx( 1 );
 			matrix::scale( mtx, pt );
 			glm::vec3 vec( r, r, r );
 			glm::mat4 mat;
@@ -192,15 +187,15 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::ProjectionMatrixComparison()
 	{
-		real left = 200.0f;
-		real right = 1920.0f;
-		real top = 100.0f;
-		real bottom = 1080.0f;
-		real near = 1.0f;
-		real far = 1000.0f;
+		float left = 200.0f;
+		float right = 1920.0f;
+		float top = 100.0f;
+		float bottom = 1080.0f;
+		float near = 1.0f;
+		float far = 1000.0f;
 		Logger::logInfo( cuT( "	Ortho RH" ) );
 		{
-			Matrix4x4r mtx( 1 );
+			Matrix4x4f mtx( 1 );
 			matrix::ortho( mtx, left, right, bottom, top, near, far );
 			glm::mat4 mat;
 			mat = glm::ortho( left, right, bottom, top, near, far );
@@ -208,7 +203,7 @@ namespace Testing
 		}
 		Logger::logInfo( cuT( "	Frustum" ) );
 		{
-			Matrix4x4r mtx( 1 );
+			Matrix4x4f mtx( 1 );
 			matrix::frustum( mtx, left, right, bottom, top, near, far );
 			glm::mat4 mat;
 			mat = glm::frustum( left, right, bottom, top, near, far );
@@ -217,11 +212,11 @@ namespace Testing
 		Logger::logInfo( cuT( "	Perspective" ) );
 		{
 			Angle fov{ 90.0_degrees };
-			real aspect = 4.0f / 3.0f;
-			Matrix4x4r mtx( 1 );
+			float aspect = 4.0f / 3.0f;
+			Matrix4x4f mtx( 1 );
 			matrix::perspective( mtx, fov, aspect, near, far );
 			glm::mat4 mat;
-			mat = glm::perspective< real >( fov.radians(), aspect, near, far );
+			mat = glm::perspective< float >( fov.radians(), aspect, near, far );
 			CT_EQUAL( mtx, mat );
 		}
 	}

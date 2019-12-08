@@ -49,7 +49,7 @@ namespace CastorCom
 			return m_image;
 		}
 
-		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_image.get(), &castor::Image::getPixels ) );
+		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_image.get(), &castor::Image::getPixels, 0u ) );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha );
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );

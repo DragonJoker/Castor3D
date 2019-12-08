@@ -40,7 +40,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "nullptr instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, nullptr );
+				hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "nullptr instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, nullptr );
 			}
 
 			return hr;

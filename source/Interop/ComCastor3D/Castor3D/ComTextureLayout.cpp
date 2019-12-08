@@ -3,7 +3,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The texture layout must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The texture layout must be initialised" );
 
 	CTextureLayout::CTextureLayout()
 	{
@@ -26,7 +26,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
-				cuT( "Initialise" ),			// This is generally displayed as the title
+				_T( "Initialise" ),			// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
@@ -49,7 +49,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
-				cuT( "Cleanup" ),				// This is generally displayed as the title
+				_T( "Cleanup" ),				// This is generally displayed as the title
 				ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );

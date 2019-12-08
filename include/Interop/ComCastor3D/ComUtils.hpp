@@ -8,10 +8,10 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_WRONG_VARIANT_TYPE = cuT( "Wrong type given" );
-	static const castor::String ERROR_EXPECTED_STRING = cuT( "Expected at least a BSTR" );
-	static const castor::String ERROR_EXPECTED_DISPATCH = cuT( "Expected at least a IDispatch" );
-	static const castor::String ERROR_EXPECTED_VARIANT_ARRAY = cuT( "Expected at least a SafeArray of Variant" );
+	static tstring const ERROR_WRONG_VARIANT_TYPE = _T( "Wrong type given" );
+	static tstring const ERROR_EXPECTED_STRING = _T( "Expected at least a BSTR" );
+	static tstring const ERROR_EXPECTED_DISPATCH = _T( "Expected at least a IDispatch" );
+	static tstring const ERROR_EXPECTED_VARIANT_ARRAY = _T( "Expected at least a SafeArray of Variant" );
 	/**
 	 *\~english
 	 *\brief		Frees a COM pointer

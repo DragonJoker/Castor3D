@@ -422,11 +422,6 @@ namespace castor
 			return m_buffers[level]->getConstPtr();
 		}
 
-		inline PxBufferBaseSPtr getPixels( uint32_t level = 0u )
-		{
-			return m_buffers[level];
-		}
-
 		inline PxBufferBaseSPtr getPixels( uint32_t level = 0u )const
 		{
 			return m_buffers[level];

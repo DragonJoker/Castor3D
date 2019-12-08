@@ -6,7 +6,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The scene node must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The scene node must be initialised" );
 
 	CSceneNode::CSceneNode()
 	{
@@ -27,7 +27,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "attachObject" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "attachObject" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -44,7 +44,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "detachObject" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "detachObject" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -61,7 +61,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "attachTo" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "attachTo" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -78,7 +78,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Detach" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Detach" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -95,7 +95,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Yaw" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Yaw" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -112,7 +112,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Pitch" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Pitch" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -129,7 +129,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Roll" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Roll" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -146,7 +146,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Rotate" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Rotate" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -163,7 +163,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Translate" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Translate" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -180,7 +180,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, cuT( "Scale" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_ISceneNode, _T( "Scale" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;

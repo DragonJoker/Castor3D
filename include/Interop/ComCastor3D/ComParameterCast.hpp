@@ -54,6 +54,11 @@ namespace CastorCom
 	{
 		return reinterpret_cast< IScene *>( value.get() );
 	}
+	template<>
+	inline IPixelBuffer * parameterCast< IPixelBuffer *, castor::PxBufferBaseSPtr >( castor::PxBufferBaseSPtr const & value )
+	{
+		return reinterpret_cast< IPixelBuffer *>( value.get() );
+	}
 }
 
 #endif

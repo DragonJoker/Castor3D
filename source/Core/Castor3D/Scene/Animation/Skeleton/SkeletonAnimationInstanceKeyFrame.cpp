@@ -79,8 +79,8 @@ namespace castor3d
 			CU_Ensure( !isNan( max[0] ) && !isNan( max[1] ) && !isNan( max[2] ) );
 			CU_Ensure( !isInf( min[0] ) && !isInf( min[1] ) && !isInf( min[2] ) );
 			CU_Ensure( !isInf( max[0] ) && !isInf( max[1] ) && !isInf( max[2] ) );
-			CU_Ensure( min != Point3r( rmax, rmax, rmax ) );
-			CU_Ensure( max != Point3r( rmin, rmin, rmin ) );
+			CU_Ensure( min != Point3f( rmax, rmax, rmax ) );
+			CU_Ensure( max != Point3f( rmin, rmin, rmin ) );
 			return BoundingBox{ min, max };
 		}
 	}

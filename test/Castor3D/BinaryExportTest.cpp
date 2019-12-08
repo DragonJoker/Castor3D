@@ -104,7 +104,7 @@ namespace Testing
 	void BinaryExportTest::doTestMesh( MeshSPtr & src )
 	{
 		auto device = m_engine.getRenderSystem()->createDevice( ashes::WindowHandle{ std::make_unique< TestWindowHandle >() }, 0u );
-		m_engine.getRenderSystem()->setCurrentDevice( device.get() );
+		m_engine.getRenderSystem()->setCurrentRenderDevice( device.get() );
 		Scene & scene = *src->getScene();
 		String name = src->getName();
 		Path path{ name + cuT( ".cmsh" ) };
@@ -162,7 +162,7 @@ namespace Testing
 		dst->cleanup();
 		src.reset();
 		dst.reset();
-		m_engine.getRenderSystem()->setCurrentDevice( nullptr );
+		m_engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
 		device.reset();
 		doCleanupEngine();
 	}

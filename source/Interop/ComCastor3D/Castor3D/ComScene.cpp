@@ -17,7 +17,7 @@
 
 namespace CastorCom
 {
-	static const castor::String ERROR_UNINITIALISED = cuT( "The scene must be initialised" );
+	static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
 
 	CScene::CScene()
 	{
@@ -41,7 +41,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "ClearScene" ),			// This is generally displayed as the title
+					 _T( "ClearScene" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -71,7 +71,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "CreateSceneNode" ),		// This is generally displayed as the title
+					 _T( "CreateSceneNode" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -101,7 +101,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "CreateGeometry" ),		// This is generally displayed as the title
+					 _T( "CreateGeometry" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -123,7 +123,7 @@ namespace CastorCom
 				if ( hr == S_OK )
 				{
 					castor3d::Viewport l_viewport{ *getInternal()->getEngine() };
-					l_viewport.setPerspective( castor::Angle::fromDegrees( 120 ), 4.0_r / 3.0_r, 0.1_r, 1000.0_r );
+					l_viewport.setPerspective( castor::Angle::fromDegrees( 120 ), 4.0f / 3.0f, 0.1f, 1000.0f );
 					l_viewport.resize( castor::Size( ww, wh ) );
 					auto l_camera = m_internal->getCameraCache().add( fromBstr( name )
 						, node ? static_cast< CSceneNode * >( node )->getInternal() : nullptr
@@ -137,7 +137,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "CreateCamera" ),			// This is generally displayed as the title
+					 _T( "CreateCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -167,7 +167,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "CreateLight" ),			// This is generally displayed as the title
+					 _T( "CreateLight" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -196,7 +196,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -223,7 +223,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "GetNode" ),				// This is generally displayed as the title
+					 _T( "GetNode" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -253,7 +253,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "GetGeometry" ),			// This is generally displayed as the title
+					 _T( "GetGeometry" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -283,7 +283,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "GetLight" ),				// This is generally displayed as the title
+					 _T( "GetLight" ),				// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -313,7 +313,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "GetCamera" ),			// This is generally displayed as the title
+					 _T( "GetCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -339,7 +339,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "RemoveLight" ),			// This is generally displayed as the title
+					 _T( "RemoveLight" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -365,7 +365,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "RemoveNode" ),			// This is generally displayed as the title
+					 _T( "RemoveNode" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -391,7 +391,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "RemoveGeometry" ),		// This is generally displayed as the title
+					 _T( "RemoveGeometry" ),		// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
@@ -417,7 +417,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 cuT( "RemoveCamera" ),			// This is generally displayed as the title
+					 _T( "RemoveCamera" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );

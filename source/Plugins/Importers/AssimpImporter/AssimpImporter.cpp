@@ -734,7 +734,7 @@ namespace C3dAssimp
 			{
 				index = m_mapBoneByID[name];
 				aiMatrix4x4 mtx{ aiBone.mOffsetMatrix };
-				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == Matrix4x4r( &mtx.Transpose().a1 ) );
+				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == castor::Matrix4x4f( &mtx.Transpose().a1 ) );
 			}
 
 			for ( auto weight : castor::makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )

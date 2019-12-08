@@ -98,8 +98,8 @@ namespace
 		template< typename CharType >
 		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
-			uint32_t width = p_buffer.dimensions().getWidth();
-			uint32_t height = p_buffer.dimensions().getHeight();
+			uint32_t width = p_buffer.getWidth();
+			uint32_t height = p_buffer.getHeight();
 			CharType fill = p_stream.fill( '0' );
 
 			for ( uint32_t x = 0; x < width; ++x )
@@ -134,8 +134,8 @@ namespace
 		template< typename CharType >
 		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
-			uint32_t width = p_buffer.dimensions().getWidth();
-			uint32_t height = p_buffer.dimensions().getHeight();
+			uint32_t width = p_buffer.getWidth();
+			uint32_t height = p_buffer.getHeight();
 			CharType fill = p_stream.fill( '0' );
 
 			for ( uint32_t x = 0; x < width; ++x )
@@ -165,10 +165,10 @@ namespace
 	{
 		p_stream << "BPP : ";
 		p_stream.width( 2 );
-		p_stream << uint32_t( PF::getBytesPerPixel( p_buffer.format() ) );
+		p_stream << uint32_t( PF::getBytesPerPixel( p_buffer.getFormat() ) );
 		p_stream << ", Format : ";
 		p_stream.width( 10 );
-		p_stream << string::stringCast< CharType >( PF::getFormatName( p_buffer.format() ) );
+		p_stream << string::stringCast< CharType >( PF::getFormatName( p_buffer.getFormat() ) );
 		return p_stream;
 	}
 
@@ -265,9 +265,12 @@ namespace
 	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct BufferConverter
 	{
-		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
+		void operator()( std::shared_ptr< PxBuffer< PFSrc > > source )
 		{
-			std::shared_ptr< PxBuffer< PFDst > > dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), PixelFormat( PFDst ), p_source->ptr(), PixelFormat( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFDst > > dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( source->getDimensions()
+				, PixelFormat( PFDst )
+				, source->getPtr()
+				, PixelFormat( PFSrc ) ) );
 			StringStream stream;
 			stream.width( 20 );
 			stream << "Converted buffer : " << *dest;

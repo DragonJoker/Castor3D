@@ -63,10 +63,10 @@ namespace CastorCom
 		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
 
 	private:
-		castor::real doTransformX( int x );
-		castor::real doTransformY( int y );
-		int doTransformX( castor::real x );
-		int doTransformY( castor::real y );
+		float doTransformX( int x );
+		float doTransformY( int y );
+		int doTransformX( float x );
+		int doTransformY( float y );
 
 	private:
 		castor3d::RenderWindowSPtr m_internal;

@@ -4,6 +4,8 @@
 
 #include "CastorTestPrerequisites.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <map>
 
 namespace Testing

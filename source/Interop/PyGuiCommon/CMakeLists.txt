@@ -18,47 +18,30 @@ else ()
 endif()
 
 if ( wxWidgets_FOUND AND GTK2_FOUND )
-	include_directories( ${Castor3DIncludeDirs} )
-	include_directories( ${CASTOR_SOURCE_DIR}/include/Samples )
-	include_directories( ${CASTOR_SOURCE_DIR}/include/Interop )
-	include_directories( ${CASTOR_BINARY_DIR}/include/Interop )
-	include_directories( ${Boost_INCLUDE_DIR} )
-	include_directories( ${PYTHON_INCLUDE_DIR} )
-	include_directories( ${GTK2_INCLUDE_DIRS} )
-	include_directories( ${wxWidgets_INCLUDE_DIR} )
-
-	link_directories( ${Boost_LIBRARY_DIR} )
-	link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
-	link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
-
-	#wxWidgets Libs
-	set( wxWidgetsLibraries "" )
-	foreach( Lib ${wxWidgets_LIBRARIES} )
-		if( wxWidgetsLibraries )
-			set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
-		else()
-			set( wxWidgetsLibraries "${Lib}" )
-		endif()
-	endforeach()
-	foreach( Lib ${GTK2_LIBRARIES} )
-		if( wxWidgetsLibraries )
-			set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
-		else()
-			set( wxWidgetsLibraries "${Lib}" )
-		endif()
-	endforeach()
-	
-	link_directories( ${Boost_LIBRARY_DIR} )
-
 	add_target( 
 		${PROJECT_NAME}
 		dll
 		${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}
-		"CastorUtils;Castor3D;GuiCommon"
-		"CastorUtils;Castor3D;GuiCommon;${PythonLibraries};${wxWidgetsLibraries}"
 	)
-
+	add_library( castor::${PROJECT_NAME}
+		ALIAS
+		${PROJECT_NAME}
+	)
+	target_include_directories( ${PROJECT_NAME}
+		PRIVATE
+			${Castor3DIncludeDirs}
+			${CASTOR_SOURCE_DIR}/samples
+			${GTK2_INCLUDE_DIRS} )
+			${wxWidgets_INCLUDE_DIR} )
+	)
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			${wxWidgets_LIBRARIES}
+			${GTK2_LIBRARIES}
+			castor::PyCastor3D
+			castor::GuiCommon
+	)
 	set_target_properties( ${PROJECT_NAME}
 		PROPERTIES
 			PREFIX ""

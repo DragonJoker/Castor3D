@@ -6,10 +6,12 @@
 
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Mesh/Mesh.hpp>
 #include <Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp>
 #include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Mesh/Skeleton/VertexBoneData.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Animation/AnimationInstance.hpp>
@@ -353,9 +355,81 @@ namespace Testing
 	}
 
 	template<>
+	inline std::string toString< castor3d::VertexBoneData::Ids >( castor3d::VertexBoneData::Ids const & p_value )
+	{
+		std::string result;
+		std::string sep;
+
+		for ( auto & v : p_value )
+		{
+			result += sep + toString( v );
+			sep = ", ";
+		}
+
+		return result;
+	}
+
+	template<>
+	inline std::string toString< castor3d::VertexBoneData::Weights >( castor3d::VertexBoneData::Weights const & p_value )
+	{
+		std::string result;
+		std::string sep;
+
+		for ( auto & v : p_value )
+		{
+			result += sep + toString( v );
+			sep = ", ";
+		}
+
+		return result;
+	}
+
+	template<>
 	inline std::string toString< castor3d::InterleavedVertex >( castor3d::InterleavedVertex const & p_value )
 	{
 		return std::string{ "castor3d::InterleavedVertex" };
+	}
+
+	template< typename Value >
+	inline std::string toString( castor::ArrayView< Value > const & values )
+	{
+		std::stringstream stream;
+		stream << values.size() << ": ";
+
+		for ( auto & value : values )
+		{
+			stream << " " << toString( value );
+		}
+
+		return stream.str();
+	}
+
+	template< typename Value, size_t N >
+	inline std::string toString( std::array< Value, N > const & values )
+	{
+		std::stringstream stream;
+		stream << values.size() << ": ";
+
+		for ( auto & value : values )
+		{
+			stream << " " << toString( value );
+		}
+
+		return stream.str();
+	}
+
+	template< typename Value >
+	inline std::string toString( std::vector< Value > const & values )
+	{
+		std::stringstream stream;
+		stream << values.size() << ": ";
+
+		for ( auto & value : values )
+		{
+			stream << " " << toString( value );
+		}
+
+		return stream.str();
 	}
 
 	//*********************************************************************************************
@@ -402,6 +476,49 @@ namespace Testing
 		bool compare( castor3d::SkeletonAnimationInstance const & p_a, castor3d::SkeletonAnimationInstance const & p_b );
 		bool compare( castor3d::SkeletonAnimationInstanceObject const & p_a, castor3d::SkeletonAnimationInstanceObject const & p_b );
 		bool compare( castor3d::SkeletonAnimationInstanceKeyFrame const & p_a, castor3d::SkeletonAnimationInstanceKeyFrame const & p_b );
+		bool compare( castor3d::VertexBoneData const & p_a, castor3d::VertexBoneData const & p_b );
+		bool compare( castor3d::VertexBoneData::Ids const & p_a, castor3d::VertexBoneData::Ids const & p_b );
+		bool compare( castor3d::VertexBoneData::Weights const & p_a, castor3d::VertexBoneData::Weights const & p_b );
+		bool compare( castor3d::InterleavedVertex const & p_a, castor3d::InterleavedVertex const & p_b );
+
+		template< typename Value >
+		inline bool compare( castor::ArrayView< Value > const & p_a, castor::ArrayView< Value > const & p_b )
+		{
+			bool result{ p_a.size() == p_b.size() };
+
+			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			{
+				result = this->compare( p_a[i], p_b[i] );
+			}
+
+			return result;
+		}
+
+		template< typename Value >
+		inline bool compare( std::vector< Value > const & p_a, std::vector< Value > const & p_b )
+		{
+			auto result = ( p_a.size() == p_b.size() );
+
+			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			{
+				result = this->compare( p_a[i], p_b[i] );
+			}
+
+			return result;
+		}
+
+		template< typename Value, size_t N, size_t M >
+		inline bool compare( std::array< Value, N > const & p_a, std::array< Value, M > const & p_b )
+		{
+			auto result = ( p_a.size() == p_b.size() );
+
+			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			{
+				result = this->compare( p_a[i], p_b[i] );
+			}
+
+			return result;
+		}
 
 	protected:
 		castor3d::Engine & m_engine;
