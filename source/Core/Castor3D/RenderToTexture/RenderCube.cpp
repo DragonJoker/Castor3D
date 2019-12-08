@@ -274,7 +274,7 @@ namespace castor3d
 		, uint32_t subpassIndex
 		, uint32_t face )
 	{
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( false );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		setDebugObjectName( m_device, *m_commandBuffer, "RenderCubeCommandBuffer" );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, VkCommandBufferInheritanceInfo

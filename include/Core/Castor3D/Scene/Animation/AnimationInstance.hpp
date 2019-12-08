@@ -87,7 +87,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le multiplicateur de temps de l'animation.
 		 */
-		inline real getScale()const
+		inline float getScale()const
 		{
 			return m_scale;
 		}
@@ -99,7 +99,7 @@ namespace castor3d
 		 *\brief		Définit le multiplicateur de temps de l'animation
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setScale( real value )
+		inline void setScale( float value )
 		{
 			m_scale = value;
 		}
@@ -151,7 +151,7 @@ namespace castor3d
 		Animation const & m_animation;
 		//!\~english	The animation time scale.
 		//!\~french		Le multiplicateur de temps.
-		real m_scale{ 1.0_r };
+		float m_scale{ 1.0f };
 		//!\~english	Tells whether or not the animation is looped.
 		//!\~french		Dit si oui ou non l'animation est bouclée.
 		bool m_looped{ false };

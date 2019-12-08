@@ -128,7 +128,7 @@ namespace castor3d
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API virtual void update( RenderInfo & info
-			, castor::Point2r const & jitter ) = 0;
+			, castor::Point2f const & jitter ) = 0;
 		/**
 		*\~english
 		*name
@@ -160,7 +160,7 @@ namespace castor3d
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API void doUpdate( RenderInfo & info
-			, castor::Point2r const & jitter = castor::Point2r{} );
+			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\copydoc		castor3d::RenderPass::doCleanup
 		 */
@@ -180,7 +180,7 @@ namespace castor3d
 		 *\param[in,out]	count		Reçouit le nombre de noeuds dessinés.
 		 */
 		C3D_API void doUpdateNodes( SceneCulledRenderNodes & nodes
-			, castor::Point2r const & jitter
+			, castor::Point2f const & jitter
 			, RenderInfo & info )const;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise

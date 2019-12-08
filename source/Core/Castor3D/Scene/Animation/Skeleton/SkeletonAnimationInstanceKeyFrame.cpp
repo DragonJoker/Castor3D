@@ -23,10 +23,10 @@ namespace castor3d
 			, Submesh const & submesh
 			, SkeletonAnimationKeyFrame const & keyFrame )
 		{
-			real rmax = std::numeric_limits< real >::max();
-			real rmin = std::numeric_limits< real >::lowest();
-			Point3r min{ rmax, rmax, rmax };
-			Point3r max{ rmin, rmin, rmin };
+			float rmax = std::numeric_limits< float >::max();
+			float rmin = std::numeric_limits< float >::lowest();
+			castor::Point3f min{ rmax, rmax, rmax };
+			castor::Point3f max{ rmin, rmin, rmin };
 
 			if ( !submesh.hasComponent( BonesComponent::Name ) )
 			{
@@ -40,14 +40,14 @@ namespace castor3d
 
 				for ( auto & boneData : component->getBonesData() )
 				{
-					Matrix4x4r transform{ 1.0_r };
+					castor::Matrix4x4f transform{ 1.0 };
 
 					if ( boneData.m_weights[0] > 0 )
 					{
 						auto bone = *( skeleton.begin() + boneData.m_ids[0] );
 						auto it = keyFrame.find( *bone );
 						CU_Require( it != keyFrame.end() );
-						transform = Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
+						transform = castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[0] };
 					}
 
 					for ( uint32_t i = 1; i < boneData.m_ids.size(); ++i )
@@ -57,12 +57,12 @@ namespace castor3d
 							auto bone = *( skeleton.begin() + boneData.m_ids[i] );
 							auto it = keyFrame.find( *bone );
 							CU_Require( it != keyFrame.end() );
-							transform += Matrix4x4r{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
+							transform += castor::Matrix4x4f{ it->second * bone->getOffsetMatrix() * boneData.m_weights[i] };
 						}
 					}
 
 					auto & cposition = submesh.getPoint( index ).pos;
-					Point4r position{ cposition[0], cposition[1], cposition[2], 1.0_r };
+					castor::Point4f position{ cposition[0], cposition[1], cposition[2], 1.0f };
 					position = transform * position;
 					min[0] = std::min( min[0], position[0] );
 					min[1] = std::min( min[1], position[1] );

@@ -34,10 +34,10 @@ namespace castor3d
 			int m_index{ -1 };
 			//!\~english	Vertex normal.
 			//!\~french		Normale du sommet.
-			std::array< real, 3 > m_fNormal{ { 0.0_r, 0.0_r, 0.0_r } };
+			std::array< float, 3 > m_fNormal{ { 0.0f, 0.0f, 0.0f } };
 			//!\~english	Vertex UV.
 			//!\~french		UV du sommet.
-			std::array< real, 2 > m_fTexCoords{ { 0.0_r, 0.0_r } };
+			std::array< float, 2 > m_fTexCoords{ { 0.0f, 0.0f } };
 			//!\~english	Tells the vertex has a normal.
 			//!\~french		Dit que le sommet a une normale.
 			bool m_bHasNormal{ false };

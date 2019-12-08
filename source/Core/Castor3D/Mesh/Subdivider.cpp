@@ -8,8 +8,6 @@
 #include "Castor3D/Mesh/Vertex.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Subdivider::Subdivider()
@@ -51,19 +49,19 @@ namespace castor3d
 		m_arrayFaces.clear();
 	}
 
-	SubmeshVertex & Subdivider::addPoint( real x, real y, real z )
+	SubmeshVertex & Subdivider::addPoint( float x, float y, float z )
 	{
 		auto index = m_submesh->getPointsCount();
 		m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ index, m_submesh->addPoint( x, y, z ) } ) );
 		return *m_points.back();
 	}
 
-	SubmeshVertex & Subdivider::addPoint( Point3r const & v )
+	SubmeshVertex & Subdivider::addPoint( castor::Point3f const & v )
 	{
 		return addPoint( v[0], v[1], v[2] );
 	}
 
-	SubmeshVertex & Subdivider::addPoint( real * v )
+	SubmeshVertex & Subdivider::addPoint( float * v )
 	{
 		return addPoint( v[0], v[1], v[2] );
 	}
@@ -76,7 +74,7 @@ namespace castor3d
 		return result;
 	}
 
-	int Subdivider::isInMyPoints( Point3r const & vertex, double precision )
+	int Subdivider::isInMyPoints( castor::Point3f const & vertex, double precision )
 	{
 		return m_submesh->isInMyPoints( vertex, precision );
 	}
@@ -96,9 +94,9 @@ namespace castor3d
 		return m_submesh->getPoints();
 	}
 
-	SubmeshVertex & Subdivider::doTryAddPoint( Point3r const & point )
+	SubmeshVertex & Subdivider::doTryAddPoint( castor::Point3f const & point )
 	{
-		auto lock = makeUniqueLock( m_mutex );
+		auto lock = castor::makeUniqueLock( m_mutex );
 		int index = -1;
 
 		if ( ( index = isInMyPoints( point, 0.00001 ) ) < 0 )
@@ -111,7 +109,7 @@ namespace castor3d
 
 		if ( position != point )
 		{
-			result.m_vertex.pos = ( position + point ) / real( 2 );
+			result.m_vertex.pos = ( position + point ) / 2.0f;
 		}
 
 		return result;
@@ -187,12 +185,12 @@ namespace castor3d
 		, SubmeshVertex & e
 		, SubmeshVertex & f )
 	{
-		Point3r aTex = a.m_vertex.tex;
-		Point3r bTex = b.m_vertex.tex;
-		Point3r cTex = c.m_vertex.tex;
-		d.m_vertex.tex = ( aTex + bTex ) / real( 2.0 );
-		e.m_vertex.tex = ( bTex + cTex ) / real( 2.0 );
-		f.m_vertex.tex = ( aTex + cTex ) / real( 2.0 );
+		castor::Point3f aTex = a.m_vertex.tex;
+		castor::Point3f bTex = b.m_vertex.tex;
+		castor::Point3f cTex = c.m_vertex.tex;
+		d.m_vertex.tex = ( aTex + bTex ) / 2.0f;
+		e.m_vertex.tex = ( bTex + cTex ) / 2.0f;
+		f.m_vertex.tex = ( aTex + cTex ) / 2.0f;
 		addFace( a.m_index, d.m_index, f.m_index );
 		addFace( b.m_index, e.m_index, d.m_index );
 		addFace( c.m_index, f.m_index, e.m_index );
@@ -204,27 +202,27 @@ namespace castor3d
 		, SubmeshVertex const & c
 		, SubmeshVertex & p )
 	{
-		Point3r aTex = a.m_vertex.tex;
-		Point3r bTex = b.m_vertex.tex;
-		Point3r cTex = c.m_vertex.tex;
-		p.m_vertex.tex = ( aTex + bTex + cTex ) / real( 3.0 );
+		castor::Point3f aTex = a.m_vertex.tex;
+		castor::Point3f bTex = b.m_vertex.tex;
+		castor::Point3f cTex = c.m_vertex.tex;
+		p.m_vertex.tex = ( aTex + bTex + cTex ) / 3.0f;
 		addFace( a.m_index, b.m_index, p.m_index );
 		addFace( b.m_index, c.m_index, p.m_index );
 		addFace( c.m_index, a.m_index, p.m_index );
 	}
 }
 
-String & operator << ( String & stream, castor3d::SubmeshVertex const & vertex )
+castor::String & operator << ( castor::String & stream, castor3d::SubmeshVertex const & vertex )
 {
 	auto & ptPos = vertex.m_vertex.pos;
 	stream += cuT( "Vertex[" );
-	stream += string::toString( vertex.m_index );
+	stream += castor::string::toString( vertex.m_index );
 	stream += cuT( "] - Buffer : (" );
-	stream += string::toString( ptPos[0] );
+	stream += castor::string::toString( ptPos[0] );
 	stream += cuT( "," );
-	stream += string::toString( ptPos[1] );
+	stream += castor::string::toString( ptPos[1] );
 	stream += cuT( "," );
-	stream += string::toString( ptPos[2] );
+	stream += castor::string::toString( ptPos[2] );
 	stream += cuT( ")" );
 	return stream;
 }

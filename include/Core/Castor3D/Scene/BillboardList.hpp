@@ -80,7 +80,7 @@ namespace castor3d
 		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
 		 *\param[in]	cameraPosition	La position de la caméra, relative au billboard.
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & cameraPosition );
+		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
@@ -217,7 +217,7 @@ namespace castor3d
 		SceneNodeSPtr m_node;
 		MaterialWPtr m_material;
 		castor::Point2f m_dimensions;
-		castor::Point3r m_cameraPosition;
+		castor::Point3f m_cameraPosition;
 		ashes::VertexBufferBasePtr m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		uint32_t m_vertexStride;
@@ -330,7 +330,7 @@ namespace castor3d
 		 *\brief		Ajoute un point a la liste
 		 *\param[in]	position	Le point
 		 */
-		C3D_API void addPoint( castor::Point3r const & position );
+		C3D_API void addPoint( castor::Point3f const & position );
 		/**
 		 *\~english
 		 *\brief		adds a points list to the list
@@ -339,7 +339,7 @@ namespace castor3d
 		 *\brief		Ajoute une liste de points a la liste
 		 *\param[in]	positions	La liste de points
 		 */
-		C3D_API void addPoints( castor::Point3rArray const & positions );
+		C3D_API void addPoints( castor::Point3fArray const & positions );
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
@@ -356,27 +356,27 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline castor::Point3r const & getAt( uint32_t index )const
+		inline castor::Point3f const & getAt( uint32_t index )const
 		{
 			return m_arrayPositions[index];
 		}
 
-		inline castor::Point3rArrayIt begin()
+		inline castor::Point3fArrayIt begin()
 		{
 			return m_arrayPositions.begin();
 		}
 
-		inline castor::Point3rArrayConstIt begin()const
+		inline castor::Point3fArrayConstIt begin()const
 		{
 			return m_arrayPositions.begin();
 		}
 
-		inline castor::Point3rArrayIt end()
+		inline castor::Point3fArrayIt end()
 		{
 			return m_arrayPositions.end();
 		}
 
-		inline castor::Point3rArrayConstIt end()const
+		inline castor::Point3fArrayConstIt end()const
 		{
 			return m_arrayPositions.end();
 		}
@@ -390,7 +390,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setAt( uint32_t index, castor::Point3r const & position )
+		inline void setAt( uint32_t index, castor::Point3f const & position )
 		{
 			m_needUpdate = true;
 			m_arrayPositions[index] = position;
@@ -398,7 +398,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		castor::Point3rArray m_arrayPositions;
+		castor::Point3fArray m_arrayPositions;
 	};
 }
 

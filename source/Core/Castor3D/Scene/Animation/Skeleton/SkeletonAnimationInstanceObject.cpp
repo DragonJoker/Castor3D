@@ -54,7 +54,7 @@ namespace castor3d
 		m_children.push_back( object );
 	}
 
-	void SkeletonAnimationInstanceObject::update( Matrix4x4r const & current )
+	void SkeletonAnimationInstanceObject::update( castor::Matrix4x4f const & current )
 	{
 		m_cumulativeTransform = current;
 		doApply();

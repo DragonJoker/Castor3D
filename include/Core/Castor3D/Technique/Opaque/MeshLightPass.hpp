@@ -184,7 +184,7 @@ namespace castor3d
 		 *\param[in]	camera	La caméra.
 		 *\return		La matrice.
 		 */
-		virtual castor::Matrix4x4r doComputeModelMatrix( Light const & light
+		virtual castor::Matrix4x4f doComputeModelMatrix( Light const & light
 			, Camera const & camera )const = 0;
 
 	private:

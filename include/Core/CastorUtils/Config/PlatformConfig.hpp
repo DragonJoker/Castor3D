@@ -22,6 +22,9 @@ See LICENSE file in root folder
 #	endif
 #	define CU_SharedLibExt cuT( "dll")
 #	define dlerror() ::getLastError()
+#	ifndef NOMINMAX
+#		define NOMINMAX
+#	endif
 #elif defined( CU_PlatformApple )
 #	define CU_SharedLibExt cuT( "dylib")
 #	define CU_API

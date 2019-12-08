@@ -185,7 +185,7 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	La position des premier et arrière plans.
 		*/
-		C3D_API castor::Matrix4x4r getFrustum( float left
+		C3D_API castor::Matrix4x4f getFrustum( float left
 			, float right
 			, float bottom
 			, float top
@@ -214,7 +214,7 @@ namespace castor3d
 		*\param[in] zFar
 		*	La position de l'arrière plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4r getPerspective( castor::Angle const & fovy
+		C3D_API castor::Matrix4x4f getPerspective( castor::Angle const & fovy
 			, float aspect
 			, float zNear
 			, float zFar )const;
@@ -238,7 +238,7 @@ namespace castor3d
 		*\param[in] zNear, zFar
 		*	La position des premier et arrière plans.
 		*/
-		C3D_API castor::Matrix4x4r getOrtho( float left
+		C3D_API castor::Matrix4x4f getOrtho( float left
 			, float right
 			, float bottom
 			, float top
@@ -264,7 +264,7 @@ namespace castor3d
 		*\param[in] zNear
 		*	La position du premier plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4r getInfinitePerspective( float radiansFovY
+		C3D_API castor::Matrix4x4f getInfinitePerspective( float radiansFovY
 			, float aspect
 			, float zNear )const;
 		/**

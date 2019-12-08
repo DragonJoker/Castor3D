@@ -49,9 +49,9 @@ namespace castor3d
 			, Parameters const & parameters );
 
 	private:
-		real m_height;
-		real m_width;
-		real m_depth;
+		float m_height;
+		float m_width;
+		float m_depth;
 		friend std::ostream & operator <<( std::ostream & o
 			, Cube const & c );
 	};

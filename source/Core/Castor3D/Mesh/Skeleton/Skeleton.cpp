@@ -20,7 +20,7 @@ namespace castor3d
 	}
 
 	BoneSPtr Skeleton::createBone( String const & name
-		, Matrix4x4r const & offset )
+		, castor::Matrix4x4f const & offset )
 	{
 		auto bone = std::make_shared< Bone >( *this, offset );
 		bone->setName( name );

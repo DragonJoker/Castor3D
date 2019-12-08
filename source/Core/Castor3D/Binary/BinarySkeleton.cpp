@@ -6,8 +6,6 @@
 #include "Castor3D/Mesh/Skeleton/Bone.hpp"
 #include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -47,7 +45,7 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSkeletonBone:
-				bone = std::make_shared< Bone >( obj, Matrix4x4r{ 1.0_r } );
+				bone = std::make_shared< Bone >( obj, castor::Matrix4x4f{ 1.0f } );
 				result = createBinaryParser< Bone >().parse( *bone, chunk );
 
 				if ( result )

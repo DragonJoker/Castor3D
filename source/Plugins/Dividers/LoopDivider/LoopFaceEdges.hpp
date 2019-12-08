@@ -72,16 +72,16 @@ namespace Loop
 		void doAddFaceAndEdges( VertexSPtr a
 			, VertexSPtr b
 			, VertexSPtr c
-			, castor::Point3r const & aTex
-			, castor::Point3r const & bTex
-			, castor::Point3r const & cTex
+			, castor::Point3f const & aTex
+			, castor::Point3f const & bTex
+			, castor::Point3f const & cTex
 			, FaceEdgesPtrArray & newFaces );
 		void doAddFaceAndEdges( VertexSPtr a
 			, VertexSPtr b
 			, VertexSPtr c
-			, castor::Point3r const & aTex
-			, castor::Point3r const & bTex
-			, castor::Point3r const & cTex
+			, castor::Point3f const & aTex
+			, castor::Point3f const & bTex
+			, castor::Point3f const & cTex
 			, EdgeSPtr edgeAB
 			, EdgeSPtr edgeBC
 			, EdgeSPtr edgeCA

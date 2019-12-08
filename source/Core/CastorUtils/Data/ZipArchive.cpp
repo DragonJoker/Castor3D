@@ -238,7 +238,7 @@ namespace castor
 				}
 
 				Path name = Path{ string::stringCast< xchar >( fileNameInZip.data(), fileNameInZip.data() + fileInfo.size_filename ) };
-				StringArray folders = string::split( name.getPath(), string::toString( Path::Separator ), 100, false );
+				StringArray folders = string::split( name.getPath(), string::toString( Path::NativeSeparator ), 100, false );
 
 				if ( !folders.empty() )
 				{
@@ -408,7 +408,7 @@ namespace castor
 			// The file path is this one
 			result = this;
 		}
-		else if ( p_path.find( name + Path::Separator ) == 0 )
+		else if ( p_path.find( name + Path::NativeSeparator ) == 0 )
 		{
 			// The file is inside this folder or inside a subfolder
 			Path path = Path{ p_path.substr( name.size() + 1 ) };
@@ -451,12 +451,12 @@ namespace castor
 		else if ( name.empty() )
 		{
 			// The current folder is the root one, add each file path's folder, recursively.
-			folders.push_back( Folder( p_path.substr( 0, p_path.find( Path::Separator ) ), p_path ) );
+			folders.push_back( Folder( p_path.substr( 0, p_path.find( Path::NativeSeparator ) ), p_path ) );
 		}
 		else
 		{
 			// Try to match file path's folders to this one
-			if ( p_path.find( name + Path::Separator ) == 0 )
+			if ( p_path.find( name + Path::NativeSeparator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
 				path = Path{ p_path.substr( name.size() + 1 ) };
@@ -467,14 +467,14 @@ namespace castor
 				}
 				else
 				{
-					size_t found = path.find( Path::Separator );
+					size_t found = path.find( Path::NativeSeparator );
 					folders.push_back( Folder( path.substr( 0, found ), Path{ path.substr( found + 1 ) } ) );
 				}
 			}
 			else
 			{
 				// This file is in a subfolder
-				size_t found = p_path.find( Path::Separator );
+				size_t found = p_path.find( Path::NativeSeparator );
 				folders.push_back( Folder( p_path.substr( 0, found ), Path{ p_path.substr( found + 1 ) } ) );
 			}
 		}
@@ -529,7 +529,7 @@ namespace castor
 
 			for ( StringArray::iterator it = entries.begin(); it != entries.end(); ++it )
 			{
-				string::replace( *it, m_rootFolder + Path::Separator, String() );
+				string::replace( *it, m_rootFolder + Path::NativeSeparator, String() );
 				addFile( Path{ *it } );
 			}
 

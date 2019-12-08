@@ -62,7 +62,7 @@ namespace castor3d
 		 *\param[in]	offset	La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
 		C3D_API BoneSPtr createBone( castor::String const & name
-			, castor::Matrix4x4r const & offset );
+			, castor::Matrix4x4f const & offset );
 		/**
 		 *\~english
 		 *\brief		Finds a bone from a name.
@@ -107,7 +107,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La transformation globale inversée.
 		 */
-		inline castor::Matrix4x4r const & getGlobalInverseTransform()const
+		inline castor::Matrix4x4f const & getGlobalInverseTransform()const
 		{
 			return m_globalInverse;
 		}
@@ -119,7 +119,7 @@ namespace castor3d
 		 *\brief		Définit la transformation globale inversée.
 		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void setGlobalInverseTransform( castor::Matrix4x4r const & transform )
+		inline void setGlobalInverseTransform( castor::Matrix4x4f const & transform )
 		{
 			m_globalInverse = transform;
 		}
@@ -198,7 +198,7 @@ namespace castor3d
 		BonePtrArray m_bones;
 		//!\~english	The global skeleton transform.
 		//!\~french		La transformation globale du squelette.
-		castor::Matrix4x4r m_globalInverse;
+		castor::Matrix4x4f m_globalInverse;
 		//!\~english	The bounding box for each bone, sorted by mesh.
 		//!\~french		La bounding box pour chaque os, trié par maillage.
 		std::map< Mesh *, std::vector< castor::BoundingBox > > m_boxes;

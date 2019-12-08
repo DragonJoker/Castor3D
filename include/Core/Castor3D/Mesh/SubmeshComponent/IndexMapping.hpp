@@ -61,7 +61,7 @@ namespace castor3d
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
 		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API virtual void sortByDistance( castor::Point3r const & cameraPosition ) = 0;
+		C3D_API virtual void sortByDistance( castor::Point3f const & cameraPosition ) = 0;
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents.

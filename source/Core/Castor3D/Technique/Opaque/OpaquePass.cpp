@@ -158,7 +158,7 @@ namespace castor3d
 	}
 
 	void OpaquePass::update( RenderInfo & info
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
 

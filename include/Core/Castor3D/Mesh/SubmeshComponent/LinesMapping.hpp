@@ -80,7 +80,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
+		C3D_API void sortByDistance( castor::Point3f const & cameraPosition )override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::computeNormals
 		 */
@@ -173,7 +173,7 @@ namespace castor3d
 		LineArray m_lines;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
-		castor::Point3r m_cameraPosition;
+		castor::Point3f m_cameraPosition;
 	};
 }
 

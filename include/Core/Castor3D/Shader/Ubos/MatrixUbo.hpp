@@ -90,9 +90,9 @@ namespace castor3d
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & view
-			, castor::Matrix4x4r const & projection
-			, castor::Point2r const & jitter = castor::Point2r{} )const;
+		C3D_API void update( castor::Matrix4x4f const & view
+			, castor::Matrix4x4f const & projection
+			, castor::Point2f const & jitter = castor::Point2f{} )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -109,9 +109,9 @@ namespace castor3d
 		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
 		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & view
-			, castor::Matrix4x4r const & projection
-			, castor::Point2r const & jitter
+		C3D_API void update( castor::Matrix4x4f const & view
+			, castor::Matrix4x4f const & projection
+			, castor::Point2f const & jitter
 			, ashes::StagingBuffer & stagingBuffer
 			, ashes::CommandBuffer const & commandBuffer )const;
 		/**
@@ -124,7 +124,7 @@ namespace castor3d
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & projection )const;
+		C3D_API void update( castor::Matrix4x4f const & projection )const;
 		/**
 		 *\~english
 		 *\name			Getters.

@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	weight	Le poids du bone
 		 */
 		C3D_API void addBoneData( uint32_t boneId
-			, real weight );
+			, float weight );
 
 		//!\~english	The bones ID.
 		//!\~french		L'ID des bones.

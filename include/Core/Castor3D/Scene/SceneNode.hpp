@@ -226,7 +226,7 @@ namespace castor3d
 		 *\brief		Translate le noeud
 		 *\param[in]	t	The La valeur de translation
 		 */
-		C3D_API void translate( castor::Point3r const & t );
+		C3D_API void translate( castor::Point3f const & t );
 		/**
 		 *\~english
 		 *\brief		Scales the node
@@ -235,7 +235,7 @@ namespace castor3d
 		 *\brief		Change l'échelle du noeud
 		 *\param[in]	s	La valeur d'échelle
 		 */
-		C3D_API void scale( castor::Point3r const & s );
+		C3D_API void scale( castor::Point3f const & s );
 		/**
 		 *\~english
 		 *\brief		Sets the orientation
@@ -253,7 +253,7 @@ namespace castor3d
 		 *\brief		Définit la position relative du noeud
 		 *\param[in]	position	La nouvelle valeur
 		 */
-		C3D_API void setPosition( castor::Point3r const & position );
+		C3D_API void setPosition( castor::Point3f const & position );
 		/**
 		 *\~english
 		 *\brief		Sets the relative scale from a Point3r
@@ -262,7 +262,7 @@ namespace castor3d
 		 *\brief		Définit l'échelle relative du noeud
 		 *\param[in]	scale	La nouvelle valeur
 		 */
-		C3D_API void setScale( castor::Point3r const & scale );
+		C3D_API void setScale( castor::Point3f const & scale );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
@@ -271,7 +271,7 @@ namespace castor3d
 		 *\brief		Récupère la position absolue
 		 *\return		La valeur
 		 */
-		C3D_API castor::Point3r getDerivedPosition()const;
+		C3D_API castor::Point3f getDerivedPosition()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute orientation
@@ -289,7 +289,7 @@ namespace castor3d
 		 *\brief		Récupère l'échelle absolue
 		 *\return		La valeur
 		 */
-		C3D_API castor::Point3r getDerivedScale()const;
+		C3D_API castor::Point3f getDerivedScale()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the relative transformation matrix
@@ -298,7 +298,7 @@ namespace castor3d
 		 *\brief		Récupère la matrice de transformation relative
 		 *\return		La valeur
 		 */
-		C3D_API castor::Matrix4x4r const & getTransformationMatrix()const;
+		C3D_API castor::Matrix4x4f const & getTransformationMatrix()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute transformation matrix
@@ -307,7 +307,7 @@ namespace castor3d
 		 *\brief		Récupère la matrice de transformation absolue
 		 *\return		La valeur
 		 */
-		C3D_API castor::Matrix4x4r const & getDerivedTransformationMatrix()const;
+		C3D_API castor::Matrix4x4f const & getDerivedTransformationMatrix()const;
 		/**
 		 *\~english
 		 *\brief		Sets the node visibility status
@@ -334,7 +334,7 @@ namespace castor3d
 		 *\brief		Récupère la position relative
 		 *\return		La valeur
 		 */
-		inline castor::Point3r const & getPosition()const
+		inline castor::Point3f const & getPosition()const
 		{
 			return m_position;
 		}
@@ -358,7 +358,7 @@ namespace castor3d
 		 *\brief		Récupère l'échelle relative
 		 *\return		La valeur
 		 */
-		inline castor::Point3r const & getScale()const
+		inline castor::Point3f const & getScale()const
 		{
 			return m_scale;
 		}
@@ -372,7 +372,7 @@ namespace castor3d
 		 *\param[out]	axis	Reçoit l'axe
 		 *\param[out]	angle	Reçoit l'angle
 		 */
-		inline void getAxisAngle( castor::Point3r & axis, castor::Angle & angle )const
+		inline void getAxisAngle( castor::Point3f & axis, castor::Angle & angle )const
 		{
 			m_orientation.toAxisAngle( axis, angle );
 		}
@@ -578,11 +578,11 @@ namespace castor3d
 		bool m_displayable;
 		bool m_visible{ true };
 		castor::Quaternion m_orientation;
-		castor::Point3r m_position{ 0.0_r, 0.0_r, 0.0_r };
-		castor::Point3r m_scale{ 1.0_r, 1.0_r, 1.0_r };
-		castor::Matrix4x4r m_transform{ 1.0_r };
+		castor::Point3f m_position{ 0.0f, 0.0f, 0.0f };
+		castor::Point3f m_scale{ 1.0, 1.0f, 1.0f };
+		castor::Matrix4x4f m_transform{ 1.0f };
 		bool m_mtxChanged{ true };
-		castor::Matrix4x4r m_derivedTransform{ 1.0_r };
+		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
 		SceneNodeWPtr m_parent;
 		SceneNodePtrStrMap m_children;

@@ -59,28 +59,28 @@ namespace GuiCommon
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setAngularVelocity( castor::Point2r const & value )noexcept;
+		void setAngularVelocity( castor::Point2f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void setScalarVelocity( castor::Point3r const & value )noexcept;
+		void setScalarVelocity( castor::Point3f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addAngularVelocity( castor::Point2r const & value )noexcept;
+		void addAngularVelocity( castor::Point2f const & value )noexcept;
 		/**
 		*\brief
 		*	Définit la vitesse de translation du noeud.
 		*param[in] value
 		*	La nouvelle valeur.
 		*/
-		void addScalarVelocity( castor::Point3r const & value )noexcept;
+		void addScalarVelocity( castor::Point3f const & value )noexcept;
 		/**
 		*\brief
 		*	Tourne le noeud autour de l'axe X de l'angle donné.
@@ -102,7 +102,7 @@ namespace GuiCommon
 		//! Le noeud de scène affecté par les évènements.
 		castor3d::SceneNodeSPtr const m_node;
 		//! La position originelle du noeud.
-		castor::Point3r const m_originalPosition;
+		castor::Point3f const m_originalPosition;
 		//! L'orientation originelle du noeud.
 		castor::Quaternion const m_originalOrientation;
 		//! La rotation initiale sur les axes X et Y.

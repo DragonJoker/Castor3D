@@ -98,7 +98,7 @@ namespace castor3d
 		EnvironmentMap::EnvironmentMapPasses doCreatePasses( EnvironmentMap & map
 			, SceneNode & node )
 		{
-			static Point3r const position;
+			static castor::Point3f const position;
 			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
 				std::make_shared< SceneNode >( cuT( "EnvironmentMap_PosX" ), *node.getScene() ),
@@ -110,12 +110,12 @@ namespace castor3d
 			};
 			std::array< Quaternion, size_t( CubeMapFace::eCount ) > orients
 			{
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ -1.0f, +0.0f, +0.0f }, Point3r{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ +1.0f, +0.0f, +0.0f }, Point3r{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ +0.0f, -1.0f, +0.0f }, Point3r{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ +0.0f, +1.0f, +0.0f }, Point3r{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ +0.0f, +0.0f, -1.0f }, Point3r{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
-				Quaternion::fromMatrix( matrix::lookAt( position, Point3r{ +0.0f, +0.0f, +1.0f }, Point3r{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ -1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive X
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +1.0f, +0.0f, +0.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative X
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, -1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, +1.0f } ) ),// Positive Y
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +1.0f, +0.0f }, castor::Point3f{ +0.0f, +0.0f, -1.0f } ) ),// Negative Y
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Positive Z
+				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
 			};
 
 			if ( !map.getEngine()->getRenderSystem()->isTopDown() )

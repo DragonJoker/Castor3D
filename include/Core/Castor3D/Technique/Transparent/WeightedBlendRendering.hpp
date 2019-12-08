@@ -68,7 +68,7 @@ namespace castor3d
 		void update( RenderInfo & info
 			, Scene const & scene
 			, Camera const & camera
-			, castor::Point2r const & jitter );
+			, castor::Point2f const & jitter );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.

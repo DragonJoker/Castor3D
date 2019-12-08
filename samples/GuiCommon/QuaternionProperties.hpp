@@ -32,7 +32,7 @@ namespace GuiCommon
 		}
 
 	private:
-		castor::Point3r m_axis;
+		castor::Point3f m_axis;
 		castor::Angle m_angle;
 	};
 }

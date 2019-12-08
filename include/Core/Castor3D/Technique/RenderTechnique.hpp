@@ -107,7 +107,7 @@ namespace castor3d
 		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
 		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API ashes::Semaphore const & render( castor::Point2r const & jitter
+		C3D_API ashes::Semaphore const & render( castor::Point2f const & jitter
 			, ashes::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
@@ -218,10 +218,10 @@ namespace castor3d
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderOpaque( castor::Point2r const & jitter
+		ashes::Semaphore const & doRenderOpaque( castor::Point2f const & jitter
 			, RenderInfo & info
 			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderTransparent( castor::Point2r const & jitter
+		ashes::Semaphore const & doRenderTransparent( castor::Point2f const & jitter
 			, RenderInfo & info
 			, ashes::Semaphore const & semaphore );
 

@@ -50,9 +50,9 @@ namespace castor3d
 		//!\~english The number of faces	\~french Nombre de faces
 		uint32_t m_nbFaces;
 		//!\~english  The cone height	\~french La hauteur du cône
-		real m_height;
+		float m_height;
 		//!\~english  The cone radius	\~french Le rayon de la base
-		real m_radius;
+		float m_radius;
 		friend std::ostream & operator <<( std::ostream & o
 			, Cone const & c );
 	};

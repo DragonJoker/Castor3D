@@ -11,6 +11,22 @@ See LICENSE file in root folder
 namespace castor
 {
 	/*!
+	\~english
+	\brief		Supported MemoryData types.
+	\~french
+	\brief		Types de MemoryData supportés.
+	*/
+	enum class MemoryDataType
+	{
+		eFixed,
+		eMarked,
+		eFixedGrowing,
+		eFixedGrowingMarked,
+		CU_ScopedEnumBounds( eFixed )
+	};
+	template< typename Object, MemoryDataType MemDataType >
+	class PoolManagedObject;
+	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2016

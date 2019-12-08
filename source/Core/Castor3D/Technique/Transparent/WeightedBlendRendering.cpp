@@ -86,7 +86,7 @@ namespace castor3d
 	void WeightedBlendRendering::update( RenderInfo & info
 		, Scene const & scene
 		, Camera const & camera
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getProjection().getInverse();

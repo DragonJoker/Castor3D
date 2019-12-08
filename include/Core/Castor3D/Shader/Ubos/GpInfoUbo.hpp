@@ -68,9 +68,9 @@ namespace castor3d
 		C3D_API void cleanup();
 		void update( castor::Size const & renderSize
 			, Camera const & camera
-			, castor::Matrix4x4r const & invViewProj
-			, castor::Matrix4x4r const & invView
-			, castor::Matrix4x4r const & invProj );
+			, castor::Matrix4x4f const & invViewProj
+			, castor::Matrix4x4f const & invView
+			, castor::Matrix4x4f const & invProj );
 		/**
 		 *\~english
 		 *\name			getters.

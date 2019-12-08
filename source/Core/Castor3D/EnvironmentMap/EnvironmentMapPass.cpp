@@ -94,7 +94,7 @@ namespace castor3d
 			, farZ );
 		m_camera->resize( size );
 
-		static Matrix4x4r const projection = convert( device->perspective( ( 45.0_degrees ).radians()
+		static castor::Matrix4x4f const projection = convert( device->perspective( ( 45.0_degrees ).radians()
 			, 1.0f
 			, 0.0f, 2.0f ) );
 		m_matrixUbo.initialise();
@@ -120,7 +120,7 @@ namespace castor3d
 		m_frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size[0], size[1] }
 			, std::move( attaches ) );
 		setDebugObjectName( device, *m_frameBuffer, "EnvironmentMapPass" + castor::string::toString( face ) + "FrameBuffer" );
-		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( false );
+		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		setDebugObjectName( device, *m_frameBuffer, "EnvironmentMapPass" + castor::string::toString( face ) + "CommandBuffer" );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
@@ -169,7 +169,7 @@ namespace castor3d
 		m_camera->getParent()->update();
 		m_camera->update();
 		castor::matrix::setTranslate( m_mtxModel, position );
-		castor::matrix::scale( m_mtxModel, Point3r{ 1, -1, 1 } );
+		castor::matrix::scale( m_mtxModel, castor::Point3f{ 1, -1, 1 } );
 		m_culler->compute();
 		static_cast< RenderTechniquePass & >( *m_opaquePass ).update( queues );
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );

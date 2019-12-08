@@ -204,7 +204,7 @@ namespace smaa
 		uint32_t subsampleIndex{ 0u };
 		std::array< castor::Point4i, 4u > subsampleIndices;
 		uint32_t maxSubsampleIndices{ 1u };
-		std::vector< castor::Point2r > jitters;
+		std::vector< castor::Point2f > jitters;
 	};
 }
 

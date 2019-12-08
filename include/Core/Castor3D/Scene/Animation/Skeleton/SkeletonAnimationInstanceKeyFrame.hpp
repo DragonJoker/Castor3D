@@ -23,7 +23,7 @@ namespace castor3d
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	public:
-		using ObjectArray = std::vector< std::pair< SkeletonAnimationInstanceObject *, castor::Matrix4x4r > >;
+		using ObjectArray = std::vector< std::pair< SkeletonAnimationInstanceObject *, castor::Matrix4x4f > >;
 
 	public:
 		/**

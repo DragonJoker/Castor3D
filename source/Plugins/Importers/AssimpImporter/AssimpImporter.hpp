@@ -74,7 +74,7 @@ namespace C3dAssimp
 		castor3d::MaterialSPtr doProcessMaterial( castor3d::Scene & p_scene
 			, aiMaterial const & p_aiMaterial );
 		castor3d::BoneSPtr doAddBone( castor::String const & p_name
-			, castor::Matrix4x4r const & p_offset
+			, castor::Matrix4x4f const & p_offset
 			, castor3d::Skeleton & p_skeleton
 			, uint32_t & p_index );
 		void doProcessBones( castor3d::Skeleton & p_pSkeleton

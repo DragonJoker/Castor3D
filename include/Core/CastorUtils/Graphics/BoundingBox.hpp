@@ -41,7 +41,7 @@ namespace castor
 		 *\param[in]	min	Le point minimal.
 		 *\param[in]	max	Le point maximal.
 		 */
-		CU_API BoundingBox( Point3r const & min, Point3r const & max );
+		CU_API BoundingBox( Point3f const & min, Point3f const & max );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box resulting of the union of this bounding box and given one.
@@ -63,7 +63,7 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est dans le conteneur.
 		 */
-		CU_API bool isWithin( Point3r const & point )const override;
+		CU_API bool isWithin( Point3f const & point )const override;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within.
@@ -74,7 +74,7 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est sur la limite.
 		 */
-		CU_API bool isOnLimits( Point3r const & point )const override;
+		CU_API bool isOnLimits( Point3f const & point )const override;
 		/**
 		 *\~english
 		 *\brief		Reinitialises the combo box to the given limits.
@@ -85,7 +85,7 @@ namespace castor
 		 *\param[in]	min	Le point minimal.
 		 *\param[in]	max	Le point maximal.
 		 */
-		CU_API void load( Point3r const & min, Point3r const & max );
+		CU_API void load( Point3f const & min, Point3f const & max );
 		/**
 		 *\~english
 		 *\brief		Retrieves the axis aligned cube box for given tranformations.
@@ -94,7 +94,7 @@ namespace castor
 		 *\brief		Récupère la boîte alignée sur les axes, pour les transformations données.
 		 *\param[in]	transformations	La matrice de transformation.
 		 */
-		CU_API BoundingBox getAxisAligned( Matrix4x4r const & transformations )const;
+		CU_API BoundingBox getAxisAligned( Matrix4x4f const & transformations )const;
 		/**
 		 *\~english
 		 *\brief		Computes the positive vertex of a direction.
@@ -102,23 +102,23 @@ namespace castor
 		 *\param[in]	normal	The direction vector.
 		 *\return		The position of the vertex on the box in the same way as the normal, while considering the center.
 		 */
-		CU_API Point3r getPositiveVertex( Point3r const & normal )const;
+		CU_API Point3f getPositiveVertex( Point3f const & normal )const;
 		/**
 		 *\~english
 		 *\brief		Computes the negative vertex of a direction.
 		 *\param[in]	normal	The direction vector.
 		 *\return		The position of the vertex on the box in the opposite way from the normal, while considering the center.
 		 */
-		CU_API Point3r getNegativeVertex( Point3r const & normal )const;
+		CU_API Point3f getNegativeVertex( Point3f const & normal )const;
 		/**
 		 *\~english
 		 *\return		The min extent.
 		 *\~french
 		 *\return		Le point minimal.
 		 */
-		inline Point3r getMin()const
+		inline Point3f getMin()const
 		{
-			return getCenter() - ( m_dimensions / 2.0_r );
+			return getCenter() - ( m_dimensions / 2.0f );
 		}
 		/**
 		 *\~english
@@ -126,9 +126,9 @@ namespace castor
 		 *\~french
 		 *\return		Le point maximal.
 		 */
-		inline Point3r getMax()const
+		inline Point3f getMax()const
 		{
-			return getCenter() + ( m_dimensions / 2.0_r );
+			return getCenter() + ( m_dimensions / 2.0f );
 		}
 		/**
 		 *\~english
@@ -136,7 +136,7 @@ namespace castor
 		 *\~french
 		 *\return		Les dimensions.
 		 */
-		inline Point3r const & getDimensions()const
+		inline Point3f const & getDimensions()const
 		{
 			return m_dimensions;
 		}
@@ -144,7 +144,7 @@ namespace castor
 	private:
 		//!\~english	The dimensions of the bounding box.
 		//!\~french		Les dimensions de la bounding box.
-		Point3r m_dimensions;
+		Point3f m_dimensions;
 	};
 }
 

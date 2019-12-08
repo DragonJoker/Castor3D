@@ -55,8 +55,8 @@ namespace castor3d
 		 *\param[in]	axis	L'axe de projection.
 		 *\param[in]	closed	Dit si on doit fermer la projection.
 		 */
-		C3D_API void setPoints( Pattern< castor::Point3r > const & pattern
-			, castor::Point3r const & axis
+		C3D_API void setPoints( Pattern< castor::Point3f > const & pattern
+			, castor::Point3f const & axis
 			, bool closed );
 
 	private:
@@ -67,9 +67,9 @@ namespace castor3d
 			, Parameters const & parameters )override;
 
 	private:
-		Pattern< castor::Point3r > m_pattern;
-		castor::Point3r m_axis;
-		real m_depth;
+		Pattern< castor::Point3f > m_pattern;
+		castor::Point3f m_axis;
+		float m_depth;
 		bool m_closed;
 		uint32_t m_nbFaces;
 		friend std::ostream & operator <<( std::ostream & o, Projection const & c );

@@ -42,13 +42,13 @@ namespace castor3d
 		return *this;
 	}
 
-	void VertexBoneData::addBoneData( uint32_t boneId, real weight )
+	void VertexBoneData::addBoneData( uint32_t boneId, float weight )
 	{
 		bool done = false;
 
 		for ( int i = 0; i < C3D_MAX_BONES_PER_VERTEX && !done; i++ )
 		{
-			if ( m_weights.data[i] == 0.0_r )
+			if ( m_weights.data[i] == 0.0f )
 			{
 				m_ids.data[i] = boneId;
 				m_weights.data[i] = weight;

@@ -178,18 +178,6 @@ namespace castor
 			return ldReturn;
 		}
 
-		real toReal( String const & text, std::locale const & locale )
-		{
-			real rReturn = 0;
-
-			if ( !text.empty() )
-			{
-				parse( text, rReturn, locale );
-			}
-
-			return rReturn;
-		}
-
 		bool isUpperCase( String const & text )
 		{
 			return text == upperCase( text );

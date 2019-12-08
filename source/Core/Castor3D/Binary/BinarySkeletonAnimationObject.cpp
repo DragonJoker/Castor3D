@@ -9,8 +9,6 @@
 #include "Castor3D/Binary/BinarySkeletonAnimationKeyFrame.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationNode.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -20,8 +18,8 @@ namespace castor3d
 		template< typename T >
 		struct KeyFrameT
 		{
-			Milliseconds m_timeIndex;
-			SquareMatrix< T, 4u > m_transform;
+			castor::Milliseconds m_timeIndex;
+			castor::SquareMatrix< T, 4u > m_transform;
 		};
 
 		using KeyFrame = KeyFrameT< float >;
@@ -36,8 +34,8 @@ namespace castor3d
 			for ( auto & kf : in )
 			{
 				size_t index{ 0u };
-				Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
-				Matrix4x4r transform{ &kf[index] };
+				castor::Milliseconds timeIndex{ int64_t( kf[index++] * 1000.0 ) };
+				castor::Matrix4x4f transform{ &kf[index] };
 				( *it ) = KeyFrame{ timeIndex, transform };
 				++it;
 			}
@@ -75,7 +73,7 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		Matrix4x4r transform;
+		castor::Matrix4x4f transform;
 		std::vector< KeyFrame > keyframes;
 		std::vector< KeyFramed > keyframesd;
 		SkeletonAnimationNodeSPtr node;
@@ -83,7 +81,7 @@ namespace castor3d
 		SkeletonAnimationBoneSPtr bone;
 		BinaryChunk chunk;
 		uint32_t count{ 0 };
-		real length{ 0.0_r };
+		float length{ 0.0f };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -128,7 +126,7 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_1( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		Matrix4x4r transform;
+		castor::Matrix4x4f transform;
 		std::vector< KeyFrame > keyframes;
 		std::vector< KeyFramed > keyframesd;
 		SkeletonAnimationNodeSPtr node;
@@ -136,7 +134,7 @@ namespace castor3d
 		SkeletonAnimationBoneSPtr bone;
 		BinaryChunk chunk;
 		uint32_t count{ 0 };
-		real length{ 0.0_r };
+		float length{ 0.0f };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

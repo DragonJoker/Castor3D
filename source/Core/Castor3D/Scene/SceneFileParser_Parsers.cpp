@@ -465,7 +465,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			real rIntraOcularDistance;
+			float rIntraOcularDistance;
 			params[0]->get( rIntraOcularDistance );
 
 			if ( rIntraOcularDistance > 0 )
@@ -639,7 +639,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			real rValue = -1000;
+			float rValue = -1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
@@ -664,7 +664,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			real rValue = 1000;
+			float rValue = 1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
@@ -689,7 +689,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			real rValue = 1000;
+			float rValue = 1000;
 			params[0]->get( rValue );
 
 			if ( rValue >= -1000 && rValue <= 1000 )
@@ -799,7 +799,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			real rValue = 1000;
+			float rValue = 1000;
 			params[0]->get( rValue );
 			parsingContext->sampler->setMaxAnisotropy( rValue );
 		}
@@ -1894,7 +1894,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3r axis;
+			Point3f axis;
 			float angle;
 			params[0]->get( axis );
 			params[1]->get( angle );
@@ -1913,10 +1913,10 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3r direction;
+			Point3f direction;
 			params[0]->get( direction );
-			Point3r up{ 0, 1, 0 };
-			Point3r right{ point::cross( direction, up ) };
+			Point3f up{ 0, 1, 0 };
+			Point3f right{ point::cross( direction, up ) };
 			parsingContext->sceneNode->setOrientation( Quaternion::fromAxes( right, up, direction ) );
 		}
 	}
@@ -1932,7 +1932,7 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			Point3r value;
+			Point3f value;
 			params[0]->get( value );
 			parsingContext->sceneNode->setScale( value );
 		}
@@ -2261,7 +2261,7 @@ namespace castor3d
 		}
 		else
 		{
-			real timeIndex;
+			float timeIndex;
 			params[1]->get( timeIndex );
 			Path path;
 			Path pathFile = context->m_file.getPath() / params[0]->get( path );
@@ -2378,7 +2378,7 @@ namespace castor3d
 			{
 				auto divider = engine->getSubdividerFactory().create( name );
 				parsingContext->mesh->computeContainers();
-				Point3r ptCenter = parsingContext->mesh->getBoundingBox().getCenter();
+				Point3f ptCenter = parsingContext->mesh->getBoundingBox().getCenter();
 
 				for ( auto submesh : *parsingContext->mesh )
 				{
@@ -2650,22 +2650,22 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 6 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[5] );
 			}
 
 			if ( arrayValues.size() >= 8 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[7] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[7] );
 			}
 		}
 	}
@@ -2695,28 +2695,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[8] );
-				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[8] );
+				parsingContext->vertexTex[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext->vertexTex[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext->vertexTex[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -2746,28 +2746,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 0] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 1] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 2] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 6] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 7] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 8] );
-				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 0] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 1] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 2] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 6] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 7] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 8] );
+				parsingContext->vertexNml[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext->vertexNml[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext->vertexNml[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -2797,28 +2797,28 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 9 && parsingContext->face1 != -1 )
 			{
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[0] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[1] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toReal( arrayValues[2] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[3] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[4] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toReal( arrayValues[5] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[6] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[7] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toReal( arrayValues[8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 0] * 3] = string::toFloat( arrayValues[2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[3] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[4] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 1] * 3] = string::toFloat( arrayValues[5] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face1 + 2] * 3] = string::toFloat( arrayValues[8] );
 			}
 
 			if ( arrayValues.size() >= 12 && parsingContext->face2 != -1 )
 			{
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 0] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 1] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toReal( arrayValues[ 2] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 6] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 7] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toReal( arrayValues[ 8] );
-				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[ 9] );
-				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[10] );
-				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toReal( arrayValues[11] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 0] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 1] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 0] * 3] = string::toFloat( arrayValues[ 2] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 6] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 7] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 1] * 3] = string::toFloat( arrayValues[ 8] );
+				parsingContext->vertexTan[0 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[ 9] );
+				parsingContext->vertexTan[1 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[10] );
+				parsingContext->vertexTan[2 + parsingContext->faces[parsingContext->face2 + 2] * 3] = string::toFloat( arrayValues[11] );
 			}
 		}
 	}
@@ -4807,7 +4807,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportLeft )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateLeft( rValue );
 	}
@@ -4816,7 +4816,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportRight )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateRight( rValue );
 	}
@@ -4825,7 +4825,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportTop )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateTop( rValue );
 	}
@@ -4834,7 +4834,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportBottom )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateBottom( rValue );
 	}
@@ -4843,7 +4843,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportNear )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateNear( rValue );
 	}
@@ -4852,7 +4852,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserViewportFar )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		real rValue;
+		float rValue;
 		params[0]->get( rValue );
 		parsingContext->viewport->updateFar( rValue );
 	}
@@ -5005,7 +5005,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBillboardPoint )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		Point3r position;
+		Point3f position;
 		params[0]->get( position );
 		parsingContext->billboards->addPoint( position );
 	}

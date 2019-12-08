@@ -88,7 +88,7 @@ namespace GuiCommon
 
 #else
 
-	static const castor::LogType DefaultLogType = castor::LogType::eDebug;
+	static const castor::LogType DefaultLogType = castor::LogType::eTrace;
 
 #endif
 

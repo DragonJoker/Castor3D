@@ -164,7 +164,7 @@ namespace castor3d
 	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
 	using SubmeshAnimationBufferMap = std::map< uint32_t, SubmeshAnimationBuffer >;
 	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
-	using Point3rInterpolator = Interpolator< castor::Point3r >;
+	using Point3rInterpolator = Interpolator< castor::Point3f >;
 	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
 	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
 

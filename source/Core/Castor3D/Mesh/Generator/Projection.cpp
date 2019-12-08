@@ -3,8 +3,6 @@
 #include "Castor3D/Mesh/Submesh.hpp"
 #include "Castor3D/Mesh/Vertex.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Projection::Projection()
@@ -25,14 +23,14 @@ namespace castor3d
 		return std::make_shared< Projection >();
 	}
 
-	void Projection::setPoints( Pattern< Point3r > const & pattern
-		, castor::Point3r const & axis
+	void Projection::setPoints( Pattern< castor::Point3f > const & pattern
+		, castor::Point3f const & axis
 		, bool closed )
 	{
 		m_pattern = pattern;
 		m_closed = closed;
 		m_axis = axis;
-		point::normalise( m_axis );
+		castor::point::normalise( m_axis );
 		m_axis = m_axis * m_depth;
 	}
 
@@ -75,7 +73,7 @@ namespace castor3d
 	//		// Construction des faces
 	//		for (uint32_t j = 0; j < m_nbFaces; j++)
 	//		{
-	//			Pattern< castor::Point3r > pattern;
+	//			Pattern< castor::Point3f > pattern;
 
 	//			currentUV[1] = 0;
 	//			previousUV[1] = 0;

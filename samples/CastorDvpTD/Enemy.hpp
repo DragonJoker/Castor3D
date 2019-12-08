@@ -57,7 +57,7 @@ namespace castortd
 		inline void Die()
 		{
 			m_state = State::Dead;
-			m_node.get().setPosition( castor::Point3r{ 0, -10, 0 } );
+			m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
 		}
 
 		inline bool IsAlive()const
@@ -93,6 +93,6 @@ namespace castortd
 		float m_speed{ 0.0f };
 		uint32_t m_life{ 0 };
 		Path::const_iterator m_cur;
-		castor::Point3r m_destination;
+		castor::Point3f m_destination;
 	};
 }

@@ -41,7 +41,7 @@ namespace castor
 		 *\param[in]	center	Le centre de la sphère.
 		 *\param[in]	radius	Le rayon de la sphère.
 		 */
-		CU_API BoundingSphere( Point3r const & center, real radius );
+		CU_API BoundingSphere( Point3f const & center, float radius );
 		/**
 		 *\~english
 		 *\brief		Constructor from a BoundingBox.
@@ -61,7 +61,7 @@ namespace castor
 		 *\param[in]	center	Le centre.
 		 *\param[in]	radius	Le rayon.
 		 */
-		CU_API void load( Point3r const & center, real radius );
+		CU_API void load( Point3f const & center, float radius );
 		/**
 		 *\~english
 		 *\brief		Reinitialises the sphere box from a BoundingBox.
@@ -81,7 +81,7 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est dans le conteneur.
 		 */
-		CU_API bool isWithin( Point3r const & point )const override;
+		CU_API bool isWithin( Point3f const & point )const override;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within.
@@ -92,14 +92,14 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est sur la limite.
 		 */
-		CU_API bool isOnLimits( Point3r const & point )const override;
+		CU_API bool isOnLimits( Point3f const & point )const override;
 		/**
 		 *\~english
 		 *\return		The radius.
 		 *\~french
 		 *\return		Le rayon.
 		 */
-		inline real getRadius()const
+		inline float getRadius()const
 		{
 			return m_radius;
 		}
@@ -107,7 +107,7 @@ namespace castor
 	private:
 		//!\~english	The radius of the sphere.
 		//!\~french		Le rayon de la sphère.
-		real m_radius;
+		float m_radius;
 	};
 }
 

@@ -38,7 +38,7 @@ namespace Loop
 		 *\param[in]	v	The vertex to add
 		 *\return	The vertex
 		 */
-		VertexSPtr addPoint( castor::Point3r const & v );
+		VertexSPtr addPoint( castor::Point3f const & v );
 		/**
 		 * Creates and adds a vertex to my list
 		 *\param[in]	v	The vertex coordinates

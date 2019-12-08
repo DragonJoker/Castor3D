@@ -5,8 +5,6 @@
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Mesh/Mesh.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -76,7 +74,7 @@ namespace castor3d
 	bool BinaryParser< MeshAnimationKeyFrame >::doParse( MeshAnimationKeyFrame & obj )
 	{
 		bool result = true;
-		Matrix4x4r transform;
+		castor::Matrix4x4f transform;
 		InterleavedVertexArray buffer;
 		BinaryChunk chunk;
 		uint32_t id{ 0 };
@@ -90,7 +88,7 @@ namespace castor3d
 			{
 			case ChunkType::eMeshAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
-				obj.doSetTimeIndex( Milliseconds{ int64_t( time * 1000 ) } );
+				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eMeshAnimationKeyFrameSubmeshID:

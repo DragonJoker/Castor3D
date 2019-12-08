@@ -18,7 +18,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = doWriteChunk( real( obj.getLength().count() ) / 1000.0_r, ChunkType::eAnimLength, m_chunk );
+			result = doWriteChunk( obj.getLength().count() / 1000.0f, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( result )
@@ -48,7 +48,7 @@ namespace castor3d
 		bool result = true;
 		String name;
 		BinaryChunk chunk;
-		real length{ 0.0_r };
+		float length{ 0.0f };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

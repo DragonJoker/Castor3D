@@ -12,7 +12,7 @@ namespace castortd
 
 		bool accept( Game & p_game );
 
-		void load( float p_speed, uint32_t p_damage, castor::Point3r const & p_node, Enemy & p_enemy );
+		void load( float p_speed, uint32_t p_damage, castor::Point3f const & p_node, Enemy & p_enemy );
 
 		inline castor3d::SceneNode & getNode()
 		{

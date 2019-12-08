@@ -26,7 +26,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using CubeMatrices = std::array< castor::Matrix4x4r, size_t( CubeMapFace::eCount ) >;
+		using CubeMatrices = std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) >;
 		using CubeCameras = std::array< CameraSPtr, size_t( CubeMapFace::eCount ) >;
 		using EnvironmentMapPasses = std::array< std::unique_ptr< EnvironmentMapPass >, size_t( CubeMapFace::eCount ) >;
 

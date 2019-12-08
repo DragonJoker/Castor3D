@@ -12,7 +12,7 @@ using namespace castor;
 namespace castor3d
 {
 	Bone::Bone( Skeleton & skeleton
-		, Matrix4x4r const & offset )
+		, castor::Matrix4x4f const & offset )
 		: Named{ cuEmptyString }
 		, m_skeleton{ skeleton }
 		, m_offset{ offset }
@@ -41,10 +41,10 @@ namespace castor3d
 	BoundingBox Bone::computeBoundingBox( Mesh const & mesh
 		, uint32_t boneIndex )const
 	{
-		real rmax = std::numeric_limits< real >::max();
-		real rmin = std::numeric_limits< real >::lowest();
-		Point3r min{ rmax, rmax, rmax };
-		Point3r max{ rmin, rmin, rmin };
+		auto rmax = std::numeric_limits< float >::max();
+		auto rmin = std::numeric_limits< float >::lowest();
+		castor::Point3f min{ rmax, rmax, rmax };
+		castor::Point3f max{ rmin, rmin, rmin };
 
 		for ( auto & submesh : mesh )
 		{

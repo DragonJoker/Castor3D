@@ -46,8 +46,8 @@ namespace castor3d
 		 *\param[in]	projection	La matrice de projection.
 		 *\param[in]	view		Le matrice de vue.
 		 */
-		C3D_API Planes update( castor::Matrix4x4r const & projection
-			, castor::Matrix4x4r const & view );
+		C3D_API Planes update( castor::Matrix4x4f const & projection
+			, castor::Matrix4x4f const & view );
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.
@@ -62,10 +62,10 @@ namespace castor3d
 		 *\param[in]	up			Le vecteur Y.
 		 *\param[in]	front		Le vecteur Z.
 		 */
-		C3D_API Planes update( castor::Point3r const & position
-			, castor::Point3r const & right
-			, castor::Point3r const & up
-			, castor::Point3r const & front );
+		C3D_API Planes update( castor::Point3f const & position
+			, castor::Point3f const & right
+			, castor::Point3f const & up
+			, castor::Point3f const & front );
 		/**
 		 *\~english
 		 *\brief		Updates the frustum planes.
@@ -78,9 +78,9 @@ namespace castor3d
 		 *\param[in]	target	La position de la cible de la vue.
 		 *\param[in]	up		La direction du vecteur haut, selon l'orientation de la vue.
 		 */
-		C3D_API Planes update( castor::Point3r const & eye
-			, castor::Point3r const & target
-			, castor::Point3r const & up );
+		C3D_API Planes update( castor::Point3f const & eye
+			, castor::Point3f const & target
+			, castor::Point3f const & up );
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingBox is in the view frustum.
@@ -95,7 +95,7 @@ namespace castor3d
 		 *\return		\p false si la BoundingBox est complètement en dehors du frustum de vue.
 		 */
 		C3D_API bool isVisible( castor::BoundingBox const & box
-			, castor::Matrix4x4r const & transformations )const;
+			, castor::Matrix4x4f const & transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given BoundingSphere is in the view frustum.
@@ -112,8 +112,8 @@ namespace castor3d
 		 *\return		\p false si la BoundingSphere est complètement en dehors du frustum de vue.
 		 */
 		C3D_API bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Matrix4x4r const & transformations
-			, castor::Point3r const & scale )const;
+			, castor::Matrix4x4f const & transformations
+			, castor::Point3f const & scale )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum.
@@ -124,7 +124,7 @@ namespace castor3d
 		 *\param[in]	point	Le point.
 		 *\return		\p false si le point en dehors du frustum de vue.
 		 */
-		C3D_API bool isVisible( castor::Point3r const & point )const;
+		C3D_API bool isVisible( castor::Point3f const & point )const;
 
 	private:
 		Viewport & m_viewport;

@@ -192,19 +192,6 @@ namespace castor
 		CU_API long double toLongDouble( String const & str, std::locale const & locale = std::locale( "C" ) );
 		/**
 		 *\~english
-		 *\brief		Retrieves a short from a given String
-		 *\param[in]	str		The String
-		 *\param[in]	locale	The locale used in the conversion
-		 *\return		The short contained in the String
-		 *\~french
-		 *\brief		Récupère un short à partir d'un String
-		 *\param[in]	str		Un String
-		 *\param[in]	locale	La locale utilisée dans la conversion
-		 *\return		Le short contenu dans le String
-		 */
-		CU_API real toReal( String const & str, std::locale const & locale = std::locale( "C" ) );
-		/**
-		 *\~english
 		 *\brief		Tests if the given String is upper case
 		 *\param[in]	toTest	The String to test
 		 *\return		\p true if toTest is upper case

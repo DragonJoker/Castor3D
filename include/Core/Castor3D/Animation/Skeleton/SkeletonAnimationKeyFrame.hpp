@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using ObjectTransform = std::pair< SkeletonAnimationObject *, castor::Matrix4x4r >;
+	using ObjectTransform = std::pair< SkeletonAnimationObject *, castor::Matrix4x4f >;
 	using TransformArray = std::vector< ObjectTransform >;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -55,9 +55,9 @@ namespace castor3d
 		 *\param[in]	scale		L'échelle au temps de début.
 		*/
 		C3D_API void addAnimationObject( SkeletonAnimationObject & object
-			, castor::Point3r const & translate
+			, castor::Point3f const & translate
 			, castor::Quaternion const & rotate
-			, castor::Point3r const & scale );
+			, castor::Point3f const & scale );
 		/**
 		 *\~english
 		 *\brief		Adds an animation object.
@@ -69,7 +69,7 @@ namespace castor3d
 		 *\param[in]	transform	La transformation au temps de début.
 		*/
 		C3D_API void addAnimationObject( SkeletonAnimationObject & object
-			, castor::Matrix4x4r const & transform );
+			, castor::Matrix4x4f const & transform );
 		/**
 		*\~english
 		*\return		\p true if the given object is into the transforms map (not the cumulative one).

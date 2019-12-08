@@ -415,7 +415,7 @@ namespace Bloom
 		{
 			auto & blur = m_passes[i];
 
-			ashes::CommandBufferPtr commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( true );
+			ashes::CommandBufferPtr commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 			auto & cmd = *commandBuffer;
 
 			cmd.begin();

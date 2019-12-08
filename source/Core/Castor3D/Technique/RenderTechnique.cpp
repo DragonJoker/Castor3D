@@ -319,7 +319,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & RenderTechnique::render( Point2r const & jitter
+	ashes::Semaphore const & RenderTechnique::render( castor::Point2f const & jitter
 		, ashes::SemaphoreCRefArray const & waitSemaphores
 		, RenderInfo & info )
 	{
@@ -330,7 +330,7 @@ namespace castor3d
 
 		// Update part
 		doUpdateParticles( info );
-		auto jitterProjSpace = jitter * 2.0_r;
+		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()
@@ -486,8 +486,8 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
-		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
+		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		ashes::VkAttachmentDescriptionArray attachments
 		{
@@ -826,7 +826,7 @@ namespace castor3d
 
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderOpaque( Point2r const & jitter
+	ashes::Semaphore const & RenderTechnique::doRenderOpaque( castor::Point2f const & jitter
 		, RenderInfo & info
 		, ashes::Semaphore const & semaphore )
 	{
@@ -847,7 +847,7 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderTransparent( Point2r const & jitter
+	ashes::Semaphore const & RenderTechnique::doRenderTransparent( castor::Point2f const & jitter
 		, RenderInfo & info
 		, ashes::Semaphore const & semaphore )
 	{

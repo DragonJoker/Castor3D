@@ -215,7 +215,7 @@ namespace film_grain
 		auto format = castor3d::convert( buffers[0]->getFormat() );
 		auto staging = device->createStagingTexture( format
 			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-		ashes::CommandBufferPtr cmdCopy = device.graphicsCommandPool->createCommandBuffer( true );
+		ashes::CommandBufferPtr cmdCopy = device.graphicsCommandPool->createCommandBuffer();
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{

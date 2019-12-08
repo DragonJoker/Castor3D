@@ -140,7 +140,7 @@ namespace castor3d
 		 *\brief		Définit la matrice de projection, met à jour le viewport et le frustum.
 		 *\param[in]	projection	La matrice de projection.
 		 */
-		C3D_API void setProjection( castor::Matrix4x4r const & projection );
+		C3D_API void setProjection( castor::Matrix4x4f const & projection );
 		/**
 		 *\~english
 		 *\brief		Checks if a submesh is visible, through a geometry.
@@ -174,12 +174,12 @@ namespace castor3d
 			return m_viewport;
 		}
 
-		inline castor::Matrix4x4r const & getView()const
+		inline castor::Matrix4x4f const & getView()const
 		{
 			return m_view;
 		}
 
-		inline castor::Matrix4x4r const & getProjection()const
+		inline castor::Matrix4x4f const & getProjection()const
 		{
 			return m_ownProjection
 				? m_projection
@@ -232,22 +232,22 @@ namespace castor3d
 		}
 
 		bool isVisible( castor::BoundingBox const & box
-			, castor::Matrix4x4r const & transformations )const
+			, castor::Matrix4x4f const & transformations )const
 		{
 			return m_frustum.isVisible( box
 				, transformations );
 		}
 
 		bool isVisible( castor::BoundingSphere const & sphere
-			, castor::Matrix4x4r const & transformations
-			, castor::Point3r const & scale )const
+			, castor::Matrix4x4f const & transformations
+			, castor::Point3f const & scale )const
 		{
 			return m_frustum.isVisible( sphere
 				, transformations
 				, scale );
 		}
 
-		bool isVisible( castor::Point3r const & point )const
+		bool isVisible( castor::Point3f const & point )const
 		{
 			return m_frustum.isVisible( point );
 		}
@@ -261,7 +261,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		inline void setView( castor::Matrix4x4r const & view )
+		inline void setView( castor::Matrix4x4f const & view )
 		{
 			m_view = view;
 			onChanged( *this );
@@ -300,10 +300,10 @@ namespace castor3d
 		friend class Scene;
 		Viewport m_viewport;
 		Frustum m_frustum;
-		castor::Matrix4x4r m_view;
+		castor::Matrix4x4f m_view;
 		bool m_nodeChanged{ true };
 		bool m_ownProjection{ false };
-		castor::Matrix4x4r m_projection;
+		castor::Matrix4x4f m_projection;
 	};
 }
 

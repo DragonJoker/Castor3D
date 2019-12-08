@@ -57,8 +57,8 @@ namespace castor3d
 		 *\param[in]	origin		L'origine du rayon.
 		 *\param[in]	direction	La direction du rayon.
 		 */
-		C3D_API Ray( castor::Point3r const & origin
-			, castor::Point3r const & direction );
+		C3D_API Ray( castor::Point3f const & origin
+			, castor::Point3f const & direction );
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given triangle of vertices.
@@ -75,10 +75,10 @@ namespace castor3d
 		 *\param[out]	distance	Reçoit la distance.
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
-		C3D_API castor::Intersection intersects( castor::Point3r const & pt1
-			, castor::Point3r const & pt2
-			, castor::Point3r const & pt3
-			, real & distance )const;
+		C3D_API castor::Intersection intersects( castor::Point3f const & pt1
+			, castor::Point3f const & pt2
+			, castor::Point3f const & pt3
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given face.
@@ -96,9 +96,9 @@ namespace castor3d
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
 		C3D_API castor::Intersection intersects( Face const & face
-			, castor::Matrix4x4r const & transform
+			, castor::Matrix4x4f const & transform
 			, Submesh const & submesh
-			, real & distance )const;
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the vertex is on the ray.
@@ -111,8 +111,8 @@ namespace castor3d
 		 *\param[out]	distance	Reçoit la distance.
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
-		C3D_API castor::Intersection intersects( castor::Point3r const & point
-			, real & distance )const;
+		C3D_API castor::Intersection intersects( castor::Point3f const & point
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Combo box.
@@ -126,7 +126,7 @@ namespace castor3d
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
 		C3D_API castor::Intersection intersects( castor::BoundingBox const & box
-			, real & distance )const;
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Sphere.
@@ -140,7 +140,7 @@ namespace castor3d
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
 		C3D_API castor::Intersection intersects( castor::BoundingSphere const & sphere
-			, real & distance )const;
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the ray intersects the given Geometry.
@@ -160,7 +160,7 @@ namespace castor3d
 		C3D_API castor::Intersection intersects( GeometrySPtr geometry
 			, Face & nearestFace
 			, SubmeshSPtr & nearestSubmesh
-			, real & distance )const;
+			, float & distance )const;
 		/**
 		 *\~english
 		 *\brief		Projects the given vertex on the ray.
@@ -168,16 +168,16 @@ namespace castor3d
 		 *\param[out]	result	The projecion result.
 		 *\return		\p true if the vertex can be projected on the ray, false if not.
 		 */
-		C3D_API bool projectVertex( castor::Point3r const & point
-			, castor::Point3r & result )const;
+		C3D_API bool projectVertex( castor::Point3f const & point
+			, castor::Point3f & result )const;
 
 	public:
 		//!\~english	The ray origin.
 		//!\~french		L'origine du rayon.
-		castor::Point3r m_origin;
+		castor::Point3f m_origin;
 		//!\~english	The ray direction.
 		//!\~french		La direction du rayon.
-		castor::Point3r m_direction;
+		castor::Point3f m_direction;
 	};
 }
 

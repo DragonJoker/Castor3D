@@ -256,7 +256,7 @@ namespace castor3d
 		 *\brief		Récupère la distance inter oculaire
 		 *\return		La distance inter oculaire
 		 */
-		C3D_API real getIntraOcularDistance()const;
+		C3D_API float getIntraOcularDistance()const;
 		/**
 		 *\~english
 		 *\brief		Defines the intra ocular distance.
@@ -265,7 +265,7 @@ namespace castor3d
 		 *\brief		Définit la distance inter oculaire.
 		 *\param[in]	intraOcularDistance	La distance inter oculaire.
 		 */
-		C3D_API void setIntraOcularDistance( real intraOcularDistance );
+		C3D_API void setIntraOcularDistance( float intraOcularDistance );
 		/**
 		 *\~english
 		 *\return		The window pixel format.

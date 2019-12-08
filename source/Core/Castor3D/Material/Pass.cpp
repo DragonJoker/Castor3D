@@ -67,7 +67,7 @@ namespace castor3d
 			}
 		}
 
-		void mergeConfigs( TextureConfiguration const & lhs
+		void mergeConfigs( TextureConfiguration lhs
 			, TextureConfiguration & rhs )
 		{
 			mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
@@ -81,6 +81,7 @@ namespace castor3d
 			mergeMasks( lhs.transmittanceMask[0], rhs.transmittanceMask[0] );
 			mergeMasks( lhs.environment, rhs.environment );
 			mergeMasks( lhs.needsGammaCorrection, rhs.needsGammaCorrection );
+			mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
 			mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
 			mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
 			mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
@@ -241,8 +242,8 @@ namespace castor3d
 				auto lhsConfig = unit->getConfiguration();
 				unit = *it;
 				auto rhsConfig = unit->getConfiguration();
-				mergeConfigs( lhsConfig, rhsConfig );
-				unit->setConfiguration( rhsConfig );
+				mergeConfigs( std::move( lhsConfig ), rhsConfig );
+				unit->setConfiguration( std::move( rhsConfig ) );
 			}
 		}
 		else
@@ -269,8 +270,8 @@ namespace castor3d
 				auto lhsConfig = unit->getConfiguration();
 				unit = *it;
 				auto rhsConfig = unit->getConfiguration();
-				mergeConfigs( lhsConfig, rhsConfig );
-				unit->setConfiguration( rhsConfig );
+				mergeConfigs( std::move( lhsConfig ), rhsConfig );
+				unit->setConfiguration( std::move( rhsConfig ) );
 
 				if ( unit->getConfiguration().heightMask[0] )
 				{

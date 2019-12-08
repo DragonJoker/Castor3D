@@ -377,7 +377,7 @@ namespace castor3d
 			m_pixelFormat = value;
 		}
 
-		inline void setJitter( castor::Point2r const & value )
+		inline void setJitter( castor::Point2f const & value )
 		{
 			m_jitter = value;
 		}
@@ -450,7 +450,7 @@ namespace castor3d
 		ashes::CommandBufferPtr m_combineCommands;
 		ashes::SemaphorePtr m_combineFinished;
 		SsaoConfig m_ssaoConfig;
-		castor::Point2r m_jitter;
+		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;

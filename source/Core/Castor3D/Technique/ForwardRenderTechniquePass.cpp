@@ -183,7 +183,7 @@ namespace castor3d
 	}
 
 	void ForwardRenderTechniquePass::update( RenderInfo & info
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
 		getSceneUbo().update( m_scene, m_camera );
 		doUpdate( info, jitter );

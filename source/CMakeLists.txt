@@ -4,27 +4,20 @@ get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY 
 set( Vulkan_INCLUDE_DIR ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Headers/include )
 set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
 
-if ( APPLE )
-	set( Castor3DDefinitions
-		${Castor3DDefinitions}
-		VK_USE_PLATFORM_MACOS_MVK
-	)
-elseif ( WIN32 )
-	set( Castor3DDefinitions
-		${Castor3DDefinitions}
-		VK_USE_PLATFORM_WIN32_KHR
-	)
+if ( WIN32 )
+	set( TARGET_DEFINITIONS VK_USE_PLATFORM_WIN32_KHR )
 elseif ( ANDROID )
-	set( Castor3DDefinitions
-		${Castor3DDefinitions}
-		VK_USE_PLATFORM_ANDROID_KHR
-	)
+	set( TARGET_DEFINITIONS VK_USE_PLATFORM_ANDROID_KHR )
+elseif ( APPLE )
+	set( TARGET_DEFINITIONS VK_USE_PLATFORM_MACOS_MVK )
 else ()
-	set( Castor3DDefinitions
-		${Castor3DDefinitions}
-		VK_USE_PLATFORM_XLIB_KHR
-	)
+	set( TARGET_DEFINITIONS VK_USE_PLATFORM_XLIB_KHR )
 endif ()
+
+set( Castor3DDefinitions
+	${Castor3DDefinitions}
+	${TARGET_DEFINITIONS}
+)
 
 add_subdirectory( Core )
 if ( ${CASTOR_BUILD_CASTOR3D} )
@@ -44,6 +37,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		set( ASHES_BUILD_RENDERER_D3D11 ${CASTOR_BUILD_RENDERER_D3D11} )
 		set( ASHES_BUILD_RENDERER_TEST ${CASTOR_BUILDGRP_TEST} )
 	endif ()
+
 	get_filename_component( SPIRV_CROSS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/SPIRV-Cross REALPATH )
 	add_subdirectory( ../${ASHES_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 	set_property( TARGET ashes_common PROPERTY FOLDER "External/Ashes/Core" )

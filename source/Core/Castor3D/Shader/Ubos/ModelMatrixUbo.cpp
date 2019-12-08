@@ -4,16 +4,14 @@
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	uint32_t const ModelMatrixUbo::BindingPoint = 5u;
-	String const ModelMatrixUbo::BufferModelMatrix = cuT( "ModelMatrices" );
-	String const ModelMatrixUbo::PrvMtxModel = cuT( "c3d_prvMtxModel" );
-	String const ModelMatrixUbo::PrvMtxNormal = cuT( "c3d_prvMtxNormal" );
-	String const ModelMatrixUbo::CurMtxModel = cuT( "c3d_curMtxModel" );
-	String const ModelMatrixUbo::CurMtxNormal = cuT( "c3d_curMtxNormal" );
+	castor::String const ModelMatrixUbo::BufferModelMatrix = cuT( "ModelMatrices" );
+	castor::String const ModelMatrixUbo::PrvMtxModel = cuT( "c3d_prvMtxModel" );
+	castor::String const ModelMatrixUbo::PrvMtxNormal = cuT( "c3d_prvMtxNormal" );
+	castor::String const ModelMatrixUbo::CurMtxModel = cuT( "c3d_curMtxModel" );
+	castor::String const ModelMatrixUbo::CurMtxNormal = cuT( "c3d_curMtxNormal" );
 
 	ModelMatrixUbo::ModelMatrixUbo( Engine & engine )
 		: m_engine{ engine }
@@ -45,21 +43,21 @@ namespace castor3d
 		m_ubo.reset();
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4r const & model )const
+	void ModelMatrixUbo::update( castor::Matrix4x4f const & model )const
 	{
-		auto normal = Matrix3x3r{ model };
+		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
 		normal.transpose();
 		update( model, normal );
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4r const & model
-		, castor::Matrix3x3r const & normal )const
+	void ModelMatrixUbo::update( castor::Matrix4x4f const & model
+		, castor::Matrix3x3f const & normal )const
 	{
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.prvNormal = configuration.curNormal;
 		configuration.prvModel = configuration.curModel;
-		configuration.curNormal = castor::Matrix4x4r{ normal };
+		configuration.curNormal = castor::Matrix4x4f{ normal };
 		configuration.curModel = model;
 		m_ubo->upload();
 	}

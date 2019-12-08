@@ -57,7 +57,7 @@ namespace C3dPly
 	{
 		bool result{ false };
 		UInt32Array faces;
-		RealArray sizes;
+		FloatArray sizes;
 		String name = m_fileName.getFileName();
 		String meshName = name.substr( 0, name.find_last_of( '.' ) );
 		String materialName = meshName;

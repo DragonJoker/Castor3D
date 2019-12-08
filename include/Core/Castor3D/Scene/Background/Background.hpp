@@ -479,7 +479,7 @@ namespace castor3d
 		bool m_hdr{ true };
 		MatrixUbo m_matrixUbo;
 		ModelMatrixUbo m_modelMatrixUbo;
-		castor::Matrix4x4r m_mtxModel;
+		castor::Matrix4x4f m_mtxModel;
 		ashes::SemaphorePtr m_semaphore;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;

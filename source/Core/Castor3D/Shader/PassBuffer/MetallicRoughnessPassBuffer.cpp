@@ -100,7 +100,7 @@ namespace castor3d
 		albRough.g = pass.getDiffuse().green();
 		albRough.b = pass.getDiffuse().blue();
 		albRough.a = ( 255.0f - pass.getShininess() ) / 255.0f;
-		metDiv.r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( Point3r{ 1, 1, 1 } ) );
+		metDiv.r = float( point::length( toRGBFloat( pass.getSpecular() ) ) / point::length( castor::Point3f{ 1, 1, 1 } ) );
 		common.r = pass.getOpacity();
 		common.g = pass.getEmissive();
 		common.b = pass.getAlphaValue();

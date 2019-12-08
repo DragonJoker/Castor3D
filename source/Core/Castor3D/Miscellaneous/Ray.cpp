@@ -12,77 +12,77 @@ using namespace castor;
 
 namespace castor3d
 {
-	Ray::Ray( Position const & point
+	Ray::Ray( castor::Position const & point
 		, Camera const & camera )
 	{
 		auto const & projection = camera.getProjection();
 		auto const & view = camera.getView();
 		auto invProjectionView = ( projection * view ).getInverse();
-		Point4r screen
+		castor::Point4f screen
 		{
-			( 2.0_r * real( point[0] ) / camera.getWidth() ) - 1.0_r,
-			1.0_r - ( 2.0_r * real( point[1] ) / camera.getHeight() ),
-			-1.0_r,
-			1.0_r
+			( 2.0f * float( point[0] ) / camera.getWidth() ) - 1.0f,
+			1.0f - ( 2.0f * float( point[1] ) / camera.getHeight() ),
+			-1.0f,
+			1.0f
 		};
-		Point4r world = invProjectionView * screen;
+		castor::Point4f world = invProjectionView * screen;
 		world /= world[3];
 		m_origin[0] = world[0];
 		m_origin[1] = world[1];
 		m_origin[2] = world[2];
 
-		screen[2] = 1.0_r;
+		screen[2] = 1.0f;
 		world = invProjectionView * screen;
 		world /= world[3];
 		m_direction[0] = world[0];
 		m_direction[1] = world[1];
 		m_direction[2] = world[2];
 		m_direction -= m_origin;
-		point::normalise( m_direction );
+		castor::point::normalise( m_direction );
 	}
 
 	Ray::Ray( int x, int y
 		, Camera const & camera )
-		: Ray{ Position{ x, y }, camera }
+		: Ray{ castor::Position{ x, y }, camera }
 	{
 	}
 
-	Ray::Ray( Point3r const & origin
-		, Point3r const & direction )
+	Ray::Ray( castor::Point3f const & origin
+		, castor::Point3f const & direction )
 		: m_origin{ origin }
 		, m_direction{ direction }
 	{
-		point::normalise( m_direction );
+		castor::point::normalise( m_direction );
 	}
 
-	Intersection Ray::intersects( Point3r const & pt1
-		, Point3r const & pt2
-		, Point3r const & pt3
-		, real & distance )const
+	castor::Intersection Ray::intersects( castor::Point3f const & pt1
+		, castor::Point3f const & pt2
+		, castor::Point3f const & pt3
+		, float & distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
-		Intersection result = Intersection::eOut;
-		Point3r e1{ pt2 - pt1 };
-		Point3r e2{ pt1 - pt3 };
-		Point3r h{ point::cross( m_direction, e2 ) };
-		real a = point::dot( e1, h );
+		auto result = castor::Intersection::eOut;
+		castor::Point3f e1{ pt2 - pt1 };
+		castor::Point3f e2{ pt1 - pt3 };
+		castor::Point3f h{ castor::point::cross( m_direction, e2 ) };
+		float a = castor::point::dot( e1, h );
 
-		if ( std::abs( a ) > 0.00001_r )
+		if ( std::abs( a ) > 0.00001f )
 		{
-			real f = 1.0f / a;
-			Point3r s( m_origin - pt1 );
-			real u = f * point::dot( s, h );
+			auto f = 1.0f / a;
+			castor::Point3f s( m_origin - pt1 );
+			float u = f * castor::point::dot( s, h );
 
 			if ( u >= 0.0 && u <= 1.0 )
 			{
-				Point3r q{ point::cross( s, e1 ) };
-				real v = f * point::dot( m_direction, q );
+				castor::Point3f q{ point::cross( s, e1 ) };
+				float v = f * point::dot( m_direction, q );
 
 				if ( v >= 0.0 && u + v <= 1.0 )
 				{
 					distance = f * point::dot( e2, q );
 
-					if ( distance > 0.00001_r )
+					if ( distance > 0.00001f )
 					{
 						result = Intersection::eIn;
 					}
@@ -94,11 +94,11 @@ namespace castor3d
 	}
 
 	Intersection Ray::intersects( Face const & face
-		, castor::Matrix4x4r const & transform
+		, castor::Matrix4x4f const & transform
 		, Submesh const & submesh
-		, real & distance )const
+		, float & distance )const
 	{
-		//Point3r pt1, pt2, pt3;
+		//castor::Point3f pt1, pt2, pt3;
 		//auto stride = submesh.getVertexBuffer().getDeclaration().stride();
 		//return intersects( transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[0] * stride], pt1 )
 		//	, transform * Vertex::getPosition( &submesh.getVertexBuffer().getData()[face[1] * stride], pt2 )
@@ -107,16 +107,16 @@ namespace castor3d
 		return Intersection::eOut;
 	}
 
-	Intersection Ray::intersects( Point3r const & vertex
-		, real & distance )const
+	Intersection Ray::intersects( castor::Point3f const & vertex
+		, float & distance )const
 	{
 		Intersection result = Intersection::eOut;
-		Point3r u( m_origin - vertex );
-		Point3r puv;
+		castor::Point3f u( m_origin - vertex );
+		castor::Point3f puv;
 
 		if ( projectVertex( u, puv ) && point::lengthSquared( puv ) < 0.000001 )
 		{
-			distance = real( point::length( u ) );
+			distance = float( point::length( u ) );
 			result = Intersection::eIn;
 		}
 
@@ -124,19 +124,19 @@ namespace castor3d
 	}
 
 	Intersection Ray::intersects( BoundingBox const & box
-		, real & distance )const
+		, float & distance )const
 	{
-		Point3r v1( box.getMin().constPtr() );
-		Point3r v8( box.getMax().constPtr() );
-		Point3r v2( v8[0], v1[1], v1[2] );
-		Point3r v3( v1[0], v8[1], v1[2] );
-		Point3r v4( v8[0], v8[1], v1[2] );
-		Point3r v5( v8[0], v1[1], v8[2] );
-		Point3r v6( v1[0], v8[1], v8[2] );
-		Point3r v7( v8[0], v8[1], v8[2] );
+		castor::Point3f v1( box.getMin().constPtr() );
+		castor::Point3f v8( box.getMax().constPtr() );
+		castor::Point3f v2( v8[0], v1[1], v1[2] );
+		castor::Point3f v3( v1[0], v8[1], v1[2] );
+		castor::Point3f v4( v8[0], v8[1], v1[2] );
+		castor::Point3f v5( v8[0], v1[1], v8[2] );
+		castor::Point3f v6( v1[0], v8[1], v8[2] );
+		castor::Point3f v7( v8[0], v8[1], v8[2] );
 		auto result = Intersection::eOut;
-		real dist = 0.0_r;
-		real min = std::numeric_limits< real >::max();
+		float dist = 0.0f;
+		float min = std::numeric_limits< float >::max();
 
 		if ( ( intersects( v1, v2, v3, dist ) ) != Intersection::eOut )
 		{
@@ -219,17 +219,17 @@ namespace castor3d
 	}
 
 	Intersection Ray::intersects( BoundingSphere const & sphere
-		, real & distance )const
+		, float & distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
 		auto result = Intersection::eOut;
-		Point3r v( sphere.getCenter() - m_origin );
-		Point3r puv;
+		castor::Point3f v( sphere.getCenter() - m_origin );
+		castor::Point3f puv;
 
 		if ( projectVertex( v, puv ) )
 		{
 			// Sphere's center projects on the ray.
-			distance = real( point::length( puv - v ) );
+			distance = float( point::length( puv - v ) );
 
 			if ( distance == sphere.getRadius() )
 			{
@@ -244,18 +244,18 @@ namespace castor3d
 				if ( point::length( v ) < sphere.getRadius() )
 				{
 					// The ray origin is inside the sphere.
-					distance = real( point::length( puv ) + sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
+					distance = float( point::length( puv ) + sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
 				}
 				else
 				{
 					// The ray origin is outside the sphere
-					distance = real( point::length( puv ) - sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
+					distance = float( point::length( puv ) - sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) );
 				}
 			}
 		}
 		else
 		{
-			distance = real( point::length( v ) );
+			distance = float( point::length( v ) );
 
 			if ( distance == sphere.getRadius() )
 			{
@@ -265,8 +265,8 @@ namespace castor3d
 			else if ( point::length( v ) < sphere.getRadius() )
 			{
 				// The sphere's center is behind the ray, and the rays origin is inside the sphere.
-				distance = real( point::length( puv - v ) );
-				distance = real( sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) - point::length( puv ) );
+				distance = float( point::length( puv - v ) );
+				distance = float( sqrt( sphere.getRadius() * sphere.getRadius() - distance * distance ) - point::length( puv ) );
 				result = Intersection::eIn;
 			}
 			else
@@ -281,14 +281,14 @@ namespace castor3d
 	Intersection Ray::intersects( GeometrySPtr geometry
 		, Face & nearestFace
 		, SubmeshSPtr & nearestSubmesh
-		, real & distance )const
+		, float & distance )const
 	{
 		MeshSPtr mesh = geometry->getMesh();
-		Point3r center{ geometry->getParent()->getDerivedPosition() };
+		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
 		BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
-		Matrix4x4r const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
+		castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };
 		auto result = Intersection::eOut;
-		real faceDist = std::numeric_limits< real >::max();
+		float faceDist = std::numeric_limits< float >::max();
 
 		if ( intersects( sphere, distance ) != Intersection::eOut )
 		{
@@ -306,7 +306,7 @@ namespace castor3d
 							0,//submesh->getIndexBuffer().getData()[k * 3 + 1],
 							0,//submesh->getIndexBuffer().getData()[k * 3 + 2],
 						};
-						real curfaceDist = 0.0_r;
+						float curfaceDist = 0.0f;
 
 						if ( intersects( face, transform, *submesh, curfaceDist ) != Intersection::eOut && curfaceDist < faceDist )
 						{
@@ -324,10 +324,10 @@ namespace castor3d
 		return result;
 	}
 
-	bool Ray::projectVertex( Point3r const & point, Point3r & result )const
+	bool Ray::projectVertex( castor::Point3f const & point, castor::Point3f & result )const
 	{
 		bool isProjected = false;
-		result = ( m_direction * real( point::dot( m_direction, point ) ) );
+		result = ( m_direction * float( point::dot( m_direction, point ) ) );
 
 		if ( point::dot( m_direction, point ) >= 0.0 )
 		{

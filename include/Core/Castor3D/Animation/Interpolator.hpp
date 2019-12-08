@@ -53,7 +53,7 @@ namespace castor3d
 		 */
 		C3D_API virtual Type interpolate( Type const & src
 			, Type const & dst
-			, real percent )const = 0;
+			, float percent )const = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -107,7 +107,7 @@ namespace castor3d
 		 */
 		inline Type interpolate( Type const & src
 			, Type const &
-			, real )const override
+			, float )const override
 		{
 			return src;
 		}
@@ -158,7 +158,7 @@ namespace castor3d
 		 */
 		inline Type interpolate( Type const & src
 			, Type const & dst
-			, real percent )const override
+			, float percent )const override
 		{
 			Type result;
 
@@ -224,7 +224,7 @@ namespace castor3d
 		 */
 		inline castor::Quaternion interpolate( castor::Quaternion const & src
 			, castor::Quaternion const & dst
-			, real percent )const override
+			, float percent )const override
 		{
 			castor::Quaternion result;
 

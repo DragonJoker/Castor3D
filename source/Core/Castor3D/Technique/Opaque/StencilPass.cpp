@@ -186,7 +186,7 @@ namespace castor3d
 				*m_renderPass,
 			} );
 
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		m_finished = device->createSemaphore();
 
 		m_commandBuffer->begin();

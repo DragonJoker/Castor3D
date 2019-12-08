@@ -128,8 +128,8 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			static castor::Point3r const Scale{ 1, -1, 1 };
-			static castor::Matrix3x3r const Identity{ 1.0f };
+			static castor::Point3f const Scale{ 1, -1, 1 };
+			static castor::Matrix3x3f const Identity{ 1.0f };
 			auto node = camera.getParent();
 			castor::matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 			castor::matrix::scale( m_mtxModel, Scale );

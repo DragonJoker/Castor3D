@@ -20,7 +20,7 @@ namespace castor3d
 
 	namespace
 	{
-		std::ostream & operator<<( std::ostream & stream, Point3r const & point )
+		std::ostream & operator<<( std::ostream & stream, castor::Point3f const & point )
 		{
 			stream << "[" << point[0] << ", " << point[1] << ", " << point[2] << "]";
 			return stream;
@@ -32,8 +32,8 @@ namespace castor3d
 		{
 			return BoundingBox
 			{
-				Point3r{ prv.getMin() * real( 1.0 - factor ) + cur.getMin() * factor },
-				Point3r{ prv.getMax() * real( 1.0 - factor ) + cur.getMax() * factor }
+				castor::Point3f{ prv.getMin() * float( 1.0 - factor ) + cur.getMin() * factor },
+				castor::Point3f{ prv.getMax() * float( 1.0 - factor ) + cur.getMax() * factor }
 			};
 		}
 	}

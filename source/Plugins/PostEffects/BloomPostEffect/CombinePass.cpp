@@ -324,7 +324,7 @@ namespace Bloom
 	castor3d::CommandsSemaphore CombinePass::getCommands( castor3d::RenderPassTimer const & timer
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
-		auto result = m_device.graphicsCommandPool->createCommandBuffer( true );
+		auto result = m_device.graphicsCommandPool->createCommandBuffer();
 		auto & cmd = *result;
 
 		cmd.begin();

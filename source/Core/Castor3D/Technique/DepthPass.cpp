@@ -108,7 +108,7 @@ namespace castor3d
 	}
 
 	void DepthPass::update( RenderInfo & info
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
 		RenderTechniquePass::doUpdate( info
 			, jitter );

@@ -127,16 +127,16 @@ namespace castor3d
 						auto aabbMin = mesh.getBoundingBox().getMin();
 						auto aabbMax = mesh.getBoundingBox().getMax();
 						auto & camera = getCamera();
-						castor::Point3r corners[8]
+						castor::Point3f corners[8]
 						{
-							castor::Point3r{ aabbMin[0], aabbMin[1], aabbMin[2] },
-							castor::Point3r{ aabbMin[0], aabbMin[1], aabbMax[2] },
-							castor::Point3r{ aabbMin[0], aabbMax[1], aabbMin[2] },
-							castor::Point3r{ aabbMin[0], aabbMax[1], aabbMax[2] },
-							castor::Point3r{ aabbMax[0], aabbMin[1], aabbMin[2] },
-							castor::Point3r{ aabbMax[0], aabbMin[1], aabbMax[2] },
-							castor::Point3r{ aabbMax[0], aabbMax[1], aabbMin[2] },
-							castor::Point3r{ aabbMax[0], aabbMax[1], aabbMax[2] },
+							castor::Point3f{ aabbMin[0], aabbMin[1], aabbMin[2] },
+							castor::Point3f{ aabbMin[0], aabbMin[1], aabbMax[2] },
+							castor::Point3f{ aabbMin[0], aabbMax[1], aabbMin[2] },
+							castor::Point3f{ aabbMin[0], aabbMax[1], aabbMax[2] },
+							castor::Point3f{ aabbMax[0], aabbMin[1], aabbMin[2] },
+							castor::Point3f{ aabbMax[0], aabbMin[1], aabbMax[2] },
+							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMin[2] },
+							castor::Point3f{ aabbMax[0], aabbMax[1], aabbMax[2] },
 						};
 						for ( auto & corner : corners )
 						{

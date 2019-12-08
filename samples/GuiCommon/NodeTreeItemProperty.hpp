@@ -65,8 +65,8 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnPositionChange( castor::Point3r const & p_value );
-		void OnScaleChange( castor::Point3r const & p_value );
+		void OnPositionChange( castor::Point3f const & p_value );
+		void OnScaleChange( castor::Point3f const & p_value );
 		void OnOrientationChange( castor::Quaternion const & p_value );
 		void OnVisibilityChange( bool p_value );
 

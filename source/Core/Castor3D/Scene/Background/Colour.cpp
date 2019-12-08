@@ -87,7 +87,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( true );
+			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			m_cmdCopy->begin();
 
 			for ( uint32_t i = 0; i < 6u; ++i )

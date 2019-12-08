@@ -522,9 +522,9 @@ namespace castor3d
 		}
 	}
 
-	real RenderWindow::getIntraOcularDistance()const
+	float RenderWindow::getIntraOcularDistance()const
 	{
-		real result = 0;
+		float result = 0;
 		RenderTargetSPtr target = getRenderTarget();
 
 		if ( target )
@@ -535,7 +535,7 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderWindow::setIntraOcularDistance( real value )
+	void RenderWindow::setIntraOcularDistance( float value )
 	{
 		RenderTargetSPtr target = getRenderTarget();
 

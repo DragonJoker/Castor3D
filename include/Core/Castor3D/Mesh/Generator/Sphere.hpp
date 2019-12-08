@@ -49,7 +49,7 @@ namespace castor3d
 			, Parameters const & parameters );
 
 	private:
-		real m_radius;
+		float m_radius;
 		uint32_t m_nbFaces;
 		friend std::ostream & operator <<( std::ostream & o, Sphere const & c );
 	};

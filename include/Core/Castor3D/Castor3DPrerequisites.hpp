@@ -37,7 +37,6 @@ namespace castor3d
 {
 	static uint32_t constexpr InvalidIndex = ~( 0u );
 
-	using castor::real;
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
 	using castor::UInt32Array;
@@ -267,7 +266,7 @@ namespace castor3d
 	class CacheView;
 
 	//! real array
-	CU_DeclareVector( real, Real );
+	CU_DeclareVector( float, Float );
 	//! RenderWindow pointer array
 	CU_DeclareVector( RenderWindowSPtr, RenderWindowPtr );
 	//! FrameEvent pointer array

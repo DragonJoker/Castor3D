@@ -122,7 +122,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::MeshLightPass::doComputeModelMatrix
 		 */
-		castor::Matrix4x4r doComputeModelMatrix( Light const & light
+		castor::Matrix4x4f doComputeModelMatrix( Light const & light
 			, Camera const & camera )const override;
 
 	private:

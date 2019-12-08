@@ -94,8 +94,8 @@ namespace castor3d
 		 *\return		La face créée.
 		 */
 		C3D_API void addQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d
-			, castor::Point3r const & minUV = castor::Point3r()
-			, castor::Point3r const & maxUV = castor::Point3r( 1, 1, 1 ) );
+			, castor::Point3f const & minUV = castor::Point3f()
+			, castor::Point3f const & maxUV = castor::Point3f( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points.
@@ -143,7 +143,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::IndexMapping::sortByDistance
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & cameraPosition )override;
+		C3D_API void sortByDistance( castor::Point3f const & cameraPosition )override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::computeNormals
 		 */
@@ -239,7 +239,7 @@ namespace castor3d
 		bool m_hasNormals{ false };
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
-		castor::Point3r m_cameraPosition;
+		castor::Point3f m_cameraPosition;
 	};
 }
 

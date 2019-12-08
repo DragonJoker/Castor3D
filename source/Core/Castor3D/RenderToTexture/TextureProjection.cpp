@@ -149,7 +149,7 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 			m_finished = device->createSemaphore();
 		}
 		else
@@ -173,7 +173,7 @@ namespace castor3d
 
 	void TextureProjection::update( Camera const & camera )
 	{
-		static Matrix3x3r const Identity{ 1.0f };
+		static castor::Matrix3x3f const Identity{ 1.0f };
 		auto node = camera.getParent();
 		matrix::setTranslate( m_mtxModel, node->getDerivedPosition() );
 		m_matrixUbo.update( camera.getView()

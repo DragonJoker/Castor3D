@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	model	La nouvelle matrice modèle.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & model )const;
+		C3D_API void update( castor::Matrix4x4f const & model )const;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -92,8 +92,8 @@ namespace castor3d
 		 *\param[in]	model	La nouvelle matrice modèle.
 		 *\param[in]	normal	La nouvelle matrice normale.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & model
-			, castor::Matrix3x3r const & normal )const;
+		C3D_API void update( castor::Matrix4x4f const & model
+			, castor::Matrix3x3f const & normal )const;
 		/**
 		 *\~english
 		 *\name			getters.

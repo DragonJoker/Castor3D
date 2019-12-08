@@ -28,6 +28,7 @@ namespace castor
 		BoundingContainer( BoundingContainer && rhs ) = default;
 		BoundingContainer & operator=( BoundingContainer const & rhs ) = default;
 		BoundingContainer & operator=( BoundingContainer && rhs ) = default;
+		using MyPoint = Point< float, Dimension >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -46,7 +47,7 @@ namespace castor
 		 *\brief		Constructeur à partir du centre.
 		 *\param[in]	center	Le centre.
 		 */
-		explicit BoundingContainer( Point< real, Dimension > const & center )
+		explicit BoundingContainer( MyPoint const & center )
 			: m_center( center )
 		{
 		}
@@ -60,7 +61,7 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est dans le conteneur.
 		 */
-		CU_API virtual bool isWithin( Point< real, Dimension > const & point )const = 0;
+		CU_API virtual bool isWithin( MyPoint const & point )const = 0;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within.
@@ -71,14 +72,14 @@ namespace castor
 		 *\param[in]	point	Le point à tester.
 		 *\return		\p true si le point est sur la limite.
 		 */
-		CU_API virtual bool isOnLimits( Point< real, Dimension > const & point )const = 0;
+		CU_API virtual bool isOnLimits( MyPoint const & point )const = 0;
 		/**
 		 *\~english
 		 *\return		This container's center.
 		 *\~french
 		 *\return		Le centre de ce conteneur.
 		 */
-		inline Point< real, Dimension > const & getCenter()const
+		inline MyPoint const & getCenter()const
 		{
 			return m_center;
 		}
@@ -86,7 +87,7 @@ namespace castor
 	protected:
 		//!\~english	The center of the container.
 		//!\~french		Le centre de ce conteneur.
-		Point< real, Dimension > m_center;
+		MyPoint m_center;
 	};
 	/*!
 	\~english

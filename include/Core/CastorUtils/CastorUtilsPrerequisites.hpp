@@ -1,8 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_UTILS_PREREQUISITES_H___
-#define ___CASTOR_UTILS_PREREQUISITES_H___
+#ifndef ___CastorUtils_Prerequisites_HPP___
+#define ___CastorUtils_Prerequisites_HPP___
+#pragma once
+
+#ifndef NOMINMAX
+#	define NOMINMAX
+#endif
 
 #include <array>
 #include <cassert>
@@ -25,16 +30,6 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/SmartPtr.hpp"
 #include "CastorUtils/Log/ELogType.hpp"
-
-#if defined( min )
-#	undef min
-#endif
-#if defined( max )
-#	undef max
-#endif
-#if defined( abs )
-#	undef abs
-#endif
 
 namespace castor
 {
@@ -191,12 +186,6 @@ namespace castor
 		CU_ScopedEnumBounds( eIn )
 	};
 
-#if CU_UseDouble
-	using real = double;
-#else
-	using real = float;
-#endif
-
 	using String = std::basic_string< xchar >;
 	using Regex = std::basic_regex< xchar >;
 	using RegexIterator = std::regex_iterator< String::const_iterator >;
@@ -326,8 +315,8 @@ namespace castor
 	template< typename T > using Matrix3x3 = SquareMatrix< T, 3 >;
 	template< typename T > using Matrix4x4 = SquareMatrix< T, 4 >;
 
-	using Angle = AngleT< real >;
-	using Quaternion = QuaternionT< real >;
+	using Angle = AngleT< float >;
+	using Quaternion = QuaternionT< float >;
 
 	CU_DeclarePoint( bool,		4, b );
 	CU_DeclarePoint( bool,		3, b );
@@ -350,9 +339,6 @@ namespace castor
 	CU_DeclarePoint( uint32_t,	4, ui );
 	CU_DeclarePoint( uint32_t,	3, ui );
 	CU_DeclarePoint( uint32_t,	2, ui );
-	CU_DeclarePoint( real,		4, r );
-	CU_DeclarePoint( real,		3, r );
-	CU_DeclarePoint( real,		2, r );
 	CU_DeclarePoint( float,		4, f );
 	CU_DeclarePoint( float,		3, f );
 	CU_DeclarePoint( float,		2, f );
@@ -384,9 +370,6 @@ namespace castor
 	CU_DeclareCoord( int32_t,	4, i );
 	CU_DeclareCoord( int32_t,	3, i );
 	CU_DeclareCoord( int32_t,	2, i );
-	CU_DeclareCoord( real,		4, r );
-	CU_DeclareCoord( real,		3, r );
-	CU_DeclareCoord( real,		2, r );
 	CU_DeclareCoord( float,		4, f );
 	CU_DeclareCoord( float,		3, f );
 	CU_DeclareCoord( float,		2, f );
@@ -421,9 +404,6 @@ namespace castor
 	CU_DeclareConstCoord( int32_t,	4, i );
 	CU_DeclareConstCoord( int32_t,	3, i );
 	CU_DeclareConstCoord( int32_t,	2, i );
-	CU_DeclareConstCoord( real,		4, r );
-	CU_DeclareConstCoord( real,		3, r );
-	CU_DeclareConstCoord( real,		2, r );
 	CU_DeclareConstCoord( float,	4, f );
 	CU_DeclareConstCoord( float,	3, f );
 	CU_DeclareConstCoord( float,	2, f );
@@ -443,9 +423,6 @@ namespace castor
 	CU_DeclareSqMtx( uint32_t,	4, ui );
 	CU_DeclareSqMtx( uint32_t,	3, ui );
 	CU_DeclareSqMtx( uint32_t,	2, ui );
-	CU_DeclareSqMtx( real,		4, r );
-	CU_DeclareSqMtx( real,		3, r );
-	CU_DeclareSqMtx( real,		2, r );
 	CU_DeclareSqMtx( float,		4, f );
 	CU_DeclareSqMtx( float,		3, f );
 	CU_DeclareSqMtx( float,		2, f );
@@ -471,12 +448,6 @@ namespace castor
 	CU_DeclareMtx( uint32_t,	3, 4, ui );
 	CU_DeclareMtx( uint32_t,	4, 2, ui );
 	CU_DeclareMtx( uint32_t,	4, 3, ui );
-	CU_DeclareMtx( real,		2, 3, r );
-	CU_DeclareMtx( real,		2, 4, r );
-	CU_DeclareMtx( real,		3, 2, r );
-	CU_DeclareMtx( real,		3, 4, r );
-	CU_DeclareMtx( real,		4, 2, r );
-	CU_DeclareMtx( real,		4, 3, r );
 	CU_DeclareMtx( float,		2, 3, f );
 	CU_DeclareMtx( float,		2, 4, f );
 	CU_DeclareMtx( float,		3, 2, f );
@@ -515,26 +486,6 @@ namespace castor
 	CU_DeclareMap( String, String, StrStr );
 	CU_DeclareSet( String, Str );
 	CU_DeclareMap( uint32_t, String, StrUInt32 );
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		27/08/2012
-	\version	0.7.0.0
-	\~english
-	\brief		Message representation
-	\~french
-	\brief		Représentation d'un message
-	*/
-	struct Message
-	{
-		//! The message type.
-		LogType m_type;
-		//! The message text.
-		std::string m_message;
-		//! Tells if the new line character is printed.
-		bool m_newLine;
-	};
-	//! The message queue.
-	using MessageQueue = std::deque< Message >;
 	/**
 	 *\~english
 	 *\brief		Logging callback function.
@@ -549,30 +500,18 @@ namespace castor
 	 */
 	using LogCallback = std::function< void ( String const & text, LogType type, bool newLine ) >;
 
-	/*!
-	\~english
-	\brief		Supported MemoryData types.
-	\~french
-	\brief		Types de MemoryData supportés.
-	*/
-	enum class MemoryDataType
-	{
-		eFixed,
-		eMarked,
-		eFixedGrowing,
-		eFixedGrowingMarked,
-		CU_ScopedEnumBounds( eFixed )
-	};
-
-	template< typename Object, MemoryDataType MemDataType > class PoolManagedObject;
-
 	class NonAlignedMemoryAllocator;
-	template< size_t Align > class AlignedMemoryAllocator;
+	template< size_t Align >
+	class AlignedMemoryAllocator;
 
-	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedSizeMemoryData;
-	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedGrowingSizeMemoryData;
-	template< typename Object > class FixedSizeMarkedMemoryData;
-	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator >
+	class FixedSizeMemoryData;
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator >
+	class FixedGrowingSizeMemoryData;
+	template< typename Object >
+	class FixedSizeMarkedMemoryData;
+	template< typename Object >
+	class FixedGrowingSizeMarkedMemoryData;
 
 	inline StringStream makeStringStream()
 	{
@@ -581,11 +520,6 @@ namespace castor
 		result.imbue( loc );
 		return result;
 	}
-}
-
-constexpr castor::real operator "" _r( long double value )
-{
-	return castor::real( value );
 }
 
 constexpr castor::Seconds operator "" _s( unsigned long long value )

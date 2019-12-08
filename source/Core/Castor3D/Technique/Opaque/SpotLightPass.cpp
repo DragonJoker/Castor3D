@@ -106,7 +106,7 @@ namespace castor3d
 		return SpotLight::generateVertices();
 	}
 
-	Matrix4x4r SpotLightPass::doComputeModelMatrix( castor3d::Light const & light
+	castor::Matrix4x4f SpotLightPass::doComputeModelMatrix( castor3d::Light const & light
 		, Camera const & camera )const
 	{
 		auto lightPos = light.getParent()->getDerivedPosition();
@@ -114,7 +114,7 @@ namespace castor3d
 		auto farZ = camera.getFar();
 		auto scale = doCalcSpotLightBCone( *light.getSpotLight()
 			, float( farZ - point::distance( lightPos, camPos ) - ( farZ / 50.0f ) ) );
-		Matrix4x4r model{ 1.0f };
+		castor::Matrix4x4f model{ 1.0f };
 		matrix::setTransform( model
 			, lightPos
 			, Point3f{ scale[0], scale[0], scale[1] }

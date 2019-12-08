@@ -1086,9 +1086,9 @@ namespace castor3d
 	}
 
 	void RenderPass::doUpdateUbos( Camera const & camera
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
-		auto jitterProjSpace = jitter * 2.0_r;
+		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
 		m_matrixUbo.update( camera.getView()

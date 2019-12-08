@@ -43,6 +43,15 @@ namespace castor
 	\brief		Texte et fonction de report d'erreur.
 	*/
 	template< PoolErrorType ErrorType > struct Error;
+	using CommonOutOfMemoryPoolError = Error< PoolErrorType::eCommonOutOfMemory >;
+	using CommonPoolIsFullPoolError = Error< PoolErrorType::eCommonPoolIsFull >;
+	using CommonMemoryLeaksDetectedPoolError = Error< PoolErrorType::eCommonMemoryLeaksDetected >;
+	using CommonNotFromRangePoolError = Error< PoolErrorType::eCommonNotFromRange >;
+	using MarkedLeakAddressPoolError = Error< PoolErrorType::eMarkedLeakAddress >;
+	using MarkedDoubleDeletePoolError = Error< PoolErrorType::eMarkedDoubleDelete >;
+	using MarkedNotFromPoolPoolError = Error< PoolErrorType::eMarkedNotFromPool >;
+	using GrowingNotFromRangesPoolError = Error< PoolErrorType::eGrowingNotFromRanges >;
+	using STLAllocatorUniquePoolError = Error< PoolErrorType::eSTLAllocatorUnique >;
 
 	//!\~english	Specialisation for PoolErrorType::eCommonOutOfMemory.
 	//!\~french		Spécialisation pour PoolErrorType::eCommonOutOfMemory.
@@ -60,7 +69,7 @@ namespace castor
 		 */
 		static inline void report()
 		{
-			std::cerr << Error< PoolErrorType::eCommonOutOfMemory >::Text << std::endl;
+			std::cerr << CommonOutOfMemoryPoolError::Text << std::endl;
 		}
 	};
 
@@ -82,7 +91,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eCommonPoolIsFull >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << CommonPoolIsFullPoolError::Text << std::endl;
 		}
 	};
 
@@ -104,7 +113,7 @@ namespace castor
 		 */
 		static inline void report( size_t size )
 		{
-			std::cerr << Error< PoolErrorType::eCommonMemoryLeaksDetected >::Text << ": " << size << "bytes" << std::endl;
+			std::cerr << CommonMemoryLeaksDetectedPoolError::Text << ": " << size << "bytes" << std::endl;
 		}
 	};
 
@@ -126,7 +135,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eCommonNotFromRange >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << CommonNotFromRangePoolError::Text << std::endl;
 		}
 	};
 
@@ -148,7 +157,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "***   " << Error< PoolErrorType::eMarkedLeakAddress >::Text << ": 0x" << std::hex << space << std::endl;
+			std::cerr << "***   " << MarkedLeakAddressPoolError::Text << ": 0x" << std::hex << space << std::endl;
 		}
 	};
 
@@ -170,7 +179,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eMarkedDoubleDelete >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << MarkedDoubleDeletePoolError::Text << std::endl;
 		}
 	};
 
@@ -192,7 +201,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eMarkedNotFromPool >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << MarkedNotFromPoolPoolError::Text << std::endl;
 		}
 	};
 
@@ -214,7 +223,7 @@ namespace castor
 		 */
 		static inline void report( void * space )
 		{
-			std::cerr << "0x" << std::hex << space << " - " << Error< PoolErrorType::eGrowingNotFromRanges >::Text << std::endl;
+			std::cerr << "0x" << std::hex << space << " - " << GrowingNotFromRangesPoolError::Text << std::endl;
 		}
 	};
 
@@ -234,7 +243,7 @@ namespace castor
 		 */
 		static inline void report()
 		{
-			std::cerr << Error< PoolErrorType::eSTLAllocatorUnique >::Text << std::endl;
+			std::cerr << STLAllocatorUniquePoolError::Text << std::endl;
 		}
 	};
 	/**

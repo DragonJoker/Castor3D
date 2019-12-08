@@ -42,7 +42,7 @@ namespace castor3d
 		 *\param[in]	offset		La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
 		C3D_API explicit Bone( Skeleton & skeleton
-			, castor::Matrix4x4r const & offset );
+			, castor::Matrix4x4f const & offset );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -64,7 +64,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La matrice de transformation de l'espace objet vers l'espace du bone.
 		 */
-		inline const castor::Matrix4x4r & getOffsetMatrix()const
+		inline const castor::Matrix4x4f & getOffsetMatrix()const
 		{
 			return m_offset;
 		}
@@ -74,7 +74,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La matrice de transformation absolute de l'espace objet vers l'espace du bone.
 		 */
-		inline const castor::Matrix4x4r & getAbsoluteOffsetMatrix()const
+		inline const castor::Matrix4x4f & getAbsoluteOffsetMatrix()const
 		{
 			return m_absoluteOffset;
 		}
@@ -121,8 +121,8 @@ namespace castor3d
 
 	private:
 		BoneSPtr m_parent;
-		castor::Matrix4x4r m_offset;
-		castor::Matrix4x4r m_absoluteOffset;
+		castor::Matrix4x4f m_offset;
+		castor::Matrix4x4f m_absoluteOffset;
 		BonePtrStrMap m_children;
 		Skeleton & m_skeleton;
 	};

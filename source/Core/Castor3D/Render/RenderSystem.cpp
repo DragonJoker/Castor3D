@@ -339,7 +339,7 @@ namespace castor3d
 			, m_instance->createSurface( *m_gpus[gpuIndex], std::move( handle ) ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getFrustum( float left
+	castor::Matrix4x4f RenderSystem::getFrustum( float left
 		, float right
 		, float bottom
 		, float top
@@ -349,7 +349,7 @@ namespace castor3d
 		return convert( m_instance->frustum( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getPerspective( castor::Angle const & fovy
+	castor::Matrix4x4f RenderSystem::getPerspective( castor::Angle const & fovy
 		, float aspect
 		, float zNear
 		, float zFar )const
@@ -357,7 +357,7 @@ namespace castor3d
 		return convert( m_instance->perspective( fovy.radians(), aspect, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getOrtho( float left
+	castor::Matrix4x4f RenderSystem::getOrtho( float left
 		, float right
 		, float bottom
 		, float top
@@ -367,7 +367,7 @@ namespace castor3d
 		return convert( m_instance->ortho( left, right, bottom, top, zNear, zFar ) );
 	}
 
-	castor::Matrix4x4r RenderSystem::getInfinitePerspective( float radiansFovY
+	castor::Matrix4x4f RenderSystem::getInfinitePerspective( float radiansFovY
 		, float aspect
 		, float zNear )const
 	{

@@ -152,10 +152,10 @@ namespace castor3d
 		SceneNodeSPtr m_pGeneralParentMaterial;
 		ScenePtrStrMap mapScenes;
 		SceneFileParser * m_pParser;
-		RealArray vertexPos;
-		RealArray vertexNml;
-		RealArray vertexTan;
-		RealArray vertexTex;
+		FloatArray vertexPos;
+		FloatArray vertexNml;
+		FloatArray vertexTan;
+		FloatArray vertexTex;
 		UInt32Array faces;
 		AnimatedObjectGroupSPtr pAnimGroup;
 		AnimatedObjectSPtr pAnimSkeleton;

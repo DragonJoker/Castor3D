@@ -61,7 +61,7 @@ namespace castortd
 			else
 			{
 				m_state = State::Arrived;
-				m_node.get().setPosition( castor::Point3r{ 0, -10, 0 } );
+				m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
 			}
 		}
 		else

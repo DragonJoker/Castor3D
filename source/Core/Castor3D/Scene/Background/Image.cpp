@@ -68,7 +68,7 @@ namespace castor3d
 			, file.getFilePath()
 			, castor::Path{ cuT( "Textures" ) } );
 		auto result = file.writeText( m_tabs + cuT( "background_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
-		castor::TextWriter< Scene >::checkError( result, "Background image" );
+		checkError( result, "Background image" );
 		return result;
 	}
 
@@ -225,12 +225,12 @@ namespace castor3d
 
 	void ImageBackground::doUpdate( Camera const & camera )
 	{
-		m_viewport.setOrtho( -1.0_r
-			, 1.0_r
+		m_viewport.setOrtho( -1.0f
+			, 1.0f
 			, -m_ratio
 			, m_ratio
-			, 0.1_r
-			, 2.0_r );
+			, 0.1f
+			, 2.0f );
 		m_viewport.update();
 		auto node = camera.getParent();
 		Matrix4x4f view;

@@ -104,7 +104,7 @@ namespace castor3d
 			, TextureUnit const & source
 			, TextureUnit const & destination
 			//, TextureAttachmentSPtr attach
-			, castor::Point2r const & direction )const;
+			, castor::Point2f const & direction )const;
 		void doCombine( GeometryPassResult const & gp
 			, TextureUnit const & source )const;
 

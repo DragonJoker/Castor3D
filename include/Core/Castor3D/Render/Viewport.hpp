@@ -265,7 +265,7 @@ namespace castor3d
 			return m_modified;
 		}
 
-		inline castor::Matrix4x4r const & getProjection()const
+		inline castor::Matrix4x4f const & getProjection()const
 		{
 			return m_projection;
 		}
@@ -359,7 +359,7 @@ namespace castor3d
 		ViewportType m_type;
 		castor::Size m_size;
 		castor::Position m_position;
-		castor::Matrix4x4r m_projection;
+		castor::Matrix4x4f m_projection;
 		VkViewport m_viewport;
 		VkRect2D m_scissor;
 	};

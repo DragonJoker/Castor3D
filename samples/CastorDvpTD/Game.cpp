@@ -278,7 +278,7 @@ namespace castortd
 		return dummy;
 	}
 
-	bool Game::BuildTower( castor::Point3r const & p_position, Tower::CategoryPtr && p_category )
+	bool Game::BuildTower( castor::Point3f const & p_position, Tower::CategoryPtr && p_category )
 	{
 		bool result = false;
 
@@ -305,13 +305,13 @@ namespace castortd
 			, ( p_position[1] - int( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
-	Point2i Game::convert( castor::Point3r const & p_position )const
+	Point2i Game::convert( castor::Point3f const & p_position )const
 	{
 		return Point2i( p_position[0] / m_cellDimensions[0] + m_grid.getWidth() / 2
 			, p_position[2] / m_cellDimensions[2] + m_grid.getHeight() / 2 );
 	}
 
-	void Game::EmitBullet( float p_speed, uint32_t p_damage, castor::Point3r const & p_origin, Enemy & p_target )
+	void Game::EmitBullet( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_target )
 	{
 		if ( m_bulletsCache.empty() )
 		{

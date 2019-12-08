@@ -107,7 +107,7 @@ namespace Loop
 
 		for ( auto & faceEdges : old )
 		{
-			faceEdges->divide( real( 0.5 ), m_vertices, m_facesEdges );
+			faceEdges->divide( 0.5f, m_vertices, m_facesEdges );
 		}
 	}
 

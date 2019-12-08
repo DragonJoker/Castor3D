@@ -910,7 +910,7 @@ namespace castor3d
 		 *\param[in]	jitter	Les données de jittering.
 		 */
 		void doUpdateUbos( Camera const & camera
-			, castor::Point2r const & jitter );
+			, castor::Point2f const & jitter );
 		/**
 		*\~english
 		*\return

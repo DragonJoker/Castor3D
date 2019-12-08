@@ -69,8 +69,8 @@ namespace castor3d
 		, uint32_t b
 		, uint32_t c
 		, uint32_t d
-		, Point3r const & minUV
-		, Point3r const & maxUV )
+		, castor::Point3f const & minUV
+		, castor::Point3f const & maxUV )
 	{
 		addFace( a, b, c );
 		addFace( a, c, d );
@@ -128,7 +128,7 @@ namespace castor3d
 		return 3u;
 	}
 
-	void TriFaceMapping::sortByDistance( Point3r const & cameraPosition )
+	void TriFaceMapping::sortByDistance( castor::Point3f const & cameraPosition )
 	{
 		CU_Require( getOwner()->isInitialised() );
 

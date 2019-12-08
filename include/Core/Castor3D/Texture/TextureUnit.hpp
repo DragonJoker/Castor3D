@@ -194,7 +194,7 @@ namespace castor3d
 	private:
 		friend class TextureRenderer;
 		TextureConfiguration m_configuration;
-		castor::Matrix4x4r m_transformations;
+		castor::Matrix4x4f m_transformations;
 		TextureLayoutSPtr m_texture;
 		RenderTargetWPtr m_renderTarget;
 		SamplerWPtr m_sampler;

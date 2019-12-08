@@ -52,9 +52,9 @@ namespace castor3d
 
 	void GpInfoUbo::update( Size const & renderSize
 		, Camera const & camera
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj )
+		, castor::Matrix4x4f const & invViewProj
+		, castor::Matrix4x4f const & invView
+		, castor::Matrix4x4f const & invProj )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );

@@ -976,7 +976,7 @@ namespace castor3d
 							auto config = writer.declLocale( "config" + name
 								, textureConfigs.getTextureConfiguration( writer.cast< UInt >( c3d_textureConfig[i / 4u][i % 4u] ) ) );
 							auto sampled = writer.declLocale( "sampled" + name
-								, texture( c3d_maps[i], vtx_texture, 0.0_f ) );
+								, texture( c3d_maps[i], config.convertUV( writer, vtx_texture ), 0.0_f ) );
 							diffuse = config.getDiffuse( writer, sampled, diffuse, 1.0_f );
 							alpha = config.getOpacity( writer, sampled, alpha );
 						}

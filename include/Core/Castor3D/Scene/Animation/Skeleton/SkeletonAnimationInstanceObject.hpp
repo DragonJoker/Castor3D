@@ -79,14 +79,14 @@ namespace castor3d
 		 *\brief		Met à jour les transformations appliquées à l'objet.
 		 *\param[in]	current		La matrice de transformation courante.
 		 */
-		C3D_API void update( castor::Matrix4x4r const & current );
+		C3D_API void update( castor::Matrix4x4f const & current );
 		/**
 		 *\~english
 		 *\brief		The final object's animations transformation.
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
 		 */
-		inline castor::Matrix4x4r const & getFinalTransform()const
+		inline castor::Matrix4x4f const & getFinalTransform()const
 		{
 			return m_finalTransform;
 		}
@@ -135,10 +135,10 @@ namespace castor3d
 		SkeletonAnimationInstanceObjectPtrArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
-		castor::Matrix4x4r m_cumulativeTransform;
+		castor::Matrix4x4f m_cumulativeTransform;
 		//!\~english	The matrix holding transformation at current time.
 		//!\~french		La matrice de transformation complète au temps courant de l'animation.
-		castor::Matrix4x4r m_finalTransform;
+		castor::Matrix4x4f m_finalTransform;
 	};
 }
 

@@ -153,7 +153,7 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doUpdate( RenderInfo & info
-		, Point2r const & jitter )
+		, castor::Point2f const & jitter )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
 			, jitter
@@ -163,7 +163,7 @@ namespace castor3d
 	}
 
 	void RenderTechniquePass::doUpdateNodes( SceneCulledRenderNodes & nodes
-		, Point2r const & jitter
+		, castor::Point2f const & jitter
 		, RenderInfo & info )const
 	{
 		if ( nodes.hasNodes() )

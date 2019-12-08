@@ -1260,7 +1260,7 @@ namespace castor3d
 		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
-		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( true ) }
+		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 		, m_renderPass{ &renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Reflection" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Reflection" }

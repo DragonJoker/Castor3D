@@ -5,8 +5,6 @@
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
 #include "Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -41,9 +39,9 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse( SkeletonAnimationKeyFrame & obj )
 	{
 		bool result = true;
-		Matrix4x4f matrix;
+		castor::Matrix4x4f matrix;
 		double time{ 0.0 };
-		String name;
+		castor::String name;
 		uint8_t type;
 		BinaryChunk chunk;
 
@@ -53,7 +51,7 @@ namespace castor3d
 			{
 			case ChunkType::eSkeletonAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
-				obj.doSetTimeIndex( Milliseconds{ int64_t( time * 1000 ) } );
+				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
@@ -92,8 +90,8 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
-			SquareMatrix< double, 4 > matrix;
-			String name;
+			castor::SquareMatrix< double, 4 > matrix;
+			castor::String name;
 			uint8_t type;
 			BinaryChunk chunk;
 
@@ -116,7 +114,7 @@ namespace castor3d
 					{
 						obj.addAnimationObject( *obj.getOwner()->getObject( SkeletonAnimationObjectType( type )
 							, name )
-							, Matrix4x4r{ matrix } );
+							, castor::Matrix4x4f{ matrix } );
 					}
 
 					break;

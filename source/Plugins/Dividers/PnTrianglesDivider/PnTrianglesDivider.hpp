@@ -23,7 +23,7 @@ namespace PnTriangles
 	struct Plane
 	{
 		castor::PlaneEquation plane;
-		castor::Point3r point;
+		castor::Point3f point;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -35,16 +35,16 @@ namespace PnTriangles
 	{
 		Patch( Plane const & p1, Plane const & p2, Plane const & p3 );
 
-		castor::Point3r b300;
-		castor::Point3r b030;
-		castor::Point3r b003;
-		castor::Point3r b201;
-		castor::Point3r b210;
-		castor::Point3r b120;
-		castor::Point3r b021;
-		castor::Point3r b102;
-		castor::Point3r b012;
-		castor::Point3r b111;
+		castor::Point3f b300;
+		castor::Point3f b030;
+		castor::Point3f b003;
+		castor::Point3f b201;
+		castor::Point3f b210;
+		castor::Point3f b120;
+		castor::Point3f b021;
+		castor::Point3f b102;
+		castor::Point3f b012;
+		castor::Point3f b111;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

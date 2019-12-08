@@ -9,8 +9,8 @@ namespace castor
 	{
 	}
 
-	BoundingBox::BoundingBox( Point3r const & min, Point3r const & max )
-		: BoundingContainer3D( min + ( max - min ) / real( 2.0 ) )
+	BoundingBox::BoundingBox( Point3f const & min, Point3f const & max )
+		: BoundingContainer3D( min + ( max - min ) / 2.0f )
 		, m_dimensions( max - min )
 	{
 	}
@@ -31,7 +31,7 @@ namespace castor
 		return BoundingBox{ min, max };
 	}
 
-	bool BoundingBox::isWithin( Point3r const & point )const
+	bool BoundingBox::isWithin( Point3f const & point )const
 	{
 		auto min = getMin();
 		auto max = getMax();
@@ -40,7 +40,7 @@ namespace castor
 			&& ( point[2] > min[2] && point[2] < max[2] );
 	}
 
-	bool BoundingBox::isOnLimits( Point3r const & point )const
+	bool BoundingBox::isOnLimits( Point3f const & point )const
 	{
 		auto min = getMin();
 		auto max = getMax();
@@ -53,26 +53,26 @@ namespace castor
 				|| point[2] == max[2] );
 	}
 
-	void BoundingBox::load( Point3r const & min, Point3r const & max )
+	void BoundingBox::load( Point3f const & min, Point3f const & max )
 	{
-		m_center = min + ( max - min ) / real( 2.0 );
+		m_center = min + ( max - min ) / 2.0f;
 		m_dimensions = max - min;
 	}
 
-	BoundingBox BoundingBox::getAxisAligned( Matrix4x4r const & transformations )const
+	BoundingBox BoundingBox::getAxisAligned( Matrix4x4f const & transformations )const
 	{
 		auto min = getMin();
 		auto max = getMax();
-		Point3r corners[8]
+		Point3f corners[8]
 		{
 			min,
 			max,
-			Point3r{ min[0], max[1], min[2] },
-			Point3r{ max[0], max[1], min[2] },
-			Point3r{ max[0], min[1], min[2] },
-			Point3r{ min[0], max[1], max[2] },
-			Point3r{ min[0], min[1], max[2] },
-			Point3r{ max[0], min[1], max[2] }
+			Point3f{ min[0], max[1], min[2] },
+			Point3f{ max[0], max[1], min[2] },
+			Point3f{ max[0], min[1], min[2] },
+			Point3f{ min[0], max[1], max[2] },
+			Point3f{ min[0], min[1], max[2] },
+			Point3f{ max[0], min[1], max[2] }
 		};
 
 		// Express object box in axis aligned coordinates.
@@ -98,21 +98,21 @@ namespace castor
 		return BoundingBox{ min, max };
 	}
 
-	Point3r BoundingBox::getPositiveVertex( Point3r const & normal )const
+	Point3f BoundingBox::getPositiveVertex( Point3f const & normal )const
 	{
-		Point3r result{ getMin() };
+		Point3f result{ getMin() };
 
-		if ( normal[0] >= 0.0_r )
+		if ( normal[0] >= 0.0f )
 		{
 			result[0] = getMax()[0];
 		}
 
-		if ( normal[1] >= 0.0_r )
+		if ( normal[1] >= 0.0f )
 		{
 			result[1] = getMax()[1];
 		}
 
-		if ( normal[2] >= 0.0_r )
+		if ( normal[2] >= 0.0f )
 		{
 			result[2] = getMax()[2];
 		}
@@ -120,21 +120,21 @@ namespace castor
 		return result;
 	}
 
-	Point3r BoundingBox::getNegativeVertex( Point3r const & normal )const
+	Point3f BoundingBox::getNegativeVertex( Point3f const & normal )const
 	{
-		Point3r result{ getMax() };
+		Point3f result{ getMax() };
 
-		if ( normal[0] >= 0.0_r )
+		if ( normal[0] >= 0.0f )
 		{
 			result[0] = getMin()[0];
 		}
 
-		if ( normal[1] >= 0.0_r )
+		if ( normal[1] >= 0.0f )
 		{
 			result[1] = getMin()[1];
 		}
 
-		if ( normal[2] >= 0.0_r )
+		if ( normal[2] >= 0.0f )
 		{
 			result[2] = getMin()[2];
 		}

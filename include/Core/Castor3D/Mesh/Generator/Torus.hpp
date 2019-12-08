@@ -51,8 +51,8 @@ namespace castor3d
 			, Parameters const & parameters );
 
 	private:
-		real m_internalRadius;
-		real m_externalRadius;
+		float m_internalRadius;
+		float m_externalRadius;
 		uint32_t m_internalNbFaces;
 		uint32_t m_externalNbFaces;
 	};

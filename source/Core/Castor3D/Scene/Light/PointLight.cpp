@@ -156,8 +156,8 @@ namespace castor3d
 	{
 		PointLight::generateVertices();
 		auto scale = doCalcPointLightBSphere( *this ) / 2.0f;
-		m_cubeBox.load( Point3r{ -scale, -scale, -scale }
-			, Point3r{ scale, scale, scale } );
+		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
+			, castor::Point3f{ scale, scale, scale } );
 		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
 		m_attenuation.reset();
 	}

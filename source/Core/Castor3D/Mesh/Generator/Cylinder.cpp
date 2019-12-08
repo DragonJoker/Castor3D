@@ -54,13 +54,13 @@ namespace castor3d
 			auto indexMappingSide = std::make_shared< TriFaceMapping >( submeshSide );
 
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = PiMult2< real > / m_nbFaces;
+			float angleRotation = PiMult2< float > / m_nbFaces;
 			uint32_t i = 0;
-			real rCosRot = cos( angleRotation );
-			real rSinRot = sin( angleRotation );
-			real rCos = 1.0_r;
-			real rSin = 0.0_r;
-			real rSinT = 0.0_r;
+			float rCosRot = cos( angleRotation );
+			float rSinRot = sin( angleRotation );
+			float rCos = 1.0f;
+			float rSin = 0.0f;
+			float rSinT = 0.0f;
 			InterleavedVertexArray topVertex;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
@@ -79,13 +79,13 @@ namespace castor3d
 
 				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, -m_height / 2, m_radius * rSin }
 					, Point3f{ -rCos, -rSin, 0.0 }
-					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 0.0 ) } ) );
+					, Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 0.0 ) } ) );
 				sideVertex.push_back( InterleavedVertex::createPNT( Point3f{ m_radius * rCos, m_height / 2, m_radius * rSin }
 					, Point3f{ -rCos, -rSin, 0.0 }
-					, Point2f{ real( 1.0 ) - real( i ) / m_nbFaces, real( 1.0 ) } ) );
+					, Point2f{ float( 1.0 ) - float( i ) / m_nbFaces, float( 1.0 ) } ) );
 
-				const real newCos = rCosRot * rCos - rSinRot * rSin;
-				const real newSin = rSinRot * rCos + rCosRot * rSin;
+				const float newCos = rCosRot * rCos - rSinRot * rSin;
+				const float newSin = rSinRot * rCos + rCosRot * rSin;
 				rCos = newCos;
 				rSin = newSin;
 				rSinT = -newSin;

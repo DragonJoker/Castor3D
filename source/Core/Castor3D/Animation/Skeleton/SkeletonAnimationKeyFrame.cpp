@@ -6,17 +6,15 @@
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	namespace
 	{
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & doRotate( SquareMatrix< T, 4 > & matrix
-			, QuaternionT< U > const & orientation )
+		castor::SquareMatrix< T, 4 > & doRotate( castor::SquareMatrix< T, 4 > & matrix
+			, castor::QuaternionT< U > const & orientation )
 		{
-			SquareMatrix< T, 4 > rotate;
+			castor::SquareMatrix< T, 4 > rotate;
 			auto const qxx( orientation.quat.x * orientation.quat.x );
 			auto const qyy( orientation.quat.y * orientation.quat.y );
 			auto const qzz( orientation.quat.z * orientation.quat.z );
@@ -51,8 +49,8 @@ namespace castor3d
 		}
 
 		template< typename T, typename U >
-		void doConvert( SquareMatrix< T, 4 > const & in
-			, SquareMatrix< U, 4 > & out )
+		void doConvert( castor::SquareMatrix< T, 4 > const & in
+			, castor::SquareMatrix< U, 4 > & out )
 		{
 			out = in;
 		}
@@ -61,26 +59,26 @@ namespace castor3d
 	//*************************************************************************************************
 
 	SkeletonAnimationKeyFrame::SkeletonAnimationKeyFrame( SkeletonAnimation & skeletonAnimation
-		, Milliseconds const & timeIndex )
+		, castor::Milliseconds const & timeIndex )
 		: AnimationKeyFrame{ timeIndex }
 		, OwnedBy< SkeletonAnimation >{ skeletonAnimation }
 	{
 	}
 
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
-		, Point3r const & translate
-		, Quaternion const & rotate
-		, Point3r const & scale )
+		, castor::Point3f const & translate
+		, castor::Quaternion const & rotate
+		, castor::Point3f const & scale )
 	{
-		Matrix4x4r transform{ 1.0_r };
-		matrix::translate( transform, translate );
+		castor::Matrix4x4f transform{ 1.0f };
+		castor::matrix::translate( transform, translate );
 		doRotate( transform, rotate );
-		matrix::scale( transform, scale );
+		castor::matrix::scale( transform, scale );
 		addAnimationObject( object, transform );
 	}
 
 	void SkeletonAnimationKeyFrame::addAnimationObject( SkeletonAnimationObject & object
-		, castor::Matrix4x4r const & transform )
+		, castor::Matrix4x4f const & transform )
 	{
 		auto findTransform = [this]( SkeletonAnimationObject & object )
 		{

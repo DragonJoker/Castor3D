@@ -129,11 +129,11 @@ namespace castor3d
 			{
 				auto position = node->getDerivedPosition();
 				auto const & orientation = node->getDerivedOrientation();
-				Point3r right{ 1.0_r, 0.0_r, 0.0_r };
-				Point3r up{ 0.0_r, 1.0_r, 0.0_r };
+				castor::Point3f right{ 1.0, 0.0, 0.0 };
+				castor::Point3f up{ 0.0, 1.0, 0.0 };
 				orientation.transform( right, right );
 				orientation.transform( up, up );
-				Point3r front{ point::cross( right, up ) };
+				castor::Point3f front{ point::cross( right, up ) };
 				up = point::cross( front, right );
 
 				// Update view matrix
@@ -144,7 +144,7 @@ namespace castor3d
 		}
 	}
 
-	void Camera::setProjection( castor::Matrix4x4r const & projection )
+	void Camera::setProjection( castor::Matrix4x4f const & projection )
 	{
 		CU_Require( m_ownProjection );
 

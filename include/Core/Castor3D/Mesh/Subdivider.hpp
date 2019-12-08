@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	x, y, z	Les coordonnées de la position du sommet
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex & addPoint( real x, real y, real z );
+		C3D_API SubmeshVertex & addPoint( float x, float y, float z );
 		/**
 		 *\~english
 		 *\brief		adds a vertex to my list
@@ -86,7 +86,7 @@ namespace castor3d
 		 *\param[in]	position	La position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex & addPoint( castor::Point3r const & position );
+		C3D_API SubmeshVertex & addPoint( castor::Point3f const & position );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -97,7 +97,7 @@ namespace castor3d
 		 *\param[in]	position	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex & addPoint( real * position );
+		C3D_API SubmeshVertex & addPoint( float * position );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a face
@@ -125,7 +125,7 @@ namespace castor3d
 		 *\param[in]	precision	La précision de comparaison
 		 *\return		L'index du position s'il a été trouvé, -1 sinon
 		 */
-		C3D_API virtual int isInMyPoints( castor::Point3r const & vertex, double precision );
+		C3D_API virtual int isInMyPoints( castor::Point3f const & vertex, double precision );
 		/**
 		 *\~english
 		 *\brief		Retrieves the points count
@@ -186,7 +186,7 @@ namespace castor3d
 		 *\param[in]	position	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
-		C3D_API SubmeshVertex & doTryAddPoint( castor::Point3r const & position );
+		C3D_API SubmeshVertex & doTryAddPoint( castor::Point3f const & position );
 		/**
 		 *\~english
 		 *\brief		Main subdivision function

@@ -53,7 +53,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		void update( RenderInfo & info
-			, castor::Point2r const & jitter )override;
+			, castor::Point2f const & jitter )override;
 
 	private:
 		/**

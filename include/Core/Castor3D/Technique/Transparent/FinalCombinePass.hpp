@@ -56,9 +56,10 @@ namespace castor3d
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
 	};
+	using FinalCombineProgramPtr = std::unique_ptr< FinalCombineProgram >;
 	//!\~english	An array of FinalCombineProgram, one per fog type.
 	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
-	using FinalCombinePrograms = std::array< FinalCombineProgram, size_t( FogType::eCount ) >;
+	using FinalCombineProgramMap = std::map< FogType, FinalCombineProgramPtr >;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.10.0
@@ -117,9 +118,9 @@ namespace castor3d
 		 *\param[in]	invProj		La matrice projection inversée.
 		 */
 		void update( Camera const & camera
-			, castor::Matrix4x4r const & invViewProj
-			, castor::Matrix4x4r const & invView
-			, castor::Matrix4x4r const & invProj );
+			, castor::Matrix4x4f const & invViewProj
+			, castor::Matrix4x4f const & invView
+			, castor::Matrix4x4f const & invProj );
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
@@ -138,6 +139,9 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
+		FinalCombineProgram * doGetProgram( FogType type );
+
+	private:
 		castor::Size m_size;
 		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
@@ -153,7 +157,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_texDescriptorSet;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPassTimerSPtr m_timer;
-		FinalCombinePrograms m_programs;
+		FinalCombineProgramMap m_programs;
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::SemaphorePtr m_semaphore;
 	};

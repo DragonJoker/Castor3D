@@ -16,8 +16,6 @@
 
 #include <ashespp/Core/Device.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	Submesh::Submesh( Scene & scene, Mesh & mesh, uint32_t id )
@@ -128,13 +126,13 @@ namespace castor3d
 	{
 		if ( !m_points.empty() )
 		{
-			Point3r min = m_points[0].pos;
-			Point3r max = m_points[0].pos;
+			castor::Point3f min = m_points[0].pos;
+			castor::Point3f max = m_points[0].pos;
 			uint32_t nbVertex = getPointsCount();
 
 			for ( uint32_t i = 1; i < nbVertex; i++ )
 			{
-				Point3r cur = m_points[i].pos;
+				castor::Point3f cur = m_points[i].pos;
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );
 				max[2] = std::max( cur[2], max[2] );
@@ -202,7 +200,7 @@ namespace castor3d
 			, ( m_vertexBuffer ? uint32_t( m_vertexBuffer->getCount() ) : 0u ) );
 	}
 
-	int Submesh::isInMyPoints( Point3r const & vertex
+	int Submesh::isInMyPoints( castor::Point3f const & vertex
 		, double precision )
 	{
 		int result = -1;
@@ -210,7 +208,7 @@ namespace castor3d
 
 		for ( auto it = m_points.begin(); it != m_points.end() && result == -1; ++it )
 		{
-			if ( point::distanceSquared( vertex, it->pos ) < precision )
+			if ( castor::point::distanceSquared( vertex, it->pos ) < precision )
 			{
 				result = int( index );
 			}
@@ -221,20 +219,20 @@ namespace castor3d
 		return result;
 	}
 
-	InterleavedVertex Submesh::addPoint( real x, real y, real z )
+	InterleavedVertex Submesh::addPoint( float x, float y, float z )
 	{
 		InterleavedVertex result;
-		result.pos = Point3f{ x, y, z };
+		result.pos = castor::Point3f{ x, y, z };
 		addPoint( result );
 		return result;
 	}
 
-	InterleavedVertex Submesh::addPoint( Point3r const & value )
+	InterleavedVertex Submesh::addPoint( castor::Point3f const & value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
 
-	InterleavedVertex Submesh::addPoint( real * value )
+	InterleavedVertex Submesh::addPoint( float * value )
 	{
 		return addPoint( value[0], value[1], value[2] );
 	}
@@ -258,7 +256,7 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::sortByDistance( castor::Point3r const & cameraPosition )
+	void Submesh::sortByDistance( castor::Point3f const & cameraPosition )
 	{
 		if ( m_indexMapping )
 		{

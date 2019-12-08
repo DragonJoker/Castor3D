@@ -50,9 +50,9 @@ namespace castor3d
 		m_ubo.reset();
 	}
 
-	void MatrixUbo::update( Matrix4x4r const & view
-		, Matrix4x4r const & projection
-		, Point2r const & jitter )const
+	void MatrixUbo::update( castor::Matrix4x4f const & view
+		, castor::Matrix4x4f const & projection
+		, castor::Point2f const & jitter )const
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
@@ -66,9 +66,9 @@ namespace castor3d
 		m_ubo->upload();
 	}
 
-	void MatrixUbo::update( Matrix4x4r const & view
-		, Matrix4x4r const & projection
-		, Point2r const & jitter
+	void MatrixUbo::update( castor::Matrix4x4f const & view
+		, castor::Matrix4x4f const & projection
+		, castor::Point2f const & jitter
 		, ashes::StagingBuffer & stagingBuffer
 		, ashes::CommandBuffer const & commandBuffer )const
 	{
@@ -88,7 +88,7 @@ namespace castor3d
 			, *m_ubo );
 	}
 
-	void MatrixUbo::update( Matrix4x4r const & projection )const
+	void MatrixUbo::update( castor::Matrix4x4f const & projection )const
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );

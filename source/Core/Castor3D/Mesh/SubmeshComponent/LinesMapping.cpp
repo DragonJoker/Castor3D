@@ -83,7 +83,7 @@ namespace castor3d
 		return 2u;
 	}
 
-	void LinesMapping::sortByDistance( Point3r const & cameraPosition )
+	void LinesMapping::sortByDistance( castor::Point3f const & cameraPosition )
 	{
 		CU_Require( getOwner()->isInitialised() );
 

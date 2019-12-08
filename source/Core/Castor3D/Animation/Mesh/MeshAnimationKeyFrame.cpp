@@ -5,29 +5,27 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	//*************************************************************************************************
 
 	namespace
 	{
-		BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
+		castor::BoundingBox doComputeBoundingBox( InterleavedVertexArray const & points )
 		{
 			if ( points.empty() )
 			{
-				return BoundingBox{};
+				return castor::BoundingBox{};
 			}
 
-			Point3r min{ points[0].pos };
-			Point3r max{ points[0].pos };
+			castor::Point3f min{ points[0].pos };
+			castor::Point3f max{ points[0].pos };
 
 			if ( points.size() > 1 )
 			{
 				for ( auto & vertex : castor::makeArrayView( &points[1], points.size() - 1u ) )
 				{
-					Point3r cur{ vertex.pos };
+					castor::Point3f cur{ vertex.pos };
 					max[0] = std::max( cur[0], max[0] );
 					max[1] = std::max( cur[1], max[1] );
 					max[2] = std::max( cur[2], max[2] );
@@ -37,14 +35,14 @@ namespace castor3d
 				}
 			}
 
-			return BoundingBox{ min, max };
+			return castor::BoundingBox{ min, max };
 		}
 	}
 
 	//*************************************************************************************************
 
 	MeshAnimationKeyFrame::MeshAnimationKeyFrame( MeshAnimation & parent
-		, Milliseconds const & timeIndex )
+		, castor::Milliseconds const & timeIndex )
 		: AnimationKeyFrame{ timeIndex }
 		, OwnedBy< MeshAnimation >{ parent }
 	{

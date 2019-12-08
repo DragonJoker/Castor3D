@@ -39,9 +39,9 @@ namespace castor
 		 *\param[in]	p2	Le second point appartenant au plan.
 		 *\param[in]	p3	Le troisième point appartenant au plan.
 		 */
-		CU_API PlaneEquation( Point3r const & p1
-			, Point3r const & p2
-			, Point3r const & p3 );
+		CU_API PlaneEquation( Point3f const & p1
+			, Point3f const & p2
+			, Point3f const & p3 );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -52,8 +52,8 @@ namespace castor
 		 *\param[in]	normal	La normale du plan.
 		 *\param[in]	point	Un point appartenant au plan.
 		 */
-		CU_API PlaneEquation( Point3r const & normal
-			, Point3r const & point );
+		CU_API PlaneEquation( Point3f const & normal
+			, Point3f const & point );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -64,8 +64,8 @@ namespace castor
 		 *\param[in]	normal	La normale du plan.
 		 *\param[in]	d		La distance du plan.
 		 */
-		CU_API PlaneEquation( Point3r const & normal
-			, real d );
+		CU_API PlaneEquation( Point3f const & normal
+			, float d );
 		/**
 		 *\~english
 		 *\brief		Compute plane's equation from 3 points.
@@ -78,9 +78,9 @@ namespace castor
 		 *\param[in]	p2	Le second point appartenant au plan.
 		 *\param[in]	p3	Le troisième point appartenant au plan.
 		 */
-		CU_API void set( Point3r const & p1
-			, Point3r const & p2
-			, Point3r const & p3 );
+		CU_API void set( Point3f const & p1
+			, Point3f const & p2
+			, Point3f const & p3 );
 		/**
 		 *\~english
 		 *\brief		Defines plane's equation.
@@ -91,8 +91,8 @@ namespace castor
 		 *\param[in]	normal	La normale du plan.
 		 *\param[in]	point	Un point appartenant au plan.
 		 */
-		CU_API void set( Point3r const & normal
-			, Point3r const & point );
+		CU_API void set( Point3f const & normal
+			, Point3f const & point );
 		/**
 		 *\~english
 		 *\brief		Defines plane's equation.
@@ -103,8 +103,8 @@ namespace castor
 		 *\param[in]	normal	La normale du plan.
 		 *\param[in]	d		La distance du plan.
 		 */
-		CU_API void set( Point3r const & normal
-			, real d );
+		CU_API void set( Point3f const & normal
+			, float d );
 		/**
 		 *\~english
 		 *\brief		Checks if this plane is parallel to another one, id est if their normals are parallel
@@ -124,7 +124,7 @@ namespace castor
 		 *\param[in]	point	Le point
 		 *\return		La distance, positive si le point est du même côté que la normale du plan
 		 */
-		CU_API real distance( Point3r const & point )const;
+		CU_API float distance( Point3f const & point )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the projection of a point on this plane
@@ -135,7 +135,7 @@ namespace castor
 		 *\param[in]	point	Le point à projeter
 		 *\return		Le résultat de la projection
 		 */
-		CU_API Point3r project( Point3r const & point )const;
+		CU_API Point3f project( Point3f const & point )const;
 		/**
 		 *\todo			Find origin point
 		 *\~english
@@ -150,7 +150,7 @@ namespace castor
 		 *\return		\p true s'il y a une intersection
 		 */
 		CU_API bool intersects( PlaneEquation const & plane
-			, Line3D< real > & line )const;
+			, Line3D< float > & line )const;
 		/**
 		 *\~english
 		 *\brief		Checks the intersection of this plane with 2 other ones, gives the intersection point
@@ -167,14 +167,14 @@ namespace castor
 		 */
 		CU_API bool intersects( PlaneEquation const & plane1
 			, PlaneEquation const & plane2
-			, Point3r & intersection )const;
+			, Point3f & intersection )const;
 		/**
 		 *\~english
 		 *\return		The plane's normal.
 		 *\~french
 		 *\return		La normale du plan.
 		 */
-		inline Point3r const & getNormal()const
+		inline Point3f const & getNormal()const
 		{
 			return m_normal;
 		}
@@ -184,14 +184,14 @@ namespace castor
 		 *\~french
 		 *\return		La distance entre le plan et l'origine.
 		 */
-		inline real getDistance()const
+		inline float getDistance()const
 		{
 			return m_d;
 		}
 
 	private:
-		Point3r m_normal;
-		real m_d;
+		Point3f m_normal;
+		float m_d;
 		friend CU_API bool operator==( PlaneEquation const &, PlaneEquation const & );
 		friend CU_API bool operator!=( PlaneEquation const &, PlaneEquation const & );
 	};

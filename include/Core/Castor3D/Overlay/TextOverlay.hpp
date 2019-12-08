@@ -447,11 +447,11 @@ namespace castor3d
 		C3D_API void doUpdateBuffer( castor::Size const & size
 			, std::function< void( castor::Point2d const & size
 				, castor::Rectangle const & absolute
-				, castor::Point4r const & fontUV
-				, real & uvLeft
-				, real & uvTop
-				, real & uvRight
-				, real & uvBottom ) > generateUvs );
+				, castor::Point4f const & fontUV
+				, float & uvLeft
+				, float & uvTop
+				, float & uvRight
+				, float & uvBottom ) > generateUvs );
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.

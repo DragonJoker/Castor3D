@@ -19,7 +19,7 @@ namespace castortd
 	{
 	}
 
-	void Bullet::load( float p_speed, uint32_t p_damage, castor::Point3r const & p_origin, Enemy & p_enemy )
+	void Bullet::load( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_enemy )
 	{
 		m_damage = p_damage;
 		m_node.get().setPosition( p_origin );

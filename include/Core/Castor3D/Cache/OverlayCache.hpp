@@ -312,7 +312,7 @@ namespace castor3d
 		std::vector< int > m_overlayCountPerLevel;
 		//!\~english	The pojection matrix.
 		//!\~french		La matrice de projection.
-		castor::Matrix4x4r m_projection;
+		castor::Matrix4x4f m_projection;
 		//!\~english	The FontTextures, sorted by font name.
 		//!\~french		Les FontTextures, triées par nom de police.
 		FontTextureStrMap m_fontTextures;

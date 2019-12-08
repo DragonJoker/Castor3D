@@ -2,26 +2,26 @@
 
 namespace castor
 {
-	SphericalVertex::SphericalVertex( real p_radius, real p_phi, real p_theta )
-		: m_radius( p_radius )
-		, m_phi( p_phi )
-		, m_theta( p_theta )
+	SphericalVertex::SphericalVertex( float radius, float phi, float theta )
+		: m_radius( radius )
+		, m_phi( phi )
+		, m_theta( theta )
 	{
 	}
 
-	SphericalVertex::SphericalVertex( Point3r const & p_vertex )
+	SphericalVertex::SphericalVertex( Point3f const & vertex )
 	{
-		m_radius = real( point::length( p_vertex ) );
-		m_phi = acos( p_vertex[2] / m_radius );
-		real tmp = m_radius * sin( m_phi );
+		m_radius = float( point::length( vertex ) );
+		m_phi = acos( vertex[2] / m_radius );
+		auto tmp = m_radius * sin( m_phi );
 
-		if ( tmp == 0.0 || p_vertex[0] - tmp < 0.001 )
+		if ( tmp == 0.0 || vertex[0] - tmp < 0.001 )
 		{
-			m_theta = asin( p_vertex[1] / tmp );
+			m_theta = asin( vertex[1] / tmp );
 		}
 		else
 		{
-			m_theta = acos( p_vertex[0] / tmp );
+			m_theta = acos( vertex[0] / tmp );
 		}
 	}
 

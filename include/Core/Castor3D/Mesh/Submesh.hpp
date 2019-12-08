@@ -122,7 +122,7 @@ namespace castor3d
 		 *\param[in]	precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		C3D_API int isInMyPoints( castor::Point3r const & position, double precision );
+		C3D_API int isInMyPoints( castor::Point3f const & position, double precision );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -137,7 +137,7 @@ namespace castor3d
 		 *\param[in]	z	Coordonnée Y
 		 *\return		Le vertex créé
 		 */
-		C3D_API InterleavedVertex addPoint( real x, real y, real z );
+		C3D_API InterleavedVertex addPoint( float x, float y, float z );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to my list
@@ -148,7 +148,7 @@ namespace castor3d
 		 *\param[in]	value	Le point
 		 *\return		Le vertex créé
 		 */
-		C3D_API InterleavedVertex addPoint( castor::Point3r const & value );
+		C3D_API InterleavedVertex addPoint( castor::Point3f const & value );
 		/**
 		 *\~english
 		 *\brief		Creates and Adds a vertex to my list
@@ -159,7 +159,7 @@ namespace castor3d
 		 *\param[in]	value	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		C3D_API InterleavedVertex addPoint( real * value );
+		C3D_API InterleavedVertex addPoint( float * value );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to the list.
@@ -196,7 +196,7 @@ namespace castor3d
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
 		 *\param[in]	cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API void sortByDistance( castor::Point3r const & cameraPosition );
+		C3D_API void sortByDistance( castor::Point3f const & cameraPosition );
 		/**
 		 *\~english
 		 *\return		The shader program flags.

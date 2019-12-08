@@ -813,7 +813,7 @@ namespace castor3d
 			, [this]()
 			{
 				auto & device = getCurrentRenderDevice( *getOwner()->getEngine() );
-				m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+				m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 			} ) );
 	}
 

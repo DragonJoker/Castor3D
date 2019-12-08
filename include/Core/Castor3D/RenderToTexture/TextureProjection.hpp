@@ -102,7 +102,7 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		castor::Matrix4x4r m_mtxModel;
+		castor::Matrix4x4f m_mtxModel;
 	};
 }
 

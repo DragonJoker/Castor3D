@@ -45,18 +45,18 @@ namespace castor3d
 			m_height = string::toFloat( param );
 		}
 
-		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< real >::epsilon() && m_radius > std::numeric_limits< real >::epsilon() )
+		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< float >::epsilon() && m_radius > std::numeric_limits< float >::epsilon() )
 		{
 			Submesh & submeshBase = *mesh.createSubmesh();
 			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = PiMult2< real > / m_nbFaces;
+			float angleRotation = PiMult2< float > / m_nbFaces;
 			uint32_t i = 0;
-			real rCos, rSin;
+			float rCos, rSin;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
 
-			for ( real dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
+			for ( float dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
 			{
 				rCos = cos( dAlphaI );
 				rSin = sin( dAlphaI );
@@ -68,9 +68,9 @@ namespace castor3d
 				}
 
 				sideVertex.push_back( InterleavedVertex::createPT( Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
-					, Point2f{ real( i ) / m_nbFaces, real( 1.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex::createPT( Point3f{ real( 0 ), m_height, real( 0 ) }
-					, Point2f{ real( i ) / m_nbFaces, real( 0.0 ) } ) );
+					, Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex::createPT( Point3f{ float( 0 ), m_height, float( 0 ) }
+					, Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
 				i++;
 			}
 			

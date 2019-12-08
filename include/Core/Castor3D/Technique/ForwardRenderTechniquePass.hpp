@@ -109,7 +109,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		C3D_API void update( RenderInfo & info
-			, castor::Point2r const & jitter )override;
+			, castor::Point2f const & jitter )override;
 		/**
 		 *\~english
 		 *\brief		Renders nodes.

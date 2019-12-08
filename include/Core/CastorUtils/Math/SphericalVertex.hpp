@@ -32,7 +32,7 @@ namespace castor
 		 *\param[in]	phi		Angle Phi
 		 *\param[in]	theta	Angle Theta
 		 */
-		CU_API SphericalVertex( real radius = 0, real phi = 0, real theta = 0 );
+		CU_API SphericalVertex( float radius = 0, float phi = 0, float theta = 0 );
 		/**
 		 *\~english
 		 *\brief		Constructor from a cartesian point
@@ -41,7 +41,7 @@ namespace castor
 		 *\brief		Constructeur à partir d'un point cartésien
 		 *\param[in]	vertex	Le vertex à convertir
 		 */
-		CU_API explicit SphericalVertex( Point3r const & vertex );
+		CU_API explicit SphericalVertex( Point3f const & vertex );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -53,13 +53,13 @@ namespace castor
 	public:
 		//!\~english	The radius (distance to origin).
 		//!\~french		Rayon (distance à l'origine).
-		real m_radius;
+		float m_radius;
 		//!\~english	The xy angle.
 		//!\~french		Angle sur le plan XY.
-		real m_phi;
+		float m_phi;
 		//!\~english	The xz angle.
 		//!\~french		Angle sur le plan XZ.
-		real m_theta;
+		float m_theta;
 	};
 }
 

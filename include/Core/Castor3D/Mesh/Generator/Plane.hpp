@@ -49,8 +49,8 @@ namespace castor3d
 			, Parameters const & parameters );
 
 	private:
-		real m_depth;
-		real m_width;
+		float m_depth;
+		float m_width;
 		uint32_t m_subDivisionsW;
 		uint32_t m_subDivisionsD;
 		friend std::ostream & operator <<( std::ostream & o

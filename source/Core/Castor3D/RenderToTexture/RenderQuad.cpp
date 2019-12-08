@@ -226,7 +226,7 @@ namespace castor3d
 		, uint32_t subpassIndex )
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
 				, subpassIndex

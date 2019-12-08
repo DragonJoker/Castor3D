@@ -23,7 +23,7 @@ namespace Phong
 	struct Plane
 	{
 		castor::PlaneEquation plane;
-		castor::Point3r point;
+		castor::Point3f point;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

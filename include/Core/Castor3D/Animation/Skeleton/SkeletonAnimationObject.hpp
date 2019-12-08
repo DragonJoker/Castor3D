@@ -104,7 +104,7 @@ namespace castor3d
 		 *\brief		Récupère les animations du noeud de transformation.
 		 *\return		La valeur.
 		 */
-		inline castor::Matrix4x4r const & getNodeTransform()const
+		inline castor::Matrix4x4f const & getNodeTransform()const
 		{
 			return m_nodeTransform;
 		}
@@ -116,7 +116,7 @@ namespace castor3d
 		 *\brief		Définit les animations du noeud de transformation.
 		 *\param[in]	transform	La nouvelle valeur.
 		 */
-		inline void setNodeTransform( castor::Matrix4x4r const & transform )
+		inline void setNodeTransform( castor::Matrix4x4f const & transform )
 		{
 			m_nodeTransform = transform;
 		}
@@ -150,7 +150,7 @@ namespace castor3d
 		SkeletonAnimationObjectType m_type;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
-		castor::Matrix4x4r m_nodeTransform;
+		castor::Matrix4x4f m_nodeTransform;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
 		SkeletonAnimationObjectPtrArray m_children;

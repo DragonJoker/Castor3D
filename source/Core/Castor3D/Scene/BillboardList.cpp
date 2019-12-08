@@ -166,7 +166,7 @@ namespace castor3d
 		}
 	}
 
-	void BillboardBase::sortByDistance( Point3r const & cameraPosition )
+	void BillboardBase::sortByDistance( castor::Point3f const & cameraPosition )
 	{
 		m_needUpdate = m_cameraPosition != cameraPosition;
 		m_cameraPosition = cameraPosition;
@@ -183,14 +183,14 @@ namespace castor3d
 				struct Element
 				{
 					uint8_t * m_buffer;
-					Coords3r m_position;
+					castor::Coords3f m_position;
 					uint32_t m_stride;
 
 					Element( uint8_t * buffer
 						, uint32_t offset
 						, uint32_t stride )
 						: m_buffer{ buffer }
-						, m_position{ reinterpret_cast< real * >( buffer + offset ) }
+						, m_position{ reinterpret_cast< float * >( buffer + offset ) }
 						, m_stride{ stride }
 					{
 					}
@@ -389,13 +389,13 @@ namespace castor3d
 		}
 	}
 
-	void BillboardList::addPoint( castor::Point3r const & position )
+	void BillboardList::addPoint( castor::Point3f const & position )
 	{
 		m_arrayPositions.push_back( position );
 		m_needUpdate = true;
 	}
 
-	void BillboardList::addPoints( castor::Point3rArray const & positions )
+	void BillboardList::addPoints( castor::Point3fArray const & positions )
 	{
 		m_arrayPositions.insert( m_arrayPositions.end(), positions.begin(), positions.end() );
 		m_needUpdate = true;

@@ -372,12 +372,12 @@ namespace castor3d
 		fprintf( stdout
 			, "\r%0.7f ms, %0.7f fps"
 			, total.count() / 1000.0f
-			, ( 1000000.0_r / total.count() ) );
+			, ( 1000000.0 / total.count() ) );
 
 #else
 
 		std::cout << "\rTime: " << std::setw( 7 ) << m_totalTime;
-		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0_r / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count() );
+		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0 / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count() );
 
 #endif
 	}

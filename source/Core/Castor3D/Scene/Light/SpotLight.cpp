@@ -162,8 +162,8 @@ namespace castor3d
 	{
 		SpotLight::generateVertices();
 		auto scale = doCalcSpotLightBCone( *this ) / 2.0f;
-		m_cubeBox.load( Point3r{ -scale[0], -scale[0], -scale[1] }
-		, Point3r{ scale[0], scale[0], scale[1] } );
+		m_cubeBox.load( castor::Point3f{ -scale[0], -scale[0], -scale[1] }
+			, castor::Point3f{ scale[0], scale[0], scale[1] } );
 		m_farPlane = float( point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
 		m_attenuation.reset();
 		m_cutOff.reset();
@@ -177,7 +177,7 @@ namespace castor3d
 		lightCamera.attachTo( node );
 		lightCamera.getViewport().setPerspective( getCutOff() * 2
 			, lightCamera.getRatio()
-			, 0.5_r
+			, 0.5f
 			, m_farPlane );
 		lightCamera.update();
 		m_lightSpace = lightCamera.getProjection() * lightCamera.getView();

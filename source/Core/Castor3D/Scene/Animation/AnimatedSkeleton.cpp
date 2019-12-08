@@ -50,7 +50,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				Matrix4x4r final{ 1.0_r };
+				castor::Matrix4x4f final{ 1.0 };
 
 				for ( auto & animation : m_playingAnimations )
 				{
@@ -84,7 +84,7 @@ namespace castor3d
 		{
 			for ( auto bone : skeleton )
 			{
-				Matrix4x4r final{ 1.0_r };
+				castor::Matrix4x4f final{ 1.0f };
 
 				for ( auto & animation : m_playingAnimations )
 				{

@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CU_LOG_TYPE_H___
 #define ___CU_LOG_TYPE_H___
 
+#include <string>
+#include <deque>
+
 namespace castor
 {
 	/*!
@@ -37,6 +40,26 @@ namespace castor
 		//!\~french		Compte des logs.
 		eCount,
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		27/08/2012
+	\version	0.7.0.0
+	\~english
+	\brief		Message representation
+	\~french
+	\brief		Représentation d'un message
+	*/
+	struct Message
+	{
+		//! The message type.
+		LogType m_type;
+		//! The message text.
+		std::string m_message;
+		//! Tells if the new line character is printed.
+		bool m_newLine;
+	};
+	//! The message queue.
+	using MessageQueue = std::deque< Message >;
 }
 
 #endif
