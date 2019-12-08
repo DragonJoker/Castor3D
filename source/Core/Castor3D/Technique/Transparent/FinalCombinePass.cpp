@@ -33,9 +33,16 @@ namespace castor3d
 
 	namespace
 	{
+		static uint32_t constexpr sceneUboIndex = 0u;
+		static uint32_t constexpr gpuInfoUboIndex = 1u;
+		static uint32_t constexpr hdrUboIndex = 2u;
+		static uint32_t constexpr depthTexIndex = 0u;
+		static uint32_t constexpr accumTexIndex = 1u;
+		static uint32_t constexpr revealTexIndex = 2u;
+
 		SamplerSPtr doCreateSampler( Engine & engine )
 		{
-			String const name = cuT( "FinalCombinePass" );
+			String const name = cuT( "C3D_BW_FinalCombinePass" );
 			SamplerSPtr result;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -101,13 +108,13 @@ namespace castor3d
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
-				makeDescriptorSetLayoutBinding( 0u
+				makeDescriptorSetLayoutBinding( sceneUboIndex
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( 1u
+				makeDescriptorSetLayoutBinding( gpuInfoUboIndex
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( 2u
+				makeDescriptorSetLayoutBinding( hdrUboIndex
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
@@ -122,15 +129,15 @@ namespace castor3d
 		{
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
-			result->createBinding( layout.getBinding( 0u )
+			result->createBinding( layout.getBinding( sceneUboIndex )
 				, sceneUbo.getUbo()
 				, 0u
 				, 1u );
-			result->createBinding( layout.getBinding( 1u )
+			result->createBinding( layout.getBinding( gpuInfoUboIndex )
 				, gpInfoUbo.getUbo()
 				, 0u
 				, 1u );
-			result->createBinding( layout.getBinding( 2u )
+			result->createBinding( layout.getBinding( hdrUboIndex )
 				, hdrConfigUbo.getUbo()
 				, 0u
 				, 1u );
@@ -142,13 +149,13 @@ namespace castor3d
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings
 			{
-				makeDescriptorSetLayoutBinding( 0u
+				makeDescriptorSetLayoutBinding( depthTexIndex
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( 1u
+				makeDescriptorSetLayoutBinding( accumTexIndex
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
-				makeDescriptorSetLayoutBinding( 2u
+				makeDescriptorSetLayoutBinding( revealTexIndex
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
@@ -164,13 +171,13 @@ namespace castor3d
 		{
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 1u );
-			result->createBinding( layout.getBinding( 0u )
+			result->createBinding( layout.getBinding( depthTexIndex )
 				, depth
 				, sampler.getSampler() );
-			result->createBinding( layout.getBinding( 1u )
+			result->createBinding( layout.getBinding( accumTexIndex )
 				, accumulation
 				, sampler.getSampler() );
-			result->createBinding( layout.getBinding( 2u )
+			result->createBinding( layout.getBinding( revealTexIndex )
 				, revealage
 				, sampler.getSampler() );
 			result->update();
@@ -208,12 +215,12 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			UBO_SCENE( writer, 0u, 0u );
-			UBO_GPINFO( writer, 1u, 0u );
-			UBO_HDR_CONFIG( writer, 2u, 0u );
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), 0u, 1u );
-			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), 1u, 1u );
-			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), 2u, 1u );
+			UBO_SCENE( writer, sceneUboIndex, 0u );
+			UBO_GPINFO( writer, gpuInfoUboIndex, 0u );
+			UBO_HDR_CONFIG( writer, hdrUboIndex, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), depthTexIndex, 1u );
+			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), accumTexIndex, 1u );
+			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), revealTexIndex, 1u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 			auto in = writer.getIn();
 
@@ -328,7 +335,8 @@ namespace castor3d
 				0u,
 				VK_FALSE,
 				VK_LOGIC_OP_COPY,
-				std::move( attachments )
+				std::move( attachments ),
+				{ 1.0f, 1.0f, 1.0f, 1.0f },
 			};
 
 			auto & device = getCurrentRenderDevice( engine );
@@ -409,7 +417,7 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "FinalCombinePass" );
+			setDebugObjectName( device, *result, "TransparentResolve" );
 			return result;
 		}
 
@@ -437,6 +445,8 @@ namespace castor3d
 		, FogType fogType )
 		: m_timer{ timer }
 		, m_renderPass{ renderPass }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentResolve" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentResolve" }
 		, m_pipelineLayout{ doCreateRenderPipelineLayout( engine
 			, uboLayout
 			, texLayout ) }
@@ -445,15 +455,12 @@ namespace castor3d
 			, doCreateProgram( engine, fogType, m_vertexShader, m_pixelShader )
 			, renderPass
 			, vtxLayout ) }
-		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( true ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "FinalCombine" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FinalCombine" }
+		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer() }
 	{
 	}
 
 	FinalCombineProgram::~FinalCombineProgram()
 	{
-		m_pipeline.reset();
 	}
 
 	void FinalCombineProgram::prepare( ashes::FrameBuffer const & frameBuffer
@@ -480,10 +487,10 @@ namespace castor3d
 
 	void FinalCombineProgram::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( cuT( "Combine" )
+		visitor.visit( m_vertexShader.name
 			, VK_SHADER_STAGE_VERTEX_BIT
 			, *m_vertexShader.shader );
-		visitor.visit( cuT( "Combine" )
+		visitor.visit( m_pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, *m_pixelShader.shader );
 	}
@@ -511,23 +518,9 @@ namespace castor3d
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( m_engine, colourView ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
-		, m_programs
-		{
-			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eDisabled },
-			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eLinear },
-			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eExponential },
-			FinalCombineProgram{ m_engine, *m_renderPass, *m_timer, *m_uboDescriptorLayout, *m_texDescriptorLayout, *m_vertexLayout, FogType::eSquaredExponential }
-		}
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
 		, m_semaphore{ getCurrentRenderDevice( m_engine )->createSemaphore() }
 	{
-		for ( auto & program : m_programs )
-		{
-			program.prepare( *m_frameBuffer
-				, *m_uboDescriptorSet
-				, *m_texDescriptorSet
-				, m_vertexBuffer->getBuffer() );
-		}
 	}
 
 	FinalCombinePass::~FinalCombinePass()
@@ -536,9 +529,9 @@ namespace castor3d
 	}
 
 	void FinalCombinePass::update( Camera const & camera
-		, Matrix4x4r const & invViewProj
-		, Matrix4x4r const & invView
-		, Matrix4x4r const & invProj )
+		, castor::Matrix4x4f const & invViewProj
+		, castor::Matrix4x4f const & invView
+		, castor::Matrix4x4f const & invProj )
 	{
 		m_gpInfo.update( m_size
 			, camera
@@ -550,7 +543,7 @@ namespace castor3d
 	ashes::Semaphore const & FinalCombinePass::render( FogType fogType
 		, ashes::Semaphore const & toWait )
 	{
-		auto & program = m_programs[size_t( fogType )];
+		auto & program = *doGetProgram( fogType );
 		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
 		auto * result = &toWait;
@@ -567,7 +560,34 @@ namespace castor3d
 
 	void FinalCombinePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		m_programs[size_t( getFogType( visitor.getFlags().sceneFlags ) )].accept( visitor );
+		auto it = m_programs.find( getFogType( visitor.getFlags().sceneFlags ) );
+
+		if ( it != m_programs.end() )
+		{
+			it->second->accept( visitor );
+		}
+	}
+
+	FinalCombineProgram * FinalCombinePass::doGetProgram( FogType type )
+	{
+		auto result = m_programs.emplace( type, nullptr );
+
+		if ( result.second )
+		{
+			result.first->second = std::make_unique< FinalCombineProgram >( m_engine
+				, *m_renderPass
+				, *m_timer
+				, *m_uboDescriptorLayout
+				, *m_texDescriptorLayout
+				, *m_vertexLayout
+				, type );
+			result.first->second->prepare( *m_frameBuffer
+				, *m_uboDescriptorSet
+				, *m_texDescriptorSet
+				, m_vertexBuffer->getBuffer() );
+		}
+
+		return result.first->second.get();
 	}
 
 	//*********************************************************************************************
