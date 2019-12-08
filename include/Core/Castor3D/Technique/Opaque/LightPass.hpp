@@ -272,6 +272,26 @@ namespace castor3d
 			}
 			/**@}*/
 
+		protected:
+			/**
+			 *\~english
+			 *\brief		Renders the light pass.
+			 *\param[in]	commandBuffer	The command buffer.
+			 *\param[in]	count			The number of primitives to draw.
+			 *\param[in]	first			Tells if this is the first light pass (\p true) or not (\p false).
+			 *\param[in]	offset			The VBO offset.
+			 *\~french
+			 *\brief		Dessine la passe d'éclairage.
+			 *\param[in]	commandBuffer	Le tampon de commandes.
+			 *\param[in]	count			Le nombre de primitives à dessiner.
+			 *\param[in]	first			Dit si cette passe d'éclairage est la première (\p true) ou pas (\p false).
+			 *\param[in]	offset			L'offset dans le VBO.
+			 */
+			virtual void doRender( ashes::CommandBuffer & commandBuffer
+				, uint32_t count
+				, bool first
+				, uint32_t offset )const;
+
 		private:
 			/**
 			 *\~english
@@ -411,7 +431,7 @@ namespace castor3d
 		}
 		/**@}*/
 
-	protected:
+	public:
 		struct Pipeline
 		{
 			ProgramPtr program;
@@ -420,7 +440,26 @@ namespace castor3d
 			ashes::DescriptorSetPtr textureDescriptorSet;
 			ashes::CommandBufferPtr firstCommandBuffer;
 			ashes::CommandBufferPtr blendCommandBuffer;
+			bool isFirstSet{ false };
+			bool isBlendSet{ false };
 		};
+		static size_t makeKey( Light const & light
+			, ShadowMap const * shadowMap );
+		using PipelinePtr = std::unique_ptr< Pipeline >;
+		using PipelineMap = std::map< size_t, PipelinePtr >;
+		using PipelineArray = std::array< Pipeline, size_t( ShadowType::eCount ) * 2u >; // * 2u for volumetric scattering or not.
+
+		Pipeline LightPass::createPipeline( LightType lightType
+			, ShadowType shadowType
+			, bool volumetric
+			, ShadowMap const * shadowMap );
+
+	protected:
+		virtual Pipeline * doGetPipeline( bool first
+			, Light const & light
+			, ShadowMap const * shadowMap );
+
+	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -517,18 +556,15 @@ namespace castor3d
 		 *\brief		Prepares the command buffer for given pipeline.
 		 *\param[in]	pipeline		The light pass pipeline.
 		 *\param[in]	shadowMap		The optional shadow map.
-		 *\param[in]	shadowMapIndex	The shadow map index.
 		 *\param[in]	first			Tells if this is the first pass (\p true) or the blend pass (\p false).
 		 *\~french
 		 *\brief		Prépare le tampon de commandes du pipeline donné.
 		 *\param[in]	pipeline		Le pipeline de la passe d'éclairage.
 		 *\param[in]	shadowMap		La texture d'ombres, optionnelle.
-		 *\param[in]	shadowMapIndex	L'index de la texture d'ombres.
 		 *\param[in]	first			Dit s'il s'agit de la première passe (\p true) ou la passe de mélange (\p false).
 		 */
 		void doPrepareCommandBuffer( Pipeline & pipeline
 			, ShadowMap const * shadowMap
-			, uint32_t shadowMapIndex
 			, bool first );
 		/**
 		 *\~english
@@ -630,6 +666,10 @@ namespace castor3d
 
 		Engine & m_engine;
 		Scene const * m_scene{ nullptr };
+		SceneUbo * m_sceneUbo{ nullptr };
+		ModelMatrixUbo * m_mmUbo{ nullptr };
+		ashes::PipelineVertexInputStateCreateInfo m_usedVertexLayout{ 0u, {}, {} };
+		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
 		UniformBufferBase const * m_baseUbo{ nullptr };
 		bool m_shadows;
@@ -639,7 +679,7 @@ namespace castor3d
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::CommandBufferPtr m_commandBuffer;
-		std::array< Pipeline, size_t( ShadowType::eCount ) * 2u > m_pipelines; // * 2u for volumetric scattering or not.
+		PipelineMap m_pipelines;
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< float > m_vertexBuffer;

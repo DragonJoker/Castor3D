@@ -38,6 +38,8 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 using namespace castor;
 using namespace castor3d;
 
@@ -287,6 +289,17 @@ namespace castor3d
 		, bool first
 		, uint32_t offset )const
 	{
+		doRender( commandBuffer
+			, count
+			, first
+			, offset );
+	}
+
+	void LightPass::Program::doRender( ashes::CommandBuffer & commandBuffer
+		, uint32_t count
+		, bool first
+		, uint32_t offset )const
+	{
 		if ( first )
 		{
 			commandBuffer.bindPipeline( *m_firstPipeline );
@@ -348,8 +361,9 @@ namespace castor3d
 		, ShadowMap const * shadowMap
 		, uint32_t shadowMapIndex )
 	{
-		auto index = size_t( light.getShadowType() ) + size_t( ( light.getVolumetricSteps() > 0 ? 1u : 0u ) * size_t( ShadowType::eCount ) );
-		m_pipeline = &m_pipelines[index];
+		m_pipeline = doGetPipeline( first
+			, light
+			, shadowMap );
 		doUpdate( first
 			, size
 			, light
@@ -411,6 +425,154 @@ namespace castor3d
 		return *result;
 	}
 
+	size_t LightPass::makeKey( Light const & light
+		, ShadowMap const * shadowMap )
+	{
+		size_t hash = std::hash< LightType >{}( light.getLightType() );
+		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
+		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
+		castor::hashCombine( hash, shadowMap );
+		return hash;
+	}
+
+	LightPass::Pipeline LightPass::createPipeline( LightType lightType
+		, ShadowType shadowType
+		, bool volumetric
+		, ShadowMap const * shadowMap )
+	{
+		Scene const & scene = *m_scene;
+		GeometryPassResult const & gp = *m_geometryPassResult;
+		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
+		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
+		SceneUbo & sceneUbo = *m_sceneUbo;
+		ModelMatrixUbo * modelMatrixUbo = m_mmUbo;
+		auto & renderSystem = *m_engine.getRenderSystem();
+		auto & device = getCurrentRenderDevice( renderSystem );
+		SceneFlags sceneFlags{ scene.getFlags() };
+		LightPass::Pipeline pipeline;
+		m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
+
+		if ( scene.getMaterialsType() == MaterialType::eMetallicRoughness )
+		{
+			m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, volumetric );
+		}
+		else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
+		{
+			m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, volumetric );
+		}
+		else
+		{
+			m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
+				, lightType
+				, shadowType
+				, volumetric );
+		}
+
+		pipeline.program = doCreateProgram();
+		pipeline.program->initialise( vbo
+			, vertexLayout
+			, *m_firstRenderPass.renderPass
+			, *m_blendRenderPass.renderPass
+			, m_matrixUbo
+			, sceneUbo
+			, m_gpInfoUbo
+			, modelMatrixUbo );
+		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( 0u );
+		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
+		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
+			, m_matrixUbo.getUbo() );
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
+			, sceneUbo.getUbo() );
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
+			, m_gpInfoUbo.getUbo() );
+		if ( modelMatrixUbo )
+		{
+			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
+				, modelMatrixUbo->getUbo() );
+		}
+		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
+			, *m_baseUbo );
+		pipeline.uboDescriptorSet->update();
+
+		pipeline.firstCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		pipeline.blendCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+
+		pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
+		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
+		auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
+		{
+			return ashes::WriteDescriptorSet
+			{
+				index,
+				0u,
+				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				{ { gp.getSampler(), gp.getViews()[index - getMinBufferIndex()], layout } }
+			};
+		};
+		uint32_t index = getMinBufferIndex();
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
+		if ( shadowMap )
+		{
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
+				{
+					index++,
+					0u,
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+					{ { shadowMap->getLinearSampler(), shadowMap->getLinearView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
+				} );
+			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
+				{
+					index++,
+					0u,
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+					{ { shadowMap->getVarianceSampler(), shadowMap->getVarianceView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
+				} );
+		}
+
+		pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
+		pipeline.textureDescriptorSet->update();
+
+		return pipeline;
+	}
+
+	LightPass::Pipeline * LightPass::doGetPipeline( bool first
+		, Light const & light
+		, ShadowMap const * shadowMap )
+	{
+		auto key = makeKey( light, shadowMap );
+		auto it = m_pipelines.emplace( key, nullptr );
+
+		if ( it.second )
+		{
+			it.first->second = std::make_unique< Pipeline >( createPipeline( light.getLightType()
+				, ( shadowMap
+					? light.getShadowType()
+					: ShadowType::eNone )
+				, ( shadowMap
+					? light.getVolumetricSteps() > 0
+					: false )
+				, shadowMap ) );
+		}
+
+		doPrepareCommandBuffer( *it.first->second
+			, shadowMap
+			, first );
+		return it.first->second.get();
+	}
+
 	void LightPass::doInitialise( Scene const & scene
 		, GeometryPassResult const & gp
 		, LightType lightType
@@ -421,177 +583,56 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		m_scene = &scene;
+		m_sceneUbo = &sceneUbo;
+		m_mmUbo = modelMatrixUbo;
+		m_usedVertexLayout = vertexLayout;
+		m_pUsedVertexLayout = &m_usedVertexLayout;
 		m_timer = &timer;
 		m_geometryPassResult = &gp;
-		SceneFlags sceneFlags{ scene.getFlags() };
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		auto pipelineIndex = 0u;
-
-		for ( auto & pipeline : m_pipelines )
-		{
-			auto shadowType = ShadowType( pipelineIndex % uint32_t( ShadowType::eCount ) );
-			bool volumetric = pipelineIndex >= uint32_t( ShadowType::eCount );
-			m_vertexShader.shader = doGetVertexShaderSource( sceneFlags );
-
-			if ( scene.getMaterialsType() == MaterialType::eMetallicRoughness )
-			{
-				m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
-					, lightType
-					, shadowType
-					, volumetric );
-			}
-			else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
-			{
-				m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
-					, lightType
-					, shadowType
-					, volumetric );
-			}
-			else
-			{
-				m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
-					, lightType
-					, shadowType
-					, volumetric );
-			}
-
-			pipeline.program = doCreateProgram();
-			pipeline.program->initialise( vbo
-				, vertexLayout
-				, *m_firstRenderPass.renderPass
-				, *m_blendRenderPass.renderPass
-				, m_matrixUbo
-				, sceneUbo
-				, m_gpInfoUbo
-				, modelMatrixUbo );
-			pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( 0u );
-			auto & uboLayout = pipeline.program->getUboDescriptorLayout();
-			m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
-				, m_matrixUbo.getUbo() );
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
-				, sceneUbo.getUbo() );
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
-				, m_gpInfoUbo.getUbo() );
-			if ( modelMatrixUbo )
-			{
-				pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
-					, modelMatrixUbo->getUbo() );
-			}
-			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
-				, *m_baseUbo );
-			pipeline.uboDescriptorSet->update();
-
-			pipeline.firstCommandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
-			pipeline.blendCommandBuffer = device.graphicsCommandPool->createCommandBuffer( false );
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
-
-			pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
-			auto & texLayout = pipeline.program->getTextureDescriptorLayout();
-			auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
-			{
-				return ashes::WriteDescriptorSet
-				{
-					index,
-					0u,
-					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{ { gp.getSampler(), gp.getViews()[index - getMinBufferIndex()], layout } }
-				};
-			};
-			uint32_t index = getMinBufferIndex();
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			pipeline.textureWrites.push_back( writeBinding( index++, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-
-			pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
-			pipeline.textureDescriptorSet->update();
-
-			if ( m_shadows )
-			{
-				// Empty descriptor for shadow texture, that will be filled at runtime.
-				pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-					{
-						index++,
-						0u,
-						VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-						{ { VK_NULL_HANDLE, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
-					} );
-				pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
-					{
-						index++,
-						0u,
-						VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-						{ { VK_NULL_HANDLE, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
-					} );
-				pipeline.textureDescriptorSet->setBindings( pipeline.textureWrites );
-			}
-			else
-			{
-				doPrepareCommandBuffer( pipeline, nullptr, 0u, true );
-				doPrepareCommandBuffer( pipeline, nullptr, 0u, false );
-			}
-
-			++pipelineIndex;
-		}
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 	}
 
 	void LightPass::doCleanup()
 	{
 		m_matrixUbo.cleanup();
 		m_commandBuffer.reset();
-
-		for ( auto & pipeline : m_pipelines )
-		{
-			pipeline.textureDescriptorSet.reset();
-			pipeline.uboDescriptorSet.reset();
-			pipeline.blendCommandBuffer.reset();
-			pipeline.firstCommandBuffer.reset();
-			pipeline.program->cleanup();
-			pipeline.program.reset();
-		}
+		m_pipelines.clear();
 	}
 
 	void LightPass::doPrepareCommandBuffer( Pipeline & pipeline
 		, ShadowMap const * shadowMap
-		, uint32_t shadowMapIndex
 		, bool first )
 	{
-		auto & renderPass = first
-			? m_firstRenderPass
-			: m_blendRenderPass;
-		auto & commandBuffer = first
-			? *pipeline.firstCommandBuffer
-			: *pipeline.blendCommandBuffer;
-		auto & dimensions = renderPass.frameBuffer->getDimensions();
-
-		if ( shadowMap )
+		if ( ( first && !pipeline.isFirstSet )
+			|| ( !first && !pipeline.isBlendSet ) )
 		{
-			auto & linearWrite = pipeline.textureDescriptorSet->getBinding( 6u );
-			linearWrite.imageInfo[0].imageView = shadowMap->getLinearView();
-			linearWrite.imageInfo[0].sampler = shadowMap->getLinearSampler();
-			auto & varianceWrite = pipeline.textureDescriptorSet->getBinding( 7u );
-			varianceWrite.imageInfo[0].imageView = shadowMap->getVarianceView();
-			varianceWrite.imageInfo[0].sampler = shadowMap->getVarianceSampler();
-			pipeline.textureDescriptorSet->update();
-		}
+			auto & renderPass = first
+				? m_firstRenderPass
+				: m_blendRenderPass;
+			auto & commandBuffer = first
+				? *pipeline.firstCommandBuffer
+				: *pipeline.blendCommandBuffer;
+			auto & dimensions = renderPass.frameBuffer->getDimensions();
 
-		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkType< VkCommandBufferInheritanceInfo >( *renderPass.renderPass
-				, 0u
-				, *renderPass.frameBuffer
-				, VkBool32( VK_FALSE )
-				, 0u
-				, 0u ) );
-		commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
-		commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
-		commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
-		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-		commandBuffer.end();
+			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+				, makeVkType< VkCommandBufferInheritanceInfo >( *renderPass.renderPass
+					, 0u
+					, *renderPass.frameBuffer
+					, VkBool32( VK_FALSE )
+					, 0u
+					, 0u ) );
+			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
+			commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
+			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
+			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
+			commandBuffer.end();
+
+			pipeline.isFirstSet = pipeline.isFirstSet || first;
+			pipeline.isBlendSet = pipeline.isBlendSet || !first;
+		}
 	}
 	
 	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags

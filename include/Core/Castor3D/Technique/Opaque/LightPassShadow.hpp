@@ -346,27 +346,6 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::LightPass::doUpdate
-		 */
-		void doUpdate( bool first
-			, castor::Size const & size
-			, Light const & light
-			, Camera const & camera
-			, ShadowMap const * shadowMap
-			, uint32_t shadowMapIndex )override
-		{
-			my_pass_type::doUpdate( first
-				, size
-				, light
-				, camera
-				, nullptr
-				, 0u );
-			this->doPrepareCommandBuffer( *this->m_pipeline
-				, shadowMap
-				, shadowMapIndex
-				, first );
-		}
-		/**
 		 *\copydoc		castor3d::LightPass::doCreateProgram
 		 */
 		typename LightPass::ProgramPtr doCreateProgram()override

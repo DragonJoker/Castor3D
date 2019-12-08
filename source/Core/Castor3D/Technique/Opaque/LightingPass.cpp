@@ -71,9 +71,16 @@ namespace castor3d
 		TextureUnit doCreateColourTexture( Engine & engine
 			, Size const & size )
 		{
+			auto & device = getCurrentRenderDevice( engine );
 			return doCreateTexture( engine
 				, size
-				, VK_FORMAT_R16G16B16A16_SFLOAT
+				, device.selectSuitableFormat(
+					{
+						VK_FORMAT_R16G16B16A16_SFLOAT,
+						VK_FORMAT_R32G32B32A32_SFLOAT,
+					}
+					, VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
+					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
 				, false
 				, cuT( "LightingPass_Colour" ) );
 		}
@@ -85,9 +92,9 @@ namespace castor3d
 			return doCreateTexture( engine
 				, size
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
-					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
+					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT
+					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT )
 				, true
 				, cuT( "LightingPass_Depth" ) );
 		}
@@ -169,7 +176,7 @@ namespace castor3d
 			depthView.image->getDimensions(),
 		};
 		m_blitDepthSemaphore = device->createSemaphore();
-		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( true );
+		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		m_blitDepthCommandBuffer->begin();
 		// Src depth buffer from depth attach to transfer source
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
