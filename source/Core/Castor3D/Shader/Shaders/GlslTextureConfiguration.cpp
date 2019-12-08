@@ -35,6 +35,7 @@ namespace castor3d
 			, transmittanceMask{ trnsDumm.xy() }
 			, environment{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.x() ) ) }
 			, needsGammaCorrection{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.y() ) ) }
+			, needsYInversion{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.z() ) ) }
 		{
 		}
 
@@ -222,6 +223,22 @@ namespace castor3d
 			return mix( srgb
 				, pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) )
 				, vec3( writer.cast< sdw::Float >( needsGammaCorrection ) ) );
+		}
+
+		sdw::Vec2 TextureConfigData::convertUV( sdw::ShaderWriter & writer
+			, sdw::Vec2 const & uv )const
+		{
+			return mix( uv
+				, vec2( uv.x(), 1.0_f - uv.y() )
+				, vec2( writer.cast< sdw::Float >( needsYInversion ) ) );
+		}
+
+		sdw::Vec3 TextureConfigData::convertUVW( sdw::ShaderWriter & writer
+			, sdw::Vec3 const & uvw )const
+		{
+			return mix( uvw
+				, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() )
+				, vec3( writer.cast< sdw::Float >( needsYInversion ) ) );
 		}
 
 		//*********************************************************************************************

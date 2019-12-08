@@ -229,7 +229,7 @@ namespace castor3d
 					auto config = writer.declLocale( "config" + name
 						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], texCoords.xy() ) );
+						, texture( maps[i], config.convertUV( writer, texCoords.xy() ) ) );
 
 					if ( checkFlag( flags.textures, TextureFlag::eAlbedo ) )
 					{

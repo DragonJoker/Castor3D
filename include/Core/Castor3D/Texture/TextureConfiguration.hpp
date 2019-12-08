@@ -62,6 +62,7 @@ namespace castor3d
 		float normalGMultiplier{ 1.0f };
 		uint32_t environment{ 0u };
 		uint32_t needsGammaCorrection{ 0u };
+		uint32_t needsYInversion{ 0u };
 		/**@}*/
 		/**
 		*\~english

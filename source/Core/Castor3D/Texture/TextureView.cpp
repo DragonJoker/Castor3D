@@ -464,6 +464,7 @@ namespace castor3d
 			};
 			viewInfo->subresourceRange.baseMipLevel = 0u;
 			viewInfo->subresourceRange.levelCount = 1u;
+			m_needsYInversion = false;
 
 			for ( auto & buffer : m_source->getBuffers() )
 			{
@@ -473,6 +474,7 @@ namespace castor3d
 					, m_source->getPixelFormat()
 					, buffer->getConstPtr()
 					, view );
+				m_needsYInversion = m_needsYInversion || buffer->isFlipped();
 				viewInfo->subresourceRange.baseMipLevel++;
 			}
 

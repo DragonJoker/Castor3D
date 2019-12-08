@@ -123,6 +123,12 @@ namespace castor3d
 			return *m_texture;
 		}
 
+		inline bool needsYInversion()const
+		{
+			CU_Require( m_defaultView && m_texture );
+			return m_defaultView->needsYInversion();
+		}
+
 		inline TextureView const & getView( size_t index = 0u )const
 		{
 			return getImage( index );

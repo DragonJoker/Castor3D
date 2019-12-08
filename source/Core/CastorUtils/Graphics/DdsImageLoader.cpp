@@ -824,6 +824,7 @@ namespace castor
 
 				std::memcpy( ptr, data, byteCount );
 				data += byteCount;
+				buffer->flip();
 			}
 
 			if ( width > 1 )

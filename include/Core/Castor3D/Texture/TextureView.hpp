@@ -216,10 +216,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises the view.
-		 *\return		\p true if OK.
+		 *\return		\p true if inverted.
 		 *\~french
 		 *\brief		Initialise la vue.
-		 *\return		\p true si tout s'est bien passé.
+		 *\return		\p true si la vue est inversée.
 		 */
 		C3D_API bool initialise();
 		/**
@@ -322,6 +322,11 @@ namespace castor3d
 			return m_needsMipmapsGeneration;
 		}
 
+		inline bool needsYInversion()const
+		{
+			return m_needsYInversion;
+		}
+
 		inline ashes::ImageView const & getView()const
 		{
 			return m_view;
@@ -337,6 +342,7 @@ namespace castor3d
 		std::unique_ptr< TextureSource > m_source;
 		ashes::ImageView m_view;
 		bool m_needsMipmapsGeneration{ true };
+		bool m_needsYInversion{ false };
 	};
 }
 

@@ -108,7 +108,8 @@ namespace castor3d
 			&& lhs.normalFactor == rhs.normalFactor
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
-			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection;
+			&& lhs.needsGammaCorrection == rhs.needsGammaCorrection
+			&& lhs.needsYInversion == rhs.needsYInversion;
 	}
 
 	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )

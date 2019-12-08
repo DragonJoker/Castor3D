@@ -92,20 +92,27 @@ namespace castor
 
 	void PxBufferBase::flip()
 	{
-		uint32_t fheight = getHeight();
-		uint32_t fwidth = getSize() / fheight;
-		uint32_t hheight = fheight / 2;
-		uint8_t * bufferTop = &m_buffer[0];
-		uint8_t * bufferBot = &m_buffer[( fheight - 1 ) * fwidth];
-		std::vector< uint8_t > buffer( fwidth );
-
-		for ( uint32_t i = 0; i < hheight; i++ )
+		if ( !PF::isCompressed( m_pixelFormat ) )
 		{
-			std::memcpy( buffer.data(), bufferTop, fwidth );
-			std::memcpy( bufferTop, bufferBot, fwidth );
-			std::memcpy( bufferBot, buffer.data(), fwidth );
-			bufferTop += fwidth;
-			bufferBot -= fwidth;
+			uint32_t fullHeight = getHeight();
+			uint32_t linePitch = getSize() / fullHeight;
+			uint32_t halfHeight = fullHeight / 2;
+			uint8_t * bufferTop = &m_buffer[0];
+			uint8_t * bufferBot = &m_buffer[( fullHeight - 1 ) * linePitch];
+			std::vector< uint8_t > buffer( linePitch );
+
+			for ( uint32_t i = 0; i < halfHeight; i++ )
+			{
+				std::memcpy( buffer.data(), bufferTop, linePitch );
+				std::memcpy( bufferTop, bufferBot, linePitch );
+				std::memcpy( bufferBot, buffer.data(), linePitch );
+				bufferTop += linePitch;
+				bufferBot -= linePitch;
+			}
+		}
+		else
+		{
+			m_flipped = !m_flipped;
 		}
 	}
 

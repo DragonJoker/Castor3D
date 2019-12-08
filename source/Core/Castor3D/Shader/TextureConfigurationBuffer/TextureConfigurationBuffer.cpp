@@ -173,7 +173,9 @@ namespace castor3d
 					m_data.trnsDumm[index] = writeFlags( config.transmittanceMask, {} );
 					m_data.normalFc[index] = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					m_data.heightFc[index] = writeFlags( config.heightMask, config.heightFactor );
-					m_data.miscVals[index] = writeFlags( float( config.environment ), float( config.needsGammaCorrection ) );
+					m_data.miscVals[index] = writeFlags( float( config.environment )
+						, float( config.needsGammaCorrection )
+						, float( config.needsYInversion ) );
 
 #else
 
@@ -184,7 +186,9 @@ namespace castor3d
 					data.trnsDumm = writeFlags( config.transmittanceMask, {} );
 					data.normalFc = writeFlags( config.normalMask, config.normalFactor, config.normalGMultiplier );
 					data.heightFc = writeFlags( config.heightMask, config.heightFactor );
-					data.miscVals = writeFlags( float( config.environment ), float( config.needsGammaCorrection ) );
+					data.miscVals = writeFlags( float( config.environment )
+						, float( config.needsGammaCorrection )
+						, float( config.needsYInversion ) );
 
 #endif
 				} );

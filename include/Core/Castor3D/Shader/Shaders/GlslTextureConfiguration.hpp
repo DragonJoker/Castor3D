@@ -75,6 +75,10 @@ namespace castor3d
 			C3D_API sdw::Float getTransmittance( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Float const & transmittance )const;
+			C3D_API sdw::Vec2 convertUV( sdw::ShaderWriter & writer
+				, sdw::Vec2 const & uv )const;
+			C3D_API sdw::Vec3 convertUVW( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & uvw )const;
 
 		private:
 			sdw::Float getMix( sdw::ShaderWriter & writer
@@ -121,6 +125,7 @@ namespace castor3d
 			sdw::Vec2 transmittanceMask;
 			sdw::UInt environment;
 			sdw::UInt needsGammaCorrection;
+			sdw::UInt needsYInversion;
 		};
 
 		class TextureConfigurations

@@ -162,6 +162,12 @@ namespace castor
 		CU_API virtual uint8_t * getPtr() = 0;
 		CU_API virtual pixel_data getAt( uint32_t x, uint32_t y ) = 0;
 		CU_API virtual const_pixel_data getAt( uint32_t x, uint32_t y )const = 0;
+
+		inline bool isFlipped()const
+		{
+			return m_flipped;
+		}
+		
 		inline PixelFormat getFormat()const
 		{
 			return m_pixelFormat;
@@ -220,6 +226,7 @@ namespace castor
 
 	private:
 		PixelFormat m_pixelFormat;
+		bool m_flipped{ false };
 
 	protected:
 		//!\~english	Buffer dimensions.

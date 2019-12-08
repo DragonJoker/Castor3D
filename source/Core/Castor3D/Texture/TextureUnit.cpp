@@ -27,7 +27,7 @@ namespace castor3d
 			{
 				for ( uint32_t i = 0u; i < 4u; ++i )
 				{
-					if ( ( mask[0] >> ( i * 8u ) ) & 0x01 )
+					if ( mask[0] & ( 0x000000FFu << ( i * 8u ) ) )
 					{
 						mask[1] = i;
 						i = 4u;
@@ -342,6 +342,7 @@ namespace castor3d
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
 		m_configuration = std::move( value );
+		m_configuration.needsYInversion = m_texture->needsYInversion() ? 1u : 0u;
 		doUpdateShift( m_configuration.colourMask );
 		doUpdateShift( m_configuration.specularMask );
 		doUpdateShift( m_configuration.glossinessMask );

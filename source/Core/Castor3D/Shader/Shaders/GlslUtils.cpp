@@ -1098,7 +1098,7 @@ namespace castor3d
 					auto config = m_writer.declLocale( "config" + name
 						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = m_writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], texCoords.xy() ) );
+						, texture( maps[i], config.convertUV( m_writer, texCoords.xy() ) ) );
 						opacity = config.getOpacity( m_writer, sampled, opacity );
 				}
 			}
@@ -1119,7 +1119,7 @@ namespace castor3d
 			{
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
 					, textureConfigs.getTextureConfiguration( textureConfig[flags.heightMapIndex / 4u][flags.heightMapIndex % 4u] ) );
-				texCoords.xy() = m_parallaxMapping( texCoords.xy()
+				texCoords.xy() = m_parallaxMapping( heightMapConfig.convertUV( m_writer, texCoords.xy() )
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[flags.heightMapIndex]
 					, heightMapConfig );
