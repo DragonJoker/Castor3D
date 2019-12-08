@@ -24,7 +24,10 @@ namespace castor
 	public:
 		//!\~english	Path separator (OS dependant).
 		//!\~french		Séparateur de chemin (dépendant de l'OS)
-		static const xchar Separator;
+		static const xchar NativeSeparator;
+		//!\~english	Path separator (OS independant).
+		//!\~french		Séparateur de chemin (indépendant de l'OS)
+		static const xchar GenericSeparator;
 
 	public:
 		CU_API Path();
@@ -205,6 +208,13 @@ namespace castor
 		 *\return		L'extension
 		 */
 		CU_API String getExtension()const;
+		/**
+		 *\~english
+		 *\return		The file path, with generic /.
+		 *\~french
+		 *\return		Le chemin, avec des / génériques.
+		 */
+		CU_API String toGeneric()const;
 
 	private:
 		void doNormalise();

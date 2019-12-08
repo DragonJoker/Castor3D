@@ -4,10 +4,11 @@
 
 namespace castor
 {
+	const xchar Path::GenericSeparator = cuT( '/' );
 #if defined( CU_PlatformWindows )
-	const xchar Path::Separator = cuT( '\\' );
+	const xchar Path::NativeSeparator = cuT( '\\' );
 #else
-	const xchar Path::Separator = cuT( '/' );
+	const xchar Path::NativeSeparator = cuT( '/' );
 #endif
 
 	Path::Path()
@@ -58,7 +59,7 @@ namespace castor
 
 	Path & Path::operator/=( Path const & p_path )
 	{
-		push_back( Separator );
+		push_back( NativeSeparator );
 		append( p_path );
 		doNormalise();
 		return *this;
@@ -66,7 +67,7 @@ namespace castor
 
 	Path & Path::operator/=( String const & p_string )
 	{
-		push_back( Separator );
+		push_back( NativeSeparator );
 		append( p_string );
 		doNormalise();
 		return *this;
@@ -74,7 +75,7 @@ namespace castor
 
 	Path & Path::operator/=( char const * p_buffer )
 	{
-		push_back( Separator );
+		push_back( NativeSeparator );
 		String::operator+=( string::stringCast< xchar >( p_buffer ) );
 		doNormalise();
 		return *this;
@@ -82,7 +83,7 @@ namespace castor
 
 	Path & Path::operator/=( wchar_t const * p_buffer )
 	{
-		push_back( Separator );
+		push_back( NativeSeparator );
 		String::operator+=( string::stringCast< xchar >( p_buffer ) );
 		doNormalise();
 		return *this;
@@ -118,7 +119,7 @@ namespace castor
 	Path Path::getPath()const
 	{
 		Path result;
-		std::size_t index = find_last_of( Separator );
+		std::size_t index = find_last_of( NativeSeparator );
 
 		if ( index != String::npos )
 		{
@@ -131,7 +132,7 @@ namespace castor
 	Path Path::getFileName( bool p_withExtension )const
 	{
 		Path result = ( * this );
-		std::size_t index = find_last_of( Separator );
+		std::size_t index = find_last_of( NativeSeparator );
 
 		if ( index != String::npos )
 		{
@@ -154,7 +155,7 @@ namespace castor
 	Path Path::getFullFileName()const
 	{
 		Path result = ( * this );
-		std::size_t index = find_last_of( Separator );
+		std::size_t index = find_last_of( NativeSeparator );
 
 		if ( index != String::npos )
 		{
@@ -185,6 +186,17 @@ namespace castor
 		return result;
 	}
 
+	String Path::toGeneric()const
+	{
+#if defined( CU_PlatformWindows )
+		String copy{ *this };
+		string::replace( copy, NativeSeparator, GenericSeparator );
+		return copy;
+#else
+		return *this;
+#endif
+	}
+
 	void Path::doNormalise()
 	{
 		if ( !empty() )
@@ -208,14 +220,14 @@ namespace castor
 				assign( substr( 1 ) );
 			}
 
-			xchar sep[3] = { Separator, 0 };
+			xchar sep[3] = { NativeSeparator, 0 };
 			String tmp( *this );
 			string::replace( tmp, cuT( "/" ), sep );
 			string::replace( tmp, cuT( "\\" ), sep );
 
-			if ( this->at( this->size() - 1 ) == Separator )
+			if ( this->at( this->size() - 1 ) == NativeSeparator )
 			{
-				end = Separator;
+				end = NativeSeparator;
 			}
 
 			StringArray folders = string::split( tmp, sep, 1000, false );
@@ -247,7 +259,7 @@ namespace castor
 			{
 				if ( !tmp.empty() )
 				{
-					tmp += Separator;
+					tmp += NativeSeparator;
 				}
 
 				tmp += folder;

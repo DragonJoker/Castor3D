@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEXT_WRITER_H___
 #define ___CASTOR_TEXT_WRITER_H___
 
-#include "CastorUtils/Data/Writer.hpp"
-#include "CastorUtils/Data/TextFile.hpp"
 #include "CastorUtils/Log/Logger.hpp"
+#include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Data/TextFile.hpp"
+#include "CastorUtils/Data/Writer.hpp"
+
+#include <iomanip>
 
 namespace castor
 {
@@ -33,8 +36,10 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit TextWriter( String const & tabs )
-			: m_tabs{ tabs }
+		explicit TextWriter( String tabs
+			, String const & name = String{} )
+			: m_tabs{ std::move( tabs ) }
+			, m_name{ name.empty() ? name : name + " - " }
 		{
 		}
 		/**
@@ -76,18 +81,220 @@ namespace castor
 		 *\~french
 		 *\brief		Rapporte une erreur éventuelle.
 		 */
-		static inline void checkError( bool error, char const * const action )
+		inline void checkError( bool error, char const * const action )const
 		{
 			if ( !error )
 			{
-				Logger::logError( std::stringstream{} << action << " writing failed." );
+				Logger::logError( makeStringStream() << m_name << action << " writing failed." );
 			}
+		}
+
+		inline bool writeFooter( TextFile & file )const
+		{
+			result = file.writeText( cuT( "\n" ) + m_tabs + name + cuT( "\n" ) ) > 0
+				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
+			checkError( result, "footer" );
+		}
+
+		inline bool writeFooter( String const & name, TextFile & file )const
+		{
+			result = file.writeText( m_tabs + cuT( "} // name\n" ) ) > 0;
+			checkError( result, "footer " + name );
+		}
+
+		struct WriterBlock
+		{
+			WriterBlock( TextWriter const * writer
+				, String const & blockName
+				, String const & objectName
+				, TextFile & file )
+				: writer{ writer }
+				, name{ ( ( !blockName.empty() && !objectName.empty() )
+					? blockName + cuT( " \"" ) + objectName + cuT( "\"" )
+					: ( !blockName.empty()
+						? blockName
+						: String{} ) ) }
+				, file{ file }
+			{
+				result = ( !name.empty()
+						? file.writeText( cuT( "\n" ) + writer->m_tabs + name + cuT( "\n" ) )
+						: 1ull ) > 0
+					&& file.writeText( writer->m_tabs + cuT( "{\n" ) ) > 0;
+				writer->checkError( result, ( "header " + name ).c_str() );
+			}
+
+			WriterBlock( TextWriter const * writer
+				, String const & blockName
+				, TextFile & file )
+				: WriterBlock{ writer, blockName, {}, file }
+			{
+			}
+
+			WriterBlock( TextWriter const * writer
+				, TextFile & file )
+				: WriterBlock{ writer, {}, {}, file }
+			{
+			}
+
+			WriterBlock( WriterBlock && rhs )
+				: writer{ rhs.writer }
+				, name{ rhs.name }
+				, file{ rhs.file }
+				, result{ rhs.result }
+			{
+				rhs.writer = nullptr;
+			}
+
+			WriterBlock & operator=( WriterBlock && rhs )
+			{
+				writer = rhs.writer;
+				name = rhs.name;
+				file = rhs.file;
+				result = rhs.result;
+				rhs.writer = nullptr;
+			}
+
+			WriterBlock( WriterBlock const & rhs ) = delete;
+			WriterBlock & operator=( WriterBlock const & rhs ) = delete;
+
+			operator bool()const
+			{
+				return result;
+			}
+
+			~WriterBlock()
+			{
+				if ( writer )
+				{
+					auto result = file.writeText( writer->m_tabs + cuT( "} // " ) + name + cuT( "\n" ) ) > 0;
+					writer->checkError( result, ( "footer " + name ).c_str() );
+				}
+			}
+
+			TextWriter const * writer;
+			String name;
+			TextFile & file;
+			bool result;
+		};
+
+		inline WriterBlock writeHeader( String const & name, TextFile & file )const
+		{
+			return WriterBlock
+			{
+				this,
+				name,
+				file,
+			};
+		}
+
+		inline bool writeMask( String const & name, uint32_t mask, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, float value, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << value;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, uint32_t value, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << value;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, int32_t value, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << value;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, uint64_t value, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << value;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, int64_t value, TextFile & file )const
+		{
+			auto stream = makeStringStream();
+			stream << value;
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " " ) + stream.str() + cuT( "\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool write( String const & name, bool value, TextFile & file )const
+		{
+			if ( value )
+			{
+				auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " true\n" ) ) > 0;
+				checkError( result, name.c_str() );
+				return result;
+			}
+
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " false\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool writeOpt( String const & name, bool value, TextFile & file )const
+		{
+			bool result{ !value };
+
+			if ( !result )
+			{
+				result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " true\n" ) ) > 0;
+				checkError( result, name.c_str() );
+			}
+
+			return result;
+		}
+
+		inline bool writeName( String const & name, String const & value, TextFile & file )const
+		{
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " \"" ) + value + cuT( "\"\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool writeFile( String const & name, Path const & value, TextFile & file )const
+		{
+			auto result = file.writeText( m_tabs + cuT( "\t" ) + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) ) > 0;
+			checkError( result, name.c_str() );
+			return result;
+		}
+
+		inline bool writeFile( String const & name, Path const & value, String const & subfolder, TextFile & file )const
+		{
+			Path relative{ copyFile( Path{ value }, file.getFilePath(), Path{ subfolder } ) };
+			return writeFile( name, relative, file );
 		}
 
 	protected:
 		//!\~english	The current indentation.
 		//!\~french		L'indentation courante.
 		String m_tabs;
+
+	private:
+		String m_name;
 	};
 }
 

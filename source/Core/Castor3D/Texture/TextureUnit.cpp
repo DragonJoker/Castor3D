@@ -38,7 +38,7 @@ namespace castor3d
 	}
 
 	TextureUnit::TextWriter::TextWriter( String const & tabs, MaterialType type )
-		: castor::TextWriter< TextureUnit >{ tabs }
+		: castor::TextWriter< TextureUnit >{ tabs, "TextureUnit" }
 		, m_type{ type }
 	{
 	}
@@ -56,168 +56,44 @@ namespace castor3d
 			{
 				if ( result )
 				{
-					result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-				}
-
-				if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
-				{
-					result = file.writeText( m_tabs + cuT( "\tsampler \"" ) + unit.getSampler()->getName() + cuT( "\"\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit sampler" );
-				}
-
-				if ( result && unit.getTexture()->getMipmapCount() > 1 )
-				{
-					result = file.writeText( m_tabs + cuT( "\tlevels_count " ) + string::toString( unit.getTexture()->getMipmapCount(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit mip level count" );
-				}
-
-				if ( result  )
-				{
-					if ( !texture->getDefaultImage().isStaticSource() )
+					if ( auto block = writeHeader( cuT( "texture_unit" ), file ) )
 					{
-						if ( unit.getRenderTarget() )
+						if ( result && unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 						{
-							result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
+							result = writeName( cuT( "sampler" ), unit.getSampler()->getName(), file );
+						}
+
+						if ( result && unit.getTexture()->getMipmapCount() > 1 )
+						{
+							result = write( cuT( "levels_count" ), unit.getTexture()->getMipmapCount(), file );
+						}
+
+						if ( result )
+						{
+							if ( !texture->getDefaultImage().isStaticSource() )
+							{
+								if ( unit.getRenderTarget() )
+								{
+									result = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *unit.getRenderTarget(), file );
+									checkError( result, "render_target" );
+								}
+								else
+								{
+									// Procedurally generated textures, certainly will go here
+								}
+							}
+							else
+							{
+								result = writeFile( cuT( "image" ), Path{ image }, cuT( "Textures" ), file );
+							}
+						}
+
+						if ( result )
+						{
+							result = TextureConfiguration::TextWriter{ m_tabs, m_type }( unit.getConfiguration(), file );
+							checkError( result, "configuration" );
 						}
 					}
-					else
-					{
-						Path relative{ Scene::TextWriter::copyFile( Path{ image }, file.getFilePath(), Path{ cuT( "Textures" ) } ) };
-						String path = relative;
-						string::replace( path, cuT( "\\" ), cuT( "/" ) );
-						result = file.writeText( m_tabs + cuT( "\timage \"" ) + path + cuT( "\"\n" ) ) > 0;
-						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit image" );
-					}
-				}
-
-				auto configuration = unit.getConfiguration();
-
-				if ( result && configuration.colourMask[0] )
-				{
-					switch ( m_type )
-					{
-					case MaterialType::ePhong:
-						result = file.writeText( m_tabs + cuT( "\tdiffuse_mask " ) + writeMask( configuration.colourMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					case MaterialType::eMetallicRoughness:
-					case MaterialType::eSpecularGlossiness:
-						result = file.writeText( m_tabs + cuT( "\talbedo_mask " ) + writeMask( configuration.colourMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					default:
-						break;
-					}
-
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit diffuse/albedo mask" );
-				}
-
-				if ( result && configuration.specularMask[0] )
-				{
-					switch ( m_type )
-					{
-					case MaterialType::ePhong:
-					case MaterialType::eSpecularGlossiness:
-						result = file.writeText( m_tabs + cuT( "\tspecular_mask " ) + writeMask( configuration.specularMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					case MaterialType::eMetallicRoughness:
-						result = file.writeText( m_tabs + cuT( "\tmetalness_mask " ) + writeMask( configuration.specularMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					default:
-						break;
-					}
-
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit specular/metalness mask" );
-				}
-
-				if ( result && configuration.glossinessMask[0] )
-				{
-					switch ( m_type )
-					{
-					case MaterialType::ePhong:
-						result = file.writeText( m_tabs + cuT( "\tshininess_mask " ) + writeMask( configuration.glossinessMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					case MaterialType::eMetallicRoughness:
-						result = file.writeText( m_tabs + cuT( "\troughness_mask " ) + writeMask( configuration.glossinessMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					case MaterialType::eSpecularGlossiness:
-						result = file.writeText( m_tabs + cuT( "\tglossiness_mask " ) + writeMask( configuration.glossinessMask[0] ) + cuT( "\n" ) ) > 0;
-						break;
-					default:
-						break;
-					}
-
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit gloss mask" );
-				}
-
-				if ( result && configuration.opacityMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\topacity_mask " ) + writeMask( configuration.opacityMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit opacity mask" );
-				}
-
-				if ( result && configuration.emissiveMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\temissive_mask " ) + writeMask( configuration.emissiveMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit emissive mask" );
-				}
-
-				if ( result && configuration.normalMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\tnormal_mask " ) + writeMask( configuration.normalMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit normal mask" );
-
-					if ( result && configuration.normalFactor != 1.0f )
-					{
-						result = file.writeText( m_tabs + cuT( "\tnormal_factor " ) + string::toString( configuration.normalFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit normal factor" );
-					}
-
-					if ( result && configuration.normalGMultiplier != 1.0f )
-					{
-						result = file.writeText( m_tabs + cuT( "\tnormal_directx true\n" ) ) > 0;
-						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit DirectX normal" );
-					}
-				}
-
-				if ( result && configuration.heightMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\theight_mask " ) + writeMask( configuration.heightMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit height mask" );
-
-					if ( result && configuration.heightFactor != 1.0f )
-					{
-						result = file.writeText( m_tabs + cuT( "\theight_factor " ) + string::toString( configuration.heightFactor, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-						castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit height factor" );
-					}
-				}
-
-				if ( result && configuration.occlusionMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\tocclusion_mask " ) + writeMask( configuration.occlusionMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit occlusion mask" );
-				}
-
-				if ( result && configuration.transmittanceMask[0] )
-				{
-					result = file.writeText( m_tabs + cuT( "\ttransmittance_mask " ) + writeMask( configuration.transmittanceMask[0] ) + cuT( "\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit transmittance mask" );
-				}
-
-				if ( result && checkFlag( configuration.environment, TextureConfiguration::ReflectionMask ) )
-				{
-					result = file.writeText( m_tabs + cuT( "\treflection true\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit reflection" );
-				}
-
-				if ( result && checkFlag( configuration.environment, TextureConfiguration::RefractionMask ) )
-				{
-					result = file.writeText( m_tabs + cuT( "\trefraction true\n" ) ) > 0;
-					castor::TextWriter< TextureUnit >::checkError( result, "TextureUnit refraction" );
-				}
-
-				if ( result )
-				{
-					result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
 				}
 			}
 		}

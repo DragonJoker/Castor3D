@@ -19,6 +19,43 @@ namespace castor3d
 	*/
 	struct TextureConfiguration
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		TextureConfiguration loader.
+		\~french
+		\brief		Loader de TextureConfiguration.
+		*/
+		class TextWriter
+			: public castor::TextWriter< TextureConfiguration >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\~french
+			 *\brief		Constructeur.
+			 */
+			C3D_API explicit TextWriter( castor::String const & tabs
+				, MaterialType type );
+			/**
+			 *\~english
+			 *\brief		Writes a TextureConfiguration into a text file.
+			 *\param[in]	file	The file.
+			 *\param[in]	object	The TextureConfiguration.
+			 *\~french
+			 *\brief		Ecrit une TextureConfiguration dans un fichier texte.
+			 *\param[in]	file	Le fichier.
+			 *\param[in]	object	La TextureConfiguration.
+			 */
+			C3D_API bool operator()( TextureConfiguration const & object, castor::TextFile & file )override;
+
+		private:
+			MaterialType m_type;
+		};
+
 		/**
 		*\~english
 		*name
