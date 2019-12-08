@@ -236,7 +236,7 @@ namespace GuiCommon
 
 		if ( parent != m_scene.getObjectRootNode() )
 		{
-			auto scale = ( bb.getMax() - bb.getMin() ) / 2.0_r;
+			auto scale = ( bb.getMax() - bb.getMin() ) / 2.0f;
 			node->setScale( scale );
 			node->setPosition( bb.getCenter() );
 			node->setVisible( true );
@@ -268,13 +268,13 @@ namespace GuiCommon
 	void CubeBoxManager::onSceneUpdate( castor3d::Scene const & scene )
 	{
 		auto & obb = m_object->getBoundingBox();
-		auto scale = obb.getDimensions() / 2.0_r;
+		auto scale = obb.getDimensions() / 2.0f;
 		m_obbNode->setScale( scale );
 		m_obbNode->setPosition( obb.getCenter() );
 		m_obbNode->update();
 		uint32_t i = 0u;
 		auto & sobb = m_object->getBoundingBox( *m_submesh );
-		m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0_r );
+		m_obbSelectedSubmeshNode->setScale( sobb.getDimensions() / 2.0f );
 		m_obbSelectedSubmeshNode->setPosition( sobb.getCenter() );
 		m_obbSelectedSubmeshNode->update();
 
@@ -283,7 +283,7 @@ namespace GuiCommon
 			if ( submesh.get() != m_submesh )
 			{
 				auto & sobb = m_object->getBoundingBox( *submesh );
-				m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0_r );
+				m_obbSubmeshNodes[i]->setScale( sobb.getDimensions() / 2.0f );
 				m_obbSubmeshNodes[i]->setPosition( sobb.getCenter() );
 				m_obbSubmeshNodes[i]->update();
 				++i;

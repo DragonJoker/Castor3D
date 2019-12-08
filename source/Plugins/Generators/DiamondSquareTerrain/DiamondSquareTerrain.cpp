@@ -193,7 +193,7 @@ namespace diamond_square_terrain
 			{
 				for ( auto x = 1u; x < max; x++ )
 				{
-					submesh->addPoint( real( x ), map( x, y ), real( y ) );
+					submesh->addPoint( float( x ), map( x, y ), float( y ) );
 				}
 			}
 

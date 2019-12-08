@@ -59,10 +59,10 @@ namespace castortd
 		{
 			String name = cuT( "EnemyCube_" ) + std::to_string( m_totalSpawned );
 			auto baseNode = p_game.getScene().getSceneNodeCache().add( name + cuT( "_Base" ) );
-			baseNode->setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + Point3r{ 0, p_game.getCellHeight(), 0 } );
+			baseNode->setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 } );
 			baseNode->attachTo( p_game.getMapNode() );
 			auto node = p_game.getScene().getSceneNodeCache().add( name );
-			node->setOrientation( Quaternion::fromAxisAngle( Point3r{ 1, 0, 1 }, 45.0_degrees ) );
+			node->setOrientation( Quaternion::fromAxisAngle( castor::Point3f{ 1, 0, 1 }, 45.0_degrees ) );
 			node->attachTo( baseNode );
 			auto geometry = p_game.getScene().getGeometryCache().add( name, node, p_game.getEnemyMesh() );
 
@@ -81,7 +81,7 @@ namespace castortd
 		{
 			result = m_enemiesCache.front();
 			m_enemiesCache.erase( m_enemiesCache.begin() );
-			result->getNode().setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + Point3r{ 0, p_game.getCellHeight(), 0 } );
+			result->getNode().setPosition( p_game.convert( Point2i{ cell.m_x, cell.m_y - 1 } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 } );
 			result->load( p_game );
 		}
 
@@ -90,7 +90,7 @@ namespace castortd
 
 	void EnemySpawner::KillEnemy( Game & p_game, EnemyPtr && p_enemy )
 	{
-		p_enemy->getNode().setPosition( Point3r{ 0, -1000, 0 } );
+		p_enemy->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
 		m_enemiesCache.push_back( std::move( p_enemy ) );
 	}
 }

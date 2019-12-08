@@ -13,7 +13,7 @@ namespace castortd
 	//*********************************************************************************************
 	
 	//// Nearest enemy
-	//EnemyArray doSortNearest( EnemyArray const & p_enemies, Point3r const & p_position )
+	//EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
 	//{
 	//	EnemyArray result{ p_enemies };
 	//	std::sort( std::begin( result )
@@ -27,7 +27,7 @@ namespace castortd
 	//}
 
 	// First enemy
-	EnemyArray doSortFirst( EnemyArray const & p_enemies, Point3r const & p_position )
+	EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
 	{
 		return p_enemies;
 	}
@@ -185,7 +185,7 @@ namespace castortd
 		targetPosition[1] = m_node.getPosition()[1];
 		auto direction = targetPosition - m_node.getDerivedPosition();
 		direction = point::getNormalised( direction );
-		Point3r up{ 0, 1, 0 };
+		castor::Point3f up{ 0, 1, 0 };
 		auto right = point::cross( direction, up );
 		auto transform = matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
 		m_node.setOrientation( Quaternion::fromMatrix( transform ) );

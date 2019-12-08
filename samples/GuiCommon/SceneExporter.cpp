@@ -337,9 +337,9 @@ namespace GuiCommon
 				StringStream strF( makeStringStream() );
 				ashes::Buffer< uint32_t > & idxBuffer = submesh->getIndexBuffer();
 				auto stride = uint32_t( sizeof( InterleavedVertex ) );
-				Point3r ptPos;
-				Point3r ptNml;
-				Point3r ptTex;
+				castor::Point3f ptPos;
+				castor::Point3f ptNml;
+				castor::Point3f ptTex;
 
 				for ( auto & point : submesh->getPoints() )
 				{

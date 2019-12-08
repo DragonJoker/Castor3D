@@ -34,9 +34,9 @@ namespace castortd
 		if ( m_target.get().IsAlive() )
 		{
 			auto speed = p_game.getElapsed().count() * m_speed / 1000;
-			Point3r result = m_target.get().getNode().getPosition();
-			Point3r position{ m_node.get().getPosition() };
-			Point3r direction{ result - position };
+			castor::Point3f result = m_target.get().getNode().getPosition();
+			castor::Point3f position{ m_node.get().getPosition() };
+			castor::Point3f direction{ result - position };
 			auto distanceToDst = point::length( direction );
 			direction[0] *= speed / distanceToDst;
 			direction[2] *= speed / distanceToDst;
@@ -55,7 +55,7 @@ namespace castortd
 
 		if ( reachDst )
 		{
-			m_node.get().setPosition( Point3r{ 0, -10, 0 } );
+			m_node.get().setPosition( castor::Point3f{ 0, -10, 0 } );
 		}
 
 		return reachDst;

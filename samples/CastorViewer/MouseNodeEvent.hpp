@@ -15,14 +15,14 @@ namespace CastorViewer
 		: public castor3d::FrameEvent
 	{
 	public:
-		MouseNodeEvent( castor3d::SceneNodeSPtr p_node, castor::real p_dx, castor::real p_dy, castor::real p_dz );
+		MouseNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );
 		virtual ~MouseNodeEvent();
 
 	protected:
 		castor3d::SceneNodeWPtr m_node;
-		castor::real m_dx;
-		castor::real m_dy;
-		castor::real m_dz;
+		float m_dx;
+		float m_dy;
+		float m_dz;
 	};
 }
 

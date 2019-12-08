@@ -44,7 +44,7 @@ namespace Loop
 		 *\param[in]	value	Percentage of the segment [m_firstVertex,m_secondVertex].
 		 *\return	The created point.
 		 */
-		VertexSPtr divide( Subdivider * divider, castor::real value );
+		VertexSPtr divide( Subdivider * divider, float value );
 
 	public:
 		/**@name Accessors */

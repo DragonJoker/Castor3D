@@ -45,21 +45,21 @@ namespace Loop
 		m_vertices.clear();
 	}
 
-	VertexSPtr Subdivider::addPoint( real x, real y, real z )
+	VertexSPtr Subdivider::addPoint( float x, float y, float z )
 	{
 		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( x, y, z ) );
 		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
-	VertexSPtr Subdivider::addPoint( Point3r const & v )
+	VertexSPtr Subdivider::addPoint( castor::Point3f const & v )
 	{
 		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
 		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
-	VertexSPtr Subdivider::addPoint( real * v )
+	VertexSPtr Subdivider::addPoint( float * v )
 	{
 		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
 		m_vertices.emplace( result->getIndex(), result );
@@ -113,11 +113,11 @@ namespace Loop
 
 	void Subdivider::doAverage()
 	{
-		std::map< uint32_t, Point3r > positions;
+		std::map< uint32_t, castor::Point3f > positions;
 
 		for ( auto & it : m_vertices )
 		{
-			Point3r point = it.second->getPoint().pos;
+			castor::Point3f point = it.second->getPoint().pos;
 			positions.emplace( it.first, point );
 		}
 
@@ -125,8 +125,8 @@ namespace Loop
 		{
 			VertexSPtr vertex = it.second;
 			uint32_t nbEdges = vertex->size();
-			Point3r & position = vertex->getPoint().pos;
-			real alpha = real( getAlpha( nbEdges ) );
+			castor::Point3f & position = vertex->getPoint().pos;
+			float alpha = float( getAlpha( nbEdges ) );
 			position *= alpha;
 
 			for ( auto & itI : *vertex )
@@ -139,7 +139,7 @@ namespace Loop
 
 		for ( auto & face : m_arrayFaces )
 		{
-			Coords3r dump;
+			castor::Coords3f dump;
 			m_submesh->getPoint( face[0] ).pos = m_vertices[face[0]]->getPoint().pos;
 			m_submesh->getPoint( face[1] ).pos = m_vertices[face[1]]->getPoint().pos;
 			m_submesh->getPoint( face[2] ).pos = m_vertices[face[2]]->getPoint().pos;

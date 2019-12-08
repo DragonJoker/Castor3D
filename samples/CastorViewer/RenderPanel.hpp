@@ -79,10 +79,10 @@ namespace CastorViewer
 		void doTurnCameraVertic();
 		void doChangeCamera();
 		void doReloadScene();
-		castor::real doTransformX( int x );
-		castor::real doTransformY( int y );
-		int doTransformX( castor::real x );
-		int doTransformY( castor::real y );
+		float doTransformX( int x );
+		float doTransformY( int y );
+		int doTransformX( float x );
+		int doTransformY( float y );
 		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
 			, castor3d::SubmeshSPtr submesh );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeSPtr node
@@ -120,10 +120,10 @@ namespace CastorViewer
 		void OnMenuClose( wxCommandEvent & event );
 
 	public:
-		castor::real m_x{ 0.0_r };
-		castor::real m_y{ 0.0_r };
-		castor::real m_oldX{ 0.0_r };
-		castor::real m_oldY{ 0.0_r };
+		float m_x{ 0.0f };
+		float m_y{ 0.0f };
+		float m_oldX{ 0.0f };
+		float m_oldY{ 0.0f };
 		bool m_altdown{ false };
 		bool m_mouseLeftDown{ false };
 		bool m_mouseRightDown{ false };
@@ -142,7 +142,7 @@ namespace CastorViewer
 		castor3d::SceneNodeSPtr m_lightsNode;
 		castor3d::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;
-		castor::RangedValue< castor::real > m_camSpeed;
+		castor::RangedValue< float > m_camSpeed;
 		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager;
 
 		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates;

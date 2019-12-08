@@ -48,7 +48,7 @@ namespace Loop
 		 *\param[in,out]	vertices	The vertices map, by index.
 		 *\param[in,out]	newFaces	The array of newly created faces. All faces created by the subdivision are put inside it.
 		 */
-		void divide( castor::real value
+		void divide( float value
 			, VertexPtrUIntMap & vertices
 			, FaceEdgesPtrArray & newFaces );
 

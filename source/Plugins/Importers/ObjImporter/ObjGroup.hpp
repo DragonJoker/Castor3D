@@ -10,19 +10,19 @@ namespace Obj
 {
 	struct stNORMAL
 	{
-		castor3d::real m_val[3];
+		float m_val[3];
 	};
 	struct stVERTEX
 	{
-		castor3d::real m_val[3];
+		float m_val[3];
 	};
 	struct stUV
 	{
-		castor3d::real m_val[2];
+		float m_val[2];
 	};
 	struct stUVW
 	{
-		castor3d::real m_val[3];
+		float m_val[3];
 	};
 	struct stGROUP
 	{

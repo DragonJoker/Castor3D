@@ -65,11 +65,11 @@ namespace GuiCommon
 		{
 			if ( property->GetName() == PROPERTY_NODE_POSITION )
 			{
-				OnPositionChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
+				OnPositionChange( PointRefFromVariant< float, 3 >( p_event.GetValue() ) );
 			}
 			else if ( property->GetName() == PROPERTY_NODE_SCALE )
 			{
-				OnScaleChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
+				OnScaleChange( PointRefFromVariant< float, 3 >( p_event.GetValue() ) );
 			}
 			else if ( property->GetName() == PROPERTY_NODE_ORIENTATION )
 			{
@@ -82,7 +82,7 @@ namespace GuiCommon
 		}
 	}
 
-	void NodeTreeItemProperty::OnPositionChange( Point3r const & p_value )
+	void NodeTreeItemProperty::OnPositionChange( castor::Point3f const & p_value )
 	{
 		SceneNodeSPtr node = getNode();
 		float x = p_value[0];
@@ -91,11 +91,11 @@ namespace GuiCommon
 
 		doApplyChange( [x, y, z, node]()
 		{
-			node->setPosition( Point3r( x, y, z ) );
+			node->setPosition( castor::Point3f( x, y, z ) );
 		} );
 	}
 
-	void NodeTreeItemProperty::OnScaleChange( Point3r const & p_value )
+	void NodeTreeItemProperty::OnScaleChange( castor::Point3f const & p_value )
 	{
 		SceneNodeSPtr node = getNode();
 		float x = p_value[0];
@@ -104,7 +104,7 @@ namespace GuiCommon
 
 		doApplyChange( [x, y, z, node]()
 		{
-			node->setScale( Point3r( x, y, z ) );
+			node->setScale( castor::Point3f( x, y, z ) );
 		} );
 	}
 

@@ -9,7 +9,7 @@ using namespace castor;
 
 namespace CastorViewer
 {
-	RotateNodeEvent::RotateNodeEvent( SceneNodeSPtr p_node, real p_dx, real p_dy, real p_dz )
+	RotateNodeEvent::RotateNodeEvent( SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
 		: MouseNodeEvent( p_node, p_dx, p_dy, p_dz )
 	{
 	}
@@ -24,9 +24,9 @@ namespace CastorViewer
 
 		if ( node && ( m_dx || m_dy || m_dz ) )
 		{
-			Quaternion x{ Quaternion::fromAxisAngle( Point3r{ 1.0, 0.0, 0.0 }, Angle::fromDegrees( m_dx ) ) };
-			Quaternion y{ Quaternion::fromAxisAngle( Point3r{ 0.0, 1.0, 0.0 }, Angle::fromDegrees( m_dy ) ) };
-			Quaternion z{ Quaternion::fromAxisAngle( Point3r{ 0.0, 0.0, 1.0 }, Angle::fromDegrees( m_dz ) ) };
+			Quaternion x{ Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, Angle::fromDegrees( m_dx ) ) };
+			Quaternion y{ Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, Angle::fromDegrees( m_dy ) ) };
+			Quaternion z{ Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, Angle::fromDegrees( m_dz ) ) };
 			node->rotate( x );
 			node->rotate( y );
 			node->rotate( z );

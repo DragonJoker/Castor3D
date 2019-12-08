@@ -27,7 +27,6 @@
 #include <assimp/version.h>
 
 using namespace castor3d;
-using namespace castor;
 
 namespace C3dAssimp
 {
@@ -36,14 +35,14 @@ namespace C3dAssimp
 	namespace
 	{
 		aiNodeAnim const * const doFindNodeAnim( const aiAnimation & animation
-			, const String & nodeName )
+			, const castor::String & nodeName )
 		{
 			aiNodeAnim const * result = nullptr;
 			auto it = std::find_if( animation.mChannels
 				, animation.mChannels + animation.mNumChannels
 				, [&nodeName]( aiNodeAnim const * const p_nodeAnim )
 			{
-				return string::stringCast< xchar >( p_nodeAnim->mNodeName.data ) == nodeName;
+				return castor::string::stringCast< xchar >( p_nodeAnim->mNodeName.data ) == nodeName;
 			} );
 
 			if ( it != animation.mChannels + animation.mNumChannels )
@@ -55,14 +54,14 @@ namespace C3dAssimp
 		}
 
 		aiMeshAnim const * const FindMeshAnim( const aiAnimation & animation
-			, const String & meshName )
+			, const castor::String & meshName )
 		{
 			aiMeshAnim const * result = nullptr;
 			auto it = std::find_if( animation.mMeshChannels
 				, animation.mMeshChannels + animation.mNumMeshChannels
 				, [&meshName]( aiMeshAnim const * const p_meshAnim )
 				{
-					return string::stringCast< xchar >( p_meshAnim->mName.data ) == meshName;
+					return castor::string::stringCast< xchar >( p_meshAnim->mName.data ) == meshName;
 				} );
 
 			if ( it != animation.mMeshChannels + animation.mNumMeshChannels )
@@ -81,9 +80,9 @@ namespace C3dAssimp
 
 			for ( auto & vertex : vertices )
 			{
-				vertex.pos[0] = real( aiMesh.mVertices[index].x );
-				vertex.pos[1] = real( aiMesh.mVertices[index].y );
-				vertex.pos[2] = real( aiMesh.mVertices[index].z );
+				vertex.pos[0] = float( aiMesh.mVertices[index].x );
+				vertex.pos[1] = float( aiMesh.mVertices[index].y );
+				vertex.pos[2] = float( aiMesh.mVertices[index].z );
 				++index;
 			}
 
@@ -93,9 +92,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.nml[0] = real( aiMesh.mNormals[index].x );
-					vertex.nml[1] = real( aiMesh.mNormals[index].y );
-					vertex.nml[2] = real( aiMesh.mNormals[index].z );
+					vertex.nml[0] = float( aiMesh.mNormals[index].x );
+					vertex.nml[1] = float( aiMesh.mNormals[index].y );
+					vertex.nml[2] = float( aiMesh.mNormals[index].z );
 					++index;
 				}
 			}
@@ -106,9 +105,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.tan[0] = real( aiMesh.mTangents[index].x );
-					vertex.tan[1] = real( aiMesh.mTangents[index].y );
-					vertex.tan[2] = real( aiMesh.mTangents[index].z );
+					vertex.tan[0] = float( aiMesh.mTangents[index].x );
+					vertex.tan[1] = float( aiMesh.mTangents[index].y );
+					vertex.tan[2] = float( aiMesh.mTangents[index].z );
 					++index;
 				}
 			}
@@ -119,9 +118,9 @@ namespace C3dAssimp
 
 				for ( auto & vertex : vertices )
 				{
-					vertex.tex[0] = real( aiMesh.mTextureCoords[0][index].x );
-					vertex.tex[1] = real( aiMesh.mTextureCoords[0][index].y );
-					vertex.tex[2] = real( aiMesh.mTextureCoords[0][index].z );
+					vertex.tex[0] = float( aiMesh.mTextureCoords[0][index].x );
+					vertex.tex[1] = float( aiMesh.mTextureCoords[0][index].y );
+					vertex.tex[2] = float( aiMesh.mTextureCoords[0][index].z );
 					++index;
 				}
 			}
@@ -130,10 +129,10 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		void doFind( Milliseconds time
-			, typename std::map< Milliseconds, T > const & map
-			, typename std::map< Milliseconds, T >::const_iterator & prv
-			, typename std::map< Milliseconds, T >::const_iterator & cur )
+		void doFind( castor::Milliseconds time
+			, typename std::map< castor::Milliseconds, T > const & map
+			, typename std::map< castor::Milliseconds, T >::const_iterator & prv
+			, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
 		{
 			if ( map.empty() )
 			{
@@ -143,7 +142,7 @@ namespace C3dAssimp
 			{
 				cur = std::find_if( map.begin()
 					, map.end()
-					, [&time]( std::pair< Milliseconds, T > const & pair )
+					, [&time]( std::pair< castor::Milliseconds, T > const & pair )
 					{
 						return pair.first > time;
 					} );
@@ -165,9 +164,9 @@ namespace C3dAssimp
 		}
 
 		template< typename T >
-		T doCompute( Milliseconds const & from
+		T doCompute( castor::Milliseconds const & from
 			, Interpolator< T > const & interpolator
-			, std::map< Milliseconds, T > const & values )
+			, std::map< castor::Milliseconds, T > const & values )
 		{
 			T result;
 
@@ -181,7 +180,7 @@ namespace C3dAssimp
 				auto cur = values.begin();
 				doFind( from, values, prv, cur );
 				auto dt = cur->first - prv->first;
-				real factor = ( from - prv->first ).count() / real( dt.count() );
+				float factor = ( from - prv->first ).count() / float( dt.count() );
 				result = interpolator.interpolate( prv->second, cur->second, factor );
 			}
 
@@ -220,13 +219,13 @@ namespace C3dAssimp
 
 			pass.setOpacity( opacity );
 			pass.setTwoSided( twoSided != 0 );
-			pass.setDiffuse( RgbColour::fromComponents( diffuse.r
+			pass.setDiffuse( castor::RgbColour::fromComponents( diffuse.r
 				, diffuse.g
 				, diffuse.b ) );
-			pass.setSpecular( RgbColour::fromComponents( specular.r * shininessStrength
+			pass.setSpecular( castor::RgbColour::fromComponents( specular.r * shininessStrength
 				, specular.g * shininessStrength
 				, specular.b * shininessStrength ) );
-			pass.setEmissive( float( point::length( Point3f{ emissive.r
+			pass.setEmissive( float( castor::point::length( castor::Point3f{ emissive.r
 				, emissive.g
 				, emissive.b } ) ) );
 
@@ -243,7 +242,7 @@ namespace C3dAssimp
 		{
 			if ( name.length > 0 )
 			{
-				importer.loadTexture( Path{ string::stringCast< xchar >( name.C_Str() ) }
+				importer.loadTexture( castor::Path{ castor::string::stringCast< xchar >( name.C_Str() ) }
 					, config
 					, pass );
 			}
@@ -271,26 +270,26 @@ namespace C3dAssimp
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), shnTexName );
 
 			if ( difTexName.length > 0
-				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != String::npos
-				&& std::string( difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
+				&& std::string( difTexName.C_Str() ).find( "_Cine_" ) != castor::String::npos
+				&& std::string( difTexName.C_Str() ).find( "/MI_CH_" ) != castor::String::npos )
 			{
 				// Workaround for Collada textures.
-				String strGlob = string::stringCast< xchar >( difTexName.C_Str() ) + cuT( ".tga" );
-				string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
-				String strDiff = strGlob;
-				String strNorm = strGlob;
-				String strSpec = strGlob;
-				String strOpac = strGlob;
-				importer.loadTexture( Path{ string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }
+				castor::String strGlob = castor::string::stringCast< xchar >( difTexName.C_Str() ) + cuT( ".tga" );
+				castor::string::replace( strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+				castor::String strDiff = strGlob;
+				castor::String strNorm = strGlob;
+				castor::String strSpec = strGlob;
+				castor::String strOpac = strGlob;
+				importer.loadTexture( castor::Path{ castor::string::replace( strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }
 					, TextureConfiguration::DiffuseTexture
 					, pass );
-				importer.loadTexture( Path{ string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }
+				importer.loadTexture( castor::Path{ castor::string::replace( strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }
 					, TextureConfiguration::NormalTexture
 					, pass );
-				importer.loadTexture( Path{ string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }
+				importer.loadTexture( castor::Path{ castor::string::replace( strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }
 					, TextureConfiguration::SpecularTexture
 					, pass );
-				importer.loadTexture( Path{ string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }
+				importer.loadTexture( castor::Path{ castor::string::replace( strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }
 					, TextureConfiguration::OpacityTexture
 					, pass );
 			}
@@ -318,41 +317,41 @@ namespace C3dAssimp
 			}
 		}
 
-		std::map< Milliseconds, Point3r > doProcessVec3Keys( aiVectorKey const * const keys
+		std::map< castor::Milliseconds, castor::Point3f > doProcessVec3Keys( aiVectorKey const * const keys
 			, uint32_t count
 			, int64_t ticksPerMilliSecond
-			, std::set< Milliseconds > & times )
+			, std::set< castor::Milliseconds > & times )
 		{
-			std::map< Milliseconds, Point3r > result;
+			std::map< castor::Milliseconds, castor::Point3f > result;
 
-			for ( auto const & key : makeArrayView( keys, count ) )
+			for ( auto const & key : castor::makeArrayView( keys, count ) )
 			{
-				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
 				times.insert( time );
-				result[time] = Point3r{ key.mValue.x, key.mValue.y, key.mValue.z };
+				result[time] = castor::Point3f{ key.mValue.x, key.mValue.y, key.mValue.z };
 			}
 
 			return result;
 		}
 
-		std::map< Milliseconds, Quaternion > doProcessQuatKeys( aiQuatKey const * const keys
+		std::map< castor::Milliseconds, castor::Quaternion > doProcessQuatKeys( aiQuatKey const * const keys
 			, uint32_t count
 			, int64_t ticksPerMilliSecond
-			, std::set< Milliseconds > & times )
+			, std::set< castor::Milliseconds > & times )
 		{
-			std::map< Milliseconds, Quaternion > result;
+			std::map< castor::Milliseconds, castor::Quaternion > result;
 
-			for ( auto const & key : makeArrayView( keys, count ) )
+			for ( auto const & key : castor::makeArrayView( keys, count ) )
 			{
-				auto time = Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
+				auto time = castor::Milliseconds{ int64_t( key.mTime * 1000 ) } / ticksPerMilliSecond;
 				times.insert( time );
-				result[time] = Quaternion::fromMatrix( Matrix4x4r{ Matrix3x3r{ &key.mValue.GetMatrix().Transpose().a1 } } );
+				result[time] = castor::Quaternion::fromMatrix( castor::Matrix4x4f{ castor::Matrix3x3f{ &key.mValue.GetMatrix().Transpose().a1 } } );
 			}
 
 			return result;
 		}
 
-		SkeletonAnimationKeyFrame & doGetKeyFrame( Milliseconds const & time
+		SkeletonAnimationKeyFrame & doGetKeyFrame( castor::Milliseconds const & time
 			, SkeletonAnimation & animation
 			, SkeletonAnimationKeyFrameMap & keyframes )
 		{
@@ -367,26 +366,26 @@ namespace C3dAssimp
 			return *it->second;
 		}
 
-		void doSynchroniseKeys( std::map< Milliseconds, Point3r > const & translates
-			, std::map< Milliseconds, Point3r > const & scales
-			, std::map< Milliseconds, Quaternion > const & rotates
-			, std::set< Milliseconds > const & times
+		void doSynchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > const & translates
+			, std::map< castor::Milliseconds, castor::Point3f > const & scales
+			, std::map< castor::Milliseconds, castor::Quaternion > const & rotates
+			, std::set< castor::Milliseconds > const & times
 			, uint32_t fps
 			, int64_t ticksPerMilliSecond
 			, SkeletonAnimationObject & object
 			, SkeletonAnimation & animation
 			, SkeletonAnimationKeyFrameMap & keyframes )
 		{
-			InterpolatorT< Point3r, InterpolatorType::eLinear > pointInterpolator;
-			InterpolatorT< Quaternion, InterpolatorType::eLinear > quatInterpolator;
+			InterpolatorT< castor::Point3f, InterpolatorType::eLinear > pointInterpolator;
+			InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > quatInterpolator;
 
 			if ( ticksPerMilliSecond / 1000 >= fps )
 			{
 				for ( auto time : times )
 				{
-					Point3r translate = doCompute( time, pointInterpolator, translates );
-					Point3r scale = doCompute( time, pointInterpolator, scales );
-					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					auto translate = doCompute( time, pointInterpolator, translates );
+					auto scale = doCompute( time, pointInterpolator, scales );
+					auto rotate = doCompute( time, quatInterpolator, rotates );
 					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
 						, translate
 						, rotate
@@ -396,14 +395,14 @@ namespace C3dAssimp
 			else
 			{
 				// Limit the key frames per second to 60, to spare RAM...
-				Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
-				Milliseconds maxTime{ *times.rbegin() + step };
+				castor::Milliseconds step{ 1000 / std::min< int64_t >( 60, int64_t( fps ) ) };
+				castor::Milliseconds maxTime{ *times.rbegin() + step };
 
-				for ( Milliseconds time{ 0 }; time < maxTime; time += step )
+				for ( auto time = 0_ms; time < maxTime; time += step )
 				{
-					Point3r translate = doCompute( time, pointInterpolator, translates );
-					Point3r scale = doCompute( time, pointInterpolator, scales );
-					Quaternion rotate = doCompute( time, quatInterpolator, rotates );
+					auto translate = doCompute( time, pointInterpolator, translates );
+					auto scale = doCompute( time, pointInterpolator, scales );
+					auto rotate = doCompute( time, quatInterpolator, rotates );
 					doGetKeyFrame( time, animation, keyframes ).addAnimationObject( object
 						, translate
 						, rotate
@@ -463,7 +462,7 @@ namespace C3dAssimp
 			| aiProcess_LimitBoneWeights
 			| aiProcess_Debone;
 		bool tangentSpace = false;
-		String normals;
+		castor::String normals;
 
 		if ( m_parameters.get( cuT( "normals" ), normals ) )
 		{
@@ -479,18 +478,18 @@ namespace C3dAssimp
 		}
 
 		// And have it read the given file with some postprocessing
-		aiScene const * aiScene = importer.ReadFile( string::stringCast< char >( m_fileName ), flags );
+		aiScene const * aiScene = importer.ReadFile( castor::string::stringCast< char >( m_fileName ), flags );
 
 		if ( aiScene )
 		{
 			SkeletonSPtr skeleton = std::make_shared< Skeleton >( *mesh.getScene() );
-			skeleton->setGlobalInverseTransform( Matrix4x4r( &aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+			skeleton->setGlobalInverseTransform( castor::Matrix4x4f( &aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
 
 			if ( aiScene->HasMeshes() )
 			{
 				bool create = true;
 
-				for ( auto aiMesh : makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
+				for ( auto aiMesh : castor::makeArrayView( aiScene->mMeshes, aiScene->mNumMeshes ) )
 				{
 					if ( create )
 					{
@@ -511,7 +510,7 @@ namespace C3dAssimp
 
 				if ( skeleton )
 				{
-					for ( auto aiAnimation : makeArrayView( aiScene->mAnimations, aiScene->mNumAnimations ) )
+					for ( auto aiAnimation : castor::makeArrayView( aiScene->mAnimations, aiScene->mNumAnimations ) )
 					{
 						doProcessAnimation( mesh
 							, m_fileName.getFileName()
@@ -522,22 +521,22 @@ namespace C3dAssimp
 
 					importer.FreeScene();
 
-					if ( string::upperCase( m_fileName.getExtension() ) == cuT( "MD5MESH" ) )
+					if ( castor::string::upperCase( m_fileName.getExtension() ) == cuT( "MD5MESH" ) )
 					{
 						// Workaround to load multiple animations with MD5 models.
-						PathArray files;
-						File::listDirectoryFiles( m_fileName.getPath(), files );
+						castor::PathArray files;
+						castor::File::listDirectoryFiles( m_fileName.getPath(), files );
 
 						for ( auto file : files )
 						{
-							if ( string::lowerCase( file.getExtension() ) == cuT( "md5anim" ) )
+							if ( castor::string::lowerCase( file.getExtension() ) == cuT( "md5anim" ) )
 							{
 								// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
 								if ( file.getFileName() != m_fileName.getFileName() )
 								{
 									auto scene = importer.ReadFile( file, flags );
 
-									for ( auto aiAnimation : makeArrayView( scene->mAnimations, scene->mNumAnimations ) )
+									for ( auto aiAnimation : castor::makeArrayView( scene->mAnimations, scene->mNumAnimations ) )
 									{
 										doProcessAnimation( mesh
 											, file.getFileName()
@@ -567,7 +566,7 @@ namespace C3dAssimp
 		else
 		{
 			// The import failed, report it
-			Logger::logError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
+			castor::Logger::logError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
 		}
 
 		return result;
@@ -606,7 +605,7 @@ namespace C3dAssimp
 
 			auto mapping = std::make_shared< TriFaceMapping >( submesh );
 
-			for ( auto face : makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
+			for ( auto face : castor::makeArrayView( aiMesh.mFaces, aiMesh.mNumFaces ) )
 			{
 				if ( face.mNumIndices == 3 )
 				{
@@ -627,7 +626,7 @@ namespace C3dAssimp
 
 			if ( aiScene.HasAnimations() )
 			{
-				for( auto aiAnimation : makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
+				for( auto aiAnimation : castor::makeArrayView( aiScene.mAnimations, aiScene.mNumAnimations ) )
 				{
 					auto it = std::find_if( aiAnimation->mMeshChannels
 						, aiAnimation->mMeshChannels + aiAnimation->mNumMeshChannels
@@ -656,16 +655,16 @@ namespace C3dAssimp
 	{
 		if ( aiMeshAnim.mNumKeys )
 		{
-			String name{ string::stringCast< xchar >( aiMeshAnim.mName.C_Str() ) };
-			Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
+			castor::String name{ castor::string::stringCast< xchar >( aiMeshAnim.mName.C_Str() ) };
+			castor::Logger::logDebug( cuT( "Mesh animation found: [" ) + name + cuT( "]" ) );
 			auto & animation = mesh.createAnimation( name );
 			MeshAnimationSubmesh animSubmesh{ animation, submesh };
 			animation.addChild( std::move( animSubmesh ) );
 
-			for ( auto aiKey : makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
+			for ( auto aiKey : castor::makeArrayView( aiMeshAnim.mKeys, aiMeshAnim.mNumKeys ) )
 			{
 				MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-					, Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
+					, castor::Milliseconds{ int64_t( aiKey.mTime * 1000 ) } );
 				keyFrame->addSubmeshBuffer( submesh, doCreateVertexBuffer( *aiMesh.mAnimMeshes[aiKey.mValue] ) );
 				animation.addKeyFrame( std::move( keyFrame ) );
 			}
@@ -679,11 +678,11 @@ namespace C3dAssimp
 		auto & cache = scene.getMaterialView();
 		aiString mtlname;
 		aiMaterial.Get( AI_MATKEY_NAME, mtlname );
-		String name = string::stringCast< xchar >( mtlname.C_Str() );
+		castor::String name = castor::string::stringCast< xchar >( mtlname.C_Str() );
 
 		if ( name.empty() )
 		{
-			name = m_fileName.getFileName() + string::toString( m_anonymous++ );
+			name = m_fileName.getFileName() + castor::string::toString( m_anonymous++ );
 		}
 
 		if ( cache.has( name ) )
@@ -703,8 +702,8 @@ namespace C3dAssimp
 		return result;
 	}
 
-	BoneSPtr AssimpImporter::doAddBone( String const & name
-		, Matrix4x4r const & offset
+	BoneSPtr AssimpImporter::doAddBone( castor::String const & name
+		, castor::Matrix4x4f const & offset
 		, Skeleton & skeleton
 		, uint32_t & index )
 	{
@@ -723,13 +722,13 @@ namespace C3dAssimp
 		for ( uint32_t i = 0; i < count; ++i )
 		{
 			aiBone const & aiBone = *aiBones[i];
-			String name = string::stringCast< xchar >( aiBone.mName.C_Str() );
+			castor::String name = castor::string::stringCast< xchar >( aiBone.mName.C_Str() );
 			uint32_t index;
 
 			if ( m_mapBoneByID.find( name ) == m_mapBoneByID.end() )
 			{
 				auto mtx = aiBone.mOffsetMatrix;
-				doAddBone( name, Matrix4x4r{ &mtx.Transpose().a1 }, skeleton, index );
+				doAddBone( name, castor::Matrix4x4f{ &mtx.Transpose().a1 }, skeleton, index );
 			}
 			else
 			{
@@ -738,21 +737,21 @@ namespace C3dAssimp
 				CU_Ensure( m_arrayBones[index]->getOffsetMatrix() == Matrix4x4r( &mtx.Transpose().a1 ) );
 			}
 
-			for ( auto weight : makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
+			for ( auto weight : castor::makeArrayView( aiBone.mWeights, aiBone.mNumWeights ) )
 			{
-				arrayVertices[weight.mVertexId].addBoneData( index, real( weight.mWeight ) );
+				arrayVertices[weight.mVertexId].addBoneData( index, float( weight.mWeight ) );
 			}
 		}
 	}
 
 	void AssimpImporter::doProcessAnimation( Mesh & mesh
-		, String const & animName
+		, castor::String const & animName
 		, Skeleton & skeleton
 		, aiNode const & aiNode
 		, aiAnimation const & aiAnimation )
 	{
-		String name{ string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
-		Logger::logDebug( cuT( "Skeleton animation found: " ) + name );
+		castor::String name{ castor::string::stringCast< xchar >( aiAnimation.mName.C_Str() ) };
+		castor::Logger::logDebug( cuT( "Skeleton animation found: " ) + name );
 
 		if ( name.empty() )
 		{
@@ -802,7 +801,7 @@ namespace C3dAssimp
 		, SkeletonAnimationKeyFrameMap & keyFrames
 		, SkeletonAnimationObjectSet & notAnimated )
 	{
-		String name = string::stringCast< xchar >( aiNode.mName.data );
+		castor::String name = castor::string::stringCast< xchar >( aiNode.mName.data );
 		const aiNodeAnim * aiNodeAnim = doFindNodeAnim( aiAnimation, name );
 		SkeletonAnimationObjectSPtr object;
 		auto itBone = m_mapBoneByID.find( name );
@@ -812,9 +811,9 @@ namespace C3dAssimp
 			&& aiNode.mNumMeshes )
 		{
 			uint32_t index;
-			auto bone = doAddBone( name, Matrix4x4r{ 1.0_r }, skeleton, index );
+			auto bone = doAddBone( name, castor::Matrix4x4f{ 1.0f }, skeleton, index );
 
-			for ( auto const & aiMesh : makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
+			for ( auto const & aiMesh : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{
 				auto submesh = mesh.getSubmesh( aiMesh );
 				CU_Require( submesh != nullptr );
@@ -826,7 +825,7 @@ namespace C3dAssimp
 
 					for ( auto & boneData : arrayBones )
 					{
-						boneData.addBoneData( index, 1.0_r );
+						boneData.addBoneData( index, 1.0f );
 					}
 
 					bones->addBoneDatas( arrayBones );
@@ -859,7 +858,7 @@ namespace C3dAssimp
 				parent->addChild( object );
 			}
 
-			object->setNodeTransform( Matrix4x4r( &aiNode.mTransformation.a1 ).getTransposed() );
+			object->setNodeTransform( castor::Matrix4x4f( &aiNode.mTransformation.a1 ).getTransposed() );
 		}
 
 		if ( aiNodeAnim )
@@ -875,7 +874,7 @@ namespace C3dAssimp
 			notAnimated.insert( object );
 		}
 
-		for ( auto node : makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
+		for ( auto node : castor::makeArrayView( aiNode.mChildren, aiNode.mNumChildren ) )
 		{
 			doProcessAnimationNodes( mesh
 				, animation
@@ -895,7 +894,7 @@ namespace C3dAssimp
 		, SkeletonAnimation & animation
 		, SkeletonAnimationKeyFrameMap & keyframes )
 	{
-		std::set< Milliseconds > times;
+		std::set< castor::Milliseconds > times;
 
 		auto translates = doProcessVec3Keys( aiNodeAnim.mPositionKeys
 			, aiNodeAnim.mNumPositionKeys

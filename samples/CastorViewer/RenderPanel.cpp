@@ -28,10 +28,10 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const real MAX_CAM_SPEED = 10.0_r;
-		static const real DEF_CAM_SPEED = 0.5_r;
-		static const real MIN_CAM_SPEED = 0.05_r;
-		static const real CAM_SPEED_INC = 0.9_r;
+		static const float MAX_CAM_SPEED = 10.0f;
+		static const float DEF_CAM_SPEED = 0.5f;
+		static const float MIN_CAM_SPEED = 0.05f;
+		static const float CAM_SPEED_INC = 0.9f;
 	}
 
 	namespace
@@ -76,7 +76,7 @@ namespace CastorViewer
 		, wxSize const & size
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
-		, m_camSpeed( DEF_CAM_SPEED, Range< real >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
+		, m_camSpeed( DEF_CAM_SPEED, Range< float >{ MIN_CAM_SPEED, MAX_CAM_SPEED } )
 	{
 		m_timers[0] = nullptr;
 
@@ -181,10 +181,10 @@ namespace CastorViewer
 	{
 		doStopTimer( eTIMER_ID_COUNT );
 		m_camSpeed = DEF_CAM_SPEED;
-		m_x = 0.0_r;
-		m_y = 0.0_r;
-		m_oldX = 0.0_r;
-		m_oldY = 0.0_r;
+		m_x = 0.0f;
+		m_y = 0.0f;
+		m_oldX = 0.0f;
+		m_oldY = 0.0f;
 	}
 
 	void RenderPanel::doStartMovement()
@@ -257,7 +257,7 @@ namespace CastorViewer
 				, [this, cameraNode]()
 				{
 					Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= Quaternion::fromAxisAngle( Point3r{ 1.0_r, 0.0_r, 0.0_r }, 90.0_degrees );
+					orientation *= Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, 90.0_degrees );
 					cameraNode->setOrientation( orientation );
 				} ) );
 		}
@@ -287,53 +287,53 @@ namespace CastorViewer
 		wxGetApp().getMainFrame()->loadScene();
 	}
 
-	real RenderPanel::doTransformX( int x )
+	float RenderPanel::doTransformX( int x )
 	{
-		real result = real( x );
+		float result = float( x );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result *= real( camera->getWidth() ) / GetClientSize().x;
+			result *= float( camera->getWidth() ) / GetClientSize().x;
 		}
 
 		return result;
 	}
 
-	real RenderPanel::doTransformY( int y )
+	float RenderPanel::doTransformY( int y )
 	{
-		real result = real( y );
+		float result = float( y );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result *= real( camera->getHeight() ) / GetClientSize().y;
+			result *= float( camera->getHeight() ) / GetClientSize().y;
 		}
 
 		return result;
 	}
 
-	int RenderPanel::doTransformX( real x )
+	int RenderPanel::doTransformX( float x )
 	{
 		int result = int( x );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result = int( x * GetClientSize().x / real( camera->getWidth() ) );
+			result = int( x * GetClientSize().x / float( camera->getWidth() ) );
 		}
 
 		return result;
 	}
 
-	int RenderPanel::doTransformY( real y )
+	int RenderPanel::doTransformY( float y )
 	{
 		int result = int( y );
 		auto camera = m_camera.lock();
 
 		if ( camera )
 		{
-			result = int( y * GetClientSize().y / real( camera->getHeight() ) );
+			result = int( y * GetClientSize().y / float( camera->getHeight() ) );
 		}
 
 		return result;
@@ -449,7 +449,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, m_camSpeed.value() } );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, m_camSpeed.value() } );
 		}
 
 		p_event.Skip();
@@ -459,7 +459,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -m_camSpeed.value() } );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -m_camSpeed.value() } );
 		}
 
 		p_event.Skip();
@@ -469,7 +469,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ m_camSpeed.value(), 0.0_r, 0.0_r } );
+			m_currentState->addScalarVelocity( castor::Point3f{ m_camSpeed.value(), 0.0f, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -479,7 +479,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ -m_camSpeed.value(), 0.0_r, 0.0_r } );
+			m_currentState->addScalarVelocity( castor::Point3f{ -m_camSpeed.value(), 0.0f, 0.0f } );
 		}
 
 		p_event.Skip();
@@ -489,7 +489,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ 0.0_r, m_camSpeed.value(), 0.0_r } );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, m_camSpeed.value(), 0.0f } );
 		}
 
 		p_event.Skip();
@@ -499,7 +499,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			m_currentState->addScalarVelocity( Point3r{ 0.0_r, -m_camSpeed.value(), 0.0_r } );
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -m_camSpeed.value(), 0.0f } );
 		}
 
 		p_event.Skip();
@@ -929,9 +929,9 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				static real constexpr mult = 2.0_r;
-				real deltaX = std::min( m_camSpeed / mult, 1.0_r ) * ( m_oldX - m_x ) / mult;
-				real deltaY = std::min( m_camSpeed / mult, 1.0_r ) * ( m_oldY - m_y ) / mult;
+				static float constexpr mult = 2.0f;
+				float deltaX = std::min( m_camSpeed / mult, 1.0f ) * ( m_oldX - m_x ) / mult;
+				float deltaY = std::min( m_camSpeed / mult, 1.0f ) * ( m_oldY - m_y ) / mult;
 
 				if ( p_event.ControlDown() )
 				{
@@ -944,11 +944,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_currentState->addAngularVelocity( Point2r{ -deltaY, deltaX } );
+					m_currentState->addAngularVelocity( castor::Point2f{ -deltaY, deltaX } );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_currentState->addScalarVelocity( Point3r{ deltaX, -deltaY, 0.0_r } );
+					m_currentState->addScalarVelocity( castor::Point3f{ deltaX, -deltaY, 0.0f } );
 				}
 			}
 		}

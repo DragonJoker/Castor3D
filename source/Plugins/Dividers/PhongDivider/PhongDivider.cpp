@@ -1,21 +1,20 @@
 #include "PhongDivider/PhongDivider.hpp"
 
-using namespace castor;
 using namespace castor3d;
 
 namespace Phong
 {
 	namespace
 	{
-		Point3r barycenter( real u
-			, real v
-			, Point3r const & p1
-			, Point3r const & p2
-			, Point3r const & p3 )
+		castor::Point3f barycenter( float u
+			, float v
+			, castor::Point3f const & p1
+			, castor::Point3f const & p2
+			, castor::Point3f const & p3 )
 		{
-			real w = real( 1 - u - v );
+			float w = float( 1 - u - v );
 			CU_Ensure( std::abs( u + v + w - 1.0 ) < 0.0001 );
-			return Point3r{ p1 * u + p2 * v + p3 * w };
+			return castor::Point3f{ p1 * u + p2 * v + p3 * w };
 		}
 	}
 
@@ -28,8 +27,8 @@ namespace Phong
 	{
 	}
 
-	String const Subdivider::Name = cuT( "Phong Divider" );
-	String const Subdivider::Type = cuT( "phong" );
+	castor::String const Subdivider::Name = cuT( "Phong Divider" );
+	castor::String const Subdivider::Type = cuT( "phong" );
 
 	Subdivider::Subdivider()
 		: castor3d::Subdivider()
@@ -86,8 +85,8 @@ namespace Phong
 
 		for ( auto const & point : m_submesh->getPoints() )
 		{
-			Point3r position = point.pos;
-			Point3r normal = point.nml;
+			castor::Point3f position = point.pos;
+			castor::Point3f normal = point.nml;
 			posnml.emplace( i++, Plane{ castor::PlaneEquation( normal, position ), position } );
 		}
 
@@ -123,15 +122,15 @@ namespace Phong
 		}
 	}
 
-	void Subdivider::doComputeFaces( real u0
-		, real v0
-		, real u2
-		, real v2
+	void Subdivider::doComputeFaces( float u0
+		, float v0
+		, float u2
+		, float v2
 		, int occurences
 		, Patch const & patch )
 	{
-		real u1 = ( u0 + u2 ) / 2.0_r;
-		real v1 = ( v0 + v2 ) / 2.0_r;
+		float u1 = ( u0 + u2 ) / 2.0f;
+		float v1 = ( v0 + v2 ) / 2.0f;
 
 		if ( occurences > 1 )
 		{
@@ -152,13 +151,13 @@ namespace Phong
 		}
 	}
 
-	castor3d::SubmeshVertex & Subdivider::doComputePoint( real u, real v, Patch const & patch )
+	castor3d::SubmeshVertex & Subdivider::doComputePoint( float u, float v, Patch const & patch )
 	{
-		Point3r b = barycenter( u, v, patch.pi.point, patch.pj.point, patch.pk.point );
-		Point3r pi = patch.pi.plane.project( b );
-		Point3r pj = patch.pj.plane.project( b );
-		Point3r pk = patch.pk.plane.project( b );
-		Point3r point( barycenter( u, v, pi, pj, pk ) );
+		castor::Point3f b = barycenter( u, v, patch.pi.point, patch.pj.point, patch.pk.point );
+		castor::Point3f pi = patch.pi.plane.project( b );
+		castor::Point3f pj = patch.pj.plane.project( b );
+		castor::Point3f pk = patch.pk.plane.project( b );
+		castor::Point3f point( barycenter( u, v, pi, pj, pk ) );
 		return doTryAddPoint( point );
 	}
 }

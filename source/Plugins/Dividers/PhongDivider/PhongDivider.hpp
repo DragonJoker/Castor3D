@@ -78,14 +78,14 @@ namespace Phong
 		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
 		 */
 		void doAddGeneratedFaces()override;
-		void doComputeFaces( castor::real u0
-			, castor::real v0
-			, castor::real u2
-			, castor::real v2
+		void doComputeFaces( float u0
+			, float v0
+			, float u2
+			, float v2
 			, int occurences
 			, Patch const & patch );
-		castor3d::SubmeshVertex & doComputePoint( castor::real u
-			, castor::real v
+		castor3d::SubmeshVertex & doComputePoint( float u
+			, float v
 			, Patch const & patch );
 
 	public:

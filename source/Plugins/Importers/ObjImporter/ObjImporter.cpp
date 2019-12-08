@@ -35,9 +35,9 @@ namespace Obj
 	namespace
 	{
 		void doParseFaceVertex( std::string const & faceVtx
-			, Point3rArray const & allvtx
-			, Point2rArray const & alltex
-			, Point3rArray const & allnml
+			, Point3fArray const & allvtx
+			, Point2fArray const & alltex
+			, Point3fArray const & allnml
 			, InterleavedVertexArray::iterator vit )
 		{
 			size_t index1 = faceVtx.find( '/' );
@@ -73,7 +73,7 @@ namespace Obj
 			}
 		}
 
-		void doParseVec3( StringArray const & content, Point3rArray & array )
+		void doParseVec3( StringArray const & content, Point3fArray & array )
 		{
 			array.resize( content.size() );
 			auto it = array.begin();
@@ -88,7 +88,7 @@ namespace Obj
 			}
 		}
 
-		void doParseVec2( StringArray const & content, Point2rArray & array )
+		void doParseVec2( StringArray const & content, Point2fArray & array )
 		{
 			array.resize( content.size() );
 			auto it = array.begin();
@@ -417,13 +417,13 @@ namespace Obj
 		file.clear();
 		file.seekg( 0, std::ios::beg );
 
-		Point3rArray allvtx;
+		Point3fArray allvtx;
 		doParseVec3( v, allvtx );
 		v = StringArray{};
-		Point2rArray alltex;
+		Point2fArray alltex;
 		doParseVec2( vt, alltex );
 		vt = StringArray{};
-		Point3rArray allnml;
+		Point3fArray allnml;
 		doParseVec3( vn, allnml );
 		vn = StringArray{};
 

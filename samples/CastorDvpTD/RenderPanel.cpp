@@ -32,7 +32,7 @@ namespace castortd
 			eUpgradeDamage,
 		};
 
-		static real const g_camSpeed = 10.0_r;
+		static float const g_camSpeed = 10.0;
 	}
 
 	RenderPanel::RenderPanel( wxWindow * p_parent, wxSize const & p_size, Game & p_game )
@@ -95,53 +95,53 @@ namespace castortd
 		}
 	}
 
-	real RenderPanel::doTransformX( int x )
+	float RenderPanel::doTransformX( int x )
 	{
-		real result = real( x );
+		float result = float( x );
 		RenderWindowSPtr window = m_renderWindow.lock();
 
 		if ( window )
 		{
-			result *= real( window->getCamera()->getWidth() ) / GetClientSize().x;
+			result *= float( window->getCamera()->getWidth() ) / GetClientSize().x;
 		}
 
 		return result;
 	}
 
-	real RenderPanel::doTransformY( int y )
+	float RenderPanel::doTransformY( int y )
 	{
-		real result = real( y );
+		float result = float( y );
 		RenderWindowSPtr window = m_renderWindow.lock();
 
 		if ( window )
 		{
-			result *= real( window->getCamera()->getHeight() ) / GetClientSize().y;
+			result *= float( window->getCamera()->getHeight() ) / GetClientSize().y;
 		}
 
 		return result;
 	}
 
-	int RenderPanel::doTransformX( real x )
+	int RenderPanel::doTransformX( float x )
 	{
 		int result = int( x );
 		RenderWindowSPtr window = m_renderWindow.lock();
 
 		if ( window )
 		{
-			result = int( x * GetClientSize().x / real( window->getCamera()->getWidth() ) );
+			result = int( x * GetClientSize().x / float( window->getCamera()->getWidth() ) );
 		}
 
 		return result;
 	}
 
-	int RenderPanel::doTransformY( real y )
+	int RenderPanel::doTransformY( float y )
 	{
 		int result = int( y );
 		RenderWindowSPtr window = m_renderWindow.lock();
 
 		if ( window )
 		{
-			result = int( y * GetClientSize().y / real( window->getCamera()->getHeight() ) );
+			result = int( y * GetClientSize().y / float( window->getCamera()->getHeight() ) );
 		}
 
 		return result;
@@ -180,9 +180,9 @@ namespace castortd
 						freeCell = true;
 						m_listener->postEvent( makeFunctorEvent( EventType::ePostRender, [this, p_geometry]()
 						{
-							Point3r position = p_geometry->getParent()->getPosition();
+							castor::Point3f position = p_geometry->getParent()->getPosition();
 							auto height = p_geometry->getMesh()->getBoundingBox().getMax()[1] - p_geometry->getMesh()->getBoundingBox().getMin()[1];
-							m_marker->setPosition( Point3r{ position[0], height + 1, position[2] } );
+							m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
 						} ) );
 						m_selectedTower = nullptr;
 						break;
@@ -580,13 +580,13 @@ namespace castortd
 		{
 			if ( m_game.IsRunning() )
 			{
-				static real constexpr mult = 4.0_r;
-				real deltaX = 0.0_r;
-				real deltaY = std::min( 1.0_r / mult, 1.0_r ) * ( m_oldY - m_y ) / mult;
+				static float constexpr mult = 4.0f;
+				float deltaX = 0.0f;
+				float deltaY = std::min( 1.0f / mult, 1.0f ) * ( m_oldY - m_y ) / mult;
 
 				if ( m_mouseLeftDown )
 				{
-					m_cameraState->addAngularVelocity( Point2r{ -deltaY, deltaX } );
+					m_cameraState->addAngularVelocity( castor::Point2f{ -deltaY, deltaX } );
 				}
 			}
 		}
@@ -606,11 +606,11 @@ namespace castortd
 		{
 			if ( wheelRotation < 0 )
 			{
-				m_cameraState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, -g_camSpeed } );
+				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -g_camSpeed } );
 			}
 			else
 			{
-				m_cameraState->addScalarVelocity( Point3r{ 0.0_r, 0.0_r, g_camSpeed } );
+				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, g_camSpeed } );
 			}
 		}
 
@@ -629,25 +629,25 @@ namespace castortd
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( Point3r{ 0.0_r, g_camSpeed, 0.0_r } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, g_camSpeed, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDown( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( Point3r{ 0.0_r, -g_camSpeed, 0.0_r } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, -g_camSpeed, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLeft( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( Point3r{ g_camSpeed, 0.0_r, 0.0_r } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ g_camSpeed, 0.0f, 0.0f } );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRight( wxTimerEvent & p_event )
 	{
-		m_cameraState->addScalarVelocity( Point3r{ -g_camSpeed, 0.0_r, 0.0_r } );
+		m_cameraState->addScalarVelocity( castor::Point3f{ -g_camSpeed, 0.0f, 0.0f } );
 		p_event.Skip();
 	}
 

@@ -4,8 +4,6 @@
 #include "LoopDivider/LoopVertex.hpp"
 #include "LoopDivider/LoopDivider.hpp"
 
-using namespace castor;
-
 namespace Loop
 {
 	FaceEdges::FaceEdges( Subdivider * divider
@@ -38,7 +36,7 @@ namespace Loop
 	{
 	}
 
-	void FaceEdges::divide( real value
+	void FaceEdges::divide( float value
 		, VertexPtrUIntMap & vertices
 		, FaceEdgesPtrArray & newFaces )
 	{
@@ -58,12 +56,12 @@ namespace Loop
 		m_edgeBC.reset();
 		m_edgeCA.reset();
 		// We then compute the texture coordinates of the new 3 vertices
-		Point3r aTex = a->getPoint().tex;
-		Point3r bTex = b->getPoint().tex;
-		Point3r cTex = c->getPoint().tex;
-		Point3r dTex = aTex + ( bTex - aTex ) * value;
-		Point3r eTex = bTex + ( cTex - bTex ) * value;
-		Point3r fTex = cTex + ( aTex - cTex ) * value;
+		castor::Point3f aTex = a->getPoint().tex;
+		castor::Point3f bTex = b->getPoint().tex;
+		castor::Point3f cTex = c->getPoint().tex;
+		castor::Point3f dTex = aTex + ( bTex - aTex ) * value;
+		castor::Point3f eTex = bTex + ( cTex - bTex ) * value;
+		castor::Point3f fTex = cTex + ( aTex - cTex ) * value;
 		// Then we add the 4 resulting faces
 		doAddFaceAndEdges( a, d, f, aTex, dTex, fTex, newFaces );
 		doAddFaceAndEdges( d, b, e, dTex, bTex, eTex, newFaces );
@@ -74,9 +72,9 @@ namespace Loop
 	void FaceEdges::doAddFaceAndEdges( VertexSPtr a
 		, VertexSPtr b
 		, VertexSPtr c
-		, Point3r const & aTex
-		, Point3r const & bTex
-		, Point3r const & cTex
+		, castor::Point3f const & aTex
+		, castor::Point3f const & bTex
+		, castor::Point3f const & cTex
 		, FaceEdgesPtrArray & newFaces )
 	{
 		// First we create the 3 edges of the face
@@ -90,9 +88,9 @@ namespace Loop
 	void FaceEdges::doAddFaceAndEdges( VertexSPtr a
 		, VertexSPtr b
 		, VertexSPtr c
-		, Point3r const & aTex
-		, Point3r const & bTex
-		, Point3r const & cTex
+		, castor::Point3f const & aTex
+		, castor::Point3f const & bTex
+		, castor::Point3f const & cTex
 		, EdgeSPtr edgeAB
 		, EdgeSPtr edgeBC
 		, EdgeSPtr edgeCA

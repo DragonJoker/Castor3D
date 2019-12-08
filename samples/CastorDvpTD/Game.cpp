@@ -146,7 +146,7 @@ namespace castortd
 
 		for ( auto & bullet : m_bullets )
 		{
-			bullet.getNode().setPosition( Point3r{ 0, -10, 0 } );
+			bullet.getNode().setPosition( castor::Point3f{ 0, -10, 0 } );
 			m_bulletsCache.push_back( bullet );
 		}
 
@@ -161,7 +161,7 @@ namespace castortd
 
 		for ( auto & tower : m_towers )
 		{
-			tower->getNode().setPosition( Point3r{ 0, -1000, 0 } );
+			tower->getNode().setPosition( castor::Point3f{ 0, -1000, 0 } );
 		}
 
 		m_towers.clear();
@@ -237,7 +237,7 @@ namespace castortd
 		return getCell( p_position[0], p_position[1] );
 	}
 
-	Cell & Game::getCell( Point3r const & p_position )
+	Cell & Game::getCell( castor::Point3f const & p_position )
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
@@ -262,7 +262,7 @@ namespace castortd
 		return getCell( p_position[0], p_position[1] );
 	}
 
-	Cell const & Game::getCell( Point3r const & p_position )const
+	Cell const & Game::getCell( castor::Point3f const & p_position )const
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
@@ -298,9 +298,9 @@ namespace castortd
 		return result;
 	}
 
-	Point3r Game::convert( castor::Point2i const & p_position )const
+	castor::Point3f Game::convert( castor::Point2i const & p_position )const
 	{
-		return Point3r( ( p_position[0] - int( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
+		return castor::Point3f( ( p_position[0] - int( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
 			, 0
 			, ( p_position[1] - int( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
@@ -451,7 +451,7 @@ namespace castortd
 			m_enemies.push_back( m_spawner.Spawn( *this, m_path ) );
 		}
 
-		Angle const angle{ Angle::fromDegrees( -m_elapsed.count() * 120 / 1000.0_r ) };
+		Angle const angle{ Angle::fromDegrees( -m_elapsed.count() * 120 / 1000.0f ) };
 		auto it = m_enemies.begin();
 
 		while ( it != m_enemies.end() )
@@ -545,7 +545,7 @@ namespace castortd
 		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name );
 		auto geometry = m_scene.getGeometryCache().add( name, node, m_mapCubeMesh );
-		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1] / 2, 0 } );
+		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( m_mapNode );
 
 		for ( auto submesh : *geometry->getMesh() )
@@ -585,7 +585,7 @@ namespace castortd
 	{
 		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto node = m_scene.getSceneNodeCache().add( name );
-		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + Point3r{ 0, m_cellDimensions[1], 0 } );
+		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( m_mapNode );
 		MeshSPtr mesh = doSelectMesh( *p_category );
 		auto tower = m_scene.getGeometryCache().add( name, node, mesh );
@@ -630,7 +630,7 @@ namespace castortd
 		p_category->setAttackAnimationTime( time );
 		animGroup->startAnimation( p_category->getAttackAnimationName() );
 		animGroup->pauseAnimation( p_category->getAttackAnimationName() );
-		node->setScale( Point3r{ 0.15, 0.15, 0.15 } );
+		node->setScale( castor::Point3f{ 0.15, 0.15, 0.15 } );
 		std::clog << "Animation time: " << time.count() << std::endl;
 		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *node, *animGroup, p_cell ) );
 	}

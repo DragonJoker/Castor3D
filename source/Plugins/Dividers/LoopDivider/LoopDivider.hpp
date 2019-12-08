@@ -32,7 +32,7 @@ namespace Loop
 		 *\param[in]	z	The vertex Z coordinate
 		 *\return	The created vertex
 		 */
-		VertexSPtr addPoint( castor::real x, castor::real y, castor::real z );
+		VertexSPtr addPoint( float x, float y, float z );
 		/**
 		 * Adds a vertex to my list
 		 *\param[in]	v	The vertex to add
@@ -44,7 +44,7 @@ namespace Loop
 		 *\param[in]	v	The vertex coordinates
 		 *\return	The created vertex
 		 */
-		VertexSPtr addPoint( castor::real * v );
+		VertexSPtr addPoint( float * v );
 
 		inline castor3d::SubmeshSPtr getSubmesh()const
 		{

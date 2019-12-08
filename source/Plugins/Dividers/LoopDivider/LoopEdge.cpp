@@ -36,7 +36,7 @@ namespace Loop
 	}
 
 	VertexSPtr Edge::divide( Subdivider * divider
-		, real value )
+		, float value )
 	{
 		VertexSPtr result;
 
@@ -45,7 +45,7 @@ namespace Loop
 			if ( !m_divided )
 			{
 				// The edge is to divide and not divided yet, we create the new point
-				Point3r point = getVertex1()->getPoint().pos;
+				castor::Point3f point = getVertex1()->getPoint().pos;
 				point += getVertex2()->getPoint().pos;
 				point *= value;
 				m_createdVertex = divider->addPoint( point );

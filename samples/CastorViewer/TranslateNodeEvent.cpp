@@ -7,7 +7,7 @@ using namespace castor;
 
 namespace CastorViewer
 {
-	TranslateNodeEvent::TranslateNodeEvent( SceneNodeSPtr p_node, real p_dx, real p_dy, real p_dz )
+	TranslateNodeEvent::TranslateNodeEvent( SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
 		: MouseNodeEvent( p_node, p_dx, p_dy, p_dz )
 	{
 	}
@@ -23,9 +23,9 @@ namespace CastorViewer
 		if ( node )
 		{
 			Quaternion orientation = node->getOrientation();
-			Point3r right{ 1.0_r, 0.0_r, 0.0_r };
-			Point3r up{ 0.0_r, 1.0_r, 0.0_r };
-			Point3r front{ 0.0_r, 0.0_r, 1.0_r };
+			castor::Point3f right{ 1.0f, 0.0f, 0.0f };
+			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
+			castor::Point3f front{ 0.0f, 0.0f, 1.0f };
 			orientation.transform( right, right );
 			orientation.transform( up, up );
 			orientation.transform( front, front );

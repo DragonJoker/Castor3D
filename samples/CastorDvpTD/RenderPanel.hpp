@@ -35,10 +35,10 @@ namespace castortd
 		}
 
 	private:
-		castor::real doTransformX( int x );
-		castor::real doTransformY( int y );
-		int doTransformX( castor::real x );
-		int doTransformY( castor::real y );
+		float doTransformX( int x );
+		float doTransformY( int y );
+		int doTransformX( float x );
+		int doTransformY( float y );
 		void doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry );
 		void doUpgradeTowerDamage();
 		void doUpgradeTowerSpeed();
@@ -71,10 +71,10 @@ namespace castortd
 		void OnUpgradeTowerDamage( wxCommandEvent & p_event );
 
 	private:
-		castor::real m_x{ 0.0_r };
-		castor::real m_y{ 0.0_r };
-		castor::real m_oldX{ 0.0_r };
-		castor::real m_oldY{ 0.0_r };
+		float m_x{ 0.0f };
+		float m_y{ 0.0f };
+		float m_oldX{ 0.0f };
+		float m_oldY{ 0.0f };
 		bool m_mouseLeftDown{ false };
 		std::array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
 		GuiCommon::NodeStatePtr m_cameraState;

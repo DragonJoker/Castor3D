@@ -7,11 +7,11 @@ namespace PnTriangles
 {
 	namespace
 	{
-		Point3r barycenter( real u, real v, Point3r const & p1, Point3r const & p2, Point3r const & p3 )
+		castor::Point3f barycenter( float u, float v, castor::Point3f const & p1, castor::Point3f const & p2, castor::Point3f const & p3 )
 		{
-			real w = real( 1.0 - u - v );
+			float w = float( 1.0 - u - v );
 			CU_Ensure( std::abs( u + v + w - 1.0 ) < 0.0001 );
-			return Point3r{ p1 * u + p2 * v + p3 * w };
+			return castor::Point3f{ p1 * u + p2 * v + p3 * w };
 		}
 	}
 
@@ -19,17 +19,17 @@ namespace PnTriangles
 		, Plane const & p2
 		, Plane const & p3 )
 	{
-		b300 = barycenter( 3 / 3.0_r, 0 / 3.0_r, p1.point, p2.point, p3.point );
-		b030 = barycenter( 0 / 3.0_r, 3 / 3.0_r, p1.point, p2.point, p3.point );
-		b003 = barycenter( 0 / 3.0_r, 0 / 3.0_r, p1.point, p2.point, p3.point );
-		b201 = p1.plane.project( barycenter( 2 / 3.0_r, 0 / 3.0_r, p1.point, p2.point, p3.point ) );
-		b210 = p1.plane.project( barycenter( 2 / 3.0_r, 1 / 3.0_r, p1.point, p2.point, p3.point ) );
-		b120 = p2.plane.project( barycenter( 1 / 3.0_r, 2 / 3.0_r, p1.point, p2.point, p3.point ) );
-		b021 = p2.plane.project( barycenter( 0 / 3.0_r, 2 / 3.0_r, p1.point, p2.point, p3.point ) );
-		b102 = p3.plane.project( barycenter( 1 / 3.0_r, 0 / 3.0_r, p1.point, p2.point, p3.point ) );
-		b012 = p3.plane.project( barycenter( 0 / 3.0_r, 1 / 3.0_r, p1.point, p2.point, p3.point ) );
-		Point3r e = ( b210 + b120 + b021 + b012 + b102 + b201 ) / 6.0_r;
-		b111 = e + ( e - barycenter( 1 / 3.0_r, 1 / 3.0_r, p1.point, p2.point, p3.point ) ) / 2.0_r;
+		b300 = barycenter( 3 / 3.0f, 0 / 3.0f, p1.point, p2.point, p3.point );
+		b030 = barycenter( 0 / 3.0f, 3 / 3.0f, p1.point, p2.point, p3.point );
+		b003 = barycenter( 0 / 3.0f, 0 / 3.0f, p1.point, p2.point, p3.point );
+		b201 = p1.plane.project( barycenter( 2 / 3.0f, 0 / 3.0f, p1.point, p2.point, p3.point ) );
+		b210 = p1.plane.project( barycenter( 2 / 3.0f, 1 / 3.0f, p1.point, p2.point, p3.point ) );
+		b120 = p2.plane.project( barycenter( 1 / 3.0f, 2 / 3.0f, p1.point, p2.point, p3.point ) );
+		b021 = p2.plane.project( barycenter( 0 / 3.0f, 2 / 3.0f, p1.point, p2.point, p3.point ) );
+		b102 = p3.plane.project( barycenter( 1 / 3.0f, 0 / 3.0f, p1.point, p2.point, p3.point ) );
+		b012 = p3.plane.project( barycenter( 0 / 3.0f, 1 / 3.0f, p1.point, p2.point, p3.point ) );
+		castor::Point3f e = ( b210 + b120 + b021 + b012 + b102 + b201 ) / 6.0f;
+		b111 = e + ( e - barycenter( 1 / 3.0f, 1 / 3.0f, p1.point, p2.point, p3.point ) ) / 2.0f;
 	}
 
 	String const Subdivider::Name = cuT( "PN-Triangles Divider" );
@@ -90,8 +90,8 @@ namespace PnTriangles
 
 		for ( auto const & point : m_submesh->getPoints() )
 		{
-			Point3r position = point.pos;
-			Point3r normal = point.nml;
+			castor::Point3f position = point.pos;
+			castor::Point3f normal = point.nml;
 			posnml.emplace( i++, Plane{ castor::PlaneEquation( normal, position ), position } );
 		}
 
@@ -159,16 +159,16 @@ namespace PnTriangles
 		double v3 = double( v2 * v );
 		double w3 = double( w2 * w );
 
-		Point3r point = Point3r( patch.b300 * real( w3 )
-			+ patch.b030 * real( u3 )
-			+ patch.b003 * real( v3 )
-			+ patch.b210 * real( 3.0 * w2 * u )
-			+ patch.b120 * real( 3.0 * w * u2 )
-			+ patch.b201 * real( 3.0 * w2 * v )
-			+ patch.b021 * real( 3.0 * u2 * v )
-			+ patch.b102 * real( 3.0 * w * v2 )
-			+ patch.b012 * real( 3.0 * u * v2 )
-			+ patch.b111 * real( 6.0 * w * u * v ) );
+		castor::Point3f point = castor::Point3f( patch.b300 * float( w3 )
+			+ patch.b030 * float( u3 )
+			+ patch.b003 * float( v3 )
+			+ patch.b210 * float( 3.0 * w2 * u )
+			+ patch.b120 * float( 3.0 * w * u2 )
+			+ patch.b201 * float( 3.0 * w2 * v )
+			+ patch.b021 * float( 3.0 * u2 * v )
+			+ patch.b102 * float( 3.0 * w * v2 )
+			+ patch.b012 * float( 3.0 * u * v2 )
+			+ patch.b111 * float( 6.0 * w * u * v ) );
 
 		return doTryAddPoint( point );
 	}
