@@ -51,6 +51,8 @@ add_library( castor::${PROJECT_NAME}
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
 		${Vulkan_INCLUDE_DIRS}
+		${ASHES_SOURCE_DIR}/include
+		${ASHES_CONFIG_DIR}/include
 	PRIVATE
 		${CASTOR_SOURCE_DIR}/include/Core
 		${CASTOR_BINARY_DIR}/include/Core

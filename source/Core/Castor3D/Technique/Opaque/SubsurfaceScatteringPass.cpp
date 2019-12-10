@@ -476,13 +476,6 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
 		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringBlur" ) }
 	{
-		// Initialise the frame buffer.
-		VkExtent2D extent{ size.getWidth(), size.getHeight() };
-		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( destination.getTexture()->getDefaultView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( extent
-			, std::move( attaches ) );
-
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
@@ -506,6 +499,7 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ), // MaterialIndex map
 		};
 
+		VkExtent2D extent{ size.getWidth(), size.getHeight() };
 		createPipeline( extent
 			, Position{}
 			, shaderStages

@@ -125,7 +125,7 @@ namespace castor3d
 
 		inline bool needsYInversion()const
 		{
-			CU_Require( m_defaultView && m_texture );
+			CU_Require( m_defaultView );
 			return m_defaultView->needsYInversion();
 		}
 

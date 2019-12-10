@@ -1,7 +1,6 @@
 get_filename_component( CASTOR_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY )
 get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY )
 
-option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." FALSE )
 option( CASTOR_BUILD_SAMPLE_GUICOMMON "Build GuiCommon library (needs wxWidgets library)" TRUE )
 option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER "Build CastorViewer (needs GuiCommon library)" TRUE )
 option( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING "Build Ocean Lighting FFT sample (needs wxWidgets library)" FALSE )

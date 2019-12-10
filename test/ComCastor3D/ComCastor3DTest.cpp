@@ -3,16 +3,6 @@
 #include <tchar.h>
 #include <iostream>
 
-template< typename T >
-void  SafeRelease( T & x )
-{
-	if ( x )
-	{
-		x->Release();
-		x = NULL;
-	}
-}
-
 int _tmain( int argc, TCHAR * argv[] )
 {
 	HRESULT hr = ::CoInitialize( NULL );

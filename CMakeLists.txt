@@ -158,6 +158,7 @@ endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
+option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." FALSE )
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
 
 # Small macro to add subdirectory files to current target source and header files
@@ -234,6 +235,10 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			set_property( TARGET FreeType PROPERTY FOLDER "External" )
 		endif ()
 	endif ()
+
+	set( ASHES_SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/Ashes )
+	set( ASHES_BINARY_DIR ${CMAKE_BINARY_DIR}/external/Ashes )
+	set( ASHES_CONFIG_DIR ${ASHES_CONFIG_DIR}/external/Ashes )
 
 	add_subdirectory( source )
 
