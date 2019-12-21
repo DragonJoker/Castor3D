@@ -198,6 +198,18 @@ namespace castor3d
 		auto timerBlock = timer.start();
 
 		m_nodesCommands->begin();
+		m_nodesCommands->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Geometry",
+				{
+					opaqueBlackClearColor.color.float32[0],
+					opaqueBlackClearColor.color.float32[1],
+					opaqueBlackClearColor.color.float32[2],
+					opaqueBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();
 		m_nodesCommands->beginRenderPass( getRenderPass()
@@ -207,6 +219,7 @@ namespace castor3d
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
 		timer.endPass( *m_nodesCommands );
+		m_nodesCommands->endDebugUtilsLabel();
 		m_nodesCommands->end();
 
 		device.graphicsQueue->submit( *m_nodesCommands

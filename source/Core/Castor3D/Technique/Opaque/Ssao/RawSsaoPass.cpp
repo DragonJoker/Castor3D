@@ -737,6 +737,18 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"SSAO - Raw SSAO",
+				{
+					1.0f,
+					1.0f,
+					0.8f,
+					1.0f,
+				},
+			} );
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -748,6 +760,7 @@ namespace castor3d
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
 		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 	}
 

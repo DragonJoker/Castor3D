@@ -523,12 +523,25 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::Blur::prepareFrame( ashes::CommandBuffer & commandBuffer )const
 	{
+		commandBuffer.beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Subsurface Subscattering - Blur",
+				{
+					0.3f,
+					1.0f,
+					1.0f,
+					1.0f,
+				},
+			} );
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { opaqueBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( commandBuffer );
 		commandBuffer.endRenderPass();
+		commandBuffer.endDebugUtilsLabel();
 	}
 
 	void SubsurfaceScatteringPass::Blur::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -625,6 +638,18 @@ namespace castor3d
 	void SubsurfaceScatteringPass::Combine::prepareFrame( ashes::CommandBuffer & commandBuffer )const
 	{
 		static auto const red{ makeClearValue( 0, 1, 0, 1 ) };
+		commandBuffer.beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Subsurface Subscattering - Combine",
+				{
+					0.6f,
+					1.0f,
+					1.0f,
+					1.0f,
+				},
+			} );
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { red }
@@ -751,6 +776,18 @@ namespace castor3d
 	void SubsurfaceScatteringPass::prepare()
 	{
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Subsurface Subscattering",
+				{
+					0.0f,
+					1.0f,
+					1.0f,
+					1.0f,
+				},
+			} );
 		m_timer->beginPass( *m_commandBuffer );
 
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
@@ -761,6 +798,7 @@ namespace castor3d
 
 		m_combine.prepareFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 	}
 

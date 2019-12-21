@@ -1274,6 +1274,18 @@ namespace castor3d
 		, RenderPassTimer & timer )
 	{
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Resolve",
+				{
+					1.0f,
+					1.0f,
+					0.2f,
+					1.0f,
+				},
+			} );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
@@ -1288,6 +1300,7 @@ namespace castor3d
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
 		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 	}
 

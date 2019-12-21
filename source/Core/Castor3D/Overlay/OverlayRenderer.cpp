@@ -525,6 +525,18 @@ namespace castor3d
 
 		m_toWait = &toWait;
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Overlays",
+				{
+					0.5f,
+					0.0f,
+					0.5f,
+					1.0f,
+				},
+			} );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -536,6 +548,7 @@ namespace castor3d
 	{
 		m_commandBuffer->endRenderPass();
 		timer.endPass( *m_commandBuffer );
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 
 		for ( auto & pool : m_panelVertexBuffers )

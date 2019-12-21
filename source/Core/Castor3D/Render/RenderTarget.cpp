@@ -626,6 +626,18 @@ namespace castor3d
 		if ( result )
 		{
 			m_toneMappingCommandBuffer->begin();
+			m_toneMappingCommandBuffer->beginDebugUtilsLabel(
+				{
+					VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+					nullptr,
+					"Tone Mapping",
+					{
+						1.0f,
+						0.0f,
+						1.0f,
+						1.0f,
+					},
+				} );
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -642,6 +654,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
+			m_toneMappingCommandBuffer->endDebugUtilsLabel();
 			m_toneMappingCommandBuffer->end();
 		}
 
@@ -656,6 +669,18 @@ namespace castor3d
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		commandBuffer->begin();
+		commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Image Copy",
+				{
+					1.0f,
+					0.2f,
+					1.0f,
+					1.0f,
+				},
+			} );
 
 		if ( &source != &target )
 		{
@@ -675,6 +700,7 @@ namespace castor3d
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		commandBuffer->endDebugUtilsLabel();
 		commandBuffer->end();
 	}
 
@@ -682,7 +708,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Flip" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Combine" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -716,7 +742,7 @@ namespace castor3d
 			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Flip" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Combine" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -770,12 +796,25 @@ namespace castor3d
 			, {} );
 
 		m_combineCommands->begin();
+		m_combineCommands->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Combine 3D-2D",
+				{
+					1.0f,
+					0.4f,
+					1.0f,
+					1.0f,
+				},
+			} );
 		m_combineCommands->beginRenderPass( *m_renderPass
 			, *m_combinedFrameBuffer.frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_combineQuad->registerFrame( *m_combineCommands );
 		m_combineCommands->endRenderPass();
+		m_combineCommands->endDebugUtilsLabel();
 		m_combineCommands->end();
 	}
 

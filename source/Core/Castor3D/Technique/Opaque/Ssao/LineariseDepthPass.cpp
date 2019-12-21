@@ -636,6 +636,18 @@ namespace castor3d
 	void LineariseDepthPass::doPrepareFrame()
 	{
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"SSAO - Linearise Depth",
+				{
+					1.0f,
+					1.0f,
+					0.4f,
+					1.0f,
+				},
+			} );
 		m_timer->beginPass( *m_commandBuffer );
 
 		// Linearisation pass.
@@ -670,6 +682,19 @@ namespace castor3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, *m_depthBuffer.image
 				, subresource ) );
+		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"SSAO - Minify",
+				{
+					1.0f,
+					1.0f,
+					0.6f,
+					1.0f,
+				},
+			} );
 
 		// Minification passes.
 		for ( auto & pipeline : m_minifyPipelines )
@@ -686,6 +711,7 @@ namespace castor3d
 		}
 
 		m_timer->endPass( *m_commandBuffer );
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 	}
 }

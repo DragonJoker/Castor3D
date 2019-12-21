@@ -190,6 +190,18 @@ namespace castor3d
 		m_finished = device->createSemaphore();
 
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"Deferred - Stencil",
+				{
+					0.7f,
+					1.0f,
+					0.7f,
+					1.0f,
+				},
+			} );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_depthView.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
@@ -202,6 +214,7 @@ namespace castor3d
 		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 		m_commandBuffer->draw( uint32_t( vbo.getSize() / vertexLayout.vertexBindingDescriptions[0].stride ) );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->endDebugUtilsLabel();
 		m_commandBuffer->end();
 	}
 

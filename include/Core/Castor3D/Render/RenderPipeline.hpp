@@ -143,7 +143,6 @@ namespace castor3d
 			m_vertexLayouts = std::move( layouts );
 		}
 
-
 		inline void setPushConstantRanges( ashes::VkPushConstantRangeArray const & pushConstantRanges )
 		{
 			CU_Require( !m_pipeline );
