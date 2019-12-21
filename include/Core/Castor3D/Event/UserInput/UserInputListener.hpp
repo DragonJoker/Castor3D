@@ -26,6 +26,7 @@ namespace castor3d
 	{
 	public:
 		using OnClickActionFunction = std::function< void() >;
+		using OnMouseMoveActionFunction = std::function< void( castor::Position const & ) >;
 		using OnSelectActionFunction = std::function< void( int ) >;
 		using OnTextActionFunction = std::function< void( castor::String const & ) >;
 
@@ -113,6 +114,16 @@ namespace castor3d
 		
 		/**
 		 *\~english
+		 *\~brief		Registers an event raised by the handler when the mouse is moved over it.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Enregistre un évènement lancé par le handler si la souris se déplace sur sa surface.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void registerMouseMoveAction( castor::String const & handler
+			, OnMouseMoveActionFunction function );
+		/**
+		 *\~english
 		 *\~brief		Registers an event raised by the handler when it is clicked, if it supports clicking.
 		 *\param[in]	handler	The clicked handler.
 		 *\~french
@@ -147,6 +158,15 @@ namespace castor3d
 			, OnTextActionFunction function );
 		/**
 		 *\~english
+		 *\~brief		Unregisters an event raised by the handler when the mouse is moved over it.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Désnregistre un évènement lancé par le handler si la souris se déplace sur sa surface.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void unregisterMouseMoveAction( castor::String const & handler );
+		/**
+		 *\~english
 		 *\~brief		Unregisters an event raised by the handler when it is clicked, if it supports clicking.
 		 *\param[in]	handler	The clicked handler.
 		 *\~french
@@ -176,6 +196,15 @@ namespace castor3d
 		 *\param[in]	text	Le nouveau texte.
 		 */
 		C3D_API void unregisterTextAction( castor::String const & handler );
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when the mouse is moved over it.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler si la souris est déplacée au dessus de sa surface.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void onMouseMoveAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when it is clicked, if it supports clicking.
@@ -468,6 +497,9 @@ namespace castor3d
 		//!\~english	The last mouse target handler.
 		//!\~french		Le dernier gestionnaire cible de la souris.
 		EventHandlerWPtr m_lastMouseTarget;
+		//!\~english	The registered handler mouse move event actions.
+		//!\~french		Les actions enregistrées pour l'évènement déplacement de souris.
+		std::map< castor::String, OnMouseMoveActionFunction > m_onMouseMoveActions;
 		//!\~english	The registered handler clicked event actions.
 		//!\~french		Les actions enregistrées pour l'évènement handler cliqué.
 		std::map< castor::String, OnClickActionFunction > m_onClickActions;

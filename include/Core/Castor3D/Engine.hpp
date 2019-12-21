@@ -116,6 +116,17 @@ namespace castor3d
 		C3D_API void postEvent( FrameEventUPtr && event );
 		/**
 		 *\~english
+		 *\~brief		Fires a mouse move event.
+		 *\param[in]	position	The mouse position.
+		 *\return		\p true if the event is processed by a handler.
+		 *\~french
+		 *\~brief		Lance un évènement de déplacement de souris.
+		 *\param[in]	position	La position de la souris.
+		 *\return		\p true si l'évènement est traité par un gestionnaire.
+		 */
+		C3D_API bool fireMouseMove( castor::Position const & position );
+		/**
+		 *\~english
 		 *\brief		Retrieves the cleanup status
 		 *\remarks		Thread-safe
 		 *\return		\p true if cleaned up
@@ -462,15 +473,16 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
+		FrameListenerWPtr m_defaultListener;
 		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		UserInputListenerSPtr m_userInputListener;
+		std::map< RenderWindowRPtr, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
-		FrameListenerWPtr m_defaultListener;
 		RenderSystemFactory m_renderSystemFactory;
 		MeshFactory m_meshFactory;
 		SubdividerFactory m_subdividerFactory;

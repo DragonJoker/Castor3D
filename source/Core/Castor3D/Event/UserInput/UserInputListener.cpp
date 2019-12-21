@@ -77,6 +77,17 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::registerMouseMoveAction( castor::String const & handler
+		, OnMouseMoveActionFunction function )
+	{
+		auto it = m_onMouseMoveActions.find( handler );
+
+		if ( it == m_onMouseMoveActions.end() )
+		{
+			m_onMouseMoveActions.emplace( handler, function );
+		}
+	}
+
 	void UserInputListener::registerClickAction( String const & handler
 		, OnClickActionFunction function )
 	{
@@ -110,6 +121,16 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::unregisterMouseMoveAction( String const & handler )
+	{
+		auto it = m_onMouseMoveActions.find( handler );
+
+		if ( it != m_onMouseMoveActions.end() )
+		{
+			m_onMouseMoveActions.erase( it );
+		}
+	}
+
 	void UserInputListener::unregisterClickAction( String const & handler )
 	{
 		auto it = m_onClickActions.find( handler );
@@ -137,6 +158,16 @@ namespace castor3d
 		if ( it != m_onTextActions.end() )
 		{
 			m_onTextActions.erase( it );
+		}
+	}
+
+	void UserInputListener::onMouseMoveAction( String const & handler )
+	{
+		auto it = m_onMouseMoveActions.find( handler );
+
+		if ( it != m_onMouseMoveActions.end() )
+		{
+			it->second( getMousePosition() );
 		}
 	}
 

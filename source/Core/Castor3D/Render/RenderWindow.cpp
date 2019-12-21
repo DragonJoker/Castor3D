@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 
+#include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Miscellaneous/PickingPass.hpp"
@@ -28,6 +29,16 @@ namespace castor3d
 {
 	namespace
 	{
+		castor::Position convertToTopDown( Position const & position
+			, castor::Size const & size )
+		{
+			return
+			{
+				position.x(),
+				int32_t( size.getHeight() - position.y() )
+			};
+		}
+
 		uint32_t getImageCount( ashes::Surface const & surface )
 		{
 			auto surfaceCaps = surface.getCapabilities();
@@ -188,6 +199,7 @@ namespace castor3d
 		, Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
+		, MouseEventHandler{  }
 		, m_index{ s_nbRenderWindows++ }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
 	{
@@ -195,8 +207,8 @@ namespace castor3d
 
 	RenderWindow::~RenderWindow()
 	{
-		auto listener = getListener();
 		auto & engine = *getEngine();
+		auto listener = getListener();
 		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + string::toString( m_index ) );
 		auto target = m_renderTarget.lock();
 
@@ -938,5 +950,10 @@ namespace castor3d
 		{
 			engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
 		}
+	}
+
+	void RenderWindow::doProcessMouseEvent( MouseEventSPtr event )
+	{
+		m_mousePosition = event->getPosition();
 	}
 }

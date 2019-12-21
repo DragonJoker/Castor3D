@@ -43,14 +43,14 @@ namespace castor
 
 		ChangeTracked & operator=( T const & rhs )noexcept
 		{
-			m_dirty |= m_value != rhs;
+			m_dirty = m_dirty || ( m_value != rhs );
 			m_value = rhs;
 			return *this;
 		}
 
 		ChangeTracked & operator=( ChangeTracked< T > const & rhs )noexcept
 		{
-			m_dirty |= m_value != rhs.m_value;
+			m_dirty = m_dirty || ( m_value != rhs.m_value );
 			m_value = rhs.m_value;
 			return *this;
 		}

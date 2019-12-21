@@ -205,14 +205,24 @@ namespace castor3d
 			, dummy
 			, dummy
 			, mergeResource );
-		m_windowCache = makeCache < RenderWindow, String >(	*this
+		m_windowCache = makeCache< RenderWindow, String >(	*this
 			, [this]( castor::String const & name )
 			{
-				return std::make_shared< RenderWindow >( name
+				auto result = std::make_shared< RenderWindow >( name
 					, *this );
+				return result;
 			}
-			, dummy
-			, eventClean
+			, [this]( RenderWindowSPtr element )
+			{
+				m_windowInputListeners.emplace( element.get()
+					, std::make_shared< RenderWindow::InputListener >( *this, element ) );
+
+			}
+			, [this]( RenderWindowSPtr element )
+			{
+				m_windowInputListeners.erase( element.get() );
+				postEvent( makeCleanupEvent( *element ) );
+			}
 			, mergeResource );
 
 		if ( !File::directoryExists( getEngineDirectory() ) )
@@ -392,6 +402,17 @@ namespace castor3d
 		{
 			listener->postEvent( std::move( event ) );
 		}
+	}
+
+	bool Engine::fireMouseMove( castor::Position const & position )
+	{
+		for ( auto & listener : m_windowInputListeners )
+		{
+			listener.second->fireMouseMove( position );
+		}
+
+		auto inputListener = getUserInputListener();
+		return inputListener && inputListener->fireMouseMove( position );
 	}
 
 	Path Engine::getPluginsDirectory()

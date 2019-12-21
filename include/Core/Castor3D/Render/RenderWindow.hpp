@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderWindow_H___
 #define ___C3D_RenderWindow_H___
 
-#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
@@ -33,6 +33,7 @@ namespace castor3d
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
+		, public MouseEventHandler
 	{
 	private:
 		struct RenderingResources
@@ -98,6 +99,46 @@ namespace castor3d
 			 *\param[in]	file	Le fichier.
 			 */
 			C3D_API bool operator()( RenderWindow const & window, castor::TextFile & file )override;
+		};
+
+		class InputListener
+			: public UserInputListener
+		{
+		public:
+			InputListener( Engine & engine
+				, RenderWindowSPtr window )
+				: UserInputListener{ engine, window->getName() + "UIListener" }
+				, m_window{ std::move( window ) }
+			{
+			}
+
+		private:
+			EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & position )const override
+			{
+				return m_window;
+			}
+
+			/**@name General */
+			//@{
+
+			/**
+			 *copydoc		castor3d::UserInputListener::Initialise
+			 */
+			bool doInitialise()override
+			{
+				doAddHandler( m_window );
+				return true;
+			}
+			/**
+			 *copydoc		castor3d::UserInputListener::Cleanup
+			 */
+			void doCleanup()override
+			{
+				doRemoveHandler( m_window );
+			}
+
+		private:
+			RenderWindowSPtr m_window;
 		};
 
 	public:
@@ -409,6 +450,8 @@ namespace castor3d
 			, char const * const action );
 		void doCleanup( bool enableDevice );
 
+		void doProcessMouseEvent( MouseEventSPtr event )override;
+
 	private:
 		static uint32_t s_nbRenderWindows;
 		uint32_t m_index;
@@ -438,6 +481,7 @@ namespace castor3d
 		bool m_dirty{ true };
 		castor::PxBufferBaseSPtr m_saveBuffer;
 		PickingPassSPtr m_pickingPass;
+		castor::Position m_mousePosition;
 	};
 }
 

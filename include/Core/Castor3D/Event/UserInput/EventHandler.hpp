@@ -559,6 +559,40 @@ namespace castor3d
 		//!\~french		Les slots d'évènements de gestionnaire non clients.
 		std::array< std::vector< OnNonClientHandlerEventConnection >, size_t( HandlerEventType::eCount ) > m_ncHandlerSlotsConnections;
 	};
+
+	class MouseEventHandler
+		: public EventHandler
+	{
+	public:
+		MouseEventHandler()
+			: EventHandler{ true }
+		{
+		}
+
+	private:
+		C3D_API void doProcessKeyboardEvent( KeyboardEventSPtr event )final override
+		{
+		}
+
+		C3D_API void doProcessHandlerEvent( HandlerEventSPtr event )final override
+		{
+		}
+
+		C3D_API bool doCatchesTabKey()const final override
+		{
+			return false;
+		}
+
+		C3D_API bool doCatchesReturnKey()const final override
+		{
+			return false;
+		}
+
+		C3D_API bool doCatchesMouseEvents()const final override
+		{
+			return true;
+		}
+	};
 }
 
 #endif

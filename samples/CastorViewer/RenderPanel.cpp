@@ -923,9 +923,7 @@ namespace CastorViewer
 		m_x = doTransformX( p_event.GetX() );
 		m_y = doTransformY( p_event.GetY() );
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
+		if ( !wxGetApp().getCastor()->fireMouseMove( Position{ int32_t( m_x ), int32_t( m_y ) } ) )
 		{
 			if ( m_currentState )
 			{
