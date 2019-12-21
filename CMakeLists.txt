@@ -236,9 +236,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 	endif ()
 
-	set( ASHES_SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/Ashes )
-	set( ASHES_BINARY_DIR ${CMAKE_BINARY_DIR}/external/Ashes )
-	set( ASHES_CONFIG_DIR ${ASHES_CONFIG_DIR}/external/Ashes )
+	set( Ashes_BASE_DIR "External/Ashes" )
+	set( Ashes_SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/Ashes )
+	set( Ashes_BINARY_DIR ${CMAKE_BINARY_DIR}/external/Ashes )
 
 	add_subdirectory( source )
 

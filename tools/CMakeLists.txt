@@ -18,6 +18,12 @@ endfunction( ToolsInit )
 
 function( ToolsBuild )
 	if( ${CASTOR_BUILDGRP_TOOL} )
+		set( Castor3DIncludeDirs
+			${Castor3DIncludeDirs}
+			${CASTOR_BINARY_DIR}/include/Core
+			${CASTOR_SOURCE_DIR}/include/Core
+		)
+
 		if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER}
 			OR ${CASTOR_BUILD_TOOL_CASTOR_TEST_LAUNCHER} )
 			if( APPLE )
@@ -36,11 +42,6 @@ function( ToolsBuild )
 			find_package( wxWidgets COMPONENTS core base )
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
-				set( Castor3DIncludeDirs
-					${Castor3DIncludeDirs}
-					${CASTOR_BINARY_DIR}/include/Core
-					${CASTOR_SOURCE_DIR}/include/Core
-				)
 				if ( APPLE )
 					set( Castor3DDefinitions
 						${Castor3DDefinitions}
