@@ -1160,7 +1160,11 @@ namespace castor3d
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
 			pipeline.setViewport( makeViewport( m_size ) );
-			pipeline.setScissor( makeScissor( m_size ) );
+
+			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+			{
+				pipeline.setScissor( makeScissor( m_size ) );
+			}
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()
@@ -1199,7 +1203,11 @@ namespace castor3d
 					, flags ) ).first->second;
 			pipeline.setVertexLayouts( layouts );
 			pipeline.setViewport( makeViewport( m_size ) );
-			pipeline.setScissor( makeScissor( m_size ) );
+
+			if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+			{
+				pipeline.setScissor( makeScissor( m_size ) );
+			}
 
 			getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [this, &pipeline, flags]()

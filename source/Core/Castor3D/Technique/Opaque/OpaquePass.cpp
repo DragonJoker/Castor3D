@@ -449,11 +449,16 @@ namespace castor3d
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
 
 		// UBOs
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -587,11 +592,16 @@ namespace castor3d
 		shader::PbrMRMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
 
 		// UBOs
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -725,11 +735,16 @@ namespace castor3d
 		shader::PbrSGMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
 
 		// UBOs
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )

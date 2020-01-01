@@ -944,9 +944,14 @@ namespace castor3d
 
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 			shader::TextureConfigurations textureConfigs{ writer };
-			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+
+			if ( hasTexture )
+			{
+				textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+			}
+
 			UBO_OVERLAY( writer, OverlayUboBinding, 0u );
-			UBO_TEXTURES( writer, TexturesUboBinding, 0u );
+			UBO_TEXTURES( writer, TexturesUboBinding, 0u, hasTexture );
 
 			// Shader inputs
 			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )

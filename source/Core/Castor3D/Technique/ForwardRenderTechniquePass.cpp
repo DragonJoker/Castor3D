@@ -572,12 +572,12 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// UBOs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -606,10 +606,17 @@ namespace castor3d
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::LegacyMaterials materials{ writer };
-		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -628,7 +635,6 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
 		utils.declareInvertNormal();
 		utils.declareApplyGamma();
@@ -778,12 +784,12 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// UBOs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -812,10 +818,17 @@ namespace castor3d
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrMRMaterials materials{ writer };
-		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -842,7 +855,6 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
 		utils.declareInvertNormal();
 		utils.declareApplyGamma();
@@ -1058,12 +1070,12 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// UBOs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
 
 		// Fragment Intputs
 		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
@@ -1092,10 +1104,17 @@ namespace castor3d
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		shader::PbrSGMaterials materials{ writer };
-		materials.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		auto index = getMinTextureIndex();
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -1123,7 +1142,6 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
 		utils.declareInvertNormal();
 		utils.declareApplyGamma();

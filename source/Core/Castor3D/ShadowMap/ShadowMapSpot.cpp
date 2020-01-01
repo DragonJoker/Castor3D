@@ -463,7 +463,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
 		Ubo shadowMap{ writer, ShadowMapPassSpot::ShadowMapUbo, ShadowMapPassSpot::UboBindingPoint, 0u };
 		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassSpot::FarPlane ) );
 		shadowMap.end();
@@ -482,9 +481,16 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Outputs
 		auto pxl_linear( writer.declOutput< Float >( cuT( "pxl_linear" ), 0u ) );

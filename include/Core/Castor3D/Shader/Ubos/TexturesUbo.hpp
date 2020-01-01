@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
+#include <ShaderWriter/Optional/OptionalUbo.hpp>
+
 namespace castor3d
 {
 	/*!
@@ -114,8 +116,9 @@ namespace castor3d
 	};
 }
 
-#define UBO_TEXTURES( writer, binding, set )\
-	Ubo textures{ writer\
+#define UBO_TEXTURES( writer, binding, set, enabled )\
+	Optional< Ubo > textures{ writer\
+		, enabled\
 		, castor3d::TexturesUbo::BufferTextures\
 		, binding\
 		, set };\

@@ -778,9 +778,15 @@ namespace castor3d
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		textureConfigs.declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
 		UBO_PICKING( writer, PickingUbo::BindingPoint, 0u );
-		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u );
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Intputs
 		auto in = writer.getIn();
