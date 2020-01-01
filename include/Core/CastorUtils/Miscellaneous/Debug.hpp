@@ -119,4 +119,17 @@ namespace castor
 	}
 }
 
+#if !defined( NDEBUG )
+#	define CU_DeclareDebugVar( type, var )\
+	type var
+#	define CU_DefineDebugVar( type, var, value )\
+	type var{ value }
+#	define CU_AssignDebugVar( var, value )\
+	var = value
+#else
+#	define CU_DeclareDebugVar( type, var )
+#	define CU_DefineDebugVar( type, var, value )
+#	define CU_AssignDebugVar( var, value )
+#endif
+
 #endif

@@ -33,6 +33,8 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	/**@name File handling */
+	//@{
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -62,6 +64,9 @@ namespace castor
 	*/
 	template< FileType FT >
 	struct FileTyper;
+	//@}
+	/**@name Graphics */
+	//@{
 	/*!
 	\~english
 	\brief Pixel format enumeration
@@ -185,7 +190,9 @@ namespace castor
 		eIntersect,
 		CU_ScopedEnumBounds( eIn )
 	};
-
+	//@}
+	/**@name STL typedefs */
+	//@{
 	using String = std::basic_string< xchar >;
 	using Regex = std::basic_regex< xchar >;
 	using RegexIterator = std::regex_iterator< String::const_iterator >;
@@ -199,7 +206,7 @@ namespace castor
 	using Milliseconds = std::chrono::milliseconds;
 	using Microseconds = std::chrono::microseconds;
 	using Nanoseconds = std::chrono::nanoseconds;
-
+	//@}
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
@@ -499,7 +506,8 @@ namespace castor
 	 *\param[in]	newLine	Dit si on ajoute le caractère de fin de ligne.
 	 */
 	using LogCallback = std::function< void ( String const & text, LogType type, bool newLine ) >;
-
+	/**@name Memory pool */
+	//@{
 	class NonAlignedMemoryAllocator;
 	template< size_t Align >
 	class AlignedMemoryAllocator;
@@ -512,7 +520,13 @@ namespace castor
 	class FixedSizeMarkedMemoryData;
 	template< typename Object >
 	class FixedGrowingSizeMarkedMemoryData;
-
+	//@}
+	/**
+	 *\~english
+	 *\return		A std::stringstream using C locale.
+	 *\~french
+	 *\return		Un std::stringstream utilisant une locale C.
+	 */
 	inline StringStream makeStringStream()
 	{
 		static std::locale const loc{ "C" };
