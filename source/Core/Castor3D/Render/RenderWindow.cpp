@@ -23,13 +23,12 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-using namespace castor;
 
 namespace castor3d
 {
 	namespace
 	{
-		castor::Position convertToTopDown( Position const & position
+		castor::Position convertToTopDown( castor::Position const & position
 			, castor::Size const & size )
 		{
 			return
@@ -158,14 +157,14 @@ namespace castor3d
 		}
 	}
 
-	RenderWindow::TextWriter::TextWriter( String const & tabs )
+	RenderWindow::TextWriter::TextWriter( castor::String const & tabs )
 		: castor::TextWriter< RenderWindow >{ tabs }
 	{
 	}
 
-	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, TextFile & file )
+	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, castor::TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
+		castor::Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
@@ -195,13 +194,13 @@ namespace castor3d
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( String const & name
+	RenderWindow::RenderWindow( castor::String const & name
 		, Engine & engine )
 		: OwnedBy< Engine >{ engine }
-		, Named{ name }
+		, castor::Named{ name }
 		, MouseEventHandler{  }
 		, m_index{ s_nbRenderWindows++ }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + string::toString( m_index ) ) }
+		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) ) }
 	{
 	}
 
@@ -209,7 +208,7 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto listener = getListener();
-		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + string::toString( m_index ) );
+		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) );
 		auto target = m_renderTarget.lock();
 
 		if ( target )
@@ -229,7 +228,7 @@ namespace castor3d
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT );
 	}
 
-	bool RenderWindow::initialise( Size const & size
+	bool RenderWindow::initialise( castor::Size const & size
 		, ashes::WindowHandle handle )
 	{
 		m_size = size;
@@ -243,7 +242,7 @@ namespace castor3d
 			if ( m_initialised )
 			{
 				m_surface = m_device->surface.get();
-				auto guard = makeBlockGuard(
+				auto guard = castor::makeBlockGuard(
 					[this, &engine]()
 					{
 						engine.getRenderSystem()->setCurrentRenderDevice( m_device.get() );
@@ -271,7 +270,7 @@ namespace castor3d
 				doCreateSwapChainDependent();
 				doPrepareFrames();
 
-				m_saveBuffer = PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
+				m_saveBuffer = castor::PxBufferBase::create( target->getSize(), convert( target->getPixelFormat() ) );
 				m_stagingTexture = getDevice()->createStagingTexture( target->getPixelFormat()
 					, { m_saveBuffer->getWidth(), m_saveBuffer->getHeight() } );
 				m_initialised = true;
@@ -295,7 +294,7 @@ namespace castor3d
 				&& &getCurrentRenderDevice( *this ) != m_device.get() )
 			{
 				auto & device = getCurrentRenderDevice( *this );
-				auto guard = makeBlockGuard(
+				auto guard = castor::makeBlockGuard(
 					[this, &engine]()
 					{
 						engine.getRenderSystem()->setCurrentRenderDevice( nullptr );
@@ -323,7 +322,7 @@ namespace castor3d
 			{
 				auto & engine = *getEngine();
 				auto & renderSystem = *engine.getRenderSystem();
-				auto guard = makeBlockGuard(
+				auto guard = castor::makeBlockGuard(
 					[this, &renderSystem]()
 					{
 						renderSystem.setCurrentRenderDevice( m_device.get() );
@@ -335,7 +334,7 @@ namespace castor3d
 
 				if ( m_toSave )
 				{
-					ByteArray data;
+					castor::ByteArray data;
 					m_stagingTexture->downloadTextureData( *getDevice().transferQueue
 						, *getDevice().graphicsCommandPool
 						, target->getPixelFormat()
@@ -399,7 +398,7 @@ namespace castor3d
 		resize( { x, y } );
 	}
 
-	void RenderWindow::resize( Size const & size )
+	void RenderWindow::resize( castor::Size const & size )
 	{
 		m_size = size;
 
@@ -557,7 +556,7 @@ namespace castor3d
 		}
 	}
 
-	Size RenderWindow::getSize()const
+	castor::Size RenderWindow::getSize()const
 	{
 		return m_size;
 	}
