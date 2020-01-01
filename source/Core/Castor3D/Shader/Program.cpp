@@ -256,13 +256,13 @@ namespace castor3d
 			&& ( !it->second.source.empty() || it->second.shader != nullptr );
 	}
 
-	UInt32Array compileShader( RenderSystem const & renderSystem
+	SpirVShader compileShader( RenderSystem const & renderSystem
 		, ShaderModule const & module )
 	{
 		return renderSystem.compileShader( module );
 	}
 
-	UInt32Array compileShader( RenderDevice const & device
+	SpirVShader compileShader( RenderDevice const & device
 		, ShaderModule const & module )
 	{
 		return compileShader( device.renderSystem, module );

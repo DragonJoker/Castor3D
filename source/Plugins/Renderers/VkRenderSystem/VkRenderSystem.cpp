@@ -212,85 +212,8 @@ namespace VkRender
 			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
+	castor3d::SpirVShader RenderSystem::doCompileShader( castor3d::ShaderModule const & module )const
 	{
-		castor3d::UInt32Array result;
-
-		if ( module.shader )
-		{
-#if !defined( NDEBUG )
-
-#if C3DVkRenderer_HasGLSL
-			auto glsl = glsl::compileGlsl( *module.shader
-				, ast::SpecialisationInfo{}
-				, glsl::GlslConfig
-				{
-					module.shader->getType(),
-					460,
-					true,
-					false,
-					true,
-					true,
-					true,
-					true,
-				} );
-#else
-			std::string glsl;
-#endif
-
-			// Don't do this at home !
-			const_cast< castor3d::ShaderModule & >( module ).source = glsl + "\n" + spirv::writeSpirv( *module.shader );
-
-			result = spirv::serialiseSpirv( *module.shader );
-
-#	if C3DVkRenderer_HasSPIRVCross && C3DVkRenderer_DebugSpirV
-
-			std::string name = module.name + "_" + ashes::getName( module.stage );
-
-			try
-			{
-				auto glsl2 = compileSpvToGlsl( *getMainRenderDevice()
-					, result
-					, module.stage );
-				const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glsl2;
-			}
-			catch ( std::exception & exc )
-			{
-				std::cerr << module.source << std::endl;
-				std::cerr << exc.what() << std::endl;
-				{
-					BinaryFile file{ File::getExecutableDirectory() / ( name + "_sdw.spv" )
-						, File::OpenMode::eWrite };
-					file.writeArray( result.data()
-						, result.size() );
-				}
-
-				auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
-					, module.stage
-					, glsl );
-				{
-					BinaryFile file{ File::getExecutableDirectory() / ( name + "_glslang.spv" )
-						, File::OpenMode::eWrite };
-					file.writeArray( ref.data()
-						, ref.size() );
-				}
-			}
-
-#	endif
-#else
-
-			result = spirv::serialiseSpirv( *module.shader );
-
-#endif
-		}
-		else
-		{
-			assert( !module.source.empty() );
-			result = castor3d::compileGlslToSpv( *getMainRenderDevice()
-				, module.stage
-				, module.source );
-		}
-
-		return result;
+		return doCompileSpirV( module );
 	}
 }

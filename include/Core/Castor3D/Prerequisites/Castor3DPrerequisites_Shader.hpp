@@ -6,15 +6,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API uint32_t getPassBufferIndex()noexcept;
-	C3D_API uint32_t getTexturesBufferIndex()noexcept;
-	C3D_API uint32_t getLightBufferIndex()noexcept;
-	C3D_API uint32_t getMinBufferIndex()noexcept;
-	C3D_API uint32_t getMinTextureIndex()noexcept;
-
-	using ShaderPtr = std::unique_ptr< sdw::Shader >;
 	/**@name Shader */
 	//@{
+	using ShaderPtr = std::unique_ptr< sdw::Shader >;
+	/*!
+	\version	0.11.0
+	\~english
+	\brief		A non compiled shader module, with its source.
+	\~french
+	\brief		Un module shader non compilé, avec sa source.
+	*/
 	struct ShaderModule
 	{
 		ShaderModule( ShaderModule const & ) = delete;
@@ -38,9 +39,19 @@ namespace castor3d
 		ShaderPtr shader;
 	};
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		20/11/13
-	\version	0.7.0.0
+	\version	0.11.0
+	\~english
+	\brief		A SPIR-V shader module, with SPIR-V binary and debug text source.
+	\~french
+	\brief		Un module shader SPIR-V, avec le binaire SPIR-V et la source en texte.
+	*/
+	struct SpirVShader
+	{
+		castor::UInt32Array spirv;
+		std::string text;
+	};
+	/*!
+	\version	0.7.0
 	\~english
 	\brief		Flags to use when looking for an automatically generated program
 	\~french
@@ -110,6 +121,42 @@ namespace castor3d
 	 *\return		\p true si flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
 	 */
 	C3D_API bool isShadowMapProgram( ProgramFlags const & flags );
+	/**
+	 *\~english
+	 *\return		The materials passes buffer index.
+	 *\~french
+	 *\return		L'index du buffer de passes de matériaux.
+	 */
+	C3D_API uint32_t getPassBufferIndex()noexcept;
+	/**
+	 *\~english
+	 *\return		The textures buffer index.
+	 *\~french
+	 *\return		L'index du buffer de textures.
+	 */
+	C3D_API uint32_t getTexturesBufferIndex()noexcept;
+	/**
+	 *\~english
+	 *\return		The lights sources buffer index.
+	 *\~french
+	 *\return		L'index du buffer de sources lumineuses.
+	 */
+	C3D_API uint32_t getLightBufferIndex()noexcept;
+	/**
+	 *\~english
+	 *\return		The minimal index for shader buffers (SSBO and UBO).
+	 *\~french
+	 *\return		L'index minimal des shader buffers (SSBO et UBO).
+	 */
+	C3D_API uint32_t getMinBufferIndex()noexcept;
+	/**
+	 *\~english
+	 *\return		The minimal index for textures.
+	 *\~french
+	 *\return		L'index minimal pour les textures.
+	 */
+	C3D_API uint32_t getMinTextureIndex()noexcept;
+
 
 	class BillboardUbo;
 	class MatrixUbo;

@@ -26,6 +26,14 @@ namespace castor3d
 	{
 	}
 
+	void PickingUbo::update( Configuration & configuration
+		, uint32_t drawIndex
+		, uint32_t nodeIndex )
+	{
+		configuration.drawIndex = drawIndex;
+		configuration.nodeIndex = nodeIndex;
+	}
+
 	void PickingUbo::initialise()
 	{
 		if ( !m_ubo )
@@ -47,9 +55,9 @@ namespace castor3d
 		, uint32_t nodeIndex )const
 	{
 		CU_Require( m_ubo );
-		auto & configuration = m_ubo->getData( 0u );
-		configuration.drawIndex = drawIndex ? 1 : 0;
-		configuration.nodeIndex = nodeIndex - 1;
+		update( m_ubo->getData( 0u )
+			, drawIndex
+			, nodeIndex );
 		m_ubo->upload();
 	}
 }

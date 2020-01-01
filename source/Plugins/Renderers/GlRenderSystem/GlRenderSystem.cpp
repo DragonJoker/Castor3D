@@ -1,18 +1,18 @@
-#include "Gl4RenderSystem/Gl4RenderSystem.hpp"
+#include "GlRenderSystem/GlRenderSystem.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Shader/GlslToSpv.hpp>
 
-#include <CompilerGlsl/compileGlsl.hpp>
-
 #include <CastorUtils/Log/Logger.hpp>
+
+#include <CompilerGlsl/compileGlsl.hpp>
 
 using namespace castor;
 
-namespace Gl4Render
+namespace castor3d::gl
 {
-	String RenderSystem::Name = cuT( "OpenGL 4.x Renderer" );
-	String RenderSystem::Type = cuT( "gl4" );
+	String RenderSystem::Name = cuT( "OpenGL Renderer" );
+	String RenderSystem::Type = cuT( "gl" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, AshPluginDescription desc )
@@ -88,14 +88,13 @@ namespace Gl4Render
 			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
+	castor3d::SpirVShader RenderSystem::doCompileShader( castor3d::ShaderModule const & module )const
 	{
-		castor3d::UInt32Array result;
-		std::string glsl;
+		castor3d::SpirVShader result;
 
 		if ( module.shader )
 		{
-			glsl = glsl::compileGlsl( *module.shader
+			result.text = glsl::compileGlsl( *module.shader
 				, ast::SpecialisationInfo{}
 				, glsl::GlslConfig
 				{
@@ -109,26 +108,15 @@ namespace Gl4Render
 					true,
 					true,
 				} );
-
-#if !defined( NDEBUG )
-
-			// Don't do this at home !
-			const_cast< castor3d::ShaderModule & >( module ).source = glsl;
-
-#endif
 		}
 		else
 		{
-			glsl = module.source;
+			result.text = module.source;
 		}
 
-		//result = castor3d::compileGlslToSpv( getCurrentRenderDevice()
-		//	, module.stage
-		//	, glsl );
-
-		auto size = glsl.size() + 1u;
-		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
-		std::memcpy( result.data(), glsl.data(), glsl.size() );
+		auto size = result.text.size() + 1u;
+		result.spirv.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.spirv.data(), result.text.data(), result.text.size() );
 		return result;
 	}
 }

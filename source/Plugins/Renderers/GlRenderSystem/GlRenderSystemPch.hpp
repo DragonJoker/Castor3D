@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___Gl_PrecompiledHeader___
-#define ___Gl_PrecompiledHeader___
+#ifndef ___C3D_GlPrecompiledHeader___
+#define ___C3D_GlPrecompiledHeader___
 
 #include <CastorUtils/config.hpp>
 
@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <iomanip>
 #include <iostream>
 
-#include "Gl3RenderSystemPrerequisites.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
 
 #endif
 

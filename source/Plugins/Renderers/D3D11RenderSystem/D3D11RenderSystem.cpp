@@ -89,36 +89,28 @@ namespace D3D11Render
 			, std::move( desc ) );
 	}
 
-	castor3d::UInt32Array RenderSystem::compileShader( castor3d::ShaderModule const & module )const
+	castor3d::SpirVShader RenderSystem::doCompileShader( castor3d::ShaderModule const & module )const
 	{
-		castor3d::UInt32Array result;
-		std::string hlsl;
+		castor3d::SpirVShader result;
 
 		if ( module.shader )
 		{
-			hlsl = hlsl::compileHlsl( *module.shader
+			result.text = hlsl::compileHlsl( *module.shader
 				, ast::SpecialisationInfo{}
 				, hlsl::HlslConfig
 				{
 					module.shader->getType(),
 					true,
 				} );
-
-#if !defined( NDEBUG )
-
-			// Don't do this at home !
-			const_cast< castor3d::ShaderModule & >( module ).source = hlsl;
-
-#endif
 		}
 		else
 		{
-			hlsl = module.source;
+			result.text = module.source;
 		}
 
-		auto size = hlsl.size() + 1u;
-		result.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
-		std::memcpy( result.data(), hlsl.data(), hlsl.size() );
+		auto size = result.text.size() + 1u;
+		result.spirv.resize( size_t( std::ceil( float( size ) / sizeof( uint32_t ) ) ) );
+		std::memcpy( result.spirv.data(), result.text.data(), result.text.size() );
 		return result;
 	}
 }

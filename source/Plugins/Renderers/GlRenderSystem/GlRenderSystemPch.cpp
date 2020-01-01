@@ -1,4 +1,4 @@
-#include "Gl4RenderSystemPch.hpp"
+#include "GlRenderSystemPch.hpp"
 
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>

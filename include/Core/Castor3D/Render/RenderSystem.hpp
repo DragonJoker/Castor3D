@@ -114,7 +114,8 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API virtual UInt32Array compileShader( ShaderModule const & module )const = 0;
+		C3D_API SpirVShader compileShader( ShaderModule const & module
+			, bool forceSpirV = false )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -421,6 +422,12 @@ namespace castor3d
 			m_gpuTime = castor::Nanoseconds( 0 );
 		}
 		/**@}*/
+
+	protected:
+		C3D_API SpirVShader doCompileSpirV( castor3d::ShaderModule const & module )const;
+
+	private:
+		virtual SpirVShader doCompileShader( castor3d::ShaderModule const & module )const = 0;
 
 	protected:
 		std::recursive_mutex m_mutex;

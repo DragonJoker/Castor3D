@@ -5,7 +5,7 @@ See LICENSE file in root folder.
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/RequiredVersion.hpp"
 
-#if C3D_UseGLSLANG
+#if C3D_HasGlslang
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 

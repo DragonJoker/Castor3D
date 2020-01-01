@@ -2,12 +2,12 @@ project( Castor3D )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
 set( ${PROJECT_NAME}_BRIEF "Multiplatform 3D engine" )
-set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/../data/Images/castor-small.png" )
+set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-small.png" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-set( C3D_USE_GLSLANG 0 )
+set( ExternalIncludes )
 
 if ( CASTOR_USE_GLSLANG )
 	set( GlslangLibraries 
@@ -16,10 +16,49 @@ if ( CASTOR_USE_GLSLANG )
 		OSDependent
 		SPVRemapper
 		SPIRV )
-	set( GlslangIncludes
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		C3D_HasGlslang
+	)
+	set( ExternalIncludes
+		${ExternalIncludes}
 		${CASTOR_SOURCE_DIR}/external/glslang
 	)
-	set( C3D_USE_GLSLANG 1 )
+endif ()
+
+if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross/spirv_glsl.cpp )
+	set( SPIRV_CROSS_DIR
+		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross
+	)
+	set( SPIRV_HEADER_FILES
+		${SPIRV_CROSS_DIR}/GLSL.std.450.h
+		${SPIRV_CROSS_DIR}/spirv_common.hpp
+		${SPIRV_CROSS_DIR}/spirv.hpp
+		${SPIRV_CROSS_DIR}/spirv_cross.hpp
+		${SPIRV_CROSS_DIR}/spirv_parser.hpp
+		${SPIRV_CROSS_DIR}/spirv_cross_parsed_ir.hpp
+		${SPIRV_CROSS_DIR}/spirv_cfg.hpp
+		${SPIRV_CROSS_DIR}/spirv_glsl.hpp
+	)
+	set( SPIRV_SOURCE_FILES
+		${SPIRV_CROSS_DIR}/spirv_cross.cpp
+		${SPIRV_CROSS_DIR}/spirv_cfg.cpp
+		${SPIRV_CROSS_DIR}/spirv_glsl.cpp
+		${SPIRV_CROSS_DIR}/spirv_parser.cpp
+		${SPIRV_CROSS_DIR}/spirv_cross_parsed_ir.cpp
+	)
+	set( SPIRV_FILES
+		${SPIRV_HEADER_FILES}
+		${SPIRV_SOURCE_FILES}
+	)
+	set( Castor3DDefinitions
+		${Castor3DDefinitions}
+		C3D_HasSPIRVCross
+	)
+	set( ExternalIncludes
+		${ExternalIncludes}
+		${SPIRV_CROSS_DIR}
+	)
 endif ()
 
 configure_file(
@@ -43,7 +82,13 @@ add_target(
 	""
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
+	""
+	""
+	""
+	"${SPIRV_FILES}"
 )
+source_group( "Header Files\\SPIRVCross" FILES ${SPIRV_HEADER_FILES} )
+source_group( "Source Files\\SPIRVCross" FILES ${SPIRV_SOURCE_FILES} )
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
@@ -58,7 +103,7 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_BINARY_DIR}/include/Core
 		${CASTOR_SOURCE_DIR}/source/Core
 		${CASTOR_BINARY_DIR}/source/Core
-		${GlslangIncludes}
+		${ExternalIncludes}
 )
 target_compile_definitions( ${PROJECT_NAME}
 	PUBLIC
@@ -70,6 +115,7 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::ShaderWriter
 		ashes::ashespp
 	PRIVATE
+		sdw::CompilerSpirV
 		${GlslangLibraries}
 )
 

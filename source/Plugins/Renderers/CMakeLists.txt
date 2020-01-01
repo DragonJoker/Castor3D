@@ -3,8 +3,7 @@ option( CASTOR_BUILD_RENDERER_VKN "Build Vulkan Renderer plugin" ON )
 if ( ANDROID )
 	option( CASTOR_BUILD_RENDERER_OGL_ES3 "Build OpenGL ES 3.0 Renderer plugin" OFF )
 elseif ( NOT APPLE )
-	option( CASTOR_BUILD_RENDERER_OGL4 "Build OpenGL 4.2 Renderer plugin" ON )
-	option( CASTOR_BUILD_RENDERER_OGL3 "Build OpenGL 3.2 Renderer plugin" ON )
+	option( CASTOR_BUILD_RENDERER_OGL "Build OpenGL Renderer plugin" ON )
 	if ( WIN32 )
 		option( CASTOR_BUILD_RENDERER_D3D11 "Build Direct3D 11 Renderer plugin" ON )
 	endif ()
@@ -15,8 +14,7 @@ function( RenderersInit )
 	if ( ANDROID )
 		set( OglES3 "no (Not wanted)" PARENT_SCOPE )
 	elseif ( NOT APPLE )
-		set( Ogl4 "no (Not wanted)" PARENT_SCOPE )
-		set( Ogl3 "no (Not wanted)" PARENT_SCOPE )
+		set( Ogl "no (Not wanted)" PARENT_SCOPE )
 	endif ()
 	set( Trs "no (Not wanted)" PARENT_SCOPE )
 	if ( WIN32 )
@@ -46,15 +44,10 @@ function( RenderersBuild )
 				set( OglES3 ${Build} PARENT_SCOPE )
 			endif()
 		elseif ( NOT APPLE )
-			if ( ${CASTOR_BUILD_RENDERER_OGL4} )
-				set( Build ${Ogl4} )
-				add_subdirectory( Plugins/Renderers/Gl4RenderSystem )
-				set( Ogl4 ${Build} PARENT_SCOPE )
-			endif()
-			if ( ${CASTOR_BUILD_RENDERER_OGL3} )
-				set( Build ${Ogl3} )
-				add_subdirectory( Plugins/Renderers/Gl3RenderSystem )
-				set( Ogl3 ${Build} PARENT_SCOPE )
+			if ( ${CASTOR_BUILD_RENDERER_OGL} )
+				set( Build ${Ogl} )
+				add_subdirectory( Plugins/Renderers/GlRenderSystem )
+				set( Ogl ${Build} PARENT_SCOPE )
 			endif()
 			if ( WIN32 )
 				if ( ${CASTOR_BUILD_RENDERER_D3D11} )
@@ -96,8 +89,7 @@ function( RenderersSummary msg_in )
 
 		set( msg_tmp "${msg_tmp}\n    Vulkan               ${Vkn}" )
 		if ( NOT APPLE )
-			set( msg_tmp "${msg_tmp}\n    OpenGL 4.X           ${Ogl4}" )
-			set( msg_tmp "${msg_tmp}\n    OpenGL 3.X           ${Ogl3}" )
+			set( msg_tmp "${msg_tmp}\n    OpenGL               ${Ogl}" )
 			if ( WIN32 )
 				set( msg_tmp "${msg_tmp}\n    Direct3D 11          ${D3d11}" )
 			endif ()
@@ -138,20 +130,10 @@ function( RenderersSetup )
 				)
 			endif ()
 		elseif ( NOT APPLE )
-			if( ${CASTOR_BUILD_RENDERER_OGL4} )
-				cpack_add_component( Gl4RenderSystem
-					DISPLAY_NAME "Gl4RenderSystem"
-					DESCRIPTION "Enables OpenGL >= 4.3 rendering API in Castor3D."
-					REQUIRED
-					GROUP Renderers
-					DEPENDS CastorUtils Castor3D Ashes
-					INSTALL_TYPES Minimal Full
-				)
-			endif ()
-			if( ${CASTOR_BUILD_RENDERER_OGL3} )
-				cpack_add_component( Gl3RenderSystem
-					DISPLAY_NAME "Gl3RenderSystem"
-					DESCRIPTION "Enables OpenGL >= 3.3 rendering API in Castor3D."
+			if( ${CASTOR_BUILD_RENDERER_OGL} )
+				cpack_add_component( GlRenderSystem
+					DISPLAY_NAME "GlRenderSystem"
+					DESCRIPTION "Enables OpenGL rendering API in Castor3D."
 					REQUIRED
 					GROUP Renderers
 					DEPENDS CastorUtils Castor3D Ashes

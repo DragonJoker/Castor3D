@@ -22,10 +22,9 @@ namespace VkRender
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
 			, AshPluginDescription desc );
-		/**
-		*\copydoc		castor3d::RenderSystem::compileShader
-		*/
-		castor3d::UInt32Array compileShader( castor3d::ShaderModule const & module )const override;
+
+	private:
+		castor3d::SpirVShader doCompileShader( castor3d::ShaderModule const & module )const override;
 
 	public:
 		C3D_Vk_API static castor::String Name;

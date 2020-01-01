@@ -1,19 +1,136 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <CompilerSpirV/compileSpirV.hpp>
 
-using namespace castor;
+#if C3D_HasSPIRVCross
+#	include "spirv_cpp.hpp"
+#	include "spirv_cross_util.hpp"
+#	include "spirv_glsl.hpp"
+#endif
+
+#define C3D_DebugSpirV 1
 
 namespace castor3d
 {
 	//*************************************************************************
 
+#if C3D_HasSPIRVCross
+
 	namespace
 	{
+		struct BlockLocale
+		{
+			BlockLocale()
+			{
+				m_prvLoc = std::locale( "" );
+
+				if ( m_prvLoc.name() != "C" )
+				{
+					std::locale::global( std::locale{ "C" } );
+				}
+			}
+
+			~BlockLocale()
+			{
+				if ( m_prvLoc.name() != "C" )
+				{
+					std::locale::global( m_prvLoc );
+				}
+			}
+
+		private:
+			std::locale m_prvLoc;
+		};
+
+		spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
+		{
+			spv::ExecutionModel result{};
+
+			switch ( stage )
+			{
+			case VK_SHADER_STAGE_VERTEX_BIT:
+				result = spv::ExecutionModelVertex;
+				break;
+			case VK_SHADER_STAGE_GEOMETRY_BIT:
+				result = spv::ExecutionModelGeometry;
+				break;
+			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+				result = spv::ExecutionModelTessellationControl;
+				break;
+			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+				result = spv::ExecutionModelTessellationEvaluation;
+				break;
+			case VK_SHADER_STAGE_FRAGMENT_BIT:
+				result = spv::ExecutionModelFragment;
+				break;
+			case VK_SHADER_STAGE_COMPUTE_BIT:
+				result = spv::ExecutionModelGLCompute;
+				break;
+			default:
+				assert( false && "Unsupported shader stage flag" );
+				break;
+			}
+
+			return result;
+		}
+
+		void doSetEntryPoint( VkShaderStageFlagBits stage
+			, spirv_cross::CompilerGLSL & compiler )
+		{
+			auto model = getExecutionModel( stage );
+			std::string entryPoint;
+
+			for ( auto & e : compiler.get_entry_points_and_stages() )
+			{
+				if ( entryPoint.empty() && e.execution_model == model )
+				{
+					entryPoint = e.name;
+				}
+			}
+
+			if ( entryPoint.empty() )
+			{
+				throw std::runtime_error{ "Could not find an entry point with stage: " + ashes::getName( stage ) };
+			}
+
+			compiler.set_entry_point( entryPoint, model );
+		}
+
+		void doSetupOptions( castor3d::RenderDevice const & device
+			, spirv_cross::CompilerGLSL & compiler )
+		{
+			auto options = compiler.get_common_options();
+			options.version = device->getShaderVersion();
+			options.es = false;
+			options.separate_shader_objects = true;
+			options.enable_420pack_extension = true;
+			options.vertex.fixup_clipspace = false;
+			options.vertex.flip_vert_y = true;
+			options.vertex.support_nonzero_base_instance = true;
+			compiler.set_common_options( options );
+		}
+
+		std::string compileSpvToGlsl( castor3d::RenderDevice const & device
+			, ashes::UInt32Array const & spv
+			, VkShaderStageFlagBits stage )
+		{
+			BlockLocale guard;
+			auto compiler = std::make_unique< spirv_cross::CompilerGLSL >( spv );
+			doSetEntryPoint( stage, *compiler );
+			doSetupOptions( device, *compiler );
+			return compiler->compile();
+		}
+
+#endif
+
+		//*************************************************************************
+
 		bool isValidationLayer( std::string const & name
 			, std::string const & description )
 		{
@@ -247,7 +364,7 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
-			static std::map< uint32_t, String > vendors
+			static std::map< uint32_t, castor::String > vendors
 			{
 				{ 0x1002, cuT( "AMD" ) },
 				{ 0x10DE, cuT( "NVIDIA" ) },
@@ -255,7 +372,7 @@ namespace castor3d
 				{ 0x13B5, cuT( "ARM" ) },
 			};
 			auto & device = *getMainRenderDevice();
-			StringStream stream( makeStringStream() );
+			castor::StringStream stream( castor::makeStringStream() );
 			stream << ( device.properties.apiVersion >> 22 ) << cuT( "." ) << ( ( device.properties.apiVersion >> 12 ) & 0x0FFF );
 			m_gpuInformations.setVendor( vendors[device.properties.vendorID] );
 			m_gpuInformations.setRenderer( device.properties.deviceName );
@@ -274,9 +391,9 @@ namespace castor3d
 			m_initialised = true;
 		}
 
-		Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
-		Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
-		Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
+		castor::Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
+		castor::Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
+		castor::Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
 		//m_gpuInformations.removeFeature( GpuFeature::eShaderStorageBuffers );
 	}
 
@@ -307,6 +424,92 @@ namespace castor3d
 		return result;
 	}
 
+	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module
+		, bool forceSpirV )const
+	{
+		if ( forceSpirV )
+		{
+			return doCompileSpirV( module );
+		}
+
+		return doCompileShader( module );
+	}
+
+	SpirVShader RenderSystem::doCompileSpirV( castor3d::ShaderModule const & module )const
+	{
+		SpirVShader result;
+
+		if ( module.shader )
+		{
+			result.spirv = spirv::serialiseSpirv( *module.shader );
+
+#if !defined( NDEBUG )
+#	if C3D_HasGLSL
+			std::string glsl = glsl::compileGlsl( *module.shader
+				, ast::SpecialisationInfo{}
+				, glsl::GlslConfig
+				{
+					module.shader->getType(),
+					460,
+					true,
+					false,
+					true,
+					true,
+					true,
+					true,
+				} );
+#	else
+			std::string glsl;
+#	endif
+
+			result.text = glsl + "\n" + spirv::writeSpirv( *module.shader );
+
+#	if C3D_HasSPIRVCross && C3D_DebugSpirV
+			std::string name = module.name + "_" + ashes::getName( module.stage );
+
+			try
+			{
+				auto glslFromSpv = compileSpvToGlsl( *getMainRenderDevice()
+					, result.spirv
+					, module.stage );
+				const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;
+			}
+			catch ( std::exception & exc )
+			{
+				std::cerr << module.source << std::endl;
+				std::cerr << exc.what() << std::endl;
+				{
+					castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_sdw.spv" )
+						, castor::File::OpenMode::eWrite };
+					file.writeArray( result.spirv.data()
+						, result.spirv.size() );
+				}
+
+				auto ref = castor3d::compileGlslToSpv( *getMainRenderDevice()
+					, module.stage
+					, glsl );
+				{
+					castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_glslang.spv" )
+						, castor::File::OpenMode::eWrite };
+					file.writeArray( ref.data()
+						, ref.size() );
+				}
+			}
+#	endif
+#endif
+		}
+		else
+		{
+			CU_Require( !module.source.empty() );
+			result.text = module.source;
+			result.spirv = castor3d::compileGlslToSpv( *getMainRenderDevice()
+				, module.stage
+				, module.source );
+		}
+
+		return result;
+	}
+
 	GpuBufferOffset RenderSystem::getBuffer( VkBufferUsageFlagBits type
 		, uint32_t size
 		, VkMemoryPropertyFlags flags )
@@ -331,7 +534,7 @@ namespace castor3d
 	RenderDeviceSPtr RenderSystem::createDevice( ashes::WindowHandle handle
 		, uint32_t gpuIndex )
 	{
-		assert( gpuIndex < m_gpus.size()
+		CU_Require( gpuIndex < m_gpus.size()
 			&& "Invalid Physical Device index." );
 		return std::make_shared< RenderDevice >( *this
 			, *m_gpus[gpuIndex]

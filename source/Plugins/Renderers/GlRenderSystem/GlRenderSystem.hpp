@@ -1,16 +1,16 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GL4_RENDER_SYSTEM_H___
-#define ___GL4_RENDER_SYSTEM_H___
+#ifndef ___C3D_GlRenderSystem_H___
+#define ___C3D_GlRenderSystem_H___
 
-#include "Gl4RenderSystemPrerequisites.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
 
 #include <Castor3D/Render/RenderSystem.hpp>
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-namespace Gl4Render
+namespace castor3d::gl
 {
 	class RenderSystem
 		: public castor3d::RenderSystem
@@ -22,14 +22,13 @@ namespace Gl4Render
 
 		static castor3d::RenderSystemUPtr create( castor3d::Engine & engine
 			, AshPluginDescription desc );
-		/**
-		*\copydoc		castor3d::RenderSystem::compileShader
-		*/
-		castor3d::UInt32Array compileShader( castor3d::ShaderModule const & module )const override;
+
+	private:
+		castor3d::SpirVShader doCompileShader( castor3d::ShaderModule const & module )const override;
 
 	public:
-		C3D_Gl4_API static castor::String Name;
-		C3D_Gl4_API static castor::String Type;
+		static castor::String Name;
+		static castor::String Type;
 	};
 }
 
