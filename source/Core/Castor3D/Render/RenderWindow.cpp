@@ -23,6 +23,7 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
+#define C3D_DebugBackgroundPicking 0
 
 namespace castor3d
 {
@@ -345,8 +346,8 @@ namespace castor3d
 				}
 
 				auto resources = getResources();
-#if C3D_DebugPicking
-				m_pickingPass->pick( Position{}, *target->getCamera() );
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+				m_pickingPass->pick( convertToTopDown( m_mousePosition, m_size ), *target->getCamera() );
 #endif
 
 				if ( resources )
@@ -573,15 +574,23 @@ namespace castor3d
 
 	PickNodeType RenderWindow::pick( castor::Position const & position )
 	{
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+
+		return m_pickingPass->getPickedNodeType();
+
+
+#else
 		PickNodeType result = PickNodeType::eNone;
 		auto camera = getCamera();
 
 		if ( camera )
 		{
-			result = m_pickingPass->pick( position, *camera );
+			result = m_pickingPass->pick( convertToTopDown( position, m_size ), *camera );
 		}
 
 		return result;
+
+#endif
 	}
 
 	GeometrySPtr RenderWindow::getPickedGeometry()const

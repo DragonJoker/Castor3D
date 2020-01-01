@@ -85,6 +85,19 @@ namespace castor3d
 			, uint32_t nodeIndex )const;
 		/**
 		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	drawIndex	The draw call index.
+		 *\param[in]	nodeIndex	The node index.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	drawIndex	L'indice de la fonction de dessin.
+		 *\param[in]	nodeIndex	L'indice du noeud.
+		 */
+		C3D_API static void update( Configuration & configuration
+			, uint32_t drawIndex
+			, uint32_t nodeIndex );
+		/**
+		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.

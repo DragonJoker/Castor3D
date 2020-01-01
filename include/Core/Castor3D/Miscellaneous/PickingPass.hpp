@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	camera		La caméra regardant la scène.
 		 *\return		PickingPass::PickNodeType si rien n'a été pické.
 		 */
-		C3D_API PickNodeType pick( castor::Position const & position
+		C3D_API PickNodeType pick( castor::Position position
 			, Camera const & camera );
 		/**
 		*\~english
@@ -109,6 +109,11 @@ namespace castor3d
 		inline ashes::ImageView const & getResult()const
 		{
 			return m_colourView;
+		}
+
+		inline PickNodeType getPickedNodeType()const
+		{
+			return m_pickNodeType;
 		}
 		/**@}*/
 
@@ -234,6 +239,9 @@ namespace castor3d
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
 
+	public:
+		static uint32_t constexpr PickingWidth = 32u;
+
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
 		C3D_API static uint32_t const UboBindingPoint;
@@ -255,6 +263,7 @@ namespace castor3d
 		uint32_t m_face{ 0u };
 		std::vector< castor::Point4f > m_buffer;
 		ashes::FencePtr m_transferFence;
+		PickNodeType m_pickNodeType{ PickNodeType::eNone };
 	};
 }
 

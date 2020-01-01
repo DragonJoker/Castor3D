@@ -38,6 +38,16 @@ namespace castor3d
 		static String const DrawIndex = cuT( "c3d_iDrawIndex" );
 		static String const NodeIndex = cuT( "c3d_iNodeIndex" );
 
+		castor::Position convertToBottomUp( Position const & position
+			, castor::Size const & size )
+		{
+			return
+			{
+				position.x(),
+				int32_t( size.getHeight() - position.y() )
+			};
+		}
+
 		template< bool Opaque, typename MapType, typename FuncType >
 		inline void doTraverseNodes( RenderPass const & pass
 			, MapType & nodes
@@ -58,10 +68,9 @@ namespace castor3d
 					{
 						if ( !itSubmeshes.second.empty() )
 						{
-							auto & data = itSubmeshes.second[0]->pickingUbo.getData();
-							data.drawIndex = drawIndex;
-							data.nodeIndex = index++;
-
+							PickingUbo::update( itSubmeshes.second[0]->pickingUbo.getData()
+								, drawIndex
+								, index++ );
 							function( *itPipelines.first
 								, *itPass.first
 								, *itSubmeshes.first
@@ -90,9 +99,9 @@ namespace castor3d
 
 				for ( auto & renderNode : itPipelines.second )
 				{
-					auto & data = renderNode->pickingUbo.getData();
-					data.drawIndex = drawIndex;
-					data.nodeIndex = index++;
+					PickingUbo::update( renderNode->pickingUbo.getData()
+						, drawIndex
+						, index++ );
 				}
 
 				count++;
@@ -107,24 +116,28 @@ namespace castor3d
 			, uint32_t & face )
 		{
 			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
-			uint32_t nodeIndex{ uint32_t( index[1] ) };
-			uint32_t faceIndex{ uint32_t( index[3] ) };
 
-			CU_Require( map.size() > pipelineIndex );
-			auto itPipeline = map.begin();
-
-			while ( pipelineIndex )
+			if ( map.size() > pipelineIndex )
 			{
-				++itPipeline;
-				--pipelineIndex;
+				auto itPipeline = map.begin();
+
+				while ( pipelineIndex )
+				{
+					++itPipeline;
+					--pipelineIndex;
+				}
+
+				uint32_t nodeIndex{ uint32_t( index[1] ) };
+
+				if ( itPipeline->second.size() > nodeIndex )
+				{
+					auto itNode = itPipeline->second.begin() + nodeIndex;
+
+					subnode = std::static_pointer_cast< SubNodeType >( ( *itNode )->data.shared_from_this() );
+					node = std::static_pointer_cast< NodeType >( ( *itNode )->instance.shared_from_this() );
+					face = uint32_t( index[3] );
+				}
 			}
-
-			CU_Require( itPipeline->second.size() > nodeIndex );
-			auto itNode = itPipeline->second.begin() + nodeIndex;
-
-			subnode = std::static_pointer_cast< SubNodeType >( ( *itNode )->data.shared_from_this() );
-			node = std::static_pointer_cast< NodeType >( ( *itNode )->instance.shared_from_this() );
-			face = faceIndex;
 		}
 
 		template< typename MapType, typename NodeType, typename SubNodeType >
@@ -135,51 +148,59 @@ namespace castor3d
 			, uint32_t & face )
 		{
 			uint32_t pipelineIndex{ ( uint32_t( index[0] ) >> 8 ) - 1 };
-			uint32_t nodeIndex{ uint32_t( index[1] ) };
 
-			CU_Require( map.size() > pipelineIndex );
-			auto itPipeline = map.begin();
-
-			while ( pipelineIndex )
+			if ( map.size() > pipelineIndex )
 			{
-				++itPipeline;
-				--pipelineIndex;
-			}
+				auto itPipeline = map.begin();
 
-			auto itPass = itPipeline->second.begin();
-			CU_Require( !itPass->second.empty() );
-			auto itMesh = itPass->second.begin();
-
-			while ( nodeIndex && itPass != itPipeline->second.end() )
-			{
-				while ( itMesh != itPass->second.end() && nodeIndex )
+				while ( pipelineIndex )
 				{
-					++itMesh;
-					--nodeIndex;
+					++itPipeline;
+					--pipelineIndex;
 				}
 
-				if ( nodeIndex || itMesh == itPass->second.end() )
-				{
-					++itPass;
+				auto itPass = itPipeline->second.begin();
 
-					if ( itPass != itPipeline->second.end() )
+				if ( !itPass->second.empty() )
+				{
+					auto itMesh = itPass->second.begin();
+					uint32_t nodeIndex{ uint32_t( index[1] ) };
+
+					while ( nodeIndex && itPass != itPipeline->second.end() )
 					{
-						itMesh = itPass->second.begin();
+						while ( itMesh != itPass->second.end() && nodeIndex )
+						{
+							++itMesh;
+							--nodeIndex;
+						}
+
+						if ( nodeIndex || itMesh == itPass->second.end() )
+						{
+							++itPass;
+
+							if ( itPass != itPipeline->second.end() )
+							{
+								itMesh = itPass->second.begin();
+							}
+						}
+					}
+
+					if ( itPass != itPipeline->second.end()
+						&& itMesh != itPass->second.end() )
+					{
+						uint32_t faceIndex{ uint32_t( index[3] ) };
+
+						if ( !itMesh->second.empty() )
+						{
+							uint32_t instanceIndex{ uint32_t( index[2] ) };
+							auto itNode = itMesh->second.begin() + instanceIndex;
+
+							subnode = ( *itNode )->data.shared_from_this();
+							node = std::static_pointer_cast< Geometry >( ( *itNode )->instance.shared_from_this() );
+							face = faceIndex;
+						}
 					}
 				}
-			}
-
-			if ( itPass != itPipeline->second.end()
-					&& itMesh != itPass->second.end() )
-			{
-				uint32_t instanceIndex{ uint32_t( index[2] ) };
-				uint32_t faceIndex{ uint32_t( index[3] ) };
-				CU_Require( !itMesh->second.empty() );
-				auto itNode = itMesh->second.begin() + instanceIndex;
-
-				subnode = ( *itNode )->data.shared_from_this();
-				node = std::static_pointer_cast< Geometry >( ( *itNode )->instance.shared_from_this() );
-				face = faceIndex;
 			}
 		}
 
@@ -233,8 +254,7 @@ namespace castor3d
 			return result;
 		}
 
-		static uint32_t constexpr PickingWidth = 50u;
-		static int constexpr PickingOffset = int( PickingWidth / 2 );
+		static int constexpr PickingOffset = int( PickingPass::PickingWidth / 2 );
 	}
 
 	//*********************************************************************************************
@@ -261,26 +281,48 @@ namespace castor3d
 
 	PickingPass::~PickingPass()
 	{
+		cleanup();
 	}
 
 	void PickingPass::addScene( Scene & scene, Camera & camera )
 	{
 	}
 
-	PickNodeType PickingPass::pick( Position const & position
+	PickNodeType PickingPass::pick( castor::Position position
 		, Camera const & camera )
 	{
-		PickNodeType result{ PickNodeType::eNone };
+		if ( !getEngine()->isTopDown() )
+		{
+			position = convertToBottomUp( position, camera.getSize() );
+		}
+
+		m_pickNodeType = PickNodeType::eNone;
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
 		auto & myCamera = getCuller().getCamera();
+		int32_t offsetX = std::clamp( position.x() - PickingOffset
+			, 0
+			, int32_t( m_colourTexture->getDimensions().width - PickingWidth ) );
+		int32_t offsetY = std::clamp( position.y() - PickingOffset
+			, 0
+			, int32_t( m_colourTexture->getDimensions().height - PickingWidth ) );
+		VkRect2D scissor =
+		{
+			{ offsetX, offsetY },
+			{ PickingWidth, PickingWidth },
+		};
+
 		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue.update( shadowMaps );
-		doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
-		auto pixel = doFboPick( position, myCamera, m_renderQueue.getCommandBuffer() );
-		result = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
-		return result;
+		m_renderQueue.update( shadowMaps, scissor );
+
+		if ( m_renderQueue.getCulledRenderNodes().hasNodes() )
+		{
+			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
+			auto pixel = doFboPick( position, myCamera, m_renderQueue.getCommandBuffer() );
+			m_pickNodeType = doPick( pixel, m_renderQueue.getCulledRenderNodes() );
+		}
+		return m_pickNodeType;
 	}
 
 	void PickingPass::doUpdateNodes( SceneCulledRenderNodes & nodes )
@@ -304,31 +346,55 @@ namespace castor3d
 	{
 		static ashes::VkClearValueArray clearValues
 		{
-			opaqueBlackClearColor,
+			makeClearValue( 1.0f, 0.5f, 0.5f, 1.0f ),
+			//transparentBlackClearColor,
 			defaultClearDepthStencil,
 		};
 
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"PickingPass Render",
+				{
+					clearValues[0].color.float32[0],
+					clearValues[0].color.float32[1],
+					clearValues[0].color.float32[2],
+					clearValues[0].color.float32[3],
+				},
+			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, clearValues
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_commandBuffer->executeCommands( { commandBuffer } );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->endDebugUtilsLabel();
 
 		m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
 		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-		m_commandBuffer->memoryBarrier( m_stagingBuffer->getBuffer().getCompatibleStageFlags()
+		m_commandBuffer->beginDebugUtilsLabel(
+			{
+				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
+				nullptr,
+				"PickingPass Copy",
+				{ 0.8f, 0.4f, 0.4f, 1.0f },
+			} );
+		auto flags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		m_commandBuffer->memoryBarrier( m_stagingBuffer->getBuffer().getCompatibleStageFlags()
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_stagingBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_MEMORY_READ_BIT ) );
+		flags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
+			, VK_PIPELINE_STAGE_HOST_BIT
+			, m_stagingBuffer->getBuffer().makeHostRead() );
+		m_commandBuffer->endDebugUtilsLabel();
 #endif
 
 		m_commandBuffer->end();
@@ -349,6 +415,8 @@ namespace castor3d
 
 		auto it = m_buffer.begin();
 		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
+		castor::Logger::logTrace( castor::makeStringStream()
+			<< cuT( "Picked: " ) << it->at( 0 ) << cuT( ", " ) << it->at( 1 ) << cuT( ", " ) << it->at( 2 ) << ", " << it->at( 3 ) );
 		return *it;
 	}
 
