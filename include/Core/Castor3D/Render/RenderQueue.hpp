@@ -11,6 +11,9 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandBuffer.hpp>
 
 #include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
+
+#include <atomic>
 
 #if defined( CU_CompilerMSVC )
 #	pragma warning( push )
@@ -205,6 +208,24 @@ namespace castor3d
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps );
 		/**
+		 *\~english
+		 *\brief		Updates the render nodes.
+		 *\~french
+		 *\brief		Met à jour les noeuds de rendu.
+		 */
+		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+			, VkViewport const & viewport
+			, VkRect2D const & scissor );
+		/**
+		 *\~english
+		 *\brief		Updates the render nodes.
+		 *\~french
+		 *\brief		Met à jour les noeuds de rendu.
+		 */
+		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+			, VkRect2D const & scissor );
+		/**@}*/
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -254,6 +275,15 @@ namespace castor3d
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_allChanged;
 		bool m_culledChanged;
+		castor::ChangeTracked< ashes::Optional< VkViewport > > m_viewport;
+		castor::ChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
+		enum class Preparation
+		{
+			eWaiting,
+			eRunning,
+			eDone,
+		};
+		std::atomic< Preparation > m_preparation{ Preparation::eDone };
 	};
 }
 
