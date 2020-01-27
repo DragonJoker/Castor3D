@@ -1,8 +1,9 @@
-project( Uncharted2ToneMapping )
+set( FOLDER_NAME Uncharted2ToneMapping )
+project( castor3d${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	castor::${PROJECT_NAME}
+	castor::${FOLDER_NAME}
 	PARENT_SCOPE
 )
 
@@ -19,7 +20,7 @@ add_target(
 	""
 	""
 )
-add_library( castor::${PROJECT_NAME}
+add_library( castor::${FOLDER_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )

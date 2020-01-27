@@ -10,25 +10,18 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 set( ExternalIncludes )
 
 if ( CASTOR_USE_GLSLANG )
-	set( GlslangLibraries 
-		glslang
-		OGLCompiler
-		OSDependent
-		SPVRemapper
-		SPIRV )
 	set( Castor3DDefinitions
 		${Castor3DDefinitions}
 		C3D_HasGlslang
 	)
 	set( ExternalIncludes
 		${ExternalIncludes}
-		${CASTOR_SOURCE_DIR}/external/glslang
 	)
 endif ()
 
-if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross/spirv_glsl.cpp )
+if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/spirv_cross/spirv_glsl.cpp )
 	set( SPIRV_CROSS_DIR
-		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/SPIRV-Cross
+		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/spirv_cross
 	)
 	set( SPIRV_HEADER_FILES
 		${SPIRV_CROSS_DIR}/GLSL.std.450.h
@@ -103,6 +96,7 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_BINARY_DIR}/include/Core
 		${CASTOR_SOURCE_DIR}/source/Core
 		${CASTOR_BINARY_DIR}/source/Core
+		${GLSLANG_INCLUDE_DIR}
 		${ExternalIncludes}
 )
 target_compile_definitions( ${PROJECT_NAME}
@@ -116,7 +110,7 @@ target_link_libraries( ${PROJECT_NAME}
 		ashes::ashespp
 	PRIVATE
 		sdw::CompilerSpirV
-		${GlslangLibraries}
+		${GLSLANG_LIBRARIES}
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES

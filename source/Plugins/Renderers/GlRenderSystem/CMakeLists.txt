@@ -1,8 +1,9 @@
-project( GlRenderSystem )
+set( FOLDER_NAME GlRenderSystem )
+project( castor3d${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	castor::${PROJECT_NAME}
+	castor::${FOLDER_NAME}
 	PARENT_SCOPE
 )
 
@@ -14,14 +15,14 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}/${FOLDER_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}/${FOLDER_NAME}Pch.cpp
 )
-add_library( castor::${PROJECT_NAME}
+add_library( castor::${FOLDER_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )

@@ -1,13 +1,18 @@
-project( AssimpImporter )
+set( FOLDER_NAME AssimpImporter )
+project( castor3d${FOLDER_NAME} )
 
-find_package( ASSIMP )
+if ( VCPKG_TOOLCHAIN )
+	find_package( assimp CONFIG REQUIRED assimp )
+	set( ASSIMP_LIBRARIES assimp::assimp )
+	set( ASSIMP_FOUND ON )
+else ()
+	find_package( assimp )
+endif ()
 
 if( ASSIMP_FOUND )
-	message( STATUS "+ Found Assimp" )
-
 	set( Castor3DBinsDependencies 
 		${Castor3DBinsDependencies}
-		castor::${PROJECT_NAME}
+		castor::${FOLDER_NAME}
 		PARENT_SCOPE
 	)
 
@@ -19,12 +24,12 @@ if( ASSIMP_FOUND )
 	add_target(
 		${PROJECT_NAME}
 		plugin
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
-		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${PROJECT_NAME}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}
 		""
 		""
 	)
-	add_library( castor::${PROJECT_NAME}
+	add_library( castor::${FOLDER_NAME}
 		ALIAS
 		${PROJECT_NAME}
 	)
@@ -45,8 +50,10 @@ if( ASSIMP_FOUND )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
 	if ( WIN32 )
-		# Preparing ASSIMP dll installation
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} ${ASSIMP_LIBRARY_RELEASE} )
+		if ( NOT VCPKG_TOOLCHAIN )
+			# Preparing ASSIMP dll installation
+			copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} ${ASSIMP_LIBRARY_RELEASE} )
+		endif ()
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()

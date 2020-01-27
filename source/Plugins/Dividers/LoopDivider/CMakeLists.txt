@@ -1,8 +1,9 @@
-project( LoopDivider )
+set( FOLDER_NAME LoopDivider )
+project( castor3d${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	castor::${PROJECT_NAME}
+	castor::${FOLDER_NAME}
 	PARENT_SCOPE
 )
 
@@ -14,14 +15,14 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}/LoopPch.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}/LoopPch.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}/LoopPch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}/LoopPch.cpp
 )
-add_library( castor::${PROJECT_NAME}
+add_library( castor::${FOLDER_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )

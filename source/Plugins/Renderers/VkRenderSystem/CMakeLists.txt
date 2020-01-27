@@ -1,8 +1,9 @@
-project( VkRenderSystem )
+set( FOLDER_NAME VkRenderSystem )
+project( castor3d${FOLDER_NAME} )
 
 SET( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	castor::${PROJECT_NAME}
+	castor::${FOLDER_NAME}
 	PARENT_SCOPE
 )
 
@@ -36,18 +37,18 @@ endif ()
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}
 	""
 	""
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}/${FOLDER_NAME}Pch.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Renderers/${FOLDER_NAME}/${FOLDER_NAME}Pch.cpp
 	""
 	""
 	""
 	"${SPIRV_FILES}"
 )
-add_library( castor::${PROJECT_NAME}
+add_library( castor::${FOLDER_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )

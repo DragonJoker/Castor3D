@@ -1,8 +1,9 @@
-project( PnTrianglesDivider )
+set( FOLDER_NAME PnTrianglesDivider )
+project( castor3d${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
 	${Castor3DBinsDependencies}
-	castor::${PROJECT_NAME}
+	castor::${FOLDER_NAME}
 	PARENT_SCOPE
 )
 
@@ -14,12 +15,12 @@ set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 add_target(
 	${PROJECT_NAME}
 	plugin
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${PROJECT_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
+	${CASTOR_SOURCE_DIR}/source/Plugins/Dividers/${FOLDER_NAME}
 	""
 	""
 )
-add_library( castor::${PROJECT_NAME}
+add_library( castor::${FOLDER_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )
