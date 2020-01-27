@@ -2,7 +2,6 @@
 
 #include "GuiCommon/GradientButton.hpp"
 
-#include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
 
 using namespace castor;

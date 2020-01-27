@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___GUICOMMON_ADDITIONAL_PROPERTIES_H___
 
 #include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/editors.h>
 
 #define GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, expdecl )\
 	namspace::classname & operator<<( namspace::classname & object, const wxVariant & variant );\

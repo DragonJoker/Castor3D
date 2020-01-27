@@ -20,10 +20,10 @@ namespace castor3d
 {
 	//*************************************************************************
 
-#if C3D_HasSPIRVCross
-
 	namespace
 	{
+#if C3D_HasSPIRVCross
+
 		struct BlockLocale
 		{
 			BlockLocale()

@@ -7,12 +7,10 @@
 
 #include <CompilerGlsl/compileGlsl.hpp>
 
-using namespace castor;
-
 namespace castor3d::gl
 {
-	String RenderSystem::Name = cuT( "OpenGL Renderer" );
-	String RenderSystem::Type = cuT( "gl" );
+	castor::String RenderSystem::Name = cuT( "OpenGL Renderer" );
+	castor::String RenderSystem::Type = cuT( "gl" );
 
 	RenderSystem::RenderSystem( castor3d::Engine & engine
 		, AshPluginDescription desc )
@@ -22,59 +20,59 @@ namespace castor3d::gl
 			{
 				if ( newLine )
 				{
-					Logger::logTrace( msg );
+					castor::Logger::logTrace( msg );
 				}
 				else
 				{
-					Logger::logTraceNoNL( msg );
+					castor::Logger::logTraceNoNL( msg );
 				}
 			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 			{
 				if ( newLine )
 				{
-					Logger::logDebug( msg );
+					castor::Logger::logDebug( msg );
 				}
 				else
 				{
-					Logger::logDebugNoNL( msg );
+					castor::Logger::logDebugNoNL( msg );
 				}
 			} );
 		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 			{
 				if ( newLine )
 				{
-					Logger::logInfo( msg );
+					castor::Logger::logInfo( msg );
 				}
 				else
 				{
-					Logger::logInfoNoNL( msg );
+					castor::Logger::logInfoNoNL( msg );
 				}
 			} );
 		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 			{
 				if ( newLine )
 				{
-					Logger::logWarning( msg );
+					castor::Logger::logWarning( msg );
 				}
 				else
 				{
-					Logger::logWarningNoNL( msg );
+					castor::Logger::logWarningNoNL( msg );
 				}
 			} );
 		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 			{
 				if ( newLine )
 				{
-					Logger::logError( msg );
+					castor::Logger::logError( msg );
 				}
 				else
 				{
-					Logger::logErrorNoNL( msg );
+					castor::Logger::logErrorNoNL( msg );
 				}
 			} );
 		getEngine()->getRenderersList().selectPlugin( m_desc.name );
-		Logger::logInfo( cuT( "Using " ) + Name );
+		castor::Logger::logInfo( cuT( "Using " ) + Name );
 	}
 
 	RenderSystem::~RenderSystem()
@@ -99,14 +97,14 @@ namespace castor3d::gl
 				, glsl::GlslConfig
 				{
 					module.shader->getType(),
-					430,
-					false,
-					true,
-					true,
-					true,
-					true,
-					true,
-					true,
+					m_desc.features.maxShaderLanguageVersion,
+					false, // vulkanGlsl
+					true, // flipVertY
+					true, // fixupClipDepth
+					m_desc.features.maxShaderLanguageVersion > 430, // hasStd430Layout
+					m_desc.features.hasStorageBuffers != VK_FALSE, // hasShaderStorageBuffers
+					m_desc.features.maxShaderLanguageVersion >= 430, // hasDescriptorSets
+					m_desc.features.hasBaseInstance != VK_FALSE, // hasBaseInstance
 				} );
 		}
 		else
