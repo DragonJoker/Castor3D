@@ -107,7 +107,7 @@ namespace castor3d
 
 				// Inputs
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
-				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
 					, writer.cast< Float >( mipLevel ) / float( shader::Utils::MaxIblReflectionLod ) );
 
@@ -259,7 +259,7 @@ namespace castor3d
 										, 0.0_f
 										, 0.5_f * log2( saSample / saTexel ) ) );
 
-								prefilteredColor += texture( c3d_mapDiffuse, L, mipLevel ).rgb() * NdotL;
+								prefilteredColor += texture( c3d_mapEnvironment, L, mipLevel ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
 							FI;

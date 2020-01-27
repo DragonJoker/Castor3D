@@ -59,7 +59,7 @@ namespace Bloom
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 0u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -68,7 +68,7 @@ namespace Bloom
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( texture( c3d_mapColor, vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );

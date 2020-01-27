@@ -43,7 +43,7 @@ namespace Uncharted2
 
 		// Shader inputs
 		UBO_HDR_CONFIG( writer, 0u, 0u );
-		auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+		auto c3d_mapHdr = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
@@ -80,7 +80,7 @@ namespace Uncharted2
 		writer.implementFunction< sdw::Void >( "main", [&]()
 		{
 			auto hdrColor = writer.declLocale( "hdrColor"
-				, texture( c3d_mapDiffuse, vtx_texture ).rgb() );
+				, texture( c3d_mapHdr, vtx_texture ).rgb() );
 			hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
 			auto current = writer.declLocale( "current"

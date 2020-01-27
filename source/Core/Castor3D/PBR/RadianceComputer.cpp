@@ -112,7 +112,7 @@ namespace castor3d
 
 				// Inputs
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
-				auto c3d_mapDiffuse = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
@@ -150,7 +150,7 @@ namespace castor3d
 								auto sampleVec = writer.declLocale( "sampleVec"
 									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
 
-								irradiance += texture( c3d_mapDiffuse, sampleVec ).rgb() * cos( theta ) * sin( theta );
+								irradiance += texture( c3d_mapEnvironment, sampleVec ).rgb() * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
 							ROF;

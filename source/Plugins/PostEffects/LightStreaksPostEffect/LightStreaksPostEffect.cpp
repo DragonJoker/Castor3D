@@ -57,7 +57,7 @@ namespace light_streaks
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 0u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -66,7 +66,7 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( texture( c3d_mapColor, vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
 						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
 					maxComponent = max( maxComponent, pxl_fragColor.b() );
@@ -91,7 +91,7 @@ namespace light_streaks
 
 			// Shader inputs
 			UBO_KAWASE( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto c3d_mapHiPass = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapHiPass", 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -121,7 +121,7 @@ namespace light_streaks
 						auto sampleCoord = writer.declLocale( "sampleCoord"
 							, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
 						// Scale and accumulate
-						colour += texture( c3d_mapDiffuse, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
+						colour += texture( c3d_mapHiPass, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}
 					ROF;
 

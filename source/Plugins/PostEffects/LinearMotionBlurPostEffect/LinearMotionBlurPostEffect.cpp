@@ -71,7 +71,7 @@ namespace motion_blur
 			auto c3d_blurScale = configuration.declMember< Float >( cuT( "c3d_blurScale" ) );
 			configuration.end();
 			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapVelocity" ), 1u, 0u );
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 2u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapColor" ), 2u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -82,13 +82,13 @@ namespace motion_blur
 					auto blurVector = writer.declLocale( cuT( "vector" )
 						, writer.paren( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
-					pxl_fragColor = texture( c3d_mapDiffuse, vtx_texture );
+					pxl_fragColor = texture( c3d_mapColor, vtx_texture );
 
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( cuT( "offset" )
 							, blurVector * writer.paren( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
-						pxl_fragColor += texture( c3d_mapDiffuse, vtx_texture + offset );
+						pxl_fragColor += texture( c3d_mapColor, vtx_texture + offset );
 					}
 					ROF;
 

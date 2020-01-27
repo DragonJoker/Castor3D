@@ -217,7 +217,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Inputs
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), DifImgIdx, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapColor" ), DifImgIdx, 0u );
 			Pcb pcb{ writer, "SizePCB", ast::type::MemoryLayout::eStd140 };
 			auto c3d_size = pcb.declMember< Vec2 >( cuT( "c3d_size" ) );
 			pcb.end();
@@ -231,7 +231,7 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				pxl_FragColor = texture( c3d_mapDiffuse
+				pxl_FragColor = texture( c3d_mapColor
 					, utils.bottomUpToTopDown( in.gl_FragCoord.xy() / c3d_size ) );
 			} );
 

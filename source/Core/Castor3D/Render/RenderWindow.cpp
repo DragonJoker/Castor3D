@@ -762,7 +762,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDiffuse" ), 0u, 0u );
+			auto c3d_mapResult = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapResult" ), 0u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
 
 			// Shader outputs
@@ -771,7 +771,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					pxl_fragColor = vec4( texture( c3d_mapDiffuse, vtx_texture ).xyz(), 1.0_f );
+					pxl_fragColor = vec4( texture( c3d_mapResult, vtx_texture ).xyz(), 1.0_f );
 				} );
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

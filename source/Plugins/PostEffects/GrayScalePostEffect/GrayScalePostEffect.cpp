@@ -69,7 +69,7 @@ namespace GrayScale
 			auto configUbo = Ubo{ writer, "Configuration", 0u, 0u };
 			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
 			configUbo.end();
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
@@ -79,7 +79,7 @@ namespace GrayScale
 				, [&]()
 				{
 					auto colour = writer.declLocale( "colour"
-						, texture( c3d_mapDiffuse, vtx_texture ).xyz() );
+						, texture( c3d_mapColor, vtx_texture ).xyz() );
 					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

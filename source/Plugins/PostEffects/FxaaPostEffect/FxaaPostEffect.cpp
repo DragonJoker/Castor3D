@@ -65,7 +65,7 @@ namespace fxaa
 
 			// Shader inputs
 			UBO_FXAA( writer, 0u, 0u );
-			auto c3d_mapDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDiffuse", 1u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 1u, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
@@ -78,15 +78,15 @@ namespace fxaa
 				, [&]()
 				{
 					auto rgbNW = writer.declLocale( "rgbNW"
-						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
+						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
 					auto rgbNE = writer.declLocale( "rgbNE"
-						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
+						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
 					auto rgbSW = writer.declLocale( "rgbSW"
-						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
+						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
 					auto rgbSE = writer.declLocale( "rgbSE"
-						, textureLodOffset( c3d_mapDiffuse, vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
+						, textureLodOffset( c3d_mapColor, vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
 					auto rgbM = writer.declLocale( "rgbM"
-						, texture( c3d_mapDiffuse, vtx_texture, 0.0_f ).rgb() );
+						, texture( c3d_mapColor, vtx_texture, 0.0_f ).rgb() );
 
 					auto luma = writer.declLocale( "luma"
 						, vec3( 0.299_f, 0.587_f, 0.114_f ) );
@@ -124,8 +124,8 @@ namespace fxaa
 						, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( "rgbA"
-						, writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
-								+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
+						, writer.paren( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
+								+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
 							* writer.paren( 1.0_f / 2.0_f ) );
 
 					texcoord0 = vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f );
@@ -133,8 +133,8 @@ namespace fxaa
 
 					auto rgbB = writer.declLocale( "rgbB"
 						, writer.paren( rgbA * 1.0_f / 2.0_f )
-							+ writer.paren( texture( c3d_mapDiffuse, texcoord0, 0.0_f ).rgb()
-									+ texture( c3d_mapDiffuse, texcoord1, 0.0_f ).rgb() )
+							+ writer.paren( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
+									+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
 								* writer.paren( 1.0_f / 4.0_f ) );
 					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );
