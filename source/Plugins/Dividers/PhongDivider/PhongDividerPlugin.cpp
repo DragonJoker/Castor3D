@@ -9,7 +9,7 @@ using namespace Phong;
 #ifndef CU_PlatformWindows
 #	define C3D_Phong_API
 #else
-#	ifdef PhongDivider_EXPORTS
+#	ifdef castor3dPhongDivider_EXPORTS
 #		define C3D_Phong_API __declspec(dllexport)
 #	else
 #		define C3D_Phong_API __declspec(dllimport)

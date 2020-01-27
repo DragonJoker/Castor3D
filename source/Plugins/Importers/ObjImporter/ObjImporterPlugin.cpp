@@ -9,7 +9,7 @@ using namespace castor;
 #ifndef CU_PlatformWindows
 #	define C3D_Obj_API
 #else
-#	ifdef ObjImporter_EXPORTS
+#	ifdef castor3dObjImporter_EXPORTS
 #		define C3D_Obj_API __declspec(dllexport)
 #	else
 #		define C3D_Obj_API __declspec(dllimport)

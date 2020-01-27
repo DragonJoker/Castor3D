@@ -11,7 +11,7 @@ using namespace HejlBurgessDawson;
 #ifndef CU_PlatformWindows
 #	define C3D_HejlBurgessDawsonToneMapping_API
 #else
-#	ifdef HejlBurgessDawsonToneMapping_EXPORTS
+#	ifdef castor3dHejlBurgessDawsonToneMapping_EXPORTS
 #		define C3D_HejlBurgessDawsonToneMapping_API __declspec( dllexport )
 #	else
 #		define C3D_HejlBurgessDawsonToneMapping_API __declspec( dllimport )

@@ -10,7 +10,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_Bloom_API
 #else
-#	ifdef BloomPostEffect_EXPORTS
+#	ifdef castor3dBloomPostEffect_EXPORTS
 #		define C3D_Bloom_API __declspec( dllexport )
 #	else
 #		define C3D_Bloom_API __declspec( dllimport )

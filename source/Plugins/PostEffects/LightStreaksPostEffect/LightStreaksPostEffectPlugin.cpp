@@ -10,7 +10,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_LightStreaks_API
 #else
-#	ifdef LightStreaksPostEffect_EXPORTS
+#	ifdef castor3dLightStreaksPostEffect_EXPORTS
 #		define C3D_LightStreaks_API __declspec( dllexport )
 #	else
 #		define C3D_LightStreaks_API __declspec( dllimport )

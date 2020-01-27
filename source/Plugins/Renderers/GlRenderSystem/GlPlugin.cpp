@@ -5,7 +5,7 @@
 #include <Castor3D/Render/RenderSystemFactory.hpp>
 
 #ifdef CU_PlatformWindows
-#	ifdef GlRenderSystem_EXPORTS
+#	ifdef castor3dGlRenderSystem_EXPORTS
 #		define C3D_Gl_API __declspec( dllexport )
 #	else
 #		define C3D_Gl_API __declspec( dllimport )

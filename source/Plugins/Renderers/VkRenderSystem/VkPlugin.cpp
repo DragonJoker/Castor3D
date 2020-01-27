@@ -4,6 +4,16 @@
 #include <Castor3D/Plugin/RendererPlugin.hpp>
 #include <Castor3D/Render/RenderSystemFactory.hpp>
 
+#ifdef CU_PlatformWindows
+#	ifdef castor3dVkRenderSystem_EXPORTS
+#		define C3D_Vk_API __declspec( dllexport )
+#	else
+#		define C3D_Vk_API __declspec( dllimport )
+#	endif
+#else
+#	define C3D_Vk_API
+#endif
+
 extern "C"
 {
 	C3D_Vk_API void getRequiredVersion( castor3d::Version * p_version )

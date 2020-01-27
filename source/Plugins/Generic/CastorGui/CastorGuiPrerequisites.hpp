@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #ifndef CU_PlatformWindows
 #	define C3D_CGui_API
 #else
-#	ifdef CastorGui_EXPORTS
+#	ifdef castor3dCastorGui_EXPORTS
 #		define C3D_CGui_API __declspec( dllexport )
 #	else
 #		define C3D_CGui_API __declspec( dllimport )

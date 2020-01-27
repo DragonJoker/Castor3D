@@ -11,7 +11,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_FilmGrain_API
 #else
-#	ifdef FilmGrainPostEffect_EXPORTS
+#	ifdef castor3dFilmGrainPostEffect_EXPORTS
 #		define C3D_FilmGrain_API __declspec( dllexport )
 #	else
 #		define C3D_FilmGrain_API __declspec( dllimport )

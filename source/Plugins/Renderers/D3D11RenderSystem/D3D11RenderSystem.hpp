@@ -27,8 +27,8 @@ namespace D3D11Render
 		castor3d::SpirVShader doCompileShader( castor3d::ShaderModule const & module )const override;
 
 	public:
-		C3D_D3D11_API static castor::String Name;
-		C3D_D3D11_API static castor::String Type;
+		static castor::String Name;
+		static castor::String Type;
 	};
 }
 

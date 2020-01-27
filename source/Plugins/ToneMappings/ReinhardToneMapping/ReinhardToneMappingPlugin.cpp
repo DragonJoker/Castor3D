@@ -11,7 +11,7 @@ using namespace Reinhard;
 #ifndef CU_PlatformWindows
 #	define C3D_ReinhardToneMapping_API
 #else
-#	ifdef ReinhardToneMapping_EXPORTS
+#	ifdef castor3dReinhardToneMapping_EXPORTS
 #		define C3D_ReinhardToneMapping_API __declspec( dllexport )
 #	else
 #		define C3D_ReinhardToneMapping_API __declspec( dllimport )

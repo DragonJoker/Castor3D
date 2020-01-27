@@ -9,7 +9,7 @@ using namespace PnTriangles;
 #ifndef CU_PlatformWindows
 #	define C3D_PnTriangles_API
 #else
-#	ifdef PnTrianglesDivider_EXPORTS
+#	ifdef castor3dPnTrianglesDivider_EXPORTS
 #		define C3D_PnTriangles_API __declspec(dllexport)
 #	else
 #		define C3D_PnTriangles_API __declspec(dllimport)

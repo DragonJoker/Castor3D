@@ -11,7 +11,7 @@ using namespace Linear;
 #ifndef CU_PlatformWindows
 #	define C3D_LinearToneMapping_API
 #else
-#	ifdef LinearToneMapping_EXPORTS
+#	ifdef castor3dLinearToneMapping_EXPORTS
 #		define C3D_LinearToneMapping_API __declspec( dllexport )
 #	else
 #		define C3D_LinearToneMapping_API __declspec( dllimport )

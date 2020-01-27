@@ -11,7 +11,7 @@
 #ifndef CU_PlatformWindows
 #	define C3D_Fxaa_API
 #else
-#	ifdef FxaaPostEffect_EXPORTS
+#	ifdef castor3dFxaaPostEffect_EXPORTS
 #		define C3D_Fxaa_API __declspec( dllexport )
 #	else
 #		define C3D_Fxaa_API __declspec( dllimport )
