@@ -71,7 +71,8 @@ namespace castor3d
 			, uint32_t face
 			, ashes::RenderPass const & renderPass
 			, SceneBackground const & background
-			, ashes::DescriptorSetPool const & pool );
+			, ashes::DescriptorSetPool const & uboPool
+			, ashes::DescriptorSetPool const & texPool );
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass.
@@ -111,7 +112,8 @@ namespace castor3d
 		ashes::FrameBufferPtr m_frameBuffer;
 		ashes::RenderPass const * m_renderPass{ nullptr };
 		ashes::CommandBufferPtr m_backgroundCommands;
-		ashes::DescriptorSetPtr m_backgroundDescriptorSet;
+		ashes::DescriptorSetPtr m_backgroundUboDescriptorSet;
+		ashes::DescriptorSetPtr m_backgroundTexDescriptorSet;
 		MatrixUbo m_matrixUbo;
 		std::unique_ptr< ForwardRenderTechniquePass > m_opaquePass;
 		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;

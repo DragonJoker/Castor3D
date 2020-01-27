@@ -139,7 +139,8 @@ namespace castor3d
 		ashes::ImagePtr m_depthBuffer;
 		ashes::ImageView m_depthBufferView;
 		ashes::RenderPassPtr m_renderPass;
-		ashes::DescriptorSetPoolPtr m_backgroundDescriptorPool;
+		ashes::DescriptorSetPoolPtr m_backgroundUboDescriptorPool;
+		ashes::DescriptorSetPoolPtr m_backgroundTexDescriptorPool;
 		SceneNode const & m_node;
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		CubeMatrices m_matrices;

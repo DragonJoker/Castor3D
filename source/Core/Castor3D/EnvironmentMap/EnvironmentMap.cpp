@@ -253,8 +253,10 @@ namespace castor3d
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 		setDebugObjectName( device, *m_renderPass, "EnvironmentMapRenderPass" );
 		auto & background = *m_node.getScene()->getBackground();
-		m_backgroundDescriptorPool = background.getDescriptorLayout().createPool( 6u );
-		setDebugObjectName( device, m_backgroundDescriptorPool->getPool(), "EnvironmentMapDescriptorPool" );
+		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( 6u );
+		setDebugObjectName( device, m_backgroundUboDescriptorPool->getPool(), "EnvironmentMapUboDescriptorPool" );
+		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( 6u );
+		setDebugObjectName( device, m_backgroundTexDescriptorPool->getPool(), "EnvironmentMapTexDescriptorPool" );
 		uint32_t face = 0u;
 
 		for ( auto & pass : m_passes )
@@ -263,7 +265,8 @@ namespace castor3d
 				, face
 				, *m_renderPass
 				, background
-				, *m_backgroundDescriptorPool );
+				, *m_backgroundUboDescriptorPool
+				, *m_backgroundTexDescriptorPool );
 			++face;
 		}
 
@@ -279,7 +282,8 @@ namespace castor3d
 			pass->cleanup();
 		}
 
-		m_backgroundDescriptorPool.reset();
+		m_backgroundUboDescriptorPool.reset();
+		m_backgroundTexDescriptorPool.reset();
 		m_renderPass.reset();
 		m_depthBuffer.reset();
 		m_environmentMap.cleanup();

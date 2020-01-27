@@ -143,8 +143,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
-			UBO_MATRIX( writer, 0, 0 );
-			UBO_MODEL_MATRIX( writer, 1, 0 );
+			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
+			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, UboSetIdx );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
@@ -167,7 +167,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer, 2, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), 3u, 0u );
+			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), SkyBoxImgIdx, TexSetIdx );
 			shader::Utils utils{ writer };
 
 			if ( !m_hdr )

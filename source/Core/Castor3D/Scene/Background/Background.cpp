@@ -17,14 +17,6 @@
 
 namespace castor3d
 {
-	namespace
-	{
-		static uint32_t constexpr MtxUboIdx = 0u;
-		static uint32_t constexpr MdlMtxUboIdx = 1u;
-		static uint32_t constexpr HdrCfgUboIdx = 2u;
-		static uint32_t constexpr SkyBoxImgIdx = 3u;
-	}
-
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
 		, BackgroundType type )
@@ -109,10 +101,13 @@ namespace castor3d
 		m_pipeline.reset();
 		m_indexBuffer.reset();
 		m_vertexBuffer.reset();
-		m_descriptorSet.reset();
+		m_uboDescriptorSet.reset();
+		m_texDescriptorSet.reset();
 		m_pipelineLayout.reset();
-		m_descriptorPool.reset();
-		m_descriptorLayout.reset();
+		m_uboDescriptorPool.reset();
+		m_texDescriptorPool.reset();
+		m_uboDescriptorLayout.reset();
+		m_texDescriptorLayout.reset();
 		m_semaphore.reset();
 
 		if ( m_texture )
@@ -165,7 +160,8 @@ namespace castor3d
 		doPrepareFrame( commandBuffer
 			, size
 			, renderPass
-			, *m_descriptorSet );
+			, *m_uboDescriptorSet
+			, *m_texDescriptorSet );
 		commandBuffer.endRenderPass();
 		m_timer->endPass( commandBuffer );
 		commandBuffer.endDebugUtilsLabel();
@@ -182,13 +178,15 @@ namespace castor3d
 		return prepareFrame( commandBuffer
 			, size
 			, renderPass
-			, *m_descriptorSet );
+			, *m_uboDescriptorSet
+			, *m_texDescriptorSet );
 	}
 
 	bool SceneBackground::prepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
 		, ashes::RenderPass const & renderPass
-		, ashes::DescriptorSet const & descriptorSet )const
+		, ashes::DescriptorSet const & uboDescriptorSet
+		, ashes::DescriptorSet const & texDescriptorSet )const
 	{
 		CU_Require( m_initialised );
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
@@ -201,24 +199,26 @@ namespace castor3d
 		doPrepareFrame( commandBuffer
 			, size
 			, renderPass
-			, descriptorSet );
+			, uboDescriptorSet
+			, texDescriptorSet );
 		commandBuffer.end();
 
 		return true;
 	}
 
-	void SceneBackground::initialiseDescriptorSet( MatrixUbo const & matrixUbo
+	void SceneBackground::initialiseDescriptorSets( MatrixUbo const & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, ashes::DescriptorSet & descriptorSet )const
+		, ashes::DescriptorSet & uboDescriptorSet
+		, ashes::DescriptorSet & texDescriptorSet )const
 	{
-		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 0u )
+		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MtxUboIdx )
 			, matrixUbo.getUbo() );
-		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 1u )
+		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MdlMtxUboIdx )
 			, modelMatrixUbo.getUbo() );
-		descriptorSet.createSizedBinding( m_descriptorLayout->getBinding( 2u )
+		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( HdrCfgUboIdx )
 			, hdrConfigUbo.getUbo() );
-		descriptorSet.createBinding( m_descriptorLayout->getBinding( 3u )
+		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );
 	}
@@ -245,13 +245,14 @@ namespace castor3d
 	void SceneBackground::doPrepareFrame( ashes::CommandBuffer & commandBuffer
 		, castor::Size const & size
 		, ashes::RenderPass const & renderPass
-		, ashes::DescriptorSet const & descriptorSet )const
+		, ashes::DescriptorSet const & uboDescriptorSet
+		, ashes::DescriptorSet const & texDescriptorSet )const
 	{
 		CU_Require( m_initialised );
 		commandBuffer.bindPipeline( *m_pipeline );
 		commandBuffer.setViewport( makeViewport( size ) );
 		commandBuffer.setScissor( makeScissor( size ) );
-		commandBuffer.bindDescriptorSet( descriptorSet, *m_pipelineLayout );
+		commandBuffer.bindDescriptorSets( { uboDescriptorSet, texDescriptorSet }, *m_pipelineLayout );
 		commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		commandBuffer.bindIndexBuffer( m_indexBuffer->getBuffer(), 0u, VK_INDEX_TYPE_UINT16 );
 		commandBuffer.drawIndexed( uint32_t( m_indexBuffer->getCount() ) );
@@ -268,8 +269,8 @@ namespace castor3d
 
 			// Inputs
 			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
-			UBO_MATRIX( writer, MtxUboIdx, 0 );
-			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, 0 );
+			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
+			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, UboSetIdx );
 
 			// Outputs
 			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
@@ -292,7 +293,7 @@ namespace castor3d
 			// Inputs
 			UBO_HDR_CONFIG( writer, HdrCfgUboIdx, 0 );
 			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), SkyBoxImgIdx, 0u );
+			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), SkyBoxImgIdx, TexSetIdx );
 			shader::Utils utils{ writer };
 
 			if ( !m_hdr )
@@ -330,10 +331,10 @@ namespace castor3d
 		};
 	}
 
-	void SceneBackground::doInitialiseDescriptorLayout()
+	void SceneBackground::doInitialiseDescriptorLayouts()
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings
+		ashes::VkDescriptorSetLayoutBindingArray uboBindings
 		{
 			makeDescriptorSetLayoutBinding( MtxUboIdx
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -344,11 +345,15 @@ namespace castor3d
 			makeDescriptorSetLayoutBinding( HdrCfgUboIdx
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+		};
+		m_uboDescriptorLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
+		ashes::VkDescriptorSetLayoutBindingArray texBindings
+		{
 			makeDescriptorSetLayoutBinding( SkyBoxImgIdx
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_descriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		m_texDescriptorLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
 	}
 
 	bool SceneBackground::doInitialiseVertexBuffer()
@@ -424,20 +429,25 @@ namespace castor3d
 	{
 		auto & device = getCurrentRenderDevice( *this );
 		m_pipelineLayout.reset();
-		doInitialiseDescriptorLayout();
-		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
+		doInitialiseDescriptorLayouts();
+		m_pipelineLayout = device->createPipelineLayout( { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
 
-		m_descriptorSet.reset();
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
-		initialiseDescriptorSet( m_matrixUbo
+		m_uboDescriptorSet.reset();
+		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 1u );
+		m_uboDescriptorSet = m_uboDescriptorPool->createDescriptorSet( 0u );
+		m_texDescriptorSet.reset();
+		m_texDescriptorPool = m_texDescriptorLayout->createPool( 1u );
+		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( 0u );
+		initialiseDescriptorSets( m_matrixUbo
 			, m_modelMatrixUbo
 			, hdrConfigUbo
-			, *m_descriptorSet );
-		m_descriptorSet->update();
+			, *m_uboDescriptorSet
+			, *m_texDescriptorSet );
+		m_uboDescriptorSet->update();
+		m_texDescriptorSet->update();
 		ashes::PipelineVertexInputStateCreateInfo vertexInput
 		{
 			0u,

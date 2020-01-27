@@ -215,7 +215,8 @@ namespace castor3d
 		C3D_API bool prepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
 			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSet const & descriptorSet )const;
+			, ashes::DescriptorSet const & uboDescriptorSet
+			, ashes::DescriptorSet const & texDescriptorSet )const;
 		/**
 		*\~english
 		*\return
@@ -240,10 +241,11 @@ namespace castor3d
 		*\param[out] descriptorSet
 		*	Reçoit les descripteurs.
 		*/
-		C3D_API virtual void initialiseDescriptorSet( MatrixUbo const & matrixUbo
+		C3D_API virtual void initialiseDescriptorSets( MatrixUbo const & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, ashes::DescriptorSet & descriptorSet )const;
+			, ashes::DescriptorSet & uboDescriptorSet
+			, ashes::DescriptorSet & texDescriptorSet )const;
 		/**
 		 *\~english
 		 *\brief		Starts the CPU timer, resets GPU time.
@@ -357,10 +359,16 @@ namespace castor3d
 			return *m_pipeline;
 		}
 
-		inline ashes::DescriptorSetLayout const & getDescriptorLayout()const
+		inline ashes::DescriptorSetLayout const & getUboDescriptorLayout()const
 		{
-			CU_Require( m_descriptorLayout );
-			return *m_descriptorLayout;
+			CU_Require( m_uboDescriptorLayout );
+			return *m_uboDescriptorLayout;
+		}
+		
+		inline ashes::DescriptorSetLayout const & getTexDescriptorLayout()const
+		{
+			CU_Require( m_texDescriptorLayout );
+			return *m_texDescriptorLayout;
 		}
 
 		inline ashes::VertexBuffer< Cube > const & getVertexBuffer()const
@@ -404,7 +412,8 @@ namespace castor3d
 		void doPrepareFrame( ashes::CommandBuffer & commandBuffer
 			, castor::Size const & size
 			, ashes::RenderPass const & renderPass
-			, ashes::DescriptorSet const & descriptorSet )const;
+			, ashes::DescriptorSet const & uboDescriptorSet
+			, ashes::DescriptorSet const & texDescriptorSet )const;
 		/**
 		*\~english
 		*\return
@@ -422,7 +431,7 @@ namespace castor3d
 		*\brief
 		*	Initialise le layout de descripteurs.
 		*/
-		virtual void doInitialiseDescriptorLayout();
+		virtual void doInitialiseDescriptorLayouts();
 		/**
 		*\~english
 		*\brief
@@ -481,9 +490,12 @@ namespace castor3d
 		ModelMatrixUbo m_modelMatrixUbo;
 		castor::Matrix4x4f m_mtxModel;
 		ashes::SemaphorePtr m_semaphore;
-		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
-		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		ashes::DescriptorSetPtr m_descriptorSet;
+		ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
+		ashes::DescriptorSetPtr m_uboDescriptorSet;
+		ashes::DescriptorSetLayoutPtr m_texDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_texDescriptorPool;
+		ashes::DescriptorSetPtr m_texDescriptorSet;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::VertexBufferPtr< Cube > m_vertexBuffer;
@@ -492,6 +504,13 @@ namespace castor3d
 		TextureLayoutSPtr m_texture;
 		SamplerWPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;
+
+		C3D_API static uint32_t constexpr UboSetIdx = 0u;
+		C3D_API static uint32_t constexpr MtxUboIdx = 0u;
+		C3D_API static uint32_t constexpr MdlMtxUboIdx = 1u;
+		C3D_API static uint32_t constexpr HdrCfgUboIdx = 2u;
+		C3D_API static uint32_t constexpr TexSetIdx = 1u;
+		C3D_API static uint32_t constexpr SkyBoxImgIdx = 0u;
 	};
 }
 

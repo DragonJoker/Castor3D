@@ -82,7 +82,8 @@ namespace castor3d
 		, uint32_t face
 		, ashes::RenderPass const & renderPass
 		, SceneBackground const & background
-		, ashes::DescriptorSetPool const & pool )
+		, ashes::DescriptorSetPool const & uboPool
+		, ashes::DescriptorSetPool const & texPool )
 	{
 		auto & device = getCurrentRenderDevice( *getOwner() );
 		float const aspect = float( size.getWidth() ) / size.getHeight();
@@ -124,17 +125,22 @@ namespace castor3d
 		setDebugObjectName( device, *m_frameBuffer, "EnvironmentMapPass" + castor::string::toString( face ) + "CommandBuffer" );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
-		m_backgroundDescriptorSet = pool.createDescriptorSet( 0u );
-		setDebugObjectName( device, *m_backgroundDescriptorSet, "EnvironmentMapPass" + castor::string::toString( face ) + "DescriptorSet" );
-		background.initialiseDescriptorSet( m_matrixUbo
+		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_backgroundUboDescriptorSet, "EnvironmentMapPass" + castor::string::toString( face ) + "UboDescriptorSet" );
+		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_backgroundTexDescriptorSet, "EnvironmentMapPass" + castor::string::toString( face ) + "TexDescriptorSet" );
+		background.initialiseDescriptorSets( m_matrixUbo
 			, m_modelMatrixUbo
 			, m_hdrConfigUbo
-			, *m_backgroundDescriptorSet );
-		m_backgroundDescriptorSet->update();
+			, *m_backgroundUboDescriptorSet
+			, *m_backgroundTexDescriptorSet );
+		m_backgroundUboDescriptorSet->update();
+		m_backgroundTexDescriptorSet->update();
 		background.prepareFrame( commandBuffer
 			, size
 			, renderPass
-			, *m_backgroundDescriptorSet );
+			, *m_backgroundUboDescriptorSet
+			, *m_backgroundTexDescriptorSet );
 
 		// Initialise transparent pass.
 		m_transparentPass->initialiseRenderPass( m_envView
@@ -153,7 +159,8 @@ namespace castor3d
 		m_finished.reset();
 		m_commandBuffer.reset();
 		m_backgroundCommands.reset();
-		m_backgroundDescriptorSet.reset();
+		m_backgroundUboDescriptorSet.reset();
+		m_backgroundTexDescriptorSet.reset();
 		m_frameBuffer.reset();
 		m_opaquePass->cleanup();
 		m_transparentPass->cleanup();
