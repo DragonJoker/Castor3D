@@ -39,7 +39,7 @@ namespace light_streaks
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareNegateVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
@@ -107,11 +107,6 @@ namespace light_streaks
 					auto texcoords = writer.declLocale( "texcoords"
 						, vtx_texture );
 
-					if ( !renderSystem->isTopDown() )
-					{
-						texcoords = vec2( texcoords.x(), 1.0_f - texcoords.y() );
-					}
-
 					FOR( writer, Int, s, 0, s < c3d_samples, ++s )
 					{
 						// Weight = a^(b*s)
@@ -147,19 +142,17 @@ namespace light_streaks
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 			{
-				auto texcoordsKawase = writer.declLocale( "texcoordsKawase"
-					, vtx_texture );
-				pxl_fragColor = texture( c3d_mapScene, utils.bottomUpToTopDown( texcoordsKawase ) );
-				pxl_fragColor += texture( c3d_mapKawase1, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase2, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase3, texcoordsKawase );
-				pxl_fragColor += texture( c3d_mapKawase4, texcoordsKawase );
+				pxl_fragColor = texture( c3d_mapScene, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase1, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase2, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase3, vtx_texture );
+				pxl_fragColor += texture( c3d_mapKawase4, vtx_texture );
 			} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

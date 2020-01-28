@@ -77,9 +77,6 @@ namespace castor3d
 	enum class PluginType
 		: uint8_t
 	{
-		//!\~english	Renderer plug-in.
-		//!\~french		Plug-in de rendu.
-		eRenderer,
 		//!\~english	Importer plug-in.
 		//!\~french		Plug-in d'importation.
 		eImporter,
@@ -104,7 +101,7 @@ namespace castor3d
 		//!\~english	Particle plug-in.
 		//!\~french		Plug-in de particule.
 		eParticle,
-		CU_ScopedEnumBounds( eRenderer )
+		CU_ScopedEnumBounds( eImporter )
 	};
 
 	template< class TParsed >
@@ -115,7 +112,6 @@ namespace castor3d
 	class DebugOverlays;
 	class Engine;
 	class Plugin;
-	class RendererPlugin;
 	class ImporterPlugin;
 	class DividerPlugin;
 	class GenericPlugin;
@@ -135,7 +131,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( Engine );
 	CU_DeclareSmartPtr( Plugin );
-	CU_DeclareSmartPtr( RendererPlugin );
 	CU_DeclareSmartPtr( ImporterPlugin );
 	CU_DeclareSmartPtr( DividerPlugin );
 	CU_DeclareSmartPtr( GenericPlugin );
@@ -281,7 +276,6 @@ namespace castor3d
 	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
 	CU_DeclareVector( BillboardListSPtr, BillboardList );
 
-	CU_DeclareMap( castor::String, RendererPluginSPtr, RendererPtr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
 	CU_DeclareMap( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
 	CU_DeclareArray( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );

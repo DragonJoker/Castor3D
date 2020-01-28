@@ -541,7 +541,7 @@ namespace castor3d
 		// Fragment Outputs
 		auto pxl_linear = writer.declOutput< Float >( cuT( "pxl_linear" ), 0u );
 		auto pxl_variance = writer.declOutput< Vec2 >( cuT( "pxl_variance" ), 1u );
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 
 		auto main = [&]()
 		{

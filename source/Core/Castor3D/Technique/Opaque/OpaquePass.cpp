@@ -502,8 +502,7 @@ namespace castor3d
 		auto out_c3dOutput4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
@@ -645,8 +644,7 @@ namespace castor3d
 		auto out_c3dOutput4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
@@ -788,8 +786,7 @@ namespace castor3d
 		auto out_c3dOutput4 = writer.declOutput< Vec4 >( OpaquePass::Output4, index++ );
 		auto out_c3dOutput5 = writer.declOutput< Vec4 >( OpaquePass::Output5, index++ );
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareRemoveGamma();
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );

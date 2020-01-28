@@ -26,8 +26,6 @@
 
 using namespace castor;
 
-#define C3D_InvertFrontAndBackPipelines 0
-
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -1098,46 +1096,22 @@ namespace castor3d
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetFrontPipelines()
 	{
-#if C3D_InvertFrontAndBackPipelines
-		return getEngine()->isTopDown()
-			? m_frontPipelines
-			: m_backPipelines;
-#else
 		return m_frontPipelines;
-#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > & RenderPass::doGetBackPipelines()
 	{
-#if C3D_InvertFrontAndBackPipelines
-		return getEngine()->isTopDown()
-			? m_backPipelines
-			: m_frontPipelines;
-#else
 		return m_backPipelines;
-#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetFrontPipelines()const
 	{
-#if C3D_InvertFrontAndBackPipelines
-		return getEngine()->isTopDown()
-			? m_frontPipelines
-			: m_backPipelines;
-#else
 		return m_frontPipelines;
-#endif
 	}
 
 	std::map< PipelineFlags, RenderPipelineUPtr > const & RenderPass::doGetBackPipelines()const
 	{
-#if C3D_InvertFrontAndBackPipelines
-		return getEngine()->isTopDown()
-			? m_backPipelines
-			: m_frontPipelines;
-#else
 		return m_backPipelines;
-#endif
 	}
 
 	void RenderPass::doPrepareFrontPipeline( ShaderProgramSPtr program

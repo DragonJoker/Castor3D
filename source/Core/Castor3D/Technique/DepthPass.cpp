@@ -323,7 +323,7 @@ namespace castor3d
 
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{

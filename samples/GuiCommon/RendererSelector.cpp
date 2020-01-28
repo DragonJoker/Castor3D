@@ -5,7 +5,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Plugin/RendererPlugin.hpp>
 
 using namespace castor3d;
 
@@ -28,12 +27,17 @@ namespace GuiCommon
 
 		int count = 0;
 
-		for ( auto it : m_engine.getPluginCache().getPlugins( PluginType::eRenderer ) )
+		for ( auto & renderer : m_engine.getRenderersList() )
 		{
-			if ( it.second )
-			{
-				m_renderers->Insert( it.second->getName(), count++, it.second.get() );
-			}
+			m_names.push_back( renderer.name );
+		}
+
+		for ( auto & renderer : m_engine.getRenderersList() )
+		{
+			auto name = make_wxString( renderer.description );
+			name.Replace( wxT( " for Ashes" ), wxEmptyString );
+			m_renderers->Insert( name, count, &m_names[count] );
+			++count;
 		}
 
 		if ( !m_renderers->IsEmpty() )
@@ -82,12 +86,12 @@ namespace GuiCommon
 
 	castor::String RendererSelector::getSelectedRenderer()const
 	{
-		castor::String result = RENDERER_TYPE_UNDEFINED;
+		castor::String result = castor3d::RENDERER_TYPE_UNDEFINED;
 		uint32_t selected = m_renderers->GetSelection();
 
 		if ( selected < m_renderers->GetCount() )
 		{
-			result = static_cast< RendererPlugin * >( m_renderers->GetClientData( selected ) )->getRendererType();
+			result = *static_cast< castor::String * >( m_renderers->GetClientData( selected ) );
 		}
 
 		return result;

@@ -679,7 +679,7 @@ namespace castor3d
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
@@ -744,9 +744,9 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )
@@ -877,7 +877,7 @@ namespace castor3d
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
@@ -942,9 +942,9 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto transmittance = writer.declLocale( cuT( "transmittance" )
@@ -1131,7 +1131,7 @@ namespace castor3d
 
 		// Utility functions
 		shader::Fog fog{ getFogType( sceneFlags ), writer };
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 		utils.declareCalcTexCoord();
 		utils.declareCalcVSPosition();
 		utils.declareCalcWSPosition();
@@ -1200,9 +1200,9 @@ namespace castor3d
 			auto depth = writer.declLocale( cuT( "depth" )
 				, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
 			auto vsPosition = writer.declLocale( cuT( "vsPosition" )
-				, utils.calcVSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvProj ) );
+				, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
 			auto wsPosition = writer.declLocale( cuT( "wsPosition" )
-				, utils.calcWSPosition( utils.bottomUpToTopDown( texCoord ), depth, c3d_mtxInvViewProj ) );
+				, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 			auto wsNormal = writer.declLocale( cuT( "wsNormal" )
 				, data1.xyz() );
 			auto translucency = writer.declLocale( cuT( "translucency" )

@@ -279,16 +279,10 @@ namespace castor3d
 	//*************************************************************************
 
 	RenderSystem::RenderSystem( Engine & engine
-		, AshPluginDescription desc
-		, bool topDown
-		, bool zeroToOneDepth
-		, bool invertedNormals )
+		, AshPluginDescription desc )
 		: OwnedBy< Engine >{ engine }
 		, m_desc{ std::move( desc ) }
 		, m_initialised{ false }
-		, m_topDown{ topDown }
-		, m_zeroToOneDepth{ zeroToOneDepth }
-		, m_invertedNormals{ invertedNormals }
 		, m_gpuInformations{}
 		, m_gpuBufferPool{ *this }
 	{
@@ -424,18 +418,7 @@ namespace castor3d
 		return result;
 	}
 
-	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module
-		, bool forceSpirV )const
-	{
-		if ( forceSpirV )
-		{
-			return doCompileSpirV( module );
-		}
-
-		return doCompileShader( module );
-	}
-
-	SpirVShader RenderSystem::doCompileSpirV( castor3d::ShaderModule const & module )const
+	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		SpirVShader result;
 
@@ -495,6 +478,7 @@ namespace castor3d
 						, ref.size() );
 				}
 			}
+
 #	endif
 #endif
 		}

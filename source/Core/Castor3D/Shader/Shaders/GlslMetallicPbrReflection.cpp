@@ -110,7 +110,7 @@ namespace castor3d
 					, Vec3 const & albedo )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
-						, m_utils.negateBottomUpToTopDown( reflect( wsIncident, wsNormal ) ) );
+						, reflect( wsIncident, wsNormal ) );
 					m_writer.returnStmt( ambientLight.xyz()
 						* occlusion
 						* texture( envMap, reflected ).xyz()
@@ -149,7 +149,7 @@ namespace castor3d
 							, pow( 1.0_f - product, 5.0_f )
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
-						, m_utils.negateBottomUpToTopDown( refract( wsIncident, wsNormal, refractionRatio ) ) );
+						, refract( wsIncident, wsNormal, refractionRatio ) );
 					m_writer.returnStmt( mix( texture( envMap, refracted ).xyz() * albedo / length( albedo )
 						, reflection
 						, vec3( fresnel ) ) );

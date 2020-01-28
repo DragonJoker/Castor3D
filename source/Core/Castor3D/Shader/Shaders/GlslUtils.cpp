@@ -23,14 +23,8 @@ namespace castor3d
 
 		uint32_t const Utils::MaxIblReflectionLod = 4;
 
-		Utils::Utils( sdw::ShaderWriter & writer
-			, bool isTopDown
-			, bool isZeroToOneDepth
-			, bool isInvertedNormals )
+		Utils::Utils( sdw::ShaderWriter & writer )
 			: m_writer{ writer }
-			, m_isTopDown{ isTopDown }
-			, m_isZeroToOneDepth{ isZeroToOneDepth }
-			, m_isInvertedNormals{ isInvertedNormals }
 		{
 		}
 
@@ -64,10 +58,7 @@ namespace castor3d
 					, Mat4 const & invProj )
 				{
 					auto csPosition = m_writer.declLocale( "csPosition"
-						, vec3( uv * 2.0_f - 1.0_f
-							, ( m_isZeroToOneDepth
-								? depth
-								: depth * 2.0_f - 1.0_f ) ) );
+						, vec3( uv * 2.0_f - 1.0_f, depth ) );
 					auto vsPosition = m_writer.declLocale( "vsPosition"
 						, invProj * vec4( csPosition, 1.0_f ) );
 					m_writer.returnStmt( vsPosition.xyz() / vsPosition.w() );
@@ -90,10 +81,7 @@ namespace castor3d
 					, Mat4 const & invViewProj )
 				{
 					auto csPosition = m_writer.declLocale( "psPosition"
-						, vec3( uv * 2.0_f - 1.0_f
-							, ( m_isZeroToOneDepth
-								? depth
-								: depth * 2.0_f - 1.0_f ) ) );
+						, vec3( uv * 2.0_f - 1.0_f, depth ) );
 					auto wsPosition = m_writer.declLocale( "wsPosition"
 						, invViewProj * vec4( csPosition, 1.0_f ) );
 					m_writer.returnStmt( wsPosition.xyz() / wsPosition.w() );
@@ -150,9 +138,7 @@ namespace castor3d
 					, Float const & farPlane )
 				{
 					auto z = m_writer.declLocale( "z"
-						, ( m_isZeroToOneDepth
-							? depth
-							: depth * 2.0_f - 1.0_f ) );
+						, depth );
 					z *= m_writer.paren( farPlane - nearPlane );
 					m_writer.returnStmt( 2.0_f * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
 				}
@@ -363,11 +349,7 @@ namespace castor3d
 						, irradiance * baseColour );
 					auto R = m_writer.declLocale( "R"
 						, reflect( -V, normal ) );
-
-					if ( m_isTopDown )
-					{
-						R.y() = -R.y();
-					}
+					R.y() = -R.y();
 
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, textureLod( prefilteredEnvMap, R, roughness * Float( float( MaxIblReflectionLod ) ) ).rgb() );
@@ -439,24 +421,6 @@ namespace castor3d
 					m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z(), v.w() ) );
 				}
 				, InVec4{ m_writer, "v" } );
-		}
-
-		void Utils::declareInvertNormal()
-		{
-			if ( m_invertNormal )
-			{
-				return;
-			}
-
-			if ( m_isInvertedNormals )
-			{
-				m_invertNormal = m_writer.implementFunction< Vec3 >( "invertNormal"
-					, [&]( Vec3 const & v )
-					{
-						m_writer.returnStmt( vec3( v.x(), 1.0_f - v.y(), v.z() ) );
-					}
-					, InVec3{ m_writer, "v" } );
-			}
 		}
 
 		void Utils::declareNegateVec2Y()
@@ -832,134 +796,34 @@ namespace castor3d
 			}
 		}
 
-		sdw::Vec2 Utils::bottomUpToTopDown( sdw::Vec2 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_invertVec2Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
 		sdw::Vec2 Utils::topDownToBottomUp( sdw::Vec2 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_invertVec2Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec3 Utils::bottomUpToTopDown( sdw::Vec3 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_invertVec3Y( texCoord );
-			}
-
-			return texCoord;
+			return m_invertVec2Y( texCoord );
 		}
 
 		sdw::Vec3 Utils::topDownToBottomUp( sdw::Vec3 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_invertVec3Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec4 Utils::bottomUpToTopDown( sdw::Vec4 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_invertVec4Y( texCoord );
-			}
-
-			return texCoord;
+			return m_invertVec3Y( texCoord );
 		}
 
 		sdw::Vec4 Utils::topDownToBottomUp( sdw::Vec4 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_invertVec4Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec3 Utils::invertNormal( sdw::Vec3 const & texCoord )const
-		{
-			if ( m_isInvertedNormals )
-			{
-				return m_invertNormal( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec2 Utils::negateBottomUpToTopDown( sdw::Vec2 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_negateVec2Y( texCoord );
-			}
-
-			return texCoord;
+			return m_invertVec4Y( texCoord );
 		}
 
 		sdw::Vec2 Utils::negateTopDownToBottomUp( sdw::Vec2 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_negateVec2Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec3 Utils::negateBottomUpToTopDown( sdw::Vec3 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_negateVec3Y( texCoord );
-			}
-
-			return texCoord;
+			return m_negateVec2Y( texCoord );
 		}
 
 		sdw::Vec3 Utils::negateTopDownToBottomUp( sdw::Vec3 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_negateVec3Y( texCoord );
-			}
-
-			return texCoord;
-		}
-
-		sdw::Vec4 Utils::negateBottomUpToTopDown( sdw::Vec4 const & texCoord )const
-		{
-			if ( !m_isTopDown )
-			{
-				return m_negateVec4Y( texCoord );
-			}
-
-			return texCoord;
+			return m_negateVec3Y( texCoord );
 		}
 
 		sdw::Vec4 Utils::negateTopDownToBottomUp( sdw::Vec4 const & texCoord )const
 		{
-			if ( m_isTopDown )
-			{
-				return m_negateVec4Y( texCoord );
-			}
-
-			return texCoord;
+			return m_negateVec4Y( texCoord );
 		}
 
 		Vec2 Utils::calcTexCoord( Vec2 const & renderPos

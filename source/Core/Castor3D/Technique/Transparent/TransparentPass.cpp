@@ -747,8 +747,7 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -981,8 +980,7 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();
@@ -1266,8 +1264,7 @@ namespace castor3d
 
 		auto in = writer.getIn();
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
-		utils.declareInvertNormal();
+		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 		utils.declareRemoveGamma();
 		utils.declareLineariseDepth();

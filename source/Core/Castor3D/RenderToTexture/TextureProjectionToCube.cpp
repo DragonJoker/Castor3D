@@ -70,7 +70,7 @@ namespace castor3d
 				// Outputs
 				auto pxl_colour = writer.declOutput< Vec4 >( cuT( "pxl_colour" ), 0u );
 
-				shader::Utils utils{ writer, device.renderSystem.isTopDown() };
+				shader::Utils utils{ writer };
 				utils.declareInvertVec2Y();
 				
 				auto sampleSphericalMap = writer.implementFunction< Vec2 >( cuT( "sampleSphericalMap" )
@@ -86,7 +86,7 @@ namespace castor3d
 				std::function< void() > main = [&]()
 				{
 					auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
-					pxl_colour = vec4( texture( mapColour, utils.bottomUpToTopDown( uv ) ).rgb(), 1.0_f );
+					pxl_colour = vec4( texture( mapColour, uv ).rgb(), 1.0_f );
 				};
 
 				writer.implementFunction< sdw::Void >( cuT( "main" ), main );

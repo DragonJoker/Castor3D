@@ -472,7 +472,7 @@ namespace castor3d
 						auto uv = m_writer.declLocale( "uv"
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( "dist"
-							, texture( shadowMap, vec3( m_utils.bottomUpToTopDown( uv )
+							, texture( shadowMap, vec3( uv
 								, m_writer.cast< Float >( index ) ) ) );
 
 						IF( m_writer, shadowCoord.w() > 0.0_f )
@@ -554,7 +554,7 @@ namespace castor3d
 						auto uv = m_writer.declLocale( "uv"
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( "dist"
-							, texture( shadowMap, vec3( m_utils.bottomUpToTopDown( uv )
+							, texture( shadowMap, vec3( uv
 								, m_writer.cast< Float >( cascadeIndex ) ) ) );
 
 						IF( m_writer, shadowCoord.w() > 0 )
@@ -629,12 +629,6 @@ namespace castor3d
 						, lightSpacePosition );
 					projCoords.x() = sdw::fma( projCoords.x(), 0.5_f, 0.5_f );
 					projCoords.y() = sdw::fma( projCoords.y(), 0.5_f, 0.5_f );
-
-					if ( !m_utils.isZeroToOneDepth() )
-					{
-						projCoords.z() = sdw::fma( projCoords.z(), 0.5_f, 0.5_f );
-					}
-
 					m_writer.returnStmt( projCoords / lightSpacePosition.w() );
 				}
 				, InMat4( m_writer, "lightMatrix" )
@@ -677,7 +671,7 @@ namespace castor3d
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapShadowDirectional
-								, vec3( m_utils.bottomUpToTopDown( lightSpacePosition.xy() )
+								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( cascadeIndex ) ) ) );
 						result = m_chebyshevUpperBound( moments
 							, lightSpacePosition.z()
@@ -747,7 +741,7 @@ namespace castor3d
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapShadowSpot
-								, vec3( m_utils.bottomUpToTopDown( lightSpacePosition.xy() )
+								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( index ) ) ) );
 						result = m_chebyshevUpperBound( moments
 							, lightSpacePosition.z()
@@ -1055,7 +1049,7 @@ namespace castor3d
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapShadowDirectional
-								, vec3( m_utils.bottomUpToTopDown( lightSpacePosition.xy() )
+								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( cascadeIndex ) ) ) );
 						m_writer.returnStmt( m_chebyshevUpperBound( moments
 							, lightSpacePosition.z()
@@ -1121,7 +1115,7 @@ namespace castor3d
 					{
 						auto moments = m_writer.declLocale( "moments"
 							, texture( c3d_mapShadowSpot
-								, vec3( m_utils.bottomUpToTopDown( lightSpacePosition.xy() )
+								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( shadowMapIndex ) ) ) );
 						result = m_chebyshevUpperBound( moments
 							, lightSpacePosition.z()

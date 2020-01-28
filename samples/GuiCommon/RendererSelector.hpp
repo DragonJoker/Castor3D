@@ -44,6 +44,7 @@ namespace GuiCommon
 		wxImage * m_castorImg;
 		wxListBox * m_renderers;
 		castor3d::Engine & m_engine;
+		std::vector< castor::String > m_names;
 	};
 }
 

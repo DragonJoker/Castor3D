@@ -42,7 +42,7 @@ namespace smaa
 			auto c3d_rtMetrics = writer.declConstant( constants::RenderTargetMetrics
 				, vec4( Float( renderTargetMetrics[0] ), renderTargetMetrics[1], renderTargetMetrics[2], renderTargetMetrics[3] ) );
 
-			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			// Shader inputs

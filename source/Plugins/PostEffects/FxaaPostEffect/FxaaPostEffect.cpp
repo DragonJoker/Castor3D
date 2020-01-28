@@ -44,13 +44,13 @@ namespace fxaa
 			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
 			auto out = writer.getOut();
 
-			castor3d::shader::Utils utils{ writer, renderSystem->isTopDown() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = utils.bottomUpToTopDown( uv );
+					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - ( c3d_pixelSize * ( 0.5_f + c3d_subpixShift ) );

@@ -274,7 +274,7 @@ namespace castor3d
 					if ( fogType != FogType::eDisabled )
 					{
 						auto texCoord = writer.declLocale( cuT( "texCoord" )
-							, utils.bottomUpToTopDown( in.gl_FragCoord.xy() ) );
+							, in.gl_FragCoord.xy() );
 						auto position = writer.declLocale( cuT( "position" )
 							, utils.calcVSPosition( texCoord
 								, texture( c3d_mapDepth, texCoord ).r()

@@ -496,7 +496,7 @@ namespace castor3d
 		auto pxl_linear( writer.declOutput< Float >( cuT( "pxl_linear" ), 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( cuT( "pxl_variance" ), 1u ) );
 
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 
 		writer.implementFunction< sdw::Void >( cuT( "main" )
 			, [&]()

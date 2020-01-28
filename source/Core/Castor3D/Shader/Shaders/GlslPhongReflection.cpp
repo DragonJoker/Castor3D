@@ -100,7 +100,7 @@ namespace castor3d
 					, SampledImageCubeRgba32 const & envMap )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
-						, m_utils.negateBottomUpToTopDown( reflect( wsIncident, wsNormal ) ) );
+						, reflect( wsIncident, wsNormal ) );
 					m_writer.returnStmt( occlusion * texture( envMap, reflected ).xyz() );
 				}
 				, InVec3{ m_writer, "wsIncident" }
@@ -133,7 +133,7 @@ namespace castor3d
 							, pow( 1.0_f - product, 5.0_f )
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
-						, m_utils.negateBottomUpToTopDown( refract( wsIncident, wsNormal, refractionRatio ) ) );
+						, refract( wsIncident, wsNormal, refractionRatio ) );
 					m_writer.returnStmt( texture( envMap, refracted ).xyz() * diffuse / length( diffuse ) );
 				}
 				, InVec3{ m_writer, "wsIncident" }
@@ -171,7 +171,7 @@ namespace castor3d
 							, pow( 1.0_f - product, 5.0_f )
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
-						, m_utils.negateBottomUpToTopDown( refract( wsIncident, wsNormal, refractionRatio ) ) );
+						, refract( wsIncident, wsNormal, refractionRatio ) );
 					m_writer.returnStmt( mix( texture( envMap, refracted ).xyz() * diffuse / length( diffuse )
 						, reflection * reflection / length( reflection )
 						, vec3( fresnel ) ) );

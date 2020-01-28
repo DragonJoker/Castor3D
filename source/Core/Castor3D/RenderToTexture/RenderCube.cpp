@@ -59,8 +59,7 @@ namespace castor3d
 		UniformBufferUPtr< castor::Matrix4x4f > doCreateMatrixUbo( RenderDevice const & device
 			, ashes::Queue const & queue
 			, ashes::CommandPool const & pool
-			, bool srcIsCube
-			, bool isTopDown )
+			, bool srcIsCube )
 		{
 			static castor::Matrix4x4f const projection = convert( device->perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
 
@@ -69,7 +68,7 @@ namespace castor3d
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "RenderCubeMatrix" );
-			static std::array< castor::Matrix4x4f, 6u > const views = [isTopDown, &device]()
+			static std::array< castor::Matrix4x4f, 6u > const views = [&device]()
 			{
 				std::array< castor::Matrix4x4f, 6u > result
 				{
@@ -80,12 +79,6 @@ namespace castor3d
 					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, +1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } ),
 					matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, Point3f{ +0.0f, +0.0f, -1.0f }, Point3f{ 0.0f, -1.0f, +0.0f } )
 				};
-
-				if ( !isTopDown )
-				{
-					std::swap( result[2], result[3] );
-				}
-
 				return result;
 			}();
 
@@ -192,8 +185,7 @@ namespace castor3d
 		m_matrixUbo = doCreateMatrixUbo( m_device
 			, *m_device.graphicsQueue
 			, *m_device.graphicsCommandPool
-			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE
-			, m_device.renderSystem.isTopDown() );
+			, view->viewType == VK_IMAGE_VIEW_TYPE_CUBE );
 		m_vertexBuffer = doCreateVertexBuffer( m_device
 			, *m_device.graphicsQueue
 			, *m_device.graphicsCommandPool );

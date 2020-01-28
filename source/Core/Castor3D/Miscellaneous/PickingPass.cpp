@@ -291,11 +291,6 @@ namespace castor3d
 	PickNodeType PickingPass::pick( castor::Position position
 		, Camera const & camera )
 	{
-		if ( !getEngine()->isTopDown() )
-		{
-			position = convertToBottomUp( position, camera.getSize() );
-		}
-
 		m_pickNodeType = PickNodeType::eNone;
 		m_geometry.reset();
 		m_submesh.reset();
@@ -872,7 +867,7 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
-		shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth(), renderSystem.isInvertedNormals() };
+		shader::Utils utils{ writer };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()

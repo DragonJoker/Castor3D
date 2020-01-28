@@ -187,13 +187,6 @@ namespace castor3d
 		C3D_API void unregisterSections( castor::String const & name );
 		/**
 		 *\~english
-		 *\return		\p true if the selected rendering API is top down.
-		 *\~french
-		 *\return		\p true si l'API de rendu sélectionnée est top down.
-		 */
-		C3D_API bool isTopDown()const;
-		/**
-		 *\~english
 		 *\brief		Renders the given depth texture to the given frame buffer.
 		 *\param[in]	renderPass	The render pass.
 		 *\param[in]	frameBuffer	The frame buffer.
@@ -353,16 +346,6 @@ namespace castor3d
 			return m_threaded;
 		}
 
-		inline RenderSystemFactory const & getRenderSystemFactory()const
-		{
-			return m_renderSystemFactory;
-		}
-
-		inline RenderSystemFactory & getRenderSystemFactory()
-		{
-			return m_renderSystemFactory;
-		}
-
 		inline MeshFactory const & getMeshFactory()const
 		{
 			return m_meshFactory;
@@ -483,7 +466,6 @@ namespace castor3d
 		std::map< RenderWindowRPtr, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
-		RenderSystemFactory m_renderSystemFactory;
 		MeshFactory m_meshFactory;
 		SubdividerFactory m_subdividerFactory;
 		ImporterFactory m_importerFactory;

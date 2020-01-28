@@ -9,7 +9,6 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Plugin/RendererPlugin.hpp>
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Exception/Exception.hpp>
@@ -321,15 +320,15 @@ namespace GuiCommon
 		doloadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto renderers = m_castor->getPluginCache().getPlugins( castor3d::PluginType::eRenderer );
+		auto & renderers = m_castor->getRenderersList();
 
 		if ( renderers.empty() )
 		{
 			CU_Exception( "No renderer plug-ins" );
 		}
-		else if ( renderers.size() == 1 )
+		else if ( std::next( renderers.begin() ) == renderers.end() )
 		{
-			m_rendererType = std::static_pointer_cast< castor3d::RendererPlugin >( renderers.begin()->second )->getRendererType();
+			m_rendererType = renderers.begin()->name;
 		}
 
 		if ( m_rendererType == castor3d::RENDERER_TYPE_UNDEFINED )

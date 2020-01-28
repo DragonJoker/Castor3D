@@ -373,8 +373,7 @@ namespace castor3d
 
 		if ( it != m_rendererList.end() )
 		{
-			m_renderSystem = m_renderSystemFactory.create( type
-				, *this
+			m_renderSystem = std::make_unique< RenderSystem >( *this
 				, *it );
 		}
 
@@ -510,11 +509,6 @@ namespace castor3d
 		}
 
 		m_additionalSections.erase( it );
-	}
-
-	bool Engine::isTopDown()const
-	{
-		return m_renderSystem->isTopDown();
 	}
 
 	void Engine::renderDepth( ashes::RenderPass const & renderPass

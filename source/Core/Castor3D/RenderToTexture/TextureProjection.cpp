@@ -223,7 +223,7 @@ namespace castor3d
 			pcb.end();
 			auto in = writer.getIn();
 
-			shader::Utils utils{ writer, renderSystem.isTopDown() };
+			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			// Outputs
@@ -232,7 +232,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
 				pxl_FragColor = texture( c3d_mapColor
-					, utils.bottomUpToTopDown( in.gl_FragCoord.xy() / c3d_size ) );
+					, in.gl_FragCoord.xy() / c3d_size );
 			} );
 
 			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

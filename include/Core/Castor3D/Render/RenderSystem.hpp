@@ -18,16 +18,11 @@ namespace castor3d
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
 	\version	0.1
 	\~english
-	\brief		The render system representation
-	\remarks	This is the class which is the link between Castor3D and the renderer driver (OpenGL or Direct3D)
-				<br />Hence it is also the only class which can create the renderers
+	\brief		This class links Castor3D to the rendering API.
 	\~french
-	\brief		Représentation du système de rendu
-	\remarks	Cette classe fait le lien entre Castor3D et l'api de rendu (OpenGL ou Direct3D)
-				<br />Ainsi c'est aussi la seule classe à même de créer les renderers
+	\brief		Cette classe fait le lien entre Castor3D et l'API de rendu.
 	*/
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
@@ -40,24 +35,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	desc			The Ashes plugin description.
-		 *\param[in]	hasSsbo			Tells if the render API supports SSBO.
-		 *\param[in]	topDown			Tells if the renderer's clip space is top down.
-		 *\param[in]	zeroToOneDepth	Tells if the renderer's clip space uses [0,1] depth range.
-		 *\param[in]	invertedNormals	Tells if the renderer needs iverted normals.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	desc			The Ashes plugin description.
-		 *\param[in]	hasSsbo			Dit si l'API de rendu supporte les SSBO.
-		 *\param[in]	topDown			Dit si le clip space du renderer est top down.
-		 *\param[in]	zeroToOneDepth	Dit si le clip space du renderer utilise l'intervalle [0,1] pour la profondeur.
-		 *\param[in]	invertedNormals	Dit si le renderer nécessite une inversion des normales.
 		 */
 		C3D_API RenderSystem( Engine & engine
-			, AshPluginDescription desc
-			, bool topDown
-			, bool zeroToOneDepth
-			, bool invertedNormals );
+			, AshPluginDescription desc );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -114,8 +98,7 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API SpirVShader compileShader( ShaderModule const & module
-			, bool forceSpirV = false )const;
+		C3D_API SpirVShader compileShader( ShaderModule const & module )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -342,21 +325,6 @@ namespace castor3d
 			return m_desc.features.hasStorageBuffers;
 		}
 
-		inline bool isTopDown()const
-		{
-			return m_topDown;
-		}
-
-		inline bool isZeroToOneDepth()const
-		{
-			return m_zeroToOneDepth;
-		}
-
-		inline bool isInvertedNormals()const
-		{
-			return m_invertedNormals;
-		}
-
 		inline ashes::Instance const & getInstance()const
 		{
 			return *m_instance;
@@ -423,19 +391,10 @@ namespace castor3d
 		}
 		/**@}*/
 
-	protected:
-		C3D_API SpirVShader doCompileSpirV( castor3d::ShaderModule const & module )const;
-
 	private:
-		virtual SpirVShader doCompileShader( castor3d::ShaderModule const & module )const = 0;
-
-	protected:
 		std::recursive_mutex m_mutex;
 		bool m_initialised;
 		AshPluginDescription const m_desc;
-		bool const m_topDown;
-		bool const m_zeroToOneDepth;
-		bool const m_invertedNormals;
 		GpuInformations m_gpuInformations;
 		OverlayRendererSPtr m_overlayRenderer;
 		ashes::InstancePtr m_instance;

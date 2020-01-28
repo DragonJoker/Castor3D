@@ -43,14 +43,14 @@ namespace smaa
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = utils.bottomUpToTopDown( uv );
+					vtx_texture = uv;
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}

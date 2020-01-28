@@ -722,7 +722,7 @@ namespace castor3d
 			auto vtx_textureOverlays = writer.declOutput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
 			auto out = writer.getOut();
 
-			shader::Utils utils{ writer, renderSystem.isTopDown() };
+			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( cuT( "main" )

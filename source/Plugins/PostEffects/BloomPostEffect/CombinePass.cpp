@@ -68,23 +68,13 @@ namespace Bloom
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			castor3d::shader::Utils utils{ writer, renderSystem.isTopDown(), renderSystem.isZeroToOneDepth() };
+			castor3d::shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto texcoords = writer.declLocale( cuT( "texcoords" )
-						, utils.bottomUpToTopDown( vtx_texture ) );
-
-					if ( renderSystem.isTopDown() )
-					{
-						pxl_fragColor = texture( c3d_mapScene, vtx_texture );
-					}
-					else
-					{
-						pxl_fragColor = texture( c3d_mapScene, texcoords );
-					}
+					pxl_fragColor = texture( c3d_mapScene, vtx_texture );
 
 					for ( uint32_t i = 0; i < blurPassesCount; ++i )
 					{

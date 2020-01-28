@@ -118,11 +118,6 @@ namespace castor3d
 				Quaternion::fromMatrix( matrix::lookAt( position, castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ) ),// Negative Z
 			};
 
-			if ( !map.getEngine()->getRenderSystem()->isTopDown() )
-			{
-				std::swap( orients[2], orients[3] );
-			}
-
 			auto i = 0u;
 
 			for ( auto & node : nodes )

@@ -8,7 +8,6 @@
 #include "Castor3D/Plugin/ImporterPlugin.hpp"
 #include "Castor3D/Plugin/ParticlePlugin.hpp"
 #include "Castor3D/Plugin/PostFxPlugin.hpp"
-#include "Castor3D/Plugin/RendererPlugin.hpp"
 #include "Castor3D/Plugin/TechniquePlugin.hpp"
 #include "Castor3D/Plugin/ToneMappingPlugin.hpp"
 #include "Castor3D/Miscellaneous/VersionException.hpp"
@@ -192,10 +191,6 @@ namespace castor3d
 
 			case PluginType::eImporter:
 				result = std::make_shared< ImporterPlugin >( library, getEngine() );
-				break;
-
-			case PluginType::eRenderer:
-				result = std::make_shared< RendererPlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eGeneric:
