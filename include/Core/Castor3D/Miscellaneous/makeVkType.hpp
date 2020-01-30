@@ -191,10 +191,10 @@ namespace castor3d
 	template<> struct VkTypeTraits< VkXcbSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR; };
 #endif
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-	template<> struct VkTypeTraits< VkXLibSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkXlibSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR; };
 #endif
 #ifdef VK_USE_PLATFORM_XLIB_XRANDR_EXT
-	template<> struct VkTypeTraits< VkXLibSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR; };
+	template<> struct VkTypeTraits< VkXlibSurfaceCreateInfoKHR>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR; };
 #endif
 
 	template<> struct VkTypeTraits< VkDebugReportCallbackCreateInfoEXT>{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT; };

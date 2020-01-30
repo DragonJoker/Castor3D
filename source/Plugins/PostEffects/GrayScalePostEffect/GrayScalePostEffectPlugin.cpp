@@ -32,17 +32,17 @@ extern "C"
 
 	C3D_GrayScale_API void getName( char const ** p_name )
 	{
-		*p_name = GrayScale::PostEffect::Name.c_str();
+		*p_name = grayscale::PostEffect::Name.c_str();
 	}
 
 	C3D_GrayScale_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().registerType( GrayScale::PostEffect::Type
-			, &GrayScale::PostEffect::create );
+		engine->getRenderTargetCache().getPostEffectFactory().registerType( grayscale::PostEffect::Type
+			, &grayscale::PostEffect::create );
 	}
 
 	C3D_GrayScale_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( GrayScale::PostEffect::Type );
+		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( grayscale::PostEffect::Type );
 	}
 }

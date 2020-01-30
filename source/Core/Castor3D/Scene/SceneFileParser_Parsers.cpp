@@ -2951,8 +2951,11 @@ namespace castor3d
 				auto pass = *material->begin();
 
 				if ( pass->hasAlphaBlending()
+					&& parsingContext->bBool1
 					&& checkFlag( pass->getTextures(), TextureFlag::eOpacity ) )
 				{
+					parsingContext->bBool1 = false;
+
 					// Create a new pass with alpha rejection
 					switch ( pass->getType() )
 					{
@@ -3272,6 +3275,21 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eShaderProgram )
+
+	CU_ImplementAttributeParser( parserPassMixedInterpolative )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else if ( !params.empty() )
+		{
+			parsingContext->bBool1 = true;
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserPassAlphaBlendMode )
 	{

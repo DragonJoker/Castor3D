@@ -181,6 +181,16 @@ namespace castor3d
 		{
 			return m_wantedFPS;
 		}
+		/**
+		 *\~english
+		 *\return		The last frame time, in milliseconds.
+		 *\~french
+		 *\return		Le temps écoulé pour la dernière frame, en millisecondes.
+		 */
+		inline castor::Microseconds getLastFrameTime()
+		{
+			return m_lastFrameTime;
+		}
 
 	protected:
 		/**
@@ -238,6 +248,9 @@ namespace castor3d
 		//!\~english	The wanted time for a frame.
 		//!\~french		Le temps voulu pour une frame.
 		castor::Milliseconds m_frameTime;
+		//!\~english	The elapsed time for the last frame.
+		//!\~french		Le temps écoulé pour la dernière frame.
+		std::atomic< castor::Microseconds > m_lastFrameTime;
 		//!\~english	The debug overlays.
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;

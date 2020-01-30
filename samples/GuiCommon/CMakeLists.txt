@@ -39,19 +39,20 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/samples
 		${CASTOR_BINARY_DIR}/samples
 		${wxWidgets_INCLUDE_DIRS}
+		${GTK2_INCLUDE_DIRS}
 	PRIVATE
 		${Castor3DIncludeDirs}
 		${FFMPEG_INCLUDE_DIR}
-		${GTK2_INCLUDE_DIRS}
 )
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 		${wxWidgets_LIBRARIES}
+		${GTK2_LIBRARIES}
+		${X11_LIBRARIES}
 	PRIVATE
 		sdw::CompilerGlsl
 		${FFMPEG_LIBRARIES}
-		${GTK2_LIBRARIES}
 )
 target_compile_definitions( ${PROJECT_NAME} PUBLIC
 	${wxWidgets_DEFINITIONS}

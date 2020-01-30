@@ -225,7 +225,7 @@ namespace castor3d
 						auto prefilteredColor = writer.declLocale( "prefilteredColor"
 							, vec3( 0.0_f ) );
 
-						FOR( writer, UInt, i, 0u, i < sampleCount, ++i )
+						FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
 						{
 							auto xi = writer.declLocale( "xi"
 								, hammersley( i, sampleCount ) );

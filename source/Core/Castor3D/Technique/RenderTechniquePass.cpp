@@ -29,9 +29,9 @@ namespace castor3d
 			{
 				for ( auto & renderNode : itPipelines.second )
 				{
-					Matrix4x4r worldMeshMatrix = renderNode.sceneNode.getDerivedTransformationMatrix().getInverse().transpose();
-					Point3r worldCameraPosition = camera.getParent()->getDerivedPosition();
-					Point3r meshCameraPosition = worldCameraPosition * worldMeshMatrix;
+					Matrix4x4f worldMeshMatrix = renderNode.sceneNode.getDerivedTransformationMatrix().getInverse().transpose();
+					Point3f worldCameraPosition = camera.getParent()->getDerivedPosition();
+					Point3f meshCameraPosition = worldCameraPosition * worldMeshMatrix;
 					renderNode.data.sortByDistance( meshCameraPosition );
 					meshCameraPosition -= renderNode.sceneNode.getPosition();
 					output.emplace( point::lengthSquared( meshCameraPosition ), makeDistanceNode( renderNode ) );

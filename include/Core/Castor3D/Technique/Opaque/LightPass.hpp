@@ -449,7 +449,7 @@ namespace castor3d
 		using PipelineMap = std::map< size_t, PipelinePtr >;
 		using PipelineArray = std::array< Pipeline, size_t( ShadowType::eCount ) * 2u >; // * 2u for volumetric scattering or not.
 
-		Pipeline LightPass::createPipeline( LightType lightType
+		Pipeline createPipeline( LightType lightType
 			, ShadowType shadowType
 			, bool volumetric
 			, ShadowMap const * shadowMap );

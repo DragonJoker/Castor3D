@@ -3,13 +3,13 @@ project( castor3d${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
 	find_package( assimp CONFIG REQUIRED assimp )
-	set( ASSIMP_LIBRARIES assimp::assimp )
-	set( ASSIMP_FOUND ON )
+	set( assimp_LIBRARIES assimp::assimp )
+	set( assimp_FOUND ON )
 else ()
-	find_package( assimp )
+	find_package( assimp REQUIRED )
 endif ()
 
-if( ASSIMP_FOUND )
+if( assimp_FOUND )
 	set( Castor3DBinsDependencies 
 		${Castor3DBinsDependencies}
 		castor::${FOLDER_NAME}
@@ -36,13 +36,13 @@ if( ASSIMP_FOUND )
 	target_include_directories( ${PROJECT_NAME}
 		PRIVATE
 			${ImporterIncludes}
-			${ASSIMP_INCLUDE_DIR}
+			${assimp_INCLUDE_DIR}
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
 			castor::Castor3D
 		PRIVATE
-			${ASSIMP_LIBRARIES}
+			${assimp_LIBRARIES}
 	)
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Importers" )

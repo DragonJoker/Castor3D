@@ -96,7 +96,7 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_BINARY_DIR}/include/Core
 		${CASTOR_SOURCE_DIR}/source/Core
 		${CASTOR_BINARY_DIR}/source/Core
-		${GLSLANG_INCLUDE_DIR}
+		${glslang_INCLUDE_DIR}
 		${ExternalIncludes}
 )
 target_compile_definitions( ${PROJECT_NAME}
@@ -110,7 +110,7 @@ target_link_libraries( ${PROJECT_NAME}
 		ashes::ashespp
 	PRIVATE
 		sdw::CompilerSpirV
-		${GLSLANG_LIBRARIES}
+		${glslang_LIBRARIES}
 )
 
 file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES

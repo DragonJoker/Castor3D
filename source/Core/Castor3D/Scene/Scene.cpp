@@ -97,7 +97,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Font, FontCache, EventType::ePreRender >::clear()
+	inline void CacheView< castor::Font, FontCache, EventType::ePreRender >::clear()
 	{
 		for ( auto name : m_createdElements )
 		{
@@ -199,7 +199,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = writeView< Font >( scene.getFontView()
+			result = writeView< castor::Font >( scene.getFontView()
 				, cuT( "Fonts" )
 				, m_tabs
 				, file );
@@ -700,7 +700,7 @@ namespace castor3d
 			, std::bind( OverlayCache::OverlayInitialiser{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
 			, std::bind( OverlayCache::OverlayCleaner{ getEngine()->getOverlayCache() }, std::placeholders::_1 )
 			, getEngine()->getOverlayCache() );
-		m_fontCacheView = makeCacheView< Font, EventType::ePreRender >( getName()
+		m_fontCacheView = makeCacheView< castor::Font, EventType::ePreRender >( getName()
 			, dummy
 			, dummy
 			, getEngine()->getFontCache() );

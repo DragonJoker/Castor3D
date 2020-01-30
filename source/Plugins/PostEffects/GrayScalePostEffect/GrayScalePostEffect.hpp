@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Shader.hpp>
 
-namespace GrayScale
+namespace grayscale
 {
 	class PostEffect
 		: public castor3d::PostEffect

@@ -73,10 +73,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the overlays texts.
+		 *\return		The elapsed time for this frame.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
+		 *\return		Le temps écoulé pour cette frame.
 		 */
-		void endFrame();
+		castor::Microseconds endFrame();
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask

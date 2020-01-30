@@ -41,6 +41,7 @@ function( SamplesBuild )
 				set( GTK2_FOUND TRUE )
 			else()
 				find_package( GTK2 )
+				find_package( X11 )
 			endif()
 
 			set( GUICOMMON_C_FLAGS "" )
@@ -61,7 +62,6 @@ function( SamplesBuild )
 			find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
-				message( STATUS "+ Found wxWidgets" )
 				set( Castor3DIncludeDirs
 					${Castor3DIncludeDirs}
 					${CASTOR_BINARY_DIR}/include/Core

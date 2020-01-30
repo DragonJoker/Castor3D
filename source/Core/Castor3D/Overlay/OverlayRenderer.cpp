@@ -147,7 +147,7 @@ namespace castor3d
 			eColour = 0x02,
 			eOpacity = 0x04,
 		};
-		CU_ImplementFlags( OverlayTexture );
+		CU_ImplementFlags( OverlayTexture )
 
 		uint32_t makeKey( TextureFlags const & textures
 			, uint32_t texturesCount

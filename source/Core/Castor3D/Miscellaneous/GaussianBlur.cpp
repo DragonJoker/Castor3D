@@ -86,7 +86,7 @@ namespace castor3d
 					auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
 					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
-					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
+					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
 						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
@@ -129,7 +129,7 @@ namespace castor3d
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
 				pxl_fragColor = texture( c3d_mapSource, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
 
-				FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
+				FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 				{
 					offset += base;
 					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture - offset, Float( float( layer ) ) ) );
@@ -170,7 +170,7 @@ namespace castor3d
 				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
 				pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
-				FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
+				FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 				{
 					offset += base;
 					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );

@@ -31,7 +31,7 @@
 
 #include <numeric>
 
-namespace GrayScale
+namespace grayscale
 {
 	namespace
 	{

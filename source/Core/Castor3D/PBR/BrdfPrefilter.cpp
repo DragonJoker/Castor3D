@@ -329,7 +329,7 @@ namespace castor3d
 					auto sampleCount = writer.declLocale( "sampleCount"
 						, 1024_u );
 
-					FOR( writer, UInt, i, 0u, i < sampleCount, ++i )
+					FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
 					{
 						auto xi = writer.declLocale( "xi"
 							, hammersley( i, sampleCount ) );

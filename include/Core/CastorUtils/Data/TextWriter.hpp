@@ -89,19 +89,6 @@ namespace castor
 			}
 		}
 
-		inline bool writeFooter( TextFile & file )const
-		{
-			result = file.writeText( cuT( "\n" ) + m_tabs + name + cuT( "\n" ) ) > 0
-				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-			checkError( result, "footer" );
-		}
-
-		inline bool writeFooter( String const & name, TextFile & file )const
-		{
-			result = file.writeText( m_tabs + cuT( "} // name\n" ) ) > 0;
-			checkError( result, "footer " + name );
-		}
-
 		struct WriterBlock
 		{
 			WriterBlock( TextWriter const * writer

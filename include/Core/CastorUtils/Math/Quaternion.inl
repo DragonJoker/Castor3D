@@ -42,7 +42,7 @@ namespace castor
 
 		if ( p_file.readLine( strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
 		{
-			real degrees;
+			T degrees;
 			StringStream streamWord( strWord );
 			streamWord >> degrees;
 			angle.degrees( degrees );

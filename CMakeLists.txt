@@ -1,6 +1,10 @@
 cmake_minimum_required( VERSION 3.8 )
 cmake_policy( VERSION 3.8 )
 
+if ( VCPKG_TARGET_TRIPLET )
+	set( VCPKG_TOOLCHAIN ON )
+endif ()
+
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
 #--------------------------------------------------------------------------------------------------
@@ -14,11 +18,21 @@ set( VERSION_BUILD 0 )
 set( VERSION_YEAR 2019 )
 
 # Used to look for external modules
-set( CMAKE_MODULE_PATH
-	${CMAKE_SOURCE_DIR}/CMake
-	${CMAKE_SOURCE_DIR}/CMake/Modules
-	${CMAKE_SOURCE_DIR}/CMake/Toolchains
-)
+if ( VCPKG_TOOLCHAIN )
+	set( CMAKE_MODULE_PATH
+		${CMAKE_SOURCE_DIR}/CMake
+		${CMAKE_SOURCE_DIR}/CMake/Modules
+		${CMAKE_SOURCE_DIR}/CMake/Toolchains
+	)
+else ()
+	set( CMAKE_MODULE_PATH
+		${CMAKE_SOURCE_DIR}/CMake
+		${CMAKE_SOURCE_DIR}/CMake/Modules
+		${CMAKE_SOURCE_DIR}/CMake/Modules/Traditional
+		${CMAKE_SOURCE_DIR}/CMake/Toolchains
+	)
+endif ()
+
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -65,8 +79,8 @@ endif ()
 if ( EXISTS ${DEPENDENCIES_DIR}/ )
 	if ( NOT VCPKG_TOOLCHAIN )
 		message( STATUS "Found dependencies folder, fetching libraries from it" )
-		set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
-		set( glslang_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
+		set( assimp_DIR ${DEPENDENCIES_DIR}/assimp )
+		set( glslang_DIR ${DEPENDENCIES_DIR}/glslang )
 		set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
 		set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
 		set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
@@ -110,10 +124,6 @@ endif ()
 add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
 
 find_package( Doxygen COMPONENTS doxygen dot dia )
-
-if( DOXYGEN_FOUND )
-	message( STATUS "+ Found Doxygen (version ${DOXYGEN_VERSION})" )
-endif ()
 
 #--------------------------------------------------------------------------------------------------
 #	Adding include dirs to include search path
