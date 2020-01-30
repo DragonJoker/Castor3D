@@ -127,18 +127,13 @@ namespace castor3d
 			{
 				try
 				{
-					ashes::UInt64Array values{ 0u, 0u, 0u, 0u };
+					ashes::UInt64Array values{ 0u, 0u };
 					m_timerQuery->getResults( i * 2u
 						, 2u
 						, 0u
 						, VK_QUERY_RESULT_WAIT_BIT
 						, values );
-
-					if ( values[1] && values[3] )
-					{
-						m_gpuTime += Nanoseconds{ uint64_t( ( values[2] - values[0] ) / period ) };
-
-					}
+					m_gpuTime += Nanoseconds{ uint64_t( ( values[1] - values[0] ) / period ) };
 				}
 				catch ( ashes::Exception & exc )
 				{
