@@ -351,7 +351,7 @@ namespace castor3d
 					, face
 					, 1u );
 				setDebugObjectName( device
-					, frameBuffer.linearView
+					, frameBuffer.varianceView
 					, fbDebugName + "Variance" );
 				frameBuffer.linearView = linear.createView( VK_IMAGE_VIEW_TYPE_2D
 					, linear.getFormat()
