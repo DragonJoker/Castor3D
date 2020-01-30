@@ -70,6 +70,7 @@ namespace CastorViewer
 			eID_RENDER_TIMER,
 			eID_MSGLOG_TIMER,
 			eID_ERRLOG_TIMER,
+			eID_FPS_TIMER,
 		};
 
 		void updateLog( std::vector< std::pair< wxString, bool > > & queue, std::mutex & mutex, wxListBox & log )
@@ -99,20 +100,7 @@ namespace CastorViewer
 
 	MainFrame::MainFrame( wxString const & title )
 		: wxFrame( nullptr, wxID_ANY, title, wxPoint{}, wxSize{ 800, 700 } )
-		, m_renderPanel{ nullptr }
-		, m_timer{ nullptr }
-		, m_timerMsg{ nullptr }
-		, m_timerErr{ nullptr }
-		, m_logTabsContainer{ nullptr }
-		, m_messageLog{ nullptr }
-		, m_errorLog{ nullptr }
-		, m_logsHeight{ 100 }
-		, m_propertiesWidth{ 240 }
-		, m_sceneObjectsList{ nullptr }
-		, m_materialsList{ nullptr }
-		, m_propertiesContainer{ nullptr }
 		, m_auiManager{ this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE }
-		, m_recorder{}
 		, m_recordFps{ recordFPS }
 	{
 	}
@@ -147,6 +135,7 @@ namespace CastorViewer
 
 	void MainFrame::doCleanupScene()
 	{
+		m_fpsTimer->Stop();
 		auto scene = m_mainScene.lock();
 
 		if ( scene )
@@ -259,10 +248,12 @@ namespace CastorViewer
 					m_captureMenu->Enable( eID_TOOL_RECORD, true );
 #	endif
 #endif
-					SetTitle( wxT( "Castor Viewer - " )
+					m_title = wxT( "Castor Viewer - " )
 						+ make_wxString( scene->getEngine()->getRenderSystem()->getRendererType() )
 						+ wxT( " - " )
-						+ m_filePath.getFileName( true ) );
+						+ m_filePath.getFileName( true );
+					SetTitle( m_title );
+					m_fpsTimer->Start( 1000 );
 				}
 
 				if ( engine->isThreaded() )
@@ -466,6 +457,11 @@ namespace CastorViewer
 			{
 				m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
 				m_timerErr->Start( 100 );
+			}
+
+			if ( !m_fpsTimer )
+			{
+				m_fpsTimer = new wxTimer( this, eID_FPS_TIMER );
 			}
 		}
 		catch ( std::exception & exc )
@@ -766,6 +762,7 @@ namespace CastorViewer
 		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
 		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::OnTimer )
 		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::OnTimer )
+		EVT_TIMER( eID_FPS_TIMER, MainFrame::OnFpsTimer )
 		EVT_PAINT( MainFrame::OnPaint )
 		EVT_INIT_DIALOG( MainFrame::OnInit )
 		EVT_CLOSE( MainFrame::OnClose )
@@ -831,6 +828,23 @@ namespace CastorViewer
 		}
 
 		event.Skip();
+	}
+
+	void MainFrame::OnFpsTimer( wxTimerEvent & event )
+	{
+		if ( wxGetApp().getCastor()
+			&& wxGetApp().getCastor()->hasRenderLoop() )
+		{
+			auto time = wxGetApp().getCastor()->getRenderLoop().getLastFrameTime();
+
+			if ( time.count() )
+			{
+				SetTitle( wxString::Format( "%s - ~%.2f FPS (%.2f ms)"
+					, m_title
+					, 1000000.0f / time.count()
+					, time.count() / 1000.0f ) );
+			}
+		}
 	}
 
 	void MainFrame::OnInit( wxInitDialogEvent & event )

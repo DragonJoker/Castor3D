@@ -68,6 +68,7 @@ namespace CastorViewer
 		DECLARE_EVENT_TABLE()
 		void OnRenderTimer( wxTimerEvent & event );
 		void OnTimer( wxTimerEvent & event );
+		void OnFpsTimer( wxTimerEvent & event );
 		void OnPaint( wxPaintEvent & event );
 		void OnSize( wxSizeEvent & event );
 		void OnInit( wxInitDialogEvent & event );
@@ -86,11 +87,12 @@ namespace CastorViewer
 		void OnStop( wxCommandEvent & event );
 
 	private:
-		int m_logsHeight;
-		int m_propertiesWidth;
+		int m_logsHeight{ 100 };
+		int m_propertiesWidth{ 240 };
 		wxAuiManager m_auiManager;
-		RenderPanel * m_renderPanel;
-		wxTimer * m_timer;
+		RenderPanel * m_renderPanel{ nullptr };
+		wxTimer * m_timer{ nullptr };
+		wxTimer * m_fpsTimer{ nullptr };
 #if CV_MainFrameToolbar
 		wxAuiToolBar * m_toolBar{ nullptr };
 #else
@@ -99,28 +101,29 @@ namespace CastorViewer
 		wxMenu * m_captureMenu{ nullptr };
 		wxMenuBar * m_menuBar{ nullptr };
 #endif
-		wxAuiNotebook * m_logTabsContainer;
-		wxAuiNotebook * m_sceneTabsContainer;
-		GuiCommon::PropertiesHolder * m_propertiesHolder;
-		GuiCommon::PropertiesContainer * m_propertiesContainer;
-		wxListBox * m_messageLog;
-		wxListBox * m_errorLog;
-		GuiCommon::SceneObjectsList * m_sceneObjectsList;
-		GuiCommon::MaterialsList * m_materialsList;
+		wxAuiNotebook * m_logTabsContainer{ nullptr };
+		wxAuiNotebook * m_sceneTabsContainer{ nullptr };
+		GuiCommon::PropertiesHolder * m_propertiesHolder{ nullptr };
+		GuiCommon::PropertiesContainer * m_propertiesContainer{ nullptr };
+		wxListBox * m_messageLog{ nullptr };
+		wxListBox * m_errorLog{ nullptr };
+		GuiCommon::SceneObjectsList * m_sceneObjectsList{ nullptr };
+		GuiCommon::MaterialsList * m_materialsList{ nullptr };
 		castor3d::SceneWPtr m_mainScene;
 		castor3d::CameraWPtr m_mainCamera;
 		castor3d::SceneNodeWPtr m_sceneNode;
 		castor::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
-		wxTimer * m_timerErr;
+		wxTimer * m_timerErr{ nullptr };
 		std::vector< std::pair< wxString, bool > > m_errLogList;
 		std::mutex m_errLogListMtx;
-		wxTimer * m_timerMsg;
+		wxTimer * m_timerMsg{ nullptr };
 		std::vector< std::pair< wxString, bool > > m_msgLogList;
 		std::mutex m_msgLogListMtx;
 		GuiCommon::Recorder m_recorder;
-		int m_recordFps;
+		int m_recordFps{ 0 };
+		wxString m_title;
 	};
 }
 

@@ -338,7 +338,7 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::endFrame()
+	castor::Microseconds DebugOverlays::endFrame()
 	{
 		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
 
@@ -380,6 +380,8 @@ namespace castor3d
 		std::cout << " - FPS: " << std::setw( 7 ) << std::setprecision( 4 ) << ( 1000000.0 / std::chrono::duration_cast< std::chrono::microseconds >( m_totalTime ).count() );
 
 #endif
+
+		return std::chrono::duration_cast< castor::Microseconds >( m_totalTime );
 	}
 
 	void DebugOverlays::endGpuTask()

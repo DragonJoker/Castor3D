@@ -525,6 +525,7 @@ void SceneFileParser::doInitialiseParser( Path const & path )
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), parserPassDoubleFace, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), parserPassTextureUnit );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), parserPassShader );
+	addParser( uint32_t( CSCNSection::ePass ), cuT( "mixed_interpolation" ), parserPassMixedInterpolative, { makeParameter< ParameterType::eBool >() } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), parserPassAlphaBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), parserPassColourBlendMode, { makeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
 	addParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_func" ), parserPassAlphaFunc, { makeParameter< ParameterType::eCheckedText >( m_mapComparisonFuncs ), makeParameter< ParameterType::eFloat >() } );
