@@ -524,10 +524,8 @@ namespace castor3d
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-		m_commandBuffer->beginDebugUtilsLabel(
+		m_commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"SSAO - Blur",
 				{
 					1.0f,
@@ -544,7 +542,7 @@ namespace castor3d
 		registerFrame( *m_commandBuffer );
 		m_timer->endPass( *m_commandBuffer );
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 	}
 

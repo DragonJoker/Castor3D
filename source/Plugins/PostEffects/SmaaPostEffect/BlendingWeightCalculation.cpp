@@ -1033,6 +1033,16 @@ namespace smaa
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
 		blendingWeightCmd.begin();
+		blendingWeightCmd.beginDebugBlock(
+			{
+				"SMAA BlendingWeightCalculation",
+				{
+					castor3d::transparentBlackClearColor.color.float32[0],
+					castor3d::transparentBlackClearColor.color.float32[1],
+					castor3d::transparentBlackClearColor.color.float32[2],
+					castor3d::transparentBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( blendingWeightCmd, passIndex );
 		// Put edge detection image in shader input layout.
 		blendingWeightCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -1049,6 +1059,7 @@ namespace smaa
 		registerFrame( blendingWeightCmd );
 		blendingWeightCmd.endRenderPass();
 		timer.endPass( blendingWeightCmd, passIndex );
+		blendingWeightCmd.endDebugBlock();
 		blendingWeightCmd.end();
 
 		return std::move( blendingWeightCommands );

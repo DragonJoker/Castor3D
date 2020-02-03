@@ -252,6 +252,16 @@ namespace smaa
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 
 		reprojectCmd.begin();
+		reprojectCmd.beginDebugBlock(
+			{
+				"SMAA Reproject",
+				{
+					castor3d::transparentBlackClearColor.color.float32[0],
+					castor3d::transparentBlackClearColor.color.float32[1],
+					castor3d::transparentBlackClearColor.color.float32[2],
+					castor3d::transparentBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( reprojectCmd, passIndex );
 		// Put neighbourhood images in shader input layout.
 		reprojectCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -268,6 +278,7 @@ namespace smaa
 		registerFrame( reprojectCmd );
 		reprojectCmd.endRenderPass();
 		timer.endPass( reprojectCmd, passIndex );
+		reprojectCmd.endDebugBlock();
 		reprojectCmd.end();
 
 		return std::move( reprojectCommands );

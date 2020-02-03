@@ -332,6 +332,16 @@ namespace smaa
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
 		edgeDetectionCmd.begin();
+		edgeDetectionCmd.beginDebugBlock(
+			{
+				"SMAA LumaEdgeDetection",
+				{
+					castor3d::transparentBlackClearColor.color.float32[0],
+					castor3d::transparentBlackClearColor.color.float32[1],
+					castor3d::transparentBlackClearColor.color.float32[2],
+					castor3d::transparentBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.
 		edgeDetectionCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -366,6 +376,7 @@ namespace smaa
 		registerFrame( edgeDetectionCmd );
 		edgeDetectionCmd.endRenderPass();
 		timer.endPass( edgeDetectionCmd, passIndex );
+		edgeDetectionCmd.endDebugBlock();
 		edgeDetectionCmd.end();
 
 		return std::move( edgeDetectionCommands );

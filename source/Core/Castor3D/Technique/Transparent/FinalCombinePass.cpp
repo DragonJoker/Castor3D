@@ -469,10 +469,8 @@ namespace castor3d
 		, ashes::BufferBase const & vbo )
 	{
 		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugUtilsLabel(
+		m_commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Weighted Blended - Transparent resolve",
 				{
 					1.0f,
@@ -494,7 +492,7 @@ namespace castor3d
 		m_commandBuffer->draw( 6u );
 		m_commandBuffer->endRenderPass();
 		m_timer.endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 	}
 

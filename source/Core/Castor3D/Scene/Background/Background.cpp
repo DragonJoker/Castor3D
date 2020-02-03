@@ -140,10 +140,8 @@ namespace castor3d
 	{
 		CU_Require( m_initialised );
 		commandBuffer.begin();
-		commandBuffer.beginDebugUtilsLabel(
+		commandBuffer.beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Background Render",
 				{
 					opaqueBlackClearColor.color.float32[0],
@@ -164,7 +162,7 @@ namespace castor3d
 			, *m_texDescriptorSet );
 		commandBuffer.endRenderPass();
 		m_timer->endPass( commandBuffer );
-		commandBuffer.endDebugUtilsLabel();
+		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 
 		return true;

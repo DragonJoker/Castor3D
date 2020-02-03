@@ -178,10 +178,8 @@ namespace castor3d
 		m_blitDepthSemaphore = device->createSemaphore();
 		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		m_blitDepthCommandBuffer->begin();
-		m_blitDepthCommandBuffer->beginDebugUtilsLabel(
+		m_blitDepthCommandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Deferred - Ligth Depth Blit",
 				{ 0.7f, 1.0f, 0.7f, 1.0f },
 			} );
@@ -207,7 +205,7 @@ namespace castor3d
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-		m_blitDepthCommandBuffer->endDebugUtilsLabel();
+		m_blitDepthCommandBuffer->endDebugBlock();
 		m_blitDepthCommandBuffer->end();
 	}
 

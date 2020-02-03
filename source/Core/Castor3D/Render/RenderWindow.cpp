@@ -816,10 +816,8 @@ namespace castor3d
 			auto & commandBuffer = *m_commandBuffers[i];
 
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-			commandBuffer.beginDebugUtilsLabel(
+			commandBuffer.beginDebugBlock(
 				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-					nullptr,
 					"RenderWindow Render",
 					{
 						opaqueWhiteClearColor.color.float32[0],
@@ -834,7 +832,7 @@ namespace castor3d
 				, VK_SUBPASS_CONTENTS_INLINE );
 			m_renderQuad->registerFrame( commandBuffer );
 			commandBuffer.endRenderPass();
-			commandBuffer.endDebugUtilsLabel();
+			commandBuffer.endDebugBlock();
 			commandBuffer.end();
 		}
 

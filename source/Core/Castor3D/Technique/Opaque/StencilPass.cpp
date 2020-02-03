@@ -190,10 +190,8 @@ namespace castor3d
 		m_finished = device->createSemaphore();
 
 		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugUtilsLabel(
+		m_commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Deferred - Stencil",
 				{
 					0.7f,
@@ -214,7 +212,7 @@ namespace castor3d
 		m_commandBuffer->bindVertexBuffer( 0u, vbo.getBuffer(), 0u );
 		m_commandBuffer->draw( uint32_t( vbo.getSize() / vertexLayout.vertexBindingDescriptions[0].stride ) );
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 	}
 

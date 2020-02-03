@@ -347,10 +347,8 @@ namespace castor3d
 		};
 
 		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugUtilsLabel(
+		m_commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"PickingPass Render",
 				{
 					clearValues[0].color.float32[0],
@@ -365,16 +363,14 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_commandBuffer->executeCommands( { commandBuffer } );
 		m_commandBuffer->endRenderPass();
-		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->endDebugBlock();
 
 		m_copyRegion.imageOffset.x = int32_t( position.x() - PickingOffset );
 		m_copyRegion.imageOffset.y = int32_t( camera.getHeight() - position.y() - PickingOffset );
 
 #if !C3D_DebugPicking
-		m_commandBuffer->beginDebugUtilsLabel(
+		m_commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"PickingPass Copy",
 				{ 0.8f, 0.4f, 0.4f, 1.0f },
 			} );
@@ -389,7 +385,7 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_HOST_BIT
 			, m_stagingBuffer->getBuffer().makeHostRead() );
-		m_commandBuffer->endDebugUtilsLabel();
+		m_commandBuffer->endDebugBlock();
 #endif
 
 		m_commandBuffer->end();

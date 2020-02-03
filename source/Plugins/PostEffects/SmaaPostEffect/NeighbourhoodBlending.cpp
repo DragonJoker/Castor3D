@@ -343,6 +343,16 @@ namespace smaa
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 
 		neighbourhoodBlendingCmd.begin();
+		neighbourhoodBlendingCmd.beginDebugBlock(
+			{
+				"SMAA NeighbourhoodBlending",
+				{
+					castor3d::transparentBlackClearColor.color.float32[0],
+					castor3d::transparentBlackClearColor.color.float32[1],
+					castor3d::transparentBlackClearColor.color.float32[2],
+					castor3d::transparentBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( neighbourhoodBlendingCmd, passIndex );
 		// Put blending weights image in shader input layout.
 		neighbourhoodBlendingCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -364,6 +374,7 @@ namespace smaa
 		registerFrame( neighbourhoodBlendingCmd );
 		neighbourhoodBlendingCmd.endRenderPass();
 		timer.endPass( neighbourhoodBlendingCmd, passIndex );
+		neighbourhoodBlendingCmd.endDebugBlock();
 		neighbourhoodBlendingCmd.end();
 
 		return std::move( neighbourhoodBlendingCommands );

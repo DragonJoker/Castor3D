@@ -623,10 +623,8 @@ namespace castor3d
 					, VkBool32( VK_FALSE )
 					, 0u
 					, 0u ) );
-			commandBuffer.beginDebugUtilsLabel(
+			commandBuffer.beginDebugBlock(
 				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-					nullptr,
 					"Deferred - Light",
 					{
 						0.5f,
@@ -640,7 +638,7 @@ namespace castor3d
 			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.endDebugUtilsLabel();
+			commandBuffer.endDebugBlock();
 			commandBuffer.end();
 
 			pipeline.isFirstSet = pipeline.isFirstSet || first;

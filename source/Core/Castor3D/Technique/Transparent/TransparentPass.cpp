@@ -234,10 +234,8 @@ namespace castor3d
 		auto timerBlock = timer.start();
 
 		m_nodesCommands->begin();
-		m_nodesCommands->beginDebugUtilsLabel(
+		m_nodesCommands->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Weighted Blended - Transparent accumulation",
 				{
 					1.0f,
@@ -268,7 +266,7 @@ namespace castor3d
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
 		timer.endPass( *m_nodesCommands );
-		m_nodesCommands->endDebugUtilsLabel();
+		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
 		auto & device = getCurrentRenderDevice( *this );

@@ -351,9 +351,9 @@ namespace smaa
 			, m_edgeDetection->getSurface()->getDefaultView()
 			, m_edgeDetection->getDepth()
 			, m_config );
-		auto * velocityView = doGetVelocityView();
 
 #	if !C3D_DebugBlendingWeightCalculation
+		auto * velocityView = doGetVelocityView();
 		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_renderTarget
 			, *m_srgbTextureView
 			, m_blendingWeightCalculation->getSurface()->getDefaultView()
@@ -480,6 +480,16 @@ namespace smaa
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();
+		copyCmd.beginDebugBlock(
+			{
+				"SMAA Copy",
+				{
+					castor3d::transparentBlackClearColor.color.float32[0],
+					castor3d::transparentBlackClearColor.color.float32[1],
+					castor3d::transparentBlackClearColor.color.float32[2],
+					castor3d::transparentBlackClearColor.color.float32[3],
+				},
+			} );
 		timer.beginPass( copyCmd, passIndex );
 		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
@@ -491,6 +501,7 @@ namespace smaa
 		copyQuad->registerFrame( copyCmd );
 		copyCmd.endRenderPass();
 		timer.endPass( copyCmd, passIndex );
+		copyCmd.endDebugBlock();
 		copyCmd.end();
 		result.emplace_back( std::move( copyCommands ) );
 

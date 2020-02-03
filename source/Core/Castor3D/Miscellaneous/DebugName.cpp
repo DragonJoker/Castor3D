@@ -19,37 +19,12 @@ namespace castor3d
 		, std::string const & typeName )
 	{
 		castor::Logger::logTrace( "Created " + typeName + " [" + name + "]" );
-
-#if VK_EXT_debug_utils
-
-		if ( device.device->hasDebugUtils() )
-		{
-			device.device->setDebugUtilsObjectName(
-				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT,
-					nullptr,
-					VkObjectType( type ),
-					object,
-					name.c_str()
-				} );
-		}
-
-#endif
-#if VK_EXT_debug_marker
-
-		if ( device.device->hasDebugMarker() )
-		{
-			device.device->debugMarkerSetObjectName(
-				{
-					VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
-					nullptr,
-					VkDebugReportObjectTypeEXT( type ),
-					object,
-					name.c_str()
-				} );
-		}
-
-#endif
+		device.device->setDebugObjectName(
+			{
+				VkObjectType( type ),
+				object,
+				name.c_str()
+			} );
 	}
 
 	ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device

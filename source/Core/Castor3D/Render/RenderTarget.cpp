@@ -626,10 +626,8 @@ namespace castor3d
 		if ( result )
 		{
 			m_toneMappingCommandBuffer->begin();
-			m_toneMappingCommandBuffer->beginDebugUtilsLabel(
+			m_toneMappingCommandBuffer->beginDebugBlock(
 				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-					nullptr,
 					"Tone Mapping",
 					{
 						1.0f,
@@ -654,7 +652,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
-			m_toneMappingCommandBuffer->endDebugUtilsLabel();
+			m_toneMappingCommandBuffer->endDebugBlock();
 			m_toneMappingCommandBuffer->end();
 		}
 
@@ -669,10 +667,8 @@ namespace castor3d
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
 		commandBuffer->begin();
-		commandBuffer->beginDebugUtilsLabel(
+		commandBuffer->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Image Copy",
 				{
 					1.0f,
@@ -700,7 +696,7 @@ namespace castor3d
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, target.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		commandBuffer->endDebugUtilsLabel();
+		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 	}
 
@@ -796,10 +792,8 @@ namespace castor3d
 			, {} );
 
 		m_combineCommands->begin();
-		m_combineCommands->beginDebugUtilsLabel(
+		m_combineCommands->beginDebugBlock(
 			{
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-				nullptr,
 				"Combine 3D-2D",
 				{
 					1.0f,
@@ -814,7 +808,7 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_combineQuad->registerFrame( *m_combineCommands );
 		m_combineCommands->endRenderPass();
-		m_combineCommands->endDebugUtilsLabel();
+		m_combineCommands->endDebugBlock();
 		m_combineCommands->end();
 	}
 

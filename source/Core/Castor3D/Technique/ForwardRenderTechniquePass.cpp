@@ -206,10 +206,8 @@ namespace castor3d
 			auto & device = getCurrentRenderDevice( *this );
 
 			m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			m_nodesCommands->beginDebugUtilsLabel(
+			m_nodesCommands->beginDebugBlock(
 				{
-					VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT,
-					nullptr,
 					"Forward Pass",
 					{
 						1.0f,
@@ -227,7 +225,7 @@ namespace castor3d
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
 			getTimer().endPass( *m_nodesCommands );
-			m_nodesCommands->endDebugUtilsLabel();
+			m_nodesCommands->endDebugBlock();
 			m_nodesCommands->end();
 
 			device.graphicsQueue->submit( { *m_nodesCommands }

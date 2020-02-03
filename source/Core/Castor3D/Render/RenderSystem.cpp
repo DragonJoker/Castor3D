@@ -152,35 +152,24 @@ namespace castor3d
 		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
 			, ashes::StringArray & names )
 		{
-#	if VK_EXT_debug_utils
-
-			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
-			{
-				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-			}
-			else
-#	endif
-
-			{
-
+//#	if VK_EXT_debug_utils
+//			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
+//			{
+//				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+//			}
+//#	endif
 #	if VK_EXT_debug_report
-
-				if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
-				{
-					names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
-				}
-
+			if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
+			{
+				names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
+			}
 #	endif
 #	if VK_EXT_debug_marker
-
-				if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
-				{
-					names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
-				}
-
-#	endif
-
+			if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
+			{
+				names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			}
+#	endif
 		}
 
 		void checkExtensionsAvailability( std::vector< VkExtensionProperties > const & available
