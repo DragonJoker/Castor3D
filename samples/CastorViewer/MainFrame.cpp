@@ -280,12 +280,16 @@ namespace CastorViewer
 		{
 			m_currentPerspective = m_auiManager.SavePerspective();
 			m_auiManager.LoadPerspective( m_fullScreenPerspective );
+#if !CV_MainFrameToolbar
 			m_menuBar->Hide();
+#endif
 		}
 		else
 		{
 			m_auiManager.LoadPerspective( m_currentPerspective );
+#if !CV_MainFrameToolbar
 			m_menuBar->Show();
+#endif
 		}
 	}
 

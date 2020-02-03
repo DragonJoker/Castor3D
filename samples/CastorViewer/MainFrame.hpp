@@ -21,7 +21,7 @@ See LICENSE file in root folder
 #if defined( __WXOSX_COCOA__ )
 #	define CV_MainFrameToolbar 0
 #else
-#	define CV_MainFrameToolbar 0
+#	define CV_MainFrameToolbar 1
 #endif
 
 namespace CastorViewer
