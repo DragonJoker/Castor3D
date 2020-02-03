@@ -1,9 +1,5 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
-#if defined( VLD_AVAILABLE )
-#	include <vld.h>
-#endif
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>

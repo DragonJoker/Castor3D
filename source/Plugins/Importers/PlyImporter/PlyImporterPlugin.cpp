@@ -1,9 +1,5 @@
 #include "PlyImporter/PlyImporter.hpp"
 
-#if defined( VLD_AVAILABLE )
-#	include <vld.h>
-#endif
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 

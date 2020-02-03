@@ -18,10 +18,6 @@
 
 using namespace GuiCommon;
 
-#if CHECK_MEMORYLEAKS && defined( VLD_AVAILABLE ) && USE_VLD
-#	include <vld.h>
-#endif
-
 wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 
 namespace CastorViewer
