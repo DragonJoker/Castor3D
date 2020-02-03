@@ -200,6 +200,16 @@ namespace castor3d
 		{
 			return false;
 		}
+
+		inline SsaoConfig const & getSsaoConfig()const
+		{
+			return m_ssaoConfig;
+		}
+
+		inline SsaoConfig & getSsaoConfig()
+		{
+			return m_ssaoConfig;
+		}
 		/**@}*/
 
 	public:
