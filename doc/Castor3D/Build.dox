@@ -8,8 +8,8 @@
  *
  *Tested compilers are:
  *<ul>
- *<li>Visual Studio 2017</li>
- *<li>gcc 6.3</li>
+ *<li>Visual Studio 2019</li>
+ *<li>gcc 8.0</li>
  *</ul>
  *<br />
  *<br />
@@ -24,14 +24,6 @@
  *
  *
  *\subsection projects_plugins Plugins
- *\subsubsection plugins_renderers Renderers
- *<ul>
- *<li>VkRenderSystem: Depends on Ashes' vk_renderer.</li>
- *<li>D3D11RenderSystem: Depends on Ashes' d3d11_renderer.</li>
- *<li>Gl3RenderSystem: Depends on Ashes' gl3_renderer.</li>
- *<li>Gl4RenderSystem: Depends on Ashes' gl_renderer.</li>
- *</ul>
- *
  *\subsubsection plugins_importers Importers
  *<ul>
  *<li>ASSIMP: Depends on Castor3D and Assimp.</li>
@@ -81,7 +73,6 @@
  *<ul>
  *<li>CastorTest: Base library for testing, depends on CastorUtils.</li>
  *<li>CastorUtilsTest: Allows you to run unit and performance tests for CastorUtils, depends on CastorUtils and CastorTest.</li>
- *<li>TestRenderSystem: A dummy render system plugin, used to run tests on Castor3D without any renderer, depends on Castor3D and Ashes' TestRenderer.</li>
  *<li>Castor3DTest: Allows you to run unit tests for Castor3D, depends on Castor3D and CastorTest.</li>
  *<li>CastorTestLauncher: Depends on Castor3D.</li>
  *<li>DiffImage: Depends on CastorUtils.</li>
@@ -179,9 +170,6 @@
  *<li><b>CASTOR_BUILD_POSTFX_(NAME)</b><br />
  *    Enables the build of (NAME) post-effect plug-in.<br />
  *</li>
- *<li><b>CASTOR_BUILD_RENDERER_(NAME)</b><br />
- *    Enables the build of (NAME) renderer plug-in.<br />
- *</li>
  *<li><b>CASTOR_BUILD_SAMPLE_(NAME)</b><br />
  *    Enables the build of (NAME) technique plug-in.<br />
  *</li>
@@ -202,8 +190,8 @@
  *
  *Les compilateurs testés sont les suivants :
  *<ul>
- *<li>Visual Studio 2017</li>
- *<li>gcc 6.3</li>
+ *<li>Visual Studio 2019</li>
+ *<li>gcc 8.0</li>
  *</ul>
  *<br />
  *<br />
@@ -218,14 +206,6 @@
  *
  *
  *\subsection projects_plugins Plugins
- *\subsubsection plugins_renderers Renderers
- *<ul>
- *<li>VkRenderSystem: Dépend du renderer Vulkan de Ashes.</li>
- *<li>D3D11RenderSystem: Dépend du renderer D3D11 de Ashes.</li>
- *<li>Gl3RenderSystem: Dépend du renderer GL3 de Ashes.</li>
- *<li>Gl4RenderSystem: Dépend du renderer GL4 de Ashes.</li>
- *</ul>
- *
  *\subsubsection plugins_importers Importers
  *<ul>
  *<li>ASSIMP: Dépend de Castor3D et Assimp.</li>
@@ -275,7 +255,6 @@
  *<ul>
  *<li>CastorTest: Bibliothèque de base pour les tests, dépend de CastorUtils.</li>
  *<li>CastorUtilsTest: Vous permet de lancer des tests unitaires et de performances pour CastorUtils, dépend de CastorUtils et CastorTest.</li>
- *<li>TestRenderSystem: Un renderer dummy, utilisé pour lancer les tests de Castor3D sans renderer, dépend de Castor3D et du renderer Test de Ashes.</li>
  *<li>Castor3DTest: Vous permet de lancer les tests unitaires de Castor3D, dépend de Castor3D et CastorTest.</li>
  *<li>CastorTestLauncher: Dépend de Castor3D.</li>
  *<li>DiffImage: Dépend de CastorUtils.</li>
@@ -370,9 +349,6 @@
  *</li>
  *<li><b>CASTOR_BUILD_POSTFX_(NAME)</b><br />
  *    Active la génération du plugin PostEffect (NAME).<br />
- *</li>
- *<li><b>CASTOR_BUILD_RENDERER_(NAME)</b><br />
- *    Active la génération du plugin Renderer (NAME).<br />
  *</li>
  *<li><b>CASTOR_BUILD_SAMPLE_(NAME)</b><br />
  *    Active la génération de l'application d'exemple (NAME).<br />

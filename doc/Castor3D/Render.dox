@@ -226,7 +226,7 @@
  *</ul>
  *<br />
  *\subsection def_ssao Passe SSAO
- *Cette passe implémente l'algorithme Scalable Ambient Obscurance algorithm décrit ici : https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf<br />
+ *Cette passe implémente l'algorithme Scalable Ambient Obscurance décrit ici : https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf<br />
  *Elle est donc scindée en 3 sous-passes :
  *<ul>
  *<li>Passe de linéarisation de la profondeur</li>

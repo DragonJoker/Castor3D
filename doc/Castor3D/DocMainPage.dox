@@ -1,9 +1,9 @@
 /*!
  *\~english
- *\mainpage Castor3D Engine
+ *\mainpage Castor3D
  *Castor3D is a 3D engine written in C++ 17.<br />
  *It works on Windows and GNU/Linux.<br />
- *It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, OpenGL 3.X and OpenGL 4.X.<br />
+ *It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.<br />
  *The project itself is compilable on supported platforms using CMake (\ref build).<br />
  *<br />
  *<br />
@@ -35,19 +35,10 @@
  *<ul>
  *<li>Importer: Allow importing meshes from external formats.</li>
  *<li>Divider: Allow implementation of mesh subdivision algorithms.</li>
- *<li>Renderer: Allow supporting various rendering APIs (through Ashes renderers).</li>
  *<li>PostEffect: Allow implementation of post-effects.</li>
  *<li>Generator: Allow meshes and textures procedural generation.</li>
  *<li>Generic: Allow adding general features to the engine.</li>
  *<li>ToneMapping: Allow implementation of additional tone mapping operators.</li>
- *</ul>
- *<br />
- *\subsection plugin_renderer Renderers
- *<ul>
- *<li>VkRenderSystem.</li>
- *<li>D3D11RenderSystem.</li>
- *<li>Gl3RenderSystem.</li>
- *<li>Gl4RenderSystem.</li>
  *</ul>
  *<br />
  *\subsection plugin_importer Importers
@@ -70,8 +61,8 @@
  *<li>FilmGrain: To display some grain on the render.</li>
  *<li>GrayScale.</li>
  *<li>LightStreaks (using Kawase Light Streaks).</li>
- *<li>FXAA Antialiasing.</li>
- *<li>SMAA Antialiasing (1X and T2X so far).</li>
+ *<li>FXAA Antialiasing: fast low quality antialiasing.</li>
+ *<li>SMAA Antialiasing (1X and T2X so far): slower high quality antialiasing.</li>
  *<li>Linear Motion Blur.</li>
  *</ul>
  *<br />
@@ -111,13 +102,13 @@
  *\image html Park-Phong.png
  *<br />
  *<br />
- *For the changelog: \ref changelog<br />
+ *Full changelog: \ref changelog<br />
  *
  *\~french
- *\mainpage Moteur Castor3D
+ *\mainpage Castor3D
  *Castor3D est un moteur 3D multi-plateformes écrit en C++17.<br />
- *Il fonctionne sur les plateformes Linux (GTK) et Windows.<br />
- *Il est basé sur l'API de rendu Ashes et supporte donc les API OpenGL 3.X, OpenGL 4.X, Direct3D 11 et Vulkan.<br />
+ *Il fonctionne sur les plateformes GNU/Linux et Windows.<br />
+ *Il est basé sur l'API de rendu Ashes et supporte donc les API OpenGL, Direct3D 11 et Vulkan.<br />
  *Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake (\ref build).<br />
  *<br />
  *<br />
@@ -134,7 +125,7 @@
  *<li>Rendu HDR avec application de divers opérateurs de tone mapping.</li>
  *<li>Screen Space Subsurface Scattering (sans la backlit transmittance pour l'instant).</li>
  *<li>Volumetric Light Scattering pour la source directionnelle, si elle projette des ombres.</li>
- *<li>Cascaded Shadow Maps pour la source directionelle.</li>
+ *<li>Cascaded Shadow Maps pour la source lumineuse directionelle.</li>
  *<li>Frustum culling.</li>
  *<li>Graphe de scène.</li>
  *<li>Architecture modulaire, à base de plug-ins.</li>
@@ -149,7 +140,6 @@
  *<ul>
  *<li>Importer : Ils permettent l'ajout de l'importation de nouveaux formats de fichiers de maillages.</li>
  *<li>Divider : Ils permettent d'implémenter des algorithmes de subdivision de maillage, à la construction (pas au niveau LOD).</li>
- *<li>Renderer : Ils sont le support des API de rendu.</li>
  *<li>PostEffect : Ils permettent l'application d'effets post-rendu.</li>
  *<li>Generator : Ils permettent de générer des maillages ou textures, de manière procédurale.</li>
  *<li>Generic : Ils ont pour but d'étendre les fonctionnalités globales du moteur.</li>
@@ -170,16 +160,10 @@
  *<li>Loop.</li>
  *</ul>
  *<br />
- *\subsection plugin_renderer Renderers
- *<ul>
- *<li>GlRenderSystem, pour utiliser OpenGL.</li>
- *<li>TestRenderSystem, un renderer de test, ne faisant à peu près rien, mais permettant l'implémentation de tests.</li>
- *</ul>
- *<br />
  *\subsection plugin_postfx PostEffect
  *<ul>
  *<li>HDRBloom ;</li>
- *<li>FXAA, un antialiasing de qualité basique ;</li>
+ *<li>FXAA, un antialiasing rapide de qualité basique ;</li>
  *<li>GrayScale ;</li>
  *<li>KawaseLightStreaks ;</li>
  *<li>SMAA, un antialiasing temporel de bonne qualité ;</li>
@@ -222,5 +206,5 @@
  *\image html SanMiguel-PBRSG.png
  *<br />
  *<br />
- *Pour le changelog: \ref changelog<br />
+ *Changelog complet: \ref changelog<br />
  */

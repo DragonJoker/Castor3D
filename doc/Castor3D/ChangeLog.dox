@@ -2,23 +2,24 @@
  *\~english
  *\page changelog Change log
  *This page is here to inform about the changes since the earliest versions of the engine.
- *
+ *<br />
+ *<br />
  *\section version_0_11_0 Version 0.11.0
  *\subsection feat_0_11_0 Features
  *\subsubsection feat_0_11_0_cu CastorUtils
  *<ul>
  *<li>Reworked castor::Matrix and castor::Point to make them hold static data, and reduce memory footprint of Matrix.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_c3d Castor3D
  *<ul>
- *<li>Castor3D now relies on Ashes rendering API, allowing support for OpenGL 4.X, OpenGL 3.X, Direct3D11 and Vulkan renderers.</li>
- *<li>GlslWriter has been completely removed and replaced by ShaderLibrary, allowing the generation of shaders in the appropriate rendering API shader language.</li>
+ *<li>Castor3D now relies on Ashes, allowing support for OpenGL, Direct3D11 and Vulkan renderers.</li>
+ *<li>GlslWriter has been completely removed and replaced by <a href="https://github.com/DragonJoker/ShaderWriter">ShaderWriter</a>, allowing the generation of shaders in the appropriate rendering API shader language.</li>
  *<li>Added support for cross skyboxes.</li>
  *<li>Enabled anisotropic filtering control from scene file.</li>
  *<li>Added Raw and PCF shadow maps.</li>
  *<li>Added sendEvent function to Engine, to be able to execute an event directly if there is an enabled device.</li>
- *<li>Extracted binary write/parse classes to new files, to reduce include dependencies.</li>
+ *<li>Extracted binary write/parse classes to new files, to reduce includes dependencies.</li>
  *<li>Reworked mip level management for textures loaded from files.</li>
  *<li>Added volumetric light scattering.</li>
  *<li>MatrixUbo is now a reference, in RenderPass, hence is owned by owner classes.</li>
@@ -28,17 +29,17 @@
  *<li>Overlays are now rendered them in their own framebuffer, and then combined with the 3D rendering.</li>
  *<li>Shadow maps now use texture arrays (2D or Cube).</li>
  *</ul>
- *
- *\subsubsection feat_0_11_0_gl RenderSystems
+ *<br />
+ *\subsubsection feat_0_11_0_rend RenderSystems
  *<ul>
- *<li>Removed most of their code, they are now only wrappers around Ashes renderers.</li>
+ *<li>They have been completely removed, thanks to Ashes.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_pos PostEffects
  *<ul>
  *<li>Created LinearMotionBlur post effect.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_samp Samples
  *<ul>
  *<li>Added CastorTestLauncher, which allows to run rendering tests through the wanted rendering API.</li>
@@ -46,27 +47,27 @@
  *<li>ShaderDialog now displays all the shaders for the pipeline used to display a pass.</li>
  *<li>Selected submesh's bounding box now appears in yellow.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_tool Tools
  *<ul>
  *<li>CastorMeshUpgrader tool has been added, allowing to update cmsh files with a cl tool.</li>
  *<li>CastorMeshConverter tool has been added, allowing to convert "any" mesh file to cmsh mesh with a cl tool.</li>
  *<li>Added DiffImage, which allows image comparison between a reference image and another one (generated through CastorTestLauncher), to automatise rendering tests.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_11_0 Fixed Bugs
  *\subsubsection bugs_0_11_0_cu CastorUtils
  *<ul>
  *<li>Fixed matrix initialisation from another different size matrix.</li>
  *<li>Fixed pixel buffer flip.</li>
- *
+ *<br />
  *\subsubsection bugs_0_11_0_obj OBJImporter
  *<ul>
  *<li>Few fixes in face group management.</li>
  *</ul>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_10_0 Version 0.10.0
  *\subsection feat_0_10_0 Features
  *\subsubsection feat_0_10_0_cu CastorUtils
@@ -78,7 +79,7 @@
  *<li>PlaneEquation is no more a template class.</li>
  *<li>Created a buddy allocator class: BuddyAllocator.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_c3d Castor3D
  *<ul>
  *<li>Renamed namespace Castor3D to castor3d.</li>
@@ -99,44 +100,44 @@
  *<li>Created ColourSkybox, to handle background colour and skyboxes in the same way.</li>
  *<li>Created ShaderBuffer class, to be able to handle SSBOs or TBOs in a similar way, choosing the most appropriate one, depending on running machine.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_gen Generators
  *<ul>
  *<li>Created DiamondSquareTerrain plugin.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_gic Generic
  *<ul>
  *<li>Events from CastorGUI are now forwarded to the user.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_imp Importers
  *<ul>
  *<li>Removed almost every importer plugin, keeping only Assimp, OBJ, and PLY importers.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_gl RenderSystems
  *<ul>
  *<li>Updated to support the features provided by Castor3D.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_pos PostEffects
  *<ul>
  *<li>Created SMAA post effect.</li>
  *<li>Created Kawase Light Streaks post effect.</li>
  *<li>Created Film Grain post effect.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_tec Techniques
  *<ul>
  *<li>Technique plugins have been completely removed.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_ton Tone mappings
  *<ul>
  *<li>Created Uncharted 2 tone mappings.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_10_0 Fixed Bugs
  *\subsubsection bugs_0_10_0_c3d Castor3D
  *<ul>
@@ -144,15 +145,15 @@
  *<li>Repaired an reenabled frustum culling.</li>
  *<li>Fixed alpha rejection.</li>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_9_0 Version 0.9.0
  *\subsection feat_0_9_0 Features
  *\subsubsection feat_0_9_0_cu CastorUtils
  *<ul>
  *<li>Dropped libzip, and added minizip to the source tree.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_c3d Castor3D
  *<ul>
  *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
@@ -180,25 +181,25 @@
  * Instances of this class are held by RenderPipeline.</li>
  *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_gl GlRenderSystem
  *<ul>
  *<li>Updated to support the features provided by Castor3D.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_tec Techniques
  *<ul>
  *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
  *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_pos PostEffects
  *<ul>
  *<li>Added GrayScale post effect.</li>
  *<li>Added FXAA post effect.</li>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Features
  *\subsubsection feat_0_8_0_gen General
@@ -206,11 +207,13 @@
  *<li>Compiles now with VS >= 2013 and GCC >= 4.9.
  *<li>Direct3D support has eventually been dropped, I don't have time for it.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_cu CastorUtils
  *<ul>
  *<li>Point4f and Matrix4x4f can now use SSE2 instructions for computations.</li>
  *<li>All Castor projects are now using UTF-8 texts, using std::string.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_c3d Castor3D
  *<ul>
  *<li>The skeleton animation system is now finished and working.</li>
@@ -228,6 +231,7 @@
  *<li>Now, the ShaderProgram retrieves the vertex inputs layout. This layout is used in Submesh, to create the appropriate GeometryBuffers.</li>
  *<li>Castor3D now renders the scenes using HDR and tone mapping. The default tone mapping configuration will make the render look like there were no HDR enabled.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_gl  GlRenderSystem
  *<ul>
  *<li>Lights texture now uses Texture Buffer Objects.</li>
@@ -236,37 +240,44 @@
  *<li>Support for OpenGL 3.x has been enforced, forcing UBOs, for example.</li>
  *<li>Implemented a ShaderWriter, to write GLSL code from C++ source.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_sub Subdividers
  *<ul>
  *<li>Implemented a Phong tessellation subdivider.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_imp Importers
  *<ul>
  *<li>Implemented a FBX importer plug-in.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_tec Techniques
  *<ul>
  *<li>Each render technique is now implemented in its own plug-in.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_pos PostEffects
  *<ul>
  *<li>The first post effect plug-in has been implemented: Bloom.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_cgui CastorGUI
  *<ul>
  *<li>New plug-in, allowing creation of GUIs inside Castor3D scenes.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_gui GuiCommon
  *<ul>
  *<li>The whole look and feel has been reworked, using wxAuiManager.</li>
  *<li>Properties are displayed through wxTreeCtrl and wxPropertyGrid, to list objects and view their properties.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_8_0 Fixed Bugs
  *\subsubsection bugs_0_8_0_cu CastorUtils
  *<ul>
  *<li>Fixed transformation matrices.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_c3d Castor3D
  *<ul>
  *<li>Fixed hardware instantiation, and instantiation, for meshes with different materials.</li>
@@ -274,18 +285,20 @@
  *<li>Fixed an overlays bug, on Intel GPU (was due to a real bug in AMD driver that hid the bug).</li>
  *<li>The billboards are now fixed.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_sub Subdividers
  *<ul>
  *<li>Fixed PN Triangles subdivider, to use Bezier patches.</li>
  *<li>Updated Loop subdivider.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_gl GlRenderSystem
  *<ul>
  *<li>Fixed a crash on Linux, with Intel GPUs.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_7_0 Version 0.7.0
- *
  *\subsection feat_0_7_0 Features
  *\subsubsection feat_0_7_0_gen General
  *<ul>
@@ -294,6 +307,7 @@
  *<li>Linux and wxWidgets 2.8 compatibility improved.</li>
  *<li>Added AStyle support.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_7_0_cu CastorUtils
  *<ul>
  *<li>Modified DynamicLibrary::getFunction, added a template parameter that is the function type, and a method parameter that is the pointer to the function to retrieve so no more casts when using DynamicLibrary::getFunction.</li>
@@ -306,6 +320,7 @@
  *<li>Removed Unicode file encoding.</li>
  *<li>Added stream indentation support.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_7_0_c3d Castor3D
  *<ul>
  *<li>Modified shaders, they now take care of the shader model, they hold all defined files and sources for each model. The choice of the source is made at compile time, taking the source with the highest supported model.</li>
@@ -344,6 +359,7 @@
  *<li>Moved materials from Submesh to Geometry.</li>
  *<li>Modified submeshes instance count, to make it specific to the materials used by the submesh instances.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_7_0_gui GuiCommon
  *<ul>
  *<li>Now ShaderDialog uses wxSizers.</li>
@@ -353,6 +369,7 @@
  *<li>Corrected few bugs in images loading.</li>
  *<li>Improved StcTextEditor in order to have a better syntactic coloration.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_7_0_cview CastorViewer
  *<ul>
  *<li>Now MainFrame uses wxSizers.</li>
@@ -371,6 +388,7 @@
  *<li>Now loads plug-ins in a thread.</li>
  *<li>Added an "Export" button.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_7_0_gl GlRenderSystem
  *<ul>
  *<li>Removed GLEW dependency.</li>
@@ -378,16 +396,18 @@
  *<li>Added GL_MIRRORED_REPEAT.</li>
  *<li>Added GL_TEXTURE_MAX_ANISOTROPY.</li>
  *</ul>
- *
+ *<br />
  *\subsection Miscellaneous
  *\subsubsection misc_0_7_0_gen General
  *<ul>
  *<li>Splitted file to have one class per file.</li>
  *</ul>
+ *<br />
  *\subsubsection misc_0_7_0_cmk CMake
  *<ul>
  *<li>Updated UnitTest integration, Enabled CTest.</li>
  *</ul>
+ *<br />
  *\subsubsection misc_0_7_0_cu CastorUtils
  *<ul>
  *<li>Removed all static members and globals.</li>
@@ -402,6 +422,7 @@
  *<li>Modified Colour class, it doesn't extend Point4f anymore.</li>
  *<li>Removed macro DECLARE_SHARED_PTR, now using  CU_DeclareSmartPtr, so I replaced each XXxPtr by it's equivalent XxxSPtr.</li>
  *</ul>
+ *<br />
  *\subsubsection misc_0_7_0_c3d Castor3D
  *<ul>
  *<li>Merged Submesh and SmoothingGroup classes.</li>
@@ -422,12 +443,13 @@
  *<li>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayCache. All overlays will be rendered through this instance by the OverlayCache.</li>
  *<li>Modified Scene, added template functions to add, remove or get an object whatever it's type may be (Light, Geometry, Camera, SceneNode).</li>
  *</ul>
+ *<br />
  *\subsubsection misc_0_7_0_gl GlRenderSystem
  *<ul>
  *<li>Reviewed Vertex Array Objects, they now hold their buffers so the choice of using it or not is wrapped into it.</li>
  *<li>Geometry shader work in OpenGL, created a shader to show wireframe models with Normals, Tangents and Bitangents.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_7_0 Fixed bugs
  *\subsubsection bugs_0_7_0_gen General
  *<ul>
@@ -435,40 +457,45 @@
  *<li>Added ASSIMP importer plug-in to import actually unsupported file types, modified ImporterPlugin::getExtensions to be able to retrieve an array of pairs &lt;extension, file="" type=""&gt;.</li>
  *<li>Modified Importers so no more memory leaks are detected with Visual Studio.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_cmk CMake
  *<ul>
  *<li>Added possibility to change binaries directory and also MSVC temporary binaries directory, through PROJECTS_BINARIES_OUTPUT_PATH and PROJECTS_BINTEMP_OUTPUT_PATH.</li>
  *<li>Added possibility to activate code profiling with MSVC through PROJECTS_PROFILING boolean value.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_cu CastorUtils
  *<ul>
  *<li>Modified Image to make FreeImage load images by path and no more by handle (caused trouble with some formats).</li>
  *<li>Repaired a matrix trouble when rendering overlays.</li>
  *<li>Corrected recursive transformations.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_c3d Castor3D
  *<ul>
  *<li>Repaired alpha submeshes that were not displayed.</li>
  *<li>Corrected mipmaps generation.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_cview CastorViewer
  *<ul>
  *<li>Moved m_pCastor3D destruction and ImageLoader::Cleanup in the OnDestroy event handler.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_gl GlRenderSystem
  *<ul>
  *<li>Corrected a bug in doGetDeferredShaderSource.</li>
  *<li>Corrected mipmaps generation in GlStaticTexture and GlDynamicTexture.</li>
  *<li>Corrected the gloss map in GLSL computed programs.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_7_0_obj ObjImporter
  *<ul>
  *<li>Corrected materials and textures import.</li>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_2 Version 0.6.1.2
- *
  *\subsection adds_0_6_1_2 adds
  *<ul>
  *<li>Created Dx9Renderer to render with Direct3D 9. Stills things to correct, in shaders and matrices, but it's almost done.</li>
@@ -477,7 +504,7 @@
  *<li>Added a small app to converet from an image to a XPM.</li>
  *<li>Added new features to scene files (alpha_rejection, rgb_blend, alpha_blend, hl_shader_program, ...)</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_2 Modifications
  *<ul>
  *<li>Optimised CMakeLists file and 'cmake_modules' files in order to take care of various configurations in a better way.</li>
@@ -486,16 +513,16 @@
  *<li>TextureEnvironment are going to disappear in the next version, now multitexturing management is done with passes and texture units.</li>
  *<li>Suppressed GLU dependencies.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_6_1_2 Bugs
  *<ul>
  *<li>Trouble with Direct3D matrices (maybe differences between right-handed / left-handed).</li>
  *<li>Trouble with HLSL shaders, surely linked to previous trouble.</li>
  *<li>Still troubles with Cg shaders (not worked on it).</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_1 Version 0.6.1.1
- *
  *\subsection adds_0_6_1_1 adds
  *<ul>
  *<li>Created a CMakeLists file to generate the solution from CMake.</li>
@@ -505,7 +532,7 @@
  *<li>PNTrianglesDivider is left in Castor3D because it is sstill used by Icosahedron, LoopDivider is exported in a plug-in.</li>
  *<li>Began Cg shaders implementation. This implies a scene file modification because in Cg, uniform variables are are linked to a shader instead of being linked to the whole program. Still buggy.</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_1 Modifications
  *<ul>
  *<li>Suppressed FreeImagePlus dependencies.</li>
@@ -515,21 +542,21 @@
  *<li>Created IdPoint class, it is a point with just an index. Submes::addPoint creates now IdPoints and Submesh::addFace uses them to create the vertex.</li>
  *<li>Subdividers can  subdivide in a thread in order not to freeze the main thread. It is possible to define a function to use at the end of the subdivision (cf. CastorShape).</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_6_1_1 Corrections
  *<ul>
  *<li>Corrected LoopDivider which didn't reposition the Vertex</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_0 Version 0.6.1.0
- *
  *\subsection adds_0_6_1_0 adds
  *<ul>
  *<li>Using std or tr1 or boost smart pointers.</li>
  *<li>Created OpenGlCommon for common treatments between GL2RenderSystem and GL3RenderSystem</li>
  *<li>Created class RenderPipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Modified MemoryManager, added a template class MemoryTraced which overload new, delete new [] et delete [] operators in order to have better trace of allocations and deallocations. Each Castor class derive from this one and 3 files are created in root folder to log allocations, deallocations : memoryleaks.log, memoryalloc.log and memorydealloc.log</li>
@@ -540,15 +567,15 @@
  *<li>OpenGL 3.x/4.x now fully supported.</li>
  *<li>Modified Vertex class in order to make them include texture coordinates and normals in order to have only 1 vertex buffer instead of 3 in a mesh.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_6_1_0 Corrections
  *<ul>
  *<li>Corrected the shutdown crash.</li>
  *<li>Corrected the black render with OpenGL 3.x</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_0_0 Version 0.6.0.0
- *
  *\subsection adds_0_6_0_0 adds
  *<ul>
  *<li>Added a projection/normal and view matrices management class, in order to suppress the fixed pipeline support in OpenGl renderers.</li>
@@ -559,7 +586,7 @@
  *<li>Splitted GLRenderer in two parts : one compatible OpenGL 2.x and before (GL2RenderSystem), one compatible OpenGL3.x et after (GL3RenderSystem).</li>
  *<li>GL2RenderSystem : according to client configuration, the fixed pipe is suppressed or keeped</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_0_0 Modifications
  *<ul>
  *<li>Modified thread management, leaving the user choosing between Win32, MFC or boost.</li>
@@ -569,20 +596,20 @@
  *<li>Modified the render system, added a class Renderable used to create associated renderer in order to ease the creation of derived classes (submesh, scene node, light, camera...)</li>
  *<li>Changed scenes/materials/meshes files name (respectively cscn/cmtl/cmsh)</li>
  *</ul>
- *
+ *<br />
  *\subsection fix_0_6_0_0 Corrections
  *<ul>
  *<li>Protected managers with recursive mutexes to avoid random crashes.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_6_0_0 Bugs
  *<ul>
  *<li>Still a crash at shutdown, supposedly due to shaders.</li>
  *<li>In GL3RenderSystem, I've got a black screen (?!?) but transformations seem to be correct.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_5_0_1 Version 0.5.0.1
- *
  *\subsection adds_0_5_0_1 adds
  *<ul>
  *<li>Tangent space is computed and available in GLSL shaders.</li>
@@ -590,12 +617,12 @@
  *<li>To access to the tangent you must declare the following attribute in the vertex shader :</li>
  *<li>attribute vec3 tangent;</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_5_0_1 Modifications
  *<ul>
  *<li>The points classes have their members in a union so you can call it as you wish (xyz, rgb, left right top bottom)</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_5_0_1 Corrections
  *<ul>
  *<li>Corrected the crash on shutdown. It was due to VBOs which are now destroyed in a final render loop.</li>
@@ -606,18 +633,19 @@
  *\~french
  *\page changelog Suivi de versions
  *Cette page sert à informer des évolutions du moteur depuis les premières versions.
- *
+ *<br />
+ *<br />
  *\section version_0_11_0 Version 0.11.0
  *\subsection feat_0_11_0 Fonctionnalités
  *\subsubsection feat_0_11_0_cu CastorUtils
  *<ul>
  *<li>castor::Matrix et castor::Point ont maintenant leurs données en statique, et l'empreinte mémoire de castor::Matrix a été réduite.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_c3d Castor3D
  *<ul>
- *<li>Maintenant, Castor3D s'appuie sur Ashes, permettant le support de OpenGL 4.X, OpenGL 3.X, Direct3D11 et Vulkan.</li>
- *<li>GlslWriter a été complètement supprimé et remplacé par ShaderWriter, permettant l'export des shaders dans le langage shader natif pour l'API de rendu choisie.</li>
+ *<li>Maintenant, Castor3D s'appuie sur Ashes, permettant le support de OpenGL, Direct3D11 et Vulkan.</li>
+ *<li>GlslWriter a été complètement supprimé et remplacé par <a href="https://github.com/DragonJoker/ShaderWriter">ShaderWriter</a>, permettant l'export des shaders dans le langage shader natif pour l'API de rendu choisie.</li>
  *<li>Ajout du support des cross skyboxes.</li>
  *<li>Le contrôle du filtrage anisotropique a été ajouté aux scene files.</li>
  *<li>Ajout du choix du type de shadow map (Raw, PCF ou VSM).</li>
@@ -628,26 +656,26 @@
  *<li>MatrixUbo est maintenant une référence, dans RenderPass, et est donc gérée par leur parent.</li>
  *<li>Les meshes peuvent maintenant avoir un matériau par défaut, dans les scene files, permettant de réduire leur taille.</li>
  *<li>RenderQueue utilise maintenant un SceneCuller, permettant de spécialiser le mode de culling voulu (aucun ou frustum, pour l'instant).</li>
- *<li>Les Cascaded shadow maps sont implémentées pour les sources directionnelles.</li>
+ *<li>Les Cascaded shadow maps sont implémentées pour les sources lumineuses directionnelles.</li>
  *<li>Les incrustations sont maintenant dessinées dans leur propre framebuffer, puis celui-ci est combiné avec le rendu 3D.</li>
  *<li>Les Shadow maps utilisent maintenant des texture arrays (2D ou Cube).</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_imp Importers
  *<ul>
  *<li>Quelques corrections dans l'importeur OBJ.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_gl RenderSystems
  *<ul>
- *<li>Suppression de la majorité de leur code, ils ne sont maintenant plus que des wrappers sur les renderers Ashes.</li>
+ *<li>Tous les render systems ont été supprimés, grâce à Ashes.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_pos PostEffects
  *<ul>
  *<li>Création de l'effet LinearMotionBlur.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_samp Samples
  *<ul>
  *<li>Ajout de CastorTestLauncher, permettant les tests de rendu via l'API de rendu voulue.</li>
@@ -655,21 +683,22 @@
  *<li>ShaderDialog affiche maintenant tous les shaders pour le pipeline utilisé dans l'affichage d'une passe.</li>
  *<li>La bounding box du submesh sélectionné apparaît maintenant en jaune.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_11_0_tool Tools
  *<ul>
  *<li>Ajout de l'outil CastorMeshUpgrader, permettant la mise à jour des fichiers cmsh en ligne de commande.</li>
  *<li>Ajout de l'outil CastorMeshConverter, permettant de convertir les fichiers mesh supportés en fichiers cmsh, en ligne de commande.</li>
  *<li>Ajout de l'outil DiffImage, qui effectue la comparaison entre une image de référence et une autre image (générée via CastorTestLauncher), pour automatiser les tests de rendu.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_11_0 Fixed Bugs
  *\subsubsection bugs_0_11_0_cu CastorUtils
  *<ul>
  *<li>Correction de l'initialisation d'une castor::Matrix depuis une matrice de taille différente.</li>
  *<li>Correction du flip d'un pixel buffer.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_10_0 Version 0.10.0
  *\subsection feat_0_10_0 Fonctionnalités
  *\subsubsection feat_0_10_0_cu CastorUtils
@@ -681,7 +710,7 @@
  *<li>PlaneEquation n'est plus une classe template.</li>
  *<li>Création d'un allocateur : buddy allocator.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_c3d Castor3D
  *<ul>
  *<li>Renommage du namespace Castor3D en castor3d.</li>
@@ -702,39 +731,39 @@
  *<li>Créé la classe ColourSkybox, afin de gérer la couleur de fond et les skybox de la même manière.</li>
  *<li>Création d'une classe ShaderBuffer, permettant de manipuler les TBO et SSBO de la même manière, et de choisir le plus approprié en fonction du GPU.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_gen Generators
  *<ul>
  *<li>Création d'un plugin de génération de terrain en utilisant l'algorithme Diamond Square.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_gic Generic
  *<ul>
  *<li>Les évènements générés depuis CastorGUI sont maintenant envoyés à l'utilisateur.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_imp Importers
  *<ul>
  *<li>Suppression de la quasi totalité des plugins d'import, ne gardant que Assimp, OBJ et PLY.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_pos PostEffects
  *<ul>
  *<li>Création d'un plugin post rendu : SMAA, pour un antialiasing digne de ce nom.</li>
  *<li>Créé un plugin implémentant l'effet Kawase Light Streaks.</li>
  *<li>Création d'un plugin affichant un effet de grain filmique.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_tec Techniques
  *<ul>
  *<li>Suppression de tous les plugins de Technique.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_10_0_ton Tone mappings
  *<ul>
  *<li>Création de l'opérateur de tone mapping Uncharted 2.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_10_0 Corrections
  *\subsubsection bugs_0_10_0_c3d Castor3D
  *<ul>
@@ -742,15 +771,15 @@
  *<li>Réparation et réactivation du frustum culling.</li>
  *<li>Réparation de l'alpha rejection.</li>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_9_0 Version 0.9.0
  *\subsection feat_0_9_0 Fonctionnalités
  *\subsubsection feat_0_9_0_cu CastorUtils
  *<ul>
  *<li>Dropped libzip, and added minizip to the source tree.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_c3d Castor3D
  *<ul>
  *<li>Entire review of the render loop: RenderPipeline is no more a unique instance, but it actually contains the states, the program, and uniform buffer bindings.\n
@@ -778,25 +807,25 @@
  * Instances of this class are held by RenderPipeline.</li>
  *<li>FrameVariable class has been split in two classes: Uniform (for uniform variables contained in a UniformBuffer) and PushUniform (for uniform variables out of a UniformBuffer).</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_gl GlRenderSystem
  *<ul>
  *<li>Updated to support the features provided by Castor3D.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_tec Techniques
  *<ul>
  *<li>DeferredRenderTechnique and DeferredMsaaRenderTechnique are now real deferred rendering techniques, with a light pass per light, taking care of it's impact area.</li>
  *<li>DeferredRenderTechnique is now the default render technique, when none is specified.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection feat_0_9_0_pos PostEffects
  *<ul>
  *<li>Added GrayScale post effect.</li>
  *<li>Added FXAA post effect.</li>
  *</ul>
- *
- *
+ *<br />
+ *<br />
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Modifications
  *\subsubsection feat_0_8_0_gen Général
@@ -804,11 +833,13 @@
  *<li>Compile maintenant avec VS >= 2013 et GCC >= 4.9.</li>
  *<li>Le support de Direct3D a été abandonné, n'ayant pas le temps pour l'implémenter correctement.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_cu CastorUtils
  *<ul>
  *<li>Les opérations pour les Point4f et les Matrix4x4f peuvent maintenant utiliser les instructions SSE2.</li>
  *<li>Tous les projets du Castor utilisent maintenant des textes UTF-8, stockés dans des std::string.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_c3d Castor3D
  *<ul>
  *<li>Le système d'animations par squelette est maintenant finalisé et fonctionnel.</li>
@@ -828,6 +859,7 @@
  *<li>Cette configuration est utilisée par la classe Submesh, pour créer les GeometryBuffers qui vont bien.</li>
  *<li>Castor3D utilise le High Dynamic Range pour dessiner les scènes. Le mappage de tons par défaut permet d'avoir un rendu similaire à un rendu sans HDR.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_gl  GlRenderSystem
  *<ul>
  *<li>La texture de lumières utilise maintenant les Texture Buffer Objects.</li>
@@ -836,38 +868,45 @@
  *<li>Le support d'OpenGL 3.x a été renforcé, en forçant l'utilisation des UBOs, par exemple.</li>
  *<li>Implémentation de ShaderWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_sub Subdiviseurs
  *<ul>
  *<li>Implémentation d'un subdiviseur tessellation de Phong.</li>
  *<li>Mise à jour du subdiviseur Loop.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_imp Importeurs
  *<ul>
  *<li>Implémentation d'un plug-in d'importation de fichiers FBX.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_tec Techniques
  *<ul>
  *<li>Chaque technique de rendu est maintenant implémentée dans son propre plug-in.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_pos PostEffects
  *<ul>
  *<li>Le premier plug-in d'effet post rendu a été implémenté: HDR Bloom.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_cgui CastorGUI
  *<ul>
  *<li>Nouveau plug-in, permettant la création d'IHM au sein des scènes Castor3D.</li>
  *</ul>
+ *<br />
  *\subsubsection feat_0_8_0_gui GuiCommon
  *<ul>
  *<li>L'aspect global des application avec IHM a été retravaillé, en utilisant wxAuiManager.</li>
  *<li>Utilisation de wxTreeCtrl et des wxPropertyGrid, pour lister les objets, et visualiser leurs propriétés.</li>
  *</ul>
- *
+ *<br />
  \subsection bugs_0_8_0 Fixed Bugs
  *\subsubsection bugs_0_8_0_cu CastorUtils
  *<ul>
  *<li>Les matrices de transformation ont été corrigées.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_c3d Castor3D
  *<ul>
  *<li>Correction de l'instanciation GPU.</li>
@@ -875,17 +914,19 @@
  *<li>Correction d'un bug pour les incrustations, révélé sur les GPU Intel (était dû à un bug du driver AMD qui cachait ce bug).</li>
  *<li>Correction des billboards.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_sub Subdividers
  *<ul>
  *<li>Correction du sudiviseur PN Triangles, en utilisant des patches Bézier.</li>
  *</ul>
+ *<br />
  *\subsubsection bugs_0_8_0_gl GlRenderSystem
  *<ul>
  *<li>Correction d'un crash sous Linux, avec GPU Intel.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_7_0 Version 0.7.0
- *
  *\subsection mods_0_7_0 Modifications
  *\subsubsection mods_0_7_0_cmk CMake
  *<ul>
@@ -896,7 +937,7 @@
  *<li>Ajout de la possibilité de choisir quels projets du Castor sont à générer (dans le groupe CASTOR).</li>
  *<li>Réorganisation globale de l'arborescence des fichiers</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_gen Général
  *<ul>
  *<li>Découpe des fichiers afin de n'avoir plus qu'une classe par fichier.</li>
@@ -905,7 +946,7 @@
  *<li>Ajout de fonctions Destroy pour chaque fonction create dans les plug-ins, afin que la création et la destruction de ceux-ci se fassent dans l'espace mémoire des DLL (pour Windows).</li>
  *<li>Ajout du plug-in d'import ASSIMP, permettant d'élargir le nombre de formats supportés. La fonction ImporterPlugin::getExtensions permet maintenant de récupérer un tableau de paires &lt;extension, file type&gt;.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_cu CastorUtils
  *<ul>
  *<li>Toutes les variables statiques et globales ont été enlevées.</li>
@@ -942,7 +983,7 @@
  *<li>Création de deux nouvelles classes : Size et Positionau lieu d'un typedef pour chacune.</li>
  *<li>Création de la classe castor::Coord pour récupérer les fonctionnalités dynamiques de l'ancien castor::Point.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_c3d Castor3D
  *<ul>
  *<li>Ajout des méthodes hasParameter et setParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
@@ -1022,7 +1063,7 @@
  *</ul>
  *</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_gl GlRenderSystem
  *<ul>
  *<li>Création de la classe GeometryBuffers pour gérer les Vertex Array Objects. Ils contiennent maintenant leurs tampons, permettant d'intégrer le choix d'utiliser les VAO ou non.</li>
@@ -1032,7 +1073,7 @@
  *<li>Ajout du support de GL_MIRRORED_REPEAT.</li>
  *<li>Ajout du support de GL_TEXTURE_MAX_ANISOTROPY.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_gui GuiCommon
  *<ul>
  *<li>Maintenant ShaderDialog utilise wxSizers.</li>
@@ -1042,7 +1083,7 @@
  *<li>Correction de bugs dans le chargement des images.</li>
  *<li>Amélioration de StcTextEditor afin d'avoir une meilleure coloration syntaxique.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection mods_0_7_0_cview CastorViewer
  *<ul>
  *<li>Maintenant, MainFrame utilise wxSizers.</li>
@@ -1063,45 +1104,45 @@
  *<li>Maintenant les plug-ins sont chargés dans un thread</li>
  *<li>Ajout d'un bouton &quot;Export&quot;.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_7_0 Corrections
  *\subsubsection bugs_0_7_0_gen General
  *<ul>
  *<li>Modification des importeurs afin de ne plus avoir de fuites de mémoires détectées par Visual Studio.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection bugs_0_7_0_cu CastorUtils
  *<ul>
  *<li>castor::Image a été modifiée, j'ai retiré la possibilité de charger les images par handle, car cela provoquait des problèmes avec FreeImage sur certains formats.</li>
  *<li>Réparation d'un problème de matrices lors du rendu des incrustations.</li>
  *<li>Correction des transformations récursives.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection bugs_0_7_0_c3d Castor3D
  *<ul>
  *<li>Corrections des sous-maillages ayant un matériau transparent, car ils n'étaient pas affichés.</li>
  *<li>Corrigé la génération de mipmaps.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection bugs_0_7_0_cview CastorViewer
  *<ul>
  *<li>Déplacement de la destruction de m_pCastor3D dans la méthode OnDestroy.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection bugs_0_7_0_gl GlRenderSystem
  *<ul>
  *<li>Correction d'un bug dans doGetDeferredShaderSource.</li>
  *<li>Correction de la génération des mipmaps dans les classes GlStaticTexture et GlDynamicTexture.</li>
  *<li>Correction du traitement des textures de brillance dans les programmes GLSL auto générés.</li>
  *</ul>
- *
+ *<br />
  *\subsubsection bugs_0_7_0_obj ObjImporter
  *<ul>
  *<li>L'import des matériaux et textures a été corrigé.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_2 Version 0.6.1.2
- *
  *\subsection adds_0_6_1_2 Ajouts
  *<ul>
  *<li>Création du renderer Dx9Renderer, pour le rendu sous Direct3D 9. Il reste des choses à régler, notamment au niveau shaders et matrices, mais l'essentiel est là.</li>
@@ -1110,7 +1151,7 @@
  *<li>Ajout d'une petite appli qui transforme n'inmporte quel type d'image en XPM, plus facile pour le développement multiplateforme avec wxWidgets.</li>
  *<li>Ajout de nouvelles fonctionnalités aux fichiers de scène (alpha_rejection, rgb_blend, alpha_blend, hl_shader_program, ...)</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_2 Modifications
  *<ul>
  *<li>Optimisation du fichier CMakeLists et des fichiers du dossier 'cmake_modules' de façon à mieux prendre en charge les différentes plateformes, ainsi que les différentes configurations des PC clients.</li>
@@ -1119,16 +1160,16 @@
  *<li>Les TextureEnvironment vont disparaitre à la prochaine version, la gestion du multitexturing se faisant maintenant directement au niveau des passes et des texture units.</li>
  *<li>Suppression des fonctions issues de GLU, afin d'avoir une bibliothèque de moins à linker.</li>
  *</ul>
- *
+ *<br />
  *\subsection bugs_0_6_1_2 Bugs
  *<ul>
  *<li>Problème avec les matrices pour DxRenderSystem (je pense à la différence right-handed / left-handed, mais mes premiers tests à ce niveau ne sont pas concluants).</li>
  *<li>Problème avec les shaders HLSL, je n'ai pour l'instant pas d'affichage, je pense que c'est lié aux problèmes de matrices que je rencontre avec Direct3D.</li>
  *<li>Je n'ai pas avancé sur les shaders Cg et ai donc toujours les mêmes problèmes qu'auparavant.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_1 Version 0.6.1.1
- *
  *\subsection adds_0_6_1_1 Ajouts
  *<ul>
  *<li>Création d'un fichier CMakeLists pour générer la solution à partir de CMake.</li>
@@ -1138,7 +1179,7 @@
  *<li>PNTrianglesDivider reste dans le Castor car utilisé par la primitive Icosahedron, LoopDivider est quand à lui placé dans un plug-in.</li>
  *<li>J'ai commencé à implémenter les shaders Cg. Ca implique une modification des fichiers de scène, car dans Cg les variables uniform sont liées à un programme (vertex, pixel, geometry) plutôt qu'au shader complet comme c'est le cas en GLSL. Il reste quelques trucs à revoir (je ne sais pas encore quoi) pour que ça fonctionne.</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_1 Modifications
  *<ul>
  *<li>Suppression de FreeImagePlus, maintenant les projets ne nécessitent plus que FreeImage.</li>
@@ -1148,21 +1189,21 @@
  *<li>Création d'une classe IdPoint, qui étend Point et y ajoute un Index qui correspond à son index dans le submesh. La fonction addPoint de Submesh crée maintenant des IdPoint et la fonction addFace se sert d'eux pour générer les Vertex.</li>
  *<li>Les subdiviseurs peuvent subdiviser dans un thread à part, permettant de ne pas figer une application pendant la subdivision (cf. CastorShape). Il est possible d'assigner une fonction qui sera lancée à la fin de la subdivision (cf. CastorShape).</li>
  *</ul>
- *
+ *<br />
  *\subsection fix_0_6_1_1 Corrections
  *<ul>
  *<li>Correction du LoopDivider qui ne repositionnait plus les Vertex (les nouveaux étaient créés mais plus replacés, dû à la nouvelle architecture des Vertex)</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_1_0 Version 0.6.1.0
- *
  *\subsection add_0_6_1_0 Ajouts
  *<ul>
  *<li>Utilisation des smart pointers tr1.</li>
  *<li>Création d'un tronc commun 'OpenGLCommon' pour les 2 renderers OpenGL</li>
  *<li>Création d'une classe de RenderPipeline qui effectue les calculs matriciels et d'autres petites fonctions (perspective, ortho, ...)</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_1_0 Modifications
  *<ul>
  *<li>Le MemoryManager (activé uniquement en debug) a été modifié, ajout d'une classe template MemoryTraced qui surcharge les operateurs new, delete new [] et delete [], ce afin d'avoir une meilleure trace des objets créés et détruits. Chaque classe des projets du Castor dérivent maintenant de celle-ci, et 3 fichiers sont donc créés dans le répertoire racine (C:\ sous Windows) : memoryleaks.log, memoryalloc.log et memorydealloc.log</li>
@@ -1173,15 +1214,15 @@
  *<li>Le module OpenGL 3.x/4.x est achevé.</li>
  *<li>Modifier la structure des vertex de façon à ce qu'ils incluent les coordonnées de texture et les normales directement, de façon à n'avoir qu'1 buffer de vertex par mesh au lieu de 3 actuellement.</li>
  *</ul>
- *
+ *<br />
  *\subsection fix_0_6_1_0 Corrections
  *<ul>
  *<li>Correction du plantage à la fermeture du soft en release uniquement.</li>
  *<li>Correction du rendu noir avec OpenGL 3.x, corrigé je ne sais trop comment, mais grâce à la suppression progressive du pipeline fixe en OpenGL 2.x</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_6_0_0 Version 0.6.0.0
- *
  *\subsection adds_0_6_0_0 Ajouts
  *<ul>
  *<li>Ajout d'une classe de gestion des matrices de projection, normale et visualisation, en vue de la suppression du pipeline fixe dans les renderers OpenGL.</li>
@@ -1192,7 +1233,7 @@
  *<li>Séparation du renderer OpenGL en 2 projets : un compatible OpenGL 2.x et antérieur (GL2RenderSystem) le second compatible OpenGL3.x et ultérieur (GL3RenderSystem).</li>
  *<li>GL2RenderSystem : en fonction du PC client, suppression du pipeline fixe ou pas (si l'utilisation des shaders est permise le pipeline fixe est supprimé, sinon il est gardé)</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_6_0_0 Modifications
  *<ul>
  *<li>Modification de la gestion des threads et mutexes, permettant le choix de ceux qu'on utilise (Win32, MFC ou boost).</li>
@@ -1202,20 +1243,20 @@
  *<li>Modification du render system, ajout d'une classe renderable qui se charge de créer le renderer associé, afin de simplifier la création des dérivés de cette classe (submesh, scene node, light, camera...)</li>
  *<li>Changement des noms des fichiers de scène/materiaux/meshes du moteur (respectivement cscn/cmtl/cmsh)</li>
  *</ul>
- *
+ *<br />
  *\subsection fix_0_6_0_0 Corrections
  *<ul>
  *<li>Protection par recursive mutex des données partagées (par les managers, essentiellement) permettant d'éviter des plantages aléatoires.</li>
  *</ul>
- *
+ *<br />
  *\subsection todo_0_6_0 A faire
  *<ul>
  *<li>Il reste un plantage à la fermeture du soft en release uniquement, apparemment dû aux shaders.</li>
  *<li>Pour GL3RenderSystem, j'ai un rendu noir (?!?) mais les transformations sont prises en compte correctement.</li>
  *</ul>
- *
+ *<br />
+ *<br />
  *\section version_0_5_0_1 Version 0.5.0.1
- *
  *\subsection adds_0_5_0_1 Ajouts
  *<ul>
  *<li>Dans cette version l'espace tangent est calculé et est disponible dans les shaders GLSL.</li>
@@ -1223,12 +1264,12 @@
  *<li>Pour accéder à la tangente, il suffit de déclarer l'attribut suivant dans le vertex shader :</li>
  *<li>attribute vec3 tangent;</li>
  *</ul>
- *
+ *<br />
  *\subsection mods_0_5_0_1 Modifications
  *<ul>
  *<li>Les différentes classes de point (2D, 3D, 4D) ont leur membres en union, ce qui permet de personnaliser l'appel de ces membres. Ainsi un point 2D a comme membres (x, y) ou (u, v). Un point 3D a comme membres (x, y, z) ou (u, v, w) ou (r, g, b). Un point 4D a comme membres (x, y, z, w) ou (r, g, b, a) ou (left, top, right, bottom).</li>
  *</ul>
- *
+ *<br />
  *\subsection fix_0_5_0_1 Corrections
  *<ul>
  *<li>Correction du plantage à la fermeture de l'application lors de la suppression des VBOs. J'ai intégré un buffer manager qui les supprime pendant une boucle d'affichage.</li>
