@@ -12,12 +12,14 @@ configuration:
   - Release
 
 cache:
-  c:\tools\vcpkg\installed\
+  C:\tools\vcpkg\installed\
 
 init:
   - ps: if ($isLinux) {$env:APPVEYOR_CACHE_SKIP_SAVE = "true"}
   - ps: if ($isLinux) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
   - ps: if (!$isLinux) {$env:APPVEYOR_SAVE_CACHE_ON_ERROR = "true"}
+  - ps: if (!$isLinux) {cd C:\tools\vcpkg}
+  - ps: if (!$isLinux) {echo.set(VCPKG_BUILD_TYPE release)>> %VCPKG_DIR%\triplets\x64-windows.cmake}
 
 install:
   - git submodule init
@@ -34,8 +36,6 @@ install:
   - ps: if (!$isLinux) {vcpkg install assimp:x64-windows}
   - ps: if (!$isLinux) {vcpkg install freetype:x64-windows}
   - ps: if (!$isLinux) {vcpkg install zlib:x64-windows}
-  - ps: if (!$isLinux) {vcpkg install spirv-cross:x64-windows}
-  - ps: if (!$isLinux) {vcpkg install glslang:x64-windows}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
