@@ -149,7 +149,7 @@ namespace Bloom
 					{},
 					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 					{},
-					std::nullopt,
+					ashes::nullopt,
 					{},
 				} );
 			ashes::VkSubpassDependencyArray dependencies
@@ -233,7 +233,7 @@ namespace Bloom
 					stages,
 					inputState,
 					ashes::PipelineInputAssemblyStateCreateInfo{},
-					std::nullopt,
+					ashes::nullopt,
 					ashes::PipelineViewportStateCreateInfo
 					{
 						0u,
@@ -244,7 +244,7 @@ namespace Bloom
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
 					ashes::PipelineColorBlendStateCreateInfo{},
-					std::nullopt,
+					ashes::nullopt,
 					pipelineLayout,
 					renderPass,
 				} );

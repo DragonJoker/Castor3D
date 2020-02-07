@@ -340,7 +340,7 @@ namespace castor3d
 		, SpirVShader code
 		, std::string const & name
 		, std::string mainFuncName = "main"
-		, ashes::Optional< ashes::SpecializationInfo > specialization = std::nullopt )
+		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
 		auto module = device->createShaderModule( code.spirv );
 		setDebugObjectName( device, *module, name + "ShdMod" + "_" + ashes::getName( stage ) );
@@ -357,7 +357,7 @@ namespace castor3d
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
 		, ShaderModule const & shaderModule
 		, std::string mainFuncName = "main"
-		, ashes::Optional< ashes::SpecializationInfo > specialization = std::nullopt )
+		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
 		return makeShaderState( device
 			, shaderModule.stage

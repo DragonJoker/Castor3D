@@ -335,7 +335,7 @@ namespace castor3d
 			program,
 			*vertexLayout,
 			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
-			std::nullopt,
+			ashes::nullopt,
 			ashes::PipelineViewportStateCreateInfo{},
 			std::move( rsState ),
 			ashes::PipelineMultisampleStateCreateInfo{},
