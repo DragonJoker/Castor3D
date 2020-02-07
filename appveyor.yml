@@ -1,5 +1,10 @@
 version: '{branch}-rev{build}'
 
+branches:
+  only:
+    - master
+    - development
+
 max_jobs: 2
 
 image:
@@ -19,7 +24,7 @@ init:
   - ps: if ($isLinux) {$env:APPVEYOR_CACHE_SKIP_RESTORE = "true"}
   - ps: if (!$isLinux) {$env:APPVEYOR_SAVE_CACHE_ON_ERROR = "true"}
   - ps: if (!$isLinux) {cd C:\tools\vcpkg}
-  - ps: if (!$isLinux) {echo.set(VCPKG_BUILD_TYPE release)>> %VCPKG_DIR%\triplets\x64-windows.cmake}
+  - cmd: if (!$isLinux) {echo "set(VCPKG_BUILD_TYPE release)" >> %VCPKG_DIR%\triplets\x64-windows.cmake}
 
 install:
   - git submodule init
