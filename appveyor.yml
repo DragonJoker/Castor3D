@@ -19,6 +19,7 @@ configuration:
 install:
   - git submodule init
   - git submodule update --init -- "CMake"
+  - git submodule update --init -- "dependencies"
   - git submodule update --recursive --init -- "external/Ashes"
   - git submodule update --recursive --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
@@ -32,7 +33,6 @@ install:
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x freetype-2.3.5-win32.zip}
   - ps: if (!$isLinux) {7z x zlib-1.2.7-win32.zip}
-  - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
