@@ -44,6 +44,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 
 	if ( CASTOR_USE_GLSLANG )
 		if ( VCPKG_TOOLCHAIN
+			OR EXISTS ${DEPENDENCIES_DIR}/glslang/
 			OR ( NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang/glslang/Public/ShaderLang.h
 				AND NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang/glslang/Public/ShaderLang.h ) )
 			if ( VCPKG_TOOLCHAIN )

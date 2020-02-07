@@ -35,6 +35,7 @@ install:
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x freetype-2.3.5-win32.zip}
   - ps: if (!$isLinux) {7z x zlib-1.2.7-win32.zip}
+  - ps: if (!$isLinux) {7z x glslang-12.04.2017.zip}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
