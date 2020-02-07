@@ -4,7 +4,6 @@ branches:
   only:
     - master
     - development
-    - appveyor
 
 max_jobs: 2
 
@@ -33,7 +32,7 @@ install:
   - git submodule update --recursive --init -- "external/ShaderWriter"
   - git submodule update --init -- "external/glslang"
   - ps: if ($isLinux) {sudo apt-get update}
-  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev -y}
+  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev -y}
   - ps: $PLATFORM_NAME="x64"
   - ps: $OS_NAME="linux"
   - ps: $PROJECT_DIR="/home/appveyor/projects/castor3d"
@@ -43,11 +42,12 @@ install:
   - ps: if (!$isLinux) {vcpkg install wxWidgets:x64-windows}
   - ps: if (!$isLinux) {vcpkg install freetype:x64-windows}
   - ps: if (!$isLinux) {vcpkg install zlib:x64-windows}
+  - ps: if (!$isLinux) {vcpkg install spirv-cross:x64-windows}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
   - ps: if ($isLinux) {cmake -Wno-dev -G "Unix Makefiles" -DPROJECTS_OUTPUT_DIR=/home/appveyor/projects/castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/appveyor/projects/castor3d/package/Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_SYSTEM_LIBS=ON}
-  - ps: if (!$isLinux) {cmake -Wno-dev -G "Visual Studio 16 2019" -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DPROJECTS_OUTPUT_DIR=C:\projects\castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:\projects\castor3d\package\Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON}
+  - ps: if (!$isLinux) {cmake -Wno-dev -G "Visual Studio 16 2019" -DVCPKG_TARGET_TRIPLET=x64-windows -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DPROJECTS_OUTPUT_DIR=C:\projects\castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:\projects\castor3d\package\Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILDGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON}
 
 build_script:
   - ps: cd $PROJECT_DIR/build
