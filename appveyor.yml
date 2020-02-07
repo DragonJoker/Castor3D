@@ -30,7 +30,7 @@ install:
   - git submodule update --recursive --init -- "external/Ashes"
   - git submodule update --recursive --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
-  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev glslang-dev -y}
+  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev -y}
   - ps: $PLATFORM_NAME="x64"
   - ps: $OS_NAME="linux"
   - ps: $PROJECT_DIR="/home/appveyor/projects/castor3d"
