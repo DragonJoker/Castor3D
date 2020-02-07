@@ -75,6 +75,7 @@ else ()
 endif ()
 
 option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
+option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
 set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
