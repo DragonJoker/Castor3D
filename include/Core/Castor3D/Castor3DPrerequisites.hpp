@@ -4,22 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_PREREQUISITES_H___
 #define ___C3D_PREREQUISITES_H___
 
-#undef RGB
-#include <CastorUtils/CastorUtilsPrerequisites.hpp>
-
-#if !defined( CU_PlatformWindows )
-#	define C3D_API
-#else
-#	ifdef MemoryBarrier
-#		undef MemoryBarrier
-#	endif
-#	if defined( Castor3D_EXPORTS )
-#		define C3D_API __declspec( dllexport )
-#	else
-#		define C3D_API __declspec( dllimport )
-#	endif
-#endif
-
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -30,17 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <ashespp/AshesPPPrerequisites.hpp>
 #include <ashespp/Core/Device.hpp>
-
-namespace castor3d
-{
-	static uint32_t constexpr InvalidIndex = ~( 0u );
-
-	using castor::UInt32StrMap;
-	using castor::UInt64StrMap;
-	using castor::UInt32Array;
-}
 
 #include "Castor3D/Prerequisites/Castor3DPrerequisites_Animation.hpp"
 #include "Castor3D/Prerequisites/Castor3DPrerequisites_Camera.hpp"
@@ -110,7 +84,6 @@ namespace castor3d
 	class BinaryParser;
 
 	class DebugOverlays;
-	class Engine;
 	class Plugin;
 	class ImporterPlugin;
 	class DividerPlugin;
@@ -129,7 +102,6 @@ namespace castor3d
 	class RenderPassTimer;
 	class GaussianBlur;
 
-	CU_DeclareSmartPtr( Engine );
 	CU_DeclareSmartPtr( Plugin );
 	CU_DeclareSmartPtr( ImporterPlugin );
 	CU_DeclareSmartPtr( DividerPlugin );
@@ -143,10 +115,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( ComputePipeline );
 	CU_DeclareSmartPtr( RenderPassTimer );
 	CU_DeclareSmartPtr( GaussianBlur );
-
-	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
-	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
-	C3D_API castor::RgbaColour convert( VkClearColorValue const & value );
 
 	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 

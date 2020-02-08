@@ -4,19 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_Interpolator_H___
 #define ___C3D_Interpolator_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Animation/AnimationModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
-	\~french
-	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
-	*/
 	template< class Type >
 	class Interpolator
 	{
@@ -55,16 +46,6 @@ namespace castor3d
 			, Type const & dst
 			, float percent )const = 0;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
-	\~french
-	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
-	*/
-	template< class Type, InterpolatorType Mode > class InterpolatorT;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0

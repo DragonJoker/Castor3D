@@ -1,23 +1,24 @@
 #include "Castor3D/Animation/Animation.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
-	Animation::Animation( AnimationType type
-		, Animable & animable
-		, String const & name )
+	template< typename OwnerT >
+	Animation< OwnerT >::Animation( AnimationType type
+		, Animable< OwnerT > & animable
+		, castor::String const & name )
 		: Named{ name }
 		, OwnedBy< Animable >{ animable }
 		, m_type{ type }
 	{
 	}
-
-	Animation::~Animation()
+		
+	template< typename OwnerT >
+	Animation< OwnerT >::~Animation()
 	{
 	}
-
-	void Animation::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
+	
+	template< typename OwnerT >
+	void Animation< OwnerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()
@@ -31,7 +32,8 @@ namespace castor3d
 		updateLength();
 	}
 
-	AnimationKeyFrameArray::iterator Animation::find( castor::Milliseconds const & time )
+	template< typename OwnerT >
+	AnimationKeyFrameArray::iterator Animation< OwnerT >::find( castor::Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -41,7 +43,8 @@ namespace castor3d
 			} );
 	}
 
-	void Animation::findKeyFrame( Milliseconds const & time
+	template< typename OwnerT >
+	void Animation< OwnerT >::findKeyFrame( castor::Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
@@ -64,7 +67,8 @@ namespace castor3d
 		CU_Ensure( prv != cur );
 	}
 
-	void Animation::updateLength()
+	template< typename OwnerT >
+	void Animation< OwnerT >::updateLength()
 	{
 		for ( auto const & keyFrame : m_keyframes )
 		{
