@@ -404,7 +404,7 @@ namespace castor3d
 		if ( result )
 		{
 			Logger::logInfo( cuT( "Scene::write - Windows" ) );
-			using LockType = std::unique_lock< RenderWindowCache const >;
+			using LockType = std::unique_lock< RenderWindowCache >;
 			LockType lock{ makeUniqueLock( scene.getEngine()->getRenderWindowCache() ) };
 
 			for ( auto const & it : scene.getEngine()->getRenderWindowCache() )
@@ -880,7 +880,7 @@ namespace castor3d
 	uint32_t Scene::getVertexCount()const
 	{
 		uint32_t result = 0;
-		using LockType = std::unique_lock< GeometryCache const >;
+		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
@@ -899,7 +899,7 @@ namespace castor3d
 	uint32_t Scene::getFaceCount()const
 	{
 		uint32_t result = 0;
-		using LockType = std::unique_lock< GeometryCache const >;
+		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
