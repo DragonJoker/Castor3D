@@ -4,26 +4,28 @@ include( Doxygen )
 include( AndroidNdkModules )
 
 if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
-	find_package( Freetype )
+	if ( VCPKG_TOOLCHAIN )
+		find_package( freetype CONFIG )
+		set( Freetype_LIBRARIES freetype )
+		set( FreeType_FOUND ( freetype_FOUND OR FREETYPE_FOUND ) )
+	else ()
+		find_package( Freetype )
+		set( Freetype_LIBRARIES Freetype::Freetype )
+	endif ()
 else ()
-	set( FREETYPE_FOUND TRUE )
-	set( FREETYPE_INCLUDE_DIR_freetype2 ${CMAKE_SOURCE_DIR}/external/FreeType/include/freetype )
-	set( FREETYPE_INCLUDE_DIR_ft2build ${CMAKE_SOURCE_DIR}/external/FreeType/include )
-	set( FREETYPE_LIBRARIES FreeType )
+	set( FreeType_FOUND ON )
+	set( Freetype_LIBRARIES Freetype::Freetype )
 endif ()
-
+if ( FreeType_FOUND OR FREETYPE_FOUND )
+	set( FreeType_FOUND FREETYPE_FOUND )
+endif ()
 if ( CASTOR_USE_SYSTEM_LIBS )
 	find_package( ZLIB 1.2.7 )
 else ()
-	set( ZLIB_FOUND TRUE )
-	set( ZLIB_INCLUDE_DIR
-		${CMAKE_SOURCE_DIR}/external/zlib
-		${CMAKE_BINARY_DIR}/external/zlib
-	)
-	set( ZLIB_LIBRARIES zlib )
+	set( ZLIB_FOUND ON )
 endif ()
 
-if ( ZLIB_FOUND AND FREETYPE_FOUND )
+if ( ZLIB_FOUND AND FreeType_FOUND )
 	if ( ANDROID )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
@@ -69,7 +71,7 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
 
-	set( CastorBinsDependencies 
+	set( CastorBinsDependencies
 		${CastorBinsDependencies}
 		${PROJECT_NAME}
 		PARENT_SCOPE
@@ -78,9 +80,9 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_BRIEF "Multiplatform utilities library" )
 	set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/../data/Images/castor-dark-small.png" )
-	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
@@ -93,7 +95,7 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 		set( CASTOR_USE_TRACK 0 )
 	endif()
 
-	configure_file( 
+	configure_file(
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/config.hpp.in
 		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		@ONLY
@@ -145,9 +147,6 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/source/Core
 			${CASTOR_BINARY_DIR}/source/Core
-			${ZLIB_INCLUDE_DIR}
-			${FREETYPE_INCLUDE_DIR_freetype2}
-			${FREETYPE_INCLUDE_DIR_ft2build}
 	)
 
 	if ( WIN32 )
@@ -156,17 +155,17 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 				Dbghelp
 			PRIVATE
 				${PLATFORM_LIBRARIES}
-				${FREETYPE_LIBRARIES}
-				${ZLIB_LIBRARIES}
+				${Freetype_LIBRARIES}
+				ZLIB::ZLIB
 		)
 	else ()
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
-				dl
+				${CMAKE_DL_LIBRARY}
 			PRIVATE
 				${PLATFORM_LIBRARIES}
-				${FREETYPE_LIBRARIES}
-				${ZLIB_LIBRARIES}
+				${Freetype_LIBRARIES}
+				ZLIB::ZLIB
 		)
 	endif ()
 
@@ -235,7 +234,7 @@ if ( ZLIB_FOUND AND FREETYPE_FOUND )
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()
 	set( msg "no (missing :" )
-	if( NOT FREETYPE_FOUND )
+	if( NOT FreeType_FOUND )
 		set( msg "${msg} Freetype" )
 	endif()
 	if( NOT ZLIB_FOUND )

@@ -43,7 +43,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	add_subdirectory( ../${ASHES_DIR}/test ${CMAKE_BINARY_DIR}/${ASHES_DIR}/test )
 
 	if ( CASTOR_USE_GLSLANG )
-		if ( VCPKG_TOOLCHAIN
+		if ( CASTOR_USE_SYSTEM_LIBS
 			OR EXISTS ${DEPENDENCIES_DIR}/glslang/
 			OR ( NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang/glslang/Public/ShaderLang.h
 				AND NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang/glslang/Public/ShaderLang.h ) )
