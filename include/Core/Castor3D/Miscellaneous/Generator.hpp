@@ -48,7 +48,8 @@ namespace castor3d
 			}
 			inline bool IsStopped()const
 			{
-				auto lock = castor::makeUniqueLock( m_mutex );
+				using LockType = std::unique_lock< std::recursive_mutex >;
+				LockType lock{ castor::makeUniqueLock( m_mutex ) };
 				return m_bStopped;
 			}
 
@@ -58,7 +59,8 @@ namespace castor3d
 			}
 			inline void stop()
 			{
-				auto lock = castor::makeUniqueLock( m_mutex );
+				using LockType = std::unique_lock< std::recursive_mutex >;
+				LockType lock{ castor::makeUniqueLock( m_mutex ) };
 				m_bStopped = true;
 			}
 			inline void setRed( uint8_t val )

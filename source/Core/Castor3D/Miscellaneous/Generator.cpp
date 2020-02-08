@@ -50,7 +50,7 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			auto lock = castor::makeUniqueLock( m_mutex );
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;

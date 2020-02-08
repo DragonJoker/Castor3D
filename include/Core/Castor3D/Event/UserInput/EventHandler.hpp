@@ -118,7 +118,8 @@ namespace castor3d
 		void pushEvent( MouseEvent const & event )
 		{
 			auto mouseEvent = std::make_shared< MouseEvent >( event );
-			auto lock = castor::makeUniqueLock( m_mutex );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( mouseEvent
 				, [this, mouseEvent]()
 				{
@@ -156,7 +157,8 @@ namespace castor3d
 		void pushEvent( KeyboardEvent const & event )
 		{
 			auto mouseEvent = std::make_shared< KeyboardEvent >( event );
-			auto lock = castor::makeUniqueLock( m_mutex );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( mouseEvent
 				, [this, mouseEvent]()
 				{
@@ -213,7 +215,8 @@ namespace castor3d
 		void pushEvent( HandlerEvent const & event )
 		{
 			auto handlerEvent = std::make_shared< HandlerEvent >( event );
-			auto lock = castor::makeUniqueLock( m_mutex );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutex ) };
 			m_queue.emplace_back( handlerEvent
 				, [this, handlerEvent]()
 				{

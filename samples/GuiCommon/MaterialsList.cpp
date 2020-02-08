@@ -88,7 +88,7 @@ namespace GuiCommon
 		m_engine = engine;
 		m_scene = &scene;
 		wxTreeItemId root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		auto lock = castor::makeUniqueLock( m_engine->getMaterialCache() );
+		auto lock( castor::makeUniqueLock( m_engine->getMaterialCache() ) );
 
 		for ( auto pair : m_engine->getMaterialCache() )
 		{

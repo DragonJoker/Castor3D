@@ -739,7 +739,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & cache = scene.getParticleSystemCache();
-		std::unique_lock< ObjectCache< ParticleSystem, castor::String > > lock{ makeUniqueLock( cache ) };
+		auto lock( makeUniqueLock( cache ) );
 
 		if ( !cache.isEmpty() )
 		{

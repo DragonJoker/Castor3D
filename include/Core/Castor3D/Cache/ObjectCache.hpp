@@ -109,7 +109,7 @@ namespace castor3d
 		 */
 		inline void cleanup()
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto it : m_elements )
 			{

@@ -111,7 +111,7 @@ namespace castor3d
 
 	void GeometryCache::fillInfo( RenderInfo & info )const
 	{
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		for ( auto element : m_elements )
 		{
@@ -249,7 +249,7 @@ namespace castor3d
 
 	void GeometryCache::remove( Key const & name )
 	{
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		if ( m_elements.has( name ) )
 		{

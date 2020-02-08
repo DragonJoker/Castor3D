@@ -72,7 +72,7 @@ namespace castor3d
 				m_passBuffer.reset();
 				m_textureBuffer.reset();
 			} ) );
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		for ( auto it : m_elements )
 		{
@@ -109,7 +109,7 @@ namespace castor3d
 
 		if ( element )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			auto lock( castor::makeUniqueLock( m_elements ) );
 
 			if ( m_elements.has( name ) )
 			{
@@ -133,7 +133,7 @@ namespace castor3d
 	MaterialSPtr MaterialCache::add( Key const & name, MaterialType type )
 	{
 		MaterialSPtr result;
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		if ( !m_elements.has( name ) )
 		{
