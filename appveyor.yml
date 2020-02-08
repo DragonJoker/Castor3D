@@ -9,7 +9,7 @@ branches:
 max_jobs: 2
 
 image:
-  - Visual Studio 2019
+  - Ubuntu1804
 
 platform:
   - x64
