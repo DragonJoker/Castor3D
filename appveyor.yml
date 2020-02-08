@@ -4,6 +4,7 @@ branches:
   only:
     - master
     - development
+    - appveyor
 
 max_jobs: 2
 
@@ -19,9 +20,10 @@ configuration:
 install:
   - git submodule init
   - git submodule update --init -- "CMake"
-  - git submodule update --init -- "dependencies"
-  - git submodule update --init -- "external/zlib"
-  - git submodule update --init -- "external/FreeType"
+  - ps: if (!$isLinux) {git submodule update --init -- "dependencies"}
+  - ps: if (!$isLinux) {git submodule update --init -- "external/zlib"}
+  - ps: if (!$isLinux) {git submodule update --init -- "external/FreeType"}
+  - ps: if ($isLinux) {git submodule update --init -- "external/glslang"}
   - git submodule update --recursive --init -- "external/Ashes"
   - git submodule update --recursive --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
