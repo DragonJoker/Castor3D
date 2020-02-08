@@ -18,8 +18,8 @@ configuration:
   - Release
 
 install:
-  - ps: $CONFIGURATION=env:$CONFIGURATION
-  - ps: $PLATFORM=env:$PLATFORM
+  - ps: $CONFIGURATION=$env:CONFIGURATION
+  - ps: $PLATFORM=$env:PLATFORM
   - ps: $PROJECT_DIR=$env:APPVEYOR_BUILD_FOLDER
   - ps: git submodule init
   - ps: git submodule update --init -- "CMake"
