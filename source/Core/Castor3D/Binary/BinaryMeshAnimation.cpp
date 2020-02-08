@@ -35,7 +35,7 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eMeshAnimationKeyFrame:
-				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj );
+				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< MeshAnimationKeyFrame >().parse( *keyFrame, chunk );
 
 				if ( result )

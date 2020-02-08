@@ -42,7 +42,6 @@ namespace castor3d
 			buffer += sizeof( castor::Point4f ) * count;
 			auto miscVals = makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
 				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-			buffer += sizeof( castor::Point4f ) * count;
 			return
 			{
 				colrSpec,

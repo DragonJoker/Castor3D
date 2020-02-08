@@ -17,13 +17,18 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		using LockType = std::unique_lock< castor::Collection< Material, castor::String > >;
+	}
+
 	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
 	void MaterialCache::initialise( MaterialType type )
 	{
 		if ( !m_passBuffer )
 		{
-			auto lock = makeUniqueLock( m_elements );
+			LockType lock{ makeUniqueLock( m_elements ) };
 
 			if ( !m_elements.has( Material::DefaultMaterialName ) )
 			{
@@ -79,7 +84,7 @@ namespace castor3d
 	{
 		if ( m_passBuffer )
 		{
-			auto lock = makeUniqueLock( m_elements );
+			LockType lock{ makeUniqueLock( m_elements ) };
 
 			for ( auto & material : m_elements )
 			{
@@ -93,7 +98,7 @@ namespace castor3d
 
 	void MaterialCache::clear()
 	{
-		auto lock = makeUniqueLock( m_elements );
+		LockType lock{ makeUniqueLock( m_elements ) };
 		m_defaultMaterial.reset();
 		m_elements.clear();
 	}
@@ -149,7 +154,7 @@ namespace castor3d
 
 	void MaterialCache::getNames( StringArray & names )
 	{
-		auto lock = makeUniqueLock( m_elements );
+		LockType lock{ makeUniqueLock( m_elements ) };
 		names.clear();
 		auto it = m_elements.begin();
 

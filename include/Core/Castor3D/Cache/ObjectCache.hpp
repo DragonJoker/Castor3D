@@ -26,6 +26,7 @@ namespace castor3d
 		using Element = ElementType;
 		using Key = KeyType;
 		using Collection = castor::Collection< Element, Key >;
+		using LockType = std::unique_lock< Collection >;
 		using ElementPtr = std::shared_ptr< Element >;
 		using Producer = typename MyObjectCacheTraits::Producer;
 		using Merger = typename MyObjectCacheTraits::Merger;
@@ -157,7 +158,7 @@ namespace castor3d
 
 			if ( element )
 			{
-				auto lock = castor::makeUniqueLock( m_elements );
+				LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 				if ( m_elements.has( name ) )
 				{
@@ -195,7 +196,7 @@ namespace castor3d
 		inline ElementPtr add( Key const & name
 			, SceneNodeSPtr parent, Parameters && ... parameters )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 			ElementPtr result;
 
 			if ( !m_elements.has( name ) )
@@ -225,7 +226,7 @@ namespace castor3d
 		 */
 		inline void remove( Key const & name )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			if ( m_elements.has( name ) )
 			{
@@ -245,8 +246,8 @@ namespace castor3d
 		 */
 		inline void mergeInto( MyObjectCacheType & destination )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
-			auto lockOther = castor::makeUniqueLock( destination.m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
+			LockType lockOther{ castor::makeUniqueLock( destination.m_elements ) };
 
 			for ( auto it : m_elements )
 			{
@@ -271,7 +272,7 @@ namespace castor3d
 		template< typename FuncType >
 		inline void forEach( FuncType func )const
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto const & element : m_elements )
 			{
@@ -289,7 +290,7 @@ namespace castor3d
 		template< typename FuncType >
 		inline void forEach( FuncType func )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto & element : m_elements )
 			{
@@ -520,6 +521,7 @@ namespace castor3d
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
 		using Collection = typename MyObjectCacheType::Collection;
+		using LockType = typename MyObjectCacheType::LockType;
 		using ElementPtr = typename MyObjectCacheType::ElementPtr;
 		using Producer = typename MyObjectCacheType::Producer;
 		using Initialiser = typename MyObjectCacheType::Initialiser;

@@ -32,7 +32,7 @@ namespace GuiCommon
 		 *\param[in]	p_scene		La scène à exporter.
 		 *\param[in]	p_fileName	Le nom du fichier exportà.
 		 */
-		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
+		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -46,7 +46,7 @@ namespace GuiCommon
 	class ObjSceneExporter
 	{
 	public:
-		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
+		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 
 	private:
 		void doExportMaterials( castor3d::Scene const & p_scene, castor::Path const & p_path )const;
@@ -67,7 +67,7 @@ namespace GuiCommon
 	class CscnSceneExporter
 	{
 	public:
-		virtual void ExportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
+		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName );
 	};
 }
 

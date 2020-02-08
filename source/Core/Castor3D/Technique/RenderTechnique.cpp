@@ -47,7 +47,8 @@ namespace castor3d
 			, LightType type
 			, Camera const & camera )
 		{
-			auto lock = makeUniqueLock( cache );
+			using LockType = std::unique_lock< LightCache const >;
+			LockType lock{ makeUniqueLock( cache ) };
 			std::map< double, LightSPtr > lights;
 
 			for ( auto & light : cache.getLights( type ) )
@@ -738,7 +739,7 @@ namespace castor3d
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & cache = scene.getParticleSystemCache();
-		auto lock = makeUniqueLock( cache );
+		std::unique_lock< ObjectCache< ParticleSystem, castor::String > > lock{ makeUniqueLock( cache ) };
 
 		if ( !cache.isEmpty() )
 		{
@@ -747,7 +748,7 @@ namespace castor3d
 				m_particleTimer->updateCount( 2u * cache.getObjectCount() );
 			}
 
-			auto timerBlock = m_particleTimer->start();
+			RenderPassTimerBlock timerBlock{ m_particleTimer->start() };
 			uint32_t index = 0u;
 
 			for ( auto & particleSystem : cache )

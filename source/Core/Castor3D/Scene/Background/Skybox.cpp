@@ -82,20 +82,22 @@ namespace castor3d
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-			Path subfolder{ cuT( "Textures" ) };
-			String relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
-				, file.getFilePath()
-				, subfolder );
-			string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-			auto & size = obj.getEquiSize();
-			result = file.writeText( m_tabs + cuT( "\tequirectangular" )
-				+ cuT( " \"" ) + relative + cuT( "\" " )
-				+ string::toString( size.getWidth(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+				Path subfolder{ cuT( "Textures" ) };
+				String relative = Scene::TextWriter::copyFile( obj.getEquiTexturePath()
+					, file.getFilePath()
+					, subfolder );
+				string::replace( relative, cuT( "\\" ), cuT( "/" ) );
+				auto & size = obj.getEquiSize();
+				result = file.writeText( m_tabs + cuT( "\tequirectangular" )
+					+ cuT( " \"" ) + relative + cuT( "\" " )
+					+ string::toString( size.getWidth(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
+
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0
+					&& result;
 			}
 		}
 		else if ( !obj.getCrossTexturePath().empty()
@@ -103,17 +105,20 @@ namespace castor3d
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
-			Path subfolder{ cuT( "Textures" ) };
-			String relative = Scene::TextWriter::copyFile( obj.getCrossTexturePath()
-				, file.getFilePath()
-				, subfolder );
-			string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-			result = file.writeText( m_tabs + cuT( "\tcross" ) + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox cross-texture" );
 
 			if ( result )
 			{
-				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+				Path subfolder{ cuT( "Textures" ) };
+				String relative = Scene::TextWriter::copyFile( obj.getCrossTexturePath()
+					, file.getFilePath()
+					, subfolder );
+				string::replace( relative, cuT( "\\" ), cuT( "/" ) );
+
+				result = file.writeText( m_tabs + cuT( "\tcross" ) + cuT( " \"" ) + relative + cuT( "\"\n" ) ) > 0;
+				castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox cross-texture" );
+
+				result = file.writeText( m_tabs + cuT( "}\n" ) ) > 0
+					&& result;
 			}
 		}
 		else if ( castor::File::fileExists( Path{ obj.m_texture->getImage( 0u ).toString() } )
@@ -294,7 +299,6 @@ namespace castor3d
 
 	void SkyboxBackground::doUpdate( Camera const & camera )
 	{
-		auto node = camera.getParent();
 		m_viewport.setPerspective( 45.0_degrees
 			, camera.getRatio()
 			, 0.1f

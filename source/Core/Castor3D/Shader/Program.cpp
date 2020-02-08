@@ -62,15 +62,16 @@ namespace castor3d
 
 		if ( hasFile )
 		{
-			auto tabs = m_tabs + cuT( "\t" );
+			// TODO : Implement castor3d::ShaderModule::TextWriter (to support at least SPIR-V external shaders).
+			//auto tabs = m_tabs + cuT( "\t" );
 			result = file.writeText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			checkError( result, "Shader program" );
 
-			for ( auto & module : shaderProgram.m_modules )
-			{
-				//result = ShaderObject::TextWriter( tabs )( *shaderProgram.m_shaders[i], file );
-			}
+			//for ( auto & module : shaderProgram.m_modules )
+			//{
+			//	result = ShaderModule::TextWriter( tabs, module.first )( module.second, file );
+			//}
 
 			if ( result )
 			{

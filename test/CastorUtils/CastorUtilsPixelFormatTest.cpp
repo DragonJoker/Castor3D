@@ -87,7 +87,8 @@ namespace
 	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 	{
-		return PixelStreamer< PF >()( p_stream, p_pixel );
+		static PixelStreamer< PF > streamer;
+		return streamer( p_stream, p_pixel );
 	}
 
 	template< PixelFormat PF, typename Enable = void > struct BufferStreamer;
@@ -175,8 +176,9 @@ namespace
 	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 	{
+		static PixelStreamer< PF > streamer;
 		p_stream << static_cast< PxBufferBase const & >( p_buffer );
-		return BufferStreamer< PF >()( p_stream, p_buffer );
+		return streamer( p_stream, p_buffer );
 	}
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >

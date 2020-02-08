@@ -73,7 +73,8 @@ namespace castor
 
 	FontSPtr FontCache::add( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
-		auto lock = makeUniqueLock( *this );
+		using LockType = std::unique_lock< FontCache >;
+		LockType lock{ makeUniqueLock( *this ) };
 		FontSPtr result;
 
 		if ( Collection< Font, String >::has( p_name ) )
@@ -117,7 +118,8 @@ namespace castor
 
 	FontSPtr FontCache::add( castor::String const & p_name, FontSPtr p_font )
 	{
-		auto lock = makeUniqueLock( *this );
+		using LockType = std::unique_lock< FontCache >;
+		LockType lock{ makeUniqueLock( *this ) };
 		FontSPtr result{ p_font };
 
 		if ( Collection< Font, String >::has( p_name ) )

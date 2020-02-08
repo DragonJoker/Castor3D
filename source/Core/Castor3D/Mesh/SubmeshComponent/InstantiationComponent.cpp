@@ -125,8 +125,6 @@ namespace castor3d
 		, MaterialSPtr newMaterial
 		, bool update )
 	{
-		auto oldCount = getMaxRefCount();
-
 		if ( oldMaterial != getOwner()->getDefaultMaterial() )
 		{
 			unref( oldMaterial );

@@ -13,7 +13,7 @@ namespace castor3d
 		class CookTorranceBRDF
 		{
 		public:
-			C3D_API CookTorranceBRDF( sdw::ShaderWriter & writer );
+			C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer );
 			C3D_API void declare();
 			C3D_API void compute( Light const & light
 				, sdw::Vec3 const & worldEye

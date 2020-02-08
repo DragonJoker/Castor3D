@@ -394,7 +394,8 @@ namespace castor3d
 
 	void Engine::postEvent( FrameEventUPtr && event )
 	{
-		auto lock = makeUniqueLock( *m_listenerCache );
+		using LockType = std::unique_lock< ListenerCache >;
+		LockType lock{ makeUniqueLock( *m_listenerCache ) };
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )

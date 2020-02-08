@@ -20,6 +20,7 @@ namespace castor3d
 {
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 	static const String getTypeFunctionABIName = cuT( "getType" );
+	using MyLockType = std::unique_lock< std::recursive_mutex >;
 
 	PluginCache::Cache( Engine & engine
 		, Producer && produce
@@ -41,12 +42,12 @@ namespace castor3d
 	void PluginCache::clear()
 	{
 		{
-			auto lock = makeUniqueLock( m_mutexLoadedPluginTypes );
+			MyLockType lock{ makeUniqueLock( m_mutexLoadedPluginTypes ) };
 			m_loadedPluginTypes.clear();
 		}
 
 		{
-			auto lock = makeUniqueLock( m_mutexLoadedPlugins );
+			MyLockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
 
 			for ( auto & it : m_loadedPlugins )
 			{
@@ -55,7 +56,7 @@ namespace castor3d
 		}
 
 		{
-			auto lock = makeUniqueLock( m_mutexLibraries );
+			MyLockType lock{ makeUniqueLock( m_mutexLibraries ) };
 
 			for ( auto & it : m_libraries )
 			{
@@ -130,7 +131,8 @@ namespace castor3d
 
 	PluginStrMap PluginCache::getPlugins( PluginType type )
 	{
-		auto lock = makeUniqueLock( m_mutexLoadedPlugins );
+		using LockType = std::unique_lock< std::recursive_mutex >;
+		LockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
 		return m_loadedPlugins[size_t( type )];
 	}
 
@@ -161,7 +163,7 @@ namespace castor3d
 	PluginSPtr PluginCache::doloadPlugin( Path const & pathFile )
 	{
 		PluginSPtr result;
-		auto lockTypes = makeUniqueLock( m_mutexLoadedPluginTypes );
+		MyLockType lockTypes{ makeUniqueLock( m_mutexLoadedPluginTypes ) };
 		auto it = m_loadedPluginTypes.find( pathFile );
 
 		if ( it == m_loadedPluginTypes.end() )
@@ -171,7 +173,7 @@ namespace castor3d
 				CU_Exception( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
 			}
 
-			DynamicLibrarySPtr library = std::make_shared< DynamicLibrary >( pathFile );
+			DynamicLibrarySPtr library{ std::make_shared< DynamicLibrary >( pathFile ) };
 			Plugin::PGetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, getTypeFunctionABIName ) )
@@ -180,7 +182,7 @@ namespace castor3d
 				CASTOR_PLUGIN_EXCEPTION( string::stringCast< char >( strError ), true );
 			}
 
-			PluginType type = PluginType::eCount;
+			PluginType type{ PluginType::eCount };
 			pfnGetType( &type );
 
 			switch ( type )
@@ -234,11 +236,11 @@ namespace castor3d
 			{
 				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
 				{
-					auto lockPlugins = makeUniqueLock( m_mutexLoadedPlugins );
+					MyLockType lockPlugins{ makeUniqueLock( m_mutexLoadedPlugins ) };
 					m_loadedPlugins[size_t( type )].insert( std::make_pair( pathFile, result ) );
 				}
 				{
-					auto lockLibraries = makeUniqueLock( m_mutexLibraries );
+					MyLockType lockLibraries{ makeUniqueLock( m_mutexLibraries ) };
 					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
 				Logger::logInfo( castor::makeStringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
@@ -251,7 +253,7 @@ namespace castor3d
 		else
 		{
 			PluginType type = it->second;
-			auto lock = makeUniqueLock( m_mutexLoadedPlugins );
+			MyLockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
 			result = m_loadedPlugins[size_t( type )].find( pathFile )->second;
 		}
 

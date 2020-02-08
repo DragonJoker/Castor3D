@@ -87,7 +87,6 @@ namespace castor3d
 	void BonesComponent::doUpload()
 	{
 		auto count = uint32_t( m_bones.size() );
-		auto itbones = m_bones.begin();
 
 		if ( count )
 		{

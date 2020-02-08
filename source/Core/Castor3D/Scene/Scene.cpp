@@ -251,7 +251,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Meshes" ) );
-				auto lock = makeUniqueLock( scene.getMeshCache() );
+				using LockType = std::unique_lock< MeshCache const >;
+				LockType lock{ makeUniqueLock( scene.getMeshCache() ) };
 
 				for ( auto const & it : scene.getMeshCache() )
 				{
@@ -290,7 +291,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Cameras" ) );
-				auto lock = makeUniqueLock( scene.getCameraCache() );
+				using LockType = std::unique_lock< CameraCache const >;
+				LockType lock{ makeUniqueLock( scene.getCameraCache() ) };
 
 				for ( auto const & it : scene.getCameraCache() )
 				{
@@ -326,7 +328,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Lights" ) );
-				auto lock = makeUniqueLock( scene.getLightCache() );
+				using LockType = std::unique_lock< LightCache const >;
+				LockType lock{ makeUniqueLock( scene.getLightCache() ) };
 
 				for ( auto const & it : scene.getLightCache() )
 				{
@@ -342,7 +345,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Geometries" ) );
-				auto lock = makeUniqueLock( scene.getGeometryCache() );
+				using LockType = std::unique_lock< GeometryCache const >;
+				LockType lock{ makeUniqueLock( scene.getGeometryCache() ) };
 
 				for ( auto const & it : scene.getGeometryCache() )
 				{
@@ -363,7 +367,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
-				auto lock = makeUniqueLock( scene.getParticleSystemCache() );
+				using LockType = std::unique_lock< ObjectCache< ParticleSystem, castor::String > const >;
+				LockType lock{ makeUniqueLock( scene.getParticleSystemCache() ) };
 
 				for ( auto const & it : scene.getParticleSystemCache() )
 				{
@@ -379,7 +384,8 @@ namespace castor3d
 			if ( result )
 			{
 				Logger::logInfo( cuT( "Scene::write - Animated object groups" ) );
-				auto lock = makeUniqueLock( scene.getAnimatedObjectGroupCache() );
+				using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
+				LockType lock{ makeUniqueLock( scene.getAnimatedObjectGroupCache() ) };
 
 				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
 				{
@@ -398,7 +404,8 @@ namespace castor3d
 		if ( result )
 		{
 			Logger::logInfo( cuT( "Scene::write - Windows" ) );
-			auto lock = makeUniqueLock( scene.getEngine()->getRenderWindowCache() );
+			using LockType = std::unique_lock< RenderWindowCache const >;
+			LockType lock{ makeUniqueLock( scene.getEngine()->getRenderWindowCache() ) };
 
 			for ( auto const & it : scene.getEngine()->getRenderWindowCache() )
 			{
@@ -873,7 +880,8 @@ namespace castor3d
 	uint32_t Scene::getVertexCount()const
 	{
 		uint32_t result = 0;
-		auto lock = makeUniqueLock( *m_geometryCache );
+		using LockType = std::unique_lock< GeometryCache const >;
+		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
 		{
@@ -891,7 +899,8 @@ namespace castor3d
 	uint32_t Scene::getFaceCount()const
 	{
 		uint32_t result = 0;
-		auto lock = makeUniqueLock( *m_geometryCache );
+		using LockType = std::unique_lock< GeometryCache const >;
+		LockType lock{ makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
 		{
@@ -933,7 +942,8 @@ namespace castor3d
 
 	bool Scene::hasShadows()const
 	{
-		auto lock = makeUniqueLock( getLightCache() );
+		using LockType = std::unique_lock< LightCache const >;
+		LockType lock{ makeUniqueLock( getLightCache() ) };
 
 		return getLightCache().end() != std::find_if( getLightCache().begin(), getLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{

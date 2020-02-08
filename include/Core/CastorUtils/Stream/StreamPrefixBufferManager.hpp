@@ -26,12 +26,13 @@ namespace castor
 		class BasicPrefixBufferManager
 		{
 		private:
-			typedef std::ios_base bos;
-			typedef std::basic_streambuf< char_type, traits > bsb;
-			typedef std::map< bos *, bsb * > table_type;
-			typedef typename table_type::value_type value_type;
-			typedef typename table_type::iterator iterator;
-			typedef typename table_type::const_iterator const_iterator;
+			using bos = std::ios_base;
+			using bsb = std::basic_streambuf< char_type, traits >;
+			using table_type = std::map< bos *, bsb * >;
+			using value_type = typename table_type::value_type;
+			using iterator = typename table_type::iterator;
+			using const_iterator = typename table_type::const_iterator;
+			using lock_type = std::unique_lock< std::mutex >;
 
 			BasicPrefixBufferManager( BasicPrefixBufferManager< prefix_type, char_type, traits > & obj ) = delete;
 
@@ -58,7 +59,7 @@ namespace castor
 			~BasicPrefixBufferManager()
 			{
 				--sm_instances;
-				auto lock = makeUniqueLock( m_mutex );
+				lock_type lock{ makeUniqueLock( m_mutex ) };
 
 				for ( auto buffer : m_list )
 				{
@@ -80,7 +81,7 @@ namespace castor
 			 */
 			bool insert( bos & o_s, bsb * b_s )
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				lock_type lock{ makeUniqueLock( m_mutex ) };
 				return m_list.insert( std::make_pair( &o_s, b_s ) ).second;
 			}
 
@@ -94,7 +95,7 @@ namespace castor
 			 */
 			size_t size()
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				lock_type lock{ makeUniqueLock( m_mutex ) };
 				return m_list.size();
 			}
 
@@ -108,7 +109,7 @@ namespace castor
 			 */
 			bsb * getBuffer( std::ios_base & io_s )
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				lock_type lock{ makeUniqueLock( m_mutex ) };
 				const_iterator cb_iter( m_list.find( &io_s ) );
 
 				if ( cb_iter == m_list.end() )
@@ -132,7 +133,7 @@ namespace castor
 			bool erase( std::ios_base & io_s )
 			{
 				delete getBuffer( io_s );
-				auto lock = makeUniqueLock( m_mutex );
+				lock_type lock{ makeUniqueLock( m_mutex ) };
 				return ( m_list.erase( &io_s ) == 1 );
 			}
 

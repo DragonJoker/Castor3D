@@ -68,10 +68,11 @@ namespace castor
 			inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
 				static std::mutex mutex;
+				using LockType = std::unique_lock< std::mutex >;
 
 				if ( doGetInitialisationStatus() )
 				{
-					auto lock = makeUniqueLock( mutex );
+					LockType lock{ makeUniqueLock( mutex ) };
 					const int MaxFnNameLen( 255 );
 
 					std::vector< void * > backTrace( p_toCapture - p_toSkip );

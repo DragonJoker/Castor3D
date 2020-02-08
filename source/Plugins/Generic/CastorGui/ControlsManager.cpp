@@ -18,6 +18,11 @@ using namespace castor3d;
 
 namespace CastorGui
 {
+	namespace
+	{
+		using LockType = std::unique_lock< std::mutex >;
+	}
+
 	ControlsManager::ControlsManager( Engine & engine )
 		: UserInputListener{ engine, PLUGIN_NAME }
 		, m_changed{ false }
@@ -35,7 +40,7 @@ namespace CastorGui
 
 	void ControlsManager::doCleanup()
 	{
-		auto lock = makeUniqueLock( m_mutexHandlers );
+		LockType lock{ makeUniqueLock( m_mutexHandlers ) };
 
 		for ( auto handler : m_handlers )
 		{
@@ -113,7 +118,7 @@ namespace CastorGui
 	void ControlsManager::addControl( ControlSPtr p_control )
 	{
 		doAddHandler( p_control );
-		auto lock = makeUniqueLock( m_mutexControlsById );
+		LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 
 		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
 		{
@@ -282,7 +287,7 @@ namespace CastorGui
 
 	void ControlsManager::doUpdate()const
 	{
-		auto lock = makeUniqueLock( m_mutexControlsByZIndex );
+		LockType lock{ makeUniqueLock( m_mutexControlsByZIndex ) };
 		{
 			auto handlers = doGetHandlers();
 			m_controlsByZIndex.clear();
@@ -310,7 +315,7 @@ namespace CastorGui
 	{
 		EventHandlerSPtr handler;
 		{
-			auto lock = makeUniqueLock( m_mutexControlsById );
+			LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 			auto it = m_controlsById.find( p_id );
 
 			if ( it == m_controlsById.end() )
@@ -328,7 +333,7 @@ namespace CastorGui
 
 	std::vector< ControlSPtr > ControlsManager::doGetControlsByZIndex()const
 	{
-		auto lock = makeUniqueLock( m_mutexControlsByZIndex );
+		LockType lock{ makeUniqueLock( m_mutexControlsByZIndex ) };
 		std::vector< ControlSPtr > result;
 
 		if ( !m_controlsByZIndex.empty() )
@@ -341,7 +346,7 @@ namespace CastorGui
 
 	std::map< uint32_t, ControlWPtr > ControlsManager::doGetControlsById()const
 	{
-		auto lock = makeUniqueLock( m_mutexControlsById );
+		LockType lock{ makeUniqueLock( m_mutexControlsById ) };
 		std::map< uint32_t, ControlWPtr > result;
 
 		if ( !m_controlsById.empty() )

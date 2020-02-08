@@ -16,6 +16,8 @@ namespace castor3d
 	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 
+	using LockType = std::unique_lock< std::mutex >;
+
 	RenderLoopAsync::RenderLoopAsync( Engine & engine, uint32_t wantedFPS )
 		: RenderLoop{ engine, wantedFPS, true }
 		, m_mainLoopThread{ nullptr }
@@ -244,25 +246,25 @@ namespace castor3d
 
 	void RenderLoopAsync::doSetHandle( ashes::WindowHandle handle )
 	{
-		auto lock = makeUniqueLock( m_mutexWindow );
+		LockType lock{ makeUniqueLock( m_mutexWindow ) };
 		m_handle = std::move( handle );
 	}
 
 	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
 	{
-		auto lock = makeUniqueLock( m_mutexWindow );
+		LockType lock{ makeUniqueLock( m_mutexWindow ) };
 		return m_handle;
 	}
 
 	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )
 	{
-		auto lock = makeUniqueLock( m_mutexWindow );
+		LockType lock{ makeUniqueLock( m_mutexWindow ) };
 		m_window = p_window;
 	}
 
 	RenderWindow * RenderLoopAsync::doGetWindow()const
 	{
-		auto lock = makeUniqueLock( m_mutexWindow );
+		LockType lock{ makeUniqueLock( m_mutexWindow ) };
 		return m_window;
 	}
 }

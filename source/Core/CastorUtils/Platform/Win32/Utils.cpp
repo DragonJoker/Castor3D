@@ -34,11 +34,11 @@ namespace castor
 			}
 		}
 
-		bool getScreenSize( uint32_t p_screen, Size & p_size )
+		bool getScreenSize( uint32_t index, Size & size )
 		{
-			stSCREEN screen = { p_screen, 0, p_size };
+			stSCREEN screen = { index, 0, size };
 			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &screen ) );
-			return true;
+			return bRet != FALSE;
 		}
 
 		String getLastErrorText()

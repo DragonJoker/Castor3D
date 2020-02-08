@@ -46,7 +46,8 @@ namespace castor3d
 
 		doCleanup();
 
-		auto lock = makeUniqueLock( m_mutexHandlers );
+		using LockType = std::unique_lock< std::mutex >;
+		LockType lock{ makeUniqueLock( m_mutexHandlers ) };
 		auto it = m_handlers.begin();
 
 		while ( it != m_handlers.end() )
