@@ -9,7 +9,6 @@ branches:
 max_jobs: 2
 
 image:
-  - Ubuntu1804
   - Visual Studio 2019
 
 platform:
@@ -19,42 +18,43 @@ configuration:
   - Release
 
 install:
-  - ps: $PLATFORM_NAME="x64"
-  - ps: if ($isLinux) {$OS_NAME="linux"} else {$OS_NAME="win32"}
-  - ps: if ($isLinux) {$PROJECT_DIR="/home/appveyor/projects/castor3d"} else {$PROJECT_DIR="C:\projects\castor3d"}
-  - git submodule init
-  - git submodule update --init -- "CMake"
+  - ps: $CONFIGURATION=env:$CONFIGURATION
+  - ps: $PLATFORM=env:$PLATFORM
+  - ps: $PROJECT_DIR=$env:APPVEYOR_BUILD_FOLDER
+  - ps: git submodule init
+  - ps: git submodule update --init -- "CMake"
   - ps: if (!$isLinux) {git submodule update --init -- "dependencies"}
-  - git submodule update --init -- "external/Ashes"
+  - ps: git submodule update --init -- "external/Ashes"
   - ps: cd external/Ashes
-  - git submodule init
-  - git submodule update --init -- "external/spirv_cross"
-  - git submodule update --init -- "external/Vulkan-Headers"
-  - git submodule update --init -- "external/AGS_SDK"
+  - ps: git submodule init
+  - ps: git submodule update --init -- "external/spirv_cross"
+  - ps: git submodule update --init -- "external/Vulkan-Headers"
+  - ps: git submodule update --init -- "external/AGS_SDK"
   - ps: cd $PROJECT_DIR
-  - git submodule update --init -- "external/ShaderWriter"
+  - ps: git submodule update --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
   - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev libfreetype6-dev zlib1g-dev -y}
-  - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM_NAME}
+  - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM}
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x freetype-2.3.5-win32.zip}
   - ps: if (!$isLinux) {7z x zlib-1.2.7-win32.zip}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
-  - ps: if ($isLinux) {cmake -Wno-dev -G "Unix Makefiles" -DPROJECTS_OUTPUT_DIR=/home/appveyor/projects/castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/appveyor/projects/castor3d/package/Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF}
-  - ps: if (!$isLinux) {cmake -Wno-dev -G "Visual Studio 16 2019" -DPROJECTS_OUTPUT_DIR=C:\projects\castor3d -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=C:\projects\castor3d\package\Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_USE_SYSTEM_LIBS=ON}
+  - ps: if ($isLinux) {cmake -Wno-dev -G "Unix Makefiles" -DPROJECTS_OUTPUT_DIR=/home/appveyor/projects/castor3d -DCMAKE_BUILD_TYPE=$CONFIGURATION -DCMAKE_INSTALL_PREFIX=/home/appveyor/projects/castor3d/package/Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_USE_GLSLANG=OFF}
+  - ps: if (!$isLinux) {cmake -Wno-dev -G "Visual Studio 16 2019" -DPROJECTS_OUTPUT_DIR=C:\projects\castor3d -DCMAKE_BUILD_TYPE=$CONFIGURATION -DCMAKE_INSTALL_PREFIX=C:\projects\castor3d\package\Castor3D ../ -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILDGRP_DIVIDER=ON -DCASTOR_BUILDGRP_GENERATOR=ON -DCASTOR_BUILDGRP_GENERIC=ON -DCASTOR_BUILDGRP_IMPORTER=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_PARTICLES=ON -DCASTOR_BUILDGRP_POSTFX=ON -DCASTOR_BUILDGRP_TONEMAPS=ON -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_BUILGRP_RENDERER=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DPROJECTS_USE_PRECOMPILED_HEADERS=ON -DCASTOR_USE_GLSLANG=OFF -DCASTOR_USE_SYSTEM_LIBS=ON}
 
 build_script:
   - ps: cd $PROJECT_DIR/build
   - ps: if ($isLinux) {cmake --build . --target install --parallel 4}
-  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config Release}
+  - ps: if (!$isLinux) {cmake --build . --target install --parallel 4 --config $CONFIGURATION}
 
 after_build:
   - ps: if ($isLinux) {cd /home/appveyor/projects/castor3d}
   - ps: if (!$isLinux) {cd C:\projects\castor3d}
-  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM_NAME.zip ./package/Castor3D/*
-  - ps: Push-AppveyorArtifact Castor3D-$OS_NAME-$PLATFORM_NAME.zip
+  - ps: if ($isLinux) {$OS_NAME="linux"} elseif ($isWindows ) {$OS_NAME="win32"} else {$OS_NAME="unknown"}
+  - ps: 7z a Castor3D-$OS_NAME-$PLATFORM.zip ./package/Castor3D/*
+  - ps: Push-AppveyorArtifact Castor3D-$OS_NAME-$PLATFORM.zip
 
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
