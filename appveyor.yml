@@ -21,7 +21,7 @@ install:
   - ps: $CONFIGURATION=$env:CONFIGURATION
   - ps: $PLATFORM=$env:PLATFORM
   - ps: $PROJECT_DIR=$env:APPVEYOR_BUILD_FOLDER
-  - ps: git submodule init
+  - ps: echo "$PROJECT_DIR"
   - ps: git submodule update --init -- "CMake"
   - ps: if (!$isLinux) {git submodule update --init -- "dependencies"}
   - ps: git submodule update --init -- "external/Ashes"
