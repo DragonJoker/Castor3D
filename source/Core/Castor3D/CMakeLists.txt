@@ -14,9 +14,6 @@ if ( CASTOR_USE_GLSLANG )
 		${Castor3DDefinitions}
 		C3D_HasGlslang
 	)
-	set( ExternalIncludes
-		${ExternalIncludes}
-	)
 endif ()
 
 if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/spirv_cross/spirv_glsl.cpp )

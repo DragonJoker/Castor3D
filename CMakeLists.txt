@@ -6,18 +6,15 @@ if ( VCPKG_TARGET_TRIPLET )
 endif ()
 
 #--------------------------------------------------------------------------------------------------
-#	Initial configurations
 #--------------------------------------------------------------------------------------------------
-# Set project name, used in folders and in workspace creation
 set( MAIN_PROJECT_NAME "Castor3D" )
 
-# Set project version numbers
 set( VERSION_MAJOR 0 )
 set( VERSION_MINOR 11 )
 set( VERSION_BUILD 0 )
 set( VERSION_YEAR 2019 )
 
-# Used to look for external modules
+# Setup lookup for external modules
 if ( VCPKG_TOOLCHAIN )
 	set( CMAKE_MODULE_PATH
 		${CMAKE_SOURCE_DIR}/CMake
@@ -36,15 +33,12 @@ else ()
 endif ()
 
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
+set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Experimental Precompiled headers support for GCC
 include( PCHSupport )
 
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
 
-# Declare the project
 project( ${MAIN_PROJECT_NAME} )
 
 include( Setup )
@@ -55,12 +49,11 @@ include( CompilationFlags )
 include( AStyleUtils )
 include( ExternalDependencies )
 
-# Organize projects into folders
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
 
 set( COMPILER_FOLDER ${COMPILER} )
 
-if ( ${COMPILER_FOLDER} STREQUAL "vc15" )
+if ( ${COMPILER_FOLDER} STREQUAL "vc15" OR ${COMPILER_FOLDER} STREQUAL "vc16" )
 	set( COMPILER_FOLDER "vc14" )
 endif ()
 
@@ -81,37 +74,34 @@ option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
 set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
-if ( EXISTS ${DEPENDENCIES_DIR}/ )
-	if ( NOT CASTOR_USE_SYSTEM_LIBS )
-		message( STATUS "Found dependencies folder, fetching libraries from it" )
-		if ( EXISTS ${DEPENDENCIES_DIR}/glslang/ )
-			set( glslang_DIR ${DEPENDENCIES_DIR}/glslang )
-			set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/glm/ )
-			set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/ffmpeg/ )
-			set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/assimp/ )
-			set( assimp_DIR ${DEPENDENCIES_DIR}/assimp )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/wxWidgets/ )
-			set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
-			set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib/vc_lib CACHE PATH "wxWidgets libraries directory" )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/freetype/ )
-			set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
-		endif ()
-		if ( EXISTS ${DEPENDENCIES_DIR}/zlib/ )
-			set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
-		endif ()
+if ( CASTOR_USE_SYSTEM_LIBS AND WIN32 AND NOT VCPKG_TOOLCHAIN )
+	message( STATUS "Fetching system libraries from dependencies submodule." )
+	if ( EXISTS ${DEPENDENCIES_DIR}/glslang/ )
+		set( glslang_DIR ${DEPENDENCIES_DIR}/glslang )
+		set( SPIRV_ROOT_DIR ${DEPENDENCIES_DIR}/glslang )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/glm/ )
+		set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/ffmpeg/ )
+		set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/assimp/ )
+		set( assimp_DIR ${DEPENDENCIES_DIR}/assimp )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/wxWidgets/ )
+		set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets CACHE PATH "wxWidgets root directory" )
+		set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib/vc_lib CACHE PATH "wxWidgets libraries directory" )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/freetype/ )
+		set( ENV{FREETYPE_DIR} ${DEPENDENCIES_DIR}/freetype )
+	endif ()
+	if ( EXISTS ${DEPENDENCIES_DIR}/zlib/ )
+		set( ZLIB_ROOT ${DEPENDENCIES_DIR}/zlib )
 	endif ()
 endif ()
 
 #--------------------------------------------------------------------------------------------------
-#	Looking for needed libraries
 #--------------------------------------------------------------------------------------------------
 if ( CMAKE_COMPILER_IS_GNUCXX )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
@@ -140,14 +130,10 @@ add_compile_options( $<$<CXX_COMPILER_ID:MSVC>:/MP> )
 find_package( Doxygen COMPONENTS doxygen dot dia )
 
 #--------------------------------------------------------------------------------------------------
-#	Adding include dirs to include search path
 #--------------------------------------------------------------------------------------------------
 set( ASHES_DIR external/Ashes )
 set( SHADERWRITER_DIR external/ShaderWriter )
 
-#--------------------------------------------------------------------------------------------------
-#	Normalising libraries names
-#--------------------------------------------------------------------------------------------------
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )
 msg_debug( "CMAKE_CXX_FLAGS  : ${CMAKE_CXX_FLAGS}" )
@@ -186,10 +172,10 @@ if( MSVC )
 	)
 endif()
 
-option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
-option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
-option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." FALSE )
-option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
+option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
+option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
+option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." OFF )
+option( CASTOR_BUILD_CASTOR3D "Build Castor3D" ON )
 
 # Small macro to add subdirectory files to current target source and header files
 macro( parse_subdir_files_ex _BASE_DIR _PROJGROUP _FOLDER _GROUP )

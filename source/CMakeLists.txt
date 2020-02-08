@@ -12,9 +12,9 @@ endif ()
 
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	# Ashes external library
-	set( ASHES_BUILD_RENDERER_PLUGINS ${CASTOR_BUILGRP_RENDERER} )
+	set( ASHES_BUILD_RENDERER_PLUGINS ON )
 	set( ASHES_BUILD_RENDERER_OGL ${CASTOR_BUILGRP_RENDERER} )
-	set( ASHES_BUILD_RENDERER_VKN ${CASTOR_BUILGRP_RENDERER} )
+	set( ASHES_BUILD_RENDERER_VKN ON )
 	set( ASHES_BUILD_TESTS OFF )
 	set( ASHES_BUILD_SAMPLES OFF )
 	set( ASHES_BUILD_SW_SAMPLES OFF )
@@ -35,7 +35,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		set( Ashes_BINARY_DEFINITIONS VK_USE_PLATFORM_XLIB_KHR )
 	endif ()
 
-	get_filename_component( SPIRV_CROSS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/SPIRV-Cross REALPATH )
+	get_filename_component( SPIRV_CROSS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/spirv_cross REALPATH )
 	add_subdirectory( ../${ASHES_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 	if ( ASHES_BUILD_SAMPLES )
 		add_subdirectory( ../${ASHES_DIR}/samples ${CMAKE_BINARY_DIR}/${ASHES_DIR}/samples )
@@ -43,44 +43,33 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	add_subdirectory( ../${ASHES_DIR}/test ${CMAKE_BINARY_DIR}/${ASHES_DIR}/test )
 
 	if ( CASTOR_USE_GLSLANG )
-		if ( CASTOR_USE_SYSTEM_LIBS
-			OR EXISTS ${DEPENDENCIES_DIR}/glslang/
-			OR ( NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang/glslang/Public/ShaderLang.h
-				AND NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang/glslang/Public/ShaderLang.h ) )
+		if ( CASTOR_USE_SYSTEM_LIBS )
 			if ( VCPKG_TOOLCHAIN )
 				find_package( glslang CONFIG )
-				set( glslang_LIBRARIES
-					glslang::OSDependent
-					glslang::glslang
-					glslang::OGLCompiler
-					glslang::SPIRV
-				)
 				find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
 			else ()
-				find_package( glslang )
+				find_package( glslang REQUIRED glslang OSDependent OGLCompiler SPIRV )
 				if ( glslang_FOUND )
 					set( CASTOR_USE_GLSLANG ON )
 				else ()
 					set( CASTOR_USE_GLSLANG OFF )
 				endif ()
 			endif ()
-		else ()
-			if ( EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang/glslang/Public/ShaderLang.h )
-				set( glslang_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang )
-			else ()
-				set( glslang_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang )
-			endif ()
+			set( glslang_LIBRARIES
+				glslang::OSDependent
+				glslang::glslang
+				glslang::OGLCompiler
+				glslang::SPIRV
+			)
+		elseif ( EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang/ )
+			set( glslang_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang )
 			set( ENABLE_GLSLANG_BINARIES OFF CACHE BOOL "Builds glslangValidator and spirv-remap" FORCE )
 			set( ENABLE_AMD_EXTENSIONS OFF CACHE BOOL "Enables support of AMD-specific extensions" FORCE )
 			set( ENABLE_NV_EXTENSIONS OFF CACHE BOOL "Enables support of Nvidia-specific extensions" FORCE )
 			set( ENABLE_HLSL OFF CACHE BOOL "Enables HLSL input support" FORCE )
 			set( BUILD_TESTING OFF )
 			set( SKIP_GLSLANG_INSTALL ON )
-			if ( EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang/glslang/Public/ShaderLang.h )
-				add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/../${ASHES_DIR}/external/glslang ${CMAKE_BINARY_DIR}/external/glslang )
-			else ()
-				add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang ${CMAKE_BINARY_DIR}/external/glslang )
-			endif ()
+			add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/../external/glslang ${CMAKE_BINARY_DIR}/external/glslang )
 			set_property( TARGET glslang PROPERTY FOLDER "External/glslang" )
 			set_property( TARGET OGLCompiler PROPERTY FOLDER "External/glslang" )
 			set_property( TARGET OSDependent PROPERTY FOLDER "External/glslang" )

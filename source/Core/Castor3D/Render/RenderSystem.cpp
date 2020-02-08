@@ -436,7 +436,7 @@ namespace castor3d
 
 			result.text = glsl + "\n" + spirv::writeSpirv( *module.shader );
 
-#	if C3D_HasSPIRVCross && C3D_DebugSpirV
+#	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
 			std::string name = module.name + "_" + ashes::getName( module.stage );
 
 			try

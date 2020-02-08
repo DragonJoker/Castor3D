@@ -147,6 +147,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${CASTOR_BINARY_DIR}/include/Core
 			${CASTOR_SOURCE_DIR}/source/Core
 			${CASTOR_BINARY_DIR}/source/Core
+			${FREETYPE_INCLUDE_DIR_ft2build}
+			${FREETYPE_INCLUDE_DIR_freetype2}
 	)
 
 	if ( WIN32 )
