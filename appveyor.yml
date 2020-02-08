@@ -22,16 +22,16 @@ install:
   - ps: $PLATFORM=$env:PLATFORM
   - ps: $PROJECT_DIR=$env:APPVEYOR_BUILD_FOLDER
   - ps: echo "$PROJECT_DIR"
-  - ps: git submodule update --init -- "CMake"
-  - ps: if (!$isLinux) {git submodule update --init -- "dependencies"}
-  - ps: git submodule update --init -- "external/Ashes"
+  - git submodule update --init -- "CMake"
+  - cmd: git submodule update --init -- "dependencies"
+  - git submodule update --init -- "external/Ashes"
   - ps: cd external/Ashes
-  - ps: git submodule init
-  - ps: git submodule update --init -- "external/spirv_cross"
-  - ps: git submodule update --init -- "external/Vulkan-Headers"
-  - ps: git submodule update --init -- "external/AGS_SDK"
+  - git submodule init
+  - git submodule update --init -- "external/spirv_cross"
+  - git submodule update --init -- "external/Vulkan-Headers"
+  - git submodule update --init -- "external/AGS_SDK"
   - ps: cd $PROJECT_DIR
-  - ps: git submodule update --init -- "external/ShaderWriter"
+  - git submodule update --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
   - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev libfreetype6-dev zlib1g-dev -y}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM}
