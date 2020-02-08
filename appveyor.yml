@@ -25,7 +25,6 @@ install:
   - git submodule init
   - git submodule update --init -- "CMake"
   - ps: if (!$isLinux) {git submodule update --init -- "dependencies"}
-  - ps: if ($isLinux) {git submodule update --init -- "external/glslang"}
   - git submodule update --init -- "external/Ashes"
   - cd external/Ashes
   - git submodule init
@@ -35,12 +34,11 @@ install:
   - cd $PROJECT_DIR
   - git submodule update --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
-  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev -y}
+  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev libfreetype6-dev zlib1g-dev -y}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM_NAME}
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x freetype-2.3.5-win32.zip}
   - ps: if (!$isLinux) {7z x zlib-1.2.7-win32.zip}
-  - ps: if (!$isLinux) {7z x glslang-12.04.2017.zip}
   - ps: if (!$isLinux) {cd $PROJECT_DIR}
   - ps: md build
   - ps: cd build
