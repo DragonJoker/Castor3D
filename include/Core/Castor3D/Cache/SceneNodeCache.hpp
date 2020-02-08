@@ -134,7 +134,7 @@ namespace castor3d
 		template< typename ... Parameters >
 		inline ElementPtr add( Key const & name, SceneNodeSPtr parent = nullptr )
 		{
-			LockType lock{ castor::makeUniqueLock( thid->m_elements ) };
+			LockType lock{ castor::makeUniqueLock( this->m_elements ) };
 			ElementPtr result;
 
 			if ( !this->m_elements.has( name ) )
