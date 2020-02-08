@@ -170,7 +170,7 @@ namespace castor3d
 				m_program,
 				vertexLayout,
 				ashes::PipelineInputAssemblyStateCreateInfo{},
-				std::nullopt,
+				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo
 				{
 					0u,
@@ -181,7 +181,7 @@ namespace castor3d
 				ashes::PipelineMultisampleStateCreateInfo{},
 				std::move( dsstate ),
 				ashes::PipelineColorBlendStateCreateInfo{},
-				std::nullopt,
+				ashes::nullopt,
 				*m_pipelineLayout,
 				*m_renderPass,
 			} );

@@ -27,9 +27,8 @@ namespace castor3d
 		struct BlockLocale
 		{
 			BlockLocale()
+				: m_prvLoc{ std::locale( "" ) }
 			{
-				m_prvLoc = std::locale( "" );
-
 				if ( m_prvLoc.name() != "C" )
 				{
 					std::locale::global( std::locale{ "C" } );
@@ -436,7 +435,7 @@ namespace castor3d
 
 			result.text = glsl + "\n" + spirv::writeSpirv( *module.shader );
 
-#	if C3D_HasSPIRVCross && C3D_DebugSpirV
+#	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
 			std::string name = module.name + "_" + ashes::getName( module.stage );
 
 			try

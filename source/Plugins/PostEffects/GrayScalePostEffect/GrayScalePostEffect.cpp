@@ -201,7 +201,7 @@ namespace grayscale
 				{},
 				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
-				std::nullopt,
+				ashes::nullopt,
 				{},
 			} );
 		ashes::VkSubpassDependencyArray dependencies

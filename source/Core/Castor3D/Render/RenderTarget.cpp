@@ -504,7 +504,7 @@ namespace castor3d
 				{},
 				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
-				std::nullopt,
+				ashes::nullopt,
 				{},
 			} );
 		ashes::VkSubpassDependencyArray dependencies
@@ -927,7 +927,8 @@ namespace castor3d
 		auto * result = &toWait;
 		auto timerBlock = m_overlaysTimer->start();
 		{
-			auto lock = makeUniqueLock( getEngine()->getOverlayCache() );
+			using LockType = std::unique_lock< OverlayCache >;
+			LockType lock{ makeUniqueLock( getEngine()->getOverlayCache() ) };
 			m_overlayRenderer->beginPrepare( camera
 				, *m_overlaysTimer
 				, *result );

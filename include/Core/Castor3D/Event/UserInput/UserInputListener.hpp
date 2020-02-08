@@ -392,7 +392,8 @@ namespace castor3d
 		 */
 		inline std::vector< EventHandlerSPtr > doGetHandlers()const
 		{
-			auto lock = castor::makeUniqueLock( m_mutexHandlers );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 			return m_handlers;
 		}
 		/**
@@ -403,7 +404,8 @@ namespace castor3d
 		 */
 		inline bool doHasHandlers()const
 		{
-			auto lock = castor::makeUniqueLock( m_mutexHandlers );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 			return !m_handlers.empty();
 		}
 		/**
@@ -418,7 +420,8 @@ namespace castor3d
 		 */
 		inline void doAddHandler( EventHandlerSPtr handler )
 		{
-			auto lock = castor::makeUniqueLock( m_mutexHandlers );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 
 			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) != std::end( m_handlers ) )
 			{
@@ -439,7 +442,8 @@ namespace castor3d
 		 */
 		inline void doRemoveHandler( EventHandlerSPtr handler )
 		{
-			auto lock = castor::makeUniqueLock( m_mutexHandlers );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) );
 		}
 

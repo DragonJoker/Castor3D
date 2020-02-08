@@ -24,9 +24,8 @@ namespace castor3d
 		struct BlockLocale
 		{
 			BlockLocale()
+				: m_prvLoc{ std::locale( "" ) }
 			{
-				m_prvLoc = std::locale( "" );
-
 				if ( m_prvLoc.name() != "C" )
 				{
 					std::locale::global( std::locale{ "C" } );

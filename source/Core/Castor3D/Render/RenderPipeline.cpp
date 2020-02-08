@@ -110,7 +110,7 @@ namespace castor3d
 			m_program->getStates(),
 			ashes::PipelineVertexInputStateCreateInfo{ 0u, std::move( bindings ), std::move( attributes ) },
 			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, m_flags.topology },
-			std::nullopt,
+			ashes::nullopt,
 			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, std::move( viewports ), 1u, std::move( scissors ) },
 			std::move( m_rsState ),
 			std::move( m_msState ),

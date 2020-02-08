@@ -30,7 +30,7 @@ namespace castor3d
 
 	void FrameListener::postEvent( FrameEventUPtr && event )
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_events[size_t( event->getType() )].push_back( std::move( event ) );
 	}
 

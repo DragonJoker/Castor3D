@@ -141,7 +141,7 @@ namespace castor3d
 		 *\param[in]	type	Le type de render target.
 		 */
 		C3D_API RenderTarget( Engine & engine
-			, TargetType type = TargetType::eWindow );
+			, TargetType type );
 		/**
 		 *\~english
 		 *\brief		Destructor.

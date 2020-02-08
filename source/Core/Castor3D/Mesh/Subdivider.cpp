@@ -96,7 +96,7 @@ namespace castor3d
 
 	SubmeshVertex & Subdivider::doTryAddPoint( castor::Point3f const & point )
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		int index = -1;
 
 		if ( ( index = isInMyPoints( point, 0.00001 ) ) < 0 )
@@ -157,7 +157,7 @@ namespace castor3d
 
 	uint32_t Subdivider::doSubdivideThreaded()
 	{
-		auto lock = castor::makeUniqueLock( m_mutex );
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doSubdivide();
 		doSwapBuffers();
 

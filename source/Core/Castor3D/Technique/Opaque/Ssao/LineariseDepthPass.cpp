@@ -247,7 +247,7 @@ namespace castor3d
 					{},
 					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 					{},
-					std::nullopt,
+					ashes::nullopt,
 					{},
 				} );
 			ashes::VkSubpassDependencyArray dependencies
@@ -496,7 +496,7 @@ namespace castor3d
 				m_lineariseProgram,
 				*m_vertexLayout,
 				ashes::PipelineInputAssemblyStateCreateInfo{},
-				std::nullopt,
+				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo
 				{
 					0u,
@@ -505,9 +505,9 @@ namespace castor3d
 				},
 				ashes::PipelineRasterizationStateCreateInfo{},
 				ashes::PipelineMultisampleStateCreateInfo{},
-				std::nullopt,
+				ashes::nullopt,
 				ashes::PipelineColorBlendStateCreateInfo{},
-				std::nullopt,
+				ashes::nullopt,
 				*m_linearisePipelineLayout,
 				*m_renderPass,
 			} );
@@ -586,7 +586,7 @@ namespace castor3d
 					m_minifyProgram,
 					*m_vertexLayout,
 					ashes::PipelineInputAssemblyStateCreateInfo{},
-					std::nullopt,
+					ashes::nullopt,
 					ashes::PipelineViewportStateCreateInfo
 					{
 						0u,
@@ -595,9 +595,9 @@ namespace castor3d
 					},
 					ashes::PipelineRasterizationStateCreateInfo{},
 					ashes::PipelineMultisampleStateCreateInfo{},
-					std::nullopt,
+					ashes::nullopt,
 					ashes::PipelineColorBlendStateCreateInfo{},
-					std::nullopt,
+					ashes::nullopt,
 					*m_minifyPipelineLayout,
 					*m_renderPass,
 				} );

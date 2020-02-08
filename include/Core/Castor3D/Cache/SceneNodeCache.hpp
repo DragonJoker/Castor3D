@@ -50,6 +50,7 @@ namespace castor3d
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
 		using Collection = typename MyObjectCacheType::Collection;
+		using LockType = typename MyObjectCacheType::LockType;
 		using ElementPtr = typename MyObjectCacheType::ElementPtr;
 		using Producer = typename MyObjectCacheType::Producer;
 		using Initialiser = typename MyObjectCacheType::Initialiser;
@@ -133,7 +134,7 @@ namespace castor3d
 		template< typename ... Parameters >
 		inline ElementPtr add( Key const & name, SceneNodeSPtr parent = nullptr )
 		{
-			auto lock = castor::makeUniqueLock( this->m_elements );
+			LockType lock{ castor::makeUniqueLock( this->m_elements ) };
 			ElementPtr result;
 
 			if ( !this->m_elements.has( name ) )

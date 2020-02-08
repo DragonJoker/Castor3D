@@ -970,16 +970,17 @@ namespace CastorViewer
 
 	void MainFrame::OnExportScene( wxCommandEvent & event )
 	{
-		wxString wildcard = _( "Castor3D scene" );
-		wildcard += CSCN_WILDCARD;
-		wildcard += _( "Wavefront OBJ" );
-		wildcard += objWildcard;
-		wildcard += wxT( "|" );
-		wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 		SceneSPtr scene = m_mainScene.lock();
 
 		if ( scene )
 		{
+			wxString wildcard = _( "Castor3D scene" );
+			wildcard += CSCN_WILDCARD;
+			wildcard += _( "Wavefront OBJ" );
+			wildcard += objWildcard;
+			wildcard += wxT( "|" );
+			wxFileDialog fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
 			if ( fileDialog.ShowModal() == wxID_OK )
 			{
 				try
@@ -989,12 +990,12 @@ namespace CastorViewer
 					if ( pathFile.getExtension() == cuT( "obj" ) )
 					{
 						ObjSceneExporter exporter;
-						exporter.ExportScene( *m_mainScene.lock(), pathFile );
+						exporter.exportScene( *scene, pathFile );
 					}
 					else if ( pathFile.getExtension() == cuT( "cscn" ) )
 					{
 						CscnSceneExporter exporter;
-						exporter.ExportScene( *m_mainScene.lock(), pathFile );
+						exporter.exportScene( *scene, pathFile );
 					}
 				}
 				catch ( std::exception & exc )

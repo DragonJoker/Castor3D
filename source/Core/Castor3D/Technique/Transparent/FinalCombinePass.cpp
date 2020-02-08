@@ -346,7 +346,7 @@ namespace castor3d
 					program,
 					vtxLayout,
 					ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP },
-					std::nullopt,
+					ashes::nullopt,
 					ashes::PipelineViewportStateCreateInfo{},
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
@@ -383,7 +383,7 @@ namespace castor3d
 					{},
 					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 					{},
-					std::nullopt,
+					ashes::nullopt,
 					{},
 				} );
 			ashes::VkSubpassDependencyArray dependencies

@@ -133,7 +133,7 @@ namespace castor3d
 
 	void AnimatedObjectGroupCache::remove( Key const & name )
 	{
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		if ( m_elements.has( name ) )
 		{

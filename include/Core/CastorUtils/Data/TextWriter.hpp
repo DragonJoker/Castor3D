@@ -139,6 +139,7 @@ namespace castor
 				file = rhs.file;
 				result = rhs.result;
 				rhs.writer = nullptr;
+				return *this;
 			}
 
 			WriterBlock( WriterBlock const & rhs ) = delete;

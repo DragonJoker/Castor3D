@@ -76,7 +76,7 @@ namespace GuiCommon
 					, scene
 					, result };
 				auto & engine = *pass.getOwner()->getEngine();
-				auto lock = castor::makeUniqueLock( engine.getRenderWindowCache() );
+				auto lock( castor::makeUniqueLock( engine.getRenderWindowCache() ) );
 				auto it = engine.getRenderWindowCache().begin();
 
 				if ( it != engine.getRenderWindowCache().end()

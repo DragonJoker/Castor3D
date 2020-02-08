@@ -51,7 +51,8 @@ namespace GuiCommon
 		wxEnumProperty * material = new wxEnumProperty( p_name );
 		auto & cache = m_engine->getMaterialCache();
 		wxPGChoices choices;
-		auto lock = makeUniqueLock( cache );
+		using LockType = std::unique_lock< MaterialCache >;
+		LockType lock{ makeUniqueLock( cache ) };
 
 		for ( auto pair : cache )
 		{

@@ -7,6 +7,7 @@
 namespace castor
 {
 	static const std::string ERROR_LOGGER_ALREADY_INITIALISED = "Logger instance already initialised";
+	using LockType = std::unique_lock< std::recursive_mutex >;
 
 	template< typename CharType, typename LogStreambufTraits >
 	class LogStreambuf
@@ -138,7 +139,7 @@ namespace castor
 	Logger::Logger()
 		: m_impl( nullptr )
 	{
-		auto lock = makeUniqueLock( m_mutex );
+		LockType lock{ makeUniqueLock( m_mutex ) };
 		m_headers[size_t( LogType::eTrace )] = cuT( "***TRACE*** " );
 		m_headers[size_t( LogType::eDebug )] = cuT( "***DEBUG*** " );
 		m_headers[size_t( LogType::eInfo )] = String();
@@ -165,7 +166,7 @@ namespace castor
 		delete m_wcerr;
 		delete m_wclog;
 		{
-			auto lock = makeUniqueLock( m_mutex );
+			LockType lock{ makeUniqueLock( m_mutex ) };
 			m_impl->cleanup();
 			delete m_impl;
 			m_impl = nullptr;
@@ -183,7 +184,7 @@ namespace castor
 			m_singleton = new Logger();
 			Logger & logger = getSingleton();
 			{
-				auto lock = makeUniqueLock( logger.m_mutex );
+				LockType lock{ makeUniqueLock( logger.m_mutex ) };
 				delete logger.m_impl;
 				logger.m_impl = new LoggerImpl{ p_eLogLevel };
 				logger.m_impl->initialise( logger );
@@ -482,13 +483,13 @@ namespace castor
 
 	void Logger::doRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
-		auto lock = makeUniqueLock( m_mutex );
+		LockType lock{ makeUniqueLock( m_mutex ) };
 		m_impl->registerCallback( p_pfnCallback, p_pCaller );
 	}
 
 	void Logger::doUnregisterCallback( void * p_pCaller )
 	{
-		auto lock = makeUniqueLock( m_mutex );
+		LockType lock{ makeUniqueLock( m_mutex ) };
 		m_impl->unregisterCallback( p_pCaller );
 	}
 
@@ -496,7 +497,7 @@ namespace castor
 	{
 		m_initialised = true;
 		{
-			auto lock = makeUniqueLock( m_mutex );
+			LockType lock{ makeUniqueLock( m_mutex ) };
 			m_impl->setFileName( logFilePath, logLevel );
 		}
 	}
@@ -507,11 +508,13 @@ namespace castor
 		{
 #if !defined( NDEBUG )
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				using LockType = std::unique_lock< std::recursive_mutex >;
+				LockType lock{ makeUniqueLock( m_mutex ) };
 				m_impl->printMessage( logLevel, message, p_newLine );
 			}
 #endif
-			auto lock = makeUniqueLock( m_mutexQueue );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ makeUniqueLock( m_mutexQueue ) };
 			m_queue.push_back( { logLevel, message, p_newLine } );
 		}
 	}
@@ -522,11 +525,12 @@ namespace castor
 		{
 #if !defined( NDEBUG )
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				LockType lock{ makeUniqueLock( m_mutex ) };
 				m_impl->printMessage( logLevel, message, p_newLine );
 			}
 #endif
-			auto lock = makeUniqueLock( m_mutexQueue );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ makeUniqueLock( m_mutexQueue ) };
 			m_queue.push_back( { logLevel, string::stringCast< char >( message ), p_newLine } );
 		}
 	}
@@ -538,12 +542,14 @@ namespace castor
 			MessageQueue queue;
 
 			{
-				auto lock = makeUniqueLock( m_mutexQueue );
+				using LockType = std::unique_lock< std::mutex >;
+				LockType lock{ makeUniqueLock( m_mutexQueue ) };
 				std::swap( queue, m_queue );
 			}
 
 			{
-				auto lock = makeUniqueLock( m_mutex );
+				using LockType = std::unique_lock< std::recursive_mutex >;
+				LockType lock{ makeUniqueLock( m_mutex ) };
 				m_impl->logMessageQueue( queue );
 			}
 		}

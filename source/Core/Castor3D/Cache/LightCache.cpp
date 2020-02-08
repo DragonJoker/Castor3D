@@ -156,7 +156,7 @@ namespace castor3d
 		{
 			if ( doCheckUniqueDirectionalLight( element->getLightType() ) )
 			{
-				auto lock = castor::makeUniqueLock( m_elements );
+				auto lock( castor::makeUniqueLock( m_elements ) );
 
 				if ( m_elements.has( name ) )
 				{
@@ -186,7 +186,7 @@ namespace castor3d
 
 	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & name, SceneNodeSPtr parent, LightType type )
 	{
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 		ElementPtr result;
 
 		if ( !m_elements.has( name ) )
@@ -218,7 +218,7 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::remove( Key const & name )
 	{
-		auto lock = castor::makeUniqueLock( m_elements );
+		auto lock( castor::makeUniqueLock( m_elements ) );
 
 		if ( m_elements.has( name ) )
 		{

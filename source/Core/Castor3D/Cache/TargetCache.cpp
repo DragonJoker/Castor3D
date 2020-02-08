@@ -10,6 +10,11 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		using LockType = std::unique_lock< RenderTargetCache >;
+	}
+
 	RenderTargetCache::RenderTargetCache( Engine & engine )
 		: OwnedBy< Engine >{ engine }
 	{
@@ -21,7 +26,7 @@ namespace castor3d
 
 	RenderTargetSPtr RenderTargetCache::add( TargetType type )
 	{
-		auto lock = makeUniqueLock( *this );
+		LockType lock{ makeUniqueLock( *this ) };
 		RenderTargetSPtr result = std::make_shared< RenderTarget >( *getEngine(), type );
 		m_renderTargets[size_t( type )].push_back( result );
 		return result;
@@ -29,7 +34,7 @@ namespace castor3d
 
 	void RenderTargetCache::remove( RenderTargetSPtr target )
 	{
-		auto lock = makeUniqueLock( *this );
+		LockType lock{ makeUniqueLock( *this ) };
 		auto v = m_renderTargets.begin() + size_t( target->getTargetType() );
 		auto it = std::find( v->begin(), v->end(), target );
 
@@ -41,7 +46,7 @@ namespace castor3d
 
 	void RenderTargetCache::render( RenderInfo & info )
 	{
-		auto lock = makeUniqueLock( *this );
+		LockType lock{ makeUniqueLock( *this ) };
 
 		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{

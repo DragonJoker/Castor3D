@@ -711,7 +711,7 @@ namespace castor3d
 				{},
 				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
-				std::nullopt,
+				ashes::nullopt,
 				{},
 			} );
 		ashes::VkSubpassDependencyArray dependencies
@@ -851,7 +851,7 @@ namespace castor3d
 					std::move( program ),
 					*vertexLayout,
 					ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
-					std::nullopt,
+					ashes::nullopt,
 					ashes::PipelineViewportStateCreateInfo{},
 					ashes::PipelineRasterizationStateCreateInfo{},
 					ashes::PipelineMultisampleStateCreateInfo{},

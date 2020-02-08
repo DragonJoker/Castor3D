@@ -17,9 +17,9 @@ namespace castor3d
 
 		Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light )
 		{
-			auto length = getMaxDistance( light
-				, light.getAttenuation() );
-			auto width = light.getCutOff().degrees() / ( 45.0f * 2.0f );
+			float length{ getMaxDistance( light
+				, light.getAttenuation() ) };
+			float width{ light.getCutOff().degrees() / ( 45.0f * 2.0f ) };
 			return Point2f{ length * width, length };
 		}
 	}

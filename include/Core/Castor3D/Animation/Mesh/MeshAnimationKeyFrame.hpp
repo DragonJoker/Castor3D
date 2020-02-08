@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
 		C3D_API MeshAnimationKeyFrame( MeshAnimation & parent
-			, castor::Milliseconds const & timeIndex = 0_ms );
+			, castor::Milliseconds const & timeIndex );
 		/**
 		 *\~english
 		 *\brief		Adds a submesh buffer.

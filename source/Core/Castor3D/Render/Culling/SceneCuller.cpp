@@ -12,6 +12,11 @@
 
 namespace castor3d
 {
+	namespace
+	{
+		using LockType = std::unique_lock< BillboardListCache const >;
+	}
+
 	SceneCuller::SceneCuller( Scene const & scene
 		, Camera * camera )
 		: m_scene{ scene }
@@ -82,7 +87,7 @@ namespace castor3d
 	void SceneCuller::doListGeometries()
 	{
 		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getGeometryCache() );
+		LockType lock{ makeUniqueLock( scene.getBillboardListCache() ) };
 
 		for ( auto primitive : scene.getGeometryCache() )
 		{
@@ -155,7 +160,7 @@ namespace castor3d
 	void SceneCuller::doListBillboards()
 	{
 		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getBillboardListCache() );
+		LockType lock{ makeUniqueLock( scene.getBillboardListCache() ) };
 
 		for ( auto billboard : scene.getBillboardListCache() )
 		{
@@ -194,7 +199,7 @@ namespace castor3d
 	void SceneCuller::doListParticles()
 	{
 		auto & scene = getScene();
-		auto lock = makeUniqueLock( scene.getParticleSystemCache() );
+		LockType lock{ makeUniqueLock( scene.getBillboardListCache() ) };
 
 		for ( auto particleSystem : scene.getParticleSystemCache() )
 		{

@@ -120,7 +120,7 @@ namespace castor3d
 
 		bool result = true;
 
-		if ( result && pass.getOpacity() < 1 )
+		if ( pass.getOpacity() < 1 )
 		{
 			result = file.writeText( m_tabs + cuT( "\talpha " ) + string::toString( pass.getOpacity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Pass >::checkError( result, "Pass opacity" );

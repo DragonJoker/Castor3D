@@ -46,6 +46,7 @@ namespace castor3d
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
+		using LockType = typename MyCacheType::LockType;
 		using ElementPtr = typename MyCacheType::ElementPtr;
 		using Producer = typename MyCacheType::Producer;
 		using Initialiser = typename MyCacheType::Initialiser;

@@ -34,6 +34,7 @@ namespace castor3d
 		using Element = ElementType;
 		using Key = KeyType;
 		using Collection = castor::Collection< Element, Key >;
+		using LockType = std::unique_lock< Collection >;
 		using ElementPtr = std::shared_ptr< Element >;
 		using Producer = typename MyCacheTraits::Producer;
 		using Merger = typename MyCacheTraits::Merger;
@@ -86,7 +87,7 @@ namespace castor3d
 		 */
 		inline void cleanup()
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto it : m_elements )
 			{
@@ -148,7 +149,7 @@ namespace castor3d
 
 			if ( element )
 			{
-				auto lock = castor::makeUniqueLock( m_elements );
+				LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 				if ( m_elements.has( name ) )
 				{
@@ -183,7 +184,7 @@ namespace castor3d
 		inline ElementPtr add( Key const & name, Parameters && ... parameters )
 		{
 			ElementPtr result;
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			if ( !m_elements.has( name ) )
 			{
@@ -223,8 +224,8 @@ namespace castor3d
 		 */
 		inline void mergeInto( MyCacheType & destination )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
-			auto lockOther = castor::makeUniqueLock( destination.m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
+			LockType lockOther{ castor::makeUniqueLock( destination.m_elements ) };
 
 			for ( auto it : m_elements )
 			{
@@ -244,7 +245,7 @@ namespace castor3d
 		template< typename FuncType >
 		inline void forEach( FuncType func )const
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto const & element : m_elements )
 			{
@@ -262,7 +263,7 @@ namespace castor3d
 		template< typename FuncType >
 		inline void forEach( FuncType func )
 		{
-			auto lock = castor::makeUniqueLock( m_elements );
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto & element : m_elements )
 			{
@@ -451,6 +452,7 @@ namespace castor3d
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
+		using LockType = typename MyCacheType::LockType;
 		using ElementPtr = typename MyCacheType::ElementPtr;
 		using Producer = typename MyCacheType::Producer;
 		using Initialiser = typename MyCacheType::Initialiser;

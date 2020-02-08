@@ -52,7 +52,7 @@ if( assimp_FOUND )
 	if ( WIN32 )
 		if ( NOT VCPKG_TOOLCHAIN )
 			# Preparing ASSIMP dll installation
-			copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} ${ASSIMP_LIBRARY_RELEASE} )
+			copy_dll( ${PROJECT_NAME} "${assimp_LIBRARY_DEBUG}" "${assimp_LIBRARY_RELEASE}" )
 		endif ()
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )

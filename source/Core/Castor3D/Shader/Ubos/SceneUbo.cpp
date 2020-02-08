@@ -91,7 +91,8 @@ namespace castor3d
 		if ( lights )
 		{
 			auto & cache = scene.getLightCache();
-			auto lock = makeUniqueLock( cache );
+			using LockType = std::unique_lock< LightCache const >;
+			LockType lock{ makeUniqueLock( cache ) };
 			configuration.lightsCount[size_t( LightType::eSpot )] = float( cache.getLightsCount( LightType::eSpot ) );
 			configuration.lightsCount[size_t( LightType::ePoint )] = float( cache.getLightsCount( LightType::ePoint ) );
 			configuration.lightsCount[size_t( LightType::eDirectional )] = float( cache.getLightsCount( LightType::eDirectional ) );

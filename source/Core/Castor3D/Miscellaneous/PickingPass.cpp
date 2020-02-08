@@ -188,10 +188,9 @@ namespace castor3d
 					if ( itPass != itPipeline->second.end()
 						&& itMesh != itPass->second.end() )
 					{
-						uint32_t faceIndex{ uint32_t( index[3] ) };
-
 						if ( !itMesh->second.empty() )
 						{
+							uint32_t faceIndex{ uint32_t( index[3] ) };
 							uint32_t instanceIndex{ uint32_t( index[2] ) };
 							auto itNode = itMesh->second.begin() + instanceIndex;
 
@@ -831,7 +830,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// UBOs
 		auto materials = shader::createMaterials( writer, flags.passFlags );
@@ -841,6 +839,7 @@ namespace castor3d
 
 		if ( hasTextures )
 		{
+			auto & renderSystem = *getEngine()->getRenderSystem();
 			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		}
 

@@ -49,7 +49,8 @@ namespace castor
 	ImageSPtr ImageCache::add( String const & name
 		, Path const & path )
 	{
-		auto lock = makeUniqueLock( *this );
+		using LockType = std::unique_lock< ImageCache >;
+		LockType lock{ makeUniqueLock( *this ) };
 		ImageSPtr result;
 
 		if ( Collection< Image, String >::has( name ) )
@@ -86,7 +87,8 @@ namespace castor
 		, Size const & size
 		, PixelFormat format )
 	{
-		auto lock = makeUniqueLock( *this );
+		using LockType = std::unique_lock< ImageCache >;
+		LockType lock{ makeUniqueLock( *this ) };
 		ImageSPtr result;
 
 		if ( Collection< Image, String >::has( name ) )
