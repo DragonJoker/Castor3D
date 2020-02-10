@@ -1,34 +1,22 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MESH_H___
-#define ___C3D_MESH_H___
+#ifndef ___C3D_Mesh_H___
+#define ___C3D_Mesh_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Animation/Animable.hpp"
-#include "Castor3D/Mesh/MeshFactory.hpp"
-#include "Castor3D/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Animation/AnimationModule.hpp"
+#include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The mesh representation
-	\remark		A mesh is a collection of submeshes.
-	\~french
-	\brief		Représentation d'un maillage
-	\remark		Un maillage est une collectionde sous maillages.
-	*/
 	class Mesh
 		: public castor::Resource< Mesh >
-		, public Animable
+		, public AnimableT< Scene >
 	{
 	public:
 		/*!

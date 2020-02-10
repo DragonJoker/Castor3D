@@ -4,23 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_IMPORTER_FACTORY_H___
 #define ___C3D_IMPORTER_FACTORY_H___
 
-#include "Castor3D/Mesh/Importer.hpp"
+#include "MeshModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		22/07/2016
-	\~english
-	\brief		The importer factory.
-	\~french
-	\brief		La fabrique d'importeurs.
-	*/
-	class ImporterFactory
-		: public castor::Factory< Importer, castor::String, ImporterUPtr, std::function< ImporterUPtr( Engine & ) > >
+	class MeshImporterFactory
+		: public castor::Factory< MeshImporter, castor::String, MeshImporterUPtr, std::function< MeshImporterUPtr( Engine & ) > >
 	{
 	public:
 		/**
@@ -29,14 +20,14 @@ namespace castor3d
 		*\~french
 		*\brief		Constructeur
 		*/
-		C3D_API ImporterFactory();
+		C3D_API MeshImporterFactory();
 		/**
 		*\~english
 		*\brief		Destructor
 		*\~french
 		*\brief		Destructeur
 		*/
-		C3D_API ~ImporterFactory();
+		C3D_API ~MeshImporterFactory();
 	};
 }
 

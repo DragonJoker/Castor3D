@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SKELETON_H___
 #define ___C3D_SKELETON_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SkeletonModule.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
-#include "Castor3D/Mesh/Skeleton/Bone.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\~english
-	\brief		The skeleton, holds each bone
-	\~french
-	\brief		Le squelette, contient chaque bone
-	*/
 	class Skeleton
 		: public Animable
 	{

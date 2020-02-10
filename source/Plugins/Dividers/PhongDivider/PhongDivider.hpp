@@ -52,7 +52,7 @@ namespace Phong
 		Subdivider();
 		virtual ~Subdivider();
 
-		static castor3d::SubdividerUPtr create();
+		static castor3d::MeshSubdividerUPtr create();
 		/**
 		 *\copydoc		castor3d::Subdivider::Cleanup
 		 */

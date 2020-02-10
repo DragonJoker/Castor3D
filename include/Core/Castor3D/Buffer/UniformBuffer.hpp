@@ -13,16 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		10/09/2019
-	\~english
-	\brief		A uniform buffer, than can contain multiple sub-buffers.
-	\~french
-	\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
-	\remark
-	*/
 	class UniformBufferBase
 	{
 	public:
@@ -348,8 +338,6 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 	};
 
-	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
-
 	inline UniformBufferBasePtr makeUniformBufferBase( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkDeviceSize size
@@ -366,16 +354,7 @@ namespace castor3d
 			, std::move( name )
 			, std::move( sharingMode ) );
 	}
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.5.0
-	\date		22/10/2011
-	\~english
-	\brief		A uniform buffer, than can contain multiple sub-buffers.
-	\~french
-	\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
-	\remark
-	*/
+
 	template< typename T >
 	class UniformBuffer
 		: public UniformBufferBase

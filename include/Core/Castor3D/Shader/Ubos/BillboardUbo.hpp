@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardUbo_H___
 #define ___C3D_BillboardUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Model Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour le modèle.
-	*/
 	class BillboardUbo
 	{
 	public:

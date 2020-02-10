@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FRUSTUM_H___
 #define ___C3D_FRUSTUM_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
@@ -12,15 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Implements a frustum and the checks related to frustum culling.
-	\~french
-	\brief		Implémente un frustum et les vérifications relatives au frustum culling.
-	*/
 	class Frustum
 	{
 	public:

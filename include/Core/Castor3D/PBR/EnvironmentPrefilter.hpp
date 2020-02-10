@@ -16,15 +16,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		02/03/2017
-	\version	0.9.0
-	\~english
-	\brief		Prefilters an environment map, by generating its mipmap levels.
-	\~french
-	\brief		Préfiltre une texture d'environnement, en générant ses différents niveaux de mipmap.
-	*/
 	class EnvironmentPrefilter
 	{
 	private:

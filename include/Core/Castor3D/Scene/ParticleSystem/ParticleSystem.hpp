@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleSystem_H___
 #define ___C3D_ParticleSystem_H___
 
-#include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
+#include "ParticleModule.hpp"
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
@@ -13,15 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		19/10/2016
-	\~english
-	\brief		Particle system implementation.
-	\~french
-	\brief		Implémentation d'un système de particules.
-	*/
 	class ParticleSystem
 		: public MovableObject
 	{

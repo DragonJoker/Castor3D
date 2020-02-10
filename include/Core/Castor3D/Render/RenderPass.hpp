@@ -25,15 +25,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Render pass base class.
-	\~french
-	\brief		Classe de base d'une passe de rendu.
-	*/
 	class RenderPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named

@@ -4,22 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_Particle_H___
 #define ___C3D_Particle_H___
 
+#include "ParticleModule.hpp"
+
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
+
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d
 {
-	template< ParticleFormat Type >
-	struct ElementTyper;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		19/10/2016
-	\~english
-	\brief		Holds one particle data.
-	\~french
-	\brief		Contient les données d'une particule.
-	*/
 	class Particle
 	{
 	public:

@@ -13,17 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Class which represents the animated object groups
-	\remark		Animated object groups, are a group of objects sharing a selected list of animations and needing synchronised animating
-	\~french
-	\brief		Représente un groupe d'objets animés
-	\remark		Un groupe d'objets animés est la liste d'objets partageant les mêmes animations et nécessitant des animations synchronisées
-	*/
 	class AnimatedObjectGroup
 		: public castor::Named
 		, public castor::OwnedBy< Scene >

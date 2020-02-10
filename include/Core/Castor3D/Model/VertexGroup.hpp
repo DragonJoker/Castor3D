@@ -4,16 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_VERTEX_GROUP_H___
 #define ___C3D_VERTEX_GROUP_H___
 
+#include "ModelModule.hpp"
+
+#include <CastorUtils/Math/Point.hpp>
+
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		23/07/2012
-	\~english
-	\brief		Holds the all components of a vertex.
-	\~french
-	\brief		Contient toutes les composantes d'un sommet.
-	*/
 	template< typename T >
 	struct InterleavedVertexT
 	{
@@ -86,12 +82,6 @@ namespace castor3d
 		//!\~french		La coordonnées de texture du sommet.
 		castor::Point3< T > tex;
 	};
-
-	template< typename T >
-	using InterleavedVertexTArray = std::vector< InterleavedVertexT< T > >;
-
-	using InterleavedVertex = InterleavedVertexT< float >;
-	using InterleavedVertexArray = InterleavedVertexTArray< float >;
 }
 
 #endif

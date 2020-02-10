@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Mesh animation instance.
-	\~french
-	\brief		Instance d'animation de maillage.
-	*/
 	class MeshAnimationInstance
 		: public AnimationInstance
 	{

@@ -16,14 +16,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\~english
-	\brief		This class links Castor3D to the rendering API.
-	\~french
-	\brief		Cette classe fait le lien entre Castor3D et l'API de rendu.
-	*/
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{

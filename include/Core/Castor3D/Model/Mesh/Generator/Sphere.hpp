@@ -8,16 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The sphere primitive
-	\remark		This sphere has squared faces. It is built from a radius and a number of subsections
-	\~french
-	\brief		La primitive de sphère
-	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
-	*/
 	class Sphere
 		: public MeshGenerator
 	{

@@ -9,14 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		11/11/2017
-	\~english
-	\brief		The submesh component for lines.
-	\~french
-	\brief		Composant de sous-maillage pour les lignes.
-	*/
 	class LinesMapping
 		: public IndexMapping
 	{

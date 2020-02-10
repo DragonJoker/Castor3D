@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		07/12/2017
-	\~english
-	\brief		A keyframe for a mesh animation.
-	\~french
-	\brief		Une keyframe pour une animation de maillage.
-	*/
 	class MeshAnimationKeyFrame
 		: public AnimationKeyFrame
 		, public castor::OwnedBy< MeshAnimation >

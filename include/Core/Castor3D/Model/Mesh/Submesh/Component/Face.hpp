@@ -8,17 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Face implementation
-	\remark		A face is constituted from 3 vertices
-	\~french
-	\brief		Implémentation d'un face
-	\remark		Une face est constituée de 3 vertices
-	*/
 	class Face
 	{
 	public:

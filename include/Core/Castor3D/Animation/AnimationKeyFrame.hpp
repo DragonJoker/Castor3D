@@ -22,7 +22,10 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
-		C3D_API explicit AnimationKeyFrame( castor::Milliseconds const & timeIndex = 0_ms );
+		inline explicit AnimationKeyFrame( castor::Milliseconds const & timeIndex = 0_ms )
+			: m_timeIndex{ timeIndex }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.

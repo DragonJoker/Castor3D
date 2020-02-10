@@ -41,7 +41,7 @@ namespace Phong
 		cleanup();
 	}
 
-	SubdividerUPtr Subdivider::create()
+	MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}

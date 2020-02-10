@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of a handler event.
-	*\~french
-	*\brief		Description d'un évènement de gestionnaire.
-	*/
 	class HandlerEvent
 		: public UserInputEvent
 	{

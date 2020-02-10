@@ -4,21 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_PATTERN_H___
 #define ___C3D_PATTERN_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Pattern handler class
-	\remark		A pattern is a collection of consecutive points
-	\~french
-	\brief		Classe de gestion de chemin
-	\remark		Un chemin est une collection de points consécutifs
-	*/
 	template< typename T >
 	class Pattern
 	{

@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		The submesh component used for morphing.
-	\~french
-	\brief		Le composant de sous-maillage pour le morphing.
-	*/
 	class MorphComponent
 		: public SubmeshComponent
 	{

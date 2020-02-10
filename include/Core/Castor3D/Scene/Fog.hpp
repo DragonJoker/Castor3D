@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/05/2016
-	\~english
-	\brief		Fog implementation.
-	\~french
-	\brief		Implémentation de brouillard.
-	*/
 	class Fog
 	{
 	public:

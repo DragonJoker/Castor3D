@@ -4,24 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_PLUGIN_H___
 #define ___C3D_PLUGIN_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "PluginModule.hpp"
+
 #include "Castor3D/Plugin/PluginException.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Plugin Base class
-	\remark		Manages the base plug-in functions, allows plug-ins to check versions and to register themselves
-	\~french
-	\brief		Classe de base des plug-ins
-	\remark		Gère les fonctions de base d'un plug-in, permet aux plug-ins de faire des vérifications de version et  de s'enregistrer auprès du moteur
-	*/
 	class Plugin
 		: public castor::OwnedBy< Engine >
 	{

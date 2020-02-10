@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		08/03/2017
-	\~english
-	\brief		Shadows configuration class.
-	\~french
-	\brief		Classe de configuration des ombres.
-	*/
 	class Shadow
 	{
 	public:

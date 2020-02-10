@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DebugName_H___
 #define ___C3D_DebugName_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {

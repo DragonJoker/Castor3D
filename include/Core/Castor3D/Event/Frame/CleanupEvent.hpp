@@ -4,24 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_CLEANUP_EVENT_H___
 #define ___C3D_CLEANUP_EVENT_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Event/Frame/FrameEvent.hpp"
+#include "FrameEvent.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		24/04/2013
-	\version	0.7.0
-	\~english
-	\brief		Cleaner event
-	\remark		Cleans up the member given when constructed.
-	\~french
-	\brief		Evènement de nettoyage
-	\remark		Nettoie le membre donné lors de la construction.
-	*/
 	template< class T >
 	class CleanupEvent
 		: public FrameEvent

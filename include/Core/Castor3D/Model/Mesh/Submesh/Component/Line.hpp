@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		12/11/2017
-	\~english
-	\brief		Line implementation.
-	\~french
-	\brief		Implémentation d'un ligne.
-	*/
 	class Line
 	{
 	public:

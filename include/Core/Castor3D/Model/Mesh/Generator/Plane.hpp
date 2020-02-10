@@ -8,16 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The plane representation
-	\remark		A plane can be subdivided in width and in height.
-	\~french
-	\brief		Représentation d'un plan
-	\remark		Un plan peut être subdivisé en hauteur et en largeur
-	*/
 	class Plane
 		: public MeshGenerator
 	{

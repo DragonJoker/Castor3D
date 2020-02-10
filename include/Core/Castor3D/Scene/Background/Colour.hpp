@@ -11,16 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\version
-	*	0.9.0
-	*\~english
-	*\brief
-	*	A skybox with no image but a colour.
-	*\~french
-	*\brief
-	*	Une skybox sans image mais avec une couleur.
-	*/
 	class ColourBackground
 		: public SceneBackground
 	{

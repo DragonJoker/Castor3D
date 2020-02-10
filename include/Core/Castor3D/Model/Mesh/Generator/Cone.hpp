@@ -4,18 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_CONE_H___
 #define ___C3D_CONE_H___
 
-#include "Castor3D/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The cone is a basic primitive, with a parametrable number of faces
-	\~french
-	\brief		Le cône est une primitive basique, avec un nombre paramétrable de faces
-	*/
 	class Cone
 		: public MeshGenerator
 	{

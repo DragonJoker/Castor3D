@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\~english
-	\brief		Background text serialiser.
-	\~french
-	\brief		Sérialiseur texte de fond.
-	*/
 	class BackgroundTextWriter
 		: public BackgroundVisitor
 	{

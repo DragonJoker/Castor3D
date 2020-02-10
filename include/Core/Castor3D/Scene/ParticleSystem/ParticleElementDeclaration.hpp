@@ -4,21 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleElementDeclaration_H___
 #define ___C3D_ParticleElementDeclaration_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ParticleModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Particle element description.
-	\remark		Describes usage and type of an element in a particle.
-	\~french
-	\brief		Description d'un élément de particule.
-	\remark		Décrit l'utilisation et le type d'un élément de particule.
-	*/
 	struct ParticleElementDeclaration
 	{
 		C3D_API ParticleElementDeclaration() = default;
@@ -39,7 +28,7 @@ namespace castor3d
 		 *\param[in]	divisor	Incrément d'attribut d'instanciation.
 		 */
 		inline ParticleElementDeclaration( castor::String const & name
-			, castor::FlagCombination< ElementUsage > const & usages
+			, ElementUsages const & usages
 			, ParticleFormat type
 			, uint32_t offset = 0u
 			, uint32_t divisor = 0u )
@@ -56,7 +45,7 @@ namespace castor3d
 		castor::String m_name;
 		//!\~english	Element usage.
 		//!\~french		Utilisation de l'élément.
-		castor::FlagCombination< ElementUsage > m_usages;
+		ElementUsages m_usages;
 		//!\~english	Element type.
 		//!\~french		Type de l'élément.
 		ParticleFormat m_dataType{ ParticleFormat::eVec4f };

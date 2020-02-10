@@ -11,15 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Handles object's visibility, and behavior with shadows.
-	\~french
-	\brief		Gère la visibilité de l'objet, ainsi que son comportement avec les ombres.
-	*/
 	class RenderedObject
 		: public std::enable_shared_from_this< RenderedObject >
 	{

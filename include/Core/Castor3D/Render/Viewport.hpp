@@ -15,17 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class to represent a viewport
-	\remark		Gives its projection type, FOV, ...
-	\~french
-	\brief		Classe de représentation de viewport
-	\remark		donne le type de projection FOV, ...
-	*/
 	class Viewport
 	{
 	public:

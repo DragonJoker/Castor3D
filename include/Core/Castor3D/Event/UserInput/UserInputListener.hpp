@@ -12,15 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Class used to to manage the user input events.
-	*\~french
-	*\brief		Classe utilisée pour gérer les évènements utilisateur.
-	*/
 	class UserInputListener
 		: public castor::OwnedBy< Engine >
 	{

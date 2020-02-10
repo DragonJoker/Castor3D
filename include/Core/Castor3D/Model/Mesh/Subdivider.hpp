@@ -1,29 +1,19 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SUBDIVIDER_H___
-#define ___C3D_SUBDIVIDER_H___
+#ifndef ___C3D_Subdivider_H___
+#define ___C3D_Subdivider_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MeshModule.hpp"
 
 #include <CastorUtils/Math/Point.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		12/03/2010
-	\~english
-	\brief		Subdividers main class C3D_API
-	\remark		Abstract class C3D_API for subdivisers, contains the header for the main Subdivide function
-	\~french
-	\brief		Classe de base (abstraite) pour les subdiviseurs
-	\remark		Contient l'interface commune aux subdiviseurs
-	*/
-	class Subdivider
+	class MeshSubdivider
 	{
 	protected:
-		typedef std::function< void( Subdivider & ) > SubdivisionEndFunction;
+		typedef std::function< void( MeshSubdivider & ) > MeshSubdivisionEndFunction;
 
 	public:
 		/**
@@ -32,14 +22,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		C3D_API Subdivider();
+		C3D_API MeshSubdivider();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Subdivider();
+		C3D_API virtual ~MeshSubdivider();
 		/**
 		 *\~english
 		 *\brief		Main subdivision function
@@ -163,7 +153,7 @@ namespace castor3d
 		 *\remarks		Cette fonction *NE DOIT PAS* détruire le thread *NI* le subdiviseur
 		 *\param[in]	subdivisionEndFunc	Pointeur de la fonction à exécuter
 		 */
-		inline void setSubdivisionEndCallback( SubdivisionEndFunction subdivisionEndFunc )
+		inline void setSubdivisionEndCallback( MeshSubdivisionEndFunction subdivisionEndFunc )
 		{
 			m_onSubdivisionEnd = std::move( subdivisionEndFunc );
 		}
@@ -274,7 +264,7 @@ namespace castor3d
 		bool m_generateBuffers;
 		//!\~english	The subdivision end callback.
 		//\~french		Le callback de fin de subdivision.
-		SubdivisionEndFunction m_onSubdivisionEnd;
+		MeshSubdivisionEndFunction m_onSubdivisionEnd;
 		//!\~english	The subdivision thread.
 		//\~french		Le thread de subdivision.
 		std::shared_ptr< std::thread > m_thread;

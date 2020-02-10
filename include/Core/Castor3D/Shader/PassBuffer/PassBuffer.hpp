@@ -13,15 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/02/2010
-	\~english
-	\brief		ShaderBuffer holding the Passes data.
-	\~french
-	\brief		ShaderBuffer contenant les données des Pass.
-	*/
 	class PassBuffer
 	{
 	public:

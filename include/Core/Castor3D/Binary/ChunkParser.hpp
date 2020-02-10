@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
-	\~english
-	\brief		Chunk parser
-	\~french
-	\brief		Analyseur de chunk
-	*/
 	class ChunkParserBase
 	{
 	public:

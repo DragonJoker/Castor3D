@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderProgram_H___
 #define ___C3D_ShaderProgram_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ShaderModule.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 

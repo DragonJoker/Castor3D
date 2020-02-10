@@ -4,13 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_Submesh_H___
 #define ___C3D_Submesh_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include "Castor3D/Mesh/Mesh.hpp"
-#include "Castor3D/Mesh/VertexGroup.hpp"
-#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
+#include "Component/ComponentModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/BoundingSphere.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
@@ -22,18 +19,9 @@ namespace castor3d
 		static inline void add( std::shared_ptr< T > component
 			, Submesh & submesh );
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The submesh representation.
-	\remarks	A submesh holds its buffers (vertex, normals and texture) and its combobox.
-	\~french
-	\brief		Representation d'un sous-maillage.
-	\remarks	Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
-	*/
+
 	class Submesh
-		: public castor::OwnedBy< Scene >
+		: public castor::OwnedBy< Mesh >
 		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
@@ -45,15 +33,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	mesh	The parent mesh.
-		 *\param[in]	scene	The scene.
-		 *\param[in]	id	The submesh ID.
+		 *\param[in]	id		The submesh ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	mesh	Le mesh parent.
-		 *\param[in]	scene	La scène.
-		 *\param[in]	id	L'ID du sous-maillage.
+		 *\param[in]	id		L'ID du sous-maillage.
 		 */
-		C3D_API Submesh( Scene & scene, Mesh & mesh, uint32_t id = 1 );
+		C3D_API Submesh( Mesh & mesh, uint32_t id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -387,6 +373,6 @@ namespace castor3d
 	};
 }
 
-#include "Castor3D/Mesh/Submesh.inl"
+#include "Submesh.inl"
 
 #endif

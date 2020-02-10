@@ -4,19 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleSystemImpl_H___
 #define ___C3D_ParticleSystemImpl_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ParticleModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/11/2016
-	\~english
-	\brief		Particle system implementation base class.
-	\~french
-	\brief		Classe de base de l'implémentation d'un système de particules.
-	*/
 	class ParticleSystemImpl
 	{
 	public:

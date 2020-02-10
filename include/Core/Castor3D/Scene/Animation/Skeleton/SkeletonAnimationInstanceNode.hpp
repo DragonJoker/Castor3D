@@ -8,17 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		09/12/2013
-	\~english
-	\brief		Implementation of SkeletonAnimationNode for abstract nodes
-	\remark		Used to decompose the model and place intermediate animations
-	\~french
-	\brief		Implémentation de SkeletonAnimationNode pour des noeuds abstraits.
-	\remark		Utilisé afin de décomposer le modèle et ajouter des animations intermédiaires
-	*/
 	class SkeletonAnimationInstanceNode
 		: public SkeletonAnimationInstanceObject
 	{

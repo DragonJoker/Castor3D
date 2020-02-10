@@ -4,20 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SubmeshComponent_H___
 #define ___C3D_SubmeshComponent_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ComponentModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		Component for a submesh.
-	\~french
-	\brief		Composant pour un sous-maillage.
-	*/
 	class SubmeshComponent
 		: public castor::OwnedBy< Submesh >
 	{

@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		22/08/2017
-	\~english
-	\brief		A GpuBuffer and an offset from the GpuBuffer.
-	\~french
-	\brief		Un GpuBuffer et un offset dans le GpuBuffer.
-	*/
 	template< typename T >
 	struct UniformBufferOffset
 	{
@@ -41,15 +32,7 @@ namespace castor3d
 			return buffer->getData( offset );
 		}
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\date		08/02/2018
-	\~english
-	\brief		Uniform buffer pool implementation.
-	\~french
-	\brief		Implémentation d'un pool de tampon d'uniformes.
-	*/
+
 	template< typename T >
 	class UniformBufferPool
 		: public castor::OwnedBy< RenderSystem >

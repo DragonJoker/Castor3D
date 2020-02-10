@@ -8,16 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The cylinder representation
-	\remark		The cylinder is a basic primitive, with a parametrable number of faces
-	\~french
-	\brief		Représentation d'un cylindre
-	\remark		Un cylindre est une primitive basique avec un nombre de faces paramétrable
-	*/
 	class Cylinder
 		: public MeshGenerator
 	{

@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Structure holding mouse state.
-	*\~french
-	*\brief		Structure contenant l'état de la souris.
-	*/
 	struct MouseState
 	{
 		//!\~english	The current position.
@@ -34,15 +25,7 @@ namespace castor3d
 		//!\~french		Le bouton ayant reçu le dernier changement.
 		MouseButton m_changed;
 	};
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of a mouse event.
-	*\~french
-	*\brief		Description d'un évènement de souris.
-	*/
+
 	class MouseEvent
 		: public UserInputEvent
 	{

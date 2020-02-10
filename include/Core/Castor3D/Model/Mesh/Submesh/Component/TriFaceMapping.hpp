@@ -11,14 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		11/11/2017
-	\~english
-	\brief		The submesh component for triangular faces.
-	\~french
-	\brief		Composant de sous-maillage pour les faces triangulaires.
-	*/
 	class TriFaceMapping
 		: public IndexMapping
 	{

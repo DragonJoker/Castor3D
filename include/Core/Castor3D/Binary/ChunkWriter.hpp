@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
-	\~english
-	\brief		Chunk writer
-	\~french
-	\brief		Remplisseur de chunk
-	*/
 	class ChunkWriterBase
 	{
 	public:

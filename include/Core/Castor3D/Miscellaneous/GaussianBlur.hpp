@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GaussianBlur_H___
 #define ___C3D_GaussianBlur_H___
 
+#include "MiscellaneousModule.hpp"
+
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/RenderToTexture/RenderQuad.hpp"
 #include "Castor3D/Texture/TextureUnit.hpp"
@@ -17,15 +19,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		26/07/2017
-	\~english
-	\brief		Gaussian blur pass.
-	\~french
-	\brief		Passe flou gaussien.
-	*/
 	class GaussianBlur
 		: public castor::OwnedBy< Engine >
 	{

@@ -14,15 +14,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Render loop base class.
-	\~french
-	\brief		Classe de base d'une boucle de rendu.
-	*/
 	class RenderLoop
 		: public castor::OwnedBy< Engine >
 	{

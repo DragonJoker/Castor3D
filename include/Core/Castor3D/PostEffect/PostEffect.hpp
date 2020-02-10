@@ -27,20 +27,7 @@ namespace castor3d
 		ashes::CommandBufferPtr commandBuffer;
 		ashes::SemaphorePtr semaphore;
 	};
-	using CommandsSemaphoreArray = std::vector< CommandsSemaphore >;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		20/11/2012
-	\~english
-	\brief		Post render effect base class.
-	\remark		A post render effect is an effect applied after 3D rendering and before 2D rendering.
-				<br />Post render effects are applied in a cumulative way.
-	\~french
-	\brief		Classe de base d'effet post rendu.
-	\remark		Un effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D.
-				<br />Les effets post rendu sont appliqués de manière cumulative.
-	*/
+
 	class PostEffect
 		: public castor::OwnedBy< RenderSystem >
 		, public castor::Named

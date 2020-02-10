@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/04/2017
-	\~english
-	\brief		HDR configuration (expsure and gamma correction).
-	\~french
-	\brief		Configuration HDR (exposition et correction gamma).
-	*/
 	class HdrConfig
 	{
 	public:

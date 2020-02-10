@@ -26,17 +26,6 @@ namespace castor3d
 	{
 		using Type = std::function< std::shared_ptr< RenderTarget >( KeyType const &, TargetType ) >;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Render target class
-	\remark		A render target draws a scene in a frame buffer that can then be used by a window to have a direct render, or a texture to have offscreen rendering
-	\~french
-	\brief		Classe de cible de rendu (render target)
-	\remark		Une render target dessine une scène dans un tampon d'image qui peut ensuite être utilisé dans une fenêtre pour un rendu direct, ou une texture pour un rendu hors écran
-	*/
 	class RenderTarget
 		: public std::enable_shared_from_this< RenderTarget >
 		, public castor::OwnedBy< Engine >

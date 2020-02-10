@@ -12,10 +12,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename OwnerT >
-	class Animation
+	template< typename AnimableHanlerT >
+	class AnimationT
 		: public castor::Named
-		, public castor::OwnedBy< Animable< OwnerT > >
+		, public castor::OwnedBy< AnimableT< AnimableHanlerT > >
 	{
 	public:
 		/**
@@ -25,10 +25,10 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API Animation( Animation && rhs ) = default;
-		C3D_API Animation & operator=( Animation && rhs ) = delete;
-		C3D_API Animation( Animation const & rhs ) = delete;
-		C3D_API Animation & operator=( Animation const & rhs ) = delete;
+		C3D_API AnimationT( AnimationT && rhs ) = default;
+		C3D_API AnimationT & operator=( AnimationT && rhs ) = delete;
+		C3D_API AnimationT( AnimationT const & rhs ) = delete;
+		C3D_API AnimationT & operator=( AnimationT const & rhs ) = delete;
 		/**@}*/
 		/**
 		 *\~english
@@ -42,8 +42,8 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		inline Animation( AnimationType type
-			, Animable< OwnerT > & animable
+		inline AnimationT( AnimationType type
+			, AnimableT< AnimableHanlerT > & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Animation();
+		inline ~AnimationT();
 		/**
 		 *\~english
 		 *\brief		Adds a keyframe to the animation.
@@ -174,9 +174,9 @@ namespace castor3d
 		//!\~french		Les keyframes.
 		AnimationKeyFrameArray m_keyframes;
 
-		friend class BinaryWriter< Animation >;
-		friend class BinaryParser< Animation >;
-		friend class AnimationInstance;
+		friend class BinaryWriter< AnimationT >;
+		friend class BinaryParser< AnimationT >;
+		friend class AnimationInstanceT< AnimableHanlerT >;
 	};
 }
 

@@ -15,15 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of an event handler, class that can receive event.
-	*\~french
-	*\brief		Description d'un gestionnaire d'évènements, classe pouvant recevoir des évènements.
-	*/
 	class EventHandler
 	{
 	protected:

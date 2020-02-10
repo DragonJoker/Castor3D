@@ -18,21 +18,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		11/03/2016
-	\~english
-	\brief		Base class for ToneMapping plug-ins.
-	\remarks	The inheriting classes will have to write their fragment shader.
-				This one will have the uniform buffer slot 0 reserved for
-				a provided HdrConfigUbo (whether it uses it or not).
-	\~french
-	\brief		Classe de base pour les plug-ins de tone mapping.
-	\remarks	Les classes héritières devront écrire leur fragment shader.
-				Celui-ci devra réserver le slot 0 d'uniform buffer pour
-				un HdrConfigUbo, qu'il l'utilise ou pas.
-	*/
 	class ToneMapping
 		: public castor::OwnedBy< Engine >
 		, public castor::Named

@@ -8,16 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\version
-	*	0.11.0
-	*\~english
-	*\brief
-	*	Simple image background.
-	*\~french
-	*\brief
-	*	Simple image de fond.
-	*/
 	class ImageBackground
 		: public SceneBackground
 	{

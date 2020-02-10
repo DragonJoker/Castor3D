@@ -1,25 +1,16 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PostEffectVisitor_HPP___
-#define ___C3D_PostEffectVisitor_HPP___
+#ifndef ___C3D_PipelineVisitorBase_HPP___
+#define ___C3D_PipelineVisitorBase_HPP___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		16/05/2018
-	\~english
-	\brief		Post effect visitor base class.
-	\~french
-	\brief		Classe de base d'un visiteur d'effet post rendu.
-	*/
 	class PipelineVisitorBase
 	{
 	protected:
@@ -257,15 +248,7 @@ namespace castor3d
 			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
 		/**@}*/
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		16/05/2018
-	\~english
-	\brief		Post effect visitor base class.
-	\~french
-	\brief		Classe de base d'un visiteur d'effet post rendu.
-	*/
+
 	class PipelineVisitor
 		: public PipelineVisitorBase
 	{

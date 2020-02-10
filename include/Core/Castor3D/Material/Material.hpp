@@ -4,24 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_MATERIAL_H___
 #define ___C3D_MATERIAL_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MaterialModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	*/
-	template< MaterialType Type >
-	struct PassTyper;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -70,17 +59,7 @@ namespace castor3d
 	{
 		using Type = SpecularGlossinessPbrPass;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Definition of a material
-	\remark		A material is composed of one or more passes.
-	\~french
-	\brief		Définition d'un matériau
-	\remark		Un matériau est composé d'une ou plusieurs passes
-	*/
+
 	class Material
 		: public castor::Resource< Material >
 		, public std::enable_shared_from_this< Material >

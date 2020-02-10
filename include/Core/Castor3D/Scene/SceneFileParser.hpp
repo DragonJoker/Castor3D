@@ -65,15 +65,7 @@ namespace castor3d
 		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
 		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		25/08/2010
-	\~english
-	\brief		The context used into parsing functions.
-	\~french
-	\brief		Le contexte utilisé lors de l'analyse des fonctions.
-	*/
+
 	class SceneFileContext
 		: public castor::FileParserContext
 	{
@@ -169,17 +161,7 @@ namespace castor3d
 		std::shared_ptr< SkyboxBackground > skybox;
 		TextureConfiguration textureConfiguration;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		25/08/2010
-	\~english
-	\brief		CSCN file parser.
-	\remarks	Reads CSCN files and extracts all 3D data from it.
-	\~french
-	\brief		Analyseur de fichiers CSCN.
-	\remarks	Lit les fichiers CSCN et en extrait toutes les données 3D.
-	*/
+
 	class SceneFileParser
 		: public castor::FileParser
 		, public castor::OwnedBy< Engine >

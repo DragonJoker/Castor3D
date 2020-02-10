@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		20/07/2012
-	\~english
-	\brief		Holds face informations.
-	\~french
-	\brief		Contient des informations sur une face.
-	*/
 	struct FaceInfos
 	{
 		/*!

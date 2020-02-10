@@ -10,19 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using ObjectTransform = std::pair< SkeletonAnimationObject *, castor::Matrix4x4f >;
-	using TransformArray = std::vector< ObjectTransform >;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		The class which manages key frames
-	\remark		Key frames are the frames where the animation must be at a precise state
-	\~french
-	\brief		Classe qui gère une key frame
-	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
-	*/
 	class SkeletonAnimationKeyFrame
 		: public AnimationKeyFrame
 		, public castor::OwnedBy< SkeletonAnimation >

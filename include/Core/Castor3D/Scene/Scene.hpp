@@ -30,19 +30,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Scene handler class
-	\remarks	A scene is a collection of lights, scene nodes and geometries.
-				<br />It has at least one camera to render it
-	\~french
-	\brief		Classe de gestion d'un scène
-	\remarks	Une scène est une collection de lumières, noeuds et géométries.
-				<br />Elle a au moins une caméra permettant son rendu
-	*/
 	class Scene
 		: public std::enable_shared_from_this< Scene >
 		, public castor::OwnedBy< Engine >

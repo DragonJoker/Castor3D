@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_makeVkType_H___
 #define ___C3D_makeVkType_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 namespace castor3d
 {

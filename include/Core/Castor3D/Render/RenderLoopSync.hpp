@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Synchronous render loop.
-	\~french
-	\brief		Boucle de rendu synchrone.
-	*/
 	class RenderLoopSync
 		: public RenderLoop
 	{

@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/12/2013
-	\~english
-	\brief		Represents the animated objects
-	\~french
-	\brief		Représente les objets animés
-	*/
 	class AnimatedSkeleton
 		: public AnimatedObject
 	{

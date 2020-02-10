@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_OBJECT_H___
 #define ___C3D_ANIMATED_OBJECT_H___
 
-#include "Castor3D/Scene/Animation/AnimationInstance.hpp"
+#include "AnimationInstance.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/12/2013
-	\~english
-	\brief		Represents the animated objects
-	\~french
-	\brief		Représente les objets animés
-	*/
 	class AnimatedObject
 		: public castor::Named
 	{

@@ -11,15 +11,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class MorphComponent;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		14/06/2016
-	\~english
-	\brief		Class which represents the mesh animation submeshes.
-	\~french
-	\brief		Classe de représentation de sous-maillages d'animations de maillage.
-	*/
 	class MeshAnimationSubmesh
 		: public castor::OwnedBy< MeshAnimation >
 		, public std::enable_shared_from_this< MeshAnimationSubmesh >

@@ -4,19 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_BonesComponent_H___
 #define ___C3D_BonesComponent_H___
 
-#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp"
+#include "SubmeshComponent.hpp"
+
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		The submesh component used for skinning.
-	\~french
-	\brief		Le composant de sous-maillage pour le skinning.
-	*/
 	class BonesComponent
 		: public SubmeshComponent
 	{

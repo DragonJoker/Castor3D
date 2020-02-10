@@ -19,17 +19,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Render window representation.
-	\remark		Manages a window where you can render a scene.
-	\~french
-	\brief		Implémentation d'une fenêtre de rendu.
-	\remark		Gère une fenêtre dans laquelle une scène peut être rendue
-	*/
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named

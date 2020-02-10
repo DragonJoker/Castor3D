@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< class Type >
+	template< class DataT >
 	class Interpolator
 	{
 	public:
@@ -42,8 +42,8 @@ namespace castor3d
 		 *\param[in]	dst		L'arrivée.
 		 *\param[in]	percent	Le pourcentage.
 		 */
-		C3D_API virtual Type interpolate( Type const & src
-			, Type const & dst
+		C3D_API virtual DataT interpolate( DataT const & src
+			, DataT const & dst
 			, float percent )const = 0;
 	};
 	/*!
@@ -51,13 +51,13 @@ namespace castor3d
 	\version	0.8.0
 	\date		24/01/2016
 	\~english
-	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_NONE.
+	\brief		Partial specialisation of InterpolatorT, for InterpolatorType::eNearest.
 	\~french
-	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
+	\brief		Spécialisation partielle de InterpolatorT, pour InterpolatorType::eNearest.
 	*/
-	template< class Type >
-	class InterpolatorT< Type, InterpolatorType::eNearest >
-		: public Interpolator< Type >
+	template< class DataT >
+	class InterpolatorT< DataT, InterpolatorType::eNearest >
+		: public Interpolator< DataT >
 	{
 	public:
 		/**
@@ -86,8 +86,8 @@ namespace castor3d
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	src	Le départ.
 		 */
-		inline Type interpolate( Type const & src
-			, Type const &
+		inline DataT interpolate( DataT const & src
+			, DataT const &
 			, float )const override
 		{
 			return src;
@@ -98,13 +98,13 @@ namespace castor3d
 	\version	0.8.0
 	\date		24/01/2016
 	\~english
-	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_LINEAR.
+	\brief		Partial specialisation of InterpolatorT, for InterpolatorType::eLinear.
 	\~french
-	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
+	\brief		Spécialisation partielle de InterpolatorT, pour InterpolatorType::eLinear.
 	*/
-	template< class Type >
-	class InterpolatorT< Type, InterpolatorType::eLinear >
-		: public Interpolator< Type >
+	template< class DataT >
+	class InterpolatorT< DataT, InterpolatorType::eLinear >
+		: public Interpolator< DataT >
 	{
 	public:
 		/**
@@ -137,11 +137,11 @@ namespace castor3d
 		 *\param[in]	dst		L'arrivée.
 		 *\param[in]	percent	Le pourcentage.
 		 */
-		inline Type interpolate( Type const & src
-			, Type const & dst
+		inline DataT interpolate( DataT const & src
+			, DataT const & dst
 			, float percent )const override
 		{
-			Type result;
+			DataT result;
 
 			if ( percent <= 0.0 )
 			{
@@ -164,9 +164,9 @@ namespace castor3d
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Class which handles the Quaternion linear interpolations.
+	\brief		Handles the Quaternion linear interpolations.
 	\~french
-	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
+	\brief		Gère les interpolations linéaires de Quaternion.
 	*/
 	template<>
 	class InterpolatorT< castor::Quaternion, InterpolatorType::eLinear >

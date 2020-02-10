@@ -13,17 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		03/07/2016
-	\~english
-	\brief		Post render effect surface structure.
-	\remark		Holds basic informations for a possible post effect surface: framebuffer and colour texture.
-	\~french
-	\brief		Surface pour effet post rendu.
-	\remark		Contient les informations basiques de surface d'un effet: framebuffer, texture de couleur.
-	*/
 	struct PostEffectSurface
 		: public castor::OwnedBy< Engine >
 	{

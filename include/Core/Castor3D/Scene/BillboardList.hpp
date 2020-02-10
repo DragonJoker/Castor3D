@@ -13,17 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		23/10/2016
-	\~english
-	\brief		Billboards list
-	\remarks	All billboards from this list shares the same texture
-	\~french
-	\brief		Liste de billboards
-	\remarks	Tous les billboards de cette liste ont la meme texture
-	*/
 	class BillboardBase
 		: public RenderedObject
 	{
@@ -231,17 +220,7 @@ namespace castor3d
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0
-	\date		04/11/2013
-	\~english
-	\brief		Billboards list
-	\remarks	All billboards from this list shares the same texture
-	\~french
-	\brief		Liste de billboards
-	\remarks	Tous les billboards de cette liste ont la meme texture
-	*/
+
 	class BillboardList
 		: public MovableObject
 		, public BillboardBase

@@ -1,22 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TONE_MAPPING_PLUGIN_H___
-#define ___C3D_TONE_MAPPING_PLUGIN_H___
+#ifndef ___C3D_ToneMappingPlugin_H___
+#define ___C3D_ToneMappingPlugin_H___
 
 #include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date		01/07/2016
-	\~english
-	\brief		Tone mapping plug-in class.
-	\~french
-	\brief		Classe de plug-in de mappage de tons.
-	*/
 	class ToneMappingPlugin
 		: public Plugin
 	{

@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		15/04/2013
-	\~english
-	\brief		Binary data chunk writer/reader base class.
-	\~french
-	\brief		Classe de base de lecture/écriture d'un chunk de données binaires.
-	*/
 	template< class TWritten >
 	class BinaryWriterBase
 	{
@@ -260,8 +251,6 @@ namespace castor3d
 		//!\~french		Le chunk du writer.
 		BinaryChunk m_chunk{ ChunkTyper< TWritten >::Value };
 	};
-	template< class TWritten >
-	class BinaryWriter;
 }
 
 #endif

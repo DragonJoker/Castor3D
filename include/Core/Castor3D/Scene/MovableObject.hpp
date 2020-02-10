@@ -13,15 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Movable object class
-	\~french
-	\brief		Classe d'objet déplaçable
-	*/
 	class MovableObject
 		: public Animable
 		, public castor::Named

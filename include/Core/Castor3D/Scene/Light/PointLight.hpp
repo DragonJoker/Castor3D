@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a PointLight
-	\remark		A point light is a light which enlights from a point in all directions.
-	\~french
-	\brief		Classe de représentation d'une PointLight
-	\remark		Une point light est une source de lumière à un point donné qui illumine dans toutes les directions
-	*/
 	class PointLight
 		: public LightCategory
 	{

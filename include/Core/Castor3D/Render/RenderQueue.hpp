@@ -22,15 +22,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		21/02/2016
-	\~english
-	\brief		The render nodes for a specific scene.
-	\~french
-	\brief		Les noeuds de rendu pour une scène spécifique.
-	*/
 	template< typename NodeType, typename MapType >
 	struct RenderNodesT
 	{
@@ -41,15 +32,7 @@ namespace castor3d
 		//!\~french		Les géométries, triées par programme shader.
 		MapType backCulled;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		21/02/2016
-	\~english
-	\brief		The render nodes for a specific scene.
-	\~french
-	\brief		Les noeuds de rendu pour une scène spécifique.
-	*/
+
 	struct SceneRenderNodes
 	{
 		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesByPipelineMap >;
@@ -102,15 +85,7 @@ namespace castor3d
 				|| !billboardNodes.frontCulled.empty();
 		}
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		21/02/2016
-	\~english
-	\brief		The render nodes for a specific scene.
-	\~french
-	\brief		Les noeuds de rendu pour une scène spécifique.
-	*/
+
 	struct SceneCulledRenderNodes
 	{
 		using StaticNodesMap = RenderNodesT< StaticRenderNode, StaticRenderNodesPtrByPipelineMap >;
@@ -163,17 +138,7 @@ namespace castor3d
 				|| !billboardNodes.frontCulled.empty();
 		}
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Render technique base class
-	\remarks	A render technique is the description of a way to render a render target
-	\~french
-	\brief		Classe de base d'une technique de rendu
-	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
-	*/
+
 	class RenderQueue
 		: public castor::OwnedBy< RenderPass >
 	{

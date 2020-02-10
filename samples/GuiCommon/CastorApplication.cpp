@@ -331,7 +331,7 @@ namespace GuiCommon
 			m_rendererType = renderers.begin()->name;
 		}
 
-		if ( m_rendererType == castor3d::RENDERER_TYPE_UNDEFINED )
+		if ( m_rendererType == castor3d::RenderTypeUndefined )
 		{
 			RendererSelector m_dialog( *m_castor, nullptr, m_displayName );
 			int iReturn = m_dialog.ShowModal();

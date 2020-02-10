@@ -11,17 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the moving things.
-	\remark		Manages translation, scaling, rotation of the thing.
-	\~french
-	\brief		Classe de représentation de choses mouvantes.
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
-	*/
 	class SkeletonAnimationInstanceObject
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{

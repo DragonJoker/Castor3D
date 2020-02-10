@@ -11,14 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		The submesh component used for instantiated submeshes with bones.
-	\~french
-	\brief		Le composant de sous-maillage utilisé pour les sous-maillages avec des bones et instanciés.
-	*/
 	class BonesInstantiationComponent
 		: public SubmeshComponent
 	{

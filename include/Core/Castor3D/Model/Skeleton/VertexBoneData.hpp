@@ -1,23 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERTEX_BONE_DATA_H___
-#define ___C3D_VERTEX_BONE_DATA_H___
+#ifndef ___C3D_VertexBoneData_H___
+#define ___C3D_VertexBoneData_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SkeletonModule.hpp"
 
 namespace castor3d
 {
-	static const uint32_t C3D_MAX_BONES_PER_VERTEX = 8;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date 		26/06/2013
-	\~english
-	\brief		Holds bone data for one vertex
-	\~french
-	\brief		Contient les données de bones pour un vertice
-	*/
 	struct VertexBoneData
 	{
 		C3D_API VertexBoneData();
@@ -48,7 +38,7 @@ namespace castor3d
 				castor::Point4ui id0;
 				castor::Point4ui id1;
 			};
-			std::array< uint32_t, C3D_MAX_BONES_PER_VERTEX > data;
+			std::array< uint32_t, MaxBonesPerVertex > data;
 			Ids()
 				: data{}
 			{
@@ -117,7 +107,7 @@ namespace castor3d
 				castor::Point4f weight0;
 				castor::Point4f weight1;
 			};
-			std::array< float, C3D_MAX_BONES_PER_VERTEX > data;
+			std::array< float, MaxBonesPerVertex > data;
 			Weights()
 				: data{}
 			{
@@ -178,7 +168,6 @@ namespace castor3d
 		};
 		Weights m_weights;
 	};
-	using VertexBoneDataArray = std::vector< VertexBoneData >;
 }
 
 #endif

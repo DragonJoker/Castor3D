@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PICKING_PASS_H___
 #define ___C3D_PICKING_PASS_H___
 
+#include "MiscellaneousModule.hpp"
+
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -16,15 +18,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Picking pass, using FBO.
-	\~french
-	\brief		Passe de picking, utilisant les FBO.
-	*/
 	class PickingPass
 		: public RenderPass
 	{

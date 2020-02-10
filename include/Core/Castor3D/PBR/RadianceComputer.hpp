@@ -15,15 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		02/03/2017
-	\version	0.9.0
-	\~english
-	\brief		Computes the radiance map from an environment map.
-	\~french
-	\brief		Calcule la texture de radiance pour une texture d'environnement donnée.
-	*/
 	class RadianceComputer
 		: private RenderCube
 	{

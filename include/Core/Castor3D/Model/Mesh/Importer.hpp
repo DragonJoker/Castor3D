@@ -1,30 +1,21 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_IMPORTER_H___
-#define ___C3D_IMPORTER_H___
+#ifndef ___C3D_ModelMeshImporter_H___
+#define ___C3D_ModelMeshImporter_H___
 
-#include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "MeshModule.hpp"
 
 #include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		25/08/2010
-	\~english
-	\brief		Base class for external file import
-	\~french
-	\brief		Classe de base pour l'import de fichiers externes
-	*/
-	class Importer
+	class MeshImporter
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		virtual ~Importer() = default;
+		virtual ~MeshImporter() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -33,24 +24,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	engine		Le moteur
 		 */
-		C3D_API explicit Importer( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Scene import Function.
-		 *\param[out]	scene		Receives the imported data.
-		 *\param[in]	pathFile	The location of the file to import.
-		 *\param[in]	parameters	Import configuration parameters.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	scene		Reçoit les données importées.
-		 *\param[in]	pathFile	Le chemin vers le fichier à importer.
-		 *\param[in]	parameters	Paramètres de configuration de l'import.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
-		C3D_API bool importScene( Scene & scene
-			, castor::Path const & pathFile
-			, Parameters const & parameters );
+		C3D_API explicit MeshImporter( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -67,7 +41,7 @@ namespace castor3d
 		 *\param[in]	initialise	Dit si le mesh importé doit être initialisé.
 		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API bool importMesh( Mesh & mesh
+		C3D_API bool import( Mesh & mesh
 			, castor::Path const & pathFile
 			, Parameters const & parameters
 			, bool initialise );
@@ -104,17 +78,6 @@ namespace castor3d
 			, Pass & pass )const;
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Scene import Function.
-		 *\param[out]	scene	Receives the imported data.
-		 *\return		\p false if any problem occured.
-		 *\~french
-		 *\brief		Fonction d'import de Scene.
-		 *\param[out]	scene	Reçoit les données importées.
-		 *\return		\p false si un problème quelconque est survenu.
-		 */
-		C3D_API virtual bool doImportScene( Scene & scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.

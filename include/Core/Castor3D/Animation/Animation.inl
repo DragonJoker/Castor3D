@@ -3,7 +3,7 @@
 namespace castor3d
 {
 	template< typename OwnerT >
-	Animation< OwnerT >::Animation( AnimationType type
+	AnimationT< OwnerT >::AnimationT( AnimationType type
 		, Animable< OwnerT > & animable
 		, castor::String const & name )
 		: Named{ name }
@@ -13,12 +13,12 @@ namespace castor3d
 	}
 		
 	template< typename OwnerT >
-	Animation< OwnerT >::~Animation()
+	AnimationT< OwnerT >::~AnimationT()
 	{
 	}
 	
 	template< typename OwnerT >
-	void Animation< OwnerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
+	void AnimationT< OwnerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()
@@ -33,7 +33,7 @@ namespace castor3d
 	}
 
 	template< typename OwnerT >
-	AnimationKeyFrameArray::iterator Animation< OwnerT >::find( castor::Milliseconds const & time )
+	AnimationKeyFrameArray::iterator AnimationT< OwnerT >::find( castor::Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -44,7 +44,7 @@ namespace castor3d
 	}
 
 	template< typename OwnerT >
-	void Animation< OwnerT >::findKeyFrame( castor::Milliseconds const & time
+	void AnimationT< OwnerT >::findKeyFrame( castor::Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
@@ -68,7 +68,7 @@ namespace castor3d
 	}
 
 	template< typename OwnerT >
-	void Animation< OwnerT >::updateLength()
+	void AnimationT< OwnerT >::updateLength()
 	{
 		for ( auto const & keyFrame : m_keyframes )
 		{

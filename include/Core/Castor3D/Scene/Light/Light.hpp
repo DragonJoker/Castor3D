@@ -12,16 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Light source implementation.
-	\~french
-	\brief		Implémentation d'une source lumineuse.
-	\remark
-	*/
 	class Light
 		: public MovableObject
 	{

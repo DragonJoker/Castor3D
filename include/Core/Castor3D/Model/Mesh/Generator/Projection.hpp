@@ -11,16 +11,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		26/08/2010
-	\~english
-	\brief		Projection mesh representation.
-	\remark		The projection mesh is the projection of an arc over along axis on a given distance.
-	\~french
-	\brief		Représentation d'une projection.
-	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée.
-	*/
 	class Projection
 		: public MeshGenerator
 	{

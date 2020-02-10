@@ -50,7 +50,7 @@ namespace GuiCommon
 	\~english
 	\brief		The supported object types, for display, and properties
 	\~french
-	\brief		Les type d'objets supportàs, dans les propriétés, et à l'affichage
+	\brief		Les type d'objets supportés, dans les propriétés, et à l'affichage
 	*/
 	typedef enum ePROPERTY_DATA_TYPE
 	{

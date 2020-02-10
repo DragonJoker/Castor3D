@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		22/08/2017
-	\~english
-	\brief		A GpuBuffer and an offset from the GpuBuffer.
-	\~french
-	\brief		Un GpuBuffer et un offset dans le GpuBuffer.
-	*/
 	struct GpuBufferOffset
 	{
 		ashes::BufferBase const * buffer;

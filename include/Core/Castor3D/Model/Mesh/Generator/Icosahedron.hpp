@@ -8,18 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The icosahedron representation
-	\remark		An icosahedron is a geometric polygon constituted by 20 equilateral triangles.
-				<br />This mesh is used to build a sphere with triangular faces.
-	\~french
-	\brief		Représentation d'un icosaèdre
-	\remark		Un icosaèdre est un polygône constitué de 20 triangles équilatéraux
-				<br />Ce mesh est utilisé pour construire des sphères à faces triangulaires
-	*/
 	class Icosahedron
 		: public MeshGenerator
 	{

@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		11/11/2017
-	\~english
-	\brief		A submesh component for faces.
-	\~french
-	\brief		Un composant de sous-maillage pour les faces.
-	*/
 	class IndexMapping
 		: public SubmeshComponent
 	{

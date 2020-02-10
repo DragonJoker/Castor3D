@@ -1,23 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MESH_GENERATOR_H___
-#define ___C3D_MESH_GENERATOR_H___
+#ifndef ___C3D_MeshGenerator_H___
+#define ___C3D_MeshGenerator_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MeshModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\~english
-	\brief		Mesh category is used to create a mesh's vertices, it is created by MeshFactory
-	\remark		Custom mesh category doesn't generate vertices.
-	\~french
-	\brief		La catégorie de maillage est utilisée afin de créer les sommets du maillage, c'est créé via la MeshFactory
-	\remark		La categorie de type Custom ne génère pas de points
-	*/
 	class MeshGenerator
 	{
 	public:

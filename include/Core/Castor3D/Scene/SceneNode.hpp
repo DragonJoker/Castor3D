@@ -12,17 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		The scene node handler class
-	\remark		A scene node is a parent for nearly every object in a scene : geometry, camera, ...
-	\~french
-	\brief		La classe de gestion de noeud de scène
-	\remark		Un noeud de scène est un parent pour à peu près tous les objets d'une scène : géométrie, caméra, ...
-	*/
 	class SceneNode
 		: public std::enable_shared_from_this< SceneNode >
 		, public castor::OwnedBy< Scene >

@@ -13,17 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a Camera
-	\remark		Gives its position, orientation, viewport ...
-	\~french
-	\brief		Classe de représentation de Camera
-	\remark		donne la position, orientation, viewport ...
-	*/
 	class Camera
 		: public MovableObject
 	{

@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a SpotLight
-	\remark		A spot light is a light which enlights from a point in a given direction with a conic shape
-	\~french
-	\brief		Classe de représentation d'une PointLight
-	\remark		Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
-	*/
 	class SpotLight
 		: public LightCategory
 	{

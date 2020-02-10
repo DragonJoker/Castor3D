@@ -4,23 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_PARAMETER_H___
 #define ___C3D_PARAMETER_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 #include <cstring>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		12/11/2012
-	\~english
-	\brief		Configuration parameters
-	\remark		Pair of a name and binary data
-	\~french
-	\brief		Paramètres de configuration
-	\remark		Couple nom/données binaires
-	*/
 	class Parameters
 	{
 	public:

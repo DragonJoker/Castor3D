@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		23/07/2012
-	\~english
-	\brief		Holds the 3 vertex indices
-	\~french
-	\brief		Contient simplement les index des 3 vertex d'une face
-	*/
 	struct FaceIndices
 	{
 		//!\~english	The indices.

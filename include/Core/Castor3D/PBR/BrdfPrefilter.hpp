@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		02/03/2017
-	\version	0.9.0
-	\~english
-	\brief		Computes the convoluted BRDF 2D texture.
-	\~french
-	\brief		Calcule la texture 2D contenant le BRDF convolu.
-	*/
 	class BrdfPrefilter
 	{
 	public:

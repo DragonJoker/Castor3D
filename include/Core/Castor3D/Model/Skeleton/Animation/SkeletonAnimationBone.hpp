@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		09/12/2013
-	\~english
-	\brief		Implementation of SkeletonAnimationObject for Bones.
-	\~french
-	\brief		Implémentation de SkeletonAnimationObject pour les Bones.
-	*/
 	class SkeletonAnimationBone
 		: public SkeletonAnimationObject
 	{

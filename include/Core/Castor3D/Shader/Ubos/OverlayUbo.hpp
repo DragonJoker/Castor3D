@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Matrices Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
-	*/
 	class OverlayUbo
 	{
 	private:

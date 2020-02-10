@@ -33,7 +33,7 @@ namespace Loop
 		cleanup();
 	}
 
-	castor3d::SubdividerUPtr Subdivider::create()
+	castor3d::MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}

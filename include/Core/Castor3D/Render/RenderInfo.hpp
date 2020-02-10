@@ -9,15 +9,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		22/06/2017
-	\~english
-	\brief		Holds render informations.
-	\~french
-	\brief		Contient les informations de rendu.
-	*/
 	struct RenderInfo
 	{
 		//!\~english	The total vertex count.

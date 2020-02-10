@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		19/08/2012
-	\~english
-	\brief		Particle plug-in class.
-	\~french
-	\brief		Classe de plug-in de particules.
-	*/
 	class ParticlePlugin
 		: public Plugin
 	{

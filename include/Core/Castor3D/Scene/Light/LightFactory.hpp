@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		24/11/2014
-	\~english
-	\brief		The light source factory
-	\~french
-	\brief		La fabrique de sources lumineuse
-	*/
 	class LightFactory
 		: public castor::Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >
 	{

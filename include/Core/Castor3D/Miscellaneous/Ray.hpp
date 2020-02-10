@@ -4,22 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_RAY_H___
 #define ___C3D_RAY_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 #include <CastorUtils/Math/Point.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Ray representation
-	\remarks	A ray is an origin and a direction in 3D.
-	\~french
-	\brief		Représentation d'un rayon.
-	\remarks	Un rayon est représentaté par une origine et une direction.
-	*/
 	class Ray
 	{
 	public:

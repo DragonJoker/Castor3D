@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimationObject_H___
 #define ___C3D_SkeletonAnimationObject_H___
 
-#include "Castor3D/Animation/Interpolator.hpp"
+#include "SkeletonAnimationModule.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -12,17 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the skeleton animation objects.
-	\remark		Manages translation, scaling, rotation of the object.
-	\~french
-	\brief		Classe de représentation d'objets d'animations de squelette.
-	\remark		Gère les translations, mises à l'échelle, rotations de l'objet.
-	*/
 	class SkeletonAnimationObject
 		: public castor::OwnedBy< SkeletonAnimation >
 		, public std::enable_shared_from_this< SkeletonAnimationObject >

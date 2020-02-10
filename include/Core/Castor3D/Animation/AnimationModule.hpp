@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_AnimationModule_H___
 #define ___C3D_AnimationModule_H___
 
-#include <CastorUtils/Miscellaneous/StringUtils.hpp>
+#include "Castor3D/Castor3DModule.hpp"
 
 namespace castor3d
 {
@@ -12,9 +12,7 @@ namespace castor3d
 	//@{
 
 	/*!
-	\author 	Sylvain DOREMUS
 	\version	0.9.0
-	\date		31/05/2016
 	\~english
 	\brief		Animation types enumeration.
 	\~french
@@ -36,9 +34,7 @@ namespace castor3d
 	};
 	castor::String getName( AnimationType value );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
 	\~english
 	\brief		Interpolation modes enumeration.
 	\~french
@@ -57,8 +53,7 @@ namespace castor3d
 	};
 	castor::String getName( InterpolatorType value );
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
+	\version	0.9.0
 	\~english
 	\brief		Animation State Enumerator.
 	\~french
@@ -80,20 +75,16 @@ namespace castor3d
 	};
 	castor::String getName( AnimationState value );
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.7.0
+	\version	0.9.0
 	\~english
 	\brief		Animable public interface
 	\~french
 	\brief		interface publique d'animable
 	*/
 	template< typename OwnerT >
-	class Animable;
+	class AnimableT;
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
 	\~english
 	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
 	\~french
@@ -102,9 +93,7 @@ namespace castor3d
 	template< typename T >
 	class Interpolator;
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
 	\~english
 	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
 	\~french
@@ -113,9 +102,7 @@ namespace castor3d
 	template< class Type, InterpolatorType Mode >
 	class InterpolatorT;
 	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
 	\~english
 	\brief		Animation base class.
 	\remarks	An animation is played using an AnimationInstance.
@@ -124,11 +111,18 @@ namespace castor3d
 	\remarks	Une animation est jouée au travers d'une AnimationInstance.
 	*/
 	template< typename OwnerT >
-	class Animation;
+	class AnimationT;
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
+	\~english
+	\brief		Used to play an Animation on a specific object.
+	\~french
+	\brief		Utilisée pour jouer une animation sur un objet particulier.
+	*/
+	template< typename OwnerT >
+	class AnimationInstanceT;
+	/*!
+	\version	0.9.0
 	\~english
 	\brief		Key frames are the frames where the animation must be at a precise state.
 	\~french
@@ -136,8 +130,12 @@ namespace castor3d
 	*/
 	class AnimationKeyFrame;
 
+	using Point3rInterpolator = Interpolator< castor::Point3f >;
+	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
+
 	CU_DeclareSmartPtr( AnimationKeyFrame );
-	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
+
+	CU_DeclareVector( AnimationKeyFrameUPtr, AnimationKeyFrame );
 
 	//@}
 }

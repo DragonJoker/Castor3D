@@ -8,18 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The torus representation
-	\remark		A torus is an ellipse performing an horizontal ellipse.
-				<br />The original ellipse will be called internal and has its own radius and number of subsections
-	\~french
-	\brief		Représentation d'un tore
-	\remark		Un tore est une ellipse qui parcourt une ellipse
-				<br />L'ellipse originale sera appelée interne et possède son propre rayon et nombre de sections
-	*/
 	class Torus
 		: public MeshGenerator
 	{

@@ -11,12 +11,13 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename OwnerT >
-	class Animable
-		: public castor::OwnedBy< OwnerT >
+	template< typename AnimableHanlerT >
+	class AnimableT
+		: public castor::OwnedBy< AnimableHanlerT >
 	{
 	protected:
-		using AnimationPtr = std::unique_ptr< Animation< OwnerT > >;
+		using Animation = AnimationT< AnimableHanlerT >;
+		using AnimationPtr = std::unique_ptr< Animation >;
 		using AnimationPtrStrMap = std::map< castor::String, AnimationPtr >;
 		/**
 		 *\~english
@@ -26,42 +27,42 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	owner	Le parent.
 		 */
-		inline explicit Animable( OwnerT & owner );
+		inline explicit AnimableT( AnimableHanlerT & owner );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~Animable() = default;
+		C3D_API virtual ~AnimableT() = default;
 		/**
 		 *\~english
 		 *\brief		Move constructor.
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API Animable( Animable && rhs ) = default;
+		C3D_API AnimableT( AnimableT && rhs ) = default;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement.
 		 */
-		C3D_API Animable & operator=( Animable && rhs ) = delete;
+		C3D_API AnimableT & operator=( AnimableT && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API Animable( Animable const & rhs ) = delete;
+		C3D_API AnimableT( AnimableT const & rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie.
 		 */
-		C3D_API Animable & operator=( Animable const & rhs ) = delete;
+		C3D_API AnimableT & operator=( AnimableT const & rhs ) = delete;
 
 	public:
 		/**
@@ -92,7 +93,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		inline Animation< OwnerT > const & getAnimation( castor::String const & name )const;
+		inline Animation const & getAnimation( castor::String const & name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -103,7 +104,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		inline Animation< OwnerT > & getAnimation( castor::String const & name );
+		inline Animation & getAnimation( castor::String const & name );
 		/**
 		 *\~english
 		 *\return		The animations.
@@ -124,7 +125,7 @@ namespace castor3d
 		 *\brief		Ajoute une animation.
 		 *\param[in]	animation	L'animation.
 		 */
-		inline void doAddAnimation( AnimationSPtr && animation );
+		inline void doAddAnimation( AnimationPtr animation );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -135,8 +136,8 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		template< typename Type >
-		inline Type & doGetAnimation( castor::String const & name );
+		template< typename AnimationType >
+		inline AnimationType & doGetAnimation( castor::String const & name );
 
 	protected:
 		//!\~english	All animations.

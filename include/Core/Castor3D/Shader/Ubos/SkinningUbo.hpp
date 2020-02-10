@@ -15,15 +15,7 @@ namespace castor3d
 		std::unique_ptr < sdw::ArraySsboT< sdw::Mat4 > > ssbo;
 		std::unique_ptr < sdw::Ubo > ubo;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Matrices Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
-	*/
+
 	class SkinningUbo
 	{
 	public:

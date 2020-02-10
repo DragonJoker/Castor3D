@@ -4,7 +4,7 @@ See LICENSE file in root folder.
 */
 #pragma once
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ShaderModule.hpp"
 
 namespace castor3d
 {

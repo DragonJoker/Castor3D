@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\date		02/04/2018
-	\~english
-	\brief		Background visitor used to prepare the frame command buffer.
-	\~french
-	\brief		Visiteur de fond utilisé pour préparer le tampon de commandes d'une frame.
-	*/
 	class BackgroundFramePreparator
 		: public BackgroundVisitor
 	{

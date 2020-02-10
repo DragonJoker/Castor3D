@@ -13,14 +13,7 @@ namespace castor3d
 		castor::Matrix4x4f m_matrix;
 		int m_material;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\date		09/11/2017
-	\~english
-	\brief		The submesh component used for hardware instantiation.
-	\~french
-	\brief		Le composant de sous-maillage pour l'instantiation matérielle.
-	*/
+
 	class InstantiationComponent
 		: public SubmeshComponent
 	{

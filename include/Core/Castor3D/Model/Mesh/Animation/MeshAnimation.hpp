@@ -4,22 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_MeshAnimation_H___
 #define ___C3D_MeshAnimation_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MeshAnimationModule.hpp"
 
 #include "Castor3D/Animation/Animation.hpp"
-#include "Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp"
+
+#include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Submesh animation class.
-	\~french
-	\brief		Classe d'animation de sous-maillage.
-	*/
 	class MeshAnimation
 		: public Animation
 	{

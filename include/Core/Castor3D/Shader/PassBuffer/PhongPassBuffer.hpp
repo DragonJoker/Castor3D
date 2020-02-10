@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/02/2010
-	\~english
-	\brief		SSBO holding the PhongPasses data.
-	\~french
-	\brief		SSBO contenant les données des PhongPass.
-	*/
 	class PhongPassBuffer
 		: public PassBuffer
 	{

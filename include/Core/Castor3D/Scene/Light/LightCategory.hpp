@@ -10,16 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/02/2010
-	\~english
-	\brief		Holds light components
-	\remark		Derived into DirectionalLight, PointLight and SpotLight
-	\~french
-	\brief		Contient les composantes d'une lumière
-	\remark		Dérivée en DirectionalLight, PointLight et SpotLight
-	*/
 	class LightCategory
 	{
 	public:

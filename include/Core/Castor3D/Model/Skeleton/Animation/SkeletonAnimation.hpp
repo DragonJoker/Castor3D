@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Skeleton animation class.
-	\~french
-	\brief		Classe d'animation de squelette.
-	*/
 	class SkeletonAnimation
 		: public Animation
 	{

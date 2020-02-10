@@ -19,17 +19,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		The rendering pipeline.
-	\remark		Defines the various matrices, applies the transformations it can support.
-	\~french
-	\brief		Le pipeline de rendu.
-	\remark		Définit les diverses matrices, applique les transformations supportées.
-	*/
 	class RenderPipeline
 		: public castor::OwnedBy< RenderSystem >
 	{

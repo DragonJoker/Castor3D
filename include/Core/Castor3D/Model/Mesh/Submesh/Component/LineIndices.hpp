@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\date		12/11/2017
-	\~english
-	\brief		Holds the 2 vertex indices of a ligne.
-	\~french
-	\brief		Contient les index des 2 sommets d'une ligne.
-	*/
 	struct LineIndices
 	{
 		//!\~english	The indices.

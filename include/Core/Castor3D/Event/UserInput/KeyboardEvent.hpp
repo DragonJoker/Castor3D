@@ -8,16 +8,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Structure holding mouse state.
-	*\~french
-	*\brief		Structure contenant l'état du clavier.
-	*/
-	struct KeyboardState
+	struct KeyboardState;
 	{
 		//!\~english	The control key state.
 		//!\~french		L'état de la touche Ctrl.
@@ -29,15 +20,7 @@ namespace castor3d
 		//!\~french		L'état de la touche Shift.
 		bool m_shift;
 	};
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of a keyboard event.
-	*\~french
-	*\brief		Description d'un évènement clavier.
-	*/
+
 	class KeyboardEvent
 		: public UserInputEvent
 	{

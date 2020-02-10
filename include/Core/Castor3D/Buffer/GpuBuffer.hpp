@@ -13,16 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.5.0
-	\date		22/10/2011
-	\~english
-	\brief		A GPU buffer, that uses a buddy allocator to allocate sub-buffers.
-	\~french
-	\brief		Un tampon GPU, utilisant un buddy allocator pour allouer des sous-tampons.
-	\remark
-	*/
 	class GpuBuffer
 	{
 		friend class GpuBufferPool;

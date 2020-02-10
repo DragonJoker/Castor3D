@@ -1,24 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ANIMATION_INSTANCE_H___
-#define ___C3D_ANIMATION_INSTANCE_H___
+#ifndef ___C3D_AnimationInstance_H___
+#define ___C3D_AnimationInstance_H___
 
-#include "Castor3D/Animation/Animation.hpp"
+#include "AnimationModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/06/2016
-	\~english
-	\brief		Animation instance class.
-	\remark		Used to play an Animation on a specific object.
-	\~french
-	\brief		Classe d'instance d'animation
-	\remark		Utilisée pour jouer une animation sur un objet particulier.
-	*/
 	class AnimationInstance
 		: public castor::OwnedBy< AnimatedObject >
 	{
@@ -33,7 +22,7 @@ namespace castor3d
 		 *\param[in]	object		L'AnimatedObject parent.
 		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API AnimationInstance( AnimatedObject & object, Animation & animation );
+		C3D_API AnimationInstance( AnimatedObject & object, AnimationT< Scene > & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -131,7 +120,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline Animation const & getAnimation()const
+		inline AnimationT< OwnerT > const & getAnimation()const
 		{
 			return m_animation;
 		}
@@ -148,7 +137,7 @@ namespace castor3d
 	protected:
 		//!\~english	The animation.
 		//!\~french		L'animation.
-		Animation const & m_animation;
+		AnimationT< OwnerT > const & m_animation;
 		//!\~english	The animation time scale.
 		//!\~french		Le multiplicateur de temps.
 		float m_scale{ 1.0f };

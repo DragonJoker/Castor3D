@@ -13,15 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/11/2016
-	\~english
-	\brief		Compute shader Particle system implementation.
-	\~french
-	\brief		Implémentation d'un système de particules utilisant un compute shader.
-	*/
 	class ComputeParticleSystem
 		: public ParticleSystemImpl
 	{

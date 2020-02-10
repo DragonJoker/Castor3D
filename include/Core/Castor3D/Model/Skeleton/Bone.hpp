@@ -1,27 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BONE_H___
-#define ___C3D_BONE_H___
+#ifndef ___C3D_Bone_H___
+#define ___C3D_Bone_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SkeletonModule.hpp"
+
+#include "Castor3D/Binary/BinaryModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/06/2013
-	\version	0.7.0
-	\~english
-	\brief		Class holding bone data.
-	\remark		Holds weight for each vertice and matrix from mesh space to bone space.
-	\~french
-	\brief		Classe contenant les données d'un bone.
-	\remark		Contient les poids pour chaque vertice et la matrice de transformation de l'espace objet vers l'espace bone.
-	*/
 	class Bone
 		: public std::enable_shared_from_this< Bone >
 		, public castor::Named

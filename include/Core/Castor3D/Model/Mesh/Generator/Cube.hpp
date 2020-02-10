@@ -8,16 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		The cube representation
-	\remark		The calling of cube is abusive because it has parametrable dimensions (width, height and depth)
-	\~french
-	\brief		Représentation d'un cube
-	\remark		La dénomination "Cube" est un abus de langage car ses 3 dimensions sont paramétrables (largeur, hauteur et profondeur)
-	*/
 	class Cube
 		: public MeshGenerator
 	{

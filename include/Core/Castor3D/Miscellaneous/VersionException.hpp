@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		01/04/2011
-	\~english
-	\brief		Version comparison exception
-	\~french
-	\brief		Exception de comparaison de versions
-	*/
 	class VersionException
 		: public castor::Exception
 	{

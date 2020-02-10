@@ -64,7 +64,7 @@ namespace GuiCommon
 			, castor::String displayName
 			, uint32_t steps
 			, castor3d::Version version
-			, castor::String rendererType = castor3d::RENDERER_TYPE_UNDEFINED );
+			, castor::String rendererType = castor3d::RenderTypeUndefined );
 
 		static void assertHandler( wxString const & file
 			, int line
@@ -103,9 +103,9 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The renderer type given in command line, castor3d::RENDERER_TYPE_UNDEFINED if none was given.
+		 *\return		The renderer type given in command line, castor3d::RenderTypeUndefined if none was given.
 		 *\~french
-		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RENDERER_TYPE_UNDEFINED si aucun n'a été donné.
+		 *\return		Le type d'API de rendu donné en ligne de commande, castor3d::RenderTypeUndefined si aucun n'a été donné.
 		 */
 		inline castor::String const & getRendererType()const
 		{

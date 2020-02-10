@@ -15,16 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\version
-	*	0.9.0
-	*\~english
-	*\brief
-	*	Skybox implementation.
-	*\~french
-	*\brief
-	*	Implémentation de Skybox.
-	*/
 	class SkyboxBackground
 		: public SceneBackground
 	{
