@@ -5,7 +5,7 @@
 #include <wx/image.h>
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Plugin/RendererPlugin.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
 
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Exception/Exception.hpp>

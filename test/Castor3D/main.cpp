@@ -100,7 +100,7 @@ namespace
 			, true );
 		doloadPlugins( *result );
 
-		auto renderers = result->getPluginCache().getPlugins( PluginType::eRenderer );
+		auto & renderers = result->getRenderersList();
 
 		if ( renderers.empty() )
 		{

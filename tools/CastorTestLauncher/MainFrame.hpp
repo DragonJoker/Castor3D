@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CTL_MainFrame_HPP___
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
 #include <wx/frame.h>
 #include <wx/listctrl.h>

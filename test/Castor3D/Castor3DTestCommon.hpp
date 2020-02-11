@@ -5,13 +5,13 @@
 #include <UnitTest.hpp>
 
 #include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp>
-#include <Castor3D/Mesh/Skeleton/Bone.hpp>
-#include <Castor3D/Mesh/Skeleton/VertexBoneData.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/VertexBoneData.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Animation/AnimationInstance.hpp>

@@ -2,10 +2,9 @@
 
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
-#include <Castor3D/Plugin/RendererPlugin.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 using StringArray = std::vector< std::string >;
@@ -82,53 +81,6 @@ bool doParseArgs( int argc
 	return true;
 }
 
-bool doLoadRenderer( castor3d::Engine & engine )
-{
-	castor::PathArray arrayFiles;
-	castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
-	castor::PathArray arrayKept;
-
-	// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-	for ( auto file : arrayFiles )
-	{
-#if defined( NDEBUG )
-
-		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) == castor::String::npos )
-#else
-
-		if ( file.find( castor::String( cuT( "d." ) ) + CU_SharedLibExt ) != castor::String::npos )
-
-#endif
-		{
-			arrayKept.push_back( file );
-		}
-	}
-
-	castor::PathArray arrayFailed;
-
-	if ( !arrayKept.empty() )
-	{
-		castor::PathArray otherPlugins;
-
-		for ( auto file : arrayKept )
-		{
-			if ( file.getExtension() == CU_SharedLibExt )
-			{
-				// Since techniques depend on renderers, we load these first
-				if ( file.find( cuT( "RenderSystem" ) ) != castor::String::npos )
-				{
-					if ( !engine.getPluginCache().loadPlugin( file ) )
-					{
-						arrayFailed.push_back( file );
-					}
-				}
-			}
-		}
-	}
-
-	return arrayFailed.empty();
-}
-
 bool doInitialiseEngine( castor3d::Engine & engine )
 {
 	if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
@@ -136,9 +88,7 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 		castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 	}
 
-	doLoadRenderer( engine );
-
-	auto renderers = engine.getPluginCache().getPlugins( castor3d::PluginType::eRenderer );
+	auto & renderers = engine.getRenderersList();
 	bool result = false;
 
 	if ( renderers.empty() )
@@ -147,16 +97,11 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 	}
 	else
 	{
-		auto renderer = std::find_if( renderers.begin()
-			, renderers.end()
-			, []( std::pair< castor::String, castor3d::PluginSPtr > const & pair )
-		{
-			return pair.first.find( "Test" ) != castor::String::npos;
-		} );
+		auto renderer = renderers.find( "test" );
 
 		if ( renderer != renderers.end() )
 		{
-			if ( engine.loadRenderer( std::static_pointer_cast< castor3d::RendererPlugin >( renderer->second )->getRendererType() ) )
+			if ( engine.loadRenderer( renderer->name ) )
 			{
 				engine.initialise( 1, false );
 				result = true;

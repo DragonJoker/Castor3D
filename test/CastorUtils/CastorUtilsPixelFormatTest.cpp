@@ -12,44 +12,44 @@ namespace
 	struct PixelStreamer< PF, typename std::enable_if< IsColourFormat< PF >::value >::type >
 	{
 		template< typename CharType >
-		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & stream, Pixel< PF > const & pixel )
 		{
-			p_stream << "BPP : ";
-			p_stream.width( 2 );
-			p_stream << uint32_t( PF::getBytesPerPixel( p_pixel.getFormat() ) );
-			p_stream << ", Format : ";
-			p_stream.width( 10 );
-			p_stream << string::stringCast< CharType >( PF::getFormatName( p_pixel.getFormat() ) );
-			p_stream << ", Value : (";
-			p_stream.width( 3 );
-			p_stream << int( PF::getByteRed( p_pixel ) );
-			p_stream << ", ";
-			p_stream.width( 3 );
-			p_stream << int( PF::getByteGreen( p_pixel ) );
-			p_stream << ", ";
-			p_stream.width( 3 );
-			p_stream << int( PF::getByteBlue( p_pixel ) );
-			p_stream << ", ";
-			p_stream.width( 3 );
-			p_stream << int( PF::getByteAlpha( p_pixel ) );
-			p_stream << ") (";
-			p_stream.precision( 3 );
-			p_stream.width( 5 );
-			p_stream << PF::getFloatRed( p_pixel );
-			p_stream << ", ";
-			p_stream.precision( 3 );
-			p_stream.width( 5 );
-			p_stream << PF::getFloatGreen( p_pixel );
-			p_stream << ", ";
-			p_stream.precision( 3 );
-			p_stream.width( 5 );
-			p_stream << PF::getFloatBlue( p_pixel );
-			p_stream << ", ";
-			p_stream.precision( 3 );
-			p_stream.width( 5 );
-			p_stream << PF::getFloatAlpha( p_pixel );
-			p_stream << ")";
-			return p_stream;
+			stream << "BPP : ";
+			stream.width( 2 );
+			stream << uint32_t( PF::getBytesPerPixel( pixel.getFormat() ) );
+			stream << ", Format : ";
+			stream.width( 10 );
+			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
+			stream << ", Value : (";
+			stream.width( 3 );
+			stream << int( PF::getByteRed( pixel ) );
+			stream << ", ";
+			stream.width( 3 );
+			stream << int( PF::getByteGreen( pixel ) );
+			stream << ", ";
+			stream.width( 3 );
+			stream << int( PF::getByteBlue( pixel ) );
+			stream << ", ";
+			stream.width( 3 );
+			stream << int( PF::getByteAlpha( pixel ) );
+			stream << ") (";
+			stream.precision( 3 );
+			stream.width( 5 );
+			stream << PF::getFloatRed( pixel );
+			stream << ", ";
+			stream.precision( 3 );
+			stream.width( 5 );
+			stream << PF::getFloatGreen( pixel );
+			stream << ", ";
+			stream.precision( 3 );
+			stream.width( 5 );
+			stream << PF::getFloatBlue( pixel );
+			stream << ", ";
+			stream.precision( 3 );
+			stream.width( 5 );
+			stream << PF::getFloatAlpha( pixel );
+			stream << ")";
+			return stream;
 		}
 	};
 
@@ -57,38 +57,39 @@ namespace
 	struct PixelStreamer< PF, typename std::enable_if< IsDepthStencilFormat< PF >::value >::type >
 	{
 		template< typename CharType >
-		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & stream, Pixel< PF > const & pixel )
 		{
-			p_stream << "BPP : ";
-			p_stream.width( 2 );
-			p_stream << uint32_t( PF::getBytesPerPixel( p_pixel.getFormat() ) );
-			p_stream << ", Format : ";
-			p_stream.width( 10 );
-			p_stream << string::stringCast< CharType >( PF::getFormatName( p_pixel.getFormat() ) );
-			p_stream << ", Value : (";
-			p_stream.width( 11 );
-			p_stream << int( PF::getUInt32Depth( p_pixel ) );
-			p_stream << ", ";
-			p_stream.width( 3 );
-			p_stream << int( PF::getByteStencil( p_pixel ) );
-			p_stream << ") (";
-			p_stream.precision( 3 );
-			p_stream.width( 10 );
-			p_stream << PF::getFloatDepth( p_pixel );
-			p_stream << ", ";
-			p_stream.precision( 3 );
-			p_stream.width( 5 );
-			p_stream << PF::getFloatStencil( p_pixel );
-			p_stream << ")";
-			return p_stream;
+			stream << "BPP : ";
+			stream.width( 2 );
+			stream << uint32_t( PF::getBytesPerPixel( pixel.getFormat() ) );
+			stream << ", Format : ";
+			stream.width( 10 );
+			stream << string::stringCast< CharType >( PF::getFormatName( pixel.getFormat() ) );
+			stream << ", Value : (";
+			stream.width( 11 );
+			stream << int( PF::getUInt32Depth( pixel ) );
+			stream << ", ";
+			stream.width( 3 );
+			stream << int( PF::getByteStencil( pixel ) );
+			stream << ") (";
+			stream.precision( 3 );
+			stream.width( 10 );
+			stream << PF::getFloatDepth( pixel );
+			stream << ", ";
+			stream.precision( 3 );
+			stream.width( 5 );
+			stream << PF::getFloatStencil( pixel );
+			stream << ")";
+			return stream;
 		}
 	};
 
 	template< typename CharType, PixelFormat PF >
-	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream
+		, Pixel< PF > const & pixel )
 	{
 		static PixelStreamer< PF > streamer;
-		return streamer( p_stream, p_pixel );
+		return streamer( stream, pixel );
 	}
 
 	template< PixelFormat PF, typename Enable = void > struct BufferStreamer;
@@ -97,35 +98,35 @@ namespace
 	struct BufferStreamer< PF, typename std::enable_if< IsColourFormat< PF >::value >::type >
 	{
 		template< typename CharType >
-		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & stream, PxBuffer< PF > const & buffer )
 		{
-			uint32_t width = p_buffer.getWidth();
-			uint32_t height = p_buffer.getHeight();
-			CharType fill = p_stream.fill( '0' );
+			uint32_t width = buffer.getWidth();
+			uint32_t height = buffer.getHeight();
+			CharType fill = stream.fill( '0' );
 
 			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & column = p_buffer[x];
+				typename PxBuffer< PF >::column const & column = buffer[x];
 
 				for ( uint32_t y = 0; y < height; ++y )
 				{
 					typename PxBuffer< PF >::pixel const & pixel = column[y];
-					p_stream << "0x";
-					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::getByteAlpha( pixel ) );
-					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::getByteRed( pixel ) );
-					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::getByteGreen( pixel ) );
-					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::getByteBlue( pixel ) ) << " ";
+					stream << "0x";
+					stream.width( 2 );
+					stream << std::hex << int( PF::getByteAlpha( pixel ) );
+					stream.width( 2 );
+					stream << std::hex << int( PF::getByteRed( pixel ) );
+					stream.width( 2 );
+					stream << std::hex << int( PF::getByteGreen( pixel ) );
+					stream.width( 2 );
+					stream << std::hex << int( PF::getByteBlue( pixel ) ) << " ";
 				}
 
-				p_stream << std::endl;
+				stream << std::endl;
 			}
 
-			p_stream.fill( fill );
-			return p_stream;
+			stream.fill( fill );
+			return stream;
 		}
 	};
 
@@ -133,52 +134,52 @@ namespace
 	struct BufferStreamer< PF, typename std::enable_if< IsDepthStencilFormat< PF >::value >::type >
 	{
 		template< typename CharType >
-		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & stream, PxBuffer< PF > const & buffer )
 		{
-			uint32_t width = p_buffer.getWidth();
-			uint32_t height = p_buffer.getHeight();
-			CharType fill = p_stream.fill( '0' );
+			uint32_t width = buffer.getWidth();
+			uint32_t height = buffer.getHeight();
+			CharType fill = stream.fill( '0' );
 
 			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & column = p_buffer[x];
+				typename PxBuffer< PF >::column const & column = buffer[x];
 
 				for ( uint32_t y = 0; y < height; ++y )
 				{
 					typename PxBuffer< PF >::pixel const & pixel = column[y];
-					p_stream << "0x";
-					p_stream.width( 6 );
-					p_stream << std::hex << int( PF::getUInt24Depth( pixel ) );
-					p_stream.width( 2 );
-					p_stream << std::hex << int( PF::getByteStencil( pixel ) ) << " ";
+					stream << "0x";
+					stream.width( 6 );
+					stream << std::hex << int( PF::getUInt24Depth( pixel ) );
+					stream.width( 2 );
+					stream << std::hex << int( PF::getByteStencil( pixel ) ) << " ";
 				}
 
-				p_stream << std::endl;
+				stream << std::endl;
 			}
 
-			p_stream.fill( fill );
-			return p_stream;
+			stream.fill( fill );
+			return stream;
 		}
 	};
 
 	template< typename CharType >
-	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBufferBase const & p_buffer )
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, PxBufferBase const & buffer )
 	{
-		p_stream << "BPP : ";
-		p_stream.width( 2 );
-		p_stream << uint32_t( PF::getBytesPerPixel( p_buffer.getFormat() ) );
-		p_stream << ", Format : ";
-		p_stream.width( 10 );
-		p_stream << string::stringCast< CharType >( PF::getFormatName( p_buffer.getFormat() ) );
-		return p_stream;
+		stream << "BPP : ";
+		stream.width( 2 );
+		stream << uint32_t( PF::getBytesPerPixel( buffer.getFormat() ) );
+		stream << ", Format : ";
+		stream.width( 10 );
+		stream << string::stringCast< CharType >( PF::getFormatName( buffer.getFormat() ) );
+		return stream;
 	}
 
 	template< typename CharType, PixelFormat PF >
-	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, PxBuffer< PF > const & buffer )
 	{
-		static PixelStreamer< PF > streamer;
-		p_stream << static_cast< PxBufferBase const & >( p_buffer );
-		return streamer( p_stream, p_buffer );
+		static BufferStreamer< PF > streamer;
+		stream << static_cast< PxBufferBase const & >( buffer );
+		return streamer( stream, buffer );
 	}
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >

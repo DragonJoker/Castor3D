@@ -1,8 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PREREQUISITES_H___
-#define ___C3D_PREREQUISITES_H___
+#ifndef ___C3D_Castor3DPrerequisites_H___
+#define ___C3D_Castor3DPrerequisites_H___
+
+#include "Castor3DModule.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>

@@ -19,8 +19,8 @@ add_target(
 	bin_dos
 	${CASTOR_SOURCE_DIR}/test/Castor3D
 	${CASTOR_SOURCE_DIR}/test/Castor3D
-	"CastorUtils;Castor3D;CastorTest;TestRenderSystem"
-	"CastorUtils;Castor3D;CastorTest;TestRenderSystem;${CastorMinLibraries}"
+	"CastorUtils;Castor3D;CastorTest"
+	"CastorUtils;Castor3D;CastorTest;${CastorMinLibraries}"
 )
 
 if ( MSVC )
