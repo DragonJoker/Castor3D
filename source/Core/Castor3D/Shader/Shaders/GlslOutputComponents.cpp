@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 
 #include <ShaderAST/Expr/ExprComma.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 using namespace sdw;

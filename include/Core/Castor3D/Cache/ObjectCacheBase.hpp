@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "CacheModule.hpp"
 
+#include <CastorUtils/Design/Collection.hpp>
+
 namespace castor3d
 {
 	template< typename ElementType, typename KeyType >

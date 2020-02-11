@@ -6,6 +6,8 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	uint32_t const SkinningUbo::BindingPoint = 8u;

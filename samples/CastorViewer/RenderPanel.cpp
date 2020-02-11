@@ -18,6 +18,7 @@
 #include <Castor3D/Render/ShadowMap/ShadowMapPass.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
 

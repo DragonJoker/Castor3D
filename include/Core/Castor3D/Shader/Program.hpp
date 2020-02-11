@@ -14,6 +14,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
+#include <ashespp/Core/Device.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
 namespace castor3d

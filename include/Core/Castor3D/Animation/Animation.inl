@@ -6,8 +6,8 @@ namespace castor3d
 	AnimationT< AnimableHanlerT >::AnimationT( AnimationType type
 		, AnimableT< AnimableHanlerT > & animable
 		, castor::String const & name )
-		: Named{ name }
-		, OwnedBy< Animable >{ animable }
+		: castor::Named{ name }
+		, castor::OwnedBy< Animable >{ animable }
 		, m_type{ type }
 	{
 	}

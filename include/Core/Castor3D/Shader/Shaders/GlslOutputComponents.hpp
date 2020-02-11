@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "SdwModule.hpp"
 
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
+
 namespace castor3d
 {
 	namespace shader

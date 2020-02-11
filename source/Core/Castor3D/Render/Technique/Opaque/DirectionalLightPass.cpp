@@ -19,6 +19,8 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace castor3d;
 

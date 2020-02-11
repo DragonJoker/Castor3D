@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/TreeItemProperty.hpp"
 
+#include <Castor3D/Material/Texture/TextureConfiguration.hpp>
+
 namespace GuiCommon
 {
 	/**

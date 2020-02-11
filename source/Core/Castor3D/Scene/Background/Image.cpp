@@ -22,6 +22,8 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Shader/ShaderModule.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace sdw;
 

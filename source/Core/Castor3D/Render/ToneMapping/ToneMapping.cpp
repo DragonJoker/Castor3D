@@ -5,6 +5,8 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace sdw;
 

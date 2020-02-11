@@ -9,6 +9,8 @@
 
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace castor3d;
 

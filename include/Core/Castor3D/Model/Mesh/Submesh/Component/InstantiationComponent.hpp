@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 namespace castor3d
 {
 	struct InstantiationData

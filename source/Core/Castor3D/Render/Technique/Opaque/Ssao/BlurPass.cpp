@@ -21,6 +21,8 @@
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 
 namespace castor3d

@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
 

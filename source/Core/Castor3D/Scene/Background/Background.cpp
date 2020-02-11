@@ -14,6 +14,8 @@
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	SceneBackground::SceneBackground( Engine & engine

@@ -7,6 +7,8 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d
 {
 	using namespace sdw;

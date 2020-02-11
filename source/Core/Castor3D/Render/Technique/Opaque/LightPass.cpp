@@ -24,6 +24,8 @@
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -32,7 +34,7 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-#include <CastorUtils/Miscellaneous/Hash.hpp>
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 using namespace castor3d;

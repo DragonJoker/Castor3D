@@ -10,7 +10,7 @@ max_jobs: 2
 
 image:
   - Ubuntu1804
-  # - Visual Studio 2019
+  - Visual Studio 2019
 
 platform:
   - x64

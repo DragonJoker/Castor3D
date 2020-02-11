@@ -34,6 +34,8 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 #include <random>
 
 using namespace castor;
