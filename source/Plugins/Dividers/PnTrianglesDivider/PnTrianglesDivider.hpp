@@ -53,7 +53,7 @@ namespace PnTriangles
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
 	class Subdivider
-		: public castor3d::Subdivider
+		: public castor3d::MeshSubdivider
 	{
 	public:
 		Subdivider();
@@ -61,11 +61,11 @@ namespace PnTriangles
 
 		static castor3d::MeshSubdividerUPtr create();
 		/**
-		 *\copydoc		castor3d::Subdivider::Cleanup
+		 *\copydoc		castor3d::MeshSubdivider::Cleanup
 		 */
 		void cleanup()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::Subdivide
+		 *\copydoc		castor3d::MeshSubdivider::Subdivide
 		 */
 		void subdivide( castor3d::SubmeshSPtr submesh
 			, int occurences
@@ -74,15 +74,15 @@ namespace PnTriangles
 
 	private:
 		/**
-		 *\copydoc		castor3d::Subdivider::doSubdivide
+		 *\copydoc		castor3d::MeshSubdivider::doSubdivide
 		 */
 		void doSubdivide()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doInitialise
+		 *\copydoc		castor3d::MeshSubdivider::doInitialise
 		 */
 		void doInitialise()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 *\copydoc		castor3d::MeshSubdivider::doAddGeneratedFaces
 		 */
 		void doAddGeneratedFaces()override;
 		void doComputeFaces( double u0

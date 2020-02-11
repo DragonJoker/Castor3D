@@ -5,11 +5,13 @@
 #include "GuiCommon/ShaderDialog.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 

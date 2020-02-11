@@ -47,21 +47,17 @@ namespace C3dAssimp
 	\brief		Importeur de fichiers ASE
 	*/
 	class AssimpImporter
-		: public castor3d::Importer
+		: public castor3d::MeshImporter
 	{
 	public:
 		explicit AssimpImporter( castor3d::Engine & engine );
 		~AssimpImporter();
 
-		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
+		static castor3d::MeshImporterUPtr create( castor3d::Engine & engine );
 
 	private:
 		/**
-		 *\copydoc		castor3d::Importer::doImportScene
-		 */
-		bool doImportScene( castor3d::Scene & p_scene )override;
-		/**
-		 *\copydoc		castor3d::Importer::doImportMesh
+		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		bool doImportMesh( castor3d::Mesh & p_mesh )override;
 

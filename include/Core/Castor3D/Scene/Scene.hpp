@@ -362,6 +362,8 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
+		C3D_API void setDirectionalShadowCascades( uint32_t value );
+
 		inline void setBackgroundColour( castor::RgbColour const & value )
 		{
 			m_backgroundColour = value;
@@ -381,12 +383,6 @@ namespace castor3d
 		inline void setMaterialsType( MaterialType value )
 		{
 			getEngine()->setMaterialsType( value );
-		}
-
-		inline void setDirectionalShadowCascades( uint32_t value )
-		{
-			CU_Require( value <= shader::DirectionalMaxCascadesCount );
-			m_directionalShadowCascades = value;
 		}
 		/**@}*/
 

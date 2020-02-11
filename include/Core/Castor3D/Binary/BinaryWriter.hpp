@@ -83,7 +83,7 @@ namespace castor3d
 		inline bool doWriteHeader( BinaryChunk & chunk )const
 		{
 			BinaryChunk schunk{ ChunkType::eCmshHeader };
-			bool result = doWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, schunk );
+			bool result = doWriteChunk( CurrentCmshVersion, ChunkType::eCmshVersion, schunk );
 
 			if ( result )
 			{

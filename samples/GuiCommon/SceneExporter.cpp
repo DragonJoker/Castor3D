@@ -5,9 +5,9 @@
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>

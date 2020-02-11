@@ -2,15 +2,15 @@
 
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 #include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>

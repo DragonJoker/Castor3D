@@ -29,13 +29,15 @@ namespace castor3d
 			eSpecularGlossinessMaterial,
 			eTextureConfigData,
 		};
-
+		// Directional Shadow Cascades.
 		constexpr uint32_t DirectionalMaxCascadesCount = 4u;
-
-		C3D_API uint32_t getSpotShadowMapCount();
-		C3D_API uint32_t getPointShadowMapCount();
-		C3D_API uint32_t getBaseLightComponentsCount();
-		C3D_API uint32_t getMaxLightComponentsCount();
+		// Pass Buffer.
+		static uint32_t constexpr MaxMaterialsCount = 2000u;
+		static int constexpr MaxMaterialComponentsCount = 15;
+		static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
+		// Texture Configuration Buffer.
+		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
+		static int constexpr MaxTextureConfigurationComponentsCount = 7;
 
 		class Utils;
 		class Shadow;
@@ -44,6 +46,9 @@ namespace castor3d
 		struct PointLight;
 		struct SpotLight;
 		class Materials;
+		class LegacyMaterials;
+		class PbrMRMaterials;
+		class PbrSGMaterials;
 		class LightingModel;
 		class PhongLightingModel;
 		class MetallicBrdfLightingModel;
@@ -73,6 +78,10 @@ namespace castor3d
 		 */
 		C3D_API std::unique_ptr< Materials > createMaterials( sdw::ShaderWriter & writer
 			, PassFlags const & passFlags );
+		C3D_API uint32_t getSpotShadowMapCount();
+		C3D_API uint32_t getPointShadowMapCount();
+		C3D_API uint32_t getBaseLightComponentsCount();
+		C3D_API uint32_t getMaxLightComponentsCount();
 	}
 
 	//@}

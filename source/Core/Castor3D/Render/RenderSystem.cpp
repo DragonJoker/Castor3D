@@ -2,6 +2,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
+#include <CastorUtils/Data/BinaryFile.hpp>
+
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
 
@@ -14,7 +16,7 @@
 #	include "spirv_glsl.hpp"
 #endif
 
-#define C3D_DebugSpirV 1
+#define C3D_DebugSpirV 0
 
 namespace castor3d
 {

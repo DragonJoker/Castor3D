@@ -28,6 +28,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -1004,6 +1005,12 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void Scene::setDirectionalShadowCascades( uint32_t value )
+	{
+		CU_Require( value <= shader::DirectionalMaxCascadesCount );
+		m_directionalShadowCascades = value;
 	}
 
 	void Scene::doUpdateAnimations()

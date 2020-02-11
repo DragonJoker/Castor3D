@@ -35,7 +35,7 @@ namespace castor3d
 
 	protected:
 		/**
-		 *\copydoc		castor3d::Importer::doImportMesh
+		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		C3D_API bool doImportMesh( Mesh & mesh )override;
 

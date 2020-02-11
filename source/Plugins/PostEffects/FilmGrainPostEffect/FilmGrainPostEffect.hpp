@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FilmGrainPostEffect___
 #define ___C3D_FilmGrainPostEffect___
 
+#include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Render/ToTexture/RenderQuad.hpp>

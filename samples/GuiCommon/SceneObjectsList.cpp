@@ -30,13 +30,17 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
-#include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
 #include <Castor3D/Scene/BillboardList.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>

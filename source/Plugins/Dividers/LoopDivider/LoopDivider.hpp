@@ -14,7 +14,7 @@ namespace Loop
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
-	class Subdivider : public castor3d::Subdivider
+	class Subdivider : public castor3d::MeshSubdivider
 	{
 	public:
 		Subdivider();
@@ -22,7 +22,7 @@ namespace Loop
 
 		static castor3d::MeshSubdividerUPtr create();
 		/**
-		 *\copydoc		castor3d::Subdivider::Cleanup
+		 *\copydoc		castor3d::MeshSubdivider::Cleanup
 		 */
 		void cleanup()override;
 		/**
@@ -53,15 +53,15 @@ namespace Loop
 
 	private:
 		/**
-		 *\copydoc		castor3d::Subdivider::doInitialise
+		 *\copydoc		castor3d::MeshSubdivider::doInitialise
 		 */
 		void doInitialise()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 *\copydoc		castor3d::MeshSubdivider::doAddGeneratedFaces
 		 */
 		void doAddGeneratedFaces()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doSubdivide
+		 *\copydoc		castor3d::MeshSubdivider::doSubdivide
 		 */
 		void doSubdivide()override;
 		void doDivide();

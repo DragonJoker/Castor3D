@@ -36,7 +36,7 @@ namespace PnTriangles
 	String const Subdivider::Type = cuT( "pn_tri" );
 
 	Subdivider::Subdivider()
-		: castor3d::Subdivider()
+		: castor3d::MeshSubdivider()
 		, m_occurences( 1 )
 	{
 	}
@@ -53,7 +53,7 @@ namespace PnTriangles
 
 	void Subdivider::cleanup()
 	{
-		castor3d::Subdivider::cleanup();
+		castor3d::MeshSubdivider::cleanup();
 	}
 
 	void Subdivider::subdivide( SubmeshSPtr submesh
@@ -108,7 +108,7 @@ namespace PnTriangles
 			m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
 		}
 
-		castor3d::Subdivider::doInitialise();
+		castor3d::MeshSubdivider::doInitialise();
 		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
 	}
 

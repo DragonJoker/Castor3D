@@ -4,15 +4,16 @@
 #include "CastorGui/CtrlStatic.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/PanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 

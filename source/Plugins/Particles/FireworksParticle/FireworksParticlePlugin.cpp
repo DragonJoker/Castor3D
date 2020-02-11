@@ -2,9 +2,10 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Plugin/ParticlePlugin.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleModule.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 
-#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Design/Factory.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_Fireworks_API

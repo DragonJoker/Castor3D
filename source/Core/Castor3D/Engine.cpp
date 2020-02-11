@@ -15,6 +15,8 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/ImporterFactory.hpp"
+#include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
@@ -60,6 +62,10 @@ namespace castor3d
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
 		, m_imageCache{ m_imageLoader }
+		, m_meshFactory{ std::make_shared< MeshFactory >() }
+		, m_subdividerFactory{ std::make_shared< MeshSubdividerFactory >() }
+		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
+		, m_particleFactory{ std::make_shared< ParticleFactory >() }
 	{
 		auto dummy = []( auto element )
 		{

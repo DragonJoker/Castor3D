@@ -13,8 +13,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
-		static int constexpr MaxTextureConfigurationComponentsCount = 7;
 		castor::String const TextureConfigurationBufferName = cuT( "TextureConfigurations" );
 
 		struct TextureConfigData

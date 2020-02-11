@@ -28,29 +28,13 @@ using namespace castor;
 namespace C3dPly
 {
 	PlyImporter::PlyImporter( Engine & engine )
-		: Importer( engine )
+		: MeshImporter( engine )
 	{
 	}
 
-	ImporterUPtr PlyImporter::create( Engine & engine )
+	MeshImporterUPtr PlyImporter::create( Engine & engine )
 	{
 		return std::make_unique< PlyImporter >( engine );
-	}
-
-	bool PlyImporter::doImportScene( Scene & p_scene )
-	{
-		auto mesh = p_scene.getMeshCache().add( cuT( "Mesh_PLY" ) );
-		bool result = doImportMesh( *mesh );
-
-		if ( result )
-		{
-			SceneNodeSPtr node = p_scene.getSceneNodeCache().add( mesh->getName(), p_scene.getObjectRootNode() );
-			GeometrySPtr geometry = p_scene.getGeometryCache().add( mesh->getName(), node, nullptr );
-			geometry->setMesh( mesh );
-			m_geometries.insert( { geometry->getName(), geometry } );
-		}
-
-		return result;
 	}
 
 	bool PlyImporter::doImportMesh( Mesh & p_mesh )

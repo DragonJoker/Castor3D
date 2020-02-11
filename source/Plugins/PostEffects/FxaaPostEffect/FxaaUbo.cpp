@@ -3,6 +3,8 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 namespace fxaa
 {
 	const castor::String FxaaUbo::Name = cuT( "FxaaUbo" );

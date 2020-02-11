@@ -40,7 +40,7 @@ namespace GuiCommon
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable, Geometry & geometry, Submesh & submesh )
-		: TreeItemProperty( submesh.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_geometry( geometry )
 		, m_submesh( submesh )
 	{
@@ -208,7 +208,7 @@ namespace GuiCommon
 	{
 		doApplyChange( [p_name, this]()
 		{
-			auto & cache = m_submesh.getScene()->getEngine()->getMaterialCache();
+			auto & cache = m_submesh.getOwner()->getScene()->getEngine()->getMaterialCache();
 			MaterialSPtr material = cache.find( p_name );
 
 			if ( material )

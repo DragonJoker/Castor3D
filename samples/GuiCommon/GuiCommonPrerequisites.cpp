@@ -17,6 +17,7 @@ using Bool = int;
 #endif
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>

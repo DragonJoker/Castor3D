@@ -2,6 +2,7 @@
 
 #include "GuiCommon/AdditionalProperties.hpp"
 
+#include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 

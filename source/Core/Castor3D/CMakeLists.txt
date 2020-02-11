@@ -1375,47 +1375,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 source_group( "Header Files\\Shader\\Ubos" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Shader\\Ubos" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
-if ( EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/spirv_cross/spirv_glsl.cpp )
-	set( SPIRV_CROSS_DIR
-		${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/spirv_cross
-	)
-	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-		${SPIRV_CROSS_DIR}/GLSL.std.450.h
-		${SPIRV_CROSS_DIR}/spirv_common.hpp
-		${SPIRV_CROSS_DIR}/spirv.hpp
-		${SPIRV_CROSS_DIR}/spirv_cross.hpp
-		${SPIRV_CROSS_DIR}/spirv_parser.hpp
-		${SPIRV_CROSS_DIR}/spirv_cross_parsed_ir.hpp
-		${SPIRV_CROSS_DIR}/spirv_cfg.hpp
-		${SPIRV_CROSS_DIR}/spirv_glsl.hpp
-	)
-	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-		${SPIRV_CROSS_DIR}/spirv_cross.cpp
-		${SPIRV_CROSS_DIR}/spirv_cfg.cpp
-		${SPIRV_CROSS_DIR}/spirv_glsl.cpp
-		${SPIRV_CROSS_DIR}/spirv_parser.cpp
-		${SPIRV_CROSS_DIR}/spirv_cross_parsed_ir.cpp
-	)
-	set( Castor3DDefinitions
-		${Castor3DDefinitions}
-		C3D_HasSPIRVCross
-	)
-	set( ExternalIncludes
-		${ExternalIncludes}
-		${SPIRV_CROSS_DIR}
-	)
-	set( ${PROJECT_NAME}_SRC_FILES
-		${${PROJECT_NAME}_SRC_FILES}
-		${${PROJECT_NAME}_FOLDER_SRC_FILES}
-	)
-	set( ${PROJECT_NAME}_HDR_FILES
-		${${PROJECT_NAME}_HDR_FILES}
-		${${PROJECT_NAME}_FOLDER_HDR_FILES}
-	)
-	source_group( "Header Files\\SPIRVCross" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-	source_group( "Source Files\\SPIRVCross" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-endif ()
-
 set( Castor3DBinsDependencies
 	${Castor3DBinsDependencies}
 	castor::${PROJECT_NAME}

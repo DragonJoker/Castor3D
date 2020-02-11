@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
 namespace castor3d

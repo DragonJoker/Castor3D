@@ -87,7 +87,7 @@ namespace castor3d
 	void SceneCuller::doListGeometries()
 	{
 		auto & scene = getScene();
-		LockType lock{ makeUniqueLock( scene.getBillboardListCache() ) };
+		auto lock( makeUniqueLock( scene.getGeometryCache() ) );
 
 		for ( auto primitive : scene.getGeometryCache() )
 		{
@@ -199,7 +199,7 @@ namespace castor3d
 	void SceneCuller::doListParticles()
 	{
 		auto & scene = getScene();
-		LockType lock{ makeUniqueLock( scene.getBillboardListCache() ) };
+		auto lock( makeUniqueLock( scene.getParticleSystemCache() ) );
 
 		for ( auto particleSystem : scene.getParticleSystemCache() )
 		{

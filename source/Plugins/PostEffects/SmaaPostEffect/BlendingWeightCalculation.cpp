@@ -7,11 +7,12 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Shader/Program.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>

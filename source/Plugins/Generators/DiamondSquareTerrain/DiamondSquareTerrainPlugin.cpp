@@ -1,8 +1,7 @@
 #include "DiamondSquareTerrain/DiamondSquareTerrain.hpp"
 
 #include <Castor3D/Engine.hpp>
-
-#include <CastorUtils/Log/Logger.hpp>
+#include <Castor3D/Model/Mesh/MeshFactory.hpp>
 
 #ifndef CU_PlatformWindows
 #	define C3D_DiamondSquareTerrain_API

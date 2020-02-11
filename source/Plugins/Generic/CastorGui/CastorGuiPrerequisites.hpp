@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
 #include <Castor3D/Plugin/GenericPlugin.hpp>
+#include <Castor3D/Material/Pass/PassModule.hpp>
+#include <Castor3D/Material/Texture/TextureModule.hpp>
 
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Graphics/Colour.hpp>
