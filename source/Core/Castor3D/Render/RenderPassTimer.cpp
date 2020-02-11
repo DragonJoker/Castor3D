@@ -4,6 +4,7 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Miscellaneous/QueryPool.hpp>
 

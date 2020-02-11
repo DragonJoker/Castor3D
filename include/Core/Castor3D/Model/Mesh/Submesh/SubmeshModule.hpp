@@ -35,8 +35,12 @@ namespace castor3d
 	template< typename T >
 	struct SubmeshAnimationBufferT
 	{
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
 		InterleavedVertexTArray< T > m_buffer;
-		float m_timeIndex;
+		//!\~english	The bounding box.
+		//!\~french		La bounding box.
+		castor::BoundingBox m_boundingBox;
 	};
 	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
 

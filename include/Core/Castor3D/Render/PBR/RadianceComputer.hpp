@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_RadianceComputer_H___
 #define ___C3D_RadianceComputer_H___
 
+#include "PbrModule.hpp"
+
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -50,14 +51,11 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API ashes::Sampler const & getSampler()const;
+
 		inline ashes::ImageView const & getResult()const
 		{
 			return m_resultView;
-		}
-
-		inline ashes::Sampler const & getSampler()const
-		{
-			return m_sampler->getSampler();
 		}
 		/**@}*/
 

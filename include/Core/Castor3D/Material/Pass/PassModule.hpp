@@ -46,7 +46,7 @@ namespace castor3d
 		eDepthPeeling,
 		CU_ScopedEnumBounds( eNoBlend )
 	};
-	castor::String getName( BlendMode value );
+	C3D_API castor::String getName( BlendMode value );
 	/**
 	*\~english
 	*\brief

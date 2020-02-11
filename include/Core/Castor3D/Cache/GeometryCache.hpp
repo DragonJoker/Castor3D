@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryCache_H___
 #define ___C3D_GeometryCache_H___
 
-#include "Castor3D/Cache/ObjectCacheTraits.hpp"
+#include "Castor3D/Cache/ObjectCacheBase.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
@@ -14,6 +15,25 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/**
+	\~english
+	\brief		Helper structure to specialise a scene cache behaviour.
+	\remarks	Specialisation for Geometry.
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
+	\remarks	Spécialisation pour Geometry.
+	*/
+	template< typename KeyType >
+	struct ObjectCacheTraits< Geometry, KeyType >
+	{
+		C3D_API static const castor::String Name;
+		using Producer = std::function< std::shared_ptr< Geometry >( KeyType const &, SceneNodeSPtr, MeshSPtr ) >;
+		using Merger = std::function< void( ObjectCacheBase< Geometry, KeyType > const &
+			, castor::Collection< Geometry, KeyType > &
+			, std::shared_ptr< Geometry >
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
+	};
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016

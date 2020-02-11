@@ -4,11 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredReflectionPass_H___
 #define ___C3D_DeferredReflectionPass_H___
 
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "OpaqueModule.hpp"
+
 #include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>

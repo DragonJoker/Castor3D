@@ -28,7 +28,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Castor3DPrerequisites.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Castor3DModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Engine.cpp
 )
 set( ${PROJECT_NAME}_NVS_FILES
@@ -165,8 +165,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/BillboardCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/BillboardUboPools.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/Cache.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheTraits.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CacheView.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/CameraCache.hpp
@@ -177,7 +177,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/MaterialCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/MeshCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCache.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCacheTraits.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ObjectCacheBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/OverlayCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ParticleSystemCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/PluginCache.hpp
@@ -186,6 +186,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/SceneNodeCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/ShaderCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TargetCache.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/TechniqueCache.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Cache/WindowCache.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -249,6 +250,7 @@ source_group( "Source Files\\Event\\UserInput" FILES ${${PROJECT_NAME}_FOLDER_SR
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Material.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/MaterialModule.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Material.hpp
@@ -268,6 +270,7 @@ source_group( "Source Files\\Material" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES}
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/MetallicRoughnessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Pass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PassModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/PhongPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/SpecularGlossinessPbrPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/SubsurfaceScattering.cpp
@@ -295,6 +298,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/Sampler.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureConfiguration.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureLayout.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureSource.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureUnit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureView.cpp
@@ -322,7 +326,6 @@ source_group( "Source Files\\Material\\Texture" FILES ${${PROJECT_NAME}_FOLDER_S
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/DebugCallbacks.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/DebugName.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Generator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/GpuInformations.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/GpuObjectTracker.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Parameter.cpp
@@ -332,7 +335,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DebugCallbacks.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DebugName.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Generator.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/GpuInformations.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/GpuObjectTracker.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/MiscellaneousModule.hpp
@@ -404,7 +406,6 @@ source_group( "Source Files\\Model\\Mesh" FILES ${${PROJECT_NAME}_FOLDER_SRC_FIL
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationKeyFrame.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Model/Mesh/Animation/MeshAnimationSubmesh.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -574,6 +575,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/Overlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayFactory.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayRenderer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayVisitor.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/PanelOverlay.cpp
@@ -650,6 +652,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderLoop.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderLoopAsync.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderLoopSync.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderPassTimer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/RenderPipeline.cpp
@@ -1024,6 +1027,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Scene.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneFileParser.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneFileParser_Parsers.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneNode.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Shadow.cpp
 )
@@ -1126,6 +1130,7 @@ source_group( "Source Files\\Scene\\Animation\\Skeleton" FILES ${${PROJECT_NAME}
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Background.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/BackgroundTextWriter.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/Colour.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Background/FramePreparator.cpp
@@ -1158,6 +1163,7 @@ source_group( "Source Files\\Scene\\Background" FILES ${${PROJECT_NAME}_FOLDER_S
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/DirectionalLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/Light.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/LightFactory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Light/PointLight.cpp
@@ -1187,6 +1193,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/ComputeParticleSystem.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/CpuParticleSystem.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/Particle.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/ParticleModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/ParticleDeclaration.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/ParticleSystem.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/ParticleSystem/ParticleSystemImpl.cpp

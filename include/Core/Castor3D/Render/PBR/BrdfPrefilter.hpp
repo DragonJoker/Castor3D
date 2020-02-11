@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BrdfPrefilter_H___
 #define ___C3D_BrdfPrefilter_H___
 
+#include "PbrModule.hpp"
+
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>

@@ -4,9 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTargetCache_H___
 #define ___C3D_RenderTargetCache_H___
 
-#include "Castor3D/Cache/CacheTraits.hpp"
-#include "Castor3D/Render/RenderTarget.hpp"
-
+#include "CacheModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
@@ -127,17 +126,9 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The render targets sorted by target type.
-		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;
-		//!\~english	The mutex protecting the render targets array.
-		//!\~french		Le mutex protégeant le tableau de cibles de rendu.
 		mutable std::mutex m_mutex;
-		//!\~english	The tone mapping factory.
-		//!\~french		La fabrique de mappage de tons.
 		ToneMappingFactory m_toneMappingFactory;
-		//!\~english	The post effect factory.
-		//!\~french		La fabrique d'effets post rendu.
 		PostEffectFactory m_postEffectFactory;
 	};
 }

@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredSsaoPass_H___
 #define ___C3D_DeferredSsaoPass_H___
 
+#include "OpaqueModule.hpp"
+
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"

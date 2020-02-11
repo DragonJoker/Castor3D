@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffect_H___
 #define ___C3D_PostEffect_H___
 
+#include "PostEffectModule.hpp"
+
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
 #include "Castor3D/Render/RenderPassTimer.hpp"

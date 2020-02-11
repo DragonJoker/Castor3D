@@ -1,8 +1,6 @@
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Castor3DPrerequisites.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"

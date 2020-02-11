@@ -4,9 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_PASS_H___
 #define ___C3D_RENDER_PASS_H___
 
-#include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
-
+#include "RenderModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
@@ -17,6 +15,9 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
+
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

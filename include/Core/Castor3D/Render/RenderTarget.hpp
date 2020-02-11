@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
+#include "RenderModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"

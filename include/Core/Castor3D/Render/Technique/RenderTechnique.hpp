@@ -4,21 +4,20 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechnique_H___
 #define ___C3D_RenderTechnique_H___
 
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "TechniqueModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Render/Technique/DepthPass.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
-#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
-#include <CastorUtils/Graphics/Rectangle.hpp>
 
 namespace castor3d
 {

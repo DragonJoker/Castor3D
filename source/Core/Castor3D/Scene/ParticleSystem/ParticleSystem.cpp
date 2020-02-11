@@ -7,6 +7,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <ashespp/Core/Device.hpp>
 

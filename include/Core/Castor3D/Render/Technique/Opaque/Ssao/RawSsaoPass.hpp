@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RawSsaoPass_H___
 #define ___C3D_RawSsaoPass_H___
 
+#include "SsaoModule.hpp"
+
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"

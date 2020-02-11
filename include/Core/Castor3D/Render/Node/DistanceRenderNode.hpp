@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DistanceRenderNode_H___
 #define ___C3D_DistanceRenderNode_H___
 
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNode.hpp"
 

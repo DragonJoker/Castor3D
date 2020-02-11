@@ -5,8 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PLUGIN_H___
 
 #include "PluginModule.hpp"
-
-#include "Castor3D/Plugin/PluginException.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

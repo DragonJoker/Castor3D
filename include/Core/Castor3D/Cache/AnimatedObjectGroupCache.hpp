@@ -4,16 +4,33 @@ See LICENSE file in root folder
 #ifndef ___C3D_AnimatedObjectGroupCache_H___
 #define ___C3D_AnimatedObjectGroupCache_H___
 
+#include "Castor3D/Cache/CacheBase.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
 
-#include "Castor3D/Cache/CacheTraits.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 namespace castor3d
 {
+	/**
+	\~english
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for AnimatedObjectGroup.
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour AnimatedObjectGroup.
+	*/
+	template< typename KeyType >
+	struct CacheTraits< AnimatedObjectGroup, KeyType >
+	{
+		C3D_API static const castor::String Name;
+		using Producer = std::function< std::shared_ptr< AnimatedObjectGroup >( KeyType const & ) >;
+		using Merger = std::function< void( CacheBase< AnimatedObjectGroup, KeyType > const &
+			, castor::Collection< AnimatedObjectGroup, KeyType > &
+			, std::shared_ptr< AnimatedObjectGroup > ) >;
+	};
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016

@@ -2,6 +2,9 @@
 
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Fog.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 

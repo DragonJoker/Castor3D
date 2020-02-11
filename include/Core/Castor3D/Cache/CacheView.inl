@@ -1,6 +1,4 @@
-﻿#include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
 
 namespace castor3d
 {

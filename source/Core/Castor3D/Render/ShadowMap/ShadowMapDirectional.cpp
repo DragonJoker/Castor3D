@@ -1,12 +1,13 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 
 #include "Castor3D/Engine.hpp"
-
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Render/GaussianBlur.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"

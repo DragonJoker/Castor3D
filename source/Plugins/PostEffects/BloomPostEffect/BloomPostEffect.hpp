@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "BloomPostEffect/CombinePass.hpp"
 #include "BloomPostEffect/HiPass.hpp"
 
-#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 namespace Bloom

@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FACE_INFOS_H___
-#define ___C3D_FACE_INFOS_H___
+#ifndef ___C3D_FaceInfos_H___
+#define ___C3D_FaceInfos_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ComponentModule.hpp"
 
 namespace castor3d
 {

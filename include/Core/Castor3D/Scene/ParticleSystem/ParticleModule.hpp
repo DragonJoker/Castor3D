@@ -52,7 +52,7 @@ namespace castor3d
 		eMatIndex = 0x800,
 	};
 	CU_ImplementFlags( ElementUsage )
-	castor::String getName( ElementUsage value );
+	C3D_API castor::String getName( ElementUsage value );
 	enum class ParticleFormat
 	{
 		eInt,
@@ -71,7 +71,7 @@ namespace castor3d
 		eMat3f,
 		eMat4f,
 	};
-	castor::String getName( ParticleFormat value );
+	C3D_API castor::String getName( ParticleFormat value );
 	/**
 	*\~english
 	*\brief

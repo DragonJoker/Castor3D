@@ -5,6 +5,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 

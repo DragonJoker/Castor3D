@@ -1,8 +1,8 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
 #include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Data/ZipArchive.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>

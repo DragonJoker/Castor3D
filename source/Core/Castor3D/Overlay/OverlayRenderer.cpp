@@ -1,45 +1,36 @@
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
-#include "Castor3D/Overlay/PanelOverlay.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 
-#include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
+#include <CastorUtils/Graphics/Rectangle.hpp>
+
+#include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Pipeline/GraphicsPipeline.hpp>
-#include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include <ashespp/Sync/Fence.hpp>
-
-#include <CastorUtils/Graphics/Font.hpp>
-
-#include <ShaderWriter/Source.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 using namespace castor;
-
-#if defined( drawText )
-#	undef drawText
-#endif
 
 namespace castor3d
 {
@@ -859,7 +850,7 @@ namespace castor3d
 					std::move( blState ),
 					ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 					*pipelineLayout,
-					*m_renderPass,
+					* m_renderPass,
 				} );
 			it = pipelines.emplace( key
 				, Pipeline{ std::move( descriptorLayout )

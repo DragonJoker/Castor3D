@@ -1,9 +1,10 @@
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Shader/GlslToSpv.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>

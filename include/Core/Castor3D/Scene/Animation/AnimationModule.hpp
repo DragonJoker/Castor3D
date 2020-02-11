@@ -82,7 +82,9 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( Animable );
 	CU_DeclareSmartPtr( AnimatedObjectGroup );
+	CU_DeclareSmartPtr( AnimatedMesh );
 	CU_DeclareSmartPtr( AnimatedObject );
+	CU_DeclareSmartPtr( AnimatedSkeleton );
 	CU_DeclareSmartPtr( Animation );
 	CU_DeclareSmartPtr( AnimationInstance );
 

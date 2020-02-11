@@ -4,14 +4,18 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoBlurPass_H___
 #define ___C3D_SsaoBlurPass_H___
 
-#include "Castor3D/Render/Viewport.hpp"
+#include "SsaoModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <ashespp/Buffer/PushConstantsBuffer.hpp>
-
-#include <ShaderWriter/Shader.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

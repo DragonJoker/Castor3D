@@ -27,7 +27,7 @@ namespace castor3d
 		eText,
 		CU_ScopedEnumBounds( ePanel )
 	};
-	castor::String getName( OverlayType value );
+	C3D_API castor::String getName( OverlayType value );
 	/**
 	*\~english
 	*\brief
@@ -49,7 +49,7 @@ namespace castor3d
 		eBreakWords,
 		CU_ScopedEnumBounds( eNone )
 	};
-	castor::String getName( TextWrappingMode value );
+	C3D_API castor::String getName( TextWrappingMode value );
 	/**
 	*\~english
 	*\brief
@@ -68,7 +68,7 @@ namespace castor3d
 		eText,
 		CU_ScopedEnumBounds( eLetter )
 	};
-	castor::String getName( TextTexturingMode value );
+	C3D_API castor::String getName( TextTexturingMode value );
 	/**
 	*\~english
 	*\brief
@@ -90,7 +90,7 @@ namespace castor3d
 		eMaxFontHeight,
 		CU_ScopedEnumBounds( eOwnHeight )
 	};
-	castor::String getName( TextLineSpacingMode value );
+	C3D_API castor::String getName( TextLineSpacingMode value );
 	/**
 	*\~english
 	*\brief
@@ -112,7 +112,7 @@ namespace castor3d
 		eRight,
 		CU_ScopedEnumBounds( eLeft )
 	};
-	castor::String getName( HAlign value );
+	C3D_API castor::String getName( HAlign value );
 	/**
 	*\~english
 	*\brief
@@ -134,7 +134,7 @@ namespace castor3d
 		eBottom,
 		CU_ScopedEnumBounds( eTop )
 	};
-	castor::String getName( VAlign value );
+	C3D_API castor::String getName( VAlign value );
 	/**
 	*\~english
 	*\brief
@@ -156,7 +156,7 @@ namespace castor3d
 		eExternal,
 		CU_ScopedEnumBounds( eInternal )
 	};
-	castor::String getName( BorderPosition value );
+	C3D_API castor::String getName( BorderPosition value );
 	/**
 	*\~english
 	*\brief

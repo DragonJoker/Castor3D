@@ -7,6 +7,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 

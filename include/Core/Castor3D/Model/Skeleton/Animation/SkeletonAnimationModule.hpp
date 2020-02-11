@@ -37,7 +37,7 @@ namespace castor3d
 		eBone,
 		CU_ScopedEnumBounds( eNode )
 	};
-	castor::String getName( SkeletonAnimationObjectType value );
+	C3D_API castor::String getName( SkeletonAnimationObjectType value );
 	/**
 	\~english
 	\brief		Skeleton animation class.

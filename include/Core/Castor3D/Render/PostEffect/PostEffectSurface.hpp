@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PostEffectSurface_H___
 #define ___C3D_PostEffectSurface_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "PostEffectModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

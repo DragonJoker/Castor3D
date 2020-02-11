@@ -1,7 +1,13 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/TechniqueCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"

@@ -43,7 +43,7 @@ namespace castor3d
 			if ( !m_instancedBonesBuffer )
 			{
 				auto stride = uint32_t( sizeof( float ) * 16u * 400u );
-				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getScene()->getEngine()
+				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
 					, count * stride
 					, cuT( "InstancedBonesBuffer" ) );
 			}
@@ -71,7 +71,7 @@ namespace castor3d
 			if ( count > m_instantiation.getThreshold()
 				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < count * stride ) )
 			{
-				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getScene()->getEngine()
+				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
 					, count * stride
 					, cuT( "InstancedBonesBuffer" ) );
 			}

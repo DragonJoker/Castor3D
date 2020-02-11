@@ -1,15 +1,19 @@
 #include "Castor3D/Render/RenderWindow.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Miscellaneous/PickingPass.hpp"
+#include "Castor3D/Render/PickingPass.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>

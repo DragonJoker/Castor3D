@@ -1,6 +1,6 @@
-#include "Castor3D/EnvironmentMap/EnvironmentMapPass.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 
-#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Viewport.hpp"

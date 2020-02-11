@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ParticleSystemImpl_H___
 
 #include "ParticleModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {

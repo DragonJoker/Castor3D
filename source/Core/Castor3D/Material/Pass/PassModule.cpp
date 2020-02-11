@@ -1,23 +1,7 @@
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
 namespace castor3d
 {
-	castor::String getName( MaterialType value )
-	{
-		switch ( value )
-		{
-		case MaterialType::ePhong:
-			return cuT( "phong" );
-		case MaterialType::eMetallicRoughness:
-			return cuT( "metallic_roughness" );
-		case MaterialType::eSpecularGlossiness:
-			return cuT( "specular_glossiness" );
-		default:
-			CU_Failure( "Unsupported MaterialType" );
-			return castor::cuEmptyString;
-		}
-	}
-
 	castor::String getName( BlendMode value )
 	{
 		switch ( value )

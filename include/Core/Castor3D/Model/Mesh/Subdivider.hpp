@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_Subdivider_H___
 
 #include "MeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
 #include <CastorUtils/Math/Point.hpp>
 
@@ -255,7 +257,7 @@ namespace castor3d
 		SubmeshSPtr m_submesh;
 		//!\~english	The points.
 		//\~french		Les points.
-		std::vector< std::unique_ptr< castor3d::SubmeshVertex > > m_points;
+		std::vector< std::unique_ptr< SubmeshVertex > > m_points;
 		//!\~english	The faces.
 		//\~french		Les faces.
 		FaceArray m_arrayFaces;

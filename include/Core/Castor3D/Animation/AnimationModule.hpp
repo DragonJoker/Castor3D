@@ -33,7 +33,7 @@ namespace castor3d
 		ePaused,
 		CU_ScopedEnumBounds( ePlaying )
 	};
-	castor::String getName( AnimationState value );
+	C3D_API castor::String getName( AnimationState value );
 	/**
 	*\~english
 	*\brief
@@ -56,7 +56,7 @@ namespace castor3d
 		eMesh,
 		CU_ScopedEnumBounds( eMovable )
 	};
-	castor::String getName( AnimationType value );
+	C3D_API castor::String getName( AnimationType value );
 	/**
 	*\~english
 	*\brief
@@ -76,7 +76,7 @@ namespace castor3d
 		eLinear,
 		CU_ScopedEnumBounds( eNearest )
 	};
-	castor::String getName( InterpolatorType value );
+	C3D_API castor::String getName( InterpolatorType value );
 	/**
 	*\~english
 	*\brief

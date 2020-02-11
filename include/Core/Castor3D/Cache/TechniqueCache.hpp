@@ -1,10 +1,13 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_TECHNIQUE_CACHE_H___
 #define ___C3D_TECHNIQUE_CACHE_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "CacheModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
 
 namespace castor3d
 {
@@ -19,17 +22,17 @@ namespace castor3d
 	\brief		Structure permettant de spécialiser le comportement d'un cache.
 	\remarks	Spécialisation pour RenderTechnique.
 	*/
-	template< typename KeyType >
-	struct CacheTraits< RenderTechnique, KeyType >
+	template<>
+	struct CacheTraits< RenderTechnique, castor::String >
 	{
 		C3D_API static const castor::String Name;
-		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
+		using Producer = std::function < std::shared_ptr< RenderTechnique >( castor::String const &
 			, castor::String const &
 			, RenderTarget &
 			, Parameters const &
 			, SsaoConfig const & ) >;
-		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
-			, castor::Collection< RenderTechnique, KeyType > &
+		using Merger = std::function< void( CacheBase< RenderTechnique, castor::String > const &
+			, castor::Collection< RenderTechnique, castor::String > &
 			, std::shared_ptr< RenderTechnique > ) >;
 	};
 }

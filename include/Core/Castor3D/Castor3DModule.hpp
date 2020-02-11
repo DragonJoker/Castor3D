@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include <CastorUtils/CastorUtilsPrerequisites.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Exception/Assertion.hpp>
+#include <CastorUtils/Math/Coords.hpp>
+#include <CastorUtils/Math/Point.hpp>
 
 #include <ashespp/AshesPPPrerequisites.hpp>
 
@@ -263,7 +265,8 @@ namespace castor3d
 	static VkClearValue const opaqueBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 1.0f ) };
 	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
 	static VkClearValue const opaqueWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 1.0f ) };
-	static VkClearValue const transparentWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 0.0f ) }; }
+	static VkClearValue const transparentWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 0.0f ) };
+}
 
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::Engine, Engine )
 

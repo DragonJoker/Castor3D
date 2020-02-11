@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechniqueVisitor_HPP___
 #define ___C3D_RenderTechniqueVisitor_HPP___
 
+#include "TechniqueModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
 namespace castor3d

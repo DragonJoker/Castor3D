@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_MESH_ANIMATION_INSTANCE_H___
 #define ___C3D_MESH_ANIMATION_INSTANCE_H___
 
+#include "Castor3D/Binary/BinaryParser.hpp"
+#include "Castor3D/Binary/BinaryWriter.hpp"
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 

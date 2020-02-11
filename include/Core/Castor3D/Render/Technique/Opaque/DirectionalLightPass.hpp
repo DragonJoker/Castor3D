@@ -4,6 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredDirectionalLightPass_H___
 #define ___C3D_DeferredDirectionalLightPass_H___
 
+#include "OpaqueModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+
+#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 namespace castor3d

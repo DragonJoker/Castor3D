@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ComputeParticleSystem_H___
 #define ___C3D_ComputeParticleSystem_H___
 
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"

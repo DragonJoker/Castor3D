@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderQuad_H___
 #define ___C3D_RenderQuad_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderToTextureModule.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>

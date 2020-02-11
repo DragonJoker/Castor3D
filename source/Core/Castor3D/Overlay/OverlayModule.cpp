@@ -1,4 +1,4 @@
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
 
 namespace castor3d
 {

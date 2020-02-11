@@ -1,11 +1,8 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
 #include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 
 namespace castor3d
 {

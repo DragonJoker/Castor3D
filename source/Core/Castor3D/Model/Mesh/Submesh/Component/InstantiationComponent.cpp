@@ -42,7 +42,7 @@ namespace castor3d
 		if ( doCheckInstanced( data.count ) )
 		{
 			data.data.resize( data.count );
-			getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
+			getOwner()->getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::eQueueRender
 				, [this]()
 				{
 					doFill();
@@ -69,7 +69,7 @@ namespace castor3d
 
 			if ( !doCheckInstanced( data.count ) )
 			{
-				getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+				getOwner()->getOwner()->getScene()->getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 					, [&data]()
 					{
 						data.buffer.reset();
@@ -156,7 +156,7 @@ namespace castor3d
 					} );
 			}
 
-			auto & device = getCurrentRenderDevice( *getOwner() );
+			auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
 
 			for ( auto & data : m_instances )
 			{

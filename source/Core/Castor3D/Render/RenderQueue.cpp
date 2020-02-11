@@ -10,10 +10,12 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
@@ -179,7 +181,7 @@ namespace castor3d
 			, Submesh & submesh
 			, Geometry & primitive
 			, AnimatedSkeleton & skeleton
-			, SceneCuller::CulledSubmesh const & culled
+			, CulledSubmesh const & culled
 			, SceneRenderNodes::SkinnedNodesMap & animated
 			, SceneRenderNodes::InstantiatedSkinnedNodesMap & instanced )
 		{
@@ -238,7 +240,7 @@ namespace castor3d
 			, Submesh & submesh
 			, Geometry & primitive
 			, AnimatedMesh & mesh
-			, SceneCuller::CulledSubmesh const & culled
+			, CulledSubmesh const & culled
 			, SceneRenderNodes::MorphingNodesMap & animated )
 		{
 			doAddNode( renderPass
@@ -262,7 +264,7 @@ namespace castor3d
 			, Pass & pass
 			, Submesh & submesh
 			, Geometry & primitive
-			, SceneCuller::CulledSubmesh const & culled
+			, CulledSubmesh const & culled
 			, SceneRenderNodes::StaticNodesMap & statics
 			, SceneRenderNodes::InstantiatedStaticNodesMap & instanced )
 		{
@@ -320,7 +322,7 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, Pass & pass
 			, BillboardBase & billboard
-			, SceneCuller::CulledBillboard const & culled
+			, CulledBillboard const & culled
 			, SceneRenderNodes::BillboardNodesMap & nodes )
 		{
 			doAddNode( renderPass
@@ -437,7 +439,7 @@ namespace castor3d
 
 		void doAddRenderNode( PipelineFlags const & flags
 			, AnimatedObjects const & animated
-			, SceneCuller::CulledSubmesh const & culledNode
+			, CulledSubmesh const & culledNode
 			, Geometry & instance
 			, Pass & pass
 			, Submesh & submesh
@@ -632,7 +634,7 @@ namespace castor3d
 				, RenderPipeline & pipeline
 				, Pass & pass
 				, AllMapType & renderNodes
-				, std::vector< SceneCuller::CulledSubmesh * > const & culledNodes )
+				, std::vector< CulledSubmesh * > const & culledNodes )
 		{
 			for ( auto & node : renderNodes )
 			{

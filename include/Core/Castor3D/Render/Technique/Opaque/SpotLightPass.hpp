@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredSpotLightPass_H___
 #define ___C3D_DeferredSpotLightPass_H___
 
+#include "OpaqueModule.hpp"
+
 #include "Castor3D/Render/Technique/Opaque/MeshLightPass.hpp"
 
 namespace castor3d

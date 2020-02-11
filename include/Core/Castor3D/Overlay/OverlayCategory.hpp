@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_OverlayCategory_H___
 
 #include "Castor3D/Overlay/OverlayVisitor.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
 
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>

@@ -41,7 +41,7 @@ namespace castor3d
 
 		if ( !m_animBuffer || m_animBuffer->getCount() != count )
 		{
-			auto & device = getCurrentRenderDevice( *getOwner() );
+			auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
 			m_animBuffer = makeVertexBuffer< InterleavedVertex >( device
 				, count
 				, 0u

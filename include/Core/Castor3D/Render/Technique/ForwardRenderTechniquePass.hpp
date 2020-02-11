@@ -4,11 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_ForwardRenderTechniquePass_H___
 #define ___C3D_ForwardRenderTechniquePass_H___
 
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "TechniqueModule.hpp"
 
-#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 namespace castor3d
 {

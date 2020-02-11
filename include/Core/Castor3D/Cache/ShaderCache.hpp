@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderProgramCache_H___
 #define ___C3D_ShaderProgramCache_H___
 
-#include "Castor3D/Cache/CacheTraits.hpp"
+#include "CacheModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

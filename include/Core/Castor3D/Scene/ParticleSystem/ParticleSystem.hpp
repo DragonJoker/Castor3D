@@ -5,10 +5,14 @@ See LICENSE file in root folder
 #define ___C3D_ParticleSystem_H___
 
 #include "ParticleModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include "Castor3D/Scene/MovableObject.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
+
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 namespace castor3d
 {

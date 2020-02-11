@@ -1,23 +1,32 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
-
-#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
-#include "Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/PhongPass.hpp"
-#include "Castor3D/Material/MetallicRoughnessPbrPass.hpp"
-#include "Castor3D/Material/SpecularGlossinessPbrPass.hpp"
-#include "Castor3D/Material/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
 #include "Castor3D/Model/Mesh/Importer.hpp"
+#include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/MeshFactory.hpp"
+#include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Model/Mesh/Subdivider.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
@@ -42,13 +51,12 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Background/Image.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
@@ -1070,15 +1078,15 @@ namespace castor3d
 		Engine * engine = parsingContext->m_pParser->getEngine();
 		auto extension = string::lowerCase( pathFile.getExtension() );
 
-		if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
-		{
-			CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
-		}
-		else
-		{
-			auto importer = engine->getImporterFactory().create( extension, *engine );
-			parsingContext->scene->importExternal( pathFile, *importer );
-		}
+		//if ( !engine->getImporterFactory().isTypeRegistered( extension ) )
+		//{
+		//	CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+		//}
+		//else
+		//{
+		//	auto importer = engine->getImporterFactory().create( extension, *engine );
+		//	parsingContext->scene->importExternal( pathFile, *importer );
+		//}
 	}
 	CU_EndAttribute()
 
@@ -2242,7 +2250,7 @@ namespace castor3d
 				parsingContext->mesh = parsingContext->scene->getMeshCache().add( parsingContext->strName2 );
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 
-				if ( !importer->importMesh( *parsingContext->mesh, pathFile, parameters, true ) )
+				if ( !importer->import( *parsingContext->mesh, pathFile, parameters, true ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}
@@ -2306,7 +2314,7 @@ namespace castor3d
 				auto importer = engine->getImporterFactory().create( extension, *engine );
 				Mesh mesh{ cuT( "MorphImport" ), *parsingContext->scene };
 
-				if ( !importer->importMesh( mesh, pathFile, parameters, false ) )
+				if ( !importer->import( mesh, pathFile, parameters, false ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
 				}

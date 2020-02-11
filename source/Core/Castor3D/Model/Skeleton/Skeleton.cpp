@@ -1,7 +1,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 #include "Castor3D/Engine.hpp"
-
+#include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
 using namespace castor;
@@ -65,7 +65,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation( name ) )
 		{
-			doAddAnimation( std::make_shared< SkeletonAnimation >( *this, name ) );
+			doAddAnimation( std::make_unique< SkeletonAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< SkeletonAnimation >( name );

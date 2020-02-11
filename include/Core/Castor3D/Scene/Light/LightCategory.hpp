@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LIGHT_CATEGORY_H___
 #define ___C3D_LIGHT_CATEGORY_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "LightModule.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 

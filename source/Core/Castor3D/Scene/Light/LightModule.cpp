@@ -1,4 +1,4 @@
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 
 namespace castor3d
 {

@@ -1,18 +1,23 @@
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/Program.hpp"
-
-CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
-CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
-CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
-CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
-
-using namespace castor;
+#include "Castor3D/Material/MaterialModule.hpp"
 
 namespace castor3d
 {
+	castor::String getName( MaterialType value )
+	{
+		switch ( value )
+		{
+		case MaterialType::ePhong:
+			return cuT( "phong" );
+		case MaterialType::eMetallicRoughness:
+			return cuT( "metallic_roughness" );
+		case MaterialType::eSpecularGlossiness:
+			return cuT( "specular_glossiness" );
+		default:
+			CU_Failure( "Unsupported MaterialType" );
+			return castor::cuEmptyString;
+		}
+	}
+
 	VkFormat convert( castor::PixelFormat format )
 	{
 		switch ( format )
@@ -147,46 +152,5 @@ namespace castor3d
 			assert( false && "Unsupported VkFormat" );
 			return castor::PixelFormat::eR8G8B8A8_UNORM;
 		}
-	}
-
-	castor::Matrix4x4f convert( std::array< float, 16 > const & value )
-	{
-		castor::Matrix4x4f result;
-		std::memcpy( result.ptr(), value.data(), 16 * sizeof( float ) );
-		return result;
-	}
-
-	VkClearColorValue convert( castor::RgbaColour const & value )
-	{
-		VkClearColorValue result;
-		std::memcpy( result.float32, value.constPtr(), 4 * sizeof( float ) );
-		return result;
-	}
-
-	castor::RgbaColour convert( VkClearColorValue const & value )
-	{
-		castor::RgbaColour result;
-		std::memcpy( result.ptr(), value.float32, 4 * sizeof( float ) );
-		return result;
-	}
-
-	RenderDevice const & getCurrentRenderDevice( RenderDevice const & obj )
-	{
-		return getCurrentRenderDevice( obj.renderSystem );
-	}
-
-	RenderDevice const & getCurrentRenderDevice( RenderSystem const & obj )
-	{
-		return obj.getCurrentRenderDevice();
-	}
-
-	RenderDevice const & getCurrentRenderDevice( Engine const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getRenderSystem() );
-	}
-
-	RenderDevice const & getCurrentRenderDevice( Scene const & obj )
-	{
-		return getCurrentRenderDevice( *obj.getEngine() );
 	}
 }

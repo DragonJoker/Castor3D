@@ -4,11 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredRendering_H___
 #define ___C3D_DeferredRendering_H___
 
+#include "OpaqueModule.hpp"
+
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 namespace castor3d
 {

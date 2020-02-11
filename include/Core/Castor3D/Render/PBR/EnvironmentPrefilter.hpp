@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_EnvironmentPrefilter_H___
 #define ___C3D_EnvironmentPrefilter_H___
 
+#include "PbrModule.hpp"
+
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 

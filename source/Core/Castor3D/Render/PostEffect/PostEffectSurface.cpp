@@ -1,4 +1,4 @@
-#include "Castor3D/PostEffect/PostEffectSurface.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectSurface.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"

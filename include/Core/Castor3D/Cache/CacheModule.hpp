@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
 namespace castor3d
@@ -86,53 +87,25 @@ namespace castor3d
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView;
 	/**
-	\~english
-	\brief
-	*	Cache used to hold the shader programs. Holds it, destroys it during a rendering loop
-	\~french
-	\brief
-	*	Cache utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
+	*\~english
+	*\brief
+	*	Base class for a scene element cache.
+	*\~french
+	*\brief
+	*	Classe de base pour un cache d'éléments de scène.
 	*/
-	class ShaderProgramCache;
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		RenderTarget cache.
-	\~french
-	\brief		Cache de RenderTarget.
-	*/
-	class RenderTargetCache;
-
-	template< typename ElementType >
-	using ElementInitialiser = std::function< void( std::shared_ptr< ElementType > ) >;
-
-	template< typename ElementType >
-	using ElementCleaner = std::function< void( std::shared_ptr< ElementType > ) >;
-
 	template< typename ElementType, typename KeyType >
-	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
-
-	class ShaderProgramCache;
-	class RenderTargetCache;
-
-	using ListenerCache = Cache< FrameListener, castor::String >;
-	using MeshCache = Cache< Mesh, castor::String >;
-	using SamplerCache = Cache< Sampler, castor::String >;
-	using SceneCache = Cache< Scene, castor::String >;
-	using RenderTechniqueCache = Cache< RenderTechnique, castor::String >;
-	using RenderWindowCache = Cache< RenderWindow, castor::String >;
-
-	CU_DeclareSmartPtr( ListenerCache );
-	CU_DeclareSmartPtr( MeshCache );
-	CU_DeclareSmartPtr( SceneCache );
-	CU_DeclareSmartPtr( SamplerCache );
-	CU_DeclareSmartPtr( ShaderProgramCache );
-	CU_DeclareSmartPtr( RenderTargetCache );
-	CU_DeclareSmartPtr( RenderTechniqueCache );
-	CU_DeclareSmartPtr( RenderWindowCache );
-
+	class ObjectCacheBase;
+	/**
+	*\~english
+	*\brief
+	*	Base class for a scene element cache.
+	*\~french
+	*\brief
+	*	Classe de base pour un cache d'éléments de scène.
+	*/
+	template< typename ElementType, typename KeyType >
+	class ObjectCache;
 	/**
 	*\~english
 	*\brief
@@ -158,24 +131,61 @@ namespace castor3d
 	template< typename ElementType, typename KeyType >
 	struct ObjectCacheTraits;
 
+	/**
+	*\~english
+	*\brief
+	*	Cache used to hold the shader programs. Holds it, destroys it during a rendering loop
+	*\~french
+	*\brief
+	*	Cache utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
+	*/
+	class ShaderProgramCache;
+	/**
+	*\~english
+	*\brief
+	*	RenderTarget cache.
+	*\~french
+	*\brief
+	*	Cache de RenderTarget.
+	*/
+	class RenderTargetCache;
+
+	template< typename ElementType >
+	using ElementInitialiser = std::function< void( std::shared_ptr< ElementType > ) >;
+
+	template< typename ElementType >
+	using ElementCleaner = std::function< void( std::shared_ptr< ElementType > ) >;
+
+	template< typename ElementType, typename KeyType >
+	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
+
 	template< typename ElementType >
 	using ElementAttacher = std::function< void( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ) >;
 
 	template< typename ElementType >
 	using ElementDetacher = std::function< void( std::shared_ptr< ElementType > ) >;
 
-	template< typename ElementType, typename KeyType >
-	class ObjectCacheBase;
+	using ListenerCache = Cache< FrameListener, castor::String >;
+	using MeshCache = Cache< Mesh, castor::String >;
+	using SamplerCache = Cache< Sampler, castor::String >;
+	using SceneCache = Cache< Scene, castor::String >;
+	using RenderTechniqueCache = Cache< RenderTechnique, castor::String >;
+	using RenderWindowCache = Cache< RenderWindow, castor::String >;
 
-	template< typename ElementType, typename KeyType >
-	class ObjectCache;
+	CU_DeclareSmartPtr( ListenerCache );
+	CU_DeclareSmartPtr( MeshCache );
+	CU_DeclareSmartPtr( SceneCache );
+	CU_DeclareSmartPtr( SamplerCache );
+	CU_DeclareSmartPtr( ShaderProgramCache );
+	CU_DeclareSmartPtr( RenderTargetCache );
+	CU_DeclareSmartPtr( RenderTechniqueCache );
+	CU_DeclareSmartPtr( RenderWindowCache );
 
 	using CameraCache = ObjectCache< Camera, castor::String >;
+	using ParticleSystemCache = ObjectCache< ParticleSystem, castor::String >;
 
 	CU_DeclareSmartPtr( CameraCache );
-
-	template< typename ResourceType, typename CacheType, EventType EventType >
-	class CacheView;
+	CU_DeclareSmartPtr( ParticleSystemCache );
 
 	//@}
 }

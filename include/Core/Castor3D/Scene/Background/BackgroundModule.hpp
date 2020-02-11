@@ -30,7 +30,7 @@ namespace castor3d
 		eSkybox,
 		CU_ScopedEnumBounds( eColour )
 	};
-	castor::String getName( BackgroundType value );
+	C3D_API castor::String getName( BackgroundType value );
 	/**
 	*\~english
 	*\brief

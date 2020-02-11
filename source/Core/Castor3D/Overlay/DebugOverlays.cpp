@@ -1,10 +1,13 @@
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Miscellaneous/QueryPool.hpp>

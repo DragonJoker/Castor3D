@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GenericPlugin_H___
 #define ___C3D_GenericPlugin_H___
 
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Plugin/PluginException.hpp"
 

@@ -4,11 +4,19 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_FILE_PARSER_H___
 #define ___C3D_SCENE_FILE_PARSER_H___
 
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
+
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Material/SubsurfaceScattering.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>

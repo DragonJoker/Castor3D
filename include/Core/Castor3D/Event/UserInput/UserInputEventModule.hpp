@@ -38,7 +38,7 @@ namespace castor3d
 		eHandler,
 		CU_ScopedEnumBounds( eMouse )
 	};
-	castor::String getName( UserInputEventType value );
+	C3D_API castor::String getName( UserInputEventType value );
 	/**
 	*\~english
 	*\brief
@@ -73,7 +73,7 @@ namespace castor3d
 		eWheel,
 		CU_ScopedEnumBounds( eMove )
 	};
-	castor::String getName( MouseEventType value );
+	C3D_API castor::String getName( MouseEventType value );
 	/**
 	*\~english
 	*\brief
@@ -96,7 +96,7 @@ namespace castor3d
 		eChar,
 		CU_ScopedEnumBounds( ePushed )
 	};
-	castor::String getName( KeyboardEventType value );
+	C3D_API castor::String getName( KeyboardEventType value );
 	/**
 	*\~english
 	*\brief
@@ -116,7 +116,7 @@ namespace castor3d
 		eDeactivate,
 		CU_ScopedEnumBounds( eActivate )
 	};
-	castor::String getName( HandlerEventType value );
+	C3D_API castor::String getName( HandlerEventType value );
 	/**
 	*\~english
 	*\brief
@@ -138,7 +138,7 @@ namespace castor3d
 		eRight,
 		CU_ScopedEnumBounds( eLeft )
 	};
-	castor::String getName( MouseButton value );
+	C3D_API castor::String getName( MouseButton value );
 	/**
 	*\~english
 	*\brief

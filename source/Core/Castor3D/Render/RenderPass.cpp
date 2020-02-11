@@ -1,7 +1,7 @@
 #include "Castor3D/Render/RenderPass.hpp"
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"

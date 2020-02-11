@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_IblTextures_H___
 #define ___C3D_IblTextures_H___
 
+#include "PbrModule.hpp"
+
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 #include "Castor3D/Render/PBR/RadianceComputer.hpp"
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"

@@ -49,7 +49,7 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSubmesh:
-				submesh = std::make_shared< Submesh >( *obj.getScene(), obj, obj.getSubmeshCount() );
+				submesh = std::make_shared< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
 
 				if ( result )

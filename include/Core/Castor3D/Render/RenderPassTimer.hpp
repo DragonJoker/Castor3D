@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderPassTimer_H___
 #define ___C3D_RenderPassTimer_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>

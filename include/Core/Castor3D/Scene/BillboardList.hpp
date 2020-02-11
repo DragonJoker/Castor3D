@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 

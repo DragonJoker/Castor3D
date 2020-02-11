@@ -34,7 +34,7 @@ namespace castor3d
 		eSpecularGlossiness,
 		CU_ScopedEnumBounds( ePhong )
 	};
-	castor::String getName( MaterialType value );
+	C3D_API castor::String getName( MaterialType value );
 	/**
 	*\~english
 	*\brief

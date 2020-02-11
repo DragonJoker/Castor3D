@@ -35,7 +35,7 @@ namespace castor3d
 		eSpot,
 		CU_ScopedEnumBounds( eDirectional )
 	};
-	castor::String getName( LightType value );
+	C3D_API castor::String getName( LightType value );
 	/**
 	*\~english
 	*\brief

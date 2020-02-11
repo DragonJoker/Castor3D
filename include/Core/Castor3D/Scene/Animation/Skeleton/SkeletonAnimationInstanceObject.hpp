@@ -4,8 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimationInstanceObject_H___
 #define ___C3D_SkeletonAnimationInstanceObject_H___
 
+#include "SkeletonAnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
+
 #include "Castor3D/Animation/Interpolator.hpp"
 
+#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 

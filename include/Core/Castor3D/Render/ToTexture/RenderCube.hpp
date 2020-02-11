@@ -7,15 +7,13 @@ See LICENSE file in root folder
 
 #include "RenderToTextureModule.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include "Castor3D/Buffer/UniformBuffer.hpp"
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Image/Sampler.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 

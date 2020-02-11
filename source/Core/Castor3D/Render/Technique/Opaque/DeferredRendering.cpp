@@ -1,6 +1,13 @@
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 
+#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"

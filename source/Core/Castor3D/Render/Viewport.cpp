@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Viewport.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 using namespace castor;
 

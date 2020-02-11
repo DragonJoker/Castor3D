@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LineariseDepthPass_H___
 #define ___C3D_LineariseDepthPass_H___
 
+#include "SsaoModule.hpp"
+
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -12,8 +15,16 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
-#include <ashespp/Buffer/PushConstantsBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Image/Sampler.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

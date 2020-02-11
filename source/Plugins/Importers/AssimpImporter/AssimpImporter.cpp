@@ -1,8 +1,8 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
-#include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
 #include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>

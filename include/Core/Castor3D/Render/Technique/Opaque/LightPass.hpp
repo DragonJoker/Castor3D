@@ -4,23 +4,21 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPass_H___
 #define ___C3D_DeferredLightPass_H___
 
-#include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "OpaqueModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
-#include "Castor3D/Render/Viewport.hpp"
+//#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
-
-#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
-
+//#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+//
+//#include <CastorUtils/Miscellaneous/BlockTracker.hpp>
+//
+#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
-
-#include <ShaderWriter/Shader.hpp>
+//
+//#include <ShaderWriter/Shader.hpp>
 
 namespace castor3d
 {

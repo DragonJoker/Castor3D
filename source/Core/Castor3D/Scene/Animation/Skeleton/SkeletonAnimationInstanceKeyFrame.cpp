@@ -5,6 +5,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
+#include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"

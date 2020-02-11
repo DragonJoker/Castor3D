@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderSystem_H___
 #define ___C3D_RenderSystem_H___
 
+#include "RenderModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
 #include "Castor3D/Buffer/GpuBufferPool.hpp"

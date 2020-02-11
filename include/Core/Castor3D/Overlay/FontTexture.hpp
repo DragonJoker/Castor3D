@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_FONT_TEXTURE_H___
 
 #include "OverlayModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>

@@ -5,13 +5,14 @@
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Shader/PassBuffer/PhongPassBuffer.hpp"
 #include "Castor3D/Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
 #include "Castor3D/Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 
 using namespace castor;
 

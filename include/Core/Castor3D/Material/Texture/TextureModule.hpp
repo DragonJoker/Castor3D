@@ -85,7 +85,7 @@ namespace castor3d
 		eAll = eAllButOpacity | eOpacity,
 	};
 	CU_ImplementFlags( TextureFlag )
-	castor::String getName( TextureFlag value
+	C3D_API castor::String getName( TextureFlag value
 		, MaterialType material );
 	/**
 	*\~english

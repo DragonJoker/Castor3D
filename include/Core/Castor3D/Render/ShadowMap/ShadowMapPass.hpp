@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_H___
 #define ___C3D_SHADOW_MAP_PASS_H___
 
+#include "ShadowMapModule.hpp"
+
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"

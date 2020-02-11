@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Engine_H___
 
 #include "Castor3D/Castor3DModule.hpp"
-#include "Castor3D/Cache/CacheTraits.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
@@ -456,7 +456,7 @@ namespace castor3d
 		castor::CpuInformations m_cpuInformations;
 		MaterialType m_materialType;
 		bool m_enableValidation{ false };
-		std::unique_ptr< RenderDepthQuadSPtr > m_renderDepth;
+		RenderDepthQuadSPtr m_renderDepth;
 	};
 }
 

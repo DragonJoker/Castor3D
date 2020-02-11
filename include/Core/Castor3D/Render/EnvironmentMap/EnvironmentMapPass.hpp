@@ -5,10 +5,14 @@ See LICENSE file in root folder
 #define ___C3D_EnvironmentMapPass_H___
 
 #include "EnvironmentMapModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
+
+#include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {

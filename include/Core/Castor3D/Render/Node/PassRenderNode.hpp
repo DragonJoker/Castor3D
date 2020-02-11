@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PassRenderNode_H___
 #define ___C3D_PassRenderNode_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderNodeModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
 namespace castor3d
 {

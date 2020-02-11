@@ -1,30 +1,14 @@
 #include "Castor3D/Render/Technique/RenderTechnique.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Background/Background.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-
-#include <ShaderWriter/Source.hpp>
-
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 using namespace castor;
 

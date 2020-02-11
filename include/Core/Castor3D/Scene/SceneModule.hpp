@@ -36,7 +36,7 @@ namespace castor3d
 		eParticleEmitter,
 		CU_ScopedEnumBounds( eCamera )
 	};
-	castor::String getName( MovableType value );
+	C3D_API castor::String getName( MovableType value );
 	/**
 	*\~english
 	*\brief
@@ -61,7 +61,7 @@ namespace castor3d
 		eVariance,
 		CU_ScopedEnumBounds( eNone )
 	};
-	castor::String getName( ShadowType value );
+	C3D_API castor::String getName( ShadowType value );
 	/**
 	*\~english
 	*\brief
@@ -86,7 +86,7 @@ namespace castor3d
 		eSquaredExponential,
 		CU_ScopedEnumBounds( eDisabled )
 	};
-	castor::String getName( FogType value );
+	C3D_API castor::String getName( FogType value );
 	/**
 	*\~english
 	*\brief
@@ -150,7 +150,7 @@ namespace castor3d
 		eCylindrical,
 		CU_ScopedEnumBounds( eSpherical )
 	};
-	castor::String getName( BillboardType value );
+	C3D_API castor::String getName( BillboardType value );
 	/**
 	*\~english
 	*\brief
@@ -169,7 +169,7 @@ namespace castor3d
 		eFixed,
 		CU_ScopedEnumBounds( eDynamic )
 	};
-	castor::String getName( BillboardSize value );
+	C3D_API castor::String getName( BillboardSize value );
 	/**
 	*\~english
 	*\brief

@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Shader/Program.hpp"

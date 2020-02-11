@@ -5,8 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_RenderQueue_H___
 
 #include "RenderModule.hpp"
-#include "Castor3D/Render/Node/RenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+
+#include "Castor3D/Render/Node/RenderNode.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>

@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayCache_H___
 #define ___C3D_OverlayCache_H___
 
-#include "Castor3D/Cache/CacheTraits.hpp"
-#include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Cache/CacheBase.hpp"
+#include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayFactory.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
@@ -13,6 +13,23 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/**
+	\~english
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for Overlay.
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour Overlay.
+	*/
+	template< typename KeyType >
+	struct CacheTraits< Overlay, KeyType >
+	{
+		C3D_API static const castor::String Name;
+		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, OverlayType, SceneSPtr, OverlaySPtr ) >;
+		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
+			, castor::Collection< Overlay, KeyType > &
+			, std::shared_ptr< Overlay > ) >;
+	};
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		03/10/2015

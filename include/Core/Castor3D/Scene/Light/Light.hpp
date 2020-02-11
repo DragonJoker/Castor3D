@@ -4,8 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_LIGHT_H___
 #define ___C3D_LIGHT_H___
 
-#include "Castor3D/Scene/MovableObject.hpp"
+#include "LightModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>

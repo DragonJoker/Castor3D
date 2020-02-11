@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderWindow_H___
 #define ___C3D_RenderWindow_H___
 
+#include "RenderModule.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
+
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"

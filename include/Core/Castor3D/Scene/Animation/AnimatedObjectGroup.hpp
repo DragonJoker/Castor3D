@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_OBJECT_GROUP_H___
 #define ___C3D_ANIMATED_OBJECT_GROUP_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "AnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
 #include <CastorUtils/Data/Loader.hpp>
 #include <CastorUtils/Design/Named.hpp>
@@ -244,14 +245,8 @@ namespace castor3d
 		OnAnimatedMeshChange onMeshRemoved;
 
 	private:
-		//!<\~english	The list of animations.
-		//!\~french		La liste des animations.
 		GroupAnimationMap m_animations;
-		//!<\~english	The list of AnimatedObjects.
-		//!\~french		La liste des AnimatedObject.
 		AnimatedObjectPtrStrMap m_objects;
-		//!<\~english	A timer, usefull for animation handling.
-		//!\~french		Un timer, pour mettre à jour précisément les animations.
 		castor::PreciseTimer m_timer;
 	};
 }

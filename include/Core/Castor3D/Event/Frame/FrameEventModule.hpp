@@ -35,7 +35,7 @@ namespace castor3d
 		ePostRender,
 		CU_ScopedEnumBounds( ePreRender )
 	};
-	castor::String getName( EventType value );
+	C3D_API castor::String getName( EventType value );
 	/**
 	*\~english
 	*\brief

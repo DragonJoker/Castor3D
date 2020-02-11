@@ -4,12 +4,31 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardCache_H___
 #define ___C3D_BillboardCache_H___
 
-#include "Castor3D/Cache/ObjectCacheTraits.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Cache/ObjectCacheBase.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Cache/BillboardUboPools.hpp"
 
 namespace castor3d
 {
+	/**
+	\~english
+	\brief		Helper structure to specialise a scene cache behaviour.
+	\remarks	Specialisation for BillboardList.
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
+	\remarks	Spécialisation pour BillboardList.
+	*/
+	template< typename KeyType >
+	struct ObjectCacheTraits< BillboardList, KeyType >
+	{
+		C3D_API static const castor::String Name;
+		using Producer = std::function< std::shared_ptr< BillboardList >( KeyType const &, SceneNodeSPtr ) >;
+		using Merger = std::function< void( ObjectCacheBase< BillboardList, KeyType > const &
+			, castor::Collection< BillboardList, KeyType > &
+			, std::shared_ptr< BillboardList >
+			, SceneNodeSPtr
+			, SceneNodeSPtr ) >;
+	};
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/04/2018

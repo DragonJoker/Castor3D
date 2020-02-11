@@ -1,42 +1,36 @@
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-
-#include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineRasterizationStateCreateInfo.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-
-#include <ShaderWriter/Source.hpp>
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 

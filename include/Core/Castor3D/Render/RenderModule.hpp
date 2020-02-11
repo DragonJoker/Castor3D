@@ -106,7 +106,7 @@ namespace castor3d
 		eNearRightBottom,
 		CU_ScopedEnumBounds( eFarLeftBottom )
 	};
-	castor::String getName( FrustumCorner value );
+	C3D_API castor::String getName( FrustumCorner value );
 	/**
 	*\~english
 	*\brief
@@ -137,7 +137,7 @@ namespace castor3d
 		eBottom,
 		CU_ScopedEnumBounds( eNear )
 	};
-	castor::String getName( FrustumPlane value );
+	C3D_API castor::String getName( FrustumPlane value );
 	/**
 	*\~english
 	*\brief
@@ -157,7 +157,7 @@ namespace castor3d
 		eMorphing,
 		eBillboard
 	};
-	castor::String getName( PickNodeType value );
+	C3D_API castor::String getName( PickNodeType value );
 	/**
 	*\~english
 	*\brief
@@ -173,7 +173,7 @@ namespace castor3d
 		eTexture,
 		CU_ScopedEnumBounds( eWindow )
 	};
-	castor::String getName( TargetType value );
+	C3D_API castor::String getName( TargetType value );
 	/**
 	*\~english
 	*\brief
@@ -190,7 +190,7 @@ namespace castor3d
 		eFrustum,
 		CU_ScopedEnumBounds( eOrtho )
 	};
-	castor::String getName( ViewportType value );
+	C3D_API castor::String getName( ViewportType value );
 	/**
 	*\~english
 	*\brief
@@ -425,6 +425,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( RenderSystem );
 	CU_DeclareSmartPtr( RenderTarget );
 	CU_DeclareSmartPtr( RenderWindow );
+	CU_DeclareSmartPtr( Viewport );
 
 	//! RenderWindow pointer array.
 	CU_DeclareVector( RenderWindowSPtr, RenderWindowPtr );

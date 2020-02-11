@@ -438,8 +438,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${${PROJECT_NAME}_HDR_FILES}
 		${${PROJECT_NAME}_FOLDER_HDR_FILES}
 	)
-	source_group( "Header Files\\Miscellaneoush" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-	source_group( "Source Files\\Miscellaneoush" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+	source_group( "Header Files\\Miscellaneous" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+	source_group( "Source Files\\Miscellaneous" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Multithreading/ThreadPool.cpp

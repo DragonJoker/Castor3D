@@ -1,26 +1,10 @@
 #include "Castor3D/Cache/LightCache.hpp"
 
-#include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Event/Frame/CleanupEvent.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
-
-#include <ashespp/Core/Device.hpp>
-#include <ashespp/Image/Image.hpp>
-
-#include <CastorUtils/Design/ArrayView.hpp>
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 using namespace castor;
 

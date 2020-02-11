@@ -1,34 +1,32 @@
 #include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-#include "Castor3D/Shader/GlslToSpv.hpp"
-
-#include <ShaderWriter/Source.hpp>
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <random>
 

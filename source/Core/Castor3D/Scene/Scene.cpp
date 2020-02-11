@@ -1,15 +1,22 @@
 #include "Castor3D/Scene/Scene.hpp"
 
-#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -18,10 +25,9 @@
 #include "Castor3D/Scene/Background/Image.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
 #include "Castor3D/Scene/Background/BackgroundTextWriter.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -613,7 +619,7 @@ namespace castor3d
 				return std::make_shared< Light >( name
 					, *this
 					, node
-					, m_lightFactory
+					, *m_lightFactory
 					, lightType );
 			}
 			, dummy
@@ -871,10 +877,11 @@ namespace castor3d
 		scene->cleanup();
 	}
 
-	bool Scene::importExternal( Path const & fileName, Importer & importer )
+	bool Scene::importExternal( Path const & fileName, SceneImporter & importer )
 	{
 		setChanged();
-		return importer.importScene( *this, fileName, Parameters() );
+		//return importer.importScene( *this, fileName, Parameters() );
+		return false;
 	}
 
 	uint32_t Scene::getVertexCount()const

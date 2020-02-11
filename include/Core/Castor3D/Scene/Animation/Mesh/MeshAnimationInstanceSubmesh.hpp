@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_MeshAnimationInstanceSubmesh_H___
 
 #include "MeshAnimationModule.hpp"
-
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 

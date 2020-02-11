@@ -52,7 +52,7 @@ namespace castor3d
 
 	bool BonesComponent::doInitialise()
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
+		auto & device = getCurrentRenderDevice( *getOwner()->getOwner() );
 
 		if ( !m_bonesBuffer || m_bonesBuffer->getCount() != m_bones.size() )
 		{

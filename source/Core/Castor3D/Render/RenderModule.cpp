@@ -1,21 +1,14 @@
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+
+#include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+
+CU_ImplementExportedOwnedBy( castor3d::RenderSystem, RenderSystem )
+CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
 
 namespace castor3d
 {
-	castor::String getName( TargetType value )
-	{
-		switch ( value )
-		{
-		case TargetType::eWindow:
-			return cuT( "window" );
-		case TargetType::eTexture:
-			return cuT( "texture" );
-		default:
-			CU_Failure( "Unsupported TargetType" );
-			return castor::cuEmptyString;
-		}
-	}
-
 	castor::String getName( FrustumCorner value )
 	{
 		switch ( value )
@@ -64,22 +57,6 @@ namespace castor3d
 		}
 	}
 
-	castor::String getName( ViewportType value )
-	{
-		switch ( value )
-		{
-		case ViewportType::eOrtho:
-			return cuT( "ortho" );
-		case ViewportType::ePerspective:
-			return cuT( "perspective" );
-		case ViewportType::eFrustum:
-			return cuT( "frustum" );
-		default:
-			CU_Failure( "Unsupported ViewportType" );
-			return castor::cuEmptyString;
-		}
-	}
-
 	castor::String getName( PickNodeType value )
 	{
 		switch ( value )
@@ -104,83 +81,32 @@ namespace castor3d
 		}
 	}
 
-	castor::String getName( ElementUsage value )
+	castor::String getName( TargetType value )
 	{
 		switch ( value )
 		{
-		case ElementUsage::eUnknown:
-			return cuT( "unknown" );
-		case ElementUsage::ePosition:
-			return cuT( "position" );
-		case ElementUsage::eNormal:
-			return cuT( "normal" );
-		case ElementUsage::eTangent:
-			return cuT( "tangent" );
-		case ElementUsage::eBitangent:
-			return cuT( "bitangent" );
-		case ElementUsage::eDiffuse:
-			return cuT( "diffuse" );
-		case ElementUsage::eTexCoords:
-			return cuT( "texcoords" );
-		case ElementUsage::eBoneIds0:
-			return cuT( "bone_ids0" );
-		case ElementUsage::eBoneIds1:
-			return cuT( "bone_ids1" );
-		case ElementUsage::eBoneWeights0:
-			return cuT( "bone_weights0" );
-		case ElementUsage::eBoneWeights1:
-			return cuT( "bone_weights1" );
-		case ElementUsage::eTransform:
-			return cuT( "transform" );
-		case ElementUsage::eMatIndex:
-			return cuT( "mat_index" );
+		case TargetType::eWindow:
+			return cuT( "window" );
+		case TargetType::eTexture:
+			return cuT( "texture" );
 		default:
-			CU_Failure( "Unsupported ElementUsage" );
+			CU_Failure( "Unsupported TargetType" );
 			return castor::cuEmptyString;
 		}
 	}
 
-	castor::String getName( TextureFlag value
-		, MaterialType material )
+	castor::String getName( ViewportType value )
 	{
 		switch ( value )
 		{
-		case TextureFlag::eNone:
-			return cuT( "none" );
-		case TextureFlag::eDiffuse:
-			return ( material == MaterialType::eSpecularGlossiness
-				? castor::String{ cuT( "albedo" ) }
-				: ( material == MaterialType::eMetallicRoughness
-					? castor::String{ cuT( "albedo" ) }
-					: castor::String{ cuT( "diffuse" ) } ) );
-		case TextureFlag::eNormal:
-			return cuT( "normal" );
-		case TextureFlag::eOpacity:
-			return cuT( "opacity" );
-		case TextureFlag::eSpecular:
-			return ( material == MaterialType::eMetallicRoughness
-				? castor::String{ cuT( "metallic" ) }
-				: castor::String{ cuT( "specular" ) } );
-		case TextureFlag::eHeight:
-			return cuT( "height" );
-		case TextureFlag::eGlossiness:
-			return ( material == MaterialType::eSpecularGlossiness
-				? castor::String{ cuT( "glossiness" ) }
-				: ( material == MaterialType::eMetallicRoughness
-					? castor::String{ cuT( "roughness" ) }
-					: castor::String{ cuT( "shininess" ) } ) );
-		case TextureFlag::eEmissive:
-			return cuT( "emissive" );
-		case TextureFlag::eReflection:
-			return cuT( "reflection" );
-		case TextureFlag::eRefraction:
-			return cuT( "refraction" );
-		case TextureFlag::eOcclusion:
-			return cuT( "occlusion" );
-		case TextureFlag::eTransmittance:
-			return cuT( "transmittance" );
+		case ViewportType::eOrtho:
+			return cuT( "ortho" );
+		case ViewportType::ePerspective:
+			return cuT( "perspective" );
+		case ViewportType::eFrustum:
+			return cuT( "frustum" );
 		default:
-			CU_Failure( "Unsupported TextureFlag" );
+			CU_Failure( "Unsupported ViewportType" );
 			return castor::cuEmptyString;
 		}
 	}
@@ -222,5 +148,25 @@ namespace castor3d
 						)
 					)
 				);
+	}
+
+	RenderDevice const & getCurrentRenderDevice( RenderDevice const & obj )
+	{
+		return getCurrentRenderDevice( obj.renderSystem );
+	}
+
+	RenderDevice const & getCurrentRenderDevice( RenderSystem const & obj )
+	{
+		return obj.getCurrentRenderDevice();
+	}
+
+	RenderDevice const & getCurrentRenderDevice( Engine const & obj )
+	{
+		return getCurrentRenderDevice( *obj.getRenderSystem() );
+	}
+
+	RenderDevice const & getCurrentRenderDevice( Scene const & obj )
+	{
+		return getCurrentRenderDevice( *obj.getEngine() );
 	}
 }

@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_Overlay_H___
 #define ___C3D_Overlay_H___
 
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
