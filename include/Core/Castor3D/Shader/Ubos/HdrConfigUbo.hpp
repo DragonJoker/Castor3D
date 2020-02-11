@@ -4,7 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_HdrConfigUbo_H___
 #define ___C3D_HdrConfigUbo_H___
 
-#include "Castor3D/HDR/HdrConfig.hpp"
+#include "UbosModule.hpp"
+
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 

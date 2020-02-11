@@ -10,21 +10,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		25/08/2010
-	\~english
-	\brief		A rectangular overlay with a border
-	\remark		Uses a spceific material for the border
-	\~french
-	\brief		Une incrustation rectangulaire avec un bord
-	\remark		Utilise un matériau spécifique pour le bord
-	*/
 	class BorderPanelOverlay
 		: public OverlayCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

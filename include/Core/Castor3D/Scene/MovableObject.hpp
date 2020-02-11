@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/SceneNode.hpp"
 
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -18,7 +19,7 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

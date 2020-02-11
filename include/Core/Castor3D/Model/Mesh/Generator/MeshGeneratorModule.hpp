@@ -15,14 +15,14 @@ namespace castor3d
 	/**@name Generator */
 	//@{
 
-	/*!
+	/**
 	\~english
 	\brief		The cone is a basic primitive, with a parametrable number of faces
 	\~french
 	\brief		Le cône est une primitive basique, avec un nombre paramétrable de faces
 	*/
 	class Cone;
-	/*!
+	/**
 	\~english
 	\brief		The cube representation
 	\remark		The calling of cube is abusive because it has parametrable dimensions (width, height and depth)
@@ -31,7 +31,7 @@ namespace castor3d
 	\remark		La dénomination "Cube" est un abus de langage car ses 3 dimensions sont paramétrables (largeur, hauteur et profondeur)
 	*/
 	class Cube;
-	/*!
+	/**
 	\~english
 	\brief		The cylinder representation
 	\remark		The cylinder is a basic primitive, with a parametrable number of faces
@@ -40,7 +40,7 @@ namespace castor3d
 	\remark		Un cylindre est une primitive basique avec un nombre de faces paramétrable
 	*/
 	class Cylinder;
-	/*!
+	/**
 	\~english
 	\brief		The icosahedron representation
 	\remark		An icosahedron is a geometric polygon constituted by 20 equilateral triangles.
@@ -51,7 +51,7 @@ namespace castor3d
 				<br />Ce mesh est utilisé pour construire des sphères à faces triangulaires
 	*/
 	class Icosahedron;
-	/*!
+	/**
 	\~english
 	\brief		The plane representation
 	\remark		A plane can be subdivided in width and in height.
@@ -60,7 +60,7 @@ namespace castor3d
 	\remark		Un plan peut être subdivisé en hauteur et en largeur
 	*/
 	class Plane;
-	/*!
+	/**
 	\~english
 	\brief		Projection mesh representation.
 	\remark		The projection mesh is the projection of an arc over along axis on a given distance.
@@ -69,7 +69,7 @@ namespace castor3d
 	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée.
 	*/
 	class Projection;
-	/*!
+	/**
 	\~english
 	\brief		The sphere primitive
 	\remark		This sphere has squared faces. It is built from a radius and a number of subsections
@@ -78,7 +78,7 @@ namespace castor3d
 	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
 	*/
 	class Sphere;
-	/*!
+	/**
 	\~english
 	\brief		The torus representation
 	\remark		A torus is an ellipse performing an horizontal ellipse.

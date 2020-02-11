@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "BinaryModule.hpp"
 
-#include "ChunkData.hpp"
+#include "Castor3D/Binary/ChunkData.hpp"
 
 #include <cstdint>
 #include <cstring>
@@ -22,17 +22,17 @@ namespace castor3d
 			| ( rev << 0 ) );
 	}
 
-	inline constexpr uint32_t getMajor( uint32_t version )
+	inline constexpr uint32_t getCmshMajor( uint32_t version )
 	{
 		return ( version >> 24 );
 	}
 
-	inline constexpr uint32_t getMinor( uint32_t version )
+	inline constexpr uint32_t getCmshMinor( uint32_t version )
 	{
 		return ( ( version >> 16 ) & uint32_t( 0xff ) );
 	}
 
-	inline constexpr uint32_t getRevision( uint32_t version )
+	inline constexpr uint32_t getCmshRevision( uint32_t version )
 	{
 		return ( version & uint32_t( 0xff ) );
 	}
@@ -54,7 +54,7 @@ namespace castor3d
 			| ( uint64_t( g ) << 8 )
 			| ( uint64_t( h ) << 0 ) );
 	}
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
 	\date 		15/04/2013
@@ -354,17 +354,9 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The chunk type.
-		//!\~french		Le type du chunk.
 		ChunkType m_type;
-		//!\~english	The chunk data.
-		//!\~french		Les données du chunk.
 		castor::ByteArray m_data;
-		//!\~english	The current index in the chunk data.
-		//!\~french		L'index courant dans les données du chunk.
 		uint32_t m_index;
-		//!\~english	The chunk data.
-		//!\~french		Les données du chunk.
 		std::list< castor::ByteArray > m_addedData;
 	};
 }

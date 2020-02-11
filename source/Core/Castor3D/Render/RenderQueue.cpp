@@ -5,10 +5,10 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
-#include "Castor3D/Mesh/Mesh.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -21,7 +21,7 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

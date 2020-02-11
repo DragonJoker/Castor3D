@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version	0.7.0.0
 	\date		19/06/2012
@@ -549,7 +549,7 @@ namespace castor
 		 */
 		template< typename T, typename U >
 		std::basic_string< T > stringCast( std::initializer_list<  U > const & src );
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version	0.8.0
 		\date		21/09/2015
@@ -572,7 +572,7 @@ namespace castor
 			*/
 			template< typename IteratorType >
 			inline char32_t toUtf8( IteratorType value );
-			/*!
+			/**
 			\author		Sylvain doremus
 			\version	0.8.0
 			\date		09/03/2015
@@ -784,7 +784,7 @@ namespace castor
 			 \return		A reference to this object.
 			*/
 			inline iterator operator-( iterator it, size_t offset );
-			/*!
+			/**
 			\author		Sylvain doremus
 			\version	0.8.0
 			\date		09/03/2015
@@ -998,7 +998,7 @@ namespace castor
 			inline const_iterator operator-( const_iterator it, size_t offset );
 		}
 	}
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		19/06/2012
 	\~english

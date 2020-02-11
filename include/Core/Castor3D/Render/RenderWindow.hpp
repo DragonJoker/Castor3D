@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderWindow_H___
 
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -58,7 +58,7 @@ namespace castor3d
 		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
 
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

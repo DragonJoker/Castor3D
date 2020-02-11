@@ -1,4 +1,4 @@
-#include "Castor3D/Material/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 
 using namespace castor;
 

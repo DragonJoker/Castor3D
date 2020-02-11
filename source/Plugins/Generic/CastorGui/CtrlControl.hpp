@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 namespace CastorGui
 {
-	/*!
+	/**
 	 *\author		Sylvain DOREMU
 	 *\brief		Description of a contro
 	*/

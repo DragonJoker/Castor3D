@@ -9,9 +9,9 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/PBR/IblTextures.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/PBR/IblTextures.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 namespace castor3d
 {

@@ -120,7 +120,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'animation.
 		 */
-		inline AnimationT< OwnerT > const & getAnimation()const
+		inline Animation const & getAnimation()const
 		{
 			return m_animation;
 		}
@@ -137,7 +137,7 @@ namespace castor3d
 	protected:
 		//!\~english	The animation.
 		//!\~french		L'animation.
-		AnimationT< OwnerT > const & m_animation;
+		Animation const & m_animation;
 		//!\~english	The animation time scale.
 		//!\~french		Le multiplicateur de temps.
 		float m_scale{ 1.0f };

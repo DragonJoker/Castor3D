@@ -1,10 +1,10 @@
 #include "Castor3D/Binary/BinarySubmesh.hpp"
 
 #include "Castor3D/Binary/BinaryBonesComponent.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
 using namespace castor;
 
@@ -264,8 +264,6 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSubmeshFaceCount:
-				break;
-
 			case ChunkType::eSubmeshFaces:
 				break;
 

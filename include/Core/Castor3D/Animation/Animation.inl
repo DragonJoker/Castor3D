@@ -1,10 +1,10 @@
-#include "Castor3D/Animation/Animation.hpp"
+#include "Animation.hpp"
 
 namespace castor3d
 {
-	template< typename OwnerT >
-	AnimationT< OwnerT >::AnimationT( AnimationType type
-		, Animable< OwnerT > & animable
+	template< typename AnimableHanlerT >
+	AnimationT< AnimableHanlerT >::AnimationT( AnimationType type
+		, AnimableT< AnimableHanlerT > & animable
 		, castor::String const & name )
 		: Named{ name }
 		, OwnedBy< Animable >{ animable }
@@ -12,13 +12,13 @@ namespace castor3d
 	{
 	}
 		
-	template< typename OwnerT >
-	AnimationT< OwnerT >::~AnimationT()
+	template< typename AnimableHanlerT >
+	AnimationT< AnimableHanlerT >::~AnimationT()
 	{
 	}
 	
-	template< typename OwnerT >
-	void AnimationT< OwnerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
+	template< typename AnimableHanlerT >
+	void AnimationT< AnimableHanlerT >::addKeyFrame( AnimationKeyFrameUPtr keyFrame )
 	{
 		auto it = std::lower_bound( m_keyframes.begin()
 			, m_keyframes.end()
@@ -32,8 +32,8 @@ namespace castor3d
 		updateLength();
 	}
 
-	template< typename OwnerT >
-	AnimationKeyFrameArray::iterator AnimationT< OwnerT >::find( castor::Milliseconds const & time )
+	template< typename AnimableHanlerT >
+	AnimationKeyFrameArray::iterator AnimationT< AnimableHanlerT >::find( castor::Milliseconds const & time )
 	{
 		return std::find_if( m_keyframes.begin()
 			, m_keyframes.end()
@@ -43,8 +43,8 @@ namespace castor3d
 			} );
 	}
 
-	template< typename OwnerT >
-	void AnimationT< OwnerT >::findKeyFrame( castor::Milliseconds const & time
+	template< typename AnimableHanlerT >
+	void AnimationT< AnimableHanlerT >::findKeyFrame( castor::Milliseconds const & time
 		, AnimationKeyFrameArray::iterator & prv
 		, AnimationKeyFrameArray::iterator & cur )const
 	{
@@ -67,8 +67,8 @@ namespace castor3d
 		CU_Ensure( prv != cur );
 	}
 
-	template< typename OwnerT >
-	void AnimationT< OwnerT >::updateLength()
+	template< typename AnimableHanlerT >
+	void AnimationT< AnimableHanlerT >::updateLength()
 	{
 		for ( auto const & keyFrame : m_keyframes )
 		{

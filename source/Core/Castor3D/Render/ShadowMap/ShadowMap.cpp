@@ -1,30 +1,13 @@
-#include "Castor3D/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/ModelUbo.hpp"
-#include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
-#include "Castor3D/ShadowMap/ShadowMapPass.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
-
-#include <ashespp/Image/Image.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <ShaderWriter/Source.hpp>
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 using namespace castor;
 

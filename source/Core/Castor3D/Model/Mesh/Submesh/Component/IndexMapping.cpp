@@ -1,4 +1,4 @@
-#include "Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 
 using namespace castor;
 

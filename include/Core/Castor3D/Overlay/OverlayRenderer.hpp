@@ -1,11 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OVERLAY_RENDERER_H___
-#define ___C3D_OVERLAY_RENDERER_H___
+#ifndef ___C3D_OverlayRenderer_H___
+#define ___C3D_OverlayRenderer_H___
 
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
+
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
@@ -22,14 +24,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\~english
-	\brief		The overlay renderer.
-	\~french
-	\brief		Le renderer d'incrustation.
-	*/
 	class OverlayRenderer
 		: public castor::OwnedBy< RenderSystem >
 	{

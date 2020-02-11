@@ -1,6 +1,6 @@
-#include "Castor3D/Render/RenderNode/MorphingRenderNode.hpp"
+#include "Castor3D/Render/Node/MorphingRenderNode.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Geometry.hpp"

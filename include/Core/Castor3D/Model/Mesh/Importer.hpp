@@ -5,6 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_ModelMeshImporter_H___
 
 #include "MeshModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
+#include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
 #include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>

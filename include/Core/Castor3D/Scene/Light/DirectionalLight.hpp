@@ -19,7 +19,7 @@ namespace castor3d
 			castor::Matrix4x4f viewProjMatrix;
 			float splitDepth;
 		};
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

@@ -5,15 +5,15 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Texture/TextureConfiguration.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

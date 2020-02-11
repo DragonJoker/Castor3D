@@ -4,7 +4,7 @@
 
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Shader/Program.hpp"
 

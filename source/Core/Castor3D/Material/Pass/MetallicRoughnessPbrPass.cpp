@@ -1,4 +1,4 @@
-#include "Castor3D/Material/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
 
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 

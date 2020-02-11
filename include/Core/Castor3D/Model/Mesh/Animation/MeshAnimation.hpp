@@ -6,10 +6,11 @@ See LICENSE file in root folder
 
 #include "MeshAnimationModule.hpp"
 
-#include "Castor3D/Animation/Animation.hpp"
-
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+
+#include "Castor3D/Animation/Animation.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp"
 
 namespace castor3d
 {

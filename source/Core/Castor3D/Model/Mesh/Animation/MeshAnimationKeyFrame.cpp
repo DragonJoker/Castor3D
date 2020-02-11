@@ -1,7 +1,7 @@
-#include "Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 
-#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 

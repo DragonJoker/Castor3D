@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/PassBuffer/SpecularGlossinessPassBuffer.hpp"
 
-#include "Castor3D/Material/PhongPass.hpp"
-#include "Castor3D/Material/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
 
 using namespace castor;
 

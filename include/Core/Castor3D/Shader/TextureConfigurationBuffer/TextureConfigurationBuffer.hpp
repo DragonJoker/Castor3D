@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureConfigurationBuffer_H___
 #define ___C3D_TextureConfigurationBuffer_H___
 
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>

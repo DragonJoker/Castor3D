@@ -1,10 +1,10 @@
-#include "Castor3D/RenderToTexture/RenderCube.hpp"
+#include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>

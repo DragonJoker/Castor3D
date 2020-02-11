@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_BILLBOARD_LIST_H___
 #define ___C3D_BILLBOARD_LIST_H___
 
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
@@ -226,7 +227,7 @@ namespace castor3d
 		, public BillboardBase
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

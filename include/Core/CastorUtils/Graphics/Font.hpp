@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		17/01/2011
@@ -30,7 +30,7 @@ namespace castor
 		: public Resource< Font >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
@@ -61,7 +61,7 @@ namespace castor
 			 */
 			CU_API bool operator()( Font const & object, TextFile & file )override;
 		};
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		03/01/2011
@@ -105,7 +105,7 @@ namespace castor
 			//!\~french		Hauteur voulue pour la police
 			uint32_t m_height;
 		};
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		17/01/2011

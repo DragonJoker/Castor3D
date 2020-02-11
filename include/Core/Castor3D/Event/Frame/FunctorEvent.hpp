@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FUNCTOR_EVENT_H___
-#define ___C3D_FUNCTOR_EVENT_H___
+#ifndef ___C3D_FunctorEvent_H___
+#define ___C3D_FunctorEvent_H___
 
 #include "FrameEvent.hpp"
-
-#include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {

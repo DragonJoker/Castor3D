@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OpaqueTechniqueModule_H___
 #define ___C3D_OpaqueTechniqueModule_H___
 
-#include "Castor3D/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
 #include "Castor3D/Scene/Light/LightModule.hpp"
 

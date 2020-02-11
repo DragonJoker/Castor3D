@@ -3,9 +3,9 @@
 #include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
 #include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
 #include <Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
@@ -15,7 +15,7 @@
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Geometry.hpp>

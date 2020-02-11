@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/HDR/ToneMapping.hpp"
+#include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Overlay/OverlayRenderer.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
@@ -11,9 +11,9 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Technique/RenderTechnique.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>

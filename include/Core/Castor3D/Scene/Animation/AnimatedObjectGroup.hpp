@@ -18,7 +18,7 @@ namespace castor3d
 		, public castor::OwnedBy< Scene >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

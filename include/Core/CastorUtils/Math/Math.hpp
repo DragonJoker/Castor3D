@@ -28,7 +28,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	//************************************************************************************************
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Factorial recursive case
@@ -42,7 +42,7 @@ namespace castor
 			return N * Fact < T, N - 1 > ()();
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Factorial end case
@@ -57,7 +57,7 @@ namespace castor
 		}
 	};
 	//************************************************************************************************
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power recursive case
@@ -71,7 +71,7 @@ namespace castor
 			return Power < T, N / 2 > ()( x ) * Power < T, N / 2 > ()( x ) * Power < T, N % 2 > ()( x );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power end case
@@ -85,7 +85,7 @@ namespace castor
 			return x;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power end case
@@ -100,7 +100,7 @@ namespace castor
 		}
 	};
 	//************************************************************************************************
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm recursive case
@@ -114,7 +114,7 @@ namespace castor
 			return LogN < N - 1, T > ()( x ) + Power < double, 2 * N + 1 > ()( ( double( x ) - 1 ) / ( double( x ) + 1 ) ) / ( 2 * N + 1 );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm end case
@@ -128,7 +128,7 @@ namespace castor
 			return ( double( x ) - 1 ) / ( double( x ) + 1 );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm using template implementation

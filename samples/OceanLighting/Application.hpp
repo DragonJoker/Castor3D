@@ -13,8 +13,8 @@ namespace OceanLighting
 		: public wxApp
 	{
 	private:
-		MainFrame * m_pMainFrame;
-		wxLocale * m_pLocale;
+		MainFrame * m_pMainFrame{ nullptr };
+		wxLocale * m_pLocale{ nullptr };
 
 	public:
 		Application() {}

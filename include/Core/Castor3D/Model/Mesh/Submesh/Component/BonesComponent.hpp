@@ -67,10 +67,7 @@ namespace castor3d
 		 *\brief		Ajoute des données de bones.
 		 *\param[in]	boneData	Les données de bones.
 		 */
-		inline void addBoneDatas( std::vector< VertexBoneData > const & boneData )
-		{
-			addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
-		}
+		C3D_API void addBoneDatas( std::vector< VertexBoneData > const & boneData );
 		/**
 		 *\~english
 		 *\brief		adds bone datas.

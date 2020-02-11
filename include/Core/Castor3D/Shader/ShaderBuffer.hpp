@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ShaderModule.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
 namespace castor3d

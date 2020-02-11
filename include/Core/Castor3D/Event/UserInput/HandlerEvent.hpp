@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_HANDLER_EVENT_H___
-#define ___C3D_HANDLER_EVENT_H___
+#ifndef ___C3D_HandlerEvent_H___
+#define ___C3D_HandlerEvent_H___
 
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 

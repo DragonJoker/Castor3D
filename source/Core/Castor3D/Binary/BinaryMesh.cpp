@@ -2,9 +2,9 @@
 
 #include "Castor3D/Binary/BinarySkeleton.hpp"
 #include "Castor3D/Binary/BinarySubmesh.hpp"
-#include "Castor3D/Mesh/Mesh.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 using namespace castor;
 

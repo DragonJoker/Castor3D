@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 namespace CastorGui
 {
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\version		0.1.0
 	 *\brief		ComboBox control.

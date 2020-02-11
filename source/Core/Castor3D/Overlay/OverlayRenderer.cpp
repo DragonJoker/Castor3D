@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
@@ -15,8 +15,8 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>

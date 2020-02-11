@@ -1,9 +1,9 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Castor3D/Mesh/Skeleton/Bone.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 

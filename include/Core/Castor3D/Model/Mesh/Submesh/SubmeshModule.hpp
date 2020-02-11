@@ -32,16 +32,24 @@ namespace castor3d
 	*/
 	class Submesh;
 
+	template< typename T >
+	struct SubmeshAnimationBufferT
+	{
+		InterleavedVertexTArray< T > m_buffer;
+		float m_timeIndex;
+	};
+	using SubmeshAnimationBuffer = SubmeshAnimationBufferT< float >;
+
 	CU_DeclareSmartPtr( Submesh );
 
 	//! Submesh pointer array
 	CU_DeclareVector( SubmeshSPtr, SubmeshPtr );
 	CU_DeclareMap( castor::String, SubmeshSPtr, SubmeshPtrStr );
-
+	CU_DeclareMap( Submesh const *, castor::BoundingBox, SubmeshBoundingBox );
+	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
+	CU_DeclareMap( uint32_t, SubmeshAnimationBuffer, SubmeshAnimationBuffer );
 	using SubmeshBoundingBoxList = std::vector< std::pair< Submesh const *, castor::BoundingBox > >;
-	using SubmeshBoundingBoxMap = std::map< Submesh const *, castor::BoundingBox >;
-	using SubmeshBoundingSphereMap = std::map< Submesh const *, castor::BoundingSphere >;
-
+	
 	//@}
 	//@}
 	//@}

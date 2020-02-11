@@ -23,15 +23,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		02/03/2017
-	\version	0.9.0
-	\~english
-	\brief		Class used to render colour equirectangular textures to cube maps.
-	\~french
-	\brief		Classe utilisée pour rendre les textures couleur équirectangulaires dans des cube maps.
-	*/
 	class TextureProjection
 		: public castor::OwnedBy< Engine >
 	{

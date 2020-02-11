@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_CAMERA_H___
 
 #include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Miscellaneous/Frustum.hpp"
+#include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
@@ -17,7 +17,7 @@ namespace castor3d
 		: public MovableObject
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

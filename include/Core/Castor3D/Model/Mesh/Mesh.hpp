@@ -4,9 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_Mesh_H___
 #define ___C3D_Mesh_H___
 
+#include "MeshModule.hpp"
+
 #include "Castor3D/Animation/AnimationModule.hpp"
-#include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+
+#include "Castor3D/Animation/Animable.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
@@ -16,10 +23,10 @@ namespace castor3d
 {
 	class Mesh
 		: public castor::Resource< Mesh >
-		, public AnimableT< Scene >
+		, public Animable
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

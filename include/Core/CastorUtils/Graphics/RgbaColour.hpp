@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011
@@ -82,7 +82,7 @@ namespace castor
 		eHighAlphaWhite = 0xFFFFFFBF,
 		eOpaqueWhite = 0xFFFFFFFF,
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011
@@ -130,7 +130,7 @@ namespace castor
 	 *\return		La couleur prédéfinie
 	 */
 	inline static PredefinedRgbaColour getPredefinedRgba( String const & name );
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		14/08/2010
 	\~english
@@ -146,7 +146,7 @@ namespace castor
 	class RgbaColourT
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
@@ -177,7 +177,7 @@ namespace castor
 			 */
 			inline virtual bool operator()( RgbaColourT< ComponentType > & colour, TextFile & file );
 		};
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

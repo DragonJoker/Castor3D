@@ -1,12 +1,10 @@
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-
-#include <CastorUtils/Graphics/Image.hpp>
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

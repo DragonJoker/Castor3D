@@ -10,17 +10,17 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 using namespace castor3d;
 using namespace castor;

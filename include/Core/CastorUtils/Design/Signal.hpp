@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	*\author	Sylvain doremus
 	*\version	0.9.0
 	*\date		01/03/2017
@@ -193,7 +193,7 @@ namespace castor
 
 #endif
 	};
-	/*!
+	/**
 	*\author	Sylvain doremus
 	*\version	0.8.0
 	*\date		10/02/2016

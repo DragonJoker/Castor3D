@@ -1,7 +1,7 @@
-#include "Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
 using namespace castor;
 

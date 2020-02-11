@@ -1,8 +1,8 @@
-#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -16,10 +16,10 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/ShadowMap/ShadowMapPassPoint.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

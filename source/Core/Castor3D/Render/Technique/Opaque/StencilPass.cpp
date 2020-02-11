@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Opaque/StencilPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/StencilPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"

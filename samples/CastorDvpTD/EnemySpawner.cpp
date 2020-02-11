@@ -2,7 +2,7 @@
 
 #include "CastorDvpTD/Game.hpp"
 
-#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Light/PointLight.hpp>

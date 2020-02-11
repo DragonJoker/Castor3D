@@ -1,7 +1,7 @@
-#include "Castor3D/RenderToTexture/RenderDepthQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderDepthQuad.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>

@@ -1,43 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_LIGHT_CACHE_H___
-#define ___C3D_LIGHT_CACHE_H___
+#ifndef ___C3D_LightCache_H___
+#define ___C3D_LightCache_H___
 
-#include "Castor3D/Scene/Light/LightFactory.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Cache/ObjectCacheTraits.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
 #include <ashespp/Buffer/BufferView.hpp>
 
 namespace castor3d
 {
-	using LightsRefArray = std::vector< Light * >;
-	using LightsArray = std::vector< LightSPtr >;
-	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a scene cache behaviour.
-	\remarks	Specialisation for Light.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
-	\remarks	Spécialisation pour Light.
-	*/
-	template< typename KeyType >
-	struct ObjectCacheTraits< Light, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Light >( KeyType const &, SceneNodeSPtr, LightType ) >;
-		using Merger = std::function< void( ObjectCacheBase< Light, KeyType > const &
-			, castor::Collection< Light, KeyType > &
-			, std::shared_ptr< Light >
-			, SceneNodeSPtr
-			, SceneNodeSPtr ) >;
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0

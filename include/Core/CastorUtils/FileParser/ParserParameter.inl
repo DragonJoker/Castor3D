@@ -227,7 +227,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -257,7 +257,7 @@ namespace castor
 			return parseValues( params, 1, &value, range );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -285,7 +285,7 @@ namespace castor
 			return parseValues( params, value );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -332,7 +332,7 @@ namespace castor
 			return true;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -387,7 +387,7 @@ namespace castor
 			return !value.empty();
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -430,7 +430,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -473,7 +473,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -512,7 +512,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -607,7 +607,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -717,7 +717,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -812,7 +812,7 @@ namespace castor
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0

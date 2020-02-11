@@ -1,28 +1,16 @@
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/Mesh/SubmeshUtils.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/TriFaceMapping.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-
-#include <ashespp/Core/Device.hpp>
 
 namespace castor3d
 {
-	Submesh::Submesh( Scene & scene, Mesh & mesh, uint32_t id )
-		: OwnedBy< Scene >{ scene }
+	Submesh::Submesh( Mesh & mesh, uint32_t id )
+		: OwnedBy< Mesh >{ mesh }
 		, m_parentMesh{ mesh }
 		, m_id{ id }
-		, m_defaultMaterial{ getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
+		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 	{
 		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
 	}
@@ -37,7 +25,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			doGenerateVertexBuffer();
-			auto & device = getCurrentRenderDevice( *this );
+			auto & device = getCurrentRenderDevice( *getOwner() );
 			m_indexBuffer = makeBuffer< uint32_t >( device
 				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
@@ -282,7 +270,7 @@ namespace castor3d
 	{
 		if ( oldMaterial != newMaterial )
 		{
-			getScene()->setChanged();
+			getOwner()->getScene()->setChanged();
 		}
 
 		for ( auto & component : m_components )
@@ -325,7 +313,7 @@ namespace castor3d
 
 	void Submesh::doGenerateVertexBuffer()
 	{
-		auto & device = getCurrentRenderDevice( *this );
+		auto & device = getCurrentRenderDevice( *getOwner() );
 		uint32_t size = uint32_t( m_points.size() );
 
 		if ( size )

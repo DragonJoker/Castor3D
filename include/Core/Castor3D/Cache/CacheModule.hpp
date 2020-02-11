@@ -8,14 +8,45 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
-#include "Castor3D/Technique/TechniqueModule.hpp"
-#include "Castor3D/Texture/TextureModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
 namespace castor3d
 {
 	/**@name Cache */
 	//@{
 
+	static const xchar * InfoCacheCreatedObject = cuT( "Cache::create - Created " );
+	static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
+	static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
+	/**
+	*\~english
+	*\brief
+	*	Holds the pools for billboard UBOs.
+	*\~french
+	*\brief
+	*	Contient les pools pour les UBO des billboards.
+	*/
+	class BillboardUboPools;
+	/**
+	*\~english
+	*\brief
+	*	Base class for an element cache.
+	*\~french
+	*\brief
+	*	Classe de base pour un cache d'éléments.
+	*/
+	template< typename ElementType, typename KeyType >
+	class CacheBase;
+	/**
+	*\~english
+	*\brief
+	*	Base class for an element cache.
+	*\~french
+	*\brief
+	*	Classe de base pour un cache d'éléments.
+	*/
+	template< typename ElementType, typename KeyType >
+	class Cache;
 	/**
 	*\~english
 	*\brief
@@ -40,15 +71,39 @@ namespace castor3d
 	*/
 	template< typename ElementType, typename KeyType >
 	struct CacheTraits;
-
-	template< typename ElementType, typename KeyType >
-	class CacheBase;
-
-	template< typename ElementType, typename KeyType >
-	class Cache;
-
-	template< typename ElementType, typename KeyType >
-	struct ElementProducer;
+	/**
+	*\~english
+	*\brief
+	*	View on a resource cache.
+	*\remarks
+	*	Allows deletion of elements created through the view, and only those.
+	*\~french
+	*\brief
+	*	Vue sur un cache de ressources.
+	*\remarks
+	*	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
+	*/
+	template< typename ResourceType, typename CacheType, EventType EventType >
+	class CacheView;
+	/**
+	\~english
+	\brief
+	*	Cache used to hold the shader programs. Holds it, destroys it during a rendering loop
+	\~french
+	\brief
+	*	Cache utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
+	*/
+	class ShaderProgramCache;
+	/**
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		RenderTarget cache.
+	\~french
+	\brief		Cache de RenderTarget.
+	*/
+	class RenderTargetCache;
 
 	template< typename ElementType >
 	using ElementInitialiser = std::function< void( std::shared_ptr< ElementType > ) >;
@@ -139,7 +194,7 @@ namespace castor3d
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		std::unique_ptr< MAKE_CACHE_NAME( className ) > m_##memberName##Cache
+		std::shared_ptr< MAKE_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_NAMED_CACHE_MEMBER( memberName, className )\
 	public:\
@@ -152,7 +207,7 @@ namespace castor3d
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		std::unique_ptr< className##Cache > m_##memberName##Cache
+		std::shared_ptr< className##Cache > m_##memberName##Cache
 
 #define MAKE_OBJECT_CACHE_NAME( className )\
 	castor3d::ObjectCache< className, castor::String >
@@ -169,7 +224,7 @@ namespace castor3d
 		}\
 	private:\
 		castor::Connection< MAKE_OBJECT_CACHE_NAME( className )::OnChanged > m_on##className##Changed;\
-		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
+		std::shared_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
@@ -182,7 +237,7 @@ namespace castor3d
 			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< castor3d::CacheView< className, MAKE_CACHE_NAME( className ), eventType > > m_##memberName##CacheView
+		std::shared_ptr< castor3d::CacheView< className, MAKE_CACHE_NAME( className ), eventType > > m_##memberName##CacheView
 
 #define DECLARE_CACHE_VIEW_MEMBER_CU( memberName, className, eventType )\
 	public:\
@@ -195,7 +250,7 @@ namespace castor3d
 			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< castor3d::CacheView< castor::className, castor::className##Cache, eventType > > m_##memberName##CacheView
+		std::shared_ptr< castor3d::CacheView< castor::className, castor::className##Cache, eventType > > m_##memberName##CacheView
 
 #define DECLARE_CACHE_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
@@ -208,6 +263,6 @@ namespace castor3d
 			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< castor3d::CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
+		std::shared_ptr< castor3d::CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 
 #endif

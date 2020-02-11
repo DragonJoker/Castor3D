@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"

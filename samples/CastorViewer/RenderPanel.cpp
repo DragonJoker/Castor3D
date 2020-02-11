@@ -14,8 +14,8 @@
 #include <Castor3D/Material/PhongPass.hpp>
 #include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
 #include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/ShadowMap/ShadowMapPass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Render/ShadowMap/ShadowMapPass.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 

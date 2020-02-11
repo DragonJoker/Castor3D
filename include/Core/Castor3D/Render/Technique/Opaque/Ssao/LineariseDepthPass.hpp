@@ -5,8 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_LineariseDepthPass_H___
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 

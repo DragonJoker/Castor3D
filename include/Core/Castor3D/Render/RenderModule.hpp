@@ -5,8 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_RenderModule_H___
 
 #include "Castor3D/Scene/SceneModule.hpp"
-#include "Castor3D/Material/MaterialModule.hpp"
-#include "Castor3D/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -17,6 +17,147 @@ namespace castor3d
 	//@{
 
 	castor::String const RenderTypeUndefined = cuT( "Undefined" );
+
+	struct NonTexturedQuad
+	{
+		struct Vertex
+		{
+			castor::Point2f position;
+		};
+
+		Vertex vertex[6];
+	};
+
+	struct TexturedQuad
+	{
+		struct Vertex
+		{
+			castor::Point2f position;
+			castor::Point2f texture;
+		};
+
+		Vertex vertex[6];
+	};
+
+	struct NonTexturedCube
+	{
+		struct Quad
+		{
+			struct Vertex
+			{
+				castor::Point3f position;
+			};
+
+			Vertex vertex[6];
+		};
+
+		Quad faces[6];
+	};
+
+	struct TexturedCube
+	{
+		struct Quad
+		{
+			struct Vertex
+			{
+				castor::Point3f position;
+				castor::Point2f texture;
+			};
+
+			Vertex vertex[6];
+		};
+
+		Quad faces[6];
+	};
+
+	/**
+	*\~english
+	*\brief
+	*	Frustum corners enumeration
+	*\~french
+	*\brief
+	*	Enumération des coins d'un frustum
+	*/
+	enum class FrustumCorner
+	{
+		//!\~english	Far left bottom corner.
+		//!\~french		Coin éloigné bas gauche.
+		eFarLeftBottom,
+		//!\~english	Far left top corner.
+		//!\~french		Coin éloigné haut gauche.
+		eFarLeftTop,
+		//!\~english	Far right top corner.
+		//!\~french		Coin éloigné haut droit.
+		eFarRightTop,
+		//!\~english	Far right bottom corner.
+		//!\~french		Coin éloigné bas droit.
+		eFarRightBottom,
+		//!\~english	Near left bottom corner.
+		//!\~french		Coin proche bas gauche.
+		eNearLeftBottom,
+		//!\~english	Near left top corner.
+		//!\~french		Coin proche haut gauche.
+		eNearLeftTop,
+		//!\~english	Near right top corner.
+		//!\~french		Coin proche haut droit.
+		eNearRightTop,
+		//!\~english	Near right bottom corner.
+		//!\~french		Coin proche bas droit.
+		eNearRightBottom,
+		CU_ScopedEnumBounds( eFarLeftBottom )
+	};
+	castor::String getName( FrustumCorner value );
+	/**
+	*\~english
+	*\brief
+	*	Frustum planes enumeration
+	*\~french
+	*\brief
+	*	Enumération des plans d'un frustum.
+	*/
+	enum class FrustumPlane
+	{
+		//!\~english	Near plane.
+		//!\~french		Plan proche.
+		eNear,
+		//!\~english	Far plane.
+		//!\~french		Plan éloigné.
+		eFar,
+		//!\~english	Left plane.
+		//!\~french		Plan gauche.
+		eLeft,
+		//!\~english	Right plane.
+		//!\~french		Plan droit.
+		eRight,
+		//!\~english	Top plane.
+		//!\~french		Plan haut.
+		eTop,
+		//!\~english	Bottom plane.
+		//!\~french		Plan bas.
+		eBottom,
+		CU_ScopedEnumBounds( eNear )
+	};
+	castor::String getName( FrustumPlane value );
+	/**
+	*\~english
+	*\brief
+	*	The picking node types.
+	*\~french
+	*\brief
+	*	Les types de noeud de picking.
+	*/
+	enum class PickNodeType
+		: uint8_t
+	{
+		eNone,
+		eStatic,
+		eInstantiatedStatic,
+		eSkinning,
+		eInstantiatedSkinning,
+		eMorphing,
+		eBillboard
+	};
+	castor::String getName( PickNodeType value );
 	/**
 	*\~english
 	*\brief
@@ -75,12 +216,52 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Implements a frustum and the checks related to frustum culling.
+	*\~french
+	*\brief
+	*	Implémente un frustum et les vérifications relatives au frustum culling.
+	*/
+	class Frustum;
+	/**
+	*\~english
+	*\brief
+	*	Gaussian blur pass.
+	*\~french
+	*\brief
+	*	Passe flou gaussien.
+	*/
+	class GaussianBlur;
+	/**
+	*\~english
+	*\brief
+	*	Picking pass, using FBO.
+	*\~french
+	*\brief
+	*	Passe de picking, utilisant les FBO.
+	*/
+	class PickingPass;
+	/**
+	*\~english
+	*\brief
+	*	Ray representation
+	*\remarks
+	*	A ray is an origin and a direction in 3D.
+	*\~french
+	*\brief
+	*	Représentation d'un rayon.
+	*\remarks
+	*	Un rayon est représentaté par une origine et une direction.
+	*/
+	class Ray;
+	/**
+	*\~english
+	*\brief
 	*	Holds data for device rendering.
 	*\~french
 	*\brief
 	*	Contient les données pour le rendu sur device.
 	*/
-	class RenderDevice;
+	struct RenderDevice;
 	/**
 	*\~english
 	*\brief
@@ -235,6 +416,8 @@ namespace castor3d
 	*/
 	class Viewport;
 
+	CU_DeclareSmartPtr( GaussianBlur );
+	CU_DeclareSmartPtr( PickingPass );
 	CU_DeclareSmartPtr( RenderDevice );
 	CU_DeclareSmartPtr( RenderLoop );
 	CU_DeclareSmartPtr( RenderPassTimer );

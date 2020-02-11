@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_EquirectangularToCube_H___
 #pragma once
 
-#include "Castor3D/RenderToTexture/RenderCube.hpp"
+#include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

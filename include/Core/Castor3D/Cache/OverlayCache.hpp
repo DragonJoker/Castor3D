@@ -1,11 +1,11 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OVERLAY_CACHE_H___
-#define ___C3D_OVERLAY_CACHE_H___
+#ifndef ___C3D_OverlayCache_H___
+#define ___C3D_OverlayCache_H___
 
+#include "Castor3D/Cache/CacheTraits.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Cache/Cache.hpp"
 #include "Castor3D/Overlay/OverlayFactory.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
@@ -13,27 +13,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for Overlay.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour Overlay.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< Overlay, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, OverlayType, SceneSPtr, OverlaySPtr ) >;
-		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
-											, castor::Collection< Overlay, KeyType > &
-											, std::shared_ptr< Overlay > ) >;
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		03/10/2015
 	\version	0.8.0
@@ -56,7 +36,7 @@ namespace castor3d
 		}
 	};
 	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
@@ -299,23 +279,11 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The OverlayCategory factory.
-		//!\~french		La fabrique de OverlayCategory.
 		OverlayFactory m_overlayFactory;
-		//!\~english	The overlays, in rendering order.
-		//!\~french		Les incrustations, dans l'ordre de rendu.
 		OverlayCategorySet m_overlays;
-		//!\~english	The rendering viewport.
-		//!\~french		Le viewport de rendu.
 		Viewport m_viewport;
-		//!\~english	The overlay count, per level.
-		//!\~french		Le nombre d'incrustations par niveau.
 		std::vector< int > m_overlayCountPerLevel;
-		//!\~english	The pojection matrix.
-		//!\~french		La matrice de projection.
 		castor::Matrix4x4f m_projection;
-		//!\~english	The FontTextures, sorted by font name.
-		//!\~french		Les FontTextures, triées par nom de police.
 		FontTextureStrMap m_fontTextures;
 	};
 	using OverlayCache = Cache< Overlay, castor::String >;

@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TechniqueModule_H___
-#define ___C3D_TechniqueModule_H___
+#ifndef ___C3D_RenderTechniqueModule_H___
+#define ___C3D_RenderTechniqueModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {
@@ -44,7 +44,7 @@ namespace castor3d
 	*	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderTechnique;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		08/12/2016

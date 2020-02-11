@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GUI_EVENT_H___
-#define ___C3D_GUI_EVENT_H___
+#ifndef ___C3D_UserInputEvent_H___
+#define ___C3D_UserInputEvent_H___
 
 #include "UserInputEventModule.hpp"
 
 namespace castor3d
 {
-	/*!
+	/**
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
 	*\version	0.9.0
@@ -55,7 +55,6 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english The user input event type.	\~french Le type d'évènement entrée utilisateur.
 		UserInputEventType m_eventType;
 	};
 }

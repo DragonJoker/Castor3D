@@ -1,13 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_EnvironmentMapModule_H___
-#define ___C3D_EnvironmentMapModule_H___
+#ifndef ___C3D_RenderEnvironmentMapModule_H___
+#define ___C3D_RenderEnvironmentMapModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {
+	/**@name Render */
+	//@{
 	/**@name EnvironmentMap */
 	//@{
 
@@ -33,6 +35,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( EnvironmentMap );
 	CU_DeclareSmartPtr( EnvironmentMapPass );
 
+	//@}
 	//@}
 }
 

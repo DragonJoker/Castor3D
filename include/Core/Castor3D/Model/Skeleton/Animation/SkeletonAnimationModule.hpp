@@ -15,7 +15,7 @@ namespace castor3d
 	/**@name Skeleton */
 	//@{
 
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
@@ -38,21 +38,21 @@ namespace castor3d
 		CU_ScopedEnumBounds( eNode )
 	};
 	castor::String getName( SkeletonAnimationObjectType value );
-	/*!
+	/**
 	\~english
 	\brief		Skeleton animation class.
 	\~french
 	\brief		Classe d'animation de squelette.
 	*/
 	class SkeletonAnimation;
-	/*!
+	/**
 	\~english
 	\brief		Implementation of SkeletonAnimationObject for Bones.
 	\~french
 	\brief		Implémentation de SkeletonAnimationObject pour les Bones.
 	*/
 	class SkeletonAnimationBone;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
@@ -64,7 +64,7 @@ namespace castor3d
 	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
 	*/
 	class SkeletonAnimationKeyFrame;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
 	\date		09/12/2013
@@ -76,7 +76,7 @@ namespace castor3d
 	\remark		Utilisé afin de décomposer le modèle et ajouter des noeuds d'animation intermédiaires.
 	*/
 	class SkeletonAnimationNode;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010

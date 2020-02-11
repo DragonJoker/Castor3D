@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		29/08/2011
@@ -419,7 +419,7 @@ namespace castor
 	template < PixelFormat FT, typename U >
 	Pixel< FT > operator*( Pixel< FT > const & lhs, U const & rhs );
 	/**@}*/
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Typedef over a pixel in A8R8G8B8 format

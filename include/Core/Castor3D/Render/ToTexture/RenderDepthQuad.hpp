@@ -4,20 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderDepthQuad_H___
 #define ___C3D_RenderDepthQuad_H___
 
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		02/03/2017
-	\version	0.9.0
-	\~english
-	\brief		Class used to render depth textures.
-	\~french
-	\brief		Classe utilisée pour rendre les textures profondeur.
-	*/
 	class RenderDepthQuad
 		: public RenderQuad
 	{

@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CACHE_H___
-#define ___C3D_CACHE_H___
+#ifndef ___C3D_Cache_H___
+#define ___C3D_Cache_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "CacheModule.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -13,18 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
-	static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
-	static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Base class for an element cache.
-	\~french
-	\brief		Classe de base pour un cache d'éléments.
-	*/
 	template< typename ElementType, typename KeyType >
 	class CacheBase
 	{
@@ -391,7 +379,7 @@ namespace castor3d
 		inline void doReportCreation( castor::String const & name )
 		{
 			castor::Logger::logTrace( castor::makeStringStream()
-				<< INFO_CACHE_CREATED_OBJECT
+				<< InfoCacheCreatedObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
 				<< name );
@@ -400,7 +388,7 @@ namespace castor3d
 		inline void doReportDuplicate( castor::String const & name )
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< WarningCacheDuplicateObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
 				<< name );
@@ -409,7 +397,7 @@ namespace castor3d
 		inline void doReportNull()
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_NULL_OBJECT
+				<< WarningCacheNullObject
 				<< getObjectTypeName() );
 		}
 
@@ -433,15 +421,7 @@ namespace castor3d
 		//!\~french		Le fusionneur de collection d'éléments.
 		Merger m_merge;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Base class for an element cache.
-	\~french
-	\brief		Classe de base pour un cache d'éléments.
-	*/
+
 	template< typename ElementType, typename KeyType >
 	class Cache
 		: public CacheBase< ElementType, KeyType >

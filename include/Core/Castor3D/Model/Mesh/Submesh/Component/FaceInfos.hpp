@@ -10,7 +10,7 @@ namespace castor3d
 {
 	struct FaceInfos
 	{
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		20/07/2012
 		\~english

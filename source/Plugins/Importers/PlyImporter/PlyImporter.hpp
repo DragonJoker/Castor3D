@@ -11,14 +11,14 @@ See LICENSE file in root folder
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <Castor3D/Mesh/Importer.hpp>
+#include <Castor3D/Model/Mesh/Importer.hpp>
 
 #pragma warning( pop )
 
 namespace C3dPly
 {
 	//! PLY file importer
-	/*!
+	/**
 	Imports data from PLY files
 	\author Sylvain DOREMUS
 	\date 25/08/2010

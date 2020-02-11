@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/SubsurfaceScattering.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>

@@ -7,8 +7,8 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 

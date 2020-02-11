@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace Loop
 {
 	//! Loop subdivision algorithm Subdivider
-	/*!
+	/**
 	This class implements the Loop subdivision algorithm
 	\author Sylvain DOREMUS
 	\date 12/03/2010

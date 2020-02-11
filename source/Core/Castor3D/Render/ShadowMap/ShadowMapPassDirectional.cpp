@@ -1,4 +1,4 @@
-#include "Castor3D/ShadowMap/ShadowMapPassDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -7,11 +7,11 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
-#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>

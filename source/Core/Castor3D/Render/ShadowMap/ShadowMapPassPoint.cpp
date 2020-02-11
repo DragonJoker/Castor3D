@@ -1,14 +1,14 @@
-#include "Castor3D/ShadowMap/ShadowMapPassPoint.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassPoint.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 

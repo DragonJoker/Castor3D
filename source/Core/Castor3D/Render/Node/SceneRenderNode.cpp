@@ -1,4 +1,4 @@
-#include "Castor3D/Render/RenderNode/SceneRenderNode.hpp"
+#include "Castor3D/Render/Node/SceneRenderNode.hpp"
 
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Castor3DPrerequisites.hpp"

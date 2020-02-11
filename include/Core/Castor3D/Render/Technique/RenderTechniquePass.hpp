@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderTechniquePass_H___
 #define ___C3D_RenderTechniquePass_H___
 
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 
 #include <ashespp/Sync/Semaphore.hpp>

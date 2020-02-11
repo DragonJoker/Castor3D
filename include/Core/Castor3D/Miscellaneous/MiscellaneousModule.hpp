@@ -14,74 +14,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Frustum corners enumeration
-	*\~french
-	*\brief
-	*	Enumération des coins d'un frustum
-	*/
-	enum class FrustumCorner
-	{
-		//!\~english	Far left bottom corner.
-		//!\~french		Coin éloigné bas gauche.
-		eFarLeftBottom,
-		//!\~english	Far left top corner.
-		//!\~french		Coin éloigné haut gauche.
-		eFarLeftTop,
-		//!\~english	Far right top corner.
-		//!\~french		Coin éloigné haut droit.
-		eFarRightTop,
-		//!\~english	Far right bottom corner.
-		//!\~french		Coin éloigné bas droit.
-		eFarRightBottom,
-		//!\~english	Near left bottom corner.
-		//!\~french		Coin proche bas gauche.
-		eNearLeftBottom,
-		//!\~english	Near left top corner.
-		//!\~french		Coin proche haut gauche.
-		eNearLeftTop,
-		//!\~english	Near right top corner.
-		//!\~french		Coin proche haut droit.
-		eNearRightTop,
-		//!\~english	Near right bottom corner.
-		//!\~french		Coin proche bas droit.
-		eNearRightBottom,
-		CU_ScopedEnumBounds( eFarLeftBottom )
-	};
-	castor::String getName( FrustumCorner value );
-	/**
-	*\~english
-	*\brief
-	*	Frustum planes enumeration
-	*\~french
-	*\brief
-	*	Enumération des plans d'un frustum.
-	*/
-	enum class FrustumPlane
-	{
-		//!\~english	Near plane.
-		//!\~french		Plan proche.
-		eNear,
-		//!\~english	Far plane.
-		//!\~french		Plan éloigné.
-		eFar,
-		//!\~english	Left plane.
-		//!\~french		Plan gauche.
-		eLeft,
-		//!\~english	Right plane.
-		//!\~french		Plan droit.
-		eRight,
-		//!\~english	Top plane.
-		//!\~french		Plan haut.
-		eTop,
-		//!\~english	Bottom plane.
-		//!\~french		Plan bas.
-		eBottom,
-		CU_ScopedEnumBounds( eNear )
-	};
-	castor::String getName( FrustumPlane value );
-	/**
-	*\~english
-	*\brief
 	*	All supported GPU feature flags.
 	*\~french
 	*\brief
@@ -135,26 +67,6 @@ namespace castor3d
 
 		CU_ScopedEnumBounds( eTexture3DSize )
 	};
-	/**
-	*\~english
-	*\brief
-	*	The picking node types.
-	*\~french
-	*\brief
-	*	Les types de noeud de picking.
-	*/
-	enum class PickNodeType
-		: uint8_t
-	{
-		eNone,
-		eStatic,
-		eInstantiatedStatic,
-		eSkinning,
-		eInstantiatedSkinning,
-		eMorphing,
-		eBillboard
-	};
-	castor::String getName( PickNodeType value );
 	template< typename AshesType >
 	struct AshesTypeTraits;
 	/**
@@ -166,24 +78,6 @@ namespace castor3d
 	*	Wrapper autour des callbacks de debug_utils and debug_report callbacks.
 	*/
 	class DebugCallbacks;
-	/**
-	*\~english
-	*\brief
-	*	Implements a frustum and the checks related to frustum culling.
-	*\~french
-	*\brief
-	*	Implémente un frustum et les vérifications relatives au frustum culling.
-	*/
-	class Frustum;
-	/**
-	*\~english
-	*\brief
-	*	Gaussian blur pass.
-	*\~french
-	*\brief
-	*	Passe flou gaussien.
-	*/
-	class GaussianBlur;
 	/**
 	*\~english
 	*\brief
@@ -232,15 +126,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Picking pass, using FBO.
-	*\~french
-	*\brief
-	*	Passe de picking, utilisant les FBO.
-	*/
-	class PickingPass;
-	/**
-	*\~english
-	*\brief
 	*	Post effect visitor base class.
 	*\~french
 	*\brief
@@ -256,19 +141,6 @@ namespace castor3d
 	*	Classe de base d'un visiteur d'effet post rendu.
 	*/
 	class PipelineVisitor;
-	/**
-	*\~english
-	*\brief
-	*	Ray representation
-	*\remarks
-	*	A ray is an origin and a direction in 3D.
-	*\~french
-	*\brief
-	*	Représentation d'un rayon.
-	*\remarks
-	*	Un rayon est représentaté par une origine et une direction.
-	*/
-	class Ray;
 	/**
 	*\~english
 	*\brief
@@ -292,8 +164,16 @@ namespace castor3d
 	*/
 	class VersionException;
 
-	CU_DeclareSmartPtr( PickingPass );
-	CU_DeclareSmartPtr( GaussianBlur );
+	struct RenderDevice;
+	C3D_API void setDebugObjectName( RenderDevice const & device
+		, uint64_t object
+		, uint32_t type
+		, std::string const & name
+		, std::string const & typeName );
+	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
+		, VkMemoryRequirements const & requirements
+		, VkMemoryPropertyFlags flags
+		, std::string const & name );
 
 	//@}
 }

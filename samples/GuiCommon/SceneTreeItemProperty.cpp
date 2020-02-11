@@ -5,7 +5,7 @@
 
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 #include <wx/propgrid/advprops.h>
 

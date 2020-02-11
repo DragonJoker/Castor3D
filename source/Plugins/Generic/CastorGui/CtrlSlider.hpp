@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace CastorGui
 {
-	/*!
+	/**
 	 *\author		Sylvain DOREMU
 	 *\date		16/02/201
 	 *\version		0.1.

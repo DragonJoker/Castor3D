@@ -23,6 +23,8 @@ namespace castor3d
 	*/
 	class TextureConfigurationBuffer;
 
+	CU_DeclareSmartPtr( TextureConfigurationBuffer );
+
 	//@}
 	//@}
 }

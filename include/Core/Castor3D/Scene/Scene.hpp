@@ -4,8 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
+#include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
+
 #include "Castor3D/Cache/CacheView.hpp"
-#include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CameraCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -36,7 +38,7 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
@@ -140,7 +142,8 @@ namespace castor3d
 		 *\param[in]	importer	L'importeur chargé de la récupération des données
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
-		C3D_API bool importExternal( castor::Path const & fileName, Importer & importer );
+		C3D_API bool importExternal( castor::Path const & fileName
+			, SceneImporter & importer );
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
@@ -423,7 +426,7 @@ namespace castor3d
 		castor::RgbColour m_backgroundColour;
 		SceneBackgroundSPtr m_background;
 		SceneBackgroundSPtr m_colourBackground;
-		LightFactory m_lightFactory;
+		LightFactorySPtr m_lightFactory;
 		Fog m_fog;
 		FrameListenerWPtr m_listener;
 		std::map< SceneNode const *, std::unique_ptr< EnvironmentMap > > m_reflectionMaps;

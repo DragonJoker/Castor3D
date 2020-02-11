@@ -2783,7 +2783,7 @@ namespace castor
 	};
 	namespace detail
 	{
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		27/05/2013
 		\~english
@@ -3154,7 +3154,7 @@ namespace castor
 				dstBuffer += PixelDefinitions< PFDst >::Size;
 			}
 		};
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		08/09/2013
 		\~english

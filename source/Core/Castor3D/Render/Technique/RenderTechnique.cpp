@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
@@ -11,14 +11,14 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Technique/ForwardRenderTechniquePass.hpp"
-#include "Castor3D/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Technique/Transparent/TransparentPass.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

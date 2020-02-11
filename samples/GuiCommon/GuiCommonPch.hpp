@@ -82,9 +82,9 @@ See LICENSE file in root folder
 #	include <Castor3D/Animation/AnimationKeyFrame.hpp>
 #	include <Castor3D/Event/Frame/FrameListener.hpp>
 #	include <Castor3D/Material/Material.hpp>
-#	include <Castor3D/Material/Pass.hpp>
-#	include <Castor3D/Mesh/Mesh.hpp>
-#	include <Castor3D/Mesh/Submesh.hpp>
+#	include <Castor3D/Material/Pass/Pass.hpp>
+#	include <Castor3D/Model/Mesh/Mesh.hpp>
+#	include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #	include <Castor3D/Miscellaneous/Ray.hpp>
 #	include <Castor3D/Overlay/Overlay.hpp>
 #	include <Castor3D/Plugin/Plugin.hpp>
@@ -100,8 +100,8 @@ See LICENSE file in root folder
 #	include <Castor3D/Scene/Light/PointLight.hpp>
 #	include <Castor3D/Scene/Light/DirectionalLight.hpp>
 #	include <Castor3D/Scene/Light/SpotLight.hpp>
-#	include <Castor3D/Texture/TextureUnit.hpp>
-#	include <Castor3D/Texture/TextureLayout.hpp>
+#	include <Castor3D/Material/Texture/TextureUnit.hpp>
+#	include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 #	include <iostream>
 #	include <string>

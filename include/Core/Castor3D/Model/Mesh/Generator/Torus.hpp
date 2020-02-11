@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TORUS_H___
-#define ___C3D_TORUS_H___
+#ifndef ___C3D_Torus_H___
+#define ___C3D_Torus_H___
 
-#include "Castor3D/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
 namespace castor3d
 {

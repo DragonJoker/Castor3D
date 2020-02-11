@@ -4,22 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMap_H___
 #define ___C3D_ShadowMap_H___
 
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Shadow mapping implementation.
-	\~french
-	\brief		Implémentation du mappage d'ombres.
-	*/
 	class ShadowMap
 		: public castor::OwnedBy< Engine >
 	{

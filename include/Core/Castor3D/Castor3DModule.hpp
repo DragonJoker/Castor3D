@@ -34,7 +34,12 @@ namespace castor3d
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
 	using castor::UInt32Array;
-
+	/**
+	*\~english
+	*\brief		Castor3D engine.
+	*\~french
+	*\brief		Moteur Castor3D.
+	*/
 	class Engine;
 
 	CU_DeclareSmartPtr( Engine );

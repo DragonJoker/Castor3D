@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfig_H___
 #define ___C3D_SsaoConfig_H___
 
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -12,7 +12,7 @@ namespace castor3d
 {
 	struct SsaoConfig
 	{
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		05/06/2017
 		\~english

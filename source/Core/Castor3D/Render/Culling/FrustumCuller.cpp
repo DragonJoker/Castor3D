@@ -1,8 +1,8 @@
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 

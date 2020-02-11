@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredOpaquePass_H___
 #define ___C3D_DeferredOpaquePass_H___
 
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 namespace castor3d
 {

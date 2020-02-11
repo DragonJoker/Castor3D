@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -27,7 +27,7 @@ namespace castor
 	*/
 	template< ParameterType Type, typename Enable = void >
 	class ParserParameter;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -38,7 +38,7 @@ namespace castor
 	*/
 	template< ParameterType Type, typename Enable = void >
 	struct ValueParser;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -98,7 +98,7 @@ namespace castor
 		//!\~french		La valeur du paramètre.
 		ValueType m_value;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -174,7 +174,7 @@ namespace castor
 		//!\~french		L'intervalle de la valeur du paramètre.
 		Range< ValueType > m_range;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -217,7 +217,7 @@ namespace castor
 		 */
 		inline bool parse( String & params )override;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -264,7 +264,7 @@ namespace castor
 	public:
 		UInt32StrMap const & m_values;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
@@ -311,7 +311,7 @@ namespace castor
 	public:
 		UInt32StrMap const & m_values;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		10/12/2015
 	\version	0.8.0

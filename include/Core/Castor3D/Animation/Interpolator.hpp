@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Interpolator_H___
 #define ___C3D_Interpolator_H___
 
-#include "Castor3D/Animation/AnimationModule.hpp"
+#include "AnimationModule.hpp"
 
 namespace castor3d
 {
@@ -46,7 +46,7 @@ namespace castor3d
 			, DataT const & dst
 			, float percent )const = 0;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
 	\date		24/01/2016
@@ -93,7 +93,7 @@ namespace castor3d
 			return src;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
 	\date		24/01/2016
@@ -159,7 +159,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010

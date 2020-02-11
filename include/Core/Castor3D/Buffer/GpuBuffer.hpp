@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBuffer_H___
 #define ___C3D_GpuBuffer_H___
 
+#include "BufferModule.hpp"
+
 #include "Castor3D/Buffer/GpuBufferBuddyAllocator.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -25,13 +27,6 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 */
 		C3D_API GpuBuffer();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~GpuBuffer();
 		/**
 		 *\~english
 		 *\brief		Initialises the GPU buffer storage.

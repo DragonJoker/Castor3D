@@ -35,7 +35,7 @@ namespace castor
 {
 	/**@name File handling */
 	//@{
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
@@ -53,7 +53,7 @@ namespace castor
 		eText,
 		CU_ScopedEnumBounds( eBinary )
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		24/05/2016
@@ -67,7 +67,7 @@ namespace castor
 	//@}
 	/**@name Graphics */
 	//@{
-	/*!
+	/**
 	\~english
 	\brief Pixel format enumeration
 	\~french
@@ -165,7 +165,7 @@ namespace castor
 		eS8_UINT,
 		CU_ScopedEnumBounds( eR8_UNORM )
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
@@ -207,7 +207,7 @@ namespace castor
 	using Microseconds = std::chrono::microseconds;
 	using Nanoseconds = std::chrono::nanoseconds;
 	//@}
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		09/11/2015

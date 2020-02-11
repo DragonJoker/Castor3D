@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FaceMapping_H___
 #define ___C3D_FaceMapping_H___
 
-#include "Castor3D/Mesh/SubmeshComponent/SubmeshComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
 namespace castor3d
 {

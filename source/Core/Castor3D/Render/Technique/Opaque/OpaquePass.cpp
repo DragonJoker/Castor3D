@@ -1,6 +1,6 @@
-#include "Castor3D/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -17,10 +17,10 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

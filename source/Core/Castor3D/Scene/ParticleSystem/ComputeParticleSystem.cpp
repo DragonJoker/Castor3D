@@ -9,7 +9,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 

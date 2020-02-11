@@ -1,10 +1,8 @@
-#include "Castor3D/Mesh/Generator/Cube.hpp"
+#include "Castor3D/Model/Mesh/Generator/Cube.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
-
-using namespace castor;
 
 namespace castor3d
 {
@@ -27,21 +25,21 @@ namespace castor3d
 
 	void Cube::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( p_parameters.get( cuT( "width" ), param ) )
 		{
-			m_width = string::toFloat( param );
+			m_width = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "height" ), param ) )
 		{
-			m_height = string::toFloat( param );
+			m_height = castor::string::toFloat( param );
 		}
 
 		if ( p_parameters.get( cuT( "depth" ), param ) )
 		{
-			m_depth = string::toFloat( param );
+			m_depth = castor::string::toFloat( param );
 		}
 
 		int CptNegatif = 0;
@@ -67,54 +65,54 @@ namespace castor3d
 		SubmeshSPtr submesh4 = p_mesh.createSubmesh();
 		SubmeshSPtr submesh5 = p_mesh.createSubmesh();
 		SubmeshSPtr submesh6 = p_mesh.createSubmesh();
-		static Point3f const zero;
+		static castor::Point3f const zero;
 
 		// Face avant
 		submesh1->addPoints( {
-			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 0.0, 1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 0.0, 1.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face arrière
 		submesh2->addPoints( {
-			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 0.0, -1.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 0.0, -1.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face gauche
 		submesh3->addPoints( {
-			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ -1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, +m_height / 2, -m_depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, +m_height / 2, +m_depth / 2 }, castor::Point3f{ -1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face droite
 		submesh4->addPoints( {
-			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, Point3f{ 1.0, 0.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, +m_height / 2, +m_depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, +m_height / 2, -m_depth / 2 }, castor::Point3f{ 1.0, 0.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face bas
 		submesh5->addPoints( {
-			{ Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, Point3f{ 0.0, -1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, -m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, -1.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		// Face haut
 		submesh6->addPoints( {
-			{ Point3f{ -m_width / 2, m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, m_height / 2, -m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 0.0, 0.0 } },
-			{ Point3f{ +m_width / 2, m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 0.0, 1.0, 0.0 } },
-			{ Point3f{ -m_width / 2, m_height / 2, +m_depth / 2 }, Point3f{ 0.0, 1.0, 0.0 }, zero, Point3f{ 1.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 1.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, m_height / 2, -m_depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 0.0, 0.0, 0.0 } },
+			{ castor::Point3f{ +m_width / 2, m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 0.0, 1.0, 0.0 } },
+			{ castor::Point3f{ -m_width / 2, m_height / 2, +m_depth / 2 }, castor::Point3f{ 0.0, 1.0, 0.0 }, zero, castor::Point3f{ 1.0, 1.0, 0.0 } },
 		} );
 
 		auto mapping1 = std::make_shared< TriFaceMapping >( *submesh1 );

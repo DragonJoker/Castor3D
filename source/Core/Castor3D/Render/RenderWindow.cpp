@@ -6,10 +6,10 @@
 #include "Castor3D/Miscellaneous/PickingPass.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Technique/RenderTechnique.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>

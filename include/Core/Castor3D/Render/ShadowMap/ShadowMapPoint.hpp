@@ -5,21 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_ShadowMapPoint_H___
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Shadow mapping implementation.
-	\~french
-	\brief		Implémentation du mappage d'ombres.
-	*/
 	class ShadowMapPoint
 		: public ShadowMap
 	{

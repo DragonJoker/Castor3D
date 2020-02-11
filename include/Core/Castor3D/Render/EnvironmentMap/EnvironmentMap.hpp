@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "EnvironmentMapModule.hpp"
 
-#include "Castor3D/PBR/IblTextures.hpp"
+#include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

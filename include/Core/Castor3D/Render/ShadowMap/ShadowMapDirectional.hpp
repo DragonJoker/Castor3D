@@ -4,22 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShadowMapDirectional_H___
 #define ___C3D_ShadowMapDirectional_H___
 
-#include "Castor3D/Miscellaneous/GaussianBlur.hpp"
-#include "Castor3D/ShadowMap/ShadowMap.hpp"
+#include "Castor3D/Render/GaussianBlur.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Shadow mapping implementation for directional lights.
-	\~french
-	\brief		Implémentation du mappage d'ombres pour les lumières directionnelles.
-	*/
 	class ShadowMapDirectional
 		: public ShadowMap
 	{

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GeometryPassResult_H___
 #define ___C3D_GeometryPassResult_H___
 
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 #include <ashespp/Image/Sampler.hpp>
 #include <ashespp/Image/Image.hpp>

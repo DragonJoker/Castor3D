@@ -1,10 +1,10 @@
-#include "Castor3D/Technique/Opaque/LightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 
-#include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
-#include "Castor3D/Technique/Opaque/LightPassShadow.hpp"
-#include "Castor3D/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Technique/Opaque/PointLightPass.hpp"
-#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/DirectionalLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPassShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/PointLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -15,9 +15,9 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>

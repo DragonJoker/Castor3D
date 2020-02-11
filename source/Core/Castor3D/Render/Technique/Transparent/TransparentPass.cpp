@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
@@ -7,7 +7,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/RenderNode/RenderNode_Render.hpp"
+#include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
@@ -22,9 +22,9 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderWriter/Source.hpp>
 

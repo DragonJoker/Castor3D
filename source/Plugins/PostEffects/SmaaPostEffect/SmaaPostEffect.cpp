@@ -11,8 +11,8 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/GlslToSpv.hpp>
-#include <Castor3D/Technique/RenderTechnique.hpp>
-#include <Castor3D/Texture/Sampler.hpp>
+#include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>

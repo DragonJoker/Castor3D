@@ -11,7 +11,7 @@ namespace castor3d
 	class ParticleSystemImpl
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\version	0.9.0
 		\date		16/11/2016

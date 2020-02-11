@@ -5,10 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_SubsurfaceScatteringPass_H___
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>

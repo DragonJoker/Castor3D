@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MOUSE_EVENT_H___
-#define ___C3D_MOUSE_EVENT_H___
+#ifndef ___C3D_MouseEvent_H___
+#define ___C3D_MouseEvent_H___
 
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
@@ -10,22 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct MouseState
-	{
-		//!\~english	The current position.
-		//!\~french		La position actuelle.
-		castor::Position m_position;
-		//!\~english	The wheel position.
-		//!\~french		La position de la molette.
-		castor::Position m_wheel;
-		//!\~english	The buttons state (true = down).
-		//!\~french		L'état des boutons (true = enfoncé).
-		std::array< bool, size_t( MouseButton::eCount ) > m_buttons;
-		//!\~english	The button which had the last change.
-		//!\~french		Le bouton ayant reçu le dernier changement.
-		MouseButton m_changed;
-	};
-
 	class MouseEvent
 		: public UserInputEvent
 	{
@@ -49,15 +33,6 @@ namespace castor3d
 			, m_mouseEventType{ type }
 			, m_position{ position }
 			, m_button{ button }
-		{
-		}
-		/**
-		 *\~english
-		 *\~brief		Destructor.
-		 *\~french
-		 *\~brief		Destructeur.
-		 */
-		virtual ~MouseEvent()
 		{
 		}
 		/**
@@ -92,14 +67,8 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The mouse event type.
-		//!\~french		Le type d'évènement souris.
 		MouseEventType const m_mouseEventType;
-		//!\~english	The mouse button.
-		//!\~french		Le bouton de la souris
 		MouseButton const m_button;
-		//!\~english	The position, (wheel or mouse, depending on mouse event type).
-		//!\~french		La position (de la souris ou de la molette, selon le type d'évènement).
 		castor::Position const m_position;
 	};
 }

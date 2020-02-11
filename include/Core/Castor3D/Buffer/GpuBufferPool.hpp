@@ -16,7 +16,7 @@ namespace castor3d
 		VkMemoryPropertyFlags flags;
 		uint32_t offset;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		22/08/2017

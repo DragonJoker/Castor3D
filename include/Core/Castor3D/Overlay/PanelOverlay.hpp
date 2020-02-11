@@ -1,26 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PANEL_OVERLAY_H___
-#define ___C3D_PANEL_OVERLAY_H___
+#ifndef ___C3D_PanelOverlay_H___
+#define ___C3D_PanelOverlay_H___
 
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		25/08/2010
-	\~english
-	\brief		A simple rectangular overlay
-	\~french
-	\brief		Une simple incrustation rectangulaire
-	*/
 	class PanelOverlay
 		: public OverlayCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

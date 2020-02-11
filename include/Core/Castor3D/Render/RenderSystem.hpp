@@ -4,15 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderSystem_H___
 #define ___C3D_RenderSystem_H___
 
+#include "Castor3D/Overlay/OverlayModule.hpp"
+
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
-#include <stack>
-
 #include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <stack>
 
 namespace castor3d
 {

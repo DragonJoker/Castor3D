@@ -1,18 +1,15 @@
 #include "Castor3D/Shader/Ubos/ModelUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-using namespace castor;
 
 namespace castor3d
 {
 	uint32_t const ModelUbo::BindingPoint = 7u;
-	String const ModelUbo::BufferModel = cuT( "Model" );
-	String const ModelUbo::ShadowReceiver = cuT( "c3d_shadowReceiver" );
-	String const ModelUbo::MaterialIndex = cuT( "c3d_materialIndex" );
-	String const ModelUbo::EnvironmentIndex = cuT( "c3d_envMapIndex" );
+	castor::String const ModelUbo::BufferModel = cuT( "Model" );
+	castor::String const ModelUbo::ShadowReceiver = cuT( "c3d_shadowReceiver" );
+	castor::String const ModelUbo::MaterialIndex = cuT( "c3d_materialIndex" );
+	castor::String const ModelUbo::EnvironmentIndex = cuT( "c3d_envMapIndex" );
 
 	ModelUbo::ModelUbo( Engine & engine )
 		: m_engine{ engine }

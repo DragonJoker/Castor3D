@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PhongReflection_H___
-#define ___C3D_PhongReflection_H___
+#ifndef ___C3D_GlslPhongReflectionModel_H___
+#define ___C3D_GlslPhongReflectionModel_H___
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 

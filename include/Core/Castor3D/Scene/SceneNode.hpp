@@ -21,7 +21,7 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 19/10/2011

@@ -1,4 +1,4 @@
-#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
 using namespace castor;
 

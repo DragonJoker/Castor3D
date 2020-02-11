@@ -1,21 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SHADER_CACHE_H___
-#define ___C3D_SHADER_CACHE_H___
+#ifndef ___C3D_ShaderProgramCache_H___
+#define ___C3D_ShaderProgramCache_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Cache/CacheTraits.hpp"
+
+#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Cache used to hold the shader programs. Holds it, destroys it during a rendering loop
-	\~french
-	\brief		Cache utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
-	*/
 	class ShaderProgramCache
 		: public castor::OwnedBy< Engine >
 	{

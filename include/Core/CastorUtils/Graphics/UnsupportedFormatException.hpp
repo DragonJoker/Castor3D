@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
@@ -47,7 +47,7 @@ namespace castor
 		{
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\~english
 	\brief		english Helper macro to use UnsupportedFormatException

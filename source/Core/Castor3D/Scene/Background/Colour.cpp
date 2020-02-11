@@ -8,8 +8,8 @@
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>

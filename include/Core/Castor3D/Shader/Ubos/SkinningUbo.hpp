@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningUbo_H___
 #define ___C3D_SkinningUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 
 namespace castor3d
 {

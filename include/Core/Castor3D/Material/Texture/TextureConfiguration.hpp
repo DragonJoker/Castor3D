@@ -20,7 +20,7 @@ namespace castor3d
 	struct TextureConfiguration
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

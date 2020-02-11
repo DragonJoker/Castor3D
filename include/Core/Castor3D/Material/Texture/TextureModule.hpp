@@ -10,6 +10,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/**@name Material */
+	//@{
 	/**@name Texture */
 	//@{
 
@@ -182,6 +184,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( Sampler );
 	CU_DeclareSmartPtr( TextureLayout );
+	CU_DeclareSmartPtr( TextureSource );
 	CU_DeclareSmartPtr( TextureUnit );
 	CU_DeclareSmartPtr( TextureView );
 
@@ -196,6 +199,7 @@ namespace castor3d
 	using OnTextureUnitChanged = castor::Signal< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
+	//@}
 	//@}
 }
 

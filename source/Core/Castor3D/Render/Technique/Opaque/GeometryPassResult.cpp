@@ -1,9 +1,9 @@
-#include "Castor3D/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 using namespace castor;
 

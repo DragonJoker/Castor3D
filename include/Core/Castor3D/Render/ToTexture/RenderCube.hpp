@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderCube_H___
 #pragma once
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderToTextureModule.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
@@ -23,14 +23,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\~english
-	*\brief
-	*	Class used to render a texture into a cube.
-	*\~french
-	*\brief
-	*	Classe utilisée pour rendre une texture dans un cube.
-	*/
 	class RenderCube
 	{
 	public:

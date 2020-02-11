@@ -7,9 +7,11 @@ See LICENSE file in root folder
 #include "Castor3D/Binary/BinaryParser.hpp"
 #include "Castor3D/Binary/BinaryWriter.hpp"
 
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
+
 namespace castor3d
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date		09/11/2017
 	\~english
@@ -24,7 +26,7 @@ namespace castor3d
 	{
 		static ChunkType const Value = ChunkType::eBonesComponent;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		09/11/2017
 	\~english
@@ -49,7 +51,7 @@ namespace castor3d
 		 */
 		C3D_API bool doWrite( BonesComponent const & obj )override;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		09/11/2017
 	\~english

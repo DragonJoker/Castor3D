@@ -1,7 +1,7 @@
-#include "Castor3D/Mesh/Generator/Projection.hpp"
+#include "Castor3D/Model/Mesh/Generator/Projection.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Vertex.hpp"
 
 namespace castor3d
 {

@@ -294,13 +294,12 @@ namespace castor3d
 
 					if ( result )
 					{
-						m_fileVersion = Version{ int( CMSH_VERSION_MAJOR( version ) )
-							, int( CMSH_VERSION_MINOR( version ) )
-							, int( CMSH_VERSION_REVISION( version ) ) };
-						version = CMSH_VERSION;
-						Version latestVersion{ int( CMSH_VERSION_MAJOR( version ) )
-							, int( CMSH_VERSION_MINOR( version ) )
-							, int( CMSH_VERSION_REVISION( version ) ) };
+						m_fileVersion = Version{ int( getCmshMajor( version ) )
+							, int( getCmshMinor( version ) )
+							, int( getCmshRevision( version ) ) };
+						Version latestVersion{ int( getCmshMajor( CurrentCmshVersion ) )
+							, int( getCmshMinor( CurrentCmshVersion ) )
+							, int( getCmshRevision( CurrentCmshVersion ) ) };
 
 						if ( m_fileVersion < latestVersion )
 						{

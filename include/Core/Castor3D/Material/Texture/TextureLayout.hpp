@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TEXTURE_LAYOUT_H___
-#define ___C3D_TEXTURE_LAYOUT_H___
+#ifndef ___C3D_TextureLayout_H___
+#define ___C3D_TextureLayout_H___
 
 #include "TextureModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageCreateInfo.hpp>

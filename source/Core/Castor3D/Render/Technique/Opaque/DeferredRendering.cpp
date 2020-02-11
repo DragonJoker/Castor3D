@@ -1,10 +1,10 @@
-#include "Castor3D/Technique/Opaque/DeferredRendering.hpp"
+#include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 

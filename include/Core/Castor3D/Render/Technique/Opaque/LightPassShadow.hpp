@@ -4,24 +4,24 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPassShadow_H___
 #define ___C3D_DeferredLightPassShadow_H___
 
-#include "Castor3D/Technique/Opaque/DirectionalLightPass.hpp"
-#include "Castor3D/Technique/Opaque/PointLightPass.hpp"
-#include "Castor3D/Technique/Opaque/SpotLightPass.hpp"
-#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/ShadowMap/ShadowMapPoint.hpp"
-#include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/Technique/Opaque/DirectionalLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/PointLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 namespace castor3d
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		08/06/2017
@@ -95,7 +95,7 @@ namespace castor3d
 			return *light.getDirectionalLight();
 		}
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		08/06/2017
@@ -169,7 +169,7 @@ namespace castor3d
 			return *light.getPointLight();
 		}
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		08/06/2017
@@ -255,7 +255,7 @@ namespace castor3d
 		using my_shadow_matype = typename my_traits::shadow_pass_type;
 
 	private:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.10.0
 		\date		08/06/2017

@@ -2,7 +2,7 @@
 
 #include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>

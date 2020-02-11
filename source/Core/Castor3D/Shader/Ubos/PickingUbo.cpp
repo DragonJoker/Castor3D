@@ -1,17 +1,14 @@
 #include "Castor3D/Shader/Ubos/PickingUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-using namespace castor;
 
 namespace castor3d
 {
 	const uint32_t PickingUbo::BindingPoint = 12u;
-	String const PickingUbo::BufferPicking = cuT( "Picking" );
-	String const PickingUbo::DrawIndex = cuT( "c3d_drawIndex" );
-	String const PickingUbo::NodeIndex = cuT( "c3d_nodeIndex" );
+	castor::String const PickingUbo::BufferPicking = cuT( "Picking" );
+	castor::String const PickingUbo::DrawIndex = cuT( "c3d_drawIndex" );
+	castor::String const PickingUbo::NodeIndex = cuT( "c3d_nodeIndex" );
 
 	PickingUbo::PickingUbo( Engine & engine )
 		: m_engine{ engine }

@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Opaque/Ssao/BlurPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/BlurPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
@@ -6,11 +6,11 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>

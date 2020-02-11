@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SubsurfaceScattering_H___
 #define ___C3D_SubsurfaceScattering_H___
 
-#include "MaterialModule.hpp"
+#include "PassModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
@@ -19,7 +19,7 @@ namespace castor3d
 		using OnChangedConnection = OnChanged::connection;
 
 	public:
-		/*!
+		/**
 		\~english
 		\brief Pass loader.
 		\~french

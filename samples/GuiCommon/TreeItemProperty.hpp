@@ -43,7 +43,7 @@ namespace GuiCommon
 		std::memcpy( &result[0], p_values.data(), Count * sizeof( int ) );
 		return result;
 	}
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
 	\version	0.8.0
@@ -78,7 +78,7 @@ namespace GuiCommon
 		ePROPERTY_DATA_TYPE_SKELETON_ANIMATION,
 		ePROPERTY_DATA_TYPE_BACKGROUND,
 	}	ePROPERTY_DATA_TYPE;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
 	\version	0.8.0

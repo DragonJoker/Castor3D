@@ -11,7 +11,7 @@
 #include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
 #include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
-#include <Castor3D/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechnique.hpp>
 
 #include <CompilerGlsl/compileGlsl.hpp>
 

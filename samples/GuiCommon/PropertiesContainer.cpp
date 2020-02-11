@@ -13,8 +13,8 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Overlay/PanelOverlay.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
@@ -25,7 +25,7 @@
 #include <Castor3D/Scene/Light/DirectionalLight.hpp>
 #include <Castor3D/Scene/Light/PointLight.hpp>
 #include <Castor3D/Scene/Light/SpotLight.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 

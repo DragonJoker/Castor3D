@@ -4,22 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_SHADOW_MAP_PASS_POINT_H___
 #define ___C3D_SHADOW_MAP_PASS_POINT_H___
 
-#include "Castor3D/ShadowMap/ShadowMapPass.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Shadow mapping implementation.
-	\~french
-	\brief		Implémentation du mappage d'ombres.
-	*/
 	class ShadowMapPassPoint
 		: public ShadowMapPass
 	{

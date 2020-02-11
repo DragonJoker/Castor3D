@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FRAME_LISTENER_H___
-#define ___C3D_FRAME_LISTENER_H___
+#ifndef ___C3D_FrameListener_H___
+#define ___C3D_FrameListener_H___
 
 #include "FrameEventModule.hpp"
 

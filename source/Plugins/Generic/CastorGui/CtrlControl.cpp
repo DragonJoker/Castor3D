@@ -8,10 +8,10 @@
 
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 using namespace castor;
 using namespace castor3d;

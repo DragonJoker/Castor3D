@@ -4,13 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_MeshAnimationSubmesh_H___
 #define ___C3D_MeshAnimationSubmesh_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MeshAnimationModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	class MorphComponent;
 	class MeshAnimationSubmesh
 		: public castor::OwnedBy< MeshAnimation >
 		, public std::enable_shared_from_this< MeshAnimationSubmesh >
@@ -112,7 +113,7 @@ namespace castor3d
 		Submesh & m_submesh;
 		//!\~english	The bones component.
 		//!\~french		Le composant des os.
-		std::shared_ptr< MorphComponent > m_component;
+		MorphComponentSPtr m_component;
 
 		friend class MeshAnimationInstanceSubmesh;
 	};

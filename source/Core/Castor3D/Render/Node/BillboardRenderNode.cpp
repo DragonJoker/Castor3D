@@ -1,4 +1,4 @@
-#include "Castor3D/Render/RenderNode/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"

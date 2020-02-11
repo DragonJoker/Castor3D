@@ -1,7 +1,7 @@
-#include "Castor3D/Render/RenderNode/DistanceRenderNode.hpp"
+#include "Castor3D/Render/Node/DistanceRenderNode.hpp"
 
-#include "Castor3D/Mesh/Mesh.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 

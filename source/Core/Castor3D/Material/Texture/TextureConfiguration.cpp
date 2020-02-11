@@ -1,4 +1,4 @@
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
 namespace castor3d
 {

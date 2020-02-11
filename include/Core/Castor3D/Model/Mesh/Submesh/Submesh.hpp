@@ -6,6 +6,15 @@ See LICENSE file in root folder
 
 #include "Component/ComponentModule.hpp"
 
+#include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
+
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/VertexGroup.hpp"
+
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 

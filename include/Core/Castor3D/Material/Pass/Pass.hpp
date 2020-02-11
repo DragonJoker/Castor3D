@@ -4,10 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_PASS_H___
 #define ___C3D_PASS_H___
 
-#include "Castor3D/Material/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 
-#include "Castor3D/Texture/TextureModule.hpp"
-
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -18,7 +19,7 @@ namespace castor3d
 		: public castor::OwnedBy< Material >
 	{
 	public:
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 19/10/2011

@@ -13,16 +13,16 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/PhongPass.hpp>
 #include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Colour.hpp>
 #include <CastorUtils/Graphics/Image.hpp>

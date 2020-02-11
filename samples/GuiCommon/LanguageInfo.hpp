@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	static const wxString DEFAULT_LANGUAGE = wxT( "<default>" );
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011

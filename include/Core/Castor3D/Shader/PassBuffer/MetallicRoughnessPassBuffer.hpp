@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
-#include <CastorUtils/Design/ArrayView.hpp>
-
 namespace castor3d
 {
 	class MetallicRoughnessPassBuffer

@@ -7,14 +7,14 @@ namespace castor
 {
 	namespace
 	{
-		static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::create - Created " );
-		static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::create - Duplicate " );
-		static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
+		static const xchar * InfoCacheCreatedObject = cuT( "Cache::create - Created " );
+		static const xchar * WarningCacheDuplicateObject = cuT( "Cache::create - Duplicate " );
+		static const xchar * WarningCacheNullObject = cuT( "Cache::Insert - nullptr " );
 
 		inline void doReportCreation( castor::String const & name )
 		{
 			castor::Logger::logTrace( castor::makeStringStream()
-				<< INFO_CACHE_CREATED_OBJECT
+				<< InfoCacheCreatedObject
 				<< cuT( "Image: " )
 				<< name );
 		}
@@ -22,7 +22,7 @@ namespace castor
 		inline void doReportDuplicate( castor::String const & name )
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< WarningCacheDuplicateObject
 				<< cuT( "Image: " )
 				<< name );
 		}
@@ -30,7 +30,7 @@ namespace castor
 		inline void doReportNull()
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_NULL_OBJECT
+				<< WarningCacheNullObject
 				<< cuT( "Image" ) );
 		}
 	}

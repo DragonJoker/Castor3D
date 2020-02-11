@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_SubmeshComponent_H___
 
 #include "ComponentModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ICOSAHEDRON_H___
-#define ___C3D_ICOSAHEDRON_H___
+#ifndef ___C3D_Icosahedron_H___
+#define ___C3D_Icosahedron_H___
 
-#include "Castor3D/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
 namespace castor3d
 {

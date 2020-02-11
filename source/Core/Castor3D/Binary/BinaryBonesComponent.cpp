@@ -1,6 +1,6 @@
 #include "Castor3D/Binary/BinaryBonesComponent.hpp"
 
-#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
 using namespace castor;
 

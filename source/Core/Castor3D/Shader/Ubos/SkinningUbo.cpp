@@ -1,23 +1,16 @@
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
-#include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-
-#include <ShaderWriter/Source.hpp>
-
-using namespace castor;
 
 namespace castor3d
 {
 	uint32_t const SkinningUbo::BindingPoint = 8u;
-	String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
-	String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
+	castor::String const SkinningUbo::BufferSkinning = cuT( "Skinning" );
+	castor::String const SkinningUbo::Bones = cuT( "c3d_mtxBones" );
 
 	SkinningUbo::SkinningUbo( Engine & engine )
 		: m_engine{ engine }
@@ -112,13 +105,13 @@ namespace castor3d
 		auto bone_ids1 = writer.getVariable< IVec4 >( cuT( "bone_ids1" ) );
 		auto weights0 = writer.getVariable< Vec4 >( cuT( "weights0" ) );
 		auto weights1 = writer.getVariable< Vec4 >( cuT( "weights1" ) );
-		auto c3d_curMtxModel = writer.getVariable< sdw::Mat4 >( ModelMatrixUbo::CurMtxModel );
+		auto c3d_curMtxModel = writer.getVariable< Mat4 >( ModelMatrixUbo::CurMtxModel );
 		auto mtxBoneTransform = writer.declLocale< Mat4 >( cuT( "mtxBoneTransform" ) );
 
 		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
 		{
-			auto gl_InstanceID = writer.getVariable< sdw::Int >( cuT( "gl_InstanceID" ) );
-			auto transform = writer.getVariable< sdw::Mat4 >( cuT( "transform" ) );
+			auto gl_InstanceID = writer.getVariable< Int >( cuT( "gl_InstanceID" ) );
+			auto transform = writer.getVariable< Mat4 >( cuT( "transform" ) );
 			auto mtxInstanceOffset = writer.declLocale( cuT( "mtxInstanceOffset" )
 				, gl_InstanceID * 400_i );
 
@@ -135,7 +128,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto bones = data.ubo->getMemberArray< sdw::Mat4 >( SkinningUbo::Bones );
+			auto bones = data.ubo->getMemberArray< Mat4 >( SkinningUbo::Bones );
 			mtxBoneTransform = bones[bone_ids0[0]] * weights0[0];
 			mtxBoneTransform += bones[bone_ids0[1]] * weights0[1];
 			mtxBoneTransform += bones[bone_ids0[2]] * weights0[2];

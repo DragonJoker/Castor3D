@@ -1,8 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SpecularBrdfLighting_H___
-#define ___C3D_SpecularBrdfLighting_H___
+#ifndef ___C3D_GlslSpecularBrdfLightingModel_H___
+#define ___C3D_GlslSpecularBrdfLightingModel_H___
+
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 
@@ -10,8 +12,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		class TextureConfigurations;
-
 		class SpecularBrdfLightingModel
 			: public LightingModel
 		{

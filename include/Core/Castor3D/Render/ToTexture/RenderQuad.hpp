@@ -18,14 +18,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\~english
-	*\brief
-	*	Class used to render a texture into a quad.
-	*\~french
-	*\brief
-	*	Classe utilisée pour rendre une texture dans un quad.
-	*/
 	class RenderQuad
 	{
 	public:

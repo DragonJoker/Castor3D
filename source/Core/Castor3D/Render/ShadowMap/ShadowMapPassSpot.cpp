@@ -1,12 +1,12 @@
-#include "Castor3D/ShadowMap/ShadowMapPassSpot.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 

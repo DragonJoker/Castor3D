@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_MeshGenerator_H___
 
 #include "MeshModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 namespace castor3d
 {

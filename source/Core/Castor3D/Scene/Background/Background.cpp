@@ -5,7 +5,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>

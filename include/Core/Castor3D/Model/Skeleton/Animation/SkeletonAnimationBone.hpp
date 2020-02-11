@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimationBone_H___
 #define ___C3D_SkeletonAnimationBone_H___
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
 namespace castor3d
 {

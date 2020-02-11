@@ -1,7 +1,7 @@
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>

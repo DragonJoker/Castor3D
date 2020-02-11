@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_ChunkWriter_H___
 
 #include "Castor3D/Binary/BinaryChunk.hpp"
-#include "Castor3D/Binary/ChunkData.hpp"
 
 namespace castor3d
 {
@@ -49,7 +48,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
 	\date 		30/05/2016
@@ -121,7 +120,7 @@ namespace castor3d
 			return ChunkWriterBase::write( begin, end, type, chunk );
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
 	\date 		30/05/2016
@@ -169,7 +168,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
 	\date 		30/05/2016

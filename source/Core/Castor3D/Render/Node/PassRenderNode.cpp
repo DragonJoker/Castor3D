@@ -1,11 +1,11 @@
-#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
 
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>

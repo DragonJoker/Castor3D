@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningRenderNode_H___
 #define ___C3D_SkinningRenderNode_H___
 
-#include "Castor3D/Render/RenderNode/ObjectRenderNode.hpp"
+#include "Castor3D/Render/Node/ObjectRenderNode.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 namespace castor3d

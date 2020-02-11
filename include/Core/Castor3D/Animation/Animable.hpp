@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Animable_H___
 #define ___C3D_Animable_H___
 
-#include "Castor3D/Castor3DModule.hpp"
-#include "Castor3D/Animation/AnimationModule.hpp"
+#include "Castor3D/Animation/Animation.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

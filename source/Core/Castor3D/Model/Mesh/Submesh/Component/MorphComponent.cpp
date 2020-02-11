@@ -1,7 +1,7 @@
-#include "Castor3D/Mesh/SubmeshComponent/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"

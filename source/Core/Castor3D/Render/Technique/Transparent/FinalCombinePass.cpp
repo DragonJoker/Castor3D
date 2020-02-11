@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Transparent/FinalCombinePass.hpp"
+#include "Castor3D/Render/Technique/Transparent/FinalCombinePass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -7,9 +7,9 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>

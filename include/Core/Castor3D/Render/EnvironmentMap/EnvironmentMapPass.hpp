@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 
 namespace castor3d
 {

@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PROJECTION_H___
-#define ___C3D_PROJECTION_H___
+#ifndef ___C3D_Projection_H___
+#define ___C3D_Projection_H___
 
-#include "Castor3D/Mesh/MeshGenerator.hpp"
+#include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Miscellaneous/Pattern.hpp"
 
 #include <CastorUtils/Math/Point.hpp>

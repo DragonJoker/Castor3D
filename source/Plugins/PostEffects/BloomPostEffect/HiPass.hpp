@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/PostEffect/PostEffect.hpp>
 #include <Castor3D/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/RenderToTexture/RenderQuad.hpp>
+#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

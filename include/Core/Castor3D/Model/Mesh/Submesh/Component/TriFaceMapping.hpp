@@ -4,10 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_TriFaceMapping_H___
 #define ___C3D_TriFaceMapping_H___
 
-#include "Castor3D/Mesh/SubmeshComponent/IndexMapping.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/FaceInfos.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/Face.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
 
 namespace castor3d
 {

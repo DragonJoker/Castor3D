@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
 namespace castor3d
 {
@@ -53,6 +53,8 @@ namespace castor3d
 		struct MetallicRoughnessMaterial;
 		struct SpecularGlossinessMaterial;
 		struct TextureConfigData;
+		class TextureConfigurations;
+		struct OutputComponents;
 
 		Writer_Parameter( Light );
 		Writer_Parameter( DirectionalLight );

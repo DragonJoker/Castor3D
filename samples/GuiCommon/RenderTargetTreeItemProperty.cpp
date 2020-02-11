@@ -4,7 +4,7 @@
 #include "GuiCommon/ShaderDialog.hpp"
 
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechnique.hpp>
 
 #include <wx/propgrid/advprops.h>
 

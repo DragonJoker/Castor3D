@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TransparentTechniqueModule_H___
 #define ___C3D_TransparentTechniqueModule_H___
 
-#include "Castor3D/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
 namespace castor3d
 {
@@ -15,7 +15,7 @@ namespace castor3d
 	/**@name Transparent */
 	//@{
 
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		08/06/2017

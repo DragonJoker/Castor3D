@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MaterialModule_H___
-#define ___C3D_MaterialModule_H___
+#ifndef ___C3D_MaterialPassModule_H___
+#define ___C3D_MaterialPassModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
 
@@ -12,29 +12,9 @@ namespace castor3d
 {
 	/**@name Material */
 	//@{
+	/**@name Pass */
+	//@{
 
-	/**
-	*\~english
-	*\brief
-	*	Supported material types enumeration.
-	*\~french
-	*\brief
-	*	Enumération des types de matétiaux supportés.
-	*/
-	enum class MaterialType
-	{
-		//!\~english	Phong (non PBR).
-		//!\~french		Phong (non PBR).
-		ePhong,
-		//!\~english	Metallic/Roughness PBR.
-		//!\~french		PBR Metallic/Roughness.
-		eMetallicRoughness,
-		//!\~english	Specular/Glossiness PBR.
-		//!\~french		PBR Specular/Glossiness.
-		eSpecularGlossiness,
-		CU_ScopedEnumBounds( ePhong )
-	};
-	castor::String getName( MaterialType value );
 	/**
 	*\~english
 	*\brief
@@ -110,29 +90,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Helper class to retrieve a pass type from a MaterialType.
-	*\~french
-	*\brief
-	*	Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	*/
-	template< MaterialType Type >
-	struct PassTyper;
-	/**
-	*\~english
-	*\brief
-	*	Definition of a material
-	*\remarks
-	*	A material is composed of one or more passes.
-	*\~french
-	*\brief
-	*	Définition d'un matériau
-	*\remarks
-	*	Un matériau est composé d'une ou plusieurs passes
-	*/
-	class Material;
-	/**
-	*\~english
-	*\brief
 	*	Base class of a material pass.
 	*\~french
 	*\brief
@@ -187,36 +144,81 @@ namespace castor3d
 	*	Informations étendues de la passe, relatives au subsurface scattering.
 	*/
 	class SubsurfaceScattering;
+	/**
+	*\~english
+	*\brief
+	*	Helper class to retrieve a pass type from a MaterialType.
+	*\~french
+	*\brief
+	*	Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	*/
+	template< MaterialType Type >
+	struct PassTyper;
+	/**
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::ePhong.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::ePhong.
+	*/
+	template<>
+	struct PassTyper< MaterialType::ePhong >
+	{
+		using Type = PhongPass;
+	};
+	/**
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::eMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::eMetallicRoughness >
+	{
+		using Type = MetallicRoughnessPbrPass;
+	};
+	/**
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::eMetallicRoughness.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
+	*/
+	template<>
+	struct PassTyper< MaterialType::eSpecularGlossiness >
+	{
+		using Type = SpecularGlossinessPbrPass;
+	};
 
-	CU_DeclareSmartPtr( Material );
 	CU_DeclareSmartPtr( Pass );
 	CU_DeclareSmartPtr( PhongPass );
 	CU_DeclareSmartPtr( MetallicRoughnessPbrPass );
 	CU_DeclareSmartPtr( SpecularGlossinessPbrPass );
 	CU_DeclareSmartPtr( SubsurfaceScattering );
 
-	//! Material pointer array
-	CU_DeclareVector( MaterialSPtr, MaterialPtr );
 	//! Pass array
 	CU_DeclareVector( Pass, Pass );
 	//! Pass pointer array
 	CU_DeclareVector( PassSPtr, PassPtr );
-	//! Material pointer map, sorted by name
-	CU_DeclareMap( castor::String, MaterialSPtr, MaterialPtrStr );
-	//! Material pointer map
-	CU_DeclareMap( uint32_t, MaterialSPtr, MaterialPtrUInt );
 
 	using OnPassChangedFunction = std::function< void( Pass const & ) >;
 	using OnPassChanged = castor::Signal< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 
-	using OnMaterialChangedFunction = std::function< void( Material const & ) >;
-	using OnMaterialChanged = castor::Signal< OnMaterialChangedFunction >;
-	using OnMaterialChangedConnection = OnMaterialChanged::connection;
-
-	C3D_API VkFormat convert( castor::PixelFormat format );
-	C3D_API castor::PixelFormat convert( VkFormat format );
-
+	//@}
 	//@}
 }
 

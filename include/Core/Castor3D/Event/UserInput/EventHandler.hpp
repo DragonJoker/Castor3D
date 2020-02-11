@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_EVENT_HANDLER_H___
-#define ___C3D_EVENT_HANDLER_H___
-
-#include <CastorUtils/Design/Signal.hpp>
+#ifndef ___C3D_EventHandler_H___
+#define ___C3D_EventHandler_H___
 
 #include "Castor3D/Event/UserInput/KeyboardEvent.hpp"
 #include "Castor3D/Event/UserInput/MouseEvent.hpp"
 #include "Castor3D/Event/UserInput/HandlerEvent.hpp"
+
+#include <CastorUtils/Design/Signal.hpp>
 
 #include <deque>
 #include <mutex>
@@ -398,7 +398,7 @@ namespace castor3d
 		//!\~french		Dit si le contrôle traite la touche 'entrée'.
 		bool m_catchReturnKey;
 	};
-	/*!
+	/**
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
 	*\version	0.9.0

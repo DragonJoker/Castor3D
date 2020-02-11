@@ -1,10 +1,11 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GLSL_FOG_H___
-#define ___GLSL_FOG_H___
+#ifndef ___C3D_GlslFog_H___
+#define ___C3D_GlslFog_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SdwModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 

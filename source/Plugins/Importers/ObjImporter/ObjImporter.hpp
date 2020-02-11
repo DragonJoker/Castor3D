@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace Obj
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
 	\brief		OBJ file importer

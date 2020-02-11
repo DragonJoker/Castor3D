@@ -3,7 +3,7 @@
 #include "GuiCommon/AdditionalProperties.hpp"
 
 #include <Castor3D/Animation/Animable.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>

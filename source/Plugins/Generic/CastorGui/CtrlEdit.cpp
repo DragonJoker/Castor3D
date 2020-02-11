@@ -8,7 +8,7 @@
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
 #include <Castor3D/Overlay/PanelOverlay.hpp>
 #include <Castor3D/Overlay/TextOverlay.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 

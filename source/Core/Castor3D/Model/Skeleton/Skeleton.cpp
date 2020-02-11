@@ -1,8 +1,8 @@
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
 using namespace castor;
 

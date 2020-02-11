@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneModule_H___
 #define ___C3D_SceneModule_H___
 
-#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
 
@@ -285,6 +286,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Base class for external file import
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de fichiers externes
+	*/
+	class SceneImporter;
+	/**
+	*\~english
+	*\brief
 	*	The scene node handler class
 	*\remarks
 	*	A scene node is a parent for nearly every object in a scene : geometry, camera, ...
@@ -313,6 +323,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( Scene );
 	CU_DeclareSmartPtr( SceneFileContext );
 	CU_DeclareSmartPtr( SceneFileParser );
+	CU_DeclareSmartPtr( SceneImporter );
 	CU_DeclareSmartPtr( SceneNode );
 
 	//! Camera pointer array

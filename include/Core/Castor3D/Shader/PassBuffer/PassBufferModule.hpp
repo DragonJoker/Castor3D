@@ -50,6 +50,8 @@ namespace castor3d
 	*/
 	class SpecularGlossinessPassBuffer;
 
+	CU_DeclareSmartPtr( PassBuffer );
+
 	//@}
 	//@}
 }

@@ -1,6 +1,6 @@
-#include "Castor3D/Mesh/SubmeshComponent/BonesInstantiationComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 

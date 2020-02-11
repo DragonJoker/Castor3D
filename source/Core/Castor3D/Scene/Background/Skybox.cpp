@@ -4,15 +4,15 @@
 
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/RenderToTexture/EquirectangularToCube.hpp"
+#include "Castor3D/Render/ToTexture/EquirectangularToCube.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -18,7 +18,7 @@ namespace castor
 	\brief		donne le format de regex pour le type donné.
 	*/
 	template< typename T > struct RegexFormat;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -32,7 +32,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -46,7 +46,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -60,7 +60,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -74,7 +74,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -88,7 +88,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -102,7 +102,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -116,7 +116,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -130,7 +130,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -144,7 +144,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -158,7 +158,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -172,7 +172,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -186,7 +186,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -200,7 +200,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -214,7 +214,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		16/02/2016
@@ -228,7 +228,7 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -238,7 +238,7 @@ namespace castor
 	\brief		Structure d'aide pour les paramètres de parseur.
 	*/
 	template< ParameterType Type > struct ParserParameterHelper;
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -256,7 +256,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -276,7 +276,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -294,7 +294,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -314,7 +314,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -334,7 +334,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -354,7 +354,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -372,7 +372,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -390,7 +390,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -408,7 +408,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -426,7 +426,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -444,7 +444,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -462,7 +462,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -480,7 +480,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -498,7 +498,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -516,7 +516,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -534,7 +534,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -552,7 +552,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -570,7 +570,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -588,7 +588,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -606,7 +606,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -624,7 +624,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -642,7 +642,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -660,7 +660,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -678,7 +678,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -696,7 +696,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -714,7 +714,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -732,7 +732,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -750,7 +750,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -768,7 +768,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -786,7 +786,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -804,7 +804,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -822,7 +822,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -840,7 +840,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -858,7 +858,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -876,7 +876,7 @@ namespace castor
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -890,7 +890,7 @@ namespace castor
 		: public std::false_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -904,7 +904,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -918,7 +918,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -932,7 +932,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -946,7 +946,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -960,7 +960,7 @@ namespace castor
 		: public std::false_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -976,7 +976,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -992,7 +992,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1008,7 +1008,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1024,7 +1024,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1040,7 +1040,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1056,7 +1056,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1072,7 +1072,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1088,7 +1088,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1104,7 +1104,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -1120,7 +1120,7 @@ namespace castor
 		: public std::true_type
 	{
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0

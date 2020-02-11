@@ -6,7 +6,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 
 #include <ashespp/Core/Device.hpp>
 

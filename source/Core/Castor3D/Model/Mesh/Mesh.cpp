@@ -1,11 +1,11 @@
-#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Animation/Mesh/MeshAnimation.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 using namespace castor;
 
@@ -157,7 +157,7 @@ namespace castor3d
 
 	SubmeshSPtr Mesh::createSubmesh()
 	{
-		SubmeshSPtr submesh = std::make_shared< Submesh >( *getScene(), *this, getSubmeshCount() );
+		auto submesh = std::make_shared< Submesh >( *this, getSubmeshCount() );
 		m_submeshes.push_back( submesh );
 		return submesh;
 	}
@@ -192,7 +192,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation( name ) )
 		{
-			doAddAnimation( std::make_shared< MeshAnimation >( *this, name ) );
+			doAddAnimation( std::make_unique< MeshAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< MeshAnimation >( name );

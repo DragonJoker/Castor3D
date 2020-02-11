@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace Loop
 {
 	//! Face edges representation
-	/*!
+	/**
 	Holds the three edges constituted by a face
 	\author Sylvain DOREMUS
 	\date 25/08/2010

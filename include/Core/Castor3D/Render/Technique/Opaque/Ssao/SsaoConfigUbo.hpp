@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SsaoConfigUbo_H___
 #define ___C3D_SsaoConfigUbo_H___
 
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {

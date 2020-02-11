@@ -3,11 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/UniformBuffer.hpp>
-#include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
 using namespace castor;
 

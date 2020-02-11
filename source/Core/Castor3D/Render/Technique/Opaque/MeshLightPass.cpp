@@ -1,4 +1,4 @@
-#include "Castor3D/Technique/Opaque/MeshLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/MeshLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"

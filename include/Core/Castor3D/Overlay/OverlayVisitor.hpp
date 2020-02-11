@@ -4,18 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayVisitor_H___
 #define ___C3D_OverlayVisitor_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "OverlayModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\~english
-	\brief		The overlay visitor base class.
-	\~french
-	\brief		La classe de base de visiteur d'incrustation.
-	*/
 	class OverlayVisitor
 	{
 	public:

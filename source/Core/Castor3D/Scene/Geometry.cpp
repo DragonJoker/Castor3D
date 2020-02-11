@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 using namespace castor;
 

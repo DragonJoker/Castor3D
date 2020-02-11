@@ -15,7 +15,7 @@ namespace castor3d
 		: public std::enable_shared_from_this< RenderedObject >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

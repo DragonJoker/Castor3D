@@ -781,7 +781,8 @@ namespace OceanLighting
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 		{
-			ENSURE( fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f ) <= 16 * 64 * 3 * sizeof( float ) );
+			auto read = fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f );
+			ENSURE( read == 16 * 64 * 3 * sizeof( float ) );
 			fclose( f );
 		}
 
@@ -797,7 +798,8 @@ namespace OceanLighting
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
 		{
-			ENSURE( fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f ) <= nr * nv * nb * na * 4 * sizeof( float ) );
+			auto read = fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f );
+			ENSURE( read == nr * nv * nb * na * 4 * sizeof( float ) );
 			fclose( f );
 		}
 
@@ -807,7 +809,8 @@ namespace OceanLighting
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
 		{
-			ENSURE( fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f ) <= 256 * 64 * 3 * sizeof( float ) );
+			auto read = fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f );
+			ENSURE( read == 256 * 64 * 3 * sizeof( float ) );
 			fclose( f );
 		}
 
@@ -818,7 +821,8 @@ namespace OceanLighting
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 		{
 			unsigned char * img = new unsigned char[512 * 512 + 38];
-			ENSURE( fread( img, 1, 512 * 512 + 38, f ) <= 512 * 512 + 38 );
+			auto read = fread( img, 1, 512 * 512 + 38, f );
+			ENSURE( read == 512 * 512 + 38 );
 			fclose( f );
 			std::memcpy( m_pTexNoise->GetImage().GetBuffer()->ptr(), &img[38], 512 * 512 );
 			delete[] img;
@@ -860,7 +864,9 @@ namespace OceanLighting
 		m_pTexFFTB->Unbind( FFT_B_UNIT );
 
 		m_pTexButterfly = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eR32G32B32A32_SFLOAT, Size( m_FFT_SIZE, m_PASSES ) );
+		auto lookupTexData = computeButterflyLookupTexture();
 		std::memcpy( m_pTexButterfly->GetImage().GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
+		delete [] lookupTexData;
 		l_return &= m_pTexButterfly->Initialise();
 
 #else

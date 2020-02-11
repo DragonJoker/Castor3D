@@ -4,9 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimation_H___
 #define ___C3D_SkeletonAnimation_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SkeletonAnimationModule.hpp"
+
+#include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include "Castor3D/Animation/Animation.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
 namespace castor3d
 {

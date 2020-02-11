@@ -139,19 +139,30 @@ namespace castor3d
 	*	Classe de base de l'implémentation d'un système de particules.
 	*/
 	class ParticleSystemImpl;
+	/**
+	*\~english
+	*\brief
+	*	Particle system factory.
+	*\~french
+	*\brief
+	*	Fabrique de système de particules.
+	*/
+	using ParticleFactory = castor::Factory< CpuParticleSystem
+		, castor::String
+		, std::unique_ptr< CpuParticleSystem >
+		, std::function< std::unique_ptr< CpuParticleSystem >( ParticleSystem & ) > >;
 
 	template< ParticleFormat Type >
 	struct ElementTyper;
-
-	using ParticleArray = std::vector< Particle >;
-
+	
 	CU_DeclareSmartPtr( ComputeParticleSystem );
 	CU_DeclareSmartPtr( CpuParticleSystem );
 	CU_DeclareSmartPtr( ParticleElementDeclaration );
+	CU_DeclareSmartPtr( ParticleFactory );
 	CU_DeclareSmartPtr( ParticleSystem );
 	CU_DeclareSmartPtr( ParticleSystemImpl );
 
-	using ParticleFactory = castor::Factory< CpuParticleSystem, castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
+	CU_DeclareVector( Particle, Particle );
 
 	//@}
 	//@}

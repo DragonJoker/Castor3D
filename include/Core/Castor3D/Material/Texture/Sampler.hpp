@@ -20,7 +20,7 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.7.0
 		\date		21/03/2014

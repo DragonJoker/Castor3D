@@ -109,6 +109,7 @@ namespace castor3d
 	class SpotLight;
 
 	CU_DeclareSmartPtr( Light );
+	CU_DeclareSmartPtr( LightFactory );
 	CU_DeclareSmartPtr( LightCategory );
 	CU_DeclareSmartPtr( DirectionalLight );
 	CU_DeclareSmartPtr( PointLight );
@@ -119,10 +120,16 @@ namespace castor3d
 
 	//! Array of lights
 	CU_DeclareVector( LightSPtr, LightPtr );
+	//! Array of lights
+	CU_DeclareVector( LightSPtr, Lights );
+	//! Array to non owning light pointers
+	CU_DeclareVector( LightRPtr, LightsRef );
 	//! Map of lights, sorted by name
 	CU_DeclareMap( castor::String, LightSPtr, LightPtrStr );
 	//! Map of lights, sorted by index
 	CU_DeclareMap( int, LightSPtr, LightPtrInt );
+	//! Array of lights per light type.
+	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
 
 	using OnLightChangedFunction = std::function< void( Light & ) >;
 	using OnLightChanged = castor::Signal< OnLightChangedFunction >;

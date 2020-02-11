@@ -56,7 +56,7 @@ namespace castor3d
 
 		if ( it->second )
 		{
-			CU_Exception( cuT( "Already an animation named [" ) + name + "]" );
+			CU_Exception( cuT( "Already an animation named [" ) + animation->getName() + "]" );
 		}
 
 		it->second = std::move( animation );

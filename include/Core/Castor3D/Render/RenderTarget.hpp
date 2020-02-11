@@ -4,13 +4,19 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
-#include "Castor3D/HDR/HdrConfig.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
+#include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
+
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+//#include "Castor3D/Render/RenderInfo.hpp"
+//#include "Castor3D/Render/Culling/SceneCuller.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
@@ -21,17 +27,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename KeyType >
-	struct ElementProducer< RenderTarget, KeyType >
-	{
-		using Type = std::function< std::shared_ptr< RenderTarget >( KeyType const &, TargetType ) >;
-	};
 	class RenderTarget
 		: public std::enable_shared_from_this< RenderTarget >
 		, public castor::OwnedBy< Engine >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
@@ -67,7 +68,7 @@ namespace castor3d
 		};
 
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		19/12/2012
@@ -95,7 +96,7 @@ namespace castor3d
 		private:
 			RenderTarget & renderTarget;
 		};
-		/*!
+		/**
 		\version	0.11.0
 		\date		01/10/2018
 		\~english

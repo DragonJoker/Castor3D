@@ -5,7 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_TextureUnit_H___
 #pragma once
 
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -17,7 +18,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

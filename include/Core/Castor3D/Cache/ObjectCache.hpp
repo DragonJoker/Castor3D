@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OBJECT_CACHE_H___
-#define ___C3D_OBJECT_CACHE_H___
+#ifndef ___C3D_ObjectCache_H___
+#define ___C3D_ObjectCache_H___
 
-#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/CacheTraits.hpp"
 
 namespace castor3d
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
 	\version	0.8.0
@@ -436,7 +436,7 @@ namespace castor3d
 		inline void doReportCreation( castor::String const & name )
 		{
 			castor::Logger::logTrace( castor::makeStringStream()
-				<< INFO_CACHE_CREATED_OBJECT
+				<< InfoCacheCreatedObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
 				<< name );
@@ -445,7 +445,7 @@ namespace castor3d
 		inline void doReportDuplicate( castor::String const & name )
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_DUPLICATE_OBJECT
+				<< WarningCacheDuplicateObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
 				<< name );
@@ -454,7 +454,7 @@ namespace castor3d
 		inline void doReportNull()
 		{
 			castor::Logger::logWarning( castor::makeStringStream()
-				<< WARNING_CACHE_NULL_OBJECT
+				<< WarningCacheNullObject
 				<< getObjectTypeName() );
 		}
 
@@ -503,7 +503,7 @@ namespace castor3d
 
 		friend class Scene;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
 	\version	0.8.0

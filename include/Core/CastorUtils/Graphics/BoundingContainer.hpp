@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
@@ -89,14 +89,14 @@ namespace castor
 		//!\~french		Le centre de ce conteneur.
 		MyPoint m_center;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Typedef on a 2 dimensions BoundingContainer.
 	\~french
 	\brief		Typedef sur une BoundingContainer à 2 dimensions.
 	*/
 	using BoundingContainer2D = BoundingContainer< 2 >;
-	/*!
+	/**
 	\~english
 	\brief		Typedef on a 3 dimensions BoundingContainer.
 	\~french

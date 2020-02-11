@@ -1,17 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GLSL_PhongLighting_H___
-#define ___GLSL_PhongLighting_H___
+#ifndef ___C3D_GlslPhongLightingModel_H___
+#define ___C3D_GlslPhongLightingModel_H___
 
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {
 	namespace shader
 	{
-		class TextureConfigurations;
-
 		class PhongLightingModel
 			: public LightingModel
 		{

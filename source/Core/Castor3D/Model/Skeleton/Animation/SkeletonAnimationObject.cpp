@@ -1,4 +1,4 @@
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationObject.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
 using namespace castor;
 

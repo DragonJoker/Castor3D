@@ -1,34 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PLUGIN_CACHE_H___
-#define ___C3D_PLUGIN_CACHE_H___
+#ifndef ___C3D_PluginCache_H___
+#define ___C3D_PluginCache_H___
 
-#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/CacheTraits.hpp"
+#include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for Plugin.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour Plugin.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< Plugin, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, PluginType, castor::DynamicLibrarySPtr ) >;
-		using Merger = std::function< void( CacheBase< Plugin, KeyType > const &
-											, castor::Collection< Plugin, KeyType > &
-											, std::shared_ptr< Plugin > ) >;
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
 	\version	0.8.0

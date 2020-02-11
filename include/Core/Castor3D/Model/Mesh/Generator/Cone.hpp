@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CONE_H___
-#define ___C3D_CONE_H___
+#ifndef ___C3D_Cone_H___
+#define ___C3D_Cone_H___
 
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 

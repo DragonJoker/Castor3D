@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\~english
 	\brief Pixel PixelComponents enumeration.
 	\~french
@@ -46,7 +46,7 @@ namespace castor
 		eStencil,
 		CU_ScopedEnumBounds( eRed )
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		27/05/2013
 	\~english

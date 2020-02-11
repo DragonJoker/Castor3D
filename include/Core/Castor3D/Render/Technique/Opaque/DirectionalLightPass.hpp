@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredDirectionalLightPass_H___
 #define ___C3D_DeferredDirectionalLightPass_H___
 
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 namespace castor3d
 {
@@ -12,7 +12,7 @@ namespace castor3d
 		: public LightPass
 	{
 	protected:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.10.0
 		\date		08/06/2017

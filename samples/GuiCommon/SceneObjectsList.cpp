@@ -30,11 +30,11 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Castor3D/HDR/ToneMapping.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Overlay/Overlay.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/BillboardList.hpp>

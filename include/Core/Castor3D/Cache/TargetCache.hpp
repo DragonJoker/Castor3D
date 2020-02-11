@@ -1,31 +1,23 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TARGET_CACHE_H___
-#define ___C3D_TARGET_CACHE_H___
+#ifndef ___C3D_RenderTargetCache_H___
+#define ___C3D_RenderTargetCache_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Cache/CacheTraits.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 
-#include "Castor3D/HDR/ToneMappingFactory.hpp"
-#include "Castor3D/PostEffect/PostEffectFactory.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		RenderTarget cache.
-	\~french
-	\brief		Cache de RenderTarget.
-	*/
 	class RenderTargetCache
 		: public castor::OwnedBy< Engine >
 	{
 		CU_DeclareVector( RenderTargetSPtr, RenderTarget );
 		CU_DeclareArray( RenderTargetArray, TargetType::eCount, TargetType );
+
 	public:
 		/**
 		 *\~english

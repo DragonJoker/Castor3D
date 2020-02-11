@@ -4,7 +4,7 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Render/RenderLoopAsync.hpp"
@@ -12,8 +12,8 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
-#include "Castor3D/Technique/RenderTechnique.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>

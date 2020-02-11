@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
@@ -226,7 +226,7 @@ namespace castor
 		void * m_library;
 		Path m_pathLibrary;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		03/01/2011
 	\~english

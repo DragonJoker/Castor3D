@@ -1,10 +1,8 @@
-#include "Castor3D/Mesh/Generator/Cone.hpp"
+#include "Castor3D/Model/Mesh/Generator/Cone.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
-
-using namespace castor;
 
 namespace castor3d
 {
@@ -28,21 +26,21 @@ namespace castor3d
 	void Cone::doGenerate( Mesh & mesh
 		, Parameters const & parameters )
 	{
-		String param;
+		castor::String param;
 
 		if ( parameters.get( cuT( "faces" ), param ) )
 		{
-			m_nbFaces = string::toUInt( param );
+			m_nbFaces = castor::string::toUInt( param );
 		}
 
 		if ( parameters.get( cuT( "radius" ), param ) )
 		{
-			m_radius = string::toFloat( param );
+			m_radius = castor::string::toFloat( param );
 		}
 
 		if ( parameters.get( cuT( "height" ), param ) )
 		{
-			m_height = string::toFloat( param );
+			m_height = castor::string::toFloat( param );
 		}
 
 		if ( m_nbFaces >= 2 && m_height > std::numeric_limits< float >::epsilon() && m_radius > std::numeric_limits< float >::epsilon() )
@@ -50,7 +48,7 @@ namespace castor3d
 			Submesh & submeshBase = *mesh.createSubmesh();
 			Submesh & submeshSide = *mesh.createSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			float angleRotation = PiMult2< float > / m_nbFaces;
+			float angleRotation = castor::PiMult2< float > / m_nbFaces;
 			uint32_t i = 0;
 			float rCos, rSin;
 			InterleavedVertexArray baseVertex;
@@ -63,19 +61,19 @@ namespace castor3d
 
 				if ( i < m_nbFaces )
 				{
-					baseVertex.push_back( InterleavedVertex::createPT( Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
-						, Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
+					baseVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
+						, castor::Point2f{ ( 1 + rCos ) / 2, ( 1 + rSin ) / 2 } ) );
 				}
 
-				sideVertex.push_back( InterleavedVertex::createPT( Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
-					, Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
-				sideVertex.push_back( InterleavedVertex::createPT( Point3f{ float( 0 ), m_height, float( 0 ) }
-					, Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ m_radius * rCos, 0.0, m_radius * rSin }
+					, castor::Point2f{ float( i ) / m_nbFaces, float( 1.0 ) } ) );
+				sideVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ float( 0 ), m_height, float( 0 ) }
+					, castor::Point2f{ float( i ) / m_nbFaces, float( 0.0 ) } ) );
 				i++;
 			}
 			
-			baseVertex.push_back( InterleavedVertex::createPT( Point3f{ 0.0, 0.0, 0.0 }
-				, Point2f{ 0.5, 0.5 } ) );
+			baseVertex.push_back( InterleavedVertex::createPT( castor::Point3f{ 0.0, 0.0, 0.0 }
+				, castor::Point2f{ 0.5, 0.5 } ) );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() - 1u );
 			submeshBase.addPoints( baseVertex );
 			submeshSide.addPoints( sideVertex );
@@ -119,10 +117,10 @@ namespace castor3d
 			normal0Base += submeshSide[submeshSide.getPointsCount() - 1].nml;
 			tangent0Top += submeshSide[submeshSide.getPointsCount() - 2].tan;
 			tangent0Base += submeshSide[submeshSide.getPointsCount() - 1].tan;
-			point::normalise( normal0Top );
-			point::normalise( normal0Base );
-			point::normalise( tangent0Top );
-			point::normalise( tangent0Base );
+			castor::point::normalise( normal0Top );
+			castor::point::normalise( normal0Base );
+			castor::point::normalise( tangent0Top );
+			castor::point::normalise( tangent0Base );
 			submeshSide[submeshSide.getPointsCount() - 2].nml = normal0Top;
 			submeshSide[submeshSide.getPointsCount() - 1].nml = normal0Base;
 			submeshSide[submeshSide.getPointsCount() - 2].tan = tangent0Top;

@@ -5,9 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_SsaoBlurPass_H___
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Buffer/PushConstantsBuffer.hpp>
 

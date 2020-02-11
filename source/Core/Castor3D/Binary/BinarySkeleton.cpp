@@ -1,10 +1,10 @@
 #include "Castor3D/Binary/BinarySkeleton.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Binary/BinaryAnimation.hpp"
 #include "Castor3D/Binary/BinaryBone.hpp"
-#include "Castor3D/Mesh/Skeleton/Bone.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Model/Skeleton/Bone.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 namespace castor3d
 {

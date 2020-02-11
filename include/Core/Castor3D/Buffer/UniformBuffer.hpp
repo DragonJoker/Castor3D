@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBuffer_H___
 #define ___C3D_UniformBuffer_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "BufferModule.hpp"
+
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
@@ -338,7 +339,7 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 	};
 
-	inline UniformBufferBasePtr makeUniformBufferBase( RenderSystem const & renderSystem
+	inline UniformBufferBaseUPtr makeUniformBufferBase( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
@@ -535,9 +536,6 @@ namespace castor3d
 	private:
 		std::vector< T > m_data;
 	};
-
-	template< typename T >
-	using UniformBufferPtr = std::unique_ptr< UniformBuffer< T > >;
 
 	template< typename T >
 	inline UniformBufferUPtr< T > makeUniformBuffer( RenderSystem const & renderSystem

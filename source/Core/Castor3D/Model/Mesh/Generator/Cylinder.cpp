@@ -1,7 +1,7 @@
-#include "Castor3D/Mesh/Generator/Cylinder.hpp"
+#include "Castor3D/Model/Mesh/Generator/Cylinder.hpp"
 
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Vertex.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
 using namespace castor;

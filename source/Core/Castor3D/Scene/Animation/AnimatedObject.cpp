@@ -1,6 +1,6 @@
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 
-#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
 using namespace castor;

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MetallicRoughnessPbrPass_H___
 #define ___C3D_MetallicRoughnessPbrPass_H___
 
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
@@ -16,7 +16,7 @@ namespace castor3d
 		: public Pass
 	{
 	public:
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 19/10/2011

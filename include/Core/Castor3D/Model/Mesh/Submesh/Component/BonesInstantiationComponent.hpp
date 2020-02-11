@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BonesInstantiationComponent_H___
 #define ___C3D_BonesInstantiationComponent_H___
 
-#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 

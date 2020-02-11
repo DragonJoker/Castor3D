@@ -4,14 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderQueue_H___
 #define ___C3D_RenderQueue_H___
 
-#include "Castor3D/Render/RenderNode/RenderNode.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-
-#include <ashespp/Command/CommandBuffer.hpp>
+#include "RenderModule.hpp"
+#include "Castor3D/Render/Node/RenderNode.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
+
+#include <ashespp/Command/CommandBuffer.hpp>
 
 #include <atomic>
 

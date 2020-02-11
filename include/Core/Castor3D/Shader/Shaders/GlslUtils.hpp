@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslUtils_H___
 #define ___C3D_GlslUtils_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SdwModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <ShaderWriter/CompositeTypes/Function.hpp>
 
@@ -12,8 +13,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		class TextureConfigurations;
-
 		class Utils
 		{
 		public:

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "BinaryModule.hpp"
 
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+
 #include "Castor3D/Model/VertexGroup.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LineIndices.hpp"
@@ -13,12 +15,14 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Data/Endianness.hpp>
 #include <CastorUtils/Graphics/Colour.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Matrix.hpp>
 #include <CastorUtils/Math/Point.hpp>
-#include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
-#include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d

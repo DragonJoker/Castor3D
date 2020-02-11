@@ -16,7 +16,7 @@ namespace castor3d
 		: public MovableObject
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		24/05/2016
 		\~english

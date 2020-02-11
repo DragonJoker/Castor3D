@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DistanceRenderNode_H___
 #define ___C3D_DistanceRenderNode_H___
 
-#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
-#include "Castor3D/Render/RenderNode/SceneRenderNode.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
+#include "Castor3D/Render/Node/SceneRenderNode.hpp"
 
 namespace castor3d
 {

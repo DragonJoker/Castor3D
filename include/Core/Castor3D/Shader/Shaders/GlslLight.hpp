@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GLSL_LIGHT_H___
-#define ___GLSL_LIGHT_H___
+#ifndef ___C3D_GlslLight_H___
+#define ___C3D_GlslLight_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SdwModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>

@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "AnimatedObject.hpp"
 
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationModule.hpp"
+
 namespace castor3d
 {
 	class AnimatedMesh

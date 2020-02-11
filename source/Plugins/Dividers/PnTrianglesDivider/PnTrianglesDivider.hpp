@@ -9,10 +9,10 @@ See LICENSE file in root folder
 #pragma warning( disable:4312 )
 
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
-#include <Castor3D/Mesh/Subdivider.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Vertex.hpp>
+#include <Castor3D/Model/Mesh/Subdivider.hpp>
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
@@ -25,7 +25,7 @@ namespace PnTriangles
 		castor::PlaneEquation plane;
 		castor::Point3f point;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
 	\~english
@@ -46,7 +46,7 @@ namespace PnTriangles
 		castor::Point3f b012;
 		castor::Point3f b111;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
 	\~english

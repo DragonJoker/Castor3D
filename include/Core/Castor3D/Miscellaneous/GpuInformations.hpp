@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016
 	\version	0.9.0

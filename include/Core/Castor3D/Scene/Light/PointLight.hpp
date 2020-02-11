@@ -14,7 +14,7 @@ namespace castor3d
 		: public LightCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

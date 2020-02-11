@@ -1,27 +1,19 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TEXT_OVERLAY_H___
-#define ___C3D_TEXT_OVERLAY_H___
+#ifndef ___C3D_TextOverlay_H___
+#define ___C3D_TextOverlay_H___
 
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/FontTexture.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		25/08/2010
-	\~english
-	\brief		An overlay with a text
-	\~french
-	\brief		Une incrustation avec du texte
-	*/
 	class TextOverlay
 		: public OverlayCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		26/03/2016
 		\version	0.8.0
@@ -37,7 +29,7 @@ namespace castor3d
 			castor::Point2f texture;
 		};
 		CU_DeclareVector( Vertex, Vertex );
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english
@@ -339,7 +331,7 @@ namespace castor3d
 		}
 
 	private:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		28/01/2016
 		\~english
@@ -400,7 +392,7 @@ namespace castor3d
 				return *this;
 			}
 		};
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		28/01/2016
 		\~english

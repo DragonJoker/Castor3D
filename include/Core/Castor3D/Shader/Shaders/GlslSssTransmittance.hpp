@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GLSL_SssTransmittance_H___
-#define ___GLSL_SssTransmittance_H___
+#ifndef ___C3D_GlslSssTransmittance_H___
+#define ___C3D_GlslSssTransmittance_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
@@ -14,9 +14,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		class Shadow;
-		class Utils;
-
 		class SssTransmittance
 		{
 		public:

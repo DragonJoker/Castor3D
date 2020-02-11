@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "SkeletonModule.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
 
 namespace castor3d
 {

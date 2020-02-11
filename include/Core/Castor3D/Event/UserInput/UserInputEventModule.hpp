@@ -1,10 +1,14 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_UserInputEventModule_H___
 #define ___C3D_UserInputEventModule_H___
 
 #include "Castor3D/Castor3DModule.hpp"
+
+#include <CastorUtils/Graphics/Position.hpp>
+
+#include <array>
 
 namespace castor3d
 {
@@ -251,6 +255,49 @@ namespace castor3d
 		eNumpadSubtract,
 		eNumpadDecimal,
 		eNumpadDivide,
+	};
+	/**
+	*\~english
+	*\brief
+	*	Keyboard state.
+	*\~french
+	*\brief
+	*	Etat du clavier.
+	*/
+	struct KeyboardState
+	{
+		//!\~english	The control key state.
+		//!\~french		L'état de la touche Ctrl.
+		bool ctrl;
+		//!\~english	The alt key state.
+		//!\~french		L'état de la touche Alt.
+		bool alt;
+		//!\~english	The shift key state.
+		//!\~french		L'état de la touche Shift.
+		bool shift;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Mouse state.
+	*\~french
+	*\brief
+	*	Etat de la souris.
+	*/
+	struct MouseState
+	{
+		//!\~english	The current position.
+		//!\~french		La position actuelle.
+		castor::Position position;
+		//!\~english	The wheel position.
+		//!\~french		La position de la molette.
+		castor::Position wheel;
+		//!\~english	The buttons state (true = down).
+		//!\~french		L'état des boutons (true = enfoncé).
+		std::array< bool, size_t( MouseButton::eCount ) > buttons;
+		//!\~english	The button which had the last change.
+		//!\~french		Le bouton ayant reçu le dernier changement.
+		MouseButton changed;
 	};
 	/**
 	*\~english

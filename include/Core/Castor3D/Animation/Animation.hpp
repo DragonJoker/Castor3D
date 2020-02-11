@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_Animation_H___
 #define ___C3D_Animation_H___
 
-#include "Castor3D/Castor3DModule.hpp"
-#include "Castor3D/Animation/AnimationModule.hpp"
+#include "Castor3D/Animation/AnimationKeyFrame.hpp"
+#include "Castor3D/Binary/BinaryParser.hpp"
+#include "Castor3D/Binary/BinaryWriter.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
@@ -179,5 +180,7 @@ namespace castor3d
 		friend class AnimationInstanceT< AnimableHanlerT >;
 	};
 }
+
+#include "Animation.inl"
 
 #endif

@@ -1,24 +1,23 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
+#include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
+
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-
-using namespace castor;
 
 namespace castor3d
 {
 	uint32_t const SceneUbo::BindingPoint = 4u;
-	String const SceneUbo::BufferScene = cuT( "Scene" );
-	String const SceneUbo::AmbientLight = cuT( "c3d_ambientLight" );
-	String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );
-	String const SceneUbo::BackgroundColour = cuT( "c3d_backgroundColour" );
-	String const SceneUbo::CameraPos = cuT( "c3d_cameraPosition" );
-	String const SceneUbo::ClipInfo = cuT( "c3d_clipInfo" );
-	String const SceneUbo::FogInfo = cuT( "c3d_fogInfo" );
+	castor::String const SceneUbo::BufferScene = cuT( "Scene" );
+	castor::String const SceneUbo::AmbientLight = cuT( "c3d_ambientLight" );
+	castor::String const SceneUbo::LightsCount = cuT( "c3d_lightsCount" );
+	castor::String const SceneUbo::BackgroundColour = cuT( "c3d_backgroundColour" );
+	castor::String const SceneUbo::CameraPos = cuT( "c3d_cameraPosition" );
+	castor::String const SceneUbo::ClipInfo = cuT( "c3d_clipInfo" );
+	castor::String const SceneUbo::FogInfo = cuT( "c3d_fogInfo" );
 
 	SceneUbo::SceneUbo( Engine & engine )
 		: m_engine{ engine }
@@ -55,7 +54,7 @@ namespace castor3d
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo->getData( 0u );
 		auto position = camera.getParent()->getDerivedPosition();
-		configuration.cameraPos = Point4f{ position[0], position[1], position[2], 0.0 };
+		configuration.cameraPos = castor::Point4f{ position[0], position[1], position[2], 0.0 };
 		configuration.ambientLight = toRGBAFloat( camera.getScene()->getAmbientLight() );
 		configuration.backgroundColour = toRGBAFloat( camera.getScene()->getBackgroundColour() );
 		m_ubo->upload();
@@ -92,7 +91,7 @@ namespace castor3d
 		{
 			auto & cache = scene.getLightCache();
 			using LockType = std::unique_lock< LightCache const >;
-			LockType lock{ makeUniqueLock( cache ) };
+			LockType lock{ castor::makeUniqueLock( cache ) };
 			configuration.lightsCount[size_t( LightType::eSpot )] = float( cache.getLightsCount( LightType::eSpot ) );
 			configuration.lightsCount[size_t( LightType::ePoint )] = float( cache.getLightsCount( LightType::ePoint ) );
 			configuration.lightsCount[size_t( LightType::eDirectional )] = float( cache.getLightsCount( LightType::eDirectional ) );
@@ -101,7 +100,7 @@ namespace castor3d
 		update( camera, scene.getFog() );
 	}
 
-	void SceneUbo::setWindowSize( Size const & window )const
+	void SceneUbo::setWindowSize( castor::Size const & window )const
 	{
 		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).clipInfo[0] = float( window[0] );

@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>

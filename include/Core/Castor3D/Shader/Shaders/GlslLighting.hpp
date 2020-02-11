@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslLighting_H___
 #define ___C3D_GlslLighting_H___
 
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "SdwModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 

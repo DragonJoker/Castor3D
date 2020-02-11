@@ -11,7 +11,7 @@ namespace castor3d
 	/**@name Model */
 	//@{
 
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		23/07/2012
 	\~english
@@ -21,7 +21,7 @@ namespace castor3d
 	*/
 	template< typename T >
 	struct InterleavedVertexT;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.11.0
 	\date		17/01/2018

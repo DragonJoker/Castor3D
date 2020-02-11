@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CLEANUP_EVENT_H___
-#define ___C3D_CLEANUP_EVENT_H___
+#ifndef ___C3D_CleanupEvent_H___
+#define ___C3D_CleanupEvent_H___
 
 #include "FrameEvent.hpp"
-
-#include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {

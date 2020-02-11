@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 
 #include <ShaderWriter/Shader.hpp>
 
@@ -51,7 +51,7 @@ namespace castor3d
 	//!\~english	An array of FinalCombineProgram, one per fog type.
 	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
 	using FinalCombineProgramMap = std::map< FogType, FinalCombineProgramPtr >;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		08/06/2017

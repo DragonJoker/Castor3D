@@ -1,11 +1,11 @@
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 

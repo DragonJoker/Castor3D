@@ -11,13 +11,13 @@ See LICENSE file in root folder
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Animation/AnimationKeyFrame.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Importer.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Importer.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
@@ -27,8 +27,8 @@ See LICENSE file in root folder
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure
@@ -38,7 +38,7 @@ namespace C3dAssimp
 {
 	using SkeletonAnimationKeyFrameMap = std::map< castor::Milliseconds, castor3d::SkeletonAnimationKeyFrameUPtr >;
 	using SkeletonAnimationObjectSet = std::set< castor3d::SkeletonAnimationObjectSPtr >;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
 	\~english

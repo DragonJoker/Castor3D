@@ -20,7 +20,7 @@ namespace castor3d
 	public:
 		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > TypeName;
 
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

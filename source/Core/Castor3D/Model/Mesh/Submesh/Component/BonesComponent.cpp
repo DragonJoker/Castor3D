@@ -1,9 +1,9 @@
-#include "Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Mesh/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -43,6 +43,11 @@ namespace castor3d
 		buffers.emplace_back( m_bonesBuffer->getBuffer() );
 		offsets.emplace_back( 0u );
 		layouts.emplace_back( *m_bonesLayout );
+	}
+
+	void BonesComponent::addBoneDatas( std::vector< VertexBoneData > const & boneData )
+	{
+		addBoneDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
 	bool BonesComponent::doInitialise()

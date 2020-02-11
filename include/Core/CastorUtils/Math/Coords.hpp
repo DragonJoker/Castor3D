@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
@@ -26,7 +26,7 @@ namespace castor
 	class Coords
 	{
 	public:
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 03/01/2011
@@ -60,7 +60,7 @@ namespace castor
 			 */
 			inline bool operator()( Coords & object, TextFile & file )override;
 		};
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 03/01/2011
@@ -420,7 +420,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	Point< typename std::remove_cv< T >::type, Count > operator/( Coords< T, Count > const & lhs, T const & rhs );
 	/**@}*/
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		10/07/2012
 	\version	0.7.0

@@ -1,4 +1,4 @@
-#include "Castor3D/Material/SpecularGlossinessPbrPass.hpp"
+#include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
 
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
