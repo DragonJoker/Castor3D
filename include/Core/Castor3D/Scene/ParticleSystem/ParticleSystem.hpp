@@ -12,8 +12,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-
 namespace castor3d
 {
 	class ParticleSystem

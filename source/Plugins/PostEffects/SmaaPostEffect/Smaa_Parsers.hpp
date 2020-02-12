@@ -4,8 +4,6 @@ See LICENSE file in root folder
 #ifndef ___Smaa_Parsers_H___
 #define ___Smaa_Parsers_H___
 
-#include <Castor3D/Castor3DPrerequisites.hpp>
-
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
