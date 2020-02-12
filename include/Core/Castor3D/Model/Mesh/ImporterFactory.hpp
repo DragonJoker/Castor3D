@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_IMPORTER_FACTORY_H___
-#define ___C3D_IMPORTER_FACTORY_H___
+#ifndef ___C3D_MeshImporterFactory_H___
+#define ___C3D_MeshImporterFactory_H___
 
 #include "MeshModule.hpp"
 

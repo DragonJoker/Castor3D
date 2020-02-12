@@ -10,6 +10,9 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>

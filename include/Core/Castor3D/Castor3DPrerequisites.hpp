@@ -40,9 +40,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
-#include <CastorUtils/Design/FlagCombination.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
-#include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>

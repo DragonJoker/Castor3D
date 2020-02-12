@@ -10,7 +10,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 
 namespace castor3d
 {

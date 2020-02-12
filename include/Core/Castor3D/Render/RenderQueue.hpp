@@ -9,7 +9,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Node/RenderNode.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {

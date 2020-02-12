@@ -16,13 +16,11 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
-//#include "Castor3D/Render/RenderInfo.hpp"
-//#include "Castor3D/Render/Culling/SceneCuller.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 

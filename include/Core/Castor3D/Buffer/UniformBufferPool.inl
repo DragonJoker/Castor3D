@@ -1,5 +1,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>

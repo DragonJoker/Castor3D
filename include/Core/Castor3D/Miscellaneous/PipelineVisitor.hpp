@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {

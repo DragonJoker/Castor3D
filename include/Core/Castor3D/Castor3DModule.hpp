@@ -10,18 +10,15 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Exception/Assertion.hpp>
-#include <CastorUtils/Graphics/Position.hpp>
-#include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Point.hpp>
-#include <CastorUtils/Math/Quaternion.hpp>
-#include <CastorUtils/Math/SquareMatrix.hpp>
-#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <ashespp/AshesPPPrerequisites.hpp>
 
 #include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
 
 #if !defined( CU_PlatformWindows )
 #	define C3D_API

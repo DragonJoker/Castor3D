@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GPU_INFORMATIONS_H___
-#define ___C3D_GPU_INFORMATIONS_H___
+#ifndef ___C3D_GpuInformations_H___
+#define ___C3D_GpuInformations_H___
 
 #include "MiscellaneousModule.hpp"
-
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 #if defined( min )
 #	undef min

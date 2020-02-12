@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
+#include <CastorUtils/Math/Point.hpp>
+
 namespace castor3d
 {
 	class BillboardUbo

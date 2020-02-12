@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {

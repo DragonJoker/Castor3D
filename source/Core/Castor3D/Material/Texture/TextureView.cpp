@@ -5,6 +5,8 @@
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>

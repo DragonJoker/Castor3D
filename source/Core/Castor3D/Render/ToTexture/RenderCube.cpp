@@ -7,6 +7,10 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/TransformationMatrix.hpp>
+
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>

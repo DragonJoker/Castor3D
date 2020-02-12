@@ -1,12 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SPOT_LIGHT_H___
-#define ___C3D_SPOT_LIGHT_H___
+#ifndef ___C3D_Spotlight_H___
+#define ___C3D_Spotlight_H___
 
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {

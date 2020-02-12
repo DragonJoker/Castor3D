@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Angle.hpp>

@@ -1,14 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_Subdivider_H___
-#define ___C3D_Subdivider_H___
+#ifndef ___C3D_MeshSubdivider_H___
+#define ___C3D_MeshSubdivider_H___
 
 #include "MeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
-
-#include <CastorUtils/Math/Point.hpp>
 
 namespace castor3d
 {

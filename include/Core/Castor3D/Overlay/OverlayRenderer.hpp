@@ -7,20 +7,24 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-
-#ifdef drawText
-#	undef drawText
-#endif
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

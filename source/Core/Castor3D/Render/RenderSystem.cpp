@@ -3,6 +3,8 @@
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>

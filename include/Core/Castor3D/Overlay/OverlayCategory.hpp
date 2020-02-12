@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayVisitor.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 

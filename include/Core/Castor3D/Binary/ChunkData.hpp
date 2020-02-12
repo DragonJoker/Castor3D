@@ -19,9 +19,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Math/Coords.hpp>
 #include <CastorUtils/Math/Matrix.hpp>
-#include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 

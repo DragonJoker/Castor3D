@@ -1,9 +1,10 @@
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+
+#include <CastorUtils/Graphics/Size.hpp>
 
 #include <ShaderWriter/Source.hpp>
 

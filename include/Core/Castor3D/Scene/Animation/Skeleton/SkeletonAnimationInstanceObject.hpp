@@ -9,7 +9,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/Interpolator.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 

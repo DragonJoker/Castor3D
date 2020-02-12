@@ -18,8 +18,6 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Shader.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	class SubsurfaceScatteringPass

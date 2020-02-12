@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "AnimationModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Data/Loader.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d

@@ -1,12 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BORDER_PANEL_OVERLAY_H___
-#define ___C3D_BORDER_PANEL_OVERLAY_H___
+#ifndef ___C3D_BorderPanelOverlay_H___
+#define ___C3D_BorderPanelOverlay_H___
 
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Rectangle.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {

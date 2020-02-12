@@ -9,7 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

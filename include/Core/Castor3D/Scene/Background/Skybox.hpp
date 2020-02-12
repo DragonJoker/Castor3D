@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
+
 namespace castor3d
 {
 	class SkyboxBackground

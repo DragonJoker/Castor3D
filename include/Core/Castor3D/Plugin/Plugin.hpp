@@ -7,8 +7,6 @@ See LICENSE file in root folder
 #include "PluginModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	class Plugin

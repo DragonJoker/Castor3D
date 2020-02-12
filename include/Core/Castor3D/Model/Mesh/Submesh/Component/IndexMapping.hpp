@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FaceMapping_H___
-#define ___C3D_FaceMapping_H___
+#ifndef ___C3D_IndexMapping_H___
+#define ___C3D_IndexMapping_H___
 
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 

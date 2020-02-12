@@ -7,6 +7,9 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <CastorUtils/Graphics/Position.hpp>
+#include <CastorUtils/Math/TransformationMatrix.hpp>
+
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
@@ -20,8 +23,6 @@
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
-
-#include <CastorUtils/Math/TransformationMatrix.hpp>
 
 using namespace castor;
 using namespace sdw;

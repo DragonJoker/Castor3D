@@ -10,8 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 

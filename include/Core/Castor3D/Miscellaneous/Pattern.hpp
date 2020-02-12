@@ -1,10 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PATTERN_H___
-#define ___C3D_PATTERN_H___
+#ifndef ___C3D_Pattern_H___
+#define ___C3D_Pattern_H___
 
 #include "MiscellaneousModule.hpp"
+
+#include <list>
 
 namespace castor3d
 {

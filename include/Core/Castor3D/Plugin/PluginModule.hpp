@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
+#include <CastorUtils/Data/Path.hpp>
+
 namespace castor3d
 {
 	/**@name Plugin */

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>

@@ -7,8 +7,6 @@ See LICENSE file in root folder
 #include "CacheModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	class ShaderProgramCache

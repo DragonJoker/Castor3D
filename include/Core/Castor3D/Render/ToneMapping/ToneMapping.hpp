@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ashespp/Sync/Semaphore.hpp>
 

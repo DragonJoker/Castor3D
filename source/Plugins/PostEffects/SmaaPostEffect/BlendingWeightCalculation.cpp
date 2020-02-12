@@ -14,6 +14,8 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

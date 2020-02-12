@@ -6,9 +6,7 @@ See LICENSE file in root folder
 
 #include "SkeletonAnimationModule.hpp"
 #include "Castor3D/Animation/AnimationModule.hpp"
-
-#include "Castor3D/Binary/BinaryParser.hpp"
-#include "Castor3D/Binary/BinaryWriter.hpp"
+#include "Castor3D/Binary/BinaryModule.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>

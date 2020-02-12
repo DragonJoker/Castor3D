@@ -10,9 +10,9 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <ShaderWriter/Shader.hpp>
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>

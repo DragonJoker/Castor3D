@@ -8,6 +8,8 @@
 #include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Graphics/PixelFormat.hpp>
+
 using namespace castor;
 
 namespace castor3d

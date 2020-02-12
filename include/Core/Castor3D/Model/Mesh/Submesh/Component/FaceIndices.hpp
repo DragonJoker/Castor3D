@@ -1,10 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FACE_INDICES_H___
-#define ___C3D_FACE_INDICES_H___
+#ifndef ___C3D_FaceIndices_H___
+#define ___C3D_FaceIndices_H___
 
 #include "ComponentModule.hpp"
+
+#include <array>
 
 namespace castor3d
 {

@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FONT_TEXTURE_H___
-#define ___C3D_FONT_TEXTURE_H___
+#ifndef ___C3D_FontTexture_H___
+#define ___C3D_FontTexture_H___
 
 #include "OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
 
 namespace castor3d
 {

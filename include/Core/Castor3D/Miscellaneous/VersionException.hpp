@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERSION_EXCEPTION_H___
-#define ___C3D_VERSION_EXCEPTION_H___
+#ifndef ___C3D_VersionException_H___
+#define ___C3D_VersionException_H___
 
 #include "Castor3D/Miscellaneous/Version.hpp"
 

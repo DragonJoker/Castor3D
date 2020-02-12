@@ -22,17 +22,17 @@ namespace castor3d
 	\brief		Structure permettant de spécialiser le comportement d'un cache.
 	\remarks	Spécialisation pour RenderTechnique.
 	*/
-	template<>
-	struct CacheTraits< RenderTechnique, castor::String >
+	template< typename KeyType >
+	struct CacheTraits< RenderTechnique, KeyType >
 	{
 		C3D_API static const castor::String Name;
-		using Producer = std::function < std::shared_ptr< RenderTechnique >( castor::String const &
+		using Producer = std::function < std::shared_ptr< RenderTechnique >( KeyType const &
 			, castor::String const &
 			, RenderTarget &
 			, Parameters const &
 			, SsaoConfig const & ) >;
-		using Merger = std::function< void( CacheBase< RenderTechnique, castor::String > const &
-			, castor::Collection< RenderTechnique, castor::String > &
+		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
+			, castor::Collection< RenderTechnique, KeyType > &
 			, std::shared_ptr< RenderTechnique > ) >;
 	};
 }

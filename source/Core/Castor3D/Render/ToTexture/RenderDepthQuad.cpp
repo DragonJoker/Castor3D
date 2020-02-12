@@ -3,6 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
 

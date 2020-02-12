@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d

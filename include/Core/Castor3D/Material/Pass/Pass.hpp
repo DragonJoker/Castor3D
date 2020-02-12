@@ -9,7 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 

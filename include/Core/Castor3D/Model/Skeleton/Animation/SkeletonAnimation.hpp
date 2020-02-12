@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_SkeletonAnimation_H___
 
 #include "SkeletonAnimationModule.hpp"
-
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 

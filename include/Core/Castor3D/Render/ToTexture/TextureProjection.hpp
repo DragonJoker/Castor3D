@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 #include <ashespp/Buffer/PushConstantsBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -18,8 +20,6 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
-
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

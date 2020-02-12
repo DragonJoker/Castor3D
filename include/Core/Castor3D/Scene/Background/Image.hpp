@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Background/Background.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
+
 namespace castor3d
 {
 	class ImageBackground

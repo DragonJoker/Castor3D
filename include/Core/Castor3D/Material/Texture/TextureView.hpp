@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "TextureModule.hpp"
 
-#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Data/Path.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Image/ImageViewCreateInfo.hpp>

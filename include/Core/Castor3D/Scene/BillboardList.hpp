@@ -11,8 +11,6 @@ See LICENSE file in root folder
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	class BillboardBase

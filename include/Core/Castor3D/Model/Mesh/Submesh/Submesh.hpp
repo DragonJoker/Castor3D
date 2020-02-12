@@ -12,10 +12,9 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
@@ -35,7 +34,8 @@ namespace castor3d
 	{
 	private:
 		CU_DeclareList( castor::ByteArray, BytePtr );
-		template< typename T > friend struct SubmeshComponentAdder;
+		template< typename T >
+		friend struct SubmeshComponentAdder;
 
 	public:
 		/**

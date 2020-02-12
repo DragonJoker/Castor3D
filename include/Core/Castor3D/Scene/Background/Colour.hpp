@@ -6,8 +6,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Background/Background.hpp"
 
-#include <ashespp/Buffer/Buffer.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Graphics/HdrColourComponent.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
+
+#include <ashespp/Buffer/Buffer.hpp>
 
 namespace castor3d
 {

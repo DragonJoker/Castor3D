@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "LightModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d

@@ -9,8 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	/**@name Render */

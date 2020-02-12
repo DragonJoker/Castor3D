@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "CacheModule.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Log/Logger.hpp>
 

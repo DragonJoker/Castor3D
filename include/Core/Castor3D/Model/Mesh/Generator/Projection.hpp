@@ -7,8 +7,6 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Miscellaneous/Pattern.hpp"
 
-#include <CastorUtils/Math/Point.hpp>
-
 namespace castor3d
 {
 	class Projection

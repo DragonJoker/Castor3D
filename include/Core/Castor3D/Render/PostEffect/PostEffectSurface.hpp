@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "PostEffectModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashespp/Image/ImageView.hpp>

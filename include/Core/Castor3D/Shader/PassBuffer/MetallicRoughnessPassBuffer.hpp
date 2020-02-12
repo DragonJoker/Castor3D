@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 namespace castor3d
 {
 	class MetallicRoughnessPassBuffer

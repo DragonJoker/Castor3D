@@ -11,8 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashespp/Core/Device.hpp>

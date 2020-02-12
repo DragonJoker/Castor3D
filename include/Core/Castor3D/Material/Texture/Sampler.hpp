@@ -9,9 +9,8 @@ See LICENSE file in root folder
 #include <ashespp/Image/SamplerCreateInfo.hpp>
 #include <ashespp/Image/Sampler.hpp>
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
-#include <CastorUtils/Graphics/Colour.hpp>
 
 namespace castor3d
 {

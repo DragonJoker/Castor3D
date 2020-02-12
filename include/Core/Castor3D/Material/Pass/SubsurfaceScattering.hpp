@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PassModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 
 namespace castor3d

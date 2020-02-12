@@ -1,14 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DEBUG_OVERLAYS_H___
-#define ___C3D_DEBUG_OVERLAYS_H___
+#ifndef ___C3D_DebugOverlays_H___
+#define ___C3D_DebugOverlays_H___
 
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <ashespp/Miscellaneous/QueryPool.hpp>
 
 namespace castor3d
 {

@@ -8,8 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/PlaneEquation.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {

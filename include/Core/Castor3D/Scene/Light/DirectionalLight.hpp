@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 namespace castor3d
 {
 	class DirectionalLight

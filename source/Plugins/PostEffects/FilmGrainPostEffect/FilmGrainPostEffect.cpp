@@ -21,6 +21,8 @@
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

@@ -15,6 +15,8 @@
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
+
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>
 #include <ashespp/Core/SwapChain.hpp>

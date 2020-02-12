@@ -5,11 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_Bone_H___
 
 #include "SkeletonModule.hpp"
-
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d

@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_Mesh_H___
 
 #include "MeshModule.hpp"
-
 #include "Castor3D/Animation/AnimationModule.hpp"
 #include "Castor3D/Binary/BinaryModule.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp"
@@ -15,6 +14,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/Animable.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 #include <CastorUtils/Design/Resource.hpp>

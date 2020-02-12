@@ -5,10 +5,9 @@ See LICENSE file in root folder
 #define ___C3D_BonesComponent_H___
 
 #include "SubmeshComponent.hpp"
-#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
-
-#include "Castor3D/Binary/BinaryParser.hpp"
-#include "Castor3D/Binary/BinaryWriter.hpp"
+#include "Castor3D/Binary/BinaryModule.hpp"
+#include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 namespace castor3d
 {

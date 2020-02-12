@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FACE_H___
-#define ___C3D_FACE_H___
+#ifndef ___C3D_Face_H___
+#define ___C3D_Face_H___
 
 #include "Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp"
 

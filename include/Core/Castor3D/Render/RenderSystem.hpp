@@ -13,8 +13,6 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 #include <stack>
 
 namespace castor3d

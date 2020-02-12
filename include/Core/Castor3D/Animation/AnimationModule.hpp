@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
+#include <CastorUtils/Math/Quaternion.hpp>
+
 namespace castor3d
 {
 	/**@name Animation */

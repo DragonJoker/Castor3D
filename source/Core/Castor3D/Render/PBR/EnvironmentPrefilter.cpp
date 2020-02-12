@@ -9,6 +9,9 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>
 

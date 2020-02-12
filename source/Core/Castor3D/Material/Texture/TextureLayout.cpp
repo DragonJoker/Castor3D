@@ -3,6 +3,7 @@
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashes/ashes.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>

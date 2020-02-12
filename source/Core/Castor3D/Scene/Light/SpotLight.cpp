@@ -6,6 +6,7 @@
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 using namespace castor;
 

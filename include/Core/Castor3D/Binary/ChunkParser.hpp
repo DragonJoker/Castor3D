@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Binary/BinaryChunk.hpp"
 
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
+
 namespace castor3d
 {
 	class ChunkParserBase

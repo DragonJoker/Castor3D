@@ -1,10 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PARAMETER_H___
-#define ___C3D_PARAMETER_H___
+#ifndef ___C3D_Parameters_H___
+#define ___C3D_Parameters_H___
 
 #include "MiscellaneousModule.hpp"
+
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 #include <cstring>
 

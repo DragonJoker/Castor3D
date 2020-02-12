@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #define C3D_MaterialsStructOfArrays 0
 

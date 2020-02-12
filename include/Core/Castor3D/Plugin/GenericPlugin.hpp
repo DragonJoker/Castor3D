@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Plugin/Plugin.hpp"
-#include "Castor3D/Plugin/PluginException.hpp"
 
 namespace castor3d
 {

@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERTEX_GROUP_H___
-#define ___C3D_VERTEX_GROUP_H___
+#ifndef ___C3D_InterleavedVertex_H___
+#define ___C3D_InterleavedVertex_H___
 
 #include "ModelModule.hpp"
-
-#include <CastorUtils/Math/Point.hpp>
 
 namespace castor3d
 {

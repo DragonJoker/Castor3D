@@ -8,8 +8,6 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-#include <CastorUtils/Math/Point.hpp>
-
 namespace castor3d
 {
 	class Ray

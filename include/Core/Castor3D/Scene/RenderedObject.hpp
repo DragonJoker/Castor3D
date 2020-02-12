@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
+
 namespace castor3d
 {
 	class RenderedObject

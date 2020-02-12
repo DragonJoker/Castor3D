@@ -1,10 +1,11 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SKELETON_H___
-#define ___C3D_SKELETON_H___
+#ifndef ___C3D_Skeleton_H___
+#define ___C3D_Skeleton_H___
 
 #include "SkeletonModule.hpp"
+#include "Castor3D/Binary/BinaryModule.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"

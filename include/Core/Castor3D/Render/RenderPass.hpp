@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

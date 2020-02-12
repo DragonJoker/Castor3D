@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERSION_H___
-#define ___C3D_VERSION_H___
+#ifndef ___C3D_Version_H___
+#define ___C3D_Version_H___
 
 #include "MiscellaneousModule.hpp"
 

@@ -6,6 +6,9 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/ImageView.hpp>

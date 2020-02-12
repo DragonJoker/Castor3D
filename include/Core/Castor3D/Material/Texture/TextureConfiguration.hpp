@@ -7,6 +7,8 @@ See LICENSE file in root folder
 
 #include "TextureModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
+
 namespace castor3d
 {
 	/**

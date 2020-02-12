@@ -24,10 +24,11 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
 
-#include <CastorUtils/Log/Logger.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
+#include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 namespace castor3d

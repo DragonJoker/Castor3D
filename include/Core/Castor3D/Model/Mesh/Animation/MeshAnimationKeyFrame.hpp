@@ -9,8 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
-
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include "Castor3D/Binary/BinaryParser.hpp"
 
 namespace castor3d
 {

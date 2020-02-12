@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 
 namespace castor3d
 {

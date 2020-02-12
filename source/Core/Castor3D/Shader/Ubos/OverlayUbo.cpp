@@ -3,6 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+#include <CastorUtils/Graphics/Size.hpp>
+
 namespace castor3d
 {
 	uint32_t const OverlayUbo::BindingPoint = 3u;

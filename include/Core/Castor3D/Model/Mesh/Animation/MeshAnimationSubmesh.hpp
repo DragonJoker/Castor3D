@@ -8,8 +8,6 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	class MeshAnimationSubmesh

@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Animation/Animation.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	template< typename AnimableHanlerT >

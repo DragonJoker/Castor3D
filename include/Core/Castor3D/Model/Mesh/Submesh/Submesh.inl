@@ -1,3 +1,4 @@
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"

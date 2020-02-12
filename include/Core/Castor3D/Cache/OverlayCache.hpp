@@ -9,8 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayFactory.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
 	/**
