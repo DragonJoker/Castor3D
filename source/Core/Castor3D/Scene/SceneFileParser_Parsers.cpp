@@ -1,66 +1,72 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
+#include "Castor3D/Cache/CacheView.hpp"
+#include "Castor3D/Cache/CameraCache.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
 #include "Castor3D/Cache/SceneNodeCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/WindowCache.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
-#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
-#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
 #include "Castor3D/Model/Mesh/Importer.hpp"
 #include "Castor3D/Model/Mesh/ImporterFactory.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 #include "Castor3D/Model/Mesh/Subdivider.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
+#include "Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
-#include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Plugin/Plugin.hpp"
-#include "Castor3D/Plugin/DividerPlugin.hpp"
-#include "Castor3D/Plugin/ImporterPlugin.hpp"
-#include "Castor3D/Plugin/PostFxPlugin.hpp"
-#include "Castor3D/Plugin/TechniquePlugin.hpp"
 #include "Castor3D/Render/RenderLoop.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
+#include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Background/Image.hpp"
 #include "Castor3D/Scene/Background/Skybox.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
-#include <CastorUtils/Graphics/Font.hpp>
-#include <CastorUtils/Graphics/Image.hpp>
+
+//#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+
+//#include "Castor3D/Material/Material.hpp"
+//#include "Castor3D/Material/Texture/TextureLayout.hpp"
+//#include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
+//#include "Castor3D/Model/Vertex.hpp"
+//#include "Castor3D/Plugin/Plugin.hpp"
+//#include "Castor3D/Plugin/DividerPlugin.hpp"
+//#include "Castor3D/Plugin/ImporterPlugin.hpp"
+//#include "Castor3D/Plugin/PostFxPlugin.hpp"
+//#include "Castor3D/Plugin/TechniquePlugin.hpp"
+//#include "Castor3D/Render/RenderSystem.hpp"
+//#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
+//#include <CastorUtils/Graphics/Font.hpp>
+//#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 
@@ -161,6 +167,7 @@ namespace castor3d
 			String name;
 			params[0]->get( name );
 			parsingContext->scene = parsingContext->m_pParser->getEngine()->getSceneCache().add( name );
+			parsingContext->sceneNode = parsingContext->scene->getRootNode();
 			parsingContext->mapScenes.insert( std::make_pair( name, parsingContext->scene ) );
 		}
 	}
@@ -963,7 +970,7 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->viewport.reset();
-		parsingContext->sceneNode.reset();
+		parsingContext->sceneNode = parsingContext->scene->getCameraRootNode();
 
 		if ( !parsingContext->scene )
 		{
@@ -971,7 +978,6 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			parsingContext->sceneNode.reset();
 			params[0]->get( parsingContext->strName );
 		}
 	}
@@ -982,7 +988,7 @@ namespace castor3d
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		parsingContext->light.reset();
 		parsingContext->strName.clear();
-		parsingContext->sceneNode.reset();
+		parsingContext->sceneNode = parsingContext->scene->getObjectRootNode();
 
 		if ( !parsingContext->scene )
 		{
@@ -998,7 +1004,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneCameraNode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->sceneNode.reset();
+		parsingContext->sceneNode = parsingContext->scene->getCameraRootNode();
 		String name;
 
 		if ( !parsingContext->scene )
@@ -1008,7 +1014,8 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			params[0]->get( name );
-			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name, parsingContext->scene->getCameraRootNode() );
+			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name
+				, *parsingContext->sceneNode );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eNode )
@@ -1016,7 +1023,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneSceneNode )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-		parsingContext->sceneNode.reset();
+		parsingContext->sceneNode = parsingContext->scene->getObjectRootNode();
 		String name;
 
 		if ( !parsingContext->scene )
@@ -1026,7 +1033,8 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			params[0]->get( name );
-			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name, parsingContext->scene->getObjectRootNode() );
+			parsingContext->sceneNode = parsingContext->scene->getSceneNodeCache().add( name
+				, *parsingContext->sceneNode );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eNode )
@@ -1034,6 +1042,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneObject )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+		parsingContext->sceneNode = parsingContext->scene->getObjectRootNode();
 		parsingContext->geometry.reset();
 		String name;
 
@@ -1046,7 +1055,6 @@ namespace castor3d
 			params[0]->get( name );
 			parsingContext->geometry = std::make_shared< Geometry >( name
 				, *parsingContext->scene
-				, nullptr
 				, nullptr );
 		}
 	}
@@ -1102,7 +1110,7 @@ namespace castor3d
 		{
 			String name;
 			params[0]->get( name );
-			parsingContext->billboards = std::make_shared< BillboardList >( name, *parsingContext->scene, nullptr );
+			parsingContext->billboards = std::make_shared< BillboardList >( name, *parsingContext->scene );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eBillboard )
@@ -1246,7 +1254,7 @@ namespace castor3d
 			params[0]->get( value );
 			parsingContext->strName = value;
 			parsingContext->uiUInt32 = 0u;
-			parsingContext->sceneNode.reset();
+			parsingContext->sceneNode = parsingContext->scene->getObjectRootNode();
 			parsingContext->material.reset();
 		}
 	}
@@ -1417,7 +1425,9 @@ namespace castor3d
 				parsingContext->material = parsingContext->m_pParser->getEngine()->getMaterialCache().getDefaultMaterial();
 			}
 
-			parsingContext->particleSystem = parsingContext->scene->getParticleSystemCache().add( parsingContext->strName, parsingContext->sceneNode, parsingContext->uiUInt32 );
+			parsingContext->particleSystem = parsingContext->scene->getParticleSystemCache().add( parsingContext->strName
+				, *parsingContext->sceneNode
+				, parsingContext->uiUInt32 );
 			parsingContext->particleSystem->setMaterial( parsingContext->material );
 			parsingContext->particleSystem->setDimensions( parsingContext->point2f );
 		}
@@ -1550,7 +1560,7 @@ namespace castor3d
 			parsingContext->lightType = LightType( uiType );
 			auto & cache = parsingContext->scene->getLightCache();
 			parsingContext->light = cache.add( parsingContext->strName
-				, parsingContext->sceneNode
+				, *parsingContext->sceneNode
 				, parsingContext->lightType );
 		}
 	}
@@ -1865,7 +1875,7 @@ namespace castor3d
 
 			if ( parent )
 			{
-				parsingContext->sceneNode->attachTo( parent );
+				parsingContext->sceneNode->attachTo( *parent );
 			}
 			else
 			{
@@ -4755,20 +4765,23 @@ namespace castor3d
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
 		String name;
-		SceneNodeSPtr pParent = parsingContext->scene->getSceneNodeCache().find( params[0]->get( name ) );
+		SceneNodeSPtr parent = parsingContext->scene->getSceneNodeCache().find( params[0]->get( name ) );
 
-		if ( pParent )
+		if ( parent )
 		{
-			parsingContext->sceneNode = pParent;
+			parsingContext->sceneNode = parent;
 
-			while ( pParent->getParent() && pParent->getParent() != parsingContext->scene->getObjectRootNode() && pParent->getParent() != parsingContext->scene->getCameraRootNode() )
+			while ( parent->getParent()
+				&& parent->getParent() != parsingContext->scene->getObjectRootNode().get()
+				&& parent->getParent() != parsingContext->scene->getCameraRootNode().get() )
 			{
-				pParent = pParent->getParent();
+				parent = parent->getParent()->shared_from_this();
 			}
 
-			if ( !pParent->getParent() || pParent->getParent() == parsingContext->scene->getObjectRootNode() )
+			if ( !parent->getParent()
+				|| parent->getParent() == parsingContext->scene->getObjectRootNode().get() )
 			{
-				pParent->attachTo( parsingContext->scene->getCameraRootNode() );
+				parent->attachTo( *parsingContext->scene->getCameraRootNode() );
 			}
 		}
 		else
@@ -4808,7 +4821,9 @@ namespace castor3d
 
 		if ( parsingContext->sceneNode && parsingContext->viewport )
 		{
-			parsingContext->scene->getCameraCache().add( parsingContext->strName, parsingContext->sceneNode, std::move( *parsingContext->viewport ) );
+			parsingContext->scene->getCameraCache().add( parsingContext->strName
+				, *parsingContext->sceneNode
+				, std::move( *parsingContext->viewport ) );
 			parsingContext->viewport.reset();
 		}
 	}

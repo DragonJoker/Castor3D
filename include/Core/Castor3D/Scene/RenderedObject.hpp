@@ -4,10 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderedObject_H___
 #define ___C3D_RenderedObject_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Scene/RenderedObject.hpp"
+#include "SceneModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
@@ -81,7 +78,7 @@ namespace castor3d
 		 */
 		inline bool isShadowCaster()const
 		{
-			return m_castShadows;
+			return m_castsShadows;
 		}
 		/**
 		 *\~english
@@ -93,7 +90,7 @@ namespace castor3d
 		 */
 		inline void setShadowCaster( bool value )
 		{
-			m_castShadows = value;
+			m_castsShadows = value;
 		}
 		/**
 		 *\~english
@@ -119,14 +116,8 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	Tells if the object is visible.
-		//!\~french		Dit si l'objet est visible.
 		bool m_visible{ true };
-		//!\~english	Tells if the object casts shadows.
-		//!\~french		Dit si l'objet projette des ombres.
-		bool m_castShadows{ true };
-		//!\~english	Tells if the object receives shadows.
-		//!\~french		Dit si l'objet reçoit les ombres.
+		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
 	};
 }

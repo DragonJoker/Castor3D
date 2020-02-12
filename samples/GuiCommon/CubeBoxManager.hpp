@@ -29,7 +29,7 @@ namespace GuiCommon
 	private:
 		castor3d::SceneNodeSPtr doAddBB( castor3d::MeshSPtr bbMesh
 			, castor::String const & name
-			, castor3d::SceneNodeSPtr parent
+			, castor3d::SceneNode & parent
 			, castor::BoundingBox const & bb );
 		void doRemoveBB( castor::String const & name
 			, castor3d::SceneNodeSPtr bbNode );

@@ -85,7 +85,7 @@ namespace CastorViewer
 		int doTransformY( float y );
 		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
 			, castor3d::SubmeshSPtr submesh );
-		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeSPtr node
+		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
 
 		DECLARE_EVENT_TABLE()
@@ -139,8 +139,8 @@ namespace CastorViewer
 		wxCursor * m_cursorHand;
 		wxCursor * m_cursorNone;
 
-		castor3d::SceneNodeSPtr m_lightsNode;
-		castor3d::SceneNodeSPtr m_currentNode;
+		castor3d::SceneNodeRPtr m_lightsNode{ nullptr };
+		castor3d::SceneNodeRPtr m_currentNode{ nullptr };
 		KeyboardEventUPtr m_keyboardEvent;
 		castor::RangedValue< float > m_camSpeed;
 		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager;

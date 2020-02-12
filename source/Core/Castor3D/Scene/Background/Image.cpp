@@ -2,20 +2,21 @@
 
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/ToTexture/TextureProjectionToCube.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>

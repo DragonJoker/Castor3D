@@ -72,7 +72,7 @@ namespace castor3d
 		 */
 		C3D_API ParticleSystem( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr parent
+			, SceneNode & parent
 			, uint32_t count );
 		/**
 		 *\~english

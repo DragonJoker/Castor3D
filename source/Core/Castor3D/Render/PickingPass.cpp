@@ -3,6 +3,7 @@
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -15,7 +16,11 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Image/Image.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 

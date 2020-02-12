@@ -132,7 +132,7 @@ namespace castor3d
 			, std::shared_ptr< ElementType >
 			, SceneNodeSPtr
 			, SceneNodeSPtr ){}
-		, ElementAttacher< ElementType > && attach = []( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
+		, ElementAttacher< ElementType > && attach = []( std::shared_ptr< ElementType >, SceneNode &, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ){}
 		, ElementDetacher< ElementType > && detach = []( std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< ObjectCache< ElementType, KeyType > >( engine

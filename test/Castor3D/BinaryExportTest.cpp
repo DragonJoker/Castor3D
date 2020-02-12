@@ -21,6 +21,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>

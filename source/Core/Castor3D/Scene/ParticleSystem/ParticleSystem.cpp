@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/BillboardUboPools.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -8,6 +9,8 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
+
+#include <CastorUtils/Design/Factory.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
@@ -162,9 +165,9 @@ namespace castor3d
 
 	ParticleSystem::ParticleSystem( String const & name
 		, Scene & scene
-		, SceneNodeSPtr parent
+		, SceneNode & node
 		, uint32_t count )
-		: MovableObject{ name, scene, MovableType::eParticleEmitter, parent }
+		: MovableObject{ name, scene, MovableType::eParticleEmitter, node }
 		, m_particlesCount{ count }
 		, m_csImpl{ std::make_unique< ComputeParticleSystem >( *this ) }
 	{
@@ -216,7 +219,7 @@ namespace castor3d
 		}
 
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
-			, getScene()->getObjectRootNode()
+			, getScene()->getObjectRootNode().get()
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, bindings
 				, attributes )

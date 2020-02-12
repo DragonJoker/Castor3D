@@ -37,7 +37,7 @@ namespace GuiCommon
 	}
 
 	NodeState::NodeState( FrameListener & listener
-		, SceneNodeSPtr node
+		, SceneNodeRPtr node
 		, bool camera )
 		: m_listener{ listener }
 		, m_node{ node }

@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Scene/Scene.hpp"

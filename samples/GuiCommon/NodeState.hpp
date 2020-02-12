@@ -34,7 +34,7 @@ namespace GuiCommon
 		*	Dit si l'état est pour une caméra (pour désactiver le roll)
 		*/
 		NodeState( castor3d::FrameListener & listener
-			, castor3d::SceneNodeSPtr node
+			, castor3d::SceneNodeRPtr node
 			, bool camera );
 		/**
 		*\brief
@@ -100,7 +100,7 @@ namespace GuiCommon
 		//! Le listener qui recevra les évènements de déplacement / rotation.
 		castor3d::FrameListener & m_listener;
 		//! Le noeud de scène affecté par les évènements.
-		castor3d::SceneNodeSPtr const m_node;
+		castor3d::SceneNodeRPtr const m_node;
 		//! La position originelle du noeud.
 		castor::Point3f const m_originalPosition;
 		//! L'orientation originelle du noeud.

@@ -1,17 +1,17 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Command/Queue.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
-#include <ashespp/Sync/Fence.hpp>
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 
 using namespace castor;
 
@@ -24,7 +24,7 @@ namespace castor3d
 			Viewport viewport{ *node.getScene()->getEngine() };
 			auto camera = std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
-				, node.shared_from_this()
+				, node
 				, std::move( viewport ) );
 			camera->update();
 			return camera;
@@ -54,13 +54,13 @@ namespace castor3d
 		, m_camera{ doCreateCamera( *node ) }
 		, m_culler{ std::make_unique< FrustumCuller >( *m_camera->getScene(), *m_camera ) }
 		, m_matrixUbo{ *reflectionMap.getEngine() }
-		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
+		, m_opaquePass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "environment_opaque" )
 			, m_matrixUbo
 			, *m_culler
 			, true
 			, &objectNode
 			, SsaoConfig{} ) }
-		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
+		, m_transparentPass{ std::make_shared< ForwardRenderTechniquePass >( cuT( "environment_transparent" )
 			, m_matrixUbo
 			, *m_culler
 			, true

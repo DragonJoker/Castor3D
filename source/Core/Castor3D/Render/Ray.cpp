@@ -4,6 +4,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 using namespace castor;
 

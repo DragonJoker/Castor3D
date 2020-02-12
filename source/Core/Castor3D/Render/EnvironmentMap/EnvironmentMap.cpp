@@ -5,17 +5,17 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
+#include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
@@ -62,7 +62,7 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
+		TextureUnitSPtr doCreateTexture( Engine & engine
 			, Size const & size )
 		{
 			ashes::ImageCreateInfo colour
@@ -84,16 +84,16 @@ namespace castor3d
 				, colour
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "EnvironmentMap" ) );
-			TextureUnit unit{ engine };
-			unit.setTexture( texture );
-			unit.setSampler( doCreateSampler( engine, texture->getMipmapCount() ) );
+			auto result = std::make_shared< TextureUnit >( engine );
+			result->setTexture( texture );
+			result->setSampler( doCreateSampler( engine, texture->getMipmapCount() ) );
 
 			for ( auto & image : *texture )
 			{
 				image->initialiseSource();
 			}
 
-			return unit;
+			return result;
 		}
 
 		EnvironmentMap::EnvironmentMapPasses doCreatePasses( EnvironmentMap & map
@@ -161,7 +161,7 @@ namespace castor3d
 	bool EnvironmentMap::initialise()
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_environmentMap.initialise();
+		m_environmentMap->initialise();
 		ashes::ImageCreateInfo depthStencil
 		{
 			0u,
@@ -197,7 +197,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				m_environmentMap.getTexture()->getPixelFormat(),
+				m_environmentMap->getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -282,7 +282,7 @@ namespace castor3d
 		m_backgroundTexDescriptorPool.reset();
 		m_renderPass.reset();
 		m_depthBuffer.reset();
-		m_environmentMap.cleanup();
+		m_environmentMap->cleanup();
 	}
 	
 	void EnvironmentMap::update( RenderQueueArray & queues )
@@ -305,7 +305,7 @@ namespace castor3d
 				result = &pass->render( *result );
 			}
 
-			m_environmentMap.getTexture()->generateMipmaps();
+			m_environmentMap->getTexture()->generateMipmaps();
 			m_render = 0u;
 		}
 
@@ -319,5 +319,10 @@ namespace castor3d
 		//getEngine()->getRenderSystem()->getCurrentContext()->renderTextureCube( position
 		//	, displaySize
 		//	, *m_environmentMap.getTexture() );
+	}
+
+	VkExtent3D const & EnvironmentMap::getSize()const
+	{
+		return m_environmentMap->getTexture()->getDimensions();
 	}
 }

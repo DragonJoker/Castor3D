@@ -1,10 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GEOMETRY_H___
-#define ___C3D_GEOMETRY_H___
+#ifndef ___C3D_Geometry_H___
+#define ___C3D_Geometry_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SceneModule.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
@@ -15,7 +17,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class InstantiationComponent;
 	class Geometry
 		: public MovableObject
 		, public RenderedObject
@@ -71,7 +72,24 @@ namespace castor3d
 		 */
 		C3D_API Geometry( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr node
+			, SceneNode & node
+			, MeshSPtr mesh = nullptr );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	name	The geometry name.
+		 *\param[in]	scene	The parent scene.
+		 *\param[in]	mesh	The mesh, default is nullptr.
+		 *\param[in]	node	The scene node to which the geometry is attached.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	name	Nom de la géométrie.
+		 *\param[in]	scene	La scène parente.
+		 *\param[in]	mesh	Le maillage, par défaut nullptr.
+		 *\param[in]	node	Le scene node auquel la géométrie est attachée.
+		 */
+		C3D_API Geometry( castor::String const & name
+			, Scene & scene
 			, MeshSPtr mesh = nullptr );
 		/**
 		 *\~english

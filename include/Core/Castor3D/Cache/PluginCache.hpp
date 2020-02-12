@@ -10,23 +10,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for Plugin.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour Plugin.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< Plugin, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, PluginType, castor::DynamicLibrarySPtr ) >;
-		using Merger = std::function< void( CacheBase< Plugin, KeyType > const &
-			, castor::Collection< Plugin, KeyType > &
-			, std::shared_ptr< Plugin > ) >;
-	};
-	/**
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
 	\version	0.8.0
@@ -154,8 +137,6 @@ namespace castor3d
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
 		std::recursive_mutex m_mutexLoadedPluginTypes;
 	};
-	using PluginCache = Cache< Plugin, castor::String >;
-	CU_DeclareSmartPtr( PluginCache );
 }
 
 #endif

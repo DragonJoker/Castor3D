@@ -1,7 +1,6 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 namespace castor3d
@@ -102,7 +101,8 @@ namespace castor3d
 	uint64_t SceneNode::Count = 0;
 	uint64_t SceneNode::CurrentId = 0;
 
-	SceneNode::SceneNode( castor::String const & name, Scene & scene )
+	SceneNode::SceneNode( castor::String const & name
+		, Scene & scene )
 		: castor::OwnedBy< Scene >{ scene }
 		, castor::Named{ name }
 		, m_id{ CurrentId++ }
@@ -117,10 +117,17 @@ namespace castor3d
 		Count++;
 	}
 
+	SceneNode::SceneNode( castor::String const & name
+		, SceneNode & parent
+		, Scene & scene )
+		: SceneNode{ name, scene }
+	{
+	}
+
 	SceneNode::~SceneNode()
 	{
 		Count--;
-		SceneNodeSPtr parent = getParent();
+		auto parent = getParent();
 
 		if ( parent )
 		{
@@ -149,52 +156,52 @@ namespace castor3d
 	{
 		object.detach();
 		m_objects.push_back( object );
-		object.attachTo( shared_from_this() );
+		object.attachTo( *this );
 	}
 
 	void SceneNode::detachObject( MovableObject & object )
 	{
-		auto it = std::find_if( m_objects.begin(), m_objects.end(), [&object]( std::reference_wrapper< MovableObject > obj )
-		{
-			return obj.get().getName() == object.getName();
-		} );
+		auto it = std::find_if( m_objects.begin()
+			, m_objects.end()
+			, [&object]( std::reference_wrapper< MovableObject > obj )
+			{
+				return obj.get().getName() == object.getName();
+			} );
 
 		if ( it != m_objects.end() )
 		{
 			m_objects.erase( it );
-			object.attachTo( nullptr );
 		}
 	}
 
-	void SceneNode::attachTo( SceneNodeSPtr parent )
+	void SceneNode::attachTo( SceneNode & node )
 	{
-		SceneNodeSPtr old = getParent();
+		auto old = getParent();
 
 		if ( old )
 		{
-			m_parent.reset();
+			m_parent = nullptr;
 			old->detachChild( shared_from_this() );
-			old.reset();
 		}
 
-		m_parent = parent;
+		m_parent = &node;
 
-		if ( parent )
+		if ( m_parent )
 		{
-			m_displayable = parent->m_displayable;
-			parent->addChild( shared_from_this() );
+			m_displayable = m_parent->m_displayable;
+			m_parent->addChild( shared_from_this() );
 			m_mtxChanged = true;
 		}
 	}
 
 	void SceneNode::detach()
 	{
-		SceneNodeSPtr parent = getParent();
+		auto parent = getParent();
 
 		if ( parent )
 		{
 			m_displayable = false;
-			m_parent.reset();
+			m_parent = nullptr;
 			parent->detachChild( shared_from_this() );
 			m_mtxChanged = true;
 		}
@@ -396,7 +403,7 @@ namespace castor3d
 
 	bool SceneNode::isVisible()const
 	{
-		auto parent = m_parent.lock();
+		auto parent = m_parent;
 		return m_visible && ( parent ? parent->isVisible() : true );
 	}
 
@@ -411,7 +418,7 @@ namespace castor3d
 
 		if ( m_derivedMtxChanged )
 		{
-			SceneNodeSPtr parent = getParent();
+			auto parent = getParent();
 
 			if ( parent )
 			{

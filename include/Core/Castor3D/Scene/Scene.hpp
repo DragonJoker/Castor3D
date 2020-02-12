@@ -5,22 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_SCENE_H___
 
 #include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapModule.hpp"
 
-#include "Castor3D/Cache/CacheView.hpp"
-#include "Castor3D/Cache/BillboardCache.hpp"
-#include "Castor3D/Cache/CameraCache.hpp"
-#include "Castor3D/Cache/GeometryCache.hpp"
-#include "Castor3D/Cache/SceneNodeCache.hpp"
-#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/MeshCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Cache/ParticleSystemCache.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
-
-#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Scene/Shadow.hpp"
 
@@ -235,6 +226,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API MaterialType getMaterialsType()const;
+
 		inline SceneBackgroundSPtr getBackground()const
 		{
 			return m_background;
@@ -300,11 +293,6 @@ namespace castor3d
 			return m_fog;
 		}
 
-		inline MaterialType getMaterialsType()const
-		{
-			return getEngine()->getMaterialsType();
-		}
-
 		inline FrameListener const & getListener()const
 		{
 			CU_Require( !m_listener.expired() );
@@ -339,12 +327,12 @@ namespace castor3d
 
 		inline BillboardUboPools const & getBillboardPools()const
 		{
-			return m_billboardPools;
+			return *m_billboardPools;
 		}
 
 		inline BillboardUboPools & getBillboardPools()
 		{
-			return m_billboardPools;
+			return *m_billboardPools;
 		}
 
 		inline uint32_t getDirectionalShadowCascades()const
@@ -364,6 +352,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
+		C3D_API void setMaterialsType( MaterialType value );
 
 		inline void setBackgroundColour( castor::RgbColour const & value )
 		{
@@ -379,11 +368,6 @@ namespace castor3d
 		inline void setAmbientLight( castor::RgbColour const & value )
 		{
 			m_ambientLight = value;
-		}
-
-		inline void setMaterialsType( MaterialType value )
-		{
-			getEngine()->setMaterialsType( value );
 		}
 		/**@}*/
 
@@ -416,8 +400,8 @@ namespace castor3d
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );
 		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
-		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::ePreRender );
-		BillboardUboPools m_billboardPools;
+		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );
+		std::shared_ptr< BillboardUboPools > m_billboardPools;
 		bool m_changed{ false };
 		castor::RgbColour m_ambientLight;
 		castor::RgbColour m_backgroundColour;

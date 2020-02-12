@@ -15,6 +15,7 @@
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Animation/AnimationInstance.hpp>
+#include <Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/MovableObject.hpp>

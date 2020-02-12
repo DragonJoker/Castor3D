@@ -7,6 +7,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>

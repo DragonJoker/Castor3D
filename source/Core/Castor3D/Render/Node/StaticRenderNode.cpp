@@ -4,7 +4,6 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-#include "Castor3D/Castor3DPrerequisites.hpp"
 
 using namespace castor;
 

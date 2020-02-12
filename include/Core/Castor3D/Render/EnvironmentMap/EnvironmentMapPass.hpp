@@ -6,13 +6,18 @@ See LICENSE file in root folder
 
 #include "EnvironmentMapModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
@@ -112,8 +117,8 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_backgroundUboDescriptorSet;
 		ashes::DescriptorSetPtr m_backgroundTexDescriptorSet;
 		MatrixUbo m_matrixUbo;
-		std::unique_ptr< ForwardRenderTechniquePass > m_opaquePass;
-		std::unique_ptr< ForwardRenderTechniquePass > m_transparentPass;
+		std::shared_ptr< ForwardRenderTechniquePass > m_opaquePass;
+		std::shared_ptr< ForwardRenderTechniquePass > m_transparentPass;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 		castor::Matrix4x4f m_mtxView;

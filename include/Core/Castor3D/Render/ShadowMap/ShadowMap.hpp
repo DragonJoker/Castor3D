@@ -10,6 +10,9 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <ashespp/Sync/Fence.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
+
 namespace castor3d
 {
 	class ShadowMap

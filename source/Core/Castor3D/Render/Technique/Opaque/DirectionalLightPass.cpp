@@ -16,6 +16,7 @@
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
+#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 

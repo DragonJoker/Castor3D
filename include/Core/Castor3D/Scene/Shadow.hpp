@@ -13,20 +13,6 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		C3D_API Shadow();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~Shadow();
-		/**
-		 *\~english
 		 *\return		The fog's density.
 		 *\~french
 		 *\return		La densité du brouillard.
@@ -49,8 +35,6 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The shadows filter type type.
-		//!\~french		Le type de filtrage des ombres.
 		ShadowType m_filterType{ ShadowType::ePCF };
 	};
 }

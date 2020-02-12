@@ -5,13 +5,17 @@ See LICENSE file in root folder
 #define ___C3D_EnvironmentMap_H___
 
 #include "EnvironmentMapModule.hpp"
-
-#include "Castor3D/Render/PBR/IblTextures.hpp"
-#include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Render/PBR/PbrModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Image/Image.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 namespace castor3d
 {
@@ -95,14 +99,16 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API VkExtent3D const & getSize()const;
+
 		inline TextureUnit & getTexture()
 		{
-			return m_environmentMap;
+			return *m_environmentMap;
 		}
 
 		inline TextureUnit const & getTexture()const
 		{
-			return m_environmentMap;
+			return *m_environmentMap;
 		}
 
 		inline ashes::ImageView & getDepthView()
@@ -115,11 +121,6 @@ namespace castor3d
 			return m_depthBufferView;
 		}
 
-		inline VkExtent3D const & getSize()const
-		{
-			return m_environmentMap.getTexture()->getDimensions();
-		}
-
 		inline uint32_t getIndex()const
 		{
 			return m_index;
@@ -128,7 +129,7 @@ namespace castor3d
 
 	private:
 		static uint32_t m_count;
-		TextureUnit m_environmentMap;
+		TextureUnitSPtr m_environmentMap;
 		ashes::ImagePtr m_depthBuffer;
 		ashes::ImageView m_depthBufferView;
 		ashes::RenderPassPtr m_renderPass;
@@ -141,7 +142,7 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		EnvironmentMapPasses m_passes;
 		uint32_t m_render{ 4u };
-		std::unique_ptr< IblTextures > m_ibl;
+		std::shared_ptr< IblTextures > m_ibl;
 	};
 }
 

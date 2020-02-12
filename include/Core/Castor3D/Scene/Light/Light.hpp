@@ -75,7 +75,7 @@ namespace castor3d
 		 */
 		C3D_API Light( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr node
+			, SceneNode & node
 			, LightFactory & factory
 			, LightType lightType );
 		/**
@@ -109,7 +109,7 @@ namespace castor3d
 		 *\brief		Attache cette lumière au SceneNode donné.
 		 *\param[in]	node	Le nouveau node parent de cette lumière.
 		 */
-		C3D_API void attachTo( SceneNodeSPtr node )override;
+		C3D_API void attachTo( SceneNode & node )override;
 		/**
 		*\~english
 		*name

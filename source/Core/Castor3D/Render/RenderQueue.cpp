@@ -4,6 +4,7 @@
 
 #include "Castor3D/Render/RenderQueue.hpp"
 
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"

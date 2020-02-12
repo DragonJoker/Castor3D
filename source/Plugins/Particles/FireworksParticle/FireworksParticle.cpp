@@ -2,6 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Scene/BillboardList.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleSystem.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>

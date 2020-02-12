@@ -1,10 +1,9 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SCENE_FILE_PARSER_PARSERS_H___
-#define ___C3D_SCENE_FILE_PARSER_PARSERS_H___
+#ifndef ___C3D_SceneFileParser_Parsers_H___
+#define ___C3D_SceneFileParser_Parsers_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
 namespace castor3d

@@ -3,7 +3,9 @@
 #include "CastorDvpTD/CastorDvpTD.hpp"
 #include "CastorDvpTD/Game.hpp"
 
+#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>

@@ -432,7 +432,7 @@ namespace castor3d
 		SamplerSPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
 		castor::ImageWriter m_imageWriter;
-		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
+		DECLARE_CACHE_MEMBER( shader, ShaderProgram );
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		DECLARE_CACHE_MEMBER( material, Material );
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
@@ -440,7 +440,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerWPtr m_defaultListener;
-		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
+		DECLARE_CACHE_MEMBER( target, RenderTarget );
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		castor::FontCache m_fontCache;

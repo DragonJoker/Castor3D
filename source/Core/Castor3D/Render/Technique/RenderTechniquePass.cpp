@@ -12,6 +12,10 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Image/Sampler.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;

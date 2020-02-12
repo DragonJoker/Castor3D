@@ -11,25 +11,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\~english
-	\brief		Helper structure to specialise a scene cache behaviour.
-	\remarks	Specialisation for BillboardList.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
-	\remarks	Spécialisation pour BillboardList.
-	*/
-	template< typename KeyType >
-	struct ObjectCacheTraits< BillboardList, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< BillboardList >( KeyType const &, SceneNodeSPtr ) >;
-		using Merger = std::function< void( ObjectCacheBase< BillboardList, KeyType > const &
-			, castor::Collection< BillboardList, KeyType > &
-			, std::shared_ptr< BillboardList >
-			, SceneNodeSPtr
-			, SceneNodeSPtr ) >;
-	};
-	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/04/2018
 	\version	0.11.0
@@ -122,7 +103,7 @@ namespace castor3d
 		 *\return		L'objet créé.
 		 */
 		C3D_API ElementPtr add( Key const & name
-			, SceneNodeSPtr parent );
+			, SceneNode & parent );
 		/**
 		 *\~english
 		 *\brief		Adds an existing object.

@@ -3,6 +3,7 @@
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Program.hpp"

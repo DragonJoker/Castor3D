@@ -1,6 +1,9 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/BillboardUboPools.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Cache/ListenerCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"

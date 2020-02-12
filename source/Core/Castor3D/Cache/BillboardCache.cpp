@@ -55,7 +55,7 @@ namespace castor3d
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
-		, SceneNodeSPtr parent )
+		, SceneNode & parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
 		m_pools.registerElement( *result );

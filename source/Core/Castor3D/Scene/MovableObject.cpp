@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/MovableObject.hpp"
 
-#include "Castor3D/Animation/Animation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 using namespace castor;
 
@@ -19,11 +19,29 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	MovableObject::MovableObject( String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn )
-		: Animable{ p_scene }
-		, Named( p_name )
-		, m_type( p_type )
-		, m_sceneNode( p_sn )
+	MovableObject::MovableObject( String const & name
+		, Scene & scene
+		, MovableType type
+		, SceneNode & node )
+		: Animable{ scene }
+		, Named( name )
+		, m_type( type )
+		, m_sceneNode( &node )
+	{
+	}
+	
+	MovableObject::MovableObject( String const & name
+		, Scene & scene
+		, MovableType type )
+		: MovableObject
+		{
+			name,
+			scene,
+			type,
+			( type == MovableType::eCamera
+				? *scene.getCameraRootNode()
+				: *scene.getObjectRootNode() ),
+		}
 	{
 	}
 
@@ -35,23 +53,23 @@ namespace castor3d
 
 	void MovableObject::detach()
 	{
-		SceneNodeSPtr node = getParent();
+		auto node = getParent();
 
 		if ( node )
 		{
 			m_notifyIndex.disconnect();
+			m_sceneNode = nullptr;
 			node->detachObject( *this );
-			m_sceneNode.reset();
 		}
 	}
 
-	void MovableObject::attachTo( SceneNodeSPtr p_node )
+	void MovableObject::attachTo( SceneNode & node )
 	{
-		m_sceneNode = p_node;
+		m_sceneNode = &node;
 
-		if ( p_node )
+		if ( m_sceneNode )
 		{
-			m_strNodeName = p_node->getName();
+			m_strNodeName = m_sceneNode->getName();
 		}
 		else
 		{

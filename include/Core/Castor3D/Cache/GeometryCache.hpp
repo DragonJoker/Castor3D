@@ -16,25 +16,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\~english
-	\brief		Helper structure to specialise a scene cache behaviour.
-	\remarks	Specialisation for Geometry.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
-	\remarks	Spécialisation pour Geometry.
-	*/
-	template< typename KeyType >
-	struct ObjectCacheTraits< Geometry, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Geometry >( KeyType const &, SceneNodeSPtr, MeshSPtr ) >;
-		using Merger = std::function< void( ObjectCacheBase< Geometry, KeyType > const &
-			, castor::Collection< Geometry, KeyType > &
-			, std::shared_ptr< Geometry >
-			, SceneNodeSPtr
-			, SceneNodeSPtr ) >;
-	};
-	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0
@@ -192,7 +173,7 @@ namespace castor3d
 		 *\return		L'objet créé.
 		 */
 		C3D_API ElementPtr add( Key const & name
-			, SceneNodeSPtr parent
+			, SceneNode & parent
 			, MeshSPtr mesh );
 		/**
 		 *\~english
@@ -227,8 +208,6 @@ namespace castor3d
 		RenderPassTimerSPtr m_updatePickingTimer;
 		RenderPassTimerSPtr m_updateTexturesTimer;
 	};
-	using GeometryCache = ObjectCache< Geometry, castor::String >;
-	CU_DeclareSmartPtr( GeometryCache );
 }
 
 #endif

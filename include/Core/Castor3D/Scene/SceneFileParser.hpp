@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SCENE_FILE_PARSER_H___
-#define ___C3D_SCENE_FILE_PARSER_H___
+#ifndef ___C3D_SceneFileParser_H___
+#define ___C3D_SceneFileParser_H___
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"

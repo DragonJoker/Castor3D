@@ -12,23 +12,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for Overlay.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour Overlay.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< Overlay, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, OverlayType, SceneSPtr, OverlaySPtr ) >;
-		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
-			, castor::Collection< Overlay, KeyType > &
-			, std::shared_ptr< Overlay > ) >;
-	};
-	/**
 	\author 	Sylvain DOREMUS
 	\date 		03/10/2015
 	\version	0.8.0
@@ -301,8 +284,6 @@ namespace castor3d
 		castor::Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
 	};
-	using OverlayCache = Cache< Overlay, castor::String >;
-	CU_DeclareSmartPtr( OverlayCache );
 }
 
 #endif

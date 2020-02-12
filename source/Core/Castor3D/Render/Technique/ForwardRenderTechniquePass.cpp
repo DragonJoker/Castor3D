@@ -2,6 +2,8 @@
 
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
@@ -11,6 +13,7 @@
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"

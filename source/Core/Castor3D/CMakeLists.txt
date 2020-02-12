@@ -1020,7 +1020,6 @@ source_group( "Source Files\\Render\\ToTexture" FILES ${${PROJECT_NAME}_FOLDER_S
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/BillboardList.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Camera.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Fog.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Geometry.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/MovableObject.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/RenderedObject.cpp
@@ -1029,7 +1028,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneFileParser_Parsers.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/SceneNode.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Scene/Shadow.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Scene/BillboardList.hpp

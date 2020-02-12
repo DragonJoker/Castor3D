@@ -148,7 +148,7 @@ namespace castor3d
 					std::make_unique< MatrixUbo >( engine ),
 					std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 						, scene
-						, scene.getCameraRootNode()
+						, *scene.getCameraRootNode()
 						, std::move( viewport ) ),
 					nullptr,
 					nullptr,

@@ -9,8 +9,16 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/ComputePipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {

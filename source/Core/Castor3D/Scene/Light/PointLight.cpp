@@ -1,8 +1,9 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
 using namespace castor;
 

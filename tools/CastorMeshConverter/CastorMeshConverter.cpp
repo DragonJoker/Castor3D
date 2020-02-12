@@ -2,6 +2,9 @@
 
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>

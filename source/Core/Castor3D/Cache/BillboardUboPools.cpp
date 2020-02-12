@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 

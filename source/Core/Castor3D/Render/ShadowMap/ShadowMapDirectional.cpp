@@ -160,7 +160,7 @@ namespace castor3d
 					std::make_unique< MatrixUbo >( engine ),
 					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
 						, scene
-						, scene.getCameraRootNode()
+						, *scene.getCameraRootNode()
 						, std::move( viewport )
 						, true ),
 					nullptr,

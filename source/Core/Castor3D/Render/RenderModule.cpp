@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"

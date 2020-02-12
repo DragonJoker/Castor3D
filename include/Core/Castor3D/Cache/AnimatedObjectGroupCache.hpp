@@ -15,23 +15,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	/**
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for AnimatedObjectGroup.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour AnimatedObjectGroup.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< AnimatedObjectGroup, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< AnimatedObjectGroup >( KeyType const & ) >;
-		using Merger = std::function< void( CacheBase< AnimatedObjectGroup, KeyType > const &
-			, castor::Collection< AnimatedObjectGroup, KeyType > &
-			, std::shared_ptr< AnimatedObjectGroup > ) >;
-	};
-	/**
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0
@@ -191,8 +174,6 @@ namespace castor3d
 		UniformBufferPool< MorphingUbo::Configuration > m_morphingUboPool;
 		RenderPassTimerSPtr m_updateTimer;
 	};
-	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, castor::String >;
-	CU_DeclareSmartPtr( AnimatedObjectGroupCache );
 }
 
 #endif

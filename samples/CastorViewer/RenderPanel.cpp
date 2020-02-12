@@ -7,6 +7,7 @@
 
 #include <wx/display.h>
 
+#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/UserInput/UserInputListener.hpp>
@@ -19,6 +20,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
 
@@ -114,8 +116,8 @@ namespace CastorViewer
 		m_camera.reset();
 		m_scene.reset();
 		m_keyboardEvent.reset();
-		m_currentNode.reset();
-		m_lightsNode.reset();
+		m_currentNode = nullptr;
+		m_lightsNode = nullptr;
 		m_listener.reset();
 		m_cubeManager.reset();
 		m_renderWindow.reset();
@@ -147,11 +149,11 @@ namespace CastorViewer
 				{
 					if ( scene->getSceneNodeCache().has( cuT( "PointLightsNode" ) ) )
 					{
-						m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) );
+						m_lightsNode = scene->getSceneNodeCache().find( cuT( "PointLightsNode" ) ).get();
 					}
 					else if ( scene->getSceneNodeCache().has( cuT( "LightNode" ) ) )
 					{
-						m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) );
+						m_lightsNode = scene->getSceneNodeCache().find( cuT( "LightNode" ) ).get();
 					}
 
 					auto cameraNode = camera->getParent();
@@ -399,7 +401,7 @@ namespace CastorViewer
 		m_currentState = &doAddNodeState( m_currentNode, false );
 	}
 
-	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeSPtr node
+	GuiCommon::NodeState & RenderPanel::doAddNodeState( SceneNodeRPtr node
 		, bool camera )
 	{
 		auto it = m_nodesStates.find( node->getName() );

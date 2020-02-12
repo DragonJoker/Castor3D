@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"

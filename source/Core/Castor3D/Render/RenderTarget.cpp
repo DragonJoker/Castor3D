@@ -1,6 +1,8 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Cache/TechniqueCache.hpp"

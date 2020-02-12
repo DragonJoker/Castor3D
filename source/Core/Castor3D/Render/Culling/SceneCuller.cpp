@@ -1,5 +1,8 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 
+#include "Castor3D/Cache/BillboardCache.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/ParticleSystemCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
@@ -8,6 +11,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 namespace castor3d

@@ -4,9 +4,11 @@
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 namespace castor3d
 {

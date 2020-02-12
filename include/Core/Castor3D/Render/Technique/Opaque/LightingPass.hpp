@@ -6,7 +6,12 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
+
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Sync/Fence.hpp>
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {

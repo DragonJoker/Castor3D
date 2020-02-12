@@ -13,20 +13,6 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		C3D_API Fog();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~Fog();
-		/**
-		 *\~english
 		 *\return		The fog's density.
 		 *\~french
 		 *\return		La densité du brouillard.
@@ -71,11 +57,7 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The fog type.
-		//!\~french		Le type de brouillard.
 		FogType m_type{ FogType::eDisabled };
-		//!\~english	The fog's density.
-		//!\~french		La densité du brouillard.
 		float m_density{ 0.0f };
 	};
 }

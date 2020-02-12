@@ -7,10 +7,12 @@
 #include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"

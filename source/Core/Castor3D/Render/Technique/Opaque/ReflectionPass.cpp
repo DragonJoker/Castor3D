@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"

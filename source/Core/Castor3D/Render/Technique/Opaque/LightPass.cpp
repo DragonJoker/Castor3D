@@ -4,6 +4,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"

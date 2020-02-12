@@ -6,6 +6,7 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -188,7 +189,7 @@ namespace castor3d
 			auto & cascade = m_cascades[cascadeIndex];
 			auto node = getLight().getParent();
 			node->update();
-			lightCamera.attachTo( node );
+			lightCamera.attachTo( *node );
 			lightCamera.setProjection( cascade.projMatrix );
 			lightCamera.setView( cascade.viewMatrix );
 			lightCamera.updateFrustum();

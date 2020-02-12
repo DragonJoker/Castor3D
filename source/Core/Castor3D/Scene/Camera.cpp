@@ -1,15 +1,8 @@
 #include "Castor3D/Scene/Camera.hpp"
 
-#include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-
-#include <CastorUtils/Graphics/BoundingBox.hpp>
-#include <CastorUtils/Graphics/BoundingSphere.hpp>
+#include "Castor3D/Scene/SceneNode.hpp"
 
 #if C3D_DebugFrustum
 extern bool C3D_DebugFrustumDisplay;
@@ -53,27 +46,24 @@ namespace castor3d
 
 	Camera::Camera( String const & name
 		, Scene & scene
-		, SceneNodeSPtr node
-		, Viewport && viewport
+		, SceneNode & node
+		, Viewport viewport
 		, bool ownProjMtx )
 		: MovableObject{ name, scene, MovableType::eCamera, node }
 		, m_viewport{ std::move( viewport ) }
 		, m_frustum{ m_viewport }
 		, m_ownProjection{ ownProjMtx }
 	{
-		if ( node )
-		{
-			m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
-				{
-					onNodeChanged( node );
-				} );
-			onNodeChanged( *node );
-		}
+		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+			{
+				onNodeChanged( node );
+			} );
+		onNodeChanged( node );
 	}
 
 	Camera::Camera( String const & name
 		, Scene & scene
-		, SceneNodeSPtr node
+		, SceneNode & node
 		, bool ownProjMtx )
 		: Camera{ name
 			, scene
@@ -88,20 +78,16 @@ namespace castor3d
 		m_notifyIndex.disconnect();
 	}
 
-	void Camera::attachTo( SceneNodeSPtr node )
+	void Camera::attachTo( SceneNode & node )
 	{
-		if ( node != getParent() )
+		if ( &node != getParent() )
 		{
 			MovableObject::attachTo( node );
-
-			if ( node )
-			{
-				m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
-					{
-						onNodeChanged( node );
-					} );
-				onNodeChanged( *node );
-			}
+			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+				{
+					onNodeChanged( node );
+				} );
+			onNodeChanged( node );
 		}
 	}
 
@@ -119,7 +105,7 @@ namespace castor3d
 
 	void Camera::update()
 	{
-		SceneNodeSPtr node = getParent();
+		auto node = getParent();
 
 		if ( node )
 		{

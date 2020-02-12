@@ -29,6 +29,7 @@
 #include <wx/artprov.h>
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
@@ -45,6 +46,7 @@
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
+#include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
