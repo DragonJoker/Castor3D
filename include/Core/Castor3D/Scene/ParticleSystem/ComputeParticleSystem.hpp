@@ -4,24 +4,24 @@ See LICENSE file in root folder
 #ifndef ___C3D_ComputeParticleSystem_H___
 #define ___C3D_ComputeParticleSystem_H___
 
+#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/ComputePipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/11/2016
-	\~english
-	\brief		Compute shader Particle system implementation.
-	\~french
-	\brief		Implémentation d'un système de particules utilisant un compute shader.
-	*/
 	class ComputeParticleSystem
 		: public ParticleSystemImpl
 	{

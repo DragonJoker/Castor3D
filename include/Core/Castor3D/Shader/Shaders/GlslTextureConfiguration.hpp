@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___GLSL_TextureConfiguration_H___
 #define ___GLSL_TextureConfiguration_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SdwModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
@@ -13,11 +13,7 @@ namespace castor3d
 {
 	namespace shader
 	{
-		static uint32_t constexpr MaxTextureConfigurationCount = 4000u;
-		static int constexpr MaxTextureConfigurationComponentsCount = 7;
 		castor::String const TextureConfigurationBufferName = cuT( "TextureConfigurations" );
-
-		class TextureConfigurations;
 
 		struct TextureConfigData
 			: public sdw::StructInstance

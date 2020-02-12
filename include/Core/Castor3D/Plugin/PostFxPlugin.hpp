@@ -1,22 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_POST_FX_PLUGIN_H___
-#define ___C3D_POST_FX_PLUGIN_H___
+#ifndef ___C3D_PostFxPlugin_H___
+#define ___C3D_PostFxPlugin_H___
 
 #include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		19/08/2012
-	\~english
-	\brief		Post effect plug-in class
-	\~french
-	\brief		Classe de plug-in d'effets post rendu
-	*/
 	class PostFxPlugin
 		: public Plugin
 	{

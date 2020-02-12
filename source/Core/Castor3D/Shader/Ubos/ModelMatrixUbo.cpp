@@ -1,7 +1,6 @@
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 namespace castor3d

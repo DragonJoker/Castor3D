@@ -1,35 +1,33 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OVERLAY_RENDERER_H___
-#define ___C3D_OVERLAY_RENDERER_H___
+#ifndef ___C3D_OverlayRenderer_H___
+#define ___C3D_OverlayRenderer_H___
 
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/RenderNode/PassRenderNode.hpp"
+
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Render/Node/PassRenderNode.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-
-#ifdef drawText
-#	undef drawText
-#endif
+#include <ashespp/Sync/Semaphore.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\~english
-	\brief		The overlay renderer.
-	\~french
-	\brief		Le renderer d'incrustation.
-	*/
 	class OverlayRenderer
 		: public castor::OwnedBy< RenderSystem >
 	{

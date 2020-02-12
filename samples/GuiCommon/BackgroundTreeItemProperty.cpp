@@ -9,7 +9,7 @@
 #include <Castor3D/Scene/Background/Image.hpp>
 #include <Castor3D/Scene/Background/Skybox.hpp>
 #include <Castor3D/Scene/Background/Visitor.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
 
 #include <wx/propgrid/advprops.h>
 

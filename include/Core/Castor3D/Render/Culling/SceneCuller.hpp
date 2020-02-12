@@ -4,41 +4,31 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneCuller_H___
 #define ___C3D_SceneCuller_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include <CastorUtils/Design/Signal.hpp>
+#include "CullingModule.hpp"
+
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 namespace castor3d
 {
-	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
-	using SceneCullerSignal = castor::Signal< SceneCullerSignalFunction >;
-	using SceneCullerSignalConnection = castor::Connection< SceneCullerSignal >;
-	/**
-	*\~english
-	*\brief
-	*	Base class to cull nodes, before adding them to the render queue.
-	*\~french
-	*\brief
-	*	Classe de base pour éliminer les noeuds, avant de les ajouter à la file de rendu.
-	*/
+	struct CulledSubmesh
+	{
+		Geometry & instance;
+		Submesh & data;
+		PassSPtr pass;
+		SceneNode & sceneNode;
+	};
+
+	struct CulledBillboard
+	{
+		BillboardBase & instance;
+		BillboardBase & data;
+		PassSPtr pass;
+		SceneNode & sceneNode;
+	};
+
 	class SceneCuller
 	{
 	public:
-		struct CulledSubmesh
-		{
-			Geometry & instance;
-			Submesh & data;
-			PassSPtr pass;
-			SceneNode & sceneNode;
-		};
-		
-		struct CulledBillboard
-		{
-			BillboardBase & instance;
-			BillboardBase & data;
-			PassSPtr pass;
-			SceneNode & sceneNode;
-		};
-
 	public:
 		C3D_API SceneCuller( Scene const & scene
 			, Camera * camera );

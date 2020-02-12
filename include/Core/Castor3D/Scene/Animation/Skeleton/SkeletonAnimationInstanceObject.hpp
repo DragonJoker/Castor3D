@@ -4,6 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkeletonAnimationInstanceObject_H___
 #define ___C3D_SkeletonAnimationInstanceObject_H___
 
+#include "SkeletonAnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
+
 #include "Castor3D/Animation/Interpolator.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -11,17 +14,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the moving things.
-	\remark		Manages translation, scaling, rotation of the thing.
-	\~french
-	\brief		Classe de représentation de choses mouvantes.
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
-	*/
 	class SkeletonAnimationInstanceObject
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{

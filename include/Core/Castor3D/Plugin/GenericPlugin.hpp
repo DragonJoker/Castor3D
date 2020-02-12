@@ -1,25 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GENERIC_PLUGIN_H___
-#define ___C3D_GENERIC_PLUGIN_H___
+#ifndef ___C3D_GenericPlugin_H___
+#define ___C3D_GenericPlugin_H___
+
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Plugin/Plugin.hpp"
-#include "Castor3D/Plugin/PluginException.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		21/09/2015
-	\~english
-	\brief		Generic Plugin class.
-	\remarks	Allows general specialisations for Castor3D.
-	\~french
-	\brief		Classe de plug-in générique.
-	\remarks	Permet des spécialisation générales pour Castor3D.
-	*/
 	class GenericPlugin
 		: public Plugin
 	{

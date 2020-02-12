@@ -9,7 +9,7 @@ namespace castor
 {
 	//*************************************************************************
 
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\~french
@@ -17,7 +17,7 @@ namespace castor
 	*/
 	template< typename T >
 	struct ParserValueTyper;
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for bool.
@@ -30,7 +30,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eBool;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for int8_t.
@@ -43,7 +43,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eInt8;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for int16_t.
@@ -56,7 +56,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eInt16;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for int32_t.
@@ -69,7 +69,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eInt32;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for int64_t.
@@ -82,7 +82,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eInt64;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for uint8_t.
@@ -95,7 +95,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eUInt8;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for uint16_t.
@@ -108,7 +108,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eUInt16;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for uint32_t.
@@ -121,7 +121,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eUInt32;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for uint64_t.
@@ -134,7 +134,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eUInt64;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for float.
@@ -147,7 +147,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eFloat;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for double.
@@ -160,7 +160,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eDouble;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for long double.
@@ -173,7 +173,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eLongDouble;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::String.
@@ -186,7 +186,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eText;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Path.
@@ -199,7 +199,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePath;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::PixelFormat.
@@ -212,7 +212,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePixelFormat;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point2i.
@@ -225,7 +225,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint2I;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point3i.
@@ -238,7 +238,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint3I;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point4i.
@@ -251,7 +251,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint4I;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point2f.
@@ -264,7 +264,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint2F;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point3f.
@@ -277,7 +277,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint3F;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point4f.
@@ -290,7 +290,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint4F;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point2d.
@@ -303,7 +303,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint2D;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point3d.
@@ -316,7 +316,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint3D;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Point4d.
@@ -329,7 +329,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePoint4D;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Size.
@@ -342,7 +342,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eSize;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Position.
@@ -355,7 +355,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::ePosition;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::Rectangle.
@@ -368,7 +368,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eRectangle;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::RgbColour.
@@ -381,7 +381,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eRgbColour;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::RgbaColour.
@@ -394,7 +394,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eRgbaColour;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::HdrRgbColour.
@@ -407,7 +407,7 @@ namespace castor
 	{
 		static const ParameterType Type = ParameterType::eHdrRgbColour;
 	};
-	/*!
+	/**
 	\~english
 	\brief		Retrieves parameter type from c++ type.
 	\remarks	Specialisation for castor::HdrRgbaColour.

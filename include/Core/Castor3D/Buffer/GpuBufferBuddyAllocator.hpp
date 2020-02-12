@@ -4,11 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpuBufferBuffyAllocator_H___
 #define ___C3D_GpuBufferBuffyAllocator_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include <CastorUtils/Pool/BuddyAllocator.hpp>
-
-#include <cstddef>
+#include "BufferModule.hpp"
 
 namespace castor3d
 {
@@ -94,8 +90,6 @@ namespace castor3d
 	private:
 		size_t m_allocatedSize;
 	};
-	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
-	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;
 }
 
 #endif

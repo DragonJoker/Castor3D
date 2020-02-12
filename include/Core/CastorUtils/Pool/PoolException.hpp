@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\~english
 	\brief		Pool errors enumeration.
 	\~french
@@ -33,7 +33,7 @@ namespace castor
 		CU_ScopedEnumBounds( eCommonOutOfMemory )
 	};
 
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2015
@@ -262,7 +262,7 @@ namespace castor
 		std::cerr << "*** " << name << " *** ";
 		Error< ErrorType >::report( params... );
 	}
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2015
@@ -294,7 +294,7 @@ namespace castor
 		}
 	};
 }
-/*!
+/**
 \author 	Sylvain DOREMUS
 \date 		03/01/2011
 \~english

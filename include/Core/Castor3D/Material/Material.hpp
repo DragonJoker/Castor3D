@@ -1,93 +1,24 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MATERIAL_H___
-#define ___C3D_MATERIAL_H___
+#ifndef ___C3D_Material_H___
+#define ___C3D_Material_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MaterialModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Resource.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	*/
-	template< MaterialType Type >
-	struct PassTyper;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::ePhong.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::ePhong.
-	*/
-	template<>
-	struct PassTyper< MaterialType::ePhong >
-	{
-		using Type = PhongPass;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::eMetallicRoughness.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
-	*/
-	template<>
-	struct PassTyper< MaterialType::eMetallicRoughness >
-	{
-		using Type = MetallicRoughnessPbrPass;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Helper class to retrieve a pass type from a MaterialType.
-	\remarks	Specialisation for MaterialType::eMetallicRoughness.
-	\~french
-	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
-	\remarks	Spécialisation pour MaterialType::eMetallicRoughness.
-	*/
-	template<>
-	struct PassTyper< MaterialType::eSpecularGlossiness >
-	{
-		using Type = SpecularGlossinessPbrPass;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Definition of a material
-	\remark		A material is composed of one or more passes.
-	\~french
-	\brief		Définition d'un matériau
-	\remark		Un matériau est composé d'une ou plusieurs passes
-	*/
 	class Material
 		: public castor::Resource< Material >
 		, public std::enable_shared_from_this< Material >
 		, public castor::OwnedBy< Engine >
 	{
 	public:
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 19/10/2011
@@ -308,14 +239,8 @@ namespace castor3d
 		static const castor::String DefaultMaterialName;
 
 	private:
-		//!\~english	The passes.
-		//!\~french		Les passes.
 		PassPtrArray m_passes;
-		//!\~english	The material type.
-		//!\~french		Le type de matériau.
 		MaterialType m_type{ MaterialType::ePhong };
-		//!\~english	The connections to the pass changed signals.
-		//!\~french		Les connections aux signaux de passe changée.
 		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
 	};
 }

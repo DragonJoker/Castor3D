@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3DSMAA_SmaaUbo_H___
 #define ___C3DSMAA_SmaaUbo_H___
 
-#include <Castor3D/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

@@ -4,27 +4,18 @@ See LICENSE file in root folder
 #ifndef ___C3D_Animation_H___
 #define ___C3D_Animation_H___
 
+#include "Castor3D/Binary/BinaryModule.hpp"
+
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Animation base class.
-	\remarks	An animation is played using an AnimationInstance.
-	\~french
-	\brief		Classe de base des animations.
-	\remarks	Une animation est jouée au travers d'une AnimationInstance.
-	*/
-	class Animation
+	template< typename AnimableHanlerT >
+	class AnimationT
 		: public castor::Named
-		, public castor::OwnedBy< Animable >
+		, public castor::OwnedBy< AnimableT< AnimableHanlerT > >
 	{
 	public:
 		/**
@@ -34,10 +25,10 @@ namespace castor3d
 		 *name Copie / Déplacement.
 		 **/
 		/**@{*/
-		C3D_API Animation( Animation && rhs ) = default;
-		C3D_API Animation & operator=( Animation && rhs ) = delete;
-		C3D_API Animation( Animation const & rhs ) = delete;
-		C3D_API Animation & operator=( Animation const & rhs ) = delete;
+		C3D_API AnimationT( AnimationT && rhs ) = default;
+		C3D_API AnimationT & operator=( AnimationT && rhs ) = delete;
+		C3D_API AnimationT( AnimationT const & rhs ) = delete;
+		C3D_API AnimationT & operator=( AnimationT const & rhs ) = delete;
 		/**@}*/
 		/**
 		 *\~english
@@ -51,8 +42,8 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		C3D_API Animation( AnimationType type
-			, Animable & animable
+		inline AnimationT( AnimationType type
+			, AnimableT< AnimableHanlerT > & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english
@@ -60,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~Animation();
+		inline ~AnimationT();
 		/**
 		 *\~english
 		 *\brief		Adds a keyframe to the animation.
@@ -69,7 +60,7 @@ namespace castor3d
 		 *\brief		Ajoute une keyframe à l'animation.
 		 *\param[in]	keyFrame	La keyframe.
 		 */
-		C3D_API void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
+		inline void addKeyFrame( AnimationKeyFrameUPtr keyFrame );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -78,7 +69,7 @@ namespace castor3d
 		 *\brief			Trouve une keyframe à l'index de temps donné.
 		 *\param[in]		time	L'index de temps.
 		 */
-		C3D_API AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
+		inline AnimationKeyFrameArray::iterator find( castor::Milliseconds const & time );
 		/**
 		 *\~english
 		 *\brief			Finds a keyframe given a time index.
@@ -91,7 +82,7 @@ namespace castor3d
 		 *\param[in,out]	prv		La keyframe précédente, reçoit la nouvelle s'il y a eu un changement.
 		 *\param[in,out]	cur		La keyframe courante, reçoit la nouvelle s'il y a eu un changement.
 		 */
-		C3D_API void findKeyFrame( castor::Milliseconds const & time
+		inline void findKeyFrame( castor::Milliseconds const & time
 			, AnimationKeyFrameArray::iterator & prv
 			, AnimationKeyFrameArray::iterator & cur )const;
 		/**
@@ -100,7 +91,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la longueur de l'animation.
 		 */
-		C3D_API void updateLength();
+		inline void updateLength();
 		/**
 		 *\~english
 		 *\return		\p true if the key frames list is empty.
@@ -183,10 +174,11 @@ namespace castor3d
 		//!\~french		Les keyframes.
 		AnimationKeyFrameArray m_keyframes;
 
-		friend class BinaryWriter< Animation >;
-		friend class BinaryParser< Animation >;
-		friend class AnimationInstance;
+		friend class BinaryWriter< AnimationT >;
+		friend class BinaryParser< AnimationT >;
 	};
 }
+
+#include "Animation.inl"
 
 #endif

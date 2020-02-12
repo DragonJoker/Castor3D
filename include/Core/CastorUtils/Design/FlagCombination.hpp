@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016
@@ -18,7 +18,7 @@ namespace castor
 	\brief		Classe template qui récupère le type entier de base depuis une taille.
 	*/
 	template< size_t Size > struct BaseTypeFromSize;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016
@@ -33,7 +33,7 @@ namespace castor
 	{
 		using Type = uint8_t;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016
@@ -48,7 +48,7 @@ namespace castor
 	{
 		using Type = uint16_t;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016
@@ -63,7 +63,7 @@ namespace castor
 	{
 		using Type = uint32_t;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016
@@ -78,7 +78,7 @@ namespace castor
 	{
 		using Type = uint64_t;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		23/11/2016

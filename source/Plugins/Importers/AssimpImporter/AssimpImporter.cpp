@@ -1,11 +1,12 @@
 #include "AssimpImporter/AssimpImporter.hpp"
 
-#include <Castor3D/Animation/Mesh/MeshAnimation.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimationSubmesh.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimation.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationBone.hpp>
+#include <Castor3D//Animation/Interpolator.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimation.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationSubmesh.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
@@ -14,8 +15,8 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Mesh/Skeleton/Bone.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
@@ -238,7 +239,7 @@ namespace C3dAssimp
 		void doLoadTexture( aiString const & name
 			, castor3d::Pass & pass
 			, castor3d::TextureConfiguration const & config
-			, castor3d::Importer const & importer )
+			, castor3d::MeshImporter const & importer )
 		{
 			if ( name.length > 0 )
 			{
@@ -250,7 +251,7 @@ namespace C3dAssimp
 
 		void doProcessPassTextures( Pass & pass
 			, aiMaterial const & aiMaterial
-			, Importer const & importer )
+			, MeshImporter const & importer )
 		{
 			aiString ambTexName;
 			aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), ambTexName );
@@ -417,7 +418,7 @@ namespace C3dAssimp
 	castor::String const AssimpImporter::Name = cuT( "ASSIMP Importer" );
 
 	AssimpImporter::AssimpImporter( Engine & engine )
-		: Importer( engine )
+		: MeshImporter( engine )
 		, m_anonymous( 0 )
 	{
 	}
@@ -426,25 +427,9 @@ namespace C3dAssimp
 	{
 	}
 
-	ImporterUPtr AssimpImporter::create( Engine & engine )
+	MeshImporterUPtr AssimpImporter::create( Engine & engine )
 	{
 		return std::make_unique< AssimpImporter >( engine );
-	}
-
-	bool AssimpImporter::doImportScene( Scene & scene )
-	{
-		auto mesh = scene.getMeshCache().add( cuT( "Mesh_PLY" ) );
-		bool result = doImportMesh( *mesh );
-
-		if ( result )
-		{
-			SceneNodeSPtr node = scene.getSceneNodeCache().add( mesh->getName(), scene.getObjectRootNode() );
-			GeometrySPtr geometry = scene.getGeometryCache().add( mesh->getName(), node, nullptr );
-			geometry->setMesh( mesh );
-			m_geometries.insert( { geometry->getName(), geometry } );
-		}
-
-		return result;
 	}
 
 	bool AssimpImporter::doImportMesh( Mesh & mesh )

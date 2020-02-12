@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderDevice_H___
 #define ___C3D_RenderDevice_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderModule.hpp"
 
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Command/Queue.hpp>

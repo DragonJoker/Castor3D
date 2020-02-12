@@ -19,9 +19,12 @@
 #include <GuiCommon/SceneExporter.hpp>
 #include <GuiCommon/TreeHolder.hpp>
 
+#include <Castor3D/Cache/SceneCache.hpp>
+#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 

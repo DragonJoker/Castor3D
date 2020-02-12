@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		08/12/2011
 	\~english

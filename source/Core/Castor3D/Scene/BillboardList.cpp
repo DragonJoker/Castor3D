@@ -1,18 +1,9 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 
-#include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Shader/Program.hpp"
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-
-#include <CastorUtils/Design/ArrayView.hpp>
 
 using namespace castor;
 
@@ -79,7 +70,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	BillboardBase::BillboardBase( Scene & scene
-		, SceneNodeSPtr node
+		, SceneNode * node
 		, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout
 		, uint32_t vertexStride
 		, ashes::VertexBufferBasePtr vertexBuffer )
@@ -325,13 +316,33 @@ namespace castor3d
 
 	BillboardList::BillboardList( String const & name
 		, Scene & scene
-		, SceneNodeSPtr parent )
+		, SceneNode & node )
 		: MovableObject( name
 			, scene
 			, MovableType::eBillboard
-			, parent )
+			, node )
 		, BillboardBase{ scene
-			, parent
+			, &node
+			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+				, ashes::VkVertexInputBindingDescriptionArray
+				{
+					{ 1u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_INSTANCE },
+				}
+				, ashes::VkVertexInputAttributeDescriptionArray
+				{
+					{ 2u, 1u, VK_FORMAT_R32G32B32_SFLOAT, 0u },
+				} )
+			, sizeof( castor::Point3f ) }
+	{
+	}
+	
+	BillboardList::BillboardList( String const & name
+		, Scene & scene )
+		: MovableObject( name
+			, scene
+			, MovableType::eBillboard )
+		, BillboardBase{ scene
+			, nullptr
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray
 				{
@@ -401,7 +412,7 @@ namespace castor3d
 		m_needUpdate = true;
 	}
 
-	void BillboardList::attachTo( SceneNodeSPtr node )
+	void BillboardList::attachTo( SceneNode & node )
 	{
 		MovableObject::attachTo( node );
 		setNode( node );

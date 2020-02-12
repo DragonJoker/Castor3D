@@ -1,27 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FUNCTOR_EVENT_H___
-#define ___C3D_FUNCTOR_EVENT_H___
+#ifndef ___C3D_FunctorEvent_H___
+#define ___C3D_FunctorEvent_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Event/Frame/FrameEvent.hpp"
-
-#include <CastorUtils/Log/Logger.hpp>
+#include "FrameEvent.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		24/04/2013
-	\version	0.7.0
-	\~english
-	\brief		Functor event
-	\remark		Executes a function when processed
-	\~french
-	\brief		Evènement foncteur
-	\remark		Excécute une fonction lorsqu'il est traité
-	*/
 	template< class Functor >
 	class FunctorEvent
 		: public FrameEvent

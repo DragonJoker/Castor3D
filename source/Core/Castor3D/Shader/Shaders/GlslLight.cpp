@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace sdw;
 

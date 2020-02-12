@@ -13,7 +13,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011

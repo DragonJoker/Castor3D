@@ -8,14 +8,14 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
-#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Technique/RenderTechnique.hpp>
-#include <Castor3D/Technique/RenderTechniquePass.hpp>
+#include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 
 using namespace castor3d;
 using namespace castor;

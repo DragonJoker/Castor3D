@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011

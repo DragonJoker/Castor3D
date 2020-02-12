@@ -6,9 +6,10 @@ See LICENSE file in root folder
 
 #include "SmaaPostEffect/SmaaConfig.hpp"
 
-#include <Castor3D/PostEffect/PostEffect.hpp>
-#include <Castor3D/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/RenderToTexture/RenderQuad.hpp>
+#include <Castor3D/Buffer/UniformBuffer.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
 
 #include <ShaderWriter/Shader.hpp>
 

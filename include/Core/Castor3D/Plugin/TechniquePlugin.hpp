@@ -1,22 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_TECHNIQUE_PLUGIN_H___
-#define ___C3D_TECHNIQUE_PLUGIN_H___
+#ifndef ___C3D_TechniquePlugin_H___
+#define ___C3D_TechniquePlugin_H___
 
 #include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		19/08/2012
-	\~english
-	\brief		Render technique plug-in class
-	\~french
-	\brief		Classe de plug-in de techniques de rendu
-	*/
 	class TechniquePlugin
 		: public Plugin
 	{

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		16/09/2015
 	\version	0.8.0
@@ -34,7 +34,7 @@ namespace GuiCommon
 		 */
 		virtual void exportScene( castor3d::Scene const & p_scene, castor::Path const & p_fileName ) = 0;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		16/09/2015
 	\version	0.8.0
@@ -55,7 +55,7 @@ namespace GuiCommon
 		castor::String doExportTexture( castor::Path const & p_pathMtlFolder, castor::String p_section, castor3d::TextureUnitSPtr p_unit )const;
 		castor::String doExportMesh( castor3d::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		16/09/2015
 	\version	0.8.0

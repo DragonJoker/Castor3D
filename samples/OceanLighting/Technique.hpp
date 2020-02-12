@@ -24,10 +24,7 @@ namespace OceanLighting
 	class RenderTechnique : public Castor3D::RenderTechnique
 	{
 	private:
-		RenderTechnique & operator =( RenderTechnique const & )
-		{
-			return *this;
-		}
+		RenderTechnique & operator =( RenderTechnique const & ) = delete;
 
 	protected:
 		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
@@ -83,7 +80,7 @@ namespace OceanLighting
 		}
 		inline void CameraThetaMinus( float p_fVal )
 		{
-			m_cameraTheta = m_cameraTheta - p_fVal;
+			m_cameraTheta -= p_fVal;
 		}
 		inline void UpdateCameraPhi( float p_fVal )
 		{
@@ -91,11 +88,11 @@ namespace OceanLighting
 		}
 		inline void CameraHeightPlus( float p_fVal )
 		{
-			std::min( 8000.0f, m_cameraHeight * p_fVal );
+			m_cameraHeight += std::min( 8000.0f, m_cameraHeight * p_fVal );
 		}
 		inline void CameraHeightMinus( float p_fVal )
 		{
-			std::max( 0.5f, m_cameraHeight / p_fVal );
+			m_cameraHeight -= std::max( 0.5f, m_cameraHeight / p_fVal );
 		}
 		inline void UpdateSunPhi( int p_offset )
 		{

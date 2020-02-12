@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\~english
 	\brief		An image loader.
 	\~french
@@ -38,7 +38,7 @@ namespace castor
 	};
 
 	using ImageLoaderPtr = std::unique_ptr< ImageLoaderImpl >;
-	/*!
+	/**
 	\~english
 	\brief		Registers the image loaders, per file extension.
 	\~french

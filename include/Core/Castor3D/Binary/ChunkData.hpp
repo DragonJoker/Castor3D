@@ -4,24 +4,27 @@ See LICENSE file in root folder
 #ifndef ___C3D_ChunkData_H___
 #define ___C3D_ChunkData_H___
 
-#include "Castor3D/Mesh/VertexGroup.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/FaceIndices.hpp"
-#include "Castor3D/Mesh/SubmeshComponent/LineIndices.hpp"
-#include "Castor3D/Mesh/Skeleton/VertexBoneData.hpp"
+#include "BinaryModule.hpp"
+
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+
+#include "Castor3D/Model/VertexGroup.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LineIndices.hpp"
+#include "Castor3D/Model/Skeleton/VertexBoneData.hpp"
 
 #include <CastorUtils/Data/Endianness.hpp>
 #include <CastorUtils/Graphics/Colour.hpp>
-#include <CastorUtils/Math/Coords.hpp>
-#include <CastorUtils/Math/Matrix.hpp>
-#include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
-#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/Matrix.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
-	// Version 1.3 and before
 	template< typename T >
 	struct OldInterleavedVertexT
 	{

@@ -1,7 +1,7 @@
 #include "Castor3D/Binary/BinarySkeletonAnimationNode.hpp"
 
-#include "Castor3D/Animation/Skeleton/SkeletonAnimationNode.hpp"
-#include "Castor3D/Animation/Skeleton/SkeletonAnimation.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Binary/BinarySkeletonAnimationObject.hpp"
 
 using namespace castor;

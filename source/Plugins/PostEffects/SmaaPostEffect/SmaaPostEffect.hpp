@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "SmaaPostEffect/NeighbourhoodBlending.hpp"
 #include "SmaaPostEffect/Reproject.hpp"
 
-#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
 namespace smaa
 {

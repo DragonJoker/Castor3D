@@ -4,19 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_BackgroundVisitor_H___
 #define ___C3D_BackgroundVisitor_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "BackgroundModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\date		02/04/2018
-	\~english
-	\brief		Base class for a background visitor.
-	\~french
-	\brief		Classe de base pour un visiteur de fond.
-	*/
 	class BackgroundVisitor
 	{
 	public:

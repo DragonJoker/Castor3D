@@ -10,16 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using ParticleArray = std::vector< Particle >;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/11/2016
-	\~english
-	\brief		CPU only Particle system implementation.
-	\~french
-	\brief		Implémentation d'un système de particules CPU.
-	*/
 	class CpuParticleSystem
 		: public ParticleSystemImpl
 	{

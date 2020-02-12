@@ -1,26 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERSION_H___
-#define ___C3D_VERSION_H___
+#ifndef ___C3D_Version_H___
+#define ___C3D_Version_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
 
 #include "Castor3D/RequiredVersion.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		14/01/2011
-	\~english
-	\brief		Version management class
-	\remark		Class used to manage versions and versions dependencies for plug-ins
-	\~french
-	\brief		Classe de gestion de version
-	\remark		Classe utilisee pour gerer les versions et dependances de version pour les plug-ins
-	*/
 	class Version
 	{
 	public:

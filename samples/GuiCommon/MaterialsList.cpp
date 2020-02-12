@@ -8,10 +8,11 @@
 #include "GuiCommon/TextureTreeItemProperty.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
 

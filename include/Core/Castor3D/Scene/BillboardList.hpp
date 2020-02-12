@@ -1,29 +1,22 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_BILLBOARD_LIST_H___
-#define ___C3D_BILLBOARD_LIST_H___
+#ifndef ___C3D_BillboardList_H___
+#define ___C3D_BillboardList_H___
 
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
+
+#include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/RenderedObject.hpp"
 
+#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		23/10/2016
-	\~english
-	\brief		Billboards list
-	\remarks	All billboards from this list shares the same texture
-	\~french
-	\brief		Liste de billboards
-	\remarks	Tous les billboards de cette liste ont la meme texture
-	*/
 	class BillboardBase
 		: public RenderedObject
 	{
@@ -43,7 +36,7 @@ namespace castor3d
 		 *\param[in]	vertexBuffer	Le tampon de sommets.
 		 */
 		C3D_API BillboardBase( Scene & scene
-			, SceneNodeSPtr node
+			, SceneNode * node
 			, ashes::PipelineVertexInputStateCreateInfoPtr vertexLayout
 			, uint32_t vertexStride
 			, ashes::VertexBufferBasePtr vertexBuffer = nullptr );
@@ -142,7 +135,7 @@ namespace castor3d
 			return m_scene;
 		}
 
-		inline SceneNodeSPtr getNode()const
+		inline SceneNode * getNode()const
 		{
 			return m_node;
 		}
@@ -178,9 +171,9 @@ namespace castor3d
 			m_centerOffset = value;
 		}
 
-		inline void setNode( SceneNodeSPtr value )
+		inline void setNode( SceneNode & value )
 		{
-			m_node = value;
+			m_node = &value;
 		}
 
 		inline void setBillboardType( BillboardType value )
@@ -214,7 +207,7 @@ namespace castor3d
 
 	protected:
 		Scene & m_scene;
-		SceneNodeSPtr m_node;
+		SceneNode * m_node;
 		MaterialWPtr m_material;
 		castor::Point2f m_dimensions;
 		castor::Point3f m_cameraPosition;
@@ -231,23 +224,13 @@ namespace castor3d
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0
-	\date		04/11/2013
-	\~english
-	\brief		Billboards list
-	\remarks	All billboards from this list shares the same texture
-	\~french
-	\brief		Liste de billboards
-	\remarks	Tous les billboards de cette liste ont la meme texture
-	*/
+
 	class BillboardList
 		: public MovableObject
 		, public BillboardBase
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011
@@ -296,7 +279,21 @@ namespace castor3d
 		 */
 		C3D_API BillboardList( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr parent );
+			, SceneNode & parent );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name		The name.
+		 *\param[in]	scene		The parent scene.
+		 *\param[in]	parent	The parent scene node.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	name		Le nom.
+		 *\param[in]	scene		La scene parente.
+		 *\param[in]	parent	Le noeud de scène parent.
+		 */
+		C3D_API BillboardList( castor::String const & name
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -346,7 +343,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API void attachTo( SceneNodeSPtr node );
+		C3D_API void attachTo( SceneNode & node )override;
 		/**
 		*\~english
 		*name

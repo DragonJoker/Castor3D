@@ -6,21 +6,14 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Background/Background.hpp"
 
-#include <ashespp/Buffer/Buffer.hpp>
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Graphics/HdrColourComponent.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
+
+#include <ashespp/Buffer/Buffer.hpp>
 
 namespace castor3d
 {
-	/**
-	*\version
-	*	0.9.0
-	*\~english
-	*\brief
-	*	A skybox with no image but a colour.
-	*\~french
-	*\brief
-	*	Une skybox sans image mais avec une couleur.
-	*/
 	class ColourBackground
 		: public SceneBackground
 	{

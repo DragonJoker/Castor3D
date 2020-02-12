@@ -7,9 +7,11 @@ See LICENSE file in root folder
 #include "Castor3D/Binary/BinaryParser.hpp"
 #include "Castor3D/Binary/BinaryWriter.hpp"
 
+#include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp"
+
 namespace castor3d
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.10.0
 	\date 		07/12/2017
@@ -25,7 +27,7 @@ namespace castor3d
 	{
 		static ChunkType const Value = ChunkType::eSkeletonAnimationKeyFrame;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date 		07/12/2017
@@ -51,7 +53,7 @@ namespace castor3d
 		 */
 		C3D_API bool doWrite( SkeletonAnimationKeyFrame const & obj )override;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date 		07/12/2017

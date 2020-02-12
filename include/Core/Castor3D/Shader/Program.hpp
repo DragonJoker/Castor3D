@@ -4,24 +4,22 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderProgram_H___
 #define ___C3D_ShaderProgram_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ShaderModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
+
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
+
 #include <ShaderWriter/Shader.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
+#include <ashespp/Core/Device.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
 namespace castor3d
 {
-	template< typename KeyType >
-	struct ElementProducer< ShaderProgram, KeyType >
-	{
-		using Type = std::function< std::shared_ptr< ShaderProgram >( KeyType const & ) >;
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.2
 	\date		24/01/2011
@@ -37,7 +35,7 @@ namespace castor3d
 		friend class castor::TextWriter< castor3d::ShaderProgram >;
 
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

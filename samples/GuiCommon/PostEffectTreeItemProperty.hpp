@@ -6,9 +6,11 @@ See LICENSE file in root folder
 
 #include "GuiCommon/TreeItemProperty.hpp"
 
+#include <Castor3D/Render/PostEffect/PostEffectModule.hpp>
+
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
 	\version	0.11.0

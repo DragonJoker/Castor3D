@@ -6,26 +6,15 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		22/08/2017
-	\~english
-	\brief		A GpuBuffer and an offset from the GpuBuffer.
-	\~french
-	\brief		Un GpuBuffer et un offset dans le GpuBuffer.
-	*/
 	struct GpuBufferOffset
 	{
 		ashes::BufferBase const * buffer;
 		VkMemoryPropertyFlags flags;
 		uint32_t offset;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		22/08/2017

@@ -1,22 +1,23 @@
 #include "GuiCommon/SceneExporter.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
 #include <Castor3D/Binary/BinarySkeleton.hpp>
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/Sampler.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace CastorGui
 {
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\version		0.1.0
 	 *\brief		Description of a control, in order to be able to create it completely

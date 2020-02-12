@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Description of all elements in a vertex buffer
-	\~french
-	\brief		Description de tous les éléments dans un tampon de sommets
-	*/
 	class ParticleDeclaration
 	{
 	public:

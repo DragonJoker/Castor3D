@@ -6,9 +6,11 @@ See LICENSE file in root folder
 
 #include "GuiCommon/TreeItemProperty.hpp"
 
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp>
+
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		18/05/2018
 	\version	0.11.0

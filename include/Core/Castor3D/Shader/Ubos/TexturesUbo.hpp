@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TexturesUbo_H___
 #define ___C3D_TexturesUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
@@ -12,15 +12,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Textures configuration Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour la configuration des textures.
-	*/
 	class TexturesUbo
 	{
 	public:

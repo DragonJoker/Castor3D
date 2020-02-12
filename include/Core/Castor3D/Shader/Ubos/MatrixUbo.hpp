@@ -4,21 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_MatrixUbo_H___
 #define ___C3D_MatrixUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Matrices Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
-	*/
 	class MatrixUbo
 	{
 	public:

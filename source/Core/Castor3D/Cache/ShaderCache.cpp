@@ -1,11 +1,9 @@
 #include "Castor3D/Cache/ShaderCache.hpp"
 
 #include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/CleanupEvent.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <ShaderWriter/Source.hpp>

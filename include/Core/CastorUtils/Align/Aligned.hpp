@@ -55,7 +55,7 @@ namespace castor
 	{
 		return reinterpret_cast< T * >( alignedAlloc( alignment, size ) );
 	}
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		03/10/2015
@@ -109,7 +109,7 @@ namespace castor
 			castor::alignedFree( memory );
 		}
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		03/10/2015

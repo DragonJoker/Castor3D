@@ -5,6 +5,8 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace sdw;
 

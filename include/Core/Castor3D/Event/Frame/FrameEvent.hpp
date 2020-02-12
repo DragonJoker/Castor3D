@@ -1,28 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FRAME_EVENT_H___
-#define ___C3D_FRAME_EVENT_H___
+#ifndef ___C3D_FrameEvent_H___
+#define ___C3D_FrameEvent_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include <CastorUtils/Miscellaneous/Debug.hpp>
+#include "FrameEventModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date		03/03/2010
-	\version	0.1
-	\~english
-	\brief		The interface which represents a frame event.
-	\remark		Basically a frame event has a EventType to know when it must be applied.
-				<br />It can be applied, so the function must be implemented by children classes
-	\~french
-	\brief		Interface représentant un évènement de frame
-	\remark		Un évènement a un EventType pour savoir quand il doit être traité.
-				<br />La fonction de traitement doit être implémentée par les classes filles.
-	*/
 	class FrameEvent
 	{
 	public:

@@ -1,12 +1,11 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 
-#include "Castor3D/Engine.hpp"
-
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/LightFactory.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 
@@ -28,21 +27,17 @@ namespace castor3d
 
 	Light::Light( String const & name
 		, Scene & scene
-		, SceneNodeSPtr node
+		, SceneNode & node
 		, LightFactory & factory
 		, LightType lightType )
 		: MovableObject{ name, scene, MovableType::eLight, node }
 	{
 		m_category = factory.create( lightType, std::ref( *this ) );
-
-		if ( node )
-		{
-			m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
-				{
-					onNodeChanged( node );
-				} );
-			onNodeChanged( *node );
-		}
+		m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
+			{
+				onNodeChanged( node );
+			} );
+		onNodeChanged( node );
 	}
 
 	Light::~Light()
@@ -59,14 +54,14 @@ namespace castor3d
 		m_category->bind( buffer );
 	}
 
-	void Light::attachTo( SceneNodeSPtr node )
+	void Light::attachTo( SceneNode & node )
 	{
 		MovableObject::attachTo( node );
 		auto parent = getParent();
 
 		if ( parent )
 		{
-			m_notifyIndex = node->onChanged.connect( [this]( SceneNode const & node )
+			m_notifyIndex = node.onChanged.connect( [this]( SceneNode const & node )
 				{
 					onNodeChanged( node );
 				} );

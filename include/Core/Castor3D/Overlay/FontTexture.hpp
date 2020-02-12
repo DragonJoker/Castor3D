@@ -1,25 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FONT_TEXTURE_H___
-#define ___C3D_FONT_TEXTURE_H___
+#ifndef ___C3D_FontTexture_H___
+#define ___C3D_FontTexture_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "OverlayModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/Position.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date 		04/10/2015
-	\~english
-	\brief		Contains the font and the texture assiated to this font.
-	\~french
-	\brief		Contient la polica et la texture associée.
-	*/
 	class FontTexture
 		: public castor::OwnedBy< Engine >
 	{
@@ -132,17 +124,9 @@ namespace castor3d
 		OnChanged onChanged;
 
 	private:
-		//!\~english	The font.
-		//!\~french		La police.
 		castor::FontWPtr m_font;
-		//!\~english	The texture sampler.
-		//!\~french		L'échantillonneur de la texture.
 		SamplerWPtr m_sampler;
-		//!\~english	The texture that will receive the glyphs.
-		//!\~french		La texture qui recevra les glyphes.
 		TextureLayoutSPtr m_texture;
-		//!\~english	Glyphs positions in the texture.
-		//!\~french		Position des glyphes.
 		GlyphPositionMap m_glyphsPositions;
 	};
 }

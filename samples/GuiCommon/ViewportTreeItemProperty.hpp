@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		26/08/2015
 	\version	0.8.0

@@ -1,14 +1,24 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
 #include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
+#include "Castor3D/Cache/BillboardUboPools.hpp"
+#include "Castor3D/Cache/GeometryCache.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/TechniqueCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Design/BlockGuard.hpp>
-
-#include <future>
 
 using namespace castor;
 
@@ -45,27 +55,27 @@ namespace castor3d
 				{
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
-			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 				{
-					p_listener.fireEvents( EventType::ePreRender );
+					listener.fireEvents( EventType::ePreRender );
 				} );
-			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 				{
-					p_listener.fireEvents( EventType::eQueueRender );
+					listener.fireEvents( EventType::eQueueRender );
 				} );
 		}
 		else
 		{
-			getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
+			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 				{
-					p_listener.flushEvents( EventType::ePreRender );
-					p_listener.flushEvents( EventType::eQueueRender );
+					listener.flushEvents( EventType::ePreRender );
+					listener.flushEvents( EventType::eQueueRender );
 				} );
 		}
 
-		getEngine()->getFrameListenerCache().forEach( []( FrameListener & p_listener )
+		getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 			{
-				p_listener.fireEvents( EventType::ePostRender );
+				listener.fireEvents( EventType::ePostRender );
 			} );
 	}
 

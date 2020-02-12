@@ -3,7 +3,7 @@
 #include "GuiCommon/ShaderDialog.hpp"
 #include "GuiCommon/AdditionalProperties.hpp"
 
-#include <Castor3D/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 
 #include <ShaderWriter/Shader.hpp>

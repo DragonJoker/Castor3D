@@ -5,19 +5,11 @@ See LICENSE file in root folder
 #define ___C3D_ChunkParser_H___
 
 #include "Castor3D/Binary/BinaryChunk.hpp"
-#include "Castor3D/Binary/ChunkData.hpp"
+
+#include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
-	\~english
-	\brief		Chunk parser
-	\~french
-	\brief		Analyseur de chunk
-	*/
 	class ChunkParserBase
 	{
 	public:
@@ -49,7 +41,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
 	\date 		08/04/2014
@@ -114,7 +106,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
 	\date 		08/04/2014
@@ -162,7 +154,7 @@ namespace castor3d
 			return result;
 		}
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
 	\date 		08/04/2014

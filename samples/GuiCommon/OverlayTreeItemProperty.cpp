@@ -6,6 +6,7 @@
 #include "GuiCommon/PointProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>

@@ -1,18 +1,13 @@
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
-using namespace castor;
 
 namespace castor3d
 {
 	uint32_t const MorphingUbo::BindingPoint = 9u;
-	String const MorphingUbo::BufferMorphing = cuT( "Morphing" );
-	String const MorphingUbo::Time = cuT( "c3d_time" );
+	castor::String const MorphingUbo::BufferMorphing = cuT( "Morphing" );
+	castor::String const MorphingUbo::Time = cuT( "c3d_time" );
 
 	MorphingUbo::MorphingUbo( Engine & engine )
 		: m_engine{ engine }

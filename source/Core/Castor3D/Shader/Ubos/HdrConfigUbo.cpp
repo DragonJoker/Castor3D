@@ -1,18 +1,15 @@
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/HDR/HdrConfig.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-using namespace castor;
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
 namespace castor3d
 {
 	uint32_t const HdrConfigUbo::BindingPoint = 10u;
-	String const HdrConfigUbo::BufferHdrConfig = cuT( "HdrConfig" );
-	String const HdrConfigUbo::Exposure = cuT( "c3d_exposure" );
-	String const HdrConfigUbo::Gamma = cuT( "c3d_gamma" );
+	castor::String const HdrConfigUbo::BufferHdrConfig = cuT( "HdrConfig" );
+	castor::String const HdrConfigUbo::Exposure = cuT( "c3d_exposure" );
+	castor::String const HdrConfigUbo::Gamma = cuT( "c3d_gamma" );
 
 	HdrConfigUbo::HdrConfigUbo( Engine & engine )
 		: m_engine{ engine }

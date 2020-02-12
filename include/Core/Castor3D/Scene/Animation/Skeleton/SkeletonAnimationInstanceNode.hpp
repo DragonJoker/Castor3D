@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
 #define ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
 
+#include "SkeletonAnimationModule.hpp"
+
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		09/12/2013
-	\~english
-	\brief		Implementation of SkeletonAnimationNode for abstract nodes
-	\remark		Used to decompose the model and place intermediate animations
-	\~french
-	\brief		Implémentation de SkeletonAnimationNode pour des noeuds abstraits.
-	\remark		Utilisé afin de décomposer le modèle et ajouter des animations intermédiaires
-	*/
 	class SkeletonAnimationInstanceNode
 		: public SkeletonAnimationInstanceObject
 	{

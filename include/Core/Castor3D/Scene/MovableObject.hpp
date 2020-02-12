@@ -1,33 +1,24 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MOVABLE_OBJECT_H___
-#define ___C3D_MOVABLE_OBJECT_H___
+#ifndef ___C3D_MovableObject_H___
+#define ___C3D_MovableObject_H___
 
-#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include "Castor3D/Animation/Animable.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Movable object class
-	\~french
-	\brief		Classe d'objet déplaçable
-	*/
 	class MovableObject
 		: public Animable
 		, public castor::Named
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
@@ -77,7 +68,22 @@ namespace castor3d
 		C3D_API MovableObject( castor::String const & name
 			, Scene & scene
 			, MovableType type
-			, SceneNodeSPtr node );
+			, SceneNode & node );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name	The name
+		 *\param[in]	scene	The parent scene
+		 *\param[in]	type	MovableObject type
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	name	Le nom
+		 *\param[in]	scene	La scène parente
+		 *\param[in]	type	Le type de MovableObject
+		 */
+		C3D_API MovableObject( castor::String const & name
+			, Scene & scene
+			, MovableType type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -98,7 +104,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API virtual void attachTo( SceneNodeSPtr node );
+		C3D_API virtual void attachTo( SceneNode & node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent node
@@ -107,9 +113,9 @@ namespace castor3d
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr getParent()const
+		inline SceneNode *  getParent()const
 		{
-			return m_sceneNode.lock();
+			return m_sceneNode;
 		}
 		/**
 		 *\~english
@@ -133,7 +139,7 @@ namespace castor3d
 		castor::String m_strNodeName;
 		//!\~english	The parent scene node.
 		//!\~french		Le noeud parent.
-		SceneNodeWPtr m_sceneNode;
+		SceneNode * m_sceneNode;
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
 		OnSceneNodeChangedConnection m_notifyIndex;

@@ -50,8 +50,8 @@ target_link_libraries( ${PROJECT_NAME}
 		${wxWidgets_LIBRARIES}
 		${GTK2_LIBRARIES}
 		${X11_LIBRARIES}
-	PRIVATE
 		sdw::CompilerGlsl
+	PRIVATE
 		${FFMPEG_LIBRARIES}
 )
 target_compile_definitions( ${PROJECT_NAME} PUBLIC

@@ -5,10 +5,11 @@
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/SamplerCache.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
-#include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
-#include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderPass.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
@@ -17,11 +18,11 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Technique/RenderTechnique.hpp>
-#include <Castor3D/Technique/RenderTechniquePass.hpp>
-#include <Castor3D/Texture/Sampler.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
+#include <Castor3D/Shader/Program.hpp>
 
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>

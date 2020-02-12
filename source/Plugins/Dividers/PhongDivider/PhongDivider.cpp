@@ -31,7 +31,7 @@ namespace Phong
 	castor::String const Subdivider::Type = cuT( "phong" );
 
 	Subdivider::Subdivider()
-		: castor3d::Subdivider()
+		: castor3d::MeshSubdivider()
 		, m_occurences( 1 )
 	{
 	}
@@ -41,14 +41,14 @@ namespace Phong
 		cleanup();
 	}
 
-	SubdividerUPtr Subdivider::create()
+	MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}
 
 	void Subdivider::cleanup()
 	{
-		castor3d::Subdivider::cleanup();
+		castor3d::MeshSubdivider::cleanup();
 	}
 
 	void Subdivider::subdivide( SubmeshSPtr submesh
@@ -110,7 +110,7 @@ namespace Phong
 			m_points.emplace_back( std::make_unique< SubmeshVertex >( SubmeshVertex{ i, m_submesh->getPoint( i ) } ) );
 		}
 
-		castor3d::Subdivider::doInitialise();
+		castor3d::MeshSubdivider::doInitialise();
 		m_indexMapping = m_submesh->getComponent< TriFaceMapping >();
 	}
 

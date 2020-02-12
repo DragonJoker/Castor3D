@@ -3,7 +3,6 @@
 #include "LightStreaksPostEffect/LightStreaksPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Buffer/UniformBuffer.hpp>
 
 using namespace castor;
 using namespace castor3d;

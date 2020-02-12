@@ -4,28 +4,18 @@ See LICENSE file in root folder
 #ifndef ___C3D_POINT_LIGHT_H___
 #define ___C3D_POINT_LIGHT_H___
 
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a PointLight
-	\remark		A point light is a light which enlights from a point in all directions.
-	\~french
-	\brief		Classe de représentation d'une PointLight
-	\remark		Une point light est une source de lumière à un point donné qui illumine dans toutes les directions
-	*/
 	class PointLight
 		: public LightCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

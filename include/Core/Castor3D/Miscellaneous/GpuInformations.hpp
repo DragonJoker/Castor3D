@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GPU_INFORMATIONS_H___
-#define ___C3D_GPU_INFORMATIONS_H___
+#ifndef ___C3D_GpuInformations_H___
+#define ___C3D_GpuInformations_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include "MiscellaneousModule.hpp"
 
 #if defined( min )
 #	undef min
@@ -16,65 +14,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/05/2016
-	\version	0.9.0
-	\~english
-	\brief		All supported GPU feature flags.
-	\~french
-	\brief		Indicateurs de caractérisituqes du GPU.
-	*/
-	enum class GpuFeature
-		: uint32_t
-	{
-		//!\~english	Tells whether or not the selected render API supports stereographic rendering.
-		//!\~french		Dit si l'API de rendu choisie supporte la stéréographie.
-		eStereoRendering = 0x00000001,
-		//!\~english	Tells whether or not the selected render API supports shader stoarage buffers.
-		//!\~french		Dit si l'API de rendu choisie supporte les tampons de stockage shader.
-		eShaderStorageBuffers = 0x00000002,
-	};
-	CU_ImplementFlags( GpuFeature )
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/05/2016
-	\version	0.9.0
-	\~english
-	\brief		All supported GPU feature flags.
-	\~french
-	\brief		Indicateurs de caractérisituqes du GPU.
-	*/
-	enum class GpuMax
-		: uint32_t
-	{
-		eTexture3DSize,
-		eTextureRectangleSize,
-		eTextureCubeMapSize,
-		eTextureBufferSize,
-		eTextureSize,
-		eTextureLodBias,
-
-		eArrayTextureLayers,
-		eClipDistances,
-
-		eElementIndices,
-		eElementVertices,
-
-		eFramebufferWidth,
-		eFramebufferHeight,
-		eFramebufferLayers,
-		eFramebufferSamples,
-
-		eUniformBufferSize,
-
-		eViewportWidth,
-		eViewportHeight,
-		eViewports,
-
-		CU_ScopedEnumBounds( eTexture3DSize )
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016
 	\version	0.9.0

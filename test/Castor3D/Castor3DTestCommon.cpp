@@ -2,16 +2,16 @@
 
 #include <Castor3D/Animation/Animable.hpp>
 #include <Castor3D/Animation/Animation.hpp>
-#include <Castor3D/Animation/Mesh/MeshAnimationKeyFrame.hpp>
-#include <Castor3D/Animation/Skeleton/SkeletonAnimationKeyFrame.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
 #include <Castor3D/Cache/CameraCache.hpp>
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/BonesComponent.hpp>
+#include <Castor3D/Model/Mesh/Animation/MeshAnimationKeyFrame.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/BonesComponent.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Skeleton/Animation/SkeletonAnimationKeyFrame.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>

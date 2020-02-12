@@ -4,34 +4,24 @@ See LICENSE file in root folder
 #ifndef ___C3D_VIEWPORT_H___
 #define ___C3D_VIEWPORT_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class to represent a viewport
-	\remark		Gives its projection type, FOV, ...
-	\~french
-	\brief		Classe de représentation de viewport
-	\remark		donne le type de projection FOV, ...
-	*/
 	class Viewport
 	{
 	public:
 		C3D_API static const std::array< castor::String, size_t( ViewportType::eCount ) > TypeName;
 
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011

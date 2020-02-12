@@ -1,28 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SCENE_NODE_H___
-#define ___C3D_SCENE_NODE_H___
+#ifndef ___C3D_SceneNode_H___
+#define ___C3D_SceneNode_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SceneModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
-#include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Math/Quaternion.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		The scene node handler class
-	\remark		A scene node is a parent for nearly every object in a scene : geometry, camera, ...
-	\~french
-	\brief		La classe de gestion de noeud de scène
-	\remark		Un noeud de scène est un parent pour à peu près tous les objets d'une scène : géométrie, caméra, ...
-	*/
 	class SceneNode
 		: public std::enable_shared_from_this< SceneNode >
 		, public castor::OwnedBy< Scene >
@@ -32,7 +22,7 @@ namespace castor3d
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 19/10/2011
@@ -90,7 +80,21 @@ namespace castor3d
 		 *\param[in]	name		Le nom du noeud.
 		 *\param[in]	scene		La scène parente.
 		 */
-		C3D_API SceneNode( castor::String const & name, Scene & scene );
+		C3D_API SceneNode( castor::String const & name
+			, Scene & scene );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name		The node's name.
+		 *\param[in]	scene		The parent scene.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	name		Le nom du noeud.
+		 *\param[in]	scene		La scène parente.
+		 */
+		C3D_API SceneNode( castor::String const & name
+			, SceneNode & parent
+			, Scene & scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -131,7 +135,7 @@ namespace castor3d
 		 *\brief		Définit le noeud parent
 		 *\param[in]	parent	Le nouveau parent
 		 */
-		C3D_API void attachTo( SceneNodeSPtr parent );
+		C3D_API void attachTo( SceneNode & parent );
 		/**
 		 *\~english
 		 *\brief		Detaches the node from it's parent
@@ -396,9 +400,9 @@ namespace castor3d
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr getParent()const
+		inline SceneNode * getParent()const
 		{
-			return m_parent.lock();
+			return m_parent;
 		}
 		/**
 		 *\~english
@@ -584,7 +588,7 @@ namespace castor3d
 		bool m_mtxChanged{ true };
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };
 		bool m_derivedMtxChanged{ true };
-		SceneNodeWPtr m_parent;
+		SceneNode * m_parent{ nullptr };
 		SceneNodePtrStrMap m_children;
 		MovableObjectArray m_objects;
 	};

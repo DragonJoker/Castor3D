@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\~english
 	\brief		Image loader based on stb_image.
 	\~french

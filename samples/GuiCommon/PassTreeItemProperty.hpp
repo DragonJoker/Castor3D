@@ -7,11 +7,11 @@ See LICENSE file in root folder
 #include "GuiCommon/TreeItemProperty.hpp"
 
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
 	\version	0.8.0

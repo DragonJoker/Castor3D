@@ -4,10 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_PASS_H___
 #define ___C3D_RENDER_PASS_H___
 
-#include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
-
-#include "Castor3D/Mesh/SubmeshComponent/InstantiationComponent.hpp"
+#include "RenderModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
@@ -18,6 +16,9 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/SkinningUbo.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
@@ -25,15 +26,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		30/08/2016
-	\~english
-	\brief		Render pass base class.
-	\~french
-	\brief		Classe de base d'une passe de rendu.
-	*/
 	class RenderPass
 		: public castor::OwnedBy< Engine >
 		, public castor::Named

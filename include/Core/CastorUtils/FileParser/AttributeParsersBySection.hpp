@@ -30,7 +30,7 @@ namespace castor
 
 #if defined( CU_CompilerMSVC )
 
-	/*!
+	/**
 	\~english
 	\brief		Helper class used with MSVC to avoid warning 4503.
 	\remark		It forwards few functions and typedefs of the original map.

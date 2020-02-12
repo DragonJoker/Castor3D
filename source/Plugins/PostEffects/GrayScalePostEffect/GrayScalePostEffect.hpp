@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_GrayScalePostEffect___
 #define ___C3D_GrayScalePostEffect___
 
-#include <Castor3D/PostEffect/PostEffect.hpp>
-#include <Castor3D/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 

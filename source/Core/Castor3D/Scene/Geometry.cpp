@@ -1,13 +1,9 @@
 #include "Castor3D/Scene/Geometry.hpp"
 
-#include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Scene/Scene.hpp"
-
-#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
-#include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
 
@@ -101,9 +97,18 @@ namespace castor3d
 
 	Geometry::Geometry( String const & name
 		, Scene & scene
-		, SceneNodeSPtr node
+		, SceneNode & node
 		, MeshSPtr mesh )
 		: MovableObject{ name, scene, MovableType::eGeometry, node }
+		, m_mesh{ mesh }
+	{
+		doUpdateMesh();
+	}
+	
+	Geometry::Geometry( String const & name
+		, Scene & scene
+		, MeshSPtr mesh )
+		: MovableObject{ name, scene, MovableType::eGeometry }
 		, m_mesh{ mesh }
 	{
 		doUpdateMesh();

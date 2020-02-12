@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_UniformBuffer_H___
 #define ___C3D_UniformBuffer_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "BufferModule.hpp"
+
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
@@ -13,16 +14,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		10/09/2019
-	\~english
-	\brief		A uniform buffer, than can contain multiple sub-buffers.
-	\~french
-	\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
-	\remark
-	*/
 	class UniformBufferBase
 	{
 	public:
@@ -348,9 +339,7 @@ namespace castor3d
 		ashes::FencePtr m_transferFence;
 	};
 
-	using UniformBufferBasePtr = std::unique_ptr< UniformBufferBase >;
-
-	inline UniformBufferBasePtr makeUniformBufferBase( RenderSystem const & renderSystem
+	inline UniformBufferBaseUPtr makeUniformBufferBase( RenderSystem const & renderSystem
 		, VkDeviceSize count
 		, VkDeviceSize size
 		, VkBufferUsageFlags usage
@@ -366,16 +355,7 @@ namespace castor3d
 			, std::move( name )
 			, std::move( sharingMode ) );
 	}
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.5.0
-	\date		22/10/2011
-	\~english
-	\brief		A uniform buffer, than can contain multiple sub-buffers.
-	\~french
-	\brief		Un tampon d'uniformes, puovant contenir de multiples sous-tampons.
-	\remark
-	*/
+
 	template< typename T >
 	class UniformBuffer
 		: public UniformBufferBase
@@ -556,9 +536,6 @@ namespace castor3d
 	private:
 		std::vector< T > m_data;
 	};
-
-	template< typename T >
-	using UniformBufferPtr = std::unique_ptr< UniformBuffer< T > >;
 
 	template< typename T >
 	inline UniformBufferUPtr< T > makeUniformBuffer( RenderSystem const & renderSystem

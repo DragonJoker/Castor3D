@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.1.0.0
 	\date		09/02/2010
@@ -26,7 +26,7 @@ namespace castor
 		: public Coords4< T >
 	{
 	public:
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 03/01/2011
@@ -60,7 +60,7 @@ namespace castor
 			 */
 			virtual bool operator()( QuaternionT< T > & object, TextFile & file );
 		};
-		/*!
+		/**
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 03/01/2011

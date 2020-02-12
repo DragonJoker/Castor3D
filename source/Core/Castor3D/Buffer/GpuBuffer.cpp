@@ -14,10 +14,6 @@ namespace castor3d
 	{
 	}
 
-	GpuBuffer::~GpuBuffer()
-	{
-	}
-
 	void GpuBuffer::initialiseStorage( RenderDevice const & device
 		, uint32_t level
 		, uint32_t minBlockSize

@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace Loop
 {
 	//! Loop Algorithm vertex representation
-	/*!
+	/**
 	It's a vertex with additional information : neighbourhood and associated edges
 	\author Sylvain DOREMUS
 	\version 0.6.1.0

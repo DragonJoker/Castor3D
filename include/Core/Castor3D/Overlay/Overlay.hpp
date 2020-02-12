@@ -1,32 +1,24 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OVERLAY_H___
-#define ___C3D_OVERLAY_H___
+#ifndef ___C3D_Overlay_H___
+#define ___C3D_Overlay_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		25/08/2010
-	\~english
-	\brief		The overlay class
-	\remark		An overlay is a 2D element which is displayed at foreground
-	\~french
-	\brief		La classe d'incrustation
-	\remark		Une incrustation est un élément 2D qui est affiché en premier plan
-	*/
 	class Overlay
 		: public std::enable_shared_from_this< Overlay >
 		, public castor::OwnedBy< Engine >
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

@@ -1,31 +1,22 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SPOT_LIGHT_H___
-#define ___C3D_SPOT_LIGHT_H___
+#ifndef ___C3D_Spotlight_H___
+#define ___C3D_Spotlight_H___
 
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
+#include <CastorUtils/Math/Angle.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a SpotLight
-	\remark		A spot light is a light which enlights from a point in a given direction with a conic shape
-	\~french
-	\brief		Classe de représentation d'une PointLight
-	\remark		Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
-	*/
 	class SpotLight
 		: public LightCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

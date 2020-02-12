@@ -3,7 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Overlay/FontTexture.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>

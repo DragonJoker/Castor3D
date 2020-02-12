@@ -8,13 +8,13 @@ See LICENSE file in root folder
 
 namespace Obj
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		25/08/2010
 	\brief		OBJ file importer
 	*/
 	class ObjImporter
-		:	public castor3d::Importer
+		:	public castor3d::MeshImporter
 		,	private castor::NonCopyable
 	{
 	private:
@@ -28,15 +28,11 @@ namespace Obj
 		 */
 		explicit ObjImporter( castor3d::Engine & engine );
 
-		static castor3d::ImporterUPtr create( castor3d::Engine & engine );
+		static castor3d::MeshImporterUPtr create( castor3d::Engine & engine );
 
 	private:
 		/**
-		 *\copydoc		castor3d::Importer::doImportScene
-		 */
-		bool doImportScene( castor3d::Scene & scene )override;
-		/**
-		 *\copydoc		castor3d::Importer::doImportMesh
+		 *\copydoc		castor3d::MeshImporter::doImportMesh
 		 */
 		bool doImportMesh( castor3d::Mesh & mesh )override;
 

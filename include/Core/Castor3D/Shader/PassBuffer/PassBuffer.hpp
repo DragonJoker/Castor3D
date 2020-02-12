@@ -4,24 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_PassBuffer_H___
 #define ___C3D_PassBuffer_H___
 
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #define C3D_MaterialsStructOfArrays 0
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/02/2010
-	\~english
-	\brief		ShaderBuffer holding the Passes data.
-	\~french
-	\brief		ShaderBuffer contenant les données des Pass.
-	*/
 	class PassBuffer
 	{
 	public:
@@ -123,7 +116,7 @@ namespace castor3d
 		}
 
 	public:
-		/*!
+		/**
 		\~english
 		\brief		3 components colour.
 		\~french
@@ -135,7 +128,7 @@ namespace castor3d
 			float g;
 			float b;
 		};
-		/*!
+		/**
 		\~english
 		\brief		4 components colour.
 		\~french
@@ -150,7 +143,7 @@ namespace castor3d
 		};
 
 #if C3D_MaterialsStructOfArrays
-		/*!
+		/**
 		\~english
 		\brief		Common passes extended data.
 		\~french
@@ -167,7 +160,7 @@ namespace castor3d
 		};
 
 #else
-		/*!
+		/**
 		\~english
 		\brief		Common passes extended data.
 		\~french

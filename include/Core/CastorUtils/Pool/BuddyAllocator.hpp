@@ -90,7 +90,7 @@ namespace castor
 	private:
 		std::vector< uint8_t > m_memory;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.10.0
 	\date		22/08/2017

@@ -14,23 +14,14 @@ See LICENSE file in root folder
 
 #if C3D_TRACE_OBJECTS
 
-#include <list>
+#include "MiscellaneousModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include <list>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/12/2016
-	\version	0.9.0
-	\~english
-	\brief		Tracks objects allocated on GPU.
-	\~french
-	\brief		Trace les objets alloués sur le GPU.
-	*/
 	class GpuObjectTracker
 	{
 	public:

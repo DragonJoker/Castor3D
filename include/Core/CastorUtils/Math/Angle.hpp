@@ -14,7 +14,7 @@ namespace castor
 	static constexpr Type PiMult2{ Type( 3.1415926535897932384626433832795028841968 * 2.0 ) };
 	template< typename Type >
 	static constexpr Type PiDiv2{ Type( 3.1415926535897932384626433832795028841968 / 2.0 ) };
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011

@@ -4,9 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_GpInfoUbo_H___
 #define ___C3D_GpInfoUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {

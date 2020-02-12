@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace CastorGui
 {
 	//! Scene file sections Enum
-	/*!
+	/**
 	The enumeration which defines all the sections and subsections of a scene file
 	*/
 	enum class GUISection

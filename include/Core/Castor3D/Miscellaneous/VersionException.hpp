@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VERSION_EXCEPTION_H___
-#define ___C3D_VERSION_EXCEPTION_H___
+#ifndef ___C3D_VersionException_H___
+#define ___C3D_VersionException_H___
 
 #include "Castor3D/Miscellaneous/Version.hpp"
 
@@ -10,15 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		01/04/2011
-	\~english
-	\brief		Version comparison exception
-	\~french
-	\brief		Exception de comparaison de versions
-	*/
 	class VersionException
 		: public castor::Exception
 	{

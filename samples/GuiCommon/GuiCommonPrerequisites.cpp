@@ -17,17 +17,18 @@ using Bool = int;
 #endif
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
-#include <Castor3D/Texture/Sampler.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/Sampler.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>

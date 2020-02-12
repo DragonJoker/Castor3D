@@ -9,10 +9,10 @@ See LICENSE file in root folder
 #pragma warning( disable:4312 )
 
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
-#include <Castor3D/Mesh/Subdivider.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Vertex.hpp>
+#include <Castor3D/Model/Mesh/Subdivider.hpp>
 
 #include <CastorUtils/Math/PlaneEquation.hpp>
 
@@ -25,7 +25,7 @@ namespace Phong
 		castor::PlaneEquation plane;
 		castor::Point3f point;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
 	\~english
@@ -39,26 +39,26 @@ namespace Phong
 		Plane const & pj;
 		Plane const & pk;
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
 	\~english
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
 	class Subdivider
-		: public castor3d::Subdivider
+		: public castor3d::MeshSubdivider
 	{
 	public:
 		Subdivider();
 		virtual ~Subdivider();
 
-		static castor3d::SubdividerUPtr create();
+		static castor3d::MeshSubdividerUPtr create();
 		/**
-		 *\copydoc		castor3d::Subdivider::Cleanup
+		 *\copydoc		castor3d::MeshSubdivider::Cleanup
 		 */
 		void cleanup()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::Subdivide
+		 *\copydoc		castor3d::MeshSubdivider::Subdivide
 		 */
 		void subdivide( castor3d::SubmeshSPtr submesh
 			, int occurences
@@ -67,15 +67,15 @@ namespace Phong
 
 	private:
 		/**
-		 *\copydoc		castor3d::Subdivider::doSubdivide
+		 *\copydoc		castor3d::MeshSubdivider::doSubdivide
 		 */
 		void doSubdivide()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doInitialise
+		 *\copydoc		castor3d::MeshSubdivider::doInitialise
 		 */
 		void doInitialise()override;
 		/**
-		 *\copydoc		castor3d::Subdivider::doAddGeneratedFaces
+		 *\copydoc		castor3d::MeshSubdivider::doAddGeneratedFaces
 		 */
 		void doAddGeneratedFaces()override;
 		void doComputeFaces( float u0

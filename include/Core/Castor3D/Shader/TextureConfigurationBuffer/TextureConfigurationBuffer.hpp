@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureConfigurationBuffer_H___
 #define ___C3D_TextureConfigurationBuffer_H___
 
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -13,15 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/02/2010
-	\~english
-	\brief		ShaderBuffer holding the TextureConfigurationes data.
-	\~french
-	\brief		ShaderBuffer contenant les données des TextureConfiguration.
-	*/
 	class TextureConfigurationBuffer
 	{
 	public:

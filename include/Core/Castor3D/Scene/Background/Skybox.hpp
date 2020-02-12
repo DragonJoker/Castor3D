@@ -9,22 +9,14 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/PBR/IblTextures.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/PBR/IblTextures.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+
+#include <CastorUtils/Data/TextWriter.hpp>
 
 namespace castor3d
 {
-	/**
-	*\version
-	*	0.9.0
-	*\~english
-	*\brief
-	*	Skybox implementation.
-	*\~french
-	*\brief
-	*	Implémentation de Skybox.
-	*/
 	class SkyboxBackground
 		: public SceneBackground
 	{

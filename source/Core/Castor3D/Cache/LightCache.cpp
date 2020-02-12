@@ -1,26 +1,16 @@
 #include "Castor3D/Cache/LightCache.hpp"
 
-#include "Castor3D/Engine.hpp"
-
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
-#include "Castor3D/Event/Frame/CleanupEvent.hpp"
-#include "Castor3D/Material/Pass.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureView.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <ashespp/Core/Device.hpp>
-#include <ashespp/Image/Image.hpp>
-
-#include <CastorUtils/Design/ArrayView.hpp>
 
 using namespace castor;
 
@@ -184,7 +174,7 @@ namespace castor3d
 		return result;
 	}
 
-	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & name, SceneNodeSPtr parent, LightType type )
+	ObjectCache< Light, castor::String >::ElementPtr ObjectCache< Light, String >::add( Key const & name, SceneNode & parent, LightType type )
 	{
 		auto lock( castor::makeUniqueLock( m_elements ) );
 		ElementPtr result;

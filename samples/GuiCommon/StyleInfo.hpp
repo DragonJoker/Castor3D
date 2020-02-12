@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
@@ -24,7 +24,7 @@ namespace GuiCommon
 		eSTC_STYLE_UNDERL	= 0x04,
 		eSTC_STYLE_HIDDEN	= 0x08,
 	}	eSTC_STYLE;
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
@@ -43,7 +43,7 @@ namespace GuiCommon
 		eSTC_FOLD_COMMENTPY	= 0x40,
 		eSTC_FOLD_QUOTESPY	= 0x80,
 	}	eSTC_FOLD;
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011
@@ -56,7 +56,7 @@ namespace GuiCommon
 	{
 		eSTC_FLAG_WRAPMODE	= 0x10,
 	}	eSTC_FLAG;
-	/*!
+	/**
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 19/10/2011

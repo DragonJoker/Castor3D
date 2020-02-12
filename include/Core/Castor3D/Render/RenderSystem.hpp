@@ -4,26 +4,19 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderSystem_H___
 #define ___C3D_RenderSystem_H___
 
+#include "RenderModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 #include "Castor3D/Miscellaneous/GpuInformations.hpp"
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
-#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <stack>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\~english
-	\brief		This class links Castor3D to the rendering API.
-	\~french
-	\brief		Cette classe fait le lien entre Castor3D et l'API de rendu.
-	*/
 	class RenderSystem
 		: public castor::OwnedBy< Engine >
 	{

@@ -4,24 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderBuffer_H___
 #define ___C3D_ShaderBuffer_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "ShaderModule.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Wrapper class to select between SSBO or TBO.
-	\remarks	Allows to user either one or the other in the same way.
-	\~french
-	\brief		Classe permettant de choisir entre SSBO et TBO.
-	\remarks	Permet d'utiliser l'un comme l'autre de la même manière.
-	*/
 	class ShaderBuffer
 	{
 	public:

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		12/01/2016
@@ -25,7 +25,7 @@ namespace castor
 		eAnInstance,
 		CU_ScopedEnumBounds( eNoInstance )
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		12/01/2016
@@ -39,7 +39,7 @@ namespace castor
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011

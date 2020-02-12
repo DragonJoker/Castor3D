@@ -4,27 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderedObject_H___
 #define ___C3D_RenderedObject_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SceneModule.hpp"
 
-#include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Scene/RenderedObject.hpp"
+#include <CastorUtils/Data/TextWriter.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Handles object's visibility, and behavior with shadows.
-	\~french
-	\brief		Gère la visibilité de l'objet, ainsi que son comportement avec les ombres.
-	*/
 	class RenderedObject
 		: public std::enable_shared_from_this< RenderedObject >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011
@@ -88,7 +78,7 @@ namespace castor3d
 		 */
 		inline bool isShadowCaster()const
 		{
-			return m_castShadows;
+			return m_castsShadows;
 		}
 		/**
 		 *\~english
@@ -100,7 +90,7 @@ namespace castor3d
 		 */
 		inline void setShadowCaster( bool value )
 		{
-			m_castShadows = value;
+			m_castsShadows = value;
 		}
 		/**
 		 *\~english
@@ -126,14 +116,8 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	Tells if the object is visible.
-		//!\~french		Dit si l'objet est visible.
 		bool m_visible{ true };
-		//!\~english	Tells if the object casts shadows.
-		//!\~french		Dit si l'objet projette des ombres.
-		bool m_castShadows{ true };
-		//!\~english	Tells if the object receives shadows.
-		//!\~french		Dit si l'objet reçoit les ombres.
+		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
 	};
 }

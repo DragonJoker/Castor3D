@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_SkinningUbo_H___
 #define ___C3D_SkinningUbo_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UbosModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
-#include <ashespp/Buffer/UniformBuffer.hpp>
+#include "Castor3D/Buffer/UniformBuffer.hpp"
+
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
@@ -15,15 +18,7 @@ namespace castor3d
 		std::unique_ptr < sdw::ArraySsboT< sdw::Mat4 > > ssbo;
 		std::unique_ptr < sdw::Ubo > ubo;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		Matrices Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour les matrices.
-	*/
+
 	class SkinningUbo
 	{
 	public:

@@ -4,19 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_MESH_H___
 #define ___C3D_ANIMATED_MESH_H___
 
-#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
+#include "AnimatedObject.hpp"
+
+#include "Castor3D/Scene/Animation/Mesh/MeshAnimationModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		14/06/2016
-	\~english
-	\brief		Represents the animated submeshes
-	\~french
-	\brief		Représente les sous-maillages animés
-	*/
 	class AnimatedMesh
 		: public AnimatedObject
 	{

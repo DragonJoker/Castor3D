@@ -1,30 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DEBUG_OVERLAYS_H___
-#define ___C3D_DEBUG_OVERLAYS_H___
+#ifndef ___C3D_DebugOverlays_H___
+#define ___C3D_DebugOverlays_H___
 
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
+
+#include <ashespp/Miscellaneous/QueryPool.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		17/09/2015
-	\version	0.8.0
-	\~english
-	\brief		Debug overlays class.
-	\remarks	Contains all datas and methods to update and display debug overlays.
-				<br />If not shown, all the methods will be deactivated.
-	\~french
-	\brief		Classe de gestion des incrustations de debogage.
-	\remarks	Contient toutes les données et méthodes pour mettre à jour et afficher les incrustations de débogage.
-				<br />Si non affichés, toutes les méthodes seront désactivées.
-	*/
 	class DebugOverlays
 		: public castor::OwnedBy< Engine >
 	{

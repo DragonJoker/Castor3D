@@ -10,17 +10,17 @@
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 using namespace castor3d;
 using namespace castor;
@@ -28,29 +28,13 @@ using namespace castor;
 namespace C3dPly
 {
 	PlyImporter::PlyImporter( Engine & engine )
-		: Importer( engine )
+		: MeshImporter( engine )
 	{
 	}
 
-	ImporterUPtr PlyImporter::create( Engine & engine )
+	MeshImporterUPtr PlyImporter::create( Engine & engine )
 	{
 		return std::make_unique< PlyImporter >( engine );
-	}
-
-	bool PlyImporter::doImportScene( Scene & p_scene )
-	{
-		auto mesh = p_scene.getMeshCache().add( cuT( "Mesh_PLY" ) );
-		bool result = doImportMesh( *mesh );
-
-		if ( result )
-		{
-			SceneNodeSPtr node = p_scene.getSceneNodeCache().add( mesh->getName(), p_scene.getObjectRootNode() );
-			GeometrySPtr geometry = p_scene.getGeometryCache().add( mesh->getName(), node, nullptr );
-			geometry->setMesh( mesh );
-			m_geometries.insert( { geometry->getName(), geometry } );
-		}
-
-		return result;
 	}
 
 	bool PlyImporter::doImportMesh( Mesh & p_mesh )

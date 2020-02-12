@@ -1,34 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MATERIAL_CACHE_H___
-#define ___C3D_MATERIAL_CACHE_H___
+#ifndef ___C3D_MaterialCache_H___
+#define ___C3D_MaterialCache_H___
 
-#include "Castor3D/Cache/Cache.hpp"
+#include "Castor3D/Cache/CacheBase.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
+#include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to specialise a cache behaviour.
-	\remarks	Specialisation for Material.
-	\~french
-	\brief		Structure permettant de spécialiser le comportement d'un cache.
-	\remarks	Spécialisation pour Material.
-	*/
-	template< typename KeyType >
-	struct CacheTraits< Material, KeyType >
-	{
-		C3D_API static const castor::String Name;
-		using Producer = std::function< std::shared_ptr< Material >( KeyType const &, MaterialType ) >;
-		using Merger = std::function< void( CacheBase< Material, KeyType > const &
-			, castor::Collection< Material, KeyType > &
-			, std::shared_ptr< Material > ) >;
-	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
@@ -191,11 +174,9 @@ namespace castor3d
 
 	private:
 		MaterialSPtr m_defaultMaterial;
-		std::shared_ptr< PassBuffer > m_passBuffer;
-		std::shared_ptr< TextureConfigurationBuffer > m_textureBuffer;
+		PassBufferSPtr m_passBuffer;
+		TextureConfigurationBufferSPtr m_textureBuffer;
 	};
-	using MaterialCache = Cache< Material, castor::String >;
-	CU_DeclareSmartPtr( MaterialCache );
 }
 
 #endif

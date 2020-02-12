@@ -1,5 +1,7 @@
 #include "Castor3D/Scene/Animation/AnimationInstance.hpp"
 
+#include "Castor3D/Animation/Animation.hpp"
+
 using namespace castor;
 
 namespace castor3d

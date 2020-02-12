@@ -14,7 +14,7 @@ namespace castor
 {
 	namespace manip
 	{
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		02/09/2014
@@ -134,7 +134,7 @@ namespace castor
 			manip.apply( stream );
 			return stream;
 		}
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		02/09/2014

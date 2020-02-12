@@ -1,18 +1,16 @@
 #include "Castor3D/Cache/GeometryCache.hpp"
 
-#include "Castor3D/Engine.hpp"
-
 #include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
-#include "Castor3D/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
-#include "Castor3D/Mesh/Mesh.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -238,7 +236,7 @@ namespace castor3d
 	}
 
 	GeometrySPtr GeometryCache::add( Key const & name
-		, SceneNodeSPtr parent
+		, SceneNode & parent
 		, MeshSPtr mesh )
 	{
 		CU_Require( mesh );

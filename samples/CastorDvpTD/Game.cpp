@@ -3,10 +3,14 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>
+#include <Castor3D/Cache/CacheView.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObject.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
@@ -316,10 +320,10 @@ namespace castortd
 		if ( m_bulletsCache.empty() )
 		{
 			String name = cuT( "Bullet_" ) + std::to_string( ++m_totalBullets );
-			auto node = m_scene.getSceneNodeCache().add( name );
-			auto geometry = m_scene.getGeometryCache().add( name, node, m_bulletMesh );
+			auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
+			auto geometry = m_scene.getGeometryCache().add( name, *node, m_bulletMesh );
 			node->setPosition( p_origin );
-			node->attachTo( m_mapNode );
+			node->attachTo( *m_mapNode );
 
 			for ( auto submesh : *geometry->getMesh() )
 			{
@@ -543,10 +547,10 @@ namespace castortd
 	void Game::doAddMapCube( Cell & p_cell )
 	{
 		String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name );
-		auto geometry = m_scene.getGeometryCache().add( name, node, m_mapCubeMesh );
+		auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
+		auto geometry = m_scene.getGeometryCache().add( name, *node, m_mapCubeMesh );
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
-		node->attachTo( m_mapNode );
+		node->attachTo( *m_mapNode );
 
 		for ( auto submesh : *geometry->getMesh() )
 		{
@@ -584,11 +588,11 @@ namespace castortd
 	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
 		String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
-		auto node = m_scene.getSceneNodeCache().add( name );
+		auto node = m_scene.getSceneNodeCache().add( name, *m_scene.getObjectRootNode() );
 		node->setPosition( convert( Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
-		node->attachTo( m_mapNode );
+		node->attachTo( *m_mapNode );
 		MeshSPtr mesh = doSelectMesh( *p_category );
-		auto tower = m_scene.getGeometryCache().add( name, node, mesh );
+		auto tower = m_scene.getGeometryCache().add( name, *node, mesh );
 		auto animGroup = m_scene.getAnimatedObjectGroupCache().add( name );
 		Milliseconds time{ 0 };
 

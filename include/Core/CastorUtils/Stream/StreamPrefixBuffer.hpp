@@ -14,7 +14,7 @@ namespace castor
 {
 	namespace format
 	{
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		02/09/2014

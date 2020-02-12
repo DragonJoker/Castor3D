@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GLSL_Materials_H___
-#define ___GLSL_Materials_H___
+#ifndef ___C3D_GlslMaterials_H___
+#define ___C3D_GlslMaterials_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SdwModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
@@ -13,14 +13,7 @@ namespace castor3d
 {
 	namespace shader
 	{
-		static uint32_t constexpr MaxMaterialsCount = 2000u;
-		static int constexpr MaxMaterialComponentsCount = 15;
-		static uint32_t constexpr MaxTransmittanceProfileSize = 10u;
 		castor::String const PassBufferName = cuT( "Materials" );
-
-		class LegacyMaterials;
-		class PbrMRMaterials;
-		class PbrSGMaterials;
 
 		struct BaseMaterial
 			: public sdw::StructInstance

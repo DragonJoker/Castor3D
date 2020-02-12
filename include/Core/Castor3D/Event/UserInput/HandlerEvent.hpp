@@ -1,22 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_HANDLER_EVENT_H___
-#define ___C3D_HANDLER_EVENT_H___
+#ifndef ___C3D_HandlerEvent_H___
+#define ___C3D_HandlerEvent_H___
 
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of a handler event.
-	*\~french
-	*\brief		Description d'un évènement de gestionnaire.
-	*/
 	class HandlerEvent
 		: public UserInputEvent
 	{

@@ -4,12 +4,15 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderWindow_H___
 #define ___C3D_RenderWindow_H___
 
+#include "RenderModule.hpp"
+#include "Castor3D/Overlay/OverlayRenderer.hpp"
+
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
-#include "Castor3D/RenderToTexture/RenderQuad.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashespp/Core/Device.hpp>
@@ -19,17 +22,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Render window representation.
-	\remark		Manages a window where you can render a scene.
-	\~french
-	\brief		Implémentation d'une fenêtre de rendu.
-	\remark		Gère une fenêtre dans laquelle une scène peut être rendue
-	*/
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
@@ -69,7 +61,7 @@ namespace castor3d
 		using RenderingResourcesArray = std::vector< RenderingResourcesPtr >;
 
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english

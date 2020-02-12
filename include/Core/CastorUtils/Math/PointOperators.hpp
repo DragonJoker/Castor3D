@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		15/01/2016
 	\~english
@@ -55,7 +55,7 @@ namespace castor
 		template< typename PtType1, typename PtType2 >
 		static inline Point< typename std::remove_cv< T1 >::type, C1 > div( PtType1 const & lhs, PtType2 const & rhs );
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\date		15/01/2016
 	\~english

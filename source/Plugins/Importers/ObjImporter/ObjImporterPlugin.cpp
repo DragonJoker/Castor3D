@@ -1,6 +1,7 @@
 #include "ObjImporter/ObjImporter.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Model/Mesh/ImporterFactory.hpp>
 #include <Castor3D/Plugin/ImporterPlugin.hpp>
 
 using namespace castor3d;

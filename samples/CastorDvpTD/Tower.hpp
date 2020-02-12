@@ -2,6 +2,8 @@
 
 #include "Ability.hpp"
 
+#include <CastorUtils/Graphics/RgbColour.hpp>
+
 namespace castortd
 {
 	class Tower

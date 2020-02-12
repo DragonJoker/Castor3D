@@ -1,7 +1,7 @@
 #include "PhongDivider/PhongDivider.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <CastorUtils/Log/Logger.hpp>
+#include <Castor3D/Model/Mesh/MeshFactory.hpp>
 
 using namespace castor;
 using namespace Phong;

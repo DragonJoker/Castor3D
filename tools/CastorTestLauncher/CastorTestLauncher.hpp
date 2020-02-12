@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CTL_CastorTestLauncher_HPP___
 #define ___CTL_CastorTestLauncher_HPP___
 
-#include <Castor3D/Castor3DPrerequisites.hpp>
+#include <Castor3D/Castor3DModule.hpp>
 #include <wx/app.h>
 
 namespace test_launcher

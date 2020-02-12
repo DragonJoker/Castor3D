@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GUI_EVENT_H___
-#define ___C3D_GUI_EVENT_H___
+#ifndef ___C3D_UserInputEvent_H___
+#define ___C3D_UserInputEvent_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "UserInputEventModule.hpp"
 
 namespace castor3d
 {
-	/*!
+	/**
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
 	*\version	0.9.0
@@ -16,8 +16,8 @@ namespace castor3d
 	*\brief		Description of a user input event.
 	*\remarks	You may use this one, but prefer using MouseEvent or KeyboardEvent.
 	*\~french
-	*\brief		Description d'un évènement de tpye entràe utilisateur.
-	*\remarks	Vous pouvez utiliser cette classe, mais il est conseillà d'utiliser les  classes MouseEvent ou KeyboardEvent.
+	*\brief		Description d'un évènement de tpye entrée utilisateur.
+	*\remarks	Vous pouvez utiliser cette classe, mais il est conseillé d'utiliser les  classes MouseEvent ou KeyboardEvent.
 	*/
 	class UserInputEvent
 	{
@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	type	The user input event type.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	type	Le type d'évènement entràe utilisateur.
+		 *\param[in]	type	Le type d'évènement entrée utilisateur.
 		 */
 		explicit UserInputEvent( UserInputEventType type )
 			: m_eventType( type )
@@ -47,7 +47,7 @@ namespace castor3d
 		 *\~english
 		 *\return		The user input event type.
 		 *\~french
-		 *\return		Le type d'évènement entràe utilisateur.
+		 *\return		Le type d'évènement entrée utilisateur.
 		 */
 		inline UserInputEventType getEventType()const
 		{
@@ -55,7 +55,6 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english The user input event type.	\~french Le type d'évènement entràe utilisateur.
 		UserInputEventType m_eventType;
 	};
 }

@@ -1,24 +1,21 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
 	uint32_t const MatrixUbo::BindingPoint = 3u;
-	String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
-	String const MatrixUbo::Projection = cuT( "c3d_projection" );
-	String const MatrixUbo::CurView = cuT( "c3d_curView" );
-	String const MatrixUbo::PrvView = cuT( "c3d_prvView" );
-	String const MatrixUbo::CurViewProj = cuT( "c3d_curViewProj" );
-	String const MatrixUbo::PrvViewProj = cuT( "c3d_prvViewProj" );
-	String const MatrixUbo::InvProjection = cuT( "c3d_invProjection" );
-	String const MatrixUbo::Jitter = cuT( "c3d_jitter" );
+	castor::String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
+	castor::String const MatrixUbo::Projection = cuT( "c3d_projection" );
+	castor::String const MatrixUbo::CurView = cuT( "c3d_curView" );
+	castor::String const MatrixUbo::PrvView = cuT( "c3d_prvView" );
+	castor::String const MatrixUbo::CurViewProj = cuT( "c3d_curViewProj" );
+	castor::String const MatrixUbo::PrvViewProj = cuT( "c3d_prvViewProj" );
+	castor::String const MatrixUbo::InvProjection = cuT( "c3d_invProjection" );
+	castor::String const MatrixUbo::Jitter = cuT( "c3d_jitter" );
 
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_engine{ engine }

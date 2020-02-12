@@ -6,13 +6,4 @@ See LICENSE file in root folder
 
 #include "CastorGui/CastorGuiPrerequisites.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/OverlayCache.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass.hpp>
-#include <Castor3D/Overlay/BorderPanelOverlay.hpp>
-#include <Castor3D/Overlay/TextOverlay.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
-
 #endif

@@ -11,18 +11,18 @@
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/Face.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/Face.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Miscellaneous/Version.hpp>
 #include <Castor3D/Plugin/Plugin.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Texture/TextureLayout.hpp>
-#include <Castor3D/Texture/TextureUnit.hpp>
+#include <Castor3D/Material/Texture/TextureLayout.hpp>
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
 
 #include <CastorUtils/Graphics/Colour.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -236,31 +236,14 @@ namespace Obj
 	}
 
 	ObjImporter::ObjImporter( Engine & engine )
-		: Importer{ engine }
+		: MeshImporter{ engine }
 		, m_file{ nullptr }
 	{
 	}
 
-	ImporterUPtr ObjImporter::create( Engine & engine )
+	MeshImporterUPtr ObjImporter::create( Engine & engine )
 	{
 		return std::make_unique< ObjImporter >( engine );
-	}
-
-	bool ObjImporter::doImportScene( Scene & scene )
-	{
-		auto mesh = scene.getMeshCache().add( cuT( "Mesh_OBJ" ) );
-		bool result = doImportMesh( *mesh );
-
-		if ( result )
-		{
-			SceneNodeSPtr node = scene.getSceneNodeCache().add( mesh->getName(), scene.getObjectRootNode() );
-			GeometrySPtr geometry = scene.getGeometryCache().add( mesh->getName(), node, nullptr );
-			geometry->setMesh( mesh );
-			m_geometries.insert( { geometry->getName(), geometry } );
-		}
-
-		m_loadedMaterials.clear();
-		return result;
 	}
 
 	bool ObjImporter::doImportMesh( Mesh & mesh )

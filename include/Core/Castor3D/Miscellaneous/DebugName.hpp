@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DebugName_H___
 #define ___C3D_DebugName_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "MiscellaneousModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 namespace castor3d
 {
@@ -696,12 +697,6 @@ namespace castor3d
 		}
 	};
 
-	C3D_API void setDebugObjectName( RenderDevice const & device
-		, uint64_t object
-		, uint32_t type
-		, std::string const & name
-		, std::string const & typeName );
-
 	template< typename AshesType >
 	void setDebugObjectName( RenderDevice const & device
 		, AshesType const & object
@@ -719,11 +714,6 @@ namespace castor3d
 			, name
 			, DebugTypeTraits::getName() );
 	}
-
-	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
-		, VkMemoryRequirements const & requirements
-		, VkMemoryPropertyFlags flags
-		, std::string const & name );
 
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device

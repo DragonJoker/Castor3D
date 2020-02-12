@@ -1,17 +1,22 @@
 #include "GuiCommon/CubeBoxManager.hpp"
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/SceneNodeCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
+#include <Castor3D/Event/Frame/FunctorEvent.hpp>
 #include <Castor3D/Event/Frame/InitialiseEvent.hpp>
-#include <Castor3D/Material/PhongPass.hpp>
 #include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/MetallicRoughnessPbrPass.hpp>
-#include <Castor3D/Material/SpecularGlossinessPbrPass.hpp>
-#include <Castor3D/Mesh/Mesh.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
-#include <Castor3D/Mesh/Skeleton/Bone.hpp>
-#include <Castor3D/Mesh/Skeleton/Skeleton.hpp>
-#include <Castor3D/Mesh/SubmeshComponent/LinesMapping.hpp>
-#include <Castor3D/Mesh/Vertex.hpp>
+#include <Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp>
+#include <Castor3D/Model/Mesh/Mesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
+#include <Castor3D/Model/Skeleton/Bone.hpp>
+#include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
@@ -154,15 +159,15 @@ namespace GuiCommon
 				m_submesh = &submesh;
 				m_obbNode = doAddBB( m_obbMesh
 					, m_obbMesh->getName()
-					, object.getParent()
+					, *object.getParent()
 					, m_object->getBoundingBox() );
 				m_aabbNode = doAddBB( m_aabbMesh
 					, m_aabbMesh->getName()
-					, m_scene.getObjectRootNode()
+					, *m_scene.getObjectRootNode()
 					, m_object->getBoundingBox() );
 				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
 					, m_obbMesh->getName() + string::toString( submesh.getId() )
-					, object.getParent()
+					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
 
 				for ( auto & submesh : *m_object->getMesh() )
@@ -171,7 +176,7 @@ namespace GuiCommon
 					{
 						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
 							, m_obbMesh->getName() + string::toString( submesh->getId() )
-							, object.getParent()
+							, *object.getParent()
 							, m_object->getBoundingBox( *submesh ) ) );
 					}
 				}
@@ -226,15 +231,15 @@ namespace GuiCommon
 
 	SceneNodeSPtr CubeBoxManager::doAddBB( MeshSPtr bbMesh
 		, String const & nameSpec
-		, SceneNodeSPtr parent
+		, SceneNode & parent
 		, BoundingBox const & bb )
 	{
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 		auto node = m_scene.getSceneNodeCache().add( name, parent );
-		auto geometry = m_scene.getGeometryCache().add( name, node, bbMesh );
+		auto geometry = m_scene.getGeometryCache().add( name, *node, bbMesh );
 		geometry->setShadowCaster( false );
 
-		if ( parent != m_scene.getObjectRootNode() )
+		if ( &parent != m_scene.getObjectRootNode().get() )
 		{
 			auto scale = ( bb.getMax() - bb.getMin() ) / 2.0f;
 			node->setScale( scale );

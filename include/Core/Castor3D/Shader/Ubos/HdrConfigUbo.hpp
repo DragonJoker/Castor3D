@@ -4,21 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_HdrConfigUbo_H___
 #define ___C3D_HdrConfigUbo_H___
 
-#include "Castor3D/HDR/HdrConfig.hpp"
+#include "UbosModule.hpp"
+
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		12/04/2017
-	\~english
-	\brief		HDR configuration Uniform buffer management.
-	\~french
-	\brief		Gestion du tampon de variables uniformes pour la configuration HDR.
-	*/
 	class HdrConfigUbo
 	{
 	public:

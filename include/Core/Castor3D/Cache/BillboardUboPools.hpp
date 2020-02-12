@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_BillboardUboPools_H___
 #define ___C3D_BillboardUboPools_H___
 
+#include "CacheModule.hpp"
+
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
@@ -13,14 +15,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\date 		30/04/2018
-	\version	0.11.0
-	\~english
-	\brief		Holds the pools for billboard UBOs.
-	\~french
-	\brief		Contient les pools pour les UBO des billboards.
-	*/
 	class BillboardUboPools
 	{
 	public:

@@ -7,6 +7,7 @@
 #include "Castor3D/Plugin/GenericPlugin.hpp"
 #include "Castor3D/Plugin/ImporterPlugin.hpp"
 #include "Castor3D/Plugin/ParticlePlugin.hpp"
+#include "Castor3D/Plugin/PluginException.hpp"
 #include "Castor3D/Plugin/PostFxPlugin.hpp"
 #include "Castor3D/Plugin/TechniquePlugin.hpp"
 #include "Castor3D/Plugin/ToneMappingPlugin.hpp"

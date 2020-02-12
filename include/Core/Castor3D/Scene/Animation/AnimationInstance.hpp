@@ -1,24 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ANIMATION_INSTANCE_H___
-#define ___C3D_ANIMATION_INSTANCE_H___
+#ifndef ___C3D_AnimationInstance_H___
+#define ___C3D_AnimationInstance_H___
 
-#include "Castor3D/Animation/Animation.hpp"
+#include "AnimationModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/06/2016
-	\~english
-	\brief		Animation instance class.
-	\remark		Used to play an Animation on a specific object.
-	\~french
-	\brief		Classe d'instance d'animation
-	\remark		Utilisée pour jouer une animation sur un objet particulier.
-	*/
 	class AnimationInstance
 		: public castor::OwnedBy< AnimatedObject >
 	{
@@ -33,7 +22,7 @@ namespace castor3d
 		 *\param[in]	object		L'AnimatedObject parent.
 		 *\param[in]	animation	L'animation.
 		 */
-		C3D_API AnimationInstance( AnimatedObject & object, Animation & animation );
+		C3D_API AnimationInstance( AnimatedObject & object, AnimationT< Scene > & animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.

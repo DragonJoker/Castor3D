@@ -74,7 +74,7 @@ namespace castor
 #define CU_MakeSectionName( a, b, c, d )\
 	( (uint32_t( a ) << 24 ) | ( uint32_t( b ) << 16 ) | ( uint32_t( c ) << 8 ) | ( uint32_t( d ) << 0 ) )
 
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011

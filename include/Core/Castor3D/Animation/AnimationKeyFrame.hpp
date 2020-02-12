@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_AnimationKeyFrame_H___
 #define ___C3D_AnimationKeyFrame_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "AnimationModule.hpp"
 
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Key frames are the frames where the animation must be at a precise state.
-	\~french
-	\brief		Les key frames sont les frames auxquelles une animation est dans un état précis.
-	*/
 	class AnimationKeyFrame
 	{
 	public:
@@ -30,7 +21,10 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	timeIndex	Quand la key frame commence.
 		 */
-		C3D_API explicit AnimationKeyFrame( castor::Milliseconds const & timeIndex = 0_ms );
+		inline explicit AnimationKeyFrame( castor::Milliseconds const & timeIndex = 0_ms )
+			: m_timeIndex{ timeIndex }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.

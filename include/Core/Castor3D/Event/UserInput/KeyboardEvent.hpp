@@ -1,43 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_KEYBOARD_EVENT_H___
-#define ___C3D_KEYBOARD_EVENT_H___
+#ifndef ___C3D_KeyboardEvent_H___
+#define ___C3D_KeyboardEvent_H___
 
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Structure holding mouse state.
-	*\~french
-	*\brief		Structure contenant l'état du clavier.
-	*/
-	struct KeyboardState
-	{
-		//!\~english	The control key state.
-		//!\~french		L'état de la touche Ctrl.
-		bool m_ctrl;
-		//!\~english	The alt key state.
-		//!\~french		L'état de la touche Alt.
-		bool m_alt;
-		//!\~english	The shift key state.
-		//!\~french		L'état de la touche Shift.
-		bool m_shift;
-	};
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Description of a keyboard event.
-	*\~french
-	*\brief		Description d'un évènement clavier.
-	*/
 	class KeyboardEvent
 		: public UserInputEvent
 	{
@@ -107,15 +77,6 @@ namespace castor3d
 		}
 		/**
 		*\~english
-		*\~brief		Destructor.
-		*\~french
-		*\~brief		Destructeur.
-		 */
-		virtual ~KeyboardEvent()
-		{
-		}
-		/**
-		*\~english
 		 *\return		The keyboard event type.
 		*\~french
 		*\~return		Le type d'évènement clavier.
@@ -176,23 +137,11 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The keyboard event type.
-		//!\~french		Le type d'évènement clavier.
 		KeyboardEventType const m_keyboardEventType;
-		//!\~english	The key code.
-		//!\~french		Le code de la touche.
 		KeyboardKey const m_key;
-		//!\~english	The character.
-		//!\~french		Le caractère représenté par la touche.
 		castor::String const m_char;
-		//!\~english	Tells if the Ctrl key is down.
-		//!\~french		Dit si la touche Ctrl est enfoncée.
 		bool const m_ctrl;
-		//!\~english	Tells if the Alt key is down.
-		//!\~french		Dit si la touche Alt est enfoncée.
 		bool const m_alt;
-		//!\~english	Tells if the Shift key is down.
-		//!\~french		Dit si la touche Shift est enfoncée.
 		bool const m_shift;
 	};
 }

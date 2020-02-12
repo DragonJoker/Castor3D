@@ -86,7 +86,7 @@ namespace GuiCommon
 
 	castor::String RendererSelector::getSelectedRenderer()const
 	{
-		castor::String result = castor3d::RENDERER_TYPE_UNDEFINED;
+		castor::String result = castor3d::RenderTypeUndefined;
 		uint32_t selected = m_renderers->GetSelection();
 
 		if ( selected < m_renderers->GetCount() )

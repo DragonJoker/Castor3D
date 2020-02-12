@@ -6,19 +6,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version 	0.1
-	\date 		09/02/2010
-	\~english
-	\brief		Class which represents a Directional Light
-	\remark		A directional light is a light which enlights from an infinite point in a given direction
-	\~french
-	\brief		Classe representant une lumière directionnelle
-	\remark		Une lumière directionnelle illumine à partir d'un point infini dans une direction donnée
-	*/
 	class DirectionalLight
 		: public LightCategory
 	{
@@ -30,7 +21,7 @@ namespace castor3d
 			castor::Matrix4x4f viewProjMatrix;
 			float splitDepth;
 		};
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

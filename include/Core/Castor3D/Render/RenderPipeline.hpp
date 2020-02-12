@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderPipeline_H___
 #define ___C3D_RenderPipeline_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
@@ -15,21 +15,8 @@ See LICENSE file in root folder
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 
-#include <CastorUtils/Design/OwnedBy.hpp>
-
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		The rendering pipeline.
-	\remark		Defines the various matrices, applies the transformations it can support.
-	\~french
-	\brief		Le pipeline de rendu.
-	\remark		Définit les diverses matrices, applique les transformations supportées.
-	*/
 	class RenderPipeline
 		: public castor::OwnedBy< RenderSystem >
 	{

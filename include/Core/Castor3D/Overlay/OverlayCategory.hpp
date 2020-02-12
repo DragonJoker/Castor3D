@@ -1,29 +1,22 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_OVERLAY_CATEGORY_H___
-#define ___C3D_OVERLAY_CATEGORY_H___
+#ifndef ___C3D_OverlayCategory_H___
+#define ___C3D_OverlayCategory_H___
 
 #include "Castor3D/Overlay/OverlayVisitor.hpp"
+#include "Castor3D/Material/MaterialModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Holds specific members for an overlay category
-	\~french
-	\brief		Contient les membres spécifiques à une catégorie d'incrustation
-	*/
 	class OverlayCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		28/11/2014
 		\version	0.7.0
@@ -38,7 +31,7 @@ namespace castor3d
 			castor::Point2f texture;
 		};
 		CU_DeclareVector( Vertex, Vertex );
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

@@ -6,17 +6,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 
+#include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
+
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/12/2013
-	\~english
-	\brief		Represents the animated objects
-	\~french
-	\brief		Représente les objets animés
-	*/
 	class AnimatedSkeleton
 		: public AnimatedObject
 	{

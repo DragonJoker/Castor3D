@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011
@@ -40,7 +40,7 @@ namespace castor
 		//!\~french		Compte des logs.
 		eCount,
 	};
-	/*!
+	/**
 	\author 	Sylvain DOREMUS
 	\date 		27/08/2012
 	\version	0.7.0.0

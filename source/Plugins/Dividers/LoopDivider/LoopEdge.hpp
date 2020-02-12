@@ -9,7 +9,7 @@ See LICENSE file in root folder
 namespace Loop
 {
 	//! Edge representation
-	/*!
+	/**
 	An edge is defined between 2 vertices used to separate 2 faces
 	\author Sylvain DOREMUS
 	\date 12/03/2010

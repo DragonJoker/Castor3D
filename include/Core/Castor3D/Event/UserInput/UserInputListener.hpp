@@ -1,26 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_USER_INPUT_LISTENER_H___
-#define ___C3D_USER_INPUT_LISTENER_H___
+#ifndef ___C3D_UserInputListener_H___
+#define ___C3D_UserInputListener_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
 #include "Castor3D/Event/UserInput/EventHandler.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 
-#include <CastorUtils/Graphics/Position.hpp>
-
 namespace castor3d
 {
-	/*!
-	*\author	Sylvain DOREMUS
-	*\date		17/04/2016
-	*\version	0.9.0
-	*\~english
-	*\brief		Class used to to manage the user input events.
-	*\~french
-	*\brief		Classe utilisée pour gérer les évènements utilisateur.
-	*/
 	class UserInputListener
 		: public castor::OwnedBy< Engine >
 	{
@@ -84,7 +72,7 @@ namespace castor3d
 		 */
 		castor::Position const & getMousePosition()const
 		{
-			return m_mouse.m_position;
+			return m_mouse.position;
 		}
 		/**
 		 *\~english
@@ -392,8 +380,7 @@ namespace castor3d
 		 */
 		inline std::vector< EventHandlerSPtr > doGetHandlers()const
 		{
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			return m_handlers;
 		}
 		/**
@@ -404,8 +391,7 @@ namespace castor3d
 		 */
 		inline bool doHasHandlers()const
 		{
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			return !m_handlers.empty();
 		}
 		/**
@@ -420,8 +406,7 @@ namespace castor3d
 		 */
 		inline void doAddHandler( EventHandlerSPtr handler )
 		{
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 
 			if ( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) != std::end( m_handlers ) )
 			{
@@ -442,8 +427,7 @@ namespace castor3d
 		 */
 		inline void doRemoveHandler( EventHandlerSPtr handler )
 		{
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
+			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			m_handlers.erase( std::find( std::begin( m_handlers ), std::end( m_handlers ), handler ) );
 		}
 

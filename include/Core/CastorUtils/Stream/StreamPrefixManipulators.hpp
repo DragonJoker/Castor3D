@@ -13,7 +13,7 @@ namespace castor
 {
 	namespace format
 	{
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.8.0.0
 		\date		10/11/2015
@@ -32,7 +32,7 @@ namespace castor
 			}
 		};
 
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.8.0.0
 		\date		10/11/2015
@@ -53,7 +53,7 @@ namespace castor
 		using Prefix = BasePrefixer< char, BasicPrefixTraits< char > >;
 		using WPrefix = BasePrefixer< wchar_t, BasicPrefixTraits< wchar_t > >;
 
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.8.0.0
 		\date		10/11/2015

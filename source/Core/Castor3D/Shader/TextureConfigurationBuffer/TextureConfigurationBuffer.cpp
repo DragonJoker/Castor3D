@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 

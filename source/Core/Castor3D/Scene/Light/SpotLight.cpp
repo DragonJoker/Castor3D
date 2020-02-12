@@ -1,11 +1,13 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
-#include "Castor3D/Technique/Opaque/LightPass.hpp"
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 using namespace castor;
 
@@ -174,7 +176,7 @@ namespace castor3d
 	{
 		auto node = getLight().getParent();
 		node->update();
-		lightCamera.attachTo( node );
+		lightCamera.attachTo( *node );
 		lightCamera.getViewport().setPerspective( getCutOff() * 2
 			, lightCamera.getRatio()
 			, 0.5f

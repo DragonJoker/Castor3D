@@ -1,19 +1,33 @@
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/PluginCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Cache/SceneCache.hpp"
+#include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Cache/TargetCache.hpp"
+#include "Castor3D/Cache/TechniqueCache.hpp"
+#include "Castor3D/Cache/WindowCache.hpp"
 #include "Castor3D/Event/Frame/CleanupEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/ImporterFactory.hpp"
+#include "Castor3D/Model/Mesh/MeshFactory.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
 #include "Castor3D/Render/RenderLoopAsync.hpp"
 #include "Castor3D/Render/RenderLoopSync.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/ToTexture/RenderDepthQuad.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
-#include "Castor3D/Technique/RenderTechnique.hpp"
-#include "Castor3D/Texture/Sampler.hpp"
+#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -48,6 +62,10 @@ namespace castor3d
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
 		, m_imageCache{ m_imageLoader }
+		, m_meshFactory{ std::make_shared< MeshFactory >() }
+		, m_subdividerFactory{ std::make_shared< MeshSubdividerFactory >() }
+		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
+		, m_particleFactory{ std::make_shared< ParticleFactory >() }
 	{
 		auto dummy = []( auto element )
 		{
@@ -139,7 +157,7 @@ namespace castor3d
 		} );
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = makeCache< FrameListener, String >(	*this
+		m_listenerCache = makeCache< FrameListener, String >( *this
 			, []( String const & name )
 			{
 				return std::make_shared< FrameListener >( name );
@@ -394,7 +412,7 @@ namespace castor3d
 
 	void Engine::postEvent( FrameEventUPtr && event )
 	{
-		using LockType = std::unique_lock< ListenerCache >;
+		using LockType = std::unique_lock< FrameListenerCache >;
 		LockType lock{ makeUniqueLock( *m_listenerCache ) };
 		FrameListenerSPtr listener = m_defaultListener.lock();
 

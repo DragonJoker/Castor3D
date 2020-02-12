@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		19/10/2011
@@ -41,7 +41,7 @@ namespace castor
 		};
 
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011
@@ -53,7 +53,7 @@ namespace castor
 		using ConstParamType = typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::ConstParamType;
 		using ParamType = typename CallTraitsHelper < T, ( sizeof( T ) > sizeof( void * ) ) >::ParamType;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
@@ -64,7 +64,7 @@ namespace castor
 	*/
 	template< uint32_t A, uint32_t B, typename Enable = void >
 	struct MinValue;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
@@ -80,7 +80,7 @@ namespace castor
 	{
 		static const uint32_t value = A;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
@@ -96,7 +96,7 @@ namespace castor
 	{
 		static const uint32_t value = B;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
@@ -107,7 +107,7 @@ namespace castor
 	*/
 	template< uint32_t A, uint32_t B, typename Enable = void >
 	struct MaxValue;
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015
@@ -123,7 +123,7 @@ namespace castor
 	{
 		static const uint32_t value = A;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		17/09/2015

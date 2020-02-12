@@ -7,18 +7,10 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		09/02/2010
-	\~english
-	\brief		SSBO holding the SpecularGlossinessPbrPasses data.
-	\~french
-	\brief		SSBO contenant les données des SpecularGlossinessPbrPass.
-	*/
 	class SpecularGlossinessPassBuffer
 		: public PassBuffer
 	{

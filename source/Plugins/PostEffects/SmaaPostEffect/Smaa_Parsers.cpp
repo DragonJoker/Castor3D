@@ -3,6 +3,7 @@
 #include "SmaaPostEffect/SmaaPostEffect.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>

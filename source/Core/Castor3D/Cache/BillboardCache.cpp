@@ -4,7 +4,7 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -55,7 +55,7 @@ namespace castor3d
 	}
 
 	BillboardListSPtr BillboardListCache::add( Key const & name
-		, SceneNodeSPtr parent )
+		, SceneNode & parent )
 	{
 		auto result = MyObjectCache::add( name, parent );
 		m_pools.registerElement( *result );

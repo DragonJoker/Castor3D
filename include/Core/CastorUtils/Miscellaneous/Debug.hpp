@@ -68,7 +68,7 @@ namespace castor
 		 */
 		CU_API std::ostream & operator<<( std::ostream & stream, Backtrace const & );
 
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date		05/10/2015
 		\version	0.8.0

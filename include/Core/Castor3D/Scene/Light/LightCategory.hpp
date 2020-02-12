@@ -4,26 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_LIGHT_CATEGORY_H___
 #define ___C3D_LIGHT_CATEGORY_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "LightModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/02/2010
-	\~english
-	\brief		Holds light components
-	\remark		Derived into DirectionalLight, PointLight and SpotLight
-	\~french
-	\brief		Contient les composantes d'une lumière
-	\remark		Dérivée en DirectionalLight, PointLight et SpotLight
-	*/
 	class LightCategory
 	{
 	public:
-		/*!
+		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english

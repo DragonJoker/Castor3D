@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/PassBuffer/MetallicRoughnessPassBuffer.hpp"
 
-#include "Castor3D/Material/PhongPass.hpp"
-#include "Castor3D/Material/MetallicRoughnessPbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
 
 using namespace castor;
 

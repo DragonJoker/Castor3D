@@ -8,14 +8,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/**
-	*\~english
-	*\brief
-	*	Culls nodes against a frustum.
-	*\~french
-	*\brief
-	*	Elimine les noeuds par rapport à un frustum.
-	*/
 	class FrustumCuller
 		: public SceneCuller
 	{

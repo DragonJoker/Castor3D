@@ -1,15 +1,16 @@
 #include "Castor3D/Scene/ParticleSystem/ComputeParticleSystem.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 

@@ -1,16 +1,23 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SCENE_FILE_PARSER_H___
-#define ___C3D_SCENE_FILE_PARSER_H___
+#ifndef ___C3D_SceneFileParser_H___
+#define ___C3D_SceneFileParser_H___
+
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Material/SubsurfaceScattering.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
 
@@ -65,15 +72,7 @@ namespace castor3d
 		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
 		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		25/08/2010
-	\~english
-	\brief		The context used into parsing functions.
-	\~french
-	\brief		Le contexte utilisé lors de l'analyse des fonctions.
-	*/
+
 	class SceneFileContext
 		: public castor::FileParserContext
 	{
@@ -169,17 +168,7 @@ namespace castor3d
 		std::shared_ptr< SkyboxBackground > skybox;
 		TextureConfiguration textureConfiguration;
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		25/08/2010
-	\~english
-	\brief		CSCN file parser.
-	\remarks	Reads CSCN files and extracts all 3D data from it.
-	\~french
-	\brief		Analyseur de fichiers CSCN.
-	\remarks	Lit les fichiers CSCN et en extrait toutes les données 3D.
-	*/
+
 	class SceneFileParser
 		: public castor::FileParser
 		, public castor::OwnedBy< Engine >

@@ -1,27 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CACHE_VIEW_H___
-#define ___C3D_CACHE_VIEW_H___
+#ifndef ___C3D_CacheView_H___
+#define ___C3D_CacheView_H___
 
-#include "Castor3D/Cache/Cache.hpp"
+#include "CacheModule.hpp"
+
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/03/2016
-	\version	0.8.0
-	\~english
-	\brief		View on a resource cache.
-	\remarks	Allows deletion of elements created through the view, and only those.
-	\~french
-	\brief		Vue sur un cache de ressources.
-	\remarks	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
-	*/
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView
 		: public castor::Named

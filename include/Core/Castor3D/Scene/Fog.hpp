@@ -1,39 +1,16 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FOG_H___
-#define ___C3D_FOG_H___
+#ifndef ___C3D_Fog_H___
+#define ___C3D_Fog_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "SceneModule.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/05/2016
-	\~english
-	\brief		Fog implementation.
-	\~french
-	\brief		Implémentation de brouillard.
-	*/
 	class Fog
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		C3D_API Fog();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~Fog();
 		/**
 		 *\~english
 		 *\return		The fog's density.
@@ -80,11 +57,7 @@ namespace castor3d
 		}
 
 	private:
-		//!\~english	The fog type.
-		//!\~french		Le type de brouillard.
 		FogType m_type{ FogType::eDisabled };
-		//!\~english	The fog's density.
-		//!\~french		La densité du brouillard.
 		float m_density{ 0.0f };
 	};
 }

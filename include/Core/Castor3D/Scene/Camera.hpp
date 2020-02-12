@@ -1,34 +1,27 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_CAMERA_H___
-#define ___C3D_CAMERA_H___
+#ifndef ___C3D_Camera_H___
+#define ___C3D_Camera_H___
+
+#include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Scene/MovableObject.hpp"
-#include "Castor3D/Miscellaneous/Frustum.hpp"
+#include "Castor3D/Render/Frustum.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 
-#include <CastorUtils/Math/PlaneEquation.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
+#include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
+#include <CastorUtils/Math/SquareMatrix.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents a Camera
-	\remark		Gives its position, orientation, viewport ...
-	\~french
-	\brief		Classe de représentation de Camera
-	\remark		donne la position, orientation, viewport ...
-	*/
 	class Camera
 		: public MovableObject
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011
@@ -81,8 +74,8 @@ namespace castor3d
 		 */
 		C3D_API Camera( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr const node
-			, Viewport && viewport
+			, SceneNode & node
+			, Viewport viewport
 			, bool ownProjMtx = false );
 		/**
 		 *\~english
@@ -100,7 +93,7 @@ namespace castor3d
 		 */
 		C3D_API Camera( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr const node
+			, SceneNode & node
 			, bool ownProjMtx = false );
 		/**
 		 *\~english
@@ -117,7 +110,7 @@ namespace castor3d
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API void attachTo( SceneNodeSPtr node )override;
+		C3D_API void attachTo( SceneNode & node )override;
 		/**
 		 *\~english
 		 *\brief		Updates the frustum.

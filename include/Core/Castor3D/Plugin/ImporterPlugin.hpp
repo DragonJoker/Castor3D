@@ -1,22 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_IMPORTER_PLUGIN_H___
-#define ___C3D_IMPORTER_PLUGIN_H___
+#ifndef ___C3D_ImporterPlugin_H___
+#define ___C3D_ImporterPlugin_H___
 
 #include "Castor3D/Plugin/Plugin.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Importer Plugin class
-	\~french
-	\brief		Classe de plug-in d'import
-	*/
 	class ImporterPlugin
 		: public Plugin
 	{

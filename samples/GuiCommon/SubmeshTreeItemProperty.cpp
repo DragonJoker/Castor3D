@@ -6,9 +6,10 @@
 #include "GuiCommon/SphereBoxProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Event/Frame/FunctorEvent.hpp>
-#include <Castor3D/Mesh/Submesh.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
@@ -40,7 +41,7 @@ namespace GuiCommon
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable, Geometry & geometry, Submesh & submesh )
-		: TreeItemProperty( submesh.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_geometry( geometry )
 		, m_submesh( submesh )
 	{
@@ -208,7 +209,7 @@ namespace GuiCommon
 	{
 		doApplyChange( [p_name, this]()
 		{
-			auto & cache = m_submesh.getScene()->getEngine()->getMaterialCache();
+			auto & cache = m_submesh.getOwner()->getScene()->getEngine()->getMaterialCache();
 			MaterialSPtr material = cache.find( p_name );
 
 			if ( material )

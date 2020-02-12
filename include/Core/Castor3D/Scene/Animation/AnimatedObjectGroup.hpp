@@ -4,32 +4,22 @@ See LICENSE file in root folder
 #ifndef ___C3D_ANIMATED_OBJECT_GROUP_H___
 #define ___C3D_ANIMATED_OBJECT_GROUP_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "AnimationModule.hpp"
+#include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 
+#include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Data/Loader.hpp>
 #include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Class which represents the animated object groups
-	\remark		Animated object groups, are a group of objects sharing a selected list of animations and needing synchronised animating
-	\~french
-	\brief		Représente un groupe d'objets animés
-	\remark		Un groupe d'objets animés est la liste d'objets partageant les mêmes animations et nécessitant des animations synchronisées
-	*/
 	class AnimatedObjectGroup
 		: public castor::Named
 		, public castor::OwnedBy< Scene >
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
 		\date		19/10/2011
@@ -255,14 +245,8 @@ namespace castor3d
 		OnAnimatedMeshChange onMeshRemoved;
 
 	private:
-		//!<\~english	The list of animations.
-		//!\~french		La liste des animations.
 		GroupAnimationMap m_animations;
-		//!<\~english	The list of AnimatedObjects.
-		//!\~french		La liste des AnimatedObject.
 		AnimatedObjectPtrStrMap m_objects;
-		//!<\~english	A timer, usefull for animation handling.
-		//!\~french		Un timer, pour mettre à jour précisément les animations.
 		castor::PreciseTimer m_timer;
 	};
 }

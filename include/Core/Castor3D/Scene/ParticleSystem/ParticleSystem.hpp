@@ -4,29 +4,21 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleSystem_H___
 #define ___C3D_ParticleSystem_H___
 
+#include "ParticleModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
-
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		19/10/2016
-	\~english
-	\brief		Particle system implementation.
-	\~french
-	\brief		Implémentation d'un système de particules.
-	*/
 	class ParticleSystem
 		: public MovableObject
 	{
 	public:
-		/*!
+		/**
 		\author		Sylvain DOREMUS
 		\version	0.9.0
 		\date		19/10/2016
@@ -78,7 +70,7 @@ namespace castor3d
 		 */
 		C3D_API ParticleSystem( castor::String const & name
 			, Scene & scene
-			, SceneNodeSPtr parent
+			, SceneNode & parent
 			, uint32_t count );
 		/**
 		 *\~english

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\~english
 	\brief		An image writer.
 	\~french
@@ -35,7 +35,7 @@ namespace castor
 	};
 
 	using ImageWriterPtr = std::unique_ptr< ImageWriterImpl >;
-	/*!
+	/**
 	\~english
 	\brief		Registers the image writers, per file extension.
 	\~french

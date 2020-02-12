@@ -24,7 +24,7 @@ namespace Loop
 	String const Subdivider::Type = cuT( "loop" );
 
 	Subdivider::Subdivider()
-		: castor3d::Subdivider()
+		: castor3d::MeshSubdivider()
 	{
 	}
 
@@ -33,42 +33,42 @@ namespace Loop
 		cleanup();
 	}
 
-	castor3d::SubdividerUPtr Subdivider::create()
+	castor3d::MeshSubdividerUPtr Subdivider::create()
 	{
 		return std::make_unique< Subdivider >();
 	}
 
 	void Subdivider::cleanup()
 	{
-		castor3d::Subdivider::cleanup();
+		castor3d::MeshSubdivider::cleanup();
 		m_facesEdges.clear();
 		m_vertices.clear();
 	}
 
 	VertexSPtr Subdivider::addPoint( float x, float y, float z )
 	{
-		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( x, y, z ) );
+		VertexSPtr result = std::make_shared< Vertex >( castor3d::MeshSubdivider::addPoint( x, y, z ) );
 		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
 	VertexSPtr Subdivider::addPoint( castor::Point3f const & v )
 	{
-		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
+		VertexSPtr result = std::make_shared< Vertex >( castor3d::MeshSubdivider::addPoint( v ) );
 		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
 	VertexSPtr Subdivider::addPoint( float * v )
 	{
-		VertexSPtr result = std::make_shared< Vertex >( castor3d::Subdivider::addPoint( v ) );
+		VertexSPtr result = std::make_shared< Vertex >( castor3d::MeshSubdivider::addPoint( v ) );
 		m_vertices.emplace( result->getIndex(), result );
 		return result;
 	}
 
 	void Subdivider::doInitialise()
 	{
-		castor3d::Subdivider::doInitialise();
+		castor3d::MeshSubdivider::doInitialise();
 		m_indexMapping = m_submesh->getComponent< castor3d::TriFaceMapping >();
 		uint32_t index = 0;
 

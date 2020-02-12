@@ -1,26 +1,20 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ENGINE_H___
-#define ___C3D_ENGINE_H___
+#ifndef ___C3D_Engine_H___
+#define ___C3D_Engine_H___
 
-#include "Castor3D/Cache/Cache.hpp"
-#include "Castor3D/Cache/ListenerCache.hpp"
-#include "Castor3D/Cache/MaterialCache.hpp"
-#include "Castor3D/Cache/OverlayCache.hpp"
-#include "Castor3D/Cache/PluginCache.hpp"
-#include "Castor3D/Cache/SamplerCache.hpp"
-#include "Castor3D/Cache/SceneCache.hpp"
-#include "Castor3D/Cache/ShaderCache.hpp"
-#include "Castor3D/Cache/TargetCache.hpp"
-#include "Castor3D/Cache/TechniqueCache.hpp"
-#include "Castor3D/Cache/WindowCache.hpp"
-#include "Castor3D/Mesh/ImporterFactory.hpp"
-#include "Castor3D/Mesh/MeshFactory.hpp"
-#include "Castor3D/Mesh/SubdividerFactory.hpp"
+#include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
+#include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
+#include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Plugin/PluginModule.hpp"
+#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
+
 #include "Castor3D/Miscellaneous/Version.hpp"
-#include "Castor3D/Render/RenderSystemFactory.hpp"
-#include "Castor3D/RenderToTexture/RenderDepthQuad.hpp"
 
 #include <CastorUtils/Design/Unique.hpp>
 #include <CastorUtils/FileParser/AttributeParsersBySection.hpp>
@@ -34,17 +28,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Main System
-	\remark		Holds the render windows, the plug-ins, the render drivers...
-	\~french
-	\brief		Moteur principal
-	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
-	*/
 	class Engine
 		: public castor::Unique< Engine >
 	{
@@ -348,37 +331,37 @@ namespace castor3d
 
 		inline MeshFactory const & getMeshFactory()const
 		{
-			return m_meshFactory;
+			return *m_meshFactory;
 		}
 
 		inline MeshFactory & getMeshFactory()
 		{
-			return m_meshFactory;
+			return *m_meshFactory;
 		}
 
-		inline SubdividerFactory const & getSubdividerFactory()const
+		inline MeshSubdividerFactory const & getSubdividerFactory()const
 		{
-			return m_subdividerFactory;
+			return *m_subdividerFactory;
 		}
 
-		inline SubdividerFactory & getSubdividerFactory()
+		inline MeshSubdividerFactory & getSubdividerFactory()
 		{
-			return m_subdividerFactory;
+			return *m_subdividerFactory;
 		}
 
-		inline ImporterFactory const & getImporterFactory()const
+		inline MeshImporterFactory const & getImporterFactory()const
 		{
-			return m_importerFactory;
+			return *m_importerFactory;
 		}
 
-		inline ImporterFactory & getImporterFactory()
+		inline MeshImporterFactory & getImporterFactory()
 		{
-			return m_importerFactory;
+			return *m_importerFactory;
 		}
 
 		inline ParticleFactory & getParticleFactory()
 		{
-			return m_particleFactory;
+			return *m_particleFactory;
 		}
 
 		inline castor::CpuInformations const & getCpuInformations()const
@@ -449,7 +432,7 @@ namespace castor3d
 		SamplerSPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
 		castor::ImageWriter m_imageWriter;
-		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
+		DECLARE_CACHE_MEMBER( shader, ShaderProgram );
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		DECLARE_CACHE_MEMBER( material, Material );
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
@@ -457,7 +440,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerWPtr m_defaultListener;
-		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
+		DECLARE_CACHE_MEMBER( target, RenderTarget );
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		castor::FontCache m_fontCache;
@@ -466,14 +449,14 @@ namespace castor3d
 		std::map< RenderWindowRPtr, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
-		MeshFactory m_meshFactory;
-		SubdividerFactory m_subdividerFactory;
-		ImporterFactory m_importerFactory;
-		ParticleFactory m_particleFactory;
+		MeshFactorySPtr m_meshFactory;
+		MeshSubdividerFactorySPtr m_subdividerFactory;
+		MeshImporterFactorySPtr m_importerFactory;
+		ParticleFactorySPtr m_particleFactory;
 		castor::CpuInformations m_cpuInformations;
 		MaterialType m_materialType;
 		bool m_enableValidation{ false };
-		std::unique_ptr< RenderDepthQuad > m_renderDepth;
+		RenderDepthQuadSPtr m_renderDepth;
 	};
 }
 

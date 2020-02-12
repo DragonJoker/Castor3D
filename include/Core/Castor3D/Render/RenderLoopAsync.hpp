@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Main System
-	\remark		Holds the render windows, the plug-ins, the render drivers...
-	\~french
-	\brief		Moteur principal
-	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
-	*/
 	class RenderLoopAsync
 		: public RenderLoop
 	{

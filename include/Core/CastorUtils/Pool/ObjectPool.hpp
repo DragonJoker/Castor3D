@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2016
@@ -36,7 +36,7 @@ namespace castor
 			space->~Object();
 		}
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2016
@@ -148,7 +148,7 @@ namespace castor
 	private:
 		size_t m_count;
 	};
-	/*!
+	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0
 	\date		08/01/2016

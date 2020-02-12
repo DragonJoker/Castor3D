@@ -1,18 +1,10 @@
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 
-#include "Castor3D/Engine.hpp"
-
-#include "Castor3D/Event/Frame/FrameListener.hpp"
-#include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Castor3D/Mesh/Skeleton/Skeleton.hpp"
-#include "Castor3D/Mesh/Submesh.hpp"
-#include "Castor3D/Scene/Scene.hpp"
-
-#include <CastorUtils/Miscellaneous/Hash.hpp>
+#include "Castor3D/Render/RenderPassTimer.hpp"
 
 using namespace castor;
 

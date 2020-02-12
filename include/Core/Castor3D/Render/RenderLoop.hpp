@@ -1,11 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RENDER_LOOP_H___
-#define ___C3D_RENDER_LOOP_H___
+#ifndef ___C3D_RenderLoop_H___
+#define ___C3D_RenderLoop_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Event/Frame/FrameEventModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+
+#include "Castor3D/Overlay/DebugOverlays.hpp"
 
 #include <ashespp/Core/WindowHandle.hpp>
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
@@ -14,15 +16,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		14/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Render loop base class.
-	\~french
-	\brief		Classe de base d'une boucle de rendu.
-	*/
 	class RenderLoop
 		: public castor::OwnedBy< Engine >
 	{

@@ -1,18 +1,13 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-
-#include <ashespp/Buffer/UniformBuffer.hpp>
-
-using namespace castor;
 
 namespace castor3d
 {
 	const uint32_t BillboardUbo::BindingPoint = 11u;
-	String const BillboardUbo::BufferBillboard = cuT( "Billboard" );
-	String const BillboardUbo::Dimensions = cuT( "c3d_dimensions" );
+	castor::String const BillboardUbo::BufferBillboard = cuT( "Billboard" );
+	castor::String const BillboardUbo::Dimensions = cuT( "c3d_dimensions" );
 
 	BillboardUbo::BillboardUbo( Engine & engine )
 		: m_engine{ engine }
@@ -44,7 +39,7 @@ namespace castor3d
 		m_ubo.reset();
 	}
 
-	void BillboardUbo::update( Point2f const & dimensions )const
+	void BillboardUbo::update( castor::Point2f const & dimensions )const
 	{
 		CU_Require( m_ubo );
 		m_ubo->getData( 0u ).dimensions = dimensions;

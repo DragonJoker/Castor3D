@@ -4,14 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_SceneBackground_H___
 #define ___C3D_SceneBackground_H___
 
-#include "Castor3D/PBR/IblTextures.hpp"
+#include "BackgroundModule.hpp"
+
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/PBR/IblTextures.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Texture/TextureLayout.hpp"
-#include "Castor3D/Texture/TextureUnit.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -23,24 +25,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class SceneBackground;
-	using BackgroundChangedFunc = std::function< void( SceneBackground const & ) >;
-	using OnBackgroundChanged = castor::Signal< BackgroundChangedFunc >;
-	using OnBackgroundChangedConnection = OnBackgroundChanged::connection;
-	/**
-	*\author
-	*	Sylvain DOREMUS
-	*\version
-	*	0.9.0
-	*\date
-	*	21/05/2016
-	*\~english
-	*\brief
-	*	Scene background base class.
-	*\~french
-	*\brief
-	*	Classe de base du fond d'une scène.
-	*/
 	class SceneBackground
 		: public castor::OwnedBy< Engine >
 	{

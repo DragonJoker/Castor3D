@@ -4,22 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderPassTimer_H___
 #define ___C3D_RenderPassTimer_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "RenderModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		26/06/2018
-	\~english
-	\brief		Allows stopping a RenderPassTimer when an instance of this class goes out of scope.
-	\~french
-	\brief		Permet d'arrêter un RenderPassTimer lorsqu'une instance de cette classe sort du scope courant.
-	*/
 	class RenderPassTimerBlock
 	{
 	public:
@@ -33,15 +24,7 @@ namespace castor3d
 	private:
 		RenderPassTimer * m_timer;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.10.0
-	\date		24/07/2017
-	\~english
-	\brief		Class that holds data needed to compute a render pass times.
-	\~french
-	\brief		Classe englobant les données nécessaires au calcul des temps d'une passe de rendu.
-	*/
+
 	class RenderPassTimer
 		: public castor::Named
 	{

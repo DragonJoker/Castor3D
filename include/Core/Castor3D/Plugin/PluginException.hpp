@@ -1,24 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PLUGIN_EXCEPTION_H___
-#define ___C3D_PLUGIN_EXCEPTION_H___
+#ifndef ___C3D_PluginException_H___
+#define ___C3D_PluginException_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "PluginModule.hpp"
 
 #include <CastorUtils/Exception/Exception.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		01/04/2011
-	\~english
-	\brief		Plugin loading exception
-	\~french
-	\brief		Exception de chargement de plug-in
-	*/
 	class PluginException
 		: public castor::Exception
 	{

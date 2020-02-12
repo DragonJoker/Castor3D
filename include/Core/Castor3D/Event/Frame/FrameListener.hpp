@@ -1,26 +1,15 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FRAME_LISTENER_H___
-#define ___C3D_FRAME_LISTENER_H___
+#ifndef ___C3D_FrameListener_H___
+#define ___C3D_FrameListener_H___
 
-#include "Castor3D/Castor3DPrerequisites.hpp"
+#include "FrameEventModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		03/03/2010
-	\~english
-	\brief		User event synchronisation class.
-	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times.
-	\~french
-	\brief		Classe de synchronisation des évènements.
-	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur EventType).
-	*/
 	class FrameListener
 		: public castor::Named
 	{

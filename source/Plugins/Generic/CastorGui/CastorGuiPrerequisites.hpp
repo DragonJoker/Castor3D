@@ -4,6 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CI_CASTOR_GUI_PREREQUISITES_H___
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
+#include <Castor3D/Material/Pass/PassModule.hpp>
+#include <Castor3D/Material/Texture/TextureModule.hpp>
+#include <Castor3D/Overlay/OverlayModule.hpp>
+
 #include <Castor3D/Plugin/GenericPlugin.hpp>
 
 #include <CastorUtils/Design/Signal.hpp>
@@ -23,7 +27,7 @@ namespace CastorGui
 {
 	const castor::String PLUGIN_NAME = cuT( "CastorGui" );
 	static const uint32_t DEFAULT_HEIGHT = 25;
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		23/05/2012
 	 *\version		0.1.0
@@ -46,7 +50,7 @@ namespace CastorGui
 		//! ButtonCtrl
 		eButton,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
@@ -60,7 +64,7 @@ namespace CastorGui
 		//! The combo box events count
 		eCount,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
@@ -74,7 +78,7 @@ namespace CastorGui
 		//! The combobox events count
 		eCount,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
@@ -88,7 +92,7 @@ namespace CastorGui
 		//! The button events count
 		eCount,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
@@ -104,7 +108,7 @@ namespace CastorGui
 		//! The slider events count
 		eCount,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
@@ -120,7 +124,7 @@ namespace CastorGui
 		//! The edit events count
 		eCount,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
@@ -132,7 +136,7 @@ namespace CastorGui
 		//! read only combo box
 		eReadOnly = 0x00000001,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
@@ -150,7 +154,7 @@ namespace CastorGui
 		//! Words are not cut
 		eWordWrap = 0x00000800,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
@@ -164,7 +168,7 @@ namespace CastorGui
 		// The slider is displaye vertically
 		eVertical = 0x000200000,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
@@ -186,7 +190,7 @@ namespace CastorGui
 		//! The static's text is aligned on bottom
 		eVAlignBottom = 0x40000000,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		23/05/2012
 	 *\version		0.1.0
@@ -200,7 +204,7 @@ namespace CastorGui
 		//! Event to ask the main window to resize to the given size
 		eResizeParent,
 	};
-	/*!
+	/**
 	 *\author		Sylvain DOREMUS
 	 *\date		10/03/2015
 	 *\version		0.1.0

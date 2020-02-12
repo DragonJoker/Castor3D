@@ -1,15 +1,8 @@
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-
-#include <CastorUtils/Design/ArrayView.hpp>
-
-using namespace castor;
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 namespace castor3d
 {

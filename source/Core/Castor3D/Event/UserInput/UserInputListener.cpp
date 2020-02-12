@@ -1,9 +1,13 @@
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/ListenerCache.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/OverlayCache.hpp"
 
-#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
+#include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
+#include "Castor3D/Event/Frame/InitialiseEvent.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
@@ -15,13 +19,13 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_frameListener{ engine.getFrameListenerCache().add( name ) }
 	{
-		m_mouse.m_buttons[size_t( MouseButton::eLeft )] = false;
-		m_mouse.m_buttons[size_t( MouseButton::eMiddle )] = false;
-		m_mouse.m_buttons[size_t( MouseButton::eRight )] = false;
-		m_mouse.m_changed = MouseButton::eCount;
-		m_keyboard.m_ctrl = false;
-		m_keyboard.m_alt = false;
-		m_keyboard.m_shift = false;
+		m_mouse.buttons[size_t( MouseButton::eLeft )] = false;
+		m_mouse.buttons[size_t( MouseButton::eMiddle )] = false;
+		m_mouse.buttons[size_t( MouseButton::eRight )] = false;
+		m_mouse.changed = MouseButton::eCount;
+		m_keyboard.ctrl = false;
+		m_keyboard.alt = false;
+		m_keyboard.shift = false;
 		m_frameListener->postEvent( makeInitialiseEvent( *this ) );
 	}
 
@@ -208,7 +212,7 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			m_mouse.m_position = position;
+			m_mouse.position = position;
 			auto current = doGetMouseTargetableHandler( position );
 			auto last = m_lastMouseTarget.lock();
 
@@ -245,9 +249,9 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			m_mouse.m_buttons[size_t( button )] = true;
-			m_mouse.m_changed = button;
-			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
+			m_mouse.buttons[size_t( button )] = true;
+			m_mouse.changed = button;
+			auto current = doGetMouseTargetableHandler( m_mouse.position );
 
 			if ( current )
 			{
@@ -263,7 +267,7 @@ namespace castor3d
 					current->pushEvent( HandlerEvent( HandlerEventType::eActivate, active ) );
 				}
 
-				current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.m_position, button ) );
+				current->pushEvent( MouseEvent( MouseEventType::ePushed, m_mouse.position, button ) );
 				result = true;
 				m_activeHandler = current;
 			}
@@ -278,13 +282,13 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			m_mouse.m_buttons[size_t( button )] = false;
-			m_mouse.m_changed = button;
-			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
+			m_mouse.buttons[size_t( button )] = false;
+			m_mouse.changed = button;
+			auto current = doGetMouseTargetableHandler( m_mouse.position );
 
 			if ( current )
 			{
-				current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.m_position, button ) );
+				current->pushEvent( MouseEvent( MouseEventType::eReleased, m_mouse.position, button ) );
 				result = true;
 				m_activeHandler = current;
 			}
@@ -310,8 +314,8 @@ namespace castor3d
 
 		if ( doHasHandlers() )
 		{
-			m_mouse.m_wheel += offsets;
-			auto current = doGetMouseTargetableHandler( m_mouse.m_position );
+			m_mouse.wheel += offsets;
+			auto current = doGetMouseTargetableHandler( m_mouse.position );
 
 			if ( current )
 			{
@@ -335,20 +339,20 @@ namespace castor3d
 			{
 				if ( key == KeyboardKey::eControl )
 				{
-					m_keyboard.m_ctrl = true;
+					m_keyboard.ctrl = true;
 				}
 
 				if ( key == KeyboardKey::eAlt )
 				{
-					m_keyboard.m_alt = true;
+					m_keyboard.alt = true;
 				}
 
 				if ( key == KeyboardKey::eShift )
 				{
-					m_keyboard.m_shift = true;
+					m_keyboard.shift = true;
 				}
 
-				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;
 			}
 		}
@@ -368,20 +372,20 @@ namespace castor3d
 			{
 				if ( key == KeyboardKey::eControl )
 				{
-					m_keyboard.m_ctrl = false;
+					m_keyboard.ctrl = false;
 				}
 
 				if ( key == KeyboardKey::eAlt )
 				{
-					m_keyboard.m_alt = false;
+					m_keyboard.alt = false;
 				}
 
 				if ( key == KeyboardKey::eShift )
 				{
-					m_keyboard.m_shift = false;
+					m_keyboard.shift = false;
 				}
 
-				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;
 			}
 		}
@@ -399,7 +403,7 @@ namespace castor3d
 
 			if ( active )
 			{
-				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, key, value, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+				active->pushEvent( KeyboardEvent( KeyboardEventType::eChar, key, value, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;
 			}
 		}

@@ -4,18 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_BackgroundTextWriter_H___
 #define ___C3D_BackgroundTextWriter_H___
 
+#include "BackgroundModule.hpp"
+
 #include "Castor3D/Scene/Background/Visitor.hpp"
 
 namespace castor3d
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.11.0
-	\~english
-	\brief		Background text serialiser.
-	\~french
-	\brief		Sérialiseur texte de fond.
-	*/
 	class BackgroundTextWriter
 		: public BackgroundVisitor
 	{
