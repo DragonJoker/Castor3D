@@ -34,7 +34,7 @@ install:
   - ps: cd $PROJECT_DIR
   - git submodule update --init -- "external/ShaderWriter"
   - ps: if ($isLinux) {sudo apt-get update}
-  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libgl1-mesa-dev libegl1-mesa-dev libassimp-dev libfreetype6-dev zlib1g-dev -y}
+  - ps: if ($isLinux) {sudo apt-get install libx11-6 libx11-dev libxrandr-dev libassimp-dev libfreetype6-dev zlib1g-dev ninja -y}
   - ps: if (!$isLinux) {cd $PROJECT_DIR\dependencies\vc14\$PLATFORM}
   - ps: if (!$isLinux) {7z x assimp-3.2-win32.zip}
   - ps: if (!$isLinux) {7z x freetype-2.3.5-win32.zip}
