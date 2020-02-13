@@ -392,7 +392,6 @@ namespace castor3d
 	{
 		auto fontTexture = getFontTexture();
 		auto const & font = *fontTexture->getFont();
-		auto ovPosition = getAbsolutePosition( p_renderSize );
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
 		{

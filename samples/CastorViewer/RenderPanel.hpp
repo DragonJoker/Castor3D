@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include <GuiCommon/CubeBoxManager.hpp>
-#include <GuiCommon/NodeState.hpp>
+#include <GuiCommon/System/CubeBoxManager.hpp>
+#include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
 
@@ -52,6 +52,7 @@ namespace CastorViewer
 
 		void resetRenderWindow();
 		void setRenderWindow( castor3d::RenderWindowSPtr window );
+		void onKeyUp( wxKeyEvent & event );
 
 		inline castor3d::RenderWindowSPtr getRenderWindow()const
 		{
@@ -89,35 +90,34 @@ namespace CastorViewer
 			, bool camera );
 
 		DECLARE_EVENT_TABLE()
-		void OnTimerFwd( wxTimerEvent & event );
-		void OnTimerBck( wxTimerEvent & event );
-		void OnTimerLft( wxTimerEvent & event );
-		void OnTimerRgt( wxTimerEvent & event );
-		void OnTimerUp( wxTimerEvent & event );
-		void OnTimerDwn( wxTimerEvent & event );
-		void OnTimerMouse( wxTimerEvent & event );
-		void OnTimerMovement( wxTimerEvent & event );
-		void OnSize( wxSizeEvent & event );
-		void OnMove( wxMoveEvent & event );
-		void OnPaint( wxPaintEvent & event );
-		void OnEnterWindow( wxMouseEvent & event );
-		void OnLeaveWindow( wxMouseEvent & event );
-		void OnEraseBackground( wxEraseEvent & event );
-		void OnsetFocus( wxFocusEvent & event );
-		void OnKillFocus( wxFocusEvent & event );
+		void onTimerFwd( wxTimerEvent & event );
+		void onTimerBck( wxTimerEvent & event );
+		void onTimerLft( wxTimerEvent & event );
+		void onTimerRgt( wxTimerEvent & event );
+		void onTimerUp( wxTimerEvent & event );
+		void onTimerDwn( wxTimerEvent & event );
+		void onTimerMouse( wxTimerEvent & event );
+		void onTimerMovement( wxTimerEvent & event );
+		void onSize( wxSizeEvent & event );
+		void onMove( wxMoveEvent & event );
+		void onPaint( wxPaintEvent & event );
+		void onEnterWindow( wxMouseEvent & event );
+		void onLeaveWindow( wxMouseEvent & event );
+		void onEraseBackground( wxEraseEvent & event );
+		void onsetFocus( wxFocusEvent & event );
+		void onKillFocus( wxFocusEvent & event );
 		void onKeydown( wxKeyEvent & event );
-		void OnKeyUp( wxKeyEvent & event );
-		void OnChar( wxKeyEvent & event );
-		void OnMouseLDClick( wxMouseEvent & event );
-		void OnMouseLdown( wxMouseEvent & event );
-		void OnMouseLUp( wxMouseEvent & event );
-		void OnMouseMdown( wxMouseEvent & event );
-		void OnMouseMUp( wxMouseEvent & event );
-		void OnMouseRdown( wxMouseEvent & event );
-		void OnMouseRUp( wxMouseEvent & event );
-		void OnMouseMove( wxMouseEvent & event );
-		void OnMouseWheel( wxMouseEvent & event );
-		void OnMenuClose( wxCommandEvent & event );
+		void onChar( wxKeyEvent & event );
+		void onMouseLDClick( wxMouseEvent & event );
+		void onMouseLdown( wxMouseEvent & event );
+		void onMouseLUp( wxMouseEvent & event );
+		void onMouseMdown( wxMouseEvent & event );
+		void onMouseMUp( wxMouseEvent & event );
+		void onMouseRdown( wxMouseEvent & event );
+		void onMouseRUp( wxMouseEvent & event );
+		void onMouseMove( wxMouseEvent & event );
+		void onMouseWheel( wxMouseEvent & event );
+		void onMenuClose( wxCommandEvent & event );
 
 	public:
 		float m_x{ 0.0f };

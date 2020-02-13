@@ -50,14 +50,13 @@ namespace castor3d
 			//CALCUL DE LA POSITION DES POINTS
 			float angleRotation = castor::PiMult2< float > / m_nbFaces;
 			uint32_t i = 0;
-			float rCos, rSin;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
 
 			for ( float dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
 			{
-				rCos = cos( dAlphaI );
-				rSin = sin( dAlphaI );
+				auto rCos = cos( dAlphaI );
+				auto rSin = sin( dAlphaI );
 
 				if ( i < m_nbFaces )
 				{

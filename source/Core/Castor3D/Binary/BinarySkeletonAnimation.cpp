@@ -82,7 +82,7 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrame:
-				keyFrame = std::make_unique< SkeletonAnimationKeyFrame >( obj );
+				keyFrame = std::make_unique< SkeletonAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SkeletonAnimationKeyFrame >().parse( *keyFrame, chunk );
 
 				if ( result )

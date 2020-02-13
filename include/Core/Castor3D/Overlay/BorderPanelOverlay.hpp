@@ -36,7 +36,7 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & tabs, BorderPanelOverlay const * category = nullptr );
+			C3D_API explicit TextWriter( castor::String const & tabs, BorderPanelOverlay const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file

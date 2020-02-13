@@ -127,7 +127,7 @@ namespace castor3d
 					auto addRatio = m_writer.declLocale( "addRatio"
 						, 1.0_f + refractionRatio );
 					auto reflectance = m_writer.declLocale( "reflectance"
-						, m_writer.paren( subRatio * subRatio ) / m_writer.paren( addRatio * addRatio ) );
+						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
 					auto product = m_writer.declLocale( "product"
 						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
 					auto fresnel = m_writer.declLocale( "fresnel"
@@ -165,7 +165,7 @@ namespace castor3d
 					auto addRatio = m_writer.declLocale( "addRatio"
 						, 1.0_f + refractionRatio );
 					auto reflectance = m_writer.declLocale( "reflectance"
-						, m_writer.paren( subRatio * subRatio ) / m_writer.paren( addRatio * addRatio ) );
+						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
 					auto product = m_writer.declLocale( "product"
 						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
 					auto fresnel = m_writer.declLocale( "fresnel"

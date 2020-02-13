@@ -148,9 +148,9 @@ namespace castor3d
 				{
 					// Radius relative to ssR
 					auto alpha = writer.declLocale( cuT( "alpha" )
-						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * writer.paren( 1.0_f / writer.cast< Float >( c3d_numSamples ) ) );
+						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * ( 1.0_f / writer.cast< Float >( c3d_numSamples ) ) );
 					auto angle = writer.declLocale( cuT( "angle" )
-						, alpha * writer.paren( 6.28_f * writer.cast< Float >( c3d_numSpiralTurns ) ) + spinAngle );
+						, alpha * ( 6.28_f * writer.cast< Float >( c3d_numSpiralTurns ) ) + spinAngle );
 
 					ssRadius = alpha;
 					writer.returnStmt( vec2( cos( angle ), sin( angle ) ) );
@@ -164,7 +164,7 @@ namespace castor3d
 			auto csZToKey = writer.implementFunction< Float >( "csZToKey"
 				, [&]( Float const & z )
 				{
-					writer.returnStmt( clamp( z * writer.paren( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
+					writer.returnStmt( clamp( z * ( 1.0_f / c3d_farPlaneZ ), 0.0_f, 1.0_f ) );
 				}
 				, InFloat{ writer, "z" } );
 
@@ -218,7 +218,7 @@ namespace castor3d
 					position.z() = texelFetch( c3d_mapDepth, mipPosition, mipLevel ).r();
 
 					// Offset to pixel center
-					position = reconstructCSPosition( writer.paren( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
+					position = reconstructCSPosition( ( vec2( ssPosition ) + vec2( 0.5_f ) ) * invCszBufferScale
 						, position.z()
 						, c3d_projInfo );
 					writer.returnStmt( position );
@@ -245,7 +245,7 @@ namespace castor3d
 						// Epsilon inside the sqrt for rsqrt operation
 						auto f = writer.declLocale( cuT( "f" )
 							, max( 1.0_f - vv * c3d_invRadius2, 0.0_f ) );
-						writer.returnStmt( f * max( writer.paren( vn - c3d_bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
+						writer.returnStmt( f * max( ( vn - c3d_bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
 					}
 					else
 					{
@@ -253,7 +253,7 @@ namespace castor3d
 						//  Assumes the desired result is intensity/radius^6 in main()
 						auto f = writer.declLocale( cuT( "f" )
 							, max( c3d_radius2 - vv, 0.0_f ) );
-						writer.returnStmt( f * f * f * max( writer.paren( vn - c3d_bias ) / writer.paren( epsilon + vv ), 0.0_f ) );
+						writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
 
 					// C: Medium contrast (which looks better at high radii), no division.  Note that the 
@@ -359,7 +359,7 @@ namespace castor3d
 					if ( config.useNormalsBuffer )
 					{
 						normal = texelFetch( c3d_mapNormal, ivec2( in.gl_FragCoord.xy() ), 0_i ).xyz();
-						//normal = writer.paren( c3d_viewMatrix * vec4( normal, 1.0_f ) ).xyz();
+						//normal = ( c3d_viewMatrix * vec4( normal, 1.0_f ) ).xyz();
 						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst, c3d_readAddSecond ) );
 					}
 					else
@@ -371,7 +371,7 @@ namespace castor3d
 						// at adjacent pixels, its magnitude will be proportional to the square of distance from the camera
 						//
 						// if the threshold # is too big you will see black dots where we used a bad normal at edges, too small -> white
-						IF( writer, dot( normal, normal ) > writer.paren( square( wsCenter.z() * wsCenter.z() * 0.00006_f ) ) )
+						IF( writer, dot( normal, normal ) > ( square( wsCenter.z() * wsCenter.z() * 0.00006_f ) ) )
 						{
 							// The normals from depth should be very small values before normalization,
 							// except at depth discontinuities, where they will be large and lead
@@ -402,7 +402,7 @@ namespace castor3d
 
 					// Hash function used in the HPG12 AlchemyAO paper
 					auto randomPatternRotationAngle = writer.declLocale( cuT( "randomPatternRotationAngle" )
-						, 10.0_f * writer.cast< Float >( writer.paren( writer.paren( 3 * ssCenter.x() ) ^ writer.paren( ssCenter.y() + ssCenter.x() * ssCenter.y() ) ) ) );
+						, 10.0_f * writer.cast< Float >( ( 3 * ssCenter.x() ) ^ ( ssCenter.y() + ssCenter.x() * ssCenter.y() ) ) );
 
 					auto sum = writer.declLocale( "sum"
 						, 0.0_f );
@@ -423,17 +423,17 @@ namespace castor3d
 					{
 						auto A = writer.declLocale( cuT( "A" )
 							, pow( max( 0.0_f
-									, 1.0_f - sqrt( sum * writer.paren( 3.0_f / writer.cast< Float >( c3d_numSamples ) ) ) )
+									, 1.0_f - sqrt( sum * ( 3.0_f / writer.cast< Float >( c3d_numSamples ) ) ) )
 								, c3d_intensity ) );
 					}
 					else
 					{
 						auto A = writer.declLocale( cuT( "A" )
 							, max( 0.0_f
-								, 1.0_f - sum * c3d_intensityDivR6 * writer.paren( 5.0_f / writer.cast< Float >( c3d_numSamples ) ) ) );
+								, 1.0_f - sum * c3d_intensityDivR6 * ( 5.0_f / writer.cast< Float >( c3d_numSamples ) ) ) );
 						// Anti-tone map to reduce contrast and drag dark region farther
 						// (x^0.2 + 1.2 * x^4)/2.2
-						A = writer.paren( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
+						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
 					}
 
 					auto A = writer.getVariable< Float >( cuT( "A" ) );

@@ -16,7 +16,7 @@ namespace castor3d
 		class Utils
 		{
 		public:
-			C3D_API Utils( sdw::ShaderWriter & writer );
+			C3D_API explicit Utils( sdw::ShaderWriter & writer );
 			C3D_API void declareCalcTexCoord();
 			C3D_API void declareCalcVSPosition();
 			C3D_API void declareCalcWSPosition();

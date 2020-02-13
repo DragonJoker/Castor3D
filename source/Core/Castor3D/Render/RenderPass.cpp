@@ -793,8 +793,6 @@ namespace castor3d
 		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
-			auto const mtxSize = sizeof( float ) * 16;
-			auto const stride = sizeof( InstantiationData );
 			auto const count = std::min( uint32_t( matrixBuffer.size() )
 				, uint32_t( renderNodes.size() ) );
 			auto buffer = matrixBuffer.data();
@@ -1407,14 +1405,14 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
 			{
-				vtx_normal = normalize( writer.paren( mtxNormal * -v4Normal.xyz() ) );
+				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
 			}
 			else
 			{
-				vtx_normal = normalize( writer.paren( mtxNormal * v4Normal.xyz() ) );
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
 			}
 
-			vtx_tangent = normalize( writer.paren( mtxNormal * v4Tangent.xyz() ) );
+			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
 			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );

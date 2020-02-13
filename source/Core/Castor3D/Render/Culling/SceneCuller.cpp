@@ -172,12 +172,12 @@ namespace castor3d
 				&& billboard.second->getParent() )
 			{
 				auto & billboards = *billboard.second;
-				auto & node = *billboards.getParent();
-
 				MaterialSPtr material( billboards.getMaterial() );
 
 				if ( material )
 				{
+					auto & node = *billboards.getParent();
+
 					for ( auto & pass : *material )
 					{
 						if ( pass->hasAlphaBlending() )
@@ -211,13 +211,13 @@ namespace castor3d
 				&& particleSystem.second->getBillboards()
 				&& particleSystem.second->getParent() )
 			{
-				auto & billboards = *particleSystem.second->getBillboards();
-				auto & node = *particleSystem.second->getParent();
-
 				MaterialSPtr material( particleSystem.second->getMaterial() );
 
 				if ( material )
 				{
+					auto & billboards = *particleSystem.second->getBillboards();
+					auto & node = *particleSystem.second->getParent();
+
 					for ( auto & pass : *material )
 					{
 						if ( material->hasAlphaBlending() )

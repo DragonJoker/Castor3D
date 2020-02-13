@@ -213,16 +213,15 @@ namespace film_grain
 			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ) ).front(),
 		};
 
-		uint32_t maxSize = buffers[0]->getSize();
 		auto dim = buffers[0]->getDimensions();
 		auto format = castor3d::convert( buffers[0]->getFormat() );
 		auto staging = device->createStagingTexture( format
 			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
-		ashes::CommandBufferPtr cmdCopy = device.graphicsCommandPool->createCommandBuffer();
 
 		for ( uint32_t i = 0u; i < NoiseMapCount; ++i )
 		{
-			staging->uploadTextureData( *cmdCopy
+			staging->uploadTextureData( *device.graphicsQueue
+				, *device.graphicsCommandPool
 				, {
 					m_noiseView->subresourceRange.aspectMask,
 					m_noiseView->subresourceRange.baseMipLevel,
@@ -430,16 +429,26 @@ namespace film_grain
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
-		castor3d::CommandsSemaphore commands
-		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
-		};
-		auto & cmd = *commands.commandBuffer;
 
 		if ( result )
 		{
+			castor3d::CommandsSemaphore commands
+			{
+				device.graphicsCommandPool->createCommandBuffer(),
+				device->createSemaphore()
+			};
+			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
+			cmd.beginDebugBlock(
+				{
+					"Film Grain",
+					{
+						0.5f,
+						0.0f,
+						0.5f,
+						0.5f,
+					},
+				} );
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -453,6 +462,7 @@ namespace film_grain
 			m_quad->registerFrame( cmd );
 			cmd.endRenderPass();
 			timer.endPass( cmd );
+			cmd.endDebugBlock();
 			cmd.end();
 			m_commands.emplace_back( std::move( commands ) );
 		}

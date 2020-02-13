@@ -81,14 +81,14 @@ namespace motion_blur
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 				{
 					auto blurVector = writer.declLocale( cuT( "vector" )
-						, writer.paren( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
+						, ( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
 					pxl_fragColor = texture( c3d_mapColor, vtx_texture );
 
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( cuT( "offset" )
-							, blurVector * writer.paren( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
+							, blurVector * ( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
 						pxl_fragColor += texture( c3d_mapColor, vtx_texture + offset );
 					}
 					ROF;
@@ -285,15 +285,15 @@ namespace motion_blur
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
-		castor3d::CommandsSemaphore commands
-		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
-		};
-		auto & cmd = *commands.commandBuffer;
 
 		if ( result )
 		{
+			castor3d::CommandsSemaphore commands
+			{
+				device.graphicsCommandPool->createCommandBuffer(),
+				device->createSemaphore()
+			};
+			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );
 

@@ -33,6 +33,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Scene/Background/Colour.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/LightFactory.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -73,17 +74,16 @@ namespace castor3d
 			if ( !view.isEmpty() )
 			{
 				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
+				Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
 
+				for ( auto const & name : view )
+				{
 					if ( result )
 					{
-						Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
-
-						for ( auto const & name : view )
-						{
-							auto elem = view.find( name );
-							result = result && typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
-						}
+						auto elem = view.find( name );
+						result = typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
 					}
+				}
 			}
 
 			return result;
@@ -445,6 +445,7 @@ namespace castor3d
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_colourBackground{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_billboardPools{ std::make_shared< BillboardUboPools >( *engine.getRenderSystem() ) }
+		, m_lightFactory{ std::make_shared< LightFactory >() }
 	{
 		auto mergeObject = [this]( auto const & source
 			, auto & destination

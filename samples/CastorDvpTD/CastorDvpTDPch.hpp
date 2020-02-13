@@ -14,7 +14,7 @@
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
-#include <GuiCommon/CastorApplication.hpp>
+#include <GuiCommon/System/CastorApplication.hpp>
 
 #include <wx/frame.h>
 #include <wx/panel.h>

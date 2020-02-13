@@ -600,7 +600,7 @@ namespace smaa
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
 						auto rounding = writer.declLocale( "rounding"
-							, writer.paren( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
+							, ( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
 
 						rounding /= leftRight.x() + leftRight.y(); // Reduce blending for pixels in the center of a line.
 
@@ -630,7 +630,7 @@ namespace smaa
 						auto leftRight = writer.declLocale( "leftRight"
 							, step( d.xy(), d.yx() ) );
 						auto rounding = writer.declLocale( "rounding"
-							, writer.paren( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
+							, ( 1.0_f - c3d_cornerRoundingNorm ) * leftRight );
 
 						rounding /= leftRight.x() + leftRight.y();
 

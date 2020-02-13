@@ -55,7 +55,7 @@ namespace castor3d
 		case FogType::eExponential:
 			return cuT( "exponential" );
 		case FogType::eSquaredExponential:
-			return cuT( "square_exponential" );
+			return cuT( "squared_exponential" );
 		default:
 			CU_Failure( "Unsupported FogType" );
 			return castor::cuEmptyString;

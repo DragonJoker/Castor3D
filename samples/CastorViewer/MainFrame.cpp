@@ -7,17 +7,17 @@
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <GuiCommon/ImagesLoader.hpp>
-#include <GuiCommon/MaterialsList.hpp>
-#include <GuiCommon/RendererSelector.hpp>
-#include <GuiCommon/SplashScreen.hpp>
-#include <GuiCommon/AuiDockArt.hpp>
-#include <GuiCommon/AuiTabArt.hpp>
-#include <GuiCommon/AuiToolBarArt.hpp>
-#include <GuiCommon/PropertiesContainer.hpp>
-#include <GuiCommon/PropertiesHolder.hpp>
-#include <GuiCommon/SceneExporter.hpp>
-#include <GuiCommon/TreeHolder.hpp>
+#include <GuiCommon/Aui/AuiDockArt.hpp>
+#include <GuiCommon/Aui/AuiTabArt.hpp>
+#include <GuiCommon/Aui/AuiToolBarArt.hpp>
+#include <GuiCommon/Properties/Math/PropertiesContainer.hpp>
+#include <GuiCommon/Properties/Math/PropertiesHolder.hpp>
+#include <GuiCommon/Properties/TreeItems/TreeHolder.hpp>
+#include <GuiCommon/System/ImagesLoader.hpp>
+#include <GuiCommon/System/MaterialsList.hpp>
+#include <GuiCommon/System/RendererSelector.hpp>
+#include <GuiCommon/System/SplashScreen.hpp>
+#include <GuiCommon/System/SceneExporter.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
@@ -776,6 +776,7 @@ namespace CastorViewer
 		EVT_ENTER_WINDOW( MainFrame::OnEnterWindow )
 		EVT_LEAVE_WINDOW( MainFrame::OnLeaveWindow )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
+		EVT_KEY_UP( MainFrame::OnKeyUp )
 #if CV_MainFrameToolbar
 		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
@@ -950,6 +951,18 @@ namespace CastorViewer
 	void MainFrame::OnEraseBackground( wxEraseEvent & event )
 	{
 		event.Skip();
+	}
+
+	void MainFrame::OnKeyUp( wxKeyEvent & p_event )
+	{
+		if ( m_renderPanel )
+		{
+			m_renderPanel->onKeyUp( p_event );
+		}
+		else
+		{
+			p_event.Skip();
+		}
 	}
 
 	void MainFrame::OnLoadScene( wxCommandEvent & event )

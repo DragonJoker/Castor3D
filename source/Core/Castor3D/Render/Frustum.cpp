@@ -216,7 +216,6 @@ namespace castor3d
 					cuT( "Bottom" )
 				};
 
-				auto plane = FrustumPlane( index );
 				auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
 				auto dist = m_planes[index].distance( vp );
 				auto center = aabb.getCenter();
@@ -296,7 +295,6 @@ namespace castor3d
 					cuT( "Bottom" )
 				};
 
-				auto plane = FrustumPlane( index );
 				auto dist = m_planes[index].distance( center );
 				std::clog << cuT( " - BoundingSphere" )
 					<< cuT( " - P: " ) << names[index]
@@ -363,7 +361,6 @@ namespace castor3d
 					cuT( "Bottom" )
 				};
 
-				auto plane = FrustumPlane( index );
 				auto dist = m_planes[index].distance( point );
 				std::clog << cuT( " - Point" )
 					<< cuT( " - P: " ) << names[index]

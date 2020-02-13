@@ -94,14 +94,14 @@ namespace castor
 			WriterBlock( TextWriter const * writer
 				, String const & blockName
 				, String const & objectName
-				, TextFile & file )
+				, TextFile & rfile )
 				: writer{ writer }
 				, name{ ( ( !blockName.empty() && !objectName.empty() )
 					? blockName + cuT( " \"" ) + objectName + cuT( "\"" )
 					: ( !blockName.empty()
 						? blockName
 						: String{} ) ) }
-				, file{ file }
+				, file{ rfile }
 			{
 				result = ( !name.empty()
 						? file.writeText( cuT( "\n" ) + writer->m_tabs + name + cuT( "\n" ) )

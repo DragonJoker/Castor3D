@@ -27,7 +27,7 @@ namespace castor3d
 		 *\param[in]	animable	L'objet animable parent.
 		 *\param[in]	name		Le nom de l'animation.
 		 */
-		C3D_API SkeletonAnimation( Animable & animable
+		C3D_API explicit SkeletonAnimation( Animable & animable
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english

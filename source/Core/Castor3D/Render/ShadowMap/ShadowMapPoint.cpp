@@ -488,7 +488,7 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
 				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0_f );
-				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+				vtx_texture = vtx_texture * ( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			auto mtxModel = writer.getVariable< Mat4 >( cuT( "mtxModel" ) );
@@ -569,7 +569,7 @@ namespace castor3d
 				, dFdx( pxl_linear ) );
 			auto dy = writer.declLocale( cuT( "dy" )
 				, dFdy( pxl_linear ) );
-			pxl_variance.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
+			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );

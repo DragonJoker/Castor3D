@@ -15,8 +15,4 @@ namespace castor3d
 		registerType( LightType::ePoint, PointLight::create );
 		registerType( LightType::eSpot, SpotLight::create );
 	}
-
-	LightFactory::~LightFactory()
-	{
-	}
 }

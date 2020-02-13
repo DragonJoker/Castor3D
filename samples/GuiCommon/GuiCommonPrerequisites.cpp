@@ -13,7 +13,7 @@
 #	undef Always
 using Bool = int;
 #elif defined( CU_PlatformApple )
-#	include "GuiCommon/MetalLayer.h"
+#	include "GuiCommon/System/MetalLayer.h"
 #endif
 
 #include <Castor3D/Engine.hpp>

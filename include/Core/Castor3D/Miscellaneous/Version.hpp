@@ -36,7 +36,7 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	vk	Le numéro de version pour Vulkan.
 		 */
-		C3D_API Version( uint32_t vk );
+		C3D_API explicit Version( uint32_t vk );
 		/**
 		 *\~english
 		 *\brief		Destructor.

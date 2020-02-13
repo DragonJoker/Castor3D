@@ -29,7 +29,7 @@ namespace castor3d
 						{
 							// Linear
 							auto fogFactor = writer.declLocale( "fogFactor"
-								, writer.paren( 80.0_f - z ) / writer.paren( 80.0_f - 20.0_f ) );
+								, ( 80.0_f - z ) / ( 80.0_f - 20.0_f ) );
 							fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 							writer.returnStmt( vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() ) );
 						}
@@ -62,9 +62,9 @@ namespace castor3d
 							// Ground
 							//my camera y is 10.0. you can change it or pass it as a uniform
 							auto be = writer.declLocale( "be"
-								, writer.paren( c3d_cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
+								, ( c3d_cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
 							auto bi = writer.declLocale( "bi"
-								, writer.paren( c3d_cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
+								, ( c3d_cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
 							auto extinction = writer.declLocale( "ext"
 								, exp( -z * be ) );
 							auto inscattering = writer.declLocale( "insc"

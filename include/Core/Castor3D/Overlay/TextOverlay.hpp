@@ -49,7 +49,7 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & tabs
+			C3D_API explicit TextWriter( castor::String const & tabs
 				, TextOverlay const * category = nullptr );
 			/**
 			 *\~english

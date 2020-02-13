@@ -40,7 +40,7 @@ namespace castor3d
 		 *\param[in]	mesh	Le maillage parent.
 		 *\param[in]	name	Le nom de l'animation.
 		 */
-		C3D_API MeshAnimation( Mesh & mesh
+		C3D_API explicit MeshAnimation( Mesh & mesh
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english

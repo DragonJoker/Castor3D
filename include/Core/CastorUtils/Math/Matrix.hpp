@@ -63,8 +63,8 @@ namespace castor
 		/**@{*/
 		Matrix();
 		explicit Matrix( NoInit const & );
-		Matrix( Matrix< T, Columns, Rows > const & matrix );
-		Matrix( Matrix< T, Columns, Rows > && matrix );
+		Matrix( Matrix const & matrix );
+		Matrix( Matrix && matrix );
 		explicit Matrix( T const & value );
 		explicit Matrix( T * matrix );
 		template< typename Type >

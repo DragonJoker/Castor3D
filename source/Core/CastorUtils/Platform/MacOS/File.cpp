@@ -18,11 +18,71 @@ namespace castor
 {
 	namespace
 	{
+		void printErrnoName( String const & type
+			, Path const & path )
+		{
+			switch ( errno )
+			{
+			case EACCES:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( " [" ) + path + cuT( "]: Permission denied." ) );
+				break;
+
+			case EBADF:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Invalid file descriptor." ) );
+				break;
+
+			case EFAULT:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Bad address." ) );
+				break;
+
+			case ELOOP:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Too many symbolic links encountered while traversing the path." ) );
+				break;
+
+			case ENAMETOOLONG:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: <name> is too long." ) );
+				break;
+
+			case EMFILE:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Too many file descriptor in use." ) );
+				break;
+
+			case ENFILE:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Too many files currently open." ) );
+				break;
+
+			case ENOENT:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: <name> doesn't exist." ) );
+				break;
+
+			case ENOMEM:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Insufficient memory." ) );
+				break;
+
+			case ENOTDIR:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: <name> is not a directory." ) );
+				break;
+
+			case EOVERFLOW:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: <name> refers to a file whose size, inode number, or number of blocks cannot be represented in, respectively, the types off_t, ino_t, or blkcnt_t." ) );
+				break;
+
+			default:
+				Logger::logWarning( cuT( "Can't open " ) + type + cuT( "[" ) + path + cuT( "]: Unknown error." ) );
+				break;
+			}
+		}
+
 		bool isLink( Path const & filePath )
 		{
 			auto cfilePath = string::stringCast< char >( filePath );
 			struct stat buf;
-			auto x = lstat( cfilePath.c_str(), &buf );
+			
+			if ( lstat( cfilePath.c_str(), &buf ) )
+			{
+				printErrnoName( cuT( "file" ), filePath );
+			}
+
 			return S_ISLNK( buf.st_mode );
 		}
 
@@ -35,41 +95,7 @@ namespace castor
 
 			if ( ( dir = opendir( string::stringCast< char >( folderPath ).c_str() ) ) == nullptr )
 			{
-				switch ( errno )
-				{
-				case EACCES:
-					Logger::logWarning( cuT( "Can't open dir : Permission denied - Directory : " ) + folderPath );
-					break;
-
-				case EBADF:
-					Logger::logWarning( cuT( "Can't open dir : Invalid file descriptor - Directory : " ) + folderPath );
-					break;
-
-				case EMFILE:
-					Logger::logWarning( cuT( "Can't open dir : Too many file descriptor in use - Directory : " ) + folderPath );
-					break;
-
-				case ENFILE:
-					Logger::logWarning( cuT( "Can't open dir : Too many files currently open - Directory : " ) + folderPath );
-					break;
-
-				case ENOENT:
-					Logger::logWarning( cuT( "Can't open dir : Directory doesn't exist - Directory : " ) + folderPath );
-					break;
-
-				case ENOMEM:
-					Logger::logWarning( cuT( "Can't open dir : Insufficient memory - Directory : " ) + folderPath );
-					break;
-
-				case ENOTDIR:
-					Logger::logWarning( cuT( "Can't open dir : <name> is not a directory - Directory : " ) + folderPath );
-					break;
-
-				default:
-					Logger::logWarning( cuT( "Can't open dir : Unknown error - Directory : " ) + folderPath );
-					break;
-				}
-
+				printErrnoName( cuT( "folder" ), folderPath );
 				result = false;
 			}
 			else
@@ -159,11 +185,11 @@ namespace castor
 	{
 		Path pathReturn;
 		char path[FILENAME_MAX]{};
-		char realPath[FILENAME_MAX]{};
 		uint32_t size = FILENAME_MAX;
 
 		if ( _NSGetExecutablePath( &path[0], &size ) == 0 )
 		{
+			char realPath[FILENAME_MAX]{};
 			realpath( path, realPath );
 			pathReturn = Path{ string::stringCast< xchar >( realPath ) };
 		}

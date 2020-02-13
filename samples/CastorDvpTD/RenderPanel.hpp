@@ -3,7 +3,7 @@
 #include <wx/panel.h>
 #include <wx/timer.h>
 
-#include <GuiCommon/NodeState.hpp>
+#include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
 

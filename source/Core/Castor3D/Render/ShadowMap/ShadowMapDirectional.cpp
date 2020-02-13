@@ -506,7 +506,7 @@ namespace castor3d
 			{
 				auto time = writer.declLocale( cuT( "time" ), 1.0_f - c3d_time );
 				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0_f );
-				vtx_texture = vtx_texture * writer.paren( 1.0_f - c3d_time ) + texture2 * c3d_time;
+				vtx_texture = vtx_texture * ( 1.0_f - c3d_time ) + texture2 * c3d_time;
 			}
 
 			auto mtxModel = writer.getVariable< Mat4 >( cuT( "mtxModel" ) );
@@ -590,7 +590,7 @@ namespace castor3d
 					, dFdx( depth ) );
 				auto dy = writer.declLocale( cuT( "dy" )
 					, dFdy( depth ) );
-				pxl_variance.y() += 0.25_f * writer.paren( dx * dx + dy * dy );
+				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 			} );
 
 		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

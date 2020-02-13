@@ -24,7 +24,7 @@ namespace castor3d
 		 *\param[in]	animation	L'animation parente.
 		 *\param[in]	name		Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationNode( SkeletonAnimation & animation
+		C3D_API explicit SkeletonAnimationNode( SkeletonAnimation & animation
 			, castor::String const & name = castor::cuEmptyString );
 		/**
 		 *\~english

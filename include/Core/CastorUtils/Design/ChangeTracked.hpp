@@ -35,7 +35,7 @@ namespace castor
 		{
 		}
 
-		ChangeTracked( ChangeTracked< T > const & rhs )noexcept
+		ChangeTracked( ChangeTracked const & rhs )noexcept
 			: m_value{ rhs.m_value }
 			, m_dirty{ true }
 		{

@@ -46,8 +46,7 @@ namespace castor3d
 	{
 		auto result = std::make_shared< SkeletonAnimationBone >( *this );
 		result->setBone( bone );
-		auto added = addObject( result, parent );
-		return result;
+		return addObject( result, parent );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::addObject( SkeletonAnimationObjectSPtr object

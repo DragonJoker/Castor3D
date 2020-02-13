@@ -120,7 +120,6 @@ namespace castor3d
 			doUpdateColour();
 		}
 
-		auto node = camera.getParent();
 		m_viewport.setPerspective( 45.0_degrees
 			, camera.getRatio()
 			, 0.1f

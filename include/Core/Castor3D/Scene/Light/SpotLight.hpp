@@ -34,7 +34,7 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( castor::String const & tabs, SpotLight const * category = nullptr );
+			C3D_API explicit TextWriter( castor::String const & tabs, SpotLight const * category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
