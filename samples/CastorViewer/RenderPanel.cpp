@@ -417,38 +417,38 @@ namespace CastorViewer
 	}
 
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
-		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::OnTimerFwd )
-		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::OnTimerBck )
-		EVT_TIMER( eTIMER_ID_LEFT, RenderPanel::OnTimerLft )
-		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::OnTimerRgt )
-		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
-		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
-		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::OnTimerMouse )
-		EVT_TIMER( eTIMER_ID_MOVEMENT, RenderPanel::OnTimerMovement )
-		EVT_SIZE( RenderPanel::OnSize )
-		EVT_MOVE( RenderPanel::OnMove )
-		EVT_PAINT( RenderPanel::OnPaint )
-		EVT_ENTER_WINDOW( RenderPanel::OnEnterWindow )
-		EVT_LEAVE_WINDOW( RenderPanel::OnLeaveWindow )
-		EVT_ERASE_BACKGROUND( RenderPanel::OnEraseBackground )
-		EVT_SET_FOCUS( RenderPanel::OnsetFocus )
-		EVT_KILL_FOCUS( RenderPanel::OnKillFocus )
+		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::onTimerFwd )
+		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::onTimerBck )
+		EVT_TIMER( eTIMER_ID_LEFT, RenderPanel::onTimerLft )
+		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::onTimerRgt )
+		EVT_TIMER( eTIMER_ID_UP, RenderPanel::onTimerUp )
+		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::onTimerDwn )
+		EVT_TIMER( eTIMER_ID_MOUSE, RenderPanel::onTimerMouse )
+		EVT_TIMER( eTIMER_ID_MOVEMENT, RenderPanel::onTimerMovement )
+		EVT_SIZE( RenderPanel::onSize )
+		EVT_MOVE( RenderPanel::onMove )
+		EVT_PAINT( RenderPanel::onPaint )
+		EVT_ENTER_WINDOW( RenderPanel::onEnterWindow )
+		EVT_LEAVE_WINDOW( RenderPanel::onLeaveWindow )
+		EVT_ERASE_BACKGROUND( RenderPanel::onEraseBackground )
+		EVT_SET_FOCUS( RenderPanel::onsetFocus )
+		EVT_KILL_FOCUS( RenderPanel::onKillFocus )
 		EVT_KEY_DOWN( RenderPanel::onKeydown )
-		EVT_KEY_UP( RenderPanel::OnKeyUp )
-		EVT_CHAR( RenderPanel::OnChar )
-		EVT_LEFT_DCLICK( RenderPanel::OnMouseLDClick )
-		EVT_LEFT_DOWN( RenderPanel::OnMouseLdown )
-		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
-		EVT_MIDDLE_DOWN( RenderPanel::OnMouseMdown )
-		EVT_MIDDLE_UP( RenderPanel::OnMouseMUp )
-		EVT_RIGHT_DOWN( RenderPanel::OnMouseRdown )
-		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
-		EVT_MOTION( RenderPanel::OnMouseMove )
-		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
-		EVT_MENU( wxID_EXIT, RenderPanel::OnMenuClose )
+		EVT_KEY_UP( RenderPanel::onKeyUp )
+		EVT_CHAR( RenderPanel::onChar )
+		EVT_LEFT_DCLICK( RenderPanel::onMouseLDClick )
+		EVT_LEFT_DOWN( RenderPanel::onMouseLdown )
+		EVT_LEFT_UP( RenderPanel::onMouseLUp )
+		EVT_MIDDLE_DOWN( RenderPanel::onMouseMdown )
+		EVT_MIDDLE_UP( RenderPanel::onMouseMUp )
+		EVT_RIGHT_DOWN( RenderPanel::onMouseRdown )
+		EVT_RIGHT_UP( RenderPanel::onMouseRUp )
+		EVT_MOTION( RenderPanel::onMouseMove )
+		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
+		EVT_MENU( wxID_EXIT, RenderPanel::onMenuClose )
 	END_EVENT_TABLE()
 
-	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
+	void RenderPanel::onTimerFwd( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -458,7 +458,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
+	void RenderPanel::onTimerBck( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -468,7 +468,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
+	void RenderPanel::onTimerLft( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -478,7 +478,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
+	void RenderPanel::onTimerRgt( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -488,7 +488,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
+	void RenderPanel::onTimerUp( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -498,7 +498,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
+	void RenderPanel::onTimerDwn( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -508,12 +508,12 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerMouse( wxTimerEvent & p_event )
+	void RenderPanel::onTimerMouse( wxTimerEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnTimerMovement( wxTimerEvent & p_event )
+	void RenderPanel::onTimerMovement( wxTimerEvent & p_event )
 	{
 		if ( m_currentState )
 		{
@@ -523,7 +523,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnSize( wxSizeEvent & p_event )
+	void RenderPanel::onSize( wxSizeEvent & p_event )
 	{
 		auto window = m_renderWindow.lock();
 
@@ -545,7 +545,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMove( wxMoveEvent & p_event )
+	void RenderPanel::onMove( wxMoveEvent & p_event )
 	{
 		auto window = m_renderWindow.lock();
 
@@ -560,7 +560,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnPaint( wxPaintEvent & p_event )
+	void RenderPanel::onPaint( wxPaintEvent & p_event )
 	{
 		auto window = m_renderWindow.lock();
 
@@ -575,27 +575,27 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnEnterWindow( wxMouseEvent & p_event )
+	void RenderPanel::onEnterWindow( wxMouseEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnLeaveWindow( wxMouseEvent & p_event )
+	void RenderPanel::onLeaveWindow( wxMouseEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnEraseBackground( wxEraseEvent & p_event )
+	void RenderPanel::onEraseBackground( wxEraseEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnsetFocus( wxFocusEvent & p_event )
+	void RenderPanel::onsetFocus( wxFocusEvent & p_event )
 	{
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnKillFocus( wxFocusEvent & p_event )
+	void RenderPanel::onKillFocus( wxFocusEvent & p_event )
 	{
 		doStopTimer( eTIMER_ID_COUNT );
 		p_event.Skip();
@@ -654,7 +654,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
+	void RenderPanel::onKeyUp( wxKeyEvent & p_event )
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
@@ -715,7 +715,14 @@ namespace CastorViewer
 				break;
 
 			case WXK_ESCAPE:
-				doUpdateSelectedGeometry( nullptr, nullptr );
+				if ( m_selectedGeometry )
+				{
+					doUpdateSelectedGeometry( nullptr, nullptr );
+				}
+				else
+				{
+					m_parent->Close();
+				}
 				break;
 
 			case 'L':
@@ -728,7 +735,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnChar( wxKeyEvent & p_event )
+	void RenderPanel::onChar( wxKeyEvent & p_event )
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
@@ -743,7 +750,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
+	void RenderPanel::onMouseLDClick( wxMouseEvent & p_event )
 	{
 		m_x = doTransformX( p_event.GetX() );
 		m_y = doTransformY( p_event.GetY() );
@@ -764,7 +771,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseLdown( wxMouseEvent & p_event )
+	void RenderPanel::onMouseLdown( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = true;
 		m_x = doTransformX( p_event.GetX() );
@@ -811,7 +818,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
+	void RenderPanel::onMouseLUp( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = false;
 		m_x = doTransformX( p_event.GetX() );
@@ -829,7 +836,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseMdown( wxMouseEvent & p_event )
+	void RenderPanel::onMouseMdown( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = true;
 		m_x = doTransformX( p_event.GetX() );
@@ -867,7 +874,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseMUp( wxMouseEvent & p_event )
+	void RenderPanel::onMouseMUp( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = false;
 		m_x = doTransformX( p_event.GetX() );
@@ -885,7 +892,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseRdown( wxMouseEvent & p_event )
+	void RenderPanel::onMouseRdown( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = true;
 		m_x = doTransformX( p_event.GetX() );
@@ -903,7 +910,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseRUp( wxMouseEvent & p_event )
+	void RenderPanel::onMouseRUp( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = false;
 		m_x = doTransformX( p_event.GetX() );
@@ -921,7 +928,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
+	void RenderPanel::onMouseMove( wxMouseEvent & p_event )
 	{
 		m_x = doTransformX( p_event.GetX() );
 		m_y = doTransformY( p_event.GetY() );
@@ -959,7 +966,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
+	void RenderPanel::onMouseWheel( wxMouseEvent & p_event )
 	{
 		int wheelRotation = p_event.GetWheelRotation();
 
@@ -985,7 +992,7 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnMenuClose( wxCommandEvent & p_event )
+	void RenderPanel::onMenuClose( wxCommandEvent & p_event )
 	{
 		Close( true );
 		p_event.Skip();

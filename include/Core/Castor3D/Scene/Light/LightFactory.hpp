@@ -15,19 +15,14 @@ namespace castor3d
 	{
 	public:
 		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
+		*\~english
+		*\brief
+		*	Register default light types.
+		*\~french
+		*\brief
+		*	Enregistre les types par défaut.
+		*/
 		C3D_API LightFactory();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~LightFactory();
 	};
 }
 

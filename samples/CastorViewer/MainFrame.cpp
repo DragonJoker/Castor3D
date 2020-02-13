@@ -776,6 +776,7 @@ namespace CastorViewer
 		EVT_ENTER_WINDOW( MainFrame::OnEnterWindow )
 		EVT_LEAVE_WINDOW( MainFrame::OnLeaveWindow )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
+		EVT_KEY_UP( MainFrame::OnKeyUp )
 #if CV_MainFrameToolbar
 		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
@@ -950,6 +951,18 @@ namespace CastorViewer
 	void MainFrame::OnEraseBackground( wxEraseEvent & event )
 	{
 		event.Skip();
+	}
+
+	void MainFrame::OnKeyUp( wxKeyEvent & p_event )
+	{
+		if ( m_renderPanel )
+		{
+			m_renderPanel->onKeyUp( p_event );
+		}
+		else
+		{
+			p_event.Skip();
+		}
 	}
 
 	void MainFrame::OnLoadScene( wxCommandEvent & event )
