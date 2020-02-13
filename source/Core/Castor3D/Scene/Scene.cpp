@@ -73,17 +73,16 @@ namespace castor3d
 			if ( !view.isEmpty() )
 			{
 				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
+				Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
 
+				for ( auto const & name : view )
+				{
 					if ( result )
 					{
-						Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
-
-						for ( auto const & name : view )
-						{
-							auto elem = view.find( name );
-							result = result && typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
-						}
+						auto elem = view.find( name );
+						result = typename ObjType::TextWriter{ tabs + cuT( "\t" ) }( *elem, file );
 					}
+				}
 			}
 
 			return result;

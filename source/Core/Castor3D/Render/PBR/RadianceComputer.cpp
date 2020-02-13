@@ -161,7 +161,7 @@ namespace castor3d
 						}
 						ROF;
 
-						irradiance = irradiance * Float{ Pi< float > } * writer.paren( 1.0_f / writer.cast< Float >( nrSamples ) );
+						irradiance = irradiance * Float{ Pi< float > } * ( 1.0_f / writer.cast< Float >( nrSamples ) );
 						pxl_fragColor = vec4( irradiance, 1.0_f );
 					} );
 

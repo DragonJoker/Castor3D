@@ -358,7 +358,7 @@ namespace castor3d
 							auto Fc = writer.declLocale( "Fc"
 								, pow( 1.0_f - VdotH, 5.0_f ) );
 
-							A += writer.paren( 1.0_f - Fc ) * G_Vis;
+							A += ( 1.0_f - Fc ) * G_Vis;
 							B += Fc * G_Vis;
 						}
 						FI;

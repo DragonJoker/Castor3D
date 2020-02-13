@@ -774,7 +774,6 @@ namespace castor3d
 			, 1u
 			, std::max( 1u, flags.texturesCount )
 			, flags.texturesCount > 0u ) );
-		index += flags.texturesCount;
 
 		auto out = writer.getOut();
 

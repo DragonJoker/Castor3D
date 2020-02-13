@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		if ( result && configuration.colourMask[0] )
+		if ( configuration.colourMask[0] )
 		{
 			switch ( m_type )
 			{

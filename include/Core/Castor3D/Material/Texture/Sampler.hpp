@@ -64,7 +64,7 @@ namespace castor3d
 		 *\param[in]	name	Le nom du sampler
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Sampler( Engine & engine, castor::String const & name = castor::cuEmptyString );
+		C3D_API Sampler( Engine & engine, castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Destructor

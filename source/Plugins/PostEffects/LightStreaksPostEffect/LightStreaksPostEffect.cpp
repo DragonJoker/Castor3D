@@ -46,7 +46,7 @@ namespace light_streaks
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					vtx_texture = ( position + 1.0_f ) / 2.0_f;
 					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
@@ -115,7 +115,7 @@ namespace light_streaks
 							, pow( c3d_attenuation, b * writer.cast< Float >( s ) ) );
 						// Streak direction is a 2D vector in image space
 						auto sampleCoord = writer.declLocale( "sampleCoord"
-							, texcoords + writer.paren( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
+							, texcoords + ( c3d_direction * b * vec2( s, s ) * c3d_pixelSize ) );
 						// Scale and accumulate
 						colour += texture( c3d_mapHiPass, sampleCoord ).rgb() * clamp( weight, 0.0_f, 1.0_f );
 					}

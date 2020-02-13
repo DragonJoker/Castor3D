@@ -77,18 +77,15 @@ namespace castor3d
 			}
 		}
 
-		if ( result )
+		for ( auto const & it : node.m_children )
 		{
-			for ( auto const & it : node.m_children )
+			if ( result )
 			{
-				if ( result )
-				{
-					SceneNodeSPtr node = it.second.lock();
+				SceneNodeSPtr node = it.second.lock();
 
-					if ( node )
-					{
-						result = SceneNode::TextWriter{ m_tabs }( *node, file );
-					}
+				if ( node )
+				{
+					result = SceneNode::TextWriter{ m_tabs }( *node, file );
 				}
 			}
 		}

@@ -25,7 +25,7 @@ namespace castor3d
 		 *\param[in]	wantedFPS	Le nombre voulu du FPS.
 		 */
 		C3D_API RenderLoopAsync( Engine & engine
-			, uint32_t wantedFPS = 100 );
+			, uint32_t wantedFPS );
 		/**
 		 *\~english
 		 *\brief		Destructor.

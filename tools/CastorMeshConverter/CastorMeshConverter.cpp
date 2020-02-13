@@ -138,12 +138,12 @@ bool writeView( ViewType const & view
 
 	if ( !view.isEmpty() )
 	{
-		if ( result )
+		for ( auto const & name : view )
 		{
-			for ( auto const & name : view )
+			if ( result )
 			{
 				auto elem = view.find( name );
-				result &= typename ObjType::TextWriter{ castor::cuEmptyString }( *elem, file );
+				result = typename ObjType::TextWriter{ castor::cuEmptyString }( *elem, file );
 			}
 		}
 	}
@@ -263,11 +263,11 @@ struct ObjectPostWriter< true, castor3d::Mesh >
 	{
 		auto name = options.output + cuT( "_" ) + castor::string::toString( options.submesh, std::locale{ "C" } );
 		auto newPath = path / ( options.output + cuT( "Integration.cscn" ) );
-		auto & submesh = *object.getSubmesh( 0u );
 		castor::Point3f position;
 			
 		if ( options.recenter )
 		{
+			auto & submesh = *object.getSubmesh( 0u );
 			position = submesh.getBoundingBox().getCenter();
 		}
 

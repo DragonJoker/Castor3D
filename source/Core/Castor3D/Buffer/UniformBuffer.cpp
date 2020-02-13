@@ -112,7 +112,7 @@ namespace castor3d
 		m_buffer = ashes::makeUniformBuffer( *device.device
 			, m_elemCount
 			, m_elemSize
-			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_sharingMode );
 		setDebugObjectName( device, *m_buffer, m_debugName + "Ubo" );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );

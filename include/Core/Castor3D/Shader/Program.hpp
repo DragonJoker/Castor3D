@@ -54,7 +54,7 @@ namespace castor3d
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API TextWriter( castor::String const & tabs, castor::String const & name = cuT( "shader_program" ) );
+			C3D_API explicit TextWriter( castor::String const & tabs, castor::String const & name = cuT( "shader_program" ) );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderProgram into a text file.

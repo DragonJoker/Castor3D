@@ -430,15 +430,15 @@ namespace film_grain
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ m_target->getWidth(), m_target->getHeight() }
 			, m_target->getPixelFormat() );
-		castor3d::CommandsSemaphore commands
-		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
-		};
-		auto & cmd = *commands.commandBuffer;
 
 		if ( result )
 		{
+			castor3d::CommandsSemaphore commands
+			{
+				device.graphicsCommandPool->createCommandBuffer(),
+				device->createSemaphore()
+			};
+			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.

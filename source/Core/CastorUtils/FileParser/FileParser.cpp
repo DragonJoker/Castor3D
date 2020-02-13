@@ -350,11 +350,7 @@ namespace castor
 
 				if ( !p_line.empty() )
 				{
-					result = doParseScriptLine( p_line );
-				}
-				else
-				{
-					result = false;
+					doParseScriptLine( p_line );
 				}
 
 				doLeaveBlock();

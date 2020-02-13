@@ -235,7 +235,7 @@ namespace castor3d
 						occlusion *= textureLod( c3d_mapSsao, vtx_texture, 0.0_f ).r();
 					}
 
-					IF( writer, envMapIndex > 0_i && writer.paren( reflection != 0_i || refraction != 0_i ) )
+					IF( writer, envMapIndex > 0_i && ( reflection != 0_i || refraction != 0_i ) )
 					{
 						auto incident = writer.declLocale( "incident"
 							, reflections.computeIncident( position, c3d_cameraPosition.xyz() ) );

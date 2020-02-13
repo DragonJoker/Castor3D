@@ -85,7 +85,7 @@ namespace smaa
 						, abs( neighbours.xx() - neighbours.yz() ) );
 					auto edges = writer.declLocale( "edges"
 						, step( vec2( c3d_predicationThreshold ), delta ) );
-					writer.returnStmt( c3d_predicationScale * c3d_threshold * writer.paren( 1.0_f - c3d_predicationStrength * edges ) );
+					writer.returnStmt( c3d_predicationScale * c3d_threshold * ( 1.0_f - c3d_predicationStrength * edges ) );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }

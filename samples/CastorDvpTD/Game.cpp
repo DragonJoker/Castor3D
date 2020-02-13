@@ -271,15 +271,15 @@ namespace castortd
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
 		auto coords = convert( p_position );
-		Cell & result = dummy;
+		Cell const * result = &dummy;
 
 		if ( coords[0] >= 0 && coords[0] < int( m_grid.getWidth() )
 			 && coords[1] >= 0 && coords[1] < int( m_grid.getHeight() ) )
 		{
-			result = getCell( coords );
+			result = &getCell( coords );
 		}
 
-		return dummy;
+		return *result;
 	}
 
 	bool Game::BuildTower( castor::Point3f const & p_position, Tower::CategoryPtr && p_category )
@@ -598,7 +598,7 @@ namespace castortd
 
 		if ( !tower->getAnimations().empty() )
 		{
-			auto object = animGroup->addObject( *tower, tower->getName() + cuT( "_Movable" ) );
+			animGroup->addObject( *tower, tower->getName() + cuT( "_Movable" ) );
 		}
 
 		if ( tower->getMesh() )
@@ -607,7 +607,7 @@ namespace castortd
 
 			if ( !mesh->getAnimations().empty() )
 			{
-			  auto object = animGroup->addObject( *mesh, *tower, tower->getName() + cuT( "_Mesh" ) );
+			  animGroup->addObject( *mesh, *tower, tower->getName() + cuT( "_Mesh" ) );
 				time = std::max( time
 					, mesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 			}
@@ -618,7 +618,7 @@ namespace castortd
 			{
 				if ( !skeleton->getAnimations().empty() )
 				{
-					auto object = animGroup->addObject( *skeleton, *mesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
+					animGroup->addObject( *skeleton, *mesh, *tower, tower->getName() + cuT( "_Skeleton" ) );
 					time = std::max( time
 						, skeleton->getAnimation( p_category->getAttackAnimationName() ).getLength() );
 				}

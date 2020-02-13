@@ -17,7 +17,7 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		PropertiesHolder( wxWindow * parent
+		explicit PropertiesHolder( wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, wxSize const & size = wxDefaultSize );
 		~PropertiesHolder();

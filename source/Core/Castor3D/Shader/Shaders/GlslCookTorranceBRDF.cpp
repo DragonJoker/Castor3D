@@ -114,7 +114,7 @@ namespace castor3d
 					auto r = m_writer.declLocale( "r"
 						, roughness + 1.0_f );
 					auto k = m_writer.declLocale( "k"
-						, m_writer.paren( r * r ) / 8.0_f );
+						, ( r * r ) / 8.0_f );
 
 					auto numerator = m_writer.declLocale( "num"
 						, product );
@@ -222,8 +222,8 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					output.m_diffuse = shadowFactor * m_writer.paren( radiance * NdotL * kD / Float{ castor::Pi< float > } );
-					output.m_specular = shadowFactor * m_writer.paren( specReflectance * radiance * NdotL );
+					output.m_diffuse = shadowFactor * ( radiance * NdotL * kD / Float{ castor::Pi< float > } );
+					output.m_specular = shadowFactor * ( specReflectance * radiance * NdotL );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )

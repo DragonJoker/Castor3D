@@ -140,8 +140,8 @@ namespace castor3d
 				{
 					auto z = m_writer.declLocale( "z"
 						, depth );
-					z *= m_writer.paren( farPlane - nearPlane );
-					m_writer.returnStmt( 2.0_f * farPlane * nearPlane / m_writer.paren( farPlane + nearPlane - z ) );
+					z *= ( farPlane - nearPlane );
+					m_writer.returnStmt( 2.0_f * farPlane * nearPlane / ( farPlane + nearPlane - z ) );
 				}
 				, InFloat{ m_writer, "depth" }
 				, InFloat{ m_writer, "nearPlane" }
@@ -485,10 +485,10 @@ namespace castor3d
 				{
 					auto flags = m_writer.declLocale( "flags"
 						, 0_u
-						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( receiver ) << UInt( ReceiverOffset ) )		& UInt( ReceiverMask ) )
-						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( refraction ) << UInt( RefractionOffset ) )	& UInt( RefractionMask ) )
-						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( reflection ) << UInt( ReflectionOffset ) )	& UInt( ReflectionMask ) )
-						+ m_writer.paren( m_writer.paren( m_writer.cast< UInt >( envMapIndex ) << UInt( EnvMapIndexOffset ) )	& UInt( EnvMapIndexMask ) ) );
+						+ ( ( m_writer.cast< UInt >( receiver ) << UInt( ReceiverOffset ) ) & UInt( ReceiverMask ) )
+						+ ( ( m_writer.cast< UInt >( refraction ) << UInt( RefractionOffset ) ) & UInt( RefractionMask ) )
+						+ ( ( m_writer.cast< UInt >( reflection ) << UInt( ReflectionOffset ) ) & UInt( ReflectionMask ) )
+						+ ( ( m_writer.cast< UInt >( envMapIndex ) << UInt( EnvMapIndexOffset ) ) & UInt( EnvMapIndexMask ) ) );
 					encoded = m_writer.cast< Float >( flags );
 				}
 				, InInt{ m_writer, "receiver" }
@@ -514,10 +514,10 @@ namespace castor3d
 				{
 					auto flags = m_writer.declLocale( "flags"
 						, m_writer.cast< UInt >( encoded ) );
-					receiver = m_writer.cast< Int >( m_writer.paren( flags & UInt( ReceiverMask ) ) >> UInt( ReceiverOffset ) );
-					refraction = m_writer.cast< Int >( m_writer.paren( flags & UInt( RefractionMask ) ) >> UInt( RefractionOffset ) );
-					reflection = m_writer.cast< Int >( m_writer.paren( flags & UInt( ReflectionMask ) ) >> UInt( ReflectionOffset ) );
-					envMapIndex = m_writer.cast< Int >( m_writer.paren( flags & UInt( EnvMapIndexMask ) ) >> UInt( EnvMapIndexOffset ) );
+					receiver = m_writer.cast< Int >( ( flags & UInt( ReceiverMask ) ) >> UInt( ReceiverOffset ) );
+					refraction = m_writer.cast< Int >( ( flags & UInt( RefractionMask ) ) >> UInt( RefractionOffset ) );
+					reflection = m_writer.cast< Int >( ( flags & UInt( ReflectionMask ) ) >> UInt( ReflectionOffset ) );
+					envMapIndex = m_writer.cast< Int >( ( flags & UInt( EnvMapIndexMask ) ) >> UInt( EnvMapIndexOffset ) );
 				}
 				, InFloat{ m_writer, "encoded" }
 				, OutInt{ m_writer, "receiver" }
@@ -537,7 +537,7 @@ namespace castor3d
 				, [&]( Int const & encoded
 					, Int receiver )
 				{
-					receiver = m_writer.paren( encoded & ReceiverMask ) >> ReceiverOffset;
+					receiver = ( encoded & ReceiverMask ) >> ReceiverOffset;
 				}
 				, InInt{ m_writer, "encoded" }
 				, OutInt{ m_writer, "receiver" } );

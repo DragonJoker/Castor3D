@@ -48,7 +48,7 @@ namespace castor3d
 		 *\param[in]	mesh	Le mesh parent.
 		 *\param[in]	id		L'ID du sous-maillage.
 		 */
-		C3D_API Submesh( Mesh & mesh, uint32_t id = 1 );
+		C3D_API explicit Submesh( Mesh & mesh, uint32_t id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor

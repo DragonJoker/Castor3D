@@ -150,7 +150,7 @@ namespace castor3d
 					// From https://learnopengl.com/#!PBR/Lighting
 					auto bits = writer.declLocale( "bits"
 						, inBits );
-					bits = ( bits << 16_u ) | writer.paren( bits >> 16_u );
+					bits = ( bits << 16_u ) | ( bits >> 16_u );
 					bits = ( ( bits & 0x55555555_u ) << 1_u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1_u );
 					bits = ( ( bits & 0x33333333_u ) << 2_u ) | ( ( bits & 0xCCCCCCCC_u ) >> 2_u );
 					bits = ( ( bits & 0x0F0F0F0F_u ) << 4_u ) | ( ( bits & 0xF0F0F0F0_u ) >> 4_u );

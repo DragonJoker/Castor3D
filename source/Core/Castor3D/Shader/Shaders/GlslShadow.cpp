@@ -386,7 +386,7 @@ namespace castor3d
 					auto p = m_writer.declLocale( "p"
 						, step( moments.x() + varianceBias, distance ) );
 					auto variance = m_writer.declLocale( "variance"
-						, moments.y() - m_writer.paren( moments.x() * moments.x() ) );
+						, moments.y() - ( moments.x() * moments.x() ) );
 					variance = sdw::max( variance, minVariance );
 					auto d = m_writer.declLocale( "d"
 						, distance - moments.x() );
@@ -924,7 +924,7 @@ namespace castor3d
 					auto oneMinusVolumeScattering = m_writer.declLocale( "oneMinusVolumeScattering"
 						, 1.0_f - sqVolumetricScattering );
 					auto scattering = m_writer.declLocale( "scattering"
-						, oneMinusVolumeScattering / m_writer.paren( 4.0_f
+						, oneMinusVolumeScattering / ( 4.0_f
 							* Float{ Pi< float > }
 							* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 0.0_f ), 1.5_f ) ) );
 					auto maxCount = m_writer.declLocale( "maxCount"
@@ -1290,7 +1290,7 @@ namespace castor3d
 					auto oneMinusVolumeScattering = m_writer.declLocale( "oneMinusVolumeScattering"
 						, 1.0_f - sqVolumetricScattering );
 					auto scattering = m_writer.declLocale( "scattering"
-						, oneMinusVolumeScattering / m_writer.paren( 4.0_f
+						, oneMinusVolumeScattering / ( 4.0_f
 							* Float{ Pi< float > }
 							* pow( max( 1.0_f + sqVolumetricScattering - dblVolumetricScattering * RdotL, 0.0_f ), 1.5_f ) ) );
 					auto maxCount = m_writer.declLocale( "maxCount"

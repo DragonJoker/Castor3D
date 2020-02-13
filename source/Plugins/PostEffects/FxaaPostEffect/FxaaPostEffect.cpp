@@ -108,11 +108,11 @@ namespace fxaa
 						, max( lumaM, max( max( lumaNW, lumaNE ), max( lumaSW, lumaSE ) ) ) );
 
 					auto dir = writer.declLocale( "dir"
-						, vec2( -writer.paren( writer.paren( lumaNW + lumaNE ) - writer.paren( lumaSW + lumaSE ) )
-							, ( writer.paren( lumaNW + lumaSW ) - writer.paren( lumaNE + lumaSE ) ) ) );
+						, vec2( -( ( lumaNW + lumaNE ) - ( lumaSW + lumaSE ) )
+							, ( ( lumaNW + lumaSW ) - ( lumaNE + lumaSE ) ) ) );
 
 					auto dirReduce = writer.declLocale( "dirReduce"
-						, max( writer.paren( lumaNW + lumaNE + lumaSW + lumaSE ) * writer.paren( 0.25_f * c3d_reduceMul ), FXAA_REDUCE_MIN ) );
+						, max( ( lumaNW + lumaNE + lumaSW + lumaSE ) * ( 0.25_f * c3d_reduceMul ), FXAA_REDUCE_MIN ) );
 					auto rcpDirMin = writer.declLocale( "rcpDirMin"
 						, 1.0_f / ( min( abs( dir.x() ), abs( dir.y() ) ) + dirReduce ) );
 					dir = min( vec2( c3d_spanMax, c3d_spanMax )
@@ -120,23 +120,23 @@ namespace fxaa
 							, dir * rcpDirMin ) ) * c3d_pixelSize;
 
 					auto texcoord0 = writer.declLocale( "texcoord0"
-						, vtx_texture + dir * writer.paren( 1.0_f / 3.0_f - 0.5_f ) );
+						, vtx_texture + dir * ( 1.0_f / 3.0_f - 0.5_f ) );
 					auto texcoord1 = writer.declLocale( "texcoord1"
-						, vtx_texture + dir * writer.paren( 2.0_f / 3.0_f - 0.5_f ) );
+						, vtx_texture + dir * ( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( "rgbA"
-						, writer.paren( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
+						, ( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
 								+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
-							* writer.paren( 1.0_f / 2.0_f ) );
+							* ( 1.0_f / 2.0_f ) );
 
-					texcoord0 = vtx_texture + dir * writer.paren( 0.0_f / 3.0_f - 0.5_f );
-					texcoord1 = vtx_texture + dir * writer.paren( 3.0_f / 3.0_f - 0.5_f );
+					texcoord0 = vtx_texture + dir * ( 0.0_f / 3.0_f - 0.5_f );
+					texcoord1 = vtx_texture + dir * ( 3.0_f / 3.0_f - 0.5_f );
 
 					auto rgbB = writer.declLocale( "rgbB"
-						, writer.paren( rgbA * 1.0_f / 2.0_f )
-							+ writer.paren( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
+						, ( rgbA * 1.0_f / 2.0_f )
+							+ ( texture( c3d_mapColor, texcoord0, 0.0_f ).rgb()
 									+ texture( c3d_mapColor, texcoord1, 0.0_f ).rgb() )
-								* writer.paren( 1.0_f / 4.0_f ) );
+								* ( 1.0_f / 4.0_f ) );
 					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );
 
@@ -368,15 +368,15 @@ namespace fxaa
 		auto result = m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
 			, m_target->getPixelFormat() );
-		castor3d::CommandsSemaphore commands
-		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
-		};
-		auto & cmd = *commands.commandBuffer;
 
 		if ( result )
 		{
+			castor3d::CommandsSemaphore commands
+			{
+				device.graphicsCommandPool->createCommandBuffer(),
+				device->createSemaphore()
+			};
+			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
 			auto & targetView = m_target->getDefaultView();
 

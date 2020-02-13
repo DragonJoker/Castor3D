@@ -71,7 +71,7 @@ namespace HaarmPieterDuiker
 					, 1.0_f / c3d_gamma );
 
 				auto logColor = writer.declLocale( "logColor"
-					, writer.paren( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
+					, ( log10( vec3( 0.4_f ) * hdrColor.rgb() / linReference )
 						/ ld * logGamma + 444.0_f ) / 1023.0_f );
 				logColor = clamp( logColor, vec3( 0.0_f ), vec3( 1.0_f ) );
 

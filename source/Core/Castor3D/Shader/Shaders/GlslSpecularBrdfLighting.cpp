@@ -519,8 +519,8 @@ namespace castor3d
 							, sdw::fma( light.m_attenuation.y()
 								, distance
 								, light.m_attenuation.x() ) ) );
-					spotFactor = sdw::fma( m_writer.paren( spotFactor - 1.0_f )
-						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff )
+					spotFactor = sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
 						, 1.0_f );
 					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;
@@ -760,8 +760,8 @@ namespace castor3d
 							, sdw::fma( light.m_attenuation.y()
 								, distance
 								, light.m_attenuation.x() ) ) );
-					spotFactor = sdw::fma( m_writer.paren( spotFactor - 1.0_f )
-						, 1.0_f / m_writer.paren( 1.0_f - light.m_cutOff )
+					spotFactor = sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
 						, 1.0_f );
 					parentOutput.m_diffuse += spotFactor * output.m_diffuse / attenuation;
 					parentOutput.m_specular += spotFactor * output.m_specular / attenuation;

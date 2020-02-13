@@ -871,7 +871,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		using namespace shader;
-		auto & renderSystem = *getRenderSystem();
 		bool hasTexture = textures != TextureFlag::eNone;
 
 		// Vertex shader
@@ -900,7 +899,7 @@ namespace castor3d
 					auto size = writer.declLocale( cuT( "size" )
 						, vec2( c3d_positionRatio.z() * writer.cast< Float >( c3d_renderSizeIndex.x() )
 							, c3d_positionRatio.w() * writer.cast< Float >( c3d_renderSizeIndex.y() ) ) );
-					out.gl_out.gl_Position = c3d_projection * vec4( size * writer.paren( c3d_positionRatio.xy() + position )
+					out.gl_out.gl_Position = c3d_projection * vec4( size * ( c3d_positionRatio.xy() + position )
 						, 0.0_f
 						, 1.0_f );
 				} );
@@ -911,6 +910,7 @@ namespace castor3d
 		// Pixel shader
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Overlay" };
 		{
+			auto & renderSystem = *getRenderSystem();
 			FragmentWriter writer;
 
 			std::unique_ptr< Materials > materials;

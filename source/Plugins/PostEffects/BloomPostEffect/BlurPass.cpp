@@ -46,7 +46,7 @@ namespace Bloom
 
 			writer.implementFunction< sdw::Void >( "main", [&]()
 				{
-					vtx_texture = writer.paren( position + 1.0_f ) / 2.0_f;
+					vtx_texture = ( position + 1.0_f ) / 2.0_f;
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );

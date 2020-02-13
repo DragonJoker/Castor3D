@@ -196,9 +196,9 @@ namespace castor3d
 				, [&]()
 				{
 					auto curBbcenter = writer.declLocale( cuT( "curBbcenter" )
-						, writer.paren( c3d_curMtxModel * vec4( center, 1.0_f ) ).xyz() );
+						, ( c3d_curMtxModel * vec4( center, 1.0_f ) ).xyz() );
 					auto prvBbcenter = writer.declLocale( cuT( "prvBbcenter" )
-						, writer.paren( c3d_prvMtxModel * vec4( center, 1.0_f ) ).xyz() );
+						, ( c3d_prvMtxModel * vec4( center, 1.0_f ) ).xyz() );
 					auto curToCamera = writer.declLocale( cuT( "curToCamera" )
 						, c3d_cameraPosition.xyz() - curBbcenter );
 					curToCamera.y() = 0.0_f;

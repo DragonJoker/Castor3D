@@ -169,7 +169,7 @@ namespace castor3d
 					// The key values are in scene-specific scale. To make them scale-invariant, factor in
 					// the AO radius, which should be based on the scene scale.
 					auto depthWeight = writer.declLocale( cuT( "depthWeight" )
-						, max( 0.0_f, 1.0_f - writer.paren( c3d_edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
+						, max( 0.0_f, 1.0_f - ( c3d_edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
 					auto k_normal = writer.declLocale( cuT( "k_normal" )
 						, 1.0_f );
 					auto k_plane = writer.declLocale( cuT( "k_plane" )
@@ -194,8 +194,8 @@ namespace castor3d
 						}
 
 						auto normalError = writer.declLocale( cuT( "normalError" )
-							, writer.paren( 1.0_f - normalCloseness ) * k_normal );
-						normalWeight = max( writer.paren( 1.0_f - c3d_edgeSharpness * normalError ), 0.0_f );
+							, ( 1.0_f - normalCloseness ) * k_normal );
+						normalWeight = max( 1.0_f - c3d_edgeSharpness * normalError, 0.0_f );
 
 						if ( config.blurHighQuality )
 						{
@@ -285,7 +285,7 @@ namespace castor3d
 						IF( writer, r != 0_i )
 						{
 							auto tapLoc = writer.declLocale( cuT( "tapLoc" )
-								, ssCenter + c3d_axis * writer.paren( r * c3d_blurStepSize ) );
+								, ssCenter + c3d_axis * ( r * c3d_blurStepSize ) );
 
 							// spatial domain: offset gaussian tap
 							auto absR = writer.declLocale( cuT( "absR" )
@@ -316,7 +316,7 @@ namespace castor3d
 
 					auto const epsilon = writer.declLocale( cuT( "epsilon" )
 						, 0.0001_f );
-					result = sum / writer.paren( totalWeight + epsilon );
+					result = sum / ( totalWeight + epsilon );
 				} );
 			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 

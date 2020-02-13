@@ -153,14 +153,12 @@ namespace castor3d
 	{
 		this->size = size;
 		ashes::ImageViewCRefArray attaches;
-		uint32_t index = 0u;
 
 		if ( colourTexture )
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
 			attaches.emplace_back( colourTexture->getImage().getView() );
-			++index;
 		}
 
 		if ( depthTexture )
