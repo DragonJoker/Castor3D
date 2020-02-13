@@ -17,18 +17,245 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-add_target(
+set( ${PROJECT_NAME}_HDR_FILES
+	GuiCommonPrerequisites.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	GuiCommonPrerequisites.cpp
+)
+source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
+source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Aui/AuiDockArt.cpp
+	Aui/AuiTabArt.cpp
+	Aui/AuiToolBarArt.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Aui/AuiDockArt.hpp
+	Aui/AuiTabArt.hpp
+	Aui/AuiToolBarArt.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Aui" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Aui" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Properties/AdditionalProperties.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Properties/AdditionalProperties.hpp
+	Properties/AdditionalProperties.inl
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Properties" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Properties" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Properties/Math/CubeBoxProperties.cpp
+	Properties/Math/MatrixProperties.cpp
+	Properties/Math/PointProperties.cpp
+	Properties/Math/PositionProperties.cpp
+	Properties/Math/PropertiesContainer.cpp
+	Properties/Math/PropertiesHolder.cpp
+	Properties/Math/QuaternionProperties.cpp
+	Properties/Math/RectangleProperties.cpp
+	Properties/Math/SizeProperties.cpp
+	Properties/Math/SphereBoxProperties.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Properties/Math/CubeBoxProperties.hpp
+	Properties/Math/MatrixProperties.hpp
+	Properties/Math/MatrixProperties.inl
+	Properties/Math/PointProperties.hpp
+	Properties/Math/PointProperties.inl
+	Properties/Math/PositionProperties.hpp
+	Properties/Math/PropertiesContainer.hpp
+	Properties/Math/PropertiesHolder.hpp
+	Properties/Math/QuaternionProperties.hpp
+	Properties/Math/RectangleProperties.hpp
+	Properties/Math/SizeProperties.hpp
+	Properties/Math/SphereBoxProperties.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Properties\\Math" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Properties\\Math" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Properties/TreeItems/AnimatedObjectGroupTreeItemProperty.cpp
+	Properties/TreeItems/AnimatedObjectTreeItemProperty.cpp
+	Properties/TreeItems/AnimationTreeItemProperty.cpp
+	Properties/TreeItems/BackgroundTreeItemProperty.cpp
+	Properties/TreeItems/BillboardTreeItemProperty.cpp
+	Properties/TreeItems/BoneTreeItemProperty.cpp
+	Properties/TreeItems/CameraTreeItemProperty.cpp
+	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
+	Properties/TreeItems/FrameVariableTreeItemProperty.cpp
+	Properties/TreeItems/GeometryTreeItemProperty.cpp
+	Properties/TreeItems/LightTreeItemProperty.cpp
+	Properties/TreeItems/MaterialTreeItemProperty.cpp
+	Properties/TreeItems/NodeTreeItemProperty.cpp
+	Properties/TreeItems/OverlayTreeItemProperty.cpp
+	Properties/TreeItems/PassTreeItemProperty.cpp
+	Properties/TreeItems/PostEffectTreeItemProperty.cpp
+	Properties/TreeItems/RenderTargetTreeItemProperty.cpp
+	Properties/TreeItems/RenderWindowTreeItemProperty.cpp
+	Properties/TreeItems/SceneTreeItemProperty.cpp
+	Properties/TreeItems/SkeletonAnimationTreeItemProperty.cpp
+	Properties/TreeItems/SkeletonTreeItemProperty.cpp
+	Properties/TreeItems/SubmeshTreeItemProperty.cpp
+	Properties/TreeItems/TextureTreeItemProperty.cpp
+	Properties/TreeItems/ToneMappingTreeItemProperty.cpp
+	Properties/TreeItems/TreeHolder.cpp
+	Properties/TreeItems/TreeItemProperty.cpp
+	Properties/TreeItems/ViewportTreeItemProperty.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Properties/TreeItems/AnimatedObjectGroupTreeItemProperty.hpp
+	Properties/TreeItems/AnimatedObjectTreeItemProperty.hpp
+	Properties/TreeItems/AnimationTreeItemProperty.hpp
+	Properties/TreeItems/BackgroundTreeItemProperty.hpp
+	Properties/TreeItems/BillboardTreeItemProperty.hpp
+	Properties/TreeItems/BoneTreeItemProperty.hpp
+	Properties/TreeItems/CameraTreeItemProperty.hpp
+	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp
+	Properties/TreeItems/FrameVariableTreeItemProperty.hpp
+	Properties/TreeItems/GeometryTreeItemProperty.hpp
+	Properties/TreeItems/LightTreeItemProperty.hpp
+	Properties/TreeItems/MaterialTreeItemProperty.hpp
+	Properties/TreeItems/NodeTreeItemProperty.hpp
+	Properties/TreeItems/OverlayTreeItemProperty.hpp
+	Properties/TreeItems/PassTreeItemProperty.hpp
+	Properties/TreeItems/PostEffectTreeItemProperty.hpp
+	Properties/TreeItems/RenderTargetTreeItemProperty.hpp
+	Properties/TreeItems/RenderWindowTreeItemProperty.hpp
+	Properties/TreeItems/SceneTreeItemProperty.hpp
+	Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp
+	Properties/TreeItems/SkeletonTreeItemProperty.hpp
+	Properties/TreeItems/SubmeshTreeItemProperty.hpp
+	Properties/TreeItems/TextureTreeItemProperty.hpp
+	Properties/TreeItems/ToneMappingTreeItemProperty.hpp
+	Properties/TreeItems/TreeHolder.hpp
+	Properties/TreeItems/TreeItemProperty.hpp
+	Properties/TreeItems/ViewportTreeItemProperty.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Properties\\TreeItems" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Properties\\TreeItems" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Shader/FrameVariablesList.cpp
+	Shader/LanguageFileContext.cpp
+	Shader/LanguageFileParser.cpp
+	Shader/LanguageInfo.cpp
+	Shader/ShaderDialog.cpp
+	Shader/ShaderEditorPage.cpp
+	Shader/ShaderSource.cpp
+	Shader/StcContext.cpp
+	Shader/StcTextEditor.cpp
+	Shader/StyleInfo.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Shader/FrameVariablesList.hpp
+	Shader/LanguageFileContext.hpp
+	Shader/LanguageFileParser.hpp
+	Shader/LanguageInfo.hpp
+	Shader/ShaderDialog.hpp
+	Shader/ShaderEditorPage.hpp
+	Shader/ShaderSource.hpp
+	Shader/StcContext.hpp
+	Shader/StcTextEditor.hpp
+	Shader/StyleInfo.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	System/CastorApplication.cpp
+	System/CubeBoxManager.cpp
+	System/GradientButton.cpp
+	System/ImagesLoader.cpp
+	System/MaterialsList.cpp
+	System/NodeState.cpp
+	System/Recorder.cpp
+	System/RendererSelector.cpp
+	System/SceneExporter.cpp
+	System/SceneObjectsList.cpp
+	System/SplashScreen.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	System/CastorApplication.hpp
+	System/CubeBoxManager.hpp
+	System/GradientButton.hpp
+	System/ImagesLoader.hpp
+	System/MaterialsList.hpp
+	System/NodeState.hpp
+	System/Recorder.hpp
+	System/RendererSelector.hpp
+	System/SceneExporter.hpp
+	System/SceneObjectsList.hpp
+	System/SplashScreen.hpp
+)
+if ( APPLE )
+	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+		System/MetalLayer.mm
+	)
+	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		System/MetalLayer.h
+	)
+endif ()
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+add_target_min(
 	${PROJECT_NAME}
 	lib
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
-	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
-	""
-	""
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
-	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
-	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
-	""
 )
 add_library( castor::${PROJECT_NAME}
 	ALIAS

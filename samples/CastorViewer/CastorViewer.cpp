@@ -6,8 +6,8 @@
 #include <CastorUtils/Data/File.hpp>
 #include <CastorUtils/Exception/Exception.hpp>
 
-#include <GuiCommon/ImagesLoader.hpp>
-#include <GuiCommon/RendererSelector.hpp>
+#include <GuiCommon/System/ImagesLoader.hpp>
+#include <GuiCommon/System/RendererSelector.hpp>
 
 #include <GuiCommon/xpms/export.xpm>
 #include <GuiCommon/xpms/log.xpm>

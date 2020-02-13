@@ -7,17 +7,17 @@
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <GuiCommon/ImagesLoader.hpp>
-#include <GuiCommon/MaterialsList.hpp>
-#include <GuiCommon/RendererSelector.hpp>
-#include <GuiCommon/SplashScreen.hpp>
-#include <GuiCommon/AuiDockArt.hpp>
-#include <GuiCommon/AuiTabArt.hpp>
-#include <GuiCommon/AuiToolBarArt.hpp>
-#include <GuiCommon/PropertiesContainer.hpp>
-#include <GuiCommon/PropertiesHolder.hpp>
-#include <GuiCommon/SceneExporter.hpp>
-#include <GuiCommon/TreeHolder.hpp>
+#include <GuiCommon/Aui/AuiDockArt.hpp>
+#include <GuiCommon/Aui/AuiTabArt.hpp>
+#include <GuiCommon/Aui/AuiToolBarArt.hpp>
+#include <GuiCommon/Properties/Math/PropertiesContainer.hpp>
+#include <GuiCommon/Properties/Math/PropertiesHolder.hpp>
+#include <GuiCommon/Properties/TreeItems/TreeHolder.hpp>
+#include <GuiCommon/System/ImagesLoader.hpp>
+#include <GuiCommon/System/MaterialsList.hpp>
+#include <GuiCommon/System/RendererSelector.hpp>
+#include <GuiCommon/System/SplashScreen.hpp>
+#include <GuiCommon/System/SceneExporter.hpp>
 
 #include <Castor3D/Cache/SceneCache.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>

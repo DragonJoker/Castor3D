@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
-#include <GuiCommon/Recorder.hpp>
-#include <GuiCommon/SceneObjectsList.hpp>
+#include <GuiCommon/System/Recorder.hpp>
+#include <GuiCommon/System/SceneObjectsList.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Data/Path.hpp>

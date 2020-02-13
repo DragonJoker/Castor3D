@@ -4,8 +4,8 @@ See LICENSE file in root folder
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include <GuiCommon/CubeBoxManager.hpp>
-#include <GuiCommon/NodeState.hpp>
+#include <GuiCommon/System/CubeBoxManager.hpp>
+#include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
 
