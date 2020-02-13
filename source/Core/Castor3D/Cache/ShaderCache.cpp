@@ -118,7 +118,6 @@ namespace castor3d
 	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
-		VkShaderStageFlags matrixUboShaderMask = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
 		result->setSource( VK_SHADER_STAGE_VERTEX_BIT
 			, renderPass.getVertexShaderSource( flags ) );
@@ -128,7 +127,6 @@ namespace castor3d
 
 		if ( geometry )
 		{
-			matrixUboShaderMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
 			result->setSource( VK_SHADER_STAGE_GEOMETRY_BIT
 				, std::move( geometry ) );
 		}

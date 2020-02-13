@@ -51,7 +51,7 @@ namespace castor3d
 				result = file.writeText( m_tabs + cuT( "\t}\n" ) ) > 0;
 			}
 
-			file.writeText( m_tabs + cuT( "}\n" ) ) > 0;
+			file.writeText( m_tabs + cuT( "}\n" ) );
 		}
 
 		return result;

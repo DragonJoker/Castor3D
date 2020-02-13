@@ -480,9 +480,8 @@ namespace castor
 		}
 	}
 
-	void ZipArchive::Folder::removeFile( Path const & p_path )
+	void ZipArchive::Folder::removeFile( Path const & CU_UnusedParam( path ) )
 	{
-		Path path = p_path.getPath();
 	}
 
 	//*********************************************************************************************

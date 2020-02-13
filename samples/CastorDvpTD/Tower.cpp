@@ -186,7 +186,6 @@ namespace castortd
 		auto direction = targetPosition - m_node.getDerivedPosition();
 		direction = point::getNormalised( direction );
 		castor::Point3f up{ 0, 1, 0 };
-		auto right = point::cross( direction, up );
 		auto transform = matrix::lookAt( m_node.getDerivedPosition(), m_node.getDerivedPosition() - direction, up );
 		m_node.setOrientation( Quaternion::fromMatrix( transform ) );
 	}

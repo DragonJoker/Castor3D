@@ -402,13 +402,13 @@ namespace Obj
 
 		Point3fArray allvtx;
 		doParseVec3( v, allvtx );
-		v = StringArray{};
+		v.clear();
 		Point2fArray alltex;
 		doParseVec2( vt, alltex );
-		vt = StringArray{};
+		vt.clear();
 		Point3fArray allnml;
 		doParseVec3( vn, allnml );
-		vn = StringArray{};
+		vn.clear();
 
 		std::cout << "    Vertex count: " << allvtx.size() << std::endl;
 		std::cout << "    TexCoord count: " << alltex.size() << std::endl;

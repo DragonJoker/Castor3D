@@ -47,8 +47,6 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		auto cameraNode = camera.getParent();
-		auto lightNode = light.getParent();
 		auto & myCamera = getCuller().getCamera();
 		light.getDirectionalLight()->updateShadow( camera
 			, myCamera

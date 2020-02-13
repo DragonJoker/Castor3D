@@ -64,25 +64,6 @@ namespace GuiCommon
 
 			void visit( SkyboxBackground const & background )
 			{
-				wxString selected;
-				wxPGChoices choices;
-				choices.Add( PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR );
-				choices.Add( PROPERTY_BACKGROUND_SKYBOX_CROSS );
-				choices.Add( PROPERTY_BACKGROUND_SKYBOX_FACES );
-
-				if ( !background.getEquiTexturePath().empty() )
-				{
-					selected = PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR;
-				}
-				else if ( !background.getCrossTexturePath().empty() )
-				{
-					selected = PROPERTY_BACKGROUND_SKYBOX_CROSS;
-				}
-				else
-				{
-					selected = PROPERTY_BACKGROUND_SKYBOX_FACES;
-				}
-
 				if ( !background.getEquiTexturePath().empty() )
 				{
 					m_grid.Append( new wxImageFileProperty{ PROPERTY_BACKGROUND_SKYBOX_EQUIRECTANGULAR_IMAGE

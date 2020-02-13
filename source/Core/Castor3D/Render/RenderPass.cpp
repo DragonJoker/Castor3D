@@ -793,8 +793,6 @@ namespace castor3d
 		uint32_t copyNodesMatrices( std::vector< NodeT > const & renderNodes
 			, std::vector< InstantiationData > & matrixBuffer )
 		{
-			auto const mtxSize = sizeof( float ) * 16;
-			auto const stride = sizeof( InstantiationData );
 			auto const count = std::min( uint32_t( matrixBuffer.size() )
 				, uint32_t( renderNodes.size() ) );
 			auto buffer = matrixBuffer.data();

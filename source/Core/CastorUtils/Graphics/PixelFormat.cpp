@@ -1221,7 +1221,6 @@ namespace castor
 				uint8_t blockBuffer[16 * 4u];
 				uint8_t const * data = src->getConstPtr();
 				uint32_t pixelSize = PF::getBytesPerPixel( result->getFormat() );
-				uint32_t blockSize = PF::getBytesPerPixel( src->getFormat() );
 				uint32_t height = src->getHeight();
 				uint32_t width = src->getWidth();
 				uint32_t heightInBlocks = height / 4u;

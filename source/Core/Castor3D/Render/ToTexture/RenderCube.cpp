@@ -187,7 +187,6 @@ namespace castor3d
 		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
 		m_sampler->initialise();
-		auto commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
 		m_matrixUbo = doCreateMatrixUbo( m_device
 			, *m_device.graphicsQueue
 			, *m_device.graphicsCommandPool

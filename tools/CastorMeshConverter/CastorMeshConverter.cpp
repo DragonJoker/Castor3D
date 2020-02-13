@@ -462,8 +462,6 @@ int main( int argc, char * argv[] )
 			return EXIT_SUCCESS;
 		}
 
-		auto extension = castor::string::lowerCase( path.getExtension() );
-
 #if defined( NDEBUG )
 		castor::Logger::initialise( castor::LogType::eInfo );
 #else

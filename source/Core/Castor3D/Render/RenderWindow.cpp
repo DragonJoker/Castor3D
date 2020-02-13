@@ -792,7 +792,6 @@ namespace castor3d
 	void RenderWindow::doCreateSwapChainDependent()
 	{
 		doCreateRenderingResources();
-		RenderTargetSPtr target = getRenderTarget();
 		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
 			, false
 			, false );
@@ -803,7 +802,7 @@ namespace castor3d
 #if C3D_DebugPicking
 			, m_pickingPass->getResult()
 #else
-			, target->getTexture().getTexture()->getDefaultView()
+			, getRenderTarget()->getTexture().getTexture()->getDefaultView()
 #endif
 			, *m_renderPass
 			, {}
