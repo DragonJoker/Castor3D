@@ -66,7 +66,7 @@ namespace castor3d
 		 *\param[in]	renderSystem	Le RenderSystem.
 		 *\param[in]	target			La vue de texture cible.
 		 */
-		C3D_API explicit OverlayRenderer( RenderSystem & renderSystem
+		C3D_API OverlayRenderer( RenderSystem & renderSystem
 			, ashes::ImageView const & target );
 		/**
 		 *\~english

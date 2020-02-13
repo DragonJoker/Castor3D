@@ -329,11 +329,11 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	OverlayRenderer::VertexBufferPool< VertexT, CountT >::VertexBufferPool( RenderDevice const & device
-		, ashes::PipelineVertexInputStateCreateInfo const & declaration
+		, ashes::PipelineVertexInputStateCreateInfo const & decl
 		, uint32_t count )
 		: maxCount{ count }
 		, data{ count, Quad{} }
-		, declaration{ declaration }
+		, declaration{ decl }
 		, buffer{ makeVertexBuffer< Quad >( device
 			, count
 			, 0u

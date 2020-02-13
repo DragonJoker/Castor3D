@@ -60,8 +60,8 @@ namespace castor
 		SquareMatrix();
 		explicit SquareMatrix( NoInit const & );
 		explicit SquareMatrix( T const & rhs );
-		SquareMatrix( SquareMatrix< T, Count > const & rhs );
-		explicit SquareMatrix( SquareMatrix< T, Count > && rhs );
+		SquareMatrix( SquareMatrix const & rhs );
+		SquareMatrix( SquareMatrix && rhs );
 		template< uint32_t _Rows >
 		explicit SquareMatrix( SquareMatrix< T, _Rows > const & rhs );
 		template< typename Type >

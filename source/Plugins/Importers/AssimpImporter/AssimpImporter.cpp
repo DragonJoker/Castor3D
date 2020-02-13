@@ -796,7 +796,7 @@ namespace C3dAssimp
 			&& aiNode.mNumMeshes )
 		{
 			uint32_t index;
-			auto bone = doAddBone( name, castor::Matrix4x4f{ 1.0f }, skeleton, index );
+			doAddBone( name, castor::Matrix4x4f{ 1.0f }, skeleton, index );
 
 			for ( auto const & aiMesh : castor::makeArrayView( aiNode.mMeshes, aiNode.mNumMeshes ) )
 			{

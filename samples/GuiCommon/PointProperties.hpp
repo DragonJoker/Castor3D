@@ -52,7 +52,7 @@ namespace GuiCommon
 		PointProperty( wxString const & label
 			, wxString const & name
 			, castor::Coords< T, Count > const & value );
-		PointProperty( wxString const( & p_names )[Count]
+		explicit PointProperty( wxString const( & p_names )[Count]
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );

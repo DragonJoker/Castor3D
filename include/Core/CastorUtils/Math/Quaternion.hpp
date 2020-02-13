@@ -118,7 +118,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	rhs	L'objet Quaternion à copier
 		 */
-		inline QuaternionT( QuaternionT< T > const & rhs );
+		inline QuaternionT( QuaternionT const & rhs );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -127,7 +127,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 */
-		inline QuaternionT( QuaternionT< T > && rhs );
+		inline QuaternionT( QuaternionT && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor

@@ -216,7 +216,6 @@ namespace castor3d
 					cuT( "Bottom" )
 				};
 
-				auto plane = FrustumPlane( index );
 				auto vp = aabb.getPositiveVertex( m_planes[index].getNormal() );
 				auto dist = m_planes[index].distance( vp );
 				auto center = aabb.getCenter();

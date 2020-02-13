@@ -24,7 +24,7 @@ namespace GuiCommon
 		MatrixProperty( wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, castor::SquareMatrix< T, Count > const & value = castor::SquareMatrix< T, Count >() );
-		MatrixProperty( wxString const( & rowNames )[Count]
+		explicit MatrixProperty( wxString const( & rowNames )[Count]
 			, wxString const( & colNames )[Count]
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL

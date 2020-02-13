@@ -36,20 +36,6 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Factory() = default;
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~Factory() = default;
-		/**
-		 *\~english
 		 *\brief		Registers an object type
 		 *\param[in]	key		The object type
 		 *\param[in]	creator	The object creation function

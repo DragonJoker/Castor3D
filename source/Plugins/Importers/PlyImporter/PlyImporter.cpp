@@ -100,7 +100,7 @@ namespace C3dPly
 				{
 					std::getline( isFile, strLine );
 
-					if ( ( stIndex = strLine.find( "property " ) ) != std::string::npos )
+					if ( strLine.find( "property " ) != std::string::npos )
 					{
 						iNbProperties++;
 					}
