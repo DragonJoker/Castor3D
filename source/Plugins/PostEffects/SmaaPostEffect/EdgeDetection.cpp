@@ -81,6 +81,9 @@ namespace smaa
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdgeDetection" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdgeDetection" }
 	{
+		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
+		static constexpr VkFormat depthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
+
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
 
@@ -89,7 +92,7 @@ namespace smaa
 		{
 			{
 				0u,
-				VK_FORMAT_R8G8B8A8_UNORM,
+				colourFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -100,7 +103,7 @@ namespace smaa
 			},
 			{
 				0u,
-				VK_FORMAT_S8_UINT,
+				depthFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -155,8 +158,8 @@ namespace smaa
 
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()
-			, VK_FORMAT_R8G8B8A8_UNORM
-			, VK_FORMAT_D24_UNORM_S8_UINT );
+			, colourFormat
+			, depthFormat );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doGetEdgeDetectionVP( m_renderSystem

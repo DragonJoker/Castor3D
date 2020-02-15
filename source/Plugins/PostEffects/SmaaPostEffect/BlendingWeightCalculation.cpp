@@ -867,6 +867,8 @@ namespace smaa
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeightCalculation" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeightCalculation" }
 	{
+		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
@@ -918,7 +920,7 @@ namespace smaa
 		{
 			{
 				0u,
-				VK_FORMAT_R8G8B8A8_UNORM,
+				colourFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -929,7 +931,7 @@ namespace smaa
 			},
 			{
 				0u,
-				VK_FORMAT_S8_UINT,
+				depthView->getDefaultView()->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -1020,7 +1022,7 @@ namespace smaa
 			, std::move( dsstate ) );
 		m_surface.initialise( *m_renderPass
 			, castor::Size{ size.width, size.height }
-			, VK_FORMAT_R8G8B8A8_UNORM
+			, colourFormat
 			, depthView );
 	}
 
