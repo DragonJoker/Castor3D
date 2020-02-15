@@ -247,25 +247,25 @@ namespace castor3d
 
 	void RenderLoopAsync::doSetHandle( ashes::WindowHandle handle )
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		m_handle = std::move( handle );
 	}
 
 	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		return m_handle;
 	}
 
 	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		m_window = p_window;
 	}
 
 	RenderWindow * RenderLoopAsync::doGetWindow()const
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		return m_window;
 	}
 }

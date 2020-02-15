@@ -29,7 +29,7 @@ namespace castor3d
 	{
 		if ( !m_passBuffer )
 		{
-			LockType lock{ makeUniqueLock( m_elements ) };
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			if ( !m_elements.has( Material::DefaultMaterialName ) )
 			{
@@ -85,7 +85,7 @@ namespace castor3d
 	{
 		if ( m_passBuffer )
 		{
-			LockType lock{ makeUniqueLock( m_elements ) };
+			LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 			for ( auto & material : m_elements )
 			{
@@ -99,7 +99,7 @@ namespace castor3d
 
 	void MaterialCache::clear()
 	{
-		LockType lock{ makeUniqueLock( m_elements ) };
+		LockType lock{ castor::makeUniqueLock( m_elements ) };
 		m_defaultMaterial.reset();
 		m_elements.clear();
 	}
@@ -155,7 +155,7 @@ namespace castor3d
 
 	void MaterialCache::getNames( StringArray & names )
 	{
-		LockType lock{ makeUniqueLock( m_elements ) };
+		LockType lock{ castor::makeUniqueLock( m_elements ) };
 		names.clear();
 		auto it = m_elements.begin();
 

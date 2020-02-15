@@ -68,8 +68,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( Scene const & lhs, Scene const & rhs )
 	{
-		auto lockA = makeUniqueLock( lhs.getSceneNodeCache() );
-		auto lockB = makeUniqueLock( rhs.getSceneNodeCache() );
+		auto lockA = castor::makeUniqueLock( lhs.getSceneNodeCache() );
+		auto lockB = castor::makeUniqueLock( rhs.getSceneNodeCache() );
 		auto itA = lhs.getSceneNodeCache().begin();
 		auto endItA =  lhs.getSceneNodeCache().end();
 		auto itB = rhs.getSceneNodeCache().begin();
@@ -92,8 +92,8 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = makeUniqueLock( lhs.getGeometryCache() );
-			auto lockB = makeUniqueLock( rhs.getGeometryCache() );
+			auto lockA = castor::makeUniqueLock( lhs.getGeometryCache() );
+			auto lockB = castor::makeUniqueLock( rhs.getGeometryCache() );
 			auto itA = lhs.getGeometryCache().begin();
 			auto endItA =  lhs.getGeometryCache().end();
 			auto itB = rhs.getGeometryCache().begin();
@@ -110,8 +110,8 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = makeUniqueLock( lhs.getLightCache() );
-			auto lockB = makeUniqueLock( rhs.getLightCache() );
+			auto lockA = castor::makeUniqueLock( lhs.getLightCache() );
+			auto lockB = castor::makeUniqueLock( rhs.getLightCache() );
 			auto itA = lhs.getLightCache().begin();
 			auto endItA =  lhs.getLightCache().end();
 			auto itB = rhs.getLightCache().begin();
@@ -128,8 +128,8 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = makeUniqueLock( lhs.getCameraCache() );
-			auto lockB = makeUniqueLock( rhs.getCameraCache() );
+			auto lockA = castor::makeUniqueLock( lhs.getCameraCache() );
+			auto lockB = castor::makeUniqueLock( rhs.getCameraCache() );
 			auto itA = lhs.getCameraCache().begin();
 			auto endItA =  lhs.getCameraCache().end();
 			auto itB = rhs.getCameraCache().begin();
@@ -152,8 +152,8 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = makeUniqueLock( lhs.getAnimatedObjectGroupCache() );
-			auto lockB = makeUniqueLock( rhs.getAnimatedObjectGroupCache() );
+			auto lockA = castor::makeUniqueLock( lhs.getAnimatedObjectGroupCache() );
+			auto lockB = castor::makeUniqueLock( rhs.getAnimatedObjectGroupCache() );
 			auto itA = lhs.getAnimatedObjectGroupCache().begin();
 			auto endItA =  lhs.getAnimatedObjectGroupCache().end();
 			auto itB = rhs.getAnimatedObjectGroupCache().begin();

@@ -246,7 +246,7 @@ namespace castor3d
 		{
 			auto timerBlock = m_timer->start();
 			using LockType = std::unique_lock< LightCache const >;
-			LockType lock{ makeUniqueLock( cache ) };
+			LockType lock{ castor::makeUniqueLock( cache ) };
 			auto count = cache.getLightsCount( LightType::eDirectional )
 				+ cache.getLightsCount( LightType::ePoint )
 				+ cache.getLightsCount( LightType::eSpot );

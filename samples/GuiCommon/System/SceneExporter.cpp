@@ -427,7 +427,7 @@ namespace GuiCommon
 			}
 
 			using LockType = std::unique_lock< MeshCache const >;
-			LockType lock{ makeUniqueLock( scene.getMeshCache() ) };
+			LockType lock{ castor::makeUniqueLock( scene.getMeshCache() ) };
 
 			for ( auto const & it : scene.getMeshCache() )
 			{

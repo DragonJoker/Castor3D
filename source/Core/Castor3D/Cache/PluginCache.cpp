@@ -43,12 +43,12 @@ namespace castor3d
 	void PluginCache::clear()
 	{
 		{
-			MyLockType lock{ makeUniqueLock( m_mutexLoadedPluginTypes ) };
+			MyLockType lock{ castor::makeUniqueLock( m_mutexLoadedPluginTypes ) };
 			m_loadedPluginTypes.clear();
 		}
 
 		{
-			MyLockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
+			MyLockType lock{ castor::makeUniqueLock( m_mutexLoadedPlugins ) };
 
 			for ( auto & it : m_loadedPlugins )
 			{
@@ -57,7 +57,7 @@ namespace castor3d
 		}
 
 		{
-			MyLockType lock{ makeUniqueLock( m_mutexLibraries ) };
+			MyLockType lock{ castor::makeUniqueLock( m_mutexLibraries ) };
 
 			for ( auto & it : m_libraries )
 			{
@@ -133,7 +133,7 @@ namespace castor3d
 	PluginStrMap PluginCache::getPlugins( PluginType type )
 	{
 		using LockType = std::unique_lock< std::recursive_mutex >;
-		LockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexLoadedPlugins ) };
 		return m_loadedPlugins[size_t( type )];
 	}
 
@@ -164,7 +164,7 @@ namespace castor3d
 	PluginSPtr PluginCache::doloadPlugin( Path const & pathFile )
 	{
 		PluginSPtr result;
-		MyLockType lockTypes{ makeUniqueLock( m_mutexLoadedPluginTypes ) };
+		MyLockType lockTypes{ castor::makeUniqueLock( m_mutexLoadedPluginTypes ) };
 		auto it = m_loadedPluginTypes.find( pathFile );
 
 		if ( it == m_loadedPluginTypes.end() )
@@ -237,11 +237,11 @@ namespace castor3d
 			{
 				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
 				{
-					MyLockType lockPlugins{ makeUniqueLock( m_mutexLoadedPlugins ) };
+					MyLockType lockPlugins{ castor::makeUniqueLock( m_mutexLoadedPlugins ) };
 					m_loadedPlugins[size_t( type )].insert( std::make_pair( pathFile, result ) );
 				}
 				{
-					MyLockType lockLibraries{ makeUniqueLock( m_mutexLibraries ) };
+					MyLockType lockLibraries{ castor::makeUniqueLock( m_mutexLibraries ) };
 					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
 				Logger::logInfo( castor::makeStringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
@@ -254,7 +254,7 @@ namespace castor3d
 		else
 		{
 			PluginType type = it->second;
-			MyLockType lock{ makeUniqueLock( m_mutexLoadedPlugins ) };
+			MyLockType lock{ castor::makeUniqueLock( m_mutexLoadedPlugins ) };
 			result = m_loadedPlugins[size_t( type )].find( pathFile )->second;
 		}
 

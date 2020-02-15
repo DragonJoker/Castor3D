@@ -84,7 +84,7 @@ namespace castortd
 				if ( p_window )
 				{
 					using LockType = std::unique_lock< CameraCache >;
-					LockType lock{ makeUniqueLock( scene->getCameraCache() ) };
+					LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
 					auto camera = scene->getCameraCache().begin()->second;
 					p_window->addPickingScene( *scene );
 					m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );

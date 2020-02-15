@@ -59,7 +59,7 @@ namespace castor
 			~BasicPrefixBufferManager()
 			{
 				--sm_instances;
-				lock_type lock{ makeUniqueLock( m_mutex ) };
+				lock_type lock{ castor::makeUniqueLock( m_mutex ) };
 
 				for ( auto buffer : m_list )
 				{
@@ -82,7 +82,7 @@ namespace castor
 			bool insert( bos & o_s, bsb * b_s )
 			{
 				lock_type lock{ makeUniqueLock( m_mutex ) };
-				return m_list.insert( std::make_pair( &o_s, b_s ) ).second;
+				return m_list.emplace( &o_s, b_s ).second;
 			}
 
 			/**

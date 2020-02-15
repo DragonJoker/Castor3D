@@ -936,7 +936,7 @@ namespace castor3d
 		auto timerBlock = m_overlaysTimer->start();
 		{
 			using LockType = std::unique_lock< OverlayCache >;
-			LockType lock{ makeUniqueLock( getEngine()->getOverlayCache() ) };
+			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
 			m_overlayRenderer->beginPrepare( camera
 				, *m_overlaysTimer
 				, *result );

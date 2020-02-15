@@ -94,14 +94,14 @@ namespace castor3d
 
 	void Cache< Overlay, castor::String >::clear()
 	{
-		LockType lock{ makeUniqueLock( m_elements ) };
+		LockType lock{ castor::makeUniqueLock( m_elements ) };
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}
 
 	void Cache< Overlay, castor::String >::cleanup()
 	{
-		LockType lock{ makeUniqueLock( m_elements ) };
+		LockType lock{ castor::makeUniqueLock( m_elements ) };
 
 		for ( auto it : m_fontTextures )
 		{

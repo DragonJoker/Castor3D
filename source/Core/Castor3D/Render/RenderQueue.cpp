@@ -122,7 +122,7 @@ namespace castor3d
 			AnimatedObjectSPtr result;
 			auto & cache = scene.getAnimatedObjectGroupCache();
 			using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
-			LockType lock{ makeUniqueLock( cache ) };
+			LockType lock{ castor::makeUniqueLock( cache ) };
 
 			for ( auto group : cache )
 			{
