@@ -291,7 +291,7 @@ namespace castor3d
 			6u * shader::getPointShadowMapCount(),
 			VK_SAMPLE_COUNT_1_BIT,
 			VK_IMAGE_TILING_OPTIMAL,
-			VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT,
+			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
 		};
 		ashes::ImageViewCreateInfo view
 		{
