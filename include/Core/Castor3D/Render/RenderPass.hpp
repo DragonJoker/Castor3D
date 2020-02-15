@@ -174,7 +174,7 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API ShaderPtr getVertexShaderSource( PipelineFlags const & flags )const;
 		/**
@@ -183,16 +183,16 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API ShaderPtr getGeometryShaderSource( PipelineFlags const & flags )const;
 		/**
@@ -555,7 +555,7 @@ namespace castor3d
 		 *\param[in,out]	flags	The pipeline flags.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	flags	Les flags de pipeline.
+		 *\param[in,out]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API void updateFlags( PipelineFlags & flags )const;
 		/**
@@ -674,8 +674,8 @@ namespace castor3d
 		 *\brief		Retrieves the shader program matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief		Récupère le programme shader correspondant aux flags donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\brief		Récupère le programme shader correspondant aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags )const;
 		/**
@@ -1102,7 +1102,7 @@ namespace castor3d
 		 *\param[in,out]	flags	The pipeline flags.
 		 *\~french
 		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	flags	Les flags de pipeline.
+		 *\param[in,out]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual void doUpdateFlags( PipelineFlags & flags )const = 0;
 		/**
@@ -1120,16 +1120,25 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the billboards' vertex shader source matching the given flags.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Récupère le source du vertex shader de billboards qui correspond aux indicateurs donnés.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const = 0;
 		/**
@@ -1138,7 +1147,7 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const = 0;
 		/**
@@ -1147,7 +1156,7 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const = 0;
 		/**
@@ -1156,7 +1165,7 @@ namespace castor3d
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les flags de pipeline.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const = 0;
 
