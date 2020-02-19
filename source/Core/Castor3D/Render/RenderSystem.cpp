@@ -137,8 +137,12 @@ namespace castor3d
 		bool isValidationLayer( std::string const & name
 			, std::string const & description )
 		{
-			return ( name.find( "validation" ) != std::string::npos )
-				|| ( description.find( "LunarG Validation" ) != std::string::npos );
+			static std::set< std::string > const validNames
+			{
+				"VK_LAYER_KHRONOS_validation",
+				"VK_LAYER_LUNARG_api_dump",
+			};
+			return validNames.find( name ) != validNames.end();
 		}
 
 		bool isExtensionAvailable( std::vector< VkExtensionProperties > const & available
@@ -155,6 +159,12 @@ namespace castor3d
 		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
 			, ashes::StringArray & names )
 		{
+#	if VK_EXT_debug_utils
+			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
+			{
+				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
+			}
+#	endif
 #	if VK_EXT_debug_utils
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
 			{
@@ -263,7 +273,7 @@ namespace castor3d
 				engine.getAppVersion().getVkVersion(),
 				"Castor3D",
 				Version{}.getVkVersion(),
-				VK_API_VERSION_1_0,
+				VK_API_VERSION_1_2,
 			};
 		}
 	}

@@ -165,8 +165,8 @@ namespace castor3d
 		{
 			this->depthTexture = depthTexture;
 			this->depthTexture->initialise();
-			auto format = this->depthTexture->getPixelFormat();
 			auto & texture = this->depthTexture->getTexture();
+			auto format = texture.getFormat();
 			auto aspectMask = ashes::getAspectMask( format );
 			ashes::ImageViewCreateInfo view
 			{
