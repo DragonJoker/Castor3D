@@ -140,6 +140,15 @@ namespace castor3d
 			static std::set< std::string > const validNames
 			{
 				"VK_LAYER_KHRONOS_validation",
+			};
+			return validNames.find( name ) != validNames.end();
+		}
+
+		bool isApiTraceLayer( std::string const & name
+			, std::string const & description )
+		{
+			static std::set< std::string > const validNames
+			{
 				"VK_LAYER_LUNARG_api_dump",
 			};
 			return validNames.find( name ) != validNames.end();
@@ -159,30 +168,24 @@ namespace castor3d
 		void addOptionalDebugLayers( std::vector< VkExtensionProperties > const & available
 			, ashes::StringArray & names )
 		{
-#	if VK_EXT_debug_utils
+#if VK_EXT_debug_utils
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
 			}
-#	endif
-#	if VK_EXT_debug_utils
-			if ( isExtensionAvailable( available, VK_EXT_DEBUG_UTILS_EXTENSION_NAME ) )
-			{
-				names.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
-			}
-#	endif
-#	if VK_EXT_debug_report
+#endif
+#if VK_EXT_debug_report
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_REPORT_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
 			}
-#	endif
-#	if VK_EXT_debug_marker
+#endif
+#if VK_EXT_debug_marker
 			if ( isExtensionAvailable( available, VK_EXT_DEBUG_MARKER_EXTENSION_NAME ) )
 			{
 				names.push_back( VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 			}
-#	endif
+#endif
 		}
 
 		void checkExtensionsAvailability( std::vector< VkExtensionProperties > const & available
@@ -368,29 +371,47 @@ namespace castor3d
 				{ 0x13B5, cuT( "ARM" ) },
 			};
 			auto & device = *getMainRenderDevice();
+			auto & features = device.features;
+			auto & properties = device.properties;
+			auto & limits = properties.limits;
 			castor::StringStream stream( castor::makeStringStream() );
-			stream << ( device.properties.apiVersion >> 22 ) << cuT( "." ) << ( ( device.properties.apiVersion >> 12 ) & 0x0FFF );
-			m_gpuInformations.setVendor( vendors[device.properties.vendorID] );
-			m_gpuInformations.setRenderer( device.properties.deviceName );
+			stream << ( properties.apiVersion >> 22 ) << cuT( "." ) << ( ( properties.apiVersion >> 12 ) & 0x0FFF );
+			m_gpuInformations.setVendor( vendors[properties.vendorID] );
+			m_gpuInformations.setRenderer( properties.deviceName );
 			m_gpuInformations.setVersion( stream.str() );
 			m_gpuInformations.setShaderLanguageVersion( device.device->getShaderVersion() );
 			m_gpuInformations.updateFeature( castor3d::GpuFeature::eShaderStorageBuffers, m_desc.features.hasStorageBuffers );
-			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, false );
+			m_gpuInformations.updateFeature( castor3d::GpuFeature::eStereoRendering, limits.maxViewports > 1u );
 
 			m_gpuInformations.useShaderType( VK_SHADER_STAGE_COMPUTE_BIT, device.device->getInstance().getFeatures().hasComputeShaders );
-			m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, device.features.tessellationShader );
-			m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, device.features.tessellationShader );
-			m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, device.features.geometryShader );
+			m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, features.tessellationShader );
+			m_gpuInformations.useShaderType( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, features.tessellationShader );
+			m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, features.geometryShader );
 			m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 			m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
 
+			m_gpuInformations.setMaxValue( GpuMax::eTexture1DSize, limits.maxImageDimension1D );
+			m_gpuInformations.setMaxValue( GpuMax::eTexture2DSize, limits.maxImageDimension2D );
+			m_gpuInformations.setMaxValue( GpuMax::eTexture3DSize, limits.maxImageDimension3D );
+			m_gpuInformations.setMaxValue( GpuMax::eTextureCubeSize, limits.maxImageDimensionCube );
+			m_gpuInformations.setMaxValue( GpuMax::eTextureLayers, limits.maxImageArrayLayers );
+			m_gpuInformations.setMaxValue( GpuMax::eSamplerLodBias, int32_t( limits.maxSamplerLodBias ) );
+			m_gpuInformations.setMaxValue( GpuMax::eClipDistances, limits.maxClipDistances  );
+			m_gpuInformations.setMaxValue( GpuMax::eFramebufferWidth, limits.maxFramebufferWidth );
+			m_gpuInformations.setMaxValue( GpuMax::eFramebufferHeight, limits.maxFramebufferHeight );
+			m_gpuInformations.setMaxValue( GpuMax::eFramebufferLayers, limits.maxFramebufferLayers );
+			m_gpuInformations.setMaxValue( GpuMax::eFramebufferSamples, limits.framebufferColorSampleCounts );
+			m_gpuInformations.setMaxValue( GpuMax::eTexelBufferSize, limits.maxTexelBufferElements );
+			m_gpuInformations.setMaxValue( GpuMax::eUniformBufferSize, limits.maxUniformBufferRange );
+			m_gpuInformations.setMaxValue( GpuMax::eStorageBufferSize, limits.maxStorageBufferRange );
+			m_gpuInformations.setMaxValue( GpuMax::eViewportWidth, limits.maxViewportDimensions[0] );
+			m_gpuInformations.setMaxValue( GpuMax::eViewportHeight, limits.maxViewportDimensions[1] );
+			m_gpuInformations.setMaxValue( GpuMax::eViewports, limits.maxViewports );
+
+			log::info << m_gpuInformations << std::endl;
+
 			m_initialised = true;
 		}
-
-		castor::Logger::logInfo( cuT( "Vendor: " ) + m_gpuInformations.getVendor() );
-		castor::Logger::logInfo( cuT( "Renderer: " ) + m_gpuInformations.getRenderer() );
-		castor::Logger::logInfo( cuT( "Version: " ) + m_gpuInformations.getVersion() );
-		//m_gpuInformations.removeFeature( GpuFeature::eShaderStorageBuffers );
 	}
 
 	void RenderSystem::cleanup()
@@ -567,8 +588,10 @@ namespace castor3d
 	{
 		for ( auto const & props : m_layers )
 		{
-			if ( getEngine()->isValidationEnabled()
-				&& isValidationLayer( props.layerName, props.description ) )
+			if ( ( getEngine()->isValidationEnabled()
+					&& isValidationLayer( props.layerName, props.description ) )
+				|| ( getEngine()->isApiTraceEnabled()
+					&& isApiTraceLayer( props.layerName, props.description ) ) )
 			{
 				names.push_back( props.layerName );
 			}

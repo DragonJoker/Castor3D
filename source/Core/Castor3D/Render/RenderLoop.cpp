@@ -142,11 +142,11 @@ namespace castor3d
 		}
 		catch ( castor::Exception & exc )
 		{
-			Logger::logError( cuT( "createContext - " ) + exc.getFullDescription() );
+			log::error << cuT( "createContext - " ) << exc.getFullDescription() << std::endl;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( std::string( "createContext - " ) + exc.what() );
+			log::error << std::string( "createContext - " ) << exc.what() << std::endl;
 		}
 
 		return result;

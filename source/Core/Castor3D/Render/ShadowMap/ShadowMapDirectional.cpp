@@ -191,7 +191,7 @@ namespace castor3d
 		, m_frameBuffers( m_passes.size() )
 		, m_cascades{ scene.getDirectionalShadowCascades() }
 	{
-		castor::Logger::logTrace( "Created ShadowMapDirectional" );
+		log::trace << "Created ShadowMapDirectional" << std::endl;
 	}
 
 	ShadowMapDirectional::~ShadowMapDirectional()

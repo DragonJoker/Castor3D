@@ -242,7 +242,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Using Compute Shader Particle System" ) );
+			log::info << cuT( "Using Compute Shader Particle System" ) << std::endl;
 			m_impl = m_csImpl.get();
 		}
 		else
@@ -251,7 +251,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Using CPU Particle System" ) );
+				log::info << cuT( "Using CPU Particle System" ) << std::endl;
 				m_impl = m_cpuImpl.get();
 			}
 		}

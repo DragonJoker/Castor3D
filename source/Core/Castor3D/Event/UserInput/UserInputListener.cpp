@@ -220,7 +220,7 @@ namespace castor3d
 			{
 				if ( last )
 				{
-					castor::Logger::logDebug( castor::makeStringStream() << position.x() << "x" << position.y() );
+					log::debug << position.x() << "x" << position.y() << std::endl;
 					last->pushEvent( MouseEvent( MouseEventType::eLeave, position ) );
 					last.reset();
 					m_lastMouseTarget.reset();

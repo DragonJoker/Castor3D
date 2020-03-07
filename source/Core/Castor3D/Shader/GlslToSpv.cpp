@@ -201,9 +201,9 @@ namespace castor3d
 
 		if ( !glshader.parse( &resources, 100, false, messages ) )
 		{
-			castor::Logger::logError( glshader.getInfoLog() );
-			castor::Logger::logError( glshader.getInfoDebugLog() );
-			castor::Logger::logError( source );
+			log::error << glshader.getInfoLog() << std::endl;
+			log::error << glshader.getInfoDebugLog() << std::endl;
+			log::error << source << std::endl;
 			CU_Exception( "Shader compilation failed." );
 		}
 
@@ -212,9 +212,9 @@ namespace castor3d
 
 		if ( !glprogram.link( messages ) )
 		{
-			castor::Logger::logError( glprogram.getInfoLog() );
-			castor::Logger::logError( glprogram.getInfoDebugLog() );
-			castor::Logger::logError( source );
+			log::error << glprogram.getInfoLog() << std::endl;
+			log::error << glprogram.getInfoDebugLog() << std::endl;
+			log::error << source << std::endl;
 			CU_Exception( "Shader linkage failed." );
 		}
 

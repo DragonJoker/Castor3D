@@ -20,7 +20,7 @@ namespace castor3d
 
 		if ( geometry.getMesh() )
 		{
-			Logger::logInfo( m_tabs + cuT( "Writing Geometry " ) + geometry.getName() );
+			log::info << m_tabs << cuT( "Writing Geometry " ) << geometry.getName() << std::endl;
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + geometry.getName() + cuT( "\"\n" ) ) > 0
 					   && file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			castor::TextWriter< Geometry >::checkError( result, "Geometry name" );
@@ -128,9 +128,9 @@ namespace castor3d
 				faceCount += nbFaces;
 				vertexCount += nbVertex;
 				mesh->computeContainers();
-				Logger::logInfo( makeStringStream() << cuT( "Geometry [" ) << getName()
+				log::info << cuT( "Geometry [" ) << getName()
 					<< cuT( "] - NbVertex: " ) << nbVertex
-					<< cuT( ", NbFaces: " ) << nbFaces );
+					<< cuT( ", NbFaces: " ) << nbFaces << std::endl;
 				m_listCreated = mesh->getSubmeshCount() > 0;
 			}
 		}
@@ -209,7 +209,7 @@ namespace castor3d
 		}
 		else
 		{
-			Logger::logError( cuT( "Geometry::getMaterial - Wrong submesh" ) );
+			log::error << cuT( "Geometry::getMaterial - Wrong submesh" ) << std::endl;
 		}
 
 		return result;

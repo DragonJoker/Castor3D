@@ -16,7 +16,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		castor::Logger::logInfo( m_tabs + cuT( "Writing Sampler " ) + sampler.getName() );
+		log::info << m_tabs << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
 
 		if ( sampler.getName() != cuT( "LightsSampler" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
 		{

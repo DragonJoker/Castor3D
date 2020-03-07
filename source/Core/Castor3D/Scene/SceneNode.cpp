@@ -33,7 +33,7 @@ namespace castor3d
 
 		if ( !isIgnored( node ) )
 		{
-			castor::Logger::logInfo( m_tabs + cuT( "Writing Node " ) + node.getName() );
+			log::info << m_tabs << cuT( "Writing Node " ) << node.getName() << std::endl;
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + node.getName() + cuT( "\"\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 			castor::TextWriter< SceneNode >::checkError( result, "Node name" );
@@ -231,7 +231,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( m_name + cuT( " - Can't add SceneNode " ) + name + cuT( " - Already in childs" ) );
+			log::warn << m_name << cuT( " - Can't add SceneNode " ) << name << cuT( " - Already in childs" ) << std::endl;
 		}
 	}
 
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( m_name + cuT( " - Can't remove SceneNode - Null pointer given" ) );
+			log::warn << m_name << cuT( " - Can't remove SceneNode - Null pointer given" ) << std::endl;
 		}
 	}
 
@@ -263,7 +263,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Logger::logWarning( m_name + cuT( " - Can't remove SceneNode " ) + childName + cuT( " - Not in childs" ) );
+			log::warn << m_name << cuT( " - Can't remove SceneNode " ) << childName << cuT( " - Not in childs" ) << std::endl;
 		}
 	}
 

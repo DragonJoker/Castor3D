@@ -14,6 +14,6 @@ namespace castor3d
 		stream << given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
-		Logger::logDebug( m_description );
+		log::debug << m_description << std::endl;
 	}
 }

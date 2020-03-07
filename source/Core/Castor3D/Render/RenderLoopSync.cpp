@@ -42,17 +42,17 @@ namespace castor3d
 			}
 			catch ( castor::Exception & exc )
 			{
-				Logger::logError( exc.getFullDescription() );
+				log::error << exc.getFullDescription() << std::endl;
 				m_active = false;
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::logError( exc.what() );
+				log::error << exc.what() << std::endl;
 				m_active = false;
 			}
 			catch ( ... )
 			{
-				Logger::logError( RLS_UNKNOWN_EXCEPTION );
+				log::error << RLS_UNKNOWN_EXCEPTION << std::endl;
 				m_active = false;
 			}
 		}

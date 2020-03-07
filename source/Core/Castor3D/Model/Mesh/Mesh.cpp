@@ -21,7 +21,7 @@ namespace castor3d
 	bool Mesh::TextWriter::operator()( Mesh const & object
 		, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Mesh " ) + object.getName() );
+		log::info << m_tabs << cuT( "Writing Mesh " ) << object.getName() << std::endl;
 		auto result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "mesh \"" ) + object.getName() + cuT( "\"\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0
 			&& file.writeText( m_tabs + cuT( "\timport \"Meshes/" ) + object.getName() + cuT( ".cmsh\"\n" ) ) > 0;

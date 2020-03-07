@@ -151,7 +151,7 @@ namespace castor3d
 		, m_index{ ++m_count }
 		, m_passes( doCreatePasses( *this, node ) )
 	{
-		castor::Logger::logTrace( "Created EnvironmentMap" + node.getName() );
+		log::trace << "Created EnvironmentMap" << node.getName() << std::endl;
 	}
 
 	EnvironmentMap::~EnvironmentMap()

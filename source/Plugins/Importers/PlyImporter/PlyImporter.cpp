@@ -90,7 +90,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element vertex " ).length() ) );
 						ssToken >> iNbVertex;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::logInfo( castor::makeStringStream() << cuT( "Vertices: " ) << iNbVertex );
+						log::info << cuT( "Vertices: " ) << iNbVertex << std::endl;
 						break;
 					}
 				}
@@ -107,7 +107,7 @@ namespace C3dPly
 					else
 					{
 						isFile.seekg( -isFile.gcount() ); // Unget last line
-						Logger::logDebug( castor::makeStringStream() << cuT( "Vertex properties: " ) << iNbProperties );
+						log::info << cuT( "Vertex properties: " ) << iNbProperties << std::endl;
 						break;
 					}
 				}
@@ -126,7 +126,7 @@ namespace C3dPly
 						ssToken.str( strLine.substr( std::string( "element face " ).size() ) );
 						ssToken >> iNbFaces;
 						ssToken.clear( std::istringstream::goodbit );
-						Logger::logInfo( castor::makeStringStream() << cuT( "Triangles: " ) << iNbFaces );
+						log::info << cuT( "Triangles: " ) << iNbFaces << std::endl;
 						break;
 					}
 				}

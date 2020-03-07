@@ -170,7 +170,7 @@ namespace castor3d
 			, createPasses( engine, scene, *this )
 			, shader::getPointShadowMapCount() }
 	{
-		castor::Logger::logTrace( "Created ShadowMapPoint" );
+		log::trace << "Created ShadowMapPoint" << std::endl;
 	}
 
 	ShadowMapPoint::~ShadowMapPoint()

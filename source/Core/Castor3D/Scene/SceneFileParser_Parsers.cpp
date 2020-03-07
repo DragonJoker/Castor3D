@@ -2621,7 +2621,7 @@ namespace castor3d
 			{
 				Point4i pt4Indices;
 
-				if ( castor::parseValues( strParams, pt4Indices ) )
+				if ( castor::parseValues( *parsingContext->logger, strParams, pt4Indices ) )
 				{
 					parsingContext->face1 = int( parsingContext->faces.size() );
 					parsingContext->faces.push_back( pt4Indices[0] );
@@ -2633,7 +2633,7 @@ namespace castor3d
 					parsingContext->faces.push_back( pt4Indices[3] );
 				}
 			}
-			else if ( castor::parseValues( strParams, pt3Indices ) )
+			else if ( castor::parseValues( *parsingContext->logger, strParams, pt3Indices ) )
 			{
 				parsingContext->face1 = int( parsingContext->faces.size() );
 				parsingContext->faces.push_back( pt3Indices[0] );

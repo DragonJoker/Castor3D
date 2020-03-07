@@ -79,7 +79,7 @@ namespace castor3d
 			, "PointLightPassUbo" ) }
 	{
 		m_baseUbo = m_ubo.get();
-		castor::Logger::logTrace( castor::makeStringStream() << cuT( "Created PointLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) );
+		log::trace << cuT( "Created PointLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}
 
 	PointLightPass::~PointLightPass()

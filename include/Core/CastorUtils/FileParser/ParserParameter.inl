@@ -32,7 +32,10 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T >
-	inline bool parseValues( String & params, size_t count, T * value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, size_t count
+		, T * value )
 	{
 		bool result = false;
 
@@ -92,12 +95,12 @@ namespace castor
 			}
 			else
 			{
-				Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+				logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 			}
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+			logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 		}
 
 		return result;
@@ -117,12 +120,16 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T >
-	inline bool parseValues( String & params
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
 		, size_t count
 		, T * values
 		, Range< T > const & range )
 	{
-		bool result = parseValues( params, count, values );
+		bool result = parseValues( logger
+			, params
+			, count
+			, values );
 
 		if ( result )
 		{
@@ -131,7 +138,7 @@ namespace castor
 				if ( value < range.getMin()
 					|| value > range.getMax() )
 				{
-					Logger::logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
+					logger.logWarning( castor::makeStringStream() << cuT( "Value " ) << value << cuT( " is outside of range [" ) << range.getMin() << cuT( ", " ) << range.getMax() << cuT( "]" ) );
 					value = range.clamp( value );
 				}
 			}
@@ -152,9 +159,14 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & params, Point< T, Count > & value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, Point< T, Count > & value )
 	{
-		return parseValues( params, Count, value.ptr() );
+		return parseValues( logger
+			, params
+			, Count
+			, value.ptr() );
 	}
 	/**
 	 *\~english
@@ -169,9 +181,14 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & params, Coords< T, Count > & value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, Coords< T, Count > & value )
 	{
-		return parseValues( params, Count, value.ptr() );
+		return parseValues( logger
+			, params
+			, Count
+			, value.ptr() );
 	}
 	/**
 	 *\~english
@@ -186,9 +203,14 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & params, Size & value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, Size & value )
 	{
-		return parseValues( params, Count, value.ptr() );
+		return parseValues( logger
+			, params
+			, Count
+			, value.ptr() );
 	}
 	/**
 	 *\~english
@@ -203,9 +225,14 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & params, Position & value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, Position & value )
 	{
-		return parseValues( params, Count, value.ptr() );
+		return parseValues( logger
+			, params
+			, Count
+			, value.ptr() );
 	}
 	/**
 	 *\~english
@@ -220,9 +247,14 @@ namespace castor
 	 *\return		\p true si tout s'est bien passé.
 	 */
 	template< typename T, uint32_t Count >
-	inline bool parseValues( String & params, Rectangle & value )
+	inline bool parseValues( LoggerInstance & logger
+		, String & params
+		, Rectangle & value )
 	{
-		return parseValues( params, Count, value.ptr() );
+		return parseValues( loger
+			, params
+			, Count
+			, value.ptr() );
 	}
 
 	//*************************************************************************************************
@@ -250,11 +282,12 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params
+		static inline bool parse( LoggerInstance & logger
+			, String & params
 			, ValueType & value
 			, Range< ValueType > const & range )
 		{
-			return parseValues( params, 1, &value, range );
+			return parseValues( logger, params, 1, &value, range );
 		}
 	};
 	/**
@@ -280,9 +313,11 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & 
+			params, ValueType & value )
 		{
-			return parseValues( params, value );
+			return parseValues( logger, params, value );
 		}
 	};
 	/**
@@ -308,7 +343,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			value = params;
 			params.clear();
@@ -355,7 +392,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			value = Path{ params };
 			params.clear();
@@ -410,7 +449,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
@@ -453,7 +494,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
@@ -496,7 +539,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 
@@ -506,7 +551,7 @@ namespace castor
 			}
 			else
 			{
-				result = parseValues( params, value );
+				result = parseValues( logger, params, value );
 			}
 
 			return result;
@@ -535,7 +580,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
@@ -543,7 +590,7 @@ namespace castor
 			if ( values.size() >= size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -630,7 +677,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
@@ -638,7 +687,7 @@ namespace castor
 			if ( values.size() >= size_t( RgbaComponent::eCount ) )
 			{
 				Point4f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -651,7 +700,7 @@ namespace castor
 			else if ( values.size() == size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -703,12 +752,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -740,7 +789,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
@@ -748,7 +799,7 @@ namespace castor
 			if ( values.size() >= size_t( RgbComponent::eCount ) )
 			{
 				Point4f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -798,12 +849,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -835,7 +886,9 @@ namespace castor
 		 *\param[in]	params	La ligne contenant la valeur.
 		 *\param[out]	value		Reçoit le résultat.
 		 */
-		static inline bool parse( String & params, ValueType & value )
+		static inline bool parse( LoggerInstance & logger
+			, String & params
+			, ValueType & value )
 		{
 			bool result = false;
 			StringArray values = string::split( params, cuT( " \t,;" ), 5, false );
@@ -843,7 +896,7 @@ namespace castor
 			if ( values.size() >= size_t( RgbaComponent::eCount ) )
 			{
 				Point4f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -856,7 +909,7 @@ namespace castor
 			else if ( values.size() == size_t( RgbComponent::eCount ) )
 			{
 				Point3f colour;
-				result = parseValues( params, colour );
+				result = parseValues( logger, params, colour );
 
 				if ( result )
 				{
@@ -908,12 +961,12 @@ namespace castor
 					}
 					else
 					{
-						Logger::logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
+						logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
 				catch ( std::exception & p_exc )
 				{
-					Logger::logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
 				}
 
 				return result;
@@ -950,7 +1003,8 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eName > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eName >::parse( String & params )
+	inline bool ParserParameter< ParameterType::eName >::parse( LoggerInstance & logger
+		, String & params )
 	{
 		Regex regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
 		auto begin = std::begin( params );
@@ -995,7 +1049,8 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eCheckedText >::parse( String & params )
+	inline bool ParserParameter< ParameterType::eCheckedText >::parse( LoggerInstance & logger
+		, String & params )
 	{
 		bool result = false;
 		StringArray values = string::split( params, cuT( " \t,;" ), 1, false );
@@ -1048,7 +1103,8 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( String & params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::parse( LoggerInstance & logger
+		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );
 		bool result = false;
@@ -1125,7 +1181,8 @@ namespace castor
 		return std::make_shared< ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( String & params )
+	inline bool ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::parse( LoggerInstance & logger
+		, String & params )
 	{
 		static uint32_t constexpr Infinite = ~( 0u );
 		bool result = false;

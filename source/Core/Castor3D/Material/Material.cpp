@@ -15,7 +15,7 @@ namespace castor3d
 
 	bool Material::TextWriter::operator()( Material const & material, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Material " ) + material.getName() );
+		log::info << m_tabs + cuT( "Writing Material " ) << material.getName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + material.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{" ) ) > 0;
 		castor::TextWriter< Material >::checkError( result, "Material name" );
@@ -78,7 +78,7 @@ namespace castor3d
 
 	void Material::initialise()
 	{
-		Logger::logDebug( cuT( "Initialising material [" ) + getName() + cuT( "]" ) );
+		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
 		for ( auto pass : m_passes )
 		{

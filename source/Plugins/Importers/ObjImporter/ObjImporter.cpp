@@ -265,7 +265,7 @@ namespace Obj
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logWarning( std::stringstream() << "Encountered exception while importing mesh: " << exc.what() );
+			log::warn << "Encountered exception while importing mesh: " << exc.what() << std::endl;
 		}
 
 		return result;
@@ -394,7 +394,7 @@ namespace Obj
 		}
 		else
 		{
-			Logger::logWarning( cuT( "Mtl file " ) + m_filePath / mtlfile + cuT( " doesn't exist" ) );
+			log::warn << cuT( "Mtl file " ) << m_filePath / mtlfile << cuT( " doesn't exist" ) << std::endl;
 		}
 
 		file.clear();
@@ -748,7 +748,7 @@ namespace Obj
 
 						desc = std::make_unique< MaterialDescription >();
 						desc->name = value;
-						Logger::logDebug( cuT( "Material : " ) + value );
+						log::debug << cuT( "Material : " ) << value << std::endl;
 					}
 					else if ( section == cuT( "illum" ) )
 					{

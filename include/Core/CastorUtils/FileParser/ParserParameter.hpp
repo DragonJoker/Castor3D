@@ -85,9 +85,10 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override
+		inline bool parse( LoggerInstance & logger
+			, String & params )override
 		{
-			return ValueParser< Type >::parse( params, m_value );
+			return ValueParser< Type >::parse( logger, params, m_value );
 		}
 
 	public:
@@ -161,9 +162,10 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override
+		inline bool parse( LoggerInstance & logger
+			, String & params )override
 		{
-			return ValueParser< Type >::parse( params, m_value, m_range );
+			return ValueParser< Type >::parse( logger, params, m_value, m_range );
 		}
 
 	public:
@@ -215,7 +217,8 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override;
+		inline bool parse( LoggerInstance & logger
+			, String & params )override;
 	};
 	/**
 	\author 	Sylvain DOREMUS
@@ -259,7 +262,8 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override;
+		inline bool parse( LoggerInstance & logger
+			, String & params )override;
 
 	public:
 		UInt32StrMap const & m_values;
@@ -306,7 +310,8 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override;
+		inline bool parse( LoggerInstance & logger
+			, String & params )override;
 
 	public:
 		UInt32StrMap const & m_values;
@@ -353,7 +358,8 @@ namespace castor
 		/**
 		 *\copydoc		castor::ParserParameterBase::parse
 		 */
-		inline bool parse( String & params )override;
+		inline bool parse( LoggerInstance & logger
+			, String & params )override;
 
 	public:
 		UInt64StrMap const & m_values;

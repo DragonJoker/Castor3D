@@ -51,7 +51,7 @@ namespace castor3d
 
 			if ( header.getChunkType() != ChunkType::eCmshFile )
 			{
-				castor::Logger::logError( cuT( "Not a valid CMSH file." ) );
+				log::error << cuT( "Not a valid CMSH file." ) << std::endl;
 				result = false;
 			}
 
@@ -102,7 +102,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				log::error << cuT( "Not a valid chunk for parsed type." ) << std::endl;
 				result = false;
 			}
 
@@ -159,7 +159,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				log::error << cuT( "Not a valid chunk for parsed type." ) << std::endl;
 				result = false;
 			}
 
@@ -198,7 +198,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				log::error << cuT( "Not a valid chunk for parsed type." ) << std::endl;
 				result = false;
 			}
 
@@ -237,7 +237,7 @@ namespace castor3d
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Not a valid chunk for parsed type." ) );
+				log::error << cuT( "Not a valid chunk for parsed type." ) << std::endl;
 				result = false;
 			}
 
@@ -272,7 +272,7 @@ namespace castor3d
 
 			if ( schunk.getChunkType() != ChunkType::eCmshHeader )
 			{
-				castor::Logger::logError( cuT( "Missing header chunk." ) );
+				log::error << cuT( "Missing header chunk." ) << std::endl;
 				result = false;
 			}
 
@@ -304,11 +304,11 @@ namespace castor3d
 
 						if ( m_fileVersion < latestVersion )
 						{
-							castor::Logger::logWarning( castor::makeStringStream() << cuT( "This file is using version " )
+							log::warn << cuT( "This file is using version " )
 								<< m_fileVersion
 								<< cuT( ", consider upgrading it to version " )
 								<< latestVersion
-								<< cuT( "." ) );
+								<< cuT( "." ) << std::endl;
 						}
 					}
 

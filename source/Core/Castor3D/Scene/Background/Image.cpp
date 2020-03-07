@@ -124,7 +124,7 @@ namespace castor3d
 		}
 		catch ( castor::Exception & p_exc )
 		{
-			Logger::logError( p_exc.what() );
+			log::error << p_exc.what() << std::endl;
 		}
 
 		return result;

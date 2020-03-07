@@ -40,13 +40,15 @@ namespace castor3d
 		void print( std::ostream & stream
 			, std::string const & name
 			, uint32_t count
-			, ObjectT const * objects )
+			, ObjectT const * objects
+			, std::string const & lineEnd
+			, std::string const & lineBegin )
 		{
-			stream << "    " << name << ": " << count << "\n";
+			stream << lineBegin << name << ": " << count << lineEnd;
 
 			for ( uint32_t i = 0u; i < count; ++i, ++objects )
 			{
-				stream << "      " << *objects << "\n";
+				stream << lineBegin << lineBegin << *objects << lineEnd;
 			}
 		}
 
@@ -61,15 +63,21 @@ namespace castor3d
 			std::stringstream stream;
 			stream.imbue( loc );
 			stream << "Vulkan ";
+			std::string lineEnd;
+			std::string lineBegin = ", ";
 
 			// Error that may result in undefined behaviour
 			switch ( messageSeverity )
 			{
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
 				stream << "Error";
+				lineEnd = "\n";
+				lineBegin = "    ";
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
 				stream << "Warning";
+				lineEnd = "\n";
+				lineBegin = "    ";
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
 				stream << "Info";
@@ -94,29 +102,29 @@ namespace castor3d
 				stream << " - Performance";
 			}
 
-			stream << ":\n";
-			stream << "    Message ID: " << pCallbackData->pMessageIdName << "\n";
-			stream << "    Code: 0x" << std::hex << pCallbackData->messageIdNumber << "\n";
-			stream << "    Message: " << pCallbackData->pMessage << "\n";
-			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects );
-			print( stream, "Queue Labels", pCallbackData->queueLabelCount, pCallbackData->pQueueLabels );
-			print( stream, "CommmandBuffer Labels", pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels );
+			stream << lineEnd;
+			stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
+			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
+			stream << lineBegin << "Message: " << pCallbackData->pMessage << lineEnd;
+			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );
+			print( stream, "Queue Labels", pCallbackData->queueLabelCount, pCallbackData->pQueueLabels, lineEnd, lineBegin );
+			print( stream, "CommmandBuffer Labels", pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels, lineEnd, lineBegin );
 
 			VkBool32 result = VK_FALSE;
 
 			switch ( messageSeverity )
 			{
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-				castor::Logger::logError( stream );
+				log::error << stream.str() << std::endl;
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-				castor::Logger::logWarning( stream );
+				log::warn << stream.str() << std::endl;
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-				castor::Logger::logTrace( stream );
+				log::trace << stream.str() <<std::endl;
 				break;
 			case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-				castor::Logger::logDebug( stream );
+				log::debug << stream.str() << std::endl;
 				break;
 			default:
 				break;
@@ -174,58 +182,66 @@ namespace castor3d
 			std::stringstream stream;
 			stream.imbue( loc );
 			stream << "Vulkan ";
+			std::string lineEnd;
+			std::string lineBegin = ", ";
 
 			// Error that may result in undefined behaviour
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
 			{
-				stream << "Error:\n";
+				lineEnd = "\n";
+				lineBegin = "    ";
+				stream << "Error:" << lineEnd << lineBegin;
 			};
 			// Warnings may hint at unexpected / non-spec API usage
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_WARNING_BIT_EXT ) )
 			{
-				stream << "Warning:\n";
+				lineEnd = "\n";
+				lineBegin = "    ";
+				stream << "Warning:" << lineEnd << lineBegin;
 			};
 			// May indicate sub-optimal usage of the API
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) )
 			{
-				stream << "Performance:\n";
+				lineEnd = "\n";
+				lineBegin = "    ";
+				stream << "Performance:" << lineEnd << lineBegin;
 			};
 			// Informal messages that may become handy during debugging
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) )
 			{
-				stream << "Info:\n";
+				stream << "Info:" << lineEnd;
 			}
 			// Diagnostic info from the Vulkan loader and layers
 			// Usually not helpful in terms of API usage, but may help to debug layer and loader problems 
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_DEBUG_BIT_EXT ) )
 			{
-				stream << "Debug:\n";
+				stream << "Debug:" << lineEnd;
 			}
 
 			// Display message to default output (console/logcat)
-			stream << "    Layer: " << pLayerPrefix << "\n";
-			stream << "    Code: 0x" << std::hex << messageCode << "\n";
-			stream << "    Object: (" << std::hex << object << ") " << ashes::getName( objectType ) << "\n";
-			stream << "    Message: " << pMessage;
+			stream << "Layer: " << pLayerPrefix << lineEnd;
+			stream << lineBegin << "Code: 0x" << std::hex << messageCode << lineEnd;
+			stream << lineBegin << "Object: (" << std::hex << object << ") " << ashes::getName( objectType ) << lineEnd;
+			stream << lineBegin << "Message: " << pMessage;
 
 			VkBool32 result = VK_FALSE;
 
 			if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_ERROR_BIT_EXT ) )
 			{
-				castor::Logger::logError( stream );
+				log::error << stream.str() << std::endl;
 			}
 			else if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_WARNING_BIT_EXT )
 				|| ashes::checkFlag( flags, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT ) )
 			{
-				castor::Logger::logWarning( stream );
+				log::warn << stream.str() << std::endl;
 			}
 			else if ( ashes::checkFlag( flags, VK_DEBUG_REPORT_INFORMATION_BIT_EXT ) )
 			{
-				castor::Logger::logTrace( stream );
+				log::trace << stream.str() << std::endl;
 			}
 			else
 			{
-				castor::Logger::logDebug( stream );
+				log::debug << stream.str() << std::endl;
 			}
 
 			// The return value of this callback controls wether the Vulkan call that caused

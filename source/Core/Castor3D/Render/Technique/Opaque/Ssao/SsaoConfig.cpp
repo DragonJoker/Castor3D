@@ -15,7 +15,7 @@ namespace castor3d
 
 		if ( object.enabled )
 		{
-			Logger::logInfo( m_tabs + cuT( "Writing SsaoConfig" ) );
+			log::info << m_tabs << cuT( "Writing SsaoConfig" ) << std::endl;
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "ssao\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 			if ( result )

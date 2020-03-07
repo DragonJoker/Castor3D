@@ -23,7 +23,7 @@ namespace castor3d
 
 	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & group, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + group.getName() );
+		log::info << m_tabs << cuT( "Writing AnimatedObjectGroup " ) << group.getName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + group.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< AnimatedObjectGroup >::checkError( result, "AnimatedObjectGroup name" );

@@ -19,7 +19,7 @@ namespace castor3d
 
 	bool Camera::TextWriter::operator()( Camera const & camera, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Camera " ) + camera.getName() );
+		log::info << m_tabs << cuT( "Writing Camera " ) << camera.getName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + camera.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< Camera >::checkError( result, "Camera name" );

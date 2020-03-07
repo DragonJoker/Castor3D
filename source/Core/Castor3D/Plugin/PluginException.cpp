@@ -12,7 +12,7 @@ namespace castor3d
 		: Exception( "Plugin loading error : " + description, file, function, line )
 		, m_critical( critical )
 	{
-		Logger::logDebug( description );
+		log::debug << description << std::endl;
 	}
 
 	PluginException::~PluginException()throw()

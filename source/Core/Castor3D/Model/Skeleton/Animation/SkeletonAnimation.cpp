@@ -69,7 +69,7 @@ namespace castor3d
 		}
 		else
 		{
-			Logger::logWarning( cuT( "This object was already added: [" ) + name + cuT( "]" ) );
+			log::warn << cuT( "This object was already added: [" ) << name << cuT( "]" ) << std::endl;
 			result = it->second;
 		}
 

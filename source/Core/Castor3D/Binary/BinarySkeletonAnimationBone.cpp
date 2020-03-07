@@ -48,7 +48,7 @@ namespace castor3d
 					}
 					else
 					{
-						Logger::logError( cuT( "Couldn't find bone " ) + name + cuT( " in skeleton" ) );
+						log::error << cuT( "Couldn't find bone " ) << name << cuT( " in skeleton" ) << std::endl;
 					}
 				}
 

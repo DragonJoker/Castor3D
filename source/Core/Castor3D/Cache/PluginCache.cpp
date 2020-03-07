@@ -77,7 +77,7 @@ namespace castor3d
 		}
 		catch ( VersionException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
+			log::warn << "loadPlugin - Fail - " << exc.getFullDescription() << std::endl;
 		}
 		catch ( PluginException & exc )
 		{
@@ -87,16 +87,16 @@ namespace castor3d
 			}
 			else
 			{
-				Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
+				log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
 			}
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) );
+			log::warn << cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) << std::endl;
 		}
 		catch ( ... )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - Unknown error" ) );
+			log::warn << cuT( "loadPlugin - Fail - Unknown error" ) << std::endl;
 		}
 
 		return result;
@@ -112,19 +112,19 @@ namespace castor3d
 		}
 		catch ( VersionException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
+			log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
 		}
 		catch ( PluginException & exc )
 		{
-			Logger::logWarning( "loadPlugin - Fail - " + exc.getFullDescription() );
+			log::warn << "loadPlugin - Fail - " + exc.getFullDescription() << std::endl;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) );
+			log::warn << cuT( "loadPlugin - Fail - " ) + string::stringCast< xchar >( exc.what() ) << std::endl;
 		}
 		catch ( ... )
 		{
-			Logger::logWarning( cuT( "loadPlugin - Fail - Unknown error" ) );
+			log::warn << cuT( "loadPlugin - Fail - Unknown error" ) << std::endl;
 		}
 
 		return result;
@@ -154,7 +154,7 @@ namespace castor3d
 					}
 					catch ( ... )
 					{
-						Logger::logWarning( cuT( "Can't load plug-in : " ) + file );
+						log::warn << cuT( "Can't load plug-in : " ) + file << std::endl;
 					}
 				}
 			}
@@ -244,7 +244,7 @@ namespace castor3d
 					MyLockType lockLibraries{ castor::makeUniqueLock( m_mutexLibraries ) };
 					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
-				Logger::logInfo( castor::makeStringStream() << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) );
+				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
 			}
 			else
 			{

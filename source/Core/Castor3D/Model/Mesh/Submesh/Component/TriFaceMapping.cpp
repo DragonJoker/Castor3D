@@ -190,7 +190,7 @@ namespace castor3d
 		}
 		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << exc.what() );
+			log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 		}
 	}
 

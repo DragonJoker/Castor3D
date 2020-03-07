@@ -377,27 +377,24 @@ namespace castor3d
 	protected:
 		inline void doReportCreation( castor::String const & name )
 		{
-			castor::Logger::logTrace( castor::makeStringStream()
-				<< InfoCacheCreatedObject
+			log::trace << InfoCacheCreatedObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
-				<< name );
+				<< name << std::endl;
 		}
 
 		inline void doReportDuplicate( castor::String const & name )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
-				<< WarningCacheDuplicateObject
+			log::warn << WarningCacheDuplicateObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
-				<< name );
+				<< name << std::endl;
 		}
 
 		inline void doReportNull()
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
-				<< WarningCacheNullObject
-				<< getObjectTypeName() );
+			log::warn << WarningCacheNullObject
+				<< getObjectTypeName() << std::endl;
 		}
 
 	protected:

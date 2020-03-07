@@ -18,7 +18,7 @@ namespace castor3d
 		, std::string const & name
 		, std::string const & typeName )
 	{
-		castor::Logger::logTrace( "Created " + typeName + " [" + name + "]" );
+		log::trace << "Created " << typeName << " [" << name << "]" << std::endl;
 		device.device->setDebugObjectName(
 			{
 				VkObjectType( type ),

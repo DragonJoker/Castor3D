@@ -15,7 +15,7 @@ namespace castor3d
 
 	bool MetallicRoughnessPbrPass::TextWriter::operator()( MetallicRoughnessPbrPass const & pass, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing MetallicRoughnessPbrPass " ) );
+		log::info << m_tabs << cuT( "Writing MetallicRoughnessPbrPass " ) << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		

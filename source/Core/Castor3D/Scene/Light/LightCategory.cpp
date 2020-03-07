@@ -16,7 +16,7 @@ namespace castor3d
 
 	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing Light " ) + p_light.getLight().getName() );
+		log::info << m_tabs << cuT( "Writing Light " ) << p_light.getLight().getName() << std::endl;
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.getLight().getName() + cuT( "\"\n" ) ) > 0
 			&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< LightCategory >::checkError( result, "LightCategory name" );

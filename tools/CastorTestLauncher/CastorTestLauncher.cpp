@@ -146,7 +146,7 @@ namespace test_launcher
 				File::directoryCreate( m_fileName.getPath() / cuT( "Compare" ) );
 			}
 
-			Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) );
+			Logger::setFileName( m_fileName.getPath() / cuT( "Compare" ) / ( m_fileName.getFileName() + cuT( "_" ) + m_rendererType + cuT( ".log" ) ) );
 			Logger::logInfo( cuT( "Start" ) );
 
 			try

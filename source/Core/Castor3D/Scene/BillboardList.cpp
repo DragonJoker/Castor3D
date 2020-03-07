@@ -250,7 +250,7 @@ namespace castor3d
 				}
 				catch ( Exception const & p_exc )
 				{
-					Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
+					log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
 				}
 
 				m_vertexBuffer->getBuffer().flush( 0u, m_count * m_vertexStride );

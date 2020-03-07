@@ -282,7 +282,7 @@ namespace castor3d
 
 		if ( !result )
 		{
-			castor::Logger::logError( C3D_UniqueDirectionalLight );
+			log::error << C3D_UniqueDirectionalLight << std::endl;
 		}
 
 		return result;

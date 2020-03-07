@@ -26,7 +26,7 @@ namespace castor3d
 
 	bool TextOverlay::TextWriter::operator()( TextOverlay const & p_overlay, castor::TextFile & p_file )
 	{
-		castor::Logger::logInfo( m_tabs + cuT( "Writing TextOverlay " ) + p_overlay.getOverlayName() );
+		log::info << m_tabs << cuT( "Writing TextOverlay " ) << p_overlay.getOverlayName() << std::endl;
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.getOverlayName() + cuT( "\"\n" ) ) > 0
 						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		OverlayCategory::TextWriter::checkError( result, "TextOverlay name" );

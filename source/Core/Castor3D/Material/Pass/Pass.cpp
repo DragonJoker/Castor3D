@@ -291,7 +291,7 @@ namespace castor3d
 	void Pass::removeTextureUnit( uint32_t index )
 	{
 		CU_Require( index < m_textureUnits.size() );
-		Logger::logInfo( makeStringStream() << cuT( "Destroying TextureUnit " ) << index );
+		log::info << cuT( "Destroying TextureUnit " ) << index << std::endl;
 		auto it = m_textureUnits.begin() + index;
 		auto config = ( *it )->getConfiguration();
 		m_textureUnits.erase( it );

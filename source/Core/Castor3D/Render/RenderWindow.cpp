@@ -171,7 +171,7 @@ namespace castor3d
 
 	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, castor::TextFile & file )
 	{
-		castor::Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
+		log::info << m_tabs << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
@@ -882,7 +882,7 @@ namespace castor3d
 			return nullptr;
 		}
 
-		castor::Logger::logError( "Couldn't retrieve rendering resources" );
+		log::error << "Couldn't retrieve rendering resources" << std::endl;
 		return nullptr;
 	}
 

@@ -233,13 +233,13 @@ namespace castor3d
 		}
 		catch ( castor::Exception & exc )
 		{
-			Logger::logError( cuT( "RenderLoop - " ) + exc.getFullDescription() );
+			log::error << cuT( "RenderLoop - " ) << exc.getFullDescription() << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( std::string( "RenderLoop - " ) + exc.what() );
+			log::error << std::string( "RenderLoop - " ) + exc.what() << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}

@@ -265,8 +265,14 @@ namespace castor
 	class Line3D;
 	template< class T, FileType FT >
 	class Loader;
-	class ILoggerImpl;
+	class LoggerImpl;
+	class LoggerInstance;
 	class Logger;
+	template< typename CharT
+		, template< typename CharT > typename StreambufT >
+	struct LoggerStreamT;
+	template< typename CharT, typename TraitsT >
+	class LoggerStreambufT;
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class Matrix;
 	template< class Owmer >
@@ -527,6 +533,15 @@ namespace castor
 	 *\~french
 	 *\return		Un std::stringstream utilisant une locale C.
 	 */
+	template< typename CharT >
+	inline std::basic_stringstream< CharT > makeStringStreamT()
+	{
+		static std::locale const loc{ "C" };
+		std::basic_stringstream< CharT > result;
+		result.imbue( loc );
+		return result;
+	}
+
 	inline StringStream makeStringStream()
 	{
 		static std::locale const loc{ "C" };
