@@ -72,7 +72,7 @@ namespace castor3d
 		eCmshVersion = makeChunkID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ),
 		eName = makeChunkID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ),
 		eMesh = makeChunkID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ),
-		eSkeleton [[deprecated( "Skeleton now lives in its own file" )]] = makeChunkID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
+		eSkeleton = makeChunkID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
 		eSkeletonGlobalInverse = makeChunkID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
 		eSkeletonBone = makeChunkID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
 		eBoneParentName = makeChunkID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),

@@ -263,12 +263,7 @@ namespace castor3d
 				faceCount = 0u;
 				break;
 
-			case ChunkType::eSubmeshFaceCount:
-			case ChunkType::eSubmeshFaces:
-				break;
-
 			default:
-				result = false;
 				break;
 			}
 		}

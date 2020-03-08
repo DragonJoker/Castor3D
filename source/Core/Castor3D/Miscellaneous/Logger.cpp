@@ -19,11 +19,11 @@ namespace castor3d
 	{
 		m_logger = new castor::LoggerInstance{ type };
 		m_logger->setFileName( filePath );
-		trace.reset( *m_logger );
-		debug.reset( *m_logger );
-		info.reset( *m_logger );
-		warn.reset( *m_logger );
-		error.reset( *m_logger );
+		trace.set( *m_logger );
+		debug.set( *m_logger );
+		info.set( *m_logger );
+		warn.set( *m_logger );
+		error.set( *m_logger );
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
 				m_logger->pushMessage( castor::LogType::eTrace, msg, newLine );
@@ -51,7 +51,6 @@ namespace castor3d
 	{
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
-				std::clog << msg << newLine ? "\n" : "";
 			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 			{
@@ -69,11 +68,12 @@ namespace castor3d
 			{
 				std::cerr << msg << newLine ? "\n" : "";
 			} );
-		trace.reset( std::clog );
-		debug.reset( std::clog );
-		info.reset( std::cout );
-		warn.reset( std::cout );
-		error.reset( std::cerr );
+		trace.reset();
+		debug.reset();
+		info.reset();
+		warn.reset();
+		error.reset();
+		delete m_logger;
 		m_logger = nullptr;
 	}
 }

@@ -38,7 +38,7 @@ namespace castor
 		{
 		}
 
-		void reset( LoggerInstance & logger )
+		void set( LoggerInstance & logger )
 		{
 			m_streambuf.reset();
 			m_streambuf = std::make_unique< StreambufT< CharT > >( logger
@@ -46,11 +46,9 @@ namespace castor
 			this->imbue( std::locale{ "C" } );
 		}
 
-		void reset( std::basic_ostream< CharT > & stream )
+		void reset()
 		{
 			m_streambuf.reset();
-			m_streambuf = std::make_unique< StreambufT< CharT > >( stream );
-			this->imbue( std::locale{ "C" } );
 		}
 
 	private:
