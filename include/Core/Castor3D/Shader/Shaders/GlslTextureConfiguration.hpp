@@ -82,10 +82,6 @@ namespace castor3d
 			sdw::Float getFloat( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Vec2 const & mask )const;
-			sdw::Float getFloat( sdw::ShaderWriter & writer
-				, sdw::Vec4 const & sampled
-				, sdw::Float const & factor
-				, sdw::Vec2 const & mask )const;
 			sdw::Vec3 getVec3( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Vec2 const & mask )const;
