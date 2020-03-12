@@ -11,15 +11,12 @@ namespace castor
 {
 	class LoggerImpl;
 
-	LoggerImpl::LoggerImpl( LogType level, LoggerInstance & parent )
+	LoggerImpl::LoggerImpl( ProgramConsole & console
+		, LogType level
+		, LoggerInstance & parent )
 		: m_parent{ parent }
-		, m_console{ std::make_unique< ProgramConsole >( level < LogType::eInfo ) }
+		, m_console{ &console }
 	{
-	}
-
-	LoggerImpl::~LoggerImpl()
-	{
-		m_console.reset();
 	}
 
 	void LoggerImpl::registerCallback( LogCallback callback, void * caller )

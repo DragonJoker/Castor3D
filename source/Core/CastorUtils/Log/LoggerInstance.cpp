@@ -12,9 +12,10 @@ namespace castor
 		doCleanupThread();
 	}
 
-	LoggerInstance::LoggerInstance( LogType logType )
+	LoggerInstance::LoggerInstance( ProgramConsole & console
+		, LogType logType )
 		: m_logLevel{ logType }
-		, m_impl{ logType, *this }
+		, m_impl{ console, logType, *this }
 		, m_headers
 		{
 			cuT( "****TRACE**** " ),
@@ -42,6 +43,11 @@ namespace castor
 	{
 		m_impl.setFileName( logFilePath, logType );
 		m_initialised = true;
+	}
+
+	LogType LoggerInstance::getLevel()
+	{
+		return m_logLevel;
 	}
 
 	void LoggerInstance::logTrace( LoggerInstance::my_string const & p_msg )

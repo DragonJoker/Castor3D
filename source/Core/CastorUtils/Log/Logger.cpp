@@ -2,6 +2,7 @@
 
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Exception/Exception.hpp"
+#include "CastorUtils/Log/LoggerConsole.hpp"
 #include "CastorUtils/Log/LoggerStreambuf.hpp"
 
 namespace castor
@@ -10,17 +11,20 @@ namespace castor
 
 	Logger * Logger::m_singleton = nullptr;
 
-	Logger::Logger()
+	Logger::Logger( LogType level )
+		: m_console{ std::make_unique< ProgramConsole >( level < LogType::eInfo ) }
+		, m_instance{ std::make_unique< LoggerInstance >( *m_console, level ) }
+		, m_cout{ new InfoLoggerStreambufT< char >( *m_instance, std::cout ) }
+		, m_cerr{ new ErrorLoggerStreambufT< char >( *m_instance, std::cerr ) }
+		, m_clog{ new DebugLoggerStreambufT< char >( *m_instance, std::clog ) }
+		, m_wcout{ new InfoLoggerStreambufT< wchar_t >( *m_instance, std::wcout ) }
+		, m_wcerr{ new ErrorLoggerStreambufT< wchar_t >( *m_instance, std::wcerr ) }
+		, m_wclog{ new DebugLoggerStreambufT< wchar_t >( *m_instance, std::wclog ) }
 	{
 	}
 
 	Logger::~Logger()
 	{
-		if ( m_instance )
-		{
-			m_instance.reset();
-		}
-
 		delete m_cout;
 		delete m_cerr;
 		delete m_clog;
@@ -29,7 +33,7 @@ namespace castor
 		delete m_wclog;
 	}
 
-	LoggerInstance * Logger::initialise( LogType p_eLogLevel )
+	LoggerInstance * Logger::initialise( LogType level )
 	{
 		LoggerInstance * result = nullptr;
 
@@ -39,23 +43,8 @@ namespace castor
 		}
 		else
 		{
-			m_singleton = new Logger();
-			Logger & logger = getSingleton();
-			logger.m_instance.reset();
-			delete logger.m_cout;
-			delete logger.m_cerr;
-			delete logger.m_clog;
-			delete logger.m_wcout;
-			delete logger.m_wcerr;
-			delete logger.m_wclog;
-			logger.m_instance = std::make_unique< LoggerInstance >( p_eLogLevel );
-			logger.m_cout = new InfoLoggerStreambufT< char >( *logger.m_instance, std::cout );
-			logger.m_cerr = new ErrorLoggerStreambufT< char >( *logger.m_instance, std::cerr );
-			logger.m_clog = new DebugLoggerStreambufT< char >( *logger.m_instance, std::clog );
-			logger.m_wcout = new InfoLoggerStreambufT< wchar_t >( *logger.m_instance, std::wcout );
-			logger.m_wcerr = new ErrorLoggerStreambufT< wchar_t >( *logger.m_instance, std::wcerr );
-			logger.m_wclog = new DebugLoggerStreambufT< wchar_t >( *logger.m_instance, std::wclog );
-			result = logger.m_instance.get();
+			m_singleton = new Logger( level );
+			result = m_singleton->getInstance();
 		}
 
 		return result;
@@ -68,6 +57,12 @@ namespace castor
 			delete m_singleton;
 			m_singleton = nullptr;
 		}
+	}
+
+	LoggerInstance * Logger::createInstance( LogType logLevel )
+	{
+		CU_Require( getSingleton().m_console );
+		return new LoggerInstance{ *getSingleton().m_console, logLevel };
 	}
 
 	void Logger::registerCallback( LogCallback p_pfnCallback, void * p_pCaller )
@@ -88,6 +83,12 @@ namespace castor
 		{
 			getSingleton().m_instance->setFileName( p_logFilePath, p_eLogType );
 		}
+	}
+
+	LogType Logger::getLevel()
+	{
+		CU_Require( getSingleton().m_instance );
+		return getSingleton().m_instance->getLevel();
 	}
 
 	void Logger::logTrace( std::string const & p_msg )

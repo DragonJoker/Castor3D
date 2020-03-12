@@ -37,7 +37,8 @@ namespace castor
 		 *\param[in]	logFilePath	Le chemin du fichier
 		 *\param[in]	logType		Le type de log concerné
 		 */
-		CU_API LoggerInstance( LogType logType );
+		CU_API LoggerInstance( ProgramConsole & console
+			, LogType logType );
 		/**
 		 *\~english
 		 *\brief		Registers the logging callback
@@ -70,6 +71,13 @@ namespace castor
 		 */
 		CU_API void setFileName( Path const & logFilePath
 			, LogType logType = LogType::eCount );
+		/**
+		 *\~english
+		 *\return		The current log level.
+		 *\~french
+		 *\return		Le niveau de log actuel.
+		 */
+		CU_API LogType getLevel();
 		/**
 		 *\~english
 		 *\brief		Logs a trace message, from a std::string
@@ -278,23 +286,14 @@ namespace castor
 		CU_API void doCleanupThread();
 
 	private:
-		//! the current logging level, all logs lower than this level are ignored
 		LogType m_logLevel;
-		//! The logger implementation.
 		LoggerImpl m_impl;
-		//! The header for each lg line of given log level
 		std::array< String, size_t( LogType::eCount ) > m_headers;
-		//! The message queue
 		MessageQueue m_queue;
-		//! The mutex protecting the message queue
 		std::mutex m_mutexQueue;
-		//! The logging thread
 		std::thread m_logThread;
-		//! Tells if the logger is initialised
 		std::atomic_bool m_initialised{ false };
-		//! Tells if the thread must be stopped
 		std::atomic_bool m_stopped{ false };
-		//! Event raised when the thread is ended
 		std::atomic_bool m_threadEnded{ false };
 	};
 }

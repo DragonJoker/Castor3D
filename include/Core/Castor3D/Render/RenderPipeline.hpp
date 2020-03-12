@@ -162,9 +162,14 @@ namespace castor3d
 			return m_flags;
 		}
 
+		inline bool hasPipeline()const
+		{
+			return m_pipeline != nullptr;
+		}
+
 		inline ashes::GraphicsPipeline const & getPipeline()const
 		{
-			CU_Require( m_pipeline );
+			hasPipeline();
 			return *m_pipeline;
 		}
 

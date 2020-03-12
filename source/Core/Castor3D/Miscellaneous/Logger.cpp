@@ -17,7 +17,7 @@ namespace castor3d
 	castor::LoggerInstance * log::initialise( castor::LogType type
 		, castor::Path const & filePath )
 	{
-		m_logger = new castor::LoggerInstance{ type };
+		m_logger = castor::Logger::createInstance( type );
 		m_logger->setFileName( filePath );
 		trace.set( *m_logger );
 		debug.set( *m_logger );

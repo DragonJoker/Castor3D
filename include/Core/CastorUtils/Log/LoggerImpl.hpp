@@ -34,15 +34,9 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit LoggerImpl( LogType level
+		explicit LoggerImpl( ProgramConsole & console
+			, LogType level
 			, LoggerInstance & parent );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~LoggerImpl();
 		/**
 		 *\~english
 		 *\brief		Registers a callback
@@ -157,15 +151,10 @@ namespace castor
 
 	private:
 		LoggerInstance & m_parent;
-		//! The files paths, per log level
+		ProgramConsole * m_console;
 		std::array< String, size_t( LogType::eCount ) > m_logFilePath;
-		//! The files data mutex
 		std::mutex m_mutexFiles;
-		//! The console
-		std::unique_ptr< ProgramConsole > m_console;
-		//! Registered callbacks
 		LoggerCallbackMap m_mapCallbacks;
-		//! Protects the registered callbacks map
 		std::mutex m_mutexCallbacks;
 	};
 }

@@ -211,7 +211,7 @@ namespace GuiCommon
 		parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help." ), wxCMD_LINE_OPTION_HELP );
 		parser.AddSwitch( wxT( "a" ), wxT( "validate" ), _( "Enables rendering API validation." ) );
 		parser.AddSwitch( wxT( "u" ), wxT( "unlimited" ), _( "Disables FPS limit." ) );
-		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level." ), wxCMD_LINE_VAL_NUMBER );
+		parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level (from 0=trace to 4=error)." ), wxCMD_LINE_VAL_NUMBER );
 		parser.AddParam( _( "The initial scene file." ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 		ashes::RendererList list;
@@ -249,7 +249,6 @@ namespace GuiCommon
 				logLevel = castor::LogType( log );
 			}
 
-			castor::Logger::initialise( logLevel );
 			m_validation = parser.Found( wxT( 'a' ) );
 			m_unlimitedFps = parser.Found( wxT( 'u' ) );
 
@@ -267,6 +266,8 @@ namespace GuiCommon
 			{
 				m_fileName = make_String( parser.GetParam( 0 ) );
 			}
+
+			castor::Logger::initialise( logLevel );
 		}
 
 		return result;

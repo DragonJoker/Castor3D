@@ -28,7 +28,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		CU_API Logger();
+		CU_API Logger( LogType level );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -54,6 +54,15 @@ namespace castor
 		 *\brief		Détruit l'instance du Logger
 		 */
 		CU_API static void cleanup();
+		/**
+		 *\~english
+		 *\brief		Creates a logger instance of given level.
+		 *\param[in]	logLevel	The log level.
+		 *\~french
+		 *\brief		Crée une instance de logger avec le niveau donné.
+		 *\param[in]	logLevel	Le niveau de log.
+		 */
+		CU_API static LoggerInstance * createInstance( LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Registers the logging callback
@@ -85,6 +94,13 @@ namespace castor
 		 *\param[in]	logType		Le type de log concerné
 		 */
 		CU_API static void setFileName( Path const & logFilePath, LogType logType = LogType::eCount );
+		/**
+		 *\~english
+		 *\return		The current log level.
+		 *\~french
+		 *\return		Le niveau de log actuel.
+		 */
+		CU_API static LogType getLevel();
 		/**
 		 *\~english
 		 *\brief		Logs a trace message, from a std::string
@@ -519,13 +535,14 @@ namespace castor
 	private:
 		static Logger * m_singleton;
 
+		std::unique_ptr< ProgramConsole > m_console;
+		std::unique_ptr< LoggerInstance > m_instance;
 		std::streambuf * m_cout{ nullptr };
 		std::streambuf * m_cerr{ nullptr };
 		std::streambuf * m_clog{ nullptr };
 		std::wstreambuf * m_wcout{ nullptr };
 		std::wstreambuf * m_wcerr{ nullptr };
 		std::wstreambuf * m_wclog{ nullptr };
-		std::unique_ptr< LoggerInstance > m_instance;
 	};
 }
 

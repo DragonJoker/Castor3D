@@ -47,11 +47,6 @@ using namespace castor;
 namespace castor3d
 {
 	static constexpr bool C3D_EnableAPITrace = false;
-#if defined( NDEBUG )
-	static constexpr castor::LogType C3D_DefaultLogType = castor::LogType::eInfo;
-#else
-	static constexpr castor::LogType C3D_DefaultLogType = castor::LogType::eDebug;
-#endif
 	static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
@@ -59,7 +54,7 @@ namespace castor3d
 		, Version const & appVersion
 		, bool enableValidation )
 		: Unique< Engine >( this )
-		, m_logger{ log::initialise( C3D_DefaultLogType, getEngineDirectory() / cuT( "Castor3D.log" ) ) }
+		, m_logger{ log::initialise( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) ) }
 		, m_appName{ appName }
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
