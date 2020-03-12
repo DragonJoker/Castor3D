@@ -15,7 +15,7 @@ using namespace castor;
 namespace castor3d
 {
 	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ renderSystem, false, false }
+		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_program{ renderSystem }
 	{
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };

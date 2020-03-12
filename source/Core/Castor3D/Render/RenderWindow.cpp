@@ -792,9 +792,7 @@ namespace castor3d
 	void RenderWindow::doCreateSwapChainDependent()
 	{
 		doCreateRenderingResources();
-		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
-			, false
-			, false );
+		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem(), VK_FILTER_LINEAR, RenderQuad::TexcoordConfig{} );
 		doCreateProgram();
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}

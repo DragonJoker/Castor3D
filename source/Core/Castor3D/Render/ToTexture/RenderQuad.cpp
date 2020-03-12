@@ -61,18 +61,31 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, bool nearest
-		, bool invertU
-		, bool invertV )
+		, VkFilter samplerFilter
+		, TexcoordConfig const * config )
 		: m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
-			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 1.0 : 0.0 ) } },
-			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, Point2f{ ( invertU ? 1.0 : 0.0 ), ( invertV ? 0.0 : 1.0 ) } },
-			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 1.0 : 0.0 ) } },
-			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, Point2f{ ( invertU ? 0.0 : 1.0 ), ( invertV ? 0.0 : 1.0 ) } },
+			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
 		}
-		, m_sampler{ doCreateSampler( m_renderSystem, nearest ) }
+		, m_sampler{ doCreateSampler( m_renderSystem, samplerFilter ) }
+		, m_useTexCoords{ config != nullptr }
+	{
+	}
+
+	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, VkFilter samplerFilter
+		, TexcoordConfig const & config )
+		: RenderQuad{ renderSystem, samplerFilter, &config }
+	{
+	}
+
+	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, VkFilter samplerFilter )
+		: RenderQuad{ renderSystem, samplerFilter, nullptr }
 	{
 	}
 
@@ -88,6 +101,7 @@ namespace castor3d
 		, m_descriptorSetPool{ std::move( rhs.m_descriptorSetPool ) }
 		, m_descriptorSet{ std::move( rhs.m_descriptorSet ) }
 		, m_sourceView{ std::move( rhs.m_sourceView ) }
+		, m_useTexCoords{ std::move( rhs.m_useTexCoords ) }
 	{
 	}
 
@@ -152,6 +166,16 @@ namespace castor3d
 		}
 
 		// Initialise the vertex layout.
+		ashes::VkVertexInputAttributeDescriptionArray attributes
+		{
+			{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
+		};
+
+		if ( m_useTexCoords )
+		{
+			attributes.push_back( { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) } );
+		}
+
 		ashes::PipelineVertexInputStateCreateInfo vertexState
 		{
 			0u,
@@ -159,11 +183,7 @@ namespace castor3d
 			{
 				{ 0u, sizeof( TexturedQuad::Vertex ), VK_VERTEX_INPUT_RATE_VERTEX },
 			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, position ) },
-				{ 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TexturedQuad::Vertex, texture ) },
-			},
+			std::move( attributes ),
 		};
 
 		// Initialise the descriptor set.

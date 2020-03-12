@@ -75,7 +75,7 @@ namespace smaa
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_config{ config }
 		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaEdgeDetection" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdgeDetection" }

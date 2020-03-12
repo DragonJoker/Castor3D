@@ -190,7 +190,7 @@ namespace castor3d
 
 	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
 		, ashes::ImageView const & ovView )
-		: RenderQuad{ renderSystem, true }
+		: RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
 		, m_ovView{ ovView }
 	{
 	}

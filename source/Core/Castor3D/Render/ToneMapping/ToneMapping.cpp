@@ -25,7 +25,7 @@ namespace castor3d
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
-		, RenderQuad{ *engine.getRenderSystem(), true, false }
+		, RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST, TexcoordConfig{} }
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }

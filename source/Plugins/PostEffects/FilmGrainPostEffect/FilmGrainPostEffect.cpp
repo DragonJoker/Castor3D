@@ -148,7 +148,7 @@ namespace film_grain
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_size{ size }
 	{
 		auto & device = getCurrentRenderDevice( renderSystem );
