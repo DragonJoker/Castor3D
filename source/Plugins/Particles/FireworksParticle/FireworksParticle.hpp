@@ -5,8 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_FireworksParticle_H___
 
 #include <Castor3D/Scene/ParticleSystem/CpuParticleSystem.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp>
+#include <Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp>
 
-namespace Fireworks
+namespace fireworks
 {
 	class ParticleSystem
 		: public castor3d::CpuParticleSystem
@@ -15,10 +17,6 @@ namespace Fireworks
 		explicit ParticleSystem( castor3d::ParticleSystem & parent );
 		virtual ~ParticleSystem();
 		static castor3d::CpuParticleSystemUPtr create( castor3d::ParticleSystem & parent );
-		void emitParticle( float type
-			, castor::Point3f const & position
-			, castor::Point3f const & velocity
-			, float age );
 		/**
 		 *\copydoc		castor3d::CpuParticleSystem::update
 		 */
@@ -36,6 +34,10 @@ namespace Fireworks
 		 *\copydoc		castor3d::CpuParticleSystem::doCleanup
 		 */
 		void doCleanup()override;
+		/**
+		 *\copydoc		castor3d::CpuParticleSystem::doOnEmit
+		 */
+		void doOnEmit( castor3d::Particle const & particle )override;
 
 	public:
 		static castor::String const Type;
@@ -43,10 +45,6 @@ namespace Fireworks
 
 	private:
 		uint32_t m_firstUnused{ 1u };
-		castor3d::ParticleDeclaration::iterator m_type;
-		castor3d::ParticleDeclaration::iterator m_position;
-		castor3d::ParticleDeclaration::iterator m_velocity;
-		castor3d::ParticleDeclaration::iterator m_age;
 	};
 }
 

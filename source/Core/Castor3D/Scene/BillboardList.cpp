@@ -167,8 +167,12 @@ namespace castor3d
 	{
 		if ( m_count )
 		{
+			auto & device = getCurrentRenderDevice( getParentScene() );
+			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count * m_vertexStride )
+				, device.properties.limits.nonCoherentAtomSize );
+
 			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
-				, m_count * m_vertexStride
+				, mappedSize
 				, 0u ) )
 			{
 				struct Element
@@ -253,7 +257,7 @@ namespace castor3d
 					log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
 				}
 
-				m_vertexBuffer->getBuffer().flush( 0u, m_count * m_vertexStride );
+				m_vertexBuffer->getBuffer().flush( 0u, mappedSize );
 				m_vertexBuffer->getBuffer().unlock();
 			}
 		}

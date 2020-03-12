@@ -1460,10 +1460,16 @@ namespace castor3d
 		// Shader outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
 			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_viewPosition = writer.declOutput< Vec3 >( cuT( "vtx_viewPosition" )
+			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
 			, RenderPass::VertexOutputs::CurPositionLocation );
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
 			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
 		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
 			, RenderPass::VertexOutputs::NormalLocation );
 		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
@@ -1532,7 +1538,12 @@ namespace castor3d
 				prvPosition = c3d_prvView * vec4( prvPosition );
 				curPosition = c3d_projection * curPosition;
 				prvPosition = c3d_projection * prvPosition;
+				vtx_viewPosition = curPosition.xyz();
 
+				auto tbn = writer.declLocale( cuT( "tbn" )
+					, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
+				vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
+				vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
 				// Convert the jitter from non-homogeneous coordiantes to homogeneous
 				// coordinates and add it:
 				// (note that for providing the jitter in non-homogeneous projection space,

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ParticleModule_H___
 #define ___C3D_ParticleModule_H___
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
 namespace castor3d
@@ -124,6 +125,21 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Emits the particles.
+	*\remarks
+	*	Emits one particle at a time.
+	*\~french
+	*\brief
+	*	Emet les particules
+	*\remarks
+	*	Emet une particle à la fois.
+	*\remarks
+	*	Décrit l'utilisation et le type d'un élément de particule.
+	*/
+	class ParticleEmitter;
+	/**
+	*\~english
+	*\brief
 	*	Particle system implementation.
 	*\~french
 	*\brief
@@ -139,6 +155,19 @@ namespace castor3d
 	*	Classe de base de l'implémentation d'un système de particules.
 	*/
 	class ParticleSystemImpl;
+	/**
+	*\~english
+	*\brief
+	*	Updates the particles.
+	*\remarks
+	*	Met à jour une particule à la fois
+	*\~french
+	*\brief
+	*	Met à jour les particules.
+	*\remarks
+	*	Met à jour une particule à la fois.
+	*/
+	class ParticleUpdater;
 	/**
 	*\~english
 	*\brief
@@ -158,11 +187,17 @@ namespace castor3d
 	CU_DeclareSmartPtr( ComputeParticleSystem );
 	CU_DeclareSmartPtr( CpuParticleSystem );
 	CU_DeclareSmartPtr( ParticleElementDeclaration );
+	CU_DeclareSmartPtr( ParticleEmitter );
 	CU_DeclareSmartPtr( ParticleFactory );
 	CU_DeclareSmartPtr( ParticleSystem );
 	CU_DeclareSmartPtr( ParticleSystemImpl );
+	CU_DeclareSmartPtr( ParticleUpdater );
 
 	CU_DeclareVector( Particle, Particle );
+	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );
+	CU_DeclareVector( ParticleUpdaterUPtr, ParticleUpdater );
+
+	using ParticleValues = ParametersT< size_t >;
 
 	//@}
 	//@}

@@ -734,9 +734,11 @@ namespace castor3d
 
 		if ( !cache.isEmpty() )
 		{
-			if ( m_particleTimer->getCount() < cache.getObjectCount() )
+			auto count = 2u * cache.getObjectCount();
+
+			if ( m_particleTimer->getCount() < count )
 			{
-				m_particleTimer->updateCount( 2u * cache.getObjectCount() );
+				m_particleTimer->updateCount( count );
 			}
 
 			RenderPassTimerBlock timerBlock{ m_particleTimer->start() };
@@ -745,8 +747,6 @@ namespace castor3d
 			for ( auto & particleSystem : cache )
 			{
 				particleSystem.second->update( *m_particleTimer, index );
-				m_particleTimer->notifyPassRender( index++ );
-				m_particleTimer->notifyPassRender( index++ );
 				info.m_particlesCount += particleSystem.second->getParticlesCount();
 			}
 		}

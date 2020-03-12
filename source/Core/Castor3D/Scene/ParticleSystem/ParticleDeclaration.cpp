@@ -18,7 +18,7 @@ namespace castor3d
 			{
 				m_elements.push_back( elements[i] );
 				m_elements[i].m_offset = m_stride;
-				m_stride += getSize( m_elements[i].m_dataType );
+				m_stride += uint32_t( getSize( m_elements[i].m_dataType ) );
 			}
 		}
 	}
@@ -29,7 +29,7 @@ namespace castor3d
 
 	bool operator==( ParticleDeclaration const & lhs, ParticleDeclaration const & rhs )
 	{
-		bool result = lhs.stride() == rhs.stride() && lhs.size() == rhs.size();
+		bool result = lhs.stride() == rhs.stride() && lhs.count() == rhs.count();
 		auto itl = lhs.begin();
 		auto itr = rhs.begin();
 

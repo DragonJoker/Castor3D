@@ -115,7 +115,7 @@ namespace castor3d
 			, sdw::Float const & shininess )const
 		{
 			return mix( shininess
-				, shininess * getFloat( writer, sampled, 255.0_f, glossinessMask )
+				, shininess * 255.0_f * getFloat( writer, sampled, glossinessMask )
 				, getMix( writer, glossinessMask ) );
 		}
 
@@ -142,7 +142,7 @@ namespace castor3d
 			, sdw::Float const & opacity )const
 		{
 			return mix( opacity
-				, opacity * getFloat( writer, sampled, opacity, opacityMask )
+				, opacity * getFloat( writer, sampled, opacityMask )
 				, getMix( writer, opacityMask ) );
 		}
 
@@ -165,7 +165,7 @@ namespace castor3d
 			, sdw::Float const & height )const
 		{
 			return mix( height
-				, getFloat( writer, sampled, heightFactor, heightMask )
+				, heightFactor * getFloat( writer, sampled, heightMask )
 				, getMix( writer, heightMask ) );
 		}
 
@@ -190,30 +190,22 @@ namespace castor3d
 		sdw::Float TextureConfigData::getMix( sdw::ShaderWriter & writer
 			, sdw::Vec2 const & mask )const
 		{
-			return ( 1.0_f - step( mask[0], 0.0_f ) );
+			return ( 1.0_f - step( mask.x(), 0.0_f ) );
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Vec2 const & mask )const
 		{
-			return sampled[writer.cast< sdw::UInt >( mask[1] )];
-		}
-
-		sdw::Float TextureConfigData::getFloat( sdw::ShaderWriter & writer
-			, sdw::Vec4 const & sampled
-			, sdw::Float const & factor
-			, sdw::Vec2 const & mask )const
-		{
-			return factor * getFloat( writer, sampled, mask );
+			return sampled[writer.cast< sdw::UInt >( mask.y() )];
 		}
 
 		sdw::Vec3 TextureConfigData::getVec3( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Vec2 const & mask )const
 		{
-			return ( sampled.rgb() * ( 1.0_f - writer.cast< sdw::Float >( mask[1] ) ) )
-				+ ( sampled.gba() * writer.cast< sdw::Float >( mask[1] ) );
+			return ( sampled.rgb() * ( 1.0_f - writer.cast< sdw::Float >( mask.x() ) ) )
+				+ ( sampled.gba() * writer.cast< sdw::Float >( mask.y() ) );
 		}
 
 		sdw::Vec3 TextureConfigData::removeGamma( sdw::ShaderWriter & writer

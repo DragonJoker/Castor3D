@@ -12,7 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class Parameters
+	template< typename KeyT >
+	class ParametersT
 	{
 	public:
 		/**
@@ -21,7 +22,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Parameters()
+		inline ParametersT()
 		{
 		}
 		/**
@@ -30,7 +31,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Parameters()
+		inline ~ParametersT()
 		{
 		}
 		/**
@@ -41,26 +42,29 @@ namespace castor3d
 		 *\brief		Analyse le texte donné en une liste de paramètres.
 		 *\param[in]	text	Le texte source.
 		 */
-		C3D_API void parse( castor::String const & text )
+		inline void parse( castor::String const & text )
 		{
-			castor::StringArray params = castor::string::split( text, cuT( " " ), 0xFFFFFFFF, false );
-
-			for ( auto param : params )
+			if constexpr ( std::is_same_v< KeyT, castor::String > )
 			{
-				if ( param.find( cuT( "-" ) ) != castor::String::npos )
-				{
-					param = param.substr( 1 );
-				}
+				castor::StringArray params = castor::string::split( text, cuT( " " ), 0xFFFFFFFF, false );
 
-				castor::StringArray paramNameValue = castor::string::split( param, cuT( "=" ), 2, false );
+				for ( auto param : params )
+				{
+					if ( param.find( cuT( "-" ) ) != castor::String::npos )
+					{
+						param = param.substr( 1 );
+					}
 
-				if ( paramNameValue.size() > 1 )
-				{
-					add( paramNameValue[0], paramNameValue[1] );
-				}
-				else
-				{
-					add( param, true );
+					castor::StringArray paramNameValue = castor::string::split( param, cuT( "=" ), 2, false );
+
+					if ( paramNameValue.size() > 1 )
+					{
+						add( paramNameValue[0], paramNameValue[1] );
+					}
+					else
+					{
+						add( param, true );
+					}
 				}
 			}
 		}
@@ -80,19 +84,19 @@ namespace castor3d
 		 *\param[in]	count	Le compte des valeurs
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		template< typename T >
-		inline bool add( castor::String const & name
-			, T * values
+		template< typename ValueT >
+		inline bool add( KeyT const & name
+			, ValueT * values
 			, uint32_t count )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( name );
+			ParamNameMapIt it = m_values.find( name );
 
-			if ( it == m_mapParameters.end() )
+			if ( it == m_values.end() )
 			{
-				ByteArray param( sizeof( T ) * count, 0 );
-				std::memcpy( &param[0], values, sizeof( T ) * count );
-				m_mapParameters.insert( std::make_pair( name, param ) );
+				ByteArray param( sizeof( ValueT ) * count, 0 );
+				std::memcpy( &param[0], values, sizeof( ValueT ) * count );
+				m_values.emplace( name, param );
 				result = true;
 			}
 
@@ -106,11 +110,11 @@ namespace castor3d
 		 *\brief		Ajoute une liste de paramètres.
 		 *\param[in]	parameters	La liste de paramètres.
 		 */
-		inline void add( Parameters const & parameters )
+		inline void add( ParametersT const & parameters )
 		{
-			for ( auto parameter : parameters.m_mapParameters )
+			for ( auto parameter : parameters.m_values )
 			{
-				m_mapParameters.insert( { parameter.first, parameter.second } );
+				m_values.emplace( parameter.first, parameter.second );
 			}
 		}
 		/**
@@ -127,9 +131,9 @@ namespace castor3d
 		 *\param[in]	values	Les valeurs du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		template< typename T, uint32_t N >
-		inline bool add( castor::String const & name
-			, T const( &values )[N] )
+		template< typename ValueT, uint32_t N >
+		inline bool add( KeyT const & name
+			, ValueT const( &values )[N] )
 		{
 			return add( name, values, N );
 		}
@@ -147,9 +151,9 @@ namespace castor3d
 		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		template< typename T >
-		inline bool add( castor::String const & name
-			, T const & value )
+		template< typename ValueT >
+		inline bool add( KeyT const & name
+			, ValueT const & value )
 		{
 			return add( name, &value, 1 );
 		}
@@ -167,18 +171,18 @@ namespace castor3d
 		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
-		inline bool add( castor::String const & name
+		inline bool add( KeyT const & name
 			, castor::String const & value )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( name );
+			ParamNameMapIt it = m_values.find( name );
 
-			if ( it == m_mapParameters.end() )
+			if ( it == m_values.end() )
 			{
 				size_t size = sizeof( xchar ) * value.size();
 				ByteArray param( size + 1, 0 );
 				std::memcpy( &param[0], value.data(), size );
-				m_mapParameters.insert( std::make_pair( name, param ) );
+				m_values.emplace( name, param );
 				result = true;
 			}
 
@@ -196,16 +200,16 @@ namespace castor3d
 		 *\param[in]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		template< typename T >
-		inline bool set( castor::String const & name
-			, T const & value )
+		template< typename ValueT >
+		inline bool set( KeyT const & name
+			, ValueT const & value )
 		{
 			bool result = false;
-			ParamNameMapIt it = m_mapParameters.find( name );
+			ParamNameMapIt it = m_values.find( name );
 
-			if ( it != m_mapParameters.end() )
+			if ( it != m_values.end() )
 			{
-				std::memcpy( &it->second[0], &value, sizeof( T ) );
+				std::memcpy( &it->second[0], &value, sizeof( ValueT ) );
 				result = true;
 			}
 
@@ -225,17 +229,17 @@ namespace castor3d
 		 *\param[in]	count	La nombre disponible de valeurs
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		template< typename T >
-		inline bool get( castor::String const & name
-			, T * values
+		template< typename ValueT >
+		inline bool get( KeyT const & name
+			, ValueT * values
 			, uint32_t count )const
 		{
 			bool result = false;
-			ParamNameMapConstIt it = m_mapParameters.find( name );
+			ParamNameMapConstIt it = m_values.find( name );
 
-			if ( it != m_mapParameters.end() )
+			if ( it != m_values.end() )
 			{
-				if ( sizeof( T ) * count >= it->second.size() )
+				if ( sizeof( ValueT ) * count >= it->second.size() )
 				{
 					std::memcpy( values, &it->second[0], it->second.size() );
 					result = true;
@@ -256,9 +260,9 @@ namespace castor3d
 		 *\param[out]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		template< typename T >
-		inline bool get( castor::String const & name
-			, T & value )const
+		template< typename ValueT >
+		inline bool get( KeyT const & name
+			, ValueT & value )const
 		{
 			return get( name, &value, 1 );
 		}
@@ -274,9 +278,9 @@ namespace castor3d
 		 *\param[out]	values	Les valeurs du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		template< typename T, uint32_t N >
-		inline bool get( castor::String const & name
-			, T( &values )[N] )const
+		template< typename ValueT, uint32_t N >
+		inline bool get( KeyT const & name
+			, ValueT( &values )[N] )const
 		{
 			return get( name, values, N );
 		}
@@ -292,13 +296,13 @@ namespace castor3d
 		 *\param[out]	value	La valeur du paramètre
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		inline bool get( castor::String const & name
+		inline bool get( KeyT const & name
 			, castor::String & value )const
 		{
 			bool result = false;
-			ParamNameMapConstIt it = m_mapParameters.find( name );
+			ParamNameMapConstIt it = m_values.find( name );
 
-			if ( it != m_mapParameters.end() )
+			if ( it != m_values.end() )
 			{
 				value = reinterpret_cast< xchar const * const >( it->second.data() );
 				result = true;
@@ -306,11 +310,31 @@ namespace castor3d
 
 			return result;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a parameter value
+		 *\param[in]	name	The parameter name
+		 *\~french
+		 *\brief		Récupère la valeur d'un paramètre
+		 *\param[in]	name	Le nom du paramètre
+		 */
+		template< typename ValueT >
+		inline ValueT get( KeyT const & name )const
+		{
+			ValueT result;
+			this->get( name, result );
+			return result;
+		}
+
+		size_t size()const
+		{
+			return m_values.size();
+		}
 
 	private:
 		CU_DeclareVector( uint8_t, Byte );
-		CU_DeclareMap( castor::String, ByteArray, ParamName );
-		ParamNameMap m_mapParameters;
+		CU_DeclareTemplateMap( KeyT, ByteArray, ParamName );
+		ParamNameMap m_values;
 	};
 }
 

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_CpuParticleSystem_H___
 
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
-#include "Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp"
+#include "Castor3D/Scene/ParticleSystem/ParticleEmitter.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystemImpl.hpp"
 
 namespace castor3d
@@ -45,6 +45,29 @@ namespace castor3d
 			, ParticleFormat type
 			, castor::String const & defaultValue )override;
 
+	protected:
+		/**
+		 *\~english
+		 *\brief		Adds the given emitter to the list.
+		 *\~french
+		 *\brief		Donne l'emitter donné à la liste.
+		 */
+		C3D_API ParticleEmitter * addEmitter( ParticleEmitterUPtr emitter );
+		/**
+		 *\~english
+		 *\brief		Adds the given updater to the list.
+		 *\~french
+		 *\brief		Donne l'updater donné à la liste.
+		 */
+		C3D_API ParticleUpdater * addUpdater( ParticleUpdaterUPtr updater );
+		/**
+		 *\~english
+		 *\brief		Called when a particle is emitted.
+		 *\~french
+		 *\brief		Appelé lorsqu'une particule est créée.
+		 */
+		C3D_API void onEmit( Particle const & particle );
+
 	private:
 		/**
 		 *\~english
@@ -62,6 +85,13 @@ namespace castor3d
 		 *\brief		Nettoie l'implémentation.
 		 */
 		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Called when a particle is emitted.
+		 *\~french
+		 *\brief		Appelé lorsqu'une particule est créée.
+		 */
+		C3D_API virtual void doOnEmit( Particle const & particle ) = 0;
 
 	protected:
 		//!\~english	The particle's elements description.
@@ -70,6 +100,15 @@ namespace castor3d
 		//!\~english	The particles.
 		//!\~french		Les particules.
 		ParticleArray m_particles;
+		//!\~english	The particles emitters.
+		//!\~french		Les émetteurs de particules.
+		ParticleEmitterArray m_emitters;
+		//!\~english	The particles updaters.
+		//!\~french		Les updaters de particules.
+		ParticleUpdaterArray m_updaters;
+
+	private:
+		std::vector< ParticleEmitter::OnEmitConnection > m_onEmits;
 	};
 }
 
