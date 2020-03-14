@@ -204,7 +204,7 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Vec2 const & mask )const
 		{
-			return ( sampled.rgb() * ( 1.0_f - writer.cast< sdw::Float >( mask.x() ) ) )
+			return ( sampled.rgb() * ( 1.0_f - writer.cast< sdw::Float >( mask.y() ) ) )
 				+ ( sampled.gba() * writer.cast< sdw::Float >( mask.y() ) );
 		}
 
