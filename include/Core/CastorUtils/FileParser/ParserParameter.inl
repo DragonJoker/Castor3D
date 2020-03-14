@@ -251,7 +251,7 @@ namespace castor
 		, String & params
 		, Rectangle & value )
 	{
-		return parseValues( loger
+		return parseValues( logger
 			, params
 			, Count
 			, value.ptr() );

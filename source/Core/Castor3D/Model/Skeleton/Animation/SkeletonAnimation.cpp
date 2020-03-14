@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationBone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationNode.hpp"
 #include "Castor3D/Model/Skeleton/Bone.hpp"

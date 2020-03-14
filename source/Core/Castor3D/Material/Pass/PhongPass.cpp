@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 using namespace castor;

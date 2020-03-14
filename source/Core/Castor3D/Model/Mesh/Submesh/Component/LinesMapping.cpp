@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>

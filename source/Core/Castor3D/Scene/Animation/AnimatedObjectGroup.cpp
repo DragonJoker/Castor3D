@@ -1,12 +1,12 @@
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObject.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
-
 #include "Castor3D/Scene/Geometry.hpp"
-#include "Castor3D/Model/Mesh/Mesh.hpp"
-#include "Castor3D/Model/Skeleton/Skeleton.hpp"
 
 using namespace castor;
 

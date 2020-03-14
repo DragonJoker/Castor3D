@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 

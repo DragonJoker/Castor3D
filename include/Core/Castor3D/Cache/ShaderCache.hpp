@@ -141,7 +141,7 @@ namespace castor3d
 		}
 
 	private:
-		ShaderProgramSPtr ShaderProgramCache::doFindAutomaticProgram( PipelineFlags const & flags );
+		ShaderProgramSPtr doFindAutomaticProgram( PipelineFlags const & flags );
 		ShaderProgramSPtr doCreateAutomaticProgram( RenderPass const & renderPass
 			, PipelineFlags const & flags )const;
 		void doAddAutomaticProgram( ShaderProgramSPtr program

@@ -3,6 +3,7 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>

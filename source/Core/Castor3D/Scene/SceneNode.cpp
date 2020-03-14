@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 

@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Material.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/MetallicRoughnessPbrPass.hpp"
 #include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"

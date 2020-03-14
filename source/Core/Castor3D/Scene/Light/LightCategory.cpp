@@ -1,4 +1,6 @@
 #include "Castor3D/Scene/Light/LightCategory.hpp"
+
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
 #include <CastorUtils/Graphics/PixelBuffer.hpp>

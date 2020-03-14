@@ -269,7 +269,7 @@ namespace castor
 	class LoggerInstance;
 	class Logger;
 	template< typename CharT
-		, template< typename CharT > typename StreambufT >
+		, template< typename T > typename StreambufT >
 	struct LoggerStreamT;
 	template< typename CharT, typename TraitsT >
 	class LoggerStreambufT;

@@ -1,5 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 using namespace castor;
 
 namespace castor3d

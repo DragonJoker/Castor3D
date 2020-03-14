@@ -5,10 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_CacheBase_H___
 
 #include "CacheModule.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Design/Signal.hpp>
-#include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {

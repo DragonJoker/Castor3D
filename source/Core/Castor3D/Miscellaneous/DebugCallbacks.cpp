@@ -1,5 +1,7 @@
 #include "Castor3D/Miscellaneous/DebugCallbacks.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
 

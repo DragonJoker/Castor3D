@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Geometry.hpp"
 
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Scene/Scene.hpp"

@@ -9,12 +9,12 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename CharT
-		, template< typename CharT > typename StreambufT >
+		, template< typename T > typename StreambufT >
 	struct LoggerStreamT
 		: public std::basic_ostringstream< CharT >
 	{
-		template< typename CharT >
-		using StreambufPtrT = std::unique_ptr< StreambufT< CharT > >;
+		template< typename T >
+		using StreambufPtrT = std::unique_ptr< StreambufT< T > >;
 
 	public:
 		LoggerStreamT( std::basic_ostream< CharT > & stream )

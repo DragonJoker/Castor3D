@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ObjectCacheBase_H___
 
 #include "CacheModule.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
 

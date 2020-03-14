@@ -1,5 +1,6 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/FrameEvent.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
 using namespace castor;
 
