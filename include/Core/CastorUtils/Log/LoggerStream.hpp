@@ -17,21 +17,9 @@ namespace castor
 		using StreambufPtrT = std::unique_ptr< StreambufT< T > >;
 
 	public:
-		LoggerStreamT( std::basic_ostream< CharT > & stream )
-			: std::basic_ostringstream< CharT >{}
-		{
-			reset( stream );
-		}
-		
 		LoggerStreamT()
 			: std::basic_ostringstream< CharT >{}
 		{
-		}
-
-		LoggerStreamT( LoggerInstance & logger )
-			: std::basic_ostringstream< CharT >{}
-		{
-			reset( logger );
 		}
 
 		~LoggerStreamT()

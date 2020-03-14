@@ -54,19 +54,19 @@ namespace castor3d
 			} );
 		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
 			{
-				std::clog << msg << newLine ? "\n" : "";
+				std::clog << msg << ( newLine ? "\n" : "" );
 			} );
 		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
 			{
-				std::cout << msg << newLine ? "\n" : "";
+				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
 		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
 			{
-				std::cout << msg << newLine ? "\n" : "";
+				std::cout << msg << ( newLine ? "\n" : "" );
 			} );
 		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
 			{
-				std::cerr << msg << newLine ? "\n" : "";
+				std::cerr << msg << ( newLine ? "\n" : "" );
 			} );
 		trace.reset();
 		debug.reset();

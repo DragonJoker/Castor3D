@@ -36,14 +36,14 @@ namespace fireworks
 			: public ParticleEmitter
 		{
 		public:
-			PrimaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
+			explicit PrimaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
 		};
 
 		class SecondaryParticleEmitter
 			: public ParticleEmitter
 		{
 		public:
-			SecondaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
+			explicit SecondaryParticleEmitter( castor3d::ParticleDeclaration const & decl );
 		};
 
 		class ParticleUpdater

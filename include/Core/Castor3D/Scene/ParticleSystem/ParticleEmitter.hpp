@@ -16,7 +16,7 @@ namespace castor3d
 	class ParticleEmitter
 	{
 	public:
-		C3D_API ParticleEmitter( castor3d::ParticleDeclaration const & decl );
+		C3D_API explicit ParticleEmitter( castor3d::ParticleDeclaration const & decl );
 		C3D_API virtual ~ParticleEmitter() = default;
 		C3D_API castor3d::Particle emit( ParticleValues const & value );
 
