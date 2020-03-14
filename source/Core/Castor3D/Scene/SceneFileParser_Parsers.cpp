@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/CameraCache.hpp"
@@ -51,22 +52,6 @@
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
-
-//#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-
-//#include "Castor3D/Material/Material.hpp"
-//#include "Castor3D/Material/Texture/TextureLayout.hpp"
-//#include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
-//#include "Castor3D/Model/Vertex.hpp"
-//#include "Castor3D/Plugin/Plugin.hpp"
-//#include "Castor3D/Plugin/DividerPlugin.hpp"
-//#include "Castor3D/Plugin/ImporterPlugin.hpp"
-//#include "Castor3D/Plugin/PostFxPlugin.hpp"
-//#include "Castor3D/Plugin/TechniquePlugin.hpp"
-//#include "Castor3D/Render/RenderSystem.hpp"
-//#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
-//#include <CastorUtils/Graphics/Font.hpp>
-//#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 

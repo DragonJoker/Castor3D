@@ -15,8 +15,9 @@ namespace castor3d
 {
 	struct SkinningData
 	{
-		std::unique_ptr < sdw::ArraySsboT< sdw::Mat4 > > ssbo;
-		std::unique_ptr < sdw::Ubo > ubo;
+		std::unique_ptr< sdw::ArraySsboT< sdw::Mat4 > > ssbo;
+		std::unique_ptr< sdw::Ubo > ubo;
+		std::unique_ptr< sdw::SampledImageBufferRgba32 > tbo;
 	};
 
 	class SkinningUbo
