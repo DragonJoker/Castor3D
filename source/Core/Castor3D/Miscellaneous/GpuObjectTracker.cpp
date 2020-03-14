@@ -1,5 +1,7 @@
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 #if C3D_TRACE_OBJECTS
 
 namespace castor3d
