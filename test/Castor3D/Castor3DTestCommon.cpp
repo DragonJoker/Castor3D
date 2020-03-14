@@ -689,6 +689,8 @@ namespace Testing
 		while ( result && itA != childrenA.end() )
 		{
 			result = CT_EQUAL( *itA, *itB );
+			++itA;
+			++itB;
 		}
 
 		return result;
@@ -716,6 +718,8 @@ namespace Testing
 		while ( result && itA != p_a.end() )
 		{
 			result = CT_EQUAL( *itA, *itB );
+			++itA;
+			++itB;
 		}
 
 		return result;
@@ -730,6 +734,8 @@ namespace Testing
 		while ( result && itA != p_a.end() )
 		{
 			result = CT_EQUAL( *itA, *itB );
+			++itA;
+			++itB;
 		}
 
 		return result;
