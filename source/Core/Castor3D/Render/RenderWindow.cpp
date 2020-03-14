@@ -205,14 +205,16 @@ namespace castor3d
 		, Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, MouseEventHandler{  }
+		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) ) }
 	{
+		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
+		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
 		auto listener = getListener();
 		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) );
@@ -282,6 +284,7 @@ namespace castor3d
 					, { m_saveBuffer->getWidth(), m_saveBuffer->getHeight() } );
 				m_initialised = true;
 				m_dirty = false;
+				engine.registerWindow( *this );
 			}
 		}
 
@@ -295,6 +298,7 @@ namespace castor3d
 		if ( m_device )
 		{
 			auto & engine = *getEngine();
+			engine.unregisterWindow( *this );
 			bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 			if ( hasCurrent

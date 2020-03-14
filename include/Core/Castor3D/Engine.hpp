@@ -131,6 +131,20 @@ namespace castor3d
 		C3D_API void setCleaned();
 		/**
 		 *\~english
+		 *\brief		Registers a RenderWindow.
+		 *\~french
+		 *\brief		Enregistre une RenderWindow.
+		 */
+		C3D_API void registerWindow( RenderWindow & window );
+		/**
+		 *\~english
+		 *\brief		Unregisters a RenderWindow.
+		 *\~french
+		 *\brief		Désenregistre une RenderWindow.
+		 */
+		C3D_API void unregisterWindow( RenderWindow const & window );
+		/**
+		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
 		 *\param[in]	name	The registering name.
 		 *\param[in]	parsers	The parsers.
@@ -458,7 +472,7 @@ namespace castor3d
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		UserInputListenerSPtr m_userInputListener;
-		std::map< RenderWindowRPtr, UserInputListenerSPtr > m_windowInputListeners;
+		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
 		MeshFactorySPtr m_meshFactory;

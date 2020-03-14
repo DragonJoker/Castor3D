@@ -176,6 +176,13 @@ namespace castor3d
 
 	void TextureUnit::cleanup()
 	{
+		auto sampler = getSampler();
+
+		if ( sampler )
+		{
+			sampler->cleanup();
+		}
+		
 		if ( m_texture )
 		{
 			m_texture->cleanup();

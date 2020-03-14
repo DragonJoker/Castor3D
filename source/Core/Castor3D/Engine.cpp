@@ -173,15 +173,9 @@ namespace castor3d
 					, *this );
 				return result;
 			}
+			, dummy
 			, [this]( RenderWindowSPtr element )
 			{
-				m_windowInputListeners.emplace( element.get()
-					, std::make_shared< RenderWindow::InputListener >( *this, element ) );
-
-			}
-			, [this]( RenderWindowSPtr element )
-			{
-				m_windowInputListeners.erase( element.get() );
 				postEvent( makeCleanupEvent( *element ) );
 			}
 			, mergeResource );
@@ -426,6 +420,29 @@ namespace castor3d
 	void Engine::setCleaned()
 	{
 		m_cleaned = true;
+	}
+
+	void Engine::registerWindow( RenderWindow & window )
+	{
+		m_windowInputListeners.emplace( &window
+			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
+		auto listener = m_windowInputListeners.find( &window )->second;
+		log::debug << "Created UIListener 0x" << std::hex << listener.get() << " for window " << window.getName() << std::endl;
+	}
+
+	void Engine::unregisterWindow( RenderWindow const & window )
+	{
+		auto listener = m_windowInputListeners.find( &window )->second;
+		listener->cleanup();
+		auto plistener = listener.get();
+		auto pwindow = &window;
+		log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
+		listener->getFrameListener().postEvent( makeFunctorEvent( EventType::ePostRender
+			, [this, plistener, pwindow]()
+			{
+				m_windowInputListeners.erase( pwindow );
+				log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
+			} ) );
 	}
 
 	void Engine::registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers )
