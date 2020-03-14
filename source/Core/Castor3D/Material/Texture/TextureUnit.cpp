@@ -216,7 +216,11 @@ namespace castor3d
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
 		m_configuration = std::move( value );
-		m_configuration.needsYInversion = m_texture->needsYInversion() ? 1u : 0u;
+		m_configuration.needsYInversion = m_texture
+			? ( m_texture->needsYInversion()
+				? 1u
+				: 0u )
+			: 0u;
 		doUpdateShift( m_configuration.colourMask );
 		doUpdateShift( m_configuration.specularMask );
 		doUpdateShift( m_configuration.glossinessMask );
