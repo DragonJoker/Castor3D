@@ -3,6 +3,7 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
@@ -18,7 +19,7 @@ namespace castor3d
 		, std::string const & name
 		, std::string const & typeName )
 	{
-		castor::Logger::logTrace( "Created " + typeName + " [" + name + "]" );
+		log::trace << "Created " << typeName << " [" << name << "]" << std::endl;
 		device.device->setDebugObjectName(
 			{
 				VkObjectType( type ),

@@ -125,7 +125,8 @@ namespace castor
 		 *\param[in,out]	params	Le texte contenant la valeur du paramètre.
 		 *\return			\p si un problème quelconque est arrivé.
 		 */
-		CU_API virtual bool parse( String & params ) = 0;
+		CU_API virtual bool parse( LoggerInstance & logger
+			, String & params ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value.

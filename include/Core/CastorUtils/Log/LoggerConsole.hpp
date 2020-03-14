@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_CONSOLE_H___
-#define ___CU_CONSOLE_H___
+#ifndef ___CU_LoggerConsole_H___
+#define ___CU_LoggerConsole_H___
 
 #include "CastorUtils/CastorUtilsPrerequisites.hpp"
 

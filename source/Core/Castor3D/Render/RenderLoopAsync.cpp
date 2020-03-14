@@ -233,13 +233,13 @@ namespace castor3d
 		}
 		catch ( castor::Exception & exc )
 		{
-			Logger::logError( cuT( "RenderLoop - " ) + exc.getFullDescription() );
+			log::error << cuT( "RenderLoop - " ) << exc.getFullDescription() << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( std::string( "RenderLoop - " ) + exc.what() );
+			log::error << std::string( "RenderLoop - " ) + exc.what() << std::endl;
 			m_frameEnded = true;
 			m_ended = true;
 		}
@@ -247,25 +247,25 @@ namespace castor3d
 
 	void RenderLoopAsync::doSetHandle( ashes::WindowHandle handle )
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		m_handle = std::move( handle );
 	}
 
 	ashes::WindowHandle & RenderLoopAsync::doGetHandle()
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		return m_handle;
 	}
 
 	void RenderLoopAsync::doSetWindow( RenderWindow * p_window )
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		m_window = p_window;
 	}
 
 	RenderWindow * RenderLoopAsync::doGetWindow()const
 	{
-		LockType lock{ makeUniqueLock( m_mutexWindow ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexWindow ) };
 		return m_window;
 	}
 }

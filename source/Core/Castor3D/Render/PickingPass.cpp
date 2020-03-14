@@ -401,8 +401,7 @@ namespace castor3d
 
 		auto it = m_buffer.begin();
 		it += ( PickingOffset * PickingWidth ) + PickingOffset - 1;
-		castor::Logger::logTrace( castor::makeStringStream()
-			<< cuT( "Picked: " ) << it->at( 0 ) << cuT( ", " ) << it->at( 1 ) << cuT( ", " ) << it->at( 2 ) << ", " << it->at( 3 ) );
+		log::trace << cuT( "Picked: " ) << it->at( 0 ) << cuT( ", " ) << it->at( 1 ) << cuT( ", " ) << it->at( 2 ) << ", " << it->at( 3 ) << std::endl;
 		return *it;
 	}
 

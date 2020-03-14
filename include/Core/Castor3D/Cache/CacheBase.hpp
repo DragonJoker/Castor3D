@@ -5,10 +5,10 @@ See LICENSE file in root folder
 #define ___C3D_CacheBase_H___
 
 #include "CacheModule.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Design/Signal.hpp>
-#include <CastorUtils/Log/Logger.hpp>
 
 namespace castor3d
 {
@@ -377,27 +377,24 @@ namespace castor3d
 	protected:
 		inline void doReportCreation( castor::String const & name )
 		{
-			castor::Logger::logTrace( castor::makeStringStream()
-				<< InfoCacheCreatedObject
+			log::trace << InfoCacheCreatedObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
-				<< name );
+				<< name << std::endl;
 		}
 
 		inline void doReportDuplicate( castor::String const & name )
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
-				<< WarningCacheDuplicateObject
+			log::warn << WarningCacheDuplicateObject
 				<< getObjectTypeName()
 				<< cuT( ": " )
-				<< name );
+				<< name << std::endl;
 		}
 
 		inline void doReportNull()
 		{
-			castor::Logger::logWarning( castor::makeStringStream()
-				<< WarningCacheNullObject
-				<< getObjectTypeName() );
+			log::warn << WarningCacheNullObject
+				<< getObjectTypeName() << std::endl;
 		}
 
 	protected:

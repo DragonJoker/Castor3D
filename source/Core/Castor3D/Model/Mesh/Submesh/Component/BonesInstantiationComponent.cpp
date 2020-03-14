@@ -1,6 +1,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/BonesInstantiationComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
@@ -38,7 +40,8 @@ namespace castor3d
 		bool result = true;
 		auto count = m_instantiation.getMaxRefCount();
 
-		if ( count > m_instantiation.getThreshold() )
+		if ( count > m_instantiation.getThreshold()
+			&& getOwner()->getOwner()->getScene()->getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() )
 		{
 			if ( !m_instancedBonesBuffer )
 			{

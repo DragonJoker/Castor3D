@@ -14,7 +14,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SceneFileContext::SceneFileContext( Path const & path, SceneFileParser * parser )
-		: FileParserContext( path )
+		: FileParserContext{ parser->getEngine()->getLogger(), path }
 		, window()
 		, sceneNode()
 		, geometry()
@@ -120,7 +120,7 @@ namespace castor3d
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
-		, FileParser( uint32_t( CSCNSection::eRoot ) )
+		, FileParser{ engine.getLogger(), uint32_t( CSCNSection::eRoot ) }
 	{
 		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ZERO )] = uint32_t( VK_BLEND_FACTOR_ZERO );
 		m_mapBlendFactors[ashes::getName( VK_BLEND_FACTOR_ONE )] = uint32_t( VK_BLEND_FACTOR_ONE );
@@ -724,7 +724,7 @@ namespace castor3d
 
 	bool SceneFileParser::doDiscardParser( String const & line )
 	{
-		Logger::logError( cuT( "Parser not found @ line #" ) + string::toString( m_context->m_line ) + cuT( " : " ) + line );
+		log::error << cuT( "Parser not found @ line #" ) << string::toString( m_context->m_line ) << cuT( " : " ) << line << std::endl;
 		return false;
 	}
 

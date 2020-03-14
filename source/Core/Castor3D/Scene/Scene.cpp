@@ -74,7 +74,7 @@ namespace castor3d
 			if ( !view.isEmpty() )
 			{
 				result = file.writeText( cuT( "\n" ) + tabs + cuT( "\t// " ) + elemsName + cuT( "\n" ) ) > 0;
-				Logger::logInfo( cuT( "Scene::write - " ) + elemsName );
+				log::info << cuT( "Scene::write - " ) << elemsName << std::endl;
 
 				for ( auto const & name : view )
 				{
@@ -133,8 +133,7 @@ namespace castor3d
 
 	bool Scene::TextWriter::operator()( Scene const & scene, TextFile & file )
 	{
-		Logger::logInfo( cuT( "Scene::write - Scene Name" ) );
-
+		log::info << cuT( "Scene::write - Scene Name" ) << std::endl;
 		bool result = file.writeText( m_tabs + cuT( "// Global configuration\n" ) ) > 0;
 
 		if ( scene.getEngine()->getRenderLoop().hasDebugOverlays() )
@@ -163,7 +162,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Ambient light" ) );
+			log::info << cuT( "Scene::write - Ambient light" ) << std::endl;
 			result = file.print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
 				&& RgbColour::TextWriter( String() )( scene.getAmbientLight(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
@@ -172,7 +171,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Background colour" ) );
+			log::info << cuT( "Scene::write - Background colour" ) << std::endl;
 			result = file.print( 256, cuT( "%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 				&& RgbColour::TextWriter( String() )( scene.getBackgroundColour(), file )
 				&& file.writeText( cuT( "\n" ) ) > 0;
@@ -181,7 +180,7 @@ namespace castor3d
 
 		if ( result && !m_materialsFile.empty() )
 		{
-			Logger::logInfo( cuT( "Scene::write - Materials file" ) );
+			log::info << cuT( "Scene::write - Materials file" ) << std::endl;
 			String path = m_materialsFile;
 			string::replace( path, cuT( "\\" ), cuT( "/" ) );
 			result = file.writeText( m_tabs + cuT( "\tinclude \"" ) + path +cuT( "\"\n" ) ) > 0;
@@ -190,20 +189,20 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Background" ) );
+			log::info << cuT( "Scene::write - Background" ) << std::endl;
 			BackgroundTextWriter writer{ file, m_tabs + cuT( "\t" ) };
 			scene.getBackground()->accept( writer );
 		}
 
 		if ( result && scene.getFog().getType() != FogType::eDisabled )
 		{
-			Logger::logInfo( cuT( "Scene::write - Fog type" ) );
+			log::info << cuT( "Scene::write - Fog type" ) << std::endl;
 			result = file.writeText( m_tabs + cuT( "\tfog_type " ) + castor3d::getName( scene.getFog().getType() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< Scene >::checkError( result, "Scene fog type" );
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Fog density" ) );
+				log::info << cuT( "Scene::write - Fog density" ) << std::endl;
 				result = file.writeText( m_tabs + cuT( "\tfog_density " ) + string::toString( scene.getFog().getDensity(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< Scene >::checkError( result, "Scene fog density" );
 			}
@@ -242,7 +241,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Overlays" ) );
+				log::info << cuT( "Scene::write - Overlays" ) << std::endl;
 
 				for ( auto const & name : scene.getOverlayView() )
 				{
@@ -262,9 +261,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Meshes" ) );
+				log::info << cuT( "Scene::write - Meshes" ) << std::endl;
 				using LockType = std::unique_lock< MeshCache const >;
-				LockType lock{ makeUniqueLock( scene.getMeshCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getMeshCache() ) };
 
 				for ( auto const & it : scene.getMeshCache() )
 				{
@@ -282,7 +281,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Cameras nodes" ) );
+				log::info << cuT( "Scene::write - Cameras nodes" ) << std::endl;
 
 				for ( auto const & it : scene.getCameraRootNode()->getChildren() )
 				{
@@ -302,9 +301,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Cameras" ) );
+				log::info << cuT( "Scene::write - Cameras" ) << std::endl;
 				using LockType = std::unique_lock< CameraCache const >;
-				LockType lock{ makeUniqueLock( scene.getCameraCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getCameraCache() ) };
 
 				for ( auto const & it : scene.getCameraCache() )
 				{
@@ -324,7 +323,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Objects nodes" ) );
+				log::info << cuT( "Scene::write - Objects nodes" ) << std::endl;
 
 				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
 				{
@@ -339,9 +338,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Lights" ) );
+				log::info << cuT( "Scene::write - Lights" ) << std::endl;
 				using LockType = std::unique_lock< LightCache const >;
-				LockType lock{ makeUniqueLock( scene.getLightCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getLightCache() ) };
 
 				for ( auto const & it : scene.getLightCache() )
 				{
@@ -356,9 +355,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Geometries" ) );
+				log::info << cuT( "Scene::write - Geometries" ) << std::endl;
 				using LockType = std::unique_lock< GeometryCache const >;
-				LockType lock{ makeUniqueLock( scene.getGeometryCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getGeometryCache() ) };
 
 				for ( auto const & it : scene.getGeometryCache() )
 				{
@@ -378,9 +377,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Particle systems" ) );
+				log::info << cuT( "Scene::write - Particle systems" ) << std::endl;
 				using LockType = std::unique_lock< ObjectCache< ParticleSystem, castor::String > const >;
-				LockType lock{ makeUniqueLock( scene.getParticleSystemCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getParticleSystemCache() ) };
 
 				for ( auto const & it : scene.getParticleSystemCache() )
 				{
@@ -395,9 +394,9 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Scene::write - Animated object groups" ) );
+				log::info << cuT( "Scene::write - Animated object groups" ) << std::endl;
 				using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
-				LockType lock{ makeUniqueLock( scene.getAnimatedObjectGroupCache() ) };
+				LockType lock{ castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() ) };
 
 				for ( auto const & it : scene.getAnimatedObjectGroupCache() )
 				{
@@ -415,9 +414,9 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Scene::write - Windows" ) );
+			log::info << cuT( "Scene::write - Windows" ) << std::endl;
 			using LockType = std::unique_lock< RenderWindowCache >;
-			LockType lock{ makeUniqueLock( scene.getEngine()->getRenderWindowCache() ) };
+			LockType lock{ castor::makeUniqueLock( scene.getEngine()->getRenderWindowCache() ) };
 
 			for ( auto const & it : scene.getEngine()->getRenderWindowCache() )
 			{
@@ -875,7 +874,7 @@ namespace castor3d
 	{
 		uint32_t result = 0;
 		using LockType = std::unique_lock< GeometryCache >;
-		LockType lock{ makeUniqueLock( *m_geometryCache ) };
+		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
 		{
@@ -894,7 +893,7 @@ namespace castor3d
 	{
 		uint32_t result = 0;
 		using LockType = std::unique_lock< GeometryCache >;
-		LockType lock{ makeUniqueLock( *m_geometryCache ) };
+		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
 		for ( auto pair : *m_geometryCache )
 		{
@@ -937,7 +936,7 @@ namespace castor3d
 	bool Scene::hasShadows()const
 	{
 		using LockType = std::unique_lock< LightCache const >;
-		LockType lock{ makeUniqueLock( getLightCache() ) };
+		LockType lock{ castor::makeUniqueLock( getLightCache() ) };
 
 		return getLightCache().end() != std::find_if( getLightCache().begin(), getLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{

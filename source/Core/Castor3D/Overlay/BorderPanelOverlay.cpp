@@ -17,7 +17,7 @@ namespace castor3d
 
 	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & overlay, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + overlay.getOverlayName() );
+		log::info << m_tabs << cuT( "Writing BorderPanelOverlay " ) << overlay.getOverlayName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + overlay.getOverlay().getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		OverlayCategory::TextWriter::checkError( result, "BorderPanelOverlay name" );

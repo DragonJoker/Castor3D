@@ -107,7 +107,7 @@ namespace castor3d
 		}
 		else
 		{
-			Logger::logWarning( cuT( "No object named " ) + name + cuT( " for this animation instance" ) );
+			log::warn << cuT( "No object named " ) << name << cuT( " for this animation instance" ) << std::endl;
 		}
 
 		return result;

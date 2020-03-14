@@ -2,9 +2,11 @@
 
 namespace castor
 {
-	FileParserContext::FileParserContext( Path const & path )
+	FileParserContext::FileParserContext( LoggerInstance & logger
+		, Path const & path )
 		: m_file{ path }
 		, m_line{ 0 }
+		, logger{ &logger }
 	{
 	}
 

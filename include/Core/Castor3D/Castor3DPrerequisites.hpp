@@ -39,6 +39,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBufferModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 #include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>

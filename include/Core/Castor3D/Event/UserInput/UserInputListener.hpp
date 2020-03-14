@@ -64,36 +64,29 @@ namespace castor3d
 		 *\~brief		Traite tous les évènements.
 		 */
 		C3D_API void processEvents();
-		/**
-		 *\~english
-		 *\return		The current mouse position.
-		 *\~french
-		 *\return		La position actuelle de la souris.
-		 */
+
+		//@}
+		/**@name Getters */
+		//@{
+		
 		castor::Position const & getMousePosition()const
 		{
 			return m_mouse.position;
 		}
-		/**
-		 *\~english
-		 *\return		The active control.
-		 *\~french
-		 *\return		Le contrôle actif.
-		 */
+
 		inline EventHandlerSPtr getActiveControl()const
 		{
 			return m_activeHandler.lock();
 		}
 
-		/**
-		 *\~english
-		 *\return		The focused control.
-		 *\~french
-		 *\return		Le contrôle ayant le focus.
-		 */
 		inline EventHandlerSPtr getFocusedControl()const
 		{
 			return m_lastMouseTarget.lock();
+		}
+
+		inline FrameListener & getFrameListener()const
+		{
+			return *m_frameListener;
 		}
 
 		//@}
@@ -470,32 +463,14 @@ namespace castor3d
 		FrameListenerSPtr m_frameListener;
 
 	private:
-		//!\~english	The current mouse state.
-		//!\~french		L'état courant de la souris.
 		MouseState m_mouse;
-		//!\~english	The current keyboard state.
-		//!\~french		L'état courant du clavier.
 		KeyboardState m_keyboard;
-		//!\~english	Tells if the listener needs to be refreshed or not.
-		//!\~french		Dit si le listener doit être mis à jour.
 		bool m_enabled;
-		//!\~english	The currently active handler.
-		//!\~french		Le gestionnaire actif.
 		EventHandlerWPtr m_activeHandler;
-		//!\~english	The last mouse target handler.
-		//!\~french		Le dernier gestionnaire cible de la souris.
 		EventHandlerWPtr m_lastMouseTarget;
-		//!\~english	The registered handler mouse move event actions.
-		//!\~french		Les actions enregistrées pour l'évènement déplacement de souris.
 		std::map< castor::String, OnMouseMoveActionFunction > m_onMouseMoveActions;
-		//!\~english	The registered handler clicked event actions.
-		//!\~french		Les actions enregistrées pour l'évènement handler cliqué.
 		std::map< castor::String, OnClickActionFunction > m_onClickActions;
-		//!\~english	The registered handler sub element selected event actions.
-		//!\~french		Les actions enregistrées pour l'évènement sous élément de handler sélectionné.
 		std::map< castor::String, OnSelectActionFunction > m_onSelectActions;
-		//!\~english	The registered handler caption changed event actions.
-		//!\~french		Les actions enregistrées pour l'évènement caption du handler changé.
 		std::map< castor::String, OnTextActionFunction > m_onTextActions;
 	};
 }

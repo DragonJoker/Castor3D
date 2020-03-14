@@ -12,6 +12,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	class LoggerInstance;
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		27/08/2012
@@ -33,30 +34,9 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit LoggerImpl( LogType level );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~LoggerImpl();
-		/**
-		 *\~english
-		 *\brief		Initialises the headers, from the given logger
-		 *\param[in]	logger	The logger
-		 *\~french
-		 *\brief		Initialise les en-têtes, depuis le logger donné
-		 *\param[in]	logger	Le logger
-		 */
-		void initialise( Logger const & logger );
-		/**
-		 *\~english
-		 *\brief		Cleans up the instance
-		 *\~french
-		 *\brief		Nettoie l'instance
-		 */
-		void cleanup();
+		explicit LoggerImpl( ProgramConsole & console
+			, LogType level
+			, LoggerInstance & parent );
 		/**
 		 *\~english
 		 *\brief		Registers a callback
@@ -170,15 +150,11 @@ namespace castor
 		void doLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel, bool newLine );
 
 	private:
-		//! The files paths, per log level
+		LoggerInstance & m_parent;
+		ProgramConsole * m_console;
 		std::array< String, size_t( LogType::eCount ) > m_logFilePath;
-		//! The headers, per log level
-		std::array< String, size_t( LogType::eCount ) > m_headers;
-		//! The console
-		std::unique_ptr< ProgramConsole > m_console;
-		//! Registered callbacks
+		std::mutex m_mutexFiles;
 		LoggerCallbackMap m_mapCallbacks;
-		//! Protects the registered callbacks map
 		std::mutex m_mutexCallbacks;
 	};
 }

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_LOG_TYPE_H___
-#define ___CU_LOG_TYPE_H___
+#ifndef ___CU_LogType_H___
+#define ___CU_LogType_H___
 
 #include <string>
 #include <deque>

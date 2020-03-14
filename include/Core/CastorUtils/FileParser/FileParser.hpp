@@ -9,6 +9,8 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	class LoggerInstance;
+
 #define DO_WRITE_PARSER_NAME( funcname )\
 	funcname( castor::FileParser * parser, castor::ParserParameterArray const & params )
 
@@ -95,6 +97,18 @@ namespace castor
 		 *\param[in]	rootSectionId	L'id de la section de root.
 		 */
 		CU_API FileParser( uint32_t rootSectionId );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	logger			The logger instance.
+		 *\param[in]	rootSectionId	The root section id.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	logger			L'instance de logging.
+		 *\param[in]	rootSectionId	L'id de la section de root.
+		 */
+		CU_API FileParser( LoggerInstance & logger
+			, uint32_t rootSectionId );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -282,6 +296,7 @@ namespace castor
 		int m_ignoreLevel;
 
 	protected:
+		LoggerInstance & m_logger;
 		//!\~english	The map holding the parsers, sorted by section.
 		//!\~french		La map de parseurs, triés par section.
 		AttributeParsersBySection m_parsers;

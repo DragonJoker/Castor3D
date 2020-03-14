@@ -51,7 +51,7 @@ namespace castor3d
 		doCleanup();
 
 		using LockType = std::unique_lock< std::mutex >;
-		LockType lock{ makeUniqueLock( m_mutexHandlers ) };
+		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 		auto it = m_handlers.begin();
 
 		while ( it != m_handlers.end() )
@@ -220,7 +220,7 @@ namespace castor3d
 			{
 				if ( last )
 				{
-					castor::Logger::logDebug( castor::makeStringStream() << position.x() << "x" << position.y() );
+					log::debug << position.x() << "x" << position.y() << std::endl;
 					last->pushEvent( MouseEvent( MouseEventType::eLeave, position ) );
 					last.reset();
 					m_lastMouseTarget.reset();

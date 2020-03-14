@@ -35,7 +35,7 @@ namespace castor3d
 		, uint32_t cascadeIndex )
 		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
 	{
-		castor::Logger::logTrace( "Created ShadowMapPassDirectional_" + castor::string::toString( cascadeIndex ) );
+		log::trace << "Created ShadowMapPassDirectional_" << cascadeIndex << std::endl;
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()

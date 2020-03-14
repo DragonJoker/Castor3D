@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 
@@ -16,7 +17,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		castor::Logger::logInfo( m_tabs + cuT( "Writing Sampler " ) + sampler.getName() );
+		log::info << m_tabs << cuT( "Writing Sampler " ) << sampler.getName() << std::endl;
 
 		if ( sampler.getName() != cuT( "LightsSampler" ) && sampler.getName() != RenderTarget::DefaultSamplerName )
 		{

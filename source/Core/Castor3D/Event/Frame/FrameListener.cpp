@@ -1,5 +1,6 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/FrameEvent.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 
 using namespace castor;
 
@@ -54,17 +55,17 @@ namespace castor3d
 		}
 		catch ( Exception & exc )
 		{
-			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) );
+			log::error << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.getFullDescription() ) << std::endl;
 			result = false;
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) );
+			log::error << cuT( "Encountered exception while processing events: " ) << string::stringCast< xchar >( exc.what() ) << std::endl;
 			result = false;
 		}
 		catch ( ... )
 		{
-			Logger::logError( castor::makeStringStream() << cuT( "Encountered exception while processing events" ) );
+			log::error << cuT( "Encountered exception while processing events" ) << std::endl;
 			result = false;
 		}
 

@@ -122,7 +122,7 @@ namespace castor3d
 			AnimatedObjectSPtr result;
 			auto & cache = scene.getAnimatedObjectGroupCache();
 			using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
-			LockType lock{ makeUniqueLock( cache ) };
+			LockType lock{ castor::makeUniqueLock( cache ) };
 
 			for ( auto group : cache )
 			{
@@ -398,7 +398,8 @@ namespace castor3d
 			AnimatedSkeletonSPtr skeleton;
 		};
 
-		AnimatedObjects doAdjustFlags( ProgramFlags & programFlags
+		AnimatedObjects doAdjustFlags( RenderSystem const & renderSystem
+			, ProgramFlags & programFlags
 			, TextureFlags & textures
 			, uint32_t & texturesCount
 			, PassFlags const & passFlags
@@ -428,7 +429,15 @@ namespace castor3d
 				&& ( !pass.hasAlphaBlending() || renderPass.isOrderIndependent() )
 				&& !pass.hasEnvironmentMapping() )
 			{
-				addFlag( programFlags, ProgramFlag::eInstantiation );
+				if ( checkFlag( programFlags, ProgramFlag::eSkinning )
+					&& renderSystem.getGpuInformations().hasShaderStorageBuffers() )
+				{
+					addFlag( programFlags, ProgramFlag::eInstantiation );
+				}
+				else
+				{
+					remFlag( programFlags, ProgramFlag::eInstantiation );
+				}
 			}
 			else
 			{
@@ -513,7 +522,8 @@ namespace castor3d
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass->getTextures();
 						auto texturesCount = pass->getNonEnvTextureUnitsCount();
-						auto animated = doAdjustFlags( programFlags
+						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
+							, programFlags
 							, textures
 							, texturesCount
 							, passFlags

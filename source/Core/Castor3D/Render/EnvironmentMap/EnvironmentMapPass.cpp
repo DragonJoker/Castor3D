@@ -71,7 +71,7 @@ namespace castor3d
 		, m_modelMatrixUbo{ *reflectionMap.getEngine() }
 		, m_hdrConfigUbo{ *reflectionMap.getEngine() }
 	{
-		castor::Logger::logTrace( "Created EnvironmentMapPass" + objectNode.getName() );
+		log::trace << "Created EnvironmentMapPass" << objectNode.getName() << std::endl;
 	}
 
 	EnvironmentMapPass::~EnvironmentMapPass()

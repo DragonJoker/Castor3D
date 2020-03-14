@@ -463,7 +463,7 @@ namespace smaa
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), true );
+		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), VK_FILTER_NEAREST, castor3d::RenderQuad::TexcoordConfig{} );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram

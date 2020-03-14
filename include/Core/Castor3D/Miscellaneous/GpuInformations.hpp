@@ -6,12 +6,6 @@ See LICENSE file in root folder
 
 #include "MiscellaneousModule.hpp"
 
-#if defined( min )
-#	undef min
-#	undef max
-#	undef abs
-#endif
-
 namespace castor3d
 {
 	/**
@@ -144,7 +138,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La version du langage shader.
 		 */
-		inline uint32_t getShaderLanguageVersion()const
+		inline std::string const & getShaderLanguageVersion()const
 		{
 			return m_shaderLanguageVersion;
 		}
@@ -156,9 +150,9 @@ namespace castor3d
 		 *\brief		Définit la version du langage shader.
 		 *\param[in]	value	La version.
 		 */
-		inline void setShaderLanguageVersion( uint32_t value )
+		inline void setShaderLanguageVersion( std::string value )
 		{
-			m_shaderLanguageVersion = value;
+			m_shaderLanguageVersion = std::move( value );
 		}
 		/**
 		 *\~english
@@ -267,7 +261,7 @@ namespace castor3d
 
 	private:
 		GpuFeatures m_features{ 0u };
-		uint32_t m_shaderLanguageVersion{ 0 };
+		std::string m_shaderLanguageVersion{ 0 };
 		std::map< VkShaderStageFlagBits, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
 		uint32_t m_totalMemorySize;
@@ -275,6 +269,19 @@ namespace castor3d
 		castor::String m_renderer;
 		castor::String m_version;
 	};
+	/**
+	 *\~english
+	 *\brief			Output stream operator.
+	 *\param[in,out]	stream	The stream.
+	 *\param[in]		object	The object to put in the stream.
+	 *\return			The stream.
+	 *\~french
+	 *\brief			Opérateur de flux de sortie.
+	 *\param[in,out]	stream	Le flux.
+	 *\param[in]		object	L'objet à mettre dans le flux.
+	 *\return			Le flux
+	 */
+	C3D_API std::ostream & operator<<( std::ostream & stream, GpuInformations const & object );
 }
 
 #endif

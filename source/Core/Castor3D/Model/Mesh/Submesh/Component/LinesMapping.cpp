@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -140,7 +141,7 @@ namespace castor3d
 		}
 		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortLines - Error: " << exc.what() );
+			log::error << "Submesh::SortLines - Error: " << exc.what() << std::endl;
 		}
 	}
 

@@ -151,10 +151,10 @@ namespace castor3d
 		//!\~french		La texture profondeur de la surface.
 		TextureLayoutSPtr depthTexture;
 		//!\~english	The surface depth view.
-		//!\~french		La vie profondeur de la surface.
+		//!\~french		La vue profondeur de la surface.
 		ashes::ImageView depthView;
 		//!\~english	The surface stencil view.
-		//!\~french		La vie stencil de la surface.
+		//!\~french		La vue stencil de la surface.
 		ashes::ImageView stencilView;
 		//!\~english	The surface dimensions.
 		//!\~french		Les dimensions de la surface.

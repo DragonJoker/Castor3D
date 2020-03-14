@@ -27,8 +27,15 @@ namespace castor
 		}
 	}
 
-	FileParser::FileParser( uint32_t p_rootSectionId )
-		: m_rootSectionId( p_rootSectionId )
+	FileParser::FileParser( uint32_t rootSectionId )
+		: FileParser{ *Logger::getSingleton().getInstance(), rootSectionId }
+	{
+	}
+
+	FileParser::FileParser( LoggerInstance & logger
+		, uint32_t rootSectionId )
+		: m_logger{ logger }
+		, m_rootSectionId( rootSectionId )
 		, m_context()
 		, m_ignoreLevel( 0 )
 		, m_ignored( false )
@@ -58,13 +65,13 @@ namespace castor
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+			m_logger.logInfo( cuT( "FileParser : Parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 			result = parseFile( path, content );
-			Logger::logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
+			m_logger.logInfo( cuT( "FileParser : Finished parsing file [" ) + path.getFileName( true ) + cuT( "]." ) );
 		}
 		else
 		{
-			Logger::logError( cuT( "FileParser : Couldn't parse file [" ) + path.getFileName( true ) + cuT( "], file does not exist." ) );
+			m_logger.logError( cuT( "FileParser : Couldn't parse file [" ) + path.getFileName( true ) + cuT( "], file does not exist." ) );
 		}
 
 		return result;
@@ -105,7 +112,7 @@ namespace castor
 				bReuse = false;
 			}
 
-			//Logger::logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
+			//m_logger.logDebug( string::toString( m_context->m_line ) + cuT( " - " ) + strLine.c_str() );
 			string::trim( strLine );
 
 			if ( !strLine.empty() )
@@ -249,14 +256,14 @@ namespace castor
 	{
 		StringStream error{ makeStringStream() };
 		error << cuT( "Error, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_error;
-		Logger::logError( error.str() );
+		m_logger.logError( error.str() );
 	}
 
 	void FileParser::parseWarning( String const & p_warning )
 	{
 		StringStream error{ makeStringStream() };
 		error << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": Directive <" ) << doGetSectionsStack() << cuT( ">: " ) << p_warning;
-		Logger::logWarning( error.str() );
+		m_logger.logWarning( error.str() );
 	}
 
 	bool FileParser::checkParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received )
@@ -271,7 +278,7 @@ namespace castor
 			if ( result )
 			{
 				auto filled = param->clone();
-				result = filled->parse( params );
+				result = filled->parse( m_logger, params );
 
 				if ( !result )
 				{

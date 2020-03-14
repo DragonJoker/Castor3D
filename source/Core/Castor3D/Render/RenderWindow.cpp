@@ -171,7 +171,7 @@ namespace castor3d
 
 	bool RenderWindow::TextWriter::operator()( RenderWindow const & window, castor::TextFile & file )
 	{
-		castor::Logger::logInfo( m_tabs + cuT( "Writing Window " ) + window.getName() );
+		log::info << m_tabs << cuT( "Writing Window " ) << window.getName() << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + window.getName() + cuT( "\"\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderWindow >::checkError( result, "RenderWindow name" );
@@ -205,14 +205,16 @@ namespace castor3d
 		, Engine & engine )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, MouseEventHandler{  }
+		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
 		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) ) }
 	{
+		log::debug << "Created render window " << m_index << std::endl;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
+		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
 		auto listener = getListener();
 		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) );
@@ -282,6 +284,7 @@ namespace castor3d
 					, { m_saveBuffer->getWidth(), m_saveBuffer->getHeight() } );
 				m_initialised = true;
 				m_dirty = false;
+				engine.registerWindow( *this );
 			}
 		}
 
@@ -295,6 +298,7 @@ namespace castor3d
 		if ( m_device )
 		{
 			auto & engine = *getEngine();
+			engine.unregisterWindow( *this );
 			bool hasCurrent = engine.getRenderSystem()->hasCurrentRenderDevice();
 
 			if ( hasCurrent
@@ -792,9 +796,7 @@ namespace castor3d
 	void RenderWindow::doCreateSwapChainDependent()
 	{
 		doCreateRenderingResources();
-		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem()
-			, false
-			, false );
+		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem(), VK_FILTER_LINEAR, RenderQuad::TexcoordConfig{} );
 		doCreateProgram();
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
@@ -882,7 +884,7 @@ namespace castor3d
 			return nullptr;
 		}
 
-		castor::Logger::logError( "Couldn't retrieve rendering resources" );
+		log::error << "Couldn't retrieve rendering resources" << std::endl;
 		return nullptr;
 	}
 

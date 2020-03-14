@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
 #include "Castor3D/Cache/BillboardCache.hpp"
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Cache/CameraCache.hpp"
@@ -51,22 +52,6 @@
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
-
-//#include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-
-//#include "Castor3D/Material/Material.hpp"
-//#include "Castor3D/Material/Texture/TextureLayout.hpp"
-//#include "Castor3D/Model/Mesh/Submesh/Component/Face.hpp"
-//#include "Castor3D/Model/Vertex.hpp"
-//#include "Castor3D/Plugin/Plugin.hpp"
-//#include "Castor3D/Plugin/DividerPlugin.hpp"
-//#include "Castor3D/Plugin/ImporterPlugin.hpp"
-//#include "Castor3D/Plugin/PostFxPlugin.hpp"
-//#include "Castor3D/Plugin/TechniquePlugin.hpp"
-//#include "Castor3D/Render/RenderSystem.hpp"
-//#include "Castor3D/Scene/Animation/AnimatedObject.hpp"
-//#include <CastorUtils/Graphics/Font.hpp>
-//#include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
 
@@ -2621,7 +2606,7 @@ namespace castor3d
 			{
 				Point4i pt4Indices;
 
-				if ( castor::parseValues( strParams, pt4Indices ) )
+				if ( castor::parseValues( *parsingContext->logger, strParams, pt4Indices ) )
 				{
 					parsingContext->face1 = int( parsingContext->faces.size() );
 					parsingContext->faces.push_back( pt4Indices[0] );
@@ -2633,7 +2618,7 @@ namespace castor3d
 					parsingContext->faces.push_back( pt4Indices[3] );
 				}
 			}
-			else if ( castor::parseValues( strParams, pt3Indices ) )
+			else if ( castor::parseValues( *parsingContext->logger, strParams, pt3Indices ) )
 			{
 				parsingContext->face1 = int( parsingContext->faces.size() );
 				parsingContext->faces.push_back( pt3Indices[0] );

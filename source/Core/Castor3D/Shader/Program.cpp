@@ -179,7 +179,11 @@ namespace castor3d
 
 					if ( module.shader || !module.source.empty() )
 					{
-						m_states.push_back( makeShaderState( device, module ) );
+						auto compiled = compileShader( device, module );
+						m_states.push_back( makeShaderState( device
+							, module.stage
+							, compiled
+							, module.name ) );
 					}
 				}
 			};

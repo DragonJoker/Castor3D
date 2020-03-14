@@ -1,5 +1,7 @@
 #include "Castor3D/Miscellaneous/GpuObjectTracker.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 #if C3D_TRACE_OBJECTS
 
 namespace castor3d
@@ -30,14 +32,14 @@ namespace castor3d
 			m_allocated.push_back( { ++m_id, type, object, file, line, stream.str() } );
 			std::stringstream nameStream;
 			nameStream << "(" << m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
-			castor::Logger::logDebug( nameStream );
+			log::debug << nameStream.str() << std::endl;
 			name = nameStream.str();
 		}
 		else
 		{
 			std::stringstream nameStream;
 			nameStream << "(" << it->m_id << ") " << typeStream.str() << " [0x" << ptrStream.str() << "]";
-			castor::Logger::logDebug( std::stringstream() << "Rereferencing object: " << nameStream.str() );
+			log::debug << "Rereferencing object: " << nameStream.str() << std::endl;
 		}
 
 		return result;
@@ -71,12 +73,12 @@ namespace castor3d
 			typeStream << std::left << it->m_name;
 			declaration = *it;
 			result = true;
-			castor::Logger::logWarning( std::stringstream() << "Released " << typeStream.str() << " [0x" << ptrStream.str() << "]" );
+			log::warn << "Released " << typeStream.str() << " [0x" << ptrStream.str() << "]" << std::endl;
 			m_allocated.erase( it );
 		}
 		else
 		{
-			castor::Logger::logWarning( std::stringstream() << "Untracked [0x" << ptrStream.str() << cuT( "]" ) );
+			log::warn << "Untracked [0x" << ptrStream.str() << cuT( "]" ) << std::endl;
 		}
 
 		return result;
@@ -89,7 +91,7 @@ namespace castor3d
 			std::stringstream stream;
 			stream << "Leaked 0x" << std::hex << decl.m_object << std::dec << " (" << decl.m_name << "), from file " << decl.m_file << ", line " << decl.m_line << std::endl;
 			stream << castor::string::stringCast< char >( decl.m_stack ) << std::endl;
-			castor::Logger::logError( stream.str() );
+			log::error << stream.str() << std::endl;
 		}
 	}
 }

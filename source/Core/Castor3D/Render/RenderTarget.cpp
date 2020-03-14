@@ -61,7 +61,7 @@ namespace castor3d
 
 	bool RenderTarget::TextWriter::operator()( RenderTarget const & target, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing RenderTarget" ) );
+		log::info << m_tabs << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 		castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget name" );
 
@@ -190,7 +190,7 @@ namespace castor3d
 
 	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
 		, ashes::ImageView const & ovView )
-		: RenderQuad{ renderSystem, true }
+		: RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
 		, m_ovView{ ovView }
 	{
 	}
@@ -613,7 +613,7 @@ namespace castor3d
 			}
 			catch ( Exception & p_exc )
 			{
-				Logger::logError( cuT( "Couldn't load render technique: " ) + string::stringCast< xchar >( p_exc.getFullDescription() ) );
+				log::error << cuT( "Couldn't load render technique: " ) << string::stringCast< xchar >( p_exc.getFullDescription() ) << std::endl;
 				throw;
 			}
 		}
@@ -936,7 +936,7 @@ namespace castor3d
 		auto timerBlock = m_overlaysTimer->start();
 		{
 			using LockType = std::unique_lock< OverlayCache >;
-			LockType lock{ makeUniqueLock( getEngine()->getOverlayCache() ) };
+			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
 			m_overlayRenderer->beginPrepare( camera
 				, *m_overlaysTimer
 				, *result );

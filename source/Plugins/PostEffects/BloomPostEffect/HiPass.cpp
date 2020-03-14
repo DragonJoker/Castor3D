@@ -156,7 +156,7 @@ namespace Bloom
 		, ashes::ImageView const & sceneView
 		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ renderSystem, true }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
 		, m_sceneView{ sceneView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram( renderSystem ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram( renderSystem ) }

@@ -1,5 +1,7 @@
 #include "Castor3D/Miscellaneous/VersionException.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 using namespace castor;
 
 namespace castor3d
@@ -14,6 +16,6 @@ namespace castor3d
 		stream << given;
 		stream << "] - Incompatible versions";
 		m_description = stream.str();
-		Logger::logDebug( m_description );
+		log::debug << m_description << std::endl;
 	}
 }

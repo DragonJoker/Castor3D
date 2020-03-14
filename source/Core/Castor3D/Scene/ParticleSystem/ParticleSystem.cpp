@@ -20,65 +20,93 @@ namespace castor3d
 {
 	namespace
 	{
-		uint32_t getSize( ParticleFormat format )
+		size_t getVkCount( ParticleFormat format )
 		{
 			switch ( format )
 			{
-			case castor3d::ParticleFormat::eInt:
-			case castor3d::ParticleFormat::eUInt:
-			case castor3d::ParticleFormat::eFloat:
-				return 8u;
-			case castor3d::ParticleFormat::eVec2i:
-			case castor3d::ParticleFormat::eVec2ui:
-			case castor3d::ParticleFormat::eVec2f:
-				return 16u;
-			case castor3d::ParticleFormat::eVec3i:
-			case castor3d::ParticleFormat::eVec3ui:
-			case castor3d::ParticleFormat::eVec3f:
-				return 24u;
-			case castor3d::ParticleFormat::eVec4i:
-			case castor3d::ParticleFormat::eVec4ui:
-			case castor3d::ParticleFormat::eVec4f:
-				return 32u;
+			case ParticleFormat::eMat2f:
+				return 2u;
+			case ParticleFormat::eMat3f:
+				return 3u;
+			case ParticleFormat::eMat4f:
+				return 4u;
 			default:
-				return 8u;
-				break;
+				return 1u;
 			}
 		}
 
-		VkFormat convert( ParticleFormat format )
+		ParticleFormat getComponent( ParticleFormat format )
 		{
 			switch ( format )
 			{
-			case castor3d::ParticleFormat::eInt:
+			case ParticleFormat::eVec2i:
+			case ParticleFormat::eVec3i:
+			case ParticleFormat::eVec4i:
+				return ParticleFormat::eInt;
+			case ParticleFormat::eVec2ui:
+			case ParticleFormat::eVec3ui:
+			case ParticleFormat::eVec4ui:
+				return ParticleFormat::eUInt;
+			case ParticleFormat::eVec2f:
+			case ParticleFormat::eVec3f:
+			case ParticleFormat::eVec4f:
+				return ParticleFormat::eFloat;
+			case ParticleFormat::eMat2f:
+				return ParticleFormat::eVec2f;
+			case ParticleFormat::eMat3f:
+				return ParticleFormat::eVec3f;
+			case ParticleFormat::eMat4f:
+				return ParticleFormat::eVec4f;
+			default:
+				return format;
+			}
+		}
+
+		VkFormat getVkFormat( ParticleFormat format )
+		{
+			switch ( format )
+			{
+			case ParticleFormat::eInt:
 				return VK_FORMAT_R32_SINT;
-			case castor3d::ParticleFormat::eVec2i:
+			case ParticleFormat::eVec2i:
 				return VK_FORMAT_R32G32_SINT;
-			case castor3d::ParticleFormat::eVec3i:
+			case ParticleFormat::eVec3i:
 				return VK_FORMAT_R32G32B32_SINT;
-			case castor3d::ParticleFormat::eVec4i:
+			case ParticleFormat::eVec4i:
 				return VK_FORMAT_R32G32B32A32_SINT;
-			case castor3d::ParticleFormat::eUInt:
+			case ParticleFormat::eUInt:
 				return VK_FORMAT_R32_UINT;
-			case castor3d::ParticleFormat::eVec2ui:
+			case ParticleFormat::eVec2ui:
 				return VK_FORMAT_R32G32_UINT;
-			case castor3d::ParticleFormat::eVec3ui:
+			case ParticleFormat::eVec3ui:
 				return VK_FORMAT_R32G32B32_UINT;
-			case castor3d::ParticleFormat::eVec4ui:
+			case ParticleFormat::eVec4ui:
 				return VK_FORMAT_R32G32B32A32_UINT;
-			case castor3d::ParticleFormat::eFloat:
+			case ParticleFormat::eFloat:
 				return VK_FORMAT_R32_SFLOAT;
-			case castor3d::ParticleFormat::eVec2f:
+			case ParticleFormat::eVec2f:
+			case ParticleFormat::eMat2f:
 				return VK_FORMAT_R32G32_SFLOAT;
-			case castor3d::ParticleFormat::eVec3f:
+			case ParticleFormat::eVec3f:
+			case ParticleFormat::eMat3f:
 				return VK_FORMAT_R32G32B32_SFLOAT;
-			case castor3d::ParticleFormat::eVec4f:
+			case ParticleFormat::eVec4f:
+			case ParticleFormat::eMat4f:
 				return VK_FORMAT_R32G32B32A32_SFLOAT;
 			default:
 				assert( false );
 				return VK_FORMAT_R32G32B32A32_SFLOAT;
-				break;
 			}
+		}
+
+		VkFormat getVkComponentFormat( ParticleFormat format )
+		{
+			return getVkFormat( getComponent( format ) );
+		}
+
+		VkDeviceSize getComponentSize( ParticleFormat format )
+		{
+			return getSize( getComponent( format ) );
 		}
 	}
 
@@ -190,32 +218,17 @@ namespace castor3d
 
 		for ( auto & attribute : m_inputs )
 		{
-			if ( attribute.m_dataType == ParticleFormat::eMat2f )
+			auto fmt = getVkFormat( attribute.m_dataType );
+			auto compSize = uint32_t( getComponentSize( attribute.m_dataType ) );
+			uint32_t offset = 0u;
+
+			for ( size_t i = 0u; i < getVkCount( attribute.m_dataType ); ++i )
 			{
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32_SFLOAT, attribute.m_offset + 0u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32_SFLOAT, attribute.m_offset + 8u } );
-				stride += 16u;
+				attributes.push_back( { index++, 1u, fmt, attribute.m_offset + offset } );
+				offset += compSize;
 			}
-			else if ( attribute.m_dataType == ParticleFormat::eMat3f )
-			{
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 0u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 12u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32_SFLOAT, attribute.m_offset + 24u } );
-				stride += 36u;
-			}
-			else if ( attribute.m_dataType == ParticleFormat::eMat4f )
-			{
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 0u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 16u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 32u } );
-				attributes.push_back( { index++, 1u, VK_FORMAT_R32G32B32A32_SFLOAT, attribute.m_offset + 48u } );
-				stride += 64u;
-			}
-			else
-			{
-				attributes.push_back( { index++, 1u, convert( attribute.m_dataType ), attribute.m_offset + 0u } );
-				stride += getSize( attribute.m_dataType );
-			}
+
+			stride += uint32_t( getSize( attribute.m_dataType ) );
 		}
 
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
@@ -242,7 +255,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			Logger::logInfo( cuT( "Using Compute Shader Particle System" ) );
+			log::info << cuT( "Using Compute Shader Particle System" ) << std::endl;
 			m_impl = m_csImpl.get();
 		}
 		else
@@ -251,7 +264,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				Logger::logInfo( cuT( "Using CPU Particle System" ) );
+				log::info << cuT( "Using CPU Particle System" ) << std::endl;
 				m_impl = m_cpuImpl.get();
 			}
 		}

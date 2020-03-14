@@ -152,7 +152,7 @@ namespace fxaa
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, Size const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_fxaaUbo{ *renderSystem.getEngine(), size }
 	{
 	}

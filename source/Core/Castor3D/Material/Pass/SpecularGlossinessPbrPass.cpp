@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/SpecularGlossinessPbrPass.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 using namespace castor;
@@ -15,7 +16,7 @@ namespace castor3d
 
 	bool SpecularGlossinessPbrPass::TextWriter::operator()( SpecularGlossinessPbrPass const & pass, TextFile & file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing SpecularGlossinessPbrPass " ) );
+		log::info << m_tabs << cuT( "Writing SpecularGlossinessPbrPass " ) << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 		

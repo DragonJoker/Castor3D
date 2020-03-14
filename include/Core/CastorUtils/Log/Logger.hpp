@@ -1,15 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_LOGGER_H___
-#define ___CU_LOGGER_H___
+#ifndef ___CU_Logger_H___
+#define ___CU_Logger_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
-
-#include <condition_variable>
-#include <mutex>
-#include <atomic>
-#include <thread>
+#include "CastorUtils/Log/LoggerInstance.hpp"
 
 namespace castor
 {
@@ -33,7 +28,7 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		CU_API Logger();
+		CU_API Logger( LogType level );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -51,7 +46,7 @@ namespace castor
 		 *\brief		Initialise l'instance du logger avec le niveau donné
 		 *\param[in]	logLevel	Le niveau de log
 		 */
-		CU_API static void initialise( LogType logLevel );
+		CU_API static LoggerInstance * initialise( LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Destroys the Logger instance
@@ -59,6 +54,15 @@ namespace castor
 		 *\brief		Détruit l'instance du Logger
 		 */
 		CU_API static void cleanup();
+		/**
+		 *\~english
+		 *\brief		Creates a logger instance of given level.
+		 *\param[in]	logLevel	The log level.
+		 *\~french
+		 *\brief		Crée une instance de logger avec le niveau donné.
+		 *\param[in]	logLevel	Le niveau de log.
+		 */
+		CU_API static LoggerInstance * createInstance( LogType logLevel );
 		/**
 		 *\~english
 		 *\brief		Registers the logging callback
@@ -89,7 +93,14 @@ namespace castor
 		 *\param[in]	logFilePath	Le chemin du fichier
 		 *\param[in]	logType		Le type de log concerné
 		 */
-		CU_API static void setFileName( String const & logFilePath, LogType logType = LogType::eCount );
+		CU_API static void setFileName( Path const & logFilePath, LogType logType = LogType::eCount );
+		/**
+		 *\~english
+		 *\return		The current log level.
+		 *\~french
+		 *\return		Le niveau de log actuel.
+		 */
+		CU_API static LogType getLevel();
 		/**
 		 *\~english
 		 *\brief		Logs a trace message, from a std::string
@@ -508,54 +519,30 @@ namespace castor
 		 *\return		L'instance
 		 */
 		CU_API static Logger * getSingletonPtr();
+		/**
+		 *\~english
+		 *\brief		Returns a pointer over the instance
+		 *\return		The instance
+		 *\~french
+		 *\brief		Retourne un pointeur sur l'instance
+		 *\return		L'instance
+		 */
+		inline LoggerInstance * getInstance()const
+		{
+			return m_instance.get();
+		}
 
 	private:
-		void doRegisterCallback( LogCallback callback, void * caller );
-		void doUnregisterCallback( void * caller );
-		void doSetFileName( String const & logFilePath, LogType logType = LogType::eCount );
-		void doPushMessage( LogType type, std::string const & message, bool newLine = true );
-		void doPushMessage( LogType type, std::wstring const & message, bool newLine = true );
-		void doInitialiseThread();
-		void doCleanupThread();
-		void doFlushQueue();
-
-	private:
-		friend class LoggerImpl;
-
-		//! The logger
 		static Logger * m_singleton;
-		//! The streambuf used to log info messages
-		std::streambuf * m_cout;
-		//! The streambuf used to log error messages
-		std::streambuf * m_cerr;
-		//! The streambuf used to log debug messages
-		std::streambuf * m_clog;
-		//! The wstreambuf used to log info messages
-		std::wstreambuf * m_wcout;
-		//! The wstreambuf used to log error messages
-		std::wstreambuf * m_wcerr;
-		//! The wstreambuf used to log info messages
-		std::wstreambuf * m_wclog;
-		//! The logger implementation
-		LoggerImpl * m_impl;
-		//! the mutex used to protect the implementation
-		std::recursive_mutex m_mutex;
-		//! the current logging level, all logs lower than this level are ignored
-		LogType m_logLevel;
-		//! The header for each lg line of given log level
-		std::array< String, size_t( LogType::eCount ) > m_headers;
-		//! The message queue
-		MessageQueue m_queue;
-		//! The mutex protecting the message queue
-		std::mutex m_mutexQueue;
-		//! The logging thread
-		std::thread m_logThread;
-		//! Tells if the logger is initialised
-		std::atomic_bool m_initialised;
-		//! Tells if the thread must be stopped
-		std::atomic_bool m_stopped;
-		//! Event raised when the thread is ended
-		std::atomic_bool m_threadEnded;
+
+		std::unique_ptr< ProgramConsole > m_console;
+		std::unique_ptr< LoggerInstance > m_instance;
+		std::streambuf * m_cout{ nullptr };
+		std::streambuf * m_cerr{ nullptr };
+		std::streambuf * m_clog{ nullptr };
+		std::wstreambuf * m_wcout{ nullptr };
+		std::wstreambuf * m_wcerr{ nullptr };
+		std::wstreambuf * m_wclog{ nullptr };
 	};
 }
 

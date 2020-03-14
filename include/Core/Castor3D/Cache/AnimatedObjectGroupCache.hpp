@@ -152,6 +152,9 @@ namespace castor3d
 		C3D_API void remove( Key const & name );
 
 	private:
+		using MyCache::add;
+
+	private:
 		SkeletonPoolsEntry doCreateEntry( AnimatedObjectGroup const & group
 			, AnimatedSkeleton const & skeleton );
 		MeshPoolsEntry doCreateEntry( AnimatedObjectGroup const & group

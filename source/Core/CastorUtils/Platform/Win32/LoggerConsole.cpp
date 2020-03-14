@@ -74,6 +74,17 @@ namespace castor
 						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
 						writeText( text.str(), true );
 					}
+
+					CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+
+					if ( !::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo )
+						|| csbiInfo.dwSize.X < 0
+						|| csbiInfo.dwSize.Y < 0 )
+					{
+						StringStream text{ makeStringStream() };
+						text << cuT( "Screenbuffer settings failed." );
+						writeText( text.str(), true );
+					}
 				}
 				else
 				{
@@ -323,6 +334,25 @@ namespace castor
 
 #endif
 
+	inline bool checkAlive()
+	{
+		auto result = ::AllocConsole();
+
+		if ( result )
+		{
+			return false;
+		}
+
+		DWORD lastError = ::GetLastError();
+
+		if ( lastError != ERROR_ACCESS_DENIED )
+		{
+			std::cerr << "Failed to create to a new console with error 0x" << std::hex << lastError << std::endl;
+		}
+
+		return true;
+	}
+
 	class DebugConsole
 		: public ConsoleImpl
 	{
@@ -391,6 +421,11 @@ namespace castor
 
 		void print( String const & p_toLog, bool p_newLine )
 		{
+			if ( !checkAlive() )
+			{
+				doInitialiseConsole( INVALID_HANDLE_VALUE );
+			}
+
 			m_handle.writeText( p_toLog, p_newLine );
 		}
 

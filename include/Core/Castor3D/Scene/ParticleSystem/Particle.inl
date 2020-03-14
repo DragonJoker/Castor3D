@@ -1,5 +1,8 @@
 #include "Particle.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+#include <CastorUtils/Math/Point.hpp>
+
 namespace castor3d
 {
 	template< typename T, size_t Count >
@@ -292,8 +295,80 @@ namespace castor3d
 		}
 	};
 
+	template<>
+	struct ElementTyper< ParticleFormat::eMat2f >
+	{
+		using Type = castor::Matrix2x2f;
+
+		static inline Type parse( castor::String const & value )
+		{
+			Type result;
+			ParseArray< float, 4 >( value, result.ptr() );
+			return result;
+		}
+
+		static inline float const * getPointer( Type const & value )
+		{
+			return value.constPtr();
+		}
+
+		static inline float * getPointer( Type & value )
+		{
+			return value.ptr();
+		}
+	};
+
+	template<>
+	struct ElementTyper< ParticleFormat::eMat3f >
+	{
+		using Type = castor::Matrix3x3f;
+
+		static inline Type parse( castor::String const & value )
+		{
+			Type result;
+			ParseArray< float, 9 >( value, result.ptr() );
+			return result;
+		}
+
+		static inline float const * getPointer( Type const & value )
+		{
+			return value.constPtr();
+		}
+
+		static inline float * getPointer( Type & value )
+		{
+			return value.ptr();
+		}
+	};
+
+	template<>
+	struct ElementTyper< ParticleFormat::eMat4f >
+	{
+		using Type = castor::Matrix4x4f;
+
+		static inline Type parse( castor::String const & value )
+		{
+			Type result;
+			ParseArray< float, 16 >( value, result.ptr() );
+			return result;
+		}
+
+		static inline float const * getPointer( Type const & value )
+		{
+			return value.constPtr();
+		}
+
+		static inline float * getPointer( Type & value )
+		{
+			return value.ptr();
+		}
+	};
+
+	template< ParticleFormat TypeT >
+	using ParticleElementTypeT = typename ElementTyper< TypeT >::Type;
+
 	template< ParticleFormat Type >
-	inline typename ElementTyper< Type >::Type parseValue( castor::String const & value )
+	inline ParticleElementTypeT< Type > parseValue( castor::String const & value )
 	{
 		return ElementTyper< Type >::parse( value );
 	}
@@ -389,27 +464,48 @@ namespace castor3d
 			}
 			break;
 
+		case ParticleFormat::eMat2f:
+			{
+				auto value = parseValue< ParticleFormat::eMat2f >( textValue );
+				particle.setValue< ParticleFormat::eMat2f >( index, value );
+			}
+			break;
+
+		case ParticleFormat::eMat3f:
+			{
+				auto value = parseValue< ParticleFormat::eMat3f >( textValue );
+				particle.setValue< ParticleFormat::eMat3f >( index, value );
+			}
+			break;
+
+		case ParticleFormat::eMat4f:
+			{
+				auto value = parseValue< ParticleFormat::eMat4f >( textValue );
+				particle.setValue< ParticleFormat::eMat4f >( index, value );
+			}
+			break;
+
 		default:
 			break;
 		}
 	}
 
 	template< ParticleFormat Type >
-	inline void Particle::setValue( uint32_t index, typename ElementTyper< Type >::Type const & value )
+	inline void Particle::setValue( uint32_t index, ParticleElementTypeT< Type > const & value )
 	{
-		CU_Require( index < m_description.size() );
+		CU_Require( index < m_description.count() );
 		auto it = m_description.begin() + index;
 		CU_Require( it->m_dataType == Type );
 		std::memcpy( &m_data[it->m_offset], ElementTyper< Type >::getPointer( value ), sizeof( value ) );
 	}
 
 	template< ParticleFormat Type >
-	inline typename ElementTyper< Type >::Type Particle::getValue( uint32_t index )const
+	inline ParticleElementTypeT< Type > Particle::getValue( uint32_t index )const
 	{
-		CU_Require( index < m_description.size() );
+		CU_Require( index < m_description.count() );
 		auto it = m_description.begin() + index;
 		CU_Require( it->m_dataType == Type );
-		typename ElementTyper< Type >::Type result{};
+		ParticleElementTypeT< Type > result{};
 		std::memcpy( ElementTyper< Type >::getPointer( result ), &m_data[it->m_offset], sizeof( result ) );
 		return result;
 	}

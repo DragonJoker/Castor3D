@@ -20,7 +20,7 @@ namespace CastorGui
 		{
 			StringStream strError{ makeStringStream() };
 			strError << cuT( "Error, : " ) << p_error;
-			Logger::logError( strError.str() );
+			log::error << strError.str() << std::endl;
 		}
 
 		void addParser( AttributeParsersBySection & parsers

@@ -41,31 +41,24 @@ namespace castor3d
 	enum class GpuMax
 		: uint32_t
 	{
+		eTexture1DSize,
+		eTexture2DSize,
 		eTexture3DSize,
-		eTextureRectangleSize,
-		eTextureCubeMapSize,
-		eTextureBufferSize,
-		eTextureSize,
-		eTextureLodBias,
-
-		eArrayTextureLayers,
+		eTextureCubeSize,
+		eTextureLayers,
+		eSamplerLodBias,
 		eClipDistances,
-
-		eElementIndices,
-		eElementVertices,
-
 		eFramebufferWidth,
 		eFramebufferHeight,
 		eFramebufferLayers,
 		eFramebufferSamples,
-
+		eTexelBufferSize,
 		eUniformBufferSize,
-
+		eStorageBufferSize,
 		eViewportWidth,
 		eViewportHeight,
 		eViewports,
-
-		CU_ScopedEnumBounds( eTexture3DSize )
+		CU_ScopedEnumBounds( eTexture1DSize )
 	};
 	template< typename AshesType >
 	struct AshesTypeTraits;
@@ -108,7 +101,8 @@ namespace castor3d
 	\remarks
 	*	Couple nom/données binaires.
 	*/
-	class Parameters;
+	template< typename KeyT >
+	class ParametersT;
 	/**
 	*\~english
 	*\brief
@@ -163,6 +157,8 @@ namespace castor3d
 	*	Exception de comparaison de versions
 	*/
 	class VersionException;
+
+	using Parameters = ParametersT< castor::String >;
 
 	struct RenderDevice;
 	C3D_API void setDebugObjectName( RenderDevice const & device

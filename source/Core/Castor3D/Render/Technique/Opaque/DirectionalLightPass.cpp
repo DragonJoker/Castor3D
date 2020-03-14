@@ -233,7 +233,7 @@ namespace castor3d
 	{
 		m_baseUbo = m_ubo.get();
 		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
-		castor::Logger::logTrace( castor::makeStringStream() << cuT( "Created DirectionalLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) );
+		log::trace << cuT( "Created DirectionalLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}
 
 	void DirectionalLightPass::initialise( Scene const & scene

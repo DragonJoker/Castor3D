@@ -361,7 +361,7 @@ namespace castor3d
 		, UniformBuffer< Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, false, false }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_srcView{ src }
 		, m_dstView{ dst }
 		, m_blurUbo{ blurUbo }

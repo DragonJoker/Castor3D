@@ -1,5 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 using namespace castor;
 
 namespace castor3d
@@ -15,7 +17,7 @@ namespace castor3d
 
 		if ( object.enabled )
 		{
-			Logger::logInfo( m_tabs + cuT( "Writing SsaoConfig" ) );
+			log::info << m_tabs << cuT( "Writing SsaoConfig" ) << std::endl;
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "ssao\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 			if ( result )

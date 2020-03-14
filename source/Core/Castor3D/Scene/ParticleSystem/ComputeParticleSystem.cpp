@@ -143,13 +143,16 @@ namespace castor3d
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		timer.beginPass( *m_commandBuffer, index + 0u );
 		// Put buffers in appropriate state for compute
-		m_commandBuffer->memoryBarrier( m_generatedCountBuffer->getBuffer().getCompatibleStageFlags()
+		auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
-		m_commandBuffer->memoryBarrier( m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags()
+		flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 			, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
-		m_commandBuffer->memoryBarrier( m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags()
+		flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 			, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
 		// Dispatch compute
@@ -160,19 +163,23 @@ namespace castor3d
 		auto dispatch = doDispatch( particlesCount, m_worgGroupSizes );
 		m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
 		// Put counts buffer to host visible state
-		m_commandBuffer->memoryBarrier( m_generatedCountBuffer->getBuffer().getCompatibleStageFlags()
+		flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_HOST_BIT
 			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
-		m_commandBuffer->memoryBarrier( m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags()
+		flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
-		m_commandBuffer->memoryBarrier( m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags()
+		flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+		m_commandBuffer->memoryBarrier( flags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
 		timer.endPass( *m_commandBuffer, index + 0u );
 		m_commandBuffer->end();
 
 		device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
+		timer.notifyPassRender( index + 0u );
 		m_fence->wait( ashes::MaxTimeout );
 		m_fence->reset();
 		m_commandBuffer->reset();
@@ -190,13 +197,15 @@ namespace castor3d
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			timer.beginPass( *m_commandBuffer, index + 1u );
 			// Copy output storage to billboard's vertex buffer
-			m_commandBuffer->memoryBarrier( m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags()
+			auto flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
-				, m_particlesCount * m_inputs.stride() );
-			m_commandBuffer->memoryBarrier( m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags()
+				, uint32_t( m_particlesCount * m_inputs.stride() ) );
+			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().makeVertexShaderInputResource() );
 			timer.endPass( *m_commandBuffer, index + 1u );
@@ -204,6 +213,7 @@ namespace castor3d
 
 			m_fence->reset();
 			device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
+			timer.notifyPassRender( index + 1u );
 			m_fence->wait( ashes::MaxTimeout );
 			m_fence->reset();
 
@@ -231,10 +241,11 @@ namespace castor3d
 		auto size = uint32_t( m_parent.getMaxParticlesCount() * m_inputs.stride() );
 		auto & device = getCurrentRenderDevice( getParent() );
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
-			, 2u
+			, ashes::getAlignedSize( 2u * sizeof( uint32_t )
+				, device.device->getProperties().limits.nonCoherentAtomSize ) / sizeof( uint32_t )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, "ComputeParticleSystemCountBuffer" );
-
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "ComputeParticleSystemCountBuffer" );
 		m_particlesStorages[0] = makeBuffer< uint8_t >( device
 			, size
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT

@@ -63,7 +63,7 @@ namespace Testing
 					File::directoryCreate( folder / subfolder );
 				}
 
-				auto lock = makeUniqueLock( p_scene.getMeshCache() );
+				auto lock = castor::makeUniqueLock( p_scene.getMeshCache() );
 
 				for ( auto const & it : p_scene.getMeshCache() )
 				{

@@ -557,7 +557,7 @@ namespace castor3d
 						, SampledImage2DRgba32 const & heightMap
 						, TextureConfigData const & textureConfig )
 					{
-						IF( m_writer, textureConfig.heightMask[0] == 0.0_f )
+						IF( m_writer, textureConfig.heightMask.x() == 0.0_f )
 						{
 							m_writer.returnStmt( texCoords );
 						}

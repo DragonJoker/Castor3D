@@ -463,7 +463,7 @@ namespace castor3d
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, false, false }
+		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_renderSystem{ renderSystem }
 		, m_geometryBufferResult{ gp }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -576,7 +576,7 @@ namespace castor3d
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, false, false }
+		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
 		, m_geometryBufferResult{ gp }

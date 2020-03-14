@@ -31,17 +31,17 @@ extern "C"
 
 	C3D_Fireworks_API void getName( char const ** p_name )
 	{
-		*p_name = Fireworks::ParticleSystem::Name.c_str();
+		*p_name = fireworks::ParticleSystem::Name.c_str();
 	}
 
 	C3D_Fireworks_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
-		engine->getParticleFactory().registerType( Fireworks::ParticleSystem::Type
-			, &Fireworks::ParticleSystem::create );
+		engine->getParticleFactory().registerType( fireworks::ParticleSystem::Type
+			, &fireworks::ParticleSystem::create );
 	}
 
 	C3D_Fireworks_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->getParticleFactory().unregisterType( Fireworks::ParticleSystem::Type );
+		engine->getParticleFactory().unregisterType( fireworks::ParticleSystem::Type );
 	}
 }

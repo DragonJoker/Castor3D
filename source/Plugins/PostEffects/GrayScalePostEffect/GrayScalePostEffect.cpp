@@ -91,7 +91,7 @@ namespace grayscale
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::UniformBuffer< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ renderSystem, true }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
 		, m_configUbo{ configUbo }
 	{
 	}

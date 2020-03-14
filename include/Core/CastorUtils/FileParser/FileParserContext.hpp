@@ -43,7 +43,8 @@ namespace castor
 		 *\brief		Constructeur.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API explicit FileParserContext( Path const & path );
+		CU_API explicit FileParserContext( LoggerInstance & logger
+			, Path const & path );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -101,6 +102,9 @@ namespace castor
 		//!\~english	The user context data, useful in plug-ins.
 		//!\~french		Les données de contexte utilisateur, utile dans les plug-ins.
 		std::map< String, void * > m_userContexts;
+		//!\~english	The logger instance.
+		//!\~french		L'instance de logger.
+		LoggerInstance * logger{ nullptr };
 	};
 }
 

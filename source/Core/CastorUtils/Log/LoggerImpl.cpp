@@ -5,41 +5,29 @@
 #include "CastorUtils/Data/TextFile.hpp"
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
+#include "CastorUtils/Config/MultiThreadConfig.hpp"
+
 namespace castor
 {
 	class LoggerImpl;
 
-	LoggerImpl::LoggerImpl( LogType level )
-		: m_console{ std::make_unique< ProgramConsole >( level < LogType::eInfo ) }
-	{
-	}
-
-	LoggerImpl::~LoggerImpl()
-	{
-		m_console.reset();
-	}
-
-	void LoggerImpl::initialise( Logger const & logger )
-	{
-		for ( uint8_t i = 0u; i < uint8_t( LogType::eCount ); i++ )
-		{
-			m_headers[i] = logger.m_headers[i];
-		}
-	}
-
-	void LoggerImpl::cleanup()
+	LoggerImpl::LoggerImpl( ProgramConsole & console
+		, LogType level
+		, LoggerInstance & parent )
+		: m_parent{ parent }
+		, m_console{ &console }
 	{
 	}
 
 	void LoggerImpl::registerCallback( LogCallback callback, void * caller )
 	{
-		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
+		auto lock( makeUniqueLock( m_mutexCallbacks ) );
 		m_mapCallbacks[caller] = callback;
 	}
 
 	void LoggerImpl::unregisterCallback( void * caller )
 	{
-		std::lock_guard< std::mutex > lock( m_mutexCallbacks );
+		auto lock( makeUniqueLock( m_mutexCallbacks ) );
 		auto it = m_mapCallbacks.find( caller );
 
 		if ( it != m_mapCallbacks.end() )
@@ -50,6 +38,8 @@ namespace castor
 
 	void LoggerImpl::setFileName( String const & logFilePath, LogType logType )
 	{
+		auto lock( makeUniqueLock( m_mutexFiles ) );
+
 		if ( logType == LogType::eCount )
 		{
 			for ( auto & path : m_logFilePath )
@@ -122,21 +112,25 @@ namespace castor
 				}
 			}
 
-			int i = 0;
-
-			for ( auto const & stream : logs )
 			{
-				String text = stream.str();
+				auto lock( makeUniqueLock( m_mutexFiles ) );
+				int i = 0;
 
-				if ( !text.empty() )
+				for ( auto const & stream : logs )
 				{
-					try
+					String text = stream.str();
+
+					if ( !text.empty() )
 					{
-						TextFile file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
-						file.writeText( text );
-					}
-					catch ( Exception & )
-					{
+						try
+						{
+							TextFile file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
+							file.writeText( text );
+						}
+						catch ( Exception & exc )
+						{
+							printf( "Unexpected exception while writing log messages: %s", exc.what() );
+						}
 					}
 				}
 			}
@@ -181,7 +175,7 @@ namespace castor
 #endif
 
 		{
-			std::lock_guard< std::mutex > lock( m_mutexCallbacks );
+			auto lock( makeUniqueLock( m_mutexCallbacks ) );
 
 			if ( !m_mapCallbacks.empty() )
 			{
@@ -192,6 +186,6 @@ namespace castor
 			}
 		}
 
-		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << ( newLine ? "\n" : "" );
+		stream << timestamp << cuT( " - " ) << m_parent.getHeader( uint8_t( logLevel ) ) << line << ( newLine ? "\n" : "" );
 	}
 }

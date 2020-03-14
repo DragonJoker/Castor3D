@@ -1,8 +1,9 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 
-#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 using namespace castor;
@@ -167,8 +168,12 @@ namespace castor3d
 	{
 		if ( m_count )
 		{
+			auto & device = getCurrentRenderDevice( getParentScene() );
+			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count * m_vertexStride )
+				, device.properties.limits.nonCoherentAtomSize );
+
 			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
-				, m_count * m_vertexStride
+				, mappedSize
 				, 0u ) )
 			{
 				struct Element
@@ -250,10 +255,10 @@ namespace castor3d
 				}
 				catch ( Exception const & p_exc )
 				{
-					Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what());
+					log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
 				}
 
-				m_vertexBuffer->getBuffer().flush( 0u, m_count * m_vertexStride );
+				m_vertexBuffer->getBuffer().flush( 0u, mappedSize );
 				m_vertexBuffer->getBuffer().unlock();
 			}
 		}

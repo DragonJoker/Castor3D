@@ -218,13 +218,15 @@ namespace smaa
 		, ashes::ImageView const & blendView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), false, false }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhoodBlending" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhoodBlending" }
 	{
+		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
 		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
 		auto & renderSystem = m_renderSystem;
 		auto & device = getCurrentRenderDevice( renderSystem );
@@ -234,7 +236,7 @@ namespace smaa
 		{
 			{
 				0u,
-				VK_FORMAT_R8G8B8A8_SRGB,
+				colourFormat,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -327,7 +329,7 @@ namespace smaa
 				, cuT( "SmaaNeighbourhoodBlending" ) );
 			m_surfaces.back().initialise( *m_renderPass
 				, castor::Size{ size.width, size.height }
-				, VK_FORMAT_R8G8B8A8_SRGB );
+				, colourFormat );
 		}
 	}
 

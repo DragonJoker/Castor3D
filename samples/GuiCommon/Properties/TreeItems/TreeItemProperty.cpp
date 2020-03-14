@@ -52,7 +52,7 @@ namespace GuiCommon
 		auto & cache = m_engine->getMaterialCache();
 		wxPGChoices choices;
 		using LockType = std::unique_lock< MaterialCache >;
-		LockType lock{ makeUniqueLock( cache ) };
+		LockType lock{ castor::makeUniqueLock( cache ) };
 
 		for ( auto pair : cache )
 		{

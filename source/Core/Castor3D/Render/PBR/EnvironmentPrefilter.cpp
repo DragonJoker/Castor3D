@@ -113,7 +113,7 @@ namespace castor3d
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
 				auto c3d_mapEnvironment = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
-					, writer.cast< Float >( mipLevel ) / float( shader::Utils::MaxIblReflectionLod ) );
+					, writer.cast< Float >( mipLevel / float( shader::Utils::MaxIblReflectionLod ) ) );
 
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );

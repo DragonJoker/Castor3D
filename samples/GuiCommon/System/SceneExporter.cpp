@@ -396,7 +396,7 @@ namespace GuiCommon
 		Path filePath{ folder / ( fileName.getFileName() + cuT( ".cscn" ) ) };
 		bool result = false;
 		{
-			TextFile mtlFile( filePath, File::OpenMode::eWrite, File::EncodingMode::eASCII );
+			TextFile mtlFile( filePath, File::OpenMode::eWrite, File::EncodingMode::eUTF8 );
 			result = writeView< Sampler >( scene.getSamplerView()
 				, cuT( "Samplers" )
 				, mtlFile );
@@ -413,7 +413,7 @@ namespace GuiCommon
 		{
 			File::copyFile( filePath, folder / cuT( "Materials" ) );
 			File::deleteFile( filePath );
-			TextFile scnFile( Path{ filePath }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
+			TextFile scnFile( Path{ filePath }, File::OpenMode::eWrite, File::EncodingMode::eUTF8 );
 			result = Scene::TextWriter( String(), cuT( "Materials" ) / filePath.getFileName( true ) )( scene, scnFile );
 		}
 
@@ -427,7 +427,7 @@ namespace GuiCommon
 			}
 
 			using LockType = std::unique_lock< MeshCache const >;
-			LockType lock{ makeUniqueLock( scene.getMeshCache() ) };
+			LockType lock{ castor::makeUniqueLock( scene.getMeshCache() ) };
 
 			for ( auto const & it : scene.getMeshCache() )
 			{

@@ -1,5 +1,5 @@
 debug_overlays true
-materials legacy
+materials phong
 
 scene "Scene"
 {
@@ -51,7 +51,7 @@ scene "Scene"
 	camera "MainCamera"
 	{
 		parent "MainCameraNode"
-		primitive triangles
+		primitive triangle_list
 		viewport "MainViewport"
 		{
 			type perspective
@@ -68,7 +68,7 @@ window "Window"
 	render_target
 	{
 		format argb32
-		size screen_size
+		size 800 600
 		scene "Scene"
 		camera "MainCamera"
 	}

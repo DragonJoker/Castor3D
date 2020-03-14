@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/PhongPass.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 
 using namespace castor;
@@ -15,7 +16,7 @@ namespace castor3d
 
 	bool PhongPass::TextWriter::operator()( PhongPass const & p_pass, TextFile & p_file )
 	{
-		Logger::logInfo( m_tabs + cuT( "Writing PhongPass " ) );
+		log::info << m_tabs << cuT( "Writing PhongPass " ) << std::endl;
 		bool result = p_file.writeText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 						&& p_file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
 

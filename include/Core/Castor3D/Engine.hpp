@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
 
 #include <CastorUtils/Design/Unique.hpp>
@@ -128,6 +129,20 @@ namespace castor3d
 		 *\remarks		Thread-safe
 		 */
 		C3D_API void setCleaned();
+		/**
+		 *\~english
+		 *\brief		Registers a RenderWindow.
+		 *\~french
+		 *\brief		Enregistre une RenderWindow.
+		 */
+		C3D_API void registerWindow( RenderWindow & window );
+		/**
+		 *\~english
+		 *\brief		Unregisters a RenderWindow.
+		 *\~french
+		 *\brief		Désenregistre une RenderWindow.
+		 */
+		C3D_API void unregisterWindow( RenderWindow const & window );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -304,6 +319,11 @@ namespace castor3d
 			return m_enableValidation;
 		}
 
+		inline bool isApiTraceEnabled()const
+		{
+			return m_enableApiTrace;
+		}
+
 		inline bool hasRenderLoop()const
 		{
 			return m_renderLoop != nullptr;
@@ -388,6 +408,11 @@ namespace castor3d
 		{
 			return m_rendererList;
 		}
+
+		inline castor::LoggerInstance & getLogger()
+		{
+			return *m_logger;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -418,6 +443,7 @@ namespace castor3d
 		void doLoadCoreData();
 
 	private:
+		castor::LoggerInstance * m_logger{ nullptr };
 		castor::String const m_appName;
 		Version const m_appVersion;
 		std::recursive_mutex m_mutexResources;
@@ -425,9 +451,9 @@ namespace castor3d
 		Version m_version;
 		ashes::RendererList m_rendererList;
 		RenderSystemUPtr m_renderSystem;
-		bool m_cleaned;
-		bool m_threaded;
-		bool m_perObjectLighting;
+		bool m_cleaned{ true };
+		bool m_threaded{ false };
+		bool m_perObjectLighting{ true };
 		SamplerSPtr m_defaultSampler;
 		SamplerSPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
@@ -446,7 +472,7 @@ namespace castor3d
 		castor::FontCache m_fontCache;
 		castor::ImageCache m_imageCache;
 		UserInputListenerSPtr m_userInputListener;
-		std::map< RenderWindowRPtr, UserInputListenerSPtr > m_windowInputListeners;
+		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		std::map< castor::String, castor::AttributeParsersBySection > m_additionalParsers;
 		std::map< castor::String, castor::StrUInt32Map > m_additionalSections;
 		MeshFactorySPtr m_meshFactory;
@@ -454,8 +480,9 @@ namespace castor3d
 		MeshImporterFactorySPtr m_importerFactory;
 		ParticleFactorySPtr m_particleFactory;
 		castor::CpuInformations m_cpuInformations;
-		MaterialType m_materialType;
+		MaterialType m_materialType{ MaterialType::ePhong };
 		bool m_enableValidation{ false };
+		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
 	};
 }

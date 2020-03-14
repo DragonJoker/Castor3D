@@ -349,12 +349,16 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/Logger.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/LoggerConsole.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/LoggerImpl.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Log/LoggerInstance.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/ELogType.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/Logger.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerConsole.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerImpl.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerInstance.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerStream.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerStreambuf.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}

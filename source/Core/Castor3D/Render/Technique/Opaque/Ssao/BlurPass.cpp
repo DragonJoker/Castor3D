@@ -473,26 +473,26 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ *engine.getRenderSystem(), true }
+		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_input{ input }
 		, m_normals{ normals }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsaoBlur" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsaoBlur" }
 		, m_config{ config }
-		, m_program{ doGetProgram( m_engine, config, m_vertexShader, m_pixelShader ) }
+		, m_program{ doGetProgram( m_engine, m_config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_fbo{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore() }
-		, m_configurationUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
+		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
+		, m_configurationUbo{ makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SsaoBlurCfg" ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsaoBlur" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsaoBlur" }
 	{
 		auto & configuration = m_configurationUbo->getData();
 		configuration.axis = axis;

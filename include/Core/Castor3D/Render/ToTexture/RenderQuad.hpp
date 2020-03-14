@@ -21,6 +21,40 @@ namespace castor3d
 	class RenderQuad
 	{
 	public:
+		/**
+		*\~english
+		*\brief
+		*	Tells how the texture coordinates from the vertex buffer are built.
+		*\~french
+		*\brief
+		*	Définit comment sont construites les coordonnées de texture du vertex buffer.
+		*/
+		struct TexcoordConfig
+		{
+			/*
+			*\~english
+			*\brief
+			*	Tells if the U coordinate of UV must be inverted, thus mirroring vertically the resulting image.
+			*\~french
+			*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un miroir vertical de l'image.
+			*/
+			bool invertU{ false };
+			/*
+			*\~english
+			*\brief
+			*	Tells if the U coordinate of UV must be inverted, thus mirroring horizontally the resulting image.
+			*\~french
+			*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
+			*/
+			bool invertV{ false };
+		};
+
+	private:
+		C3D_API RenderQuad( RenderSystem & renderSystem
+			, VkFilter samplerFilter
+			, TexcoordConfig const * config );
+
+	public:
 		C3D_API virtual ~RenderQuad();
 		C3D_API explicit RenderQuad( RenderQuad && rhs );
 		/**
@@ -30,27 +64,36 @@ namespace castor3d
 		*\param[in] renderSystem
 		*	The RenderSystem.
 		*\param[in] nearest
-		*	Tells if the sampler needs a Nearest filter or not.
-		*\param[in] invertU
-		*	Tells if the U coordinate of UV must be inverted, thus mirroring vertically the resulting image.
-		*\param[in] invertV
-		*	Tells if the U coordinate of UV must be inverted, thus mirroring horizontally the resulting image.
+			*	Tells if the sampler needs a Nearest filter or not.
+		*\param[in] config
+		*	The texture coordinates configuration.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\param[in] renderSystem
 		*	Le RenderSystem.
 		*\param[in] nearest
-		*	Dit si le sampler doit filtrer en Nearest ou pas.
-		*\param[in] invertU
-		*	Dit si la coordonnée U de l'UV doit être inversée, rendant ainsi un miroir vertical de l'image.
-		*\param[in] invertV
-		*	Dit si la coordonnée V de l'UV doit être inversée, rendant ainsi un miroir horizontal de l'image.
+			*	Dit si le sampler doit filtrer en Nearest ou pas.
+		*\param[in] config
+		*	La configuration des coordonnées de texture.
 		*/
-		C3D_API explicit RenderQuad( RenderSystem & renderSystem
-			, bool nearest
-			, bool invertU = false
-			, bool invertV = false );
+		C3D_API RenderQuad( RenderSystem & renderSystem
+			, VkFilter samplerFilter
+			, TexcoordConfig const & config );
+		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\remarks
+		*	Doesn't use the texture coordinates.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\remarks
+		*	N'utilise pas les coordonnées de texture.
+		*/
+		C3D_API RenderQuad( RenderSystem & renderSystem
+			, VkFilter samplerFilter );
 		/**
 		*\~english
 		*\brief
@@ -215,6 +258,7 @@ namespace castor3d
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
 		ashes::DescriptorSetPtr m_descriptorSet;
 		ashes::ImageView const * m_sourceView{ nullptr };
+		bool m_useTexCoords;
 	};
 }
 

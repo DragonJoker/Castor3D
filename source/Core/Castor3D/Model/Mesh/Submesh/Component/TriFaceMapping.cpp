@@ -1,5 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Vertex.hpp"
@@ -190,7 +191,7 @@ namespace castor3d
 		}
 		catch ( Exception const & exc )
 		{
-			Logger::logError( std::stringstream() << "Submesh::SortFaces - Error: " << exc.what() );
+			log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 		}
 	}
 

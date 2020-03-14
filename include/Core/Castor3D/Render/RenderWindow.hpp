@@ -26,6 +26,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
 		, public MouseEventHandler
+		, public std::enable_shared_from_this< RenderWindow >
 	{
 	private:
 		struct RenderingResources
@@ -98,16 +99,16 @@ namespace castor3d
 		{
 		public:
 			InputListener( Engine & engine
-				, RenderWindowSPtr window )
-				: UserInputListener{ engine, window->getName() + "UIListener" }
-				, m_window{ std::move( window ) }
+				, RenderWindow & window )
+				: UserInputListener{ engine, window.getName() + "UIListener" }
+				, m_window{ window.shared_from_this() }
 			{
 			}
 
 		private:
 			EventHandlerSPtr doGetMouseTargetableHandler( castor::Position const & position )const override
 			{
-				return m_window;
+				return m_window.lock();
 			}
 
 			/**@name General */
@@ -118,7 +119,7 @@ namespace castor3d
 			 */
 			bool doInitialise()override
 			{
-				doAddHandler( m_window );
+				doAddHandler( m_window.lock() );
 				return true;
 			}
 			/**
@@ -126,11 +127,11 @@ namespace castor3d
 			 */
 			void doCleanup()override
 			{
-				doRemoveHandler( m_window );
+				doRemoveHandler( m_window.lock() );
 			}
 
 		private:
-			RenderWindowSPtr m_window;
+			RenderWindowWPtr m_window;
 		};
 
 	public:

@@ -46,6 +46,7 @@ using namespace castor;
 
 namespace castor3d
 {
+	static constexpr bool C3D_EnableAPITrace = false;
 	static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call castor3d::Engine::loadRenderer before castor3d::Engine::Initialise";
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
@@ -53,11 +54,7 @@ namespace castor3d
 		, Version const & appVersion
 		, bool enableValidation )
 		: Unique< Engine >( this )
-		, m_renderSystem( nullptr )
-		, m_cleaned( true )
-		, m_perObjectLighting( true )
-		, m_threaded( false )
-		, m_materialType{ MaterialType::ePhong }
+		, m_logger{ log::initialise( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) ) }
 		, m_appName{ appName }
 		, m_appVersion{ appVersion }
 		, m_enableValidation{ enableValidation }
@@ -66,6 +63,7 @@ namespace castor3d
 		, m_subdividerFactory{ std::make_shared< MeshSubdividerFactory >() }
 		, m_importerFactory{ std::make_shared< MeshImporterFactory >() }
 		, m_particleFactory{ std::make_shared< ParticleFactory >() }
+		, m_enableApiTrace{ C3D_EnableAPITrace }
 	{
 		auto dummy = []( auto element )
 		{
@@ -100,61 +98,6 @@ namespace castor3d
 		DdsImageLoader::registerLoader( m_imageLoader );
 		XpmImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
-		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logTrace( msg );
-			}
-			else
-			{
-				Logger::logTraceNoNL( msg );
-			}
-		} );
-		ashes::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logDebug( msg );
-			}
-			else
-			{
-				Logger::logDebugNoNL( msg );
-			}
-		} );
-		ashes::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logInfo( msg );
-			}
-			else
-			{
-				Logger::logInfoNoNL( msg );
-			}
-		} );
-		ashes::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logWarning( msg );
-			}
-			else
-			{
-				Logger::logWarningNoNL( msg );
-			}
-		} );
-		ashes::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
-		{
-			if ( newLine )
-			{
-				Logger::logError( msg );
-			}
-			else
-			{
-				Logger::logErrorNoNL( msg );
-			}
-		} );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = makeCache< FrameListener, String >( *this
@@ -230,15 +173,9 @@ namespace castor3d
 					, *this );
 				return result;
 			}
+			, dummy
 			, [this]( RenderWindowSPtr element )
 			{
-				m_windowInputListeners.emplace( element.get()
-					, std::make_shared< RenderWindow::InputListener >( *this, element ) );
-
-			}
-			, [this]( RenderWindowSPtr element )
-			{
-				m_windowInputListeners.erase( element.get() );
 				postEvent( makeCleanupEvent( *element ) );
 			}
 			, mergeResource );
@@ -248,8 +185,8 @@ namespace castor3d
 			File::directoryCreate( getEngineDirectory() );
 		}
 
-		Logger::logInfo( makeStringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} );
-		Logger::logDebug( makeStringStream() << m_cpuInformations );
+		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
+		log::info << m_cpuInformations << std::endl;
 	}
 
 	Engine::~Engine()
@@ -278,6 +215,9 @@ namespace castor3d
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
 		cleanupGlslang();
+
+		m_logger = nullptr;
+		log::cleanup();
 	}
 
 	void Engine::initialise( uint32_t wanted, bool threaded )
@@ -413,7 +353,7 @@ namespace castor3d
 	void Engine::postEvent( FrameEventUPtr && event )
 	{
 		using LockType = std::unique_lock< FrameListenerCache >;
-		LockType lock{ makeUniqueLock( *m_listenerCache ) };
+		LockType lock{ castor::makeUniqueLock( *m_listenerCache ) };
 		FrameListenerSPtr listener = m_defaultListener.lock();
 
 		if ( listener )
@@ -480,6 +420,29 @@ namespace castor3d
 	void Engine::setCleaned()
 	{
 		m_cleaned = true;
+	}
+
+	void Engine::registerWindow( RenderWindow & window )
+	{
+		m_windowInputListeners.emplace( &window
+			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
+		auto listener = m_windowInputListeners.find( &window )->second;
+		log::debug << "Created UIListener 0x" << std::hex << listener.get() << " for window " << window.getName() << std::endl;
+	}
+
+	void Engine::unregisterWindow( RenderWindow const & window )
+	{
+		auto listener = m_windowInputListeners.find( &window )->second;
+		listener->cleanup();
+		auto plistener = listener.get();
+		auto pwindow = &window;
+		log::debug << "Removing UIListener 0x" << std::hex << plistener << std::endl;
+		listener->getFrameListener().postEvent( makeFunctorEvent( EventType::ePostRender
+			, [this, plistener, pwindow]()
+			{
+				m_windowInputListeners.erase( pwindow );
+				log::debug << "Removed UIListener 0x" << std::hex << plistener << std::endl;
+			} ) );
 	}
 
 	void Engine::registerParsers( castor::String const & name, castor::AttributeParsersBySection const & parsers )
@@ -556,7 +519,7 @@ namespace castor3d
 
 			if ( !parser.parseFile( path / cuT( "Core.zip" ) ) )
 			{
-				Logger::logError( cuT( "Can't read Core.zip data file" ) );
+				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}
 		}
 	}
