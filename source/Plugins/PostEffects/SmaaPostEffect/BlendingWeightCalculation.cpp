@@ -3,7 +3,6 @@
 #include "SmaaPostEffect/AreaTex.h"
 #include "SmaaPostEffect/SearchTex.h"
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBuffer.hpp>

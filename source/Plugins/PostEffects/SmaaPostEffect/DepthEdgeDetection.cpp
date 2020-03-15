@@ -1,7 +1,6 @@
 #include "SmaaPostEffect/DepthEdgeDetection.hpp"
 
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>

@@ -1,4 +1,4 @@
-#include "Uncharted2/Uncharted2ToneMapping.hpp"
+#include "Uncharted2ToneMapping/Uncharted2ToneMapping.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
