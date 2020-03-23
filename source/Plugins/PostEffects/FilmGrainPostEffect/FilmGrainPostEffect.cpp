@@ -47,7 +47,7 @@ namespace film_grain
 		static std::string const NoiseTex = "c3d_noiseTex";
 		static uint32_t constexpr NoiseMapCount = 6u;
 
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -69,10 +69,10 @@ namespace film_grain
 					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -140,7 +140,7 @@ namespace film_grain
 					colour = addNoise( colour, vtx_texture );
 					pxl_fragColor = vec4( colour, 1.0 );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

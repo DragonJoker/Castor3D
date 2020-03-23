@@ -59,7 +59,7 @@ namespace castor3d
 					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		uint32_t constexpr BlurSceneUboId = 2u;
@@ -193,7 +193,7 @@ namespace castor3d
 					}
 					ROF;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		uint32_t constexpr CombData4ImgId = 2u;
@@ -287,7 +287,7 @@ namespace castor3d
 					pxl_fragColor = original;
 #endif
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateBlurProgram( Engine & engine

@@ -344,7 +344,7 @@ namespace castor3d
 			out.gl_out.gl_Position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	//*********************************************************************************************

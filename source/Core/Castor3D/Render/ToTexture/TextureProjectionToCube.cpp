@@ -57,7 +57,7 @@ namespace castor3d
 				};
 
 				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "TextureProjToCube" };
@@ -91,7 +91,7 @@ namespace castor3d
 				};
 
 				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			return ashes::PipelineShaderStageCreateInfoArray

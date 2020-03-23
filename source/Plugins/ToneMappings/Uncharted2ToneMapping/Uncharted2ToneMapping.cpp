@@ -94,7 +94,7 @@ namespace Uncharted2
 			pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0_f );
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

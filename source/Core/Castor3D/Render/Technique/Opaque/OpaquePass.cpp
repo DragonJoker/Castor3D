@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -437,7 +438,7 @@ namespace castor3d
 		};
 
 		writer.implementFunction< Void >( cuT( "main" ), main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
@@ -578,7 +579,7 @@ namespace castor3d
 			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
@@ -719,7 +720,7 @@ namespace castor3d
 			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
@@ -860,6 +861,6 @@ namespace castor3d
 			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

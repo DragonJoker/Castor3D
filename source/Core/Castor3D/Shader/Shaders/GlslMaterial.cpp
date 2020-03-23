@@ -12,7 +12,7 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		BaseMaterial::BaseMaterial( sdw::Shader * shader
+		BaseMaterial::BaseMaterial( ast::Shader * shader
 			, ast::expr::ExprPtr expr )
 			: StructInstance{ shader, std::move( expr ) }
 			, m_common{ getMember< Vec4 >( "m_common" ) }
@@ -36,7 +36,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		LegacyMaterial::LegacyMaterial( sdw::Shader * shader
+		LegacyMaterial::LegacyMaterial( ast::Shader * shader
 			, ast::expr::ExprPtr expr )
 			: BaseMaterial{ shader, std::move( expr ) }
 			, m_diffAmb{ getMember< Vec4 >( "m_diffAmb" ) }
@@ -76,7 +76,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		MetallicRoughnessMaterial::MetallicRoughnessMaterial( sdw::Shader * shader
+		MetallicRoughnessMaterial::MetallicRoughnessMaterial( ast::Shader * shader
 			, ast::expr::ExprPtr expr )
 			: BaseMaterial{ shader, std::move( expr ) }
 			, m_albRough{ getMember< Vec4 >( "m_albRough" ) }
@@ -116,7 +116,7 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		SpecularGlossinessMaterial::SpecularGlossinessMaterial( sdw::Shader * shader
+		SpecularGlossinessMaterial::SpecularGlossinessMaterial( ast::Shader * shader
 			, ast::expr::ExprPtr expr )
 			: BaseMaterial{ shader, std::move( expr ) }
 			, m_diffDiv{ getMember< Vec4 >( "m_diffDiv" ) }

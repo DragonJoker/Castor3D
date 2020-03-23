@@ -39,7 +39,7 @@ namespace motion_blur
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -57,10 +57,10 @@ namespace motion_blur
 					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -95,7 +95,7 @@ namespace motion_blur
 
 					pxl_fragColor /= writer.cast< Float >( c3d_samplesCount );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

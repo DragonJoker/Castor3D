@@ -34,7 +34,7 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( castor::String const & name
 			, VkShaderStageFlagBits type
-			, sdw::Shader const & shader ) = 0;
+			, ast::Shader const & shader ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -273,7 +273,7 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( castor::String const & name
 			, VkShaderStageFlagBits type
-			, sdw::Shader const & shader )override
+			, ast::Shader const & shader )override
 		{
 		}
 		/**@}*/

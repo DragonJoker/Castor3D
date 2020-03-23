@@ -18,7 +18,7 @@ namespace castor3d
 	{
 		//***********************************************************************************************
 
-		ast::expr::ExprList makeFnArg( sdw::Shader & shader
+		ast::expr::ExprList makeFnArg( ast::Shader & shader
 			, FragmentInput const & value )
 		{
 			ast::expr::ExprList result;
@@ -85,7 +85,7 @@ namespace castor3d
 			return m_expr.get();
 		}
 
-		sdw::Shader * FragmentInput::getShader()const
+		ast::Shader * FragmentInput::getShader()const
 		{
 			return findShader( m_clipVertex
 				, m_viewVertex

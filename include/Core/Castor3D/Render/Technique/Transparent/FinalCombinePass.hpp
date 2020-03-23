@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace castor3d
 {

@@ -50,7 +50,7 @@ namespace castor3d
 				{
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetPixelProgram( Engine & engine
@@ -318,7 +318,7 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 
 #undef result
 #undef keyPassThrough

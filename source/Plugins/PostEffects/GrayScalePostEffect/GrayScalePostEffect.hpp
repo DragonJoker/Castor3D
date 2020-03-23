@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace grayscale
 {

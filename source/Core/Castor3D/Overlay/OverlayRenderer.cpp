@@ -904,7 +904,7 @@ namespace castor3d
 						, 1.0_f );
 				} );
 
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		// Pixel shader
@@ -994,7 +994,7 @@ namespace castor3d
 					pxl_fragColor = vec4( diffuse.xyz(), alpha );
 				} );
 
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( *this );

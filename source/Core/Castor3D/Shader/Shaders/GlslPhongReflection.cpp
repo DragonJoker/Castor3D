@@ -131,8 +131,8 @@ namespace castor3d
 					auto product = m_writer.declLocale( "product"
 						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
 					auto fresnel = m_writer.declLocale( "fresnel"
-						, sdw::fma( max( shininess / 255.0_f, reflectance ) - reflectance
-							, pow( 1.0_f - product, 5.0_f )
+						, sdw::fma( pow( 1.0_f - product, 5.0_f )
+							, 1.0_f - reflectance
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );
@@ -169,8 +169,8 @@ namespace castor3d
 					auto product = m_writer.declLocale( "product"
 						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
 					auto fresnel = m_writer.declLocale( "fresnel"
-						, sdw::fma( max( shininess / 255.0_f, reflectance ) - reflectance
-							, pow( 1.0_f - product, 5.0_f )
+						, sdw::fma( pow( 1.0_f - product, 5.0_f )
+							, 1.0_f - reflectance
 							, reflectance ) );
 					auto refracted = m_writer.declLocale( "refracted"
 						, refract( wsIncident, wsNormal, refractionRatio ) );

@@ -213,7 +213,7 @@ namespace castor3d
 				out.gl_out.gl_Position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
 			} );
 
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "TextureProj" };
@@ -240,7 +240,7 @@ namespace castor3d
 					, in.gl_FragCoord.xy() / c3d_size );
 			} );
 
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( *this );

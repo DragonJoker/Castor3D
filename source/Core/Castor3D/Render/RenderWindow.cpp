@@ -763,7 +763,7 @@ namespace castor3d
 					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "RenderWindow" };
@@ -783,7 +783,7 @@ namespace castor3d
 				{
 					pxl_fragColor = vec4( texture( c3d_mapResult, vtx_texture ).xyz(), 1.0_f );
 				} );
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		m_program = ashes::PipelineShaderStageCreateInfoArray

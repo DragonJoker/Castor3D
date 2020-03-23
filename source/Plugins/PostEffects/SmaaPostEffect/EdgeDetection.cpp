@@ -25,7 +25,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -66,7 +66,7 @@ namespace smaa
 					vtx_texture = uv;
 					SMAAEdgeDetectionVS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

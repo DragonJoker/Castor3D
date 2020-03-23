@@ -743,7 +743,7 @@ namespace castor3d
 
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Combine" };
@@ -771,7 +771,7 @@ namespace castor3d
 					//overlayColor.rgb() *= overlayColor.a();
 					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
 				} );
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( *this );

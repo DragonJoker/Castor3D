@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -798,7 +799,7 @@ namespace castor3d
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr PickingPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
@@ -881,7 +882,7 @@ namespace castor3d
 #endif
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void PickingPass::doUpdateFlags( PipelineFlags & flags )const

@@ -31,7 +31,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doBlendingWeightCalculationVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -84,10 +84,10 @@ namespace smaa
 					vtx_texture = uv;
 					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -823,7 +823,7 @@ namespace smaa
 						, c3d_searchTex
 						, c3d_subsampleIndices );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::SamplerPtr doCreateSampler( castor3d::Engine & engine

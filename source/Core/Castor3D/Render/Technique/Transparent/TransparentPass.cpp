@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -679,7 +680,7 @@ namespace castor3d
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr TransparentPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
@@ -904,7 +905,7 @@ namespace castor3d
 				pxl_velocity.xy() = curPosition - prvPosition;
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr TransparentPass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
@@ -1188,7 +1189,7 @@ namespace castor3d
 			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr TransparentPass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
@@ -1471,7 +1472,7 @@ namespace castor3d
 			pxl_velocity.xy() = curPosition - prvPosition;
 		} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void TransparentPass::doUpdatePipeline( RenderPipeline & pipeline )const

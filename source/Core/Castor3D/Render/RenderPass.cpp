@@ -1436,7 +1436,7 @@ namespace castor3d
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr RenderPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
@@ -1562,6 +1562,6 @@ namespace castor3d
 				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

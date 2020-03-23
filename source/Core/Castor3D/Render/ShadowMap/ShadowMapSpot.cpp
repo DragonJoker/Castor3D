@@ -454,7 +454,7 @@ namespace castor3d
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr ShadowMapSpot::doGetPixelShaderSource( PipelineFlags const & flags )const
@@ -530,6 +530,6 @@ namespace castor3d
 				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

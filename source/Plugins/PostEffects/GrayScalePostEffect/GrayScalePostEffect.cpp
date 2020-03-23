@@ -36,7 +36,7 @@ namespace grayscale
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -58,10 +58,10 @@ namespace grayscale
 					vtx_texture = uv;
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getFragmentProgram()
+		std::unique_ptr< ast::Shader > getFragmentProgram()
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -83,7 +83,7 @@ namespace grayscale
 						, texture( c3d_mapColor, vtx_texture ).xyz() );
 					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

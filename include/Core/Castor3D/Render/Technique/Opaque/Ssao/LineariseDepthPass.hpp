@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 

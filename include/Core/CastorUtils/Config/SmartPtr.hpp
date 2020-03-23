@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/Macros.hpp"
 
+#include <memory>
+
 namespace castor
 {
 	/**
@@ -22,12 +24,24 @@ namespace castor
 	struct DummyDtor
 	{
 		template< typename T >
-		inline void operator()( T *& pointer )throw()
+		inline void operator()( T *& pointer )noexcept
 		{
 			pointer = 0;
 		}
 	};
 	CU_API extern DummyDtor g_dummyDtor;
+
+	template< typename T >
+	struct Deleter
+	{
+		inline void operator()( T * pointer )noexcept
+		{
+			delete pointer;
+		}
+	};
+
+	template< typename T >
+	using UniquePtr = std::unique_ptr< T, Deleter< T > >;
 }
 
 #endif

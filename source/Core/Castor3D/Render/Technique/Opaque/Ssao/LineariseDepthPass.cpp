@@ -67,7 +67,7 @@ namespace castor3d
 				{
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetLinearisePixelProgram( Engine & engine )
@@ -101,7 +101,7 @@ namespace castor3d
 					pxl_fragColor = reconstructCSZ( texelFetch( c3d_mapDepth, ivec2( in.gl_FragCoord.xy() ), 0_i ).r()
 						, c3d_clipInfo );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetMinifyPixelProgram( Engine & engine )
@@ -134,7 +134,7 @@ namespace castor3d
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
 						, c3d_previousLevel ).r();
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetLineariseProgram( Engine & engine

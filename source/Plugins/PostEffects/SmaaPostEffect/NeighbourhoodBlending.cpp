@@ -27,7 +27,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -65,10 +65,10 @@ namespace smaa
 					vtx_texture = uv;
 					SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
@@ -206,7 +206,7 @@ namespace smaa
 				{
 					pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

@@ -27,7 +27,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -165,10 +165,10 @@ namespace smaa
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAALumaEdgeDetectionPS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -279,7 +279,7 @@ namespace smaa
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAALumaEdgeDetectionPS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ImageView doCreatePredicationView( ashes::Image const & texture )

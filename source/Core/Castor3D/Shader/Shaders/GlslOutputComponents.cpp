@@ -12,7 +12,7 @@ namespace castor3d
 	{
 		//***********************************************************************************************
 
-		ast::expr::ExprList makeFnArg( sdw::Shader & shader
+		ast::expr::ExprList makeFnArg( ast::Shader & shader
 			, OutputComponents const & value )
 		{
 			ast::expr::ExprList result;
@@ -53,7 +53,7 @@ namespace castor3d
 			return m_expr.get();
 		}
 
-		sdw::Shader * OutputComponents::getShader()const
+		ast::Shader * OutputComponents::getShader()const
 		{
 			return findShader( m_diffuse, m_specular );
 		}

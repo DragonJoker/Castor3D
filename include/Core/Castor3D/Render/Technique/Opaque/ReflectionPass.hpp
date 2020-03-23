@@ -22,7 +22,7 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace castor3d
 {

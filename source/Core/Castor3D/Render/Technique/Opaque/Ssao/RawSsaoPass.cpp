@@ -61,7 +61,7 @@ namespace castor3d
 				{
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetPixelProgram( Engine & engine
@@ -447,7 +447,7 @@ namespace castor3d
 							, 0.0_f
 							, 1.0_f ) );
 				} );
-				return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetProgram( Engine & engine

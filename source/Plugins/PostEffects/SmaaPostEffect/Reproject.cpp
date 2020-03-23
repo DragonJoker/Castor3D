@@ -28,7 +28,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetReprojectVP( castor3d::RenderSystem const & renderSystem
+		std::unique_ptr< ast::Shader > doGetReprojectVP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -52,10 +52,10 @@ namespace smaa
 					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doGetReprojectFP( castor3d::RenderSystem const & renderSystem
+		std::unique_ptr< ast::Shader > doGetReprojectFP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
@@ -122,7 +122,7 @@ namespace smaa
 				{
 					pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 	
