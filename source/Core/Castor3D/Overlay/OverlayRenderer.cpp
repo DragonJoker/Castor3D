@@ -498,9 +498,7 @@ namespace castor3d
 		m_finished.reset();
 	}
 
-	void OverlayRenderer::beginPrepare( Camera const & camera
-		, RenderPassTimer const & timer
-		, ashes::Semaphore const & toWait )
+	void OverlayRenderer::update( Camera const & camera )
 	{
 		auto size = camera.getSize();
 
@@ -515,7 +513,11 @@ namespace castor3d
 				, -1.0f
 				, 1.0f ) );
 		}
+	}
 
+	void OverlayRenderer::beginPrepare( RenderPassTimer const & timer
+		, ashes::Semaphore const & toWait )
+	{
 		m_toWait = &toWait;
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		m_commandBuffer->beginDebugBlock(
@@ -619,8 +621,8 @@ namespace castor3d
 			, pipeline.descriptorLayout->getBinding( getTexturesBufferIndex() ) );
 		// Matrix UBO
 		result->createBinding( pipeline.descriptorLayout->getBinding( MatrixUboBinding )
-			, m_matrixUbo.getUbo()
-			, 0u
+			, *m_matrixUbo.getUbo().buffer
+			, m_matrixUbo.getUbo().offset
 			, 1u );
 		// Overlay UBO
 		result->createBinding( pipeline.descriptorLayout->getBinding( OverlayUboBinding )

@@ -311,17 +311,11 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & RenderTechnique::render( castor::Point2f const & jitter
-		, ashes::SemaphoreCRefArray const & waitSemaphores
+	void RenderTechnique::update( castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
-		scene.getLightCache().updateLightsTexture( camera );
-		scene.updateDeviceDependent( camera );
-
-		// Update part
-		doUpdateParticles( info );
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
@@ -329,40 +323,39 @@ namespace castor3d
 			, camera.getProjection()
 			, jitterProjSpace );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
+
+#if C3D_UseDeferredRendering
+		m_deferredRendering->update( info, scene, camera, jitter );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info, jitter );
+#endif
+#if C3D_UseWeightedBlendedRendering
+		m_weightedBlendRendering->update( info, scene, camera, jitter );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info, jitter );
+#endif
+
+		scene.getLightCache().updateLightsTexture( camera );
+		scene.updateDeviceDependent( camera );
+
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		{
+			map.get().update();
+		}
+	}
+
+	ashes::Semaphore const & RenderTechnique::render( ashes::SemaphoreCRefArray const & waitSemaphores
+		, RenderInfo & info )
+	{
+		doUpdateParticles( info );
 		auto * semaphore = &doRenderBackground( waitSemaphores );
 		semaphore = &doRenderEnvironmentMaps( *semaphore );
 		semaphore = &doRenderShadowMaps( *semaphore );
 
-#if C3D_UseDeferredRendering
-
-		m_deferredRendering->update( info
-			, scene
-			, camera
-			, jitter );
-
-#else
-
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info
-			, jitter );
-
-#endif
-#if C3D_UseWeightedBlendedRendering
-
-		m_weightedBlendRendering->update( info
-			, scene
-			, camera
-			, jitter );
-
-#else
-
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info
-			, jitter );
-
-#endif
 
 		// Render part
-		semaphore = &doRenderOpaque( jitter, info, *semaphore );
-		semaphore = &doRenderTransparent( jitter, info, *semaphore );
+		semaphore = &doRenderOpaque( info, *semaphore );
+		semaphore = &doRenderTransparent( info, *semaphore );
 		return *semaphore;
 	}
 
@@ -818,8 +811,7 @@ namespace castor3d
 
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderOpaque( castor::Point2f const & jitter
-		, RenderInfo & info
+	ashes::Semaphore const & RenderTechnique::doRenderOpaque( RenderInfo & info
 		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
@@ -839,8 +831,7 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderTransparent( castor::Point2f const & jitter
-		, RenderInfo & info
+	ashes::Semaphore const & RenderTechnique::doRenderTransparent( RenderInfo & info
 		, ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;

@@ -262,6 +262,13 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
+		m_matrixUboPool = std::make_shared< UniformBufferPool< MatrixUboConfiguration > >( *m_renderSystem
+			, cuT( "MatrixUboPool" ) );
+		m_hdrConfigUboPool = std::make_shared< UniformBufferPool< HdrConfig > >( *m_renderSystem
+			, cuT( "HdrConfigUboPool" ) );
+		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
+			, cuT( "ModelMatrixUboPool" ) );
+
 		if ( threaded )
 		{
 			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, wanted );
@@ -307,6 +314,9 @@ namespace castor3d
 			m_techniqueCache->cleanup();
 
 			m_renderLoop.reset();
+			m_matrixUboPool.reset();
+			m_hdrConfigUboPool.reset();
+			m_modelMatrixUboPool.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -507,6 +517,13 @@ namespace castor3d
 				, size
 				, texture );
 		}
+	}
+
+	void Engine::uploadUbos()
+	{
+		m_matrixUboPool->upload();
+		m_hdrConfigUboPool->upload();
+		m_modelMatrixUboPool->upload();
 	}
 
 	void Engine::doLoadCoreData()

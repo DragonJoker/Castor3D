@@ -84,18 +84,27 @@ namespace castor3d
 		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
+		 *\brief		Updates GPU data.
+		 *\param[in]	jitter	The jittering value.
+		 *\param[out]	info	Receives the render informations.
+		 *\~french
+		 *\brief		Met à jour les données GPU.
+		 *\param[in]	jitter	La valeur de jittering.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 */
+		C3D_API void update( castor::Point2f const & jitter
+			, RenderInfo & info );
+		/**
+		 *\~english
 		 *\brief		Render function
-		 *\param[in]	jitter			The jittering value.
 		 *\param[in]	waitSemaphores	The semaphores to wait for.
 		 *\param[out]	info			Receives the render informations.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	jitter			La valeur de jittering.
 		 *\param[in]	waitSemaphores	Les sémaphores à attendre.
 		 *\param[out]	info			Reçoit les informations de rendu.
 		 */
-		C3D_API ashes::Semaphore const & render( castor::Point2f const & jitter
-			, ashes::SemaphoreCRefArray const & waitSemaphores
+		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & waitSemaphores
 			, RenderInfo & info );
 		/**
 		 *\~english
@@ -151,6 +160,11 @@ namespace castor3d
 		}
 
 		inline MatrixUbo const & getMatrixUbo()const
+		{
+			return m_matrixUbo;
+		}
+
+		inline MatrixUbo & getMatrixUbo()
 		{
 			return m_matrixUbo;
 		}
@@ -215,11 +229,9 @@ namespace castor3d
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderOpaque( castor::Point2f const & jitter
-			, RenderInfo & info
+		ashes::Semaphore const & doRenderOpaque( RenderInfo & info
 			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderTransparent( castor::Point2f const & jitter
-			, RenderInfo & info
+		ashes::Semaphore const & doRenderTransparent( RenderInfo & info
 			, ashes::Semaphore const & semaphore );
 
 	private:

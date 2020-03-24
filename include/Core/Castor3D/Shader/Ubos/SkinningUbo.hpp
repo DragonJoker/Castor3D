@@ -23,63 +23,9 @@ namespace castor3d
 	class SkinningUbo
 	{
 	public:
-		struct Configuration
-		{
-			castor::Matrix4x4f bonesMatrix[400];
-		};
+		using Configuration = SkinningUboConfiguration;
 
 	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API SkinningUbo( SkinningUbo const & ) = delete;
-		C3D_API SkinningUbo & operator=( SkinningUbo const & ) = delete;
-		C3D_API SkinningUbo( SkinningUbo && ) = default;
-		C3D_API SkinningUbo & operator=( SkinningUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		C3D_API explicit SkinningUbo( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~SkinningUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 */
-		C3D_API void initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	skeleton	The skeleton to update from.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	skeleton	Le squelette à partir duquel la mise à jour s'effectue.
-		 */
-		C3D_API void update( AnimatedSkeleton const & skeleton )const;
 		/**
 		 *\~english
 		 *\brief		Declares the variables needed to compute skinning in vertex shader.
@@ -129,21 +75,6 @@ namespace castor3d
 		C3D_API static sdw::Mat4 computeTransform( SkinningData & data
 			, sdw::ShaderWriter & writer
 			, ProgramFlags const & flags );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		inline UniformBuffer< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
-
-		inline UniformBuffer< Configuration > const & getUbo()const
-		{
-			return *m_ubo;
-		}
 		/**@}*/
 
 	public:
@@ -154,10 +85,6 @@ namespace castor3d
 		//!\~english	Name of the bones matrices attribute.
 		//!\~french		Nom de l'attribut de de matrices d'os.
 		C3D_API static castor::String const Bones;
-
-	private:
-		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
 	};
 }
 

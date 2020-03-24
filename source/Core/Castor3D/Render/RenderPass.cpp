@@ -76,7 +76,7 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
 		: OwnedBy< Engine >{ engine }
 		, Named{ name }
@@ -94,7 +94,7 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit )
 		: OwnedBy< Engine >{ engine }
@@ -113,7 +113,7 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SceneNode const * ignored )
 		: OwnedBy< Engine >{ engine }
@@ -132,7 +132,7 @@ namespace castor3d
 	RenderPass::RenderPass( String const & category
 		, String const & name
 		, Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, SceneNode const * ignored )
@@ -544,43 +544,45 @@ namespace castor3d
 		void initialiseCommonUboDescriptor( Engine & engine
 			, ashes::DescriptorSetLayout const & layout
 			, RenderNodeT & node
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneUbo const & sceneUbo )
 		{
-			engine.getMaterialCache().getPassBuffer().createBinding( *node.uboDescriptorSet
+			ashes::DescriptorSet & uboDescriptorSet = *node.uboDescriptorSet;
+			engine.getMaterialCache().getPassBuffer().createBinding( uboDescriptorSet
 				, layout.getBinding( getPassBufferIndex() ) );
 
 			if ( node.pipeline.getFlags().texturesCount )
 			{
-				engine.getMaterialCache().getTextureBuffer().createBinding( *node.uboDescriptorSet
+				engine.getMaterialCache().getTextureBuffer().createBinding( uboDescriptorSet
 					, layout.getBinding( getTexturesBufferIndex() ) );
 			}
 
 			if ( checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eLighting ) )
 			{
-				node.uboDescriptorSet->createBinding( layout.getBinding( getLightBufferIndex() )
+				uboDescriptorSet.createBinding( layout.getBinding( getLightBufferIndex() )
 					, node.sceneNode.getScene()->getLightCache().getBuffer()
 					, node.sceneNode.getScene()->getLightCache().getView() );
 			}
 
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
-				, matrixUbo.getUbo() );
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
+			uboDescriptorSet.createSizedBinding( layout.getBinding( MatrixUbo::BindingPoint )
+				, *matrixUbo.getUbo().buffer
+				, matrixUbo.getUbo().offset );
+			uboDescriptorSet.createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
 
 			if ( !checkFlag( node.pipeline.getFlags().programFlags, ProgramFlag::eInstantiation ) )
 			{
-				node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
+				uboDescriptorSet.createSizedBinding( layout.getBinding( ModelMatrixUbo::BindingPoint )
 					, *node.modelMatrixUbo.buffer
 					, node.modelMatrixUbo.offset
 					, 1u );
 			}
 
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
+			uboDescriptorSet.createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
 				, *node.modelUbo.buffer
 				, node.modelUbo.offset
 				, 1u );
-			node.uboDescriptorSet->createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
+			uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
 				, *node.texturesUbo.buffer
 				, node.texturesUbo.offset
 				, 1u );

@@ -225,7 +225,7 @@ namespace castor3d
 		*\param[out] descriptorSet
 		*	Reçoit les descripteurs.
 		*/
-		C3D_API virtual void initialiseDescriptorSets( MatrixUbo const & matrixUbo
+		C3D_API virtual void initialiseDescriptorSets( MatrixUbo & matrixUbo
 			, ModelMatrixUbo const & modelMatrixUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, ashes::DescriptorSet & uboDescriptorSet

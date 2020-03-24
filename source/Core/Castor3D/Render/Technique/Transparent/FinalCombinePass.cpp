@@ -139,8 +139,8 @@ namespace castor3d
 				, 0u
 				, 1u );
 			result->createBinding( layout.getBinding( hdrUboIndex )
-				, hdrConfigUbo.getUbo()
-				, 0u
+				, *hdrConfigUbo.getUbo().buffer
+				, hdrConfigUbo.getUbo().offset
 				, 1u );
 			result->update();
 			return result;

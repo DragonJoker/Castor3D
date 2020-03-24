@@ -53,7 +53,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
 		/**
 		 *\~english
@@ -76,7 +76,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit );
 		/**
@@ -100,7 +100,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SceneNode const * ignored );
 		/**
@@ -126,7 +126,7 @@ namespace castor3d
 		C3D_API RenderPass( castor::String const & category
 			, castor::String const & name
 			, Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
 			, SceneNode const * ignored );
@@ -609,7 +609,7 @@ namespace castor3d
 			return m_sceneUbo;
 		}
 
-		inline MatrixUbo const & getMatrixUbo()const
+		inline MatrixUbo & getMatrixUbo()const
 		{
 			return m_matrixUbo;
 		}
@@ -1209,7 +1209,7 @@ namespace castor3d
 
 	protected:
 		RenderSystem & m_renderSystem;
-		MatrixUbo const & m_matrixUbo;
+		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
 		castor::String m_category;
 		RenderQueue m_renderQueue;

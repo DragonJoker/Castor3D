@@ -484,16 +484,20 @@ namespace castor3d
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
-			, m_matrixUbo.getUbo() );
+			, *m_matrixUbo.getUbo().buffer
+			, m_matrixUbo.getUbo().offset );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( SceneUbo::BindingPoint )
 			, sceneUbo.getUbo() );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( GpInfoUbo::BindingPoint )
 			, m_gpInfoUbo.getUbo() );
+
 		if ( modelMatrixUbo )
 		{
 			pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( ModelMatrixUbo::BindingPoint )
-				, modelMatrixUbo->getUbo() );
+				, *modelMatrixUbo->getUbo().buffer
+				, modelMatrixUbo->getUbo().offset );
 		}
+
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
 			, *m_baseUbo );
 		pipeline.uboDescriptorSet->update();

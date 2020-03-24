@@ -26,7 +26,7 @@ using namespace castor3d;
 namespace castor3d
 {
 	DepthPass::DepthPass( String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )

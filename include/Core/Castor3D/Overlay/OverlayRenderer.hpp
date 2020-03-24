@@ -91,18 +91,24 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\brief		Begins the overlays preparation.
+		 *\brief		Updates the GPU data.
 		 *\param[in]	camera	The render window camera.
+		 *\~french
+		 *\brief		Met à jour les données GPU.
+		 *\param[in]	camera	La caméra de la fenêtre de rendu.
+		 */
+		C3D_API void update( Camera const & camera );
+		/**
+		 *\~english
+		 *\brief		Begins the overlays preparation.
 		 *\param[in]	timer	The render pass timer.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
-		 *\param[in]	camera	La caméra de la fenêtre de rendu.
 		 *\param[in]	timer	Le timer de la passe de rendu.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
-		C3D_API void beginPrepare( Camera const & camera
-			, RenderPassTimer const & timer
+		C3D_API void beginPrepare( RenderPassTimer const & timer
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english

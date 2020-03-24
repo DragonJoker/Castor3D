@@ -40,7 +40,7 @@ namespace castor3d
 	String const OpaquePass::Output4 = cuT( "c3d_output4" );
 	String const OpaquePass::Output5 = cuT( "c3d_output5" );
 
-	OpaquePass::OpaquePass( MatrixUbo const & matrixUbo
+	OpaquePass::OpaquePass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
@@ -160,8 +160,7 @@ namespace castor3d
 			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
 	}
 
-	void OpaquePass::update( RenderInfo & info
-		, castor::Point2f const & jitter )
+	void OpaquePass::update( RenderInfo & info, castor::Point2f const & jitter )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
 

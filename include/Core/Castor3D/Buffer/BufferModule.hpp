@@ -94,6 +94,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
+	CU_DeclareTemplateSmartPtr( UniformBufferPool );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;

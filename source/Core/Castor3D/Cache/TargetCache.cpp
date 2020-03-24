@@ -40,6 +40,21 @@ namespace castor3d
 		}
 	}
 
+	void RenderTargetCache::update( RenderInfo & info )
+	{
+		LockType lock{ castor::makeUniqueLock( *this ) };
+
+		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		{
+			target->update( info );
+		}
+
+		for ( auto target : m_renderTargets[size_t( TargetType::eWindow )] )
+		{
+			target->update( info );
+		}
+	}
+
 	void RenderTargetCache::render( RenderInfo & info )
 	{
 		LockType lock{ castor::makeUniqueLock( *this ) };

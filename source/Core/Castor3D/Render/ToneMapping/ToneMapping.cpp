@@ -118,8 +118,8 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
-			, m_hdrConfigUbo.getUbo().getBuffer()
-			, 0u
+			, *m_hdrConfigUbo.getUbo().buffer
+			, m_hdrConfigUbo.getUbo().offset
 			, 1u );
 	}
 }

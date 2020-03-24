@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	cascadeIndex	L'index de la cascade de cette passe.
 		 */
 		C3D_API ShadowMapPassDirectional( Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
 			, uint32_t cascadeIndex );

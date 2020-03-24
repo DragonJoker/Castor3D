@@ -293,6 +293,14 @@ namespace castor3d
 		}
 	}
 
+	void EnvironmentMap::update()
+	{
+		for ( auto & pass : m_passes )
+		{
+			pass->update();
+		}
+	}
+
 	ashes::Semaphore const & EnvironmentMap::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;

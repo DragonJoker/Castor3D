@@ -42,7 +42,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
@@ -58,7 +58,7 @@ namespace castor3d
 	}
 
 	ForwardRenderTechniquePass::ForwardRenderTechniquePass( String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, bool environment

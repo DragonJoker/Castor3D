@@ -124,14 +124,13 @@ namespace castor3d
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
-		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_gpInfoUbo.update( m_size
 			, camera
 			, invViewProj
 			, invView
 			, invProj );
-		m_opaquePass.update( info
-			, jitter );
+		m_opaquePass.getSceneUbo().update( scene, &camera );
+		m_opaquePass.update( info, jitter );
 
 		if ( m_ssaoConfig.enabled )
 		{

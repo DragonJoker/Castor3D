@@ -130,9 +130,11 @@ namespace castor3d
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet();
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo() );
+			, *m_matrixUbo.getUbo().buffer
+			, m_matrixUbo.getUbo().offset );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo() );
+			, *m_modelMatrixUbo.getUbo().buffer
+			, m_modelMatrixUbo.getUbo().offset );
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( m_engine, m_depthView );

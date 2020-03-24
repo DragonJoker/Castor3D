@@ -206,18 +206,21 @@ namespace castor3d
 		return true;
 	}
 
-	void SceneBackground::initialiseDescriptorSets( MatrixUbo const & matrixUbo
+	void SceneBackground::initialiseDescriptorSets( MatrixUbo & matrixUbo
 		, ModelMatrixUbo const & modelMatrixUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, ashes::DescriptorSet & uboDescriptorSet
 		, ashes::DescriptorSet & texDescriptorSet )const
 	{
 		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MtxUboIdx )
-			, matrixUbo.getUbo() );
+			, *matrixUbo.getUbo().buffer
+			, matrixUbo.getUbo().offset );
 		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( MdlMtxUboIdx )
-			, modelMatrixUbo.getUbo() );
+			, *modelMatrixUbo.getUbo().buffer
+			, modelMatrixUbo.getUbo().offset );
 		uboDescriptorSet.createSizedBinding( m_uboDescriptorLayout->getBinding( HdrCfgUboIdx )
-			, hdrConfigUbo.getUbo() );
+			, *hdrConfigUbo.getUbo().buffer
+			, hdrConfigUbo.getUbo().offset );
 		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
 			, m_texture->getDefaultView()
 			, m_sampler.lock()->getSampler() );

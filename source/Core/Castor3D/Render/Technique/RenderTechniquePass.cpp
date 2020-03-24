@@ -88,7 +88,7 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
@@ -104,7 +104,7 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, bool environment

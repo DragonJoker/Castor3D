@@ -40,7 +40,7 @@ namespace castor3d
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool environment
 			, SceneNode const * ignored
@@ -69,7 +69,7 @@ namespace castor3d
 		 */
 		C3D_API RenderTechniquePass( castor::String const & category
 			, castor::String const & name
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, bool oit
 			, bool environment

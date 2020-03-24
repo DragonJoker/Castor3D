@@ -13,19 +13,15 @@ namespace castor3d
 {
 	namespace
 	{
-		inline void copyBuffer( ashes::BufferBase const & src
+		inline void doCopyBuffer( ashes::BufferBase const & src
 			, ashes::BufferBase const & dst
 			, ashes::BufferBase const * ubo
 			, ashes::CommandBuffer const & commandBuffer
 			, VkDeviceSize elemAlignedSize
 			, VkDeviceSize count
 			, VkDeviceSize offset
-			, VkPipelineStageFlags flags
-			, RenderPassTimer const & timer
-			, uint32_t index )
+			, VkPipelineStageFlags flags )
 		{
-			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			timer.beginPass( commandBuffer, index );
 			auto srcSrcStage = src.getCompatibleStageFlags();
 			commandBuffer.memoryBarrier( srcSrcStage
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -66,8 +62,51 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_HOST_BIT
 					, dst.makeHostRead() );
 			}
+		}
 
+		inline void copyBuffer( ashes::BufferBase const & src
+			, ashes::BufferBase const & dst
+			, ashes::BufferBase const * ubo
+			, ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize elemAlignedSize
+			, VkDeviceSize count
+			, VkDeviceSize offset
+			, VkPipelineStageFlags flags
+			, RenderPassTimer const & timer
+			, uint32_t index )
+		{
+			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			timer.beginPass( commandBuffer, index );
+			doCopyBuffer( src
+				, dst
+				, ubo
+				, commandBuffer
+				, elemAlignedSize
+				, count
+				, offset
+				, flags );
 			timer.endPass( commandBuffer, index );
+			commandBuffer.end();
+		}
+
+		inline void copyBuffer( ashes::BufferBase const & src
+			, ashes::BufferBase const & dst
+			, ashes::BufferBase const * ubo
+			, ashes::CommandBuffer const & commandBuffer
+			, VkDeviceSize elemAlignedSize
+			, VkDeviceSize count
+			, VkDeviceSize offset
+			, VkPipelineStageFlags flags )
+		{
+			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			doCopyBuffer( src
+				, dst
+				, ubo
+				, commandBuffer
+				, elemAlignedSize
+				, count
+				, offset
+				, flags );
 			commandBuffer.end();
 		}
 	}
@@ -142,6 +181,68 @@ namespace castor3d
 	void UniformBufferBase::deallocate( uint32_t offset )
 	{
 		m_available.insert( offset );
+	}
+
+	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
+		, ashes::Queue const & queue
+		, ashes::CommandPool const & commandPool
+		, const void * data
+		, size_t size
+		, uint32_t offset
+		, VkPipelineStageFlags flags )const
+	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		upload( stagingBuffer
+			, *commandBuffer
+			, data
+			, size
+			, offset
+			, flags );
+		queue.submit( *commandBuffer
+			, m_transferFence.get() );
+		m_transferFence->wait( ashes::MaxTimeout );
+		m_transferFence->reset();
+	}
+
+	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer
+		, ashes::CommandBuffer const & commandBuffer
+		, const void * data
+		, size_t size
+		, uint32_t offset
+		, VkPipelineStageFlags flags )const
+	{
+		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
+		auto src = reinterpret_cast< const uint8_t * >( data );
+		CU_Require( ( size % m_elemSize ) == 0 );
+		auto count = size / m_elemSize;
+		CU_Require( count <= m_elemCount - offset );
+
+		if ( auto dest = stagingBuffer.lock( 0u
+			, count * elemAlignedSize
+			, 0u ) )
+		{
+			auto dst = dest;
+
+			for ( uint32_t i = 0u; i < count; ++i )
+			{
+				std::memcpy( dst, src, m_elemSize );
+				src += m_elemSize;
+				dst += elemAlignedSize;
+			}
+
+			stagingBuffer.flush( 0u, count * elemAlignedSize );
+			stagingBuffer.unlock();
+		}
+
+		copyBuffer( stagingBuffer
+			, getBuffer().getBuffer()
+			, &getBuffer().getBuffer()
+			, commandBuffer
+			, elemAlignedSize
+			, count
+			, offset
+			, flags );
 	}
 
 	void UniformBufferBase::upload( ashes::BufferBase const & stagingBuffer

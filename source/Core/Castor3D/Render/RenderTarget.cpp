@@ -383,6 +383,13 @@ namespace castor3d
 		m_culler->compute();
 	}
 
+	void RenderTarget::update( RenderInfo & info )
+	{
+		m_toneMapping->update();
+		m_renderTechnique->update( m_jitter, info );
+		m_overlayRenderer->update( *getCamera() );
+	}
+
 	void RenderTarget::render( RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
@@ -826,7 +833,6 @@ namespace castor3d
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
-		m_toneMapping->update();
 		ashes::SemaphoreCRefArray signalsToWait;
 		
 		if ( m_type == TargetType::eWindow )
@@ -835,8 +841,7 @@ namespace castor3d
 		}
 
 		// Render the scene through the RenderTechnique.
-		m_signalFinished = &m_renderTechnique->render( m_jitter
-			, signalsToWait
+		m_signalFinished = &m_renderTechnique->render( signalsToWait
 			, info );
 
 		// Draw HDR post effects.
@@ -857,7 +862,7 @@ namespace castor3d
 			, elapsedTime );
 
 		// And now render overlays.
-		m_signalFinished = &doRenderOverlays( *m_signalFinished, *camera );
+		m_signalFinished = &doRenderOverlays( *m_signalFinished );
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
@@ -929,16 +934,14 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait
-		, Camera const & camera )
+	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		auto timerBlock = m_overlaysTimer->start();
 		{
 			using LockType = std::unique_lock< OverlayCache >;
 			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
-			m_overlayRenderer->beginPrepare( camera
-				, *m_overlaysTimer
+			m_overlayRenderer->beginPrepare( *m_overlaysTimer
 				, *result );
 			auto preparer = m_overlayRenderer->getPreparer();
 

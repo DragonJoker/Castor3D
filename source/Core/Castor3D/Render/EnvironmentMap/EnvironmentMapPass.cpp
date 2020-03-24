@@ -182,15 +182,19 @@ namespace castor3d
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}
 
-	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
+	void EnvironmentMapPass::update()
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
 		m_matrixUbo.update( m_camera->getView()
 			, m_camera->getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
+	}
+
+	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
+	{
+		auto & device = getCurrentRenderDevice( *getOwner() );
 		ashes::Semaphore const * result = &toWait;
 
 		m_commandBuffer->begin();

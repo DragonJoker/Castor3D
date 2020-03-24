@@ -17,7 +17,7 @@ using namespace castor;
 namespace castor3d
 {
 	ShadowMapPass::ShadowMapPass( Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
 		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine, matrixUbo, culler }

@@ -74,6 +74,13 @@ namespace castor3d
 		C3D_API void update( RenderQueueArray & queues );
 		/**
 		 *\~english
+		 *\brief		Updates the GPU data.
+		 *\~french
+		 *\brief		Met à jour les données GPU.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
 		 *\brief		Renders the environment map.
 		 *\~french
 		 *\brief		Dessine la texture d'environnement.

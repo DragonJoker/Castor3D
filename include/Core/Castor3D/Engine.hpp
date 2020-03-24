@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Engine_H___
 
 #include "Castor3D/Castor3DModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
@@ -13,9 +14,11 @@ See LICENSE file in root folder
 #include "Castor3D/Plugin/PluginModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/Version.hpp"
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 
 #include <CastorUtils/Design/Unique.hpp>
 #include <CastorUtils/FileParser/AttributeParsersBySection.hpp>
@@ -204,6 +207,13 @@ namespace castor3d
 			, castor::Position const & position
 			, castor::Size const & size
 			, TextureLayout const & texture );
+		/**
+		 *\~english
+		 *\brief		Transfers UBO pools data to VRAM.
+		 *\~french
+		 *\brief		Transfère en VRAM les données des pools d'UBO.
+		 */
+		C3D_API void uploadUbos();
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
@@ -413,6 +423,21 @@ namespace castor3d
 		{
 			return *m_logger;
 		}
+
+		inline UniformBufferPool< MatrixUboConfiguration > & getMatrixUboPool()
+		{
+			return *m_matrixUboPool;
+		}
+
+		inline UniformBufferPool< HdrConfig > & getHdrConfigUboPool()
+		{
+			return *m_hdrConfigUboPool;
+		}
+
+		inline UniformBufferPool< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
+		{
+			return *m_modelMatrixUboPool;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -484,6 +509,9 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
+		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
+		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
+		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
 	};
 }
 

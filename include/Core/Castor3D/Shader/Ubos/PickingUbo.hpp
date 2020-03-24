@@ -13,67 +13,7 @@ namespace castor3d
 	class PickingUbo
 	{
 	public:
-		struct Configuration
-		{
-			uint32_t drawIndex;
-			uint32_t nodeIndex;
-		};
-
-	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API PickingUbo( PickingUbo const & ) = delete;
-		C3D_API PickingUbo & operator=( PickingUbo const & ) = delete;
-		C3D_API PickingUbo( PickingUbo && ) = default;
-		C3D_API PickingUbo & operator=( PickingUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		C3D_API explicit PickingUbo( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~PickingUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 */
-		C3D_API void initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	drawIndex	The draw call index.
-		 *\param[in]	nodeIndex	The node index.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	drawIndex	L'indice de la fonction de dessin.
-		 *\param[in]	nodeIndex	L'indice du noeud.
-		 */
-		C3D_API void update( uint32_t drawIndex
-			, uint32_t nodeIndex )const;
+		using Configuration = PickingUboConfiguration;
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -87,23 +27,6 @@ namespace castor3d
 		C3D_API static void update( Configuration & configuration
 			, uint32_t drawIndex
 			, uint32_t nodeIndex );
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		/**@{*/
-		inline UniformBuffer< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
-
-		inline UniformBuffer< Configuration > const & getUbo()const
-		{
-			return *m_ubo;
-		}
-		/**@}*/
 
 	public:
 		C3D_API static const uint32_t BindingPoint;

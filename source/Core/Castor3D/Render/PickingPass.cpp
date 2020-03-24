@@ -258,7 +258,7 @@ namespace castor3d
 	uint32_t const PickingPass::UboBindingPoint = 7u;
 
 	PickingPass::PickingPass( Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler )
 		: RenderPass{ cuT( "Picking" )
 			, cuT( "Picking" )

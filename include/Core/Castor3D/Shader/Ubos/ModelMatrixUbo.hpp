@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -15,13 +15,7 @@ namespace castor3d
 	class ModelMatrixUbo
 	{
 	public:
-		struct Configuration
-		{
-			castor::Matrix4x4f prvModel;
-			castor::Matrix4x4f prvNormal;
-			castor::Matrix4x4f curModel;
-			castor::Matrix4x4f curNormal;
-		};
+		using Configuration = ModelMatrixUboConfiguration;
 
 	public:
 		/**
@@ -74,7 +68,7 @@ namespace castor3d
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	model	La nouvelle matrice modèle.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & model )const;
+		C3D_API void update( castor::Matrix4x4f const & model );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -86,21 +80,21 @@ namespace castor3d
 		 *\param[in]	normal	La nouvelle matrice normale.
 		 */
 		C3D_API void update( castor::Matrix4x4f const & model
-			, castor::Matrix3x3f const & normal )const;
+			, castor::Matrix3x3f const & normal );
 		/**
 		 *\~english
 		 *\name			getters.
 		 *\~french
 		 *\name			getters.
 		 */
-		inline UniformBuffer< Configuration > & getUbo()
+		inline UniformBufferOffset< Configuration > & getUbo()
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		inline UniformBufferOffset< Configuration > const & getUbo()const
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 		/**@}*/
 
@@ -114,7 +108,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferOffset< Configuration > m_ubo;
 	};
 }
 

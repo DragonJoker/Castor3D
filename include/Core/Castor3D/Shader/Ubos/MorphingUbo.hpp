@@ -6,87 +6,12 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
-
 namespace castor3d
 {
 	class MorphingUbo
 	{
 	public:
-		struct Configuration
-		{
-			float time;
-		};
-
-	public:
-		/**
-		 *\~english
-		 *\name			Copy/Move construction/assignment operation.
-		 *\~french
-		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
-		 */
-		/**@{*/
-		C3D_API MorphingUbo( MorphingUbo const & ) = delete;
-		C3D_API MorphingUbo & operator=( MorphingUbo const & ) = delete;
-		C3D_API MorphingUbo( MorphingUbo && ) = default;
-		C3D_API MorphingUbo & operator=( MorphingUbo && ) = delete;
-		/**@}*/
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 */
-		C3D_API explicit MorphingUbo( Engine & engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~MorphingUbo();
-		/**
-		 *\~english
-		 *\brief		Initialises the UBO.
-		 *\~french
-		 *\brief		Initialise l'UBO.
-		 */
-		C3D_API void initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanup function.
-		 *\~french
-		 *\brief		Fonction de nettoyage.
-		 */
-		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	time	The current time index.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	time	L'indice de temps courant.
-		 */
-		C3D_API void update( float time )const;
-		/**
-		 *\~english
-		 *\name			getters.
-		 *\~french
-		 *\name			getters.
-		 */
-		/**@{*/
-		inline UniformBuffer< Configuration > & getUbo()
-		{
-			return *m_ubo;
-		}
-
-		inline UniformBuffer< Configuration > const & getUbo()const
-		{
-			return *m_ubo;
-		}
-		/**@}*/
+		using Configuration = MorphingUboConfiguration;
 
 	public:
 		C3D_API static uint32_t const BindingPoint;
@@ -96,10 +21,6 @@ namespace castor3d
 		//!\~english	Name of the morphing time attribute.
 		//!\~french		Nom de l'attribut du temps d'animation par sommet.
 		C3D_API static castor::String const Time;
-
-	private:
-		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
 	};
 }
 

@@ -966,7 +966,8 @@ namespace castor3d
 			result->createSizedBinding( layout.getBinding( GpInfoUbo::BindingPoint )
 				, gpInfoUbo.getUbo() );
 			result->createSizedBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
-				, hdrConfigUbo.getUbo() );
+				, *hdrConfigUbo.getUbo().buffer
+				, hdrConfigUbo.getUbo().offset );
 			result->update();
 			return result;
 		}

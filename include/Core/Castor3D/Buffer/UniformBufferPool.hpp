@@ -13,13 +13,14 @@ namespace castor3d
 	template< typename T >
 	struct UniformBufferOffset
 	{
-		UniformBuffer< T > * buffer;
-		VkMemoryPropertyFlags flags;
-		uint32_t offset;
+		UniformBuffer< T > * buffer{ nullptr };
+		VkMemoryPropertyFlags flags{ 0u };
+		uint32_t offset{ 0u };
 
 		explicit operator bool()const
 		{
-			return buffer->hasBuffer();
+			return buffer
+				&& buffer->hasBuffer();
 		}
 
 		T const & getData()const
@@ -30,6 +31,11 @@ namespace castor3d
 		T & getData()
 		{
 			return buffer->getData( offset );
+		}
+
+		uint32_t getAlignedSize()const
+		{
+			return buffer->getAlignedSize();
 		}
 	};
 
@@ -67,6 +73,13 @@ namespace castor3d
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
 		void cleanup();
+		/**
+		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 */
+		void upload()const;
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.

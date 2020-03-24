@@ -29,7 +29,7 @@ namespace castor3d
 	String const ShadowMapPassDirectional::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )

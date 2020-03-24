@@ -76,7 +76,7 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	TransparentPass::TransparentPass( MatrixUbo const & matrixUbo
+	TransparentPass::TransparentPass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ "Transparent"
