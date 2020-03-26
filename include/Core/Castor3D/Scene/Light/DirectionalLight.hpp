@@ -10,17 +10,28 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct DirectionalLightCascade
+	{
+		castor::Matrix4x4f viewMatrix;
+		castor::Matrix4x4f projMatrix;
+		castor::Matrix4x4f viewProjMatrix;
+		float splitDepth;
+	};
+
+	C3D_API bool operator==( DirectionalLightCascade const & lhs
+		, DirectionalLightCascade  const & rhs );
+
+	inline bool operator!=( DirectionalLightCascade const & lhs
+		, DirectionalLightCascade  const & rhs )
+	{
+		return !( lhs == rhs );
+	}
+
 	class DirectionalLight
 		: public LightCategory
 	{
 	public:
-		struct Cascade
-		{
-			castor::Matrix4x4f viewMatrix;
-			castor::Matrix4x4f projMatrix;
-			castor::Matrix4x4f viewProjMatrix;
-			float splitDepth;
-		};
+		using Cascade = DirectionalLightCascade;
 		/**
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
@@ -102,14 +113,16 @@ namespace castor3d
 		 *\param[in]	lightCamera		The light camera.
 		 *\param[in]	cascadeIndex	The cascade to update.
 		 *\param[in]	minCastersZ		The minimal Z of shadow casters.
+		 *\return		\p false if nothing changed.
 		 *\~french
 		 *\brief		Met à jour les information de shadow cascades.
 		 *\param[in]	sceneCamera		La caméra de la scène.
 		 *\param[in]	lightCamera		La caméra de la lumière.
 		 *\param[in]	cascadeIndex	L'index de la cascade à mettre à jour.
 		 *\param[in]	minCastersZ		Le Z minimal des shadow casters.
+		 *\return		\p false si rien n'a changé.
 		 */
-		C3D_API void updateShadow( Camera const & sceneCamera
+		C3D_API bool updateShadow( Camera const & sceneCamera
 			, Camera & lightCamera
 			, int32_t cascadeIndex
 			, float minCastersZ );
@@ -158,6 +171,7 @@ namespace castor3d
 	private:
 		castor::Point3f m_direction;
 		std::vector< Cascade > m_cascades;
+		std::vector< Cascade > m_prvCascades;
 	};
 }
 

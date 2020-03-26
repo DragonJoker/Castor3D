@@ -91,30 +91,6 @@ namespace castor3d
 			}
 		}
 
-		void doPrepareShadowMaps( LightCache const & cache
-			, LightType type
-			, Camera const & camera
-			, RenderTechnique::ShadowMapArray & shadowMaps
-			, ShadowMapLightTypeArray & activeShadowMaps
-			, RenderQueueArray & queues )
-		{
-			auto lights = doSortLights( cache, type, camera );
-			size_t count = std::min( shadowMaps.size(), lights.size() );
-			auto it = lights.begin();
-
-			for ( auto i = 0u; i < count; ++i )
-			{
-				auto & shadowMap = *shadowMaps[i];
-				it->second->setShadowMap( &shadowMap );
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), 0u );
-				shadowMap.update( camera
-					, queues
-					, *( it->second )
-					, i );
-				++it;
-			}
-		}
-
 		TextureLayoutSPtr doCreateTexture( Engine & engine
 			, Size const & size
 			, VkFormat format

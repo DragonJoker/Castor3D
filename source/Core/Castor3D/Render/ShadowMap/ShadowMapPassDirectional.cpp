@@ -48,12 +48,18 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto & myCamera = getCuller().getCamera();
-		light.getDirectionalLight()->updateShadow( camera
+
+		if ( light.getDirectionalLight()->updateShadow( camera
 			, myCamera
 			, index
-			, getCuller().getMinCastersZ() );
-		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
-		doUpdate( queues );
+			, getCuller().getMinCastersZ() ) )
+		{
+			m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
+			auto & myCamera = getCuller().getCamera();
+			m_matrixUbo.update( myCamera.getView()
+				, myCamera.getProjection() );
+			doUpdate( queues );
+		}
 	}
 
 	void ShadowMapPassDirectional::updateDeviceDependent( uint32_t index )
@@ -68,9 +74,6 @@ namespace castor3d
 				m_shadowConfig->upload();
 			}
 
-			auto & myCamera = getCuller().getCamera();
-			m_matrixUbo.update( myCamera.getView()
-				, myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}

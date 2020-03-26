@@ -125,6 +125,16 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	bool operator==( DirectionalLightCascade const & lhs
+		, DirectionalLightCascade  const & rhs )
+	{
+		return lhs.viewMatrix == rhs.viewMatrix
+			&& lhs.projMatrix == rhs.projMatrix
+			&& lhs.splitDepth == rhs.splitDepth;
+	}
+
+	//*************************************************************************************************
+
 	DirectionalLight::TextWriter::TextWriter( String const & tabs
 		, DirectionalLight const * category )
 		: LightCategory::TextWriter{ tabs }
@@ -155,6 +165,7 @@ namespace castor3d
 	DirectionalLight::DirectionalLight( Light & light )
 		: LightCategory{ LightType::eDirectional, light }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
+		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
 	{
 	}
 
@@ -171,11 +182,13 @@ namespace castor3d
 	{
 	}
 
-	void DirectionalLight::updateShadow( Camera const & viewCamera
+	bool DirectionalLight::updateShadow( Camera const & viewCamera
 		, Camera & lightCamera
 		, int32_t cascadeIndex
 		, float minCastersZ )
 	{
+		bool result = false;
+
 		if ( size_t( cascadeIndex ) < m_cascades.size() )
 		{
 			if ( !cascadeIndex )
@@ -187,13 +200,26 @@ namespace castor3d
 			}
 
 			auto & cascade = m_cascades[cascadeIndex];
-			auto node = getLight().getParent();
-			node->update();
-			lightCamera.attachTo( *node );
-			lightCamera.setProjection( cascade.projMatrix );
-			lightCamera.setView( cascade.viewMatrix );
-			lightCamera.updateFrustum();
+			auto & prvCascade = m_prvCascades[cascadeIndex];
+
+			if ( cascade != prvCascade )
+			{
+				auto node = getLight().getParent();
+				node->update();
+				lightCamera.attachTo( *node );
+				lightCamera.setProjection( cascade.projMatrix );
+				lightCamera.setView( cascade.viewMatrix );
+				lightCamera.updateFrustum();
+				result = true;
+
+				if ( !cascadeIndex )
+				{
+					m_prvCascades = m_cascades;
+				}
+			}
 		}
+
+		return result;
 	}
 
 	void DirectionalLight::updateNode( SceneNode const & node )
