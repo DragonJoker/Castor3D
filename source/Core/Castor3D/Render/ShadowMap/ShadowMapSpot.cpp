@@ -170,6 +170,7 @@ namespace castor3d
 	ShadowMapSpot::ShadowMapSpot( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
+			, cuT( "ShadowMapSpot" )
 			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
 			, createPasses( engine, scene, *this )
@@ -188,48 +189,6 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_passes[index].pass->update( camera, queues, light, index );
-	}
-
-	ashes::Semaphore const & ShadowMapSpot::render( ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-		auto & pass = m_passes[index];
-		auto & commandBuffer = *m_passesData[index].commandBuffer;
-		auto & frameBuffer = *m_passesData[index].frameBuffer;
-		auto & finished = *m_passesData[index].finished;
-		auto & blur = *m_passesData[index].blur;
-
-		pass.pass->updateDeviceDependent();
-		auto & timer = pass.pass->getTimer();
-		auto timerBlock = timer.start();
-
-		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		timer.notifyPassRender();
-		timer.beginPass( commandBuffer );
-		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
-			, frameBuffer
-			, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-		commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
-		commandBuffer.endRenderPass();
-		timer.endPass( commandBuffer );
-		commandBuffer.end();
-
-		auto & device = getCurrentRenderDevice( *getEngine() );
-		auto * result = &toWait;
-		device.graphicsQueue->submit( commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, finished
-			, nullptr );
-		result = &finished;
-
-		if ( static_cast< ShadowMapPassSpot const & >( *pass.pass ).getShadowType() == ShadowType::eVariance )
-		{
-			result = &blur.blur( *result );
-		}
-
-		return *result;
 	}
 
 	void ShadowMapSpot::debugDisplay( ashes::RenderPass const & renderPass
@@ -337,6 +296,61 @@ namespace castor3d
 	void ShadowMapSpot::doCleanup()
 	{
 		m_passesData.clear();
+	}
+
+	ashes::Semaphore const & ShadowMapSpot::doRender( ashes::Semaphore const & toWait
+		, uint32_t index )
+	{
+		auto & pass = m_passes[index];
+		auto & commandBuffer = *m_passesData[index].commandBuffer;
+		auto & frameBuffer = *m_passesData[index].frameBuffer;
+		auto & finished = *m_passesData[index].finished;
+		auto & blur = *m_passesData[index].blur;
+
+		auto & timer = pass.pass->getTimer();
+		auto timerBlock = timer.start();
+
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		auto col = index / ( ( shader::getSpotShadowMapCount() - 1u ) * 2.0f );
+		commandBuffer.beginDebugBlock(
+			{
+				"ShadowMapSpot index ",
+				{ col, col, 0.8f, 1.0f },
+			} );
+		timer.notifyPassRender();
+		timer.beginPass( commandBuffer );
+		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
+			, frameBuffer
+			, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+		commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
+		commandBuffer.endRenderPass();
+		timer.endPass( commandBuffer );
+		commandBuffer.endDebugBlock();
+		commandBuffer.end();
+
+		pass.pass->setUpToDate();
+
+		auto & device = getCurrentRenderDevice( *getEngine() );
+		auto * result = &toWait;
+		device.graphicsQueue->submit( commandBuffer
+			, *result
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, finished
+			, nullptr );
+		result = &finished;
+
+		if ( static_cast< ShadowMapPassSpot const & >( *pass.pass ).getShadowType() == ShadowType::eVariance )
+		{
+			result = &blur.blur( *result );
+		}
+
+		return *result;
+	}
+
+	bool ShadowMapSpot::isUpToDate( uint32_t index )const
+	{
+		return m_passes[index].pass->isUpToDate();
 	}
 
 	void ShadowMapSpot::doUpdateFlags( PipelineFlags & flags )const
@@ -450,7 +464,7 @@ namespace castor3d
 			vertexPosition = mtxModel * vertexPosition;
 			vertexPosition = c3d_curView * vertexPosition;
 			vtx_viewPosition = vertexPosition.xyz();
-			out.gl_out.gl_Position = c3d_projection * vertexPosition;
+			out.vtx.position = c3d_projection * vertexPosition;
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
@@ -518,8 +532,8 @@ namespace castor3d
 					, alphaRef );
 
 				auto depth = writer.declLocale( cuT( "depth" )
-					, in.gl_FragCoord.z() );
-				pxl_linear = in.gl_FragCoord.z();
+					, in.fragCoord.z() );
+				pxl_linear = in.fragCoord.z();
 				pxl_variance.x() = depth;
 				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
 

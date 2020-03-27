@@ -748,7 +748,7 @@ namespace castor3d
 						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
 					}
 
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

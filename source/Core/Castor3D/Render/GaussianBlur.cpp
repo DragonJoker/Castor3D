@@ -38,7 +38,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -79,7 +79,7 @@ namespace castor3d
 
 					if ( isDepth )
 					{
-						out.gl_FragDepth = pxl_fragColor.r();
+						out.fragDepth = pxl_fragColor.r();
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -122,7 +122,7 @@ namespace castor3d
 
 				if ( isDepth )
 				{
-					out.gl_FragDepth = pxl_fragColor.r();
+					out.fragDepth = pxl_fragColor.r();
 				}
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -163,7 +163,7 @@ namespace castor3d
 
 				if ( isDepth )
 				{
-					out.gl_FragDepth = pxl_fragColor.r();
+					out.fragDepth = pxl_fragColor.r();
 				}
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -452,12 +452,18 @@ namespace castor3d
 	{
 		auto result = device.graphicsCommandPool->createCommandBuffer();
 		result->begin();
+		result->beginDebugBlock(
+			{
+				"GaussianBlur Blur pass",
+				{ 0.5f, 0.5f, 1.0f, 1.0f },
+			} );
 		result->beginRenderPass( renderPass
 			, *fbo
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		result->executeCommands( { quad.getCommandBuffer() } );
 		result->endRenderPass();
+		result->endDebugBlock();
 		result->end();
 		return result;
 	}

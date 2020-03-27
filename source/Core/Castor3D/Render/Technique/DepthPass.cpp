@@ -255,7 +255,7 @@ namespace castor3d
 				//  code)
 				curPosition.xy() -= c3d_jitter * curPosition.w();
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
-				out.gl_out.gl_Position = curPosition;
+				out.vtx.position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();

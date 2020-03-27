@@ -59,7 +59,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -345,7 +345,7 @@ namespace castor3d
 				{
 					// Pixel being shaded
 					auto ssCenter = writer.declLocale( "ssCenter"
-						, ivec2( in.gl_FragCoord.xy() ) );
+						, ivec2( in.fragCoord.xy() ) );
 
 					// World space point being shaded
 					// SDO: World, or Camera space ? (getPosition returns Camera space)
@@ -358,7 +358,7 @@ namespace castor3d
 
 					if ( config.useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ivec2( in.gl_FragCoord.xy() ), 0_i ).xyz();
+						normal = texelFetch( c3d_mapNormal, ivec2( in.fragCoord.xy() ), 0_i ).xyz();
 						//normal = ( c3d_viewMatrix * vec4( normal, 1.0_f ) ).xyz();
 						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst, c3d_readAddSecond ) );
 					}

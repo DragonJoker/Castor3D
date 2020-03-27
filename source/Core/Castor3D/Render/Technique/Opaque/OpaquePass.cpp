@@ -411,7 +411,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
+			vtx_instance = writer.cast< UInt >( in.instanceID );
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
@@ -425,7 +425,7 @@ namespace castor3d
 			//  code)
 			curPosition.xy() -= c3d_jitter * curPosition.w();
 			prvPosition.xy() -= c3d_jitter * prvPosition.w();
-			out.gl_out.gl_Position = curPosition;
+			out.vtx.position = curPosition;
 
 			vtx_curPosition = curPosition.xyw();
 			vtx_prvPosition = prvPosition.xyw();

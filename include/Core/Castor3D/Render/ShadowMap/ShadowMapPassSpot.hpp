@@ -42,7 +42,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		void update( Camera const & camera
+		bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;

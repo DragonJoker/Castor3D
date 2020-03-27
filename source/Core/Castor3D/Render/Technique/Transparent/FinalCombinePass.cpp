@@ -203,7 +203,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -246,7 +246,7 @@ namespace castor3d
 				, [&]()
 				{
 					auto coord = writer.declLocale( cuT( "coord" )
-						, ivec2( in.gl_FragCoord.xy() ) );
+						, ivec2( in.fragCoord.xy() ) );
 					auto revealage = writer.declLocale( cuT( "revealage" )
 						, texelFetch( c3d_mapRevealage, coord, 0_i ).r() );
 
@@ -275,7 +275,7 @@ namespace castor3d
 					if ( fogType != FogType::eDisabled )
 					{
 						auto texCoord = writer.declLocale( cuT( "texCoord" )
-							, in.gl_FragCoord.xy() );
+							, in.fragCoord.xy() );
 						auto position = writer.declLocale( cuT( "position" )
 							, utils.calcVSPosition( texCoord
 								, texture( c3d_mapDepth, texCoord ).r()

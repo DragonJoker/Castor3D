@@ -15,7 +15,6 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
-#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -179,12 +178,14 @@ namespace castor3d
 			ashes::GraphicsPipelinePtr pipeline;
 		};
 
+	public:
 		struct OverlayRenderNode
 		{
 			Pipeline & pipeline;
 			Pass const & pass;
 		};
 
+	private:
 		struct OverlayGeometryBuffers
 		{
 			GeometryBuffers noTexture;
@@ -243,6 +244,9 @@ namespace castor3d
 		OverlayRenderNode & doGetTextNode( Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
+		Pipeline doCreatePipeline( Pass const & pass
+			, ashes::PipelineShaderStageCreateInfoArray program
+			, bool text );
 		Pipeline & doGetPipeline( Pass const & pass
 			, std::map< uint32_t, Pipeline > & pipelines
 			, bool text );
@@ -265,46 +269,6 @@ namespace castor3d
 			, TextureLayout const & texture
 			, Sampler const & sampler );
 		void doCreateRenderPass();
-
-		template< typename VertexBufferIndexT, typename VertexBufferPoolT >
-		VertexBufferIndexT & doGetVertexBuffer( std::vector< std::unique_ptr< VertexBufferPoolT > > & pools
-			, std::map< size_t, VertexBufferIndexT > & overlays
-			, Overlay const & overlay
-			, Pass const & pass
-			, OverlayRenderNode & node
-			, RenderDevice const & device
-			, ashes::PipelineVertexInputStateCreateInfo const & layout
-			, uint32_t maxCount )
-		{
-			auto hash = std::hash< Overlay const * >{}( &overlay );
-			hash = castor::hashCombine( hash, pass );
-			auto it = overlays.find( hash );
-
-			if ( it == overlays.end() )
-			{
-				for ( auto & pool : pools )
-				{
-					if ( it == overlays.end() )
-					{
-						auto result = pool->allocate( node );
-
-						if ( bool( result ) )
-						{
-							it = overlays.emplace( hash, std::move( result ) ).first;
-						}
-					}
-				}
-
-				if ( it == overlays.end() )
-				{
-					pools.emplace_back( std::make_unique< VertexBufferPoolT >( device, layout, maxCount ) );
-					auto result = pools.back()->allocate( node );
-					it = overlays.emplace( hash, std::move( result ) ).first;
-				}
-			}
-
-			return it->second;
-		}
 
 	private:
 		ashes::ImageView const & m_target;

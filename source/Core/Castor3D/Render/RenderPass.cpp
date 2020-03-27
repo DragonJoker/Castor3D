@@ -1428,8 +1428,8 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
-			out.gl_out.gl_Position = c3d_projection * v4Vertex;
+			vtx_instance = writer.cast< UInt >( in.instanceID );
+			out.vtx.position = c3d_projection * v4Vertex;
 
 			auto tbn = writer.declLocale( cuT( "tbn" )
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
@@ -1534,7 +1534,7 @@ namespace castor3d
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
 
 				vtx_texture = vec3( uv, 0.0_f );
-				vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
+				vtx_instance = writer.cast< UInt >( in.instanceID );
 				auto curPosition = writer.declLocale( cuT( "curPosition" )
 					, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );
 				prvPosition = c3d_prvView * vec4( prvPosition );
@@ -1553,7 +1553,7 @@ namespace castor3d
 				//  code)
 				curPosition.xy() -= c3d_jitter * curPosition.w();
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
-				out.gl_out.gl_Position = curPosition;
+				out.vtx.position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();

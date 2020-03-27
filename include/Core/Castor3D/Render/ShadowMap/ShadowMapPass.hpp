@@ -23,18 +23,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	name		The pass name.
 		 *\param[in]	engine		The engine.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	name		Le nom de la passe.
 		 *\param[in]	engine		Le moteur.
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
-		C3D_API ShadowMapPass( Engine & engine
+		C3D_API ShadowMapPass( castor::String name
+			, Engine & engine
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
@@ -53,6 +56,7 @@ namespace castor3d
 		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\param[out]	light	The light source.
 		 *\param[out]	index	The pass index.
+		 *\return		\p true if the pass has changed.
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
@@ -60,8 +64,9 @@ namespace castor3d
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 *\param[out]	light	La source lumineuse.
 		 *\param[out]	index	L'indice de la passe.
+		 *\return		\p true si la passe a changé.
 		 */
-		C3D_API virtual void update( Camera const & camera
+		C3D_API virtual bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
 			, uint32_t index ) = 0;
@@ -78,6 +83,16 @@ namespace castor3d
 		inline RenderPassTimer & getTimer()
 		{
 			return *m_timer;
+		}
+
+		inline bool isUpToDate()const
+		{
+			return !m_outOfDate;
+		}
+
+		inline void setUpToDate()
+		{
+			m_outOfDate = false;
 		}
 
 	protected:
@@ -142,6 +157,7 @@ namespace castor3d
 	protected:
 		ShadowMap const & m_shadowMap;
 		mutable bool m_initialised{ false };
+		bool m_outOfDate{ true };
 	};
 }
 

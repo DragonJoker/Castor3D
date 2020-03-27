@@ -44,11 +44,6 @@ namespace castor3d
 			, Light & light
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::render
-		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait
-			, uint32_t index )override;
-		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
 		void debugDisplay( ashes::RenderPass const & renderPass
@@ -71,6 +66,11 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::ShadowMap::doRender
+		 */
+		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+			, uint32_t index )override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
@@ -82,6 +82,10 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::isUpToDate
+		 */
+		bool isUpToDate( uint32_t index )const override;
 
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;

@@ -544,7 +544,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
+			vtx_instance = writer.cast< UInt >( in.instanceID );
 			prvPosition = c3d_projection * prvPosition;
 			curPosition = c3d_projection * curPosition;
 
@@ -559,7 +559,7 @@ namespace castor3d
 			//  code)
 			curPosition.xy() -= c3d_jitter * curPosition.w();
 			prvPosition.xy() -= c3d_jitter * prvPosition.w();
-			out.gl_out.gl_Position = curPosition;
+			out.vtx.position = curPosition;
 
 			vtx_curPosition = curPosition.xyw();
 			vtx_prvPosition = prvPosition.xyw();
@@ -719,7 +719,7 @@ namespace castor3d
 			lighting->computeCombined( worldEye
 				, shininess
 				, c3d_shadowReceiver
-				, shader::FragmentInput( in.gl_FragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+				, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			auto ambient = writer.declLocale( cuT( "ambient" )
@@ -955,7 +955,7 @@ namespace castor3d
 				, metallic
 				, roughness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( in.gl_FragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+				, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			if ( checkFlag( flags.textures, TextureFlag::eReflection )
@@ -1239,7 +1239,7 @@ namespace castor3d
 				, specular
 				, glossiness
 				, c3d_shadowReceiver
-				, shader::FragmentInput( in.gl_FragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+				, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 				, output );
 
 			if ( checkFlag( flags.textures, TextureFlag::eReflection )

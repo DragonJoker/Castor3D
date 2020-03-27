@@ -29,6 +29,8 @@
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 
+#include <algorithm>
+
 using namespace castor;
 using namespace castor3d;
 
@@ -165,6 +167,7 @@ namespace castor3d
 	ShadowMapPoint::ShadowMapPoint( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
+			, cuT( "ShadowMapPoint" )
 			, doInitialiseVariance( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassPoint::TextureSize, ShadowMapPassPoint::TextureSize } )
 			, createPasses( engine, scene, *this )
@@ -189,56 +192,6 @@ namespace castor3d
 			auto & pass = m_passes[face];
 			pass.pass->update( camera, queues, light, index );
 		}
-	}
-
-	ashes::Semaphore const & ShadowMapPoint::render( ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-		static float constexpr component = std::numeric_limits< float >::max();
-		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
-		auto & myTimer = m_passes[0].pass->getTimer();
-		auto timerBlock = myTimer.start();
-		auto * result = &toWait;
-		auto offset = index * 6u;
-
-		for ( size_t face = offset; face < offset + 6u; ++face )
-		{
-			m_passes[face].pass->updateDeviceDependent( uint32_t( face - offset ) );
-		}
-
-		auto & commandBuffer = *m_passesData[index].commandBuffer;
-		auto & finished = *m_passesData[index].finished;
-		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-
-		for ( size_t face = 0u; face < 6u; ++face )
-		{
-			auto & pass = m_passes[face + ( index * 6u )];
-			auto & timer = pass.pass->getTimer();
-			auto & renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_passesData[index].frameBuffers[face];
-
-			timer.notifyPassRender();
-			timer.beginPass( commandBuffer );
-			commandBuffer.beginRenderPass( renderPass
-				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencil, rgb32fMaxColor, rgb32fMaxColor }
-				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
-			commandBuffer.endRenderPass();
-			timer.endPass( commandBuffer );
-		}
-
-		commandBuffer.end();
-		auto & device = getCurrentRenderDevice( *this );
-
-		device.graphicsQueue->submit( commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, finished
-			, nullptr );
-		result = &finished;
-
-		return *result;
 	}
 
 	void ShadowMapPoint::debugDisplay( ashes::RenderPass const & renderPass
@@ -384,6 +337,80 @@ namespace castor3d
 		m_passesData.clear();
 	}
 
+	void ShadowMapPoint::updateDeviceDependent( uint32_t index )
+	{
+		uint32_t offset = index * 6u;
+
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
+		{
+			m_passes[face].pass->updateDeviceDependent( face - offset );
+		}
+	}
+
+	ashes::Semaphore const & ShadowMapPoint::doRender( ashes::Semaphore const & toWait
+		, uint32_t index )
+	{
+		static float constexpr component = std::numeric_limits< float >::max();
+		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
+		auto & myTimer = m_passes[0].pass->getTimer();
+		auto timerBlock = myTimer.start();
+		auto * result = &toWait;
+		uint32_t offset = index * 6u;
+
+		auto & commandBuffer = *m_passesData[index].commandBuffer;
+		auto & finished = *m_passesData[index].finished;
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		auto col = index / ( ( shader::getPointShadowMapCount() - 1u ) * 2.0f );
+
+		for ( uint32_t face = 0u; face < 6u; ++face )
+		{
+			auto & pass = m_passes[offset + face];
+			auto & timer = pass.pass->getTimer();
+			auto & renderPass = pass.pass->getRenderPass();
+			auto & frameBuffer = m_passesData[index].frameBuffers[face];
+
+			commandBuffer.beginDebugBlock(
+				{
+					"ShadowMapPoint index " + std::to_string( index ) + " face " + std::to_string( face ),
+					{ face / 10.0f, col, 0.7f, 1.0f },
+				} );
+			timer.notifyPassRender();
+			timer.beginPass( commandBuffer );
+			commandBuffer.beginRenderPass( renderPass
+				, *frameBuffer.frameBuffer
+				, { defaultClearDepthStencil, rgb32fMaxColor, rgb32fMaxColor }
+				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
+			commandBuffer.endRenderPass();
+			timer.endPass( commandBuffer );
+			commandBuffer.endDebugBlock();
+			pass.pass->setUpToDate();
+		}
+
+		commandBuffer.end();
+		auto & device = getCurrentRenderDevice( *this );
+
+		device.graphicsQueue->submit( commandBuffer
+			, *result
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, finished
+			, nullptr );
+		result = &finished;
+
+		return *result;
+	}
+
+	bool ShadowMapPoint::isUpToDate( uint32_t index )const
+	{
+		uint32_t offset = index * 6u;
+		return std::all_of( m_passes.begin() + offset
+			, m_passes.begin() + offset + 6u
+			, []( ShadowMap::PassData const & data )
+			{
+				return data.pass->isUpToDate();
+			} );
+	}
+
 	void ShadowMapPoint::doUpdateFlags( PipelineFlags & flags )const
 	{
 		addFlag( flags.programFlags, ProgramFlag::eShadowMapPoint );
@@ -495,7 +522,7 @@ namespace castor3d
 			vertexPosition = mtxModel * vertexPosition;
 			vtx_worldPosition = vertexPosition.xyz();
 			vertexPosition = c3d_curView * vertexPosition;
-			out.gl_out.gl_Position = c3d_projection * vertexPosition;
+			out.vtx.position = c3d_projection * vertexPosition;
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );

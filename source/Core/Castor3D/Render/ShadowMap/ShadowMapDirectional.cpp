@@ -184,6 +184,7 @@ namespace castor3d
 	ShadowMapDirectional::ShadowMapDirectional( Engine & engine
 		, Scene & scene )
 		: ShadowMap{ engine
+			, cuT( "ShadowMapDirectional" )
 			, doInitialiseVariance( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, scene.getDirectionalShadowCascades() )
 			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassDirectional::TextureSize, ShadowMapPassDirectional::TextureSize }, scene.getDirectionalShadowCascades() )
 			, createPasses( engine, scene, *this, scene.getDirectionalShadowCascades() )
@@ -581,8 +582,8 @@ namespace castor3d
 					, alphaRef );
 
 				auto depth = writer.declLocale( cuT( "depth" )
-					, in.gl_FragCoord.z() );
-				pxl_linear = in.gl_FragCoord.z();
+					, in.fragCoord.z() );
+				pxl_linear = in.fragCoord.z();
 				pxl_variance.x() = depth;
 				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
 

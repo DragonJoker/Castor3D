@@ -210,7 +210,7 @@ namespace castor3d
 
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
-				out.gl_out.gl_Position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
+				out.vtx.position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
 			} );
 
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -237,7 +237,7 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 			{
 				pxl_FragColor = texture( c3d_mapColor
-					, in.gl_FragCoord.xy() / c3d_size );
+					, in.fragCoord.xy() / c3d_size );
 			} );
 
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

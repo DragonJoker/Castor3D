@@ -198,6 +198,11 @@ namespace castor3d
 		ashes::Semaphore const * result = &toWait;
 
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugBlock(
+			{
+				"EnvironmentMapPass render",
+				{ 0.5f, 1.0f, 1.0f, 1.0f },
+			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
@@ -218,6 +223,7 @@ namespace castor3d
 
 		m_commandBuffer->executeCommands( commandBuffers );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
 		device.graphicsQueue->submit( *m_commandBuffer

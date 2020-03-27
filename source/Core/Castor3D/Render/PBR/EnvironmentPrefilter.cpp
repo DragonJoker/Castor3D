@@ -99,7 +99,7 @@ namespace castor3d
 					, [&]()
 					{
 						vtx_worldPosition = position;
-						out.gl_out.gl_Position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
+						out.vtx.position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
 					} );
 				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}

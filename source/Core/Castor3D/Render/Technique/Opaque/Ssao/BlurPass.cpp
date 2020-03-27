@@ -48,7 +48,7 @@ namespace castor3d
 			writer.implementFunction< Void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -240,7 +240,7 @@ namespace castor3d
 				, [&]()
 				{
 					auto ssCenter = writer.declLocale( cuT( "ssCenter" )
-						, ivec2( in.gl_FragCoord.xy() ) );
+						, ivec2( in.fragCoord.xy() ) );
 
 					auto temp = writer.declLocale( cuT( "temp" )
 						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );

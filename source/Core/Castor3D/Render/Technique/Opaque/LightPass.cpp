@@ -708,7 +708,7 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
+				, utils.calcTexCoord( in.fragCoord.xy()
 					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
@@ -766,7 +766,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -787,7 +787,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -808,7 +808,7 @@ namespace castor3d
 						, eye
 						, shininess
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -906,7 +906,7 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
+				, utils.calcTexCoord( in.fragCoord.xy()
 					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
@@ -968,7 +968,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -991,7 +991,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1032,7 +1032,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1050,7 +1050,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 					lightDiffuse += sss.compute( material
 						, light
@@ -1073,7 +1073,7 @@ namespace castor3d
 						, metallic
 						, roughness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #endif
 				}
@@ -1164,7 +1164,7 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
 		{
 			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, utils.calcTexCoord( in.gl_FragCoord.xy()
+				, utils.calcTexCoord( in.fragCoord.xy()
 					, c3d_renderSize ) );
 			auto data1 = writer.declLocale( cuT( "data1" )
 				, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
@@ -1224,7 +1224,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1247,7 +1247,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material
@@ -1270,7 +1270,7 @@ namespace castor3d
 						, specular
 						, glossiness
 						, shadowReceiver
-						, shader::FragmentInput( in.gl_FragCoord.xy(), vsPosition, wsPosition, wsNormal )
+						, shader::FragmentInput( in.fragCoord.xy(), vsPosition, wsPosition, wsNormal )
 						, output );
 #if !C3D_DisableSSSTransmittance
 					lightDiffuse += sss.compute( material

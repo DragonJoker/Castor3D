@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	scene	La scène.
 		 */
-		ShadowMapPoint( Engine & engine
+		C3D_API ShadowMapPoint( Engine & engine
 			, Scene & scene );
 		/**
 		 *\~english
@@ -37,47 +37,51 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ShadowMapPoint();
+		C3D_API ~ShadowMapPoint();
 		/**
 		 *\copydoc		castor3d::ShadowMap::update
 		 */
-		void update( Camera const & camera
+		C3D_API void update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::render
+		 *\~english
+		 *\brief		Updates VRAM data.
+		 *\param[out]	index	The map index.
+		 *\~french
+		 *\brief		Met à jour les données VRAM.
+		 *\param[out]	index	L'indice de la texture.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait
-			, uint32_t index )override;
+		C3D_API void updateDeviceDependent( uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
-		void debugDisplay( ashes::RenderPass const & renderPass
+		C3D_API void debugDisplay( ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, castor::Size const & size, uint32_t index )override;
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
 		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
-		 */
+
 		inline TextureUnit & getTexture()
 		{
 			return m_shadowMap;
 		}
-		/**
-		 *\~english
-		 *\return		The shadow map.
-		 *\~english
-		 *\return		La map d'ombres.
-		 */
+
 		inline TextureUnit const & getTexture()const
 		{
 			return m_shadowMap;
 		}
+		/**@}*/
 
 	private:
 		/**
@@ -93,6 +97,11 @@ namespace castor3d
 		 */
 		void doCleanup()override;
 		/**
+		 *\copydoc		castor3d::ShadowMap::doRender
+		 */
+		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+			, uint32_t index )override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
@@ -104,6 +113,10 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
 		 */
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::isUpToDate
+		 */
+		bool isUpToDate( uint32_t index )const override;
 
 	public:
 		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;

@@ -57,7 +57,7 @@ namespace castor3d
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

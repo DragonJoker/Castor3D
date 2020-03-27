@@ -318,6 +318,16 @@ namespace castor3d
 		{
 			map.get().update();
 		}
+
+		for ( auto & maps : m_activeShadowMaps )
+		{
+			auto index = 0u;
+
+			for ( auto & map : maps )
+			{
+				map.first.get().updateDeviceDependent( index++ );
+			}
+		}
 	}
 
 	ashes::Semaphore const & RenderTechnique::render( ashes::SemaphoreCRefArray const & waitSemaphores

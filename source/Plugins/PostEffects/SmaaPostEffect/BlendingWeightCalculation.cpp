@@ -80,7 +80,7 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( cuT( "main" )
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
 				} );

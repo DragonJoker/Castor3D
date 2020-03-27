@@ -16,11 +16,12 @@ using namespace castor;
 
 namespace castor3d
 {
-	ShadowMapPass::ShadowMapPass( Engine & engine
+	ShadowMapPass::ShadowMapPass( castor::String name
+		, Engine & engine
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine, matrixUbo, culler }
+		: RenderPass{ cuT( "ShadowMap" ), std::move( name ), engine, matrixUbo, culler }
 		, m_shadowMap{ shadowMap }
 	{
 	}

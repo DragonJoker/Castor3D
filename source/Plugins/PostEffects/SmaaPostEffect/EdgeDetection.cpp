@@ -62,7 +62,7 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAAEdgeDetectionVS( vtx_texture, vtx_offset );
 				} );

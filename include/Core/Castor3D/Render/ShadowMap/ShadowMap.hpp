@@ -32,6 +32,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine		The engine.
+		 *\param[in]	name		The shadow map name.
 		 *\param[in]	shadowMap	The shadow map.
 		 *\param[in]	linearMap	The linear depth map.
 		 *\param[in]	passes		The passes used to render map.
@@ -39,15 +40,17 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
-		 *\param[in]	shadowMap	La texture d'ombres.
+		 *\param[in]	name		Le nom de la shadow map.
+		 *\param[in]	shadowMap	La shadow map.
 		 *\param[in]	linearMap	La texture de profondeur linéaire.
 		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
 		 *\param[in]	count		Le nombre de passes.
 		 */
 		C3D_API ShadowMap( Engine & engine
-			, TextureUnit && shadowMap
-			, TextureUnit && linearMap
-			, std::vector< PassData > && passes
+			, castor::String name
+			, TextureUnit shadowMap
+			, TextureUnit linearMap
+			, std::vector< PassData > passes
 			, uint32_t count );
 		/**
 		 *\~english
@@ -100,8 +103,17 @@ namespace castor3d
 		 *\param[out]	toWait	Le sémaphore de la précédente passe de rendu.
 		 *\param[out]	index	L'indice de la texture.
 		 */
-		C3D_API virtual ashes::Semaphore const & render( ashes::Semaphore const & toWait
-			, uint32_t index/* = 0u*/ ) = 0;
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait
+			, uint32_t index );
+		/**
+		 *\~english
+		 *\brief		Updates VRAM data.
+		 *\param[out]	index	The map index.
+		 *\~french
+		 *\brief		Met à jour les données VRAM.
+		 *\param[out]	index	L'indice de la texture.
+		 */
+		C3D_API virtual void updateDeviceDependent( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.
@@ -186,19 +198,18 @@ namespace castor3d
 		 */
 		C3D_API virtual void doInitialiseDepthFormat() = 0;
 		/**
-		 *\~english
-		 *\brief		Initialises the light type specific data.
-		 *\~french
-		 *\brief		Initialise les données spécifiques au type de source lumineuse.
+		 *\copydoc		castor3d::ShadowMap::initialise
 		 */
 		C3D_API virtual void doInitialise() = 0;
 		/**
-		 *\~english
-		 *\brief		Cleans up the light type specific data.
-		 *\~french
-		 *\brief		Nettoie les données spécifiques au type de source lumineuse.
+		 *\copydoc		castor3d::ShadowMap::cleanup
 		 */
 		C3D_API virtual void doCleanup() = 0;
+		/**
+		 *\copydoc		castor3d::ShadowMap::render
+		 */
+		C3D_API virtual ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
+			, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */
@@ -215,8 +226,16 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
 		 */
 		C3D_API virtual ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Checks if all passes for given map index are up to date.
+		 *\~french
+		 *\brief		Vérifie si toutes les passes pour l'index de map donné sont à jour.
+		 */
+		C3D_API virtual bool isUpToDate( uint32_t index )const = 0;
 
 	protected:
+		castor::String m_name;
 		ashes::FencePtr m_fence;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
 		std::vector< PassData > m_passes;

@@ -281,7 +281,7 @@ namespace castor3d
 
 			std::function< void() > main = [&]()
 			{
-				out.gl_out.gl_Position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
+				out.vtx.position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
 				vtx_texture = position;
 			};
 

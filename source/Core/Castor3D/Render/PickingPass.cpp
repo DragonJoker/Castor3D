@@ -794,8 +794,8 @@ namespace castor3d
 			vtx_texture = v3Texture;
 			v4Vertex = mtxModel * v4Vertex;
 			v4Vertex = c3d_curView * v4Vertex;
-			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
-			out.gl_out.gl_Position = c3d_projection * v4Vertex;
+			vtx_instance = writer.cast< UInt >( in.instanceID );
+			out.vtx.position = c3d_projection * v4Vertex;
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
@@ -876,7 +876,7 @@ namespace castor3d
 				, alpha
 				, material->m_alphaRef );
 
-			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, in.gl_PrimitiveID );
+			pxl_fragColor = vec4( c3d_drawIndex, c3d_nodeIndex, vtx_instance, in.primitiveID );
 #if C3D_DebugPicking
 			pxl_fragColor /= 255.0_f;
 #endif

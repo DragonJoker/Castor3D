@@ -74,15 +74,15 @@ namespace castor3d
 		//!\~english	Light transmittance map.
 		//!\~french		Map de transmission de lumière.
 		eTransmittance = 0x0400,
-		//!\~english	Mask for all the texture channels except for opacity and colour.
-		//!\~french		Masque pour les canaux de texture sauf l'opacité et la couleur.
-		eAllButColourAndOpacity = 0x07FA,
-		//!\~english	Mask for all the texture channels except for opacity.
-		//!\~french		Masque pour les canaux de texture sauf l'opacité.
-		eAllButOpacity = eAllButColourAndOpacity | eDiffuse,
 		//!\~english	Mask for all the texture channels.
 		//!\~french		Masque pour les canaux de texture.
-		eAll = eAllButOpacity | eOpacity,
+		eAll = 0x7FF,
+		//!\~english	Mask for all the texture channels except for opacity.
+		//!\~french		Masque pour les canaux de texture sauf l'opacité.
+		eAllButOpacity = eAll & ~( eOpacity ),
+		//!\~english	Mask for all the texture channels except for opacity and colour.
+		//!\~french		Masque pour les canaux de texture sauf l'opacité et la couleur.
+		eAllButColourAndOpacity = eAllButOpacity & ~( eDiffuse ),
 	};
 	CU_ImplementFlags( TextureFlag )
 	C3D_API castor::String getName( TextureFlag value

@@ -53,7 +53,7 @@ namespace castor3d
 				std::function< void() > main = [&]()
 				{
 					vtx_position = position.xyz();
-					out.gl_out.gl_Position = mtxViewProjection * position;
+					out.vtx.position = mtxViewProjection * position;
 				};
 
 				writer.implementFunction< sdw::Void >( cuT( "main" ), main );

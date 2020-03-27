@@ -52,7 +52,7 @@ namespace fxaa
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
 					vtx_posPos.xy() = position.xy();
 					vtx_posPos.zw() = position.xy() - ( c3d_pixelSize * ( 0.5_f + c3d_subpixShift ) );
 				} );

@@ -54,7 +54,7 @@ namespace castor3d
 					, [&]()
 					{
 						vtx_position = position.xyz();
-						out.gl_out.gl_Position = mtxViewProjection * position;
+						out.vtx.position = mtxViewProjection * position;
 					} );
 				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}

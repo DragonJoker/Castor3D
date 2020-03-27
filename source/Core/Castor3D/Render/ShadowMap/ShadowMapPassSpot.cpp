@@ -24,7 +24,7 @@ namespace castor3d
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "ShadowMapPassSpot" ), engine, matrixUbo, culler, shadowMap }
 	{
 		log::trace << "Created ShadowMapPassSpot" << std::endl;
 	}
@@ -33,11 +33,15 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPassSpot::update( Camera const & camera
+	bool ShadowMapPassSpot::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
+		getCuller().compute();
+		m_outOfDate = m_outOfDate
+			|| getCuller().areAllChanged()
+			|| getCuller().areCulledChanged();
 		m_shadowType = light.getShadowType();
 		auto & myCamera = getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
@@ -45,6 +49,7 @@ namespace castor3d
 		auto & data = m_shadowConfig->getData();
 		data.farPlane = light.getSpotLight()->getFarPlane();
 		doUpdate( queues );
+		return m_outOfDate;
 	}
 
 	void ShadowMapPassSpot::updateDeviceDependent( uint32_t index )
@@ -142,12 +147,15 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device
+			, *m_renderPass
+			, "ShadowMapPassSpot_Pass" );
 
 		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassSpotShadowConfigUbo" );
+			, "ShadowMapPassSpot_ShadowConfigUbo" );
 
 		m_initialised = true;
 		return m_initialised;
@@ -176,7 +184,6 @@ namespace castor3d
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
 	{
-		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 
