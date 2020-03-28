@@ -40,7 +40,7 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_UseLightPassFence 1
+#define C3D_UseLightPassFence 0
 #define C3D_DisableSSSTransmittance 1
 #define C3D_DebugEye 0
 #define C3D_DebugVSPosition 0
@@ -418,7 +418,6 @@ namespace castor3d
 			, nullptr );
 #endif
 		result = m_signalReady.get();
-
 		return *result;
 	}
 

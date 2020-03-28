@@ -289,10 +289,11 @@ namespace castor3d
 
 					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
 					{
-						// Get cascade index for the current fragment's view position
 						auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
 						auto maxCount = m_writer.declLocale( "maxCount"
 							, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
 							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
@@ -554,10 +555,11 @@ namespace castor3d
 
 					if ( shadowType != ShadowType::eNone )
 					{
-						// Get cascade index for the current fragment's view position
 						auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
 						auto maxCount = m_writer.declLocale( "maxCount"
 							, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
 							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
