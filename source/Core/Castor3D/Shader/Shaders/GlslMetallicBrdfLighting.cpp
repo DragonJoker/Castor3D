@@ -335,6 +335,7 @@ namespace castor3d
 								, fragmentIn.m_worldVertex
 								, -lightDirection
 								, cascadeIndex
+								, light.m_cascadeCount
 								, fragmentIn.m_worldNormal ) );
 					}
 					FI;
@@ -363,6 +364,7 @@ namespace castor3d
 								, light.m_transforms[cascadeIndex]
 								, -lightDirection
 								, cascadeIndex
+								, light.m_cascadeCount
 								, light.m_lightBase.m_colour
 								, light.m_lightBase.m_intensity
 								, light.m_lightBase.m_volumetricSteps
@@ -606,6 +608,7 @@ namespace castor3d
 								, fragmentIn.m_worldVertex
 								, -lightDirection
 								, cascadeIndex
+								, light.m_cascadeCount
 								, fragmentIn.m_worldNormal ) );
 					}
 
@@ -629,6 +632,7 @@ namespace castor3d
 							, light.m_transforms[cascadeIndex]
 							, -lightDirection
 							, cascadeIndex
+							, light.m_cascadeCount
 							, light.m_lightBase.m_colour
 							, light.m_lightBase.m_intensity
 							, light.m_lightBase.m_volumetricSteps

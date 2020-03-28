@@ -44,6 +44,7 @@ namespace castor3d
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
 				, sdw::Vec3 const & normal )const;
 			C3D_API sdw::Float computeSpotShadow( sdw::Int const & shadowType
 				, sdw::Vec2 const & shadowOffsets
@@ -70,6 +71,7 @@ namespace castor3d
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
 				, sdw::Vec3 const & lightColour
 				, sdw::Vec2 const & lightIntensity
 				, sdw::UInt const & lightVolumetricSteps
@@ -81,6 +83,7 @@ namespace castor3d
 				, sdw::Vec3 const & worldSpacePosition
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
 				, sdw::Vec3 const & normal )const;
 			C3D_API sdw::Float computeSpotShadow( sdw::Vec2 const & shadowOffsets
 				, sdw::Vec2 const & shadowVariance
@@ -104,6 +107,7 @@ namespace castor3d
 				, sdw::Mat4 const & lightMatrix
 				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
+				, sdw::UInt const & maxCascade
 				, sdw::Vec3 const & lightColour
 				, sdw::Vec2 const & lightIntensity
 				, sdw::UInt const & lightVolumetricSteps
@@ -180,6 +184,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InUInt
+				, sdw::InUInt
 				, sdw::InVec3 > m_computeDirectional;
 			sdw::Function< sdw::Float
 				, sdw::InInt
@@ -209,6 +214,7 @@ namespace castor3d
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InUInt
+				, sdw::InUInt
 				, sdw::InVec3
 				, sdw::InVec2
 				, sdw::InUInt
@@ -220,6 +226,7 @@ namespace castor3d
 				, sdw::InMat4
 				, sdw::InVec3
 				, sdw::InVec3
+				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InVec3 > m_computeOneDirectional;
 			sdw::Function< sdw::Float
@@ -246,6 +253,7 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InMat4
 				, sdw::InVec3
+				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InVec3
 				, sdw::InVec2

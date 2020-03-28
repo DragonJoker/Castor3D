@@ -175,6 +175,7 @@ namespace castor3d
 			, Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
+			, UInt const & maxCascade
 			, Vec3 const & normal )const
 		{
 			return m_computeDirectional( shadowType
@@ -184,6 +185,7 @@ namespace castor3d
 				, worldSpacePosition
 				, lightDirection
 				, cascadeIndex
+				, maxCascade
 				, normal );
 		}
 
@@ -234,6 +236,7 @@ namespace castor3d
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
+			, UInt const & maxCascade
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
 			, UInt const & lightVolumetricSteps
@@ -249,6 +252,7 @@ namespace castor3d
 				, lightMatrix
 				, lightDirection
 				, cascadeIndex
+				, maxCascade
 				, lightColour
 				, lightIntensity
 				, lightVolumetricSteps
@@ -269,6 +273,7 @@ namespace castor3d
 			, Vec3 const & worldSpacePosition
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
+			, UInt const & maxCascade
 			, Vec3 const & normal )const
 		{
 			return m_computeOneDirectional( shadowOffsets
@@ -277,6 +282,7 @@ namespace castor3d
 				, worldSpacePosition
 				, lightDirection
 				, cascadeIndex
+				, maxCascade
 				, normal );
 		}
 
@@ -322,6 +328,7 @@ namespace castor3d
 			, Mat4 const & lightMatrix
 			, Vec3 const & lightDirection
 			, UInt const & cascadeIndex
+			, UInt const & maxCascade
 			, Vec3 const & lightColour
 			, Vec2 const & lightIntensity
 			, UInt const & lightVolumetricSteps
@@ -336,6 +343,7 @@ namespace castor3d
 				, lightMatrix
 				, lightDirection
 				, cascadeIndex
+				, maxCascade
 				, lightColour
 				, lightIntensity
 				, lightVolumetricSteps
@@ -591,6 +599,7 @@ namespace castor3d
 					, Vec3 const & worldSpacePosition
 					, Vec3 const & lightDirection
 					, UInt const & cascadeIndex
+					, UInt const & maxCascade
 					, Vec3 const & normal )
 				{
 					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DArrayR32 >( Shadow::MapDepthDirectional );
@@ -647,6 +656,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldSpacePosition" )
 				, InVec3( m_writer, "lightDirection" )
 				, InUInt( m_writer, "cascadeIndex" )
+				, InUInt( m_writer, "maxCascade" )
 				, InVec3( m_writer, "normal" ) );
 		}
 
@@ -881,6 +891,7 @@ namespace castor3d
 					, Mat4 const & lightMatrix
 					, Vec3 const & lightDirection
 					, UInt const & cascadeIndex
+					, UInt const & maxCascade
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
 					, UInt const & lightVolumetricSteps
@@ -932,7 +943,7 @@ namespace castor3d
 
 					FOR( m_writer, Int, i, 0, i < maxCount, ++i )
 					{
-						IF ( m_writer, m_computeDirectional( shadowType, shadowOffsets, shadowVariance, lightMatrix, currentPosition, lightDirection, cascadeIndex, vec3( 0.0_f ) ) < 0.5_f )
+						IF ( m_writer, m_computeDirectional( shadowType, shadowOffsets, shadowVariance, lightMatrix, currentPosition, lightDirection, cascadeIndex, maxCascade, vec3( 0.0_f ) ) < 0.5_f )
 						{
 							volumetric += scattering;
 						}
@@ -955,6 +966,7 @@ namespace castor3d
 				, InMat4{ m_writer, "lightMatrix" }
 				, InVec3{ m_writer, "lightDirection" }
 				, InUInt{ m_writer, "cascadeIndex" }
+				, InUInt{ m_writer, "maxCascade" }
 				, InVec3{ m_writer, "lightColour" }
 				, InVec2{ m_writer, "lightIntensity" }
 				, InUInt{ m_writer, "lightVolumetricSteps" }
@@ -971,6 +983,7 @@ namespace castor3d
 					, Vec3 const & worldSpacePosition
 					, Vec3 const & lightDirection
 					, UInt const & cascadeIndex
+					, UInt const & maxCascade
 					, Vec3 const & normal )
 				{
 					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DArrayR32 >( Shadow::MapDepthDirectional );
@@ -1022,6 +1035,7 @@ namespace castor3d
 				, InVec3( m_writer, "worldSpacePosition" )
 				, InVec3( m_writer, "lightDirection" )
 				, InUInt( m_writer, "cascadeIndex" )
+				, InUInt( m_writer, "maxCascade" )
 				, InVec3( m_writer, "normal" ) );
 		}
 
@@ -1247,6 +1261,7 @@ namespace castor3d
 					, Mat4 const & lightMatrix
 					, Vec3 const & lightDirection
 					, UInt const & cascadeIndex
+					, UInt const & maxCascade
 					, Vec3 const & lightColour
 					, Vec2 const & lightIntensity
 					, UInt const & lightVolumetricSteps
@@ -1298,7 +1313,7 @@ namespace castor3d
 
 					FOR( m_writer, Int, i, 0, i < maxCount, ++i )
 					{
-						IF ( m_writer, m_computeOneDirectional( shadowOffsets, shadowVariance, lightMatrix, currentPosition, lightDirection, cascadeIndex, vec3( 0.0_f ) ) > 0.5_f )
+						IF ( m_writer, m_computeOneDirectional( shadowOffsets, shadowVariance, lightMatrix, currentPosition, lightDirection, cascadeIndex, maxCascade, vec3( 0.0_f ) ) > 0.5_f )
 						{
 							volumetric += scattering;
 						}
@@ -1320,6 +1335,7 @@ namespace castor3d
 				, InMat4{ m_writer, "lightMatrix" }
 				, InVec3{ m_writer, "lightDirection" }
 				, InUInt{ m_writer, "cascadeIndex" }
+				, InUInt{ m_writer, "maxCascade" }
 				, InVec3{ m_writer, "lightColour" }
 				, InVec2{ m_writer, "lightIntensity" }
 				, InUInt{ m_writer, "lightVolumetricSteps" }
