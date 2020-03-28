@@ -60,25 +60,40 @@ namespace castor3d
 		~LightingPass();
 		/**
 		 *\~english
+		 *\brief		Updates opaque pass.
+		 *\param[out]	info	Receives the render informations.
+		 *\param[in]	scene	The rendered scene.
+		 *\param[in]	camera	The viewer camera.
+		 *\param[in]	jitter	The jittering value.
+		 *\~french
+		 *\brief		Met à jour la passe opaque.
+		 *\param[out]	info	Reçoit les informations de rendu.
+		 *\param[in]	scene	La scène rendue.
+		 *\param[in]	camera	La caméra par laquelle la scène est rendue.
+		 *\param[in]	jitter	La valeur de jittering.
+		 */
+		void update( RenderInfo & info
+			, Scene const & scene
+			, Camera const & camera
+			, castor::Point2f const & jitter );
+		/**
+		 *\~english
 		 *\brief		Renders the light passes on currently bound framebuffer.
 		 *\param[in]	scene	The scene.
 		 *\param[in]	camera	The viewing camera.
 		 *\param[in]	gp		The geometry pass result.
 		 *\param[out]	toWait	The semaphore from previous render pass.
-		 *\param[out]	info	The render infos.
 		 *\~french
 		 *\brief		Dessine les passes d'éclairage sur le tampon d'image donné.
 		 *\param[in]	scene	La scène.
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	gp		Le résultat de la geometry pass.
 		 *\param[out]	toWait	Le sémaphore de la passe de rendu précédente.
-		 *\param[out]	info	Les informations de rendu.
 		 */
 		ashes::Semaphore const & render( Scene const & scene
 			, Camera const & camera
 			, GeometryPassResult const & gp
-			, ashes::Semaphore const & toWait
-			, RenderInfo & info );
+			, ashes::Semaphore const & toWait );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -105,13 +120,17 @@ namespace castor3d
 		}
 
 	private:
+		void doUpdateLights( Scene const & scene
+			, Camera const & camera
+			, LightType type
+			, uint32_t & index
+			, RenderInfo & info );
 		ashes::Semaphore const & doRenderLights( Scene const & scene
 			, Camera const & camera
 			, LightType type
 			, GeometryPassResult const & gp
 			, ashes::Semaphore const & toWait
-			, uint32_t & index
-			, RenderInfo & info );
+			, uint32_t & index );
 
 	private:
 		Engine & m_engine;

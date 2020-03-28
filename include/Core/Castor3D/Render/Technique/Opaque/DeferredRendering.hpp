@@ -79,19 +79,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
-		 *\param[out]	info		Receives the render informations.
 		 *\param[out]	scene		The rendered scene.
 		 *\param[out]	camera		The viewer camera.
 		 *\param[in]	toWait		The semaphore from the previous render pass.
 		 *\~french
 		 *\brief		Dessine les noeuds opaques.
-		 *\param[out]	info		Reçoit les informations de rendu.
 		 *\param[out]	scene		La scène rendue.
 		 *\param[out]	camera		La caméra par laquelle la scène est rendue.
 		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 */
-		ashes::Semaphore const & render( RenderInfo & info
-			, Scene const & scene
+		ashes::Semaphore const & render( Scene const & scene
 			, Camera const & camera
 			, ashes::Semaphore const & toWait );
 		/**

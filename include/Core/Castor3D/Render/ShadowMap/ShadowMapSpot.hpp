@@ -44,6 +44,10 @@ namespace castor3d
 			, Light & light
 			, uint32_t index )override;
 		/**
+		 *\copydoc		castor3d::ShadowMap::updateDeviceDependent
+		 */
+		void updateDeviceDependent( uint32_t index )override;
+		/**
 		 *\copydoc		castor3d::ShadowMap::debugDisplay
 		 */
 		void debugDisplay( ashes::RenderPass const & renderPass

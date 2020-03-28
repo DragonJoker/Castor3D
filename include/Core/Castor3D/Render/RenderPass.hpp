@@ -638,6 +638,12 @@ namespace castor3d
 		{
 			return *m_timer;
 		}
+
+		inline uint32_t getPipelinesCount()const
+		{
+			return uint32_t( m_backPipelines.size()
+				+ m_frontPipelines.size() );
+		}
 		/**@}*/
 
 	protected:

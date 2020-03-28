@@ -233,11 +233,38 @@ namespace castor3d
 		m_depth.cleanup();
 	}
 
+	void LightingPass::update( RenderInfo & info
+		, Scene const & scene
+		, Camera const & camera
+		, castor::Point2f const & jitter )
+	{
+		auto & cache = scene.getLightCache();
+
+		if ( !cache.isEmpty() )
+		{
+			uint32_t index = 0;
+			doUpdateLights( scene
+				, camera
+				, LightType::eDirectional
+				, index
+				, info );
+			doUpdateLights( scene
+				, camera
+				, LightType::ePoint
+				, index
+				, info );
+			doUpdateLights( scene
+				, camera
+				, LightType::eSpot
+				, index
+				, info );
+		}
+	}
+
 	ashes::Semaphore const & LightingPass::render( Scene const & scene
 		, Camera const & camera
 		, GeometryPassResult const & gp
-		, ashes::Semaphore const & toWait
-		, RenderInfo & info )
+		, ashes::Semaphore const & toWait )
 	{
 		auto & cache = scene.getLightCache();
 		ashes::Semaphore const * result = &toWait;
@@ -270,22 +297,19 @@ namespace castor3d
 				, LightType::eDirectional
 				, gp
 				, *result
-				, index
-				, info );
+				, index );
 			result = &doRenderLights( scene
 				, camera
 				, LightType::ePoint
 				, gp
 				, *result
-				, index
-				, info );
+				, index );
 			result = &doRenderLights( scene
 				, camera
 				, LightType::eSpot
 				, gp
 				, *result
-				, index
-				, info );
+				, index );
 		}
 
 		return *result;
@@ -301,15 +325,12 @@ namespace castor3d
 		m_lightPassShadow[size_t( LightType::eSpot )]->accept( visitor );
 	}
 
-	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
+	void LightingPass::doUpdateLights( Scene const & scene
 		, Camera const & camera
 		, LightType type
-		, GeometryPassResult const & gp
-		, ashes::Semaphore const & toWait
 		, uint32_t & index
 		, RenderInfo & info )
 	{
-		auto result = &toWait;
 		auto & cache = scene.getLightCache();
 
 		if ( cache.getLightsCount( type ) )
@@ -339,14 +360,50 @@ namespace castor3d
 						, camera
 						, light->getShadowMap()
 						, light->getShadowMapIndex() );
-					result = &pass->render( index
-						, *result );
-
 					++index;
 					info.m_visibleLightsCount++;
 				}
 
 				info.m_totalLightsCount++;
+			}
+		}
+	}
+
+	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
+		, Camera const & camera
+		, LightType type
+		, GeometryPassResult const & gp
+		, ashes::Semaphore const & toWait
+		, uint32_t & index )
+	{
+		auto result = &toWait;
+		auto & cache = scene.getLightCache();
+
+		if ( cache.getLightsCount( type ) )
+		{
+			auto lightPass = m_lightPass[size_t( type )].get();
+			auto lightPassShadow = m_lightPassShadow[size_t( type )].get();
+
+			for ( auto & light : cache.getLights( type ) )
+			{
+				if ( light->getLightType() == LightType::eDirectional
+					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
+				{
+					LightPass * pass = nullptr;
+
+					if ( light->isShadowProducer() && light->getShadowMap() )
+					{
+						pass = lightPassShadow;
+					}
+					else
+					{
+						pass = lightPass;
+					}
+
+					result = &pass->render( index
+						, *result );
+					++index;
+				}
 			}
 		}
 

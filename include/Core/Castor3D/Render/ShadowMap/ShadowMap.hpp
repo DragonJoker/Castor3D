@@ -95,6 +95,15 @@ namespace castor3d
 			, uint32_t index ) = 0;
 		/**
 		 *\~english
+		 *\brief		Updates VRAM data.
+		 *\param[out]	index	The map index.
+		 *\~french
+		 *\brief		Met à jour les données VRAM.
+		 *\param[out]	index	L'indice de la texture.
+		 */
+		C3D_API virtual void updateDeviceDependent( uint32_t index ) = 0;
+		/**
+		 *\~english
 		 *\brief		Renders the light's shadow map.
 		 *\param[out]	toWait	The semaphore from previous render pass.
 		 *\param[out]	index	The map index.
@@ -105,15 +114,6 @@ namespace castor3d
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait
 			, uint32_t index );
-		/**
-		 *\~english
-		 *\brief		Updates VRAM data.
-		 *\param[out]	index	The map index.
-		 *\~french
-		 *\brief		Met à jour les données VRAM.
-		 *\param[out]	index	L'indice de la texture.
-		 */
-		C3D_API virtual void updateDeviceDependent( uint32_t index );
 		/**
 		 *\~english
 		 *\brief		Dumps the shadow map on screen.

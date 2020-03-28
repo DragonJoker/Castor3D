@@ -191,6 +191,11 @@ namespace castor3d
 		m_passes[index].pass->update( camera, queues, light, index );
 	}
 
+	void ShadowMapSpot::updateDeviceDependent( uint32_t index )
+	{
+		m_passes[index].pass->updateDeviceDependent();
+	}
+
 	void ShadowMapSpot::debugDisplay( ashes::RenderPass const & renderPass
 		, ashes::FrameBuffer const & frameBuffer
 		, castor::Size const & size

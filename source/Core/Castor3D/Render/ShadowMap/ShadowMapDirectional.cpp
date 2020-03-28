@@ -208,59 +208,8 @@ namespace castor3d
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
-			m_passes[cascade].pass->update( camera, queues, light, cascade );
+			 m_passes[cascade].pass->update( camera, queues, light, cascade );
 		}
-	}
-
-	ashes::Semaphore const & ShadowMapDirectional::render( ashes::Semaphore const & toWait
-		, uint32_t index )
-	{
-		auto & myTimer = m_passes[0].pass->getTimer();
-		auto timerBlock = myTimer.start();
-
-		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-		{
-			m_passes[cascade].pass->updateDeviceDependent( cascade );
-		}
-
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-
-		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-		{
-			auto & pass = m_passes[cascade];
-			auto & timer = pass.pass->getTimer();
-			auto & renderPass = pass.pass->getRenderPass();
-			auto & frameBuffer = m_frameBuffers[cascade];
-
-			timer.notifyPassRender();
-			timer.beginPass( *m_commandBuffer );
-			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
-				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
-				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
-			m_commandBuffer->endRenderPass();
-			timer.endPass( *m_commandBuffer );
-		}
-
-		m_commandBuffer->end();
-		auto & device = getCurrentRenderDevice( *getEngine() );
-		auto * result = &toWait;
-		device.graphicsQueue->submit( *m_commandBuffer
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_finished
-			, nullptr );
-		result = m_finished.get();
-
-		if ( m_shadowType == ShadowType::eVariance )
-		{
-			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-			{
-				result = &m_frameBuffers[cascade].blur->blur( *result );
-			}
-		}
-		return *result;
 	}
 
 	void ShadowMapDirectional::debugDisplay( ashes::RenderPass const & renderPass
@@ -403,6 +352,70 @@ namespace castor3d
 		m_depthTexture.reset();
 	}
 
+	bool ShadowMapDirectional::isUpToDate( uint32_t index )const
+	{
+		return std::all_of( m_passes.begin()
+			, m_passes.begin() + m_cascades
+			, []( ShadowMap::PassData const & data )
+			{
+				return data.pass->isUpToDate();
+			} );
+	}
+
+	void ShadowMapDirectional::updateDeviceDependent( uint32_t index )
+	{
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			m_passes[cascade].pass->updateDeviceDependent( cascade );
+		}
+	}
+	
+	ashes::Semaphore const & ShadowMapDirectional::doRender( ashes::Semaphore const & toWait
+		, uint32_t index )
+	{
+		auto & myTimer = m_passes[0].pass->getTimer();
+		auto timerBlock = myTimer.start();
+		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			auto & pass = m_passes[cascade];
+			auto & timer = pass.pass->getTimer();
+			auto & renderPass = pass.pass->getRenderPass();
+			auto & frameBuffer = m_frameBuffers[cascade];
+
+			timer.notifyPassRender();
+			timer.beginPass( *m_commandBuffer );
+			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
+				, *frameBuffer.frameBuffer
+				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
+			m_commandBuffer->endRenderPass();
+			timer.endPass( *m_commandBuffer );
+			pass.pass->setUpToDate();
+		}
+
+		m_commandBuffer->end();
+		auto & device = getCurrentRenderDevice( *getEngine() );
+		auto * result = &toWait;
+		device.graphicsQueue->submit( *m_commandBuffer
+			, *result
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, *m_finished
+			, nullptr );
+		result = m_finished.get();
+
+		if ( m_shadowType == ShadowType::eVariance )
+		{
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			{
+				result = &m_frameBuffers[cascade].blur->blur( *result );
+			}
+		}
+		return *result;
+	}
+
 	void ShadowMapDirectional::doUpdateFlags( PipelineFlags & flags )const
 	{
 		addFlag( flags.programFlags, ProgramFlag::eShadowMapDirectional );
@@ -514,7 +527,7 @@ namespace castor3d
 			vertexPosition = mtxModel * vertexPosition;
 			vertexPosition = c3d_curView * vertexPosition;
 			vtx_viewPosition = vertexPosition.xyz();
-			out.gl_out.gl_Position = c3d_projection * vertexPosition;
+			out.vtx.position = c3d_projection * vertexPosition;
 		};
 
 		writer.implementFunction< sdw::Void >( cuT( "main" ), main );

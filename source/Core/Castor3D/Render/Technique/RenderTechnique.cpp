@@ -321,11 +321,12 @@ namespace castor3d
 
 		for ( auto & maps : m_activeShadowMaps )
 		{
-			auto index = 0u;
-
 			for ( auto & map : maps )
 			{
-				map.first.get().updateDeviceDependent( index++ );
+				for ( auto & id : map.second )
+				{
+					map.first.get().updateDeviceDependent( id );
+				}
 			}
 		}
 	}
@@ -340,8 +341,8 @@ namespace castor3d
 
 
 		// Render part
-		semaphore = &doRenderOpaque( info, *semaphore );
-		semaphore = &doRenderTransparent( info, *semaphore );
+		semaphore = &doRenderOpaque( *semaphore );
+		semaphore = &doRenderTransparent( *semaphore );
 		return *semaphore;
 	}
 
@@ -797,8 +798,7 @@ namespace castor3d
 
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderOpaque( RenderInfo & info
-		, ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderOpaque( ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -808,7 +808,7 @@ namespace castor3d
 			auto & camera = *m_renderTarget.getCamera();
 
 #if C3D_UseDeferredRendering
-			result = &m_deferredRendering->render( info, scene, camera, *result );
+			result = &m_deferredRendering->render( scene, camera, *result );
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( *result );
 #endif
@@ -817,8 +817,7 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderTransparent( RenderInfo & info
-		, ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderTransparent( ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -827,7 +826,7 @@ namespace castor3d
 			auto & scene = *m_renderTarget.getScene();
 
 #if C3D_UseWeightedBlendedRendering
-			result = &m_weightedBlendRendering->render( info, scene, *result );
+			result = &m_weightedBlendRendering->render( scene, *result );
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( *result );
 #endif

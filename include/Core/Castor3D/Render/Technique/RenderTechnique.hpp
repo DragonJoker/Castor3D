@@ -229,10 +229,8 @@ namespace castor3d
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
-		ashes::Semaphore const & doRenderOpaque( RenderInfo & info
-			, ashes::Semaphore const & semaphore );
-		ashes::Semaphore const & doRenderTransparent( RenderInfo & info
-			, ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderOpaque( ashes::Semaphore const & semaphore );
+		ashes::Semaphore const & doRenderTransparent( ashes::Semaphore const & semaphore );
 
 	private:
 		bool m_initialised;

@@ -212,7 +212,7 @@ namespace castor3d
 				lightCamera.updateFrustum();
 				result = true;
 
-				if ( !cascadeIndex )
+				if ( cascadeIndex == m_cascades.size() - 1u )
 				{
 					m_prvCascades = m_cascades;
 				}
