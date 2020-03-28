@@ -37,6 +37,14 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			auto c3d_maxCascadeCount = m_writer.declConstant( "c3d_maxCascadeCount"
 				, UInt( DirectionalMaxCascadesCount ) );
+			auto c3d_volumetricDither = m_writer.declConstantArray( "c3d_volumetricDither"
+				, std::vector< Vec4 >
+				{
+					vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f ),
+					vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f ),
+					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
+					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
+				} );
 			auto c3d_mapDepthDirectional = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthDirectional, index++, 1u );
 			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
 			auto c3d_mapDepthSpot = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthSpot, index++, 1u );
@@ -67,6 +75,14 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			auto c3d_maxCascadeCount = m_writer.declConstant( "c3d_maxCascadeCount"
 				, UInt( DirectionalMaxCascadesCount ) );
+			auto c3d_volumetricDither = m_writer.declConstantArray( "c3d_volumetricDither"
+				, std::vector< Vec4 >
+				{
+					vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f ),
+					vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f ),
+					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
+					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
+				} );
 			auto c3d_mapDepthDirectional = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthDirectional, index++, 1u );
 			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
 			m_utils.declareInvertVec2Y();
@@ -898,12 +914,7 @@ namespace castor3d
 					, Float const & lightVolumetricScattering
 					, OutputComponents & parentOutput )
 				{
-					auto volumetricDither = m_writer.declLocale< Mat4 >( "volumetricDither"
-						, mat4(
-							vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f ),
-							vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f ),
-							vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
-							vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) ) );
+					auto c3d_volumetricDither = m_writer.getVariableArray< Vec4 >( "c3d_volumetricDither" );
 
 					auto rayVector = m_writer.declLocale( "rayVector"
 						, worldSpacePosition - eyePosition );
@@ -919,7 +930,7 @@ namespace castor3d
 						, uvec2( m_writer.cast< UInt >( clipSpacePosition.x() )
 							, m_writer.cast< UInt >( clipSpacePosition.y() ) ) );
 					auto ditherValue = m_writer.declLocale( "ditherValue"
-						, volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
+						, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
 
 					auto currentPosition = m_writer.declLocale( "currentPosition"
 						, eyePosition + step * ditherValue );
@@ -1268,12 +1279,7 @@ namespace castor3d
 					, Float const & lightVolumetricScattering
 					, OutputComponents & parentOutput )
 				{
-					auto volumetricDither = m_writer.declLocale< Mat4 >( "volumetricDither"
-						, mat4(
-							vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f ),
-							vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f ),
-							vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
-							vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) ) );
+					auto c3d_volumetricDither = m_writer.getVariableArray< Vec4 >( "c3d_volumetricDither" );
 
 					auto rayVector = m_writer.declLocale( "rayVector"
 						, worldSpacePosition - eyePosition );
@@ -1289,7 +1295,7 @@ namespace castor3d
 						, uvec2( m_writer.cast< UInt >( clipSpacePosition.x() )
 							, m_writer.cast< UInt >( clipSpacePosition.y() ) ) );
 					auto ditherValue = m_writer.declLocale( "ditherValue"
-						, volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
+						, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
 
 					auto currentPosition = m_writer.declLocale( "currentPosition"
 						, eyePosition + step * ditherValue );
