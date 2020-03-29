@@ -96,7 +96,6 @@ namespace castor3d
 	public:
 		C3D_API static castor::String const ShadowMapUbo;
 		C3D_API static castor::String const WorldLightPosition;
-		C3D_API static castor::String const FarPlane;
 		C3D_API static uint32_t const TextureSize;
 		C3D_API static uint32_t const UboBindingPoint;
 

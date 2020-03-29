@@ -2,12 +2,14 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/GaussianBlur.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -205,21 +207,37 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
-		auto minDepth = std::numeric_limits< float >::max();
+		auto minCasterZ = std::numeric_limits< float >::max();
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
-			minDepth = std::min( minDepth
+			minCasterZ = std::min( minCasterZ
 				, std::static_pointer_cast< ShadowMapPassDirectional >( m_passes[cascade].pass )->cull() );
 		}
 
-		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		auto & culler = m_passes[m_cascades - 1u].pass->getCuller();
+		auto node = light.getParent();
+		node->update();
+
+		auto & directional = *light.getDirectionalLight();
+		auto & lightCamera = culler.getCamera();
+		lightCamera.attachTo( *node );
+		lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
+		lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+		lightCamera.updateFrustum();
+
+		if ( directional.updateShadow( camera
+				, minCasterZ )
+			|| culler.areAllChanged()
+			|| culler.areCulledChanged() )
 		{
-			std::static_pointer_cast< ShadowMapPassDirectional >( m_passes[cascade].pass )->update( camera
-				, queues
-				, light
-				, cascade
-				, minDepth );
+			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+			{
+				m_passes[cascade].pass->update( camera
+					, queues
+					, light
+					, cascade );
+			}
 		}
 	}
 
@@ -481,7 +499,10 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
 
-		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
+		Ubo shadowMap{ writer, ShadowMapPassDirectional::ShadowMapUbo, ShadowMapPassDirectional::UboBindingPoint, 0u };
+		auto c3d_projection( shadowMap.declMember< Mat4 >( ShadowMapPassDirectional::Projection ) );
+		auto c3d_view( shadowMap.declMember< Mat4 >( ShadowMapPassDirectional::View ) );
+		shadowMap.end();
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
@@ -537,7 +558,7 @@ namespace castor3d
 
 			auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
 			vertexPosition = mtxModel * vertexPosition;
-			vertexPosition = c3d_curView * vertexPosition;
+			vertexPosition = c3d_view * vertexPosition;
 			vtx_viewPosition = vertexPosition.xyz();
 			out.vtx.position = c3d_projection * vertexPosition;
 		};
@@ -553,10 +574,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
-		Ubo shadowMap{ writer, ShadowMapPassDirectional::ShadowMapUbo, ShadowMapPassDirectional::UboBindingPoint, 0u };
-		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassDirectional::FarPlane ) );
-		shadowMap.end();
-
 		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"

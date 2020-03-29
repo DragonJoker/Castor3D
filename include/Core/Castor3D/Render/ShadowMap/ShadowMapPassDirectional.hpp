@@ -53,21 +53,13 @@ namespace castor3d
 		C3D_API bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
-			, uint32_t index
-			, float minCasterZ );
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
 		C3D_API void updateDeviceDependent( uint32_t index )override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMapPass::update
-		 */
-		C3D_API bool update( Camera const & camera
-			, RenderQueueArray & queues
-			, Light & light
-			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */
@@ -104,19 +96,22 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static castor::String const ShadowMapUbo;
-		C3D_API static castor::String const FarPlane;
+		C3D_API static std::string const ShadowMapUbo;
+		C3D_API static std::string const Projection;
+		C3D_API static std::string const View;
 		C3D_API static uint32_t const UboBindingPoint;
 		C3D_API static uint32_t const TextureSize;
 
 		struct Configuration
 		{
-			float farPlane;
+			castor::Matrix4x4f projection;
+			castor::Matrix4x4f view;
 		};
 
 	private:
 		UniformBufferUPtr< Configuration > m_shadowConfig;
-		float m_farPlane;
+		castor::Matrix4x4f m_projection;
+		castor::Matrix4x4f m_view;
 	};
 }
 

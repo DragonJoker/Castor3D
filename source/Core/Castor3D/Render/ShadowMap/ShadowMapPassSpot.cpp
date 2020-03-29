@@ -15,10 +15,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	uint32_t const ShadowMapPassSpot::UboBindingPoint = 10u;
 	uint32_t const ShadowMapPassSpot::TextureSize = 256u;
-	String const ShadowMapPassSpot::ShadowMapUbo = cuT( "ShadowMap" );
-	String const ShadowMapPassSpot::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
 		, MatrixUbo & matrixUbo
@@ -46,8 +43,6 @@ namespace castor3d
 		auto & myCamera = getCuller().getCamera();
 		light.getSpotLight()->updateShadow( myCamera
 			, index );
-		auto & data = m_shadowConfig->getData();
-		data.farPlane = light.getSpotLight()->getFarPlane();
 		doUpdate( queues );
 		return m_outOfDate;
 	}
@@ -56,7 +51,6 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_shadowConfig->upload();
 			auto & myCamera = getCuller().getCamera();
 			m_matrixUbo.update( myCamera.getView(), myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
@@ -151,12 +145,6 @@ namespace castor3d
 			, *m_renderPass
 			, "ShadowMapPassSpot_Pass" );
 
-		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassSpot_ShadowConfigUbo" );
-
 		m_initialised = true;
 		return m_initialised;
 	}
@@ -164,22 +152,17 @@ namespace castor3d
 	void ShadowMapPassSpot::doCleanup()
 	{
 		m_renderQueue.cleanup();
-		m_shadowConfig.reset();
 		getCuller().getCamera().detach();
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
-			, m_shadowConfig->getBuffer() );
 	}
 
 	void ShadowMapPassSpot::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassSpot::UboBindingPoint )
-			, m_shadowConfig->getBuffer() );
 	}
 
 	void ShadowMapPassSpot::doUpdate( RenderQueueArray & queues )
@@ -189,12 +172,8 @@ namespace castor3d
 
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassSpot::doCreateUboBindings( PipelineFlags const & flags )const
 	{
-		auto uboBindings = RenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapPassSpot::UboBindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_initialised = true;
-		return uboBindings;
+		return ashes::VkDescriptorSetLayoutBindingArray{};
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const

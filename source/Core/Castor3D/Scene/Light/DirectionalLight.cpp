@@ -187,40 +187,17 @@ namespace castor3d
 	}
 
 	bool DirectionalLight::updateShadow( Camera const & viewCamera
-		, Camera & lightCamera
-		, int32_t cascadeIndex
 		, float minCastersZ )
 	{
-		bool result = false;
+		m_cascades = doComputeCascades( viewCamera
+			, *this
+			, uint32_t( m_cascades.size() )
+			, minCastersZ );
+		bool result = m_cascades != m_prvCascades;
 
-		if ( size_t( cascadeIndex ) < m_cascades.size() )
+		if ( result )
 		{
-			if ( !cascadeIndex )
-			{
-				m_cascades = doComputeCascades( viewCamera
-					, *this
-					, uint32_t( m_cascades.size() )
-					, minCastersZ );
-			}
-
-			auto & cascade = m_cascades[cascadeIndex];
-			auto & prvCascade = m_prvCascades[cascadeIndex];
-
-			if ( cascade != prvCascade )
-			{
-				auto node = getLight().getParent();
-				node->update();
-				lightCamera.attachTo( *node );
-				lightCamera.setProjection( cascade.projMatrix );
-				lightCamera.setView( cascade.viewMatrix );
-				lightCamera.updateFrustum();
-				result = true;
-
-				if ( cascadeIndex == m_cascades.size() - 1u )
-				{
-					m_prvCascades = m_cascades;
-				}
-			}
+			m_prvCascades = m_cascades;
 		}
 
 		return result;

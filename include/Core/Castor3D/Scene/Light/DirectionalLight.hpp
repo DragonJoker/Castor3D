@@ -110,21 +110,15 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the shadow cascades informations.
 		 *\param[in]	sceneCamera		The viewer camera.
-		 *\param[in]	lightCamera		The light camera.
-		 *\param[in]	cascadeIndex	The cascade to update.
 		 *\param[in]	minCastersZ		The minimal Z of shadow casters.
 		 *\return		\p false if nothing changed.
 		 *\~french
 		 *\brief		Met à jour les information de shadow cascades.
 		 *\param[in]	sceneCamera		La caméra de la scène.
-		 *\param[in]	lightCamera		La caméra de la lumière.
-		 *\param[in]	cascadeIndex	L'index de la cascade à mettre à jour.
 		 *\param[in]	minCastersZ		Le Z minimal des shadow casters.
 		 *\return		\p false si rien n'a changé.
 		 */
 		C3D_API bool updateShadow( Camera const & sceneCamera
-			, Camera & lightCamera
-			, int32_t cascadeIndex
 			, float minCastersZ );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
@@ -146,10 +140,20 @@ namespace castor3d
 		{
 			return m_direction;
 		}
-		
+
 		inline float getSplitDepth( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].splitDepth;
+		}
+
+		inline castor::Matrix4x4f getProjMatrix( uint32_t cascadeIndex )const
+		{
+			return m_cascades[cascadeIndex].projMatrix;
+		}
+
+		inline castor::Matrix4x4f getViewMatrix( uint32_t cascadeIndex )const
+		{
+			return m_cascades[cascadeIndex].viewMatrix;
 		}
 
 		inline castor::Matrix4x4f const & getLightSpaceTransform( uint32_t cascadeIndex )const

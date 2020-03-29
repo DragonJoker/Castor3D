@@ -25,8 +25,9 @@ namespace castor3d
 {
 	uint32_t const ShadowMapPassDirectional::UboBindingPoint = 10u;
 	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
-	String const ShadowMapPassDirectional::ShadowMapUbo = cuT( "ShadowMap" );
-	String const ShadowMapPassDirectional::FarPlane = cuT( "c3d_farPlane" );
+	std::string const ShadowMapPassDirectional::ShadowMapUbo = cuT( "ShadowMap" );
+	std::string const ShadowMapPassDirectional::Projection = cuT( "c3d_projection" );
+	std::string const ShadowMapPassDirectional::View = cuT( "c3d_view" );
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
 		, MatrixUbo & matrixUbo
@@ -51,21 +52,12 @@ namespace castor3d
 	bool ShadowMapPassDirectional::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
-		, uint32_t index
-		, float minCasterZ )
+		, uint32_t index )
 	{
-		auto & myCamera = getCuller().getCamera();
-
-		if ( light.getDirectionalLight()->updateShadow( camera
-			, myCamera
-			, index
-			, minCasterZ )
-			|| getCuller().areAllChanged()
-			|| getCuller().areCulledChanged() )
-		{
-			update( camera, queues, light, index );
-		}
-
+		m_projection = light.getDirectionalLight()->getProjMatrix( index );
+		m_view = light.getDirectionalLight()->getViewMatrix( index );
+		doUpdate( queues );
+		m_outOfDate = true;
 		return m_outOfDate;
 	}
 
@@ -75,28 +67,16 @@ namespace castor3d
 		{
 			auto & config = m_shadowConfig->getData();
 
-			if ( m_farPlane != config.farPlane )
+			if ( m_projection != config.projection
+				|| m_view != config.view )
 			{
-				config.farPlane = m_farPlane;
+				config.projection = m_projection;
+				config.view = m_view;
 				m_shadowConfig->upload();
 			}
 
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
-	}
-
-	bool ShadowMapPassDirectional::update( Camera const & camera
-		, RenderQueueArray & queues
-		, Light & light
-		, uint32_t index )
-	{
-		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
-		auto & myCamera = getCuller().getCamera();
-		m_matrixUbo.update( myCamera.getView()
-			, myCamera.getProjection() );
-		doUpdate( queues );
-		m_outOfDate = true;
-		return m_outOfDate;
 	}
 
 	bool ShadowMapPassDirectional::doInitialise( Size const & size )
@@ -228,7 +208,7 @@ namespace castor3d
 		auto uboBindings = RenderPass::doCreateUboBindings( flags );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapPassDirectional::UboBindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
 		m_initialised = true;
 		return uboBindings;
 	}

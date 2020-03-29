@@ -484,10 +484,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Fragment Intputs
-		Ubo shadowMap{ writer, ShadowMapPassSpot::ShadowMapUbo, ShadowMapPassSpot::UboBindingPoint, 0u };
-		auto c3d_farPlane( shadowMap.declMember< Float >( ShadowMapPassSpot::FarPlane ) );
-		shadowMap.end();
-
 		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
