@@ -42,27 +42,28 @@ namespace castor3d
 	{
 	}
 
+	float ShadowMapPassDirectional::cull()
+	{
+		getCuller().compute();
+		return getCuller().getMinCastersZ();
+	}
+
 	bool ShadowMapPassDirectional::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
-		, uint32_t index )
+		, uint32_t index
+		, float minCasterZ )
 	{
 		auto & myCamera = getCuller().getCamera();
-		getCuller().compute();
 
 		if ( light.getDirectionalLight()->updateShadow( camera
 			, myCamera
 			, index
-				, getCuller().getMinCastersZ() )
+			, minCasterZ )
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged() )
 		{
-			m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
-			auto & myCamera = getCuller().getCamera();
-			m_matrixUbo.update( myCamera.getView()
-				, myCamera.getProjection() );
-			doUpdate( queues );
-			m_outOfDate = true;
+			update( camera, queues, light, index );
 		}
 
 		return m_outOfDate;
@@ -82,6 +83,20 @@ namespace castor3d
 
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
+	}
+
+	bool ShadowMapPassDirectional::update( Camera const & camera
+		, RenderQueueArray & queues
+		, Light & light
+		, uint32_t index )
+	{
+		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
+		auto & myCamera = getCuller().getCamera();
+		m_matrixUbo.update( myCamera.getView()
+			, myCamera.getProjection() );
+		doUpdate( queues );
+		m_outOfDate = true;
+		return m_outOfDate;
 	}
 
 	bool ShadowMapPassDirectional::doInitialise( Size const & size )

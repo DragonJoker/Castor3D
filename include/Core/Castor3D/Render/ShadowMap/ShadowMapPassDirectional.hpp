@@ -43,18 +43,31 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapPassDirectional();
 		/**
+		 *\brief		Culls nodes.
+		 *\return		The min depth among remaining nodes.
+		 */
+		C3D_API float cull();
+		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		bool update( Camera const & camera
+		C3D_API bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
-			, uint32_t index )override;
+			, uint32_t index
+			, float minCasterZ );
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::updateDeviceDependent
 		 */
-		void updateDeviceDependent( uint32_t index )override;
+		C3D_API void updateDeviceDependent( uint32_t index )override;
 
 	private:
+		/**
+		 *\copydoc		castor3d::ShadowMapPass::update
+		 */
+		C3D_API bool update( Camera const & camera
+			, RenderQueueArray & queues
+			, Light & light
+			, uint32_t index )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doInitialise
 		 */

@@ -205,10 +205,21 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
+		auto minDepth = std::numeric_limits< float >::max();
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
-			 m_passes[cascade].pass->update( camera, queues, light, cascade );
+			minDepth = std::min( minDepth
+				, std::static_pointer_cast< ShadowMapPassDirectional >( m_passes[cascade].pass )->cull() );
+		}
+
+		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
+		{
+			std::static_pointer_cast< ShadowMapPassDirectional >( m_passes[cascade].pass )->update( camera
+				, queues
+				, light
+				, cascade
+				, minDepth );
 		}
 	}
 
