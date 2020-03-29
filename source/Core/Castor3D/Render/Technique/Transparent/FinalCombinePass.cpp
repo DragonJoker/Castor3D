@@ -192,14 +192,14 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_texture = uv;
@@ -222,11 +222,11 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), depthTexIndex, 1u );
 			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), accumTexIndex, 1u );
 			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), revealTexIndex, 1u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
@@ -235,19 +235,19 @@ namespace castor3d
 
 			shader::Fog fog{ fogType, writer };
 
-			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
+			auto maxComponent = writer.implementFunction< Float >( "maxComponent"
 				, [&]( Vec3 const & v )
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
-				, InVec3{ writer, cuT( "v" ) } );
+				, InVec3{ writer, "v" } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto coord = writer.declLocale( cuT( "coord" )
+					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );
-					auto revealage = writer.declLocale( cuT( "revealage" )
+					auto revealage = writer.declLocale( "revealage"
 						, texelFetch( c3d_mapRevealage, coord, 0_i ).r() );
 
 					IF( writer, revealage == 1.0_f )
@@ -257,7 +257,7 @@ namespace castor3d
 					}
 					FI;
 
-					auto accum = writer.declLocale( cuT( "accum" )
+					auto accum = writer.declLocale( "accum"
 						, texelFetch( c3d_mapAccumulation, coord, 0_i ) );
 
 					// Suppress overflow
@@ -267,16 +267,16 @@ namespace castor3d
 					}
 					FI;
 
-					auto averageColor = writer.declLocale( cuT( "averageColor" )
+					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
 					pxl_fragColor = vec4( averageColor.rgb(), 1.0_f - revealage );
 
 					if ( fogType != FogType::eDisabled )
 					{
-						auto texCoord = writer.declLocale( cuT( "texCoord" )
+						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );
-						auto position = writer.declLocale( cuT( "position" )
+						auto position = writer.declLocale( "position"
 							, utils.calcVSPosition( texCoord
 								, texture( c3d_mapDepth, texCoord ).r()
 								, c3d_mtxInvProj ) );

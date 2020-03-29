@@ -80,15 +80,16 @@ namespace castor3d
 			// Shader inputs
 			UBO_MATRIX( writer, 0u, 0u );
 			UBO_MODEL_MATRIX( writer, 1u, 0u );
-			auto vertex = writer.declInput< Vec3 >( cuT( "position" ), 0u );
+			auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 			// Shader outputs
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				out.vtx.position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
-			} );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					out.vtx.position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
+				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

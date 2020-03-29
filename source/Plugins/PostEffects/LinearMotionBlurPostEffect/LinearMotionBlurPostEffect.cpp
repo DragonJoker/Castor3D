@@ -45,14 +45,15 @@ namespace motion_blur
 			VertexWriter writer;
 
 			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			Vec2 uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
+			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -66,28 +67,29 @@ namespace motion_blur
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo configuration{ writer, cuT( "Configuration" ), 0u, 0u };
-			auto c3d_samplesCount = configuration.declMember< UInt >( cuT( "c3d_samplesCount" ) );
-			auto c3d_vectorDivider = configuration.declMember< Float >( cuT( "c3d_vectorDivider" ) );
-			auto c3d_blurScale = configuration.declMember< Float >( cuT( "c3d_blurScale" ) );
+			Ubo configuration{ writer, "Configuration", 0u, 0u };
+			auto c3d_samplesCount = configuration.declMember< UInt >( "c3d_samplesCount" );
+			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
+			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );
 			configuration.end();
-			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapVelocity" ), 1u, 0u );
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapColor" ), 2u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapVelocity = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapVelocity", 1u, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", 2u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					auto blurVector = writer.declLocale( cuT( "vector" )
+					auto blurVector = writer.declLocale( "vector"
 						, ( texture( c3d_mapVelocity, vtx_texture ).xy() / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
 					pxl_fragColor = texture( c3d_mapColor, vtx_texture );
 
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
-						auto offset = writer.declLocale( cuT( "offset" )
+						auto offset = writer.declLocale( "offset"
 							, blurVector * ( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
 						pxl_fragColor += texture( c3d_mapColor, vtx_texture + offset );
 					}

@@ -75,24 +75,25 @@ namespace Uncharted2
 							+ ToeStrength * ToeDenominator ) )
 					- ToeNumerator / ToeDenominator );
 			}
-			, InVec3{ writer, "x" } );
+		, InVec3{ writer, "x" } );
 
-		writer.implementFunction< sdw::Void >( "main", [&]()
-		{
-			auto hdrColor = writer.declLocale( "hdrColor"
-				, texture( c3d_mapHdr, vtx_texture ).rgb() );
-			hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto hdrColor = writer.declLocale( "hdrColor"
+					, texture( c3d_mapHdr, vtx_texture ).rgb() );
+				hdrColor *= vec3( Float( ExposureBias ) ); // Hardcoded Exposure Adjustment.
 
-			auto current = writer.declLocale( "current"
-				, uncharted2ToneMap( hdrColor * c3d_exposure ) );
+				auto current = writer.declLocale( "current"
+					, uncharted2ToneMap( hdrColor * c3d_exposure ) );
 
-			auto whiteScale = writer.declLocale( "whiteScale"
-				, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
-			auto colour = writer.declLocale( "colour"
-				, current * whiteScale );
+				auto whiteScale = writer.declLocale( "whiteScale"
+					, vec3( 1.0_f ) / uncharted2ToneMap( vec3( Float( LinearWhitePointValue ) ) ) );
+				auto colour = writer.declLocale( "colour"
+					, current * whiteScale );
 
-			pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0_f );
-		} );
+				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, colour ), 1.0_f );
+			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

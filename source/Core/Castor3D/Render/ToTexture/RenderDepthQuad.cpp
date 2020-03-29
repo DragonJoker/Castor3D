@@ -24,14 +24,15 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					vtx_texture = uv;
 					out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
@@ -45,15 +46,16 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", 0u, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					auto depth = writer.declLocale( cuT( "depth" ), texture( c3d_mapDepth, vtx_texture.xy() ).x() );
+					auto depth = writer.declLocale( "depth", texture( c3d_mapDepth, vtx_texture.xy() ).x() );
 					depth = 1.0_f - ( 1.0_f - depth ) * 25.0f;
 					pxl_fragColor = vec4( depth, depth, depth, 1.0_f );
 				} );

@@ -44,7 +44,8 @@ namespace Bloom
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main", [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					vtx_texture = ( position + 1.0_f ) / 2.0_f;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -70,7 +71,8 @@ namespace Bloom
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main", [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );

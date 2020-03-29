@@ -77,7 +77,7 @@ namespace smaa
 				, OutVec2{ writer, "pixcoord" }
 				, OutVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -812,7 +812,7 @@ namespace smaa
 				, InSampledImage2DRgba32{ writer, "searchTex" }
 				, InIVec4{ writer, "subsampleIndices" } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					pxl_fragColour = SMAABlendingWeightCalculationPS( vtx_texture

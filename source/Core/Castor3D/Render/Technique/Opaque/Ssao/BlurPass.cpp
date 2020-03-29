@@ -40,12 +40,12 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
 			auto out = writer.getOut();
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -61,73 +61,73 @@ namespace castor3d
 
 			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
 			/** (1, 0) or (0, 1)*/
-			Ubo configuration{ writer, cuT( "BlurConfiguration" ), BlurCfgUboIdx, 0u };
-			auto c3d_axis = configuration.declMember< IVec2 >( cuT( "c3d_axis" ) );
-			auto c3d_dummy = configuration.declMember< IVec2 >( cuT( "c3d_dummy" ) );
-			auto c3d_gaussian = configuration.declMember< Vec4 >( cuT( "c3d_gaussian" ), 2u );
+			Ubo configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
+			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );
+			auto c3d_dummy = configuration.declMember< IVec2 >( "c3d_dummy" );
+			auto c3d_gaussian = configuration.declMember< Vec4 >( "c3d_gaussian", 2u );
 			configuration.end();
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapNormal" ), NmlImgIdx, 0u, config.useNormalsBuffer );
-			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapInput" ), InpImgIdx, 0u );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NmlImgIdx, 0u, config.useNormalsBuffer );
+			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapInput", InpImgIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_readMultiplyFirst = writer.declConstant( cuT( "c3d_readMultiplyFirst" ), vec3( 2.0_f ), config.useNormalsBuffer );
-			auto c3d_readAddSecond = writer.declConstant( cuT( "c3d_readAddSecond" ), vec3( 1.0_f ), config.useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ), config.useNormalsBuffer );
+			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ), config.useNormalsBuffer );
 
 			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
 #define  result         pxl_fragColor.r()
 #define  keyPassThrough pxl_fragColor.g()
 
 			/** Returns a number on (0, 1) */
-			auto unpackKey = writer.implementFunction< Float >( cuT( "unpackKey" )
+			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
 				, [&]( Float const & p )
 				{
 					writer.returnStmt( p );
 				}
-				, InFloat{ writer, cuT( "p" ) } );
+				, InFloat{ writer, "p" } );
 
 			// Reconstruct camera-space P.xyz from screen-space S = (x, y) in
 			// pixels and camera-space z < 0.  Assumes that the upper-left pixel center
 			// is at (0.5, 0.5) [but that need not be the location at which the sample tap
 			// was placed!]
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
-			auto reconstructCSPosition = writer.implementFunction< Vec3 >( cuT( "reconstructCSPosition" )
+			auto reconstructCSPosition = writer.implementFunction< Vec3 >( "reconstructCSPosition"
 				, [&]( Vec2 const & S
 					, Float const & z
 					, Vec4 const & projInfo )
 				{
 					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
-				, InVec2{ writer, cuT( "S" ) }
-				, InFloat{ writer, cuT( "z" ) }
-				, InVec4{ writer, cuT( "projInfo" ) } );
+				, InVec2{ writer, "S" }
+				, InFloat{ writer, "z" }
+				, InVec4{ writer, "projInfo" } );
 
-			auto positionFromKey = writer.implementFunction< Vec3 >( cuT( "positionFromKey" )
+			auto positionFromKey = writer.implementFunction< Vec3 >( "positionFromKey"
 				, [&]( Float const & key
 					, IVec2 const & ssCenter
 					, Vec4 const & projInfo )
 				{
-					auto z = writer.declLocale( cuT( "z" )
+					auto z = writer.declLocale( "z"
 						, key * c3d_farPlaneZ );
-					auto position = writer.declLocale( cuT( "position" )
+					auto position = writer.declLocale( "position"
 						, reconstructCSPosition( vec2( ssCenter ) + vec2( 0.5_f )
 							, z
 							, projInfo ) );
 					writer.returnStmt( position );
 				}
-				, InFloat{ writer, cuT( "key" ) }
-				, InIVec2{ writer, cuT( "ssCenter" ) }
-				, InVec4{ writer, cuT( "projInfo" ) } );
+				, InFloat{ writer, "key" }
+				, InIVec2{ writer, "ssCenter" }
+				, InVec4{ writer, "projInfo" } );
 
-			auto getTapInformation = writer.implementFunction< Void >( cuT( "getTapInformation" )
+			auto getTapInformation = writer.implementFunction< Void >( "getTapInformation"
 				, [&]( IVec2 const & tapLoc
 					, Float tapKey
 					, Float value
 					, Vec3 tapNormal )
 				{
-					auto temp = writer.declLocale( cuT( "temp" )
+					auto temp = writer.declLocale( "temp"
 						, texelFetch( c3d_mapInput, tapLoc, 0_i ) );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
@@ -142,19 +142,19 @@ namespace castor3d
 						tapNormal = vec3( 0.0_f );
 					}
 				}
-				, InIVec2{ writer, cuT( "tapLoc" ) }
-				, OutFloat{ writer, cuT( "tapKey" ) }
-				, OutFloat{ writer, cuT( "value" ) }
-				, OutVec3{ writer, cuT( "tapNormal" ) } );
+				, InIVec2{ writer, "tapLoc" }
+				, OutFloat{ writer, "tapKey" }
+				, OutFloat{ writer, "value" }
+				, OutVec3{ writer, "tapNormal" } );
 
-			auto square = writer.implementFunction< Float >( cuT( "square" )
+			auto square = writer.implementFunction< Float >( "square"
 				, [&]( Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
-				, InFloat{ writer, cuT( "x") } );
+				, InFloat{ writer, "x" } );
 
-			auto calculateBilateralWeight = writer.implementFunction< Float >( cuT( "calculateBilateralWeight" )
+			auto calculateBilateralWeight = writer.implementFunction< Float >( "calculateBilateralWeight"
 				, [&]( Float const & key
 					, Float const & tapKey
 					, IVec2 const & tapLoc
@@ -162,28 +162,28 @@ namespace castor3d
 					, Vec3 const & tapNormal
 					, Vec3 const & position )
 				{
-					auto scale = writer.declLocale( cuT( "scale" )
+					auto scale = writer.declLocale( "scale"
 						, 1.5_f * c3d_invRadius );
 
 					// The "bilateral" weight. As depth difference increases, decrease weight.
 					// The key values are in scene-specific scale. To make them scale-invariant, factor in
 					// the AO radius, which should be based on the scene scale.
-					auto depthWeight = writer.declLocale( cuT( "depthWeight" )
+					auto depthWeight = writer.declLocale( "depthWeight"
 						, max( 0.0_f, 1.0_f - ( c3d_edgeSharpness * 2000.0_f ) * abs( tapKey - key ) * scale ) );
-					auto k_normal = writer.declLocale( cuT( "k_normal" )
+					auto k_normal = writer.declLocale( "k_normal"
 						, 1.0_f );
-					auto k_plane = writer.declLocale( cuT( "k_plane" )
+					auto k_plane = writer.declLocale( "k_plane"
 						, 1.0_f );
 
 					// Prevents blending over creases. 
-					auto normalWeight = writer.declLocale( cuT( "normalWeight" )
+					auto normalWeight = writer.declLocale( "normalWeight"
 						, 1.0_f );
-					auto planeWeight = writer.declLocale( cuT( "planeWeight" )
+					auto planeWeight = writer.declLocale( "planeWeight"
 						, 1.0_f );
 
 					if ( config.useNormalsBuffer )
 					{
-						auto normalCloseness = writer.declLocale( cuT( "normalCloseness" )
+						auto normalCloseness = writer.declLocale( "normalCloseness"
 							, dot( tapNormal, normal ) );
 
 						if ( !config.blurHighQuality )
@@ -193,29 +193,29 @@ namespace castor3d
 							k_normal = 4.0_f;
 						}
 
-						auto normalError = writer.declLocale( cuT( "normalError" )
+						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
 						normalWeight = max( 1.0_f - c3d_edgeSharpness * normalError, 0.0_f );
 
 						if ( config.blurHighQuality )
 						{
-							auto lowDistanceThreshold2 = writer.declLocale( cuT( "lowDistanceThreshold2" )
+							auto lowDistanceThreshold2 = writer.declLocale( "lowDistanceThreshold2"
 								, 0.001_f );
 
-							auto tapPosition = writer.declLocale( cuT( "tapPosition" )
+							auto tapPosition = writer.declLocale( "tapPosition"
 								, positionFromKey( tapKey, tapLoc, c3d_projInfo ) );
 
 							// Change position in camera space
-							auto dq = writer.declLocale( cuT( "dq" )
+							auto dq = writer.declLocale( "dq"
 								, position - tapPosition );
 
 							// How far away is this point from the original sample
 							// in camera space? (Max value is unbounded)
-							auto distance2 = writer.declLocale( cuT( "distance2" )
+							auto distance2 = writer.declLocale( "distance2"
 								, dot( dq, dq ) );
 
 							// How far off the expected plane (on the perpendicular) is this point?  Max value is unbounded.
-							auto planeError = writer.declLocale( cuT( "planeError" )
+							auto planeError = writer.declLocale( "planeError"
 								, max( abs( dot( dq, tapNormal ) ), abs( dot( dq, normal ) ) ) );
 
 							// Minimum distance threshold must be scale-invariant, so factor in the radius
@@ -229,28 +229,28 @@ namespace castor3d
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
 				}
-				, InFloat{ writer, cuT( "key" ) }
-				, InFloat{ writer, cuT( "tapKey" ) }
-				, InIVec2{ writer, cuT( "tapLoc" ) }
-				, InVec3{ writer, cuT( "normal" ) }
-				, InVec3{ writer, cuT( "tapNormal" ) }
-				, InVec3{ writer, cuT( "position" ) } );
+				, InFloat{ writer, "key" }
+				, InFloat{ writer, "tapKey" }
+				, InIVec2{ writer, "tapLoc" }
+				, InVec3{ writer, "normal" }
+				, InVec3{ writer, "tapNormal" }
+				, InVec3{ writer, "position" } );
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
-					auto ssCenter = writer.declLocale( cuT( "ssCenter" )
+					auto ssCenter = writer.declLocale( "ssCenter"
 						, ivec2( in.fragCoord.xy() ) );
 
-					auto temp = writer.declLocale( cuT( "temp" )
+					auto temp = writer.declLocale( "temp"
 						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );
-					auto sum = writer.declLocale( cuT( "sum" )
+					auto sum = writer.declLocale( "sum"
 						, temp.r() );
 
 					keyPassThrough = temp.g();
-					auto key = writer.declLocale( cuT( "key" )
+					auto key = writer.declLocale( "key"
 						, unpackKey( keyPassThrough ) );
-					auto normal = writer.declLocale( cuT( "normal" )
+					auto normal = writer.declLocale( "normal"
 						, vec3( 0.0_f ) );
 
 					if ( config.useNormalsBuffer )
@@ -269,13 +269,13 @@ namespace castor3d
 
 					// Base weight for depth falloff.  Increase this for more blurriness,
 					// decrease it for better edge discrimination
-					auto BASE = writer.declLocale( cuT( "BASE" )
+					auto BASE = writer.declLocale( "BASE"
 						, c3d_gaussian[0_u][0_u] );
-					auto totalWeight = writer.declLocale( cuT( "totalWeight" )
+					auto totalWeight = writer.declLocale( "totalWeight"
 						, BASE );
 					sum *= totalWeight;
 
-					auto position = writer.declLocale( cuT( "position" )
+					auto position = writer.declLocale( "position"
 						, positionFromKey( key, ssCenter, c3d_projInfo ) );
 
 					FOR( writer, Int, r, -c3d_blurRadius, r <= c3d_blurRadius, ++r )
@@ -284,21 +284,21 @@ namespace castor3d
 						// so the IF statement has no runtime cost
 						IF( writer, r != 0_i )
 						{
-							auto tapLoc = writer.declLocale( cuT( "tapLoc" )
+							auto tapLoc = writer.declLocale( "tapLoc"
 								, ssCenter + c3d_axis * ( r * c3d_blurStepSize ) );
 
 							// spatial domain: offset gaussian tap
-							auto absR = writer.declLocale( cuT( "absR" )
+							auto absR = writer.declLocale( "absR"
 								, writer.cast< UInt >( abs( r ) ) );
-							auto weight = writer.declLocale( cuT( "weight" )
+							auto weight = writer.declLocale( "weight"
 								, 0.3_f + c3d_gaussian[absR % 2_u][absR / 2_u] );
 
-							auto tapKey = writer.declLocale< Float >( cuT( "tapKey" ) );
-							auto value = writer.declLocale< Float >( cuT( "value" ) );
-							auto tapNormal = writer.declLocale< Vec3 >( cuT( "tapNormal" ) );
+							auto tapKey = writer.declLocale< Float >( "tapKey" );
+							auto value = writer.declLocale< Float >( "value" );
+							auto tapNormal = writer.declLocale< Vec3 >( "tapNormal" );
 							getTapInformation( tapLoc, tapKey, value, tapNormal );
 
-							auto bilateralWeight = writer.declLocale( cuT( "bilateralWeight" )
+							auto bilateralWeight = writer.declLocale( "bilateralWeight"
 								, calculateBilateralWeight( key
 									, tapKey
 									, tapLoc
@@ -314,7 +314,7 @@ namespace castor3d
 					}
 					ROF;
 
-					auto const epsilon = writer.declLocale( cuT( "epsilon" )
+					auto const epsilon = writer.declLocale( "epsilon"
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
 				} );

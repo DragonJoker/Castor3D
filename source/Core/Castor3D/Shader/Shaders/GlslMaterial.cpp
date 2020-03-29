@@ -181,13 +181,13 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
-				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( cuT( "getMaterial" )
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
+				m_getMaterial = m_writer.implementFunction< LegacyMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
 						auto result = m_writer.declLocale< LegacyMaterial >( "result"
 							, *m_type );
-						auto offset = m_writer.declLocale( cuT( "offset" )
+						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_diffAmb = texelFetch( c3d_materials, offset++ );
 						result.m_specShin = texelFetch( c3d_materials, offset++ );
@@ -202,7 +202,7 @@ namespace castor3d
 
 						m_writer.returnStmt( result );
 					}
-					, InUInt{ m_writer, cuT( "index" ) } );
+					, InUInt{ m_writer, "index" } );
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace castor3d
 
 		BaseMaterialUPtr LegacyMaterials::getBaseMaterial( UInt const & index )const
 		{
-			auto material = m_writer.declLocale( cuT( "material" )
+			auto material = m_writer.declLocale( "material"
 				, getMaterial( index ) );
 			return std::make_unique< LegacyMaterial >( material );
 		}
@@ -246,13 +246,13 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
-				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( cuT( "getMaterial" )
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
+				m_getMaterial = m_writer.implementFunction< MetallicRoughnessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
 						auto result = m_writer.declLocale< MetallicRoughnessMaterial >( "result"
 							, *m_type );
-						auto offset = m_writer.declLocale( cuT( "offset" )
+						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_albRough = texelFetch( c3d_materials, offset++ );
 						result.m_metDiv = texelFetch( c3d_materials, offset++ );
@@ -267,7 +267,7 @@ namespace castor3d
 
 						m_writer.returnStmt( result );
 					}
-					, InUInt{ m_writer, cuT( "index" ) } );
+					, InUInt{ m_writer, "index" } );
 			}
 		}
 		
@@ -285,7 +285,7 @@ namespace castor3d
 
 		BaseMaterialUPtr PbrMRMaterials::getBaseMaterial( UInt const & index )const
 		{
-			auto material = m_writer.declLocale( cuT( "material" )
+			auto material = m_writer.declLocale( "material"
 				, getMaterial( index ) );
 			return std::make_unique< MetallicRoughnessMaterial >( material );
 		}
@@ -311,13 +311,13 @@ namespace castor3d
 			}
 			else
 			{
-				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( cuT( "c3d_materials" ), getPassBufferIndex(), 0u );
-				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( cuT( "getMaterial" )
+				auto c3d_materials = m_writer.declSampledImage< FImgBufferRgba32 >( "c3d_materials", getPassBufferIndex(), 0u );
+				m_getMaterial = m_writer.implementFunction< SpecularGlossinessMaterial >( "getMaterial"
 					, [this, &c3d_materials]( UInt const & index )
 					{
 						auto result = m_writer.declLocale< SpecularGlossinessMaterial >( "result"
 							, *m_type );
-						auto offset = m_writer.declLocale( cuT( "offset" )
+						auto offset = m_writer.declLocale( "offset"
 							, m_writer.cast< Int >( index ) * Int( MaxMaterialComponentsCount ) );
 						result.m_diffDiv = texelFetch( c3d_materials, offset++ );
 						result.m_specGloss = texelFetch( c3d_materials, offset++ );
@@ -332,7 +332,7 @@ namespace castor3d
 
 						m_writer.returnStmt( result );
 					}
-					, InUInt{ m_writer, cuT( "index" ) } );
+					, InUInt{ m_writer, "index" } );
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace castor3d
 
 		BaseMaterialUPtr PbrSGMaterials::getBaseMaterial( UInt const & index )const
 		{
-			auto material = m_writer.declLocale( cuT( "material" )
+			auto material = m_writer.declLocale( "material"
 				, getMaterial( index ) );
 			return std::make_unique< SpecularGlossinessMaterial >( material );
 		}

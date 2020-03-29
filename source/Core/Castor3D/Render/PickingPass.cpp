@@ -31,9 +31,9 @@ namespace castor3d
 
 	namespace
 	{
-		static String const Picking = cuT( "Picking" );
-		static String const DrawIndex = cuT( "c3d_iDrawIndex" );
-		static String const NodeIndex = cuT( "c3d_iNodeIndex" );
+		static std::string const Picking = "Picking";
+		static std::string const DrawIndex = "c3d_iDrawIndex";
+		static std::string const NodeIndex = "c3d_iNodeIndex";
 
 		castor::Position convertToBottomUp( Position const & position
 			, castor::Size const & size )
@@ -708,32 +708,32 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
+		auto uv = writer.declInput< Vec3 >( "uv"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( "weights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( "weights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( "transform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( "material"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( "position2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( "texture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -745,60 +745,59 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		// Outputs
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
-		std::function< void() > main = [&]()
-		{
-			auto v4Vertex = writer.declLocale( cuT( "v4Vertex" )
-				, vec4( position.xyz(), 1.0_f ) );
-			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
-				, uv );
-			auto mtxModel = writer.declLocale< Mat4 >( cuT( "mtxModel" ) );
+		writer.implementFunction< sdw::Void >( "main"
+			,[&] ()
+			{
+				auto v4Vertex = writer.declLocale( "v4Vertex"
+					, vec4( position.xyz(), 1.0_f ) );
+				auto v3Texture = writer.declLocale( "v3Texture"
+					, uv );
+				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel" );
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
-			{
-				mtxModel = SkinningUbo::computeTransform( skinningData, writer, flags.programFlags );
-			}
-			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				mtxModel = transform;
-			}
-			else
-			{
-				mtxModel = c3d_curMtxModel;
-			}
+				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
+				{
+					mtxModel = SkinningUbo::computeTransform( skinningData, writer, flags.programFlags );
+				}
+				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+				{
+					mtxModel = transform;
+				}
+				else
+				{
+					mtxModel = c3d_curMtxModel;
+				}
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-			{
-				vtx_material = writer.cast< UInt >( material );
-			}
-			else
-			{
-				vtx_material = writer.cast< UInt >( c3d_materialIndex );
-			}
+				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
+				{
+					vtx_material = writer.cast< UInt >( material );
+				}
+				else
+				{
+					vtx_material = writer.cast< UInt >( c3d_materialIndex );
+				}
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
-			{
-				auto time = writer.declLocale( cuT( "time" )
-					, vec3( 1.0_f - c3d_time ) );
-				v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0_f );
-				v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
-			}
+				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
+				{
+					auto time = writer.declLocale( "time"
+						, vec3( 1.0_f - c3d_time ) );
+					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0_f );
+					v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
+				}
 
-			vtx_texture = v3Texture;
-			v4Vertex = mtxModel * v4Vertex;
-			v4Vertex = c3d_curView * v4Vertex;
-			vtx_instance = writer.cast< UInt >( in.instanceID );
-			out.vtx.position = c3d_projection * v4Vertex;
-		};
-
-		writer.implementFunction< sdw::Void >( cuT( "main" ), main );
+				vtx_texture = v3Texture;
+				v4Vertex = mtxModel * v4Vertex;
+				v4Vertex = c3d_curView * v4Vertex;
+				vtx_instance = writer.cast< UInt >( in.instanceID );
+				out.vtx.position = c3d_projection * v4Vertex;
+			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 

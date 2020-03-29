@@ -725,18 +725,18 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_textureObjects = writer.declOutput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
-			auto vtx_textureOverlays = writer.declOutput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
+			auto vtx_textureObjects = writer.declOutput< Vec2 >( "vtx_textureObjects", 0u );
+			auto vtx_textureOverlays = writer.declOutput< Vec2 >( "vtx_textureOverlays", 1u );
 			auto out = writer.getOut();
 
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_textureObjects = utils.topDownToBottomUp( uv );
@@ -759,20 +759,20 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapOverlays" ), OverlayImgIdx, 0u );
-			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapObjects" ), ObjectImgIdx, 0u );
-			auto vtx_textureObjects = writer.declInput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
-			auto vtx_textureOverlays = writer.declInput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
+			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapOverlays", OverlayImgIdx, 0u );
+			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapObjects", ObjectImgIdx, 0u );
+			auto vtx_textureObjects = writer.declInput< Vec2 >( "vtx_textureObjects", 0u );
+			auto vtx_textureOverlays = writer.declInput< Vec2 >( "vtx_textureOverlays", 1u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto overlayColor = writer.declLocale( cuT( "overlayColor" )
+					auto overlayColor = writer.declLocale( "overlayColor"
 						, texture( c3d_mapOverlays, vtx_textureOverlays ) );
-					auto objectsColor = writer.declLocale( cuT( "objectsColor" )
+					auto objectsColor = writer.declLocale( "objectsColor"
 						, texture( c3d_mapObjects, vtx_textureObjects ) );
 					objectsColor.rgb() *= 1.0_f - overlayColor.a();
 					//overlayColor.rgb() *= overlayColor.a();

@@ -333,15 +333,16 @@ namespace castor3d
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+		auto position = writer.declInput< Vec2 >( "position", 0u );
 
 		// Shader outputs
 		auto out = writer.getOut();
 
-		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-		{
-			out.vtx.position = c3d_projection * vec4( position, 0.0_f, 1.0_f );
-		} );
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				out.vtx.position = c3d_projection * vec4( position, 0.0_f, 1.0_f );
+			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

@@ -149,12 +149,14 @@ namespace castor3d
 						};
 						for ( auto & corner : corners )
 						{
-							m_minCullersZ = std::min( m_minCullersZ, ( camera.getView() * node.getDerivedTransformationMatrix() * corner )[2] );
+							m_minCullersZ = std::min( m_minCullersZ
+								, ( camera.getView() * node.getDerivedTransformationMatrix() * corner )[2] );
 						}
 					}
 					else
 					{
-						m_minCullersZ = std::min( m_minCullersZ, -mesh.getBoundingSphere().getRadius() );
+						m_minCullersZ = std::min( m_minCullersZ
+							, node.getDerivedPosition()[2] - mesh.getBoundingSphere().getRadius() );
 					}
 				}
 			}

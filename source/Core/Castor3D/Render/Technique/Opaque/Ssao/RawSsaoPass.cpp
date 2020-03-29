@@ -91,7 +91,7 @@ namespace castor3d
 
 			UBO_SSAO_CONFIG( writer, 0u, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), 1u, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", 1u, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", 2u, 0u, config.useNormalsBuffer );
@@ -100,7 +100,7 @@ namespace castor3d
 
 			auto in = writer.getIn();
 
-			auto pxl_fragColor = writer.declOutput< Vec3 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
 
 #define visibility      pxl_fragColor.r()
 #define bilateralKey    pxl_fragColor.g()
@@ -147,9 +147,9 @@ namespace castor3d
 					, Float ssRadius )
 				{
 					// Radius relative to ssR
-					auto alpha = writer.declLocale( cuT( "alpha" )
+					auto alpha = writer.declLocale( "alpha"
 						, ( writer.cast< Float >( sampleNumber ) + 0.5_f ) * ( 1.0_f / writer.cast< Float >( c3d_numSamples ) ) );
-					auto angle = writer.declLocale( cuT( "angle" )
+					auto angle = writer.declLocale( "angle"
 						, alpha * ( 6.28_f * writer.cast< Float >( c3d_numSpiralTurns ) ) + spinAngle );
 
 					ssRadius = alpha;
@@ -172,7 +172,7 @@ namespace castor3d
 			auto getPosition = writer.implementFunction< Vec3 >( "getPosition"
 				, [&]( IVec2 const & ssPosition )
 				{
-					auto position = writer.declLocale< Vec3 >( cuT( "position" ) );
+					auto position = writer.declLocale< Vec3 >( "position" );
 					position.z() = texelFetch( c3d_mapDepth, ssPosition, 0_i ).r();
 
 					// Offset to pixel center
@@ -203,15 +203,15 @@ namespace castor3d
 					, Float const & invCszBufferScale )
 				{
 					// Derivation:
-					auto mipLevel = writer.declLocale( cuT( "mipLevel" )
+					auto mipLevel = writer.declLocale( "mipLevel"
 						, getMipLevel( ssRadius ) );
-					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
+					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( ssRadius * unitOffset ) + ssCenter );
-					auto position = writer.declLocale< Vec3 >( cuT( "position" ) );
+					auto position = writer.declLocale< Vec3 >( "position" );
 
 					// We need to divide by 2^mipLevel to read the appropriately scaled coordinate from a MIP-map.
 					// Manually clamp to the texture size because texelFetch bypasses the texture unit
-					auto mipPosition = writer.declLocale( cuT( "mipPosition" )
+					auto mipPosition = writer.declLocale( "mipPosition"
 						, clamp( ivec2( ssPosition.x() >> mipLevel, ssPosition.y() >> mipLevel )
 							, ivec2( 0_i )
 							, textureSize( c3d_mapDepth, mipLevel ) - ivec2( 1_i ) ) );
@@ -243,7 +243,7 @@ namespace castor3d
 					if ( config.highQuality )
 					{
 						// Epsilon inside the sqrt for rsqrt operation
-						auto f = writer.declLocale( cuT( "f" )
+						auto f = writer.declLocale( "f"
 							, max( 1.0_f - vv * c3d_invRadius2, 0.0_f ) );
 						writer.returnStmt( f * max( ( vn - c3d_bias ) * inverseSqrt( epsilon + vv ), 0.0_f ) );
 					}
@@ -251,7 +251,7 @@ namespace castor3d
 					{
 						// Avoid the square root from above.
 						//  Assumes the desired result is intensity/radius^6 in main()
-						auto f = writer.declLocale( cuT( "f" )
+						auto f = writer.declLocale( "f"
 							, max( c3d_radius2 - vv, 0.0_f ) );
 						writer.returnStmt( f * f * f * max( ( vn - c3d_bias ) / ( epsilon + vv ), 0.0_f ) );
 					}
@@ -338,7 +338,7 @@ namespace castor3d
 				{
 					writer.returnStmt( x * x );
 				}
-				, InFloat{ writer, cuT( "x") } );
+				, InFloat{ writer, "x" } );
 
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
@@ -401,7 +401,7 @@ namespace castor3d
 					FI;
 
 					// Hash function used in the HPG12 AlchemyAO paper
-					auto randomPatternRotationAngle = writer.declLocale( cuT( "randomPatternRotationAngle" )
+					auto randomPatternRotationAngle = writer.declLocale( "randomPatternRotationAngle"
 						, 10.0_f * writer.cast< Float >( ( 3 * ssCenter.x() ) ^ ( ssCenter.y() + ssCenter.x() * ssCenter.y() ) ) );
 
 					auto sum = writer.declLocale( "sum"
@@ -421,14 +421,14 @@ namespace castor3d
 
 					if ( config.highQuality )
 					{
-						auto A = writer.declLocale( cuT( "A" )
+						auto A = writer.declLocale( "A"
 							, pow( max( 0.0_f
 									, 1.0_f - sqrt( sum * ( 3.0_f / writer.cast< Float >( c3d_numSamples ) ) ) )
 								, c3d_intensity ) );
 					}
 					else
 					{
-						auto A = writer.declLocale( cuT( "A" )
+						auto A = writer.declLocale( "A"
 							, max( 0.0_f
 								, 1.0_f - sum * c3d_intensityDivR6 * ( 5.0_f / writer.cast< Float >( c3d_numSamples ) ) ) );
 						// Anti-tone map to reduce contrast and drag dark region farther
@@ -436,7 +436,7 @@ namespace castor3d
 						A = ( pow( A, 0.2_f ) + 1.2_f * A * A * A * A ) / 2.2_f;
 					}
 
-					auto A = writer.getVariable< Float >( cuT( "A" ) );
+					auto A = writer.getVariable< Float >( "A" );
 					// Visualize random spin distribution
 					//A = mod(randomPatternRotationAngle / (2 * 3.141592653589), 1.0);
 

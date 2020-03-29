@@ -939,20 +939,21 @@ namespace castor3d
 
 			// Shader inputs
 			uint32_t index = 0u;
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u, hasTexture != 0u );
-			auto text = writer.declInput< Vec2 >( cuT( "text" ), 2u, textOverlay );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTexture != 0u );
+			auto text = writer.declInput< Vec2 >( "text", 2u, textOverlay );
 
 			// Shader outputs
-			auto vtx_text = writer.declOutput< Vec2 >( cuT( "vtx_text" ), 0u, textOverlay );
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 1u, hasTexture );
+			auto vtx_text = writer.declOutput< Vec2 >( "vtx_text", 0u, textOverlay );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 1u, hasTexture );
 			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< void >( "main"
+				, [&]()
 				{
 					vtx_text = text;
 					vtx_texture = uv;
-					auto size = writer.declLocale( cuT( "size" )
+					auto size = writer.declLocale( "size"
 						, vec2( c3d_positionRatio.z() * writer.cast< Float >( c3d_renderSizeIndex.x() )
 							, c3d_positionRatio.w() * writer.cast< Float >( c3d_renderSizeIndex.y() ) ) );
 					out.vtx.position = c3d_projection * vec4( size * ( c3d_positionRatio.xy() + position )
@@ -1001,31 +1002,32 @@ namespace castor3d
 			UBO_TEXTURES( writer, TexturesUboBinding, 0u, hasTexture );
 
 			// Shader inputs
-			auto vtx_text = writer.declInput< Vec2 >( cuT( "vtx_text" )
+			auto vtx_text = writer.declInput< Vec2 >( "vtx_text"
 				, 0u
 				, textOverlay );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" )
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture"
 				, 1u
 				, hasTexture );
-			auto c3d_mapText = writer.declSampledImage< FImg2DR32 >( cuT( "c3d_mapText" )
+			auto c3d_mapText = writer.declSampledImage< FImg2DR32 >( "c3d_mapText"
 				, TextMapBinding
 				, 0u
 				, textOverlay );
-			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( cuT( "c3d_maps" )
+			auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 				, MapsBinding
 				, 0u
 				, std::max( 1u, texturesCount )
 				, hasTexture ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< void >( cuT( "main" ), [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					auto material = materials->getBaseMaterial( writer.cast< UInt >( c3d_renderSizeIndex.z() ) );
-					auto diffuse = writer.declLocale( cuT( "diffuse" )
+					auto diffuse = writer.declLocale( "diffuse"
 						, material->m_diffuse() );
-					auto alpha = writer.declLocale( cuT( "alpha" )
+					auto alpha = writer.declLocale( "alpha"
 						, material->m_opacity );
 
 					if ( textOverlay )

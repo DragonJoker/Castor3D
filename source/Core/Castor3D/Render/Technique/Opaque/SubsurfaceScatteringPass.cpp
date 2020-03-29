@@ -46,14 +46,14 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_texture = uv;
@@ -94,27 +94,27 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), BlurDepthImgId, 0u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), BlurData5ImgId, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), BlurLgtDiffImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			shader::Utils utils{ writer };
 			utils.declareCalcVSPosition();
 			utils.declareInvertVec2Y();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto data4 = writer.declLocale( cuT( "data4" )
+					auto data4 = writer.declLocale( "data4"
 						, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
-					auto data5 = writer.declLocale( cuT( "data5" )
+					auto data5 = writer.declLocale( "data5"
 						, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
-					auto materialId = writer.declLocale( cuT( "materialId" )
+					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
-					auto translucency = writer.declLocale( cuT( "translucency" )
+					auto translucency = writer.declLocale( "translucency"
 						, data4.w() );
 					auto material = materials->getBaseMaterial( materialId );
 
@@ -125,9 +125,9 @@ namespace castor3d
 					FI;
 
 					// Fetch color and linear depth for current pixel:
-					auto colorM = writer.declLocale( cuT( "colorM" )
+					auto colorM = writer.declLocale( "colorM"
 						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
-					auto depthM = writer.declLocale( cuT( "depthM" )
+					auto depthM = writer.declLocale( "depthM"
 						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).r() );
 					depthM = utils.calcVSPosition( vtx_texture
 						, depthM
@@ -139,36 +139,36 @@ namespace castor3d
 
 					if ( isVertic )
 					{
-						auto step = writer.declLocale( cuT( "step" )
+						auto step = writer.declLocale( "step"
 							, c3d_pixelSize * vec2( 0.0_f, 1.0_f ) );
 					}
 					else
 					{
-						auto step = writer.declLocale( cuT( "step" )
+						auto step = writer.declLocale( "step"
 							, c3d_pixelSize * vec2( 1.0_f, 0.0_f ) );
 					}
 
-					auto step = writer.getVariable< Vec2 >( cuT( "step" ) );
+					auto step = writer.getVariable< Vec2 >( "step" );
 
 					// Calculate the step that we will use to fetch the surrounding pixels,
 					// where "step" is:
 					//     step = sssStrength * gaussianWidth * pixelSize * dir
 					// The closer the pixel, the stronger the effect needs to be, hence
 					// the factor 1.0 / depthM.
-					auto finalStep = writer.declLocale( cuT( "finalStep" )
+					auto finalStep = writer.declLocale( "finalStep"
 						, translucency * step * material->m_subsurfaceScatteringStrength * material->m_gaussianWidth / depthM );
 
-					auto offset = writer.declLocale< Vec2 >( cuT( "offset" ) );
-					auto color = writer.declLocale< Vec3 >( cuT( "color" ) );
-					auto depth = writer.declLocale< Float >( cuT( "depth" ) );
-					auto s = writer.declLocale< Float >( cuT( "s" ) );
+					auto offset = writer.declLocale< Vec2 >( "offset" );
+					auto color = writer.declLocale< Vec3 >( "color" );
+					auto depth = writer.declLocale< Float >( "depth" );
+					auto s = writer.declLocale< Float >( "s" );
 
 					// Gaussian weights for the six samples around the current pixel:
 					//   -3 -2 -1 +1 +2 +3
-					auto w = writer.declLocaleArray( cuT( "w" )
+					auto w = writer.declLocaleArray( "w"
 						, 6u
 						, std::vector< Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
-					auto o = writer.declLocaleArray( cuT( "o" )
+					auto o = writer.declLocaleArray( "o"
 						, 6u
 						, std::vector< Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
 
@@ -220,27 +220,27 @@ namespace castor3d
 
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
-			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur1" ), CombBlur1ImgId, 0u );
-			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur2" ), CombBlur2ImgId, 0u );
-			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapBlur3" ), CombBlur3ImgId, 0u );
-			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapLightDiffuse" ), CombLgtDiffImgId, 0u );
+			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
+			auto c3d_mapBlur2 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur2", CombBlur2ImgId, 0u );
+			auto c3d_mapBlur3 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
+			auto c3d_mapLightDiffuse = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
 
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto data5 = writer.declLocale( cuT( "data5" )
+					auto data5 = writer.declLocale( "data5"
 						, textureLod( c3d_mapData5, vtx_texture, 0.0_f ) );
-					auto original = writer.declLocale( cuT( "original" )
+					auto original = writer.declLocale( "original"
 						, textureLod( c3d_mapLightDiffuse, vtx_texture, 0.0_f ) );
-					auto materialId = writer.declLocale( cuT( "materialId" )
+					auto materialId = writer.declLocale( "materialId"
 						, writer.cast< UInt >( data5.z() ) );
 					auto material = materials->getBaseMaterial( materialId );
 
@@ -251,31 +251,31 @@ namespace castor3d
 					}
 					ELSE
 					{
-						auto originalWeight = writer.declLocale< Vec4 >( cuT( "originalWeight" )
+						auto originalWeight = writer.declLocale< Vec4 >( "originalWeight"
 							, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
-						auto blurWeights = writer.declLocaleArray< Vec4 >( cuT( "blurWeights" )
+						auto blurWeights = writer.declLocaleArray< Vec4 >( "blurWeights"
 							, 3u
 							, {
 								vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
 								vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
 								vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
 							} );
-						auto blurVariances = writer.declLocaleArray< Float >( cuT( "blurVariances" )
+						auto blurVariances = writer.declLocaleArray< Float >( "blurVariances"
 							, 3u
 							, {
 								0.0516_f,
 								0.2719_f,
 								2.0062_f
 							} );
-						auto blur1 = writer.declLocale( cuT( "blur1" )
+						auto blur1 = writer.declLocale( "blur1"
 							, textureLod( c3d_mapBlur1, vtx_texture, 0.0_f ) );
-						auto blur2 = writer.declLocale( cuT( "blur2" )
+						auto blur2 = writer.declLocale( "blur2"
 							, textureLod( c3d_mapBlur2, vtx_texture, 0.0_f ) );
-						auto blur3 = writer.declLocale( cuT( "blur3" )
+						auto blur3 = writer.declLocale( "blur3"
 							, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
-						auto data4 = writer.declLocale( cuT( "data4" )
+						auto data4 = writer.declLocale( "data4"
 							, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
-						auto translucency = writer.declLocale( cuT( "translucency" )
+						auto translucency = writer.declLocale( "translucency"
 							, data4.w() );
 						pxl_fragColor = original * originalWeight
 							+ blur1 * blurWeights[0]
@@ -676,12 +676,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	String const SubsurfaceScatteringPass::Config = cuT( "Config" );
-	String const SubsurfaceScatteringPass::Step = cuT( "c3d_step" );
-	String const SubsurfaceScatteringPass::Correction = cuT( "c3d_correction" );
-	String const SubsurfaceScatteringPass::PixelSize = cuT( "c3d_pixelSize" );
-	String const SubsurfaceScatteringPass::Weights = cuT( "c3d_weights" );
-	String const SubsurfaceScatteringPass::Offsets = cuT( "c3d_offsets" );
+	String const SubsurfaceScatteringPass::Config = "Config";
+	String const SubsurfaceScatteringPass::Step = "c3d_step";
+	String const SubsurfaceScatteringPass::Correction = "c3d_correction";
+	String const SubsurfaceScatteringPass::PixelSize = "c3d_pixelSize";
+	String const SubsurfaceScatteringPass::Weights = "c3d_weights";
+	String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
 		, GpInfoUbo & gpInfoUbo
