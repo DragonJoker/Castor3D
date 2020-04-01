@@ -110,16 +110,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the shadow cascades informations.
 		 *\param[in]	sceneCamera		The viewer camera.
-		 *\param[in]	minCastersZ		The minimal Z of shadow casters.
 		 *\return		\p false if nothing changed.
 		 *\~french
 		 *\brief		Met à jour les information de shadow cascades.
 		 *\param[in]	sceneCamera		La caméra de la scène.
-		 *\param[in]	minCastersZ		Le Z minimal des shadow casters.
 		 *\return		\p false si rien n'a changé.
 		 */
-		C3D_API bool updateShadow( Camera const & sceneCamera
-			, float minCastersZ );
+		C3D_API bool updateShadow( Camera const & sceneCamera );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */

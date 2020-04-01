@@ -43,17 +43,12 @@ namespace castor3d
 	{
 	}
 
-	float ShadowMapPassDirectional::cull()
-	{
-		getCuller().compute();
-		return getCuller().getMinCastersZ();
-	}
-
 	bool ShadowMapPassDirectional::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
+		getCuller().compute();
 		m_projection = light.getDirectionalLight()->getProjMatrix( index );
 		m_view = light.getDirectionalLight()->getViewMatrix( index );
 		doUpdate( queues );

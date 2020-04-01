@@ -43,11 +43,6 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapPassDirectional();
 		/**
-		 *\brief		Culls nodes.
-		 *\return		The min depth among remaining nodes.
-		 */
-		C3D_API float cull();
-		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
 		C3D_API bool update( Camera const & camera

@@ -12,8 +12,6 @@
 using namespace castor;
 using namespace sdw;
 
-#define C3D_DebugCascades 0
-
 namespace castor3d
 {
 	namespace shader
@@ -379,19 +377,23 @@ namespace castor3d
 					{
 						IF( m_writer, cascadeIndex == 0_u )
 						{
-							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 1_u )
+						ELSEIF( cascadeIndex == 1_u )
 						{
-							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 2_u )
+						ELSEIF( cascadeIndex == 2_u )
 						{
-							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 						}
 						ELSE
 						{
-							output.m_diffuse.rgb() = vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 						}
 						FI;
 					}
@@ -645,23 +647,23 @@ namespace castor3d
 					{
 						IF( m_writer, cascadeIndex == 0_u )
 						{
-							output.m_diffuse.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
-							output.m_specular.rgb() = vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 1_u )
+						ELSEIF( cascadeIndex == 1_u )
 						{
-							output.m_diffuse.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
-							output.m_specular.rgb() = vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 						}
-						ELSEIF( m_writer, cascadeIndex == 2_u )
+						ELSEIF( cascadeIndex == 2_u )
 						{
-							output.m_diffuse.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
-							output.m_specular.rgb() = vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 						}
 						ELSE
 						{
-							output.m_diffuse.rgb() = vec3( 1.0_f, 1.0f, 0.25f );
-							output.m_specular.rgb() = vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 						}
 						FI;
 					}

@@ -207,32 +207,22 @@ namespace castor3d
 		, uint32_t index )
 	{
 		m_shadowType = light.getShadowType();
-		auto minCasterZ = std::numeric_limits< float >::max();
-
-		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
-		{
-			minCasterZ = std::min( minCasterZ
-				, std::static_pointer_cast< ShadowMapPassDirectional >( m_passes[cascade].pass )->cull() );
-		}
-
-		auto & culler = m_passes[m_cascades - 1u].pass->getCuller();
 		auto node = light.getParent();
 		node->update();
 
 		auto & directional = *light.getDirectionalLight();
-		auto & lightCamera = culler.getCamera();
-		lightCamera.attachTo( *node );
-		lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
-		lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
-		lightCamera.updateFrustum();
 
-		if ( directional.updateShadow( camera
-				, minCasterZ )
-			|| culler.areAllChanged()
-			|| culler.areCulledChanged() )
+		if ( directional.updateShadow( camera ) )
 		{
 			for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 			{
+				auto & culler = m_passes[cascade].pass->getCuller();
+				auto & lightCamera = culler.getCamera();
+				lightCamera.attachTo( *node );
+				lightCamera.setProjection( directional.getProjMatrix( m_cascades - 1u ) );
+				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
+				lightCamera.updateFrustum();
+
 				m_passes[cascade].pass->update( camera
 					, queues
 					, light

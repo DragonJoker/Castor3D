@@ -546,6 +546,23 @@ namespace castor
 	namespace point
 	{
 		template< typename T, uint32_t TCount >
+		static void round( Point< T, TCount > & point )
+		{
+			for ( uint32_t i = 0; i < TCount; i++ )
+			{
+				point[i] = std::round( point[i] );
+			}
+		}
+
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getRounded( Point< T, TCount > & point )
+		{
+			Point< T, TCount > result{ point };
+			point::round( result );
+			return result;
+		}
+
+		template< typename T, uint32_t TCount >
 		inline void negate( Point< T, TCount > & point )
 		{
 			for ( uint32_t i = 0; i < TCount; i++ )

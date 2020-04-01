@@ -376,6 +376,34 @@ namespace castor3d
 						FI;
 					}
 
+#if C3D_DebugCascades
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					{
+						IF( m_writer, cascadeIndex == 0_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 1_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 2_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+					}
+					FI;
+#endif
+
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
 				}
@@ -625,6 +653,33 @@ namespace castor3d
 							, light.m_lightBase.m_volumetricScattering
 							, output );
 					}
+
+#if C3D_DebugCascades
+					if ( shadowType != ShadowType::eNone )
+					{
+						IF( m_writer, cascadeIndex == 0_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 1_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 2_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+					}
+#endif
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;

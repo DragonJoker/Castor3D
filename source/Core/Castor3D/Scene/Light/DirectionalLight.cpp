@@ -4,6 +4,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -22,8 +23,7 @@ namespace castor3d
 	{
 		std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
 			, DirectionalLight const & light
-			, uint32_t cascades
-			, float minCastersZ )
+			, uint32_t cascades )
 		{
 			auto & renderSystem = *light.getLight().getScene()->getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
@@ -55,7 +55,7 @@ namespace castor3d
 			}
 
 			// Calculate orthographic projection matrix for each cascade
-			float lastSplitDist = 0.0;
+			float prevSplitDist = 0.0;
 
 			for ( uint32_t i = 0; i < cascades; i++ )
 			{
@@ -83,8 +83,10 @@ namespace castor3d
 				for ( uint32_t i = 0; i < 4; i++ )
 				{
 					auto dist = frustumCorners[i + 4] - frustumCorners[i];
-					frustumCorners[i + 4] = frustumCorners[i] + ( dist * splitDist );
-					frustumCorners[i] = frustumCorners[i] + ( dist * lastSplitDist );
+					auto nearCorner = dist * prevSplitDist;
+					auto farCorner = dist * splitDist;
+					frustumCorners[i + 4] = frustumCorners[i] + farCorner;
+					frustumCorners[i] = frustumCorners[i] + nearCorner;
 				}
 
 				// Get frustum center
@@ -106,21 +108,37 @@ namespace castor3d
 				Point3f maxExtents{ radius, radius, radius };
 				Point3f minExtents = -maxExtents;
 
-				Point3f lightDir = light.getDirection();
+				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
 
 				// Store split distance and matrix in cascade
 				auto & cascade = result[i];
 				matrix::lookAt( cascade.viewMatrix
-					, frustumCenter - ( lightDir * maxExtents[2] )
+					, lightDirection
 					, frustumCenter
 					, Point3f( 0.0f, 1.0f, 0.0f ) );
+				auto cascadeExtents = maxExtents - minExtents;
 				cascade.projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0]
 					, minExtents[1], maxExtents[1]
-					//, -minCastersZ, minCastersZ );
-					, -minCastersZ, maxExtents[2] - minExtents[2] );
+					, -cascadeExtents[2], cascadeExtents[2] );
+
+				// Create a rounding matrix so we move in texel sized increments.
+				Matrix4x4f shadowMatrix = cascade.projMatrix * cascade.viewMatrix;
+				Point4f shadowOrigin{ 0.0f, 0.0f, 0.0f, 1.0f };
+				auto shadowMapSize = float( ShadowMapPassDirectional::TextureSize );
+				shadowOrigin = shadowMatrix * shadowOrigin;
+				shadowOrigin = shadowOrigin * shadowMapSize / 2.0f;
+				Point4f roundedOrigin{ point::getRounded( shadowOrigin ) };
+				Point4f roundOffset{ roundedOrigin - shadowOrigin };
+				roundOffset = roundOffset * 2.0f / shadowMapSize;
+				roundOffset[2] = 0.0f;
+				roundOffset[3] = 0.0f;
+
+				Matrix4x4f shadowProj = cascade.projMatrix;
+				shadowProj[3] += roundOffset;
+				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
 				cascade.splitDepth = ( nearZ + splitDist * clipRange ) * -1.0f;
-				lastSplitDist = cascadeSplits[i];
+				prevSplitDist = cascadeSplits[i];
 			}
 
 			return result;
@@ -186,13 +204,11 @@ namespace castor3d
 	{
 	}
 
-	bool DirectionalLight::updateShadow( Camera const & viewCamera
-		, float minCastersZ )
+	bool DirectionalLight::updateShadow( Camera const & viewCamera )
 	{
 		m_cascades = doComputeCascades( viewCamera
 			, *this
-			, uint32_t( m_cascades.size() )
-			, minCastersZ );
+			, uint32_t( m_cascades.size() ) );
 		bool result = m_cascades != m_prvCascades;
 
 		if ( result )

@@ -413,6 +413,28 @@ namespace castor
 	{
 		/**
 		 *\~english
+		 *\brief		Rounds every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\~french
+		 *\brief		Arrondit chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 */
+		template< typename T, uint32_t TCount >
+		static void round( Point< T, TCount > & point );
+		/**
+		 *\~english
+		 *\brief		Rounds every value of a point's data.
+		 *\param[in]	point	The point.
+		 *\return		The rounded point.
+		 *\~french
+		 *\brief		Arrondit chaque donnée du point donné.
+		 *\param[in]	point	Le point.
+		 *\return		Le point arrondi.
+		 */
+		template< typename T, uint32_t TCount >
+		static Point< T, TCount > getRounded( Point< T, TCount > & point );
+		/**
+		 *\~english
 		 *\brief		Negates every value of a point's data
 		 *\param[in]	point	The point
 		 *\~french
