@@ -11,6 +11,8 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Core/Device.hpp>
@@ -145,12 +147,7 @@ namespace castor3d
 		commandBuffer.beginDebugBlock(
 			{
 				"Background Render",
-				{
-					opaqueBlackClearColor.color.float32[0],
-					opaqueBlackClearColor.color.float32[1],
-					opaqueBlackClearColor.color.float32[2],
-					opaqueBlackClearColor.color.float32[3],
-				},
+				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( renderPass

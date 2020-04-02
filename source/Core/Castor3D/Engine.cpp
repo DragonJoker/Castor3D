@@ -422,6 +422,19 @@ namespace castor3d
 		return loc;
 	}
 
+	RgbaColour Engine::getNextRainbowColour()const
+	{
+		static float currentColourHue{ 0.0f };
+		currentColourHue += 0.05f;
+
+		if ( currentColourHue > 1.0f )
+		{
+			currentColourHue = 0.0f;
+		}
+
+		return RgbaColour::fromHSB( currentColourHue, 1.0f, 1.0f );
+	}
+
 	bool Engine::isCleaned()
 	{
 		return m_cleaned;

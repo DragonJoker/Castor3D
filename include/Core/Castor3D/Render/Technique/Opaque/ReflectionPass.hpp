@@ -112,6 +112,7 @@ namespace castor3d
 				, RenderPassTimer & timer );
 			void accept( RenderTechniqueVisitor & visitor );
 
+			Engine & m_engine;
 			GeometryPassResult const & m_geometryPassResult;
 			ashes::RenderPass const * m_renderPass;
 			castor3d::ShaderModule m_vertexShader;

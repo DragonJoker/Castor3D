@@ -1256,7 +1256,8 @@ namespace castor3d
 		, VkExtent2D const & size
 		, FogType fogType
 		, MaterialType matType )
-		: m_geometryPassResult{ gp }
+		: m_engine{ engine }
+		, m_geometryPassResult{ gp }
 		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
@@ -1277,12 +1278,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Resolve",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT

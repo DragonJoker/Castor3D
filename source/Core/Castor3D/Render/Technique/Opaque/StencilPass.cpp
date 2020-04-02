@@ -9,6 +9,8 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -197,12 +199,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Stencil",
-				{
-					0.7f,
-					1.0f,
-					0.7f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT

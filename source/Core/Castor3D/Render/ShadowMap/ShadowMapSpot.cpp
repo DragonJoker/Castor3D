@@ -319,8 +319,8 @@ namespace castor3d
 		auto col = index / ( ( shader::getSpotShadowMapCount() - 1u ) * 2.0f );
 		commandBuffer.beginDebugBlock(
 			{
-				"ShadowMapSpot index ",
-				{ col, col, 0.8f, 1.0f },
+				m_name + " generation " + std::to_string( index ),
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		timer.notifyPassRender();
 		timer.beginPass( commandBuffer );

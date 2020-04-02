@@ -259,6 +259,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API castor::RgbaColour getNextRainbowColour()const;
+
 		inline castor::String const & getAppName()const
 		{
 			return m_appName;

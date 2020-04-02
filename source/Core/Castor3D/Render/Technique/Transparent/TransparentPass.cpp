@@ -31,6 +31,8 @@
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 #include <ashespp/Pipeline/PipelineColorBlendStateCreateInfo.hpp>
@@ -242,12 +244,7 @@ namespace castor3d
 		m_nodesCommands->beginDebugBlock(
 			{
 				"Weighted Blended - Transparent accumulation",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();

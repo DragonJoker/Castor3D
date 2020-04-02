@@ -644,12 +644,7 @@ namespace castor3d
 			m_toneMappingCommandBuffer->beginDebugBlock(
 				{
 					"Tone Mapping",
-					{
-						1.0f,
-						0.0f,
-						1.0f,
-						1.0f,
-					},
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
@@ -685,12 +680,7 @@ namespace castor3d
 		commandBuffer->beginDebugBlock(
 			{
 				"Image Copy",
-				{
-					1.0f,
-					0.2f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 
 		if ( &source != &target )
@@ -810,12 +800,7 @@ namespace castor3d
 		m_combineCommands->beginDebugBlock(
 			{
 				"Combine 3D-2D",
-				{
-					1.0f,
-					0.4f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		m_combineCommands->beginRenderPass( *m_renderPass
 			, *m_combinedFrameBuffer.frameBuffer

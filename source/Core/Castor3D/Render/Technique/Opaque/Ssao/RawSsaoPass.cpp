@@ -18,6 +18,8 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Command/Queue.hpp>
@@ -741,12 +743,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Raw SSAO",
-				{
-					1.0f,
-					1.0f,
-					0.8f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass

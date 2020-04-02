@@ -217,12 +217,7 @@ namespace castor3d
 			m_nodesCommands->beginDebugBlock(
 				{
 					"Forward Pass",
-					{
-						1.0f,
-						1.0f,
-						0.2f,
-						1.0f,
-					},
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			getTimer().beginPass( *m_nodesCommands );
 			getTimer().notifyPassRender();

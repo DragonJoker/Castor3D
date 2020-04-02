@@ -1,7 +1,5 @@
 #include "Castor3D/Render/PickingPass.hpp"
 
-#include "Castor3D/Shader/ShaderModule.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Cache/GeometryCache.hpp"
 #include "Castor3D/Material/Material.hpp"
@@ -13,9 +11,13 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -346,12 +348,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"PickingPass Render",
-				{
-					clearValues[0].color.float32[0],
-					clearValues[0].color.float32[1],
-					clearValues[0].color.float32[2],
-					clearValues[0].color.float32[3],
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -368,7 +365,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"PickingPass Copy",
-				{ 0.8f, 0.4f, 0.4f, 1.0f },
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		auto flags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( flags

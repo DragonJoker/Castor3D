@@ -626,12 +626,7 @@ namespace castor3d
 			commandBuffer.beginDebugBlock(
 				{
 					"Deferred - Light",
-					{
-						0.5f,
-						1.0f,
-						0.5f,
-						1.0f,
-					},
+					makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
 			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
 			commandBuffer.setScissor( ashes::makeScissor( dimensions ) );

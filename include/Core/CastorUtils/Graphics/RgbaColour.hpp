@@ -638,6 +638,17 @@ namespace castor
 		inline static RgbaColourT fromBGRA( uint32_t colour );
 		/**
 		 *\~english
+		 *\brief		Constructor from an HSB components.
+		 *\param[in]	hue, saturation, brightness	The HSB components.
+		 *\return		The built RgbaColourT.
+		 *\~french
+		 *\brief		Constructeur à partir de composantes HSB
+		 *\param[in]	hue, saturation, brightness	Les composantes HSB.
+		 *\return		La RgbaColourT construite.
+		 */
+		inline static RgbaColourT fromHSB( float hue, float saturation, float brightness );
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the first ColourComponent
 		 *\return		The iterator
 		 *\~french

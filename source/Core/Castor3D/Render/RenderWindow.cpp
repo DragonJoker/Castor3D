@@ -16,6 +16,7 @@
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>
@@ -826,12 +827,7 @@ namespace castor3d
 			commandBuffer.beginDebugBlock(
 				{
 					"RenderWindow Render",
-					{
-						opaqueWhiteClearColor.color.float32[0],
-						opaqueWhiteClearColor.color.float32[1],
-						opaqueWhiteClearColor.color.float32[2],
-						opaqueWhiteClearColor.color.float32[3],
-					},
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			commandBuffer.beginRenderPass( *m_renderPass
 				, frameBuffer

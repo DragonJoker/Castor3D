@@ -7,6 +7,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -457,7 +459,7 @@ namespace castor3d
 		result->beginDebugBlock(
 			{
 				"GaussianBlur Blur pass",
-				{ 0.5f, 0.5f, 1.0f, 1.0f },
+				makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 		result->beginRenderPass( renderPass
 			, *fbo

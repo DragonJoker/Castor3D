@@ -567,12 +567,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Overlays",
-				{
-					0.5f,
-					0.0f,
-					0.5f,
-					1.0f,
-				},
+				makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass

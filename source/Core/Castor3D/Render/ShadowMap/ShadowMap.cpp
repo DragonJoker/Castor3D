@@ -5,6 +5,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -49,7 +51,7 @@ namespace castor3d
 				cmdBuffer->beginDebugBlock(
 					{
 						m_name + " variance clear",
-						{ 0.0f, 0.0f, 3.0f, 1.0f },
+						makeFloatArray( getEngine()->getNextRainbowColour() ),
 					} );
 
 				for ( auto & view : *m_shadowMap.getTexture() )
@@ -67,7 +69,7 @@ namespace castor3d
 				cmdBuffer->beginDebugBlock(
 					{
 						m_name + " linear clear",
-						{ 0.0f, 0.0f, 0.4f, 1.0f },
+						makeFloatArray( getEngine()->getNextRainbowColour() ),
 					} );
 
 				for ( auto & view : *m_linearMap.getTexture() )

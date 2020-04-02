@@ -14,6 +14,7 @@
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -1040,12 +1041,7 @@ namespace smaa
 		blendingWeightCmd.beginDebugBlock(
 			{
 				"SMAA BlendingWeightCalculation",
-				{
-					castor3d::transparentBlackClearColor.color.float32[0],
-					castor3d::transparentBlackClearColor.color.float32[1],
-					castor3d::transparentBlackClearColor.color.float32[2],
-					castor3d::transparentBlackClearColor.color.float32[3],
-				},
+				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( blendingWeightCmd, passIndex );
 		// Put edge detection image in shader input layout.

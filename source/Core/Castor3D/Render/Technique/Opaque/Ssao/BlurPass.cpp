@@ -17,6 +17,8 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
@@ -523,12 +525,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Blur",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( *m_renderPass

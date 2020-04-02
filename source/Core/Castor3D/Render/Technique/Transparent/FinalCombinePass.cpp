@@ -17,6 +17,8 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
@@ -444,7 +446,8 @@ namespace castor3d
 		, ashes::DescriptorSetLayout const & texLayout
 		, ashes::PipelineVertexInputStateCreateInfo const & vtxLayout
 		, FogType fogType )
-		: m_timer{ timer }
+		: m_engine{ engine }
+		, m_timer{ timer }
 		, m_renderPass{ renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentResolve" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentResolve" }
@@ -473,12 +476,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Weighted Blended - Transparent resolve",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( m_renderPass

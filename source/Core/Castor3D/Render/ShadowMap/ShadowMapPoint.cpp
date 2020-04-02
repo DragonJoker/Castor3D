@@ -360,6 +360,11 @@ namespace castor3d
 		auto & commandBuffer = *m_passesData[index].commandBuffer;
 		auto & finished = *m_passesData[index].finished;
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+			commandBuffer.beginDebugBlock(
+				{
+					m_name + " generation " + std::to_string( index ),
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
+				} );
 		auto col = index / ( ( shader::getPointShadowMapCount() - 1u ) * 2.0f );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
@@ -371,8 +376,8 @@ namespace castor3d
 
 			commandBuffer.beginDebugBlock(
 				{
-					"ShadowMapPoint index " + std::to_string( index ) + " face " + std::to_string( face ),
-					{ face / 10.0f, col, 0.7f, 1.0f },
+					m_name + " " + std::to_string( index ) + " face " + std::to_string( face ),
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			timer.notifyPassRender();
 			timer.beginPass( commandBuffer );

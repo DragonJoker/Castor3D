@@ -41,6 +41,7 @@ namespace castor3d
 		}
 
 	private:
+		Engine & m_engine;
 		RenderPassTimer & m_timer;
 		ashes::RenderPass const & m_renderPass;
 		ShaderModule m_vertexShader;

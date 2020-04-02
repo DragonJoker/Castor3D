@@ -22,6 +22,7 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -442,12 +443,7 @@ namespace film_grain
 			cmd.beginDebugBlock(
 				{
 					"Film Grain",
-					{
-						0.5f,
-						0.0f,
-						0.5f,
-						0.5f,
-					},
+					castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 				} );
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.

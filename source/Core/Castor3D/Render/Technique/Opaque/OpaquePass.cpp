@@ -203,12 +203,7 @@ namespace castor3d
 		m_nodesCommands->beginDebugBlock(
 			{
 				"Deferred - Geometry",
-				{
-					opaqueBlackClearColor.color.float32[0],
-					opaqueBlackClearColor.color.float32[1],
-					opaqueBlackClearColor.color.float32[2],
-					opaqueBlackClearColor.color.float32[3],
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();

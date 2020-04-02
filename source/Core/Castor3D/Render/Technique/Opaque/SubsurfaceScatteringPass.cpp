@@ -522,12 +522,7 @@ namespace castor3d
 		commandBuffer.beginDebugBlock(
 			{
 				"Deferred - Subsurface Subscattering - Blur",
-				{
-					0.3f,
-					1.0f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -635,12 +630,7 @@ namespace castor3d
 		commandBuffer.beginDebugBlock(
 			{
 				"Deferred - Subsurface Subscattering - Combine",
-				{
-					0.6f,
-					1.0f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 		commandBuffer.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -771,12 +761,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Subsurface Subscattering",
-				{
-					0.0f,
-					1.0f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( *m_commandBuffer );
 

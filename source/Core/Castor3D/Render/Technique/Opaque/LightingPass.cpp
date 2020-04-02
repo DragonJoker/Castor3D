@@ -15,19 +15,20 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
-
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -183,7 +184,7 @@ namespace castor3d
 		m_blitDepthCommandBuffer->beginDebugBlock(
 			{
 				"Deferred - Ligth Depth Blit",
-				{ 0.7f, 1.0f, 0.7f, 1.0f },
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		// Src depth buffer from depth attach to transfer source
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT

@@ -18,6 +18,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Command/Queue.hpp>
@@ -639,12 +641,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Linearise Depth",
-				{
-					1.0f,
-					1.0f,
-					0.4f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( *m_commandBuffer );
 
@@ -684,12 +681,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Minify",
-				{
-					1.0f,
-					1.0f,
-					0.6f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 
 		// Minification passes.

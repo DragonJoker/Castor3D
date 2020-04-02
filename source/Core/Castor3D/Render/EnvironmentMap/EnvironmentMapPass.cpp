@@ -13,6 +13,8 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -201,7 +203,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"EnvironmentMapPass render",
-				{ 0.5f, 1.0f, 1.0f, 1.0f },
+				makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ),
 			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer

@@ -395,6 +395,11 @@ namespace castor3d
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_commandBuffer->beginDebugBlock(
+			{
+				m_name + " generation " + std::to_string( index ),
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
 
 		for ( uint32_t cascade = 0u; cascade < m_cascades; ++cascade )
 		{
@@ -403,18 +408,25 @@ namespace castor3d
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
 
+			m_commandBuffer->beginDebugBlock(
+				{
+					m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade ),
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
+				} );
 			timer.notifyPassRender();
 			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+				, { defaultClearDepthStencil, opaqueWhiteClearColor, opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
 			timer.endPass( *m_commandBuffer );
+			m_commandBuffer->endDebugBlock();
 			pass.pass->setUpToDate();
 		}
 
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 		auto & device = getCurrentRenderDevice( *getEngine() );
 		auto * result = &toWait;
