@@ -312,16 +312,19 @@ namespace castor3d
 			}
 		} ) );
 
-		for ( auto & submesh : *geometry.getMesh() )
+		if ( geometry.getMesh() )
 		{
-			auto material = geometry.getMaterial( *submesh );
-
-			if ( material )
+			for ( auto & submesh : *geometry.getMesh() )
 			{
-				for ( auto & pass : *material )
+				auto material = geometry.getMaterial( *submesh );
+
+				if ( material )
 				{
-					m_entries.emplace( hash( geometry, *submesh, *pass )
-						, doCreateEntry( geometry, *submesh, *pass ) );
+					for ( auto & pass : *material )
+					{
+						m_entries.emplace( hash( geometry, *submesh, *pass )
+							, doCreateEntry( geometry, *submesh, *pass ) );
+					}
 				}
 			}
 		}
@@ -331,11 +334,14 @@ namespace castor3d
 	{
 		m_connections.erase( &geometry );
 
-		for ( auto & submesh : *geometry.getMesh() )
+		if ( geometry.getMesh() )
 		{
-			for ( auto & pass : *geometry.getMaterial( *submesh ) )
+			for ( auto & submesh : *geometry.getMesh() )
 			{
-				doRemoveEntry( geometry, *submesh, *pass );
+				for ( auto & pass : *geometry.getMaterial( *submesh ) )
+				{
+					doRemoveEntry( geometry, *submesh, *pass );
+				}
 			}
 		}
 	}

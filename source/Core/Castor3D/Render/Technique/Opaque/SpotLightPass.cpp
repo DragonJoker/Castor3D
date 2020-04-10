@@ -99,9 +99,12 @@ namespace castor3d
 			name += cuT( " Shadow" );
 		}
 
-		visitor.visit( name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		if ( m_pixelShader.shader )
+		{
+			visitor.visit( name
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, *m_pixelShader.shader );
+		}
 	}
 
 	Point3fArray SpotLightPass::doGenerateVertices()const
