@@ -36,6 +36,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< SkeletonAnimationKeyFrame >::Name = cuT( "SkeletonAnimationKeyFrame" );
+
 	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse( SkeletonAnimationKeyFrame & obj )
 	{
 		bool result = true;
@@ -51,21 +53,25 @@ namespace castor3d
 			{
 			case ChunkType::eSkeletonAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
+				checkError( result, "Couldn't parse time index." );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 				result = doParseChunk( type, chunk );
+				checkError( result, "Couldn't parse object type." );
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse object name." );
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
 				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( matrix, chunk );
+					checkError( result, "Couldn't parse object transform." );
 
 					if ( result )
 					{
@@ -101,14 +107,17 @@ namespace castor3d
 				{
 				case ChunkType::eSkeletonAnimationKeyFrameObjectType:
 					result = doParseChunk( type, chunk );
+					checkError( result, "Couldn't parse object type." );
 					break;
 
 				case ChunkType::eSkeletonAnimationKeyFrameObjectName:
 					result = doParseChunk( name, chunk );
+					checkError( result, "Couldn't parse object name." );
 					break;
 
 				case ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
 					result = doParseChunk( matrix, chunk );
+					checkError( result, "Couldn't parse object transform." );
 
 					if ( result )
 					{

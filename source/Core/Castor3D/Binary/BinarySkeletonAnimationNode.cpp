@@ -24,6 +24,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< SkeletonAnimationNode >::Name = cuT( "SkeletonAnimationNode" );
+
 	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & obj )
 	{
 		bool result = true;
@@ -36,10 +38,12 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( obj.m_name, chunk );
+				checkError( result, "Couldn't parse name." );
 				break;
 
 			case ChunkType::eAnimationObject:
 				result = createBinaryParser< SkeletonAnimationObject >().parse( obj, chunk );
+				checkError( result, "Couldn't parse animation object." );
 				break;
 
 			default:

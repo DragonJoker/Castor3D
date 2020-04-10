@@ -26,6 +26,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< BonesComponent >::Name = cuT( "BonesComponent" );
+
 	bool BinaryParser< BonesComponent >::doParse( BonesComponent & obj )
 	{
 		bool result = true;
@@ -41,6 +43,7 @@ namespace castor3d
 			{
 			case ChunkType::eSubmeshBoneCount:
 				result = doParseChunk( count, chunk );
+				checkError( result, "Couldn't parse bone count." );
 
 				if ( result )
 				{
@@ -52,6 +55,7 @@ namespace castor3d
 
 			case ChunkType::eSubmeshBones:
 				result = doParseChunk( bones, chunk );
+				checkError( result, "Couldn't parse bones data." );
 
 				if ( result && boneCount > 0 )
 				{

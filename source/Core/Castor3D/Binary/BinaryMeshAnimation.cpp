@@ -24,6 +24,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< MeshAnimation >::Name = cuT( "MeshAnimation" );
+
 	bool BinaryParser< MeshAnimation >::doParse( MeshAnimation & obj )
 	{
 		bool result = true;
@@ -37,6 +39,7 @@ namespace castor3d
 			case ChunkType::eMeshAnimationKeyFrame:
 				keyFrame = std::make_unique< MeshAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< MeshAnimationKeyFrame >().parse( *keyFrame, chunk );
+				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
 				{

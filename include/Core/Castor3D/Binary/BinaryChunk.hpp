@@ -349,6 +349,10 @@ namespace castor3d
 
 				m_index += size;
 			}
+			else
+			{
+				log::error << "Not enough data in chunk";
+			}
 
 			return result;
 		}

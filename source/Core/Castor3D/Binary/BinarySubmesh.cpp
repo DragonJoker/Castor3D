@@ -127,6 +127,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< Submesh >::Name = cuT( "Submesh" );
+
 	bool BinaryParser< Submesh >::doParse( Submesh & obj )
 	{
 		bool result = true;
@@ -150,6 +152,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( count, chunk );
+					checkError( result, "Couldn't parse vertex count." );
 
 					if ( result )
 					{
@@ -162,6 +165,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( vertices, chunk );
+					checkError( result, "Couldn't parse vertex data." );
 
 					if ( result && !vertices.empty() )
 					{
@@ -178,6 +182,7 @@ namespace castor3d
 				}
 
 				result = doParseChunk( count, chunk );
+				checkError( result, "Couldn't parse bones count." );
 
 				if ( result )
 				{
@@ -189,6 +194,7 @@ namespace castor3d
 
 			case ChunkType::eSubmeshBones:
 				result = doParseChunk( bones, chunk );
+				checkError( result, "Couldn't parse bones data." );
 
 				if ( result && boneCount > 0 )
 				{
@@ -201,6 +207,7 @@ namespace castor3d
 			case ChunkType::eBonesComponent:
 				bonesComponent = std::make_shared< BonesComponent >( obj );
 				result = createBinaryParser< BonesComponent >().parse( *bonesComponent, chunk );
+				checkError( result, "Couldn't parse bones component." );
 
 				if ( result )
 				{
@@ -211,10 +218,12 @@ namespace castor3d
 
 			case ChunkType::eSubmeshIndexComponentCount:
 				result = doParseChunk( components, chunk );
+				checkError( result, "Couldn't parse index component size." );
 				break;
 
 			case ChunkType::eSubmeshIndexCount:
 				result = doParseChunk( count, chunk );
+				checkError( result, "Couldn't parse index count." );
 
 				if ( result )
 				{
@@ -239,6 +248,7 @@ namespace castor3d
 					if ( components == 3u )
 					{
 						result = doParseChunk( faces, chunk );
+						checkError( result, "Couldn't parse index data." );
 
 						if ( result )
 						{
@@ -250,6 +260,7 @@ namespace castor3d
 					else if ( components == 2u )
 					{
 						result = doParseChunk( lines, chunk );
+						checkError( result, "Couldn't parse index data." );
 
 						if ( result )
 						{
@@ -289,6 +300,7 @@ namespace castor3d
 				{
 				case ChunkType::eSubmeshVertexCount:
 					result = doParseChunk( count, chunk );
+					checkError( result, "Couldn't parse vertex count." );
 
 					if ( result )
 					{
@@ -299,6 +311,7 @@ namespace castor3d
 
 				case ChunkType::eSubmeshVertex:
 					result = doParseChunk( srcbuf, chunk );
+					checkError( result, "Couldn't parse vertex data." );
 
 					if ( result && !srcbuf.empty() )
 					{
@@ -311,6 +324,7 @@ namespace castor3d
 
 				case ChunkType::eSubmeshFaceCount:
 					result = doParseChunk( count, chunk );
+					checkError( result, "Couldn't parse faces count." );
 
 					if ( result )
 					{
@@ -322,6 +336,7 @@ namespace castor3d
 
 				case ChunkType::eSubmeshFaces:
 					result = doParseChunk( faces, chunk );
+					checkError( result, "Couldn't parse faces data." );
 
 					if ( result && faceCount > 0 )
 					{

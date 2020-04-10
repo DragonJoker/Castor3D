@@ -10,11 +10,41 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
+	namespace
+	{
+		BonePtrArray reorderBones( BonePtrArray bones )
+		{
+			BonePtrArray result;
+			std::set< Bone * > inserted;
+
+			while ( !bones.empty() )
+			{
+				auto bone = bones.front();
+				bones.erase( bones.begin() );
+
+				if ( !bone->getParent()
+					|| inserted.find( bone->getParent().get() ) != inserted.end() )
+				{
+					result.push_back( bone );
+					inserted.insert( bone.get() );
+				}
+				else
+				{
+					bones.push_back( bone );
+				}
+			}
+
+			return result;
+		}
+	}
+
+	//*************************************************************************************************
+
 	bool BinaryWriter< Skeleton >::doWrite( Skeleton const & obj )
 	{
 		bool result = doWriteChunk( obj.getGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 
-		for ( auto bone : obj.m_bones )
+		for ( auto bone : reorderBones( obj.m_bones ) )
 		{
 			result = result && BinaryWriter< Bone >{}.write( *bone, m_chunk );
 		}
@@ -29,6 +59,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	castor::String BinaryParser< Skeleton >::Name = cuT( "Skeleton" );
+
 	bool BinaryParser< Skeleton >::doParse( Skeleton & obj )
 	{
 		bool result = true;
@@ -42,11 +74,13 @@ namespace castor3d
 			{
 			case ChunkType::eSkeletonGlobalInverse:
 				result = doParseChunk( obj.m_globalInverse, chunk );
+				checkError( result, "Couldn't parse global inverse matrix." );
 				break;
 
 			case ChunkType::eSkeletonBone:
 				bone = std::make_shared< Bone >( obj, castor::Matrix4x4f{ 1.0f } );
 				result = createBinaryParser< Bone >().parse( *bone, chunk );
+				checkError( result, "Couldn't parse bone." );
 
 				if ( result )
 				{
@@ -58,6 +92,7 @@ namespace castor3d
 			case ChunkType::eAnimation:
 				animation = std::make_unique< SkeletonAnimation >( obj );
 				result = createBinaryParser< Animation >().parse( *animation, chunk );
+				checkError( result, "Couldn't parse animation." );
 
 				if ( result )
 				{
