@@ -32,6 +32,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/DdsImageLoader.hpp>
+#include <CastorUtils/Graphics/ExrImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
@@ -94,8 +95,9 @@ namespace castor3d
 		{
 		};
 		initialiseGlslang();
-		StbImageLoader::registerLoader( m_imageLoader );
 		DdsImageLoader::registerLoader( m_imageLoader );
+		StbImageLoader::registerLoader( m_imageLoader );
+		ExrImageLoader::registerLoader( m_imageLoader );
 		XpmImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
 
