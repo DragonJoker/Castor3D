@@ -5,6 +5,7 @@
 #include <Castor3D/Cache/CacheView.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/MeshCache.hpp>
+#include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/Importer.hpp>
@@ -27,7 +28,7 @@ struct Options
 
 void printUsage()
 {
-	std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH files." << std::endl;
+	std::cout << "Castor Mesh Converter is a tool that allows you to convert any mesh file to the CMSH file format." << std::endl;
 	std::cout << "Usage:" << std::endl;
 	std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-r]" << std::endl;
 	std::cout << "Options:" << std::endl;
@@ -70,7 +71,7 @@ bool doParseArgs( int argc
 
 	if ( it == args.end() )
 	{
-		options.output = options.input;
+		options.output = options.input.getFileName();
 	}
 	else if ( ++it == args.end() )
 	{
@@ -80,7 +81,7 @@ bool doParseArgs( int argc
 	}
 	else
 	{
-		options.output = *it;
+		options.output = castor::Path{ *it }.getFileName();
 	}
 
 	it = std::find( args.begin(), args.end(), "-s" );
@@ -89,6 +90,83 @@ bool doParseArgs( int argc
 	options.recenter = it != args.end();
 
 	return true;
+}
+
+castor::PathArray listPluginsFiles( castor::Path const & folder )
+{
+	castor::PathArray files;
+	castor::File::listDirectoryFiles( folder, files );
+	castor::PathArray result;
+
+	// Exclude debug plug-in in release builds, and release plug-ins in debug builds
+	for ( auto file : files )
+	{
+		if ( file.find( CU_SharedLibExt ) != castor::String::npos
+			&& file.getFileName().find( cuT( "castor3d" ) ) == 0u )
+		{
+			result.push_back( file );
+		}
+	}
+
+	return result;
+}
+
+void loadPlugins( castor3d::Engine & engine )
+{
+	castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+
+#if !defined( NDEBUG )
+
+		// When debug is installed, plugins are installed in lib/Debug/Castor3D
+	if ( arrayKept.empty() )
+	{
+		castor::Path pathBin = castor::File::getExecutableDirectory();
+
+		while ( pathBin.getFileName() != cuT( "bin" ) )
+		{
+			pathBin = pathBin.getPath();
+		}
+
+		castor::Path pathUsr = pathBin.getPath();
+		arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Debug" ) / cuT( "Castor3D" ) );
+	}
+
+#endif
+
+	if ( !arrayKept.empty() )
+	{
+		castor::PathArray arrayFailed;
+		castor::PathArray otherPlugins;
+
+		for ( auto file : arrayKept )
+		{
+			if ( file.getExtension() == CU_SharedLibExt )
+			{
+				// Only load importer plugins.
+				if ( file.find( cuT( "Importer" ) ) != castor::String::npos )
+				{
+					if ( !engine.getPluginCache().loadPlugin( file ) )
+					{
+						arrayFailed.push_back( file );
+					}
+				}
+			}
+		}
+
+		if ( !arrayFailed.empty() )
+		{
+			castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+
+			for ( auto file : arrayFailed )
+			{
+				castor::Logger::logWarning( castor::Path( file ).getFileName() );
+			}
+
+			arrayFailed.clear();
+		}
+	}
+
+	castor::Logger::logInfo( cuT( "Plugins loaded" ) );
 }
 
 bool doInitialiseEngine( castor3d::Engine & engine )
@@ -114,6 +192,7 @@ bool doInitialiseEngine( castor3d::Engine & engine )
 			if ( engine.loadRenderer( renderer->name ) )
 			{
 				engine.initialise( 1, false );
+				loadPlugins( engine );
 				result = true;
 			}
 			else
@@ -169,7 +248,7 @@ bool doWriteObject( castor::Path const & path
 
 	try
 	{
-		ObjectWriter< Split, T >{}( meshFolder, object, options );
+		result = ObjectWriter< Split, T >{}( meshFolder, object, options );
 	}
 	catch ( castor::Exception & exc )
 	{
@@ -319,13 +398,16 @@ struct ObjectWriter< false, castor3d::Mesh >
 		, Options options )
 	{
 		auto newPath = path / ( options.output + cuT( ".cmsh" ) );
-		castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
-		castor3d::BinaryWriter< castor3d::Mesh > writer;
-		auto result = writer.write( object, file );
+		bool result = false;
+		{
+			castor::BinaryFile file{ newPath, castor::File::OpenMode::eWrite };
+			castor3d::BinaryWriter< castor3d::Mesh > writer;
+			result = writer.write( object, file );
+		}
 
 		if ( result )
 		{
-			result = doPostWrite< false >( path, object, options );
+			result = doPostWrite< false >( path.getPath(), object, options );
 		}
 
 		return result;
@@ -502,7 +584,6 @@ int main( int argc, char * argv[] )
 
 			if ( mesh )
 			{
-				name = castor::Path{ options.output };
 				auto rootFolder = path.getPath() / name;
 
 				if ( !castor::File::directoryExists( rootFolder ) )
