@@ -31,62 +31,62 @@ namespace castor3d
 			// Compute camera inverse view transform.
 			auto cameraVP = camera.getProjection() * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
-			auto nearZ = camera.getNear();
-			auto farZ = camera.getFar();
+			auto nearClip = camera.getNear();
+			auto farClip = camera.getFar();
 
-			float clipRange = farZ - nearZ;
-			float minZ = nearZ;
-			float maxZ = nearZ + clipRange;
+			float clipRange = farClip - nearClip;
+			float minZ = nearClip;
+			float maxZ = nearClip + clipRange;
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
 			// Calculate split depths based on view camera frustum
 			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
 			std::vector< float > cascadeSplits( cascades, 0.0f );
-			float cascadeSplitLambda = 0.95f;
+			float constexpr lambda = 0.95f;
 
 			for ( uint32_t i = 0; i < cascades; i++ )
 			{
 				float p = ( i + 1 ) / float( cascades );
 				float log = minZ * std::pow( ratio, p );
 				float uniform = minZ + range * p;
-				float d = cascadeSplitLambda * ( log - uniform ) + uniform;
-				cascadeSplits[i] = ( d - nearZ ) / clipRange;
+				float d = lambda * ( log - uniform ) + uniform;
+				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
 			// Calculate orthographic projection matrix for each cascade
 			float prevSplitDist = 0.0;
 
-			for ( uint32_t i = 0; i < cascades; i++ )
+			for ( uint32_t cascadeIdx = 0; cascadeIdx < cascades; ++cascadeIdx )
 			{
-				float splitDist = cascadeSplits[i];
+				float splitDist = cascadeSplits[cascadeIdx];
 
-				Point4f frustumCorners[8]
+				Point3f frustumCorners[8]
 				{
-					Point4f( -1.0f, 1.0f, -1.0f, 1.0f ),
-					Point4f( 1.0f, 1.0f, -1.0f, 1.0f ),
-					Point4f( 1.0f, -1.0f, -1.0f, 1.0f ),
-					Point4f( -1.0f, -1.0f, -1.0f, 1.0f ),
-					Point4f( -1.0f, 1.0f, 1.0f, 1.0f ),
-					Point4f( 1.0f, 1.0f, 1.0f, 1.0f ),
-					Point4f( 1.0f, -1.0f, 1.0f, 1.0f ),
-					Point4f( -1.0f, -1.0f, 1.0f, 1.0f ),
+					Point3f( -1.0f, 1.0f, -1.0f ),
+					Point3f( 1.0f, 1.0f, -1.0f ),
+					Point3f( 1.0f, -1.0f, -1.0f ),
+					Point3f( -1.0f, -1.0f, -1.0f ),
+					Point3f( -1.0f, 1.0f, 1.0f ),
+					Point3f( 1.0f, 1.0f, 1.0f ),
+					Point3f( 1.0f, -1.0f, 1.0f ),
+					Point3f( -1.0f, -1.0f, 1.0f ),
 				};
 
 				// Project frustum corners into world space
 				for ( auto & frustumCorner : frustumCorners )
 				{
-					auto invCorner = invCameraVP * frustumCorner;
-					frustumCorner = invCorner / invCorner[3];
+					auto invCorner = invCameraVP * Point4f{ frustumCorner[0], frustumCorner[1], frustumCorner[2], 1.0f };
+					frustumCorner = Point3f{ invCorner / invCorner[3] };
 				}
 
-				for ( uint32_t i = 0; i < 4; i++ )
+				for ( uint32_t i = 0; i < 4; ++i )
 				{
-					auto dist = frustumCorners[i + 4] - frustumCorners[i];
-					auto nearCorner = dist * prevSplitDist;
-					auto farCorner = dist * splitDist;
-					frustumCorners[i + 4] = frustumCorners[i] + farCorner;
-					frustumCorners[i] = frustumCorners[i] + nearCorner;
+					auto cornerRay = frustumCorners[i + 4] - frustumCorners[i];
+					auto nearCornerRay = cornerRay * prevSplitDist;
+					auto farCornerRay = cornerRay * splitDist;
+					frustumCorners[i + 4] = frustumCorners[i] + farCornerRay;
+					frustumCorners[i] = frustumCorners[i] + nearCornerRay;
 				}
 
 				// Get frustum center
@@ -100,7 +100,7 @@ namespace castor3d
 				float radius = 0.0f;
 				for ( auto frustumCorner : frustumCorners )
 				{
-					float distance = float( point::distance( Point3f{ frustumCorner }, frustumCenter ) );
+					float distance = float( point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;
@@ -109,17 +109,17 @@ namespace castor3d
 				Point3f minExtents = -maxExtents;
 
 				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
+				Point3f up{ 0.0f, 1.0f, 0.0f };
+				Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
+				up = point::getNormalised( point::cross( lightDirection, right ) );
 
 				// Store split distance and matrix in cascade
-				auto & cascade = result[i];
-				matrix::lookAt( cascade.viewMatrix
-					, lightDirection
-					, frustumCenter
-					, Point3f( 0.0f, 1.0f, 0.0f ) );
+				auto & cascade = result[cascadeIdx];
+				cascade.viewMatrix = matrix::lookAt( lightDirection, frustumCenter, up );
 				auto cascadeExtents = maxExtents - minExtents;
 				cascade.projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0]
 					, minExtents[1], maxExtents[1]
-					, -cascadeExtents[2], cascadeExtents[2] );
+					, 10.0f * -cascadeExtents[2], cascadeExtents[2] );
 
 				// Create a rounding matrix so we move in texel sized increments.
 				Matrix4x4f shadowMatrix = cascade.projMatrix * cascade.viewMatrix;
@@ -137,8 +137,8 @@ namespace castor3d
 				shadowProj[3] += roundOffset;
 				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-				cascade.splitDepth = ( nearZ + splitDist * clipRange ) * -1.0f;
-				prevSplitDist = cascadeSplits[i];
+				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				prevSplitDist = splitDist;
 			}
 
 			return result;
