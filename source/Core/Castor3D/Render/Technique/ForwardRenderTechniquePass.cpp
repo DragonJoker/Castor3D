@@ -539,7 +539,7 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = writer.cast< UInt >( in.instanceID );
+			vtx_instance = writer.cast< UInt >( in.instanceIndex );
 			prvPosition = c3d_projection * prvPosition;
 			curPosition = c3d_projection * curPosition;
 

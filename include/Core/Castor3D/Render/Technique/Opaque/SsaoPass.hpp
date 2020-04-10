@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
+#define C3D_DebugSSAO 0
+
 namespace castor3d
 {
 	class SsaoPass

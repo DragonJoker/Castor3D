@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -37,7 +38,6 @@
 
 using namespace castor;
 
-#define C3D_DebugSSAO 0
 #define C3D_DebugDiffuseLighting 0
 #define C3D_DebugSpecularLighting 0
 #define C3D_DebugIBL 0

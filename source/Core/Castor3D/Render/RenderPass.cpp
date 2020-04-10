@@ -1429,7 +1429,7 @@ namespace castor3d
 				vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 				vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 				vtx_bitangent = cross( vtx_normal, vtx_tangent );
-				vtx_instance = writer.cast< UInt >( in.instanceID );
+				vtx_instance = writer.cast< UInt >( in.instanceIndex );
 				out.vtx.position = c3d_projection * v4Vertex;
 
 				auto tbn = writer.declLocale( "tbn"
@@ -1535,7 +1535,7 @@ namespace castor3d
 					, vec4( prvBbcenter + right * position.x() * width + up * position.y() * height, 1.0_f ) );
 
 				vtx_texture = vec3( uv, 0.0_f );
-				vtx_instance = writer.cast< UInt >( in.instanceID );
+				vtx_instance = writer.cast< UInt >( in.instanceIndex );
 				auto curPosition = writer.declLocale( "curPosition"
 					, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );
 				prvPosition = c3d_prvView * vec4( prvPosition );
