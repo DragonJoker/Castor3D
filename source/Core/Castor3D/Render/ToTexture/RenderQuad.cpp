@@ -32,14 +32,10 @@ namespace castor3d
 {
 	namespace
 	{
-		SamplerSPtr doCreateSampler( RenderSystem const & renderSystem, bool nearest )
+		SamplerSPtr doCreateSampler( RenderSystem const & renderSystem
+			, VkFilter filter )
 		{
-			String const name = nearest
-				? String{ cuT( "RenderQuad_Nearest" ) }
-			: String{ cuT( "RenderQuad_Linear" ) };
-			VkFilter const filter = nearest
-				? VK_FILTER_NEAREST
-				: VK_FILTER_LINEAR;
+			String const name = String{ cuT( "RenderQuad_" ) + ashes::getName( filter ) };
 			auto & cache = renderSystem.getEngine()->getSamplerCache();
 			SamplerSPtr sampler;
 
