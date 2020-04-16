@@ -81,7 +81,7 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdgeDetection" }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-		static constexpr VkFormat depthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
+		static constexpr VkFormat depthFormat = VK_FORMAT_S8_UINT;
 
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };

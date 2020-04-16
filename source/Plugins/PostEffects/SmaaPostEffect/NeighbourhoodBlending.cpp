@@ -226,7 +226,7 @@ namespace smaa
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhoodBlending" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhoodBlending" }
 	{
-		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
+		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_SRGB;
 
 		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
 		auto & renderSystem = m_renderSystem;

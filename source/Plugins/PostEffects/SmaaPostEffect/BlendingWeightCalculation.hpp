@@ -25,7 +25,7 @@ namespace smaa
 			, SmaaConfig const & config );
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
-		void update( castor::Point4i const & subsampleIndices );
+		void update( castor::Point4f const & subsampleIndices );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		inline castor3d::TextureLayoutSPtr getSurface()const
@@ -42,7 +42,7 @@ namespace smaa
 		ashes::RenderPassPtr m_renderPass;
 		castor3d::PostEffectSurface m_surface;
 		ashes::SamplerPtr m_pointSampler;
-		castor3d::UniformBufferUPtr< castor::Point4i > m_ubo;
+		castor3d::UniformBufferUPtr< castor::Point4f > m_ubo;
 		castor3d::TextureLayoutSPtr m_areaTex;
 		castor3d::TextureLayoutSPtr m_searchTex;
 		castor3d::ShaderModule m_vertexShader;
