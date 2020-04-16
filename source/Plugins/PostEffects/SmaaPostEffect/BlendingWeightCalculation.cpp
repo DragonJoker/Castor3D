@@ -194,7 +194,7 @@ namespace smaa
 				, [&]( SampledImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
-					, Vec2 e )
+					, Vec2 & e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
@@ -221,7 +221,7 @@ namespace smaa
 				, [&]( SampledImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
-					, Vec2 e )
+					, Vec2 & e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
@@ -298,8 +298,10 @@ namespace smaa
 						, vec2( 0.0_f, 0.0_f ) );
 
 					// Search for the line ends:
-					auto d = writer.declLocale< Vec4 >( "d" );
-					auto end = writer.declLocale< Vec2 >( "end" );
+					auto d = writer.declLocale< Vec4 >( "d"
+						, vec4( 0.0_f ) );
+					auto end = writer.declLocale( "end"
+						, vec2( 0.0_f ) );
 
 					IF( writer, e.r() > 0.0_f )
 					{

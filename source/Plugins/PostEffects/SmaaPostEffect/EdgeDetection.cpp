@@ -81,7 +81,7 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdgeDetection" }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-		static constexpr VkFormat depthFormat = VK_FORMAT_S8_UINT;
+		static const VkFormat depthFormat = renderTarget.getEngine()->getRenderSystem()->getMainRenderDevice()->selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };
