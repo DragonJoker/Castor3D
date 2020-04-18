@@ -24,16 +24,17 @@ using namespace castor;
 namespace castor3d
 {
 	uint32_t const ShadowMapPassDirectional::UboBindingPoint = 10u;
-	uint32_t const ShadowMapPassDirectional::TextureSize = 1024u;
-	String const ShadowMapPassDirectional::ShadowMapUbo = cuT( "ShadowMap" );
-	String const ShadowMapPassDirectional::FarPlane = cuT( "c3d_farPlane" );
+	uint32_t const ShadowMapPassDirectional::TextureSize = 2048u;
+	std::string const ShadowMapPassDirectional::ShadowMapUbo = cuT( "ShadowMap" );
+	std::string const ShadowMapPassDirectional::Projection = cuT( "c3d_projection" );
+	std::string const ShadowMapPassDirectional::View = cuT( "c3d_view" );
 
 	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )
-		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "ShadowMapPassDirectional" ), engine, matrixUbo, culler, shadowMap }
 	{
 		log::trace << "Created ShadowMapPassDirectional_" << cascadeIndex << std::endl;
 	}
@@ -42,18 +43,17 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPassDirectional::update( Camera const & camera
+	bool ShadowMapPassDirectional::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
-		auto & myCamera = getCuller().getCamera();
-		light.getDirectionalLight()->updateShadow( camera
-			, myCamera
-			, index
-			, getCuller().getMinCastersZ() );
-		m_farPlane = std::abs( light.getDirectionalLight()->getSplitDepth( index ) );
+		getCuller().compute();
+		m_projection = light.getDirectionalLight()->getProjMatrix( index );
+		m_view = light.getDirectionalLight()->getViewMatrix( index );
 		doUpdate( queues );
+		m_outOfDate = true;
+		return m_outOfDate;
 	}
 
 	void ShadowMapPassDirectional::updateDeviceDependent( uint32_t index )
@@ -62,15 +62,14 @@ namespace castor3d
 		{
 			auto & config = m_shadowConfig->getData();
 
-			if ( m_farPlane != config.farPlane )
+			if ( m_projection != config.projection
+				|| m_view != config.view )
 			{
-				config.farPlane = m_farPlane;
+				config.projection = m_projection;
+				config.view = m_view;
 				m_shadowConfig->upload();
 			}
 
-			auto & myCamera = getCuller().getCamera();
-			m_matrixUbo.update( myCamera.getView()
-				, myCamera.getProjection() );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
 	}
@@ -159,12 +158,15 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device
+			, *m_renderPass
+			, "ShadowMapPassDirectional_Pass" );
 
 		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassDirectionalShadowConfigUbo" );
+			, "ShadowMapPassDirectional_ShadowConfigUbo" );
 
 		m_initialised = true;
 		return m_initialised;
@@ -193,7 +195,6 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::doUpdate( RenderQueueArray & queues )
 	{
-		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 
@@ -202,7 +203,7 @@ namespace castor3d
 		auto uboBindings = RenderPass::doCreateUboBindings( flags );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapPassDirectional::UboBindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, VK_SHADER_STAGE_VERTEX_BIT ) );
 		m_initialised = true;
 		return uboBindings;
 	}

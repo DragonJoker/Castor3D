@@ -16,6 +16,8 @@
 #include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -55,10 +57,10 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		castor3d::ShaderPtr doGetCopyPixelShader( SmaaConfig const & config )
@@ -87,7 +89,7 @@ namespace smaa
 						pxl_fragColour = texture( c3d_map, vtx_texture );
 					}
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device
@@ -485,12 +487,7 @@ namespace smaa
 		copyCmd.beginDebugBlock(
 			{
 				"SMAA Copy",
-				{
-					castor3d::transparentBlackClearColor.color.float32[0],
-					castor3d::transparentBlackClearColor.color.float32[1],
-					castor3d::transparentBlackClearColor.color.float32[2],
-					castor3d::transparentBlackClearColor.color.float32[3],
-				},
+				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( copyCmd, passIndex );
 		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT

@@ -28,6 +28,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< Bone >::Name = cuT( "Bone" );
+
 	bool BinaryParser< Bone >::doParse( Bone & obj )
 	{
 		bool result = true;
@@ -42,6 +45,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
 
 				if ( result )
 				{
@@ -52,10 +56,12 @@ namespace castor3d
 
 			case ChunkType::eBoneOffsetMatrix:
 				result = doParseChunk( obj.m_offset, chunk );
+				checkError( result, "Couldn't parse offset matrix." );
 				break;
 
 			case ChunkType::eBoneParentName:
 				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse parent name." );
 
 				if ( result )
 				{
@@ -69,6 +75,7 @@ namespace castor3d
 					else
 					{
 						result = false;
+						checkError( result, "Couldn't find parent bone " + name );
 					}
 				}
 

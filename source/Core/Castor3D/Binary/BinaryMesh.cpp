@@ -26,6 +26,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< Mesh >::Name = cuT( "Mesh" );
+
 	bool BinaryParser< Mesh >::doParse( Mesh & obj )
 	{
 		bool result = true;
@@ -40,6 +43,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
 
 				if ( result )
 				{
@@ -51,6 +55,7 @@ namespace castor3d
 			case ChunkType::eSubmesh:
 				submesh = std::make_shared< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
+				checkError( result, "Couldn't parse submesh." );
 
 				if ( result )
 				{
@@ -87,6 +92,7 @@ namespace castor3d
 			case ChunkType::eSkeleton:
 				skeleton = std::make_shared< Skeleton >( *obj.getScene() );
 				result = createBinaryParser< Skeleton >().parse( *skeleton, chunk );
+				checkError( result, "Couldn't parse skeleton." );
 
 				if ( result )
 				{

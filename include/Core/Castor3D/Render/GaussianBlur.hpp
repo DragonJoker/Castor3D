@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace castor3d
 {
@@ -106,25 +106,25 @@ namespace castor3d
 			return m_blurY.pixelShader;
 		}
 
-		inline sdw::Shader const & getBlurXVertexShader()const
+		inline ast::Shader const & getBlurXVertexShader()const
 		{
 			CU_Require( m_blurX.vertexShader.shader );
 			return *m_blurX.vertexShader.shader;
 		}
 
-		inline sdw::Shader const & getBlurXPixelShader()const
+		inline ast::Shader const & getBlurXPixelShader()const
 		{
 			CU_Require( m_blurX.pixelShader.shader );
 			return *m_blurX.pixelShader.shader;
 		}
 
-		inline sdw::Shader const & getBlurYVertexShader()const
+		inline ast::Shader const & getBlurYVertexShader()const
 		{
 			CU_Require( m_blurY.vertexShader.shader );
 			return *m_blurY.vertexShader.shader;
 		}
 
-		inline sdw::Shader const & getBlurYPixelShader()const
+		inline ast::Shader const & getBlurYPixelShader()const
 		{
 			CU_Require( m_blurY.pixelShader.shader );
 			return *m_blurY.pixelShader.shader;

@@ -312,10 +312,11 @@ namespace castor3d
 					{
 						IF ( m_writer, receivesShadows != 0_i )
 						{
-							// Get cascade index for the current fragment's view position
 							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
 							auto maxCount = m_writer.declLocale( "maxCount"
 								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+							// Get cascade index for the current fragment's view position
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
@@ -334,6 +335,7 @@ namespace castor3d
 									, fragmentIn.m_worldVertex
 									, -lightDirection
 									, cascadeIndex
+									, light.m_cascadeCount
 									, fragmentIn.m_worldNormal ) );
 						}
 						FI;
@@ -364,6 +366,7 @@ namespace castor3d
 								, light.m_transforms[cascadeIndex]
 								, light.m_direction
 								, cascadeIndex
+								, light.m_cascadeCount
 								, light.m_lightBase.m_colour
 								, light.m_lightBase.m_intensity
 								, light.m_lightBase.m_volumetricSteps
@@ -372,6 +375,34 @@ namespace castor3d
 						}
 						FI;
 					}
+
+#if C3D_DebugCascades
+					IF( m_writer, light.m_lightBase.m_shadowType != Int( int( ShadowType::eNone ) ) )
+					{
+						IF( m_writer, cascadeIndex == 0_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 1_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 2_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+					}
+					FI;
+#endif
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;
@@ -567,10 +598,11 @@ namespace castor3d
 					{
 						IF ( m_writer, receivesShadows != 0_i )
 						{
-							// Get cascade index for the current fragment's view position
 							auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
 							auto maxCount = m_writer.declLocale( "maxCount"
 								, m_writer.cast< UInt >( clamp( light.m_cascadeCount, 1_u, c3d_maxCascadeCount ) - 1_u ) );
+
+							// Get cascade index for the current fragment's view position
 							FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 							{
 								IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
@@ -588,6 +620,7 @@ namespace castor3d
 									, fragmentIn.m_worldVertex
 									, -lightDirection
 									, cascadeIndex
+									, light.m_cascadeCount
 									, fragmentIn.m_worldNormal ) );
 						}
 						FI;
@@ -613,12 +646,40 @@ namespace castor3d
 							, light.m_transforms[cascadeIndex]
 							, light.m_direction
 							, cascadeIndex
+							, light.m_cascadeCount
 							, light.m_lightBase.m_colour
 							, light.m_lightBase.m_intensity
 							, light.m_lightBase.m_volumetricSteps
 							, light.m_lightBase.m_volumetricScattering
 							, output );
 					}
+
+#if C3D_DebugCascades
+					if ( shadowType != ShadowType::eNone )
+					{
+						IF( m_writer, cascadeIndex == 0_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 1_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+						}
+						ELSEIF( cascadeIndex == 2_u )
+						{
+							output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+							output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+						}
+						ELSE
+						{
+							output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+							output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+						}
+						FI;
+					}
+#endif
 
 					parentOutput.m_diffuse += output.m_diffuse;
 					parentOutput.m_specular += output.m_specular;

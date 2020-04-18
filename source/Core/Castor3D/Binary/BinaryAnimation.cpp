@@ -43,6 +43,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< Animation >::Name = cuT( "Animation" );
+
 	bool BinaryParser< Animation >::doParse( Animation & obj )
 	{
 		bool result = true;
@@ -56,6 +59,7 @@ namespace castor3d
 			{
 			case ChunkType::eName:
 				result = doParseChunk( name, chunk );
+				checkError( result, "Couldn't parse name." );
 
 				if ( result )
 				{
@@ -66,15 +70,18 @@ namespace castor3d
 
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
+				checkError( result, "Couldn't parse length." );
 				obj.m_length = Milliseconds( uint64_t( length * 1000 ) );
 				break;
 
 			case ChunkType::eSkeletonAnimation:
-				createBinaryParser< SkeletonAnimation >().parse( static_cast< SkeletonAnimation & >( obj ), chunk );
+				log::info << "Loading skeleton animation [" << obj.m_name << "]\n";
+				result = createBinaryParser< SkeletonAnimation >().parse( static_cast< SkeletonAnimation & >( obj ), chunk );
 				break;
 
 			case ChunkType::eMeshAnimation:
-				createBinaryParser< MeshAnimation >().parse( static_cast< MeshAnimation & >( obj ), chunk );
+				log::info << "Loading mesh animation [" << obj.m_name << "]\n";
+				result = createBinaryParser< MeshAnimation >().parse( static_cast< MeshAnimation & >( obj ), chunk );
 				break;
 
 			default:

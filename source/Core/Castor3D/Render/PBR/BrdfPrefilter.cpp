@@ -193,13 +193,13 @@ namespace castor3d
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "BRDFPrefilter" };
@@ -213,10 +213,10 @@ namespace castor3d
 			// Outputs
 			auto pxl_fragColor = writer.declOutput< Vec2 >( "pxl_FragColor", 0u );
 
-			auto radicalInverse = writer.implementFunction< Float >( cuT( "RadicalInverse_VdC" )
+			auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
 				, [&]( UInt const & inBits )
 				{
-					auto bits = writer.declLocale( cuT( "bits" )
+					auto bits = writer.declLocale( "bits"
 						, inBits );
 					bits = ( bits << 16u ) | ( bits >> 16u );
 					bits = ( ( bits & 0x55555555_u ) << 1u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1u );
@@ -225,7 +225,7 @@ namespace castor3d
 					bits = ( ( bits & 0x00FF00FF_u ) << 8u ) | ( ( bits & 0xFF00FF00_u ) >> 8u );
 					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
 				}
-				, InUInt{ writer, cuT( "inBits" ) } );
+				, InUInt{ writer, "inBits" } );
 
 			auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
 				, [&]( UInt const & i
@@ -236,7 +236,7 @@ namespace castor3d
 				, InUInt{ writer, "i" }
 				, InUInt{ writer, "n" } );
 
-			auto importanceSample = writer.implementFunction< Vec3 >( cuT( "ImportanceSampleGGX" )
+			auto importanceSample = writer.implementFunction< Vec3 >( "ImportanceSampleGGX"
 				, [&]( Vec2 const & xi
 					, Vec3 const & n
 					, Float const & roughness )
@@ -378,7 +378,7 @@ namespace castor3d
 					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), 1.0_f - vtx_texture.y() );
 				} );
 
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( m_renderSystem );

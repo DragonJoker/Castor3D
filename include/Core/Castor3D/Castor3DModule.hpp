@@ -54,6 +54,7 @@ namespace castor3d
 	C3D_API castor::Matrix4x4f convert( std::array< float, 16 > const & value );
 	C3D_API VkClearColorValue convert( castor::RgbaColour const & value );
 	C3D_API castor::RgbaColour convert( VkClearColorValue const & value );
+	C3D_API std::array< float, 4u > makeFloatArray( castor::RgbaColour const & value );
 
 	CU_DeclareVector( float, Float );
 	CU_DeclareMap( uint32_t, int, IntUInt );

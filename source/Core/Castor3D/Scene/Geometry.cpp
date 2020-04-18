@@ -143,6 +143,19 @@ namespace castor3d
 		m_mesh = mesh;
 		doUpdateMesh();
 		doUpdateContainers();
+		bool hasEnvironmentMapping = std::any_of( mesh->begin()
+			, mesh->end()
+			, []( SubmeshSPtr const & submesh )
+			{
+				return submesh->getDefaultMaterial()
+					? submesh->getDefaultMaterial()->hasEnvironmentMapping()
+					: false;
+			} );
+
+		if ( hasEnvironmentMapping )
+		{
+			getScene()->createEnvironmentMap( *getParent() );
+		}
 	}
 
 	void Geometry::setMaterial( Submesh & submesh

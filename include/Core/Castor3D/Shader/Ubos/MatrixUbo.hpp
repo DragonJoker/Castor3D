@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -15,18 +15,7 @@ namespace castor3d
 	class MatrixUbo
 	{
 	public:
-		struct Configuration
-		{
-			castor::Matrix4x4f projection;
-			castor::Matrix4x4f invProjection;
-			castor::Matrix4x4f curView;
-			castor::Matrix4x4f prvView;
-			castor::Matrix4x4f curViewProj;
-			castor::Matrix4x4f prvViewProj;
-			castor::Point2f jitter;
-		};
-
-	public:
+		using Configuration = MatrixUboConfiguration;
 		/**
 		*\~english
 		*\name
@@ -85,28 +74,7 @@ namespace castor3d
 		 */
 		C3D_API void update( castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
-			, castor::Point2f const & jitter = castor::Point2f{} )const;
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	view			The new view matrix.
-		 *\param[in]	projection		The new projection matrix.
-		 *\param[in]	jitter			The jittering value.
-		 *\param[in]	stagingBuffer	The staging buffer used to transfer the data.
-		 *\param[in]	commandBuffer	The command buffer on which the transfer commands are recorded.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	view			La nouvelle matrice de vue.
-		 *\param[in]	projection		La nouvelle matrice de projection.
-		 *\param[in]	jitter			La valeur de jittering.
-		 *\param[in]	stagingBuffer	Le staging buffer utilisé pour effectuer le transfer.
-		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes de transfert sont enregistrées.
-		 */
-		C3D_API void update( castor::Matrix4x4f const & view
-			, castor::Matrix4x4f const & projection
-			, castor::Point2f const & jitter
-			, ashes::StagingBuffer & stagingBuffer
-			, ashes::CommandBuffer const & commandBuffer )const;
+			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -117,21 +85,21 @@ namespace castor3d
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
-		C3D_API void update( castor::Matrix4x4f const & projection )const;
+		C3D_API void update( castor::Matrix4x4f const & projection );
 		/**
 		 *\~english
 		 *\name			Getters.
 		 *\~french
 		 *\name			Accesseurs.
 		 */
-		inline UniformBuffer< Configuration > & getUbo()
+		inline UniformBufferOffset< Configuration > & getUbo()
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 
-		inline UniformBuffer< Configuration > const & getUbo()const
+		inline UniformBufferOffset< Configuration > const & getUbo()const
 		{
-			return *m_ubo;
+			return m_ubo;
 		}
 		/**@}*/
 
@@ -148,7 +116,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		UniformBufferUPtr< Configuration > m_ubo;
+		UniformBufferOffset< Configuration > m_ubo;
 	};
 }
 

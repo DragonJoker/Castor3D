@@ -124,14 +124,14 @@ namespace castor3d
 		auto invView = camera.getView().getInverse().getTransposed();
 		auto invProj = camera.getProjection().getInverse();
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
-		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_gpInfoUbo.update( m_size
 			, camera
 			, invViewProj
 			, invView
 			, invProj );
-		m_opaquePass.update( info
-			, jitter );
+		m_opaquePass.getSceneUbo().update( scene, &camera );
+		m_opaquePass.update( info, jitter );
+		m_lightingPass->update( info, scene, camera, jitter );
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -148,8 +148,7 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & DeferredRendering::render( RenderInfo & info
-		, Scene const & scene
+	ashes::Semaphore const & DeferredRendering::render( Scene const & scene
 		, Camera const & camera
 		, ashes::Semaphore const & toWait )
 	{
@@ -159,8 +158,7 @@ namespace castor3d
 		result = &m_lightingPass->render( scene
 			, camera
 			, m_geometryPassResult
-			, *result
-			, info );
+			, *result );
 
 		if ( m_ssaoConfig.enabled )
 		{

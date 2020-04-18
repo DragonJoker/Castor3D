@@ -98,6 +98,13 @@ namespace castor3d
 			, RenderQueueArray & queues );
 		/**
 		 *\~english
+		 *\brief		Updates the GPU data.
+		 *\~french
+		 *\brief		Met à jour les données GPU.
+		 */
+		C3D_API void update();
+		/**
+		 *\~english
 		 *\brief		Render function.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french

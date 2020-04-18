@@ -45,7 +45,7 @@ function( ToneMappingsBuild )
 
 		if( ${CASTOR_BUILD_TONEMAP_UNCHARTED2} )
 			set( Build ${Uncharted2} )
-			add_subdirectory( Plugins/ToneMappings/Uncharted2 )
+			add_subdirectory( Plugins/ToneMappings/Uncharted2ToneMapping )
 			set( Uncharted2 ${Build} PARENT_SCOPE )
 		endif()
 	endif ()

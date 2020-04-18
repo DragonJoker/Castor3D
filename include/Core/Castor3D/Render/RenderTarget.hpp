@@ -147,6 +147,13 @@ namespace castor3d
 		C3D_API void update();
 		/**
 		 *\~english
+		 *\brief		Updates GPU data.
+		 *\~french
+		 *\brief		Met à jour les données GPU.
+		 */
+		C3D_API void update( RenderInfo & info );
+		/**
+		 *\~english
 		 *\brief		Renders one frame.
 		 *\param[out]	info	Receives the render informations.
 		 *\~french
@@ -401,8 +408,7 @@ namespace castor3d
 			, ashes::SemaphorePtr const & copyFinished
 			, castor::Nanoseconds const & elapsedTime );
 		C3D_API ashes::Semaphore const & doApplyToneMapping( ashes::Semaphore const & toWait );
-		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait
-			, Camera const & camera );
+		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
 	public:

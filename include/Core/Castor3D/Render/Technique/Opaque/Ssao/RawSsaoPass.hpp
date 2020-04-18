@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace castor3d
 {

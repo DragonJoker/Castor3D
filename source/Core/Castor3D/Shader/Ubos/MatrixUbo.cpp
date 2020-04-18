@@ -20,7 +20,7 @@ namespace castor3d
 	MatrixUbo::MatrixUbo( Engine & engine )
 		: m_engine{ engine }
 	{
-		if ( engine.getRenderSystem()->hasCurrentRenderDevice() )
+		if ( m_engine.getRenderSystem()->hasCurrentRenderDevice() )
 		{
 			initialise();
 		}
@@ -34,25 +34,24 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "MatrixUbo" );
+			m_ubo = m_engine.getMatrixUboPool().getBuffer( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
 	void MatrixUbo::cleanup()
 	{
-		m_ubo.reset();
+		if ( m_ubo )
+		{
+			m_engine.getMatrixUboPool().putBuffer( m_ubo );
+		}
 	}
 
 	void MatrixUbo::update( castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
-		, castor::Point2f const & jitter )const
+		, castor::Point2f const & jitter )
 	{
 		CU_Require( m_ubo );
-		auto & configuration = m_ubo->getData( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.prvView = configuration.curView;
 		configuration.prvViewProj = configuration.curViewProj;
 		configuration.curView = view;
@@ -60,37 +59,13 @@ namespace castor3d
 		configuration.curViewProj = projection * view;
 		configuration.invProjection = projection.getInverse();
 		configuration.jitter = jitter;
-		m_ubo->upload();
 	}
 
-	void MatrixUbo::update( castor::Matrix4x4f const & view
-		, castor::Matrix4x4f const & projection
-		, castor::Point2f const & jitter
-		, ashes::StagingBuffer & stagingBuffer
-		, ashes::CommandBuffer const & commandBuffer )const
+	void MatrixUbo::update( castor::Matrix4x4f const & projection )
 	{
 		CU_Require( m_ubo );
-		auto & configuration = m_ubo->getData( 0u );
-		configuration.prvView = configuration.curView;
-		configuration.prvViewProj = configuration.curViewProj;
-		configuration.curView = view;
-		configuration.projection = projection;
-		configuration.curViewProj = projection * view;
-		configuration.invProjection = projection.getInverse();
-		configuration.jitter = jitter;
-		stagingBuffer.uploadUniformData( commandBuffer
-			, &configuration
-			, 1u
-			, 0u
-			, *m_ubo );
-	}
-
-	void MatrixUbo::update( castor::Matrix4x4f const & projection )const
-	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo->getData( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();
-		m_ubo->upload();
 	}
 }

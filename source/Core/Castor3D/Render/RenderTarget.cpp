@@ -383,6 +383,13 @@ namespace castor3d
 		m_culler->compute();
 	}
 
+	void RenderTarget::update( RenderInfo & info )
+	{
+		m_toneMapping->update();
+		m_renderTechnique->update( m_jitter, info );
+		m_overlayRenderer->update( *getCamera() );
+	}
+
 	void RenderTarget::render( RenderInfo & info )
 	{
 		SceneSPtr scene = getScene();
@@ -637,12 +644,7 @@ namespace castor3d
 			m_toneMappingCommandBuffer->beginDebugBlock(
 				{
 					"Tone Mapping",
-					{
-						1.0f,
-						0.0f,
-						1.0f,
-						1.0f,
-					},
+					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
 			m_toneMappingTimer->beginPass( *m_toneMappingCommandBuffer );
 			// Put render technique image in shader input layout.
@@ -678,12 +680,7 @@ namespace castor3d
 		commandBuffer->beginDebugBlock(
 			{
 				"Image Copy",
-				{
-					1.0f,
-					0.2f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 
 		if ( &source != &target )
@@ -718,18 +715,18 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_textureObjects = writer.declOutput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
-			auto vtx_textureOverlays = writer.declOutput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
+			auto vtx_textureObjects = writer.declOutput< Vec2 >( "vtx_textureObjects", 0u );
+			auto vtx_textureOverlays = writer.declOutput< Vec2 >( "vtx_textureOverlays", 1u );
 			auto out = writer.getOut();
 
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_textureObjects = utils.topDownToBottomUp( uv );
@@ -741,9 +738,9 @@ namespace castor3d
 						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
 					}
 
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Combine" };
@@ -752,26 +749,26 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapOverlays" ), OverlayImgIdx, 0u );
-			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapObjects" ), ObjectImgIdx, 0u );
-			auto vtx_textureObjects = writer.declInput< Vec2 >( cuT( "vtx_textureObjects" ), 0u );
-			auto vtx_textureOverlays = writer.declInput< Vec2 >( cuT( "vtx_textureOverlays" ), 1u );
+			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapOverlays", OverlayImgIdx, 0u );
+			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapObjects", ObjectImgIdx, 0u );
+			auto vtx_textureObjects = writer.declInput< Vec2 >( "vtx_textureObjects", 0u );
+			auto vtx_textureOverlays = writer.declInput< Vec2 >( "vtx_textureOverlays", 1u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto overlayColor = writer.declLocale( cuT( "overlayColor" )
+					auto overlayColor = writer.declLocale( "overlayColor"
 						, texture( c3d_mapOverlays, vtx_textureOverlays ) );
-					auto objectsColor = writer.declLocale( cuT( "objectsColor" )
+					auto objectsColor = writer.declLocale( "objectsColor"
 						, texture( c3d_mapObjects, vtx_textureObjects ) );
 					objectsColor.rgb() *= 1.0_f - overlayColor.a();
 					//overlayColor.rgb() *= overlayColor.a();
 					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
 				} );
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( *this );
@@ -803,12 +800,7 @@ namespace castor3d
 		m_combineCommands->beginDebugBlock(
 			{
 				"Combine 3D-2D",
-				{
-					1.0f,
-					0.4f,
-					1.0f,
-					1.0f,
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		m_combineCommands->beginRenderPass( *m_renderPass
 			, *m_combinedFrameBuffer.frameBuffer
@@ -826,7 +818,6 @@ namespace castor3d
 	{
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
-		m_toneMapping->update();
 		ashes::SemaphoreCRefArray signalsToWait;
 		
 		if ( m_type == TargetType::eWindow )
@@ -835,8 +826,7 @@ namespace castor3d
 		}
 
 		// Render the scene through the RenderTechnique.
-		m_signalFinished = &m_renderTechnique->render( m_jitter
-			, signalsToWait
+		m_signalFinished = &m_renderTechnique->render( signalsToWait
 			, info );
 
 		// Draw HDR post effects.
@@ -857,7 +847,7 @@ namespace castor3d
 			, elapsedTime );
 
 		// And now render overlays.
-		m_signalFinished = &doRenderOverlays( *m_signalFinished, *camera );
+		m_signalFinished = &doRenderOverlays( *m_signalFinished );
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
@@ -929,16 +919,14 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait
-		, Camera const & camera )
+	ashes::Semaphore const & RenderTarget::doRenderOverlays( ashes::Semaphore const & toWait )
 	{
 		auto * result = &toWait;
 		auto timerBlock = m_overlaysTimer->start();
 		{
 			using LockType = std::unique_lock< OverlayCache >;
 			LockType lock{ castor::makeUniqueLock( getEngine()->getOverlayCache() ) };
-			m_overlayRenderer->beginPrepare( camera
-				, *m_overlaysTimer
+			m_overlayRenderer->beginPrepare( *m_overlaysTimer
 				, *result );
 			auto preparer = m_overlayRenderer->getPreparer();
 

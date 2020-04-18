@@ -32,7 +32,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -44,15 +44,16 @@ namespace Bloom
 			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( "main", [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -70,7 +71,8 @@ namespace Bloom
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 
-			writer.implementFunction< sdw::Void >( "main", [&]()
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );
@@ -84,7 +86,7 @@ namespace Bloom
 					}
 					ROF;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		std::vector< float > getHalfPascal( uint32_t height )

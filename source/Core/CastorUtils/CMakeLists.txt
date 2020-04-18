@@ -5,11 +5,11 @@ include( AndroidNdkModules )
 
 if ( CASTOR_USE_SYSTEM_LIBS OR APPLE )
 	if ( VCPKG_TOOLCHAIN )
-		find_package( freetype CONFIG )
+		find_package( freetype CONFIG REQUIRED )
 		set( Freetype_LIBRARIES freetype )
 		set( FreeType_FOUND ( freetype_FOUND OR FREETYPE_FOUND ) )
 	else ()
-		find_package( Freetype )
+		find_package( Freetype REQUIRED )
 		set( Freetype_LIBRARIES Freetype::Freetype )
 	endif ()
 else ()
@@ -20,7 +20,7 @@ if ( FreeType_FOUND OR FREETYPE_FOUND )
 	set( FreeType_FOUND FREETYPE_FOUND )
 endif ()
 if ( CASTOR_USE_SYSTEM_LIBS )
-	find_package( ZLIB 1.2.7 )
+	find_package( ZLIB 1.2.7 REQUIRED )
 else ()
 	set( ZLIB_FOUND ON )
 endif ()
@@ -277,6 +277,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/BoundingSphere.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ColourComponent.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/DdsImageLoader.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ExrImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Font.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/FontCache.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Glyph.cpp
@@ -302,6 +303,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Colour.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ColourComponent.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/DdsImageLoader.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ExrImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Font.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/FontCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Glyph.hpp
@@ -333,6 +335,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image.h
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_resize.h
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/stb_image_write.h
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/tinyexr.h
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}

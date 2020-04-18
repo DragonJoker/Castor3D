@@ -3,23 +3,25 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 using namespace castor;
 
 namespace castor3d
 {
-	ShadowMapPass::ShadowMapPass( Engine & engine
-		, MatrixUbo const & matrixUbo
+	ShadowMapPass::ShadowMapPass( castor::String name
+		, Engine & engine
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: RenderPass{ cuT( "ShadowMap" ), cuT( "ShadowMap" ), engine, matrixUbo, culler }
+		: RenderPass{ cuT( "ShadowMap" ), std::move( name ), engine, matrixUbo, culler }
 		, m_shadowMap{ shadowMap }
 	{
 	}

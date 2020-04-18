@@ -201,19 +201,20 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Inputs
-			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec3 >( "position", 0u );
 			UBO_MATRIX( writer, MtxUboIdx, 0 );
 			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, 0 );
 
 			// Outputs
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				out.gl_out.gl_Position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
-			} );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					out.vtx.position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
+				} );
 
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "TextureProj" };
@@ -222,9 +223,9 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Inputs
-			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapColor" ), DifImgIdx, 0u );
+			auto c3d_mapColor = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapColor", DifImgIdx, 0u );
 			Pcb pcb{ writer, "SizePCB", ast::type::MemoryLayout::eStd140 };
-			auto c3d_size = pcb.declMember< Vec2 >( cuT( "c3d_size" ) );
+			auto c3d_size = pcb.declMember< Vec2 >( "c3d_size" );
 			pcb.end();
 			auto in = writer.getIn();
 
@@ -232,15 +233,16 @@ namespace castor3d
 			utils.declareInvertVec2Y();
 
 			// Outputs
-			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+			auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				pxl_FragColor = texture( c3d_mapColor
-					, in.gl_FragCoord.xy() / c3d_size );
-			} );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					pxl_FragColor = texture( c3d_mapColor
+						, in.fragCoord.xy() / c3d_size );
+				} );
 
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( *this );
@@ -354,12 +356,12 @@ namespace castor3d
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo()
-			, 0u
+			, *m_matrixUbo.getUbo().buffer
+			, m_matrixUbo.getUbo().offset
 			, 1u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo()
-			, 0u
+			, *m_modelMatrixUbo.getUbo().buffer
+			, m_modelMatrixUbo.getUbo().offset
 			, 1u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 2u )
 			, texture

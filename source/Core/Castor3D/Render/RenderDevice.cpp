@@ -217,6 +217,18 @@ namespace castor3d
 		return selectSuitableFormat( depthFormats, requiredFeatures );
 	}
 
+	VkFormat RenderDevice::selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > depthFormats
+		{
+			VK_FORMAT_S8_UINT,
+			VK_FORMAT_D16_UNORM_S8_UINT,
+			VK_FORMAT_D24_UNORM_S8_UINT,
+			VK_FORMAT_D32_SFLOAT_S8_UINT,
+		};
+		return selectSuitableFormat( depthFormats, requiredFeatures );
+	}
+
 	VkFormat RenderDevice::selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
 		std::vector< VkFormat > depthFormats

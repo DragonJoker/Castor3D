@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Render/ToTexture/RenderQuad.hpp>
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 namespace smaa
 {

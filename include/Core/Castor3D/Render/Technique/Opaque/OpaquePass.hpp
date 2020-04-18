@@ -26,7 +26,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		OpaquePass( MatrixUbo const & matrixUbo
+		OpaquePass( MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & config );
 		/**

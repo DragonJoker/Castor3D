@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API explicit PickingPass( Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler );
 		/**
 		 *\~english

@@ -106,7 +106,7 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, VkShaderStageFlagBits type
-				, sdw::Shader const & shader )override
+				, ast::Shader const & shader )override
 			{
 				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
 					, ast::SpecialisationInfo{}

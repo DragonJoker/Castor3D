@@ -28,25 +28,22 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = makeUniformBuffer< HdrConfig >( *m_engine.getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "HdrConfigUbo" );
-			m_ubo->upload();
+			m_ubo = m_engine.getHdrConfigUboPool().getBuffer( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
 	void HdrConfigUbo::cleanup()
 	{
-		m_ubo.reset();
+		if ( m_ubo )
+		{
+			m_engine.getHdrConfigUboPool().putBuffer( m_ubo );
+		}
 	}
 
-	void HdrConfigUbo::update( HdrConfig const & config )const
+	void HdrConfigUbo::update( HdrConfig const & config )
 	{
 		CU_Require( m_ubo );
-		m_ubo->getData( 0u ).setExposure( config.getExposure() );
-		m_ubo->getData( 0u ).setGamma( config.getGamma() );
-		m_ubo->upload();
+		m_ubo.getData().setExposure( config.getExposure() );
+		m_ubo.getData().setGamma( config.getGamma() );
 	}
 }

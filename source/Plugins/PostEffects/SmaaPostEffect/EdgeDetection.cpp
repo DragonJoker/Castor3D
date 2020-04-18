@@ -1,7 +1,6 @@
 #include "SmaaPostEffect/EdgeDetection.hpp"
 
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderPassTimer.hpp>
@@ -26,7 +25,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( castor3d::RenderSystem const & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -63,11 +62,11 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAAEdgeDetectionVS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -82,7 +81,7 @@ namespace smaa
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdgeDetection" }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
-		static constexpr VkFormat depthFormat = VK_FORMAT_D24_UNORM_S8_UINT;
+		static const VkFormat depthFormat = renderTarget.getEngine()->getRenderSystem()->getMainRenderDevice()->selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
 
 		VkExtent2D size{ renderTarget.getSize().getWidth()
 			, renderTarget.getSize().getHeight() };

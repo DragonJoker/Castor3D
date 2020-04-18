@@ -17,6 +17,8 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBufferInheritanceInfo.hpp>
 #include <ashespp/Pipeline/GraphicsPipelineCreateInfo.hpp>
@@ -139,8 +141,8 @@ namespace castor3d
 				, 0u
 				, 1u );
 			result->createBinding( layout.getBinding( hdrUboIndex )
-				, hdrConfigUbo.getUbo()
-				, 0u
+				, *hdrConfigUbo.getUbo().buffer
+				, hdrConfigUbo.getUbo().offset
 				, 1u );
 			result->update();
 			return result;
@@ -192,20 +194,20 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetPixelProgram( Engine & engine
@@ -222,11 +224,11 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), depthTexIndex, 1u );
 			auto c3d_mapAccumulation = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), accumTexIndex, 1u );
 			auto c3d_mapRevealage = writer.declSampledImage< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), revealTexIndex, 1u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 
 			shader::Utils utils{ writer };
 			utils.declareInvertVec2Y();
@@ -235,19 +237,19 @@ namespace castor3d
 
 			shader::Fog fog{ fogType, writer };
 
-			auto maxComponent = writer.implementFunction< Float >( cuT( "maxComponent" )
+			auto maxComponent = writer.implementFunction< Float >( "maxComponent"
 				, [&]( Vec3 const & v )
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
-				, InVec3{ writer, cuT( "v" ) } );
+				, InVec3{ writer, "v" } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto coord = writer.declLocale( cuT( "coord" )
-						, ivec2( in.gl_FragCoord.xy() ) );
-					auto revealage = writer.declLocale( cuT( "revealage" )
+					auto coord = writer.declLocale( "coord"
+						, ivec2( in.fragCoord.xy() ) );
+					auto revealage = writer.declLocale( "revealage"
 						, texelFetch( c3d_mapRevealage, coord, 0_i ).r() );
 
 					IF( writer, revealage == 1.0_f )
@@ -257,7 +259,7 @@ namespace castor3d
 					}
 					FI;
 
-					auto accum = writer.declLocale( cuT( "accum" )
+					auto accum = writer.declLocale( "accum"
 						, texelFetch( c3d_mapAccumulation, coord, 0_i ) );
 
 					// Suppress overflow
@@ -267,16 +269,16 @@ namespace castor3d
 					}
 					FI;
 
-					auto averageColor = writer.declLocale( cuT( "averageColor" )
+					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
 					pxl_fragColor = vec4( averageColor.rgb(), 1.0_f - revealage );
 
 					if ( fogType != FogType::eDisabled )
 					{
-						auto texCoord = writer.declLocale( cuT( "texCoord" )
-							, in.gl_FragCoord.xy() );
-						auto position = writer.declLocale( cuT( "position" )
+						auto texCoord = writer.declLocale( "texCoord"
+							, in.fragCoord.xy() );
+						auto position = writer.declLocale( "position"
 							, utils.calcVSPosition( texCoord
 								, texture( c3d_mapDepth, texCoord ).r()
 								, c3d_mtxInvProj ) );
@@ -286,7 +288,7 @@ namespace castor3d
 							, position.z() );
 					}
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( Engine & engine
@@ -444,7 +446,8 @@ namespace castor3d
 		, ashes::DescriptorSetLayout const & texLayout
 		, ashes::PipelineVertexInputStateCreateInfo const & vtxLayout
 		, FogType fogType )
-		: m_timer{ timer }
+		: m_engine{ engine }
+		, m_timer{ timer }
 		, m_renderPass{ renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentResolve" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentResolve" }
@@ -473,12 +476,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Weighted Blended - Transparent resolve",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->beginRenderPass( m_renderPass

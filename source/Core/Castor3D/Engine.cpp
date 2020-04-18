@@ -32,6 +32,7 @@
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/DdsImageLoader.hpp>
+#include <CastorUtils/Graphics/ExrImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageLoader.hpp>
 #include <CastorUtils/Graphics/StbImageWriter.hpp>
 #include <CastorUtils/Graphics/XpmImageLoader.hpp>
@@ -94,8 +95,9 @@ namespace castor3d
 		{
 		};
 		initialiseGlslang();
-		StbImageLoader::registerLoader( m_imageLoader );
 		DdsImageLoader::registerLoader( m_imageLoader );
+		StbImageLoader::registerLoader( m_imageLoader );
+		ExrImageLoader::registerLoader( m_imageLoader );
 		XpmImageLoader::registerLoader( m_imageLoader );
 		StbImageWriter::registerWriter( m_imageWriter );
 
@@ -262,6 +264,13 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
+		m_matrixUboPool = std::make_shared< UniformBufferPool< MatrixUboConfiguration > >( *m_renderSystem
+			, cuT( "MatrixUboPool" ) );
+		m_hdrConfigUboPool = std::make_shared< UniformBufferPool< HdrConfig > >( *m_renderSystem
+			, cuT( "HdrConfigUboPool" ) );
+		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
+			, cuT( "ModelMatrixUboPool" ) );
+
 		if ( threaded )
 		{
 			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, wanted );
@@ -307,6 +316,9 @@ namespace castor3d
 			m_techniqueCache->cleanup();
 
 			m_renderLoop.reset();
+			m_matrixUboPool.reset();
+			m_hdrConfigUboPool.reset();
+			m_modelMatrixUboPool.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -412,6 +424,19 @@ namespace castor3d
 		return loc;
 	}
 
+	RgbaColour Engine::getNextRainbowColour()const
+	{
+		static float currentColourHue{ 0.0f };
+		currentColourHue += 0.05f;
+
+		if ( currentColourHue > 1.0f )
+		{
+			currentColourHue = 0.0f;
+		}
+
+		return RgbaColour::fromHSB( currentColourHue, 1.0f, 1.0f );
+	}
+
 	bool Engine::isCleaned()
 	{
 		return m_cleaned;
@@ -507,6 +532,13 @@ namespace castor3d
 				, size
 				, texture );
 		}
+	}
+
+	void Engine::uploadUbos()
+	{
+		m_matrixUboPool->upload();
+		m_hdrConfigUboPool->upload();
+		m_modelMatrixUboPool->upload();
 	}
 
 	void Engine::doLoadCoreData()

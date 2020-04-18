@@ -9,6 +9,8 @@
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -80,17 +82,18 @@ namespace castor3d
 			// Shader inputs
 			UBO_MATRIX( writer, 0u, 0u );
 			UBO_MODEL_MATRIX( writer, 1u, 0u );
-			auto vertex = writer.declInput< Vec3 >( cuT( "position" ), 0u );
+			auto vertex = writer.declInput< Vec3 >( "position", 0u );
 
 			// Shader outputs
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				out.gl_out.gl_Position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
-			} );
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					out.vtx.position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
+				} );
 
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -130,9 +133,11 @@ namespace castor3d
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet();
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
-			, m_matrixUbo.getUbo() );
+			, *m_matrixUbo.getUbo().buffer
+			, m_matrixUbo.getUbo().offset );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 1u )
-			, m_modelMatrixUbo.getUbo() );
+			, *m_modelMatrixUbo.getUbo().buffer
+			, m_modelMatrixUbo.getUbo().offset );
 		m_descriptorSet->update();
 
 		m_renderPass = doCreateRenderPass( m_engine, m_depthView );
@@ -194,12 +199,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Stencil",
-				{
-					0.7f,
-					1.0f,
-					0.7f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT

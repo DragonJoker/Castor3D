@@ -5,6 +5,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -87,7 +88,7 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool environment
 		, SceneNode const * ignored
@@ -103,7 +104,7 @@ namespace castor3d
 
 	RenderTechniquePass::RenderTechniquePass( String const & category
 		, String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, bool oit
 		, bool environment

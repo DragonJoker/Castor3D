@@ -504,6 +504,43 @@ namespace castor
 	}
 
 	template< typename ComponentType >
+	RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
+	{
+		float h = hue == 1.0f ? 0 : hue * 6.0f;
+		float f = h - ( int )h;
+		float p = brightness * ( 1.0f - saturation );
+		float q = brightness * ( 1.0f - saturation * f );
+		float t = brightness * ( 1.0f - ( saturation * ( 1.0f - f ) ) );
+
+		if ( h < 1 )
+		{
+			return RgbaColourT< ComponentType >::fromComponents( brightness, t, p, 1.0f );
+		}
+
+		if ( h < 2 )
+		{
+			return RgbaColourT< ComponentType >::fromComponents( q, brightness, p, 1.0f );
+		}
+
+		if ( h < 3 )
+		{
+			return RgbaColourT< ComponentType >::fromComponents( p, brightness, t, 1.0f );
+		}
+
+		if ( h < 4 )
+		{
+			return RgbaColourT< ComponentType >::fromComponents( p, q, brightness, 1.0f );
+		}
+
+		if ( h < 5 )
+		{
+			return RgbaColourT< ComponentType >::fromComponents( t, p, brightness, 1.0f );
+		}
+
+		return RgbaColourT< ComponentType >::fromComponents( brightness, p, q, 1.0f );
+	}
+
+	template< typename ComponentType >
 	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator+=( RgbaColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )

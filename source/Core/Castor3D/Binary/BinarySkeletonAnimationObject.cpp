@@ -70,6 +70,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< SkeletonAnimationObject >::Name = cuT( "SkeletonAnimationObject" );
+
 	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
@@ -89,12 +92,14 @@ namespace castor3d
 			{
 			case ChunkType::eMovingTransform:
 				result = doParseChunk( obj.m_nodeTransform, chunk );
+				checkError( result, "Couldn't parse transform." );
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
 				bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
 				obj.addChild( bone );
 				result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
+				checkError( result, "Couldn't parse animation bone." );
 
 				if ( result )
 				{
@@ -107,6 +112,7 @@ namespace castor3d
 				node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
 				obj.addChild( node );
 				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
+				checkError( result, "Couldn't parse animation node." );
 
 				if ( result )
 				{
@@ -142,6 +148,7 @@ namespace castor3d
 			{
 			case ChunkType::eKeyframeCount:
 				result = doParseChunk( count, chunk );
+				checkError( result, "Couldn't parse keyframes count." );
 
 				if ( result )
 				{
@@ -152,6 +159,7 @@ namespace castor3d
 
 			case ChunkType::eKeyframes:
 				result = doParseChunk( keyframesd, chunk );
+				checkError( result, "Couldn't parse keyframes." );
 
 				if ( result )
 				{
@@ -183,6 +191,7 @@ namespace castor3d
 
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
+				checkError( result, "Couldn't parse animation length." );
 				break;
 
 			default:

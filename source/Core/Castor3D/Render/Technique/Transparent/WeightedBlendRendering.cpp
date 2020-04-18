@@ -104,8 +104,7 @@ namespace castor3d
 			, jitter );
 	}
 
-	ashes::Semaphore const & WeightedBlendRendering::render( RenderInfo & info
-		, Scene const & scene
+	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene
 		, ashes::Semaphore const & toWait )
 	{
 		m_engine.setPerObjectLighting( true );

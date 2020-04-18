@@ -28,6 +28,36 @@ namespace castor3d
 		, ashes::Queue const & queue
 		, ashes::CommandPool const & commandPool
 		, uint32_t offset
+		, VkPipelineStageFlags flags )const
+	{
+		UniformBufferBase::upload( stagingBuffer
+			, queue
+			, commandPool
+			, getDatas().data()
+			, getDatas().size() * sizeof( T )
+			, offset
+			, flags );
+	}
+
+	template< typename T >
+	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+		, ashes::CommandBuffer const & commandBuffer
+		, uint32_t offset
+		, VkPipelineStageFlags flags )const
+	{
+		UniformBufferBase::upload( stagingBuffer
+			, commandBuffer
+			, getDatas().data()
+			, getDatas().size() * sizeof( T )
+			, offset
+			, flags );
+	}
+
+	template< typename T >
+	inline void UniformBuffer< T >::upload( ashes::BufferBase const & stagingBuffer
+		, ashes::Queue const & queue
+		, ashes::CommandPool const & commandPool
+		, uint32_t offset
 		, VkPipelineStageFlags flags
 		, RenderPassTimer const & timer
 		, uint32_t index )const

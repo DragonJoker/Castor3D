@@ -7,6 +7,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -27,20 +29,20 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
-			auto uv = writer.declInput< Vec2 >( cuT( "uv" ), 1u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr getBlurXProgram( RenderSystem & renderSystem, bool isDepth )
@@ -52,21 +54,21 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapSource" ), DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
-					auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
+					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
+					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
 					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
@@ -79,10 +81,10 @@ namespace castor3d
 
 					if ( isDepth )
 					{
-						out.gl_FragDepth = pxl_fragColor.r();
+						out.fragDepth = pxl_fragColor.r();
 					}
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr getBlurXProgramLayer( RenderSystem & renderSystem
@@ -96,36 +98,37 @@ namespace castor3d
 			Ubo config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
 			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
 			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
+			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DArrayRgba32 >( cuT( "c3d_mapSource" ), DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSource = writer.declSampledImage< FImg2DArrayRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
-				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
-				pxl_fragColor = texture( c3d_mapSource, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
-
-				FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					offset += base;
-					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture - offset, Float( float( layer ) ) ) );
-					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture + offset, Float( float( layer ) ) ) );
-				}
-				ROF;
+					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
+					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
+					pxl_fragColor = texture( c3d_mapSource, vec3( vtx_texture, Float( float( layer ) ) ) ) * c3d_coefficients[0_u][0_u];
 
-				if ( isDepth )
-				{
-					out.gl_FragDepth = pxl_fragColor.r();
-				}
-			} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+					{
+						offset += base;
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture - offset, Float( float( layer ) ) ) );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vec3( vtx_texture + offset, Float( float( layer ) ) ) );
+					}
+					ROF;
+
+					if ( isDepth )
+					{
+						out.fragDepth = pxl_fragColor.r();
+					}
+				} );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr getBlurYProgram( RenderSystem & renderSystem, bool isDepth )
@@ -140,33 +143,34 @@ namespace castor3d
 			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
 			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
 			config.end();
-			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapSource" ), DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( cuT( "vtx_texture" ), 0u );
+			auto c3d_mapSource = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( cuT( "pxl_fragColor" ), 0 );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
 			auto out = writer.getOut();
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-			{
-				auto base = writer.declLocale( cuT( "base" ), vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
-				auto offset = writer.declLocale( cuT( "offset" ), vec2( 0.0_f, 0.0_f ) );
-				pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
-
-				FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
 				{
-					offset += base;
-					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
-					pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture + offset );
-				}
-				ROF;
+					auto base = writer.declLocale( "base", vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
+					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
+					pxl_fragColor = texture( c3d_mapSource, vtx_texture ) * c3d_coefficients[0_u][0_u];
 
-				if ( isDepth )
-				{
-					out.gl_FragDepth = pxl_fragColor.r();
-				}
-			} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+					{
+						offset += base;
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture - offset );
+						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * texture( c3d_mapSource, vtx_texture + offset );
+					}
+					ROF;
+
+					if ( isDepth )
+					{
+						out.fragDepth = pxl_fragColor.r();
+					}
+				} );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr getPixelProgram( RenderSystem & renderSystem
@@ -452,12 +456,18 @@ namespace castor3d
 	{
 		auto result = device.graphicsCommandPool->createCommandBuffer();
 		result->begin();
+		result->beginDebugBlock(
+			{
+				"GaussianBlur Blur pass",
+				makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
 		result->beginRenderPass( renderPass
 			, *fbo
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		result->executeCommands( { quad.getCommandBuffer() } );
 		result->endRenderPass();
+		result->endDebugBlock();
 		result->end();
 		return result;
 	}

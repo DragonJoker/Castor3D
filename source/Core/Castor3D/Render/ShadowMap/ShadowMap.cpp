@@ -5,6 +5,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -14,11 +16,13 @@ using namespace castor;
 namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
-		, TextureUnit && shadowMap
-		, TextureUnit && linearMap
-		, std::vector< PassData > && passes
+		, castor::String name
+		, TextureUnit shadowMap
+		, TextureUnit linearMap
+		, std::vector< PassData > passes
 		, uint32_t count )
 		: OwnedBy< Engine >{ engine }
+		, m_name{ std::move( name ) }
 		, m_shadowMap{ std::move( shadowMap ) }
 		, m_linearMap{ std::move( linearMap ) }
 		, m_passes{ std::move( passes ) }
@@ -44,6 +48,11 @@ namespace castor3d
 				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer();
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 				static VkClearColorValue const clearColour{ 1.0f, 1.0f, 1.0f, 1.0f };
+				cmdBuffer->beginDebugBlock(
+					{
+						m_name + " variance clear",
+						makeFloatArray( getEngine()->getNextRainbowColour() ),
+					} );
 
 				for ( auto & view : *m_shadowMap.getTexture() )
 				{
@@ -56,6 +65,13 @@ namespace castor3d
 						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 				}
 
+				cmdBuffer->endDebugBlock();
+				cmdBuffer->beginDebugBlock(
+					{
+						m_name + " linear clear",
+						makeFloatArray( getEngine()->getNextRainbowColour() ),
+					} );
+
 				for ( auto & view : *m_linearMap.getTexture() )
 				{
 					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
@@ -67,6 +83,7 @@ namespace castor3d
 						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 				}
 
+				cmdBuffer->endDebugBlock();
 				cmdBuffer->end();
 				auto fence = device->createFence();
 				device.graphicsQueue->submit( *cmdBuffer, fence.get() );
@@ -109,9 +126,21 @@ namespace castor3d
 		m_linearMap.cleanup();
 	}
 
+	ashes::Semaphore const & ShadowMap::render( ashes::Semaphore const & toWait
+		, uint32_t index )
+	{
+		if ( isUpToDate( index ) )
+		{
+			return toWait;
+		}
+
+		return doRender( toWait, index );
+	}
+
 	void ShadowMap::updateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
+		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		remFlag( flags.textures, TextureFlag::eAllButOpacity );
 		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )

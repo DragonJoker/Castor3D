@@ -4,8 +4,6 @@
 #include "Castor3D/Model/Skeleton/Bone.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 
-using namespace castor;
-
 namespace castor3d
 {
 	Skeleton::Skeleton( Scene & scene )
@@ -19,7 +17,7 @@ namespace castor3d
 		Animable::cleanupAnimations();
 	}
 
-	BoneSPtr Skeleton::createBone( String const & name
+	BoneSPtr Skeleton::createBone( castor::String const & name
 		, castor::Matrix4x4f const & offset )
 	{
 		auto bone = std::make_shared< Bone >( *this, offset );
@@ -78,7 +76,7 @@ namespace castor3d
 		if ( it == m_boxes.end() )
 		{
 			uint32_t index = 0u;
-			std::vector< BoundingBox > boxes;
+			std::vector< castor::BoundingBox > boxes;
 			boxes.reserve( m_bones.size() );
 
 			for ( auto & bone : m_bones )

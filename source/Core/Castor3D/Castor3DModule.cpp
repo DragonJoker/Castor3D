@@ -31,4 +31,15 @@ namespace castor3d
 		std::memcpy( result.ptr(), value.float32, 4 * sizeof( float ) );
 		return result;
 	}
+
+	std::array< float, 4u > makeFloatArray( castor::RgbaColour const & value )
+	{
+		return
+		{
+			value.red(),
+			value.green(),
+			value.blue(),
+			value.alpha(),
+		};
+	}
 }

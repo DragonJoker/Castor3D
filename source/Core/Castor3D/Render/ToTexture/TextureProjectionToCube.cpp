@@ -41,23 +41,23 @@ namespace castor3d
 				VertexWriter writer;
 
 				// Inputs
-				auto position = writer.declInput< Vec4 >( cuT( "position" ), 0u );
-				auto matrixUbo = sdw::Ubo{ writer, cuT( "Matrix" ), 0u, 0u };
-				auto mtxViewProjection = matrixUbo.declMember< Mat4 >( cuT( "mtxViewProjection" ) );
+				auto position = writer.declInput< Vec4 >( "position", 0u );
+				auto matrixUbo = sdw::Ubo{ writer, "Matrix", 0u, 0u };
+				auto mtxViewProjection = matrixUbo.declMember< Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
 
 				// Outputs
-				auto vtx_position = writer.declOutput< Vec3 >( cuT( "vtx_position" ), 0u );
+				auto vtx_position = writer.declOutput< Vec3 >( "vtx_position", 0u );
 				auto out = writer.getOut();
 
 				std::function< void() > main = [&]()
 				{
 					vtx_position = position.xyz();
-					out.gl_out.gl_Position = mtxViewProjection * position;
+					out.vtx.position = mtxViewProjection * position;
 				};
 
-				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				writer.implementFunction< sdw::Void >( "main", main );
+				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "TextureProjToCube" };
@@ -65,33 +65,35 @@ namespace castor3d
 				FragmentWriter writer;
 
 				// Inputs
-				auto mapColour = writer.declSampledImage< FImg2DRgba32 >( cuT( "mapColour" ), 1u, 0u );
-				auto vtx_position = writer.declInput< Vec3 >( cuT( "vtx_position" ), 0u );
+				auto mapColour = writer.declSampledImage< FImg2DRgba32 >( "mapColour", 1u, 0u );
+				auto vtx_position = writer.declInput< Vec3 >( "vtx_position", 0u );
 
 				// Outputs
-				auto pxl_colour = writer.declOutput< Vec4 >( cuT( "pxl_colour" ), 0u );
+				auto pxl_colour = writer.declOutput< Vec4 >( "pxl_colour", 0u );
 
 				shader::Utils utils{ writer };
 				utils.declareInvertVec2Y();
 				
-				auto sampleSphericalMap = writer.implementFunction< Vec2 >( cuT( "sampleSphericalMap" )
+				auto sampleSphericalMap = writer.implementFunction< Vec2 >( "sampleSphericalMap"
 					, [&]( Vec3 const & v )
 					{
-						auto uv = writer.declLocale( cuT( "uv" ), vec2( atan( v.z() / v.x() ), asin( v.y() ) ) );
+						auto uv = writer.declLocale( "uv"
+							, vec2( atan( v.z() / v.x() ), asin( v.y() ) ) );
 						uv *= vec2( 0.1591_f, 0.3183_f );
 						uv += 0.5_f;
 						writer.returnStmt( uv );
 					}
-					, InVec3{ writer, cuT( "v" ) } );
+					, InVec3{ writer, "v" } );
 
 				std::function< void() > main = [&]()
 				{
-					auto uv = writer.declLocale( cuT( "uv" ), sampleSphericalMap( normalize( vtx_position ) ) );
+					auto uv = writer.declLocale( "uv"
+						, sampleSphericalMap( normalize( vtx_position ) ) );
 					pxl_colour = vec4( texture( mapColour, uv ).rgb(), 1.0_f );
 				};
 
-				writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				writer.implementFunction< sdw::Void >( "main", main );
+				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			return ashes::PipelineShaderStageCreateInfoArray

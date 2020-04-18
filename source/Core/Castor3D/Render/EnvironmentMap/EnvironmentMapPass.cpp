@@ -13,6 +13,8 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 using namespace castor;
 
 namespace castor3d
@@ -182,18 +184,27 @@ namespace castor3d
 		static_cast< RenderTechniquePass & >( *m_transparentPass ).update( queues );
 	}
 
-	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
+	void EnvironmentMapPass::update()
 	{
-		auto & device = getCurrentRenderDevice( *getOwner() );
 		RenderInfo info;
 		m_opaquePass->update( info, {} );
 		m_transparentPass->update( info, {} );
 		m_matrixUbo.update( m_camera->getView()
 			, m_camera->getProjection() );
 		m_modelMatrixUbo.update( m_mtxModel );
+	}
+
+	ashes::Semaphore const & EnvironmentMapPass::render( ashes::Semaphore const & toWait )
+	{
+		auto & device = getCurrentRenderDevice( *getOwner() );
 		ashes::Semaphore const * result = &toWait;
 
 		m_commandBuffer->begin();
+		m_commandBuffer->beginDebugBlock(
+			{
+				"EnvironmentMapPass render",
+				makeFloatArray( getOwner()->getEngine()->getNextRainbowColour() ),
+			} );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { defaultClearDepthStencil, opaqueBlackClearColor }
@@ -214,6 +225,7 @@ namespace castor3d
 
 		m_commandBuffer->executeCommands( commandBuffers );
 		m_commandBuffer->endRenderPass();
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
 		device.graphicsQueue->submit( *m_commandBuffer

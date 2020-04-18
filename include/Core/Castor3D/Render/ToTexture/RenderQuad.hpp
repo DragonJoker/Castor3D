@@ -239,6 +239,11 @@ namespace castor3d
 			return *m_commandBuffer;
 		}
 
+		inline RenderSystem * getRenderSystem()const
+		{
+			return &m_renderSystem;
+		}
+
 	private:
 		C3D_API virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 			, ashes::DescriptorSet & descriptorSet );

@@ -26,7 +26,7 @@ using namespace castor3d;
 namespace castor3d
 {
 	DepthPass::DepthPass( String const & name
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
@@ -154,32 +154,32 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto uv = writer.declInput< Vec3 >( cuT( "uv" )
+		auto uv = writer.declInput< Vec3 >( "uv"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( "weights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( "weights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( "transform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( "material"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( "position2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( "texture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -191,37 +191,37 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		// Outputs
-		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
-		writer.implementFunction< sdw::Void >( cuT( "main" )
+		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 		{
-				auto curPosition = writer.declLocale( cuT( "curPosition" )
+				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( position.xyz(), 1.0_f ) );
-				auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+				auto v3Texture = writer.declLocale( "v3Texture"
 					, uv );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
-					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					auto mtxModel = writer.declLocale( "mtxModel"
 						, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
 				}
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
-					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					auto mtxModel = writer.declLocale( "mtxModel"
 						, transform );
 				}
 				else
 				{
-					auto mtxModel = writer.declLocale( cuT( "mtxModel" )
+					auto mtxModel = writer.declLocale( "mtxModel"
 						, c3d_curMtxModel );
 				}
 
@@ -234,7 +234,7 @@ namespace castor3d
 					vtx_material = writer.cast< UInt >( c3d_materialIndex );
 				}
 
-				auto mtxModel = writer.getVariable< Mat4 >( cuT( "mtxModel" ) );
+				auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
@@ -244,7 +244,7 @@ namespace castor3d
 
 				vtx_texture = v3Texture;
 				curPosition = mtxModel * curPosition;
-				auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_prvViewProj * curPosition );
 				curPosition = c3d_curViewProj * curPosition;
 
@@ -255,7 +255,7 @@ namespace castor3d
 				//  code)
 				curPosition.xy() -= c3d_jitter * curPosition.w();
 				prvPosition.xy() -= c3d_jitter * prvPosition.w();
-				out.gl_out.gl_Position = curPosition;
+				out.vtx.position = curPosition;
 
 				vtx_curPosition = curPosition.xyw();
 				vtx_prvPosition = prvPosition.xyw();
@@ -266,7 +266,7 @@ namespace castor3d
 				vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5_f );
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
@@ -296,15 +296,15 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		// Intputs
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( cuT( "c3d_maps" )
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
@@ -325,24 +325,25 @@ namespace castor3d
 
 		shader::Utils utils{ writer };
 
-		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-		{
-			auto material = materials->getBaseMaterial( vtx_material );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material->m_opacity );
-			auto alphaRef = writer.declLocale( cuT( "alphaRef" )
-				, material->m_alphaRef );
-			utils.computeOpacityMapContribution( flags
-				, textureConfigs
-				, c3d_textureConfig
-				, c3d_maps
-				, vtx_texture
-				, alpha );
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, alphaRef );
-		} );
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = materials->getBaseMaterial( vtx_material );
+				auto alpha = writer.declLocale( "alpha"
+					, material->m_opacity );
+				auto alphaRef = writer.declLocale( "alphaRef"
+					, material->m_alphaRef );
+				utils.computeOpacityMapContribution( flags
+					, textureConfigs
+					, c3d_textureConfig
+					, c3d_maps
+					, vtx_texture
+					, alpha );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, alphaRef );
+			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

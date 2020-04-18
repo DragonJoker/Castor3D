@@ -553,8 +553,8 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "height_mask" ), parserUnitHeightMask, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "occlusion_mask" ), parserUnitOcclusionMask, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "transmittance_mask" ), parserUnitTransmittanceMask, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "normal_factor" ), parserUnitNormalFactor, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "height_factor" ), parserUnitHeightFactor, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "normal_factor" ), parserUnitNormalFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "height_factor" ), parserUnitHeightFactor, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "normal_directx" ), parserUnitNormalDirectX, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), parserUnitEnd );

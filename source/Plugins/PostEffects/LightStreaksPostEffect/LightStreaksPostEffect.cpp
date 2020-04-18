@@ -28,7 +28,7 @@ namespace light_streaks
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -47,12 +47,12 @@ namespace light_streaks
 				, [&]()
 				{
 					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getHiPassProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getHiPassProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -82,10 +82,10 @@ namespace light_streaks
 					}
 					FI;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getKawaseProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getKawaseProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -123,10 +123,10 @@ namespace light_streaks
 
 					pxl_fragColor = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getCombineProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getCombineProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -155,7 +155,7 @@ namespace light_streaks
 				pxl_fragColor += texture( c3d_mapKawase3, vtx_texture );
 				pxl_fragColor += texture( c3d_mapKawase4, vtx_texture );
 			} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 

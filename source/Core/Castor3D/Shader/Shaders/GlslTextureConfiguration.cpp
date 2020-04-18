@@ -11,7 +11,7 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		TextureConfigData::TextureConfigData( sdw::Shader * shader
+		TextureConfigData::TextureConfigData( ast::Shader * shader
 			, ast::expr::ExprPtr expr )
 			: sdw::StructInstance{ shader, std::move( expr ) }
 			, colrSpec{ getMember< sdw::Vec4 >( "colrSpec" ) }

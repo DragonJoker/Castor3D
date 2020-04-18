@@ -191,6 +191,8 @@ namespace castor3d
 					scene.getAnimatedObjectGroupCache().uploadUbos();
 				} );
 			getEngine()->getMaterialCache().update();
+			getEngine()->getRenderTargetCache().update( info );
+			getEngine()->uploadUbos();
 			getEngine()->getRenderTargetCache().render( info );
 			doProcessEvents( EventType::eQueueRender );
 		}

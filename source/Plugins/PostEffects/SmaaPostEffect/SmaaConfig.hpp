@@ -123,13 +123,14 @@ namespace smaa
 			switch ( data.mode )
 			{
 			case Mode::e1X:
-				subsampleIndices[0] = castor::Point4i{ 0, 0, 0, 0 };
+				subsampleIndices[0] = castor::Point4f{ 0, 0, 0, 0 };
 				maxSubsampleIndices = 1u;
 				break;
 
 			case Mode::eT2X:
 				parameters.get( cuT( "enableReprojection" ), data.enableReprojection );
-				// no break wanted here.
+				[[fallthrough]];
+
 			case Mode::eS2X:
 				/***
 				* Sample positions (bottom-to-top y axis):
@@ -138,8 +139,8 @@ namespace smaa
 				*  |       |  S1: -0.25     0.25
 				*  |____S0_|
 				*/
-				subsampleIndices[0] = castor::Point4i{ 1, 1, 1, 0 }; // S0
-				subsampleIndices[1] = castor::Point4i{ 2, 2, 2, 0 }; // S1
+				subsampleIndices[0] = castor::Point4f{ 1, 1, 1, 0 }; // S0
+				subsampleIndices[1] = castor::Point4f{ 2, 2, 2, 0 }; // S1
 				maxSubsampleIndices = 2u;
 				// (it's 1 for the horizontal slot of S0 because horizontal
 				//  blending is reversed: positive numbers point to the right)
@@ -154,10 +155,10 @@ namespace smaa
 				*  |S3      |  S2:  0.1250   -0.3750
 				*  |____S2__|  S3: -0.3750    0.1250
 				*/
-				subsampleIndices[0] = castor::Point4i{ 5, 3, 1, 3 }; // S0
-				subsampleIndices[1] = castor::Point4i{ 4, 6, 2, 3 }; // S1
-				subsampleIndices[2] = castor::Point4i{ 3, 5, 1, 4 }; // S2
-				subsampleIndices[3] = castor::Point4i{ 6, 4, 2, 4 }; // S3
+				subsampleIndices[0] = castor::Point4f{ 5, 3, 1, 3 }; // S0
+				subsampleIndices[1] = castor::Point4f{ 4, 6, 2, 3 }; // S1
+				subsampleIndices[2] = castor::Point4f{ 3, 5, 1, 4 }; // S2
+				subsampleIndices[3] = castor::Point4f{ 6, 4, 2, 4 }; // S3
 				maxSubsampleIndices = 4u;
 				break;
 			}
@@ -202,7 +203,7 @@ namespace smaa
 		};
 		Data data;
 		uint32_t subsampleIndex{ 0u };
-		std::array< castor::Point4i, 4u > subsampleIndices;
+		std::array< castor::Point4f, 4u > subsampleIndices;
 		uint32_t maxSubsampleIndices{ 1u };
 		std::vector< castor::Point2f > jitters;
 	};

@@ -91,30 +91,6 @@ namespace castor3d
 			}
 		}
 
-		void doPrepareShadowMaps( LightCache const & cache
-			, LightType type
-			, Camera const & camera
-			, RenderTechnique::ShadowMapArray & shadowMaps
-			, ShadowMapLightTypeArray & activeShadowMaps
-			, RenderQueueArray & queues )
-		{
-			auto lights = doSortLights( cache, type, camera );
-			size_t count = std::min( shadowMaps.size(), lights.size() );
-			auto it = lights.begin();
-
-			for ( auto i = 0u; i < count; ++i )
-			{
-				auto & shadowMap = *shadowMaps[i];
-				it->second->setShadowMap( &shadowMap );
-				activeShadowMaps[size_t( type )].emplace_back( std::ref( shadowMap ), 0u );
-				shadowMap.update( camera
-					, queues
-					, *( it->second )
-					, i );
-				++it;
-			}
-		}
-
 		TextureLayoutSPtr doCreateTexture( Engine & engine
 			, Size const & size
 			, VkFormat format
@@ -311,17 +287,11 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & RenderTechnique::render( castor::Point2f const & jitter
-		, ashes::SemaphoreCRefArray const & waitSemaphores
+	void RenderTechnique::update( castor::Point2f const & jitter
 		, RenderInfo & info )
 	{
 		auto & scene = *m_renderTarget.getScene();
 		auto & camera = *m_renderTarget.getCamera();
-		scene.getLightCache().updateLightsTexture( camera );
-		scene.updateDeviceDependent( camera );
-
-		// Update part
-		doUpdateParticles( info );
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= camera.getWidth();
 		jitterProjSpace[1] /= camera.getHeight();
@@ -329,40 +299,50 @@ namespace castor3d
 			, camera.getProjection()
 			, jitterProjSpace );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
+
+#if C3D_UseDeferredRendering
+		m_deferredRendering->update( info, scene, camera, jitter );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info, jitter );
+#endif
+#if C3D_UseWeightedBlendedRendering
+		m_weightedBlendRendering->update( info, scene, camera, jitter );
+#else
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info, jitter );
+#endif
+
+		scene.getLightCache().updateLightsTexture( camera );
+		scene.updateDeviceDependent( camera );
+
+		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
+		{
+			map.get().update();
+		}
+
+		for ( auto & maps : m_activeShadowMaps )
+		{
+			for ( auto & map : maps )
+			{
+				for ( auto & id : map.second )
+				{
+					map.first.get().updateDeviceDependent( id );
+				}
+			}
+		}
+	}
+
+	ashes::Semaphore const & RenderTechnique::render( ashes::SemaphoreCRefArray const & waitSemaphores
+		, RenderInfo & info )
+	{
+		doUpdateParticles( info );
 		auto * semaphore = &doRenderBackground( waitSemaphores );
 		semaphore = &doRenderEnvironmentMaps( *semaphore );
 		semaphore = &doRenderShadowMaps( *semaphore );
 
-#if C3D_UseDeferredRendering
-
-		m_deferredRendering->update( info
-			, scene
-			, camera
-			, jitter );
-
-#else
-
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).update( info
-			, jitter );
-
-#endif
-#if C3D_UseWeightedBlendedRendering
-
-		m_weightedBlendRendering->update( info
-			, scene
-			, camera
-			, jitter );
-
-#else
-
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).update( info
-			, jitter );
-
-#endif
 
 		// Render part
-		semaphore = &doRenderOpaque( jitter, info, *semaphore );
-		semaphore = &doRenderTransparent( jitter, info, *semaphore );
+		semaphore = &doRenderOpaque( *semaphore );
+		semaphore = &doRenderTransparent( *semaphore );
 		return *semaphore;
 	}
 
@@ -818,9 +798,7 @@ namespace castor3d
 
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderOpaque( castor::Point2f const & jitter
-		, RenderInfo & info
-		, ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderOpaque( ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -830,7 +808,7 @@ namespace castor3d
 			auto & camera = *m_renderTarget.getCamera();
 
 #if C3D_UseDeferredRendering
-			result = &m_deferredRendering->render( info, scene, camera, *result );
+			result = &m_deferredRendering->render( scene, camera, *result );
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).render( *result );
 #endif
@@ -839,9 +817,7 @@ namespace castor3d
 		return *result;
 	}
 
-	ashes::Semaphore const & RenderTechnique::doRenderTransparent( castor::Point2f const & jitter
-		, RenderInfo & info
-		, ashes::Semaphore const & semaphore )
+	ashes::Semaphore const & RenderTechnique::doRenderTransparent( ashes::Semaphore const & semaphore )
 	{
 		ashes::Semaphore const * result = &semaphore;
 
@@ -850,7 +826,7 @@ namespace castor3d
 			auto & scene = *m_renderTarget.getScene();
 
 #if C3D_UseWeightedBlendedRendering
-			result = &m_weightedBlendRendering->render( info, scene, *result );
+			result = &m_weightedBlendRendering->render( scene, *result );
 #else
 			result = &static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).render( *result );
 #endif

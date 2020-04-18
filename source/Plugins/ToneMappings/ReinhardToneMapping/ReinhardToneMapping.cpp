@@ -53,7 +53,8 @@ namespace Reinhard
 		shader::Utils utils{ writer };
 		utils.declareApplyGamma();
 
-		writer.implementFunction< sdw::Void >( "main", [&]()
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, texture( c3d_mapHdr, vtx_texture ).rgb() );
@@ -64,7 +65,7 @@ namespace Reinhard
 				pxl_rgb = vec4( utils.applyGamma( c3d_gamma, mapped ), 1.0_f );
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

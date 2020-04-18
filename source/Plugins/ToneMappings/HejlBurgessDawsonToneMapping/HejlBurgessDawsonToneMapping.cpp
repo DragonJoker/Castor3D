@@ -60,7 +60,7 @@ namespace HejlBurgessDawson
 					/ ( x * ( 6.2f * x + 1.7f ) + 0.06f ), 1.0_f );
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

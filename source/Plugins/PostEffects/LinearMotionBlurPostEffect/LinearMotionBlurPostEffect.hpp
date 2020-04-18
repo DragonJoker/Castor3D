@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 

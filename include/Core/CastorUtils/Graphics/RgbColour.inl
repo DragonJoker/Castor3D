@@ -407,6 +407,43 @@ namespace castor
 	}
 
 	template< typename ComponentType >
+	RgbColourT< ComponentType > RgbColourT< ComponentType >::fromHSB( float hue, float saturation, float brightness )
+	{
+		float h = hue == 1.0f ? 0 : hue * 6.0f;
+		float f = h - ( int )h;
+		float p = brightness * ( 1.0f - saturation );
+		float q = brightness * ( 1.0f - saturation * f );
+		float t = brightness * ( 1.0f - ( saturation * ( 1.0f - f ) ) );
+
+		if ( h < 1 )
+		{
+			return RgbColourT< ComponentType >::fromComponents( brightness, t, p );
+		}
+
+		if ( h < 2 )
+		{
+			return RgbColourT< ComponentType >::fromComponents( q, brightness, p );
+		}
+
+		if ( h < 3 )
+		{
+			return RgbColourT< ComponentType >::fromComponents( p, brightness, t );
+		}
+
+		if ( h < 4 )
+		{
+			return RgbColourT< ComponentType >::fromComponents( p, q, brightness );
+		}
+
+		if ( h < 5 )
+		{
+			return RgbColourT< ComponentType >::fromComponents( t, p, brightness );
+		}
+
+		return RgbColourT< ComponentType >::fromComponents( brightness, p, q );
+	}
+
+	template< typename ComponentType >
 	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator+=( RgbColourT< ComponentType > const & rhs )
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )

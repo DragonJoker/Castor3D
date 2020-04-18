@@ -33,7 +33,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -49,12 +49,12 @@ namespace Bloom
 				, [&]()
 				{
 					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem & renderSystem
 			, uint32_t blurPassesCount )
 		{
 			using namespace sdw;
@@ -81,7 +81,7 @@ namespace Bloom
 						pxl_fragColor += texture( c3d_mapPasses, vtx_texture, Float( float( i ) ) );
 					}
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		castor3d::TextureLayoutSPtr doCreateTexture( castor3d::RenderDevice const & device

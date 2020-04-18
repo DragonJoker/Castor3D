@@ -1,7 +1,6 @@
 #include "SmaaPostEffect/NeighbourhoodBlending.hpp"
 
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
@@ -10,6 +9,8 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -28,7 +29,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -62,14 +63,14 @@ namespace smaa
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config
 			, bool reprojection )
@@ -207,7 +208,7 @@ namespace smaa
 				{
 					pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -225,7 +226,7 @@ namespace smaa
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhoodBlending" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhoodBlending" }
 	{
-		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
+		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_SRGB;
 
 		VkExtent2D size{ sourceView.image->getDimensions().width, sourceView.image->getDimensions().height };
 		auto & renderSystem = m_renderSystem;
@@ -349,12 +350,7 @@ namespace smaa
 		neighbourhoodBlendingCmd.beginDebugBlock(
 			{
 				"SMAA NeighbourhoodBlending",
-				{
-					castor3d::transparentBlackClearColor.color.float32[0],
-					castor3d::transparentBlackClearColor.color.float32[1],
-					castor3d::transparentBlackClearColor.color.float32[2],
-					castor3d::transparentBlackClearColor.color.float32[3],
-				},
+				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( neighbourhoodBlendingCmd, passIndex );
 		// Put blending weights image in shader input layout.

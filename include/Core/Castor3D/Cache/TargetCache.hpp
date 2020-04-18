@@ -56,6 +56,13 @@ namespace castor3d
 		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english
+		 *\brief		Updates the render targets.
+		 *\~french
+		 *\brief		Met à jour les cibles de rendu.
+		 */
+		C3D_API void update( RenderInfo & info );
+		/**
+		 *\~english
 		 *\brief			Renders into the render targets.
 		 *\param[in,out]	info	Receives the render informations.
 		 *\~french

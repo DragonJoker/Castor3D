@@ -71,6 +71,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< MeshAnimationKeyFrame >::Name = cuT( "MeshAnimationKeyFrame" );
+
 	bool BinaryParser< MeshAnimationKeyFrame >::doParse( MeshAnimationKeyFrame & obj )
 	{
 		bool result = true;
@@ -88,11 +91,13 @@ namespace castor3d
 			{
 			case ChunkType::eMeshAnimationKeyFrameTime:
 				result = doParseChunk( time, chunk );
+				checkError( result, "Couldn't parse time index." );
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 
 			case ChunkType::eMeshAnimationKeyFrameSubmeshID:
 				result = doParseChunk( id, chunk );
+				checkError( result, "Couldn't parse submesh ID." );
 
 				if ( result )
 				{
@@ -103,6 +108,7 @@ namespace castor3d
 
 			case ChunkType::eMeshAnimationKeyFrameBufferSize:
 				result = doParseChunk( count, chunk );
+				checkError( result, "Couldn't parse buffer size." );
 
 				if ( result )
 				{
@@ -115,6 +121,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( buffer, chunk );
+					checkError( result, "Couldn't parse buffer data." );
 
 					if ( result )
 					{
@@ -147,6 +154,7 @@ namespace castor3d
 				if ( m_fileVersion > Version{ 1, 3, 0 } )
 				{
 					result = doParseChunk( bufferd, chunk );
+					checkError( result, "Couldn't parse buffer data." );
 
 					if ( result )
 					{

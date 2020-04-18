@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Castor3DModule.hpp"
 
-#include <ShaderWriter/Shader.hpp>
+#include <ShaderAST/Shader.hpp>
+#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 
@@ -15,7 +16,7 @@ namespace castor3d
 	/**@name Shader */
 	//@{
 
-	using ShaderPtr = std::unique_ptr< sdw::Shader >;
+	using ShaderPtr = std::unique_ptr< ast::Shader >;
 
 	/**
 	*\~english

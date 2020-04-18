@@ -85,7 +85,7 @@ namespace HaarmPieterDuiker
 				pxl_rgb.a() = 1.0f;
 			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	void ToneMapping::doDestroy()

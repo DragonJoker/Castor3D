@@ -1,4 +1,4 @@
-#include "Uncharted2/Uncharted2ToneMapping.hpp"
+#include "Uncharted2ToneMapping/Uncharted2ToneMapping.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
 

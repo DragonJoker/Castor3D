@@ -18,6 +18,8 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <CastorUtils/Graphics/RgbaColour.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Command/Queue.hpp>
@@ -57,17 +59,17 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec2 >( "position", 0u );
 
 			// Shader outputs
 			auto out = writer.getOut();
 
-			writer.implementFunction< void >( cuT( "main" )
+			writer.implementFunction< void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetLinearisePixelProgram( Engine & engine )
@@ -77,14 +79,14 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo clipInfo{ writer, cuT( "ClipInfo" ), ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
-			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( cuT( "c3d_clipInfo" ) );
+			Ubo clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
+			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
 			clipInfo.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), DepthImgIdx, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
 
 			auto reconstructCSZ = writer.implementFunction< Float >( "reconstructCSZ"
 				, [&]( Float const & depth
@@ -95,13 +97,13 @@ namespace castor3d
 				, InFloat{ writer, "d" }
 				, InVec3{ writer, "clipInfo" } );
 
-			writer.implementFunction< Void >( cuT( "main" )
+			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
-					pxl_fragColor = reconstructCSZ( texelFetch( c3d_mapDepth, ivec2( in.gl_FragCoord.xy() ), 0_i ).r()
+					pxl_fragColor = reconstructCSZ( texelFetch( c3d_mapDepth, ivec2( in.fragCoord.xy() ), 0_i ).r()
 						, c3d_clipInfo );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 		
 		ShaderPtr doGetMinifyPixelProgram( Engine & engine )
@@ -111,21 +113,21 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo previousLevel{ writer, cuT( "PreviousLevel" ), PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
-			auto c3d_textureSize = previousLevel.declMember< IVec2 >( cuT( "c3d_textureSize" ) );
-			auto c3d_previousLevel = previousLevel.declMember< Int >( cuT( "c3d_previousLevel" ) );
+			Ubo previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
+			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
+			auto c3d_previousLevel = previousLevel.declMember< Int >( "c3d_previousLevel" );
 			previousLevel.end();
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( cuT( "c3d_mapDepth" ), DepthImgIdx, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 			auto in = writer.getIn();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( cuT( "pxl_fragColor" ), 0u );
+			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto ssPosition = writer.declLocale( cuT( "ssPosition" )
-						, ivec2( in.gl_FragCoord.xy() ) );
+					auto ssPosition = writer.declLocale( "ssPosition"
+						, ivec2( in.fragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
 					pxl_fragColor = texelFetch( c3d_mapDepth
@@ -134,7 +136,7 @@ namespace castor3d
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
 						, c3d_previousLevel ).r();
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doGetLineariseProgram( Engine & engine
@@ -639,12 +641,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Linearise Depth",
-				{
-					1.0f,
-					1.0f,
-					0.4f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		m_timer->beginPass( *m_commandBuffer );
 
@@ -684,12 +681,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"SSAO - Minify",
-				{
-					1.0f,
-					1.0f,
-					0.6f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 
 		// Minification passes.

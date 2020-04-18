@@ -22,6 +22,7 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -47,7 +48,7 @@ namespace film_grain
 		static std::string const NoiseTex = "c3d_noiseTex";
 		static uint32_t constexpr NoiseMapCount = 6u;
 
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -67,12 +68,12 @@ namespace film_grain
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position.xy(), 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
+		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderSystem * renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -140,7 +141,7 @@ namespace film_grain
 					colour = addNoise( colour, vtx_texture );
 					pxl_fragColor = vec4( colour, 1.0 );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 	}
 
@@ -442,12 +443,7 @@ namespace film_grain
 			cmd.beginDebugBlock(
 				{
 					"Film Grain",
-					{
-						0.5f,
-						0.0f,
-						0.5f,
-						0.5f,
-					},
+					castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 				} );
 			timer.beginPass( cmd );
 			// Put image in the right state for rendering.

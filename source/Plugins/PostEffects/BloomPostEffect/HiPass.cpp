@@ -32,7 +32,7 @@ namespace Bloom
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -49,12 +49,12 @@ namespace Bloom
 				, [&]()
 				{
 					vtx_texture = uv;
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > getPixelProgram( castor3d::RenderSystem const & renderSystem )
+		std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -84,7 +84,7 @@ namespace Bloom
 					}
 					FI;
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( castor3d::RenderDevice const & device

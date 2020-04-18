@@ -1,5 +1,7 @@
 #include "Castor3D/Binary/BinaryChunk.hpp"
 
+#include "Castor3D/Miscellaneous/Logger.hpp"
+
 #include <CastorUtils/Data/BinaryFile.hpp>
 
 #include <numeric>
@@ -147,5 +149,10 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void BinaryChunk::binaryError( std::string_view view )
+	{
+		log::error << view;
 	}
 }

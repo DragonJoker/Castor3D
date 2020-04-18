@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -33,13 +34,13 @@ using namespace castor3d;
 
 namespace castor3d
 {
-	String const OpaquePass::Output1 = cuT( "c3d_output1" );
-	String const OpaquePass::Output2 = cuT( "c3d_output2" );
-	String const OpaquePass::Output3 = cuT( "c3d_output3" );
-	String const OpaquePass::Output4 = cuT( "c3d_output4" );
-	String const OpaquePass::Output5 = cuT( "c3d_output5" );
+	String const OpaquePass::Output1 = "c3d_output1";
+	String const OpaquePass::Output2 = "c3d_output2";
+	String const OpaquePass::Output3 = "c3d_output3";
+	String const OpaquePass::Output4 = "c3d_output4";
+	String const OpaquePass::Output5 = "c3d_output5";
 
-	OpaquePass::OpaquePass( MatrixUbo const & matrixUbo
+	OpaquePass::OpaquePass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
 		: castor3d::RenderTechniquePass{ cuT( "Opaque" )
@@ -159,8 +160,7 @@ namespace castor3d
 			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
 	}
 
-	void OpaquePass::update( RenderInfo & info
-		, castor::Point2f const & jitter )
+	void OpaquePass::update( RenderInfo & info, castor::Point2f const & jitter )
 	{
 		auto & nodes = m_renderQueue.getCulledRenderNodes();
 
@@ -203,12 +203,7 @@ namespace castor3d
 		m_nodesCommands->beginDebugBlock(
 			{
 				"Deferred - Geometry",
-				{
-					opaqueBlackClearColor.color.float32[0],
-					opaqueBlackClearColor.color.float32[1],
-					opaqueBlackClearColor.color.float32[2],
-					opaqueBlackClearColor.color.float32[3],
-				},
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_nodesCommands );
 		timer.notifyPassRender();
@@ -264,42 +259,42 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( cuT( "position" )
+		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declInput< Vec3 >( cuT( "normal" )
+		auto normal = writer.declInput< Vec3 >( "normal"
 			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declInput< Vec3 >( cuT( "tangent" )
+		auto tangent = writer.declInput< Vec3 >( "tangent"
 			, RenderPass::VertexInputs::TangentLocation );
-		auto texture = writer.declInput< Vec3 >( cuT( "uv" )
+		auto texture = writer.declInput< Vec3 >( "uv"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( cuT( "bone_ids0" )
+		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( cuT( "bone_ids1" )
+		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( cuT( "weights0" )
+		auto weights0 = writer.declInput< Vec4 >( "weights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( cuT( "weights1" )
+		auto weights1 = writer.declInput< Vec4 >( "weights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( cuT( "transform" )
+		auto transform = writer.declInput< Mat4 >( "transform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( cuT( "material" )
+		auto material = writer.declInput< Int >( "material"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( cuT( "position2" )
+		auto position2 = writer.declInput< Vec4 >( "position2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declInput< Vec3 >( cuT( "normal2" )
+		auto normal2 = writer.declInput< Vec3 >( "normal2"
 			, RenderPass::VertexInputs::Normal2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declInput< Vec3 >( cuT( "tangent2" )
+		auto tangent2 = writer.declInput< Vec3 >( "tangent2"
 			, RenderPass::VertexInputs::Tangent2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( cuT( "texture2" )
+		auto texture2 = writer.declInput< Vec3 >( "texture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -312,66 +307,66 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0u, flags.programFlags );
 
 		// Outputs
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( cuT( "vtx_worldPosition" )
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declOutput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+		auto vtx_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+		auto vtx_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "vtx_tangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declOutput< Vec3 >( cuT( "vtx_normal" )
+		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declOutput< Vec3 >( cuT( "vtx_tangent" )
+		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( cuT( "vtx_bitangent" )
+		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< UInt >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
 		std::function< void() > main = [&]()
 		{
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
+			auto curPosition = writer.declLocale( "curPosition"
 				, vec4( position.xyz(), 1.0_f ) );
-			auto v4Normal = writer.declLocale( cuT( "v4Normal" )
+			auto v4Normal = writer.declLocale( "v4Normal"
 				, vec4( normal, 0.0_f ) );
-			auto v4Tangent = writer.declLocale( cuT( "v4Tangent" )
+			auto v4Tangent = writer.declLocale( "v4Tangent"
 				, vec4( tangent, 0.0_f ) );
-			auto v3Texture = writer.declLocale( cuT( "v3Texture" )
+			auto v3Texture = writer.declLocale( "v3Texture"
 				, texture );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 			{
-				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+				auto curMtxModel = writer.declLocale( "curMtxModel"
 					, SkinningUbo::computeTransform( skinningData, writer, flags.programFlags ) );
-				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+				auto prvMtxModel = writer.declLocale( "prvMtxModel"
 					, curMtxModel );
 			}
 			else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 			{
-				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+				auto curMtxModel = writer.declLocale( "curMtxModel"
 					, transform );
-				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+				auto prvMtxModel = writer.declLocale( "prvMtxModel"
 					, curMtxModel );
 			}
 			else
 			{
-				auto curMtxModel = writer.declLocale( cuT( "curMtxModel" )
+				auto curMtxModel = writer.declLocale( "curMtxModel"
 					, c3d_curMtxModel );
-				auto prvMtxModel = writer.declLocale( cuT( "prvMtxModel" )
+				auto prvMtxModel = writer.declLocale( "prvMtxModel"
 					, c3d_prvMtxModel );
 			}
 
-			auto curMtxModel = writer.getVariable< Mat4 >( cuT( "curMtxModel" ) );
-			auto prvMtxModel = writer.getVariable< Mat4 >( cuT( "prvMtxModel" ) );
-			auto mtxNormal = writer.declLocale( cuT( "mtxNormal" )
+			auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
+			auto prvMtxModel = writer.getVariable< Mat4 >( "prvMtxModel" );
+			auto mtxNormal = writer.declLocale( "mtxNormal"
 				, transpose( inverse( mat3( curMtxModel ) ) ) );
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
@@ -392,7 +387,7 @@ namespace castor3d
 			}
 
 			vtx_texture = v3Texture;
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
+			auto prvPosition = writer.declLocale( "prvPosition"
 				, prvMtxModel * curPosition );
 			curPosition = curMtxModel * curPosition;
 			vtx_worldPosition = curPosition.xyz();
@@ -411,9 +406,9 @@ namespace castor3d
 			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
 			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
 			vtx_bitangent = cross( vtx_normal, vtx_tangent );
-			vtx_instance = writer.cast< UInt >( in.gl_InstanceID );
+			vtx_instance = writer.cast< UInt >( in.instanceIndex );
 
-			auto tbn = writer.declLocale( cuT( "tbn" )
+			auto tbn = writer.declLocale( "tbn"
 				, transpose( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) ) );
 			vtx_tangentSpaceFragPosition = tbn * vtx_worldPosition;
 			vtx_tangentSpaceViewPosition = tbn * c3d_cameraPosition.xyz();
@@ -425,7 +420,7 @@ namespace castor3d
 			//  code)
 			curPosition.xy() -= c3d_jitter * curPosition.w();
 			prvPosition.xy() -= c3d_jitter * prvPosition.w();
-			out.gl_out.gl_Position = curPosition;
+			out.vtx.position = curPosition;
 
 			vtx_curPosition = curPosition.xyw();
 			vtx_prvPosition = prvPosition.xyw();
@@ -436,8 +431,8 @@ namespace castor3d
 			vtx_prvPosition.xy() *= vec2( 0.5_f, -0.5f );
 		};
 
-		writer.implementFunction< Void >( cuT( "main" ), main );
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		writer.implementFunction< Void >( "main", main );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
@@ -461,27 +456,27 @@ namespace castor3d
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
@@ -506,79 +501,81 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-		{
-			auto material = writer.declLocale( cuT( "material" )
-				, materials.getMaterial( vtx_material ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, vtx_texture );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material.m_opacity );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma );
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
-			auto diffuse = writer.declLocale( cuT( "diffuse" )
-				, utils.removeGamma( gamma, material.m_diffuse() ) );
-			auto specular = writer.declLocale( cuT( "specular" )
-				, material.m_specular );
-			auto shininess = writer.declLocale( cuT( "shininess" )
-				, material.m_shininess );
-			auto emissive = writer.declLocale( cuT( "emissive" )
-				, vec3( material.m_emissive ) );
-			auto occlusion = writer.declLocale( cuT( "occlusion" )
-				, 1.0_f );
-			auto transmittance = writer.declLocale( cuT( "transmittance" )
-				, 0.0_f );
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( vtx_material ) );
+				auto texCoord = writer.declLocale( "texCoord"
+					, vtx_texture );
+				auto alpha = writer.declLocale( "alpha"
+					, material.m_opacity );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto diffuse = writer.declLocale( "diffuse"
+					, utils.removeGamma( gamma, material.m_diffuse() ) );
+				auto specular = writer.declLocale( "specular"
+					, material.m_specular );
+				auto shininess = writer.declLocale( "shininess"
+					, material.m_shininess );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
 
-			utils.computeHeightMapContribution( flags
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangentSpaceViewPosition
-				, vtx_tangentSpaceFragPosition
-				, c3d_maps
-				, texCoord );
-			shader::PhongLightingModel::computeMapContributions( writer
-				, utils
-				, flags
-				, gamma
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangent
-				, vtx_bitangent
-				, c3d_maps
-				, texCoord
-				, normal
-				, diffuse
-				, specular
-				, emissive
-				, shininess
-				, alpha
-				, occlusion
-				, transmittance );
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, material.m_alphaRef );
-			emissive *= diffuse;
-			auto matFlags = writer.declLocale( cuT( "flags" ), 0.0_f );
-			utils.encodeMaterial( c3d_shadowReceiver
-				, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
-				, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
-				, c3d_envMapIndex
-				, matFlags );
+				utils.computeHeightMapContribution( flags
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangentSpaceViewPosition
+					, vtx_tangentSpaceFragPosition
+					, c3d_maps
+					, texCoord );
+				shader::PhongLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangent
+					, vtx_bitangent
+					, c3d_maps
+					, texCoord
+					, normal
+					, diffuse
+					, specular
+					, emissive
+					, shininess
+					, alpha
+					, occlusion
+					, transmittance );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.m_alphaRef );
+				emissive *= diffuse;
+				auto matFlags = writer.declLocale( "flags"
+					, 0.0_f );
+				utils.encodeMaterial( c3d_shadowReceiver
+					, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
+					, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
+					, c3d_envMapIndex
+					, matFlags );
 
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput1 = vec4( normal, matFlags );
-			out_c3dOutput2 = vec4( diffuse, shininess );
-			out_c3dOutput3 = vec4( specular, occlusion );
-			out_c3dOutput4 = vec4( emissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
-		} );
+				auto curPosition = writer.declLocale( "curPosition"
+					, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+				out_c3dOutput1 = vec4( normal, matFlags );
+				out_c3dOutput2 = vec4( diffuse, shininess );
+				out_c3dOutput3 = vec4( specular, occlusion );
+				out_c3dOutput4 = vec4( emissive, transmittance );
+				out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
+			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
@@ -602,27 +599,27 @@ namespace castor3d
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
@@ -647,79 +644,81 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-		{
-			auto material = writer.declLocale( cuT( "material" )
-				, materials.getMaterial( vtx_material ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, vtx_texture );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material.m_opacity );
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
-			auto albedo = writer.declLocale( cuT( "albedo" )
-				, material.m_albedo );
-			auto roughness = writer.declLocale( cuT( "roughness" )
-				, material.m_roughness );
-			auto metallic = writer.declLocale( cuT( "metallic" )
-				, material.m_metallic );
-			auto emissive = writer.declLocale( cuT( "emissive" )
-				, vec3( material.m_emissive ) );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma );
-			auto occlusion = writer.declLocale( cuT( "ambientOcclusion" )
-				, 1.0_f );
-			auto transmittance = writer.declLocale( cuT( "transmittance" )
-				, 0.0_f );
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( vtx_material ) );
+				auto texCoord = writer.declLocale( "texCoord"
+					, vtx_texture );
+				auto alpha = writer.declLocale( "alpha"
+					, material.m_opacity );
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto albedo = writer.declLocale( "albedo"
+					, material.m_albedo );
+				auto roughness = writer.declLocale( "roughness"
+					, material.m_roughness );
+				auto metallic = writer.declLocale( "metallic"
+					, material.m_metallic );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto occlusion = writer.declLocale( "ambientOcclusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
 
-			utils.computeHeightMapContribution( flags
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangentSpaceViewPosition
-				, vtx_tangentSpaceFragPosition
-				, c3d_maps
-				, texCoord );
-			shader::MetallicBrdfLightingModel::computeMapContributions( writer
-				, utils
-				, flags
-				, gamma
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangent
-				, vtx_bitangent
-				, c3d_maps
-				, texCoord
-				, normal
-				, albedo
-				, metallic
-				, emissive
-				, roughness
-				, alpha
-				, occlusion
-				, transmittance );
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, material.m_alphaRef );
-			emissive *= albedo;
-			auto matFlags = writer.declLocale( cuT( "flags" ), 0.0_f );
-			utils.encodeMaterial( c3d_shadowReceiver
-				, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
-				, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
-				, c3d_envMapIndex
-				, matFlags );
-			
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput1 = vec4( normal, matFlags );
-			out_c3dOutput2 = vec4( albedo, 0.0_f );
-			out_c3dOutput3 = vec4( metallic, roughness, 0.0_f, occlusion );
-			out_c3dOutput4 = vec4( emissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
-		} );
+				utils.computeHeightMapContribution( flags
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangentSpaceViewPosition
+					, vtx_tangentSpaceFragPosition
+					, c3d_maps
+					, texCoord );
+				shader::MetallicBrdfLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangent
+					, vtx_bitangent
+					, c3d_maps
+					, texCoord
+					, normal
+					, albedo
+					, metallic
+					, emissive
+					, roughness
+					, alpha
+					, occlusion
+					, transmittance );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.m_alphaRef );
+				emissive *= albedo;
+				auto matFlags = writer.declLocale( "flags"
+					, 0.0_f );
+				utils.encodeMaterial( c3d_shadowReceiver
+					, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
+					, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
+					, c3d_envMapIndex
+					, matFlags );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				auto curPosition = writer.declLocale( "curPosition"
+					, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+				out_c3dOutput1 = vec4( normal, matFlags );
+				out_c3dOutput2 = vec4( albedo, 0.0_f );
+				out_c3dOutput3 = vec4( metallic, roughness, 0.0_f, occlusion );
+				out_c3dOutput4 = vec4( emissive, transmittance );
+				out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	ShaderPtr OpaquePass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
@@ -743,27 +742,27 @@ namespace castor3d
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Inputs
-		auto vtx_worldPosition = writer.declInput< Vec3 >( cuT( "vtx_worldPosition" )
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
 			, RenderPass::VertexOutputs::WorldPositionLocation );
-		auto vtx_curPosition = writer.declInput< Vec3 >( cuT( "vtx_curPosition" )
+		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
 			, RenderPass::VertexOutputs::CurPositionLocation );
-		auto vtx_prvPosition = writer.declInput< Vec3 >( cuT( "vtx_prvPosition" )
+		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
-		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceFragPosition" )
+		auto vtx_tangentSpaceFragPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceFragPosition"
 			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
-		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( cuT( "vtx_tangentSpaceViewPosition" )
+		auto vtx_tangentSpaceViewPosition = writer.declInput< Vec3 >( "vtx_tangentSpaceViewPosition"
 			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
-		auto vtx_normal = writer.declInput< Vec3 >( cuT( "vtx_normal" )
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
 			, RenderPass::VertexOutputs::NormalLocation );
-		auto vtx_tangent = writer.declInput< Vec3 >( cuT( "vtx_tangent" )
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
 			, RenderPass::VertexOutputs::TangentLocation );
-		auto vtx_bitangent = writer.declInput< Vec3 >( cuT( "vtx_bitangent" )
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
 			, RenderPass::VertexOutputs::BitangentLocation );
-		auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" )
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declInput< UInt >( cuT( "vtx_instance" )
+		auto vtx_instance = writer.declInput< UInt >( "vtx_instance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declInput< UInt >( cuT( "vtx_material" )
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 
 		auto index = getMinTextureIndex();
@@ -788,78 +787,80 @@ namespace castor3d
 		utils.declareEncodeMaterial();
 		utils.declareParallaxMappingFunc( flags );
 
-		writer.implementFunction< sdw::Void >( cuT( "main" ), [&]()
-		{
-			auto material = writer.declLocale( cuT( "material" )
-				, materials.getMaterial( vtx_material ) );
-			auto texCoord = writer.declLocale( cuT( "texCoord" )
-				, vtx_texture );
-			auto alpha = writer.declLocale( cuT( "alpha" )
-				, material.m_opacity );
-			auto normal = writer.declLocale( cuT( "normal" )
-				, normalize( vtx_normal ) );
-			auto albedo = writer.declLocale( cuT( "albedo" )
-				, material.m_diffuse() );
-			auto glossiness = writer.declLocale( cuT( "glossiness" )
-				, material.m_glossiness );
-			auto specular = writer.declLocale( cuT( "specular" )
-				, material.m_specular );
-			auto emissive = writer.declLocale( cuT( "emissive" )
-				, vec3( material.m_emissive ) );
-			auto gamma = writer.declLocale( cuT( "gamma" )
-				, material.m_gamma );
-			auto occlusion = writer.declLocale( cuT( "ambientOcclusion" )
-				, 1.0_f );
-			auto transmittance = writer.declLocale( cuT( "transmittance" )
-				, 0.0_f );
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( vtx_material ) );
+				auto texCoord = writer.declLocale( "texCoord"
+					, vtx_texture );
+				auto alpha = writer.declLocale( "alpha"
+					, material.m_opacity );
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto albedo = writer.declLocale( "albedo"
+					, material.m_diffuse() );
+				auto glossiness = writer.declLocale( "glossiness"
+					, material.m_glossiness );
+				auto specular = writer.declLocale( "specular"
+					, material.m_specular );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto occlusion = writer.declLocale( "ambientOcclusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
 
-			utils.computeHeightMapContribution( flags
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangentSpaceViewPosition
-				, vtx_tangentSpaceFragPosition
-				, c3d_maps
-				, texCoord );
-			shader::SpecularBrdfLightingModel::computeMapContributions( writer
-				, utils
-				, flags
-				, gamma
-				, textureConfigs
-				, c3d_textureConfig
-				, vtx_tangent
-				, vtx_bitangent
-				, c3d_maps
-				, texCoord
-				, normal
-				, albedo
-				, specular
-				, emissive
-				, glossiness
-				, alpha
-				, occlusion
-				, transmittance );
-			utils.applyAlphaFunc( flags.alphaFunc
-				, alpha
-				, material.m_alphaRef );
-			emissive *= albedo;
-			auto matFlags = writer.declLocale( cuT( "flags" ), 0.0_f );
-			utils.encodeMaterial( c3d_shadowReceiver
-				, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
-				, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
-				, c3d_envMapIndex
-				, matFlags );
+				utils.computeHeightMapContribution( flags
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangentSpaceViewPosition
+					, vtx_tangentSpaceFragPosition
+					, c3d_maps
+					, texCoord );
+				shader::SpecularBrdfLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangent
+					, vtx_bitangent
+					, c3d_maps
+					, texCoord
+					, normal
+					, albedo
+					, specular
+					, emissive
+					, glossiness
+					, alpha
+					, occlusion
+					, transmittance );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, material.m_alphaRef );
+				emissive *= albedo;
+				auto matFlags = writer.declLocale( "flags"
+					, 0.0_f );
+				utils.encodeMaterial( c3d_shadowReceiver
+					, checkFlag( flags.textures, TextureFlag::eReflection ) ? 1_i : 0_i
+					, checkFlag( flags.textures, TextureFlag::eRefraction ) ? 1_i : 0_i
+					, c3d_envMapIndex
+					, matFlags );
 
-			auto curPosition = writer.declLocale( cuT( "curPosition" )
-				, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
-			auto prvPosition = writer.declLocale( cuT( "prvPosition" )
-				, vtx_prvPosition.xy() / vtx_prvPosition.z() );
-			out_c3dOutput1 = vec4( normal, matFlags );
-			out_c3dOutput2 = vec4( albedo, glossiness );
-			out_c3dOutput3 = vec4( specular, occlusion );
-			out_c3dOutput4 = vec4( emissive, transmittance );
-			out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
-		} );
+				auto curPosition = writer.declLocale( "curPosition"
+					, vtx_curPosition.xy() / vtx_curPosition.z() ); // w is stored in z
+				auto prvPosition = writer.declLocale( "prvPosition"
+					, vtx_prvPosition.xy() / vtx_prvPosition.z() );
+				out_c3dOutput1 = vec4( normal, matFlags );
+				out_c3dOutput2 = vec4( albedo, glossiness );
+				out_c3dOutput3 = vec4( specular, occlusion );
+				out_c3dOutput4 = vec4( emissive, transmittance );
+				out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
+			} );
 
-		return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

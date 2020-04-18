@@ -54,9 +54,9 @@ namespace castor3d
 					, [&]()
 					{
 						vtx_position = position.xyz();
-						out.gl_out.gl_Position = mtxViewProjection * position;
+						out.vtx.position = mtxViewProjection * position;
 					} );
-				vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "EquirectangularToCube" };
@@ -91,7 +91,7 @@ namespace castor3d
 							, sampleSphericalMap( normalize( vtx_position ) ) );
 						pxl_colour = vec4( texture( mapColour, utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
 					} );
-				pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
 			return ashes::PipelineShaderStageCreateInfoArray

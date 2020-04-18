@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassPoint( Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
@@ -45,7 +45,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		void update( Camera const & camera
+		bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
@@ -96,7 +96,6 @@ namespace castor3d
 	public:
 		C3D_API static castor::String const ShadowMapUbo;
 		C3D_API static castor::String const WorldLightPosition;
-		C3D_API static castor::String const FarPlane;
 		C3D_API static uint32_t const TextureSize;
 		C3D_API static uint32_t const UboBindingPoint;
 

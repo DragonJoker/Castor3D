@@ -145,22 +145,22 @@ namespace castor3d
 			VertexWriter writer;
 
 			// Inputs
-			auto position = writer.declInput< Vec3 >( cuT( "position" ), 0u );
+			auto position = writer.declInput< Vec3 >( "position", 0u );
 			UBO_MATRIX( writer, MtxUboIdx, UboSetIdx );
 			UBO_MODEL_MATRIX( writer, MdlMtxUboIdx, UboSetIdx );
 
 			// Outputs
-			auto vtx_texture = writer.declOutput< Vec3 >( cuT( "vtx_texture" ), 0u );
+			auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
 			auto out = writer.getOut();
 
 			std::function< void() > main = [&]()
 			{
-				out.gl_out.gl_Position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
+				out.vtx.position = ( c3d_projection * c3d_curView * c3d_curMtxModel * vec4( position, 1.0_f ) ).xyww();
 				vtx_texture = position;
 			};
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-			vtx.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			writer.implementFunction< sdw::Void >( "main", main );
+			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "ImageBackground" };
@@ -169,8 +169,8 @@ namespace castor3d
 
 			// Inputs
 			UBO_HDR_CONFIG( writer, 2, 0 );
-			auto vtx_texture = writer.declInput< Vec3 >( cuT( "vtx_texture" ), 0u );
-			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( cuT( "c3d_mapSkybox" ), SkyBoxImgIdx, TexSetIdx );
+			auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
+			auto c3d_mapSkybox = writer.declSampledImage< FImgCubeRgba32 >( "c3d_mapSkybox", SkyBoxImgIdx, TexSetIdx );
 			shader::Utils utils{ writer };
 
 			if ( !m_hdr )
@@ -179,11 +179,11 @@ namespace castor3d
 			}
 
 			// Outputs
-			auto pxl_FragColor = writer.declOutput< Vec4 >( cuT( "pxl_FragColor" ), 0u );
+			auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
 			std::function< void() > main = [&]()
 			{
-				auto colour = writer.declLocale( cuT( "colour" )
+				auto colour = writer.declLocale( "colour"
 					, texture( c3d_mapSkybox, vtx_texture ) );
 
 				if ( !m_hdr )
@@ -196,8 +196,8 @@ namespace castor3d
 				}
 			};
 
-			writer.implementFunction< sdw::Void >( cuT( "main" ), main );
-			pxl.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			writer.implementFunction< sdw::Void >( "main", main );
+			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		auto & device = getCurrentRenderDevice( renderSystem );

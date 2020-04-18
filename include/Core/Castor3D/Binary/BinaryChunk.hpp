@@ -327,6 +327,9 @@ namespace castor3d
 		}
 
 	private:
+		C3D_API void binaryError( std::string_view view );
+
+	private:
 		template< typename T >
 		inline bool doRead( T * values
 			, uint32_t count )
@@ -348,6 +351,10 @@ namespace castor3d
 				}
 
 				m_index += size;
+			}
+			else
+			{
+				binaryError( "Not enough data in chunk" );
 			}
 
 			return result;

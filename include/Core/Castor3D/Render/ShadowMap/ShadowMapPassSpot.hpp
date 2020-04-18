@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassSpot( Engine & engine
-			, MatrixUbo const & matrixUbo
+			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
 		/**
@@ -42,7 +42,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		void update( Camera const & camera
+		bool update( Camera const & camera
 			, RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
@@ -102,18 +102,9 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static castor::String const ShadowMapUbo;
-		C3D_API static castor::String const FarPlane;
-		C3D_API static uint32_t const UboBindingPoint;
 		C3D_API static uint32_t const TextureSize;
 
-		struct Configuration
-		{
-			float farPlane;
-		};
-
 	private:
-		UniformBufferUPtr< Configuration > m_shadowConfig;
 		ShadowType m_shadowType;
 		castor::Matrix4x4f m_view;
 	};

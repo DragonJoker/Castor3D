@@ -1,7 +1,6 @@
 #include "SmaaPostEffect/DepthEdgeDetection.hpp"
 
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
@@ -11,6 +10,8 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Program.hpp>
+
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -28,7 +29,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -101,7 +102,7 @@ namespace smaa
 					pxl_fragColour = vec4( 0.0_f );
 					pxl_fragColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::ImageView doCreateDepthView( ashes::ImageView const & depthView )
@@ -152,12 +153,7 @@ namespace smaa
 		edgeDetectionCmd.beginDebugBlock(
 			{
 				"SMAA DepthEdgeDetection",
-				{
-					castor3d::transparentBlackClearColor.color.float32[0],
-					castor3d::transparentBlackClearColor.color.float32[1],
-					castor3d::transparentBlackClearColor.color.float32[2],
-					castor3d::transparentBlackClearColor.color.float32[3],
-				},
+				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( edgeDetectionCmd, passIndex );
 		// Put source image in shader input layout.

@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -37,7 +38,6 @@
 
 using namespace castor;
 
-#define C3D_DebugSSAO 0
 #define C3D_DebugDiffuseLighting 0
 #define C3D_DebugSpecularLighting 0
 #define C3D_DebugIBL 0
@@ -120,9 +120,9 @@ namespace castor3d
 				, [&]()
 			{
 				vtx_texture = uv;
-				out.gl_out.gl_Position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
+				out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
 			} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr doCreateLegacyPixelProgram( RenderDevice const & device
@@ -221,14 +221,17 @@ namespace castor3d
 						, data2.xyz() );
 					auto shininess = writer.declLocale( "shininess"
 						, data2.w() );
+					auto specular = writer.declLocale( "specular"
+						, data3.xyz() );
 					auto occlusion = writer.declLocale( "occlusion"
 						, data3.a() );
 					auto emissive = writer.declLocale( "emissive"
 						, data4.xyz() );
 					auto ambient = writer.declLocale( "ambient"
-						, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
+						, clamp( c3d_ambientLight.xyz() + material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
+					lightSpecular *= specular;
 
 					if ( hasSsao )
 					{
@@ -302,7 +305,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						ambient *= occlusion * diffuse;
+						ambient *= occlusion;
 						diffuse *= lightDiffuse;
 					}
 					FI;
@@ -348,7 +351,7 @@ namespace castor3d
 					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr doCreatePbrMRPixelProgram( RenderDevice const & device
@@ -628,7 +631,7 @@ namespace castor3d
 					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ShaderPtr doCreatePbrSGPixelProgram( RenderDevice const & device
@@ -908,7 +911,7 @@ namespace castor3d
 					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
 #endif
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
@@ -966,7 +969,8 @@ namespace castor3d
 			result->createSizedBinding( layout.getBinding( GpInfoUbo::BindingPoint )
 				, gpInfoUbo.getUbo() );
 			result->createSizedBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
-				, hdrConfigUbo.getUbo() );
+				, *hdrConfigUbo.getUbo().buffer
+				, hdrConfigUbo.getUbo().offset );
 			result->update();
 			return result;
 		}
@@ -1255,7 +1259,8 @@ namespace castor3d
 		, VkExtent2D const & size
 		, FogType fogType
 		, MaterialType matType )
-		: m_geometryPassResult{ gp }
+		: m_engine{ engine }
+		, m_geometryPassResult{ gp }
 		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
@@ -1276,12 +1281,7 @@ namespace castor3d
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Resolve",
-				{
-					1.0f,
-					1.0f,
-					0.2f,
-					1.0f,
-				},
+				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT

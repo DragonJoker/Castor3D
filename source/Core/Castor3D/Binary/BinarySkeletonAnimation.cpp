@@ -45,6 +45,9 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	template<>
+	castor::String BinaryParserBase< SkeletonAnimation >::Name = cuT( "SkeletonAnimation" );
+
 	bool BinaryParser< SkeletonAnimation >::doParse( SkeletonAnimation & obj )
 	{
 		bool result = true;
@@ -62,6 +65,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationNode:
 				node = std::make_shared< SkeletonAnimationNode >( obj );
 				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
+				checkError( result, "Couldn't parse node." );
 
 				if ( result )
 				{
@@ -73,6 +77,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				bone = std::make_shared< SkeletonAnimationBone >( obj );
 				result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
+				checkError( result, "Couldn't parse bone." );
 
 				if ( result )
 				{
@@ -84,6 +89,7 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationKeyFrame:
 				keyFrame = std::make_unique< SkeletonAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SkeletonAnimationKeyFrame >().parse( *keyFrame, chunk );
+				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
 				{

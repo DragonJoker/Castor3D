@@ -29,20 +29,19 @@ namespace castor3d
 	{
 		if ( !m_ubo )
 		{
-			m_ubo = makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
-				, 1u
-				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "ModelMatrixUbo" );
+			m_ubo = m_engine.getModelMatrixUboPool().getBuffer( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
 	void ModelMatrixUbo::cleanup()
 	{
-		m_ubo.reset();
+		if ( m_ubo )
+		{
+			m_engine.getModelMatrixUboPool().putBuffer( m_ubo );
+		}
 	}
 
-	void ModelMatrixUbo::update( castor::Matrix4x4f const & model )const
+	void ModelMatrixUbo::update( castor::Matrix4x4f const & model )
 	{
 		auto normal = castor::Matrix3x3f{ model };
 		normal.invert();
@@ -51,13 +50,12 @@ namespace castor3d
 	}
 
 	void ModelMatrixUbo::update( castor::Matrix4x4f const & model
-		, castor::Matrix3x3f const & normal )const
+		, castor::Matrix3x3f const & normal )
 	{
-		auto & configuration = m_ubo->getData( 0u );
+		auto & configuration = m_ubo.getData();
 		configuration.prvNormal = configuration.curNormal;
 		configuration.prvModel = configuration.curModel;
 		configuration.curNormal = castor::Matrix4x4f{ normal };
 		configuration.curModel = model;
-		m_ubo->upload();
 	}
 }

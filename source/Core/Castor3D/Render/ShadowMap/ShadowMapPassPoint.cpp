@@ -3,6 +3,7 @@
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
@@ -45,13 +46,12 @@ namespace castor3d
 	uint32_t const ShadowMapPassPoint::UboBindingPoint = 10u;
 	String const ShadowMapPassPoint::ShadowMapUbo = cuT( "ShadowMap" );
 	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
-	String const ShadowMapPassPoint::FarPlane = cuT( "c3d_farPlane" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
-		, MatrixUbo const & matrixUbo
+		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "ShadowMapPassPoint" ), engine, matrixUbo, culler, shadowMap }
 		, m_viewport{ engine }
 	{
 		log::trace << "Created ShadowMapPassPoint" << std::endl;
@@ -61,11 +61,15 @@ namespace castor3d
 	{
 	}
 
-	void ShadowMapPassPoint::update( Camera const & camera
+	bool ShadowMapPassPoint::update( Camera const & camera
 		, RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{
+		getCuller().compute();
+		m_outOfDate = m_outOfDate
+			|| getCuller().areAllChanged()
+			|| getCuller().areCulledChanged();
 		auto position = light.getParent()->getDerivedPosition();
 		light.getPointLight()->updateShadow( m_viewport
 			, index );
@@ -74,6 +78,7 @@ namespace castor3d
 		config.worldLightPosition = position;
 		config.farPlane = m_viewport.getFar();
 		doUpdate( queues );
+		return m_outOfDate;
 	}
 
 	void ShadowMapPassPoint::updateDeviceDependent( uint32_t index )
@@ -184,12 +189,15 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device
+			, *m_renderPass
+			, "ShadowMapPassPoint_Pass" );
 
 		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassPointShadowConfigUbo" );
+			, "ShadowMapPassPoint_ShadowConfigUbo" );
 
 		m_viewport.resize( size );
 		m_initialised = true;
@@ -219,7 +227,6 @@ namespace castor3d
 
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
 	{
-		getCuller().compute();
 		queues.emplace_back( m_renderQueue );
 	}
 

@@ -2248,6 +2248,8 @@ namespace castor3d
 				if ( !importer->import( *parsingContext->mesh, pathFile, parameters, true ) )
 				{
 					CU_ParsingError( cuT( "Mesh Import failed" ) );
+					parsingContext->mesh.reset();
+					parsingContext->scene->getMeshCache().remove( parsingContext->strName2 );
 				}
 			}
 		}

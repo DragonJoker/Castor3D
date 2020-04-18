@@ -13,15 +13,7 @@ namespace castor3d
 	class SceneUbo
 	{
 	private:
-		struct Configuration
-		{
-			castor::Point4f ambientLight;
-			castor::Point4f backgroundColour;
-			castor::Point4f lightsCount;
-			castor::Point4f cameraPos;
-			castor::Point4f clipInfo;
-			castor::Point4f fogInfo;
-		};
+		using Configuration = SceneUboConfiguration;
 
 	public:
 		/**

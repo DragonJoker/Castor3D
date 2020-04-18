@@ -24,7 +24,7 @@ namespace castor3d
 			C3D_API virtual sdw::Vec3 m_diffuse()const = 0;
 
 		protected:
-			C3D_API BaseMaterial( sdw::Shader * shader
+			C3D_API BaseMaterial( ast::Shader * shader
 				, ast::expr::ExprPtr expr );
 
 		protected:
@@ -59,7 +59,7 @@ namespace castor3d
 		{
 			friend class LegacyMaterials;
 
-			C3D_API LegacyMaterial( sdw::Shader * shader
+			C3D_API LegacyMaterial( ast::Shader * shader
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -82,7 +82,7 @@ namespace castor3d
 		{
 			friend class PbrMRMaterials;
 
-			C3D_API MetallicRoughnessMaterial( sdw::Shader * shader
+			C3D_API MetallicRoughnessMaterial( ast::Shader * shader
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );
@@ -105,7 +105,7 @@ namespace castor3d
 		{
 			friend class PbrSGMaterials;
 
-			C3D_API SpecularGlossinessMaterial( sdw::Shader * shader
+			C3D_API SpecularGlossinessMaterial( ast::Shader * shader
 				, ast::expr::ExprPtr expr );
 
 			C3D_API static ast::type::StructPtr makeType( ast::type::TypesCache & cache );

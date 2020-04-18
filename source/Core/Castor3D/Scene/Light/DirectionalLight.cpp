@@ -4,6 +4,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -22,8 +23,7 @@ namespace castor3d
 	{
 		std::vector< DirectionalLight::Cascade > doComputeCascades( Camera const & camera
 			, DirectionalLight const & light
-			, uint32_t cascades
-			, float minCastersZ )
+			, uint32_t cascades )
 		{
 			auto & renderSystem = *light.getLight().getScene()->getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
@@ -31,60 +31,62 @@ namespace castor3d
 			// Compute camera inverse view transform.
 			auto cameraVP = camera.getProjection() * camera.getView();
 			auto invCameraVP = cameraVP.getInverse();
-			auto nearZ = camera.getNear();
-			auto farZ = camera.getFar();
+			auto nearClip = camera.getNear();
+			auto farClip = camera.getFar();
 
-			float clipRange = farZ - nearZ;
-			float minZ = nearZ;
-			float maxZ = nearZ + clipRange;
+			float clipRange = farClip - nearClip;
+			float minZ = nearClip;
+			float maxZ = nearClip + clipRange;
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
 			// Calculate split depths based on view camera frustum
-			// Based on method presentd in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
+			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
 			std::vector< float > cascadeSplits( cascades, 0.0f );
-			float cascadeSplitLambda = 0.95f;
+			float constexpr lambda = 0.95f;
 
 			for ( uint32_t i = 0; i < cascades; i++ )
 			{
 				float p = ( i + 1 ) / float( cascades );
 				float log = minZ * std::pow( ratio, p );
 				float uniform = minZ + range * p;
-				float d = cascadeSplitLambda * ( log - uniform ) + uniform;
-				cascadeSplits[i] = ( d - nearZ ) / clipRange;
+				float d = lambda * ( log - uniform ) + uniform;
+				cascadeSplits[i] = ( d - nearClip ) / clipRange;
 			}
 
 			// Calculate orthographic projection matrix for each cascade
-			float lastSplitDist = 0.0;
+			float prevSplitDist = 0.0;
 
-			for ( uint32_t i = 0; i < cascades; i++ )
+			for ( uint32_t cascadeIdx = 0; cascadeIdx < cascades; ++cascadeIdx )
 			{
-				float splitDist = cascadeSplits[i];
+				float splitDist = cascadeSplits[cascadeIdx];
 
-				Point4f frustumCorners[8]
+				Point3f frustumCorners[8]
 				{
-					Point4f( -1.0f, 1.0f, -1.0f, 1.0f ),
-					Point4f( 1.0f, 1.0f, -1.0f, 1.0f ),
-					Point4f( 1.0f, -1.0f, -1.0f, 1.0f ),
-					Point4f( -1.0f, -1.0f, -1.0f, 1.0f ),
-					Point4f( -1.0f, 1.0f, 1.0f, 1.0f ),
-					Point4f( 1.0f, 1.0f, 1.0f, 1.0f ),
-					Point4f( 1.0f, -1.0f, 1.0f, 1.0f ),
-					Point4f( -1.0f, -1.0f, 1.0f, 1.0f ),
+					Point3f( -1.0f, 1.0f, -1.0f ),
+					Point3f( 1.0f, 1.0f, -1.0f ),
+					Point3f( 1.0f, -1.0f, -1.0f ),
+					Point3f( -1.0f, -1.0f, -1.0f ),
+					Point3f( -1.0f, 1.0f, 1.0f ),
+					Point3f( 1.0f, 1.0f, 1.0f ),
+					Point3f( 1.0f, -1.0f, 1.0f ),
+					Point3f( -1.0f, -1.0f, 1.0f ),
 				};
 
 				// Project frustum corners into world space
 				for ( auto & frustumCorner : frustumCorners )
 				{
-					auto invCorner = invCameraVP * frustumCorner;
-					frustumCorner = invCorner / invCorner[3];
+					auto invCorner = invCameraVP * Point4f{ frustumCorner[0], frustumCorner[1], frustumCorner[2], 1.0f };
+					frustumCorner = Point3f{ invCorner / invCorner[3] };
 				}
 
-				for ( uint32_t i = 0; i < 4; i++ )
+				for ( uint32_t i = 0; i < 4; ++i )
 				{
-					auto dist = frustumCorners[i + 4] - frustumCorners[i];
-					frustumCorners[i + 4] = frustumCorners[i] + ( dist * splitDist );
-					frustumCorners[i] = frustumCorners[i] + ( dist * lastSplitDist );
+					auto cornerRay = frustumCorners[i + 4] - frustumCorners[i];
+					auto nearCornerRay = cornerRay * prevSplitDist;
+					auto farCornerRay = cornerRay * splitDist;
+					frustumCorners[i + 4] = frustumCorners[i] + farCornerRay;
+					frustumCorners[i] = frustumCorners[i] + nearCornerRay;
 				}
 
 				// Get frustum center
@@ -98,7 +100,7 @@ namespace castor3d
 				float radius = 0.0f;
 				for ( auto frustumCorner : frustumCorners )
 				{
-					float distance = float( point::length( Point3f{ frustumCorner } -frustumCenter ) );
+					float distance = float( point::length( frustumCorner - frustumCenter ) );
 					radius = std::max( radius, distance );
 				}
 				radius = std::ceil( radius * 16.0f ) / 16.0f;
@@ -106,21 +108,51 @@ namespace castor3d
 				Point3f maxExtents{ radius, radius, radius };
 				Point3f minExtents = -maxExtents;
 
-				Point3f lightDir = light.getDirection();
+				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
+				Point3f up{ 0.0f, 1.0f, 0.0f };
+				Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
+				up = point::getNormalised( point::cross( lightDirection, right ) );
 
 				// Store split distance and matrix in cascade
-				auto & cascade = result[i];
-				matrix::lookAt( cascade.viewMatrix, frustumCenter - lightDir * -minExtents[2], frustumCenter, Point3f( 0.0f, 1.0f, 0.0f ) );
+				auto & cascade = result[cascadeIdx];
+				cascade.viewMatrix = matrix::lookAt( lightDirection, frustumCenter, up );
+				auto cascadeExtents = maxExtents - minExtents;
 				cascade.projMatrix = renderSystem.getOrtho( minExtents[0], maxExtents[0]
 					, minExtents[1], maxExtents[1]
-					, minCastersZ * 100.0f, maxExtents[2] - minExtents[2] );
+					, 10.0f * -cascadeExtents[2], cascadeExtents[2] );
+
+				// Create a rounding matrix so we move in texel sized increments.
+				Matrix4x4f shadowMatrix = cascade.projMatrix * cascade.viewMatrix;
+				Point4f shadowOrigin{ 0.0f, 0.0f, 0.0f, 1.0f };
+				auto shadowMapSize = float( ShadowMapPassDirectional::TextureSize );
+				shadowOrigin = shadowMatrix * shadowOrigin;
+				shadowOrigin = shadowOrigin * shadowMapSize / 2.0f;
+				Point4f roundedOrigin{ point::getRounded( shadowOrigin ) };
+				Point4f roundOffset{ roundedOrigin - shadowOrigin };
+				roundOffset = roundOffset * 2.0f / shadowMapSize;
+				roundOffset[2] = 0.0f;
+				roundOffset[3] = 0.0f;
+
+				Matrix4x4f shadowProj = cascade.projMatrix;
+				shadowProj[3] += roundOffset;
+				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-				cascade.splitDepth = ( nearZ + splitDist * clipRange ) * -1.0f;
-				lastSplitDist = cascadeSplits[i];
+				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				prevSplitDist = splitDist;
 			}
 
 			return result;
 		}
+	}
+
+	//*************************************************************************************************
+
+	bool operator==( DirectionalLightCascade const & lhs
+		, DirectionalLightCascade  const & rhs )
+	{
+		return lhs.viewMatrix == rhs.viewMatrix
+			&& lhs.projMatrix == rhs.projMatrix
+			&& lhs.splitDepth == rhs.splitDepth;
 	}
 
 	//*************************************************************************************************
@@ -155,6 +187,7 @@ namespace castor3d
 	DirectionalLight::DirectionalLight( Light & light )
 		: LightCategory{ LightType::eDirectional, light }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
+		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
 	{
 	}
 
@@ -171,29 +204,19 @@ namespace castor3d
 	{
 	}
 
-	void DirectionalLight::updateShadow( Camera const & viewCamera
-		, Camera & lightCamera
-		, int32_t cascadeIndex
-		, float minCastersZ )
+	bool DirectionalLight::updateShadow( Camera const & viewCamera )
 	{
-		if ( size_t( cascadeIndex ) < m_cascades.size() )
-		{
-			if ( !cascadeIndex )
-			{
-				m_cascades = doComputeCascades( viewCamera
-					, *this
-					, uint32_t( m_cascades.size() )
-					, minCastersZ );
-			}
+		m_cascades = doComputeCascades( viewCamera
+			, *this
+			, uint32_t( m_cascades.size() ) );
+		bool result = m_cascades != m_prvCascades;
 
-			auto & cascade = m_cascades[cascadeIndex];
-			auto node = getLight().getParent();
-			node->update();
-			lightCamera.attachTo( *node );
-			lightCamera.setProjection( cascade.projMatrix );
-			lightCamera.setView( cascade.viewMatrix );
-			lightCamera.updateFrustum();
+		if ( result )
+		{
+			m_prvCascades = m_cascades;
 		}
+
+		return result;
 	}
 
 	void DirectionalLight::updateNode( SceneNode const & node )

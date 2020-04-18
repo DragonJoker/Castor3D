@@ -3,7 +3,6 @@
 #include "SmaaPostEffect/AreaTex.h"
 #include "SmaaPostEffect/SearchTex.h"
 #include "SmaaPostEffect/SmaaUbo.hpp"
-#include "SmaaPostEffect/SMAA.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBuffer.hpp>
@@ -15,6 +14,7 @@
 #include <Castor3D/Shader/Program.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -32,7 +32,7 @@ namespace smaa
 {
 	namespace
 	{
-		std::unique_ptr< sdw::Shader > doBlendingWeightCalculationVP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -78,17 +78,17 @@ namespace smaa
 				, OutVec2{ writer, "pixcoord" }
 				, OutVec4Array{ writer, "offset", 3u } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					out.gl_out.gl_Position = vec4( position, 0.0_f, 1.0_f );
+					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 					vtx_texture = uv;
 					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< sdw::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
+		std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderSystem & renderSystem
 			, Point4f const & renderTargetMetrics
 			, SmaaConfig const & config )
 		{
@@ -119,7 +119,7 @@ namespace smaa
 
 			// Shader inputs
 			Ubo ubo{ writer, cuT( "Subsample" ), 0u, 0u };
-			auto c3d_subsampleIndices = ubo.declMember< IVec4 >( constants::SubsampleIndices );
+			auto c3d_subsampleIndices = ubo.declMember< Vec4 >( constants::SubsampleIndices );
 			ubo.end();
 			auto c3d_areaTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_areaTex", 1u, 0u );
 			auto c3d_searchTex = writer.declSampledImage< FImg2DRgba32 >( "c3d_searchTex", 2u, 0u );
@@ -292,14 +292,16 @@ namespace smaa
 					, SampledImage2DRgba32 const & areaTex
 					, Vec2 const & texcoord
 					, Vec2 const & e
-					, IVec4 const & subsampleIndices )
+					, Vec4 const & subsampleIndices )
 				{
 					auto weights = writer.declLocale( "weights"
 						, vec2( 0.0_f, 0.0_f ) );
 
 					// Search for the line ends:
-					auto d = writer.declLocale< Vec4 >( "d" );
-					auto end = writer.declLocale< Vec2 >( "end" );
+					auto d = writer.declLocale< Vec4 >( "d"
+						, vec4( 0.0_f ) );
+					auto end = writer.declLocale( "end"
+						, vec2( 0.0_f ) );
 
 					IF( writer, e.r() > 0.0_f )
 					{
@@ -343,11 +345,11 @@ namespace smaa
 						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0_f ) );
 
 						// Fetch the areas for this line:
-						weights += SMAAAreaDiag( areaTex, d.xy(), cc, writer.cast< Float >( subsampleIndices.z() ) );
+						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.z() );
 					}
 					FI;
 
-						// Search for the line ends:
+					// Search for the line ends:
 					d.xz() = SMAASearchDiag2( edgesTex, texcoord, vec2( -1.0_f, -1.0_f ), end );
 
 					IF( writer, textureLodOffset( edgesTex, texcoord, 0.0_f, ivec2( 1_i, 0_i ) ).r() > 0.0_f )
@@ -380,7 +382,7 @@ namespace smaa
 						SMAAMovc( bvec2( step( vec2( 0.9_f ), d.zw() ) ), cc, vec2( 0.0_f, 0.0_f ) );
 
 						// Fetch the areas for this line:
-						weights += SMAAAreaDiag( areaTex, d.xy(), cc, writer.cast< Float >( subsampleIndices.w() ) ).gr();
+						weights += SMAAAreaDiag( areaTex, d.xy(), cc, subsampleIndices.w() ).gr();
 					}
 					FI;
 
@@ -390,7 +392,7 @@ namespace smaa
 				, InSampledImage2DRgba32{ writer, "areaTex" }
 				, InVec2{ writer, "texcoord" }
 				, InVec2{ writer, "e" }
-				, InIVec4{ writer, "subsampleIndices" } );
+				, InVec4{ writer, "subsampleIndices" } );
 
 			//-----------------------------------------------------------------------------
 			// Horizontal/Vertical Search Functions
@@ -656,7 +658,7 @@ namespace smaa
 					, SampledImage2DRgba32 const & edgesTex
 					, SampledImage2DRgba32 const & areaTex
 					, SampledImage2DRgba32 const & searchTex
-					, IVec4 const & subsampleIndices )
+					, Vec4 const & subsampleIndices )
 				{ // Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 					auto weights = writer.declLocale( "weights"
 						, vec4( 0.0_f, 0.0_f, 0.0_f, 0.0_f ) );
@@ -708,7 +710,7 @@ namespace smaa
 
 								// Ok, we know how this pattern looks like, now it is time for getting
 								// the actual area:
-								weights.rg() = SMAAArea( areaTex, sqrt_d, e1, e2, writer.cast< Float >( subsampleIndices.y() ) );
+								weights.rg() = SMAAArea( areaTex, sqrt_d, e1, e2, subsampleIndices.y() );
 
 								// Fix corners:
 								coords.y() = texcoord.y();
@@ -755,7 +757,7 @@ namespace smaa
 
 							// Ok, we know how this pattern looks like, now it is time for getting
 							// the actual area:
-							weights.rg() = SMAAArea( areaTex, sqrt_d, e1, e2, writer.cast< Float >( subsampleIndices.y() ) );
+							weights.rg() = SMAAArea( areaTex, sqrt_d, e1, e2, subsampleIndices.y() );
 
 							// Fix corners:
 							coords.y() = texcoord.y();
@@ -795,7 +797,7 @@ namespace smaa
 							, textureLodOffset( edgesTex, coords.xz(), 0.0_f, ivec2( 0_i, 1_i ) ).g() );
 
 						// Get the area for this direction:
-						weights.ba() = SMAAArea( areaTex, sqrt_d, e1, e2, writer.cast< Float >( subsampleIndices.x() ) );
+						weights.ba() = SMAAArea( areaTex, sqrt_d, e1, e2, subsampleIndices.x() );
 
 						// Fix corners:
 						coords.x() = texcoord.x();
@@ -811,9 +813,9 @@ namespace smaa
 				, InSampledImage2DRgba32{ writer, "edgesTex" }
 				, InSampledImage2DRgba32{ writer, "areaTex" }
 				, InSampledImage2DRgba32{ writer, "searchTex" }
-				, InIVec4{ writer, "subsampleIndices" } );
+				, InVec4{ writer, "subsampleIndices" } );
 
-			writer.implementFunction< sdw::Void >( cuT( "main" )
+			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
 					pxl_fragColour = SMAABlendingWeightCalculationPS( vtx_texture
@@ -824,7 +826,7 @@ namespace smaa
 						, c3d_searchTex
 						, c3d_subsampleIndices );
 				} );
-			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		ashes::SamplerPtr doCreateSampler( castor3d::Engine & engine
@@ -872,7 +874,7 @@ namespace smaa
 		VkExtent2D size{ m_edgeDetectionView.image->getDimensions().width
 			, m_edgeDetectionView.image->getDimensions().height };
 
-		m_ubo = castor3d::makeUniformBuffer< castor::Point4i >( m_renderSystem
+		m_ubo = castor3d::makeUniformBuffer< castor::Point4f >( m_renderSystem
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
@@ -1041,12 +1043,7 @@ namespace smaa
 		blendingWeightCmd.beginDebugBlock(
 			{
 				"SMAA BlendingWeightCalculation",
-				{
-					castor3d::transparentBlackClearColor.color.float32[0],
-					castor3d::transparentBlackClearColor.color.float32[1],
-					castor3d::transparentBlackClearColor.color.float32[2],
-					castor3d::transparentBlackClearColor.color.float32[3],
-				},
+				castor3d::makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
 			} );
 		timer.beginPass( blendingWeightCmd, passIndex );
 		// Put edge detection image in shader input layout.
@@ -1080,10 +1077,10 @@ namespace smaa
 			, *m_pixelShader.shader );
 	}
 
-	void BlendingWeightCalculation::update( castor::Point4i const & subsampleIndices )
+	void BlendingWeightCalculation::update( castor::Point4f const & subsampleIndices )
 	{
 		auto & data = m_ubo->getData();
-		data = Point4i{ subsampleIndices };
+		data = subsampleIndices;
 		m_ubo->upload();
 	}
 
