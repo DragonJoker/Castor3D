@@ -831,9 +831,10 @@ namespace castor3d
 					, c3d_shadowReceiver
 					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
 					, output );
+				lightSpecular *= specular;
 
 				auto ambient = writer.declLocale( "ambient"
-					, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
+					, clamp( c3d_ambientLight.xyz() + material.m_ambient * diffuse
 						, vec3( 0.0_f )
 						, vec3( 1.0_f ) ) );
 
@@ -877,16 +878,12 @@ namespace castor3d
 				}
 				else
 				{
-					ambient *= occlusion * diffuse;
+					ambient *= occlusion;
 					diffuse *= lightDiffuse;
 				}
 
-				auto colour = writer.declLocale< Vec3 >( "colour"
-					, sdw::fma( ambient + lightDiffuse
-						, diffuse
-						, sdw::fma( lightSpecular
-							, specular
-							, emissive ) ) );
+				auto colour = writer.declLocale( "colour"
+					, vec3( diffuse + lightSpecular + emissive + ambient ) );
 
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
@@ -1169,9 +1166,7 @@ namespace castor3d
 				}
 
 				auto colour = writer.declLocale( "colour"
-					, sdw::fma( lightDiffuse
-						, albedo
-						, lightSpecular + emissive + ambient ) );
+					, vec3( lightDiffuse * albedo + lightSpecular + emissive + ambient ) );
 
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour
@@ -1452,10 +1447,9 @@ namespace castor3d
 					}
 					FI;
 				}
+
 				auto colour = writer.declLocale( "colour"
-					, sdw::fma( lightDiffuse
-						, albedo
-						, lightSpecular + emissive + ambient ) );
+					, vec3( lightDiffuse * albedo + lightSpecular + emissive + ambient ) );
 
 				pxl_accumulation = utils.computeAccumulation( in.fragCoord.z()
 					, colour

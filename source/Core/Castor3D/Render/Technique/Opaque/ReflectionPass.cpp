@@ -221,14 +221,17 @@ namespace castor3d
 						, data2.xyz() );
 					auto shininess = writer.declLocale( "shininess"
 						, data2.w() );
+					auto specular = writer.declLocale( "specular"
+						, data3.xyz() );
 					auto occlusion = writer.declLocale( "occlusion"
 						, data3.a() );
 					auto emissive = writer.declLocale( "emissive"
 						, data4.xyz() );
 					auto ambient = writer.declLocale( "ambient"
-						, clamp( c3d_ambientLight.xyz() + material.m_ambient * material.m_diffuse()
+						, clamp( c3d_ambientLight.xyz() + material.m_ambient * diffuse
 							, vec3( 0.0_f )
 							, vec3( 1.0_f ) ) );
+					lightSpecular *= specular;
 
 					if ( hasSsao )
 					{
@@ -302,7 +305,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						ambient *= occlusion * diffuse;
+						ambient *= occlusion;
 						diffuse *= lightDiffuse;
 					}
 					FI;

@@ -723,12 +723,8 @@ namespace castor3d
 				auto materialId = writer.declLocale( "materialId"
 					, writer.cast< UInt >( data5.z() )
 					, C3D_DisableSSSTransmittance == 0 );
-				auto diffuse = writer.declLocale( "diffuse"
-					, data2.xyz() );
 				auto shininess = writer.declLocale( "shininess"
 					, data2.w() );
-				auto specular = writer.declLocale( "specular"
-					, data3.xyz() );
 				auto lightDiffuse = writer.declLocale( "lightDiffuse"
 					, vec3( 0.0_f ) );
 				auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -820,8 +816,8 @@ namespace castor3d
 					break;
 				}
 
-				pxl_diffuse = lightDiffuse * diffuse;
-				pxl_specular = lightSpecular * specular;
+				pxl_diffuse = lightDiffuse;
+				pxl_specular = lightSpecular;
 
 #if C3D_DebugEye
 				pxl_diffuse = eye;
