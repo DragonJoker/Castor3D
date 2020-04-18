@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include <CastorUtils/Math/SquareMatrix.hpp>
+
 namespace castor3d
 {
 	/**@name Shader */

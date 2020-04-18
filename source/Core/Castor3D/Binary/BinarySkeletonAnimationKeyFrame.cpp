@@ -36,7 +36,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< SkeletonAnimationKeyFrame >::Name = cuT( "SkeletonAnimationKeyFrame" );
+	template<>
+	castor::String BinaryParserBase< SkeletonAnimationKeyFrame >::Name = cuT( "SkeletonAnimationKeyFrame" );
 
 	bool BinaryParser< SkeletonAnimationKeyFrame >::doParse( SkeletonAnimationKeyFrame & obj )
 	{

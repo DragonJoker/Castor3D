@@ -127,7 +127,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< Submesh >::Name = cuT( "Submesh" );
+	template<>
+	castor::String BinaryParserBase< Submesh >::Name = cuT( "Submesh" );
 
 	bool BinaryParser< Submesh >::doParse( Submesh & obj )
 	{

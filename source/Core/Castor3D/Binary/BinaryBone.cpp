@@ -28,7 +28,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< Bone >::Name = cuT( "Bone" );
+	template<>
+	castor::String BinaryParserBase< Bone >::Name = cuT( "Bone" );
 
 	bool BinaryParser< Bone >::doParse( Bone & obj )
 	{

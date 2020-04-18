@@ -8,6 +8,17 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
+#include <ShaderWriter/BaseTypes/Array.hpp>
+#include <ShaderWriter/BaseTypes/Bool.hpp>
+#include <ShaderWriter/BaseTypes/Double.hpp>
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/Image.hpp>
+#include <ShaderWriter/BaseTypes/Int.hpp>
+#include <ShaderWriter/BaseTypes/SampledImage.hpp>
+#include <ShaderWriter/BaseTypes/Sampler.hpp>
+#include <ShaderWriter/BaseTypes/UInt.hpp>
+#include <ShaderWriter/CompositeTypes/Function.hpp>
+
 namespace castor3d
 {
 	/**@name Shader */

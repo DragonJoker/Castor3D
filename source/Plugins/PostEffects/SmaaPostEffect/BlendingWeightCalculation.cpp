@@ -194,7 +194,7 @@ namespace smaa
 				, [&]( SampledImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
-					, Vec2 & e )
+					, Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
@@ -221,7 +221,7 @@ namespace smaa
 				, [&]( SampledImage2DRgba32 const & edgesTex
 					, Vec2 const & texcoord
 					, Vec2 const & dir
-					, Vec2 & e )
+					, Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );

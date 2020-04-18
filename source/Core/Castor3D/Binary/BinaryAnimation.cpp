@@ -43,7 +43,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< Animation >::Name = cuT( "Animation" );
+	template<>
+	castor::String BinaryParserBase< Animation >::Name = cuT( "Animation" );
 
 	bool BinaryParser< Animation >::doParse( Animation & obj )
 	{

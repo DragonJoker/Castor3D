@@ -26,7 +26,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< Mesh >::Name = cuT( "Mesh" );
+	template<>
+	castor::String BinaryParserBase< Mesh >::Name = cuT( "Mesh" );
 
 	bool BinaryParser< Mesh >::doParse( Mesh & obj )
 	{

@@ -24,7 +24,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	castor::String BinaryParser< SkeletonAnimationNode >::Name = cuT( "SkeletonAnimationNode" );
+	template<>
+	castor::String BinaryParserBase< SkeletonAnimationNode >::Name = cuT( "SkeletonAnimationNode" );
 
 	bool BinaryParser< SkeletonAnimationNode >::doParse( SkeletonAnimationNode & obj )
 	{
