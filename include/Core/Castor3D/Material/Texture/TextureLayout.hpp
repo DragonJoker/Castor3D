@@ -15,6 +15,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, castor::Path const & relative
+		, castor::Path const & folder );
+	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, castor::String const & name
+		, castor::PxBufferBaseSPtr buffer );
+	C3D_API uint32_t getMipLevels( VkExtent3D const & extent );
+
 	class TextureLayout
 		: public castor::OwnedBy< RenderSystem >
 	{

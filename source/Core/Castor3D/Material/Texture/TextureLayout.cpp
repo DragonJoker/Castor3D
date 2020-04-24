@@ -1,8 +1,10 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashes/ashes.hpp>
@@ -112,13 +114,70 @@ namespace castor3d
 				, 0u );
 		}
 
-		uint32_t getMaxMipLevels( uint32_t mipLevels
+		uint32_t getMinMipLevels( uint32_t mipLevels
 			, VkExtent3D const & extent )
 		{
-			auto min = std::min( extent.width, extent.height );
-			auto bitSize = uint32_t( castor::getBitSize( min ) );
-			return std::min( bitSize, mipLevels );
+			return std::min( getMipLevels( extent ), mipLevels );
 		}
+	}
+
+	//************************************************************************************************
+
+	TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, Path const & relative
+		, Path const & folder )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_UNDEFINED,
+			{ 1u, 1u, 1u },
+			20u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		auto texture = std::make_shared < TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, relative );
+		texture->setSource( folder
+			, relative );
+		return texture;
+	}
+
+	TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, String const & name
+		, PxBufferBaseSPtr buffer )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			( buffer->getHeight() > 1u
+				? VK_IMAGE_TYPE_2D
+				: VK_IMAGE_TYPE_1D ),
+			VK_FORMAT_UNDEFINED,
+			{ buffer->getWidth(), buffer->getHeight(), 1u },
+			uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) ),
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		auto texture = std::make_shared < TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, name );
+		texture->setSource( buffer );
+		return texture;
+	}
+
+	uint32_t getMipLevels( VkExtent3D const & extent )
+	{
+		auto min = std::min( extent.width, extent.height );
+		return uint32_t( castor::getBitSize( min ) );
 	}
 
 	//************************************************************************************************
@@ -288,7 +347,7 @@ namespace castor3d
 
 			if ( m_info->mipLevels > 1u )
 			{
-				m_info->mipLevels = getMaxMipLevels( m_info->mipLevels
+				m_info->mipLevels = getMinMipLevels( m_info->mipLevels
 					, m_info->extent );
 			}
 
