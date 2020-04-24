@@ -397,6 +397,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Range.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/RangeSequence.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/RangedValue.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.inl
