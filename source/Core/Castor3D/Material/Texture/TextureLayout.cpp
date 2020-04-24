@@ -660,7 +660,8 @@ namespace castor3d
 
 	TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, String const & name
-		, PxBufferBaseUPtr buffer )
+		, PxBufferBaseUPtr buffer
+		, bool isStatic )
 	{
 		ashes::ImageCreateInfo createInfo
 		{
@@ -680,7 +681,7 @@ namespace castor3d
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name );
-		texture->setSource( std::move( buffer ) );
+		texture->setSource( std::move( buffer ), isStatic );
 		return texture;
 	}
 

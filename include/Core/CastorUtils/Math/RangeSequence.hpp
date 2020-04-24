@@ -89,6 +89,12 @@ namespace castor
 	private:
 		SequenceType m_sequence;
 	};
+
+	template< typename T >
+	inline RangeSequenceT< T > makeRangeSequence( std::vector< T > const & sequence )
+	{
+		return RangeSequenceT< T >{ sequence };
+	}
 }
 
 #endif

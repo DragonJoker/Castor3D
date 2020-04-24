@@ -170,7 +170,8 @@ namespace castor3d
 		, castor::Path const & folder );
 	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
-		, castor::PxBufferBaseUPtr buffer );
+		, castor::PxBufferBaseUPtr buffer
+		, bool isStatic = false );
 	C3D_API uint32_t getMipLevels( VkExtent3D const & extent );
 
 	class TextureLayout
