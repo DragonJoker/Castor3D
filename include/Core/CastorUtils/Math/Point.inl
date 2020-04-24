@@ -112,7 +112,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point()
-		: m_coords{}
+		: m_data{}
 	{
 	}
 
@@ -121,7 +121,7 @@ namespace castor
 	{
 		if ( !rhs )
 		{
-			std::memset( m_coords.data()
+			std::memset( m_data.coords.data()
 				, 0
 				, binary_size );
 		}
@@ -129,7 +129,7 @@ namespace castor
 		{
 			std::copy( rhs
 				, rhs + TCount
-				, m_coords.begin() );
+				, m_data.coords.begin() );
 		}
 	}
 
@@ -138,7 +138,7 @@ namespace castor
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
-			, m_coords.begin() );
+			, m_data.coords.begin() );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -146,7 +146,7 @@ namespace castor
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
-			, m_coords.begin() );
+			, m_data.coords.begin() );
 	}
 
 	template< typename T, uint32_t TCount >
@@ -173,7 +173,7 @@ namespace castor
 	{
 		if ( !rhs )
 		{
-			std::memset( m_coords.data()
+			std::memset( m_data.coords.data()
 				, 0
 				, binary_size );
 		}
@@ -181,7 +181,7 @@ namespace castor
 		{
 			for ( uint32_t i = 0; i < TCount; i++ )
 			{
-				m_coords[i] = T( rhs[i] );
+				m_data.coords[i] = T( rhs[i] );
 			}
 		}
 	}
@@ -189,7 +189,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB >
 	Point< T, TCount >::Point( ValueA a, ValueB b )
-		: m_coords{ T( a ), T( b ) }
+		: m_data{ std::array< T, TCount >{ T( a ), T( b ) } }
 	{
 
 	}
@@ -197,14 +197,14 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC >
 	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c )
-		: m_coords{ T( a ), T( b ), T( c ) }
+		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ) } }
 	{
 	}
 
 	template< typename T, uint32_t TCount >
 	template< typename ValueA, typename ValueB, typename ValueC, typename ValueD >
 	Point< T, TCount >::Point( ValueA a, ValueB b, ValueC c, ValueD d )
-		: m_coords{ T( a ), T( b ), T( c ), T( d ) }
+		: m_data{ std::array< T, TCount >{ T( a ), T( b ), T( c ), T( d ) } }
 	{
 	}
 
@@ -213,7 +213,7 @@ namespace castor
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
-			, m_coords.begin() );
+			, m_data.coords.begin() );
 		return *this;
 	}
 
@@ -224,7 +224,7 @@ namespace castor
 		{
 			std::copy( rhs.begin()
 				, rhs.end()
-				, m_coords.begin() );
+				, m_data.coords.begin() );
 		}
 
 		return *this;
@@ -331,7 +331,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			std::swap( m_coords[i], rhs.m_coords[i] );
+			std::swap( m_data.coords[i], rhs.m_data.coords[i] );
 		}
 	}
 
@@ -340,7 +340,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount / 2; i++ )
 		{
-			std::swap( m_coords[i], m_coords[TCount - 1 - i] );
+			std::swap( m_data.coords[i], m_data.coords[TCount - 1 - i] );
 		}
 	}
 
@@ -349,7 +349,7 @@ namespace castor
 	{
 		for ( uint32_t i = 0; i < TCount; i++ )
 		{
-			result[i] = m_coords[i];
+			result[i] = m_data.coords[i];
 		}
 	}
 
@@ -357,14 +357,14 @@ namespace castor
 	T const & Point< T, TCount >::at( uint32_t index )const
 	{
 		CU_Require( index < TCount );
-		return m_coords[index];
+		return m_data.coords[index];
 	}
 
 	template< typename T, uint32_t TCount >
 	T & Point< T, TCount >::at( uint32_t index )
 	{
 		CU_Require( index < TCount );
-		return m_coords[index];
+		return m_data.coords[index];
 	}
 
 	//*************************************************************************************************
