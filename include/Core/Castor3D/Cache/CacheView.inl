@@ -3,14 +3,14 @@
 namespace castor3d
 {
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline CacheView< ResourceType, CacheType, EventType >::CacheView( castor::String const & p_name
-		, Initialiser && p_initialise
-		, Cleaner && p_clean
+	inline CacheView< ResourceType, CacheType, EventType >::CacheView( castor::String const & name
+		, Initialiser && initialise
+		, Cleaner && clean
 		, CacheType & cache )
-		: castor::Named( p_name )
+		: castor::Named( name )
 		, m_cache( cache )
-		, m_initialise{ p_initialise }
-		, m_clean{ p_clean }
+		, m_initialise{ initialise }
+		, m_clean{ clean }
 	{
 	}
 
@@ -21,33 +21,36 @@ namespace castor3d
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
 	template< typename ... Params >
-	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & p_name, Params && ... p_params )
+	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & name
+		, Params && ... params )
 	{
 		std::shared_ptr< ResourceType > result;
 
-		if ( m_cache.has( p_name ) )
+		if ( m_cache.has( name ) )
 		{
-			result = m_cache.find( p_name );
+			result = m_cache.find( name );
 		}
 		else
 		{
-			result = m_cache.create( p_name, std::forward< Params >( p_params )... );
+			result = m_cache.create( name
+				, std::forward< Params >( params )... );
 			m_initialise( result );
-			m_cache.add( p_name, result );
-			m_createdElements.insert( p_name );
+			m_cache.add( name, result );
+			m_createdElements.insert( name );
 		}
 
 		return result;
 	}
 
 	template< typename ResourceType, typename CacheType, EventType EventType >
-	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
+	inline std::shared_ptr< ResourceType > CacheView< ResourceType, CacheType, EventType >::add( castor::String const & name
+		, std::shared_ptr< ResourceType > element )
 	{
-		auto result = m_cache.add( p_name, p_element );
+		auto result = m_cache.add( name, element );
 
 		if ( result )
 		{
-			m_createdElements.insert( p_name );
+			m_createdElements.insert( name );
 		}
 
 		return result;

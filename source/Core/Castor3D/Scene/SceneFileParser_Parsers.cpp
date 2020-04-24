@@ -3428,6 +3428,8 @@ namespace castor3d
 		{
 			parsingContext->pass.reset();
 			parsingContext->phongPass.reset();
+			parsingContext->pbrMRPass.reset();
+			parsingContext->pbrSGPass.reset();
 		}
 	}
 	CU_EndAttributePop()

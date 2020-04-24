@@ -158,7 +158,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
 
-		if ( count )
+		if ( count && getOwner()->hasIndexBuffer() )
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 

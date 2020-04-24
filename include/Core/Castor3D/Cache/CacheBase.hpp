@@ -117,6 +117,7 @@ namespace castor3d
 		inline ElementPtr create( Key const & name
 			, Parameters && ... parameters )
 		{
+			this->doReportCreation( name );
 			return m_produce( name
 				, std::forward< Parameters >( parameters )... );
 		}
@@ -175,7 +176,7 @@ namespace castor3d
 
 			if ( !m_elements.has( name ) )
 			{
-				result = m_produce( name
+				result = create( name
 					, std::forward< Parameters >( parameters )... );
 				m_initialise( result );
 				m_elements.insert( name, result );

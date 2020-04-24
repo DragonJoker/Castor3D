@@ -138,7 +138,7 @@ namespace castor3d
 
 		if ( !m_elements.has( name ) )
 		{
-			result = m_produce( name, type );
+			result = create( name, type );
 			m_initialise( result );
 			m_elements.insert( name, result );
 			doReportCreation( name );

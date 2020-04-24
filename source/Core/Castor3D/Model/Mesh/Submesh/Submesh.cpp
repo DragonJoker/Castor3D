@@ -89,7 +89,7 @@ namespace castor3d
 
 	void Submesh::update()
 	{
-		if ( m_dirty )
+		if ( m_dirty && m_vertexBuffer )
 		{
 			auto size = uint32_t( m_points.size() );
 

@@ -33,17 +33,20 @@ namespace castor3d
 	template< typename T >
 	void UniformBufferPool< T >::upload()const
 	{
-		auto & device = getCurrentRenderDevice( *this );
-
-		for ( auto & bufferIt : m_buffers )
+		if ( m_stagingBuffer )
 		{
-			for ( auto & buffer : bufferIt.second )
+			auto & device = getCurrentRenderDevice( *this );
+
+			for ( auto & bufferIt : m_buffers )
 			{
-				buffer->upload( m_stagingBuffer->getBuffer()
-					, *device.transferQueue
-					, *device.transferCommandPool
-					, 0u
-					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				for ( auto & buffer : bufferIt.second )
+				{
+					buffer->upload( m_stagingBuffer->getBuffer()
+						, *device.transferQueue
+						, *device.transferCommandPool
+						, 0u
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+				}
 			}
 		}
 	}
@@ -51,21 +54,24 @@ namespace castor3d
 	template< typename T >
 	void UniformBufferPool< T >::upload( RenderPassTimer & timer, uint32_t index )const
 	{
-		auto & device = getCurrentRenderDevice( *this );
-
-		for ( auto & bufferIt : m_buffers )
+		if ( m_stagingBuffer )
 		{
-			for ( auto & buffer : bufferIt.second )
+			auto & device = getCurrentRenderDevice( *this );
+
+			for ( auto & bufferIt : m_buffers )
 			{
-				buffer->upload( m_stagingBuffer->getBuffer()
-					, *device.transferQueue
-					, *device.transferCommandPool
-					, 0u
-					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					, timer
-					, index );
-				timer.notifyPassRender( index );
-				++index;
+				for ( auto & buffer : bufferIt.second )
+				{
+					buffer->upload( m_stagingBuffer->getBuffer()
+						, *device.transferQueue
+						, *device.transferCommandPool
+						, 0u
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
+						, timer
+						, index );
+					timer.notifyPassRender( index );
+					++index;
+				}
 			}
 		}
 	}
