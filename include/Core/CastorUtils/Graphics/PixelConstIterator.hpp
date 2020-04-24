@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_ConstPixelIterator_H___
 #define ___CU_ConstPixelIterator_H___
 
-#include "CastorUtils/Graphics/Pixel.hpp"
+#include "CastorUtils/Graphics/PixelIterator.hpp"
 
 #include <cstddef>
 #include <iterator>
@@ -13,12 +13,16 @@ namespace castor
 {
 	template< PixelFormat PF >
 	struct ConstPixelIterator
-		: public std::iterator< std::random_access_iterator_tag
-			, Pixel< PF >
-			, std::ptrdiff_t
-			, Pixel< PF > const *
-			, Pixel< PF > const & >
 	{
+		template< PixelFormat PF >
+		friend struct PixelIterator;
+
+		using iterator_category = typename std::random_access_iterator_tag;
+		using value_type = Pixel< PF >;
+		using difference_type = std::ptrdiff_t;
+		using pointer = Pixel< PF > const *;
+		using reference = Pixel< PF > const &;
+
 		using pixel_type = Pixel< PF >;
 		using array_type = PxBufferBase::px_array;
 		using internal_type = array_type::const_iterator;
@@ -123,6 +127,27 @@ namespace castor
 		{
 			return !( *this == it );
 		}
+
+		static inline difference_type diffIt( ConstPixelIterator const & lhs
+			, ConstPixelIterator const & rhs )
+		{
+			assert( lhs.m_end == rhs.m_end );
+			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
+		}
+
+		static inline difference_type diffIt( ConstPixelIterator const & lhs
+			, PixelIterator< PF > const & rhs )
+		{
+			assert( lhs.m_end == rhs.m_end );
+			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
+		}
+
+		static inline difference_type diffIt( PixelIterator< PF > const & lhs
+			, ConstPixelIterator const & rhs )
+		{
+			assert( lhs.m_end == rhs.m_end );
+			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
+		}
 		
 	private:
 		void doLink()
@@ -141,7 +166,8 @@ namespace castor
 	};
 
 	template< PixelFormat PF >
-	inline ConstPixelIterator< PF > operator+( ConstPixelIterator< PF > it, size_t offset )
+	inline ConstPixelIterator< PF > operator+( ConstPixelIterator< PF > const & it
+		, size_t offset )
 	{
 		ConstPixelIterator< PF > result{ it };
 		result += offset;
@@ -149,11 +175,33 @@ namespace castor
 	}
 
 	template< PixelFormat PF >
-	inline ConstPixelIterator< PF > operator-( ConstPixelIterator< PF > it, size_t offset )
+	inline ConstPixelIterator< PF > operator-( ConstPixelIterator< PF > const & it
+		, size_t offset )
 	{
 		ConstPixelIterator< PF > result{ it };
 		result -= offset;
 		return result;
+	}
+
+	template< PixelFormat PF >
+	inline typename ConstPixelIterator< PF >::difference_type operator-( ConstPixelIterator< PF > const & lhs
+		, ConstPixelIterator< PF > const & rhs )
+	{
+		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
+	}
+
+	template< PixelFormat PF >
+	inline typename ConstPixelIterator< PF >::difference_type operator-( PixelIterator< PF > const & lhs
+		, ConstPixelIterator< PF > const & rhs )
+	{
+		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
+	}
+
+	template< PixelFormat PF >
+	inline typename ConstPixelIterator< PF >::difference_type operator-( ConstPixelIterator< PF > const & lhs
+		, PixelIterator< PF > const & rhs )
+	{
+		return ConstPixelIterator< PF >::diffIt( lhs, rhs );
 	}
 }
 

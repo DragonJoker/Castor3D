@@ -13,12 +13,16 @@ namespace castor
 {
 	template< PixelFormat PF >
 	struct PixelIterator
-		: public std::iterator< std::random_access_iterator_tag
-			, Pixel< PF >
-			, std::ptrdiff_t
-			, Pixel< PF > *
-			, Pixel< PF > & >
 	{
+		template< PixelFormat PF >
+		friend struct ConstPixelIterator;
+
+		using iterator_category = typename std::random_access_iterator_tag;
+		using value_type = Pixel< PF >;
+		using difference_type = std::ptrdiff_t;
+		using pointer = Pixel< PF > *;
+		using reference = Pixel< PF > &;
+
 		using pixel_type = Pixel< PF >;
 		using array_type = PxBufferBase::px_array;
 		using internal_type = array_type::iterator;
@@ -131,6 +135,13 @@ namespace castor
 			return !( *this == it );
 		}
 
+		static inline difference_type diffIt( PixelIterator const & lhs
+			, PixelIterator const & rhs )
+		{
+			assert( lhs.m_end == rhs.m_end );
+			return difference_type( ( lhs.m_current - rhs.m_current ) / size );
+		}
+
 	private:
 		void doLink()
 		{
@@ -148,7 +159,8 @@ namespace castor
 	};
 
 	template< PixelFormat PF >
-	inline PixelIterator< PF > operator+( PixelIterator< PF > it, size_t offset )
+	inline PixelIterator< PF > operator+( PixelIterator< PF > it
+		, size_t offset )
 	{
 		PixelIterator< PF > result{ it };
 		result += offset;
@@ -156,11 +168,19 @@ namespace castor
 	}
 
 	template< PixelFormat PF >
-	inline PixelIterator< PF > operator-( PixelIterator< PF > it, size_t offset )
+	inline PixelIterator< PF > operator-( PixelIterator< PF > it
+		, size_t offset )
 	{
 		PixelIterator< PF > result{ it };
 		result -= offset;
 		return result;
+	}
+
+	template< PixelFormat PF >
+	inline typename PixelIterator< PF >::difference_type operator-( PixelIterator< PF > const & lhs
+		, PixelIterator< PF > const & rhs )
+	{
+		return PixelIterator< PF >::diffIt( lhs, rhs );
 	}
 }
 

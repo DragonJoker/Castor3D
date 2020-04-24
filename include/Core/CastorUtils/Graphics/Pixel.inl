@@ -263,54 +263,6 @@ namespace castor
 	}
 
 	template< PixelFormat FT >
-	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator+=( U const & p_t )
-	{
-		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
-		{
-			m_components.get()[i] = T( U( m_components.get()[i] ) + p_t );
-		}
-
-		return *this;
-	}
-
-	template< PixelFormat FT >
-	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator-=( U const & p_t )
-	{
-		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
-		{
-			m_components.get()[i] = T( U( m_components.get()[i] ) - p_t );
-		}
-
-		return *this;
-	}
-
-	template< PixelFormat FT >
-	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator/=( U const & p_t )
-	{
-		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
-		{
-			m_components.get()[i] = ( p_t == 0 ? m_components.get()[i] : T( U( m_components.get()[i] ) + p_t ) );
-		}
-
-		return *this;
-	}
-
-	template< PixelFormat FT >
-	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator*=( U const & p_t )
-	{
-		for ( uint8_t i = 0; i < PixelDefinitions< FT >::Size; i++ )
-		{
-			m_components.get()[i] = T( U( m_components.get()[i] ) * p_t );
-		}
-
-		return *this;
-	}
-
-	template< PixelFormat FT >
 	void Pixel< FT >::clear()
 	{
 		m_components.reset();
@@ -344,15 +296,6 @@ namespace castor
 	{
 		Pixel< FU > pxReturn( *this );
 		pxReturn *= p_px;
-		return pxReturn;
-	}
-
-	template< PixelFormat FT >
-	template< PixelFormat FU >
-	Pixel< FU > Pixel< FT >::mul( uint8_t const & p_val )const
-	{
-		Pixel< FU > pxReturn( *this );
-		pxReturn *= p_val;
 		return pxReturn;
 	}
 
@@ -397,27 +340,11 @@ namespace castor
 		return pxReturn;
 	}
 
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator+( Pixel< FT > const & p_pixel, U const & p_t )
-	{
-		Pixel< FT > pxReturn( p_pixel );
-		pxReturn += p_t;
-		return pxReturn;
-	}
-
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator-( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > pxReturn( p_pixel );
 		pxReturn -= p_px;
-		return pxReturn;
-	}
-
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator-( Pixel< FT > const & p_pixel, U const & p_t )
-	{
-		Pixel< FT > pxReturn( p_pixel );
-		pxReturn -= p_t;
 		return pxReturn;
 	}
 
@@ -429,27 +356,11 @@ namespace castor
 		return pxReturn;
 	}
 
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator/( Pixel< FT > const & p_pixel, U const & p_t )
-	{
-		Pixel< FT > pxReturn( p_pixel );
-		pxReturn /= p_t;
-		return pxReturn;
-	}
-
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator*( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > pxReturn( p_pixel );
 		pxReturn *= p_px;
-		return pxReturn;
-	}
-
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator*( Pixel< FT > const & p_pixel, U const & p_t )
-	{
-		Pixel< FT > pxReturn( p_pixel );
-		pxReturn *= p_t;
 		return pxReturn;
 	}
 }

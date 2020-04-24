@@ -163,18 +163,6 @@ namespace castor
 		Pixel< FU > mul( Pixel< FU > const & px )const;
 		/**
 		 *\~english
-		 *\brief		Multiplication function
-		 *\param[in]	byVal	The value
-		 *\return		The multiplication result
-		 *\~french
-		 *\brief		Fonction de multiplication
-		 *\param[in]	byVal	The value
-		 *\return		Le résultat de la multiplication
-		 */
-		template< PixelFormat FU >
-		Pixel< FU > mul( uint8_t const & byVal )const;
-		/**
-		 *\~english
 		 *\brief		deallocate components
 		 *\~french
 		 *\brief		Désalloue les composantes de ce pixel
@@ -370,14 +358,6 @@ namespace castor
 		Pixel & operator*=( Pixel< FU > const & px );
 		template< PixelFormat FU >
 		Pixel & operator/=( Pixel< FU > const & px );
-		template< typename U >
-		Pixel & operator+=( U const & t );
-		template< typename U >
-		Pixel & operator-=( U const & t );
-		template< typename U >
-		Pixel & operator*=( U const & t );
-		template< typename U >
-		Pixel & operator/=( U const & t );
 		/**@}*/
 
 	private:
@@ -410,14 +390,6 @@ namespace castor
 	Pixel< FT > operator/( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
 	template < PixelFormat FT, PixelFormat FU >
 	Pixel< FT > operator*( Pixel< FT > const & lhs, Pixel< FU > const & rhs );
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator+( Pixel< FT > const & lhs, U const & rhs );
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator-( Pixel< FT > const & lhs, U const & rhs );
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator/( Pixel< FT > const & lhs, U const & rhs );
-	template < PixelFormat FT, typename U >
-	Pixel< FT > operator*( Pixel< FT > const & lhs, U const & rhs );
 	/**@}*/
 	/**
 	\author 	Sylvain DOREMUS
