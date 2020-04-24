@@ -30,6 +30,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/SmartPtr.hpp"
 #include "CastorUtils/Log/ELogType.hpp"
+#include "CastorUtils/Noise/NoiseModule.hpp"
 
 namespace castor
 {
