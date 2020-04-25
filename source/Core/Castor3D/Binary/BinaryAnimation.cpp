@@ -71,7 +71,7 @@ namespace castor3d
 			case ChunkType::eAnimLength:
 				result = doParseChunk( length, chunk );
 				checkError( result, "Couldn't parse length." );
-				obj.m_length = Milliseconds( uint64_t( length * 1000 ) );
+				obj.m_length = Milliseconds( uint64_t( length ) * 1000u );
 				break;
 
 			case ChunkType::eSkeletonAnimation:

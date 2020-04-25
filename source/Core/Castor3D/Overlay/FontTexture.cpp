@@ -90,7 +90,7 @@ namespace castor3d
 
 					for ( uint32_t i = 0; i < size.getHeight(); ++i )
 					{
-						CU_Ensure( dstLineIndex + size.getWidth() <= bufsize );
+						CU_Ensure( size_t( dstLineIndex ) + size.getWidth() <= bufsize );
 						std::memcpy( dstLineBuffer, &buffer[i * size.getWidth()], size.getWidth() );
 						dstLineBuffer += uiTotalWidth;
 					}

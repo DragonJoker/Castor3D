@@ -159,6 +159,11 @@ namespace castor3d
 			return *m_depthBuffer;
 		}
 
+		inline TextureLayoutSPtr getDepthPtr()const
+		{
+			return m_depthBuffer;
+		}
+
 		inline MatrixUbo const & getMatrixUbo()const
 		{
 			return m_matrixUbo;

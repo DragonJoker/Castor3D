@@ -97,7 +97,7 @@ namespace castor3d
 
 			ashes::StagingBuffer stagingBuffer{ *device.device
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, 6u * result->getAlignedSize() };
+				, 6ull * result->getAlignedSize() };
 			stagingBuffer.uploadUniformData( queue
 				, pool
 				, result->getDatas()

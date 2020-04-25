@@ -15,8 +15,8 @@ namespace castor3d
 	{
 	public:
 		C3D_API explicit RenderPassTimerBlock( RenderPassTimer & timer );
-		C3D_API RenderPassTimerBlock( RenderPassTimerBlock && rhs );
-		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock && rhs );
+		C3D_API RenderPassTimerBlock( RenderPassTimerBlock && rhs )noexcept;
+		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock && rhs )noexcept;
 		C3D_API RenderPassTimerBlock( RenderPassTimerBlock const & ) = delete;
 		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock const & ) = delete;
 		C3D_API ~RenderPassTimerBlock();

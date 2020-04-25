@@ -48,7 +48,7 @@ namespace Testing
 		using clock = std::chrono::high_resolution_clock;
 		clock::time_point m_saved;
 		std::string m_name;
-		std::chrono::nanoseconds m_cumulativeTimes;
+		std::chrono::nanoseconds m_cumulativeTimes{};
 		uint64_t m_totalExecutions;
 		std::string m_summary;
 	};

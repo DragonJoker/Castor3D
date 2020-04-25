@@ -134,7 +134,7 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
-		VkFormat m_depthFormat;
+		VkFormat m_depthFormat{};
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
 	};

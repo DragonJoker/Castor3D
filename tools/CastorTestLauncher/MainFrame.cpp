@@ -94,7 +94,7 @@ namespace test_launcher
 					if ( flip )
 					{
 						uint32_t pitch = width * 4;
-						uint8_t const * buffer = input + ( height - 1 ) * pitch;
+						uint8_t const * buffer = input + ( height - 1ull ) * pitch;
 
 						for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
 						{

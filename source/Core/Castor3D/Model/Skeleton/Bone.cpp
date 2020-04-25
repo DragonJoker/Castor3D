@@ -39,8 +39,8 @@ namespace castor3d
 	BoundingBox Bone::computeBoundingBox( Mesh const & mesh
 		, uint32_t boneIndex )const
 	{
-		auto rmax = std::numeric_limits< float >::max();
-		auto rmin = std::numeric_limits< float >::lowest();
+		auto constexpr rmax = std::numeric_limits< float >::max();
+		auto constexpr rmin = std::numeric_limits< float >::lowest();
 		castor::Point3f min{ rmax, rmax, rmax };
 		castor::Point3f max{ rmin, rmin, rmin };
 

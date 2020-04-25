@@ -19,7 +19,7 @@ namespace diamond_square_terrain
 				: m_size{ p_size }
 				, m_max{ m_size - 1 }
 			{
-				m_map.resize( m_size * m_size );
+				m_map.resize( size_t( m_size ) * m_size );
 			}
 
 			inline uint32_t getIndex( uint32_t x, uint32_t y, uint32_t size )const

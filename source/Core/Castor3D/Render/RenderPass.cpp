@@ -883,7 +883,7 @@ namespace castor3d
 		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
-		uint32_t const stride = mtxSize * 400u;
+		VkDeviceSize const stride = mtxSize * 400u;
 		auto const count = std::min( uint32_t( bonesBuffer.getSize() / stride ), uint32_t( renderNodes.size() ) );
 		CU_Require( count <= renderNodes.size() );
 		auto buffer = bonesBuffer.getPtr();

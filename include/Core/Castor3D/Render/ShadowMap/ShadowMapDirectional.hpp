@@ -109,7 +109,7 @@ namespace castor3d
 		CameraSPtr m_camera;
 		ashes::ImagePtr m_depthTexture;
 		std::vector< FrameBuffer > m_frameBuffers;
-		ShadowType m_shadowType;
+		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;
 	};
 }

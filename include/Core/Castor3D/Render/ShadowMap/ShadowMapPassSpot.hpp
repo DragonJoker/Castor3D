@@ -105,7 +105,7 @@ namespace castor3d
 		C3D_API static uint32_t const TextureSize;
 
 	private:
-		ShadowType m_shadowType;
+		ShadowType m_shadowType{ ShadowType::eRaw };
 		castor::Matrix4x4f m_view;
 	};
 }

@@ -447,9 +447,9 @@ namespace castor3d
 
 	private:
 		static uint32_t s_nbRenderWindows;
-		uint32_t m_index;
+		uint32_t m_index{};
 		RenderDeviceSPtr m_device;
-		ashes::Surface const * m_surface;
+		ashes::Surface const * m_surface{};
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
 		ashes::CommandPoolPtr m_commandPool;

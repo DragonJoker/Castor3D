@@ -325,7 +325,7 @@ namespace castor3d
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		CU_Require( size >= m_elemCount * m_elemSize
+		CU_Require( size >= size_t( m_elemCount ) * m_elemSize
 			&& "Need a large enough buffer" );
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
 		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );

@@ -107,7 +107,7 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::initialise()
 	{
-		m_lightsBuffer.resize( 300u * shader::getMaxLightComponentsCount() );
+		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
 		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{

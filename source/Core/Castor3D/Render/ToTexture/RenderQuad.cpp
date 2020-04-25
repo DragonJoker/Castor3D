@@ -85,7 +85,7 @@ namespace castor3d
 	{
 	}
 
-	RenderQuad::RenderQuad( RenderQuad && rhs )
+	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
 		: m_renderSystem{ rhs.m_renderSystem }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }

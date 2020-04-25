@@ -140,7 +140,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1, 0 );
+				std::vector< char > buffer( size + 1ull, 0 );
 				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
 					, chunk );
@@ -188,7 +188,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				std::vector< char > buffer( size + 1, 0 );
+				std::vector< char > buffer( size + 1ull, 0 );
 				result = ChunkParserBase::parse( reinterpret_cast< uint8_t * >( buffer.data() )
 					, size
 					, chunk );

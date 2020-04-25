@@ -138,10 +138,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		VkFormat m_format;
+		VkFormat m_format{};
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		VkExtent3D m_size;
+		VkExtent3D m_size{};
 	};
 }
 

@@ -324,7 +324,7 @@ namespace fireworks
 		doPackParticles( m_particles, m_firstUnused );
 		auto & device = getCurrentRenderDevice( *m_parent.getParent()->getScene() );
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
-		auto stride = m_inputs.stride();
+		VkDeviceSize stride = m_inputs.stride();
 		auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_firstUnused * stride )
 			, device.properties.limits.nonCoherentAtomSize );
 

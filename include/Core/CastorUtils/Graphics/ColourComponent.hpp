@@ -249,7 +249,7 @@ namespace castor
 		 */
 		inline int8_t & convertTo( int8_t & v )const
 		{
-			return v = int8_t( value() * 255.0f );
+			return v = int8_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -259,7 +259,7 @@ namespace castor
 		 */
 		inline uint8_t & convertTo( uint8_t & v )const
 		{
-			return v = uint8_t( value() * 255.0f );
+			return v = uint8_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -269,7 +269,7 @@ namespace castor
 		 */
 		inline int16_t & convertTo( int16_t & v )const
 		{
-			return v = int16_t( value() * 255.0f );
+			return v = int16_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -279,7 +279,7 @@ namespace castor
 		 */
 		inline uint16_t & convertTo( uint16_t & v )const
 		{
-			return v = uint16_t( value() * 255.0f );
+			return v = uint16_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -289,7 +289,7 @@ namespace castor
 		 */
 		inline int32_t & convertTo( int32_t & v )const
 		{
-			return v = int32_t( value() * 255.0f );
+			return v = int32_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -299,7 +299,7 @@ namespace castor
 		 */
 		inline uint32_t & convertTo( uint32_t & v )const
 		{
-			return v = uint32_t( value() * 255.0f );
+			return v = uint32_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -309,7 +309,7 @@ namespace castor
 		 */
 		inline int64_t & convertTo( int64_t & v )const
 		{
-			return v = int64_t( value() * 255.0f );
+			return v = int64_t( value() * 255.0 );
 		}
 		/**
 		 *\~english
@@ -319,7 +319,7 @@ namespace castor
 		 */
 		inline uint64_t & convertTo( uint64_t & v )const
 		{
-			return v = uint64_t( value() * 255.0f );
+			return v = uint64_t( value() * 255.0 );
 		}
 		/**
 		 *\~english

@@ -17,8 +17,8 @@ namespace smaa
 	struct ParserContext
 	{
 		castor3d::Engine * engine{ nullptr };
-		Preset preset;
-		SmaaConfig::Data data;
+		Preset preset{};
+		SmaaConfig::Data data{};
 	};
 
 	ParserContext & getParserContext( castor::FileParserContextSPtr context )

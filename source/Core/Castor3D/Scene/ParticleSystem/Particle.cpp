@@ -35,7 +35,7 @@ namespace castor3d
 	{
 	}
 
-	Particle::Particle( Particle && rhs )
+	Particle::Particle( Particle && rhs )noexcept
 		: m_description{ rhs.m_description }
 		, m_data{ std::move( rhs.m_data ) }
 	{
@@ -47,7 +47,7 @@ namespace castor3d
 		return *this;
 	}
 
-	Particle & Particle::operator=( Particle && rhs )
+	Particle & Particle::operator=( Particle && rhs )noexcept
 	{
 		m_data = std::move( rhs.m_data );
 		return *this;

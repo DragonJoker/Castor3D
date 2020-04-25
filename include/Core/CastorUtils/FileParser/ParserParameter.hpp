@@ -97,7 +97,7 @@ namespace castor
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		//!\~english	The parameter value.
 		//!\~french		La valeur du paramètre.
-		ValueType m_value;
+		ValueType m_value{};
 	};
 	/**
 	\author 	Sylvain DOREMUS
@@ -171,7 +171,7 @@ namespace castor
 	public:
 		//!\~english	The parameter value.
 		//!\~french		La valeur du paramètre.
-		ValueType m_value;
+		ValueType m_value{};
 		//!\~english	The parameter value range.
 		//!\~french		L'intervalle de la valeur du paramètre.
 		Range< ValueType > m_range;

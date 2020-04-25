@@ -99,6 +99,7 @@ extern "C"
 
 	C3D_LinearMotionBlur_API void OnUnload( castor3d::Engine * engine )
 	{
+		engine->unregisterSections( motion_blur::PostEffect::Type );
 		engine->unregisterParsers( motion_blur::PostEffect::Type );
 		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( motion_blur::PostEffect::Type );
 	}

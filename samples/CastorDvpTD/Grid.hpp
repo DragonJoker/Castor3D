@@ -75,12 +75,12 @@ namespace castortd
 
 		inline auto & operator()( uint32_t x, uint32_t y )const
 		{
-			return m_cells[x * m_height + y];
+			return m_cells[size_t( x ) * m_height + y];
 		}
 
 		inline auto & operator()( uint32_t x, uint32_t y )
 		{
-			return m_cells[x * m_height + y];
+			return m_cells[size_t( x ) * m_height + y];
 		}
 
 	private:

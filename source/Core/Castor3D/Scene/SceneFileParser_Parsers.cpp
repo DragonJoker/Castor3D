@@ -2332,7 +2332,7 @@ namespace castor3d
 					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->mesh->getAnimation( animName ) ) };
 					uint32_t index = 0u;
 					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-						, Milliseconds{ int64_t( timeIndex * 1000 ) } );
+						, Milliseconds{ int64_t( timeIndex * 1000ll ) } );
 
 					for ( auto & submesh : mesh )
 					{

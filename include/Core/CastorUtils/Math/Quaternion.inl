@@ -117,7 +117,7 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( QuaternionT< T > && p_q )
+	QuaternionT< T >::QuaternionT( QuaternionT< T > && p_q )noexcept
 		: QuaternionT( NoInit() )
 	{
 		std::memmove( buffer, p_q.buffer, sizeof( buffer ) );
@@ -160,7 +160,7 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > && p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > && p_rhs )noexcept
 	{
 		if ( this != &p_rhs )
 		{
@@ -323,7 +323,7 @@ namespace castor
 		Point3d u( quat.x, quat.y, quat.z );
 		Point3d uv( castor::point::cross( u, p_vector ) );
 		Point3d uuv( castor::point::cross( u, uv ) );
-		uv *= 2 * quat.w;
+		uv *= 2.0 * quat.w;
 		uuv *= 2;
 		p_result = p_vector + uv + uuv;
 		return p_result;

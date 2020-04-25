@@ -28,7 +28,7 @@ namespace castor3d
 			doGenerateVertexBuffer();
 			auto & device = getCurrentRenderDevice( *getOwner() );
 			m_indexBuffer = makeBuffer< uint32_t >( device
-				, m_indexMapping->getCount() * m_indexMapping->getComponentsCount()
+				, VkDeviceSize( m_indexMapping->getCount() ) * m_indexMapping->getComponentsCount()
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, m_parentMesh.getName() + "Submesh" + castor::string::toString( m_id ) + "IndexBuffer" );

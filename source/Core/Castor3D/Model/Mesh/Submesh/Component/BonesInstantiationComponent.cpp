@@ -69,13 +69,13 @@ namespace castor3d
 		if ( m_instancedBonesBuffer )
 		{
 			auto count = m_instantiation.getMaxRefCount();
-			auto stride = uint32_t( sizeof( float ) * 16u * 400u );
+			auto stride = VkDeviceSize( sizeof( float ) * 16u * 400u );
 
 			if ( count > m_instantiation.getThreshold()
 				&& ( !m_instancedBonesBuffer || m_instancedBonesBuffer->getSize() < count * stride ) )
 			{
 				m_instancedBonesBuffer = std::make_unique< ShaderBuffer >( *getOwner()->getOwner()->getScene()->getEngine()
-					, count * stride
+					, uint32_t( count * stride )
 					, cuT( "InstancedBonesBuffer" ) );
 			}
 			else if ( count <= m_instantiation.getThreshold() )

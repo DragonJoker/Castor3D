@@ -551,7 +551,7 @@ namespace castor3d
 		castor::String m_strBorderMatName;
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
-		BorderPosition m_borderPosition;
+		BorderPosition m_borderPosition{ BorderPosition::eInternal };
 		//!\~english	The vertex buffer data.
 		//!\~french		Les données du tampon de sommets.
 		VertexArray m_arrayVtx;

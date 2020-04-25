@@ -14,7 +14,7 @@ namespace castor3d
 	{
 	}
 
-	VertexBoneData::VertexBoneData( VertexBoneData && rhs )
+	VertexBoneData::VertexBoneData( VertexBoneData && rhs )noexcept
 		: m_ids{ std::move( rhs.m_ids ) }
 		, m_weights{ std::move( rhs.m_weights ) }
 	{
@@ -31,7 +31,7 @@ namespace castor3d
 		return *this;
 	}
 
-	VertexBoneData & VertexBoneData::operator=( VertexBoneData && rhs )
+	VertexBoneData & VertexBoneData::operator=( VertexBoneData && rhs )noexcept
 	{
 		if ( this != &rhs )
 		{

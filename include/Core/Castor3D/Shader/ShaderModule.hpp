@@ -31,8 +31,8 @@ namespace castor3d
 		ShaderModule( ShaderModule const & ) = delete;
 		ShaderModule & operator=( ShaderModule const & ) = delete;
 
-		C3D_API ShaderModule( ShaderModule && rhs );
-		C3D_API ShaderModule & operator=( ShaderModule && rhs );
+		C3D_API ShaderModule( ShaderModule && rhs )noexcept;
+		C3D_API ShaderModule & operator=( ShaderModule && rhs )noexcept;
 
 		C3D_API ShaderModule( VkShaderStageFlagBits stage
 			, std::string const & name );

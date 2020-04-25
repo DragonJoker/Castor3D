@@ -135,7 +135,7 @@ namespace castor3d
 				, TextureUnit const & destination
 				, bool isVertic
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
-			Blur( Blur && rhs );
+			Blur( Blur && rhs )noexcept;
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:
@@ -164,7 +164,7 @@ namespace castor3d
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination
 				, ashes::PipelineShaderStageCreateInfoArray const & shaderStages );
-			Combine( Combine && rhs );
+			Combine( Combine && rhs )noexcept;
 			void prepareFrame( ashes::CommandBuffer & commandBuffer )const;
 
 		private:

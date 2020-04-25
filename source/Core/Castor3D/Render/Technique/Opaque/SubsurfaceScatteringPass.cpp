@@ -505,7 +505,7 @@ namespace castor3d
 			, {} );
 	}
 
-	SubsurfaceScatteringPass::Blur::Blur( Blur && rhs )
+	SubsurfaceScatteringPass::Blur::Blur( Blur && rhs )noexcept
 		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
@@ -612,7 +612,7 @@ namespace castor3d
 			, {} );
 	}
 
-	SubsurfaceScatteringPass::Combine::Combine( Combine && rhs )
+	SubsurfaceScatteringPass::Combine::Combine( Combine && rhs )noexcept
 		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_blurUbo{ rhs.m_blurUbo }

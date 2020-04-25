@@ -577,7 +577,7 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfo const * m_pUsedVertexLayout{ nullptr };
 		RenderPassTimer * m_timer{ nullptr };
 		UniformBufferBase const * m_baseUbo{ nullptr };
-		bool m_shadows;
+		bool m_shadows{};
 		MatrixUbo m_matrixUbo;
 		RenderPass m_firstRenderPass;
 		RenderPass m_blendRenderPass;
@@ -593,7 +593,7 @@ namespace castor3d
 		uint32_t m_offset{ 0u };
 		ashes::SemaphorePtr m_signalReady;
 		ashes::FencePtr m_fence;
-		GeometryPassResult const * m_geometryPassResult;
+		GeometryPassResult const * m_geometryPassResult{};
 	};
 }
 

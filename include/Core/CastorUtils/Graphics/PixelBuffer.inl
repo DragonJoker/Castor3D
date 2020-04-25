@@ -117,14 +117,14 @@ namespace castor
 	typename PxBufferBase::pixel_data PxBuffer< FT >::getAt( uint32_t x, uint32_t y )
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
-		return m_buffer.begin() + ( doConvert( x, y ) * PixelDefinitions< FT >::Size );
+		return m_buffer.begin() + ( size_t( doConvert( x, y ) ) * PixelDefinitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
 	typename PxBufferBase::const_pixel_data PxBuffer< FT >::getAt( uint32_t x, uint32_t y )const
 	{
 		CU_Require( x < getWidth() && y < getHeight() );
-		return m_buffer.begin() + ( doConvert( x, y ) * PixelDefinitions< FT >::Size );
+		return m_buffer.begin() + ( size_t( doConvert( x, y ) ) * PixelDefinitions< FT >::Size );
 	}
 
 	template< PixelFormat FT >
@@ -144,7 +144,7 @@ namespace castor
 	template< PixelFormat FT >
 	void PxBuffer< FT >::mirror()
 	{
-		uint32_t mwidth = getWidth() * PixelDefinitions< FT >::Size;
+		uint64_t mwidth = getWidth() * PixelDefinitions< FT >::Size;
 		uint32_t mheight = getHeight();
 
 		for ( uint32_t i = 0; i < mheight; i++ )
@@ -152,7 +152,7 @@ namespace castor
 			uint8_t * pxA = &m_buffer[i * mwidth];
 			uint8_t * rhs = &m_buffer[( i + 1 ) * mwidth - 1];
 
-			for ( uint32_t j = 0; j < mwidth / 2; j += PixelDefinitions< FT >::Size )
+			for ( uint64_t j = 0; j < mwidth / 2; j += PixelDefinitions< FT >::Size )
 			{
 				for ( uint32_t k = 0; k < PixelDefinitions< FT >::Size; k++ )
 				{
@@ -176,7 +176,7 @@ namespace castor
 	{
 		if ( col < getWidth() )
 		{
-			uint8_t const * buffer = &m_buffer[col * getWidth() * PixelDefinitions< FT >::Size];
+			uint8_t const * buffer = &m_buffer[size_t( col ) * getWidth() * PixelDefinitions< FT >::Size];
 			m_column = column( getHeight() );
 
 			for ( uint32_t j = 0; j < getHeight(); j++ )
@@ -193,7 +193,7 @@ namespace castor
 	{
 		if ( col < getWidth() )
 		{
-			uint8_t * buffer = &m_buffer[col * getWidth() * PixelDefinitions< FT >::Size];
+			uint8_t * buffer = &m_buffer[size_t( col ) * getWidth() * PixelDefinitions< FT >::Size];
 			m_column = column( getHeight() );
 
 			for ( uint32_t j = 0; j < getHeight(); j++ )

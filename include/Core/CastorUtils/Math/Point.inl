@@ -142,7 +142,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	Point< T, TCount >::Point( Point< T, TCount > && rhs )
+	Point< T, TCount >::Point( Point< T, TCount > && rhs )noexcept
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -218,7 +218,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t TCount >
-	inline Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > && rhs )
+	inline Point< T, TCount > & Point< T, TCount >::operator=( Point< T, TCount > && rhs )noexcept
 	{
 		if ( this != &rhs )
 		{

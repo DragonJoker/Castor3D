@@ -76,7 +76,7 @@ namespace castor
 		 *\brief			Constructeur par déplacement.
 		 *\param[in,out]	rhs	L'objet à déplacer.
 		 */
-		Connection( Connection< my_signal > && rhs )
+		Connection( Connection< my_signal > && rhs )noexcept
 			: m_connection{ rhs.m_connection }
 			, m_signal{ rhs.m_signal }
 #if !defined( NDEBUG )
@@ -99,7 +99,7 @@ namespace castor
 		 *\brief			Opérateur d'affectation par déplacement.
 		 *\param[in,out]	rhs	L'objet à déplacer.
 		 */
-		Connection & operator=( Connection< my_signal > && rhs )
+		Connection & operator=( Connection< my_signal > && rhs )noexcept
 		{
 			if ( &rhs != this )
 			{

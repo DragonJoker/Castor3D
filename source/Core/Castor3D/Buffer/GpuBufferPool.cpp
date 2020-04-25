@@ -73,7 +73,7 @@ namespace castor3d
 
 			if ( itB == it->second.end() )
 			{
-				uint32_t level = 20u;
+				uint64_t level = 20u;
 				uint64_t maxSize = ( 1u << level ) * 96;
 
 				while ( size > maxSize && level <= 24 )
@@ -87,7 +87,7 @@ namespace castor3d
 
 				std::unique_ptr< GpuBuffer > buffer = std::make_unique< GpuBuffer >();
 				buffer->initialiseStorage( getCurrentRenderDevice( *getRenderSystem() )
-					, level
+					, uint32_t( level )
 					, 96u
 					, target
 					, flags );

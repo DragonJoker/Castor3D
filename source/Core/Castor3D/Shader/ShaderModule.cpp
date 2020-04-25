@@ -57,7 +57,7 @@ namespace castor3d
 
 	//*************************************************************************
 
-	ShaderModule::ShaderModule( ShaderModule && rhs )
+	ShaderModule::ShaderModule( ShaderModule && rhs )noexcept
 		: stage{ rhs.stage }
 		, name{ std::move( rhs.name ) }
 		, source{ std::move( rhs.source ) }
@@ -65,7 +65,7 @@ namespace castor3d
 	{
 	}
 
-	ShaderModule & ShaderModule::operator=( ShaderModule && rhs )
+	ShaderModule & ShaderModule::operator=( ShaderModule && rhs )noexcept
 	{
 		stage = rhs.stage;
 		name = std::move( rhs.name );

@@ -367,7 +367,7 @@ namespace castor3d
 			{
 			}
 
-			DisplayableChar( DisplayableChar && rhs )
+			DisplayableChar( DisplayableChar && rhs )noexcept
 				: m_position{ std::move( rhs.m_position ) }
 				, m_size{ std::move( rhs.m_size ) }
 				, m_glyph{ rhs.m_glyph }
@@ -381,7 +381,7 @@ namespace castor3d
 				return *this;
 			}
 
-			DisplayableChar & operator=( DisplayableChar && rhs )
+			DisplayableChar & operator=( DisplayableChar && rhs )noexcept
 			{
 				if ( &rhs != this )
 				{

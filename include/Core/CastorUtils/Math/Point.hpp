@@ -122,14 +122,14 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *name Construction / Destruction.
+		 *\name Construction / Destruction.
 		 *\~french
-		 *name Construction / Destruction.
+		 *\name Construction / Destruction.
 		 **/
 		/**@{*/
 		Point();
 		Point( Point const & rhs );
-		Point( Point && rhs );
+		Point( Point && rhs )noexcept;
 		explicit Point( T const * rhs );
 		template< typename U, uint32_t UCount >
 		explicit Point( Point< U, UCount > const & rhs );
@@ -146,19 +146,19 @@ namespace castor
 		/**@}*/
 		/**
 		 *\~english
-		 *name Assignment operators.
+		 *\name Assignment operators.
 		 *\~french
-		 *name Opérateurs d'affectation.
+		 *\name Opérateurs d'affectation.
 		 **/
 		/**@{*/
 		Point & operator=( Point const & rhs );
-		Point & operator=( Point && rhs );
+		Point & operator=( Point && rhs )noexcept;
 		/**@}*/
 		/**
 		 *\~english
-		 *name Arithmetic operators.
+		 *\name Arithmetic operators.
 		 *\~french
-		 *name Opérateurs arithmétiques.
+		 *\name Opérateurs arithmétiques.
 		**/
 		/**@{*/
 		template< typename U, uint32_t UCount >
