@@ -597,7 +597,8 @@ namespace castor3d
 						, *this
 						, *getEngine()->getRenderSystem()
 						, m_techniqueParameters
-						, m_ssaoConfig ) );
+						, m_ssaoConfig
+						, m_ssgiConfig ) );
 			}
 			catch ( Exception & p_exc )
 			{

@@ -125,7 +125,8 @@ namespace castor3d
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & parameters
-		, SsaoConfig const & config )
+		, SsaoConfig const & ssaoConfig
+		, SsgiConfig const & ssgiConfig )
 		: OwnedBy< Engine >{ *renderSystem.getEngine() }
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
@@ -135,7 +136,7 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
-			, config ) }
+			, ssaoConfig ) }
 #else
 		, m_opaquePass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "opaque_pass" )
 			, m_matrixUbo
@@ -147,7 +148,7 @@ namespace castor3d
 #if C3D_UseWeightedBlendedRendering
 		, m_transparentPass{ std::make_unique< TransparentPass >( m_matrixUbo
 			, renderTarget.getCuller()
-			, config ) }
+			, ssaoConfig ) }
 #else
 		, m_transparentPass{ std::make_unique< ForwardRenderTechniquePass >( cuT( "transparent_pass" )
 			, m_matrixUbo
@@ -158,7 +159,8 @@ namespace castor3d
 			, config ) }
 #endif
 		, m_initialised{ false }
-		, m_ssaoConfig{ config }
+		, m_ssaoConfig{ ssaoConfig }
+		, m_ssgiConfig{ ssgiConfig }
 	{
 		doCreateShadowMaps();
 	}
@@ -579,7 +581,8 @@ namespace castor3d
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo
-			, m_ssaoConfig );
+			, m_ssaoConfig
+			, m_ssgiConfig );
 
 #else
 

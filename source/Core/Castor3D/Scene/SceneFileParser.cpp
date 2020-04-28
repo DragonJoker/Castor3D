@@ -684,7 +684,12 @@ namespace castor3d
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_high_quality" ), parserSsaoBlurHighQuality, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_step_size" ), parserSsaoBlurStepSize, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "blur_radius" ), parserSsaoBlurRadius, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( uint32_t( CSCNSection::eSsao ), cuT( "ssgi" ), parserSsgiBegin );
 		addParser( uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
+
+		addParser( uint32_t( CSCNSection::eSsgi ), cuT( "enabled" ), parserSsgiEnabled, { makeParameter< ParameterType::eBool >() } );
+		addParser( uint32_t( CSCNSection::eSsgi ), cuT( "blurSize" ), parserSsgiBlurSize, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( uint32_t( CSCNSection::eSsgi ), cuT( "}" ), parserSsgiEnd );
 
 		addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "strength" ), parserSubsurfaceScatteringStrength, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "gaussian_width" ), parserSubsurfaceScatteringGaussianWidth, { makeParameter< ParameterType::eFloat >() } );
@@ -859,6 +864,10 @@ namespace castor3d
 
 		case CSCNSection::eParticle:
 			result = cuT( "particle" );
+			break;
+
+		case CSCNSection::eSsgi:
+			result = cuT( "ssgi" );
 			break;
 
 		default:

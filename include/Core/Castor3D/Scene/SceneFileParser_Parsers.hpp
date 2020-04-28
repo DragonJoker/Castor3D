@@ -337,6 +337,12 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSsaoBlurRadius )
 	CU_DeclareAttributeParser( parserSsaoEnd )
 
+	// SSGI parsers
+	CU_DeclareAttributeParser( parserSsgiBegin )
+	CU_DeclareAttributeParser( parserSsgiEnabled )
+	CU_DeclareAttributeParser( parserSsgiBlurSize )
+	CU_DeclareAttributeParser( parserSsgiEnd )
+
 	// Subsurface Scattering parsers
 	CU_DeclareAttributeParser( parserSubsurfaceScatteringStrength )
 	CU_DeclareAttributeParser( parserSubsurfaceScatteringGaussianWidth )

@@ -16,6 +16,7 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiModule.hpp"
 
 namespace castor3d
 {
@@ -224,7 +225,8 @@ namespace castor3d
 			, castor::String const &
 			, RenderTarget &
 			, Parameters const &
-			, SsaoConfig const & ) >;
+			, SsaoConfig const &
+			, SsgiConfig const & ) >;
 		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
 			, castor::Collection< RenderTechnique, KeyType > &
 			, std::shared_ptr< RenderTechnique > ) >;

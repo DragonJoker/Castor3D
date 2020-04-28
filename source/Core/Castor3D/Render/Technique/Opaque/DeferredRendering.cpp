@@ -12,6 +12,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -47,6 +48,32 @@ namespace castor3d
 
 			return result;
 		}
+
+		TextureLayoutSPtr createTexture( Engine & engine
+			, String const & name
+			, TextureLayout const & source )
+		{
+			auto & renderSystem = *engine.getRenderSystem();
+			ashes::ImageCreateInfo image
+			{
+				0u,
+				source.getType(),
+				source.getPixelFormat(),
+				source.getDimensions(),
+				source.getMipmapCount(),
+				source.getLayersCount(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+			};
+			auto texture = std::make_shared< TextureLayout >( renderSystem
+				, std::move( image )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, name );
+			texture->getDefaultImage().initialiseSource();
+			texture->initialise();
+			return texture;
+		}
 	}
 
 	//*********************************************************************************************
@@ -59,9 +86,11 @@ namespace castor3d
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo & hdrConfigUbo
-		, SsaoConfig & config )
+		, SsaoConfig & ssaoConfig
+		, SsgiConfig & ssgiConfig )
 		: m_engine{ engine }
-		, m_ssaoConfig{ config }
+		, m_ssaoConfig{ ssaoConfig }
+		, m_ssgiConfig{ ssgiConfig }
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
 		, m_gpInfoUbo{ m_engine }
@@ -88,7 +117,16 @@ namespace castor3d
 			, m_size
 			, m_geometryPassResult
 			, m_lightingPass->getDiffuse() ) }
+		, m_resolveResult{ createTexture( engine, cuT( "DeferredResolveResult" ), *resultTexture ) }
+		, m_ssgi{ std::make_unique< SsgiPass >( m_engine
+			, makeExtent2D( m_size )
+			, m_ssaoConfig
+			, m_ssgiConfig
+			, *m_linearisePass->getResult().getTexture()
+			, *m_resolveResult
+			, resultTexture ) }
 	{
+		// SSGI Off
 		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
 			, scene
 			, m_geometryPassResult
@@ -109,12 +147,34 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo
 			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+		// SSGI On
+		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+			, scene
+			, m_geometryPassResult
+			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
+			, m_resolveResult->getDefaultView()
+			, m_opaquePass.getSceneUbo()
+			, m_gpInfoUbo
+			, hdrConfigUbo
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+			, scene
+			, m_geometryPassResult
+			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
+			, m_resolveResult->getDefaultView()
+			, m_opaquePass.getSceneUbo()
+			, m_gpInfoUbo
+			, hdrConfigUbo
+			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
+		m_opaquePass.initialiseRenderPass( m_geometryPassResult );
 	}
 
 	DeferredRendering::~DeferredRendering()
 	{
 		m_results.clear();
-		m_reflection.clear();
+		m_resolve.clear();
 		m_subsurfaceScattering.reset();
 		m_lightingPass.reset();
 	}
@@ -134,6 +194,8 @@ namespace castor3d
 			, invProj );
 		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_opaquePass.update( info, jitter );
+
+		if ( m_ssaoConfig.enabled
 			|| m_ssgiConfig.enabled )
 		{
 			m_linearisePass->update( camera.getViewport() );
@@ -146,13 +208,13 @@ namespace castor3d
 			m_ssao->update( camera );
 		}
 
-		if ( scene.needsSubsurfaceScattering() )
+		auto index = 2u * ( m_ssgiConfig.enabled ? 1u : 0u )
+			+ ( scene.needsSubsurfaceScattering() ? 1u : 0u );
+		m_resolve[index]->update( camera );
+
+		if ( m_ssgiConfig.enabled )
 		{
-			m_reflection[1]->update( camera );
-		}
-		else
-		{
-			m_reflection[0]->update( camera );
+			m_ssgi->update( camera );
 		}
 	}
 
@@ -169,6 +231,7 @@ namespace castor3d
 			, *result );
 
 		if ( m_ssaoConfig.enabled
+			|| m_ssgiConfig.enabled )
 		{
 			result = &m_linearisePass->linearise( *result );
 		}
@@ -178,14 +241,19 @@ namespace castor3d
 			result = &m_ssao->render( *result );
 		}
 
+		auto index = 2u * ( m_ssgiConfig.enabled ? 1u : 0u );
+
 		if ( scene.needsSubsurfaceScattering() )
 		{
+			++index;
 			result = &m_subsurfaceScattering->render( *result );
-			result = &m_reflection[1]->render( *result );
 		}
-		else
+
+		result = &m_resolve[index]->render( *result );
+
+		if ( m_ssgiConfig.enabled )
 		{
-			result = &m_reflection[0]->render( *result );
+			result = &m_ssgi->render( *result );
 		}
 
 		return *result;
@@ -223,6 +291,7 @@ namespace castor3d
 		m_lightingPass->accept( visitor );
 
 		if ( m_ssaoConfig.enabled
+			|| m_ssgiConfig.enabled )
 		{
 			m_linearisePass->accept( visitor );
 		}
@@ -232,14 +301,19 @@ namespace castor3d
 			m_ssao->accept( visitor );
 		}
 
+		auto index = 2u * ( m_ssgiConfig.enabled ? 1u : 0u );
+
 		if ( visitor.getScene().needsSubsurfaceScattering() )
 		{
+			++index;
 			m_subsurfaceScattering->accept( visitor );
-			m_reflection[1]->accept( visitor );
 		}
-		else
+
+		m_resolve[index]->accept( visitor );
+
+		if ( m_ssgiConfig.enabled )
 		{
-			m_reflection[0]->accept( visitor );
+			m_ssgi->accept( visitor );
 		}
 	}
 }

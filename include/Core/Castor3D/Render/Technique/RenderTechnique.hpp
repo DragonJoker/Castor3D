@@ -11,6 +11,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -47,7 +48,8 @@ namespace castor3d
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
-			, SsaoConfig const & config );
+			, SsaoConfig const & ssaoConfig
+			, SsgiConfig const & ssgiConfig );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -249,6 +251,7 @@ namespace castor3d
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
+		SsgiConfig m_ssgiConfig;
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;

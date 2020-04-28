@@ -5653,6 +5653,78 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserSsgiBegin )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->renderTarget )
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eSsgi )
+
+	CU_ImplementAttributeParser( parserSsgiEnabled )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext->ssgiConfig.enabled );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsgiBlurSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				params[0]->get( value );
+				parsingContext->ssgiConfig.blurSize = makeRangedValue( uint32_t( value ), 1u, 6u );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsgiEnd )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			parsingContext->renderTarget->setSsgiConfig( parsingContext->ssgiConfig );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttributePop()
+
 	CU_ImplementAttributeParser( parserSubsurfaceScatteringStrength )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );

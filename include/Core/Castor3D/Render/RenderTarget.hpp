@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
@@ -347,6 +348,11 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
+		inline void setSsgiConfig( SsgiConfig const & config )
+		{
+			m_ssgiConfig = config;
+		}
+
 		inline void setPixelFormat( VkFormat value )
 		{
 			m_pixelFormat = value;
@@ -422,6 +428,7 @@ namespace castor3d
 		RenderPassTimerSPtr m_overlaysTimer;
 		std::unique_ptr< CombinePass > m_combineQuad;
 		SsaoConfig m_ssaoConfig;
+		SsgiConfig m_ssgiConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
