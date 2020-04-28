@@ -214,6 +214,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Holds a command buffer and its semaphore.
+	*\~french
+	*\brief
+	*	Contient un command buffer et son semaphore.
+	*/
+	struct CommandsSemaphore;
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief

@@ -4,6 +4,7 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -258,6 +259,7 @@ namespace castor3d
 		TextureUnit createTexture( Engine & engine
 			, VkExtent2D const & size
 			, VkFormat format
+			, VkImageSubresourceRange const & range
 			, String const & name )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -268,7 +270,7 @@ namespace castor3d
 				VK_IMAGE_TYPE_2D,
 				format,
 				{ size.width, size.height, 1u },
-				1u,
+				range.levelCount,
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
@@ -287,7 +289,9 @@ namespace castor3d
 		}
 
 		ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, VkFormat format )
+			, castor::String const & name
+			, VkFormat format
+			, uint32_t subpassCount )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
@@ -343,7 +347,7 @@ namespace castor3d
 				std::move( dependencies ),
 			};
 			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "GaussianBlurRenderPass" );
+			setDebugObjectName( device, *result, name );
 			return result;
 		}
 
@@ -355,19 +359,71 @@ namespace castor3d
 			attaches.emplace_back( view );
 			return renderPass.createFrameBuffer( size, std::move( attaches ) );
 		}
+
+		ashes::ImageView createImageView( RenderSystem const & renderSystem
+			, castor::String const & name
+			, ashes::ImageView const & view
+			, VkImageSubresourceRange const & range )
+		{
+			auto createInfo = view.createInfo;
+			createInfo.subresourceRange.baseMipLevel = range.baseMipLevel;
+			createInfo.subresourceRange.levelCount = range.levelCount;
+			auto & device = getCurrentRenderDevice( renderSystem );
+			auto result = view.image->createView( std::move( createInfo ) );
+			setDebugObjectName( device, result, name );
+			return result;
+		}
+
+		std::vector< GaussianBlur::RenderQuadPtr > createQuads( Engine & engine
+			, castor::String const & name
+			, ashes::ImageView const & input
+			, ashes::ImageView const & output
+			, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
+			, VkFormat format
+			, VkExtent2D const & textureSize )
+		{
+			std::vector< GaussianBlur::RenderQuadPtr > result;
+			CU_Require( input->subresourceRange.levelCount == output->subresourceRange.levelCount );
+			VkImageSubresourceRange srcRange{};
+			srcRange.levelCount = 1u;
+			srcRange.baseMipLevel = input->subresourceRange.baseMipLevel;
+			VkImageSubresourceRange dstRange{};
+			dstRange.levelCount = 1u;
+			dstRange.baseMipLevel = output->subresourceRange.baseMipLevel;
+
+			for ( uint32_t level = 0u; level < input->subresourceRange.levelCount; ++level )
+			{
+				result.push_back( std::make_unique< GaussianBlur::RenderQuad >( *engine.getRenderSystem()
+					, name + castor::string::toString( level )
+					, input
+					, srcRange
+					, output
+					, dstRange
+					, blurUbo
+					, format
+					, textureSize ) );
+				++srcRange.baseMipLevel;
+				++dstRange.baseMipLevel;
+			}
+
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
 
 	GaussianBlur::RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, castor::String const & name
 		, ashes::ImageView const & src
+		, VkImageSubresourceRange const & srcRange
 		, ashes::ImageView const & dst
+		, VkImageSubresourceRange const & dstRange
 		, UniformBuffer< Configuration > const & blurUbo
 		, VkFormat format
 		, VkExtent2D const & size )
 		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
-		, m_srcView{ src }
-		, m_dstView{ dst }
+		, srcView{ createImageView( renderSystem, name, src, srcRange ) }
+		, dstView{ createImageView( renderSystem, name, dst, dstRange ) }
 		, m_blurUbo{ blurUbo }
 	{
 	}
@@ -375,7 +431,7 @@ namespace castor3d
 	void GaussianBlur::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( GaussCfgIdx )
 			, m_blurUbo
 			, 0u
 			, 1u );
@@ -383,13 +439,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String Names[2]
-	{
-		"GaussianBlurY",
-		"GaussianBlurX"
-	};
-
 	GaussianBlur::BlurPass::BlurPass( Engine & engine
+		, castor::String const & name
 		, ashes::ImageView const & input
 		, ashes::ImageView const & output
 		, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
@@ -397,25 +448,17 @@ namespace castor3d
 		, VkExtent2D const & textureSize
 		, ashes::RenderPass const & renderPass
 		, bool isHorizontal )
-		: quad
-		{
-			*engine.getRenderSystem(),
-			input,
-			output,
-			blurUbo,
-			format,
-			textureSize,
-		}
+		: quads{ createQuads( engine, name, input, output, blurUbo, format, textureSize ) }
 		, vertexShader
 		{
 			VK_SHADER_STAGE_VERTEX_BIT,
-			( isHorizontal ? Names[1] : Names[0] ),
+			name,
 			getVertexProgram( *engine.getRenderSystem() ),
 		}
 		, pixelShader
 		{
 			VK_SHADER_STAGE_FRAGMENT_BIT,
-			( isHorizontal ? Names[1] : Names[0] ),
+			name,
 			getPixelProgram( *engine.getRenderSystem()
 				, input->subresourceRange.baseArrayLayer
 				, input->subresourceRange.layerCount
@@ -424,8 +467,9 @@ namespace castor3d
 		}
 		, semaphore{ getCurrentRenderDevice( engine )->createSemaphore() }
 		, fbo{ createFbo( renderPass, output, textureSize ) }
+		, m_engine{ engine }
 	{
-		auto & device = getCurrentRenderDevice( engine );
+		auto & device = getCurrentRenderDevice( m_engine );
 
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
@@ -439,16 +483,44 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT )
 		};
+		uint32_t subpass = 0u;
 
-		quad.createPipeline( textureSize
-			, Position{}
-			, program
-			, input
-			, renderPass
-			, std::move( bindings )
-			, {} );
-		quad.prepareFrame( renderPass, 0u );
+		for ( auto & quad : quads )
+		{
+			quad->createPipeline( textureSize
+				, Position{}
+				, program
+				, quad->srcView
+				, renderPass
+				, bindings
+				, {} );
+			quad->prepareFrame( renderPass, subpass );
+			++subpass;
+		}
+
 		commandBuffer = doGenerateCommandBuffer( device, renderPass );
+	}
+
+	void GaussianBlur::BlurPass::getCommands( ashes::CommandBuffer const & cmd
+		, ashes::RenderPass const & renderPass )const
+	{
+		cmd.beginDebugBlock(
+			{
+				vertexShader.name,
+				makeFloatArray( m_engine.getNextRainbowColour() ),
+			} );
+		cmd.beginRenderPass( renderPass
+			, *fbo
+			, { transparentBlackClearColor }
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+
+		for ( auto & quad : quads )
+		{
+			cmd.executeCommands( { quad->getCommandBuffer() } );
+		}
+
+		cmd.endRenderPass();
+		cmd.endDebugBlock();
 	}
 	
 	ashes::CommandBufferPtr GaussianBlur::BlurPass::doGenerateCommandBuffer( RenderDevice const & device
@@ -461,12 +533,7 @@ namespace castor3d
 				"GaussianBlur Blur pass",
 				makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
-		result->beginRenderPass( renderPass
-			, *fbo
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
-		result->executeCommands( { quad.getCommandBuffer() } );
-		result->endRenderPass();
+		getCommands( *result, renderPass );
 		result->endDebugBlock();
 		result->end();
 		return result;
@@ -480,24 +547,27 @@ namespace castor3d
 	String const GaussianBlur::TextureSize = cuT( "c3d_textureSize" );
 
 	GaussianBlur::GaussianBlur( Engine & engine
+		, castor::String const & prefix
 		, ashes::ImageView const & texture
 		, VkExtent2D const & textureSize
 		, VkFormat format
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - GaussianBlur" ) }
 		, m_source{ texture }
 		, m_size{ textureSize }
 		, m_format{ format }
-		, m_intermediate{ createTexture( engine, textureSize, format, cuT( "GaussianBlur" ) ) }
-		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_format ) }
+		, m_intermediate{ createTexture( engine, textureSize, format, texture->subresourceRange, m_prefix ) }
+		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_prefix, m_format, m_source->subresourceRange.levelCount ) }
 		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
-			, "GaussianBlurCfg" ) }
+			, m_prefix + cuT( " Config" ) ) }
 		, m_blurX
 		{
 			engine,
+			m_prefix + cuT( " - X Pass" ),
 			texture,
 			m_intermediate.getTexture()->getDefaultView(),
 			*m_blurUbo,
@@ -509,6 +579,7 @@ namespace castor3d
 		, m_blurY
 		{
 			engine,
+			m_prefix + cuT( " - Y Pass" ),
 			m_intermediate.getTexture()->getDefaultView(),
 			texture,
 			*m_blurUbo,
@@ -530,6 +601,34 @@ namespace castor3d
 		data.textureSize[0] = float( textureSize.width );
 		data.textureSize[1] = float( textureSize.height );
 		m_blurUbo->upload();
+	}
+
+	void GaussianBlur::accept( PipelineVisitorBase & visitor )
+	{
+		visitor.visit( m_blurX.vertexShader );
+		visitor.visit( m_blurX.pixelShader );
+
+		visitor.visit( m_blurY.vertexShader );
+		visitor.visit( m_blurY.pixelShader );
+	}
+
+	CommandsSemaphore GaussianBlur::getCommands( RenderPassTimer const & timer
+		, uint32_t index )const
+	{
+		auto & device = getCurrentRenderDevice( *this );
+		castor3d::CommandsSemaphore commands
+		{
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
+		cmd.begin();
+		timer.beginPass( cmd, index );
+		m_blurX.getCommands( cmd, *m_renderPass );
+		m_blurY.getCommands( cmd, *m_renderPass );
+		timer.endPass( cmd, index );
+		cmd.end();
+		return commands;
 	}
 
 	ashes::Semaphore const & GaussianBlur::blur( ashes::Semaphore const & toWait )

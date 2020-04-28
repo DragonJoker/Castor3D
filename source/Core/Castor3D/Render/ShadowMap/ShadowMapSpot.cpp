@@ -290,6 +290,7 @@ namespace castor3d
 					std::move( depthTexture ),
 					std::move( depthView ),
 					std::make_unique< GaussianBlur >( *getEngine()
+						, debugName
 						, m_shadowMap.getTexture()->getImage( i ).getView()
 						, size
 						, m_shadowMap.getTexture()->getPixelFormat()

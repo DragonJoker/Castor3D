@@ -349,6 +349,7 @@ namespace castor3d
 				, debugName + "Fbo" );
 
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
+				, debugName
 				, frameBuffer.varianceView
 				, size
 				, variance.getFormat()

@@ -1,5 +1,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -7,6 +9,55 @@
 
 namespace castor3d
 {
+	SamplerSPtr createSampler( Engine & engine
+		, castor::String const & baseName
+		, VkFilter filter
+		, VkImageSubresourceRange const * range )
+	{
+		castor::String const name = baseName
+			+ cuT( "_" ) + ashes::getName( filter )
+			+ ( range
+				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
+				: castor::String{} );
+		auto & cache = engine.getSamplerCache();
+		SamplerSPtr sampler;
+
+		if ( cache.has( name ) )
+		{
+			sampler = cache.find( name );
+		}
+		else
+		{
+			ashes::SamplerCreateInfo createInfo
+			{
+				0u,
+				filter,
+				filter,
+				VK_SAMPLER_MIPMAP_MODE_NEAREST,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+				VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+				0.0f, // mipLodBias
+				VK_FALSE, // anisotropyEnable
+				0.0f, // maxAnisotropy
+				VK_FALSE, // compareEnable
+				VK_COMPARE_OP_ALWAYS, // compareOp
+				( range
+					? float( range->baseMipLevel )
+					: -1000.0f ), // minLod
+				( range
+					? float( range->baseMipLevel + range->levelCount )
+					: 1000.0f ), // maxLod
+			};
+			sampler = std::make_shared< Sampler >( engine
+				, name
+				, std::move( createInfo ) );
+			cache.add( name, sampler );
+		}
+
+		return sampler;
+	}
+
 	Sampler::TextWriter::TextWriter( castor::String const & tabs )
 		: castor::TextWriter< Sampler >{ tabs }
 	{
@@ -120,6 +171,15 @@ namespace castor3d
 		, castor::String const & name )
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
+	{
+	}
+	
+	Sampler::Sampler( Engine & engine
+		, castor::String const & name
+		, ashes::SamplerCreateInfo createInfo )
+		: castor::OwnedBy< Engine >{ engine }
+		, castor::Named{ name }
+		, m_info{ std::move( createInfo ) }
 	{
 	}
 

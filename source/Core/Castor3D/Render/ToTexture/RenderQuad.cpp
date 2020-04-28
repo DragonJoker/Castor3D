@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -30,34 +31,9 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		SamplerSPtr doCreateSampler( RenderSystem const & renderSystem
-			, VkFilter filter )
-		{
-			String const name = String{ cuT( "RenderQuad_" ) + ashes::getName( filter ) };
-			auto & cache = renderSystem.getEngine()->getSamplerCache();
-			SamplerSPtr sampler;
-
-			if ( cache.has( name ) )
-			{
-				sampler = cache.find( name );
-			}
-			else
-			{
-				sampler = cache.add( name );
-				sampler->setMinFilter( filter );
-				sampler->setMagFilter( filter );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			}
-
-			return sampler;
-		}
-	}
-
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, VkFilter samplerFilter
+		, VkImageSubresourceRange const * range
 		, TexcoordConfig const * config )
 		: m_renderSystem{ renderSystem }
 		, m_vertexData
@@ -67,21 +43,39 @@ namespace castor3d
 			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
 			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
 		}
-		, m_sampler{ doCreateSampler( m_renderSystem, samplerFilter ) }
+		, m_sampler{ createSampler( *m_renderSystem.getEngine()
+			, cuT( "RenderQuad" )
+			, samplerFilter
+			, range ) }
 		, m_useTexCoords{ config != nullptr }
 	{
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, VkFilter samplerFilter
+		, VkImageSubresourceRange const & range
 		, TexcoordConfig const & config )
-		: RenderQuad{ renderSystem, samplerFilter, &config }
+		: RenderQuad{ renderSystem, samplerFilter, &range, &config }
+	{
+	}
+
+	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, VkFilter samplerFilter
+		, TexcoordConfig const & config )
+		: RenderQuad{ renderSystem, samplerFilter, nullptr, &config }
+	{
+	}
+
+	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, VkFilter samplerFilter
+		, VkImageSubresourceRange const & range )
+		: RenderQuad{ renderSystem, samplerFilter, &range, nullptr }
 	{
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, VkFilter samplerFilter )
-		: RenderQuad{ renderSystem, samplerFilter, nullptr }
+		: RenderQuad{ renderSystem, samplerFilter, nullptr, nullptr }
 	{
 	}
 

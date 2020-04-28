@@ -52,6 +52,7 @@ namespace castor3d
 	private:
 		C3D_API RenderQuad( RenderSystem & renderSystem
 			, VkFilter samplerFilter
+			, VkImageSubresourceRange const * range
 			, TexcoordConfig const * config );
 
 	public:
@@ -63,8 +64,10 @@ namespace castor3d
 		*	Constructor.
 		*\param[in] renderSystem
 		*	The RenderSystem.
-		*\param[in] nearest
-			*	Tells if the sampler needs a Nearest filter or not.
+		*\param[in] samplerFilter
+		*	The sampler filter for the source texture.
+		*\param[in] range
+		*	Contains mip levels for the sampler.
 		*\param[in] config
 		*	The texture coordinates configuration.
 		*\~french
@@ -72,8 +75,34 @@ namespace castor3d
 		*	Constructeur.
 		*\param[in] renderSystem
 		*	Le RenderSystem.
-		*\param[in] nearest
-			*	Dit si le sampler doit filtrer en Nearest ou pas.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
+		*\param[in] range
+		*	Contient les mip levels, pour l'échantillonneur.
+		*\param[in] config
+		*	La configuration des coordonnées de texture.
+		*/
+		C3D_API RenderQuad( RenderSystem & renderSystem
+			, VkFilter samplerFilter
+			, VkImageSubresourceRange const & range
+			, TexcoordConfig const & config );
+		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderSystem
+		*	The RenderSystem.
+		*\param[in] samplerFilter
+		*	The sampler filter for the source texture.
+		*\param[in] config
+		*	The texture coordinates configuration.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
 		*\param[in] config
 		*	La configuration des coordonnées de texture.
 		*/
@@ -84,13 +113,44 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Constructor.
+		*\param[in] renderSystem
+		*	The RenderSystem.
+		*\param[in] samplerFilter
+		*	The sampler filter for the souorce texture.
+		*\param[in] range
+		*	Contains mip levels for the sampler.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
+		*\param[in] range
+		*	Contient les mip levels, pour l'échantillonneur.
+		*/
+		C3D_API RenderQuad( RenderSystem & renderSystem
+			, VkFilter samplerFilter
+			, VkImageSubresourceRange const & range );
+		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderSystem
+		*	The RenderSystem.
 		*\remarks
 		*	Doesn't use the texture coordinates.
+		*\param[in] samplerFilter
+		*	The sampler filter for the source texture.
 		*\~french
 		*\brief
 		*	Constructeur.
 		*\remarks
 		*	N'utilise pas les coordonnées de texture.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
 		*/
 		C3D_API RenderQuad( RenderSystem & renderSystem
 			, VkFilter samplerFilter );

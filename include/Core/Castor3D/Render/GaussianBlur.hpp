@@ -4,12 +4,14 @@ See LICENSE file in root folder
 #ifndef ___C3D_GaussianBlur_H___
 #define ___C3D_GaussianBlur_H___
 
-#include "RenderModule.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
@@ -38,6 +40,7 @@ namespace castor3d
 		 *\param[in]	kernelSize	Le nombre de coefficients du kernel.
 		 */
 		C3D_API GaussianBlur( Engine & engine
+			, castor::String const & prefix
 			, ashes::ImageView const & texture
 			, VkExtent2D const & textureSize
 			, VkFormat format
@@ -49,6 +52,20 @@ namespace castor3d
 		 *\brief		Applique le flou sur la texture.
 		 */
 		C3D_API ashes::Semaphore const & blur( ashes::Semaphore const & toWait );
+		/**
+		 *\~english
+		 *\param[in]	timer	The render timer.
+		 *\return		The commands used to render the pass.
+		 *\~french
+		 *\param[in]	timer	Le timer de rendu.
+		 *\return		Les commandes utilisées pour rendre la passe.
+		 */
+		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
+			, uint32_t index )const;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -78,12 +95,12 @@ namespace castor3d
 
 		inline ashes::CommandBuffer const & getBlurXCommandBuffer()const
 		{
-			return m_blurX.quad.getCommandBuffer();
+			return *m_blurX.commandBuffer;
 		}
 
 		inline ashes::CommandBuffer const & getBlurYCommandBuffer()const
 		{
-			return m_blurY.quad.getCommandBuffer();
+			return *m_blurY.commandBuffer;
 		}
 
 		inline ShaderModule const & getBlurXVertexModule()const
@@ -151,8 +168,11 @@ namespace castor3d
 		{
 		public:
 			RenderQuad( RenderSystem & renderSystem
+				, castor::String const & name
 				, ashes::ImageView const & src
+				, VkImageSubresourceRange const & srcRange
 				, ashes::ImageView const & dst
+				, VkImageSubresourceRange const & dstRange
 				, UniformBuffer< Configuration > const & blurUbo
 				, VkFormat format
 				, VkExtent2D const & size );
@@ -161,14 +181,18 @@ namespace castor3d
 			virtual void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 				, ashes::DescriptorSet & descriptorSet );
 
-			ashes::ImageView const & m_srcView;
-			ashes::ImageView const & m_dstView;
+		public:
+			ashes::ImageView srcView;
+			ashes::ImageView dstView;
+
+		private:
 			UniformBuffer< Configuration > const & m_blurUbo;
 		};
+		using RenderQuadPtr = std::unique_ptr< RenderQuad >;
 
 		struct BlurPass
 		{
-			RenderQuad quad;
+			std::vector< RenderQuadPtr > quads;
 			ShaderModule vertexShader;
 			ShaderModule pixelShader;
 			ashes::SemaphorePtr semaphore;
@@ -176,6 +200,7 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 
 			BlurPass( Engine & engine
+				, castor::String const & name
 				, ashes::ImageView const & input
 				, ashes::ImageView const & output
 				, UniformBuffer< GaussianBlur::Configuration > const & blurUbo
@@ -183,14 +208,20 @@ namespace castor3d
 				, VkExtent2D const & textureSize
 				, ashes::RenderPass const & renderPass
 				, bool isHorizontal );
+			void getCommands( ashes::CommandBuffer const & cmd
+				, ashes::RenderPass const & renderPass )const;
 
 		private:
 			ashes::CommandBufferPtr doGenerateCommandBuffer( RenderDevice const & device
 				, ashes::RenderPass const & renderPass );
+
+		private:
+			Engine & m_engine;
 		};
 
 	private:
 		ashes::ImageView const & m_source;
+		castor::String m_prefix;
 		VkExtent2D m_size;
 		VkFormat m_format;
 		TextureUnit m_intermediate;

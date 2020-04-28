@@ -107,7 +107,6 @@ namespace castor3d
 		, Size const & size
 		, Scene const & scene
 		, GeometryPassResult const & gpResult
-		, OpaquePass & opaque
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo )
@@ -172,11 +171,11 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( engine );
 		VkImageCopy copy
 		{
-			{ depthView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
 			VkOffset3D{ 0, 0, 0 },
-			{ depthView->subresourceRange.aspectMask, 0u, 0u, 1u },
+			{ m_srcDepth->subresourceRange.aspectMask, 0u, 0u, 1u },
 			VkOffset3D{ 0, 0, 0 },
-			depthView.image->getDimensions(),
+			m_srcDepth.image->getDimensions(),
 		};
 		m_blitDepthSemaphore = device->createSemaphore();
 		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );

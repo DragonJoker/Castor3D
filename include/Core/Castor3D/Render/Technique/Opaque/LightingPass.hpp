@@ -28,7 +28,6 @@ namespace castor3d
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	scene		The scene.
 		 *\param[in]	gpResult	The geometry pass buffers.
-		 *\param[in]	opaque		The opaque pass.
 		 *\param[in]	depthView	The depth buffer attach.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	gpInfoUbo	The geometry pass UBO.
@@ -38,7 +37,6 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	scene		La scène.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
-		 *\param[in]	opaque		La passe opaque.
 		 *\param[in]	depthView	L'attache du tampon de profondeur.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
@@ -47,7 +45,6 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene const & scene
 			, GeometryPassResult const & gpResult
-			, OpaquePass & opaque
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo );
