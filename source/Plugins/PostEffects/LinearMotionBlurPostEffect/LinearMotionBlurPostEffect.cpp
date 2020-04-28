@@ -137,7 +137,7 @@ namespace motion_blur
 			, renderTarget
 			, renderSystem
 			, parameters
-			, false }
+			, 1u }
 		, m_surface{ *renderSystem.getEngine(), cuT( "LinearMotionBlur" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur" }

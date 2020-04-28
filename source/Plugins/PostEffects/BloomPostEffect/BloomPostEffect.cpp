@@ -44,7 +44,8 @@ namespace Bloom
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params }
+			, params
+			, 3u }
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
@@ -74,10 +75,11 @@ namespace Bloom
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( m_hiPass->getVertexShader() );
-		visitor.visit( m_hiPass->getPixelShader() );
-
+		m_hiPass->accept( visitor );
 #if !Bloom_DebugHiPass
+		m_blurXPass->accept( visitor );
+		m_blurYPass->accept( visitor );
+		m_combinePass->accept( visitor );
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );
@@ -165,7 +167,7 @@ namespace Bloom
 			, size
 			, m_blurPassesCount );
 #endif
-		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer ) ) );
+		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, 0u ) ) );
 
 #if !Bloom_DebugHiPass
 		for ( auto & command : m_blurXPass->getCommands( timer, *m_vertexBuffer ) )

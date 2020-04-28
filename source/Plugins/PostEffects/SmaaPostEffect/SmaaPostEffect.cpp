@@ -258,11 +258,10 @@ namespace smaa
 			, renderTarget
 			, renderSystem
 			, parameters
-			, true }
+			, 5u
+			, Kind::eSRGB }
 		, m_config{ parameters }
 	{
-		m_passesCount = 5u;
-
 		if ( m_config.data.mode == Mode::eT2X )
 		{
 			m_passesCount += m_config.maxSubsampleIndices;

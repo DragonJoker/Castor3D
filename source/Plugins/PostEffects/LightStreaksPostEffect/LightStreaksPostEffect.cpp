@@ -209,7 +209,8 @@ namespace light_streaks
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params )
+			, params
+			, 4u )
 		, m_kawaseUbo{ *renderSystem.getEngine() }
 		, m_pipelines
 		{
@@ -229,8 +230,6 @@ namespace light_streaks
 	{
 		m_linearSampler = doCreateSampler( true );
 		m_nearestSampler = doCreateSampler( false );
-
-		m_passesCount = 4u;
 	}
 
 	PostEffect::~PostEffect()

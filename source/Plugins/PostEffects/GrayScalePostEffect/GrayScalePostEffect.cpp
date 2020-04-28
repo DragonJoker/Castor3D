@@ -115,8 +115,7 @@ namespace grayscale
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params
-			, false }
+			, params }
 		, m_surface{ *renderSystem.getEngine(), cuT( "GrayScale" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale" }

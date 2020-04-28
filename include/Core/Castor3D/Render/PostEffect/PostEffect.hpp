@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
+#include "Castor3D/Render/CommandsSemaphore.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -16,24 +17,19 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct CommandsSemaphore
-	{
-		CommandsSemaphore( ashes::CommandBufferPtr && commandBuffer
-			, ashes::SemaphorePtr && semaphore )
-			: commandBuffer{ std::move( commandBuffer ) }
-			, semaphore{ std::move( semaphore ) }
-		{
-		}
-
-		ashes::CommandBufferPtr commandBuffer;
-		ashes::SemaphorePtr semaphore;
-	};
-
 	class PostEffect
 		: public castor::OwnedBy< RenderSystem >
 		, public castor::Named
 	{
 	public:
+		enum class Kind
+		{
+			eHDR,
+			eSRGB,
+			eOverlay, // TODO: Unsupported yet.
+		};
+
+	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -57,7 +53,10 @@ namespace castor3d
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
-			, bool postToneMapping = false );
+			, uint32_t passesCount = 1u
+			, Kind kind = Kind::eHDR );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -141,7 +140,7 @@ namespace castor3d
 
 		inline bool isAfterToneMapping()const
 		{
-			return m_postToneMapping;
+			return m_kind == Kind::eSRGB;
 		}
 
 		inline TextureLayout const & getResult()const
@@ -198,7 +197,7 @@ namespace castor3d
 		uint32_t m_passesCount{ 1u };
 		uint32_t m_currentPass{ 0u };
 		std::unique_ptr< RenderPassTimer > m_timer;
-		bool m_postToneMapping{ false };
+		Kind m_kind{ Kind::eHDR };
 		TextureLayout const * m_target{ nullptr };
 		CommandsSemaphoreArray m_commands;
 		TextureLayout const * m_result{ nullptr };

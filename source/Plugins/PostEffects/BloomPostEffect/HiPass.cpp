@@ -189,7 +189,8 @@ namespace Bloom
 			, blurPassesCount );
 	}
 
-	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer )const
+	castor3d::CommandsSemaphore HiPass::getCommands( castor3d::RenderPassTimer const & timer
+		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
@@ -200,7 +201,7 @@ namespace Bloom
 		auto & cmd = *commands.commandBuffer;
 
 		cmd.begin();
-		timer.beginPass( cmd, 0u );
+		timer.beginPass( cmd, index );
 
 		// Put target image in shader input layout.
 		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -217,9 +218,15 @@ namespace Bloom
 		m_surface.colourTexture->getTexture().generateMipmaps( cmd );
 #endif
 
-		timer.endPass( cmd, 0u );
+		timer.endPass( cmd, index );
 		cmd.end();
 
 		return commands;
+	}
+
+	void HiPass::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 }

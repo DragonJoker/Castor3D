@@ -185,7 +185,8 @@ namespace fxaa
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, parameters }
+			, parameters
+			, 1u }
 		, m_surface{ *renderSystem.getEngine(), cuT( "Fxaa" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa" }

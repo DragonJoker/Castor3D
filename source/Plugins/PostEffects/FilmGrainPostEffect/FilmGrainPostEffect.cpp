@@ -277,8 +277,7 @@ namespace film_grain
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params
-			, false }
+			, params }
 		, m_surface{ *renderSystem.getEngine(), cuT( "FilmGrain" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "FilmGrain" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FilmGrain" }

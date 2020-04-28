@@ -22,6 +22,7 @@ namespace Bloom
 			, bool isVertical );
 		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		inline castor3d::ShaderModule const & getVertexShader()const
 		{

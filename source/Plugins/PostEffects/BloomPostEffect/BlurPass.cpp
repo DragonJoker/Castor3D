@@ -440,4 +440,10 @@ namespace Bloom
 
 		return result;
 	}
+
+	void BlurPass::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+	}
 }

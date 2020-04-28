@@ -8,21 +8,40 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	PostEffect::PostEffect( String const & name
+	namespace
+	{
+		castor::String getKindName( PostEffect::Kind kind )
+		{
+			switch ( kind )
+			{
+			case castor3d::PostEffect::Kind::eHDR:
+				return cuT( "HDR" );
+			case castor3d::PostEffect::Kind::eSRGB:
+				return cuT( "sRGB" );
+			case castor3d::PostEffect::Kind::eOverlay:
+				return cuT( "Overlay" );
+			default:
+				CU_Failure( "Unexpected PostEffect::Kind." );
+				return cuT( "Unknown" );
+			}
+		}
+	}
+
+	PostEffect::PostEffect( castor::String const & name
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & CU_UnusedParam( parameters )
-		, bool postToneMapping )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, Named{ name }
+		, uint32_t passesCount
+		, Kind kind )
+		: castor::OwnedBy< RenderSystem >{ renderSystem }
+		, castor::Named{ name }
 		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
-		, m_postToneMapping{ postToneMapping }
+		, m_passesCount{ passesCount }
+		, m_kind{ kind }
 	{
 	}
 
@@ -42,9 +61,7 @@ namespace castor3d
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
 		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
 		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
-			, ( m_postToneMapping
-				? String{ cuT( "sRGB PostEffect" ) }
-				: String{ cuT( "HDR PostEffect" ) } )
+			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );
 		auto result = doInitialise( *m_timer );

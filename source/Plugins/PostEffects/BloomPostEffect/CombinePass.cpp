@@ -333,4 +333,10 @@ namespace Bloom
 
 		return { std::move( result ), m_device->createSemaphore() };
 	}
+
+	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )
+	{
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+	}
 }
