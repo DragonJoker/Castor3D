@@ -8,9 +8,9 @@ set( Castor3DBinsDependencies
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D GUI creation" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 4 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/CastorGui_Parsers.hpp

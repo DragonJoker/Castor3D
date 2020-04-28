@@ -8,9 +8,9 @@ set( Castor3DBinsDependencies
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Wavefront Object Importer" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	11 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 5 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/ObjGroup.hpp

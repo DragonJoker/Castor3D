@@ -5,9 +5,9 @@ if ( MSVC )
 
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
-		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+		set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 5 )
+		set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 		configure_file( 
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/ComCastorUtils.hpp.in
