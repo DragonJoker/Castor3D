@@ -2,15 +2,10 @@ if ( MSVC )
 	if ( TARGET ComCastor3D )
 		project( ComCastor3DTest )
 
-		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
-
 		set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} COM binding test application" )
-		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
-
+		set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 3 )
+		set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 		add_target( 
 			ComCastor3DTest

@@ -311,7 +311,7 @@ namespace GuiCommon
 		ShaderSource & operator=( ShaderSource && ) = default;
 
 		castor::String name;
-		std::map< VkShaderStageFlagBits, castor::String > sources;
+		std::map< VkShaderStageFlagBits, castor3d::ShaderModule const * > sources;
 		std::vector< UniformBufferValues > ubos;
 	};
 

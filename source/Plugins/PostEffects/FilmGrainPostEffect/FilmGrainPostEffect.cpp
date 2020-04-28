@@ -315,18 +315,14 @@ namespace film_grain
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "FilmGrain" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "FilmGrain" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "FilmGrain" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( m_pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "Exposure" )
 			, m_quad->getUbo().getData().m_exposure );
-		visitor.visit( cuT( "FilmGrain" )
+		visitor.visit( m_pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "NoiseIntensity" )

@@ -24,6 +24,7 @@ namespace GuiCommon
 		~ShaderDialog();
 
 	private:
+		void doLoadLanguage( ShaderLanguage language );
 		void doInitialiseShaderLanguage();
 		void doInitialiseLayout();
 		void doLoadPages();
@@ -32,18 +33,22 @@ namespace GuiCommon
 
 		DECLARE_EVENT_TABLE()
 		void onClose( wxCloseEvent & event );
-		void onOk( wxCommandEvent & event );
-		void onCancel( wxCommandEvent & event );
 		void onMenuClose( wxCommandEvent & event );
-		void onPageChanged( wxAuiNotebookEvent & event );
+		void onMenuLanguageGLSL( wxCommandEvent & event );
+		void onMenuLanguageHLSL( wxCommandEvent & event );
+		void onMenuLanguageSPIRV( wxCommandEvent & event );
+		void onMenuPreferences( wxCommandEvent & event );
 
 	private:
 		castor3d::Engine * m_engine;
 		wxAuiManager m_auiManager;
-		wxAuiNotebook * m_editors;
+		wxAuiNotebook * m_programs;
 		std::unique_ptr< StcContext > m_stcContext;
-		std::vector< ShaderEditorPage * > m_pages;
+		std::vector< ShaderProgramPage * > m_pages;
 		ShaderSources m_sources;
+		wxMenuItem * m_glslRadio;
+		wxMenuItem * m_hlslRadio;
+		wxMenuItem * m_spirvRadio;
 	};
 }
 

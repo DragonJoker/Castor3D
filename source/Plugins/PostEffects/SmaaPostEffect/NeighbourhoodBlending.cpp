@@ -381,12 +381,8 @@ namespace smaa
 
 	void NeighbourhoodBlending::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "NeighbourhoodBlending" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "NeighbourhoodBlending" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	void NeighbourhoodBlending::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

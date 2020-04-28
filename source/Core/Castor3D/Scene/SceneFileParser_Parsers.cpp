@@ -1432,7 +1432,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext->particleSystem->getName(), true );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eShaderProgram )
@@ -3272,7 +3272,8 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
-			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext->material->getName() + castor::string::toString( parsingContext->pass->getId() )
+				, true );
 		}
 		else
 		{

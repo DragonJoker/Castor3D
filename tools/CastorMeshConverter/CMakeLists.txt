@@ -2,7 +2,7 @@ project( CastorMeshConverter )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D mesh file converter." )
 set( ${PROJECT_NAME}_VERSION_MAJOR	1 )
-set( ${PROJECT_NAME}_VERSION_MINOR	1 )
+set( ${PROJECT_NAME}_VERSION_MINOR	0 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 set( ${PROJECT_NAME}_HDR_FILES

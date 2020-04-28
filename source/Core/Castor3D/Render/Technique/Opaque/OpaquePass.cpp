@@ -152,12 +152,8 @@ namespace castor3d
 		auto & flags = visitor.getFlags();
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, flags );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	void OpaquePass::update( RenderInfo & info, castor::Point2f const & jitter )

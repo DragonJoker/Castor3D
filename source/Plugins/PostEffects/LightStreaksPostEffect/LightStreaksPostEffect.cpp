@@ -248,36 +248,24 @@ namespace light_streaks
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_pipelines.hiPass.vertexShader.shader );
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pipelines.hiPass.pixelShader.shader );
+		visitor.visit( m_pipelines.hiPass.vertexShader );
+		visitor.visit( m_pipelines.hiPass.pixelShader );
 
-		visitor.visit( cuT( "Kawase" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_pipelines.kawase.vertexShader.shader );
-		visitor.visit( cuT( "Kawase" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pipelines.kawase.pixelShader.shader );
-		visitor.visit( cuT( "Kawase" )
+		visitor.visit( m_pipelines.kawase.vertexShader );
+		visitor.visit( m_pipelines.kawase.pixelShader );
+		visitor.visit( m_pipelines.kawase.pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Kawase" )
 			, cuT( "Attenuation" )
 			, m_kawaseUbo.getUbo().getData().attenuation );
-		visitor.visit( cuT( "Kawase" )
+		visitor.visit( m_pipelines.kawase.pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Kawase" )
 			, cuT( "Samples" )
 			, m_kawaseUbo.getUbo().getData().samples );
 
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_pipelines.combine.vertexShader.shader );
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pipelines.combine.pixelShader.shader );
+		visitor.visit( m_pipelines.combine.vertexShader );
+		visitor.visit( m_pipelines.combine.pixelShader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )

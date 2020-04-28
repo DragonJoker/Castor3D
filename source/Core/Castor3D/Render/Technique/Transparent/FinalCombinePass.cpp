@@ -497,12 +497,8 @@ namespace castor3d
 
 	void FinalCombineProgram::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( m_vertexShader.name
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( m_pixelShader.name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	//*********************************************************************************************

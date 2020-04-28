@@ -1,4 +1,4 @@
-#include "GuiCommon/Shader/ShaderEditorPage.hpp"
+#include "GuiCommon/Shader/ShaderEditor.hpp"
 
 #include "GuiCommon/Aui/AuiDockArt.hpp"
 #include "GuiCommon/Shader/StcTextEditor.hpp"
@@ -17,44 +17,43 @@
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 #include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 
+#include <CompilerGlsl/compileGlsl.hpp>
+#include <CompilerHlsl/compileHlsl.hpp>
+#include <CompilerSpirV/compileSpirV.hpp>
+
 using namespace castor3d;
 using namespace castor;
 
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( Engine * engine
+	ShaderEditor::ShaderEditor( Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
-		, VkShaderStageFlagBits type
-		, castor::String const & source
+		, castor3d::ShaderModule const & module
 		, std::vector< UniformBufferValues > & ubos
+		, ShaderLanguage language
 		, wxWindow * parent
 		, wxPoint const & position
 		, const wxSize size )
 		: wxPanel( parent, wxID_ANY, position, size )
-		, m_stage( type )
-		, m_source( make_wxString( source ) )
-		, m_ubos{ ubos }
+		, m_module( module )
+		, m_ubos( ubos )
 		, m_stcContext( stcContext )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_canEdit( canEdit )
 	{
-		doInitialiseShaderLanguage();
 		doInitialiseLayout( engine );
-		doLoadPage();
+		loadLanguage( language );
+		m_frameVariablesList->loadVariables( m_module.stage, m_ubos );
 	}
 
-	ShaderEditorPage::~ShaderEditorPage()
+	ShaderEditor::~ShaderEditor()
 	{
 		doCleanup();
 		m_auiManager.UnInit();
 	}
 
-	void ShaderEditorPage::doInitialiseShaderLanguage()
-	{
-	}
-
-	void ShaderEditorPage::doInitialiseLayout( Engine * engine )
+	void ShaderEditor::doInitialiseLayout( Engine * engine )
 	{
 		static int constexpr ListWidth = 200;
 		wxSize size = GetClientSize();
@@ -101,8 +100,8 @@ namespace GuiCommon
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
 				.CloseButton( false )
-				.Name( wxT( "FrameVariablesList" ) )
-				.Caption( _( "Frame variables" ) )
+				.Name( wxT( "UniformBuffers" ) )
+				.Caption( _( "Uniform Buffers" ) )
 				.Right()
 				.Dock()
 				.LeftDockable()
@@ -130,29 +129,60 @@ namespace GuiCommon
 		m_auiManager.Update();
 	}
 
-	void ShaderEditorPage::doLoadPage()
+	void ShaderEditor::loadLanguage( ShaderLanguage language )
 	{
-		wxString extension = wxT( ".glsl" );
-		wxArrayString arrayChoices;
-		arrayChoices.push_back( wxCOMBO_NEW );
-		m_editor->setText( m_source );
+		wxString extension;
+		wxString source;
+
+		switch ( language )
+		{
+		case GuiCommon::ShaderLanguage::GLSL:
+			extension = wxT( ".glsl" );
+			source = make_wxString( glsl::compileGlsl( *m_module.shader
+				, {}
+				, {
+					m_module.shader->getType(),
+					460,
+					true,
+					false,
+					false,
+					true,
+					true,
+					true,
+					true,
+				} ) );
+			break;
+		case GuiCommon::ShaderLanguage::HLSL:
+			extension = wxT( ".hlsl" );
+			source = make_wxString( hlsl::compileHlsl( *m_module.shader
+				, {}
+				, {
+					m_module.shader->getType(),
+					false,
+				} ) );
+			break;
+		case GuiCommon::ShaderLanguage::SPIRV:
+			extension = wxT( ".spirv" );
+			source = make_wxString( spirv::writeSpirv( *m_module.shader
+				, true ) );
+			break;
+		}
+
+		m_editor->setText( source );
 		m_editor->SetReadOnly( !m_canEdit );
 		m_editor->initializePrefs( m_editor->determinePrefs( extension ) );
-
-		// Load frame variables list
-		m_frameVariablesList->loadVariables( m_stage, m_ubos );
 	}
 
-	void ShaderEditorPage::doCleanup()
+	void ShaderEditor::doCleanup()
 	{
 		m_auiManager.DetachPane( m_editor );
 	}
 
-	BEGIN_EVENT_TABLE( ShaderEditorPage, wxPanel )
-		EVT_CLOSE( ShaderEditorPage::onClose )
+	BEGIN_EVENT_TABLE( ShaderEditor, wxPanel )
+		EVT_CLOSE( ShaderEditor::onClose )
 	END_EVENT_TABLE()
 
-	void ShaderEditorPage::onClose( wxCloseEvent & p_event )
+	void ShaderEditor::onClose( wxCloseEvent & p_event )
 	{
 		doCleanup();
 		p_event.Skip();

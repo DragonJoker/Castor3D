@@ -74,34 +74,10 @@ namespace Bloom
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_hiPass->getVertexShader().shader );
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_hiPass->getPixelShader().shader );
+		visitor.visit( m_hiPass->getVertexShader() );
+		visitor.visit( m_hiPass->getPixelShader() );
 
 #if !Bloom_DebugHiPass
-		visitor.visit( cuT( "BlurX" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurXPass->getVertexShader().shader );
-		visitor.visit( cuT( "BlurX" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurXPass->getPixelShader().shader );
-
-		visitor.visit( cuT( "BlurY" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurYPass->getVertexShader().shader );
-		visitor.visit( cuT( "BlurY" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurYPass->getPixelShader().shader );
-
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_combinePass->getVertexShader().shader );
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_combinePass->getPixelShader().shader );
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );

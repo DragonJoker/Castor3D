@@ -103,13 +103,9 @@ namespace castor3d
 
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
-		visitor.visit( cuT( "ToneMapping" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "ToneMapping" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "ToneMapping" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( m_vertexShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, m_config );
 	}

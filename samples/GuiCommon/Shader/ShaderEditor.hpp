@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_SHADER_EDITOR_PAGE_H___
-#define ___GUICOMMON_SHADER_EDITOR_PAGE_H___
+#ifndef ___C3DGC_ShaderEditor_H___
+#define ___C3DGC_ShaderEditor_H___
 
 #include "GuiCommon/Shader/ShaderSource.hpp"
 
@@ -11,25 +11,25 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
-	class ShaderEditorPage
+	class ShaderEditor
 		: public wxPanel
 	{
 	public:
-		ShaderEditorPage( castor3d::Engine * engine
+		ShaderEditor( castor3d::Engine * engine
 			, bool canEdit
 			, StcContext & stcContext
-			, VkShaderStageFlagBits type
-			, castor::String const & source
+			, castor3d::ShaderModule const & module
 			, std::vector< UniformBufferValues > & ubos
+			, ShaderLanguage language
 			, wxWindow * parent
 			, wxPoint const & position = wxDefaultPosition
 			, const wxSize size = wxSize( 800, 600 ) );
-		~ShaderEditorPage();
+		~ShaderEditor();
+
+		void loadLanguage( ShaderLanguage language );
 
 	private:
-		void doInitialiseShaderLanguage();
 		void doInitialiseLayout( castor3d::Engine * engine );
-		void doLoadPage();
 		void doCleanup();
 
 		DECLARE_EVENT_TABLE()
@@ -41,8 +41,7 @@ namespace GuiCommon
 		StcTextEditor * m_editor;
 		FrameVariablesList * m_frameVariablesList;
 		PropertiesContainer * m_frameVariablesProperties;
-		VkShaderStageFlagBits m_stage;
-		wxString m_source;
+		castor3d::ShaderModule const & m_module;
 		std::vector< UniformBufferValues > & m_ubos;
 		bool m_canEdit;
 	};

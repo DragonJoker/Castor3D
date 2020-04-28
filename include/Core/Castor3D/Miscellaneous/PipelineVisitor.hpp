@@ -32,9 +32,7 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
-			, VkShaderStageFlagBits type
-			, ast::Shader const & shader ) = 0;
+		virtual void visit( ShaderModule const & shader ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -271,9 +269,7 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
-			, VkShaderStageFlagBits type
-			, ast::Shader const & shader )override
+		void visit( ShaderModule const & shader )override
 		{
 		}
 		/**@}*/

@@ -1442,8 +1442,6 @@ namespace castor3d
 
 	ShaderPtr RenderPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
-		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
-		auto & engine = *getEngine();
 		using namespace sdw;
 		VertexWriter writer;
 

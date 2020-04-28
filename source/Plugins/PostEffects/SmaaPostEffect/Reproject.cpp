@@ -283,12 +283,8 @@ namespace smaa
 
 	void Reproject::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "Reproject" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "Reproject" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	void Reproject::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

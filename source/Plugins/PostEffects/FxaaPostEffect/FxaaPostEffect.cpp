@@ -237,25 +237,21 @@ namespace fxaa
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "FXAA" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "FXAA" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "SubPixShift" )
 			, m_subpixShift );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "SpanMax" )
 			, m_spanMax );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "ReduceMul" )
 			, m_reduceMul );
 	}

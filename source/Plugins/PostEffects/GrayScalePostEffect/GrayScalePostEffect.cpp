@@ -146,12 +146,8 @@ namespace grayscale
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "GrayScale" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "GrayScale" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 		visitor.visit( cuT( "GrayScale" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Configuration" )

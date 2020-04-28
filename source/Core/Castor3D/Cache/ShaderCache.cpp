@@ -55,9 +55,10 @@ namespace castor3d
 		m_programs.clear();
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::getNewProgram( bool initialise )
+	ShaderProgramSPtr ShaderProgramCache::getNewProgram( castor::String const & name
+		, bool initialise )
 	{
-		auto result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
+		auto result = std::make_shared< ShaderProgram >( name , *getEngine()->getRenderSystem() );
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doAddProgram( result );
 
@@ -102,7 +103,7 @@ namespace castor3d
 	ShaderProgramSPtr ShaderProgramCache::doCreateAutomaticProgram( RenderPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
-		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
+		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
 		result->setSource( VK_SHADER_STAGE_VERTEX_BIT
 			, renderPass.getVertexShaderSource( flags ) );
 		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT

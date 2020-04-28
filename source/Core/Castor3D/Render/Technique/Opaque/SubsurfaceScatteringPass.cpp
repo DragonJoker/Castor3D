@@ -818,25 +818,13 @@ namespace castor3d
 
 	void SubsurfaceScatteringPass::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( cuT( "SSSSS - Blur X" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurHorizVertexShader.shader );
-		visitor.visit( cuT( "SSSSS - Blur X" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurHorizPixelShader.shader );
+		visitor.visit( m_blurHorizVertexShader );
+		visitor.visit( m_blurHorizPixelShader );
 
-		visitor.visit( cuT( "SSSSS - Blur Y" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurVerticVertexShader.shader );
-		visitor.visit( cuT( "SSSSS - Blur Y" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurVerticPixelShader.shader );
+		visitor.visit( m_blurVerticVertexShader );
+		visitor.visit( m_blurVerticPixelShader );
 
-		visitor.visit( cuT( "SSSSS - Combine" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_combineVertexShader.shader );
-		visitor.visit( cuT( "SSSSS - Combine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_combinePixelShader.shader );
+		visitor.visit( m_combineVertexShader );
+		visitor.visit( m_combinePixelShader );
 	}
 }

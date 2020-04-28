@@ -32,35 +32,10 @@ namespace GuiCommon
 		void setKeywords( uint32_t index
 			, castor::StringArray const & keywords );
 
-		inline int getFoldFlags()const
-		{
-			return m_foldFlags;
-		}
-
-		inline int32_t getFontSize()const
-		{
-			return m_fontSize;
-		}
-
 		inline castor::String const & getKeywords( uint32_t index )const
 		{
 			CU_Require( index < 9 );
 			return m_keywords[index];
-		}
-
-		inline castor::String const & getFilePattern()const
-		{
-			return m_filePattern;
-		}
-
-		inline castor::String const & getName()const
-		{
-			return m_name;
-		}
-
-		inline castor::String const & getFontName()const
-		{
-			return m_fontName;
 		}
 
 		inline StyleInfo & getStyle( int type )
@@ -78,38 +53,16 @@ namespace GuiCommon
 			return m_styles;
 		}
 
-		inline void setName( castor::String const & name )
-		{
-			m_name = name;
-		}
-
-		inline void setFontName( castor::String const & name )
-		{
-			m_fontName = name;
-		}
-
-		inline void setFilePattern( castor::String const & pattern )
-		{
-			m_filePattern = pattern;
-		}
-
-		inline void setFoldFlags( int flags )
-		{
-			m_foldFlags = flags;
-		}
-
-		inline void setFontSize( int32_t size )
-		{
-			m_fontSize = size;
-		}
+	public:
+		castor::String name;
+		castor::String filePattern;
+		bool isCLike{ true };
+		int foldFlags{ 0 };
+		int32_t fontSize{ 10 };
+		castor::String fontName;
 
 	private:
-		castor::String m_name;
-		castor::String m_filePattern;
 		WordArray m_keywords;
-		int m_foldFlags{ 0 };
-		int32_t m_fontSize{ 10 };
-		castor::String m_fontName;
 		StyleInfoMap m_styles;
 	};
 }

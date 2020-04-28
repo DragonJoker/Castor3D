@@ -44,9 +44,7 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
-			, VkShaderStageFlagBits type
-			, castor::String const & shader )
+		void visit( ShaderModule const & shader )override
 		{
 		}
 		/**@}*/

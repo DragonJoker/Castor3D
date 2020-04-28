@@ -303,11 +303,14 @@ namespace castor3d
 			name += cuT( " Shadow" );
 		}
 
+		if ( m_vertexShader.shader )
+		{
+			visitor.visit( m_vertexShader );
+		}
+
 		if ( m_pixelShader.shader )
 		{
-			visitor.visit( name
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, *m_pixelShader.shader );
+			visitor.visit( m_pixelShader );
 		}
 	}
 

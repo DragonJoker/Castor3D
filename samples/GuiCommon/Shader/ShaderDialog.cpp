@@ -5,34 +5,24 @@
 #include "GuiCommon/Aui/AuiToolBarArt.hpp"
 #include "GuiCommon/Shader/StcTextEditor.hpp"
 #include "GuiCommon/Shader/FrameVariablesList.hpp"
-#include "GuiCommon/Shader/ShaderEditorPage.hpp"
+#include "GuiCommon/Shader/ShaderEditor.hpp"
+#include "GuiCommon/Shader/ShaderProgramPage.hpp"
 #include "GuiCommon/Properties/Math/PropertiesContainer.hpp"
-
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/RenderWindow.hpp>
-#include <Castor3D/Scene/Scene.hpp>
-#include <Castor3D/Render/Technique/RenderTechnique.hpp>
-#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 
 using namespace castor3d;
 using namespace castor;
+
 namespace GuiCommon
 {
 	typedef enum eID
 	{
-		eID_GRID_VERTEX,
-		eID_GRID_FRAGMENT,
-		eID_GRID_GEOMETRY,
-		eID_GRID_HULL,
-		eID_GRID_DOMAIN,
-		eID_GRID_COMPUTE,
 		eID_MENU_QUIT,
 		eID_MENU_PREFS,
-		eID_PAGES
+		eID_MENU_LANG,
+		eID_MENU_LANG_GLSL,
+		eID_MENU_LANG_HLSL,
+		eID_MENU_LANG_SPIRV,
+		eID_PAGES,
 	}	eID;
 
 	ShaderDialog::ShaderDialog( Engine * engine
@@ -57,7 +47,14 @@ namespace GuiCommon
 	ShaderDialog::~ShaderDialog()
 	{
 		m_auiManager.UnInit();
-		m_stcContext.reset();
+	}
+
+	void ShaderDialog::doLoadLanguage( ShaderLanguage language )
+	{
+		for ( auto page : m_pages )
+		{
+			page->loadLanguage( language );
+		}
 	}
 
 	void ShaderDialog::doInitialiseShaderLanguage()
@@ -77,19 +74,19 @@ namespace GuiCommon
 	void ShaderDialog::doInitialiseLayout()
 	{
 		wxSize size = GetClientSize();
-		m_editors = new wxAuiNotebook( this
+		m_programs = new wxAuiNotebook( this
 			, eID_PAGES
 			, wxDefaultPosition
 			, wxDefaultSize
 			, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH | wxAUI_NB_SCROLL_BUTTONS );
-		m_editors->SetArtProvider( new AuiTabArt );
+		m_programs->SetArtProvider( new AuiTabArt );
 
 		m_auiManager.SetArtProvider( new AuiDockArt );
-		m_auiManager.AddPane( m_editors
+		m_auiManager.AddPane( m_programs
 			, wxAuiPaneInfo()
 				.CaptionVisible( false )
-				.Name( wxT( "Shaders" ) )
-				.Caption( _( "Shaders" ) )
+				.Name( wxT( "Programs" ) )
+				.Caption( _( "Programs" ) )
 				.CenterPane()
 				.Dock()
 				.MinSize( size )
@@ -100,37 +97,19 @@ namespace GuiCommon
 
 	void ShaderDialog::doLoadPages()
 	{
-		std::map< VkShaderStageFlagBits, wxString > const texts
-		{
-			{ VK_SHADER_STAGE_VERTEX_BIT, _( "Vertex" ) },
-			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, _( "Tessellation Control" ) },
-			{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, _( "Tessellation Evaluation" ) },
-			{ VK_SHADER_STAGE_GEOMETRY_BIT, _( "Geometry" ) },
-			{ VK_SHADER_STAGE_FRAGMENT_BIT, _( "Fragment" ) },
-			{ VK_SHADER_STAGE_COMPUTE_BIT, _( "Compute" ) },
-		};
-
 		for ( auto & sources : m_sources )
 		{
-			for ( auto & source : sources.sources )
-			{
-				wxArrayString arrayChoices;
-				arrayChoices.push_back( wxCOMBO_NEW );
-
-				// The editor page
-				m_pages.push_back( new ShaderEditorPage( m_engine
-					, true
-					, *m_stcContext
-					, source.first
-					, source.second
-					, sources.ubos
-					, m_editors ) );
-				auto & page = *m_pages.back();
-				page.SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-				page.SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-				m_editors->AddPage( &page, sources.name + cuT( " - " ) + texts.at( source.first ), true );
-				page.SetSize( 0, 22, m_editors->GetClientSize().x, m_editors->GetClientSize().y - 22 );
-			}
+			m_pages.push_back( new ShaderProgramPage( m_engine
+				, true
+				, *m_stcContext
+				, sources
+				, ShaderLanguage::GLSL
+				, m_programs ) );
+			auto & page = *m_pages.back();
+			page.SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+			page.SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			m_programs->AddPage( &page, sources.name, true );
+			page.SetSize( 0, 22, m_programs->GetClientSize().x, m_programs->GetClientSize().y - 22 );
 		}
 	}
 
@@ -144,6 +123,10 @@ namespace GuiCommon
 		menu->Append( eID_MENU_QUIT, _( "&Quit\tCTRL+Q" ) );
 		menuBar->Append( menu, _T( "&File" ) );
 		menu = new wxMenu;
+		m_glslRadio = menu->AppendRadioItem( eID_MENU_LANG_GLSL, wxT( "GLSL" ), _( "Use GLSL to display shaders" ) );
+		m_hlslRadio = menu->AppendRadioItem( eID_MENU_LANG_HLSL, wxT( "HLSL" ), _( "Use HLSL to display shaders" ) );
+		m_spirvRadio = menu->AppendRadioItem( eID_MENU_LANG_SPIRV, wxT( "SPIR-V" ), _( "Use SPIR-V to display shaders" ) );
+		menu->AppendSeparator();
 		menu->Append( eID_MENU_PREFS, _( "&Edit preferences ...\tCTRL+E" ) );
 		menuBar->Append( menu, _T( "O&ptions" ) );
 		SetMenuBar( menuBar );
@@ -151,14 +134,17 @@ namespace GuiCommon
 
 	void ShaderDialog::doCleanup()
 	{
-		m_auiManager.DetachPane( m_editors );
-		m_editors->DeleteAllPages();
+		m_auiManager.DetachPane( m_programs );
+		m_programs->DeleteAllPages();
 	}
 
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
 		EVT_CLOSE( ShaderDialog::onClose )
 		EVT_MENU( eID_MENU_QUIT, ShaderDialog::onMenuClose )
-		EVT_AUINOTEBOOK_PAGE_CHANGED( eID_PAGES, ShaderDialog::onPageChanged )
+		EVT_MENU( eID_MENU_LANG_GLSL, ShaderDialog::onMenuLanguageGLSL )
+		EVT_MENU( eID_MENU_LANG_HLSL, ShaderDialog::onMenuLanguageHLSL )
+		EVT_MENU( eID_MENU_LANG_SPIRV, ShaderDialog::onMenuLanguageSPIRV )
+		EVT_MENU( eID_MENU_PREFS, ShaderDialog::onMenuPreferences )
 	END_EVENT_TABLE()
 
 	void ShaderDialog::onClose( wxCloseEvent & event )
@@ -173,7 +159,43 @@ namespace GuiCommon
 		event.Skip();
 	}
 
-	void ShaderDialog::onPageChanged( wxAuiNotebookEvent & event )
+	void ShaderDialog::onMenuLanguageGLSL( wxCommandEvent & event )
+	{
+		if ( !m_glslRadio->IsCheck() )
+		{
+			m_hlslRadio->Check( false );
+			m_spirvRadio->Check( false );
+			doLoadLanguage( ShaderLanguage::GLSL );
+		}
+
+		event.Skip();
+	}
+
+	void ShaderDialog::onMenuLanguageHLSL( wxCommandEvent & event )
+	{
+		if ( !m_hlslRadio->IsCheck() )
+		{
+			m_glslRadio->Check( false );
+			m_spirvRadio->Check( false );
+			doLoadLanguage( ShaderLanguage::HLSL );
+		}
+
+		event.Skip();
+	}
+
+	void ShaderDialog::onMenuLanguageSPIRV( wxCommandEvent & event )
+	{
+		if ( !m_spirvRadio->IsCheck() )
+		{
+			m_glslRadio->Check( false );
+			m_hlslRadio->Check( false );
+			doLoadLanguage( ShaderLanguage::SPIRV );
+		}
+
+		event.Skip();
+	}
+
+	void ShaderDialog::onMenuPreferences( wxCommandEvent & event )
 	{
 		event.Skip();
 	}

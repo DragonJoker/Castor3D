@@ -182,12 +182,8 @@ namespace castor3d
 	{
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	void ForwardRenderTechniquePass::update( RenderInfo & info

@@ -1266,8 +1266,8 @@ namespace castor3d
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 		, m_renderPass{ &renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Reflection" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Reflection" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
 	{
 	}
 
@@ -1303,12 +1303,8 @@ namespace castor3d
 
 	void ReflectionPass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( cuT( "Reflection" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "Reflection" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	//*********************************************************************************************

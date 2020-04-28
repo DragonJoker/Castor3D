@@ -621,27 +621,9 @@ namespace castor3d
 		, SsaoConfig & config
 		, RenderTechniqueVisitor & visitor )
 	{
-		castor::StringStream stream{ castor::makeStringStream() };
-		stream << cuT( "SSAO - " );
-
-		if ( horizontal )
-		{
-			stream << cuT( "Horizontal - " );
-		}
-		else
-		{
-			stream << cuT( "Vertical - " );
-		}
-
-		stream << cuT( "Blur" );
-		auto name = stream.str();
-		visitor.visit( name
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		config.accept( name, visitor );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		config.accept( m_vertexShader.name, visitor );
 	}
 
 	void SsaoBlurPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

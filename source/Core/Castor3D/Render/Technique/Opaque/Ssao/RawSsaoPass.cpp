@@ -795,12 +795,8 @@ namespace castor3d
 	void RawSsaoPass::accept( SsaoConfig & config
 		, RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( cuT( "SSAO - Raw" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "SSAO - Raw" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		config.accept( cuT( "SSAO - Raw" ), visitor );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader  );
+		config.accept( m_pixelShader.name, visitor );
 	}
 }

@@ -1069,12 +1069,8 @@ namespace smaa
 
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	void BlendingWeightCalculation::update( castor::Point4f const & subsampleIndices )

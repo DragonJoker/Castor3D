@@ -68,6 +68,7 @@ namespace GuiCommon
 	CU_DeclareAttributeParser( Language_Style )
 	CU_DeclareAttributeParser( Language_FontName )
 	CU_DeclareAttributeParser( Language_FontSize )
+	CU_DeclareAttributeParser( Language_CLike )
 	CU_DeclareAttributeParser( Style_Type )
 	CU_DeclareAttributeParser( Style_FgColour )
 	CU_DeclareAttributeParser( Style_BgColour )

@@ -1,0 +1,209 @@
+language "spirv"
+{
+	pattern *.spirv *.spv
+	fold_flags compact
+	font_name Consolas
+	font_size 10
+	is_c_like false
+	keywords 1
+	{
+		OPCapability
+		OPSource
+		OPName
+		OPDecorate
+		OPVariable
+		OPConstant
+		OPConstantComposite
+		OPTypeVoid
+		OPTypeBool
+		OPTypeInt
+		OPTypeFunction
+		OPTypeImage
+		OPTypeSampledImage
+		OPTypeFloat
+		OPTypePointer
+		OPTypeVector
+		OPExtInstImport
+		OPMemoryModel
+		OPEntryPoint
+		OPExecutionMode
+		OPFunction
+		OPFunctionParameter
+		OPLabel
+		OPLoad
+		OPCompositeExtract
+		OPSelectionMerge
+		OPBranchConditional
+		OPAccessChain
+		OPBranch
+		OPStore
+		OPReturn
+		OPFunctionEnd
+		OPVectorShuffle
+		OPFunctionCall
+		OPImageSampleImplicitLod
+		OPFConvert
+		OPCompositeConstruct
+		OPDot
+		OPFOrdLessThan
+		OPImageSampleExplicitLod
+		OPReturnValue
+		OPExtInst
+		OPFOrdGreaterThan
+		OPFDiv
+		OPFNegate
+		OPVectorTimesScalar
+		OPFAdd
+		OPUndef
+		OPTypeArray
+		OPFSub
+		OPFOrdEqual
+		OPKill
+		OPFMul
+		OPMemberName
+		OPMemberDecorate
+		OPTypeStruct
+		OPSwitch
+	}
+	keywords 2
+	{
+		Lod
+		Shader
+		Float64
+		Logical
+		OriginLowerLeft
+		OriginUpperLeft
+		Fragment
+		GLCompute
+		LocalSize
+		GLSL
+		Magic
+		Version
+		Generator
+		Bound
+		Schema
+		GLSL450
+		Location
+		Binding
+		DescriptorSet
+		Input
+		Output
+		Dim2D
+		UniformConstant
+		R32i
+		Rgba32f
+		Function
+		FMax
+		Fma
+		BuiltIn
+		2D
+		sampled
+		None
+		Step
+		FAbs
+		ArrayStride
+		Block
+		Vertex
+		FClamp
+		Pow
+		FMin
+		Sqrt
+		Normalize
+		FMix
+		Dim1D
+		Image
+		Flat
+		Uniform
+	}
+	keywords 5
+	{
+		None
+		WorkgroupSize
+		Offset
+		MatrixStride
+		ColMajor
+		InstanceIndex
+		Position
+		PointSize
+		ClipDistance
+		CullDistance
+	}
+	style
+	{
+		type		default
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		word1
+		fg_colour	#569CD6
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		word2
+		fg_colour	#FF8000
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment_doc
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment_line
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment_line_doc
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment_doc_keyword
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		comment_doc_keyword_error
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		number
+		fg_colour	#B5CEA8
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		operator
+		fg_colour	#B4B4B4
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		preprocessor
+		fg_colour	#BD63C5
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		identifier
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+	}
+}
