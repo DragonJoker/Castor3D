@@ -135,6 +135,10 @@ namespace castor3d
 		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_opaquePass.update( info, jitter );
 			|| m_ssgiConfig.enabled )
+		{
+			m_linearisePass->update( camera.getViewport() );
+		}
+
 		m_lightingPass->update( info, scene, camera, jitter );
 
 		if ( m_ssaoConfig.enabled )

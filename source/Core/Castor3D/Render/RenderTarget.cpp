@@ -187,23 +187,6 @@ namespace castor3d
 	}
 
 	//*************************************************************************************************
-
-	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
-		, ashes::ImageView const & ovView )
-		: RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
-		, m_ovView{ ovView }
-	{
-	}
-
-	void RenderTarget::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ovView
-			, m_sampler->getSampler() );
-	}
-
-	//*************************************************************************************************
 	
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
@@ -323,8 +306,6 @@ namespace castor3d
 			m_signalReady.reset();
 
 			m_combineQuad.reset();
-			m_combineCommands.reset();
-			m_combineFinished.reset();
 
 			m_toneMappingCommandBuffer.reset();
 
@@ -709,7 +690,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Combine" };
+		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -743,7 +724,7 @@ namespace castor3d
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Combine" };
+		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -771,45 +752,19 @@ namespace castor3d
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( *this );
-		auto program = ashes::PipelineShaderStageCreateInfoArray
-		{
-			makeShaderState( device, vtx ),
-			makeShaderState( device, pxl ),
-		};
-
-		m_combineCommands = device.graphicsCommandPool->createCommandBuffer();
-		m_combineFinished = device->createSemaphore();
-		m_combineQuad = std::make_unique< CombineQuad >( *getEngine()->getRenderSystem()
-			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( OverlayImgIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT )
-		};
-		m_combineQuad->createPipeline( { m_size.getWidth(), m_size.getHeight() }
-			, Position{}
-			, std::move( program )
-			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
-			, *m_renderPass
-			, std::move( bindings )
-			, {} );
-
-		m_combineCommands->begin();
-		m_combineCommands->beginDebugBlock(
+		m_combineQuad = std::make_unique< CombinePass >( *getEngine()
+			, "Target"
+			, getPixelFormat()
+			, VkExtent2D
 			{
-				"Combine 3D-2D",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		m_combineCommands->beginRenderPass( *m_renderPass
-			, *m_combinedFrameBuffer.frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		m_combineQuad->registerFrame( *m_combineCommands );
-		m_combineCommands->endRenderPass();
-		m_combineCommands->endDebugBlock();
-		m_combineCommands->end();
+				m_combinedFrameBuffer.colourTexture.getTexture()->getWidth(),
+				m_combinedFrameBuffer.colourTexture.getTexture()->getHeight(),
+			}
+			, std::move( vtx )
+			, std::move( pxl )
+			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView()
+			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
+			, m_combinedFrameBuffer.colourTexture.getTexture() );
 	}
 
 	void RenderTarget::doRender( RenderInfo & info
@@ -952,17 +907,6 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-		auto & queue = *device.graphicsQueue;
-		auto * result = &toWait;
-
-		queue.submit( *m_combineCommands
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_combineFinished
-			, nullptr );
-		result = m_combineFinished.get();
-
-		return *result;
+		return m_combineQuad->combine( toWait );
 	}
 }

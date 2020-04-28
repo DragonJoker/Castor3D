@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/CombinePass.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
@@ -94,28 +95,6 @@ namespace castor3d
 
 		private:
 			RenderTarget & renderTarget;
-		};
-		/**
-		\version	0.11.0
-		\date		01/10/2018
-		\~english
-		\brief		Combines objects and overlays textures.
-		\~french
-		\brief		Combine les textures des incrustations et des objets.
-		*/
-		class CombineQuad
-			: public RenderQuad
-		{
-		public:
-			explicit CombineQuad( RenderSystem & renderSystem
-				, ashes::ImageView const & ovView );
-
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
-		private:
-			ashes::ImageView const & m_ovView;
 		};
 
 	public:
@@ -441,9 +420,7 @@ namespace castor3d
 		ashes::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
-		std::unique_ptr< CombineQuad > m_combineQuad;
-		ashes::CommandBufferPtr m_combineCommands;
-		ashes::SemaphorePtr m_combineFinished;
+		std::unique_ptr< CombinePass > m_combineQuad;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;

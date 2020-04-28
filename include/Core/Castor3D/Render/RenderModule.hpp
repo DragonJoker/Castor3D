@@ -223,6 +223,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Combines two textures into one, using an addition.
+	*\~french
+	*\brief
+	*	Combine deux textures en une, en les additionnant.
+	*/
+	class CombinePass;
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief
