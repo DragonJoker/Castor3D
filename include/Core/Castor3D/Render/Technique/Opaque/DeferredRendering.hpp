@@ -110,6 +110,8 @@ namespace castor3d
 		OpaquePass & m_opaquePass;
 		castor::Size m_size;
 		GpInfoUbo m_gpInfoUbo;
+		GeometryPassResult m_geometryPassResult;
+		std::unique_ptr< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;
 		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;

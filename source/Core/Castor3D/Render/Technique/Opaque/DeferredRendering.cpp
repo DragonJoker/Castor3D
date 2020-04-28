@@ -6,6 +6,7 @@
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -63,30 +64,32 @@ namespace castor3d
 		, m_ssaoConfig{ config }
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
-		, m_gpInfoUbo{ engine }
-		, m_geometryPassResult{ engine, depthTexture->getTexture(), velocityTexture->getTexture() }
-	{
-		m_opaquePass.initialiseRenderPass( m_geometryPassResult );
-
-		m_lightingPass = std::make_unique< LightingPass >( engine
+		, m_gpInfoUbo{ m_engine }
+		, m_geometryPassResult{ m_engine, depthTexture->getTexture(), velocityTexture->getTexture() }
+		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
+			, cuT( "Deferred" )
+			, makeExtent2D( m_size )
+			, m_geometryPassResult.getViews()[size_t( DsTexture::eDepth )] ) }
+		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_size
 			, scene
 			, m_geometryPassResult
-			, m_opaquePass
 			, depthTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo );
-		m_ssao = std::make_unique< SsaoPass >( engine
-			, VkExtent2D{ m_size.getWidth(), m_size.getHeight() }
+			, m_gpInfoUbo ) }
+		, m_ssao{ std::make_unique< SsaoPass >( m_engine
+			, makeExtent2D( m_size )
 			, m_ssaoConfig
-			, m_geometryPassResult );
-		m_subsurfaceScattering = std::make_unique< SubsurfaceScatteringPass >( engine
+			, m_linearisePass->getResult()
+			, m_geometryPassResult ) }
+		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
 			, m_size
 			, m_geometryPassResult
-			, m_lightingPass->getDiffuse() );
-		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
+			, m_lightingPass->getDiffuse() ) }
+	{
+		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
@@ -96,7 +99,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo
 			, m_ssaoConfig.enabled ? &m_ssao->getResult().getTexture()->getDefaultView() : nullptr ) );
-		m_reflection.emplace_back( std::make_unique< ReflectionPass >( engine
+		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
@@ -131,6 +134,7 @@ namespace castor3d
 			, invProj );
 		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_opaquePass.update( info, jitter );
+			|| m_ssgiConfig.enabled )
 		m_lightingPass->update( info, scene, camera, jitter );
 
 		if ( m_ssaoConfig.enabled )
@@ -159,6 +163,11 @@ namespace castor3d
 			, camera
 			, m_geometryPassResult
 			, *result );
+
+		if ( m_ssaoConfig.enabled
+		{
+			result = &m_linearisePass->linearise( *result );
+		}
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -208,6 +217,11 @@ namespace castor3d
 	{
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );
+
+		if ( m_ssaoConfig.enabled
+		{
+			m_linearisePass->accept( visitor );
+		}
 
 		if ( m_ssaoConfig.enabled )
 		{

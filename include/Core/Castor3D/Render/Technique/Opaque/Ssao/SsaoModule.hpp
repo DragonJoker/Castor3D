@@ -20,28 +20,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Ambient occlusion blur pass.
+	*	SSAO blur pass.
 	*\~french
 	*\brief
-	*	Passe de flou de l'occlusion ambiante.
+	*	Passe de flou du SSAO.
 	*/
 	class SsaoBlurPass;
 	/**
 	*\~english
 	*\brief
-	*	Depth linearisation pass, with mipmaps generation.
+	*	Raw SSAO pass.
 	*\~french
 	*\brief
-	*	Passe linéarisation de profondeur, avec génération des mipmaps.
-	*/
-	class LineariseDepthPass;
-	/**
-	*\~english
-	*\brief
-	*	Raw ambient occlusion pass.
-	*\~french
-	*\brief
-	*	Passe d'occlusion ambiante.
+	*	Passe de SSAO.
 	*/
 	class RawSsaoPass;
 	/**
@@ -56,10 +47,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Ambient occlusion configuration UBO.
+	*	SSAO configuration UBO.
 	*\~french
 	*\brief
-	*	UBO de configuration de l'occlusion ambiante.
+	*	UBO de configuration du SSAO.
 	*/
 	class SsaoConfigUbo;
 

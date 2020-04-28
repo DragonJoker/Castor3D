@@ -4,10 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_LineariseDepthPass_H___
 #define ___C3D_LineariseDepthPass_H___
 
-#include "SsaoModule.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -26,6 +27,8 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#define C3D_DebugLinearisePass 0
+
 namespace castor3d
 {
 	class LineariseDepthPass
@@ -36,18 +39,16 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
 		 *\param[in]	depthBuffer		The non linearised depth buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	ssaoConfigUbo	L'UBO de configuration SSAO.
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
 		 */
-		LineariseDepthPass( Engine & engine
+		C3D_API LineariseDepthPass( Engine & engine
+			, castor::String prefix
 			, VkExtent2D const & size
-			, SsaoConfigUbo & ssaoConfigUbo
 			, ashes::ImageView const & depthBuffer );
 		/**
 		 *\~english
@@ -55,7 +56,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~LineariseDepthPass();
+		C3D_API ~LineariseDepthPass();
 		/**
 		 *\~english
 		 *\brief		Updates clipping info.
@@ -64,18 +65,38 @@ namespace castor3d
 		 *\brief		Met à jour les informations de clipping.
 		 *\param[in]	viewport	Le viewport contenant les données de clipping.
 		 */
-		void update( Viewport const & viewport );
+		C3D_API void update( Viewport const & viewport
+			, ashes::CommandBuffer * cb );
+		/**
+		 *\~english
+		 *\brief		Updates clipping info.
+		 *\param[in]	viewport	The viewport containing the clipping data.
+		 *\~french
+		 *\brief		Met à jour les informations de clipping.
+		 *\param[in]	viewport	Le viewport contenant les données de clipping.
+		 */
+		C3D_API void update( Viewport const & viewport );
 		/**
 		 *\~english
 		 *\brief		Linearises depth buffer.
 		 *\~french
 		 *\brief		Linéarise le tampon de profondeur.
 		 */
-		ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
+		C3D_API ashes::Semaphore const & linearise( ashes::Semaphore const & toWait )const;
+		/**
+		 *\~english
+		 *\param[in]	timer	The render timer.
+		 *\return		The commands used to render the pass.
+		 *\~french
+		 *\param[in]	timer	Le timer de rendu.
+		 *\return		Les commandes utilisées pour rendre la passe.
+		 */
+		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
+			, uint32_t index )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -89,6 +110,11 @@ namespace castor3d
 		{
 			return m_result;
 		}
+
+		inline ashes::CommandBuffer const & getCommands()const
+		{
+			return *m_commandBuffer;
+		}
 		/**@}*/
 
 	private:
@@ -96,7 +122,9 @@ namespace castor3d
 		void doInitialiseMinifyPass();
 		void doCleanupLinearisePass();
 		void doCleanupMinifyPass();
-		void doPrepareFrame();
+		void doPrepareFrame( ashes::CommandBuffer & cb
+			, RenderPassTimer const & timer
+			, uint32_t index )const;
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
@@ -105,8 +133,8 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfigUbo & m_ssaoConfigUbo;
 		ashes::ImageView const & m_depthBuffer;
+		castor::String m_prefix;
 		VkExtent2D m_size;
 		TextureUnit m_result;
 		RenderPassTimerSPtr m_timer;

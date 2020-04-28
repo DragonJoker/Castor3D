@@ -52,10 +52,10 @@ namespace castor3d
 		~RawSsaoPass();
 		/**
 		 *\~english
-		 *\brief		Renders the SSAO pass on currently bound framebuffer.
+		 *\brief		Renders the SSAO pass.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
 		 *\~french
-		 *\brief		Dessine la passe SSAO sur le tampon d'image actif.
+		 *\brief		Dessine la passe SSAO.
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		ashes::Semaphore const & compute( ashes::Semaphore const & toWait )const;

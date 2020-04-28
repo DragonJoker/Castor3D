@@ -1,11 +1,15 @@
-#include "Castor3D/Render/Technique/Opaque/Ssao/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -13,10 +17,6 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -350,16 +350,16 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
+		, castor::String prefix
 		, VkExtent2D const & size
-		, SsaoConfigUbo & ssaoConfigUbo
 		, ashes::ImageView const & depthBuffer )
 		: m_engine{ engine }
-		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_depthBuffer{ depthBuffer }
+		, m_prefix{ std::move( prefix ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine
-			, cuT( "SSAO" )
+			, m_prefix
 			, cuT( "Linearise depth" ) ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
@@ -381,13 +381,13 @@ namespace castor3d
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "LineariseDepthClipInfo" ) }
-		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LineariseDepth" }
-		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LineariseDepth" }
+		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth" }
+		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth" }
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine
 			, m_lineariseVertexShader
 			, m_linearisePixelShader ) }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Minify" }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Minify" }
+		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "Minify" }
+		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "Minify" }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine
 			, m_minifyVertexShader
 			, m_minifyPixelShader ) }
@@ -405,7 +405,8 @@ namespace castor3d
 		m_result.cleanup();
 	}
 
-	void LineariseDepthPass::update( Viewport const & viewport )
+	void LineariseDepthPass::update( Viewport const & viewport
+		, ashes::CommandBuffer * cb )
 	{
 		auto z_f = viewport.getFar();
 		auto z_n = viewport.getNear();
@@ -421,8 +422,17 @@ namespace castor3d
 		{
 			m_clipInfo->getData() = m_clipInfoValue;
 			m_clipInfo->upload( 0u );
-			doPrepareFrame();
+
+			if ( cb )
+			{
+				doPrepareFrame( *cb, *m_timer, 0u );
+			}
 		}
+	}
+	
+	void LineariseDepthPass::update( Viewport const & viewport )
+	{
+		update( viewport, m_commandBuffer.get() );
 	}
 
 	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
@@ -442,21 +452,27 @@ namespace castor3d
 		return *result;
 	}
 
-	void LineariseDepthPass::accept( RenderTechniqueVisitor & visitor )
+	CommandsSemaphore LineariseDepthPass::getCommands( RenderPassTimer const & timer
+		, uint32_t index )const
 	{
-		visitor.visit( cuT( "SSAO - Linearise" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_lineariseVertexShader.shader );
-		visitor.visit( cuT( "SSAO - Linearise" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_linearisePixelShader.shader );
+		auto & device = getCurrentRenderDevice( *m_engine.getRenderSystem() );
+		castor3d::CommandsSemaphore commands
+		{
+			device.graphicsCommandPool->createCommandBuffer(),
+			device->createSemaphore()
+		};
+		auto & cmd = *commands.commandBuffer;
+		doPrepareFrame( cmd, timer, index );
+		return commands;
+	}
 
-		visitor.visit( cuT( "SSAO - Minify" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_minifyVertexShader.shader );
-		visitor.visit( cuT( "SSAO - Minify" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_minifyPixelShader.shader );
+	void LineariseDepthPass::accept( PipelineVisitorBase & visitor )
+	{
+		visitor.visit( m_lineariseVertexShader );
+		visitor.visit( m_linearisePixelShader );
+
+		visitor.visit( m_minifyVertexShader );
+		visitor.visit( m_minifyPixelShader );
 	}
 
 	void LineariseDepthPass::doInitialiseLinearisePass()
@@ -635,20 +651,22 @@ namespace castor3d
 		m_minifyDescriptorLayout.reset();
 	}
 
-	void LineariseDepthPass::doPrepareFrame()
+	void LineariseDepthPass::doPrepareFrame( ashes::CommandBuffer & cb
+		, RenderPassTimer const & timer
+		, uint32_t index )const
 	{
-		m_commandBuffer->begin();
-		m_commandBuffer->beginDebugBlock(
-			{
-				"SSAO - Linearise Depth",
-				makeFloatArray( m_engine.getNextRainbowColour() ),
-			} );
-		m_timer->beginPass( *m_commandBuffer );
+		cb.begin();
+		timer.beginPass( cb, index );
 
 		// Linearisation pass.
+		cb.beginDebugBlock(
+			{
+				m_prefix + " - Linearise Depth",
+				makeFloatArray( m_engine.getNextRainbowColour() ),
+			} );
 		auto subresource = m_depthBuffer->subresourceRange;
 		subresource.aspectMask = ashes::getAspectMask( m_depthBuffer.getFormat() );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+		cb.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( 0u )
 				, VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
@@ -658,16 +676,16 @@ namespace castor3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, *m_depthBuffer.image
 				, subresource ) );
-		m_commandBuffer->beginRenderPass( *m_renderPass
+		cb.beginRenderPass( *m_renderPass
 			, *m_lineariseFrameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
-		m_commandBuffer->bindPipeline( *m_linearisePipeline );
-		m_commandBuffer->bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
-		m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-		m_commandBuffer->draw( 6u );
-		m_commandBuffer->endRenderPass();
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		cb.bindPipeline( *m_linearisePipeline );
+		cb.bindDescriptorSet( *m_lineariseDescriptor, *m_linearisePipelineLayout );
+		cb.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+		cb.draw( 6u );
+		cb.endRenderPass();
+		cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
 			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
 				, VkAccessFlags( VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT )
@@ -677,29 +695,30 @@ namespace castor3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, *m_depthBuffer.image
 				, subresource ) );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->beginDebugBlock(
+		cb.endDebugBlock();
+
+		// Minification passes.
+		cb.beginDebugBlock(
 			{
-				"SSAO - Minify",
+				m_prefix + " - Minify",
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 
-		// Minification passes.
 		for ( auto & pipeline : m_minifyPipelines )
 		{
-			m_commandBuffer->beginRenderPass( *m_renderPass
+			cb.beginRenderPass( *m_renderPass
 				, *pipeline.frameBuffer
 				, { transparentBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
-			m_commandBuffer->bindPipeline( *pipeline.pipeline );
-			m_commandBuffer->bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
-			m_commandBuffer->bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
-			m_commandBuffer->draw( 6u );
-			m_commandBuffer->endRenderPass();
+			cb.bindPipeline( *pipeline.pipeline );
+			cb.bindDescriptorSet( *pipeline.descriptor, *m_minifyPipelineLayout );
+			cb.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
+			cb.draw( 6u );
+			cb.endRenderPass();
 		}
 
-		m_timer->endPass( *m_commandBuffer );
-		m_commandBuffer->endDebugBlock();
-		m_commandBuffer->end();
+		cb.endDebugBlock();
+		timer.endPass( cb, index );
+		cb.end();
 	}
 }

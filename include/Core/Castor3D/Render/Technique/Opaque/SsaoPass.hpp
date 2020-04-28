@@ -21,20 +21,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	config		The SSAO configuration.
-		 *\param[in]	gpResult	The geometry pass result.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	linearisedDepth	The linearised depth buffer.
+		 *\param[in]	gpResult		The geometry pass result.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	config		La configuration du SSAO.
-		 *\param[in]	gpResult	Le résultat de la geometry pass.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	linearisedDepth	Le depth buffer linéarisé.
+		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 */
 		SsaoPass( Engine & engine
 			, VkExtent2D const & size
-			, SsaoConfig & config
+			, SsaoConfig & ssaoConfig
+			, TextureUnit const & linearisedDepth
 			, GeometryPassResult const & gpResult );
 		/**
 		 *\~english
@@ -71,10 +74,9 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfig & m_config;
+		SsaoConfig & m_ssaoConfig;
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
-		std::shared_ptr< LineariseDepthPass > m_linearisePass;
 		std::shared_ptr< RawSsaoPass > m_rawSsaoPass;
 		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
 		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
