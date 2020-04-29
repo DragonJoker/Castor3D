@@ -67,8 +67,7 @@ namespace castor3d
 		, SsaoConfig & ssaoConfig
 		, SsgiConfig & ssgiConfig
 		, TextureLayout const & linearisedDepth
-		, TextureLayout const & scene
-		, TextureLayoutSPtr resultTexture )
+		, TextureLayoutSPtr scene )
 		: m_engine{ engine }
 		, m_size{ size.width >> 2, size.height >> 2 }
 		, m_ssaoConfig{ ssaoConfig }
@@ -78,7 +77,7 @@ namespace castor3d
 			, m_size
 			, m_ssgiConfig
 			, linearisedDepth
-			, scene.getDefaultView() ) }
+			, scene->getDefaultView() ) }
 #if !C3D_DebugRawPass
 		, m_gaussianBlur{ std::make_shared< GaussianBlur >( engine
 			, cuT( "SSGI" )
@@ -88,13 +87,13 @@ namespace castor3d
 			, ssgiConfig.blurSize.value().value() ) }
 		, m_combine{ std::make_shared< CombinePass >( engine
 			, cuT( "SSGI" )
-			, scene.getPixelFormat()
-			, VkExtent2D{ scene.getWidth(), scene.getHeight() }
+			, scene->getPixelFormat()
+			, VkExtent2D{ scene->getWidth(), scene->getHeight() }
 			, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, "SSGI - Combine", getVertexProgram( *engine.getRenderSystem() ) }
 			, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSGI - Combine", getPixelProgram( *engine.getRenderSystem() ) }
-			, scene.getDefaultView()
+			, m_rawSsgi->getSceneView().getTexture()->getDefaultView()
 			, m_rawSsgi->getResult().getTexture()->getDefaultView()
-			, resultTexture ) }
+			, scene ) }
 #endif
 	{
 	}

@@ -119,7 +119,6 @@ namespace castor3d
 		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		std::vector< std::unique_ptr< ReflectionPass > > m_resolve;
-		TextureLayoutSPtr m_resolveResult;
 		std::unique_ptr< SsgiPass > m_ssgi;
 		std::vector< ashes::ImagePtr > m_results;
 	};

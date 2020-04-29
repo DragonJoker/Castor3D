@@ -71,6 +71,10 @@ namespace castor3d
 		{
 			return m_result;
 		}
+		inline TextureUnit const & getSceneView()const
+		{
+			return m_scene;
+		}
 		/**@}*/
 
 	public:
@@ -85,6 +89,7 @@ namespace castor3d
 		ashes::ImageView const & m_sceneView;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
+		TextureUnit m_scene;
 		ashes::RenderPassPtr m_renderPass;
 		TextureUnit m_result;
 		ashes::FrameBufferPtr m_frameBuffer;

@@ -43,8 +43,7 @@ namespace castor3d
 			, SsaoConfig & ssaoConfig
 			, SsgiConfig & ssgiConfig
 			, TextureLayout const & linearisedDepth
-			, TextureLayout const & scene
-			, TextureLayoutSPtr resultTexture );
+			, TextureLayoutSPtr scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.

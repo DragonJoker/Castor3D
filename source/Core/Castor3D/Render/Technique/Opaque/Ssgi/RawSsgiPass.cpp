@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
@@ -228,7 +229,7 @@ namespace castor3d
 					pxl_fragColor = vec4( gi, 1.0 );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
+			}
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
@@ -239,12 +240,12 @@ namespace castor3d
 					0u,
 					format,
 					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
 					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				}
 			};
 			ashes::SubpassDescriptionArray subpasses;
@@ -313,28 +314,33 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, VkExtent2D const & size )
+		TextureUnit doCreateTexture( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent2D const & size
+			, bool transfer )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, cuT( "SSGIRaw_Result" ), VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 
 			ashes::ImageCreateInfo image
 			{
 				0u,
 				VK_IMAGE_TYPE_2D,
-				RawSsgiPass::ResultFormat,
+				format,
 				{ size.width, size.height, 1u },
 				1u,
 				1u,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
 				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ),
+					| VK_IMAGE_USAGE_SAMPLED_BIT 
+					| ( transfer ? VK_IMAGE_USAGE_TRANSFER_DST_BIT : 0u ) ),
 			};
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "SSGIRaw_Result" ) );
+				, name );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -364,8 +370,9 @@ namespace castor3d
 		, m_sceneView{ scene }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "RawSSGI", getVertexProgram( m_renderSystem ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "RawSSGI", getPixelProgram( m_renderSystem, size.width, size.height ) }
+		, m_scene{ doCreateTexture( engine, "RawSSGIScene", scene->format, VkExtent2D{ scene.image->getDimensions().width, scene.image->getDimensions().height }, true ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), ResultFormat ) }
-		, m_result{ doCreateTexture( engine, size ) }
+		, m_result{ doCreateTexture( engine, "RawSSGIResult", ResultFormat, size, false ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "RawSSGI" ) ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore() }
@@ -415,6 +422,7 @@ namespace castor3d
 		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
+		auto & sceneView = m_scene.getTexture()->getDefaultView();
 		castor3d::CommandsSemaphore commands
 		{
 			device.graphicsCommandPool->createCommandBuffer(),
@@ -424,6 +432,31 @@ namespace castor3d
 
 		cmd.begin();
 		timer.beginPass( cmd, index );
+
+		cmd.beginDebugBlock(
+			{
+				"SSGI - Copy HDR texture",
+				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
+			} );
+		// Copy original scene view to internal one
+		// Transition scene view to transfer source
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_sceneView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		// Transition internal to transfer destination
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, sceneView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		cmd.copyImage( m_sceneView, sceneView );
+		// Transition scene view back to color attachment
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, m_sceneView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+		// And internal to shader input
+		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, sceneView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		cmd.endDebugBlock();
 		cmd.beginDebugBlock(
 			{
 				"SSGI - RawSSGI",
@@ -461,7 +494,7 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( HdrMapIdx )
-			, m_sceneView
+			, m_scene.getTexture()->getDefaultView()
 			, m_sampler->getSampler() );
 	}
 

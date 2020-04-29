@@ -199,7 +199,8 @@ namespace castor3d
 				, m_size
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
 
 			m_depthBuffer = doCreateTexture( *getEngine()
