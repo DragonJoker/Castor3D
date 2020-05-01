@@ -913,7 +913,7 @@ namespace castor3d
 				auto metallic = writer.declLocale( "metallic"
 					, data3.r() );
 				auto roughness = writer.declLocale( "roughness"
-					, data3.g() );
+					, data2.w() );
 				auto flags = writer.declLocale( "flags"
 					, writer.cast< Int >( data1.w() ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"

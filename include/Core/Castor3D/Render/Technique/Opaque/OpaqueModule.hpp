@@ -30,8 +30,8 @@ namespace castor3d
 	{
 		eDepth,
 		eData1, // RGB => Normal, A => Object Material flags
-		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBRMR: A => Unused - PBRSG: A => Glossiness
-		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Roughness, B => Unused
+		eData2, // RGB => Diffuse/Albedo - SSR: A => Shininess - PBRMR: A => Roughness - PBRSG: A => Glossiness
+		eData3, // A => AO - SSR/PBRSG: RGB => Specular - PBRMR: R => Metallic, G => Unused, B => Unused
 		eData4, // RGB => Emissive, A => Transmittance
 		eData5, // RG => Velocity, B => Material Index, A => Unused
 		CU_ScopedEnumBounds( eDepth ),

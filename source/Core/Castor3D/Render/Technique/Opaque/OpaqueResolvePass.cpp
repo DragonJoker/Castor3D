@@ -447,10 +447,10 @@ namespace castor3d
 						, data1.rgb() );
 					auto albedo = writer.declLocale( "albedo"
 						, data2.rgb() );
+					auto roughness = writer.declLocale( "roughness"
+						, data2.a() );
 					auto metalness = writer.declLocale( "metalness"
 						, data3.r() );
-					auto roughness = writer.declLocale( "roughness"
-						, data3.g() );
 					auto occlusion = writer.declLocale( "occlusion"
 						, data3.a() );
 					auto emissive = writer.declLocale( "emissive"

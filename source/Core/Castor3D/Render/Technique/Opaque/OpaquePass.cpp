@@ -723,8 +723,8 @@ namespace castor3d
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, vtx_prvPosition.xy() / vtx_prvPosition.z() );
 				out_c3dOutput1 = vec4( normal, matFlags );
-				out_c3dOutput2 = vec4( albedo, 0.0_f );
-				out_c3dOutput3 = vec4( metallic, roughness, 0.0_f, occlusion );
+				out_c3dOutput2 = vec4( albedo, roughness );
+				out_c3dOutput3 = vec4( metallic, 0.0_f, 0.0_f, occlusion );
 				out_c3dOutput4 = vec4( emissive, transmittance );
 				out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 			} );
