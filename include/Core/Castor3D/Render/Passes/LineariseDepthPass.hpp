@@ -4,17 +4,16 @@ See LICENSE file in root folder
 #ifndef ___C3D_LineariseDepthPass_H___
 #define ___C3D_LineariseDepthPass_H___
 
-#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
+#include "PassesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Render/PostEffect/PostEffect.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#include <ShaderAST/Shader.hpp>
-
 #include <CastorUtils/Design/ChangeTracked.hpp>
+
+#include <ShaderAST/Shader.hpp>
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -128,12 +127,11 @@ namespace castor3d
 
 	public:
 		static constexpr uint32_t MaxMipLevel = 5u;
-		static constexpr uint32_t LogMaxOffset = 3u;
-		static constexpr float MinRadius = 1.0f;
 
 	private:
 		Engine & m_engine;
-		ashes::ImageView const & m_depthBuffer;
+		ashes::ImageView const & m_srcDepthBuffer;
+		ashes::ImageView m_depthBuffer;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		TextureUnit m_result;

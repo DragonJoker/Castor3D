@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsgiPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
@@ -118,7 +118,7 @@ namespace castor3d
 		std::unique_ptr< LightingPass > m_lightingPass;
 		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< std::unique_ptr< ReflectionPass > > m_resolve;
+		std::vector< std::unique_ptr< OpaqueResolvePass > > m_resolve;
 		std::unique_ptr< SsgiPass > m_ssgi;
 		std::vector< ashes::ImagePtr > m_results;
 	};

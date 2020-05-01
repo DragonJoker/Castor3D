@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/DepthPass.hpp"
+#include "Castor3D/Render/Passes/DepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -13,6 +13,8 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
@@ -62,9 +64,9 @@ namespace castor3d
 				0u,
 				VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
 				{},
-				ashes::nullopt,
+				{},
+				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 				{},
 			} );
 		ashes::VkSubpassDependencyArray dependencies
@@ -96,11 +98,15 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, cuT( "DepthPass" ) );
 
 		ashes::ImageViewCRefArray fbattaches;
 		fbattaches.emplace_back( depthBuffer->getDefaultView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( size
 			, std::move( fbattaches ) );
+		setDebugObjectName( device, *m_frameBuffer, cuT( "DepthPass" ) );
+
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
 	}
 
 	DepthPass::~DepthPass()
@@ -114,25 +120,94 @@ namespace castor3d
 			, jitter );
 	}
 
+	ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores )
+	{
+		static ashes::VkClearValueArray const clearValues
+		{
+			defaultClearDepthStencil,
+			opaqueBlackClearColor,
+		};
+
+		getEngine()->setPerObjectLighting( true );
+		auto timerBlock = getTimer().start();
+		auto & device = getCurrentRenderDevice( *this );
+
+		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_nodesCommands->beginDebugBlock(
+			{
+				"Depth Pass",
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
+		getTimer().beginPass( *m_nodesCommands );
+		getTimer().notifyPassRender();
+		m_nodesCommands->beginRenderPass( getRenderPass()
+			, *m_frameBuffer
+			, clearValues
+			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
+		if ( hasNodes() )
+		{
+			m_nodesCommands->executeCommands( { getCommandBuffer() } );
+		}
+		m_nodesCommands->endRenderPass();
+		getTimer().endPass( *m_nodesCommands );
+		m_nodesCommands->endDebugBlock();
+		m_nodesCommands->end();
+
+		ashes::VkPipelineStageFlagsArray const stages( semaphores.size(), VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
+		device.graphicsQueue->submit( { *m_nodesCommands }
+			, semaphores
+			, stages
+			, { getSemaphore() }
+			, nullptr );
+
+		return getSemaphore();
+	}
+
+	void DepthPass::doCleanup()
+	{
+		m_nodesCommands.reset();
+		m_frameBuffer.reset();
+		m_renderPass.reset();
+		RenderTechniquePass::doCleanup();
+	}
+
 	void DepthPass::doUpdate( RenderQueueArray & queues )
 	{
 		queues.emplace_back( m_renderQueue );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray DepthPass::doCreateUboBindings( PipelineFlags const & flags )const
-	{
-		return RenderPass::doCreateUboBindings( flags );
-	}
-
 	void DepthPass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eEnvironmentMapping );
+		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		remFlag( flags.textures, TextureFlag::eAllButOpacity );
 		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
 			? 1u
 			: 0u;
+		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
+	}
+
+	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, BillboardListRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
+	}
+
+	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+		, uint32_t & index
+		, SubmeshRenderNode & node
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		node.passNode.fillDescriptor( layout
+			, index
+			, *node.texDescriptorSet
+			, true );
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const
@@ -141,12 +216,16 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo DepthPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+			, VK_TRUE
+			, VK_TRUE };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo DepthPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
+		return RenderPass::createBlendState( BlendMode::eNoBlend
+			, BlendMode::eNoBlend
+			, 1u );
 	}
 
 	ShaderPtr DepthPass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -206,8 +285,7 @@ namespace castor3d
 		{
 				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( position.xyz(), 1.0_f ) );
-				auto v3Texture = writer.declLocale( "v3Texture"
-					, uv );
+				vtx_texture = uv;
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
@@ -234,15 +312,14 @@ namespace castor3d
 					vtx_material = writer.cast< UInt >( c3d_materialIndex );
 				}
 
-				auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
 					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
+					vtx_texture = sdw::mix( vtx_texture, texture2, vec3( c3d_time ) );
 				}
 
-				vtx_texture = v3Texture;
+				auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
 				curPosition = mtxModel * curPosition;
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_prvViewProj * curPosition );
@@ -294,6 +371,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = flags.texturesCount > 0;
 
 		// Intputs
 		auto vtx_curPosition = writer.declInput< Vec3 >( "vtx_curPosition"
@@ -308,13 +386,12 @@ namespace castor3d
 			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
+			, hasTextures ) );
 		auto out = writer.getOut();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
 
 		if ( hasTextures )
 		{

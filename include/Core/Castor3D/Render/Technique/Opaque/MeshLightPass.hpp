@@ -6,7 +6,8 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/StencilPass.hpp"
+#include "Castor3D/Render/Passes/StencilPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 

@@ -1,6 +1,6 @@
 #include "Castor3D/Render/Technique/Opaque/Ssao/RawSsaoPass.hpp"
 
-#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"

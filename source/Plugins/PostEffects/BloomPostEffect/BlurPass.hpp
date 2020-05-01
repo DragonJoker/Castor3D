@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Bloom_BlurPass_HPP___
 #define ___C3D_Bloom_BlurPass_HPP___
 
-#include <Castor3D/Render/GaussianBlur.hpp>
+#include <Castor3D/Render/Passes/GaussianBlur.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
 namespace Bloom

@@ -193,7 +193,9 @@ namespace castor3d
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
-		m_finished = getCurrentRenderDevice( *this )->createSemaphore();
+		auto & device = getCurrentRenderDevice( *this );
+		m_finished = device->createSemaphore();
+		setDebugObjectName( device, *m_finished, getName() );
 		return true;
 	}
 
@@ -230,7 +232,12 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, m_opaque };
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, m_opaque
+		};
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const

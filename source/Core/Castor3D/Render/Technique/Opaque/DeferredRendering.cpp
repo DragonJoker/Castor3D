@@ -5,15 +5,15 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
@@ -133,7 +133,7 @@ namespace castor3d
 	{
 		//SSAO Off
 		//	SSSSS Off
-		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
@@ -144,7 +144,7 @@ namespace castor3d
 			, hdrConfigUbo
 			, nullptr ) );
 		//	SSSSS On
-		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
@@ -156,7 +156,7 @@ namespace castor3d
 			, nullptr ) );
 		//SSAO On
 		//	SSSSS Off
-		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
@@ -167,7 +167,7 @@ namespace castor3d
 			, hdrConfigUbo
 			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
 		//	SSSSS On
-		m_resolve.emplace_back( std::make_unique< ReflectionPass >( m_engine
+		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_geometryPassResult
 			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()

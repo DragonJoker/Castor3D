@@ -9,7 +9,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
 

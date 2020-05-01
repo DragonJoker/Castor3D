@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -89,7 +89,7 @@ namespace castor3d
 				, uint32_t( sizeof( data ) )
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "ReflectopPass" );
+				, "DeferredResolve" );
 
 			if ( auto * buffer = vertexBuffer->getBuffer().lock( 0u
 				, ~( 0ull )
@@ -444,9 +444,9 @@ namespace castor3d
 					auto data4 = writer.declLocale( "data4"
 						, textureLod( c3d_mapData4, fixedTexCoord, 0.0_f ) );
 					auto normal = writer.declLocale( "normal"
-						, data1.xyz() );
+						, data1.rgb() );
 					auto albedo = writer.declLocale( "albedo"
-						, data2.xyz() );
+						, data2.rgb() );
 					auto metalness = writer.declLocale( "metalness"
 						, data3.r() );
 					auto roughness = writer.declLocale( "roughness"
@@ -454,7 +454,7 @@ namespace castor3d
 					auto occlusion = writer.declLocale( "occlusion"
 						, data3.a() );
 					auto emissive = writer.declLocale( "emissive"
-						, data4.xyz() );
+						, data4.rgb() );
 					auto depth = writer.declLocale( "depth"
 						, textureLod( c3d_mapDepth, vtx_texture, 0.0_f ).x() );
 					auto position = writer.declLocale( "position"
@@ -462,9 +462,9 @@ namespace castor3d
 					auto ambient = writer.declLocale( "ambient"
 						, c3d_ambientLight.xyz() );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, textureLod( c3d_mapLightDiffuse, fixedTexCoord, 0.0_f ).xyz() );
+						, textureLod( c3d_mapLightDiffuse, fixedTexCoord, 0.0_f ).rgb() );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, textureLod( c3d_mapLightSpecular, fixedTexCoord, 0.0_f ).xyz() );
+						, textureLod( c3d_mapLightSpecular, fixedTexCoord, 0.0_f ).rgb() );
 
 					if ( hasSsao )
 					{
@@ -506,7 +506,7 @@ namespace castor3d
 						ELSE
 						{
 							// Reflection from background skybox.
-							ambient = c3d_ambientLight.xyz()
+							ambient = c3d_ambientLight.rgb()
 								* occlusion
 								* utils.computeMetallicIBL( normal
 									, position
@@ -556,7 +556,7 @@ namespace castor3d
 					ELSE
 					{
 						// Reflection from background skybox.
-						ambient = c3d_ambientLight.xyz()
+						ambient = c3d_ambientLight.rgb()
 							* occlusion
 							* utils.computeMetallicIBL( normal
 								, position
@@ -951,7 +951,10 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( std::move( bindings ) );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
+			setDebugObjectName( device, *result, "DeferredResolveUbo" );
+			return result;
 		}
 
 		inline ashes::DescriptorSetPtr doCreateUboDescriptorSet( Engine & engine
@@ -963,6 +966,8 @@ namespace castor3d
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
+			auto & device = getCurrentRenderDevice( engine );
+			setDebugObjectName( device, *result, "DeferredResolveUbo" );
 			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
 			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
@@ -988,7 +993,7 @@ namespace castor3d
 					VK_ATTACHMENT_STORE_OP_STORE,
 					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				}
 			};
@@ -1034,11 +1039,12 @@ namespace castor3d
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
 			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "ReflectionPassRenderPass" );
+			setDebugObjectName( device, *result, "DeferredResolve" );
 			return result;
 		}
 
-		inline ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
+		inline ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
+			, ashes::RenderPass const & renderPass
 			, VkExtent2D const size
 			, ashes::ImageView const & view )
 		{
@@ -1046,7 +1052,10 @@ namespace castor3d
 			{
 				view
 			};
-			return renderPass.createFrameBuffer( size, std::move( attaches ) );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = renderPass.createFrameBuffer( size, std::move( attaches ) );
+			setDebugObjectName( device, *result, "DeferredResolve" );
+			return result;
 		}
 
 		inline ashes::DescriptorSetLayoutPtr doCreateTexDescriptorLayout( Engine & engine
@@ -1110,14 +1119,21 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT
 				, envMapCount ) );	// c3d_mapEnvironment
 
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( std::move( bindings ) );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = getCurrentRenderDevice( engine )->createDescriptorSetLayout( std::move( bindings ) );
+			setDebugObjectName( device, *result, "DeferredResolveTex" );
+			return result;
 		}
 
-		inline ashes::DescriptorSetPtr doCreateTexDescriptorSet( ashes::DescriptorSetPool & pool
+		inline ashes::DescriptorSetPtr doCreateTexDescriptorSet( Engine & engine
+			, ashes::DescriptorSetPool & pool
 			, SamplerSPtr sampler )
 		{
 			sampler->initialise();
-			return pool.createDescriptorSet( 1u );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = pool.createDescriptorSet( 1u );
+			setDebugObjectName( device, *result, "DeferredResolveTex" );
+			return result;
 		}
 
 		inline ashes::WriteDescriptorSetArray doCreateTexDescriptorWrites( ashes::DescriptorSetLayout const & layout
@@ -1196,7 +1212,8 @@ namespace castor3d
 			, ashes::RenderPass const & renderPass
 			, VkExtent2D const & size )
 		{
-			return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+
+			auto result = device->createPipeline( ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
 					std::move( program ),
@@ -1217,6 +1234,8 @@ namespace castor3d
 					pipelineLayout,
 					renderPass,
 				} );
+			setDebugObjectName( device, *result, "DeferredResolveTex" );
+			return result;
 		}
 
 		template< typename T >
@@ -1250,7 +1269,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ReflectionPass::ProgramPipeline::ProgramPipeline( Engine & engine
+	OpaqueResolvePass::ProgramPipeline::ProgramPipeline( Engine & engine
 		, GeometryPassResult const & gp
 		, ashes::DescriptorSetLayout const & uboLayout
 		, ashes::DescriptorSetLayout const & texLayout
@@ -1261,17 +1280,19 @@ namespace castor3d
 		, MaterialType matType )
 		: m_engine{ engine }
 		, m_geometryPassResult{ gp }
+		, m_renderPass{ &renderPass }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
 		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
 		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
-		, m_renderPass{ &renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
 	{
+		setDebugObjectName( getCurrentRenderDevice( engine ), *m_pipelineLayout, "DeferredResolve" );
+		setDebugObjectName( getCurrentRenderDevice( engine ), *m_commandBuffer, "DeferredResolve" );
 	}
 
-	void ReflectionPass::ProgramPipeline::updateCommandBuffer( ashes::VertexBufferBase & vbo
+	void OpaqueResolvePass::ProgramPipeline::updateCommandBuffer( ashes::VertexBufferBase & vbo
 		, ashes::DescriptorSet const & uboSet
 		, ashes::DescriptorSet const & texSet
 		, ashes::FrameBuffer const & frameBuffer
@@ -1301,7 +1322,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void ReflectionPass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
+	void OpaqueResolvePass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -1309,7 +1330,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ReflectionPass::ReflectionPass( Engine & engine
+	OpaqueResolvePass::OpaqueResolvePass( Engine & engine
 		, Scene & scene
 		, GeometryPassResult const & gp
 		, ashes::ImageView const & lightDiffuse
@@ -1334,9 +1355,9 @@ namespace castor3d
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo, hdrConfigUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, m_sampler ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, result ) }
+		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, result ) }
 		, m_finished{ m_device->createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
 		, m_programs
@@ -1400,7 +1421,7 @@ namespace castor3d
 		m_viewport.update();
 	}
 
-	void ReflectionPass::update( Camera const & camera )
+	void OpaqueResolvePass::update( Camera const & camera )
 	{
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
@@ -1422,7 +1443,7 @@ namespace castor3d
 			, *m_timer );
 	}
 
-	ashes::Semaphore const & ReflectionPass::render( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & OpaqueResolvePass::render( ashes::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
 		auto timerBlock = m_timer->start();
@@ -1440,7 +1461,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void ReflectionPass::accept( RenderTechniqueVisitor & visitor )
+	void OpaqueResolvePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];

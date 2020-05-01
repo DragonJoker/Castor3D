@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DepthPass_H___
 #define ___C3D_DepthPass_H___
 
-#include "TechniqueModule.hpp"
+#include "PassesModule.hpp"
 
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
@@ -47,6 +47,24 @@ namespace castor3d
 		 */
 		void update( RenderInfo & info
 			, castor::Point2f const & jitter )override;
+		/**
+		 *\~english
+		 *\brief		Renders nodes.
+		 *\param[out]	toWait	The semaphore to wait for.
+		 *\~french
+		 *\brief		Dessine les noeuds.
+		 *\param[out]	toWait	Le sémaphore à attendre.
+		 */
+		ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores );
+
+	public:
+		using RenderTechniquePass::update;
+
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
+		 */
+		C3D_API void doCleanup()override;
 
 	private:
 		/**
@@ -54,13 +72,23 @@ namespace castor3d
 		 */
 		void doUpdate( RenderQueueArray & queues )override;
 		/**
-		*\copydoc		castor3d::RenderPass::doCreateUboBindings
-		*/
-		ashes::VkDescriptorSetLayoutBindingArray doCreateUboBindings( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doUpdateFlags
 		 */
 		void doUpdateFlags( PipelineFlags & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, BillboardListRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
+		 */
+		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, SubmeshRenderNode & nodes
+			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
 		 */
@@ -99,8 +127,8 @@ namespace castor3d
 		C3D_API ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const;
 
 	private:
-		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
+		ashes::CommandBufferPtr m_nodesCommands;
 	};
 }
 

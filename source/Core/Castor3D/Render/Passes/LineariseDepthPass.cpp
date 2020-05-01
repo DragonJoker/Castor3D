@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/LineariseDepthPass.hpp"
+#include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
@@ -6,9 +6,11 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
@@ -192,6 +194,16 @@ namespace castor3d
 			return sampler;
 		}
 
+		ashes::ImageView doCreateImageView( Engine & engine, ashes::ImageView const & srcView )
+		{
+			auto createInfos = srcView.createInfo;
+			createInfos.subresourceRange.aspectMask = ashes::getAspectMask( createInfos.format );
+			auto result = srcView.image->createView( createInfos );
+			auto & device = getCurrentRenderDevice( engine );
+			setDebugObjectName( device, result, "LineariseDepth" );
+			return result;
+		}
+
 		TextureUnit doCreateTexture( Engine & engine, VkExtent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
@@ -354,7 +366,8 @@ namespace castor3d
 		, VkExtent2D const & size
 		, ashes::ImageView const & depthBuffer )
 		: m_engine{ engine }
-		, m_depthBuffer{ depthBuffer }
+		, m_srcDepthBuffer{ depthBuffer }
+		, m_depthBuffer{ doCreateImageView( engine, m_srcDepthBuffer ) }
 		, m_prefix{ std::move( prefix ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
@@ -501,7 +514,7 @@ namespace castor3d
 		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
 		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
-			, m_depthBuffer
+			, m_srcDepthBuffer
 			, *m_lineariseSampler );
 		m_lineariseDescriptor->createSizedBinding( m_lineariseDescriptorLayout->getBinding( 1u )
 			, *m_clipInfo
@@ -664,18 +677,9 @@ namespace castor3d
 				m_prefix + " - Linearise Depth",
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
-		auto subresource = m_depthBuffer->subresourceRange;
-		subresource.aspectMask = ashes::getAspectMask( m_depthBuffer.getFormat() );
-		cb.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+		cb.memoryBarrier( VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( 0u )
-				, VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED
-				, *m_depthBuffer.image
-				, subresource ) );
+			, m_depthBuffer.makeShaderInputResource( VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL ) );
 		cb.beginRenderPass( *m_renderPass
 			, *m_lineariseFrameBuffer
 			, { transparentBlackClearColor }
@@ -687,14 +691,7 @@ namespace castor3d
 		cb.endRenderPass();
 		cb.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT
-			, makeVkType< VkImageMemoryBarrier >( VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
-				, VkAccessFlags( VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED
-				, *m_depthBuffer.image
-				, subresource ) );
+			, m_depthBuffer.makeDepthStencilAttachment( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		cb.endDebugBlock();
 
 		// Minification passes.

@@ -48,7 +48,8 @@ namespace castor3d
 		}
 
 		ashes::ImageView doCreateDepthView( Engine & engine
-			, ashes::ImageView const & depthView )
+			, ashes::ImageView const & depthView
+			, WbTexture texture )
 		{
 			ashes::ImageViewCreateInfo view
 			{
@@ -59,7 +60,11 @@ namespace castor3d
 				VkComponentMapping{},
 				{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u },
 			};
-			return depthView.image->createView( view );
+			auto result = depthView.image->createView( view );
+			setDebugObjectName( getCurrentRenderDevice( engine )
+				, result
+				, "AccumulationResult_" + getTextureName( texture ) );
+			return result;
 		}
 	}
 
@@ -74,7 +79,7 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
-		, m_depthView{ doCreateDepthView( engine, depthView ) }
+		, m_depthView{ doCreateDepthView( engine, depthView, WbTexture::eDepth ) }
 		, m_accumulation{ doCreateTexture( engine, m_size, WbTexture::eAccumulation ) }
 		, m_accumulationView{ m_accumulation->createView( VK_IMAGE_VIEW_TYPE_2D, m_accumulation->getFormat() ) }
 		, m_revealage{ doCreateTexture( engine, m_size, WbTexture::eRevealage ) }
@@ -82,6 +87,12 @@ namespace castor3d
 		, m_weightedBlendPassResult{ { m_depthView, m_accumulationView, m_revealageView, velocityTexture->getDefaultView() } }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, m_weightedBlendPassResult, colourView }
 	{
+		setDebugObjectName( getCurrentRenderDevice( engine )
+			, m_accumulationView
+			, "AccumulationResult_" + getTextureName( WbTexture::eAccumulation ) );
+		setDebugObjectName( getCurrentRenderDevice( engine )
+			, m_revealageView
+			, "AccumulationResult_" + getTextureName( WbTexture::eRevealage ) );
 		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );
 		m_transparentPass.initialise( m_size );
 	}

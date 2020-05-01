@@ -1,4 +1,4 @@
-#include "Castor3D/Render/CombinePass.hpp"
+#include "Castor3D/Render/Passes/CombinePass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"

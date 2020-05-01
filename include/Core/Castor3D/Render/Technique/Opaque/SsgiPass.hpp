@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"

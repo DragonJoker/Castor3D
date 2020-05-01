@@ -698,7 +698,7 @@ namespace castor3d
 	};
 
 	template< typename AshesType >
-	void setDebugObjectName( RenderDevice const & device
+	void setDebugObjectName( ashes::Device const & device
 		, AshesType const & object
 		, std::string const & name )
 	{
@@ -715,8 +715,16 @@ namespace castor3d
 			, DebugTypeTraits::getName() );
 	}
 
+	template< typename AshesType >
+	void setDebugObjectName( RenderDevice const & device
+		, AshesType const & object
+		, std::string const & name )
+	{
+		setDebugObjectName( *device, object, name );
+	}
+
 	template< typename ResT >
-	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
+	inline ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, ResT & resource
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
@@ -725,6 +733,15 @@ namespace castor3d
 			, resource.getMemoryRequirements()
 			, flags
 			, name );
+	}
+
+	template< typename ResT >
+	inline ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
+		, ResT & resource
+		, VkMemoryPropertyFlags flags
+		, std::string const & name )
+	{
+		return setupMemory( *device, resource, flags, name );
 	}
 }
 

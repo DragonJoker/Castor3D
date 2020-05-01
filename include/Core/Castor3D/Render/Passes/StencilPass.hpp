@@ -4,9 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredStencilPass_H___
 #define ___C3D_DeferredStencilPass_H___
 
-#include "OpaqueModule.hpp"
+#include "PassesModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>

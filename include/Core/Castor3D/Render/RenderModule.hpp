@@ -214,39 +214,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Holds a command buffer and its semaphore.
-	*\~french
-	*\brief
-	*	Contient un command buffer et son semaphore.
-	*/
-	struct CommandsSemaphore;
-	/**
-	*\~english
-	*\brief
-	*	Combines two textures into one, using an addition.
-	*\~french
-	*\brief
-	*	Combine deux textures en une, en les additionnant.
-	*/
-	class CombinePass;
-	/**
-	*\~english
-	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief
 	*	Implémente un frustum et les vérifications relatives au frustum culling.
 	*/
 	class Frustum;
-	/**
-	*\~english
-	*\brief
-	*	Gaussian blur pass.
-	*\~french
-	*\brief
-	*	Passe flou gaussien.
-	*/
-	class GaussianBlur;
 	/**
 	*\~english
 	*\brief
@@ -432,7 +405,6 @@ namespace castor3d
 	*/
 	class Viewport;
 
-	CU_DeclareSmartPtr( GaussianBlur );
 	CU_DeclareSmartPtr( PickingPass );
 	CU_DeclareSmartPtr( RenderDevice );
 	CU_DeclareSmartPtr( RenderLoop );

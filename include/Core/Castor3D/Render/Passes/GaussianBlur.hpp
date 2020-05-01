@@ -4,10 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_GaussianBlur_H___
 #define ___C3D_GaussianBlur_H___
 
-#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
+#include "PassesModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 

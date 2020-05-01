@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>

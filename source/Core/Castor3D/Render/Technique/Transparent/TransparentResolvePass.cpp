@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Transparent/FinalCombinePass.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentResolvePass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
@@ -83,7 +83,7 @@ namespace castor3d
 				, 1u
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "FinalCombinePass" );
+				, "TransparentResolve" );
 
 			if ( auto buffer = reinterpret_cast< TexturedQuad * >( result->getBuffer().lock( 0u
 				, ~( 0ull )
@@ -122,16 +122,21 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			auto & device = getCurrentRenderDevice( engine );
-			return device->createDescriptorSetLayout( std::move( bindings ) );
+			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
+			setDebugObjectName( device, *result, "TransparentResolveUbo" );
+			return result;
 		}
 
-		ashes::DescriptorSetPtr doCreateUboDescriptorSet( ashes::DescriptorSetPool & pool
+		ashes::DescriptorSetPtr doCreateUboDescriptorSet( Engine & engine
+			, ashes::DescriptorSetPool & pool
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo )
 		{
+			auto & device = getCurrentRenderDevice( engine );
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 0u );
+			setDebugObjectName( device, *result, "TransparentResolveUbo" );
 			result->createBinding( layout.getBinding( sceneUboIndex )
 				, sceneUbo.getUbo()
 				, 0u
@@ -163,17 +168,22 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			auto & device = getCurrentRenderDevice( engine );
-			return device->createDescriptorSetLayout( std::move( bindings ) );
+			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
+			setDebugObjectName( device, *result, "TransparentResolveTex" );
+			return result;
 		}
 
-		ashes::DescriptorSetPtr doCreateTexDescriptorSet( ashes::DescriptorSetPool & pool
+		ashes::DescriptorSetPtr doCreateTexDescriptorSet( Engine & engine
+			, ashes::DescriptorSetPool & pool
 			, ashes::ImageView const & depth
 			, ashes::ImageView const & accumulation
 			, ashes::ImageView const & revealage
 			, Sampler const & sampler )
 		{
+			auto & device = getCurrentRenderDevice( engine );
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( 1u );
+			setDebugObjectName( device, *result, "TransparentResolveTex" );
 			result->createBinding( layout.getBinding( depthTexIndex )
 				, depth
 				, sampler.getSampler() );
@@ -311,7 +321,10 @@ namespace castor3d
 			, ashes::DescriptorSetLayout const & uboLayout
 			, ashes::DescriptorSetLayout const & texLayout )
 		{
-			return getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = device->createPipelineLayout( { uboLayout, texLayout } );
+			setDebugObjectName( device, *result, "TransparentResolve" );
+			return result;
 		}
 
 		ashes::GraphicsPipelinePtr doCreateRenderPipeline( Engine & engine
@@ -343,7 +356,7 @@ namespace castor3d
 			};
 
 			auto & device = getCurrentRenderDevice( engine );
-			return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			auto result = device->createPipeline( ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
 					program,
@@ -359,6 +372,8 @@ namespace castor3d
 					pipelineLayout,
 					renderPass,
 				} );
+			setDebugObjectName( device, *result, "TransparentResolve" );
+			return result;
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
@@ -424,7 +439,8 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
+			, ashes::RenderPass const & renderPass
 			, Size const & size
 			, ashes::ImageView const & colourView )
 		{
@@ -432,8 +448,11 @@ namespace castor3d
 			{
 				colourView,
 			};
-			return renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
-			, std::move( attaches ) );
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+				, std::move( attaches ) );
+			setDebugObjectName( device, *result, "TransparentResolve" );
+			return result;
 		}
 	}
 
@@ -461,6 +480,9 @@ namespace castor3d
 			, vtxLayout ) }
 		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer() }
 	{
+		setDebugObjectName( getCurrentRenderDevice( engine )
+			, *m_commandBuffer
+			, "TransparentResolve" );
 	}
 
 	FinalCombineProgram::~FinalCombineProgram()
@@ -518,13 +540,13 @@ namespace castor3d
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( m_engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
-		, m_uboDescriptorSet{ doCreateUboDescriptorSet( *m_uboDescriptorPool, m_sceneUbo, m_gpInfo, hdrConfigUbo ) }
+		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfo, hdrConfigUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( m_engine ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( uint32_t( FogType::eCount ) ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( m_engine, colourView ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_size, colourView ) }
+		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, colourView ) }
 		, m_semaphore{ getCurrentRenderDevice( m_engine )->createSemaphore() }
 	{
 	}

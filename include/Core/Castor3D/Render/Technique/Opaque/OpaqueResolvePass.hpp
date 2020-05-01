@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredReflectionPass_H___
-#define ___C3D_DeferredReflectionPass_H___
+#ifndef ___C3D_DeferredOpaqueResolvePass_H___
+#define ___C3D_DeferredOpaqueResolvePass_H___
 
 #include "OpaqueModule.hpp"
 
@@ -26,7 +26,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class ReflectionPass
+	class OpaqueResolvePass
 		: castor::OwnedBy< Engine >
 	{
 	public:
@@ -56,7 +56,7 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo	L'UBO HDR.
 		 *\param[in]	ssao			L'image SSAO.
 		 */
-		ReflectionPass( Engine & engine
+		OpaqueResolvePass( Engine & engine
 			, Scene & scene
 			, GeometryPassResult const & gp
 			, ashes::ImageView const & lightDiffuse

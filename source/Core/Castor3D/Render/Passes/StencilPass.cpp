@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/StencilPass.hpp"
+#include "Castor3D/Render/Passes/StencilPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -6,6 +6,8 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 
@@ -19,8 +21,6 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
 using namespace castor;
 using namespace castor3d;

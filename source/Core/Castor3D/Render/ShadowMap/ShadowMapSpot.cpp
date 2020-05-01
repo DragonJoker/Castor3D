@@ -461,10 +461,8 @@ namespace castor3d
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto time = writer.declLocale( "time"
-					, 1.0_f - c3d_time );
-				vertexPosition = vec4( vertexPosition.xyz() * time + position2.xyz() * c3d_time, 1.0_f );
-				vtx_texture = vtx_texture * ( 1.0_f - c3d_time ) + texture2 * c3d_time;
+				vertexPosition = vec4( sdw::mix( vertexPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				vtx_texture = sdw::mix( vtx_texture, texture2, vec3( c3d_time ) );
 			}
 
 			auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
@@ -483,6 +481,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
+		bool hasTextures = flags.texturesCount > 0;
 
 		// Fragment Intputs
 		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
@@ -495,13 +494,12 @@ namespace castor3d
 			, getMinTextureIndex()
 			, 1u
 			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
+			, hasTextures ) );
 		auto in = writer.getIn();
 
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
 
 		if ( hasTextures )
 		{

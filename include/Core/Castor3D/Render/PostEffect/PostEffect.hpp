@@ -6,12 +6,11 @@ See LICENSE file in root folder
 
 #include "PostEffectModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
-
-#include "Castor3D/Render/CommandsSemaphore.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 

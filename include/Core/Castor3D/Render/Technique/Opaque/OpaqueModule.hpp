@@ -144,12 +144,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The post lighting reflection pass.
+	*	The post lighting resolve pass.
 	*\~french
 	*\brief
-	*	La passe de réflexion post éclairage.
+	*	La passe de résolution post éclairage.
 	*/
-	class ReflectionPass;
+	class OpaqueResolvePass;
 	/**
 	*\~english
 	*\brief
@@ -159,15 +159,6 @@ namespace castor3d
 	*	Passe de Occlusion Ambiante en Espace Ecran.
 	*/
 	class SsaoPass;
-	/**
-	*\~english
-	*\brief
-	*	Stencil pre-pass for light passes needing a mesh.
-	*\~french
-	*\brief
-	*	Pré-passe de stencil pour les passes d'éclairage nécessitant un maillage.
-	*/
-	class StencilPass;
 	/**
 	*\~english
 	*\brief

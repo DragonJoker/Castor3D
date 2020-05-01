@@ -59,7 +59,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( PostEffect );
 
-	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
 	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
 
 	//@}

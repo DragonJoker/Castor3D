@@ -4,9 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_CombinePass_HPP___
 #define ___C3D_CombinePass_HPP___
 
-#include "RenderModule.hpp"
+#include "PassesModule.hpp"
 
-#include "Castor3D/Render/CommandsSemaphore.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 

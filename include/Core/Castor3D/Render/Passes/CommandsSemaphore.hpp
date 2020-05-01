@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_CommandsSemaphore_H___
 #define ___C3D_CommandsSemaphore_H___
 
-#include "RenderModule.hpp"
+#include "PassesModule.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>

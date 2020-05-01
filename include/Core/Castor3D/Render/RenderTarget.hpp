@@ -6,14 +6,12 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
-#include "Castor3D/Overlay/OverlayModule.hpp"
-#include "Castor3D/Render/CombinePass.hpp"
-#include "Castor3D/Render/Culling/CullingModule.hpp"
-#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
-#include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
-
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Passes/CombinePass.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
