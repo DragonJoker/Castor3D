@@ -65,7 +65,7 @@ namespace castor3d
 				0u,
 				gpResult.getViews()[0]->format,
 				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -239,7 +239,22 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+#if C3D_UseDepthPrepass
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, VK_FALSE
+			, VK_COMPARE_OP_LESS_OR_EQUAL
+		};
+#else
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, VK_TRUE
+		};
+#endif
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const

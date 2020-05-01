@@ -17,6 +17,10 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
+#if C3D_UseDepthPrepass
+#	include "Castor3D/Render/Passes/DepthPass.hpp"
+#endif
+
 #include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
@@ -227,6 +231,9 @@ namespace castor3d
 		void doCreateShadowMaps();
 		void doInitialiseShadowMaps();
 		void doInitialiseBackgroundPass();
+#if C3D_UseDepthPrepass
+		void doInitialiseDepthPass();
+#endif
 		void doInitialiseOpaquePass();
 		void doInitialiseTransparentPass();
 		void doInitialiseDebugPass();
@@ -235,6 +242,10 @@ namespace castor3d
 		void doUpdateParticles( RenderInfo & info );
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
+#if C3D_UseDepthPrepass
+		ashes::Semaphore const & doRenderDepth( ashes::SemaphoreCRefArray const & semaphores );
+		ashes::Semaphore const & doRenderBackground( ashes::Semaphore const & semaphore );
+#endif
 		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderOpaque( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderTransparent( ashes::Semaphore const & semaphore );
@@ -248,6 +259,9 @@ namespace castor3d
 		TextureLayoutSPtr m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
+#if C3D_UseDepthPrepass
+		std::unique_ptr< DepthPass > m_depthPass;
+#endif
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;

@@ -222,6 +222,9 @@ namespace castor3d
 
 			doInitialiseShadowMaps();
 			doInitialiseBackgroundPass();
+#if C3D_UseDepthPrepass
+			doInitialiseDepthPass();
+#endif
 			doInitialiseOpaquePass();
 			doInitialiseTransparentPass();
 			doInitialiseDebugPass();
@@ -249,6 +252,10 @@ namespace castor3d
 		m_hdrConfigUbo.cleanup();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
+#if C3D_UseDepthPrepass
+		m_depthPass->cleanup();
+		m_depthPass.reset();
+#endif
 		m_matrixUbo.cleanup();
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
@@ -279,6 +286,9 @@ namespace castor3d
 	void RenderTechnique::update( RenderQueueArray & queues )
 	{
 		m_renderTarget.update();
+#if C3D_UseDepthPrepass
+		m_depthPass->update( queues );
+#endif
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
 		doUpdateShadowMaps( queues );
@@ -303,6 +313,9 @@ namespace castor3d
 			, jitterProjSpace );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 
+#if C3D_UseDepthPrepass
+		m_depthPass->update( info, jitter );
+#endif
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( info, scene, camera, jitter );
 #else
@@ -338,10 +351,14 @@ namespace castor3d
 		, RenderInfo & info )
 	{
 		doUpdateParticles( info );
+#if C3D_UseDepthPrepass
+		auto * semaphore = &doRenderDepth( waitSemaphores );
+		semaphore = &doRenderBackground( *semaphore );
+#else
 		auto * semaphore = &doRenderBackground( waitSemaphores );
+#endif
 		semaphore = &doRenderEnvironmentMaps( *semaphore );
 		semaphore = &doRenderShadowMaps( *semaphore );
-
 
 		// Render part
 		semaphore = &doRenderOpaque( *semaphore );
@@ -463,6 +480,12 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( renderSystem );
 		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
 		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		auto depthLoadOp = C3D_UseDepthPrepass
+			? VK_ATTACHMENT_LOAD_OP_LOAD
+			: VK_ATTACHMENT_LOAD_OP_CLEAR;
+		auto depthInitialLayout = C3D_UseDepthPrepass
+			? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+			: VK_IMAGE_LAYOUT_UNDEFINED;
 
 		ashes::VkAttachmentDescriptionArray attachments
 		{
@@ -470,11 +493,11 @@ namespace castor3d
 				0u,
 				m_depthBuffer->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				depthLoadOp,
 				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
+				depthInitialLayout,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
@@ -538,6 +561,7 @@ namespace castor3d
 		};
 		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
 			, std::move( attaches ) );
+		setDebugObjectName( device, *m_bgFrameBuffer, "Background" );
 
 		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto prepareBackground = [&background, this]()
@@ -568,6 +592,20 @@ namespace castor3d
 				getEngine()->postEvent( makeFunctorEvent( EventType::ePreRender, prepareCBackground ) );
 			} );
 	}
+
+#if C3D_UseDepthPrepass
+
+	void RenderTechnique::doInitialiseDepthPass()
+	{
+		m_depthPass = std::make_unique< DepthPass >( cuT( "Depth Prepass" )
+			, m_matrixUbo
+			, m_renderTarget.getCuller()
+			, m_ssaoConfig
+			, m_depthBuffer );
+		m_depthPass->initialise( m_size );
+	}
+
+#endif
 
 	void RenderTechnique::doInitialiseOpaquePass()
 	{
@@ -770,6 +808,20 @@ namespace castor3d
 		return *result;
 	}
 
+#if C3D_UseDepthPrepass
+
+	ashes::Semaphore const & RenderTechnique::doRenderDepth( ashes::SemaphoreCRefArray const & semaphores )
+	{
+		return m_depthPass->render( semaphores );
+	}
+
+	ashes::Semaphore const & RenderTechnique::doRenderBackground( ashes::Semaphore const & semaphore )
+	{
+		return doRenderBackground( { 1u, std::ref( semaphore ) } );
+	}
+
+#endif
+
 	ashes::Semaphore const & RenderTechnique::doRenderBackground( ashes::SemaphoreCRefArray const & semaphores )
 	{
 		auto const & queue = *getCurrentRenderDevice( *this ).graphicsQueue;
@@ -799,7 +851,6 @@ namespace castor3d
 			, { bgSemaphore }
 			, nullptr );
 		return bgSemaphore;
-
 	}
 
 	ashes::Semaphore const & RenderTechnique::doRenderOpaque( ashes::Semaphore const & semaphore )
