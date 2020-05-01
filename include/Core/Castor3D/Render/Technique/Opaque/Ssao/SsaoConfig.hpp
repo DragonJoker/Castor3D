@@ -57,6 +57,14 @@ namespace castor3d
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.
 		bool enabled{ false };
+		//!\~english	The log of the maximum pixel offset.
+		//!\~french		Le log de l'offset maximum pour un pixel.
+		castor::RangedValue< int32_t > logMaxOffset{ 3u, castor::makeRange( 2, 6 ) };
+		int32_t maxMipLevel{ 5 };
+		//!\~english	Minimal sample radius to compute AO.
+		//!\~french		Rayon minimal d'échantillonnage pour calculer l'AO.
+		float minRadius{ 1.0f };
+		int32_t variation{ 0 };
 		//!\~english	The high quality activation status.
 		//!\~french		Le statut d'activation de haute qualité.
 		bool highQuality{ false };

@@ -91,49 +91,51 @@ namespace GuiCommon
 
 		if ( property && target )
 		{
+			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
+
 			if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_ENABLED )
 			{
-				OnSsaoEnable( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.enabled );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY )
 			{
-				OnSsaoHighQuality( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.highQuality );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER )
 			{
-				OnSsaoNormalsBuffer( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.useNormalsBuffer );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_RADIUS )
 			{
-				OnSsaoRadius( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.radius );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BIAS )
 			{
-				OnSsaoBias( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.bias );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_INTENSITY )
 			{
-				OnSsaoIntensity( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.intensity );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_SAMPLES )
 			{
-				OnSsaoSamples( uint32_t( property->GetValue().GetLong() ) );
+				onValueChange( uint32_t( property->GetValue().GetLong() ), &ssaoConfig.numSamples );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS )
 			{
-				OnSsaoEdgeSharpness( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.edgeSharpness );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY )
 			{
-				OnSsaoBlurHighQuality( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.blurHighQuality );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE )
 			{
-				OnSsaoBlurStepSize( uint32_t( property->GetValue().GetLong() ) );
+				onValueChange( uint32_t( property->GetValue().GetLong() ), &ssaoConfig.blurStepSize );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS )
 			{
-				OnSsaoBlurRadius( int32_t( property->GetValue().GetLong() ) );
+				onValueChange( int32_t( property->GetValue().GetLong() ), &ssaoConfig.blurRadius );
 			}
 		}
 	}

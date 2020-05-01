@@ -76,6 +76,49 @@ namespace GuiCommon
 		void OnSsaoBlurStepSize( uint32_t value );
 		void OnSsaoBlurRadius( int32_t value );
 
+		void onValueChange( bool value, int32_t * toChange )
+		{
+			onValueChange( int32_t( value ), toChange );
+		}
+
+		template< typename TypeT >
+		void onValueChange( TypeT value, TypeT * toChange )
+		{
+			doApplyChange( [value, toChange]()
+				{
+					*toChange = value;
+				} );
+		}
+
+		template< typename TypeT >
+		void onValueChange( TypeT value, castor::RangedValue< TypeT > * toChange )
+		{
+			doApplyChange( [value, toChange]()
+				{
+					*toChange = value;
+				} );
+		}
+
+		template< typename TypeT >
+		void onValueChange( TypeT value, castor::ChangeTracked< TypeT > * toChange )
+		{
+			doApplyChange( [value, toChange]()
+				{
+					*toChange = value;
+				} );
+		}
+
+		template< typename TypeT >
+		void onValueChange( TypeT value, castor::ChangeTracked< castor::RangedValue< TypeT > > * toChange )
+		{
+			doApplyChange( [value, toChange]()
+				{
+					castor::RangedValue< TypeT > tmp{ *toChange };
+					tmp = value;
+					*toChange = tmp;
+				} );
+		}
+
 	private:
 		castor3d::RenderTargetWPtr m_target;
 	};

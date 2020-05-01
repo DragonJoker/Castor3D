@@ -56,6 +56,12 @@ namespace castor3d
 	String const SsaoConfigUbo::BlurRadius = cuT( "c3d_blurRadius" );
 	String const SsaoConfigUbo::ProjInfo = cuT( "c3d_projInfo" );
 	String const SsaoConfigUbo::ViewMatrix = cuT( "c3d_viewMatrix" );
+	String const SsaoConfigUbo::HighQuality = cuT( "c3d_highQuality" );
+	String const SsaoConfigUbo::BlurHighQuality = cuT( "c3d_blurHighQuality" );
+	String const SsaoConfigUbo::LogMaxOffset = cuT( "c3d_logMaxOffset" );
+	String const SsaoConfigUbo::MaxMipLevel = cuT( "c3d_maxMipLevel" );
+	String const SsaoConfigUbo::MinRadius = cuT( "c3d_minRadius" );
+	String const SsaoConfigUbo::Variation = cuT( "c3d_variation" );
 
 	SsaoConfigUbo::SsaoConfigUbo( Engine & engine )
 		: m_engine{ engine }
@@ -157,6 +163,12 @@ namespace castor3d
 			( 1.0f - proj[1][2] ) / proj[1][1]
 		};
 		configuration.viewMatrix = camera.getView();
+		configuration.blurHighQuality = config.blurHighQuality ? 1u : 0u;
+		configuration.highQuality = config.highQuality ? 1u : 0u;
+		configuration.logMaxOffset = config.logMaxOffset.value();
+		configuration.maxMipLevel = config.maxMipLevel;
+		configuration.minRadius = config.minRadius;
+		configuration.variation = config.variation;
 
 		m_ubo->upload();
 	}

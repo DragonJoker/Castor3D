@@ -188,18 +188,19 @@ namespace castor3d
 						auto normalCloseness = writer.declLocale( "normalCloseness"
 							, dot( tapNormal, normal ) );
 
-						if ( !config.blurHighQuality )
+						IF( writer, c3d_blurHighQuality == 0_i )
 						{
 							normalCloseness = normalCloseness * normalCloseness;
 							normalCloseness = normalCloseness * normalCloseness;
 							k_normal = 4.0_f;
 						}
+						FI;
 
 						auto normalError = writer.declLocale( "normalError"
 							, ( 1.0_f - normalCloseness ) * k_normal );
 						normalWeight = max( 1.0_f - c3d_edgeSharpness * normalError, 0.0_f );
 
-						if ( config.blurHighQuality )
+						IF( writer, c3d_blurHighQuality )
 						{
 							auto lowDistanceThreshold2 = writer.declLocale( "lowDistanceThreshold2"
 								, 0.001_f );
@@ -227,6 +228,7 @@ namespace castor3d
 										, 1.0_f - c3d_edgeSharpness * 2.0 * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
+						FI;
 					}
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );

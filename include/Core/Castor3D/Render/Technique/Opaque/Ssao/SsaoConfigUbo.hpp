@@ -62,8 +62,20 @@ namespace castor3d
 			// unobjectionable after shading was applied but eliminated most temporal incoherence
 			// from using small numbers of sample taps.
 			int32_t blurStepSize;
-			// VkFilter radius in pixels. This will be multiplied by blurStepSize.
+			// Filter radius in pixels. This will be multiplied by blurStepSize.
 			int32_t blurRadius;
+			int32_t highQuality;
+			int32_t blurHighQuality;
+			// If using depth mip levels, the log of the maximum pixel offset before we need to switch to a lower
+			// miplevel to maintain reasonable spatial locality in the cache
+			// If this number is too small (< 3), too many taps will land in the same pixel, and we'll get bad variance that manifests as flashing.
+			// If it is too high (> 5), we'll get bad performance because we're not using the MIP levels effectively
+			int32_t logMaxOffset;
+			// This must be less than or equal to LineariseDepthPass::MaxMipLevel.
+			int32_t maxMipLevel;
+			// pixels
+			float minRadius;
+			int32_t variation;
 		};
 
 	public:
@@ -157,6 +169,12 @@ namespace castor3d
 		C3D_API static castor::String const BlurRadius;
 		C3D_API static castor::String const ProjInfo;
 		C3D_API static castor::String const ViewMatrix;
+		C3D_API static castor::String const HighQuality;
+		C3D_API static castor::String const BlurHighQuality;
+		C3D_API static castor::String const LogMaxOffset;
+		C3D_API static castor::String const MaxMipLevel;
+		C3D_API static castor::String const MinRadius;
+		C3D_API static castor::String const Variation;
 
 	private:
 		Engine & m_engine;
@@ -182,6 +200,12 @@ namespace castor3d
 	auto c3d_edgeSharpness = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::EdgeSharpness );\
 	auto c3d_blurStepSize = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurStepSize );\
 	auto c3d_blurRadius = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurRadius );\
+	auto c3d_highQuality = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::HighQuality );\
+	auto c3d_blurHighQuality = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BlurHighQuality );\
+	auto c3d_logMaxOffset = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::LogMaxOffset );\
+	auto c3d_maxMipLevel = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::MaxMipLevel );\
+	auto c3d_minRadius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::MinRadius );\
+	auto c3d_variation = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::Variation );\
 	ssaoConfig.end()
 
 #endif

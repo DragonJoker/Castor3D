@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <ShaderAST/Shader.hpp>
@@ -83,26 +84,40 @@ namespace castor3d
 		static VkFormat constexpr ResultFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
 
 	private:
+		struct RenderQuad
+			: castor3d::RenderQuad
+		{
+			RenderQuad( Engine & engine
+				, ashes::RenderPass const & renderPass
+				, VkExtent2D const & size
+				, SsaoConfigUbo & ssaoConfigUbo
+				, TextureUnit const & depth
+				, ashes::ImageView const * normals );
+
+			castor3d::ShaderModule vertexShader;
+			castor3d::ShaderModule pixelShader;
+
+		private:
+			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+				, ashes::DescriptorSet & descriptorSet )override;
+
+			SsaoConfigUbo & m_ssaoConfigUbo;
+			ashes::ImageView const * m_depthView;
+			SamplerSPtr m_depthSampler;
+		};
+
+	private:
 		Engine & m_engine;
+		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
 		ashes::ImageView const & m_normals;
 		VkExtent2D m_size;
 		TextureUnit m_result;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_program;
-		ashes::SamplerPtr m_sampler;
-		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
-		ashes::DescriptorSetPoolPtr m_descriptorPool;
-		ashes::DescriptorSetPtr m_descriptor;
-		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
-		ashes::VertexBufferPtr< NonTexturedQuad > m_vertexBuffer;
-		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
-		ashes::GraphicsPipelinePtr m_pipeline;
-		ashes::CommandBufferPtr m_commandBuffer;
+		std::array< RenderQuad, 2u > m_quads;
+		std::array < ashes::CommandBufferPtr, 2u > m_commandBuffers;
 		ashes::SemaphorePtr m_finished;
 		RenderPassTimerSPtr m_timer;
 	};
