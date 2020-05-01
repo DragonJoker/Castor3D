@@ -222,8 +222,8 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					output.m_diffuse = shadowFactor * ( radiance * NdotL * kD / Float{ castor::Pi< float > } );
-					output.m_specular = shadowFactor * ( specReflectance * radiance * NdotL );
+					output.m_diffuse = shadowFactor * ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
+					output.m_specular = shadowFactor * ( specReflectance * radiance * light.m_intensity.g() * NdotL );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
