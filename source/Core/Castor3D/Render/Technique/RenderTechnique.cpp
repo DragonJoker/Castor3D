@@ -133,6 +133,7 @@ namespace castor3d
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_hdrConfigUbo{ *renderSystem.getEngine() }
+		, m_debugUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
@@ -214,6 +215,7 @@ namespace castor3d
 			m_signalFinished = device->createSemaphore();
 			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
+			m_debugUbo.initialise();
 
 			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
@@ -256,6 +258,7 @@ namespace castor3d
 		m_depthPass->cleanup();
 		m_depthPass.reset();
 #endif
+		m_debugUbo.cleanup();
 		m_matrixUbo.cleanup();
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
@@ -312,6 +315,7 @@ namespace castor3d
 			, camera.getProjection()
 			, jitterProjSpace );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
+		m_debugUbo.update( m_debugConfig );
 
 #if C3D_UseDepthPrepass
 		m_depthPass->update( info, jitter );
@@ -620,6 +624,7 @@ namespace castor3d
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo
+			, m_debugUbo
 			, m_ssaoConfig
 			, m_ssgiConfig );
 

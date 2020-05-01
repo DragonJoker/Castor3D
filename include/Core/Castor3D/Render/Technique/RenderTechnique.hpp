@@ -222,6 +222,16 @@ namespace castor3d
 		{
 			return m_ssaoConfig;
 		}
+
+		inline DebugConfig const & getDebugConfig()const
+		{
+			return m_debugConfig;
+		}
+
+		inline DebugConfig & getDebugConfig()
+		{
+			return m_debugConfig;
+		}
 		/**@}*/
 
 	public:
@@ -259,6 +269,8 @@ namespace castor3d
 		TextureLayoutSPtr m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
+		DebugUbo m_debugUbo;
+		DebugConfig m_debugConfig;
 #if C3D_UseDepthPrepass
 		std::unique_ptr< DepthPass > m_depthPass;
 #endif

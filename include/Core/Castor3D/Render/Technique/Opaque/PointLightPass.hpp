@@ -90,6 +90,7 @@ namespace castor3d
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo
+			, DebugUbo const & debugUbo
 			, bool hasShadows );
 		/**
 		 *\~english

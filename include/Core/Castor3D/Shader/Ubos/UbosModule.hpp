@@ -39,6 +39,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Debug switchs UBO.
+	*\~french
+	*\brief
+	*	UBO pour les switchs de debug.
+	*/
+	class DebugUbo;
+	/**
+	*\~english
+	*\brief
+	*	Debug switchs.
+	*\~french
+	*\brief
+	*	Les switchs de debug.
+	*/
+	struct DebugConfig;
+	/**
+	*\~english
+	*\brief
 	*	Geometry pass UBO.
 	*\~french
 	*\brief

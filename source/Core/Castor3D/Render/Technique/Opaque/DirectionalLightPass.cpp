@@ -215,6 +215,7 @@ namespace castor3d
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
+		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: LightPass{ engine
 			, doCreateRenderPass( engine, depthView, diffuseView, specularView, true )
@@ -223,6 +224,7 @@ namespace castor3d
 			, diffuseView
 			, specularView
 			, gpInfoUbo
+			, debugUbo
 			, hasShadows }
 		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
 			, 1u

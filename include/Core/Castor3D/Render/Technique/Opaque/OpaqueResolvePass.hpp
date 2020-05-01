@@ -65,6 +65,7 @@ namespace castor3d
 			, SceneUbo & sceneUbo
 			, GpInfoUbo & gpInfoUbo
 			, HdrConfigUbo & hdrConfigUbo
+			, DebugUbo const & debugUbo
 			, ashes::ImageView const * ssao );
 		/**
 		 *\~english

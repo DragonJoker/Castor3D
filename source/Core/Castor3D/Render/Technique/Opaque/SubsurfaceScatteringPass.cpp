@@ -19,6 +19,7 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/DebugUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -218,6 +219,7 @@ namespace castor3d
 						: PassFlag( 0u ) ) ) );
 			materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 
+			UBO_DEBUG( writer, 1u, 0u );
 			auto c3d_mapData4 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
 			auto c3d_mapData5 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData5 ), CombData5ImgId, 0u );
 			auto c3d_mapBlur1 = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
@@ -244,48 +246,52 @@ namespace castor3d
 						, writer.cast< UInt >( data5.z() ) );
 					auto material = materials->getBaseMaterial( materialId );
 
-#if !C3D_DebugSSSTransmittance
-					IF( writer, material->m_subsurfaceScatteringEnabled == 0_i )
+					IF( writer, c3d_debugDeferredSSSTransmittance == 0_i )
 					{
-						pxl_fragColor = original;
+						IF( writer, material->m_subsurfaceScatteringEnabled == 0_i )
+						{
+							pxl_fragColor = original;
+						}
+						ELSE
+						{
+							auto originalWeight = writer.declLocale< Vec4 >( "originalWeight"
+								, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
+							auto blurWeights = writer.declLocaleArray< Vec4 >( "blurWeights"
+								, 3u
+								, {
+									vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
+									vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
+									vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
+								} );
+							auto blurVariances = writer.declLocaleArray< Float >( "blurVariances"
+								, 3u
+								, {
+									0.0516_f,
+									0.2719_f,
+									2.0062_f
+								} );
+							auto blur1 = writer.declLocale( "blur1"
+								, textureLod( c3d_mapBlur1, vtx_texture, 0.0_f ) );
+							auto blur2 = writer.declLocale( "blur2"
+								, textureLod( c3d_mapBlur2, vtx_texture, 0.0_f ) );
+							auto blur3 = writer.declLocale( "blur3"
+								, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
+							auto data4 = writer.declLocale( "data4"
+								, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
+							auto translucency = writer.declLocale( "translucency"
+								, data4.w() );
+							pxl_fragColor = original * originalWeight
+								+ blur1 * blurWeights[0]
+								+ blur2 * blurWeights[1]
+								+ blur3 * blurWeights[2];
+						}
+						FI;
 					}
 					ELSE
 					{
-						auto originalWeight = writer.declLocale< Vec4 >( "originalWeight"
-							, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
-						auto blurWeights = writer.declLocaleArray< Vec4 >( "blurWeights"
-							, 3u
-							, {
-								vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
-								vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
-								vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
-							} );
-						auto blurVariances = writer.declLocaleArray< Float >( "blurVariances"
-							, 3u
-							, {
-								0.0516_f,
-								0.2719_f,
-								2.0062_f
-							} );
-						auto blur1 = writer.declLocale( "blur1"
-							, textureLod( c3d_mapBlur1, vtx_texture, 0.0_f ) );
-						auto blur2 = writer.declLocale( "blur2"
-							, textureLod( c3d_mapBlur2, vtx_texture, 0.0_f ) );
-						auto blur3 = writer.declLocale( "blur3"
-							, textureLod( c3d_mapBlur3, vtx_texture, 0.0_f ) );
-						auto data4 = writer.declLocale( "data4"
-							, textureLod( c3d_mapData4, vtx_texture, 0.0_f ) );
-						auto translucency = writer.declLocale( "translucency"
-							, data4.w() );
-						pxl_fragColor = original * originalWeight
-							+ blur1 * blurWeights[0]
-							+ blur2 * blurWeights[1]
-							+ blur3 * blurWeights[2];
+						pxl_fragColor = original;
 					}
 					FI;
-#else
-					pxl_fragColor = original;
-#endif
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -566,6 +572,7 @@ namespace castor3d
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
 		, UniformBuffer< BlurWeights > const & blurUbo
+		, DebugUbo const & debugUbo
 		, GeometryPassResult const & gp
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
@@ -574,6 +581,7 @@ namespace castor3d
 		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
+		, m_debugUbo{ debugUbo }
 		, m_geometryBufferResult{ gp }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
@@ -583,9 +591,9 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			renderSystem.getEngine()->getMaterialCache().getPassBuffer().createLayoutBinding(),
-			//makeDescriptorSetLayoutBinding( 1u
-			//	, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			//	, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Blur weights
+			makeDescriptorSetLayoutBinding( 1u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Debug
 			makeDescriptorSetLayoutBinding( CombData4ImgId
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),	// Translucency map
@@ -616,6 +624,7 @@ namespace castor3d
 		: RenderQuad{ std::forward< RenderQuad >( rhs ) }
 		, m_renderSystem{ rhs.m_renderSystem }
 		, m_blurUbo{ rhs.m_blurUbo }
+		, m_debugUbo{ rhs.m_debugUbo }
 		, m_geometryBufferResult{ rhs.m_geometryBufferResult }
 		, m_source{ rhs.m_source }
 		, m_blurResults{ rhs.m_blurResults }
@@ -645,8 +654,8 @@ namespace castor3d
 	{
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
-		//descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
-		//	, m_blurUbo.getBuffer() );
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 1u )
+			, m_debugUbo.getUbo() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData4ImgId )
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
 			, m_sampler->getSampler() );
@@ -676,6 +685,7 @@ namespace castor3d
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
 		, GpInfoUbo & gpInfoUbo
 		, SceneUbo & sceneUbo
+		, DebugUbo const & debugUbo
 		, Size const & textureSize
 		, GeometryPassResult const & gp
 		, TextureUnit const & lightDiffuse )
@@ -722,7 +732,7 @@ namespace castor3d
 			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[1], true, m_blurVerticProgram },
 			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
 		}
-		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result, m_combineProgram }
+		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, debugUbo, gp, lightDiffuse, m_blurResults, m_result, m_combineProgram }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) ) }
 	{
 		auto & configuration = m_blurConfigUbo->getData( 0u );

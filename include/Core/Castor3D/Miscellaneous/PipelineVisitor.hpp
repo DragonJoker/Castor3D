@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PipelineVisitorBase_HPP___
 
 #include "MiscellaneousModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -33,6 +34,7 @@ namespace castor3d
 		**/
 		/**@{*/
 		virtual void visit( ShaderModule const & shader ) = 0;
+		virtual void visit( DebugConfig const & ubo ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -272,6 +274,10 @@ namespace castor3d
 		void visit( ShaderModule const & shader )override
 		{
 		}
+
+		void visit( DebugConfig const & ubo )override
+		{
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -282,82 +288,82 @@ namespace castor3d
 		*	Configuration globale de l'effet.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, float & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, int32_t & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, uint32_t & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point2f & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point2i & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point2ui & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point3f & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point3i & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point3ui & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point4f & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point4i & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Point4ui & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::Matrix4x4f & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::RangedValue< float > & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::RangedValue< int32_t > & value )override
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, castor::RangedValue< uint32_t > & value )override
 		{
 		}
@@ -371,7 +377,7 @@ namespace castor3d
 		*	Configuration d'UBO.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -379,7 +385,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -387,7 +393,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -395,7 +401,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -403,7 +409,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -411,7 +417,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -419,7 +425,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -427,7 +433,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -435,7 +441,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -443,7 +449,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -451,7 +457,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -459,7 +465,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -467,7 +473,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -475,7 +481,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -483,7 +489,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -491,7 +497,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -499,7 +505,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -507,7 +513,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -515,7 +521,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -523,7 +529,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -531,7 +537,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -539,7 +545,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -547,7 +553,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -555,7 +561,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -563,7 +569,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -571,7 +577,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -579,7 +585,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -587,7 +593,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -595,7 +601,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -603,7 +609,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -611,7 +617,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform
@@ -619,7 +625,7 @@ namespace castor3d
 		{
 		}
 
-		virtual void visit( castor::String const & name
+		void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, castor::String const & ubo
 			, castor::String const & uniform

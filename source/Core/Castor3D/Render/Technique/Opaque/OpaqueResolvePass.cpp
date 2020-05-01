@@ -17,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/DebugUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -37,19 +38,6 @@
 #include <CastorUtils/Graphics/Image.hpp>
 
 using namespace castor;
-
-#define C3D_DebugDiffuseLighting 0
-#define C3D_DebugSpecularLighting 0
-#define C3D_DebugIBL 0
-#define C3D_DebugNormals 0
-#define C3D_DebugWorldPos 0
-#define C3D_DebugViewPos 0
-#define C3D_DebugDepth 0
-#define C3D_DebugData1 0
-#define C3D_DebugData2 0
-#define C3D_DebugData3 0
-#define C3D_DebugData4 0
-#define C3D_DebugData5 0
 
 namespace castor3d
 {
@@ -137,6 +125,7 @@ namespace castor3d
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
+			UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 			auto index = 1u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -323,33 +312,63 @@ namespace castor3d
 							, position.z() );
 					}
 
-#if C3D_DebugDiffuseLighting
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugSpecularLighting
-					pxl_fragColor = vec4( lightSpecular, 1.0_f );
-#elif C3D_DebugSSAO
-					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
-#elif C3D_DebugSSSTransmittance
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugNormals
-					pxl_fragColor = vec4( normal, 1.0_f );
-#elif C3D_DebugWorldPos
-					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
-#elif C3D_DebugViewPos
-					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
-#elif C3D_DebugDepth
-					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
-#elif C3D_DebugData1
-					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
-#elif C3D_DebugData2
-					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
-#elif C3D_DebugData3
-					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
-#elif C3D_DebugData4
-					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
-#elif C3D_DebugData5
-					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
-#endif
+					IF( writer, c3d_debugDeferredDiffuseLighting )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSpecularLighting )
+					{
+						pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredOcclusion )
+					{
+						pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSSSTransmittance )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredIBL )
+					{
+						pxl_fragColor = vec4( ambient, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredNormals )
+					{
+						pxl_fragColor = vec4( normal, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWorldPos )
+					{
+						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredViewPos )
+					{
+						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredDepth )
+					{
+						pxl_fragColor = vec4( vec3( depth ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData1 )
+					{
+						pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData2 )
+					{
+						pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData3 )
+					{
+						pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData4 )
+					{
+						pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData5 )
+					{
+						pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					}
+					FI
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -366,6 +385,7 @@ namespace castor3d
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
+			UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 			auto index = 1u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -601,35 +621,63 @@ namespace castor3d
 							, position.z() );
 					}
 
-#if C3D_DebugDiffuseLighting
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugSpecularLighting
-					pxl_fragColor = vec4( lightSpecular, 1.0_f );
-#elif C3D_DebugSSAO
-					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
-#elif C3D_DebugSSSTransmittance
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugIBL
-					pxl_fragColor = vec4( ambient, 1.0_f );
-#elif C3D_DebugNormals
-					pxl_fragColor = vec4( normal, 1.0_f );
-#elif C3D_DebugWorldPos
-					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
-#elif C3D_DebugViewPos
-					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
-#elif C3D_DebugDepth
-					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
-#elif C3D_DebugData1
-					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
-#elif C3D_DebugData2
-					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
-#elif C3D_DebugData3
-					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
-#elif C3D_DebugData4
-					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
-#elif C3D_DebugData5
-					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
-#endif
+					IF( writer, c3d_debugDeferredDiffuseLighting )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSpecularLighting )
+					{
+						pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredOcclusion )
+					{
+						pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSSSTransmittance )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredIBL )
+					{
+						pxl_fragColor = vec4( ambient, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredNormals )
+					{
+						pxl_fragColor = vec4( normal, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWorldPos )
+					{
+						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredViewPos )
+					{
+						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredDepth )
+					{
+						pxl_fragColor = vec4( vec3( depth ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData1 )
+					{
+						pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData2 )
+					{
+						pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData3 )
+					{
+						pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData4 )
+					{
+						pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData5 )
+					{
+						pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					}
+					FI
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -646,6 +694,7 @@ namespace castor3d
 			UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 			UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
 			UBO_HDR_CONFIG( writer, HdrConfigUbo::BindingPoint, 0u );
+			UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 			auto index = 1u;
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -881,35 +930,63 @@ namespace castor3d
 							, position.z() );
 					}
 
-#if C3D_DebugDiffuseLighting
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugSpecularLighting
-					pxl_fragColor = vec4( lightSpecular, 1.0_f );
-#elif C3D_DebugSSAO
-					pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
-#elif C3D_DebugSSSTransmittance
-					pxl_fragColor = vec4( lightDiffuse, 1.0_f );
-#elif C3D_DebugIBL
-					pxl_fragColor = vec4( ambient, 1.0_f );
-#elif C3D_DebugNormals
-					pxl_fragColor = vec4( normal, 1.0_f );
-#elif C3D_DebugWorldPos
-					pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
-#elif C3D_DebugViewPos
-					pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
-#elif C3D_DebugDepth
-					pxl_fragColor = vec4( vec3( depth ), 1.0_f );
-#elif C3D_DebugData1
-					pxl_fragColor = vec4( data1.xyz(), 1.0_f );
-#elif C3D_DebugData2
-					pxl_fragColor = vec4( data2.xyz(), 1.0_f );
-#elif C3D_DebugData3
-					pxl_fragColor = vec4( data3.xyz(), 1.0_f );
-#elif C3D_DebugData4
-					pxl_fragColor = vec4( data4.xyz(), 1.0_f );
-#elif C3D_DebugData5
-					pxl_fragColor = vec4( data5.xyz(), 1.0_f );
-#endif
+					IF( writer, c3d_debugDeferredDiffuseLighting )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSpecularLighting )
+					{
+						pxl_fragColor = vec4( lightSpecular, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredOcclusion )
+					{
+						pxl_fragColor = vec4( vec3( occlusion ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredSSSTransmittance )
+					{
+						pxl_fragColor = vec4( lightDiffuse, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredIBL )
+					{
+						pxl_fragColor = vec4( ambient, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredNormals )
+					{
+						pxl_fragColor = vec4( normal, 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWorldPos )
+					{
+						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredViewPos )
+					{
+						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredDepth )
+					{
+						pxl_fragColor = vec4( vec3( depth ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData1 )
+					{
+						pxl_fragColor = vec4( data1.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData2 )
+					{
+						pxl_fragColor = vec4( data2.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData3 )
+					{
+						pxl_fragColor = vec4( data3.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData4 )
+					{
+						pxl_fragColor = vec4( data4.xyz(), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredData5 )
+					{
+						pxl_fragColor = vec4( data5.xyz(), 1.0_f );
+					}
+					FI
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -950,6 +1027,9 @@ namespace castor3d
 				makeDescriptorSetLayoutBinding( HdrConfigUbo::BindingPoint
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
+				makeDescriptorSetLayoutBinding( DebugUbo::BindingPoint
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			auto & device = getCurrentRenderDevice( engine );
 			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
@@ -961,7 +1041,8 @@ namespace castor3d
 			, ashes::DescriptorSetPool & pool
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, HdrConfigUbo const & hdrConfigUbo )
+			, HdrConfigUbo const & hdrConfigUbo
+			, DebugUbo const & debugUbo )
 		{
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
@@ -976,6 +1057,8 @@ namespace castor3d
 			result->createSizedBinding( layout.getBinding( HdrConfigUbo::BindingPoint )
 				, *hdrConfigUbo.getUbo().buffer
 				, hdrConfigUbo.getUbo().offset );
+			result->createSizedBinding( layout.getBinding( DebugUbo::BindingPoint )
+				, debugUbo.getUbo() );
 			result->update();
 			return result;
 		}
@@ -1339,6 +1422,7 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, GpInfoUbo & gpInfoUbo
 		, HdrConfigUbo & hdrConfigUbo
+		, DebugUbo const & debugUbo
 		, ashes::ImageView const * ssao )
 		: OwnedBy< Engine >{ engine }
 		, m_device{ getCurrentRenderDevice( engine ) }
@@ -1352,7 +1436,7 @@ namespace castor3d
 		, m_vertexBuffer{ doCreateVbo( m_device ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
 		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
-		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo, hdrConfigUbo ) }
+		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo, hdrConfigUbo, debugUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler ) }

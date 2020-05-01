@@ -45,6 +45,7 @@ namespace castor3d
 		C3D_API SubsurfaceScatteringPass( Engine & engine
 			, GpInfoUbo & gpInfoUbo
 			, SceneUbo & sceneUbo
+			, DebugUbo const & debugUbo
 			, castor::Size const & textureSize
 			, GeometryPassResult const & gp
 			, TextureUnit const & lightDiffuse );
@@ -159,6 +160,7 @@ namespace castor3d
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
 				, UniformBuffer< BlurWeights > const & blurUbo
+				, DebugUbo const & debugUbo
 				, GeometryPassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
@@ -174,6 +176,7 @@ namespace castor3d
 		private:
 			RenderSystem & m_renderSystem;
 			UniformBuffer< BlurWeights > const & m_blurUbo;
+			DebugUbo const & m_debugUbo;
 			GeometryPassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			std::array< TextureUnit, 3u > const & m_blurResults;
