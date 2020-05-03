@@ -773,7 +773,8 @@ namespace castor3d
 			, std::move( pxl )
 			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView()
 			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
-			, m_combinedFrameBuffer.colourTexture.getTexture() );
+			, m_combinedFrameBuffer.colourTexture.getTexture()
+			, RenderQuad::TexcoordConfig{} );
 	}
 
 	void RenderTarget::doRender( RenderInfo & info

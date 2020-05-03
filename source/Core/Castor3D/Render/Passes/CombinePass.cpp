@@ -146,8 +146,9 @@ namespace castor3d
 
 	CombinePass::CombineQuad::CombineQuad( Engine & engine
 		, castor::String const & prefix
-		, ashes::ImageView const & lhsView )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
+		, ashes::ImageView const & lhsView
+		, RenderQuad::TexcoordConfig const * config )
+		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, nullptr, config }
 		, m_lhsView{ lhsView }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &lhsView->subresourceRange ) }
 	{
@@ -175,7 +176,8 @@ namespace castor3d
 		, ShaderModule pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
-		, TextureLayoutSPtr resultTexture )
+		, TextureLayoutSPtr resultTexture
+		, RenderQuad::TexcoordConfig const * config )
 		: m_engine{ engine }
 		, m_prefix{ prefix }
 		, m_image{ resultTexture }
@@ -186,7 +188,7 @@ namespace castor3d
 		, m_pixelShader{ std::move( pixelShader ) }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_view, outputSize ) }
-		, m_quad{ engine, m_prefix, lhsView }
+		, m_quad{ engine, m_prefix, lhsView, config }
 	{
 		auto & device = getCurrentRenderDevice( engine );
 		ashes::PipelineShaderStageCreateInfoArray program
@@ -219,6 +221,31 @@ namespace castor3d
 		, ShaderModule vertexShader
 		, ShaderModule pixelShader
 		, ashes::ImageView const & lhsView
+		, ashes::ImageView const & rhsView
+		, TextureLayoutSPtr resultTexture )
+		: CombinePass
+		{
+			engine,
+			prefix,
+			outputFormat,
+			outputSize,
+			std::move( vertexShader ),
+			std::move( pixelShader ),
+			lhsView,
+			rhsView,
+			resultTexture,
+			nullptr,
+		}
+	{
+	}
+
+	CombinePass::CombinePass( Engine & engine
+		, castor::String const & prefix
+		, VkFormat outputFormat
+		, VkExtent2D const & outputSize
+		, ShaderModule vertexShader
+		, ShaderModule pixelShader
+		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView )
 		: CombinePass
 		{
@@ -230,7 +257,59 @@ namespace castor3d
 			std::move( pixelShader ),
 			lhsView,
 			rhsView,
-			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat )
+			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),
+			nullptr,
+		}
+	{
+	}
+
+	CombinePass::CombinePass( Engine & engine
+		, castor::String const & prefix
+		, VkFormat outputFormat
+		, VkExtent2D const & outputSize
+		, ShaderModule vertexShader
+		, ShaderModule pixelShader
+		, ashes::ImageView const & lhsView
+		, ashes::ImageView const & rhsView
+		, TextureLayoutSPtr resultTexture
+		, RenderQuad::TexcoordConfig const & config )
+		: CombinePass
+		{
+			engine,
+			prefix,
+			outputFormat,
+			outputSize,
+			std::move( vertexShader ),
+			std::move( pixelShader ),
+			lhsView,
+			rhsView,
+			resultTexture,
+			&config,
+		}
+	{
+	}
+
+	CombinePass::CombinePass( Engine & engine
+		, castor::String const & prefix
+		, VkFormat outputFormat
+		, VkExtent2D const & outputSize
+		, ShaderModule vertexShader
+		, ShaderModule pixelShader
+		, ashes::ImageView const & lhsView
+		, ashes::ImageView const & rhsView
+		, RenderQuad::TexcoordConfig const & config )
+		: CombinePass
+		{
+			engine,
+			prefix,
+			outputFormat,
+			outputSize,
+			std::move( vertexShader ),
+			std::move( pixelShader ),
+			lhsView,
+			rhsView,
+			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),
+			&config,
 		}
 	{
 	}

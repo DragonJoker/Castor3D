@@ -25,6 +25,18 @@ namespace castor3d
 {
 	class CombinePass
 	{
+	protected:
+		C3D_API CombinePass( Engine & engine
+			, castor::String const & prefix
+			, VkFormat outputFormat
+			, VkExtent2D const & outputSize
+			, ShaderModule vertexShader
+			, ShaderModule pixelShader
+			, ashes::ImageView const & lhsView
+			, ashes::ImageView const & rhsView
+			, TextureLayoutSPtr resultTexture
+			, RenderQuad::TexcoordConfig const * config );
+
 	public:
 		C3D_API CombinePass( Engine & engine
 			, castor::String const & prefix
@@ -43,6 +55,25 @@ namespace castor3d
 			, ShaderModule pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView );
+		C3D_API CombinePass( Engine & engine
+			, castor::String const & prefix
+			, VkFormat outputFormat
+			, VkExtent2D const & outputSize
+			, ShaderModule vertexShader
+			, ShaderModule pixelShader
+			, ashes::ImageView const & lhsView
+			, ashes::ImageView const & rhsView
+			, TextureLayoutSPtr resultTexture
+			, RenderQuad::TexcoordConfig const & config );
+		C3D_API CombinePass( Engine & engine
+			, castor::String const & prefix
+			, VkFormat outputFormat
+			, VkExtent2D const & outputSize
+			, ShaderModule vertexShader
+			, ShaderModule pixelShader
+			, ashes::ImageView const & lhsView
+			, ashes::ImageView const & rhsView
+			, RenderQuad::TexcoordConfig const & config );
 		C3D_API void accept( PipelineVisitorBase & visitor );
 		C3D_API ashes::Semaphore const & combine( ashes::Semaphore const & toWait )const;
 		C3D_API CommandsSemaphore getCommands( RenderPassTimer const & timer
@@ -64,7 +95,8 @@ namespace castor3d
 		public:
 			explicit CombineQuad( Engine & engine
 				, castor::String const & prefix
-				, ashes::ImageView const & lhsiew );
+				, ashes::ImageView const & lhsiew
+				, TexcoordConfig const * config );
 
 		private:
 			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

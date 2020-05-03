@@ -215,7 +215,7 @@ namespace GuiCommon
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
 		castor3d::Version m_version;
-		bool m_validation{ false };
+		bool m_validation;
 		bool m_unlimitedFps{ false };
 	};
 }

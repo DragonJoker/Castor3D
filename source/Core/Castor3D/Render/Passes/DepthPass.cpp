@@ -232,11 +232,14 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		bool hasTextures = flags.texturesCount > 0;
+
 		// Vertex inputs
 		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
 		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation );
+			, RenderPass::VertexInputs::TextureLocation
+			, hasTextures );
 		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
@@ -260,7 +263,7 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto texture2 = writer.declInput< Vec3 >( "texture2"
 			, RenderPass::VertexInputs::Texture2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
+			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) && hasTextures );
 		auto in = writer.getIn();
 
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0 );
@@ -275,7 +278,8 @@ namespace castor3d
 		auto vtx_prvPosition = writer.declOutput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
@@ -379,7 +383,8 @@ namespace castor3d
 		auto vtx_prvPosition = writer.declInput< Vec3 >( "vtx_prvPosition"
 			, RenderPass::VertexOutputs::PrvPositionLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
-			, RenderPass::VertexOutputs::TextureLocation );
+			, RenderPass::VertexOutputs::TextureLocation
+			, hasTextures );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
@@ -410,12 +415,17 @@ namespace castor3d
 					, material->m_opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
 					, material->m_alphaRef );
-				utils.computeOpacityMapContribution( flags
-					, textureConfigs
-					, c3d_textureConfig
-					, c3d_maps
-					, vtx_texture
-					, alpha );
+
+				if ( hasTextures )
+				{
+					utils.computeOpacityMapContribution( flags
+						, textureConfigs
+						, c3d_textureConfig
+						, c3d_maps
+						, vtx_texture
+						, alpha );
+				}
+
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );

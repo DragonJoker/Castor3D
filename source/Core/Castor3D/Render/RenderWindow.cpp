@@ -884,7 +884,7 @@ namespace castor3d
 	{
 		try
 		{
-			getDevice().presentQueue->present( *m_swapChain
+			getDevice().graphicsQueue->present( *m_swapChain
 				, resources->imageIndex
 				, *resources->finishedRenderingSemaphore );
 		}

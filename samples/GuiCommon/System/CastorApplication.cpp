@@ -83,11 +83,13 @@ namespace GuiCommon
 {
 #if defined( NDEBUG )
 
-	static const castor::LogType DefaultLogType = castor::LogType::eInfo;
+	static constexpr castor::LogType DefaultLogType = castor::LogType::eInfo;
+	static constexpr bool DefaultValidation = false;
 
 #else
 
-	static const castor::LogType DefaultLogType = castor::LogType::eTrace;
+	static constexpr castor::LogType DefaultLogType = castor::LogType::eTrace;
+	static constexpr bool DefaultValidation = true;
 
 #endif
 
@@ -103,6 +105,7 @@ namespace GuiCommon
 		, m_steps{ steps + 4 }
 		, m_splashScreen{ nullptr }
 		, m_version{ std::move( version ) }
+		, m_validation{ DefaultValidation }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
