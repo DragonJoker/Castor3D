@@ -14,7 +14,14 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, castor3d::Version const & p_version );
+		SplashScreen( wxString const & title
+			, wxPoint const & titlePos
+			, wxPoint const & copyrightPos
+			, wxPoint const & versionPos
+			, wxPoint const & pos
+			, int range
+			, castor3d::Version const & appVersion
+			, castor3d::Version const & engineVersion );
 		~SplashScreen();
 
 		void Step( wxString const & p_strText, int p_iIncrement );
@@ -36,6 +43,7 @@ namespace GuiCommon
 		wxPoint m_ptCopyrightPosition;
 		wxPoint m_ptVersionPosition;
 		wxString m_strCopyright;
+		wxString m_strAppVersion;
 		wxString m_strEngineVersion;
 		wxString m_strStatus;
 		wxString m_strSubStatus;

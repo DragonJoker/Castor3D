@@ -13,21 +13,27 @@ using namespace GuiCommon;
 using namespace castor3d;
 using namespace castor;
 
-SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange, Version const & p_version )
-	: wxFrame( nullptr, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
+SplashScreen::SplashScreen( wxString const & title
+	, wxPoint const & titlePos
+	, wxPoint const & copyrightPos
+	, wxPoint const & versionPos
+	, wxPoint const & pos
+	, int range
+	, castor3d::Version const & appVersion
+	, castor3d::Version const & engineVersion )
+	: wxFrame( nullptr, wxID_ANY, title, pos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
 	, m_bmpSplash( splash_xpm )
-	, m_ptTitlePosition( p_ptTitlePos )
-	, m_ptCopyrightPosition( p_ptCopyrightPos )
-	, m_ptVersionPosition( p_ptVersionPos )
-	, m_strEngineVersion( _( "Castor3D Version " ) )
+	, m_ptTitlePosition( titlePos )
+	, m_ptCopyrightPosition( copyrightPos )
+	, m_ptVersionPosition( versionPos )
+	, m_strAppVersion( wxString{} << appVersion.getMajor() << wxT( "." ) << appVersion.getMinor() << wxT( "." ) << appVersion.getBuild() )
+	, m_strEngineVersion( wxString{} << _( "Based on Castor3D" ) << wxT( " v" ) << engineVersion.getMajor() << wxT( "." ) << engineVersion.getMinor() << wxT( "." ) << engineVersion.getBuild() )
 {
 	m_strCopyright << wxDateTime().Now().GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" );
 	SetBackgroundStyle( wxBG_STYLE_CUSTOM );
-	m_strEngineVersion.clear();
-	m_strEngineVersion << p_version.getMajor() << wxT( "." ) << p_version.getMinor() << wxT( "." ) << p_version.getBuild();
 	wxSize size = GetClientSize();
 	m_pPanelBmp = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( size.x, size.y - 20 ) );
-	m_pGauge = new wxGauge( this, wxID_ANY, p_iRange, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
+	m_pGauge = new wxGauge( this, wxID_ANY, range, wxPoint( 0, size.y - 20 ), wxSize( size.x, 20 ), wxGA_SMOOTH | wxGA_HORIZONTAL | wxBORDER_NONE );
 	Show();
 	Update();
 }
@@ -71,7 +77,7 @@ void SplashScreen::doDraw( wxDC * p_pDC )
 		p_pDC->SetTextForeground( wxColour( 92, 92, 92 ) );
 		font.SetPointSize( 70 );
 		p_pDC->SetFont( font );
-		p_pDC->DrawText( m_strEngineVersion, m_ptVersionPosition );
+		p_pDC->DrawText( m_strAppVersion, m_ptVersionPosition );
 		p_pDC->SetTextForeground( *wxWHITE );
 		font.SetPointSize( 40 );
 		p_pDC->SetFont( font );
@@ -82,6 +88,8 @@ void SplashScreen::doDraw( wxDC * p_pDC )
 		p_pDC->DrawText( m_strCopyright, m_ptCopyrightPosition );
 		p_pDC->SetTextForeground( *wxWHITE );
 		font.SetPointSize( 8 );
+		p_pDC->SetFont( font );
+		p_pDC->DrawText( m_strEngineVersion, wxPoint( 350, 350 ) );
 		p_pDC->SetFont( font );
 		p_pDC->DrawText( m_strStatus, wxPoint( 10, 350 ) );
 		p_pDC->SetTextForeground( *wxWHITE );

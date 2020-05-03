@@ -133,7 +133,8 @@ namespace GuiCommon
 			wxPoint{ 180, 260 },
 			wxPoint{ ( rect.width - 512 ) / 2, ( rect.height - 384 ) / 2 },
 			int( m_steps ),
-			m_version
+			m_version,
+			castor3d::Version{}
 		};
 		m_splashScreen = &splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
