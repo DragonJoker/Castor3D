@@ -44,7 +44,16 @@ namespace castor3d
 	*\brief
 	*	Programme utilisé pour combiner les passes opaque et transparente.
 	*/
-	struct FinalCombineProgram;
+	struct TransparentResolveProgram;
+	/**
+	*\~english
+	*\brief
+	*	Pass used to combine the transparent and opaque passes.
+	*\~french
+	*\brief
+	*	Passe utilisé pour combiner les passes opaque et transparente.
+	*/
+	class TransparentResolvePass;
 	/**
 	*\~english
 	*\brief

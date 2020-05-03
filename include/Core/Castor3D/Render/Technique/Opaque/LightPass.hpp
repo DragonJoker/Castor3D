@@ -63,6 +63,7 @@ namespace castor3d
 			 *\param[in]	hasShadows	Dit si ce programme utilise une shadow map.
 			 */
 			Program( Engine & engine
+				, castor::String const & name
 				, ShaderModule const & vtx
 				, ShaderModule const & pxl
 				, bool hasShadows );
@@ -227,6 +228,7 @@ namespace castor3d
 
 		public:
 			Engine & m_engine;
+			castor::String m_name;
 			ashes::PipelineShaderStageCreateInfoArray m_program;
 			ashes::DescriptorSetLayoutPtr m_uboDescriptorLayout;
 			ashes::DescriptorSetPoolPtr m_uboDescriptorPool;
@@ -334,6 +336,11 @@ namespace castor3d
 			CU_Require( m_signalReady );
 			return *m_signalReady;
 		}
+
+		inline castor::String const & getName()const
+		{
+			return m_name;
+		}
 		/**@}*/
 
 	public:
@@ -388,6 +395,7 @@ namespace castor3d
 		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		LightPass( Engine & engine
+			, castor::String const & suffix
 			, ashes::RenderPassPtr && firstRenderPass
 			, ashes::RenderPassPtr && blendRenderPass
 			, ashes::ImageView const & depthView
@@ -571,6 +579,7 @@ namespace castor3d
 		};
 
 		Engine & m_engine;
+		castor::String m_name;
 		Scene const * m_scene{ nullptr };
 		SceneUbo * m_sceneUbo{ nullptr };
 		ModelMatrixUbo * m_mmUbo{ nullptr };

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
 
@@ -35,6 +36,14 @@ namespace castor3d
 		, std::string const & typeName )
 	{
 		setDebugObjectName( *device, object, type, name, typeName );
+	}
+
+	void setDebugObjectName( RenderDevice const & device
+		, CommandsSemaphore const & object
+		, std::string const & name )
+	{
+		setDebugObjectName( device, *object.commandBuffer, name );
+		setDebugObjectName( device, *object.semaphore, name );
 	}
 
 	ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device

@@ -244,7 +244,7 @@ namespace Bloom
 				std::move( dependencies ),
 			};
 			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "BloomBlur" );
+			setDebugObjectName( device, *result, "BloomBlurPass" );
 			return result;
 		}
 
@@ -255,7 +255,9 @@ namespace Bloom
 				castor3d::makeDescriptorSetLayoutBinding( 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT ),
 				castor3d::makeDescriptorSetLayoutBinding( 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
-			return device->createDescriptorSetLayout( std::move( bindings ) );
+			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
+			setDebugObjectName( device, *result, "BloomBlurPass" );
+			return result;
 		}
 	}
 
@@ -285,9 +287,11 @@ namespace Bloom
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, float( index )
 			, float( index + 1u ) );
+		setDebugObjectName( device, *sampler, "BloomBlurPass" + std::to_string( index ) );
 
 		auto & descriptorLayout = descriptorPool.getLayout();
 		descriptorSet = descriptorPool.createDescriptorSet();
+		setDebugObjectName( device, *descriptorSet, "BloomBlurPass" + std::to_string( index ) );
 		descriptorSet->createSizedBinding( descriptorLayout.getBinding( 0u )
 			, blurUbo
 			, index );
@@ -298,6 +302,7 @@ namespace Bloom
 
 		ashes::ImageViewCRefArray attaches{ dstView };
 		frameBuffer = renderPass.createFrameBuffer( dimensions, std::move( attaches ) );
+		setDebugObjectName( device, *frameBuffer, "BloomBlurPass" + std::to_string( index ) );
 		
 		ashes::PipelineVertexInputStateCreateInfo inputState
 		{
@@ -337,6 +342,7 @@ namespace Bloom
 				pipelineLayout,
 				renderPass,
 			} );
+		setDebugObjectName( device, *pipeline, "BloomBlurPass" + std::to_string( index ) );
 	}
 
 	std::vector< BlurPass::Subpass > doCreateSubpasses( castor3d::RenderDevice const & device
@@ -407,6 +413,8 @@ namespace Bloom
 			, m_blurPassesCount ) }
 		, m_isVertical{ isVertical }
 	{
+		setDebugObjectName( device, *m_pipelineLayout, "BloomBlurPass" );
+		setDebugObjectName( device, *m_descriptorPool, "BloomBlurPass" );
 	}
 
 	castor3d::CommandsSemaphoreArray BlurPass::getCommands( castor3d::RenderPassTimer const & timer
@@ -436,6 +444,7 @@ namespace Bloom
 			cmd.end();
 
 			result.emplace_back( std::move( commandBuffer ), m_device->createSemaphore() );
+			setDebugObjectName( m_device, result.back(), "BloomBlurPass" );
 		}
 
 		return result;

@@ -147,6 +147,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, edgeDetectionCommands, "SMAA DepthEdgeDetection" );
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
 		edgeDetectionCmd.begin();

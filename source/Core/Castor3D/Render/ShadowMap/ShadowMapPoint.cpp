@@ -41,7 +41,7 @@ namespace castor3d
 		TextureUnit doInitialiseVariance( Engine & engine
 			, Size const & size )
 		{
-			String const name = cuT( "ShadowMap_Point_Shadow" );
+			String const name = cuT( "ShadowMapPoint_Shadow" );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -90,7 +90,7 @@ namespace castor3d
 		TextureUnit doInitialiseLinearDepth( Engine & engine
 			, Size const & size )
 		{
-			String const name = cuT( "ShadowMap_Point_Depth" );
+			String const name = cuT( "ShadowMapPoint_Depth" );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -152,6 +152,7 @@ namespace castor3d
 					nullptr,
 				};
 				passData.pass = std::make_shared< ShadowMapPassPoint >( engine
+					, i
 					, *passData.matrixUbo
 					, *passData.culler
 					, shadowMap );
@@ -293,7 +294,7 @@ namespace castor3d
 
 			for ( auto & frameBuffer : data.frameBuffers )
 			{
-				auto fbDebugName = debugName + "x" + std::to_string( face );
+				auto fbDebugName = debugName + "F" + std::to_string( face );
 				auto & pass = m_passes[face];
 				auto & renderPass = pass.pass->getRenderPass();
 				frameBuffer.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_2D
@@ -321,13 +322,15 @@ namespace castor3d
 				frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
 				setDebugObjectName( device
 					, *frameBuffer.frameBuffer
-					, fbDebugName + "Fbo" );
+					, fbDebugName );
 				++face;
 			}
 
 			auto & device = getCurrentRenderDevice( *this );
 			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+			setDebugObjectName( device, *data.commandBuffer, debugName );
 			data.finished = device->createSemaphore();
+			setDebugObjectName( device, *data.finished, debugName );
 			m_passesData.emplace_back( std::move( data ) );
 		}
 	}
@@ -360,11 +363,11 @@ namespace castor3d
 		auto & commandBuffer = *m_passesData[index].commandBuffer;
 		auto & finished = *m_passesData[index].finished;
 		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			commandBuffer.beginDebugBlock(
-				{
-					m_name + " generation " + std::to_string( index ),
-					makeFloatArray( getEngine()->getNextRainbowColour() ),
-				} );
+		commandBuffer.beginDebugBlock(
+			{
+				m_name + " generation " + std::to_string( index ),
+				makeFloatArray( getEngine()->getNextRainbowColour() ),
+			} );
 		auto col = index / ( ( shader::getPointShadowMapCount() - 1u ) * 2.0f );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
@@ -392,6 +395,7 @@ namespace castor3d
 			pass.pass->setUpToDate();
 		}
 
+		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 		auto & device = getCurrentRenderDevice( *this );
 

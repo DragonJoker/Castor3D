@@ -498,6 +498,8 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "SsaoBlurCfg" ) }
 	{
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		setDebugObjectName( device, *m_finished, "SsaoBlur" );
 		auto & configuration = m_configurationUbo->getData();
 		configuration.axis = axis;
 
@@ -520,8 +522,8 @@ namespace castor3d
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_commandBuffer, "SsaoBlur" );
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		m_commandBuffer->beginDebugBlock(

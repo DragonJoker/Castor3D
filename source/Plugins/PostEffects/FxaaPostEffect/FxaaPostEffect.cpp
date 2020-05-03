@@ -373,6 +373,7 @@ namespace fxaa
 				device.graphicsCommandPool->createCommandBuffer(),
 				device->createSemaphore()
 			};
+			setDebugObjectName( device, commands, "Fxaa" );
 			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
 			auto & targetView = m_target->getDefaultView();

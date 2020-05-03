@@ -36,6 +36,7 @@ namespace castor3d
 		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
 		 */
 		StencilPass( Engine const & engine
+			, castor::String const & prefix
 			, ashes::ImageView const & depthView
 			, MatrixUbo & matrixUbo
 			, ModelMatrixUbo & modelMatrixUbo );
@@ -85,6 +86,7 @@ namespace castor3d
 
 	private:
 		Engine const & m_engine;
+		castor::String m_prefix;
 		ashes::ImageView const & m_depthView;
 		MatrixUbo & m_matrixUbo;
 		ModelMatrixUbo & m_modelMatrixUbo;

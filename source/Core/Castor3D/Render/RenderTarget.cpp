@@ -63,18 +63,18 @@ namespace castor3d
 	{
 		log::info << m_tabs << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget name" );
+		castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " name" );
 
 		if ( result && target.getScene() )
 		{
 			result = file.writeText( m_tabs + cuT( "\tscene \"" ) + target.getScene()->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget scene" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " scene" );
 		}
 
 		if ( result && target.getCamera() )
 		{
 			result = file.writeText( m_tabs + cuT( "\tcamera \"" ) + target.getCamera()->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget camera" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " camera" );
 		}
 
 		if ( result )
@@ -82,19 +82,19 @@ namespace castor3d
 			result = file.writeText( m_tabs + cuT( "\tsize " )
 				+ string::toString( target.getSize().getWidth(), std::locale{ "C" } ) + cuT( " " )
 				+ string::toString( target.getSize().getHeight(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget size" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " size" );
 		}
 
 		if ( result )
 		{
 			result = file.writeText( m_tabs + cuT( "\tformat " ) + PF::getFormatName( convert( target.getPixelFormat() ) ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget format" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " format" );
 		}
 
 		if ( result )
 		{
 			result = file.writeText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget tone mapping" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " tone mapping" );
 		}
 
 		if ( result )
@@ -102,7 +102,7 @@ namespace castor3d
 			for ( auto const & effect : target.m_hdrPostEffects )
 			{
 				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
-				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
+				castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " post effect" );
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace castor3d
 			for ( auto const & effect : target.m_srgbPostEffects )
 			{
 				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
-				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
+				castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " post effect" );
 			}
 		}
 
@@ -143,7 +143,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 
-		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
+		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + renderTarget.getName() );
 		ashes::ImageCreateInfo createInfo
 		{
 			0u,
@@ -166,7 +166,7 @@ namespace castor3d
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "RenderTarget_Colour" ) );
+			, renderTarget.getName() + cuT( "Colour" ) );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
 		colourTexture.getTexture()->getDefaultImage().initialiseSource();
@@ -199,6 +199,7 @@ namespace castor3d
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
+		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
@@ -208,11 +209,11 @@ namespace castor3d
 			, *getEngine()
 			, m_hdrConfig
 			, Parameters{} );
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
 
-		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) );
+		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) );
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 	}
@@ -257,10 +258,12 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( m_hdrCopyCommands
+				doInitialiseCopyCommands( "HDR"
+					, m_hdrCopyCommands
 					, sourceView->getImage().getView()
 					, m_renderTechnique->getResult().getDefaultView() );
 				m_hdrCopyFinished = device->createSemaphore();
+				setDebugObjectName( device, *m_hdrCopyFinished, getName() + "HDRCopy" );
 			}
 
 			if ( m_initialised )
@@ -281,10 +284,12 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( m_srgbCopyCommands
+				doInitialiseCopyCommands( "SRGB"
+					, m_srgbCopyCommands
 					, sourceView->getDefaultView()
 					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 				m_srgbCopyFinished = device->createSemaphore();
+				setDebugObjectName( device, *m_srgbCopyFinished, getName() + "SRGBCopy" );
 			}
 
 			doInitialiseFlip();
@@ -293,6 +298,7 @@ namespace castor3d
 			m_overlayRenderer->initialise();
 
 			m_signalReady = device->createSemaphore();
+			setDebugObjectName( device, *m_signalReady, getName() + "Ready" );
 		}
 	}
 
@@ -350,7 +356,7 @@ namespace castor3d
 			m_combinedFrameBuffer.cleanup();
 			m_renderTechnique.reset();
 			m_renderPass.reset();
-			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
+			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
 		}
 	}
 
@@ -533,7 +539,7 @@ namespace castor3d
 		};
 		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "RenderTargetRenderPass" );
+		setDebugObjectName( device, *m_renderPass, getName() + "RenderPass" );
 	}
 
 	bool RenderTarget::doInitialiseFrameBuffer()
@@ -578,9 +584,9 @@ namespace castor3d
 		auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "RenderTargetVelocity" ) );
+			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
-		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
+		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
 		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
 		return m_velocityTexture.initialise();
 	}
@@ -591,7 +597,7 @@ namespace castor3d
 		{
 			try
 			{
-				auto name = cuT( "RenderTargetTechnique_" ) + string::toString( m_index );
+				auto name = getName() + cuT( "Technique" );
 				m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
 					, std::make_shared< RenderTechnique >( name
 						, *this
@@ -651,17 +657,19 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderTarget::doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+	void RenderTarget::doInitialiseCopyCommands( castor::String const & name
+		, ashes::CommandBufferPtr & commandBuffer
 		, ashes::ImageView const & source
 		, ashes::ImageView const & target )
 	{
 		auto & device = getCurrentRenderDevice( *this );
 		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *commandBuffer, getName() + name + "Copy" );
 
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(
 			{
-				"Image Copy",
+				getName() + " - " + name + " Copy",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 
@@ -775,7 +783,7 @@ namespace castor3d
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
 		ashes::SemaphoreCRefArray signalsToWait;
-		
+
 		if ( m_type == TargetType::eWindow )
 		{
 			signalsToWait = scene->getRenderTargetsSemaphores();
@@ -807,12 +815,6 @@ namespace castor3d
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
-
-#if DISPLAY_DEBUG
-
-		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
-
-#endif
 	}
 
 	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait

@@ -1500,6 +1500,9 @@ namespace castor3d
 		, m_ssaoEnabled{ ssao != nullptr }
 		, m_viewport{ engine }
 	{
+		setDebugObjectName( m_device, *m_uboDescriptorPool, "OpaqueResolvePassUbo" );
+		setDebugObjectName( m_device, *m_texDescriptorPool, "OpaqueResolvePassTex" );
+		setDebugObjectName( m_device, *m_finished, "OpaqueResolvePass" );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();

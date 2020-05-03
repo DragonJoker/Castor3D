@@ -747,6 +747,7 @@ namespace light_streaks
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, hiPassCommands, "LightStreaksHiPass" );
 		auto & hiPassCmd = *hiPassCommands.commandBuffer;
 		hiPassCmd.begin();
 		timer.beginPass( hiPassCmd, 0u );
@@ -782,6 +783,7 @@ namespace light_streaks
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, hiPassCommands, "LightStreaksCopy" );
 		auto & copyCmd = *copyCommands.commandBuffer;
 		copyCmd.begin();
 		timer.beginPass( copyCmd, 1u );
@@ -809,6 +811,7 @@ namespace light_streaks
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, hiPassCommands, "LightStreaksBlur" );
 		auto & kawaseCmd = *kawaseCommands.commandBuffer;
 		kawaseCmd.begin();
 		timer.beginPass( kawaseCmd, 2u );

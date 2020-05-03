@@ -291,6 +291,7 @@ namespace motion_blur
 				device.graphicsCommandPool->createCommandBuffer(),
 				device->createSemaphore()
 			};
+			setDebugObjectName( device, commands, "LinearMotionBlur" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );

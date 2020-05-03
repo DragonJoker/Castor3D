@@ -49,7 +49,7 @@ namespace castor3d
 			bool invertV{ false };
 		};
 
-	private:
+	protected:
 		C3D_API RenderQuad( RenderSystem & renderSystem
 			, VkFilter samplerFilter
 			, VkImageSubresourceRange const * range

@@ -43,7 +43,9 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
-		m_signalFinished = getCurrentRenderDevice( m_renderSystem )->createSemaphore();
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_signalFinished = device->createSemaphore();
+		setDebugObjectName( device, *m_signalFinished, m_fullName );
 
 		{
 			VertexWriter writer;
@@ -67,7 +69,6 @@ namespace castor3d
 		}
 
 		m_pixelShader.shader = doCreate();
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
 			makeShaderState( device, m_vertexShader ),

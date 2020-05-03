@@ -27,7 +27,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API CombinePass( Engine & engine
-			, castor::String prefix
+			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
 			, ShaderModule vertexShader
@@ -36,7 +36,7 @@ namespace castor3d
 			, ashes::ImageView const & rhsView
 			, TextureLayoutSPtr resultTexture );
 		C3D_API CombinePass( Engine & engine
-			, castor::String prefix
+			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
 			, ShaderModule vertexShader

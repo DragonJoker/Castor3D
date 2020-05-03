@@ -41,7 +41,7 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: MeshLightPass::Program{ engine, vtx, pxl, hasShadows }
+		: MeshLightPass::Program{ engine, lightPass.getName(), vtx, pxl, hasShadows }
 		, m_lightPass{ lightPass }
 	{
 	}
@@ -67,6 +67,7 @@ namespace castor3d
 		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
+			, cuT( "Point" )
 			, depthView
 			, diffuseView
 			, specularView

@@ -126,7 +126,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "TextureProjectionRenderPass" );
+		setDebugObjectName( device, *m_renderPass, "TextureProjection" );
 
 		m_sampler->initialise();
 		auto program = doInitialiseShader();
@@ -155,7 +155,9 @@ namespace castor3d
 		if ( !m_commandBuffer )
 		{
 			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+			setDebugObjectName( device, *m_commandBuffer, "TextureProjection" );
 			m_finished = device->createSemaphore();
+			setDebugObjectName( device, *m_finished, "TextureProjection" );
 		}
 		else
 		{
@@ -333,8 +335,10 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
+		setDebugObjectName( device, *m_descriptorLayout, "TextureProjection" );
 		VkPushConstantRange pushRange{ VK_SHADER_STAGE_FRAGMENT_BIT, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() };
 		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout, pushRange );
+		setDebugObjectName( device, *m_pipelineLayout, "TextureProjection" );
 
 		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
 		{
@@ -352,9 +356,12 @@ namespace castor3d
 			*m_pipelineLayout,
 			renderPass,
 		} );
+		setDebugObjectName( device, *m_pipeline, "TextureProjection" );
 
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		setDebugObjectName( device, *m_descriptorPool, "TextureProjection" );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_descriptorSet, "TextureProjection" );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, *m_matrixUbo.getUbo().buffer
 			, m_matrixUbo.getUbo().offset

@@ -185,7 +185,9 @@ namespace castor3d
 			m_srcDepth.image->getDimensions(),
 		};
 		m_blitDepthSemaphore = device->createSemaphore();
+		setDebugObjectName( device, *m_blitDepthSemaphore, "LightingPass" );
 		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		setDebugObjectName( device, *m_blitDepthCommandBuffer, "LightingPass" );
 		m_blitDepthCommandBuffer->begin();
 		m_blitDepthCommandBuffer->beginDebugBlock(
 			{

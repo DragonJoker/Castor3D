@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Passes/PassesModule.hpp"
 
 namespace castor3d
 {
@@ -722,6 +723,10 @@ namespace castor3d
 	{
 		setDebugObjectName( *device, object, name );
 	}
+
+	C3D_API void setDebugObjectName( RenderDevice const & device
+		, CommandsSemaphore const & object
+		, std::string const & name );
 
 	template< typename ResT >
 	inline ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device

@@ -9,7 +9,7 @@
 #include <CastorUtils/Math/TransformationMatrix.hpp>
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
-#include <ashespp/Command/Queue.hpp>
+#include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>

@@ -365,27 +365,8 @@ namespace castor3d
 				{
 					try
 					{
-						getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
-							, { *resources->imageAvailableSemaphore, target->getSemaphore() }
-							, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-							, { *resources->finishedRenderingSemaphore }
-							, resources->fence.get() );
-						resources->fence->wait( ashes::MaxTimeout );
-
-						try
-						{
-							getDevice().presentQueue->present( *m_swapChain
-								, resources->imageIndex
-								, *resources->finishedRenderingSemaphore );
-						}
-						catch ( ashes::Exception & exc )
-						{
-							doCheckNeedReset( exc.getResult()
-								, false
-								, "Image presentation" );
-						}
-
-						resources->imageIndex = ~0u;
+						submitFrame( resources );
+						presentFrame( resources );
 					}
 					catch ( ashes::Exception & exc )
 					{
@@ -633,6 +614,18 @@ namespace castor3d
 				, getDevice()->createFence( VK_FENCE_CREATE_SIGNALED_BIT )
 				, getDevice().graphicsCommandPool->createCommandBuffer()
 				, 0u ) );
+			setDebugObjectName( getDevice()
+				, *m_renderingResources.back()->commandBuffer
+				, getName() + castor::string::toString( i ) );
+			setDebugObjectName( getDevice()
+				, *m_renderingResources.back()->fence
+				, getName() + castor::string::toString( i ) );
+			setDebugObjectName( getDevice()
+				, *m_renderingResources.back()->finishedRenderingSemaphore
+				, getName() + castor::string::toString( i ) + "FinishedRendering" );
+			setDebugObjectName( getDevice()
+				, *m_renderingResources.back()->imageAvailableSemaphore
+				, getName() + castor::string::toString( i ) + "ImageAvailable" );
 		}
 	}
 
@@ -859,29 +852,50 @@ namespace castor3d
 	{
 		auto & resources = *m_renderingResources[m_resourceIndex];
 		m_resourceIndex = ( m_resourceIndex + 1 ) % m_renderingResources.size();
-		bool res = resources.fence->wait( ashes::MaxTimeout ) == ashes::WaitResult::eSuccess;
+		uint32_t imageIndex{ 0u };
+		auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
+			, *resources.imageAvailableSemaphore
+			, imageIndex );
 
-		if ( res )
+		if ( doCheckNeedReset( VkResult( res )
+			, true
+			, "Swap chain image acquisition" ) )
 		{
-			resources.fence->reset();
-			uint32_t imageIndex{ 0u };
-			auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
-				, *resources.imageAvailableSemaphore
-				, imageIndex );
-
-			if ( doCheckNeedReset( VkResult( res )
-				, true
-				, "Swap chain image acquisition" ) )
-			{
-				resources.imageIndex = imageIndex;
-				return &resources;
-			}
-
-			return nullptr;
+			resources.imageIndex = imageIndex;
+			return &resources;
 		}
 
-		log::error << "Couldn't retrieve rendering resources" << std::endl;
 		return nullptr;
+	}
+
+	void RenderWindow::submitFrame( RenderingResources * resources )
+	{
+		RenderTargetSPtr target = getRenderTarget();
+		resources->fence->reset();
+		getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
+			, { *resources->imageAvailableSemaphore, target->getSemaphore() }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { *resources->finishedRenderingSemaphore }
+			, resources->fence.get() );
+		resources->fence->wait( ashes::MaxTimeout );
+	}
+
+	void RenderWindow::presentFrame( RenderingResources * resources )
+	{
+		try
+		{
+			getDevice().presentQueue->present( *m_swapChain
+				, resources->imageIndex
+				, *resources->finishedRenderingSemaphore );
+		}
+		catch ( ashes::Exception & exc )
+		{
+			doCheckNeedReset( exc.getResult()
+				, false
+				, "Image presentation" );
+		}
+
+		resources->imageIndex = ~0u;
 	}
 
 	bool RenderWindow::doCheckNeedReset( VkResult errCode

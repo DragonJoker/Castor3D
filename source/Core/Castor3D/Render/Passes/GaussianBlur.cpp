@@ -473,6 +473,7 @@ namespace castor3d
 		, m_engine{ engine }
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
+		setDebugObjectName( device, *semaphore, name );
 
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
@@ -624,6 +625,7 @@ namespace castor3d
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, commands, m_prefix + "GaussianBlur" );
 		auto & cmd = *commands.commandBuffer;
 		cmd.begin();
 		timer.beginPass( cmd, index );

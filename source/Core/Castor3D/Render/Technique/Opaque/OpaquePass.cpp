@@ -134,6 +134,7 @@ namespace castor3d
 		};
 		auto & device = getCurrentRenderDevice( *this );
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		setDebugObjectName( device, *m_renderPass, "OpaquePass" );
 
 		ashes::ImageViewCRefArray attaches;
 
@@ -144,7 +145,9 @@ namespace castor3d
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
 			, std::move( attaches ) );
+		setDebugObjectName( device, *m_frameBuffer, "OpaquePass" );
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_nodesCommands, "OpaquePass" );
 	}
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )

@@ -96,7 +96,7 @@ namespace castor3d
 		ashes::ImagePtr m_revealage;
 		ashes::ImageView m_revealageView;
 		WeightedBlendTextures m_weightedBlendPassResult;
-		FinalCombinePass m_finalCombinePass;
+		TransparentResolvePass m_finalCombinePass;
 	};
 }
 

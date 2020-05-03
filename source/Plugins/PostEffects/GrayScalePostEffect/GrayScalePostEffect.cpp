@@ -257,6 +257,7 @@ namespace grayscale
 				device.graphicsCommandPool->createCommandBuffer(),
 				device->createSemaphore()
 			};
+			setDebugObjectName( device, commands, "GrayScale" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );

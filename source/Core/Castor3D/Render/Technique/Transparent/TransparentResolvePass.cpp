@@ -45,7 +45,7 @@ namespace castor3d
 
 		SamplerSPtr doCreateSampler( Engine & engine )
 		{
-			String const name = cuT( "C3D_BW_FinalCombinePass" );
+			String const name = cuT( "C3D_BW_TransparentResolvePass" );
 			SamplerSPtr result;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -458,7 +458,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	FinalCombineProgram::FinalCombineProgram( Engine & engine
+	TransparentResolveProgram::TransparentResolveProgram( Engine & engine
 		, ashes::RenderPass const & renderPass
 		, RenderPassTimer & timer
 		, ashes::DescriptorSetLayout const & uboLayout
@@ -485,11 +485,11 @@ namespace castor3d
 			, "TransparentResolve" );
 	}
 
-	FinalCombineProgram::~FinalCombineProgram()
+	TransparentResolveProgram::~TransparentResolveProgram()
 	{
 	}
 
-	void FinalCombineProgram::prepare( ashes::FrameBuffer const & frameBuffer
+	void TransparentResolveProgram::prepare( ashes::FrameBuffer const & frameBuffer
 		, ashes::DescriptorSet const & uboDescriptorSet
 		, ashes::DescriptorSet const & texDescriptorSet
 		, ashes::BufferBase const & vbo )
@@ -517,7 +517,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void FinalCombineProgram::accept( RenderTechniqueVisitor & visitor )
+	void TransparentResolveProgram::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -525,7 +525,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	FinalCombinePass::FinalCombinePass( Engine & engine
+	TransparentResolvePass::TransparentResolvePass( Engine & engine
 		, Size const & size
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo & hdrConfigUbo
@@ -549,14 +549,16 @@ namespace castor3d
 		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, colourView ) }
 		, m_semaphore{ getCurrentRenderDevice( m_engine )->createSemaphore() }
 	{
+		auto & device = getCurrentRenderDevice( m_engine );
+		setDebugObjectName( device, *m_semaphore, "TransparentResolve" );
 	}
 
-	FinalCombinePass::~FinalCombinePass()
+	TransparentResolvePass::~TransparentResolvePass()
 	{
 		m_gpInfo.cleanup();
 	}
 
-	void FinalCombinePass::update( Camera const & camera
+	void TransparentResolvePass::update( Camera const & camera
 		, castor::Matrix4x4f const & invViewProj
 		, castor::Matrix4x4f const & invView
 		, castor::Matrix4x4f const & invProj )
@@ -568,7 +570,7 @@ namespace castor3d
 			, invProj );
 	}
 
-	ashes::Semaphore const & FinalCombinePass::render( FogType fogType
+	ashes::Semaphore const & TransparentResolvePass::render( FogType fogType
 		, ashes::Semaphore const & toWait )
 	{
 		auto & program = *doGetProgram( fogType );
@@ -586,7 +588,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void FinalCombinePass::accept( RenderTechniqueVisitor & visitor )
+	void TransparentResolvePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto it = m_programs.find( getFogType( visitor.getFlags().sceneFlags ) );
 
@@ -596,13 +598,13 @@ namespace castor3d
 		}
 	}
 
-	FinalCombineProgram * FinalCombinePass::doGetProgram( FogType type )
+	TransparentResolveProgram * TransparentResolvePass::doGetProgram( FogType type )
 	{
 		auto result = m_programs.emplace( type, nullptr );
 
 		if ( result.second )
 		{
-			result.first->second = std::make_unique< FinalCombineProgram >( m_engine
+			result.first->second = std::make_unique< TransparentResolveProgram >( m_engine
 				, *m_renderPass
 				, *m_timer
 				, *m_uboDescriptorLayout

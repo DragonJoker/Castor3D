@@ -168,7 +168,7 @@ namespace castor3d
 	String const CombinePass::RhsMap = cuT( "c3d_mapRhs" );
 
 	CombinePass::CombinePass( Engine & engine
-		, castor::String prefix
+		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
 		, ShaderModule vertexShader
@@ -213,7 +213,7 @@ namespace castor3d
 	}
 
 	CombinePass::CombinePass( Engine & engine
-		, castor::String prefix
+		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
 		, ShaderModule vertexShader
@@ -267,6 +267,7 @@ namespace castor3d
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore(),
 		};
+		setDebugObjectName( device, result, m_prefix + "CombinePass" );
 		auto & cmd = *result.commandBuffer;
 
 		cmd.begin();

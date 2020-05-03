@@ -24,7 +24,7 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Command/Queue.hpp>
+#include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -362,13 +362,13 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( Engine & engine
-		, castor::String prefix
+		, String const & prefix
 		, VkExtent2D const & size
 		, ashes::ImageView const & depthBuffer )
 		: m_engine{ engine }
 		, m_srcDepthBuffer{ depthBuffer }
 		, m_depthBuffer{ doCreateImageView( engine, m_srcDepthBuffer ) }
-		, m_prefix{ std::move( prefix ) }
+		, m_prefix{ prefix }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, m_size ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine
@@ -399,12 +399,17 @@ namespace castor3d
 		, m_lineariseProgram{ doGetLineariseProgram( m_engine
 			, m_lineariseVertexShader
 			, m_linearisePixelShader ) }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "Minify" }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "Minify" }
+		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth" }
+		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth" }
 		, m_minifyProgram{ doGetMinifyProgram( m_engine
 			, m_minifyVertexShader
 			, m_minifyPixelShader ) }
 	{
+		auto & device = getCurrentRenderDevice( m_engine );
+		setDebugObjectName( device, *m_lineariseSampler, m_prefix + "LineariseDepthLinearise" );
+		setDebugObjectName( device, *m_minifySampler, m_prefix + "MinifyDepth" );
+		setDebugObjectName( device, *m_commandBuffer, m_prefix + "LineariseDepth" );
+		setDebugObjectName( device, *m_finished, m_prefix + "LineariseDepth" );
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
 	}
@@ -474,6 +479,7 @@ namespace castor3d
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, commands, m_prefix + "LineariseDepthPass" );
 		auto & cmd = *commands.commandBuffer;
 		doPrepareFrame( cmd, timer, index );
 		return commands;

@@ -174,10 +174,12 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::Program::Program( Engine & engine
+		, String const & name
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
 		: m_engine{ engine }
+		, m_name{ name }
 		, m_program{ ::doCreateProgram( engine, vtx, pxl ) }
 		, m_shadows{ hasShadows }
 	{
@@ -221,7 +223,9 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_uboDescriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		setDebugObjectName( device, *m_uboDescriptorLayout, m_name + "Ubo" );
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 2u );
+		setDebugObjectName( device, *m_uboDescriptorPool, m_name + "Ubo" );
 		uint32_t index = getMinBufferIndex();
 
 		setLayoutBindings = ashes::VkDescriptorSetLayoutBindingArray
@@ -257,11 +261,16 @@ namespace castor3d
 		}
 
 		m_textureDescriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		setDebugObjectName( device, *m_textureDescriptorLayout, m_name + "Tex" );
 		m_textureDescriptorPool = m_textureDescriptorLayout->createPool( 2u );
+		setDebugObjectName( device, *m_textureDescriptorPool, m_name + "Tex" );
 
 		m_pipelineLayout = device->createPipelineLayout( { *m_uboDescriptorLayout, *m_textureDescriptorLayout } );
+		setDebugObjectName( device, *m_pipelineLayout, m_name );
 		m_firstPipeline = doCreatePipeline( vertexLayout, firstRenderPass, false );
+		setDebugObjectName( device, *m_firstPipeline, m_name + "First" );
 		m_blendPipeline = doCreatePipeline( vertexLayout, blendRenderPass, true );
+		setDebugObjectName( device, *m_blendPipeline, m_name + "Blend" );
 	}
 
 	void LightPass::Program::cleanup()
@@ -329,6 +338,7 @@ namespace castor3d
 	//************************************************************************************************
 
 	LightPass::LightPass( Engine & engine
+		, String const & suffix
 		, ashes::RenderPassPtr && firstRenderPass
 		, ashes::RenderPassPtr && blendRenderPass
 		, ashes::ImageView const & depthView
@@ -338,6 +348,7 @@ namespace castor3d
 		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: m_engine{ engine }
+		, m_name{ "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) }
 		, m_firstRenderPass{std::move( firstRenderPass ), depthView, diffuseView, specularView }
 		, m_blendRenderPass{ std::move( blendRenderPass ), depthView, diffuseView, specularView }
 		, m_shadows{ hasShadows }
@@ -347,9 +358,14 @@ namespace castor3d
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalReady{ getCurrentRenderDevice( engine )->createSemaphore() }
 		, m_fence{ getCurrentRenderDevice( engine )->createFence( VK_FENCE_CREATE_SIGNALED_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightPass" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightPass" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_name }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_name }
 	{
+		auto & device = getCurrentRenderDevice( engine );
+		setDebugObjectName( device, *m_firstRenderPass.frameBuffer, m_name + "First" );
+		setDebugObjectName( device, *m_blendRenderPass.frameBuffer, m_name + "Blend" );
+		setDebugObjectName( device, *m_signalReady, m_name );
+		setDebugObjectName( device, *m_fence, m_name );
 	}
 
 	void LightPass::update( bool first
@@ -481,6 +497,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, modelMatrixUbo );
 		pipeline.uboDescriptorSet = pipeline.program->getUboDescriptorPool().createDescriptorSet( 0u );
+		setDebugObjectName( device, *pipeline.uboDescriptorSet, m_name + "Ubo" );
 		auto & uboLayout = pipeline.program->getUboDescriptorLayout();
 		m_engine.getMaterialCache().getPassBuffer().createBinding( *pipeline.uboDescriptorSet, uboLayout.getBinding( 0u ) );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( MatrixUbo::BindingPoint )
@@ -505,9 +522,12 @@ namespace castor3d
 		pipeline.uboDescriptorSet->update();
 
 		pipeline.firstCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		setDebugObjectName( device, *pipeline.firstCommandBuffer, m_name + "First" );
 		pipeline.blendCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		setDebugObjectName( device, *pipeline.blendCommandBuffer, m_name + "Blend" );
 
 		pipeline.textureDescriptorSet = pipeline.program->getTextureDescriptorPool().createDescriptorSet( 1u );
+		setDebugObjectName( device, *pipeline.textureDescriptorSet, m_name + "Tex" );
 		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
 		auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
 		{
@@ -595,6 +615,7 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		setDebugObjectName( device, *m_commandBuffer, m_name );
 	}
 
 	void LightPass::doCleanup()
@@ -628,7 +649,7 @@ namespace castor3d
 					, 0u ) );
 			commandBuffer.beginDebugBlock(
 				{
-					"Deferred - Light",
+					"Deferred - " + m_name,
 					makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
 			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );

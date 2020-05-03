@@ -331,7 +331,9 @@ namespace Bloom
 		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.end();
 
-		return { std::move( result ), m_device->createSemaphore() };
+		auto commands = castor3d::CommandsSemaphore{ std::move( result ), m_device->createSemaphore() };
+		setDebugObjectName( m_device, commands, "BloomCombine" );
+		return commands;
 	}
 
 	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )

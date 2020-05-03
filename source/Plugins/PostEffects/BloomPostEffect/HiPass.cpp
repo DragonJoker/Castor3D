@@ -198,6 +198,7 @@ namespace Bloom
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, commands, "BloomHiPass" );
 		auto & cmd = *commands.commandBuffer;
 
 		cmd.begin();

@@ -20,7 +20,6 @@
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;
-using namespace castor3d;
 
 namespace castor3d
 {
@@ -29,6 +28,7 @@ namespace castor3d
 	namespace
 	{
 		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
+			, castor::String const & name
 			, ashes::ImageView const & depthView
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
@@ -121,6 +121,9 @@ namespace castor3d
 				std::move( dependencies ),
 			};
 			auto result = device->createRenderPass( std::move( createInfo ) );
+			setDebugObjectName( device
+				, *result
+				, name + ( first ? "First" : "Blend" ) );
 			return result;
 		}
 	}
@@ -128,10 +131,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MeshLightPass::Program::Program( Engine & engine
+		, String const & name
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: LightPass::Program{ engine, vtx, pxl, hasShadows }
+		: LightPass::Program{ engine, name, vtx, pxl, hasShadows }
 	{
 	}
 
@@ -195,7 +199,7 @@ namespace castor3d
 
 		blattaches.push_back( blattaches.back() );
 		auto & device = getCurrentRenderDevice( m_engine );
-		return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		auto result = device->createPipeline( ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				m_program,
@@ -211,11 +215,16 @@ namespace castor3d
 				*m_pipelineLayout,
 				renderPass,
 			} );
+		setDebugObjectName( device
+			, *result
+			, m_name + ( blend ? "Blend" : "First" ) );
+		return result;
 	}
 
 	//*********************************************************************************************
 
 	MeshLightPass::MeshLightPass( Engine & engine
+		, castor::String const & suffix
 		, ashes::ImageView const & depthView
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
@@ -224,8 +233,19 @@ namespace castor3d
 		, LightType type
 		, bool hasShadows )
 		: LightPass{ engine
-			, doCreateRenderPass( engine, depthView, diffuseView, specularView, true )
-			, doCreateRenderPass( engine, depthView, diffuseView, specularView, false )
+			, suffix
+			, doCreateRenderPass( engine
+				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
+				, depthView
+				, diffuseView
+				, specularView
+				, true )
+			, doCreateRenderPass( engine
+				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
+				, depthView
+				, diffuseView
+				, specularView
+				, false )
 			, depthView
 			, diffuseView
 			, specularView
@@ -233,7 +253,7 @@ namespace castor3d
 			, debugUbo
 			, hasShadows }
 		, m_modelMatrixUbo{ engine }
-		, m_stencilPass{ engine, depthView, m_matrixUbo, m_modelMatrixUbo }
+		, m_stencilPass{ engine, getName(), depthView, m_matrixUbo, m_modelMatrixUbo }
 		, m_type{ type }
 	{
 	}

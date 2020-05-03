@@ -348,6 +348,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, edgeDetectionCommands, "SMAA ColourEdgeDetection" );
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 
 		edgeDetectionCmd.begin();

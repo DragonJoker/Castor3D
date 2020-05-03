@@ -344,6 +344,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, neighbourhoodBlendingCommands, "SMAA NeighbourhoodBlending" );
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 
 		neighbourhoodBlendingCmd.begin();

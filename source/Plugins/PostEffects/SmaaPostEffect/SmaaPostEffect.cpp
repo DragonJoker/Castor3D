@@ -480,6 +480,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, copyCommands, "SMAA Copy" );
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();

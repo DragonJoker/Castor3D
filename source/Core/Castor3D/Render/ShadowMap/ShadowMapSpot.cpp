@@ -38,7 +38,7 @@ namespace castor3d
 		TextureUnit doInitialiseVariance( Engine & engine
 			, Size const & size )
 		{
-			String const name = cuT( "ShadowMap_Spot_Variance" );
+			String const name = cuT( "ShadowMapSpot_Variance" );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -87,7 +87,7 @@ namespace castor3d
 		TextureUnit doInitialiseLinearDepth( Engine & engine
 			, Size const & size )
 		{
-			String const name = cuT( "ShadowMap_Spot_Depth" );
+			String const name = cuT( "ShadowMapSpot_Depth" );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -155,6 +155,7 @@ namespace castor3d
 				};
 				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
 				passData.pass = std::make_shared< ShadowMapPassSpot >( engine
+					, i
 					, *passData.matrixUbo
 					, *passData.culler
 					, shadowMap );
@@ -266,7 +267,7 @@ namespace castor3d
 
 		for ( auto i = 0u; i < m_passes.size(); ++i )
 		{
-			std::string debugName = "SpotShadowMap" + std::to_string( i );
+			std::string debugName = "ShadowMapSpot" + std::to_string( i );
 			auto depthTexture = makeImage( device
 				, depth
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -296,6 +297,9 @@ namespace castor3d
 						, m_shadowMap.getTexture()->getPixelFormat()
 						, 5u )
 				} );
+			setDebugObjectName( device, *m_passesData.back().commandBuffer, debugName );
+			setDebugObjectName( device, *m_passesData.back().finished, debugName );
+			setDebugObjectName( device, *m_passesData.back().frameBuffer, debugName );
 		}
 	}
 

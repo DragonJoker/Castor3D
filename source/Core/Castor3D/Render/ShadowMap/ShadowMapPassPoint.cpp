@@ -48,13 +48,14 @@ namespace castor3d
 	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
+		, uint32_t index
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap )
-		: ShadowMapPass{ cuT( "ShadowMapPassPoint" ), engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "ShadowMapPassPoint" ) + string::toString( index / 6u ) + "F" + string::toString( index % 6u ), engine, matrixUbo, culler, shadowMap }
 		, m_viewport{ engine }
 	{
-		log::trace << "Created ShadowMapPassPoint" << std::endl;
+		log::trace << "Created " << m_name << std::endl;
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
@@ -191,13 +192,13 @@ namespace castor3d
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 		setDebugObjectName( device
 			, *m_renderPass
-			, "ShadowMapPassPoint_Pass" );
+			, m_name );
 
 		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassPoint_ShadowConfigUbo" );
+			, m_name + "ShadowConfig" );
 
 		m_viewport.resize( size );
 		m_initialised = true;

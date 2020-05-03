@@ -326,6 +326,11 @@ namespace castor3d
 		{
 			return m_hdrConfig;
 		}
+
+		inline castor::String const & getName()const
+		{
+			return m_name;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -378,7 +383,8 @@ namespace castor3d
 		C3D_API bool doInitialiseVelocityTexture();
 		C3D_API bool doInitialiseTechnique();
 		C3D_API bool doInitialiseToneMapping();
-		C3D_API void doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+		C3D_API void doInitialiseCopyCommands( castor::String const & name
+			, ashes::CommandBufferPtr & commandBuffer
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
 		C3D_API void doInitialiseFlip();
@@ -413,6 +419,7 @@ namespace castor3d
 		TargetFbo m_combinedFrameBuffer;
 		VkFormat m_pixelFormat;
 		uint32_t m_index;
+		castor::String m_name;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
 		ashes::CommandBufferPtr m_hdrCopyCommands;

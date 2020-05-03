@@ -39,7 +39,9 @@ namespace castor3d
 	bool SceneBackground::initialise( ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		m_semaphore = getCurrentRenderDevice( *this )->createSemaphore();
+		auto & device = getCurrentRenderDevice( *this );
+		m_semaphore = device->createSemaphore();
+		setDebugObjectName( device, *m_semaphore, "SceneBackground" );
 		m_initialised = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
@@ -347,6 +349,7 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_uboDescriptorLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
+		setDebugObjectName( device, *m_uboDescriptorLayout, "SceneBackgroundUbo" );
 		ashes::VkDescriptorSetLayoutBindingArray texBindings
 		{
 			makeDescriptorSetLayoutBinding( SkyBoxImgIdx
@@ -354,6 +357,7 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		m_texDescriptorLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
+		setDebugObjectName( device, *m_texDescriptorLayout, "SceneBackgroundTex" );
 	}
 
 	bool SceneBackground::doInitialiseVertexBuffer()
@@ -431,16 +435,21 @@ namespace castor3d
 		m_pipelineLayout.reset();
 		doInitialiseDescriptorLayouts();
 		m_pipelineLayout = device->createPipelineLayout( { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
+		setDebugObjectName( device, *m_pipelineLayout, "SceneBackground" );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
 
 		m_uboDescriptorSet.reset();
 		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 1u );
+		setDebugObjectName( device, *m_uboDescriptorPool, "SceneBackgroundUbo" );
 		m_uboDescriptorSet = m_uboDescriptorPool->createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_uboDescriptorSet, "SceneBackgroundUbo" );
 		m_texDescriptorSet.reset();
 		m_texDescriptorPool = m_texDescriptorLayout->createPool( 1u );
+		setDebugObjectName( device, *m_texDescriptorPool, "SceneBackgroundTex" );
 		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( 0u );
+		setDebugObjectName( device, *m_texDescriptorSet, "SceneBackgroundTex" );
 		initialiseDescriptorSets( m_matrixUbo
 			, m_modelMatrixUbo
 			, hdrConfigUbo
@@ -471,6 +480,7 @@ namespace castor3d
 				*m_pipelineLayout,
 				renderPass,
 			} );
+		setDebugObjectName( device, *m_pipeline, "SceneBackground" );
 		return true;
 	}
 }

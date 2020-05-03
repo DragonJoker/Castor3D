@@ -433,6 +433,7 @@ namespace film_grain
 				device.graphicsCommandPool->createCommandBuffer(),
 				device->createSemaphore()
 			};
+			setDebugObjectName( device, commands, "FilmGrain" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock(

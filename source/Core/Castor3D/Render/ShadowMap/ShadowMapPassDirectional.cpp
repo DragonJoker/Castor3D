@@ -34,9 +34,9 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, uint32_t cascadeIndex )
-		: ShadowMapPass{ cuT( "ShadowMapPassDirectional" ), engine, matrixUbo, culler, shadowMap }
+		: ShadowMapPass{ cuT( "ShadowMapPassDirectional" ) + string::toString( cascadeIndex ), engine, matrixUbo, culler, shadowMap }
 	{
-		log::trace << "Created ShadowMapPassDirectional_" << cascadeIndex << std::endl;
+		log::trace << "Created " << m_name << std::endl;
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()
@@ -160,13 +160,13 @@ namespace castor3d
 		m_renderPass = device->createRenderPass( std::move( createInfo ) );
 		setDebugObjectName( device
 			, *m_renderPass
-			, "ShadowMapPassDirectional_Pass" );
+			, m_name );
 
 		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, "ShadowMapPassDirectional_ShadowConfigUbo" );
+			, m_name + "ShadowConfig" );
 
 		m_initialised = true;
 		return m_initialised;

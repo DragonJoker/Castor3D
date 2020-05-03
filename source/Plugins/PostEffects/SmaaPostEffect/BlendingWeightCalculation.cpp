@@ -1037,6 +1037,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, blendingWeightCommands, "SMAA BlendingWeightCalculation" );
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
 		blendingWeightCmd.begin();

@@ -251,6 +251,7 @@ namespace smaa
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, reprojectCommands, "SMAA Reproject" );
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 
 		reprojectCmd.begin();

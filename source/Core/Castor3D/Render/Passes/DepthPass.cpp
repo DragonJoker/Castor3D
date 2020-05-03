@@ -27,13 +27,13 @@ using namespace castor3d;
 
 namespace castor3d
 {
-	DepthPass::DepthPass( String const & name
+	DepthPass::DepthPass( String const & prefix
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & ssaoConfig
 		, TextureLayoutSPtr depthBuffer )
-		: RenderTechniquePass{ name
-			, name
+		: RenderTechniquePass{ prefix
+			, "DepthPass"
 			, matrixUbo
 			, culler
 			, false

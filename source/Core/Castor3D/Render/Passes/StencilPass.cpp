@@ -100,10 +100,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	StencilPass::StencilPass( Engine const & engine
+		, String const & prefix
 		, ashes::ImageView const & depthView
 		, MatrixUbo & matrixUbo
 		, ModelMatrixUbo & modelMatrixUbo )
 		: m_engine{ engine }
+		, m_prefix{ prefix }
 		, m_depthView{ depthView }
 		, m_matrixUbo{ matrixUbo }
 		, m_modelMatrixUbo{ modelMatrixUbo }
@@ -117,6 +119,7 @@ namespace castor3d
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		VkExtent2D size{ m_depthView.image->getDimensions().width, m_depthView.image->getDimensions().height };
+		auto name = m_prefix + "StencilPass";
 
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings
 		{
@@ -128,10 +131,14 @@ namespace castor3d
 				, VK_SHADER_STAGE_VERTEX_BIT ),
 		};
 		m_descriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
+		setDebugObjectName( device, *m_descriptorLayout, name );
 		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
+		setDebugObjectName( device, *m_pipelineLayout, name );
 
 		m_descriptorPool = m_descriptorLayout->createPool( 1u );
+		setDebugObjectName( device, *m_descriptorPool, name );
 		m_descriptorSet = m_descriptorPool->createDescriptorSet();
+		setDebugObjectName( device, *m_descriptorSet, name );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 			, *m_matrixUbo.getUbo().buffer
 			, m_matrixUbo.getUbo().offset );
@@ -146,11 +153,12 @@ namespace castor3d
 			m_depthView
 		};
 		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
+		setDebugObjectName( device, *m_frameBuffer, name );
 
 		m_program =
 		{
 			makeShaderState( device
-				, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, "StencilPass", doGetVertexShader( renderSystem ) } ),
+				, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, name, doGetVertexShader( renderSystem ) } ),
 		};
 
 		ashes::PipelineDepthStencilStateCreateInfo dsstate;
@@ -191,9 +199,12 @@ namespace castor3d
 				*m_pipelineLayout,
 				*m_renderPass,
 			} );
+		setDebugObjectName( device, *m_pipeline, name );
 
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		setDebugObjectName( device, *m_commandBuffer, name );
 		m_finished = device->createSemaphore();
+		setDebugObjectName( device, *m_finished, name );
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(

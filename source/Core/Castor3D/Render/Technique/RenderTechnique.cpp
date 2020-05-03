@@ -213,6 +213,7 @@ namespace castor3d
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
 			m_signalFinished = device->createSemaphore();
+			setDebugObjectName( device, *m_signalFinished, "RenderTechnique" );
 			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
 			m_debugUbo.initialise();
@@ -483,7 +484,9 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_bgCommandBuffer, "Background" );
 		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_cbgCommandBuffer, "ColourBackground" );
 		auto depthLoadOp = C3D_UseDepthPrepass
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -710,6 +713,7 @@ namespace castor3d
 		};
 		m_debugFrameBuffer = m_debugRenderPass->createFrameBuffer( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height }
 			, std::move( attaches ) );
+		setDebugObjectName( device, *m_debugFrameBuffer, "Debug" );
 	}
 
 	void RenderTechnique::doCleanupShadowMaps()

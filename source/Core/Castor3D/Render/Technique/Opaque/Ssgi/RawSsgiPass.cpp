@@ -377,8 +377,9 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "RawSSGI" ) ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore() }
 	{
-		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		auto & device = getCurrentRenderDevice( m_renderSystem );
+		setDebugObjectName( device, *m_finished, "SsgiRawGI" );
+		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
 		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
 
@@ -428,6 +429,7 @@ namespace castor3d
 			device.graphicsCommandPool->createCommandBuffer(),
 			device->createSemaphore()
 		};
+		setDebugObjectName( device, commands, "SsgiRawGI" );
 		auto & cmd = *commands.commandBuffer;
 
 		cmd.begin();

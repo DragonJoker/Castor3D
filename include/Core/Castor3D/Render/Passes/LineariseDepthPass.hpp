@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
 		 */
 		C3D_API LineariseDepthPass( Engine & engine
-			, castor::String prefix
+			, castor::String const & prefix
 			, VkExtent2D const & size
 			, ashes::ImageView const & depthBuffer );
 		/**

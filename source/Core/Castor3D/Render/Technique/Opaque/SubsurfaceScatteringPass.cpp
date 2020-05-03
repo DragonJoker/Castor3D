@@ -750,7 +750,9 @@ namespace castor3d
 
 		auto & device = getCurrentRenderDevice( engine );
 		m_finished = device->createSemaphore();
+		setDebugObjectName( device, *m_finished, "SSSSS pass" );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		setDebugObjectName( device, *m_commandBuffer, "SSSSS pass" );
 		prepare();
 	}
 

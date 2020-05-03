@@ -137,7 +137,7 @@ namespace castor3d
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: LightPass::Program{ engine, vtx, pxl, hasShadows }
+		: LightPass::Program{ engine, pass.getName(), vtx, pxl, hasShadows }
 		, m_lightPass{ pass }
 	{
 	}
@@ -218,6 +218,7 @@ namespace castor3d
 		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: LightPass{ engine
+			, "Directional"
 			, doCreateRenderPass( engine, depthView, diffuseView, specularView, true )
 			, doCreateRenderPass( engine, depthView, diffuseView, specularView, false )
 			, depthView

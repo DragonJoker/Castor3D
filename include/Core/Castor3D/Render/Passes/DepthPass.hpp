@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig	La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
-		DepthPass( castor::String const & name
+		DepthPass( castor::String const & prefix
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig

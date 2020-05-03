@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_FinalCombinePass_H___
-#define ___C3D_FinalCombinePass_H___
+#ifndef ___C3D_TransparentResolvePass_H___
+#define ___C3D_TransparentResolvePass_H___
 
 #include "TransparentModule.hpp"
 
@@ -15,20 +15,20 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct FinalCombineProgram
+	struct TransparentResolveProgram
 	{
-		FinalCombineProgram( FinalCombineProgram const & rhs ) = delete;
-		FinalCombineProgram & operator=( FinalCombineProgram const & rhs ) = delete;
-		FinalCombineProgram( FinalCombineProgram && rhs ) = default;
-		FinalCombineProgram & operator=( FinalCombineProgram && rhs ) = delete;
-		FinalCombineProgram( Engine & engine
+		TransparentResolveProgram( TransparentResolveProgram const & rhs ) = delete;
+		TransparentResolveProgram & operator=( TransparentResolveProgram const & rhs ) = delete;
+		TransparentResolveProgram( TransparentResolveProgram && rhs ) = default;
+		TransparentResolveProgram & operator=( TransparentResolveProgram && rhs ) = delete;
+		TransparentResolveProgram( Engine & engine
 			, ashes::RenderPass const & renderPass
 			, RenderPassTimer & timer
 			, ashes::DescriptorSetLayout const & uboLayout
 			, ashes::DescriptorSetLayout const & texLayout
 			, ashes::PipelineVertexInputStateCreateInfo const & vtxLayout
 			, FogType fogType );
-		~FinalCombineProgram();
+		~TransparentResolveProgram();
 		void prepare( ashes::FrameBuffer const & frameBuffer
 			, ashes::DescriptorSet const & uboDescriptorSet
 			, ashes::DescriptorSet const & texDescriptorSet
@@ -50,9 +50,9 @@ namespace castor3d
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::CommandBufferPtr m_commandBuffer;
 	};
-	using FinalCombineProgramPtr = std::unique_ptr< FinalCombineProgram >;
-	//!\~english	An array of FinalCombineProgram, one per fog type.
-	//!\~french		Un tableau de FinalCombineProgram, un par type de brouillard.
+	using FinalCombineProgramPtr = std::unique_ptr< TransparentResolveProgram >;
+	//!\~english	An array of TransparentResolveProgram, one per fog type.
+	//!\~french		Un tableau de TransparentResolveProgram, un par type de brouillard.
 	using FinalCombineProgramMap = std::map< FogType, FinalCombineProgramPtr >;
 	/**
 	\author		Sylvain DOREMUS
@@ -63,7 +63,7 @@ namespace castor3d
 	\~french
 	\brief		Passe utilisée pour combiner les passes opaque et transparente.
 	*/
-	class FinalCombinePass
+	class TransparentResolvePass
 	{
 	public:
 		/**
@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	wbResult		Les tampons de la passe d'accumulation.
 		 *\param[in]	colourView		La vue couleur cible.
 		 */
-		FinalCombinePass( Engine & engine
+		TransparentResolvePass( Engine & engine
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo & hdrConfigUbo
@@ -96,7 +96,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~FinalCombinePass();
+		~TransparentResolvePass();
 		/**
 		 *\~english
 		 *\brief		Updates the UBOs.
@@ -133,7 +133,7 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		FinalCombineProgram * doGetProgram( FogType type );
+		TransparentResolveProgram * doGetProgram( FogType type );
 
 	private:
 		castor::Size m_size;

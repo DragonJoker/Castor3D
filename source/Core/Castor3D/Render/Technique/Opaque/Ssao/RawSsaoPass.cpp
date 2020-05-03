@@ -22,7 +22,7 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Command/Queue.hpp>
+#include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -685,6 +685,11 @@ namespace castor3d
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
+		auto & device = getCurrentRenderDevice( m_engine );
+		setDebugObjectName( device, *m_finished, "SsaoRawAO" );
+		setDebugObjectName( device, *m_commandBuffers[0], "SsaoRawAO" );
+		setDebugObjectName( device, *m_commandBuffers[1], "SsaoRawAONormals" );
+
 		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
 		{
 			auto & cmd = *m_commandBuffers[i];

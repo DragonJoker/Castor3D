@@ -346,7 +346,7 @@ namespace castor3d
 			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
 			setDebugObjectName( device
 				, *frameBuffer.frameBuffer
-				, debugName + "Fbo" );
+				, debugName );
 
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
 				, debugName

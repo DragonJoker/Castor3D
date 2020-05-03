@@ -438,6 +438,8 @@ namespace castor3d
 		bool doPrepareFrames();
 		void doResetSwapChain();
 		RenderingResources * getResources();
+		void submitFrame( RenderingResources * resources );
+		void presentFrame( RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode
 			, bool acquisition
 			, char const * const action );
