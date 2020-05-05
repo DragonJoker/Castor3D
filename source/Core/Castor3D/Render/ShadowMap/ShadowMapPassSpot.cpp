@@ -141,10 +141,8 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device
-			, *m_renderPass
-			, m_name );
+		m_renderPass = device->createRenderPass( m_name
+			, std::move( createInfo ) );
 
 		m_initialised = true;
 		return m_initialised;

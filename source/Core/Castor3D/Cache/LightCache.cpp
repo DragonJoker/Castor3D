@@ -117,11 +117,11 @@ namespace castor3d
 					, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, "LightsBuffer" );
-				m_textureView = device->createBufferView( m_textureBuffer->getBuffer()
+				m_textureView = device->createBufferView( "LightsBufferView"
+					, m_textureBuffer->getBuffer()
 					, VK_FORMAT_R32G32B32A32_SFLOAT
 					, 0u
 					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
-				setDebugObjectName( device, *m_textureView, "LightsBufferView" );
 			} ) );
 	}
 

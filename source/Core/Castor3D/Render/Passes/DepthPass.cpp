@@ -97,14 +97,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, cuT( "DepthPass" ) );
+		m_renderPass = device->createRenderPass( "DepthPass"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray fbattaches;
 		fbattaches.emplace_back( depthBuffer->getDefaultView() );
-		m_frameBuffer = m_renderPass->createFrameBuffer( size
+		m_frameBuffer = m_renderPass->createFrameBuffer( "DepthPass"
+			, size
 			, std::move( fbattaches ) );
-		setDebugObjectName( device, *m_frameBuffer, cuT( "DepthPass" ) );
 
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
 	}

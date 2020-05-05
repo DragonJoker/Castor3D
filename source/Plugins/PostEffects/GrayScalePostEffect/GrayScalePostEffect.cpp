@@ -228,8 +228,8 @@ namespace grayscale
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "GrayScale" );
+		m_renderPass = device->createRenderPass( "GrayScale"
+			, std::move( createInfo ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -254,10 +254,9 @@ namespace grayscale
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "GrayScale" ),
+				device->createSemaphore( "GrayScale" )
 			};
-			setDebugObjectName( device, commands, "GrayScale" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );

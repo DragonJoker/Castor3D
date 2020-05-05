@@ -200,8 +200,8 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "Reproject" );
+		m_renderPass = device->createRenderPass( "Reproject"
+			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doGetReprojectVP( m_renderSystem
@@ -248,10 +248,9 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore reprojectCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "Reproject" ),
+			device->createSemaphore( "Reproject" )
 		};
-		setDebugObjectName( device, reprojectCommands, "SMAA Reproject" );
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 
 		reprojectCmd.begin();

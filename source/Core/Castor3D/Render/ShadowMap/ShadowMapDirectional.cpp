@@ -327,26 +327,14 @@ namespace castor3d
 			depthView->subresourceRange.baseArrayLayer = cascade;
 			varianceView->subresourceRange.baseArrayLayer = cascade;
 			linearView->subresourceRange.baseArrayLayer = cascade;
-			frameBuffer.depthView = depth.createView( depthView );
-			setDebugObjectName( device
-				, frameBuffer.depthView
-				, debugName + "Depth" );
-			frameBuffer.varianceView = variance.createView( varianceView );
-			setDebugObjectName( device
-				, frameBuffer.varianceView
-				, debugName + "Variance" );
-			frameBuffer.linearView = linear.createView( linearView );
-			setDebugObjectName( device
-				, frameBuffer.linearView
-				, debugName + "Linear" );
+			frameBuffer.depthView = depth.createView( debugName + "Depth", depthView );
+			frameBuffer.varianceView = variance.createView( debugName + "Variance", varianceView );
+			frameBuffer.linearView = linear.createView( debugName + "Linear", linearView );
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( frameBuffer.depthView );
 			attaches.emplace_back( frameBuffer.linearView );
 			attaches.emplace_back( frameBuffer.varianceView );
-			frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
-			setDebugObjectName( device
-				, *frameBuffer.frameBuffer
-				, debugName );
+			frameBuffer.frameBuffer = renderPass.createFrameBuffer( debugName, size, std::move( attaches ) );
 
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
 				, debugName

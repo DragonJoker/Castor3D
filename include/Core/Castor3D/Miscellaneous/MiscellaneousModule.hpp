@@ -161,16 +161,6 @@ namespace castor3d
 	using Parameters = ParametersT< castor::String >;
 
 	struct RenderDevice;
-	C3D_API void setDebugObjectName( ashes::Device const & device
-		, uint64_t object
-		, uint32_t type
-		, std::string const & name
-		, std::string const & typeName );
-	C3D_API void setDebugObjectName( RenderDevice const & device
-		, uint64_t object
-		, uint32_t type
-		, std::string const & name
-		, std::string const & typeName );
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
 		, VkMemoryRequirements const & requirements
 		, VkMemoryPropertyFlags flags

@@ -184,10 +184,9 @@ namespace castor3d
 			VkOffset3D{ 0, 0, 0 },
 			m_srcDepth.image->getDimensions(),
 		};
-		m_blitDepthSemaphore = device->createSemaphore();
-		setDebugObjectName( device, *m_blitDepthSemaphore, "LightingPass" );
-		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		setDebugObjectName( device, *m_blitDepthCommandBuffer, "LightingPass" );
+		m_blitDepthSemaphore = device->createSemaphore( "LightingPass" );
+		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "LightingPass"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		m_blitDepthCommandBuffer->begin();
 		m_blitDepthCommandBuffer->beginDebugBlock(
 			{

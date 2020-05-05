@@ -122,20 +122,20 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "BrdfPrefilterRenderPass" );
+		m_renderPass = device->createRenderPass( "BrdfPrefilter"
+			, std::move( createInfo ) );
 
 		// Initialise the frame buffer.
 		ashes::ImageViewCRefArray views;
 		views.emplace_back( dstTexture );
-		m_frameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "BrdfPrefilter"
+			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( views ) );
-		setDebugObjectName( device, *m_frameBuffer, "BrdfPrefilterFrameBuffer" );
 
 		// Initialise the pipeline.
-		m_pipelineLayout = device->createPipelineLayout();
-		setDebugObjectName( device, *m_pipelineLayout, "BrdfPrefilterPipelineLayout" );
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipelineLayout = device->createPipelineLayout( "BrdfPrefilter" );
+		m_pipeline = device->createPipeline( "BrdfPrefilter"
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				doCreateProgram(),
@@ -151,11 +151,8 @@ namespace castor3d
 				*m_pipelineLayout,
 				*m_renderPass
 			} );
-		setDebugObjectName( device, *m_pipeline, "BrdfPrefilterPipeline" );
-
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_commandBuffer, "BrdfPrefilterCommandBuffer" );
-		m_fence = device->createFence();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "BrdfPrefilter" );
+		m_fence = device->createFence( "BrdfPrefilter" );
 	}
 
 	void BrdfPrefilter::render()

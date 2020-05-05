@@ -273,10 +273,8 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName + "Depth" );
 			view->image = *depthTexture;
-			auto depthView = depthTexture->createView( view );
-			setDebugObjectName( device
-				, depthView
-				, debugName + "Depth" );
+			auto depthView = depthTexture->createView( debugName + "Depth"
+				, view );
 
 			auto & renderPass = m_passes[i].pass->getRenderPass();
 			ashes::ImageViewCRefArray attaches;
@@ -285,9 +283,9 @@ namespace castor3d
 			attaches.emplace_back( m_shadowMap.getTexture()->getImage( i ).getView() );
 			m_passesData.push_back(
 				{
-					device.graphicsCommandPool->createCommandBuffer(),
-					renderPass.createFrameBuffer( size, std::move( attaches ) ),
-					device->createSemaphore(),
+					device.graphicsCommandPool->createCommandBuffer( debugName ),
+					renderPass.createFrameBuffer( debugName, size, std::move( attaches ) ),
+					device->createSemaphore( debugName ),
 					std::move( depthTexture ),
 					std::move( depthView ),
 					std::make_unique< GaussianBlur >( *getEngine()
@@ -297,9 +295,6 @@ namespace castor3d
 						, m_shadowMap.getTexture()->getPixelFormat()
 						, 5u )
 				} );
-			setDebugObjectName( device, *m_passesData.back().commandBuffer, debugName );
-			setDebugObjectName( device, *m_passesData.back().finished, debugName );
-			setDebugObjectName( device, *m_passesData.back().frameBuffer, debugName );
 		}
 	}
 

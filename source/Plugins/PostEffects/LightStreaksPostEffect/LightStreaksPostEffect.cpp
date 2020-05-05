@@ -396,8 +396,8 @@ namespace light_streaks
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "LightStreaks" );
+		m_renderPass = device->createRenderPass( "LightStreaks"
+			, std::move( createInfo ) );
 		size.width >>= 2;
 		size.height >>= 2;
 		uint32_t index = 0u;
@@ -744,10 +744,9 @@ namespace light_streaks
 		auto & hiPassSurface = m_pipelines.hiPass.surfaces[0];
 		castor3d::CommandsSemaphore hiPassCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "LightStreaksHiPass" ),
+			device->createSemaphore( "LightStreaksHiPass" )
 		};
-		setDebugObjectName( device, hiPassCommands, "LightStreaksHiPass" );
 		auto & hiPassCmd = *hiPassCommands.commandBuffer;
 		hiPassCmd.begin();
 		timer.beginPass( hiPassCmd, 0u );
@@ -780,10 +779,9 @@ namespace light_streaks
 		// Copy Hi pass result to other Hi pass surfaces
 		castor3d::CommandsSemaphore copyCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "LightStreaksCopy" ),
+			device->createSemaphore( "LightStreaksCopy" )
 		};
-		setDebugObjectName( device, hiPassCommands, "LightStreaksCopy" );
 		auto & copyCmd = *copyCommands.commandBuffer;
 		copyCmd.begin();
 		timer.beginPass( copyCmd, 1u );
@@ -808,10 +806,9 @@ namespace light_streaks
 		// Kawase blur passes.
 		castor3d::CommandsSemaphore kawaseCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "LightStreaksBlur" ),
+			device->createSemaphore( "LightStreaksBlur" )
 		};
-		setDebugObjectName( device, hiPassCommands, "LightStreaksBlur" );
 		auto & kawaseCmd = *kawaseCommands.commandBuffer;
 		kawaseCmd.begin();
 		timer.beginPass( kawaseCmd, 2u );

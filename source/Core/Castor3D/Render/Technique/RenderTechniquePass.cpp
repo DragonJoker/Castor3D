@@ -194,8 +194,7 @@ namespace castor3d
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_finished = device->createSemaphore();
-		setDebugObjectName( device, *m_finished, getName() );
+		m_finished = device->createSemaphore( getName() );
 		return true;
 	}
 

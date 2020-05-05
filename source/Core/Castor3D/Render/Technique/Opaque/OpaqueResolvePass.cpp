@@ -1032,8 +1032,8 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			};
 			auto & device = getCurrentRenderDevice( engine );
-			auto result = device->createDescriptorSetLayout( std::move( bindings ) );
-			setDebugObjectName( device, *result, "DeferredResolveUbo" );
+			auto result = device->createDescriptorSetLayout( "DeferredResolveUbo"
+				, std::move( bindings ) );
 			return result;
 		}
 
@@ -1046,9 +1046,7 @@ namespace castor3d
 		{
 			auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 			auto & layout = pool.getLayout();
-			auto result = pool.createDescriptorSet( 0u );
-			auto & device = getCurrentRenderDevice( engine );
-			setDebugObjectName( device, *result, "DeferredResolveUbo" );
+			auto result = pool.createDescriptorSet( "DeferredResolveUbo", 0u );
 			passBuffer.createBinding( *result, layout.getBinding( getPassBufferIndex() ) );
 			result->createSizedBinding( layout.getBinding( SceneUbo::BindingPoint )
 				, sceneUbo.getUbo() );
@@ -1121,8 +1119,8 @@ namespace castor3d
 			};
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "DeferredResolve" );
+			auto result = device->createRenderPass( "DeferredResolve"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -1135,9 +1133,9 @@ namespace castor3d
 			{
 				view
 			};
-			auto & device = getCurrentRenderDevice( engine );
-			auto result = renderPass.createFrameBuffer( size, std::move( attaches ) );
-			setDebugObjectName( device, *result, "DeferredResolve" );
+			auto result = renderPass.createFrameBuffer( "DeferredResolve"
+				, size
+				, std::move( attaches ) );
 			return result;
 		}
 
@@ -1203,8 +1201,8 @@ namespace castor3d
 				, envMapCount ) );	// c3d_mapEnvironment
 
 			auto & device = getCurrentRenderDevice( engine );
-			auto result = getCurrentRenderDevice( engine )->createDescriptorSetLayout( std::move( bindings ) );
-			setDebugObjectName( device, *result, "DeferredResolveTex" );
+			auto result = device->createDescriptorSetLayout( "DeferredResolveTex"
+				, std::move( bindings ) );
 			return result;
 		}
 
@@ -1213,9 +1211,7 @@ namespace castor3d
 			, SamplerSPtr sampler )
 		{
 			sampler->initialise();
-			auto & device = getCurrentRenderDevice( engine );
-			auto result = pool.createDescriptorSet( 1u );
-			setDebugObjectName( device, *result, "DeferredResolveTex" );
+			auto result = pool.createDescriptorSet( "DeferredResolveTex", 1u );
 			return result;
 		}
 
@@ -1296,7 +1292,8 @@ namespace castor3d
 			, VkExtent2D const & size )
 		{
 
-			auto result = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			auto result = device->createPipeline( "DeferredResolve"
+				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
 					std::move( program ),
@@ -1317,7 +1314,6 @@ namespace castor3d
 					pipelineLayout,
 					renderPass,
 				} );
-			setDebugObjectName( device, *result, "DeferredResolveTex" );
 			return result;
 		}
 
@@ -1367,12 +1363,10 @@ namespace castor3d
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
 		, m_program{ doCreateProgram( getCurrentRenderDevice( engine ), fogType, ssao != nullptr, matType, m_vertexShader, m_pixelShader ) }
-		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( { uboLayout, texLayout } ) }
+		, m_pipelineLayout{ getCurrentRenderDevice( engine )->createPipelineLayout( "DeferredResolve", { uboLayout, texLayout } ) }
 		, m_pipeline{ doCreateRenderPipeline( getCurrentRenderDevice( engine ), *m_pipelineLayout, m_program, renderPass, size ) }
-		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
+		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "DeferredResolve", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 	{
-		setDebugObjectName( getCurrentRenderDevice( engine ), *m_pipelineLayout, "DeferredResolve" );
-		setDebugObjectName( getCurrentRenderDevice( engine ), *m_commandBuffer, "DeferredResolve" );
 	}
 
 	void OpaqueResolvePass::ProgramPipeline::updateCommandBuffer( ashes::VertexBufferBase & vbo
@@ -1435,14 +1429,14 @@ namespace castor3d
 		, m_lightSpecular{ lightSpecular }
 		, m_vertexBuffer{ doCreateVbo( m_device ) }
 		, m_uboDescriptorLayout{ doCreateUboDescriptorLayout( engine ) }
-		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( 1u ) }
+		, m_uboDescriptorPool{ m_uboDescriptorLayout->createPool( "OpaqueResolvePassUbo", 1u ) }
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, sceneUbo, gpInfoUbo, hdrConfigUbo, debugUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( engine, m_ssaoResult != nullptr, engine.getMaterialsType() ) }
-		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( 1u ) }
+		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( "OpaqueResolvePassTex", 1u ) }
 		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( engine, result.getFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, result ) }
-		, m_finished{ m_device->createSemaphore() }
+		, m_finished{ m_device->createSemaphore( "OpaqueResolvePass" ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Reflection pass" ) ) }
 		, m_programs
 		{
@@ -1500,9 +1494,6 @@ namespace castor3d
 		, m_ssaoEnabled{ ssao != nullptr }
 		, m_viewport{ engine }
 	{
-		setDebugObjectName( m_device, *m_uboDescriptorPool, "OpaqueResolvePassUbo" );
-		setDebugObjectName( m_device, *m_texDescriptorPool, "OpaqueResolvePassTex" );
-		setDebugObjectName( m_device, *m_finished, "OpaqueResolvePass" );
 		m_viewport.setOrtho( 0, 1, 0, 1, 0, 1 );
 		m_viewport.resize( { m_size.width, m_size.height } );
 		m_viewport.update();

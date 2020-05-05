@@ -269,68 +269,55 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "PointShadowMapDepth" );
 			view->image = *data.depthTexture;
-			data.depthView = data.depthTexture->createView( view );
-			setDebugObjectName( device
-				, data.depthView
-				, debugName + "Depth" );
-			data.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_CUBE
+			data.depthView = data.depthTexture->createView( debugName + "Depth"
+				, view );
+			data.varianceView = variance.createView( debugName + "Variance"
+				, VK_IMAGE_VIEW_TYPE_CUBE
 				, variance.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 6u );
-			setDebugObjectName( device
-				, data.varianceView
-				, debugName + "Variance" );
-			data.linearView = linear.createView( VK_IMAGE_VIEW_TYPE_CUBE
+			data.linearView = linear.createView( debugName + "Linear"
+				, VK_IMAGE_VIEW_TYPE_CUBE
 				, linear.getFormat()
 				, 0u
 				, 1u
 				, face
 				, 6u );
-			setDebugObjectName( device
-				, data.linearView
-				, debugName + "Linear" );
 
 			for ( auto & frameBuffer : data.frameBuffers )
 			{
 				auto fbDebugName = debugName + "F" + std::to_string( face );
 				auto & pass = m_passes[face];
 				auto & renderPass = pass.pass->getRenderPass();
-				frameBuffer.varianceView = variance.createView( VK_IMAGE_VIEW_TYPE_2D
+				frameBuffer.varianceView = variance.createView( fbDebugName + "Variance"
+					, VK_IMAGE_VIEW_TYPE_2D
 					, variance.getFormat()
 					, 0u
 					, 1u
 					, face
 					, 1u );
-				setDebugObjectName( device
-					, frameBuffer.varianceView
-					, fbDebugName + "Variance" );
-				frameBuffer.linearView = linear.createView( VK_IMAGE_VIEW_TYPE_2D
+				frameBuffer.linearView = linear.createView( fbDebugName + "Linear"
+					, VK_IMAGE_VIEW_TYPE_2D
 					, linear.getFormat()
 					, 0u
 					, 1u
 					, face
 					, 1u );
-				setDebugObjectName( device
-					, frameBuffer.linearView
-					, fbDebugName + "Linear" );
 				ashes::ImageViewCRefArray attaches;
 				attaches.emplace_back( data.depthView );
 				attaches.emplace_back( frameBuffer.linearView );
 				attaches.emplace_back( frameBuffer.varianceView );
-				frameBuffer.frameBuffer = renderPass.createFrameBuffer( size, std::move( attaches ) );
-				setDebugObjectName( device
-					, *frameBuffer.frameBuffer
-					, fbDebugName );
+				frameBuffer.frameBuffer = renderPass.createFrameBuffer( fbDebugName
+					, size
+					, std::move( attaches ) );
 				++face;
 			}
 
 			auto & device = getCurrentRenderDevice( *this );
-			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-			setDebugObjectName( device, *data.commandBuffer, debugName );
-			data.finished = device->createSemaphore();
-			setDebugObjectName( device, *data.finished, debugName );
+			data.commandBuffer = device.graphicsCommandPool->createCommandBuffer( debugName );
+			data.finished = device->createSemaphore( debugName );
 			m_passesData.emplace_back( std::move( data ) );
 		}
 	}

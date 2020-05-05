@@ -120,10 +120,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device
-				, *result
-				, name + ( first ? "First" : "Blend" ) );
+			auto result = device->createRenderPass( name + ( first ? "First" : "Blend" )
+				, std::move( createInfo ) );
 			return result;
 		}
 	}
@@ -199,7 +197,8 @@ namespace castor3d
 
 		blattaches.push_back( blattaches.back() );
 		auto & device = getCurrentRenderDevice( m_engine );
-		auto result = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		auto result = device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				m_program,
@@ -215,9 +214,6 @@ namespace castor3d
 				*m_pipelineLayout,
 				renderPass,
 			} );
-		setDebugObjectName( device
-			, *result
-			, m_name + ( blend ? "Blend" : "First" ) );
 		return result;
 	}
 

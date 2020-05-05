@@ -400,8 +400,8 @@ namespace film_grain
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "FilmGrain" );
+		m_renderPass = device->createRenderPass( "FilmGrain"
+			, std::move( createInfo ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -430,10 +430,9 @@ namespace film_grain
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "FilmGrain" ),
+				device->createSemaphore( "FilmGrain" )
 			};
-			setDebugObjectName( device, commands, "FilmGrain" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			cmd.beginDebugBlock(

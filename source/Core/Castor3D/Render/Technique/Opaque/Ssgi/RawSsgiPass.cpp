@@ -287,8 +287,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "SsgiPass" );
+			auto result = device->createRenderPass( "SsgiPass"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -375,10 +375,9 @@ namespace castor3d
 		, m_result{ doCreateTexture( engine, "RawSSGIResult", ResultFormat, size, false ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "RawSSGI" ) ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore() }
+		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( "SsgiRawGI" ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		setDebugObjectName( device, *m_finished, "SsgiRawGI" );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		shaderStages.push_back( makeShaderState( device, m_vertexShader ) );
 		shaderStages.push_back( makeShaderState( device, m_pixelShader ) );
@@ -426,10 +425,9 @@ namespace castor3d
 		auto & sceneView = m_scene.getTexture()->getDefaultView();
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "SsgiRawGI" ),
+			device->createSemaphore( "SsgiRawGI" )
 		};
-		setDebugObjectName( device, commands, "SsgiRawGI" );
 		auto & cmd = *commands.commandBuffer;
 
 		cmd.begin();

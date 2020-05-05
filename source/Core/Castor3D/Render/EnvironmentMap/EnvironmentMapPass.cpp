@@ -32,7 +32,8 @@ namespace castor3d
 			return camera;
 		}
 
-		ashes::ImageView doCreateView( TextureView const & image
+		ashes::ImageView doCreateView( castor::String const & name
+			, TextureView const & image
 			, uint32_t face )
 		{
 			ashes::ImageViewCreateInfo view
@@ -44,7 +45,7 @@ namespace castor3d
 				VkComponentMapping{},
 				{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, face, 1u }
 			};
-			return image.getOwner()->getTexture().createView( view );
+			return image.getOwner()->getTexture().createView( name, view );
 		}
 	}
 
@@ -106,8 +107,9 @@ namespace castor3d
 		m_modelMatrixUbo.initialise();
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
-		m_envView = doCreateView( environmentLayout->getImage( face ), face );
-		setDebugObjectName( device, m_envView, name + "Colour" );
+		m_envView = doCreateView( name + "Colour"
+			, environmentLayout->getImage( face )
+			, face );
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.
@@ -121,17 +123,15 @@ namespace castor3d
 		ashes::ImageViewCRefArray attaches;
 		attaches.emplace_back( depthView );
 		attaches.emplace_back( m_envView );
-		m_frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size[0], size[1] }
+		m_frameBuffer = renderPass.createFrameBuffer( name
+			, VkExtent2D{ size[0], size[1] }
 			, std::move( attaches ) );
-		setDebugObjectName( device, *m_frameBuffer, name );
-		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		setDebugObjectName( device, *m_backgroundCommands, name );
+		m_backgroundCommands = device.graphicsCommandPool->createCommandBuffer( name
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		auto & commandBuffer = *m_backgroundCommands;
 		m_renderPass = &renderPass;
-		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( 0u );
-		setDebugObjectName( device, *m_backgroundUboDescriptorSet, name + "Ubo" );
-		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( 0u );
-		setDebugObjectName( device, *m_backgroundTexDescriptorSet, name + "Tex" );
+		m_backgroundUboDescriptorSet = uboPool.createDescriptorSet( name + "Ubo", 0u );
+		m_backgroundTexDescriptorSet = texPool.createDescriptorSet( name + "Tex", 0u );
 		background.initialiseDescriptorSets( m_matrixUbo
 			, m_modelMatrixUbo
 			, m_hdrConfigUbo
@@ -152,10 +152,8 @@ namespace castor3d
 			, false );
 		m_transparentPass->initialise( size );
 
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_commandBuffer, name );
-		m_finished = device->createSemaphore();
-		setDebugObjectName( device, *m_finished, name );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name );
+		m_finished = device->createSemaphore( name );
 		return true;
 	}
 

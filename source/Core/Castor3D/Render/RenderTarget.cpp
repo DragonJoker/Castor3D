@@ -262,8 +262,7 @@ namespace castor3d
 					, m_hdrCopyCommands
 					, sourceView->getImage().getView()
 					, m_renderTechnique->getResult().getDefaultView() );
-				m_hdrCopyFinished = device->createSemaphore();
-				setDebugObjectName( device, *m_hdrCopyFinished, getName() + "HDRCopy" );
+				m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
 			}
 
 			if ( m_initialised )
@@ -288,8 +287,7 @@ namespace castor3d
 					, m_srgbCopyCommands
 					, sourceView->getDefaultView()
 					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
-				m_srgbCopyFinished = device->createSemaphore();
-				setDebugObjectName( device, *m_srgbCopyFinished, getName() + "SRGBCopy" );
+				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
 			}
 
 			doInitialiseFlip();
@@ -297,8 +295,7 @@ namespace castor3d
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
 
-			m_signalReady = device->createSemaphore();
-			setDebugObjectName( device, *m_signalReady, getName() + "Ready" );
+			m_signalReady = device->createSemaphore( getName() + "Ready" );
 		}
 	}
 
@@ -538,8 +535,8 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, getName() + "RenderPass" );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 	}
 
 	bool RenderTarget::doInitialiseFrameBuffer()
@@ -663,8 +660,7 @@ namespace castor3d
 		, ashes::ImageView const & target )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *commandBuffer, getName() + name + "Copy" );
+		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
 
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(

@@ -286,8 +286,8 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "NeighbourhoodBlending" );
+		m_renderPass = device->createRenderPass( "NeighbourhoodBlending"
+			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
@@ -341,10 +341,9 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "NeighbourhoodBlending" ),
+			device->createSemaphore( "NeighbourhoodBlending" )
 		};
-		setDebugObjectName( device, neighbourhoodBlendingCommands, "SMAA NeighbourhoodBlending" );
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 
 		neighbourhoodBlendingCmd.begin();

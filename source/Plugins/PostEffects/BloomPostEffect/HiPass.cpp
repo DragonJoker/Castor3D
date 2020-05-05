@@ -143,8 +143,8 @@ namespace Bloom
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "LineariseDepthRenderPass" );
+			auto result = device->createRenderPass( "BloomHiPass"
+				, std::move( createInfo ) );
 			return result;
 		}
 	}
@@ -195,10 +195,9 @@ namespace Bloom
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "BloomHiPass" ),
+			device->createSemaphore( "BloomHiPass" )
 		};
-		setDebugObjectName( device, commands, "BloomHiPass" );
 		auto & cmd = *commands.commandBuffer;
 
 		cmd.begin();

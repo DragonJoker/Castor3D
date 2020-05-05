@@ -222,8 +222,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "RadianceComputerRenderPass" );
+			auto result = device->createRenderPass( "RadianceComputer"
+				, std::move( createInfo ) );
 			return result;
 		}
 	}
@@ -235,7 +235,7 @@ namespace castor3d
 		, ashes::Image const & srcTexture )
 		: RenderCube{ getCurrentRenderDevice( engine ), false }
 		, m_result{ doCreateRadianceTexture( m_device, size ) }
-		, m_resultView{ m_result->createView( VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_resultView{ m_result->createView( "RadianceComputerResult", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine ) }
 		, m_srcView{ doCreateSrcView( srcTexture ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
@@ -246,9 +246,11 @@ namespace castor3d
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
+			auto name = "RadianceComputer" + string::toString( face );
 
 			// Create the views.
-			facePass.dstView = dstTexture.createView( VK_IMAGE_VIEW_TYPE_2D
+			facePass.dstView = dstTexture.createView( name
+				, VK_IMAGE_VIEW_TYPE_2D
 				, dstTexture.getFormat()
 				, 0u
 				, 1u
@@ -257,7 +259,8 @@ namespace castor3d
 			// Initialise the frame buffer.
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( facePass.dstView );
-			facePass.frameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+			facePass.frameBuffer = m_renderPass->createFrameBuffer( name
+				, VkExtent2D{ size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
 		}
 
@@ -269,7 +272,7 @@ namespace castor3d
 			, *m_renderPass
 			, {} );
 
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RadianceComputer" );
 		m_commandBuffer->begin();
 
 		for ( auto face = 0u; face < 6u; ++face )

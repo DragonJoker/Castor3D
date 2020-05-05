@@ -44,8 +44,7 @@ namespace castor3d
 	{
 		m_hdrConfigUbo.initialise();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_signalFinished = device->createSemaphore();
-		setDebugObjectName( device, *m_signalFinished, m_fullName );
+		m_signalFinished = device->createSemaphore( m_fullName );
 
 		{
 			VertexWriter writer;

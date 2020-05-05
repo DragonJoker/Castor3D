@@ -45,8 +45,7 @@ namespace castor3d
 			auto & device = getCurrentRenderDevice( *this );
 
 			{
-				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer();
-				setDebugObjectName( device, *cmdBuffer, m_name + "Clear" );
+				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 				static VkClearColorValue const clearColour{ 1.0f, 1.0f, 1.0f, 1.0f };
 				cmdBuffer->beginDebugBlock(
@@ -86,8 +85,7 @@ namespace castor3d
 
 				cmdBuffer->endDebugBlock();
 				cmdBuffer->end();
-				auto fence = device->createFence();
-				setDebugObjectName( device, *fence, m_name + "Clear" );
+				auto fence = device->createFence( m_name + "Clear" );
 				device.graphicsQueue->submit( *cmdBuffer, fence.get() );
 				fence->wait( ashes::MaxTimeout );
 			}
@@ -103,8 +101,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				m_finished = device->createSemaphore();
-				setDebugObjectName( device, *m_finished, m_name );
+				m_finished = device->createSemaphore( m_name );
 				doInitialise();
 				m_initialised = true;
 			}

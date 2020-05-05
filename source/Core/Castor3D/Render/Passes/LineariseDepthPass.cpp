@@ -198,9 +198,8 @@ namespace castor3d
 		{
 			auto createInfos = srcView.createInfo;
 			createInfos.subresourceRange.aspectMask = ashes::getAspectMask( createInfos.format );
-			auto result = srcView.image->createView( createInfos );
-			auto & device = getCurrentRenderDevice( engine );
-			setDebugObjectName( device, result, "LineariseDepth" );
+			auto result = srcView.image->createView( "LineariseDepth"
+				, createInfos );
 			return result;
 		}
 
@@ -294,8 +293,8 @@ namespace castor3d
 			};
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "LineariseDepth" );
+			auto result = device->createRenderPass( "LineariseDepth"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -377,18 +376,20 @@ namespace castor3d
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
-		, m_lineariseSampler{ getCurrentRenderDevice( m_engine )->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+		, m_lineariseSampler{ getCurrentRenderDevice( m_engine )->createSampler( m_prefix + "LineariseDepthLinearise"
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, VK_FILTER_NEAREST
-			, VK_FILTER_NEAREST ) }
-		, m_minifySampler{ getCurrentRenderDevice( m_engine )->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_FILTER_NEAREST
 			, VK_FILTER_NEAREST ) }
-		, m_commandBuffer{ getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer() }
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
+		, m_minifySampler{ getCurrentRenderDevice( m_engine )->createSampler( m_prefix + "MinifyDepth"
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VK_FILTER_NEAREST
+			, VK_FILTER_NEAREST ) }
+		, m_commandBuffer{ getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepth" ) }
+		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( m_prefix + "LineariseDepth" ) }
 		, m_clipInfo{ makeUniformBuffer< Point3f >( *m_engine.getRenderSystem()
 			, 1u
 			, 0u
@@ -405,11 +406,6 @@ namespace castor3d
 			, m_minifyVertexShader
 			, m_minifyPixelShader ) }
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
-		setDebugObjectName( device, *m_lineariseSampler, m_prefix + "LineariseDepthLinearise" );
-		setDebugObjectName( device, *m_minifySampler, m_prefix + "MinifyDepth" );
-		setDebugObjectName( device, *m_commandBuffer, m_prefix + "LineariseDepth" );
-		setDebugObjectName( device, *m_finished, m_prefix + "LineariseDepth" );
 		doInitialiseLinearisePass();
 		doInitialiseMinifyPass();
 	}
@@ -476,10 +472,9 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *m_engine.getRenderSystem() );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( m_prefix + "LineariseDepthPass" ),
+			device->createSemaphore( m_prefix + "LineariseDepthPass" )
 		};
-		setDebugObjectName( device, commands, m_prefix + "LineariseDepthPass" );
 		auto & cmd = *commands.commandBuffer;
 		doPrepareFrame( cmd, timer, index );
 		return commands;

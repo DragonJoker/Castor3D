@@ -249,13 +249,12 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		auto result = device->createImage( std::move( createInfo ) );
-		setDebugObjectName( device, *result, name + "Map" );
+		auto result = device->createImage( name + "Map", std::move( createInfo ) );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
 			, flags );
-		auto memory = device->allocateMemory( VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		setDebugObjectName( device, *memory, name + "MapMem" );
+		auto memory = device->allocateMemory( name + "MapMem"
+			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
 		result->bindMemory( std::move( memory ) );
 		return result;
 	}

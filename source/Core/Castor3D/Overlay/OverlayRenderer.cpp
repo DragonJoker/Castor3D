@@ -501,10 +501,8 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-			setDebugObjectName( device, *m_commandBuffer, "OverlayRenderer" );
-			m_finished = device->createSemaphore();
-			setDebugObjectName( device, *m_finished, "OverlayRenderer" );
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "OverlayRenderer" );
+			m_finished = device->createSemaphore( "OverlayRenderer" );
 		}
 
 

@@ -983,8 +983,8 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "BlendingWeightCalculation" );
+		m_renderPass = device->createRenderPass( "BlendingWeightCalculation"
+			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
@@ -1034,10 +1034,9 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "BlendingWeightCalculation" ),
+			device->createSemaphore( "BlendingWeightCalculation" )
 		};
-		setDebugObjectName( device, blendingWeightCommands, "SMAA BlendingWeightCalculation" );
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
 		blendingWeightCmd.begin();

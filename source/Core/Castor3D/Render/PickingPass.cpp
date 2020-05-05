@@ -247,8 +247,8 @@ namespace castor3d
 					1u
 				}
 			};
-			auto result = texture.createView( view );
-			setDebugObjectName( device, result, "PickingPass" + name + "View" );
+			auto result = texture.createView( "PickingPass" + name + "View"
+				, view );
 			return result;
 		}
 
@@ -634,13 +634,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "PickingPassRenderPass" );
+		m_renderPass = device->createRenderPass( "PickingPass"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attachments;
 		attachments.emplace_back( m_colourView );
 		attachments.emplace_back( m_depthView );
-		m_frameBuffer = m_renderPass->createFrameBuffer( { size.getWidth(), size.getHeight() }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "PickingPass"
+			, { size.getWidth(), size.getHeight() }
 			, std::move( attachments ) );
 
 		return true;

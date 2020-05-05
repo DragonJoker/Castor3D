@@ -247,8 +247,8 @@ namespace motion_blur
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "LinearMotionBlur" );
+		m_renderPass = device->createRenderPass( "LinearMotionBlur"
+			, std::move( createInfo ) );
 
 		m_ubo = castor3d::makeUniformBuffer< Configuration >( renderSystem
 			, 1u
@@ -288,10 +288,9 @@ namespace motion_blur
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "LinearMotionBlur" ),
+				device->createSemaphore( "LinearMotionBlur" )
 			};
-			setDebugObjectName( device, commands, "LinearMotionBlur" );
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
 			timer.beginPass( cmd );

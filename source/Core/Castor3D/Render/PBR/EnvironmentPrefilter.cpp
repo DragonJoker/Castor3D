@@ -331,8 +331,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "EnvironmentPrefilterRenderPass" );
+			auto result = device->createRenderPass( "EnvironmentPrefilter"
+				, std::move( createInfo ) );
 			return result;
 		}
 	}
@@ -349,14 +349,16 @@ namespace castor3d
 		, SamplerSPtr sampler )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
-		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer() }
-		, m_fence{ m_device->createFence( VK_FENCE_CREATE_SIGNALED_BIT ) }
+		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "EnvironmentPrefilter" ) }
+		, m_fence{ m_device->createFence( "EnvironmentPrefilter", VK_FENCE_CREATE_SIGNALED_BIT ) }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
+			auto name = "EnvironmentPrefilter" + string::toString( face );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
-			facePass.dstView = dstTexture.createView( VK_IMAGE_VIEW_TYPE_2D
+			facePass.dstView = dstTexture.createView( name
+				, VK_IMAGE_VIEW_TYPE_2D
 				, dstTexture.getFormat()
 				, mipLevel
 				, 1u
@@ -365,7 +367,8 @@ namespace castor3d
 			// Initialise the frame buffer.
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( facePass.dstView );
-			facePass.frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size.width, size.height }
+			facePass.frameBuffer = renderPass.createFrameBuffer( name
+				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
 
@@ -410,9 +413,9 @@ namespace castor3d
 		, ashes::Image const & srcTexture
 		, SamplerSPtr sampler )
 		: m_device{ getCurrentRenderDevice( engine ) }
-		, m_srcView{ srcTexture.createView( VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
+		, m_srcView{ srcTexture.createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, srcTexture.getMipmapLevels(), 0u, 6u ) }
 		, m_result{ doCreatePrefilteredTexture( m_device, size ) }
-		, m_resultView{ m_result->createView( VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
+		, m_resultView{ m_result->createView( "EnvironmentPrefilterDst", VK_IMAGE_VIEW_TYPE_CUBE, m_result->getFormat(), 0u, m_result->getMipmapLevels(), 0u, 6u ) }
 		, m_sampler{ doCreateSampler( engine, m_result->getMipmapLevels() - 1u ) }
 		, m_renderPass{ doCreateRenderPass( m_device, m_result->getFormat() ) }
 	{

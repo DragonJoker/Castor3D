@@ -148,8 +148,8 @@ namespace smaa
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "LineariseDepth" );
+			auto result = device->createRenderPass( "SMAA"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -477,10 +477,9 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore copyCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "SMAA Copy" ),
+			device->createSemaphore( "SMAA Copy" )
 		};
-		setDebugObjectName( device, copyCommands, "SMAA Copy" );
 		auto & copyCmd = *copyCommands.commandBuffer;
 
 		copyCmd.begin();

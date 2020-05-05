@@ -609,23 +609,11 @@ namespace castor3d
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
 		{
-			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore()
-				, getDevice()->createSemaphore()
-				, getDevice()->createFence( VK_FENCE_CREATE_SIGNALED_BIT )
-				, getDevice().graphicsCommandPool->createCommandBuffer()
+			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
+				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
+				, getDevice()->createFence( getName() + castor::string::toString( i ), VK_FENCE_CREATE_SIGNALED_BIT )
+				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
-			setDebugObjectName( getDevice()
-				, *m_renderingResources.back()->commandBuffer
-				, getName() + castor::string::toString( i ) );
-			setDebugObjectName( getDevice()
-				, *m_renderingResources.back()->fence
-				, getName() + castor::string::toString( i ) );
-			setDebugObjectName( getDevice()
-				, *m_renderingResources.back()->finishedRenderingSemaphore
-				, getName() + castor::string::toString( i ) + "FinishedRendering" );
-			setDebugObjectName( getDevice()
-				, *m_renderingResources.back()->imageAvailableSemaphore
-				, getName() + castor::string::toString( i ) + "ImageAvailable" );
 		}
 	}
 

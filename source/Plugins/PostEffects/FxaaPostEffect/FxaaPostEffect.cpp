@@ -334,8 +334,8 @@ namespace fxaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "Fxaa" );
+		m_renderPass = device->createRenderPass( "Fxaa"
+			, std::move( createInfo ) );
 
 		// Create the FXAA quad renderer.
 		ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -370,10 +370,9 @@ namespace fxaa
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "Fxaa" ),
+				device->createSemaphore( "Fxaa" )
 			};
-			setDebugObjectName( device, commands, "Fxaa" );
 			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
 			auto & targetView = m_target->getDefaultView();

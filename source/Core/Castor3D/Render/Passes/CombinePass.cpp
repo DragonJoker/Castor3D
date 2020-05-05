@@ -128,17 +128,20 @@ namespace castor3d
 				std::move( dependencies ),
 			};
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, prefix + "CombineRenderPass" );
+			auto result = device->createRenderPass( prefix + "Combine"
+				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr doCreateFrameBuffer( castor::String const & prefix
+			, ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view
 			, VkExtent2D const & size )
 		{
 			ashes::ImageViewCRefArray attachments{ view };
-			return renderPass.createFrameBuffer( size, std::move( attachments ) );
+			return renderPass.createFrameBuffer( prefix + "Combine"
+				, size
+				, std::move( attachments ) );
 		}
 	}
 
@@ -187,7 +190,7 @@ namespace castor3d
 		, m_vertexShader{ std::move( vertexShader ) }
 		, m_pixelShader{ std::move( pixelShader ) }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_view, outputSize ) }
+		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
 		, m_quad{ engine, m_prefix, lhsView, config }
 	{
 		auto & device = getCurrentRenderDevice( engine );
@@ -343,10 +346,9 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( m_engine );
 		CommandsSemaphore result
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore(),
+			device.graphicsCommandPool->createCommandBuffer( m_prefix + "CombinePass" ),
+			device->createSemaphore( m_prefix + "CombinePass" ),
 		};
-		setDebugObjectName( device, result, m_prefix + "CombinePass" );
 		auto & cmd = *result.commandBuffer;
 
 		cmd.begin();

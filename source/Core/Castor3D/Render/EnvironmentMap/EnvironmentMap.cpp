@@ -178,9 +178,9 @@ namespace castor3d
 			, std::move( depthStencil )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "EnvironmentMapImage" );
-		m_depthBufferView = m_depthBuffer->createView( VK_IMAGE_VIEW_TYPE_2D
+		m_depthBufferView = m_depthBuffer->createView( "EnvironmentMap"
+			, VK_IMAGE_VIEW_TYPE_2D
 			, m_depthBuffer->getFormat() );
-		setDebugObjectName( device, m_depthBufferView, "EnvironmentMapImageView" );
 
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -246,13 +246,11 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "EnvironmentMapRenderPass" );
+		m_renderPass = device->createRenderPass( "EnvironmentMap"
+			, std::move( createInfo ) );
 		auto & background = *m_node.getScene()->getBackground();
-		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( 6u );
-		setDebugObjectName( device, m_backgroundUboDescriptorPool->getPool(), "EnvironmentMapUboDescriptorPool" );
-		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( 6u );
-		setDebugObjectName( device, m_backgroundTexDescriptorPool->getPool(), "EnvironmentMapTexDescriptorPool" );
+		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
+		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
 		uint32_t face = 0u;
 
 		for ( auto & pass : m_passes )

@@ -212,8 +212,8 @@ namespace castor3d
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
-			m_signalFinished = device->createSemaphore();
-			setDebugObjectName( device, *m_signalFinished, "RenderTechnique" );
+			intermediates.push_back( { "Technique Depth", m_depthBuffer->getDefaultView() } );
+			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
 			m_debugUbo.initialise();
@@ -483,10 +483,8 @@ namespace castor3d
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_bgCommandBuffer, "Background" );
-		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_cbgCommandBuffer, "ColourBackground" );
+		m_bgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "Background" );
+		m_cbgCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ColourBackground" );
 		auto depthLoadOp = C3D_UseDepthPrepass
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_CLEAR;
@@ -558,17 +556,17 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_bgRenderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_bgRenderPass, "Background" );
+		m_bgRenderPass = device->createRenderPass( "Background"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attaches
 		{
 			m_depthBuffer->getDefaultView(),
 			m_colourTexture->getDefaultView(),
 		};
-		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
+		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( "Background"
+			, { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
 			, std::move( attaches ) );
-		setDebugObjectName( device, *m_bgFrameBuffer, "Background" );
 
 		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto prepareBackground = [&background, this]()

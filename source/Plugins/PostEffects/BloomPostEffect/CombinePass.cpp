@@ -180,8 +180,8 @@ namespace Bloom
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "BloomCombineRenderPass" );
+			auto result = device->createRenderPass( "BloomCombine"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -190,7 +190,9 @@ namespace Bloom
 			, VkExtent2D const & size )
 		{
 			ashes::ImageViewCRefArray attachments{ view };
-			return renderPass.createFrameBuffer( size, std::move( attachments ) );
+			return renderPass.createFrameBuffer( "BloomCombine"
+				, size
+				, std::move( attachments ) );
 		}
 
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout( castor3d::RenderDevice const & device )
@@ -290,14 +292,16 @@ namespace Bloom
 		, m_renderPass{ doCreateRenderPass( m_device, format ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_view, size ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout( m_device ) }
-		, m_pipelineLayout{ m_device->createPipelineLayout( *m_descriptorLayout ) }
+		, m_pipelineLayout{ m_device->createPipelineLayout( "BloomCombine" , *m_descriptorLayout ) }
 		, m_pipeline{ doCreatePipeline( m_device, *m_pipelineLayout, m_vertexShader, m_pixelShader, *m_renderPass, size ) }
-		, m_sceneSampler{ m_device->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+		, m_sceneSampler{ m_device->createSampler( "BloomCombineScene"
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR ) }
-		, m_blurSampler{ m_device->createSampler( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+		, m_blurSampler{ m_device->createSampler( "BloomCombineBlur"
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_FILTER_LINEAR
@@ -305,7 +309,7 @@ namespace Bloom
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, 0.0f
 			, float( blurPassesCount ) ) }
-		, m_descriptorPool{ m_descriptorLayout->createPool( 1u ) }
+		, m_descriptorPool{ m_descriptorLayout->createPool( "BloomCombine", 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorPool, sceneView, blurView, *m_sceneSampler, *m_blurSampler ) }
 		, m_blurPassesCount{ blurPassesCount }
 	{
@@ -314,7 +318,7 @@ namespace Bloom
 	castor3d::CommandsSemaphore CombinePass::getCommands( castor3d::RenderPassTimer const & timer
 		, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const
 	{
-		auto result = m_device.graphicsCommandPool->createCommandBuffer();
+		auto result = m_device.graphicsCommandPool->createCommandBuffer( "BloomCombine" );
 		auto & cmd = *result;
 
 		cmd.begin();
@@ -331,9 +335,7 @@ namespace Bloom
 		timer.endPass( cmd, 1u + ( m_blurPassesCount * 2u ) );
 		cmd.end();
 
-		auto commands = castor3d::CommandsSemaphore{ std::move( result ), m_device->createSemaphore() };
-		setDebugObjectName( m_device, commands, "BloomCombine" );
-		return commands;
+		return { std::move( result ), m_device->createSemaphore( "BloomCombine" ) };
 	}
 
 	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )

@@ -101,9 +101,9 @@ namespace castor3d
 		}
 
 		auto & device = getCurrentRenderDevice( *this );
-		m_pipelineLayout = device->createPipelineLayout( descriptorLayouts
+		m_pipelineLayout = device->createPipelineLayout( "RenderPipeline"
+			, descriptorLayouts
 			, m_pushConstantRanges );
-		setDebugObjectName( device, *m_pipelineLayout, "RenderPipelinePipelineLayout" );
 		ashes::GraphicsPipelineCreateInfo createInfo
 		(
 			0u,
@@ -120,8 +120,8 @@ namespace castor3d
 			*m_pipelineLayout,
 			renderPass
 		);
-		m_pipeline = device->createPipeline( std::move( createInfo ) );
-		setDebugObjectName( device, *m_pipeline, "RenderPipelinePipeline" );
+		m_pipeline = device->createPipeline( "RenderPipeline"
+			, std::move( createInfo ) );
 	}
 
 	void RenderPipeline::cleanup()
@@ -148,8 +148,7 @@ namespace castor3d
 			if ( it == bindings.end()
 				&& !layout->getBindings().empty() )
 			{
-				m_descriptorPools.emplace_back( layout->createPool( maxSets ) );
-				setDebugObjectName( device, *m_descriptorPools.back(), "RenderPipelineDescriptorPool" );
+				m_descriptorPools.emplace_back( layout->createPool( "RenderPipeline", maxSets ) );
 			}
 		}
 	}

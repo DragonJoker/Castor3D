@@ -193,8 +193,8 @@ namespace castor3d
 		{
 			auto & device = getCurrentRenderDevice( *this );
 			m_info->maxAnisotropy = std::min( m_info->maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
-			m_sampler = device->createSampler( m_info );
-			setDebugObjectName( device, *m_sampler, getName() + "Sampler" );
+			m_sampler = device->createSampler( getName() + "Sampler"
+				, m_info );
 		}
 
 		return true;

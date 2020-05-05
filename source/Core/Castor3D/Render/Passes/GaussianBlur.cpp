@@ -349,8 +349,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, name );
+			auto result = device->createRenderPass( name
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -372,8 +372,8 @@ namespace castor3d
 			createInfo.subresourceRange.baseMipLevel = range.baseMipLevel;
 			createInfo.subresourceRange.levelCount = range.levelCount;
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = view.image->createView( std::move( createInfo ) );
-			setDebugObjectName( device, result, name );
+			auto result = view.image->createView( name
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -468,12 +468,11 @@ namespace castor3d
 				, isHorizontal
 				, ashes::isDepthFormat( format ) ),
 		}
-		, semaphore{ getCurrentRenderDevice( engine )->createSemaphore() }
+		, semaphore{ getCurrentRenderDevice( engine )->createSemaphore( name ) }
 		, fbo{ createFbo( renderPass, output, textureSize ) }
 		, m_engine{ engine }
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
-		setDebugObjectName( device, *semaphore, name );
 
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
@@ -557,21 +556,21 @@ namespace castor3d
 		, VkFormat format
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
-		, m_prefix{ prefix + cuT( " - GaussianBlur" ) }
+		, m_prefix{ prefix }
 		, m_source{ texture }
 		, m_size{ textureSize }
 		, m_format{ format }
-		, m_intermediate{ createTexture( engine, textureSize, format, texture->subresourceRange, m_prefix ) }
-		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_prefix, m_format, m_source->subresourceRange.levelCount ) }
+		, m_intermediate{ createTexture( engine, textureSize, format, texture->subresourceRange, m_prefix + cuT( "GaussianBlur" ) ) }
+		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_prefix + cuT( "GaussianBlur" ), m_format, m_source->subresourceRange.levelCount ) }
 		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT 
-			, m_prefix + cuT( " Config" ) ) }
+			, m_prefix + cuT( "GaussianBlurConfig" ) ) }
 		, m_blurX
 		{
 			engine,
-			m_prefix + cuT( " - X Pass" ),
+			m_prefix + cuT( " - GaussianBlur - X Pass" ),
 			texture,
 			m_intermediate.getTexture()->getDefaultView(),
 			*m_blurUbo,
@@ -583,7 +582,7 @@ namespace castor3d
 		, m_blurY
 		{
 			engine,
-			m_prefix + cuT( " - Y Pass" ),
+			m_prefix + cuT( " - GaussianBlur - Y Pass" ),
 			m_intermediate.getTexture()->getDefaultView(),
 			texture,
 			*m_blurUbo,
@@ -609,6 +608,9 @@ namespace castor3d
 
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
+		visitor.visit( m_prefix + " GaussianBlur Intermediate"
+			, m_intermediate.getTexture()->getDefaultView() );
+
 		visitor.visit( m_blurX.vertexShader );
 		visitor.visit( m_blurX.pixelShader );
 
@@ -622,10 +624,9 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( m_prefix + "GaussianBlur" ),
+			device->createSemaphore( m_prefix + "GaussianBlur" )
 		};
-		setDebugObjectName( device, commands, m_prefix + "GaussianBlur" );
 		auto & cmd = *commands.commandBuffer;
 		cmd.begin();
 		timer.beginPass( cmd, index );

@@ -189,8 +189,8 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "TransparentPass" );
+		m_renderPass = device->createRenderPass( "TransparentPass"
+			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
 		for ( size_t i = 0u; i < wbpResult.size(); ++i )
@@ -198,12 +198,10 @@ namespace castor3d
 			fbAttaches.emplace_back( wbpResult[i] );
 		}
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { wbpResult[0].image->getDimensions().width, wbpResult[0].image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "TransparentPass"
+			, { wbpResult[0].image->getDimensions().width, wbpResult[0].image->getDimensions().height }
 			, std::move( fbAttaches ) );
-		setDebugObjectName( device, *m_frameBuffer, "TransparentPass" );
-
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_nodesCommands, "TransparentPass" );
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}
 
 	void TransparentPass::update( RenderInfo & info
@@ -296,8 +294,7 @@ namespace castor3d
 	bool TransparentPass::doInitialise( Size const & size )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_finished = device->createSemaphore();
-		setDebugObjectName( device, *m_finished, "TransparentPass" );
+		m_finished = device->createSemaphore( "TransparentPass" );
 		return true;
 	}
 

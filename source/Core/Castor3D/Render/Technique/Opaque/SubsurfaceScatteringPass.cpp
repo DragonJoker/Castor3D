@@ -437,8 +437,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, std::move( name ) );
+			auto result = device->createRenderPass( std::move( name )
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -450,9 +450,9 @@ namespace castor3d
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( view );
-			auto result = renderPass.createFrameBuffer( { size.getWidth(), size.getHeight() }
+			auto result = renderPass.createFrameBuffer( std::move( name )
+				, { size.getWidth(), size.getHeight() }
 				, std::move( attaches ) );
-			setDebugObjectName( device, *result, std::move( name ) );
 			return result;
 		}
 	}
@@ -749,10 +749,8 @@ namespace castor3d
 		m_blurWeightsUbo->upload();
 
 		auto & device = getCurrentRenderDevice( engine );
-		m_finished = device->createSemaphore();
-		setDebugObjectName( device, *m_finished, "SSSSS pass" );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-		setDebugObjectName( device, *m_commandBuffer, "SSSSS pass" );
+		m_finished = device->createSemaphore( "SSSSS pass" );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SSSSS pass" );
 		prepare();
 	}
 

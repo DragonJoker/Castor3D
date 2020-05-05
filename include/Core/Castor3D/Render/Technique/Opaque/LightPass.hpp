@@ -29,7 +29,8 @@ namespace castor3d
 	protected:
 		struct RenderPass
 		{
-			RenderPass( ashes::RenderPassPtr && renderPass
+			RenderPass( std::string const & name
+				, ashes::RenderPassPtr renderPass
 				, ashes::ImageView const & depthView
 				, ashes::ImageView const & diffuseView
 				, ashes::ImageView const & specularView );

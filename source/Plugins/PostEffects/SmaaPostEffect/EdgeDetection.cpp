@@ -152,8 +152,8 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "EdgeDetection" );
+		m_renderPass = device->createRenderPass( "EdgeDetection"
+			, std::move( createInfo ) );
 
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()

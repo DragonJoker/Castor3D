@@ -124,8 +124,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "DirectionalLightPassRenderPass" );
+			auto result = device->createRenderPass( "DirectionalLightPass"
+				, std::move( createInfo ) );
 			return result;
 		}
 	}
@@ -183,7 +183,8 @@ namespace castor3d
 
 		blstate.attachments.push_back( blstate.attachments.back() );
 		auto & device = getCurrentRenderDevice( m_engine );
-		return device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		return device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				m_program,

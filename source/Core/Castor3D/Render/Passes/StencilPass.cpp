@@ -31,7 +31,8 @@ namespace castor3d
 
 	namespace
 	{
-		ashes::RenderPassPtr doCreateRenderPass( Engine const & engine
+		ashes::RenderPassPtr doCreateRenderPass( castor::String const & name
+			, Engine const & engine
 			, ashes::ImageView const & depthView )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -69,8 +70,8 @@ namespace castor3d
 			};
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "StencilPassRenderPass" );
+			auto result = device->createRenderPass( name
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -130,15 +131,13 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ),
 		};
-		m_descriptorLayout = device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
-		setDebugObjectName( device, *m_descriptorLayout, name );
-		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
-		setDebugObjectName( device, *m_pipelineLayout, name );
+		m_descriptorLayout = device->createDescriptorSetLayout( name
+			, std::move( setLayoutBindings ) );
+		m_pipelineLayout = device->createPipelineLayout( name 
+			, *m_descriptorLayout );
 
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		setDebugObjectName( device, *m_descriptorPool, name );
-		m_descriptorSet = m_descriptorPool->createDescriptorSet();
-		setDebugObjectName( device, *m_descriptorSet, name );
+		m_descriptorPool = m_descriptorLayout->createPool( name, 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( name );
 		m_descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 			, *m_matrixUbo.getUbo().buffer
 			, m_matrixUbo.getUbo().offset );
@@ -147,13 +146,12 @@ namespace castor3d
 			, m_modelMatrixUbo.getUbo().offset );
 		m_descriptorSet->update();
 
-		m_renderPass = doCreateRenderPass( m_engine, m_depthView );
+		m_renderPass = doCreateRenderPass( name, m_engine, m_depthView );
 		ashes::ImageViewCRefArray attaches
 		{
 			m_depthView
 		};
-		m_frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
-		setDebugObjectName( device, *m_frameBuffer, name );
+		m_frameBuffer = m_renderPass->createFrameBuffer( name, size, std::move( attaches ) );
 
 		m_program =
 		{
@@ -178,7 +176,8 @@ namespace castor3d
 		dsstate->front.depthFailOp = VK_STENCIL_OP_DECREMENT_AND_WRAP;
 		dsstate->front.passOp = VK_STENCIL_OP_KEEP;
 		
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipeline = device->createPipeline( name
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				m_program,
@@ -199,12 +198,9 @@ namespace castor3d
 				*m_pipelineLayout,
 				*m_renderPass,
 			} );
-		setDebugObjectName( device, *m_pipeline, name );
 
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		setDebugObjectName( device, *m_commandBuffer, name );
-		m_finished = device->createSemaphore();
-		setDebugObjectName( device, *m_finished, name );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( name, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		m_finished = device->createSemaphore( name );
 
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock(
