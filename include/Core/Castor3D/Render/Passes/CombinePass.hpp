@@ -30,8 +30,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
-			, ShaderModule vertexShader
-			, ShaderModule pixelShader
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView
 			, TextureLayoutSPtr resultTexture
@@ -42,8 +42,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
-			, ShaderModule vertexShader
-			, ShaderModule pixelShader
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView
 			, TextureLayoutSPtr resultTexture );
@@ -51,16 +51,16 @@ namespace castor3d
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
-			, ShaderModule vertexShader
-			, ShaderModule pixelShader
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView );
 		C3D_API CombinePass( Engine & engine
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
-			, ShaderModule vertexShader
-			, ShaderModule pixelShader
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView
 			, TextureLayoutSPtr resultTexture
@@ -69,8 +69,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, VkFormat outputFormat
 			, VkExtent2D const & outputSize
-			, ShaderModule vertexShader
-			, ShaderModule pixelShader
+			, ShaderModule const & vertexShader
+			, ShaderModule const & pixelShader
 			, ashes::ImageView const & lhsView
 			, ashes::ImageView const & rhsView
 			, RenderQuad::TexcoordConfig const & config );
@@ -109,14 +109,14 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
+		ShaderModule const & m_vertexShader;
+		ShaderModule const & m_pixelShader;
 		castor::String m_prefix;
 		TextureLayoutSPtr m_image;
 		ashes::ImageView m_view;
 		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
-		ShaderModule m_vertexShader;
-		ShaderModule m_pixelShader;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		CombineQuad m_quad;

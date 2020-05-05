@@ -73,6 +73,8 @@ namespace castor3d
 		, m_ssaoConfig{ ssaoConfig }
 		, m_ssgiConfig{ ssgiConfig }
 		, m_matrixUbo{ engine }
+		, m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "SSGI - Combine", getVertexProgram( *engine.getRenderSystem() ) }
+		, m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSGI - Combine", getPixelProgram( *engine.getRenderSystem() ) }
 		, m_rawSsgi{ std::make_shared< RawSsgiPass >( engine
 			, m_size
 			, m_ssgiConfig
@@ -89,8 +91,8 @@ namespace castor3d
 			, cuT( "SSGI" )
 			, scene->getPixelFormat()
 			, VkExtent2D{ scene->getWidth(), scene->getHeight() }
-			, ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT, "SSGI - Combine", getVertexProgram( *engine.getRenderSystem() ) }
-			, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSGI - Combine", getPixelProgram( *engine.getRenderSystem() ) }
+			, m_combineVtx
+			, m_combinePxl
 			, m_rawSsgi->getSceneView().getTexture()->getDefaultView()
 			, m_rawSsgi->getResult().getTexture()->getDefaultView()
 			, scene ) }

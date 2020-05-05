@@ -290,10 +290,11 @@ namespace castor3d
 				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
 			}
 
-			doInitialiseFlip();
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
 				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			m_overlayRenderer->initialise();
+
+			doInitialiseCombine();
 
 			m_signalReady = device->createSemaphore( getName() + "Ready" );
 		}
@@ -691,11 +692,10 @@ namespace castor3d
 		commandBuffer->end();
 	}
 
-	void RenderTarget::doInitialiseFlip()
+	void RenderTarget::doInitialiseCombine()
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -726,10 +726,8 @@ namespace castor3d
 
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			m_combineVtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -754,7 +752,7 @@ namespace castor3d
 					//overlayColor.rgb() *= overlayColor.a();
 					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
 				} );
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
 		m_combineQuad = std::make_unique< CombinePass >( *getEngine()

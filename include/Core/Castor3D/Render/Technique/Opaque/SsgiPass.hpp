@@ -86,6 +86,8 @@ namespace castor3d
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< RawSsgiPass > m_rawSsgi;
 		std::shared_ptr< GaussianBlur > m_gaussianBlur;
+		ShaderModule m_combineVtx;
+		ShaderModule m_combinePxl;
 		std::shared_ptr< CombinePass > m_combine;
 	};
 }

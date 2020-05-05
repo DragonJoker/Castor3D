@@ -387,7 +387,7 @@ namespace castor3d
 			, ashes::CommandBufferPtr & commandBuffer
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
-		C3D_API void doInitialiseFlip();
+		C3D_API void doInitialiseCombine();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
@@ -431,7 +431,9 @@ namespace castor3d
 		ashes::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
-		std::unique_ptr< CombinePass > m_combineQuad;
+		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
+		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
+		std::vector< std::unique_ptr< CombinePass > > m_combineQuads;
 		SsaoConfig m_ssaoConfig;
 		SsgiConfig m_ssgiConfig;
 		castor::Point2f m_jitter;
