@@ -131,9 +131,9 @@ namespace castor3d
 			return m_defaultView->needsYInversion();
 		}
 
-		inline TextureView const & getView( size_t index = 0u )const
+		inline ashes::ImageView const & getView( size_t index = 0u )const
 		{
-			return getImage( index );
+			return getImage( index ).getView();
 		}
 
 		inline TextureView const & getImage( size_t index = 0u )const

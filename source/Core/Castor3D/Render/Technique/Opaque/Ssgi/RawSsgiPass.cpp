@@ -391,7 +391,7 @@ namespace castor3d
 		this->createPipeline( size
 			, {}
 			, shaderStages
-			, linearisedDepth.getView().getView()
+			, linearisedDepth.getView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );

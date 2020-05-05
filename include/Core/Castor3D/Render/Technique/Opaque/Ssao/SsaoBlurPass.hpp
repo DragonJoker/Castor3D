@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -21,6 +23,7 @@ namespace castor3d
 {
 	class SsaoBlurPass
 		: public RenderQuad
+		, public castor::Named
 	{
 	public:
 		/**
@@ -44,11 +47,13 @@ namespace castor3d
 		 *\param[in]	normals			Le tampon de normales.
 		 */
 		SsaoBlurPass( Engine & engine
+			, castor::String const & prefix
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
+			, TextureUnit const & bentInput
 			, ashes::ImageView const & normals );
 		/**
 		 *\~english
@@ -90,6 +95,11 @@ namespace castor3d
 		{
 			return m_result;
 		}
+
+		inline TextureUnit const & getBentResult()const
+		{
+			return m_bentResult;
+		}
 		/**@}*/
 
 	private:
@@ -111,6 +121,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		TextureUnit const & m_input;
+		TextureUnit const & m_bentInput;
 		ashes::ImageView const & m_normals;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
@@ -118,6 +129,7 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		VkExtent2D m_size;
 		TextureUnit m_result;
+		TextureUnit m_bentResult;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;

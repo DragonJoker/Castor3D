@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RawSsaoPass_H___
-#define ___C3D_RawSsaoPass_H___
+#ifndef ___C3D_SsaoRawAOPass_H___
+#define ___C3D_SsaoRawAOPass_H___
 
 #include "SsaoModule.hpp"
 
@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RawSsaoPass
+	class SsaoRawAOPass
 	{
 	public:
 		/**
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
 		 *\param[in]	normals					Le tampon de normales.
 		 */
-		RawSsaoPass( Engine & engine
+		SsaoRawAOPass( Engine & engine
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
@@ -50,7 +50,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~RawSsaoPass();
+		~SsaoRawAOPass();
 		/**
 		 *\~english
 		 *\brief		Renders the SSAO pass.
@@ -77,6 +77,11 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
+		}
+
+		inline TextureUnit const & getBentResult()const
+		{
+			return m_bentNormals;
 		}
 		/**@}*/
 
@@ -114,6 +119,7 @@ namespace castor3d
 		ashes::ImageView const & m_normals;
 		VkExtent2D m_size;
 		TextureUnit m_result;
+		TextureUnit m_bentNormals;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		std::array< RenderQuad, 2u > m_quads;
