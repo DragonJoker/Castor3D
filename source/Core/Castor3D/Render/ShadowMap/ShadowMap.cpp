@@ -42,8 +42,20 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
-			intermediates.push_back( { m_name + "Variance", m_shadowMap.getTexture()->getDefaultView() } );
-			intermediates.push_back( { m_name + "Linear", m_shadowMap.getTexture()->getDefaultView() } );
+			uint32_t index = 0u;
+
+			for ( auto & view : *m_shadowMap.getTexture() )
+			{
+				intermediates.push_back( { m_name + "Variance" + string::toString( index++ ), view->getView() } );
+			}
+
+			index = 0u;
+
+			for ( auto & view : *m_linearMap.getTexture() )
+			{
+				intermediates.push_back( { m_name + "Linear" + string::toString( index++ ), view->getView() } );
+			}
+
 			auto & device = getCurrentRenderDevice( *this );
 
 			{

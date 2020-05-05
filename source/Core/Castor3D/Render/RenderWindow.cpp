@@ -672,7 +672,8 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = getDevice()->createRenderPass( std::move( createInfo ) );
+		m_renderPass = getDevice()->createRenderPass( "RenderPass"
+			, std::move( createInfo ) );
 	}
 
 	void RenderWindow::doCreateFrameBuffers()
@@ -682,7 +683,8 @@ namespace castor3d
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
 			auto attaches = doPrepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( m_swapChain->getDimensions()
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
+				, m_swapChain->getDimensions()
 				, std::move( attaches ) );
 		}
 	}
@@ -690,10 +692,11 @@ namespace castor3d
 	void RenderWindow::doCreateCommandBuffers()
 	{
 		m_commandBuffers.resize( m_swapChainImages.size() );
+		uint32_t index = 0u;
 
 		for ( auto & commandBuffer : m_commandBuffers )
 		{
-			commandBuffer = m_commandPool->createCommandBuffer();
+			commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
 		}
 	}
 

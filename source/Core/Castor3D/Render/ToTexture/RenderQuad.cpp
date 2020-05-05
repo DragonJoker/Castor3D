@@ -205,10 +205,13 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_descriptorSetLayout = device->createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device->createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
+		m_descriptorSetLayout = device->createDescriptorSetLayout( "RenderQuad"
+			, std::move( bindings ) );
+		m_pipelineLayout = device->createPipelineLayout( "RenderQuad"
+			, { *m_descriptorSetLayout }, pushRanges );
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( "RenderQuad"
+			, 1u );
+		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( "RenderQuad" );
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, *m_sourceView
@@ -226,7 +229,8 @@ namespace castor3d
 			1u,
 			ashes::VkScissorArray{ scissor },
 		};
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipeline = device->createPipeline( "RenderQuad"
+			, ashes::GraphicsPipelineCreateInfo
 			(
 				0u,
 				program,
@@ -248,7 +252,8 @@ namespace castor3d
 		, uint32_t subpassIndex )
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderQuad"
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
 				, subpassIndex

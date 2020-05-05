@@ -650,7 +650,7 @@ namespace castor3d
 		, bool update )
 	{
 		remFlag( textures, TextureFlag::eAllButColourAndOpacity );
-		auto result = pipeline.descriptorPool->createDescriptorSet();
+		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + string::toString( index ) );
 
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
@@ -777,11 +777,13 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( "OverlayRenderer"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray fbAttaches;
 		fbAttaches.emplace_back( m_target );
-		m_frameBuffer = m_renderPass->createFrameBuffer( { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "OverlayRenderer"
+			, { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 	}
 

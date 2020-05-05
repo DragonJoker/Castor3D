@@ -354,13 +354,16 @@ namespace castor3d
 			return result;
 		}
 
-		ashes::FrameBufferPtr createFbo( ashes::RenderPass const & renderPass
+		ashes::FrameBufferPtr createFbo( std::string const & name
+			, ashes::RenderPass const & renderPass
 			, ashes::ImageView const & view
 			, VkExtent2D const & size )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( view );
-			return renderPass.createFrameBuffer( size, std::move( attaches ) );
+			return renderPass.createFrameBuffer( name
+				, size
+				, std::move( attaches ) );
 		}
 
 		ashes::ImageView createImageView( RenderSystem const & renderSystem
@@ -469,7 +472,7 @@ namespace castor3d
 				, ashes::isDepthFormat( format ) ),
 		}
 		, semaphore{ getCurrentRenderDevice( engine )->createSemaphore( name ) }
-		, fbo{ createFbo( renderPass, output, textureSize ) }
+		, fbo{ createFbo( name, renderPass, output, textureSize ) }
 		, m_engine{ engine }
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
@@ -529,7 +532,7 @@ namespace castor3d
 	ashes::CommandBufferPtr GaussianBlur::BlurPass::doGenerateCommandBuffer( RenderDevice const & device
 		, ashes::RenderPass const & renderPass )
 	{
-		auto result = device.graphicsCommandPool->createCommandBuffer();
+		auto result = device.graphicsCommandPool->createCommandBuffer( "GaussianBlur Blur Pass" );
 		result->begin();
 		result->beginDebugBlock(
 			{

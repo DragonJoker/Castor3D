@@ -155,7 +155,7 @@ namespace castor3d
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_sharingMode );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
-		m_transferFence = device.device->createFence();
+		m_transferFence = device.device->createFence( m_debugName + "Transfer" );
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 

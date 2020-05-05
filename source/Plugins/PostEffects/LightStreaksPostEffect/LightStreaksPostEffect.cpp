@@ -185,11 +185,13 @@ namespace light_streaks
 		image = std::make_shared< castor3d::TextureLayout >( renderSystem
 			, imageCreateInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, std::move( debugName ) );
+			, debugName );
 		image->initialise();
 
 		ashes::ImageViewCRefArray attachments{ image->getDefaultView() };
-		frameBuffer = renderPass.createFrameBuffer( size, std::move( attachments ) );
+		frameBuffer = renderPass.createFrameBuffer( debugName
+			, size
+			, std::move( attachments ) );
 	}
 
 	//*********************************************************************************************
@@ -853,8 +855,8 @@ namespace light_streaks
 		// Combine pass.
 		castor3d::CommandsSemaphore combineCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "LightStreaksCombine" ),
+			device->createSemaphore( "LightStreaksCombine" )
 		};
 		auto & combineCmd = *combineCommands.commandBuffer;
 		combineCmd.begin();

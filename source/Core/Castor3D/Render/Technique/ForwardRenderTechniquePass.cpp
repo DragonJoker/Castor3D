@@ -167,15 +167,17 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 		fbAttaches.emplace_back( depthView );
 		fbAttaches.emplace_back( colourView );
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
+			, { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( getName() );
 	}
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )

@@ -330,10 +330,13 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ),
 		};
-		m_descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout );
+		m_descriptorLayout = device->createDescriptorSetLayout( m_parent.getName()
+			, std::move( bindings ) );
+		m_pipelineLayout = device->createPipelineLayout( m_parent.getName() 
+			, *m_descriptorLayout );
 
-		m_pipeline = device->createPipeline( ashes::ComputePipelineCreateInfo
+		m_pipeline = device->createPipeline( m_parent.getName()
+			, ashes::ComputePipelineCreateInfo
 			{
 				0u,
 				m_program->getStates()[0],
@@ -367,9 +370,9 @@ namespace castor3d
 			descriptorSet.update();
 		};
 
-		m_descriptorPool = m_descriptorLayout->createPool( 2u );
-		m_descriptorSets[0] = m_descriptorPool->createDescriptorSet( 0u );
-		m_descriptorSets[1] = m_descriptorPool->createDescriptorSet( 0u );
+		m_descriptorPool = m_descriptorLayout->createPool( m_parent.getName(), 2u );
+		m_descriptorSets[0] = m_descriptorPool->createDescriptorSet( m_parent.getName(), 0u );
+		m_descriptorSets[1] = m_descriptorPool->createDescriptorSet( m_parent.getName(), 0u );
 		initialiseDescriptor( *m_descriptorSets[0], 0u, 1u );
 		initialiseDescriptor( *m_descriptorSets[1], 1u, 0u );
 		return true;
@@ -378,7 +381,7 @@ namespace castor3d
 	void ComputeParticleSystem::doPrepareCommandBuffers()
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_commandBuffer = device.computeCommandPool->createCommandBuffer();
-		m_fence = device->createFence();
+		m_commandBuffer = device.computeCommandPool->createCommandBuffer( m_parent.getName() );
+		m_fence = device->createFence( m_parent.getName() );
 	}
 }

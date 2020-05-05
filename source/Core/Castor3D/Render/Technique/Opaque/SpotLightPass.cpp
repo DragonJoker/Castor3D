@@ -68,7 +68,6 @@ namespace castor3d
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
-		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: MeshLightPass{ engine
 			, cuT( "Spot" )
@@ -76,7 +75,6 @@ namespace castor3d
 			, diffuseView
 			, specularView
 			, gpInfoUbo
-			, debugUbo
 			, LightType::eSpot
 			, hasShadows }
 		, m_ubo{ makeUniformBuffer< Config >( *m_engine.getRenderSystem()

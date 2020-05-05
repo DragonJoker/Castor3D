@@ -403,7 +403,6 @@ namespace castor3d
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
 			, GpInfoUbo & gpInfoUbo
-			, DebugUbo const & debugUbo
 			, bool hasShadows );
 		/**
 		 *\~english
@@ -601,7 +600,6 @@ namespace castor3d
 		ashes::VertexBufferPtr< float > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		GpInfoUbo & m_gpInfoUbo;
-		DebugUbo const & m_debugUbo;
 		uint32_t m_offset{ 0u };
 		ashes::SemaphorePtr m_signalReady;
 		ashes::FencePtr m_fence;

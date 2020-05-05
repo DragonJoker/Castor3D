@@ -157,7 +157,8 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			return device->createRenderPass( std::move( createInfo ) );
+			return device->createRenderPass( "EquirectangularToCube"
+				, std::move( createInfo ) );
 		}
 	}
 
@@ -168,7 +169,7 @@ namespace castor3d
 		, TextureLayout const & target )
 		: RenderCube{ device, false }
 		, m_device{ device }
-		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer() }
+		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "EquirectangularToCube" ) }
 		, m_view{ equiRectangular.getDefaultView() }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
@@ -179,14 +180,17 @@ namespace castor3d
 		for ( auto & facePipeline : m_frameBuffers )
 		{
 			ashes::ImageViewCRefArray attaches;
-			facePipeline.view = target.getTexture().createView( VK_IMAGE_VIEW_TYPE_2D
+			facePipeline.view = target.getTexture().createView( "EquirectangularToCube" + string::toString( face )
+				, VK_IMAGE_VIEW_TYPE_2D
 				, target.getPixelFormat()
 				, 0u
 				, 1u
 				, face
 				, 1u );
 			attaches.emplace_back( facePipeline.view );
-			facePipeline.frameBuffer = m_renderPass->createFrameBuffer( size, std::move( attaches ) );
+			facePipeline.frameBuffer = m_renderPass->createFrameBuffer( "EquirectangularToCube"
+				, size
+				, std::move( attaches ) );
 			++face;
 		}
 

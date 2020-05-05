@@ -12,7 +12,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsgiPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
-#include "Castor3D/Shader/Ubos/DebugUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 namespace castor3d
@@ -52,7 +51,6 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo & hdrConfigUbo
-			, DebugUbo const & debugUbo
 			, SsaoConfig & ssaoConfig
 			, SsgiConfig & ssgiConfig );
 		/**
@@ -107,7 +105,6 @@ namespace castor3d
 		OpaquePass & m_opaquePass;
 		castor::Size m_size;
 		GpInfoUbo m_gpInfoUbo;
-		DebugUbo const & m_debugUbo;
 		GeometryPassResult m_geometryPassResult;
 		std::unique_ptr< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;

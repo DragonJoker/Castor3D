@@ -21,7 +21,6 @@
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/DebugUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -216,9 +215,6 @@ namespace castor3d
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 		}
 
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( DebugUbo::BindingPoint
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( shader::LightingModel::UboBindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -343,7 +339,6 @@ namespace castor3d
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
-		, DebugUbo const & debugUbo
 		, bool hasShadows )
 		: m_engine{ engine }
 		, m_name{ "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) }
@@ -352,7 +347,6 @@ namespace castor3d
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_debugUbo{ debugUbo }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_signalReady{ getCurrentRenderDevice( engine )->createSemaphore( m_name ) }
 		, m_fence{ getCurrentRenderDevice( engine )->createFence( m_name, VK_FENCE_CREATE_SIGNALED_BIT ) }
@@ -507,8 +501,6 @@ namespace castor3d
 				, modelMatrixUbo->getUbo().offset );
 		}
 
-		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( DebugUbo::BindingPoint )
-			, m_debugUbo.getUbo() );
 		pipeline.uboDescriptorSet->createSizedBinding( uboLayout.getBinding( shader::LightingModel::UboBindingPoint )
 			, *m_baseUbo );
 		pipeline.uboDescriptorSet->update();
@@ -669,7 +661,6 @@ namespace castor3d
 		// Shader inputs
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -835,28 +826,6 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-
-				IF( writer, c3d_debugLightEye )
-				{
-					pxl_diffuse = eye;
-				}
-				ELSEIF( c3d_debugLightVSPosition )
-				{
-					pxl_diffuse = vsPosition;
-				}
-				ELSEIF( c3d_debugLightWSPosition )
-				{
-					pxl_diffuse = wsPosition;
-				}
-				ELSEIF( c3d_debugLightWSNormal )
-				{
-					pxl_diffuse = wsNormal;
-				}
-				ELSEIF( c3d_debugLightTexCoord )
-				{
-					pxl_diffuse = vec3( texCoord, 1.0_f );
-				}
-				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -875,7 +844,6 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -1117,28 +1085,6 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-
-				IF( writer, c3d_debugLightEye )
-				{
-					pxl_diffuse = eye;
-				}
-				ELSEIF( c3d_debugLightVSPosition )
-				{
-					pxl_diffuse = vsPosition;
-				}
-				ELSEIF( c3d_debugLightWSPosition )
-				{
-					pxl_diffuse = wsPosition;
-				}
-				ELSEIF( c3d_debugLightWSNormal )
-				{
-					pxl_diffuse = wsNormal;
-				}
-				ELSEIF( c3d_debugLightTexCoord )
-				{
-					pxl_diffuse = vec3( texCoord, 1.0_f );
-				}
-				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1157,7 +1103,6 @@ namespace castor3d
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		UBO_DEBUG( writer, DebugUbo::BindingPoint, 0u );
 		auto index = getMinBufferIndex();
 		auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), index++, 1u );
 		auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), index++, 1u );
@@ -1333,28 +1278,6 @@ namespace castor3d
 
 				pxl_diffuse = lightDiffuse;
 				pxl_specular = lightSpecular;
-
-				IF( writer, c3d_debugLightEye )
-				{
-					pxl_diffuse = eye;
-				}
-				ELSEIF( c3d_debugLightVSPosition )
-				{
-					pxl_diffuse = vsPosition;
-				}
-				ELSEIF( c3d_debugLightWSPosition )
-				{
-					pxl_diffuse = wsPosition;
-				}
-				ELSEIF( c3d_debugLightWSNormal )
-				{
-					pxl_diffuse = wsNormal;
-				}
-				ELSEIF( c3d_debugLightTexCoord )
-				{
-					pxl_diffuse = vec3( texCoord, 1.0_f );
-				}
-				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

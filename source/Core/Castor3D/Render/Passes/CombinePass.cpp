@@ -186,7 +186,7 @@ namespace castor3d
 		, m_image{ resultTexture }
 		, m_view{ doCreateView( m_image->getTexture() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
+		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( cuT( "CombinePass" ) ) }
 		, m_vertexShader{ vertexShader }
 		, m_pixelShader{ pixelShader }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }

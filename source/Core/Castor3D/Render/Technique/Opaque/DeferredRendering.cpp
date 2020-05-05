@@ -93,7 +93,6 @@ namespace castor3d
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo & hdrConfigUbo
-		, DebugUbo const & debugUbo
 		, SsaoConfig & ssaoConfig
 		, SsgiConfig & ssgiConfig )
 		: m_engine{ engine }
@@ -102,7 +101,6 @@ namespace castor3d
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
 		, m_gpInfoUbo{ m_engine }
-		, m_debugUbo{ debugUbo }
 		, m_geometryPassResult{ m_engine, depthTexture->getTexture(), velocityTexture->getTexture() }
 		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
@@ -114,8 +112,7 @@ namespace castor3d
 			, m_geometryPassResult
 			, depthTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo
-			, m_debugUbo ) }
+			, m_gpInfoUbo ) }
 		, m_ssao{ std::make_unique< SsaoPass >( m_engine
 			, makeExtent2D( m_size )
 			, m_ssaoConfig
@@ -124,7 +121,6 @@ namespace castor3d
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
-			, m_debugUbo
 			, m_size
 			, m_geometryPassResult
 			, m_lightingPass->getDiffuse() ) }
@@ -146,7 +142,6 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_debugUbo
 			, nullptr ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
@@ -158,7 +153,6 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_debugUbo
 			, nullptr ) );
 		//SSAO On
 		//	SSSSS Off
@@ -171,7 +165,6 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_debugUbo
 			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
@@ -183,7 +176,6 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, m_debugUbo
 			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
 		m_opaquePass.initialiseRenderPass( m_geometryPassResult );
 	}

@@ -287,7 +287,7 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "SsgiPass"
+			auto result = device->createRenderPass( "SsgiRawGI"
 				, std::move( createInfo ) );
 			return result;
 		}
@@ -354,7 +354,8 @@ namespace castor3d
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( VkExtent2D{ size.width, size.height }
+			return renderPass.createFrameBuffer( "SsgiRawGI"
+				, VkExtent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		}
 	}
@@ -368,13 +369,13 @@ namespace castor3d
 		, ashes::ImageView const & scene )
 		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
 		, m_sceneView{ scene }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "RawSSGI", getVertexProgram( m_renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "RawSSGI", getPixelProgram( m_renderSystem, size.width, size.height ) }
-		, m_scene{ doCreateTexture( engine, "RawSSGIScene", scene->format, VkExtent2D{ scene.image->getDimensions().width, scene.image->getDimensions().height }, true ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsgiRawGI", getVertexProgram( m_renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsgiRawGI", getPixelProgram( m_renderSystem, size.width, size.height ) }
+		, m_scene{ doCreateTexture( engine, "SsgiRawGIScene", scene->format, VkExtent2D{ scene.image->getDimensions().width, scene.image->getDimensions().height }, true ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), ResultFormat ) }
-		, m_result{ doCreateTexture( engine, "RawSSGIResult", ResultFormat, size, false ) }
+		, m_result{ doCreateTexture( engine, "SsgiRawGIResult", ResultFormat, size, false ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "RawSSGI" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "Raw GI" ) ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( "SsgiRawGI" ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
@@ -459,7 +460,7 @@ namespace castor3d
 		cmd.endDebugBlock();
 		cmd.beginDebugBlock(
 			{
-				"SSGI - RawSSGI",
+				"SSGI - Raw GI",
 				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
 

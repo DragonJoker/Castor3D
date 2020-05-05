@@ -293,7 +293,7 @@ namespace castor3d
 			};
 			auto & renderSystem = *engine.getRenderSystem();
 			auto & device = getCurrentRenderDevice( renderSystem );
-			auto result = device->createRenderPass( "LineariseDepth"
+			auto result = device->createRenderPass( "LineariseDepthPass"
 				, std::move( createInfo ) );
 			return result;
 		}
@@ -304,7 +304,8 @@ namespace castor3d
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( texture.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( VkExtent2D{ size.width, size.height }
+			return renderPass.createFrameBuffer( "LineariseDepthPass"
+				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 		}
 
@@ -501,10 +502,12 @@ namespace castor3d
 	{
 		auto size = m_result.getTexture()->getDimensions();
 		ashes::ImageViewCRefArray attaches;
-		m_linearisedView = m_result.getTexture()->getTexture().createView( VK_IMAGE_VIEW_TYPE_2D
+		m_linearisedView = m_result.getTexture()->getTexture().createView( "LinearisedDepth"
+			, VK_IMAGE_VIEW_TYPE_2D
 			, m_result.getTexture()->getPixelFormat() );
 		attaches.emplace_back( m_linearisedView );
-		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.width, size.height }
+		m_lineariseFrameBuffer = m_renderPass->createFrameBuffer( "LineariseDepthPass"
+			, VkExtent2D{ size.width, size.height }
 			, std::move( attaches ) );
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
@@ -517,11 +520,14 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_lineariseDescriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
-		m_linearisePipelineLayout = device->createPipelineLayout( *m_lineariseDescriptorLayout );
+		m_lineariseDescriptorLayout = device->createDescriptorSetLayout( "LineariseDepthPass"
+			, std::move( bindings ) );
+		m_linearisePipelineLayout = device->createPipelineLayout( "LineariseDepthPass" 
+			, *m_lineariseDescriptorLayout );
 
-		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( 1u );
-		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet();
+		m_lineariseDescriptorPool = m_lineariseDescriptorLayout->createPool( "LineariseDepthPass"
+			, 1u );
+		m_lineariseDescriptor = m_lineariseDescriptorPool->createDescriptorSet( "LineariseDepthPass" );
 		m_lineariseDescriptor->createBinding( m_lineariseDescriptorLayout->getBinding( 0u )
 			, m_srcDepthBuffer
 			, *m_lineariseSampler );
@@ -530,7 +536,8 @@ namespace castor3d
 			, 0u );
 		m_lineariseDescriptor->update();
 
-		m_linearisePipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_linearisePipeline = device->createPipeline( "LineariseDepthPass"
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				m_lineariseProgram,
@@ -567,10 +574,12 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_minifyDescriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
-		m_minifyPipelineLayout = device->createPipelineLayout( *m_minifyDescriptorLayout );
-
-		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( MaxMipLevel );
+		m_minifyDescriptorLayout = device->createDescriptorSetLayout( "MinifyDepthPass"
+			, std::move( bindings ) );
+		m_minifyPipelineLayout = device->createPipelineLayout( "MinifyDepthPass" 
+			, *m_minifyDescriptorLayout );
+		m_minifyDescriptorPool = m_minifyDescriptorLayout->createPool( "MinifyDepthPass"
+			, MaxMipLevel );
 		uint32_t index = 0u;
 		auto * sourceView = &m_linearisedView;
 		ashes::ImageViewCreateInfo viewInfo
@@ -617,10 +626,12 @@ namespace castor3d
 			pipeline.descriptor->update();
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( pipeline.targetView );
-			pipeline.frameBuffer = m_renderPass->createFrameBuffer( VkExtent2D{ size.width, size.height }
+			pipeline.frameBuffer = m_renderPass->createFrameBuffer( "MinifyDepthPass"
+				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
 
-			pipeline.pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			pipeline.pipeline = device->createPipeline( "MinifyDepthPass"
+				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
 					m_minifyProgram,

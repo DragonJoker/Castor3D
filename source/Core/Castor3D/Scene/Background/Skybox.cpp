@@ -459,7 +459,7 @@ namespace castor3d
 		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = { 0u, 0u, 0u };
 
 		auto & device = getCurrentRenderDevice( renderSystem );
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT

@@ -83,7 +83,7 @@ namespace castor3d
 	{
 		cleanup();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()

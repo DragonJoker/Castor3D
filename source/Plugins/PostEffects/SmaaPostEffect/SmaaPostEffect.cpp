@@ -160,7 +160,8 @@ namespace smaa
 			{
 				{ texture.getDefaultView() }
 			};
-			return renderPass.createFrameBuffer( { texture.getWidth(), texture.getHeight() }
+			return renderPass.createFrameBuffer( "SMAA"
+				, { texture.getWidth(), texture.getHeight() }
 				, std::move( attaches ) );
 		}
 	}

@@ -273,7 +273,7 @@ namespace castor3d
 			, [this]()
 			{
 				auto & device = getCurrentRenderDevice( *this );
-				m_transferFence = device->createFence();
+				m_transferFence = device->createFence( "PickingPass" );
 			} ) );
 	}
 
@@ -525,7 +525,7 @@ namespace castor3d
 	bool PickingPass::doInitialise( Size const & size )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
 
 		m_colourTexture = createTexture( device
 			, size

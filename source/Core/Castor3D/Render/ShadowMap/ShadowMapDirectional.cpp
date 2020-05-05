@@ -330,7 +330,7 @@ namespace castor3d
 		doInitialiseDepth();
 		doInitialiseFramebuffers();
 		auto & device = getCurrentRenderDevice( *getEngine() );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name );
 	}
 
 	void ShadowMapDirectional::doCleanup()

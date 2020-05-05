@@ -7,13 +7,13 @@ See LICENSE file in root folder
 #include "TechniqueModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
-#include "Castor3D/Scene/Background/BackgroundModule.hpp"
-
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
@@ -259,7 +259,6 @@ namespace castor3d
 		TextureLayoutSPtr m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
-		DebugUbo m_debugUbo;
 		DebugConfig m_debugConfig;
 #if C3D_UseDepthPrepass
 		std::unique_ptr< DepthPass > m_depthPass;

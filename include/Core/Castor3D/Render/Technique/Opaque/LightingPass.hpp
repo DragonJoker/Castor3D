@@ -47,8 +47,7 @@ namespace castor3d
 			, GeometryPassResult const & gpResult
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
-			, GpInfoUbo & gpInfoUbo
-			, DebugUbo const & debugUbo );
+			, GpInfoUbo & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.

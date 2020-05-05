@@ -109,8 +109,7 @@ namespace castor3d
 		, GeometryPassResult const & gpResult
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
-		, GpInfoUbo & gpInfoUbo
-		, DebugUbo const & debugUbo )
+		, GpInfoUbo & gpInfoUbo )
 		: m_engine{ engine }
 		, m_size{ size }
 		, m_depth{ doCreateDepthTexture( engine, size ) }
@@ -124,40 +123,34 @@ namespace castor3d
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
 			, gpInfoUbo
-			, debugUbo
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
 			, m_depth.getTexture()->getDefaultView()
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
 			, gpInfoUbo
-			, debugUbo
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
 			, m_depth.getTexture()->getDefaultView()
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
 			, gpInfoUbo
-			, debugUbo
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
 			, m_depth.getTexture()->getDefaultView()
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
-			, gpInfoUbo
-			, debugUbo );
+			, gpInfoUbo );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 			, m_depth.getTexture()->getDefaultView()
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
-			, gpInfoUbo
-			, debugUbo );
+			, gpInfoUbo );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 			, m_depth.getTexture()->getDefaultView()
 			, m_diffuse.getTexture()->getDefaultView()
 			, m_specular.getTexture()->getDefaultView()
-			, gpInfoUbo
-			, debugUbo );
+			, gpInfoUbo );
 
 		for ( auto & lightPass : m_lightPass )
 		{

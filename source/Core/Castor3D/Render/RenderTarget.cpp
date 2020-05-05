@@ -174,7 +174,8 @@ namespace castor3d
 
 		ashes::ImageViewCRefArray attaches;
 		attaches.emplace_back( colourTexture.getTexture()->getDefaultView() );
-		frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+		frameBuffer = renderPass.createFrameBuffer( renderTarget.getName()
+			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		return true;
@@ -634,7 +635,7 @@ namespace castor3d
 			, m_renderTechnique->getResult()
 			, *m_renderPass );
 
-		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ToneMapping" );
 		auto const clear{ makeClearValue( 0.0f, 0.0f, 1.0f, 1.0f ) };
 
 		if ( result )

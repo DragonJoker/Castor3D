@@ -314,14 +314,12 @@ namespace castor3d
 			, ashes::ImageView const & depthView
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
-			, GpInfoUbo & gpInfoUbo
-			, DebugUbo const & debugUbo )
+			, GpInfoUbo & gpInfoUbo )
 			: my_pass_type{ engine
 				, depthView
 				, diffuseView
 				, specularView
 				, gpInfoUbo
-				, debugUbo
 				, true }
 		{
 		}

@@ -225,7 +225,6 @@ namespace castor3d
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
 		, GpInfoUbo & gpInfoUbo
-		, DebugUbo const & debugUbo
 		, LightType type
 		, bool hasShadows )
 		: LightPass{ engine
@@ -246,7 +245,6 @@ namespace castor3d
 			, diffuseView
 			, specularView
 			, gpInfoUbo
-			, debugUbo
 			, hasShadows }
 		, m_modelMatrixUbo{ engine }
 		, m_stencilPass{ engine, getName(), depthView, m_matrixUbo, m_modelMatrixUbo }

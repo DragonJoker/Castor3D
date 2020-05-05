@@ -73,7 +73,8 @@ namespace castor3d
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & device = getCurrentRenderDevice( *this );
-		m_stagingTexture = device->createStagingTexture( VK_FORMAT_R32G32B32A32_SFLOAT 
+		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
+			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
 
 		m_texture->getImage( 0u ).initialiseSource();
@@ -87,7 +88,8 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( "ColourBackgroundCopy"
+				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			m_cmdCopy->begin();
 
 			for ( uint32_t i = 0; i < 6u; ++i )
