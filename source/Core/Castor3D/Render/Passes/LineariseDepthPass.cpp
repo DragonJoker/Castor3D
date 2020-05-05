@@ -482,6 +482,14 @@ namespace castor3d
 
 	void LineariseDepthPass::accept( PipelineVisitorBase & visitor )
 	{
+		uint32_t index = 0u;
+
+		for ( auto & image : *getResult().getTexture() )
+		{
+			visitor.visit( "Linearised Depth " + string::toString( index++ )
+				, image->getView() );
+		}
+
 		visitor.visit( m_lineariseVertexShader );
 		visitor.visit( m_linearisePixelShader );
 

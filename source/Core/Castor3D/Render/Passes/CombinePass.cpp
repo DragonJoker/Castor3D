@@ -175,8 +175,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
-		, ShaderModule vertexShader
-		, ShaderModule pixelShader
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
 		, TextureLayoutSPtr resultTexture
@@ -187,8 +187,8 @@ namespace castor3d
 		, m_view{ doCreateView( m_image->getTexture() ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
-		, m_vertexShader{ std::move( vertexShader ) }
-		, m_pixelShader{ std::move( pixelShader ) }
+		, m_vertexShader{ vertexShader }
+		, m_pixelShader{ pixelShader }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
 		, m_quad{ engine, m_prefix, lhsView, config }
@@ -221,8 +221,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
-		, ShaderModule vertexShader
-		, ShaderModule pixelShader
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
 		, TextureLayoutSPtr resultTexture )
@@ -232,8 +232,8 @@ namespace castor3d
 			prefix,
 			outputFormat,
 			outputSize,
-			std::move( vertexShader ),
-			std::move( pixelShader ),
+			vertexShader,
+			pixelShader,
 			lhsView,
 			rhsView,
 			resultTexture,
@@ -246,8 +246,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
-		, ShaderModule vertexShader
-		, ShaderModule pixelShader
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView )
 		: CombinePass
@@ -256,8 +256,8 @@ namespace castor3d
 			prefix,
 			outputFormat,
 			outputSize,
-			std::move( vertexShader ),
-			std::move( pixelShader ),
+			vertexShader,
+			pixelShader,
 			lhsView,
 			rhsView,
 			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),
@@ -270,8 +270,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
-		, ShaderModule vertexShader
-		, ShaderModule pixelShader
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
 		, TextureLayoutSPtr resultTexture
@@ -282,8 +282,8 @@ namespace castor3d
 			prefix,
 			outputFormat,
 			outputSize,
-			std::move( vertexShader ),
-			std::move( pixelShader ),
+			vertexShader,
+			pixelShader,
 			lhsView,
 			rhsView,
 			resultTexture,
@@ -296,8 +296,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, VkFormat outputFormat
 		, VkExtent2D const & outputSize
-		, ShaderModule vertexShader
-		, ShaderModule pixelShader
+		, ShaderModule const & vertexShader
+		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
 		, RenderQuad::TexcoordConfig const & config )
@@ -307,8 +307,8 @@ namespace castor3d
 			prefix,
 			outputFormat,
 			outputSize,
-			std::move( vertexShader ),
-			std::move( pixelShader ),
+			vertexShader,
+			pixelShader,
 			lhsView,
 			rhsView,
 			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),

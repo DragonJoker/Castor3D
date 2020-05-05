@@ -65,7 +65,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( std::vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
@@ -114,24 +114,6 @@ namespace castor3d
 		 */
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait
 			, uint32_t index );
-		/**
-		 *\~english
-		 *\brief		Dumps the shadow map on screen.
-		 *\param[in]	renderPass	The render pass to use.
-		 *\param[in]	frameBuffer	The framebuffer receiving the render.
-		 *\param[in]	size		The dump dimensions.
-		 *\param[in]	index		The shadow map index (to compute its position).
-		 *\~french
-		 *\brief		Dumpe la texture d'ombres sur l'écran.
-		 *\param[in]	renderPass	La passe de rendu à utiliser.
-		 *\param[in]	frameBuffer	Le framebuffer recevant le rendu.
-		 *\param[in]	size		Les dimensions d'affichage.
-		 *\param[in]	index		L'indice de la texture d'ombres (pour calculer sa position).
-		 */
-		C3D_API virtual void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size
-			, uint32_t index ) = 0;
 		/**
 		 *\copydoc		castor3d::RenderPass::updateFlags
 		 */

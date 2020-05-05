@@ -34,7 +34,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMap::initialise()
+	bool ShadowMap::initialise( std::vector< IntermediateView > & intermediates )
 	{
 		bool result = true;
 
@@ -42,6 +42,8 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
+			intermediates.push_back( { m_name + "Variance", m_shadowMap.getTexture()->getDefaultView() } );
+			intermediates.push_back( { m_name + "Linear", m_shadowMap.getTexture()->getDefaultView() } );
 			auto & device = getCurrentRenderDevice( *this );
 
 			{

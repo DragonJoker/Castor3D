@@ -47,12 +47,6 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::debugDisplay
-		 */
-		void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size, uint32_t index )override;
 
 	private:
 		void doInitialiseDepth();

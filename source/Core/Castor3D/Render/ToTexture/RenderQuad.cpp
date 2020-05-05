@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
@@ -31,6 +32,16 @@ using namespace castor;
 
 namespace castor3d
 {
+	namespace
+	{
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass )
+		{
+			return RenderPass::createBlendState( BlendMode::eNoBlend
+				, BlendMode::eNoBlend
+				, uint32_t( pass.getAttachmentCount() ) );
+		}
+	}
+
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, VkFilter samplerFilter
 		, VkImageSubresourceRange const * range
@@ -226,7 +237,7 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				ashes::PipelineColorBlendStateCreateInfo{},
+				doCreateBlendState( renderPass ),
 				ashes::nullopt,
 				*m_pipelineLayout,
 				static_cast< VkRenderPass const & >( renderPass )

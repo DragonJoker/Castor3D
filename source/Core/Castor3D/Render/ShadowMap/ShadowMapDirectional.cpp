@@ -231,26 +231,6 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapDirectional::debugDisplay( ashes::RenderPass const & renderPass
-		, ashes::FrameBuffer const & frameBuffer
-		, castor::Size const & size
-		, uint32_t index )
-	{
-		Size displaySize{ 256u, 256u };
-		Position position{ int32_t( displaySize.getWidth() * ( 0 + index * 2 ) ), int32_t( displaySize.getHeight() * 3u ) };
-		getEngine()->renderDepth( renderPass
-			, frameBuffer
-			, position
-			, displaySize
-			, *m_shadowMap.getTexture() );
-		position.offset( int32_t( displaySize.getWidth() ), 0 );
-		getEngine()->renderDepth( renderPass
-			, frameBuffer
-			, position
-			, displaySize
-			, *m_linearMap.getTexture() );
-	}
-
 	void ShadowMapDirectional::doInitialiseDepthFormat()
 	{
 		auto & device = getCurrentRenderDevice( *this );

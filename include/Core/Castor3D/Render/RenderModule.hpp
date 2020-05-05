@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include <ashespp/Image/ImageView.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -211,6 +213,19 @@ namespace castor3d
 		VkCompareOp alphaFunc{ VK_COMPARE_OP_ALWAYS };
 	};
 	C3D_API bool operator<( PipelineFlags const & lhs, PipelineFlags const & rhs );
+	/**
+	*\~english
+	*\brief
+	*	Holds minimal data for an intermediate view.
+	*\~french
+	*\brief
+	*	Contient les données minimales pour une vue intermédiaire.
+	*/
+	struct IntermediateView
+	{
+		castor::String name;
+		ashes::ImageView view;
+	};
 	/**
 	*\~english
 	*\brief

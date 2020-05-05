@@ -308,8 +308,7 @@ namespace castor3d
 			m_culler.reset();
 
 			m_signalReady.reset();
-
-			m_combineQuad.reset();
+			m_combineQuads.clear();
 
 			m_toneMappingCommandBuffer.reset();
 
@@ -550,6 +549,7 @@ namespace castor3d
 
 		if ( result )
 		{
+			addIntermediateView( "Target Colour", m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			result = m_overlaysFrameBuffer.initialise( *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, m_size );
@@ -557,9 +557,15 @@ namespace castor3d
 
 		if ( result )
 		{
+			addIntermediateView( "Target Overlays", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 			result = m_combinedFrameBuffer.initialise( *m_renderPass
 				, getPixelFormat()
 				, m_size );
+		}
+
+		if ( result )
+		{
+			addIntermediateView( "Target Result", m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView() );
 		}
 
 		return result;
@@ -586,7 +592,14 @@ namespace castor3d
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
 		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
-		return m_velocityTexture.initialise();
+		bool result = m_velocityTexture.initialise();
+
+		if ( result )
+		{
+			addIntermediateView( "Target Velocity", m_velocityTexture.getTexture()->getDefaultView() );
+		}
+
+		return  result;
 	}
 
 	bool RenderTarget::doInitialiseTechnique()
@@ -611,7 +624,7 @@ namespace castor3d
 			}
 		}
 
-		return m_renderTechnique->initialise();
+		return m_renderTechnique->initialise( m_intermediates );
 	}
 
 	bool RenderTarget::doInitialiseToneMapping()
@@ -755,20 +768,25 @@ namespace castor3d
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_combineQuad = std::make_unique< CombinePass >( *getEngine()
-			, "Target"
-			, getPixelFormat()
-			, VkExtent2D
-			{
-				m_combinedFrameBuffer.colourTexture.getTexture()->getWidth(),
-				m_combinedFrameBuffer.colourTexture.getTexture()->getHeight(),
-			}
-			, std::move( vtx )
-			, std::move( pxl )
-			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView()
-			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
-			, m_combinedFrameBuffer.colourTexture.getTexture()
-			, RenderQuad::TexcoordConfig{} );
+		VkExtent2D extent
+		{
+			m_combinedFrameBuffer.colourTexture.getTexture()->getWidth(),
+			m_combinedFrameBuffer.colourTexture.getTexture()->getHeight(),
+		};
+
+		for ( auto & intermediate : m_intermediates )
+		{
+			m_combineQuads.emplace_back( std::make_unique< CombinePass >( *getEngine()
+				, "Target"
+				, getPixelFormat()
+				, extent
+				, m_combineVtx
+				, m_combinePxl
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView()
+				, intermediate.view
+				, m_combinedFrameBuffer.colourTexture.getTexture()
+				, RenderQuad::TexcoordConfig{} ) );
+		}
 	}
 
 	void RenderTarget::doRender( RenderInfo & info
@@ -905,6 +923,8 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		return m_combineQuad->combine( toWait );
+		auto technique = this->getTechnique();
+		auto & debugConfig = technique->getDebugConfig();
+		return m_combineQuads[debugConfig.debugIndex]->combine( toWait );
 	}
 }

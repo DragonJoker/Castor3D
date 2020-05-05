@@ -59,18 +59,33 @@ namespace castor3d
 		visitor.visit( cuT( "Debug" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Deferred" )
-			, cuT( "Normals" )
-			, debugDeferredNormals );
+			, cuT( "WS Normal" )
+			, debugDeferredWSNormal );
 		visitor.visit( cuT( "Debug" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Deferred" )
-			, cuT( "World Pos" )
-			, debugDeferredWorldPos );
+			, cuT( "VS Normal" )
+			, debugDeferredVSNormal );
 		visitor.visit( cuT( "Debug" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Deferred" )
-			, cuT( "View Pos" )
-			, debugDeferredViewPos );
+			, cuT( "CS Normal" )
+			, debugDeferredCSNormal );
+		visitor.visit( cuT( "Debug" )
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "Deferred" )
+			, cuT( "WS Position" )
+			, debugDeferredWSPosition );
+		visitor.visit( cuT( "Debug" )
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "Deferred" )
+			, cuT( "VS Position" )
+			, debugDeferredVSPosition );
+		visitor.visit( cuT( "Debug" )
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "Deferred" )
+			, cuT( "CS Position" )
+			, debugDeferredCSPosition );
 		visitor.visit( cuT( "Debug" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Deferred" )

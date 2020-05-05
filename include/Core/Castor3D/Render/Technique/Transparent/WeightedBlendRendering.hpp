@@ -76,11 +76,11 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
-		 *\brief		Displays debug data on screen.
+		 *\brief		Lists the pass' intermediate views.
 		 *\~french
-		 *\brief		Dessine les données de débogage sur l'écran.
+		 *\brief		Liste les vues intermédiaires de la passe.
 		 */
-		void debugDisplay();
+		void listIntermediates( std::vector< IntermediateView > & intermediates )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

@@ -96,14 +96,6 @@ namespace castor3d
 			, Camera const & camera
 			, ashes::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Displays debug data on screen.
-		 *\~french
-		 *\brief		Dessine les données de débogage sur l'écran.
-		 */
-		void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );

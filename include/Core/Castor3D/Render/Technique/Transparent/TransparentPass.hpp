@@ -49,6 +49,10 @@ namespace castor3d
 		 */
 		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
 		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		void update( RenderInfo & info
@@ -62,10 +66,6 @@ namespace castor3d
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
-		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		*\~english
 		*name

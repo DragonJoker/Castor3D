@@ -13,6 +13,7 @@ namespace castor3d
 {
 	struct DebugConfig
 	{
+		uint32_t debugIndex{ 0u };
 		int32_t debugLightEye{ 0 };
 		int32_t debugLightVSPosition{ 0 };
 		int32_t debugLightWSPosition{ 0 };
@@ -23,9 +24,12 @@ namespace castor3d
 		int32_t debugDeferredOcclusion{ 0 };
 		int32_t debugDeferredSSSTransmittance{ 0 };
 		int32_t debugDeferredIBL{ 0 };
-		int32_t debugDeferredNormals{ 0 };
-		int32_t debugDeferredWorldPos{ 0 };
-		int32_t debugDeferredViewPos{ 0 };
+		int32_t debugDeferredWSNormal{ 0 };
+		int32_t debugDeferredVSNormal{ 0 };
+		int32_t debugDeferredCSNormal{ 0 };
+		int32_t debugDeferredWSPosition{ 0 };
+		int32_t debugDeferredVSPosition{ 0 };
+		int32_t debugDeferredCSPosition{ 0 };
 		int32_t debugDeferredDepth{ 0 };
 		int32_t debugDeferredData1{ 0 };
 		int32_t debugDeferredData2{ 0 };

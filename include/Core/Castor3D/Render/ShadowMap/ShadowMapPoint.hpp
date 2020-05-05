@@ -55,12 +55,6 @@ namespace castor3d
 		 */
 		C3D_API void updateDeviceDependent( uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::debugDisplay
-		 */
-		C3D_API void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size, uint32_t index )override;
-		/**
 		*\~english
 		*name
 		*	Getters.

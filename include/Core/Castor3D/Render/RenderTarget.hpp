@@ -331,6 +331,11 @@ namespace castor3d
 		{
 			return m_name;
 		}
+
+		inline std::vector< IntermediateView > const & getIntermediateViews()const
+		{
+			return m_intermediates;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -400,6 +405,12 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
 
+		inline void addIntermediateView( castor::String name
+			, ashes::ImageView view )
+		{
+			m_intermediates.push_back( { std::move( name ), std::move( view ) } );
+		}
+
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
 		C3D_API static const castor::String DefaultSamplerName;
@@ -443,6 +454,7 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
+		std::vector< IntermediateView > m_intermediates;
 	};
 }
 

@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Ssao/RawSsaoPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoRawAOPass.hpp"
 
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 
@@ -81,12 +81,13 @@ namespace castor3d
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", 2u, 0u, useNormalsBuffer );
-			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ), useNormalsBuffer );
-			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ), useNormalsBuffer );
+			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
+			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
 			auto in = writer.getIn();
 
 			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
+			auto pxl_bentNormal = writer.declOutput< Vec3 >( "pxl_bentNormal", 1u );
 
 #define visibility      pxl_fragColor.r()
 #define bilateralKey    pxl_fragColor.g()
@@ -108,14 +109,6 @@ namespace castor3d
 				, InVec2{ writer, "S" }
 				, InFloat{ writer, "z" }
 				, InVec4{ writer, "projInfo" } );
-
-			// Reconstructs camera-space unit normal from camera-space position
-			auto reconstructCSFaceNormal = writer.implementFunction< Vec3 >( "reconstructCSFaceNormal"
-				, [&]( Vec3 const & vsPosition )
-				{
-					writer.returnStmt( normalize( cross( dFdy( vsPosition ), dFdx( vsPosition ) ) ) );
-				}
-				, InVec3{ writer, "vsPosition" } );
 
 			// Reconstructs camera-space normal from camera-space position
 			auto reconstructNonUnitCSFaceNormal = writer.implementFunction< Vec3 >( "reconstructNonUnitCSFaceNormal"
@@ -286,14 +279,15 @@ namespace castor3d
 			// In this implementation, we factor out (9 / radius).
 
 			// Four versions of the falloff function are implemented below."
-			auto sampleAO = writer.implementFunction< Float >( "sampleAO"
+			auto sampleAO = writer.implementFunction< Vec3 >( "sampleAO"
 				, [&]( IVec2 const & ssCenter
 					, Vec3 const & csCenter
 					, Vec3 const & normal
 					, Float const & ssDiskRadius
 					, Int const & tapIndex
 					, Float const & randomPatternRotationAngle
-					, Float const & invCszBufferScale )
+					, Float const & invCszBufferScale
+					, Float & ao )
 				{
 					// Offset on the unit disk, spun for this pixel
 					auto ssRadius = writer.declLocale< Float >( "ssRadius" );
@@ -309,8 +303,10 @@ namespace castor3d
 							, unitOffset
 							, ssRadius
 							, invCszBufferScale ) );
-
-					writer.returnStmt( aoValueFromPositionsAndNormal( csCenter, normal, occluder ) );
+					auto rayDir = writer.declLocale( "rayDir"
+						, normalize( occluder - csCenter ) );
+					ao = aoValueFromPositionsAndNormal( csCenter, normal, occluder );
+					writer.returnStmt( rayDir );
 				}
 				, InIVec2{ writer, "ssCenter" }
 				, InVec3{ writer, "csCenter" }
@@ -318,7 +314,8 @@ namespace castor3d
 				, InFloat{ writer, "ssDiskRadius" }
 				, InInt{ writer, "tapIndex" }
 				, InFloat{ writer, "randomPatternRotationAngle" }
-				, InFloat{ writer, "invCszBufferScale" } );
+				, InFloat{ writer, "invCszBufferScale" }
+				, OutFloat{ writer, "ao" } );
 
 			auto square = writer.implementFunction< Float >( "square"
 				, [&]( Float const & x )
@@ -364,6 +361,7 @@ namespace castor3d
 							// except at depth discontinuities, where they will be large and lead
 							// to 1-pixel false occlusions because they are not reliable
 							visibility = 1.0_f;
+							pxl_bentNormal = vec3( 0.0_f );
 							writer.returnStmt();
 						}
 						ELSE
@@ -383,6 +381,7 @@ namespace castor3d
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
+						pxl_bentNormal = normalize( ( normal - c3d_readAddSecond ) / c3d_readMultiplyFirst );
 						writer.returnStmt();
 					}
 					FI;
@@ -393,16 +392,27 @@ namespace castor3d
 
 					auto sum = writer.declLocale( "sum"
 						, 0.0_f );
+					auto raySum = writer.declLocale( "raySum"
+						, vec3( 0.0_f ) );
+					auto rayCount = writer.declLocale( "rayCount"
+						, 1_u );
 
 					FOR( writer, Int, i, 0, i < c3d_numSamples, ++i )
 					{
-						sum += sampleAO( ssCenter
-							, wsCenter
-							, normal
-							, ssDiskRadius
-							, i
-							, randomPatternRotationAngle
-							, 1.0_f );
+						auto ao = writer.declLocale( "ao"
+							, 0.0_f );
+						auto ray = writer.declLocale( "ray"
+							, sampleAO( ssCenter
+								, wsCenter
+								, normal
+								, ssDiskRadius
+								, i
+								, randomPatternRotationAngle
+								, 1.0_f
+								, ao ) );
+						raySum += ray * step( ao, 0.0_f );
+						rayCount += writer.cast< UInt >( step( ao, 0.0_f ) );
+						sum += ao;
 					}
 					ROF;
 
@@ -433,6 +443,10 @@ namespace castor3d
 						, clamp( ssDiskRadius - c3d_minRadius
 							, 0.0_f
 							, 1.0_f ) );
+					rayCount = clamp( rayCount, 0_u, 1_u );
+					pxl_bentNormal = mix( normalize( ( normal - c3d_readAddSecond ) / c3d_readMultiplyFirst )
+						, normalize( ( raySum - c3d_readAddSecond ) / c3d_readMultiplyFirst )
+						, vec3( writer.cast< Float >( rayCount ) ) );
 				} );
 				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -474,16 +488,19 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine, VkExtent2D const & size )
+		TextureUnit doCreateTexture( Engine & engine
+			, castor::String const & name
+			, VkFormat format
+			, VkExtent2D const & size )
 		{
 			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, cuT( "SSAORaw_Result" ), VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			
 			ashes::ImageCreateInfo image
 			{
 				0u,
 				VK_IMAGE_TYPE_2D,
-				RawSsaoPass::ResultFormat,
+				format,
 				{ size.width, size.height, 1u },
 				1u,
 				1u,
@@ -495,7 +512,7 @@ namespace castor3d
 			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "SSAORaw_Result" ) );
+				, name );
 			TextureUnit result{ engine };
 			result.setTexture( ssaoResult );
 			result.setSampler( sampler );
@@ -509,7 +526,7 @@ namespace castor3d
 			{
 				{
 					0u,
-					RawSsaoPass::ResultFormat,
+					SsaoRawAOPass::ResultFormat,
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -517,7 +534,18 @@ namespace castor3d
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				}
+				},
+				{
+					0u,
+					VK_FORMAT_R32G32B32A32_SFLOAT,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
 			};
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
@@ -525,7 +553,10 @@ namespace castor3d
 					0u,
 					VK_PIPELINE_BIND_POINT_GRAPHICS,
 					{},
-					{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
+					{
+						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					},
 					{},
 					ashes::nullopt,
 					{},
@@ -559,25 +590,31 @@ namespace castor3d
 				std::move( dependencies ),
 			};
 			auto & device = getCurrentRenderDevice( engine );
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "RawSsaoRenderPass" );
+			auto result = device->createRenderPass( "SsaoRawAO"
+				, std::move( createInfo ) );
 			return result;
 		}
 
-		ashes::FrameBufferPtr doCreateFrameBuffer( ashes::RenderPass const & renderPass
-			, TextureUnit const & texture )
+		ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
+			, ashes::RenderPass const & renderPass
+			, TextureUnit const & texture
+			, TextureUnit const & bentNormals )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( texture.getTexture()->getDefaultView() );
+			attaches.emplace_back( bentNormals.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
-			return renderPass.createFrameBuffer( VkExtent2D{ size.width, size.height }
+			auto & device = getCurrentRenderDevice( engine );
+			auto result = renderPass.createFrameBuffer( "SsaoRawAO"
+				, VkExtent2D{ size.width, size.height }
 				, std::move( attaches ) );
+			return result;
 		}
 	}
 
 	//*********************************************************************************************
 
-	RawSsaoPass::RenderQuad::RenderQuad( Engine & engine
+	SsaoRawAOPass::RenderQuad::RenderQuad( Engine & engine
 		, ashes::RenderPass const & renderPass
 		, VkExtent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
@@ -591,8 +628,8 @@ namespace castor3d
 				? ( *normals )->subresourceRange
 				: depth.getTexture()->getDefaultView()->subresourceRange ),
 		}
-		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "RawSSAO" }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "RawSSAO" }
+		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsaoRawAO" }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsaoRawAO" }
 		, m_depthView{ normals ? &depth.getTexture()->getDefaultView() : nullptr }
 		, m_depthSampler{ normals ? depth.getSampler() : nullptr }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
@@ -623,7 +660,7 @@ namespace castor3d
 			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE } );
 	}
 
-	void RawSsaoPass::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+	void SsaoRawAOPass::RenderQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
@@ -641,7 +678,7 @@ namespace castor3d
 	
 	//*********************************************************************************************
 
-	RawSsaoPass::RawSsaoPass( Engine & engine
+	SsaoRawAOPass::SsaoRawAOPass( Engine & engine
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
@@ -653,14 +690,21 @@ namespace castor3d
 		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
 		, m_normals{ normals }
 		, m_size{ size }
-		, m_result{ doCreateTexture( m_engine, m_size ) }
+		, m_result{ doCreateTexture( m_engine
+			, "SsaoRawAOResult"
+			, SsaoRawAOPass::ResultFormat
+			, m_size ) }
+		, m_bentNormals{ doCreateTexture( m_engine
+			, "BentNormals"
+			, VK_FORMAT_R32G32B32A32_SFLOAT
+			, m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_engine ) }
-		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
+		, m_frameBuffer{ doCreateFrameBuffer( m_engine, *m_renderPass, m_result, m_bentNormals ) }
 		, m_quads
 		{
 			RenderQuad
 			{
-				engine,
+				m_engine,
 				*m_renderPass,
 				m_size,
 				m_ssaoConfigUbo,
@@ -669,7 +713,7 @@ namespace castor3d
 			},
 			RenderQuad
 			{
-				engine,
+				m_engine,
 				*m_renderPass,
 				m_size,
 				m_ssaoConfigUbo,
@@ -679,17 +723,12 @@ namespace castor3d
 		}
 		, m_commandBuffers
 		{
-			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer(),
-			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer(),
+			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( "SsaoRawAO" ),
+			getCurrentRenderDevice( m_engine ).graphicsCommandPool->createCommandBuffer( "SsaoRawAONormals" ),
 		}
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore() }
+		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( "SsaoRawAO" ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Raw AO" ) ) }
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
-		setDebugObjectName( device, *m_finished, "SsaoRawAO" );
-		setDebugObjectName( device, *m_commandBuffers[0], "SsaoRawAO" );
-		setDebugObjectName( device, *m_commandBuffers[1], "SsaoRawAONormals" );
-
 		for ( auto i = 0u; i < m_commandBuffers.size(); ++i )
 		{
 			auto & cmd = *m_commandBuffers[i];
@@ -698,13 +737,13 @@ namespace castor3d
 			cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			cmd.beginDebugBlock(
 				{
-					"SSAO - Raw SSAO",
+					"SSAO - Raw AO",
 					makeFloatArray( m_engine.getNextRainbowColour() ),
 				} );
 			m_timer->beginPass( cmd );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_frameBuffer
-				, { opaqueWhiteClearColor }
+				, { opaqueWhiteClearColor, opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			quad.registerFrame( cmd );
 			cmd.endRenderPass();
@@ -714,17 +753,18 @@ namespace castor3d
 		}
 	}
 
-	RawSsaoPass::~RawSsaoPass()
+	SsaoRawAOPass::~SsaoRawAOPass()
 	{
 		for ( auto & quad : m_quads )
 		{
 			quad.cleanup();
 		}
 
+		m_bentNormals.cleanup();
 		m_result.cleanup();
 	}
 
-	ashes::Semaphore const & RawSsaoPass::compute( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & SsaoRawAOPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
@@ -743,9 +783,12 @@ namespace castor3d
 		return *result;
 	}
 
-	void RawSsaoPass::accept( SsaoConfig & config
+	void SsaoRawAOPass::accept( SsaoConfig & config
 		, RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView() );
+		visitor.visit( "Bent Normals", getBentResult().getTexture()->getDefaultView() );
+
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u
 			: 0u;

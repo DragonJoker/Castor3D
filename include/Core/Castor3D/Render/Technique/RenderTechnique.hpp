@@ -69,7 +69,7 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( std::vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -121,15 +121,6 @@ namespace castor3d
 		 *\param[in]	file	Le fichier.
 		 */
 		C3D_API bool writeInto( castor::TextFile & file );
-		/**
-		 *\~english
-		 *\brief		Displays debug dumps.
-		 *\param[in]	size	The rendering size.
-		 *\~french
-		 *\brief		Affiche les dumps de debug.
-		 *\param[in]	size	Les dimensions du rendu.
-		 */
-		C3D_API void debugDisplay( castor::Size const & size )const;
 		/**
 		*\~english
 		*\brief
@@ -239,14 +230,13 @@ namespace castor3d
 
 	private:
 		void doCreateShadowMaps();
-		void doInitialiseShadowMaps();
+		void doInitialiseShadowMaps( std::vector< IntermediateView > & intermediates );
 		void doInitialiseBackgroundPass();
 #if C3D_UseDepthPrepass
 		void doInitialiseDepthPass();
 #endif
 		void doInitialiseOpaquePass();
 		void doInitialiseTransparentPass();
-		void doInitialiseDebugPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
@@ -291,8 +281,6 @@ namespace castor3d
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
-		ashes::RenderPassPtr m_debugRenderPass;
-		ashes::FrameBufferPtr m_debugFrameBuffer;
 		ashes::StagingBufferPtr m_stagingBuffer;
 		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;

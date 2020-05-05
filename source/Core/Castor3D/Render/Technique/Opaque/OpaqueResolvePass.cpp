@@ -332,17 +332,29 @@ namespace castor3d
 					{
 						pxl_fragColor = vec4( ambient, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredNormals )
+					ELSEIF( c3d_debugDeferredWSNormal )
 					{
 						pxl_fragColor = vec4( normal, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredWorldPos )
+					ELSEIF( c3d_debugDeferredVSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredCSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGProj * c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredViewPos )
+					ELSEIF( c3d_debugDeferredVSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredVSPosition )
+					{
+						pxl_fragColor = c3d_mtxGProj * vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
 					}
 					ELSEIF( c3d_debugDeferredDepth )
 					{
@@ -641,17 +653,29 @@ namespace castor3d
 					{
 						pxl_fragColor = vec4( ambient, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredNormals )
+					ELSEIF( c3d_debugDeferredWSNormal )
 					{
 						pxl_fragColor = vec4( normal, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredWorldPos )
+					ELSEIF( c3d_debugDeferredVSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredCSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGProj * c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredViewPos )
+					ELSEIF( c3d_debugDeferredVSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredVSPosition )
+					{
+						pxl_fragColor = c3d_mtxGProj * vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
 					}
 					ELSEIF( c3d_debugDeferredDepth )
 					{
@@ -950,17 +974,29 @@ namespace castor3d
 					{
 						pxl_fragColor = vec4( ambient, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredNormals )
+					ELSEIF( c3d_debugDeferredWSNormal )
 					{
 						pxl_fragColor = vec4( normal, 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredWorldPos )
+					ELSEIF( c3d_debugDeferredVSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredCSNormal )
+					{
+						pxl_fragColor = vec4( normalize( ( c3d_mtxGProj * c3d_mtxGView * vec4( normal, 1.0_f ) ).xyz() ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredWSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcWSPosition( vtx_texture, depth, c3d_mtxInvViewProj ), 1.0_f );
 					}
-					ELSEIF( c3d_debugDeferredViewPos )
+					ELSEIF( c3d_debugDeferredVSPosition )
 					{
 						pxl_fragColor = vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
+					}
+					ELSEIF( c3d_debugDeferredVSPosition )
+					{
+						pxl_fragColor = c3d_mtxGProj * vec4( utils.calcVSPosition( vtx_texture, depth, c3d_mtxInvProj ), 1.0_f );
 					}
 					ELSEIF( c3d_debugDeferredDepth )
 					{

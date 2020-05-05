@@ -2,11 +2,13 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/BlurPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/RawSsaoPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoRawAOPass.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -24,7 +26,7 @@ namespace castor3d
 		, m_ssaoConfig{ ssaoConfig }
 		, m_matrixUbo{ engine }
 		, m_ssaoConfigUbo{ std::make_shared< SsaoConfigUbo >( engine ) }
-		, m_rawSsaoPass{ std::make_shared< RawSsaoPass >( engine
+		, m_rawAoPass{ std::make_shared< SsaoRawAOPass >( engine
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
@@ -32,18 +34,22 @@ namespace castor3d
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #if !C3D_DebugRawPass
 		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( engine
+			, cuT( "Horizontal" )
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, Point2i{ 1, 0 }
-			, m_rawSsaoPass->getResult()
+			, m_rawAoPass->getResult()
+			, m_rawAoPass->getBentResult()
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( engine
+			, cuT( "Vertical" )
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
+			, m_horizontalBlur->getBentResult()
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #endif
 	{
@@ -68,7 +74,7 @@ namespace castor3d
 	ashes::Semaphore const & SsaoPass::render( ashes::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
-		result = &m_rawSsaoPass->compute( *result );
+		result = &m_rawAoPass->compute( *result );
 #if !C3D_DebugRawPass
 		result = &m_horizontalBlur->blur( *result );
 		result = &m_verticalBlur->blur( *result );
@@ -78,7 +84,7 @@ namespace castor3d
 
 	void SsaoPass::accept( RenderTechniqueVisitor & visitor )
 	{
-		m_rawSsaoPass->accept( m_ssaoConfig, visitor );
+		m_rawAoPass->accept( m_ssaoConfig, visitor );
 #if !C3D_DebugRawPass
 		m_horizontalBlur->accept( true, m_ssaoConfig, visitor );
 		m_verticalBlur->accept( false, m_ssaoConfig, visitor );
@@ -91,6 +97,15 @@ namespace castor3d
 		return m_rawSsaoPass->getResult();
 #else
 		return m_verticalBlur->getResult();
+#endif
+	}
+
+	TextureUnit const & SsaoPass::getBentNormals()const
+	{
+#if C3D_DebugRawPass
+		return m_rawSsaoPass->getBentResult();
+#else
+		return m_rawAoPass->getBentResult();
 #endif
 	}
 }

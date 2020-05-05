@@ -122,19 +122,10 @@ namespace castor3d
 		return *result;
 	}
 
-	void WeightedBlendRendering::debugDisplay()
+	void WeightedBlendRendering::listIntermediates( std::vector< IntermediateView > & intermediates )const
 	{
-		//auto count = 2;
-		//int width = int( m_size.getWidth() ) / 6;
-		//int height = int( m_size.getHeight() ) / 6;
-		//int left = int( m_size.getWidth() ) - width;
-		//int top = int( m_size.getHeight() ) - height;
-		//auto size = Size( width, height );
-		//auto & context = *m_engine.getRenderSystem()->getCurrentContext();
-		//auto index = 0;
-		//context.renderDepth( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eDepth )]->getTexture() );
-		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eRevealage )]->getTexture() );
-		//context.renderTexture( Position{ left, top - height * index++ }, size, *m_weightedBlendPassResult[size_t( WbTexture::eAccumulation )]->getTexture() );
+		intermediates.push_back( { "Transparent Accumulation", m_accumulationView } );
+		intermediates.push_back( { "Transparent Revealage", m_revealageView } );
 	}
 
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )

@@ -195,21 +195,6 @@ namespace castor3d
 		}
 	}
 
-	void ShadowMapPoint::debugDisplay( ashes::RenderPass const & renderPass
-		, ashes::FrameBuffer const & frameBuffer
-		, castor::Size const & size, uint32_t index )
-	{
-		//Size displaySize{ 128u, 128u };
-		//Position position{ int32_t( displaySize.getWidth() * 4 * index), int32_t( displaySize.getHeight() * 4 ) };
-		//getCurrentRenderDevice( *this )->renderVarianceCube( position
-		//	, displaySize
-		//	, *m_shadowMap.getTexture() );
-		//position = Position{ int32_t( displaySize.getWidth() * 4 * ( index + 2 ) ), int32_t( displaySize.getHeight() * 4 ) };
-		//getCurrentRenderDevice( *this )->renderDepthCube( position
-		//	, displaySize
-		//	, *m_linearMap.getTexture() );
-	}
-
 	ashes::ImageView const & ShadowMapPoint::getLinearView( uint32_t index )const
 	{
 		return m_passesData[index].linearView;

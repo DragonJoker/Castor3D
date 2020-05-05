@@ -273,49 +273,32 @@ namespace castor3d
 		return *result;
 	}
 
-	void DeferredRendering::debugDisplay( ashes::RenderPass const & renderPass
-		, ashes::FrameBuffer const & frameBuffer )const
-	{
-		//auto count = 8 + ( m_ssaoConfig.m_enabled ? 1 : 0 );
-		//int width = int( m_size.getWidth() ) / count;
-		//int height = int( m_size.getHeight() ) / count;
-		//auto size = Size( width, height );
-		//auto & context = *m_engine.getRenderSystem()->getCurrentContext();
-		//auto index = 0;
-		//context.renderDepth( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eDepth )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData1 )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData2 )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData3 )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData4 )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_geometryPassResult[size_t( DsTexture::eData5 )]->getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getDiffuse().getTexture() );
-		//context.renderTexture( Position{ width * index++, 0 }, size, *m_lightingPass->getSpecular().getTexture() );
-
-		//if ( m_ssaoConfig.m_enabled )
-		//{
-		//	context.renderTexture( Position{ width * ( index++ ), 0 }, size, m_reflection->getSsao() );
-		//}
-
-		//m_subsurfaceScattering->debugDisplay( m_size );
-	}
-
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "Opaque Data1", m_geometryPassResult.getViews()[size_t( DsTexture::eData1 )] );
+		visitor.visit( "Opaque Data2", m_geometryPassResult.getViews()[size_t( DsTexture::eData2 )] );
+		visitor.visit( "Opaque Data3", m_geometryPassResult.getViews()[size_t( DsTexture::eData3 )] );
+		visitor.visit( "Opaque Data4", m_geometryPassResult.getViews()[size_t( DsTexture::eData4 )] );
+		visitor.visit( "Opaque Data5", m_geometryPassResult.getViews()[size_t( DsTexture::eData5 )] );
+
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );
 
 		if ( m_ssaoConfig.enabled
-			|| m_ssgiConfig.enabled )
+			|| m_ssgiConfig.enabled
+			|| visitor.forceSubPassesVisit )
 		{
 			m_linearisePass->accept( visitor );
 		}
 
-		if ( m_ssaoConfig.enabled )
+		if ( m_ssaoConfig.enabled
+			|| visitor.forceSubPassesVisit )
 		{
 			m_ssao->accept( visitor );
 		}
 
-		if ( visitor.getScene().needsSubsurfaceScattering() )
+		if ( visitor.getScene().needsSubsurfaceScattering()
+			|| visitor.forceSubPassesVisit )
 		{
 			m_subsurfaceScattering->accept( visitor );
 		}
@@ -323,7 +306,8 @@ namespace castor3d
 		auto index = getIndex( m_ssaoConfig, visitor.getScene() );
 		m_resolve[index]->accept( visitor );
 
-		if ( m_ssgiConfig.enabled )
+		if ( m_ssgiConfig.enabled
+			|| visitor.forceSubPassesVisit )
 		{
 			m_ssgi->accept( visitor );
 		}

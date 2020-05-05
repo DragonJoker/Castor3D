@@ -24,9 +24,30 @@ namespace castor3d
 	{
 		String getFullName( RenderPassTimer & timer )
 		{
-			return timer.getCategory() == timer.getName()
-				? timer.getCategory()
-				: timer.getCategory() + cuT( ": " ) + timer.getName();
+			auto timerName = timer.getName();
+			auto timerCategory = timer.getName();
+
+			if ( timerName.find( cuT( "ShadowMap" ) ) != String::npos )
+			{
+				if ( timerName.find( cuT( "Directional" ) ) != String::npos )
+				{
+					return cuT( "ShadowMap: Directional" );
+				}
+
+				if ( timerName.find( cuT( "Point" ) ) != String::npos )
+				{
+					return cuT( "ShadowMap: Point" );
+				}
+
+				if ( timerName.find( cuT( "Spot" ) ) != String::npos )
+				{
+					return cuT( "ShadowMap: Spot" );
+				}
+			}
+
+			return timerCategory == timerName
+				? timerCategory
+				: timerCategory + cuT( ": " ) + timerName;
 		}
 	}
 

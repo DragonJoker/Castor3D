@@ -29,15 +29,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Raw SSAO pass.
-	*\~french
-	*\brief
-	*	Passe de SSAO.
-	*/
-	class RawSsaoPass;
-	/**
-	*\~english
-	*\brief
 	*	SSAO configuration values.
 	*\~french
 	*\brief
@@ -53,6 +44,15 @@ namespace castor3d
 	*	UBO de configuration du SSAO.
 	*/
 	class SsaoConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Raw SSAO pass.
+	*\~french
+	*\brief
+	*	Passe de SSAO.
+	*/
+	class SsaoRawAOPass;
 
 	//@}
 	//@}

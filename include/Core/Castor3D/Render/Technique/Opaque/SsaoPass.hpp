@@ -71,13 +71,20 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		TextureUnit const & getResult()const;
+		/**
+		 *\~english
+		 *\return		The bent normals.
+		 *\~french
+		 *\return		Les bent normals.
+		 */
+		TextureUnit const & getBentNormals()const;
 
 	private:
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
-		std::shared_ptr< RawSsaoPass > m_rawSsaoPass;
+		std::shared_ptr< SsaoRawAOPass > m_rawAoPass;
 		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
 		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
 	};

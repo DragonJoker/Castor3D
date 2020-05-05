@@ -803,31 +803,17 @@ namespace castor3d
 		return *result;
 	}
 
-	void SubsurfaceScatteringPass::debugDisplay( castor::Size const & size )const
-	{
-		//auto count = 9u;
-		//int width = int( m_size.getWidth() ) / count;
-		//int height = int( m_size.getHeight() ) / count;
-		//int top = int( m_size.getHeight() ) - height;
-		//auto renderSize = Size( width, height );
-		//auto & context = *getEngine()->getRenderSystem()->getCurrentContext();
-		//auto index = 0;
-		//context.renderTexture( Position{ width * index++, top }
-		//	, renderSize
-		//	, *m_blurResults[0].getTexture() );
-		//context.renderTexture( Position{ width * index++, top }
-		//	, renderSize
-		//	, *m_blurResults[1].getTexture() );
-		//context.renderTexture( Position{ width * index++, top }
-		//	, renderSize
-		//	, *m_blurResults[2].getTexture() );
-		//context.renderTexture( Position{ width * index++, top }
-		//	, renderSize
-		//	, *m_result.getTexture() );
-	}
-
 	void SubsurfaceScatteringPass::accept( RenderTechniqueVisitor & visitor )
 	{
+		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
+		{
+			visitor.visit( "SSSSS Blur " + string::toString( i )
+				, m_blurResults[i].getTexture()->getDefaultView() );
+		}
+
+		visitor.visit( "SSSSS Result"
+			, m_result.getTexture()->getDefaultView() );
+
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );
 

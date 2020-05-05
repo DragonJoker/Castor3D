@@ -485,6 +485,9 @@ namespace castor3d
 	void RawSsgiPass::accept( SsgiConfig & config
 		, RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "SSGI Raw GI"
+			, getResult().getTexture()->getDefaultView() );
+
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
 		config.accept( m_pixelShader.name, visitor );

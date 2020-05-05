@@ -101,9 +101,12 @@ namespace castor3d
 		C3D_API static castor::String const DebugDeferredOcclusion;
 		C3D_API static castor::String const DebugDeferredSSSTransmittance;
 		C3D_API static castor::String const DebugDeferredIBL;
-		C3D_API static castor::String const DebugDeferredNormals;
-		C3D_API static castor::String const DebugDeferredWorldPos;
-		C3D_API static castor::String const DebugDeferredViewPos;
+		C3D_API static castor::String const DebugDeferredWSNormal;
+		C3D_API static castor::String const DebugDeferredVSNormal;
+		C3D_API static castor::String const DebugDeferredCSNormal;
+		C3D_API static castor::String const DebugDeferredWSPosition;
+		C3D_API static castor::String const DebugDeferredVSPosition;
+		C3D_API static castor::String const DebugDeferredCSPosition;
 		C3D_API static castor::String const DebugDeferredDepth;
 		C3D_API static castor::String const DebugDeferredData1;
 		C3D_API static castor::String const DebugDeferredData2;
@@ -132,9 +135,12 @@ namespace castor3d
 	auto c3d_debugDeferredOcclusion = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredOcclusion );\
 	auto c3d_debugDeferredSSSTransmittance = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredSSSTransmittance );\
 	auto c3d_debugDeferredIBL = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredIBL );\
-	auto c3d_debugDeferredNormals = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredNormals );\
-	auto c3d_debugDeferredWorldPos = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredWorldPos );\
-	auto c3d_debugDeferredViewPos = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredViewPos );\
+	auto c3d_debugDeferredWSNormal = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredWSNormal );\
+	auto c3d_debugDeferredVSNormal = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredVSNormal );\
+	auto c3d_debugDeferredCSNormal = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredCSNormal );\
+	auto c3d_debugDeferredWSPosition = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredWSPosition );\
+	auto c3d_debugDeferredVSPosition = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredVSPosition );\
+	auto c3d_debugDeferredCSPosition = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredCSPosition );\
 	auto c3d_debugDeferredDepth = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredDepth );\
 	auto c3d_debugDeferredData1 = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredData1 );\
 	auto c3d_debugDeferredData2 = debug.declMember< sdw::Int >( castor3d::DebugUbo::DebugDeferredData2 );\

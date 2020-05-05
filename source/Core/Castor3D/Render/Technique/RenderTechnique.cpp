@@ -19,12 +19,6 @@
 
 using namespace castor;
 
-#define C3D_DisplayDebugDeferredBuffers 0
-#define C3D_DisplayDebugWeightedBlendedBuffers 0
-#define C3D_DisplayDebugIBLBuffers 0
-#define C3D_DisplayDebugShadowMaps 0
-#define C3D_DisplayDebugEnvironmentMaps 0
-
 #define C3D_UseWeightedBlendedRendering 1
 #define C3D_UseDeferredRendering 1
 
@@ -34,6 +28,41 @@ namespace castor3d
 
 	namespace
 	{
+		class IntermediatesLister
+			: public RenderTechniqueVisitor
+		{
+		public:
+			static void submit( RenderTechnique & technique
+				, std::vector< IntermediateView > & intermediates )
+			{
+				PipelineFlags flags{};
+				IntermediatesLister visOpaque{ flags, *technique.getRenderTarget().getScene(), intermediates };
+				technique.accept( visOpaque );
+
+				flags.passFlags |= PassFlag::eAlphaBlending;
+				IntermediatesLister visTransparent{ flags, *technique.getRenderTarget().getScene(), intermediates };
+				technique.accept( visTransparent );
+			}
+
+			void visit( castor::String const & name
+				, ashes::ImageView const & view )override
+			{
+				m_result.push_back( { name, view } );
+			}
+
+		private:
+			IntermediatesLister( PipelineFlags const & flags
+				, Scene const & scene
+				, std::vector< IntermediateView > & result )
+				: RenderTechniqueVisitor{ flags, scene, true }
+				, m_result{ result }
+			{
+			}
+
+		private:
+			std::vector< IntermediateView > & m_result;
+		};
+
 		std::map< double, LightSPtr > doSortLights( LightCache const & cache
 			, LightType type
 			, Camera const & camera )
@@ -168,8 +197,6 @@ namespace castor3d
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_debugFrameBuffer.reset();
-		m_debugRenderPass.reset();
 		m_cbgCommandBuffer.reset();
 		m_bgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
@@ -190,7 +217,7 @@ namespace castor3d
 		m_opaquePass.reset();
 	}
 
-	bool RenderTechnique::initialise()
+	bool RenderTechnique::initialise( std::vector< IntermediateView > & intermediates )
 	{
 		if ( !m_initialised )
 		{
@@ -203,6 +230,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
+			intermediates.push_back( { "Technique Colour", m_colourTexture->getDefaultView() } );
 
 			m_depthBuffer = doCreateTexture( *getEngine()
 				, m_size
@@ -223,14 +251,14 @@ namespace castor3d
 				, m_matrixUbo.getUbo().getAlignedSize() );
 			m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
 
-			doInitialiseShadowMaps();
+			doInitialiseShadowMaps( intermediates );
 			doInitialiseBackgroundPass();
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass();
 #endif
 			doInitialiseOpaquePass();
 			doInitialiseTransparentPass();
-			doInitialiseDebugPass();
+			IntermediatesLister::submit( *this, intermediates );
 
 			m_particleTimer = std::make_shared< RenderPassTimer >( *getEngine(), cuT( "Particles" ), cuT( "Particles" ) );
 			m_initialised = true;
@@ -242,8 +270,6 @@ namespace castor3d
 	void RenderTechnique::cleanup()
 	{
 		m_onBgChanged.disconnect();
-		m_debugFrameBuffer.reset();
-		m_debugRenderPass.reset();
 		m_bgCommandBuffer.reset();
 		m_cbgCommandBuffer.reset();
 		m_bgFrameBuffer.reset();
@@ -376,67 +402,6 @@ namespace castor3d
 		return true;
 	}
 
-	void RenderTechnique::debugDisplay( Size const & size )const
-	{
-#if C3D_UseDeferredRendering && C3D_DisplayDebugDeferredBuffers
-
-		m_deferredRendering->debugDisplay( *m_debugRenderPass
-			, *m_debugFrameBuffer );
-
-#endif
-#if C3D_UseWeightedBlendedRendering && C3D_DisplayDebugWeightedBlendedBuffers
-
-		m_weightedBlendRendering->debugDisplay( *m_debugRenderPass
-			, *m_debugFrameBuffer);
-
-#endif
-#if C3D_DisplayDebugIBLBuffers
-
-		m_frameBuffer.m_frameBuffer->bind();
-		scene.getSkybox().getIbl().debugDisplay( size );
-		m_frameBuffer.m_frameBuffer->unbind();
-
-#endif
-
-#if C3D_DisplayDebugEnvironmentMaps || C3D_DisplayDebugShadowMaps
-
-		uint32_t index = 0u;
-		auto & scene = *m_renderTarget.getScene();
-
-#endif
-
-#if C3D_DisplayDebugEnvironmentMaps
-
-		for ( auto & map : m_renderTarget.getScene()->getEnvironmentMaps() )
-		{
-			map.get().debugDisplay( *m_debugRenderPass
-				, *m_debugFrameBuffer
-				, size
-				, index++ );
-		}
-
-		index = 0u;
-
-#endif
-#if C3D_DisplayDebugShadowMaps
-
-		if ( scene.hasShadows() )
-		{
-			for ( auto & maps : m_activeShadowMaps )
-			{
-				for ( auto & map : maps )
-				{
-					map.get().debugDisplay( *m_debugRenderPass
-						, *m_debugFrameBuffer
-						, size
-						, index++ );
-				}
-			}
-		}
-
-#endif
-	}
-
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
@@ -472,11 +437,11 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
-	void RenderTechnique::doInitialiseShadowMaps()
+	void RenderTechnique::doInitialiseShadowMaps( std::vector< IntermediateView > & intermediates )
 	{
-		m_directionalShadowMap->initialise();
-		m_spotShadowMap->initialise();
-		m_pointShadowMap->initialise();
+		m_directionalShadowMap->initialise( intermediates );
+		m_spotShadowMap->initialise( intermediates );
+		m_pointShadowMap->initialise( intermediates );
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()
@@ -663,55 +628,6 @@ namespace castor3d
 			, false );
 
 #endif
-	}
-
-	void RenderTechnique::doInitialiseDebugPass()
-	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-		auto & device = getCurrentRenderDevice( renderSystem );
-
-		ashes::VkAttachmentDescriptionArray attachments
-		{
-			{
-				0u,
-				m_colourTexture->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_LOAD,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-			},
-		};
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription
-			{
-				0u,
-				VK_PIPELINE_BIND_POINT_GRAPHICS,
-				{},
-				{ { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } },
-				{},
-				ashes::nullopt,
-				{},
-			} );
-		ashes::RenderPassCreateInfo createInfo
-		{
-			0u,
-			std::move( attachments ),
-			std::move( subpasses ),
-			{},
-		};
-		m_debugRenderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_debugRenderPass, "Debug" );
-
-		ashes::ImageViewCRefArray attaches
-		{
-			m_colourTexture->getDefaultView(),
-		};
-		m_debugFrameBuffer = m_debugRenderPass->createFrameBuffer( { m_colourTexture->getDimensions().width, m_colourTexture->getDimensions().height }
-			, std::move( attaches ) );
-		setDebugObjectName( device, *m_debugFrameBuffer, "Debug" );
 	}
 
 	void RenderTechnique::doCleanupShadowMaps()

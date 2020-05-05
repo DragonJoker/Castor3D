@@ -98,6 +98,13 @@ namespace castor3d
 		void accept( RenderTechniqueVisitor & visitor );
 		/**
 		 *\~english
+		 *\brief		Lists the pass' intermediate views.
+		 *\~french
+		 *\brief		Liste les vues intermédiaires de la passe.
+		 */
+		void listIntermediates( std::vector< IntermediateView > & intermediates )const;
+		/**
+		 *\~english
 		 *\return		The light pass diffuse result.
 		 *\~french
 		 *\return		Le résultat diffus de la passe d'éclairage.

@@ -16,7 +16,8 @@ namespace castor3d
 	class PipelineVisitorBase
 	{
 	protected:
-		inline PipelineVisitorBase()
+		inline PipelineVisitorBase( bool forceSubPassesVisit )
+			: forceSubPassesVisit{ forceSubPassesVisit }
 		{
 		}
 
@@ -35,6 +36,18 @@ namespace castor3d
 		/**@{*/
 		virtual void visit( ShaderModule const & shader ) = 0;
 		virtual void visit( DebugConfig const & ubo ) = 0;
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Intermediate images.
+		*\~french
+		*name
+		*	Images intermédiaires.
+		**/
+		/**@{*/
+		virtual void visit( castor::String const & name
+			, ashes::ImageView const & view ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -248,13 +261,17 @@ namespace castor3d
 			, castor::String const & uniform
 			, castor::ChangeTracked< castor::RangedValue< uint32_t > > & value ) = 0;
 		/**@}*/
+
+	public:
+		bool const forceSubPassesVisit;
 	};
 
 	class PipelineVisitor
 		: public PipelineVisitorBase
 	{
 	protected:
-		inline PipelineVisitor()
+		inline PipelineVisitor( bool forceSubPassesVisit )
+			: PipelineVisitorBase{ forceSubPassesVisit }
 		{
 		}
 
@@ -276,6 +293,20 @@ namespace castor3d
 		}
 
 		void visit( DebugConfig const & ubo )override
+		{
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Intermediate images.
+		*\~french
+		*name
+		*	Images intermédiaires.
+		**/
+		/**@{*/
+		void visit( castor::String const & name
+			, ashes::ImageView const & view )override
 		{
 		}
 		/**@}*/

@@ -325,6 +325,11 @@ namespace castor3d
 
 	void LightingPass::accept( RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "Light Diffuse"
+			, m_diffuse.getTexture()->getDefaultView() );
+		visitor.visit( "Light Specular"
+			, m_specular.getTexture()->getDefaultView() );
+
 		m_lightPass[size_t( LightType::eDirectional )]->accept( visitor );
 		m_lightPass[size_t( LightType::ePoint )]->accept( visitor );
 		m_lightPass[size_t( LightType::eSpot )]->accept( visitor );

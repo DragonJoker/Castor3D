@@ -19,9 +19,12 @@ namespace castor3d
 	castor::String const DebugUbo::DebugDeferredOcclusion = cuT( "c3d_debugDeferredOcclusion" );
 	castor::String const DebugUbo::DebugDeferredSSSTransmittance = cuT( "c3d_debugDeferredSSSTransmittance" );
 	castor::String const DebugUbo::DebugDeferredIBL = cuT( "c3d_debugDeferredIBL" );
-	castor::String const DebugUbo::DebugDeferredNormals = cuT( "c3d_debugDeferredNormals" );
-	castor::String const DebugUbo::DebugDeferredWorldPos = cuT( "c3d_debugDeferredWorldPos" );
-	castor::String const DebugUbo::DebugDeferredViewPos = cuT( "c3d_debugDeferredViewPos" );
+	castor::String const DebugUbo::DebugDeferredWSNormal = cuT( "c3d_debugDeferredWSNormal" );
+	castor::String const DebugUbo::DebugDeferredVSNormal = cuT( "c3d_debugDeferredVSNormal" );
+	castor::String const DebugUbo::DebugDeferredCSNormal = cuT( "c3d_debugDeferredCSNormal" );
+	castor::String const DebugUbo::DebugDeferredWSPosition = cuT( "c3d_debugDeferredWSPosition" );
+	castor::String const DebugUbo::DebugDeferredVSPosition = cuT( "c3d_debugDeferredVSPosition" );
+	castor::String const DebugUbo::DebugDeferredCSPosition = cuT( "c3d_debugDeferredCSPosition" );
 	castor::String const DebugUbo::DebugDeferredDepth = cuT( "c3d_debugDeferredDepth" );
 	castor::String const DebugUbo::DebugDeferredData1 = cuT( "c3d_debugDeferredData1" );
 	castor::String const DebugUbo::DebugDeferredData2 = cuT( "c3d_debugDeferredData2" );

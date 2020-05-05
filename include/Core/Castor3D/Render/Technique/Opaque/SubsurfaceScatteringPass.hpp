@@ -73,15 +73,6 @@ namespace castor3d
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait )const;
 		/**
-		 *\~english
-		 *\brief		Dumps the results on the screen.
-		 *\param[in]	size	The dump dimensions.
-		 *\~french
-		 *\brief		Dumpe les résultats sur l'écran.
-		 *\param[in]	size	Les dimensions d'affichage.
-		 */
-		C3D_API void debugDisplay( castor::Size const & size )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
