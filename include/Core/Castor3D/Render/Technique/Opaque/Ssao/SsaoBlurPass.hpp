@@ -51,6 +51,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
+			, GpInfoUbo const & gpInfoUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
 			, TextureUnit const & bentInput
@@ -120,6 +121,7 @@ namespace castor3d
 
 		Engine & m_engine;
 		SsaoConfigUbo & m_ssaoConfigUbo;
+		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_input;
 		TextureUnit const & m_bentInput;
 		ashes::ImageView const & m_normals;

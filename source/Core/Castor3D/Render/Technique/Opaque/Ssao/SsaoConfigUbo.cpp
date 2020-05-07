@@ -13,32 +13,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		castor::Matrix4x4f getProjectUnitMatrix( RenderDevice const & device
-			, Viewport const & viewport )
-		{
-			// Uses double precision because the division operations may otherwise 
-			// significantly hurt prevision.
-			double const screenWidth( viewport.getWidth() );
-			double const screenHeight( viewport.getHeight() );
-
-			double y = double( -viewport.getNear() ) * ( viewport.getFovY() / 2 ).tan();
-			double x = y * ( screenWidth / screenHeight );
-
-			float n = -viewport.getNear();
-			float f = -viewport.getFar();
-
-			// Scale the pixel offset relative to the (non-square!) pixels in the unit frustum
-			auto r = float( x );
-			auto l = float( -x );
-			auto t = float( y );
-			auto b = float( -y );
-
-			return convert( device->frustum( l, r, b, t, n, f ) );
-		}
-	}
-
 	String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
 	String const SsaoConfigUbo::NumSamples = cuT( "c3d_numSamples" );
 	String const SsaoConfigUbo::NumSpiralTurns = cuT( "c3d_numSpiralTurns" );
@@ -138,7 +112,7 @@ namespace castor3d
 		float farZ = std::max( viewport.getFar(), -projScale * radius / MIN_AO_SS_RADIUS );
 		// Hack because setting farZ lower results in banding artefacts on some scenes, should tune later.
 		farZ = std::min( farZ, -1000.0f );
-		auto const proj = getProjectUnitMatrix( device, viewport );
+		auto const & proj = camera.getProjection();
 
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.numSamples = config.numSamples;

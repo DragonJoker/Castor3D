@@ -13,10 +13,11 @@
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -71,16 +72,17 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-			auto index = getMinBufferIndex();
 
 			//////////////////////////////////////////////////
 
-			UBO_SSAO_CONFIG( writer, 0u, 0u );
+			uint32_t index = 0u;
+			UBO_SSAO_CONFIG( writer, index++, 0u );
+			UBO_GPINFO( writer, index++, 0u );
 			// Negative, "linear" values in world-space units
-			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", 1u, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapDepth", index++, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
-			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", 2u, 0u, useNormalsBuffer );
+			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", index++, 0u, useNormalsBuffer );
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
@@ -333,7 +335,7 @@ namespace castor3d
 
 					// World space point being shaded
 					// SDO: World, or Camera space ? (getPosition returns Camera space)
-					auto wsCenter = writer.declLocale( "vsPosition"
+					auto wsCenter = writer.declLocale( "wsCenter"
 						, getPosition( ssCenter ) );
 
 					bilateralKey = csZToKey( wsCenter.z() );
@@ -343,8 +345,7 @@ namespace castor3d
 					if ( useNormalsBuffer )
 					{
 						normal = texelFetch( c3d_mapNormal, ivec2( in.fragCoord.xy() ), 0_i ).xyz();
-						//normal = ( c3d_viewMatrix * vec4( normal, 1.0_f ) ).xyz();
-						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst, c3d_readAddSecond ) );
+						normal = -normalize( ( c3d_mtxInvView * vec4( normal, 1.0 ) ).xyz() );
 					}
 					else
 					{
@@ -618,6 +619,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, VkExtent2D const & size
 		, SsaoConfigUbo & ssaoConfigUbo
+		, GpInfoUbo const & gpInfoUbo
 		, TextureUnit const & depth
 		, ashes::ImageView const * normals )
 		: castor3d::RenderQuad
@@ -633,18 +635,22 @@ namespace castor3d
 		, m_depthView{ normals ? &depth.getTexture()->getDefaultView() : nullptr }
 		, m_depthSampler{ normals ? depth.getSampler() : nullptr }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
+		, m_gpInfoUbo{ gpInfoUbo }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			makeDescriptorSetLayoutBinding( 1u
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		ashes::ImageView const * view = &depth.getTexture()->getDefaultView();
 
 		if ( normals )
 		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( 1u
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( 2u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			view = normals;
@@ -667,10 +673,14 @@ namespace castor3d
 			, m_ssaoConfigUbo.getUbo()
 			, 0u
 			, 1u );
+		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
+			, m_gpInfoUbo.getUbo()
+			, 0u
+			, 1u );
 
 		if ( m_depthView )
 		{
-			descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
+			descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
 				, *m_depthView
 				, m_depthSampler->getSampler() );
 		}
@@ -682,11 +692,13 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
+		, GpInfoUbo const & gpInfoUbo
 		, TextureUnit const & linearisedDepthBuffer
 		, ashes::ImageView const & normals )
 		: m_engine{ engine }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_linearisedDepthBuffer{ linearisedDepthBuffer }
 		, m_normals{ normals }
 		, m_size{ size }
@@ -708,6 +720,7 @@ namespace castor3d
 				*m_renderPass,
 				m_size,
 				m_ssaoConfigUbo,
+				m_gpInfoUbo,
 				m_linearisedDepthBuffer,
 				nullptr,
 			},
@@ -717,6 +730,7 @@ namespace castor3d
 				*m_renderPass,
 				m_size,
 				m_ssaoConfigUbo,
+				m_gpInfoUbo,
 				m_linearisedDepthBuffer,
 				&m_normals,
 			},

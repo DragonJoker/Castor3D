@@ -15,6 +15,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -32,10 +33,11 @@ namespace castor3d
 	namespace
 	{
 		static uint32_t constexpr SsaoCfgUboIdx = 0u;
-		static uint32_t constexpr BlurCfgUboIdx = 1u;
-		static uint32_t constexpr NmlImgIdx = 2u;
-		static uint32_t constexpr InpImgIdx = 3u;
-		static uint32_t constexpr BntImgIdx = 4u;
+		static uint32_t constexpr GpInfoUboIdx = 1u;
+		static uint32_t constexpr BlurCfgUboIdx = 2u;
+		static uint32_t constexpr NmlImgIdx = 3u;
+		static uint32_t constexpr InpImgIdx = 4u;
+		static uint32_t constexpr BntImgIdx = 5u;
 
 		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
@@ -63,8 +65,9 @@ namespace castor3d
 			FragmentWriter writer;
 
 			UBO_SSAO_CONFIG( writer, SsaoCfgUboIdx, 0u );
-			/** (1, 0) or (0, 1)*/
+			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			Ubo configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
+			/** (1, 0) or (0, 1)*/
 			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );
 			auto c3d_dummy = configuration.declMember< IVec2 >( "c3d_dummy" );
 			auto c3d_gaussian = configuration.declMember< Vec4 >( "c3d_gaussian", 2u );
@@ -270,7 +273,7 @@ namespace castor3d
 					if ( useNormalsBuffer )
 					{
 						normal = texelFetch( c3d_mapNormal, ssCenter, 0_i ).xyz();
-						normal = normalize( sdw::fma( normal, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
+						normal = -normalize( ( c3d_mtxInvView * vec4( normal, 1.0 ) ).xyz() );
 					}
 
 					IF( writer, key == 1.0_f )
@@ -514,6 +517,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
+		, GpInfoUbo const & gpInfoUbo
 		, Point2i const & axis
 		, TextureUnit const & input
 		, TextureUnit const & bentInput
@@ -522,6 +526,7 @@ namespace castor3d
 		, Named{ prefix + cuT( "SsaoBlur" ) }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_input{ input }
 		, m_bentInput{ bentInput }
 		, m_normals{ normals }
@@ -549,6 +554,9 @@ namespace castor3d
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
 			makeDescriptorSetLayoutBinding( SsaoCfgUboIdx
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ),
+			makeDescriptorSetLayoutBinding( GpInfoUboIdx
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 			makeDescriptorSetLayoutBinding( BlurCfgUboIdx
@@ -691,6 +699,10 @@ namespace castor3d
 	{
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( SsaoCfgUboIdx )
 			, m_ssaoConfigUbo.getUbo().getBuffer()
+			, 0u
+			, 1u );
+		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( GpInfoUboIdx )
+			, m_gpInfoUbo.getUbo().getBuffer()
 			, 0u
 			, 1u );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( BlurCfgUboIdx )

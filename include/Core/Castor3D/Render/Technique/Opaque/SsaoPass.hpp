@@ -38,7 +38,8 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig & ssaoConfig
 			, TextureUnit const & linearisedDepth
-			, GeometryPassResult const & gpResult );
+			, GeometryPassResult const & gpResult
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -42,6 +42,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
+			, GpInfoUbo const & gpInfoUbo
 			, TextureUnit const & linearisedDepthBuffer
 			, ashes::ImageView const & normals );
 		/**
@@ -96,6 +97,7 @@ namespace castor3d
 				, ashes::RenderPass const & renderPass
 				, VkExtent2D const & size
 				, SsaoConfigUbo & ssaoConfigUbo
+				, GpInfoUbo const & gpInfoUbo
 				, TextureUnit const & depth
 				, ashes::ImageView const * normals );
 
@@ -107,6 +109,7 @@ namespace castor3d
 				, ashes::DescriptorSet & descriptorSet )override;
 
 			SsaoConfigUbo & m_ssaoConfigUbo;
+			GpInfoUbo const & m_gpInfoUbo;
 			ashes::ImageView const * m_depthView;
 			SamplerSPtr m_depthSampler;
 		};
@@ -115,6 +118,7 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
+		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_linearisedDepthBuffer;
 		ashes::ImageView const & m_normals;
 		VkExtent2D m_size;

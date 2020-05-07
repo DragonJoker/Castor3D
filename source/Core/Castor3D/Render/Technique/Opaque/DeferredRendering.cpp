@@ -117,7 +117,8 @@ namespace castor3d
 			, makeExtent2D( m_size )
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
-			, m_geometryPassResult ) }
+			, m_geometryPassResult
+			, m_gpInfoUbo ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()

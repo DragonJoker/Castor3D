@@ -21,7 +21,8 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig & ssaoConfig
 		, TextureUnit const & linearisedDepth
-		, GeometryPassResult const & gpResult )
+		, GeometryPassResult const & gpResult
+		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_matrixUbo{ engine }
@@ -30,6 +31,7 @@ namespace castor3d
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
+			, gpInfoUbo
 			, linearisedDepth
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #if !C3D_DebugRawPass
@@ -38,6 +40,7 @@ namespace castor3d
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
+			, gpInfoUbo
 			, Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
@@ -47,6 +50,7 @@ namespace castor3d
 			, size
 			, m_ssaoConfig
 			, *m_ssaoConfigUbo
+			, gpInfoUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
