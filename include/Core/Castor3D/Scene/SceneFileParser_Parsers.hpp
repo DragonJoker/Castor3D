@@ -328,6 +328,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSsaoHighQuality )
 	CU_DeclareAttributeParser( parserSsaoUseNormalsBuffer )
 	CU_DeclareAttributeParser( parserSsaoRadius )
+	CU_DeclareAttributeParser( parserSsaoMinRadius )
 	CU_DeclareAttributeParser( parserSsaoBias )
 	CU_DeclareAttributeParser( parserSsaoIntensity )
 	CU_DeclareAttributeParser( parserSsaoNumSamples )

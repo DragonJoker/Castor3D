@@ -5470,6 +5470,30 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSsaoMinRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.minRadius = value;
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSsaoBias )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
