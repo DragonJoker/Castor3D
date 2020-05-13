@@ -41,8 +41,6 @@ namespace castor3d
 		C3D_API GaussianBlur( Engine & engine
 			, castor::String const & prefix
 			, ashes::ImageView const & texture
-			, VkExtent2D const & textureSize
-			, VkFormat format
 			, uint32_t kernelSize );
 		/**
 		 *\~english

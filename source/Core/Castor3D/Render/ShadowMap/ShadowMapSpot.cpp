@@ -271,8 +271,6 @@ namespace castor3d
 					std::make_unique< GaussianBlur >( *getEngine()
 						, debugName
 						, m_shadowMap.getTexture()->getImage( i ).getView()
-						, size
-						, m_shadowMap.getTexture()->getPixelFormat()
 						, 5u )
 				} );
 		}

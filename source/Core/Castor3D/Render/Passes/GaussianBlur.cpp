@@ -13,6 +13,7 @@
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Source.hpp>
@@ -555,15 +556,13 @@ namespace castor3d
 	GaussianBlur::GaussianBlur( Engine & engine
 		, castor::String const & prefix
 		, ashes::ImageView const & texture
-		, VkExtent2D const & textureSize
-		, VkFormat format
 		, uint32_t kernelSize )
 		: OwnedBy< Engine >{ engine }
 		, m_prefix{ prefix }
 		, m_source{ texture }
-		, m_size{ textureSize }
-		, m_format{ format }
-		, m_intermediate{ createTexture( engine, textureSize, format, texture->subresourceRange, m_prefix + cuT( "GaussianBlur" ) ) }
+		, m_size{ texture.image->getDimensions().width, texture.image->getDimensions().height }
+		, m_format{ texture.image->getFormat() }
+		, m_intermediate{ createTexture( engine, m_size, m_format, texture->subresourceRange, m_prefix + cuT( "GaussianBlur" ) ) }
 		, m_renderPass{ createRenderPass( getCurrentRenderDevice( engine ), m_prefix + cuT( "GaussianBlur" ), m_format, m_source->subresourceRange.levelCount ) }
 		, m_blurUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
 			, 1u
@@ -577,8 +576,8 @@ namespace castor3d
 			texture,
 			m_intermediate.getTexture()->getDefaultView(),
 			*m_blurUbo,
-			format,
-			textureSize,
+			m_format,
+			m_size,
 			*m_renderPass,
 			true,
 		}
@@ -589,8 +588,8 @@ namespace castor3d
 			m_intermediate.getTexture()->getDefaultView(),
 			texture,
 			*m_blurUbo,
-			format,
-			textureSize,
+			m_format,
+			m_size,
 			*m_renderPass,
 			false,
 		}
@@ -604,8 +603,8 @@ namespace castor3d
 		std::memcpy( data.blurCoeffs.data()->ptr()
 			, m_kernel.data()
 			, sizeof( float ) * std::min( size_t( MaxCoefficients ), m_kernel.size() ) );
-		data.textureSize[0] = float( textureSize.width );
-		data.textureSize[1] = float( textureSize.height );
+		data.textureSize[0] = float( m_size.width );
+		data.textureSize[1] = float( m_size.height );
 		m_blurUbo->upload();
 	}
 

@@ -319,8 +319,6 @@ namespace castor3d
 			frameBuffer.blur = std::make_unique< GaussianBlur >( *getEngine()
 				, debugName
 				, frameBuffer.varianceView
-				, size
-				, variance.getFormat()
 				, 5u );
 		}
 	}
