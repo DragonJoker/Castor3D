@@ -74,6 +74,13 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		C3D_API TextureUnit const & getResult()const;
+		/**
+		 *\~english
+		 *\return		The bent normals.
+		 *\~french
+		 *\return		Les bent normals.
+		 */
+		C3D_API TextureUnit const & getBentNormals()const;
 
 		inline SsaoConfig const & getConfig()const
 		{

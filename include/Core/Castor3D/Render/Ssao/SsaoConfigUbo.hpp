@@ -77,6 +77,10 @@ namespace castor3d
 			// pixels
 			float minRadius;
 			int32_t variation;
+			// The bending normals ray steps count.
+			int32_t bendStepCount;
+			// The bending normals ray step size.
+			float bendStepSize;
 		};
 
 	public:
@@ -171,6 +175,8 @@ namespace castor3d
 		C3D_API static castor::String const MaxMipLevel;
 		C3D_API static castor::String const MinRadius;
 		C3D_API static castor::String const Variation;
+		C3D_API static castor::String const BendStepCount;
+		C3D_API static castor::String const BendStepSize;
 
 	private:
 		Engine & m_engine;
@@ -202,6 +208,8 @@ namespace castor3d
 	auto c3d_maxMipLevel = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::MaxMipLevel );\
 	auto c3d_minRadius = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::MinRadius );\
 	auto c3d_variation = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::Variation );\
+	auto c3d_bendStepCount = ssaoConfig.declMember< sdw::Int >( castor3d::SsaoConfigUbo::BendStepCount );\
+	auto c3d_bendStepSize = ssaoConfig.declMember< sdw::Float >( castor3d::SsaoConfigUbo::BendStepSize );\
 	ssaoConfig.end()
 
 #endif

@@ -88,6 +88,8 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT = _( "Bend Step Count" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE = _( "Bend Step Size" );
 #if C3D_DebugQuads
 		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 #endif
@@ -127,5 +129,7 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, &ssaoConfig.blurHighQuality );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, &ssaoConfig.blurStepSize );
 		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, &ssaoConfig.blurRadius );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_COUNT, &ssaoConfig.bendStepCount );
+		addPropertyT( grid, PROPERTY_RENDER_TARGET_SSAO_BEND_STEP_SIZE, &ssaoConfig.bendStepSize );
 	}
 }

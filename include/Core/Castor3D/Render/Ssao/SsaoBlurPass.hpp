@@ -22,7 +22,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class /*.hpp*/ SsaoBlurPass
+	class SsaoBlurPass
 		: public RenderQuad
 	{
 	public:
@@ -55,6 +55,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
+			, TextureUnit const & bentInput
 			, ashes::ImageView const & normals );
 		/**
 		 *\~english
@@ -96,6 +97,11 @@ namespace castor3d
 		{
 			return m_result;
 		}
+
+		inline TextureUnit const & getBentResult()const
+		{
+			return m_bentResult;
+		}
 		/**@}*/
 
 	public:
@@ -113,6 +119,7 @@ namespace castor3d
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_input;
+		TextureUnit const & m_bentInput;
 		ashes::ImageView const & m_normals;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
@@ -120,6 +127,7 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		VkExtent2D m_size;
 		TextureUnit m_result;
+		TextureUnit m_bentResult;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;

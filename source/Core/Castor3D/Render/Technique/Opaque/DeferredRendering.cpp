@@ -108,6 +108,12 @@ namespace castor3d
 			, cuT( "Deferred" )
 			, m_size
 			, depthTexture.getTexture()->getDefaultView().getSampledView() ) }
+		, m_ssao{ std::make_unique< SsaoPass >( m_engine
+			, m_size
+			, m_ssaoConfig
+			, m_linearisePass->getResult()
+			, m_opaquePassResult
+			, m_gpInfoUbo ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_device
 			, m_size
@@ -118,12 +124,6 @@ namespace castor3d
 			, smSpotResult
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
-			, m_gpInfoUbo ) }
-		, m_ssao{ std::make_unique< SsaoPass >( m_engine
-			, m_size
-			, m_ssaoConfig
-			, m_linearisePass->getResult()
-			, m_opaquePassResult
 			, m_gpInfoUbo ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_device
@@ -200,10 +200,6 @@ namespace castor3d
 	{
 		ashes::Semaphore const * result = &toWait;
 		result = &m_opaquePass.render( device, *result );
-		result = &m_lightingPass->render( scene
-			, camera
-			, m_opaquePassResult
-			, *result );
 
 		if ( m_ssaoConfig.enabled )
 		{
@@ -214,6 +210,11 @@ namespace castor3d
 		{
 			result = &m_ssao->render( *result );
 		}
+
+		result = &m_lightingPass->render( scene
+			, camera
+			, m_opaquePassResult
+			, *result );
 
 		if ( scene.needsSubsurfaceScattering() )
 		{
@@ -243,7 +244,6 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		m_opaquePass.accept( visitor );
-		m_lightingPass->accept( visitor );
 
 		if ( m_ssaoConfig.enabled
 			|| visitor.config.forceSubPassesVisit )
@@ -256,6 +256,8 @@ namespace castor3d
 		{
 			m_ssao.raw()->accept( visitor );
 		}
+
+		m_lightingPass->accept( visitor );
 
 		if ( visitor.getScene().needsSubsurfaceScattering()
 			|| visitor.config.forceSubPassesVisit )

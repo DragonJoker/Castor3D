@@ -126,8 +126,8 @@ namespace castor3d
 		castor::Size m_size;
 		OpaquePassResult m_opaquePassResult;
 		castor::DelayedInitialiserT< LineariseDepthPass > m_linearisePass;
-		std::unique_ptr< LightingPass > m_lightingPass;
 		castor::DelayedInitialiserT< SsaoPass > m_ssao;
+		std::unique_ptr< LightingPass > m_lightingPass;
 		castor::DelayedInitialiserT< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		castor::DelayedInitialiserT< OpaqueResolvePass > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;

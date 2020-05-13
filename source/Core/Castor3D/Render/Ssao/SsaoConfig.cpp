@@ -33,11 +33,17 @@ namespace castor3d
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig high quality" );
 			}
 
-			//if ( result )
-			//{
-			//	result = file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( object.useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
-			//}
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tuse_normals_buffer " ) + ( object.useNormalsBuffer ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig use normals buffer" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( object.blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
+			}
 
 			if ( result )
 			{
@@ -69,12 +75,6 @@ namespace castor3d
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig edge sharpness" );
 			}
 
-			//if ( result )
-			//{
-			//	result = file.writeText( m_tabs + cuT( "\tblur_high_quality " ) + ( object.m_blurHighQuality ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
-			//	castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur high quality" );
-			//}
-
 			if ( result )
 			{
 				result = file.writeText( m_tabs + cuT( "\tblur_step_size " ) + string::toString( object.blurStepSize.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
@@ -85,6 +85,18 @@ namespace castor3d
 			{
 				result = file.writeText( m_tabs + cuT( "\tblur_radius " ) + string::toString( object.blurRadius.value().value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
 				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig blur radius" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tbend_step_count " ) + string::toString( object.bendStepCount.value(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig bend steps count" );
+			}
+
+			if ( result )
+			{
+				result = file.writeText( m_tabs + cuT( "\tbend_step_size " ) + string::toString( object.bendStepSize, std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
+				castor::TextWriter< SsaoConfig >::checkError( result, "SsaoConfig bend step size" );
 			}
 
 			file.writeText( m_tabs + cuT( "}\n" ) );
@@ -131,5 +143,15 @@ namespace castor3d
 			, cuT( "SSAO" )
 			, cuT( "Blur Radius" )
 			, blurRadius );
+		visitor.visit( name
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "SSAO" )
+			, cuT( "Bend Step Count" )
+			, bendStepCount );
+		visitor.visit( name
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, cuT( "SSAO" )
+			, cuT( "Bend Step Size" )
+			, bendStepSize );
 	}
 }

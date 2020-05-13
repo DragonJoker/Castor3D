@@ -5829,6 +5829,54 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserSsaoBendStepCount )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				uint32_t value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.bendStepCount = value;
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsaoBendStepSize )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.bendStepSize = value;
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSsaoEnd )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
