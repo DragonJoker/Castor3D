@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoBlurPass.hpp"
+#include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
@@ -6,11 +6,12 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
@@ -37,7 +38,6 @@ namespace castor3d
 		static uint32_t constexpr BlurCfgUboIdx = 2u;
 		static uint32_t constexpr NmlImgIdx = 3u;
 		static uint32_t constexpr InpImgIdx = 4u;
-		static uint32_t constexpr BntImgIdx = 5u;
 
 		ShaderPtr doGetVertexProgram( Engine & engine )
 		{
@@ -74,7 +74,6 @@ namespace castor3d
 			configuration.end();
 			auto c3d_mapNormal = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapNormal", NmlImgIdx, 0u, useNormalsBuffer );
 			auto c3d_mapInput = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapInput", InpImgIdx, 0u );
-			auto c3d_mapBentInput = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapBentInput", BntImgIdx, 0u );
 
 			/** Same size as result buffer, do not offset by guard band when reading from it */
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
@@ -84,9 +83,11 @@ namespace castor3d
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
-			auto pxl_bentNormal = writer.declOutput< Vec3 >( "pxl_bentNormal", 1u );
-#define  result         pxl_fragColor.r()
-#define  keyPassThrough pxl_fragColor.g()
+
+#define result pxl_fragColor.r()
+#define keyPassThrough pxl_fragColor.g()
+#define readNormal( normal ) ( transpose( c3d_mtxInvView ) * vec4( normal, 1.0 ) ).xyz()
+#define writeNormal( normal ) ( transpose( c3d_mtxGView ) * vec4( -normal, 1.0 ) ).xyz()
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
@@ -132,13 +133,10 @@ namespace castor3d
 			auto getTapInformation = writer.implementFunction< Vec3 >( "getTapInformation"
 				, [&]( IVec2 const & tapLoc
 					, Float tapKey
-					, Float value
-					, Vec3 bent )
+					, Float value )
 				{
 					auto temp = writer.declLocale( "temp"
 						, texelFetch( c3d_mapInput, tapLoc, 0_i ).rgb() );
-					bent = texelFetch( c3d_mapBentInput, tapLoc, 0_i ).xyz();
-					bent = normalize( sdw::fma( bent, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 					tapKey = unpackKey( temp.g() );
 					value = temp.r();
 
@@ -156,8 +154,7 @@ namespace castor3d
 				}
 				, InIVec2{ writer, "tapLoc" }
 				, OutFloat{ writer, "tapKey" }
-				, OutFloat{ writer, "value" }
-				, OutVec3{ writer, "bent" } );
+				, OutFloat{ writer, "value" } );
 
 			auto square = writer.implementFunction< Float >( "square"
 				, [&]( Float const & x )
@@ -260,9 +257,6 @@ namespace castor3d
 						, texelFetch( c3d_mapInput, ssCenter, 0_i ) );
 					auto sum = writer.declLocale( "sum"
 						, temp.r() );
-					auto raySum = writer.declLocale( "raySum"
-						, texelFetch( c3d_mapBentInput, ssCenter, 0_i ).xyz() );
-					raySum = normalize( sdw::fma( raySum, c3d_readMultiplyFirst.xyz(), c3d_readAddSecond.xyz() ) );
 
 					keyPassThrough = temp.g();
 					auto key = writer.declLocale( "key"
@@ -272,15 +266,13 @@ namespace castor3d
 
 					if ( useNormalsBuffer )
 					{
-						normal = texelFetch( c3d_mapNormal, ssCenter, 0_i ).xyz();
-						normal = -normalize( ( c3d_mtxInvView * vec4( normal, 1.0 ) ).xyz() );
+						normal = normalize( readNormal( texelFetch( c3d_mapNormal, ssCenter, 0_i ) ) );
 					}
 
 					IF( writer, key == 1.0_f )
 					{
 						// Sky pixel (if you aren't using depth keying, disable this test)
 						result = sum;
-						pxl_bentNormal = normalize( ( raySum - c3d_readAddSecond ) / c3d_readMultiplyFirst );
 						writer.returnStmt();
 					}
 					FI;
@@ -292,7 +284,6 @@ namespace castor3d
 					auto totalWeight = writer.declLocale( "totalWeight"
 						, BASE );
 					sum *= totalWeight;
-					raySum *= totalWeight;
 
 					auto position = writer.declLocale( "position"
 						, positionFromKey( key, ssCenter, c3d_projInfo ) );
@@ -314,9 +305,8 @@ namespace castor3d
 
 							auto tapKey = writer.declLocale< Float >( "tapKey" );
 							auto value = writer.declLocale< Float >( "value" );
-							auto bent = writer.declLocale< Vec3 >( "bent" );
 							auto tapNormal = writer.declLocale( "tapNormal"
-								, getTapInformation( tapLoc, tapKey, value, bent ) );
+								, getTapInformation( tapLoc, tapKey, value ) );
 
 							auto bilateralWeight = writer.declLocale( "bilateralWeight"
 								, calculateBilateralWeight( key
@@ -328,7 +318,6 @@ namespace castor3d
 
 							weight *= bilateralWeight;
 							sum += value * weight;
-							raySum += bent * weight;
 							totalWeight += weight;
 						}
 						FI;
@@ -338,7 +327,6 @@ namespace castor3d
 					auto const epsilon = writer.declLocale( "epsilon"
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
-					pxl_bentNormal = normalize( ( raySum - c3d_readAddSecond ) / c3d_readMultiplyFirst );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 
@@ -432,17 +420,6 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				},
-				{
-					0u,
-					VK_FORMAT_R32G32B32A32_SFLOAT,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
 			};
 			ashes::SubpassDescriptionArray subpasses;
 			subpasses.emplace_back( ashes::SubpassDescription
@@ -452,7 +429,6 @@ namespace castor3d
 					{},
 					{
 						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					ashes::nullopt,
@@ -496,12 +472,10 @@ namespace castor3d
 		ashes::FrameBufferPtr doCreateFrameBuffer( Engine & engine
 			, String const & name
 			, ashes::RenderPass const & renderPass
-			, TextureUnit const & texture
-			, TextureUnit const & bent )
+			, TextureUnit const & texture )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( texture.getTexture()->getDefaultView() );
-			attaches.emplace_back( bent.getTexture()->getDefaultView() );
 			auto size = texture.getTexture()->getDimensions();
 			auto result = renderPass.createFrameBuffer( name
 				, VkExtent2D{ size.width, size.height }
@@ -520,7 +494,6 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, Point2i const & axis
 		, TextureUnit const & input
-		, TextureUnit const & bentInput
 		, ashes::ImageView const & normals )
 		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST }
 		, Named{ prefix + cuT( "SsaoBlur" ) }
@@ -528,7 +501,6 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_input{ input }
-		, m_bentInput{ bentInput }
 		, m_normals{ normals }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
@@ -536,9 +508,8 @@ namespace castor3d
 		, m_program{ doGetProgram( m_engine, m_config, m_vertexShader, m_pixelShader ) }
 		, m_size{ size }
 		, m_result{ doCreateTexture( m_engine, getName() + cuT( "Result" ), SsaoBlurPass::ResultFormat, m_size ) }
-		, m_bentResult{ doCreateTexture( m_engine, getName() + cuT( "BentNormals" ), m_bentInput.getTexture()->getPixelFormat(), m_size ) }
 		, m_renderPass{ doCreateRenderPass( m_engine, getName() ) }
-		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result, m_bentResult ) }
+		, m_fbo{ doCreateFrameBuffer( m_engine, getName(), *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "SSAO" ), cuT( "Blur" ) ) }
 		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( getName() ) }
 		, m_configurationUbo{ makeUniformBuffer< Configuration >( *m_engine.getRenderSystem()
@@ -565,14 +536,11 @@ namespace castor3d
 			makeDescriptorSetLayoutBinding( NmlImgIdx
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
-			makeDescriptorSetLayoutBinding( InpImgIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		createPipeline( m_size
 			, Position{}
 			, m_program
-			, m_bentInput.getTexture()->getDefaultView()
+			, m_input.getTexture()->getDefaultView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -676,17 +644,15 @@ namespace castor3d
 
 	void SsaoBlurPass::accept( bool horizontal
 		, SsaoConfig & config
-		, RenderTechniqueVisitor & visitor )
+		, PipelineVisitorBase & visitor )
 	{
 		if ( horizontal )
 		{
 			visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView() );
-			visitor.visit( "HBlurred Bent Normals", getBentResult().getTexture()->getDefaultView() );
 		}
 		else
 		{
 			visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView() );
-			visitor.visit( "Blurred Bent Normals", getBentResult().getTexture()->getDefaultView() );
 		}
 
 		visitor.visit( m_vertexShader );
@@ -712,9 +678,6 @@ namespace castor3d
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( NmlImgIdx )
 			, m_normals
 			, m_sampler->getSampler() );
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( InpImgIdx )
-			, m_input.getTexture()->getDefaultView()
-			, m_input.getSampler()->getSampler() );
 	}
 
 	void SsaoBlurPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const

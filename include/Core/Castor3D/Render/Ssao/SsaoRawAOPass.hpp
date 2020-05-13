@@ -6,9 +6,9 @@ See LICENSE file in root folder
 
 #include "SsaoModule.hpp"
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -65,7 +65,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( SsaoConfig & config
-			, RenderTechniqueVisitor & visitor );
+			, PipelineVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -78,11 +78,6 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
-		}
-
-		inline TextureUnit const & getBentResult()const
-		{
-			return m_bentNormals;
 		}
 		/**@}*/
 
@@ -123,7 +118,6 @@ namespace castor3d
 		ashes::ImageView const & m_normals;
 		VkExtent2D m_size;
 		TextureUnit m_result;
-		TextureUnit m_bentNormals;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		std::array< RenderQuad, 2u > m_quads;

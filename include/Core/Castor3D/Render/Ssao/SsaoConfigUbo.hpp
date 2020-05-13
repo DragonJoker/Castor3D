@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "SsaoModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 namespace castor3d
 {

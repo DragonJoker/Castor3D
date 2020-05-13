@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
@@ -72,13 +72,6 @@ namespace castor3d
 		 *\return		Le résultat de la passe SSAO.
 		 */
 		TextureUnit const & getResult()const;
-		/**
-		 *\~english
-		 *\return		The bent normals.
-		 *\~french
-		 *\return		Les bent normals.
-		 */
-		TextureUnit const & getBentNormals()const;
 
 	private:
 		Engine & m_engine;

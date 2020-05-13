@@ -11,7 +11,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Program.hpp"

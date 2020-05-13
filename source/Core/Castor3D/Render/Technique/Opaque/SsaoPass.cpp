@@ -5,11 +5,11 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
+#include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoBlurPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfigUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoRawAOPass.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -44,7 +44,6 @@ namespace castor3d
 			, gpInfoUbo
 			, Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
-			, m_rawAoPass->getBentResult()
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, cuT( "Vertical" )
@@ -54,7 +53,6 @@ namespace castor3d
 			, gpInfoUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
-			, m_horizontalBlur->getBentResult()
 			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
 #endif
 	{
@@ -102,15 +100,6 @@ namespace castor3d
 		return m_rawAoPass->getResult();
 #else
 		return m_verticalBlur->getResult();
-#endif
-	}
-
-	TextureUnit const & SsaoPass::getBentNormals()const
-	{
-#if C3D_DebugRawPass
-		return m_rawAoPass->getBentResult();
-#else
-		return m_rawAoPass->getBentResult();
 #endif
 	}
 }

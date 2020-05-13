@@ -1,16 +1,17 @@
-#include "Castor3D/Render/Technique/Opaque/Ssgi/RawSsgiPass.hpp"
+#include "Castor3D/Render/Ssgi/SsgiRawGIPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
+#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
@@ -35,8 +36,8 @@ namespace castor3d
 		static constexpr uint32_t HdrMapIdx = 0u;
 		static constexpr uint32_t DepthMapIdx = 1u;
 #if Ssgi_CulledBuffer
-		static constexpr uint32_t HdrCulledMapIdx = 2u;
-		static constexpr uint32_t DepthCulledMapIdx = 3u;
+		static constexpr uint32_t HdrCulledMapIdx = 3u;
+		static constexpr uint32_t DepthCulledMapIdx = 4u;
 #endif
 
 		std::unique_ptr< ast::Shader > getVertexProgram( RenderSystem const & renderSystem )
@@ -165,7 +166,7 @@ namespace castor3d
 						, texture( c3d_hdrMap, coord ).rgb() );
 					// Calculate normal for the pixel
 					auto lightNormal = writer.declLocale( "lightNormal"
-						, normalFromDepth( refDepth, c3d_depthMap, coord ) );
+						, normalFromDepth( refDepth, c3d_depthMap, coord ).xyz() );
 					// Calculate GI
 					auto gi = writer.declLocale( "gi"
 						, ( lightColor
@@ -205,7 +206,7 @@ namespace castor3d
 						, decodeDepth( texture( c3d_depthMap, vtx_texture ) ) );
 					// Calculate normal for current pixel
 					auto pixelNormal = writer.declLocale( "pixelNormal"
-						, normalFromDepth( refDepth, c3d_depthMap, vtx_texture ) );
+						, normalFromDepth( refDepth, c3d_depthMap, vtx_texture ).xyz() );
 					// Prepare to accumulate GI
 					auto gi = writer.declLocale( "gi"
 						, vec3( 0.0_f ) );
@@ -362,16 +363,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	RawSsgiPass::RawSsgiPass( Engine & engine
+	SsgiRawGIPass::SsgiRawGIPass( Engine & engine
 		, VkExtent2D const & size
 		, SsgiConfig const & config
-		, TextureLayout const & linearisedDepth
-		, ashes::ImageView const & scene )
+		, TextureLayout const & hdrResult
+		, TextureLayout const & linearisedDepth )
 		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
-		, m_sceneView{ scene }
+		, m_hdrResult{ hdrResult }
+		, m_linearisedDepth{ linearisedDepth }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsgiRawGI", getVertexProgram( m_renderSystem ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsgiRawGI", getPixelProgram( m_renderSystem, size.width, size.height ) }
-		, m_scene{ doCreateTexture( engine, "SsgiRawGIScene", scene->format, VkExtent2D{ scene.image->getDimensions().width, scene.image->getDimensions().height }, true ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), ResultFormat ) }
 		, m_result{ doCreateTexture( engine, "SsgiRawGIResult", ResultFormat, size, false ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
@@ -401,29 +402,30 @@ namespace castor3d
 		m_finished = std::move( commands.semaphore );
 	}
 
-	ashes::Semaphore const & RawSsgiPass::compute( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & SsgiRawGIPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & renderSystem = m_renderSystem;
 		auto & device = getCurrentRenderDevice( renderSystem );
 		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
 		auto * result = &toWait;
+		auto fence = device->createFence( "SsgiRawGI" );
 
 		device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, *m_finished
-			, nullptr );
+			, fence.get() );
+		fence->wait( ashes::MaxTimeout );
 		result = m_finished.get();
 
 		return *result;
 	}
 
-	CommandsSemaphore RawSsgiPass::getCommands( RenderPassTimer const & timer
+	CommandsSemaphore SsgiRawGIPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto & sceneView = m_scene.getTexture()->getDefaultView();
 		castor3d::CommandsSemaphore commands
 		{
 			device.graphicsCommandPool->createCommandBuffer( "SsgiRawGI" ),
@@ -431,43 +433,13 @@ namespace castor3d
 		};
 		auto & cmd = *commands.commandBuffer;
 
-		cmd.begin();
+		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		timer.beginPass( cmd, index );
-
-		cmd.beginDebugBlock(
-			{
-				"SSGI - Copy HDR texture",
-				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
-			} );
-		// Copy original scene view to internal one
-		// Transition scene view to transfer source
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_sceneView.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		// Transition internal to transfer destination
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, sceneView.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		cmd.copyImage( m_sceneView, sceneView );
-		// Transition scene view back to color attachment
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, m_sceneView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-		// And internal to shader input
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, sceneView.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-		cmd.endDebugBlock();
 		cmd.beginDebugBlock(
 			{
 				"SSGI - Raw GI",
 				castor3d::makeFloatArray( m_renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
-
-		// Put target image in shader input layout.
-		cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_sceneView.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
@@ -475,7 +447,6 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 		registerFrame( cmd );
 		cmd.endRenderPass();
-
 		cmd.endDebugBlock();
 		timer.endPass( cmd, index );
 		cmd.end();
@@ -483,8 +454,8 @@ namespace castor3d
 		return commands;
 	}
 
-	void RawSsgiPass::accept( SsgiConfig & config
-		, RenderTechniqueVisitor & visitor )
+	void SsgiRawGIPass::accept( SsgiConfig & config
+		, PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "SSGI Raw GI"
 			, getResult().getTexture()->getDefaultView() );
@@ -494,15 +465,15 @@ namespace castor3d
 		config.accept( m_pixelShader.name, visitor );
 	}
 
-	void RawSsgiPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
+	void SsgiRawGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( HdrMapIdx )
-			, m_scene.getTexture()->getDefaultView()
+			, m_hdrResult.getDefaultView()
 			, m_sampler->getSampler() );
 	}
 
-	void RawSsgiPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
+	void SsgiRawGIPass::doRegisterFrame( ashes::CommandBuffer & commandBuffer )const
 	{
 	}
 }

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SsaoBlurPass_H___
 
 #include "SsaoModule.hpp"
-#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
@@ -54,7 +54,6 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, castor::Point2i const & axis
 			, TextureUnit const & input
-			, TextureUnit const & bentInput
 			, ashes::ImageView const & normals );
 		/**
 		 *\~english
@@ -82,7 +81,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( bool horizontal
 			, SsaoConfig & config
-			, RenderTechniqueVisitor & visitor );
+			, PipelineVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -95,11 +94,6 @@ namespace castor3d
 		inline TextureUnit const & getResult()const
 		{
 			return m_result;
-		}
-
-		inline TextureUnit const & getBentResult()const
-		{
-			return m_bentResult;
 		}
 		/**@}*/
 
@@ -123,7 +117,6 @@ namespace castor3d
 		SsaoConfigUbo & m_ssaoConfigUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		TextureUnit const & m_input;
-		TextureUnit const & m_bentInput;
 		ashes::ImageView const & m_normals;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
@@ -131,7 +124,6 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		VkExtent2D m_size;
 		TextureUnit m_result;
-		TextureUnit m_bentResult;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_fbo;
 		RenderPassTimerSPtr m_timer;

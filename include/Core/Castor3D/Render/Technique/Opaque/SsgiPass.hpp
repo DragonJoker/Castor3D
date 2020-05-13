@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/Passes/PassesModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
+#include "Castor3D/Render/Ssgi/SsgiModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
@@ -84,7 +85,9 @@ namespace castor3d
 		SsaoConfig & m_ssaoConfig;
 		SsgiConfig & m_ssgiConfig;
 		MatrixUbo m_matrixUbo;
-		std::shared_ptr< RawSsgiPass > m_rawSsgi;
+		TextureUnit m_hdrCopy;
+		castor3d::CommandsSemaphore m_hdrCopyCommands;
+		std::shared_ptr< SsgiRawGIPass > m_rawGiPass;
 		std::shared_ptr< GaussianBlur > m_gaussianBlur;
 		ShaderModule m_combineVtx;
 		ShaderModule m_combinePxl;

@@ -15,8 +15,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
+#include "Castor3D/Render/Ssgi/SsgiModule.hpp"
 
 namespace castor3d
 {

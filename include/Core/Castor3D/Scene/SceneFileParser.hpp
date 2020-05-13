@@ -16,8 +16,8 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>

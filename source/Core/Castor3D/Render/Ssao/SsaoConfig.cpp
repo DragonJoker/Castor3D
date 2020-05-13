@@ -1,6 +1,7 @@
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
 using namespace castor;
 
@@ -93,7 +94,7 @@ namespace castor3d
 	}
 
 	void SsaoConfig::accept( castor::String const & name
-		, RenderTechniqueVisitor & visitor )
+		, PipelineVisitorBase & visitor )
 	{
 		visitor.visit( name
 			, VK_SHADER_STAGE_FRAGMENT_BIT

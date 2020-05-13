@@ -1,6 +1,7 @@
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
+#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 
 using namespace castor;
 
@@ -39,7 +40,7 @@ namespace castor3d
 	}
 
 	void SsgiConfig::accept( castor::String const & name
-		, RenderTechniqueVisitor & visitor )
+		, PipelineVisitorBase & visitor )
 	{
 		visitor.visit( name
 			, VK_SHADER_STAGE_FRAGMENT_BIT

@@ -25,7 +25,7 @@ namespace castor3d
 	*\brief
 	*	Passe de SSGI.
 	*/
-	class RawSsgiPass;
+	class SsgiRawGIPass;
 	/**
 	*\~english
 	*\brief

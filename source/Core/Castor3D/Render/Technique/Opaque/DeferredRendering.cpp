@@ -10,7 +10,7 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssgi/SsgiConfig.hpp"
+#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"

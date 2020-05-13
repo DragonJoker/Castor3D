@@ -1,14 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RawSsgiPass_HPP___
-#define ___C3D_RawSsgiPass_HPP___
+#ifndef ___C3D_SsgiRawGIPass_HPP___
+#define ___C3D_SsgiRawGIPass_HPP___
 
 #include "SsgiModule.hpp"
 
-#include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
-#include <Castor3D/Render/ToTexture/RenderQuad.hpp>
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
 #include <ShaderAST/Shader.hpp>
 
@@ -17,7 +17,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RawSsgiPass
+	class SsgiRawGIPass
 		: public RenderQuad
 	{
 	public:
@@ -37,11 +37,11 @@ namespace castor3d
 		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
 		 *\param[in]	scene			Le tampon de scène.
 		 */
-		C3D_API RawSsgiPass( Engine & engine
+		C3D_API SsgiRawGIPass( Engine & engine
 			, VkExtent2D const & size
 			, SsgiConfig const & config
-			, TextureLayout const & linearisedDepth
-			, ashes::ImageView const & scene );
+			, TextureLayout const & hdrResult
+			, TextureLayout const & linearisedDepth );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( SsgiConfig & config
-			, RenderTechniqueVisitor & visitor );
+			, PipelineVisitorBase & visitor );
 		/**
 		*\~english
 		*name
@@ -71,10 +71,6 @@ namespace castor3d
 		{
 			return m_result;
 		}
-		inline TextureUnit const & getSceneView()const
-		{
-			return m_scene;
-		}
 		/**@}*/
 
 	public:
@@ -86,10 +82,10 @@ namespace castor3d
 		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
 
 	private:
-		ashes::ImageView const & m_sceneView;
+		TextureLayout const & m_hdrResult;
+		TextureLayout const & m_linearisedDepth;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
-		TextureUnit m_scene;
 		ashes::RenderPassPtr m_renderPass;
 		TextureUnit m_result;
 		ashes::FrameBufferPtr m_frameBuffer;

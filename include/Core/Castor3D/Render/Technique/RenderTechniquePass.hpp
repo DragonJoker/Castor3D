@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "TechniqueModule.hpp"
 
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 
 #include <ashespp/Sync/Semaphore.hpp>

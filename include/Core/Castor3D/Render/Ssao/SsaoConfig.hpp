@@ -6,9 +6,10 @@ See LICENSE file in root folder
 
 #include "SsaoModule.hpp"
 
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
 namespace castor3d
@@ -52,7 +53,7 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( castor::String const & name
-			, RenderTechniqueVisitor & visitor );
+			, PipelineVisitorBase & visitor );
 
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.
