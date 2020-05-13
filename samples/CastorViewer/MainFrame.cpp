@@ -425,6 +425,7 @@ namespace CastorViewer
 		m_materialsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		holder->setTree( m_materialsList );
 		m_sceneTabsContainer->AddPage( holder, _( "Materials" ), true );
+		m_sceneTabsContainer->ChangeSelection( 0u );
 
 		m_auiManager.Update();
 	}
@@ -601,7 +602,19 @@ namespace CastorViewer
 		m_auiManager.GetPane( m_toolBar ).Hide();
 #endif
 		m_fullScreenPerspective = m_auiManager.SavePerspective();
+
+		m_auiManager.GetPane( m_toolBar ).Show();
+		m_auiManager.GetPane( m_sceneTabsContainer ).Show();
+		m_auiManager.GetPane( m_propertiesHolder ).Show();
+		m_auiManager.GetPane( m_renderPanel ).Show();
+		m_debugPerspective = m_auiManager.SavePerspective();
+
+#if 1
+//#ifndef NDEBUG
+		m_auiManager.LoadPerspective( m_debugPerspective );
+#else
 		m_auiManager.LoadPerspective( m_currentPerspective );
+#endif
 	}
 
 	void MainFrame::doLogCallback( String const & log, LogType logType, bool newLine )
