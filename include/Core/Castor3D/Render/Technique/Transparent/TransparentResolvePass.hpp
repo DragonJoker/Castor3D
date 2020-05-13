@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "TransparentModule.hpp"
 
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
@@ -88,6 +87,7 @@ namespace castor3d
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo
 			, WeightedBlendTextures const & wbResult
 			, ashes::ImageView const & colourView );
 		/**
@@ -97,24 +97,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		~TransparentResolvePass();
-		/**
-		 *\~english
-		 *\brief		Updates the UBOs.
-		 *\param[in]	camera		The viewing camera.
-		 *\param[in]	invViewProj	The inverse view projection matrix.
-		 *\param[in]	invView		The inverse view matrix.
-		 *\param[in]	invProj		The inverse projection matrix.
-		 *\~french
-		 *\brief		Met à jour les UBOs.
-		 *\param[in]	camera		La caméra.
-		 *\param[in]	invViewProj	La matrice vue projection inversée.
-		 *\param[in]	invView		La matrice vue inversée.
-		 *\param[in]	invProj		La matrice projection inversée.
-		 */
-		void update( Camera const & camera
-			, castor::Matrix4x4f const & invViewProj
-			, castor::Matrix4x4f const & invView
-			, castor::Matrix4x4f const & invProj );
 		/**
 		 *\~english
 		 *\brief		Renders the combine pass.
@@ -139,7 +121,7 @@ namespace castor3d
 		castor::Size m_size;
 		Engine & m_engine;
 		SceneUbo & m_sceneUbo;
-		GpInfoUbo m_gpInfo;
+		GpInfoUbo const & m_gpInfo;
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< TexturedQuad > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;

@@ -190,7 +190,7 @@ namespace castor3d
 		, ashes::RenderPass const & blendRenderPass
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
-		, GpInfoUbo & gpInfoUbo
+		, GpInfoUbo const & gpInfoUbo
 		, ModelMatrixUbo * modelMatrixUbo )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
@@ -338,7 +338,7 @@ namespace castor3d
 		, ashes::ImageView const & depthView
 		, ashes::ImageView const & diffuseView
 		, ashes::ImageView const & specularView
-		, GpInfoUbo & gpInfoUbo
+		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
 		, m_name{ "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) }

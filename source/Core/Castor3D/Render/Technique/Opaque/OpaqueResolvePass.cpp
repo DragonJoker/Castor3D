@@ -1231,7 +1231,7 @@ namespace castor3d
 		, ashes::ImageView const & lightSpecular
 		, ashes::ImageView const & result
 		, SceneUbo & sceneUbo
-		, GpInfoUbo & gpInfoUbo
+		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo & hdrConfigUbo
 		, ashes::ImageView const * ssao )
 		: OwnedBy< Engine >{ engine }

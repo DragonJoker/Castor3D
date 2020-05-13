@@ -51,6 +51,7 @@ namespace castor3d
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo
 			, SsaoConfig & ssaoConfig
 			, SsgiConfig & ssgiConfig );
 		/**
@@ -103,8 +104,8 @@ namespace castor3d
 		SsaoConfig & m_ssaoConfig;
 		SsgiConfig & m_ssgiConfig;
 		OpaquePass & m_opaquePass;
+		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		GpInfoUbo m_gpInfoUbo;
 		GeometryPassResult m_geometryPassResult;
 		std::unique_ptr< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;

@@ -94,6 +94,7 @@ namespace castor3d
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo & hdrConfigUbo
+		, GpInfoUbo const & gpInfoUbo
 		, SsaoConfig & ssaoConfig
 		, SsgiConfig & ssgiConfig )
 		: m_engine{ engine }
@@ -101,7 +102,7 @@ namespace castor3d
 		, m_ssgiConfig{ ssgiConfig }
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
-		, m_gpInfoUbo{ m_engine }
+		, m_gpInfoUbo{ gpInfoUbo }
 		, m_geometryPassResult{ m_engine, depthTexture->getTexture(), velocityTexture->getTexture() }
 		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
@@ -195,14 +196,6 @@ namespace castor3d
 		, Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		auto invView = camera.getView().getInverse().getTransposed();
-		auto invProj = camera.getProjection().getInverse();
-		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
-		m_gpInfoUbo.update( m_size
-			, camera
-			, invViewProj
-			, invView
-			, invProj );
 		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_opaquePass.update( info, jitter );
 

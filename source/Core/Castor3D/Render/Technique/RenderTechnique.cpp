@@ -163,6 +163,7 @@ namespace castor3d
 		, m_renderSystem{ renderSystem }
 		, m_matrixUbo{ *renderSystem.getEngine() }
 		, m_hdrConfigUbo{ *renderSystem.getEngine() }
+		, m_gpInfoUbo{ *renderSystem.getEngine() }
 #if C3D_UseDeferredRendering
 		, m_opaquePass{ std::make_unique< OpaquePass >( m_matrixUbo
 			, renderTarget.getCuller()
@@ -240,6 +241,7 @@ namespace castor3d
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
+			m_gpInfoUbo.initialise();
 			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
 
@@ -281,6 +283,7 @@ namespace castor3d
 		m_depthPass->cleanup();
 		m_depthPass.reset();
 #endif
+		m_gpInfoUbo.cleanup();
 		m_hdrConfigUbo.cleanup();
 		m_matrixUbo.cleanup();
 		m_uploadCommandBuffer.reset();
@@ -337,6 +340,8 @@ namespace castor3d
 		m_matrixUbo.update( camera.getView()
 			, camera.getProjection()
 			, jitterProjSpace );
+		m_gpInfoUbo.update( m_size
+			, camera );
 		m_hdrConfigUbo.update( m_renderTarget.getHdrConfig() );
 
 #if C3D_UseDepthPrepass
@@ -596,6 +601,7 @@ namespace castor3d
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo
+			, m_gpInfoUbo
 			, m_ssaoConfig
 			, m_ssgiConfig );
 
@@ -622,7 +628,8 @@ namespace castor3d
 			, m_renderTarget.getVelocity().getTexture()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
-			, m_hdrConfigUbo );
+			, m_hdrConfigUbo
+			, m_gpInfoUbo );
 
 #else
 

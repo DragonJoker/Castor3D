@@ -73,7 +73,8 @@ namespace castor3d
 		, TextureLayoutSPtr velocityTexture
 		, castor::Size const & size
 		, Scene const & scene
-		, HdrConfigUbo & hdrConfigUbo )
+		, HdrConfigUbo & hdrConfigUbo
+		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
@@ -87,7 +88,7 @@ namespace castor3d
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_revealage->getFormat() ) }
 		, m_weightedBlendPassResult{ { m_depthView, m_accumulationView, m_revealageView, velocityTexture->getDefaultView() } }
-		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, m_weightedBlendPassResult, colourView }
+		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_weightedBlendPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_weightedBlendPassResult );
 		m_transparentPass.initialise( m_size );
@@ -103,10 +104,6 @@ namespace castor3d
 		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
 
 		m_transparentPass.getSceneUbo().update( scene, &camera );
-		m_finalCombinePass.update( camera
-			, invViewProj
-			, invView
-			, invProj );
 		m_transparentPass.update( info
 			, jitter );
 	}

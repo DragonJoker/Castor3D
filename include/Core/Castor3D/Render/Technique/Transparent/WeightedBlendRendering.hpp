@@ -43,7 +43,8 @@ namespace castor3d
 			, TextureLayoutSPtr velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
-			, HdrConfigUbo & hdrConfigUbo );
+			, HdrConfigUbo & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.

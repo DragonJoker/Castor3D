@@ -525,12 +525,13 @@ namespace castor3d
 		, Size const & size
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo & hdrConfigUbo
+		, GpInfoUbo const & gpInfoUbo
 		, WeightedBlendTextures const & wbResult
 		, ashes::ImageView const & colourView )
 		: m_size{ size }
 		, m_engine{ engine }
 		, m_sceneUbo{ sceneUbo }
-		, m_gpInfo{ m_engine }
+		, m_gpInfo{ gpInfoUbo }
 		, m_sampler{ doCreateSampler( m_engine ) }
 		, m_vertexBuffer{ doCreateVbo( m_engine ) }
 		, m_vertexLayout{ doCreateVertexLayout( m_engine ) }
@@ -549,19 +550,6 @@ namespace castor3d
 
 	TransparentResolvePass::~TransparentResolvePass()
 	{
-		m_gpInfo.cleanup();
-	}
-
-	void TransparentResolvePass::update( Camera const & camera
-		, castor::Matrix4x4f const & invViewProj
-		, castor::Matrix4x4f const & invView
-		, castor::Matrix4x4f const & invProj )
-	{
-		m_gpInfo.update( m_size
-			, camera
-			, invViewProj
-			, invView
-			, invProj );
 	}
 
 	ashes::Semaphore const & TransparentResolvePass::render( FogType fogType

@@ -452,7 +452,7 @@ namespace castor3d
 
 	SubsurfaceScatteringPass::Blur::Blur( RenderSystem & renderSystem
 		, castor::Size const & size
-		, GpInfoUbo & gpInfoUbo
+		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, UniformBuffer< BlurConfiguration > const & blurUbo
 		, GeometryPassResult const & gp
@@ -669,7 +669,7 @@ namespace castor3d
 	String const SubsurfaceScatteringPass::Offsets = "c3d_offsets";
 
 	SubsurfaceScatteringPass::SubsurfaceScatteringPass( Engine & engine
-		, GpInfoUbo & gpInfoUbo
+		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, Size const & textureSize
 		, GeometryPassResult const & gp

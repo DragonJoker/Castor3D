@@ -92,7 +92,7 @@ namespace castor3d
 			, ashes::ImageView const & depthView
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
-			, GpInfoUbo & gpInfoUbo
+			, GpInfoUbo const & gpInfoUbo
 			, LightType type
 			, bool hasShadows );
 		/**

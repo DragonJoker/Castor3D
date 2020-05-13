@@ -269,6 +269,7 @@ namespace castor3d
 		TextureLayoutSPtr m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
+		GpInfoUbo m_gpInfoUbo;
 		DebugConfig m_debugConfig;
 #if C3D_UseDepthPrepass
 		std::unique_ptr< DepthPass > m_depthPass;

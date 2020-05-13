@@ -109,7 +109,7 @@ namespace castor3d
 		, GeometryPassResult const & gpResult
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
-		, GpInfoUbo & gpInfoUbo )
+		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_size{ size }
 		, m_depth{ doCreateDepthTexture( engine, size ) }

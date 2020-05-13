@@ -46,12 +46,14 @@ namespace castor3d
 	}
 
 	void GpInfoUbo::update( castor::Size const & renderSize
-		, Camera const & camera
-		, castor::Matrix4x4f const & invViewProj
-		, castor::Matrix4x4f const & invView
-		, castor::Matrix4x4f const & invProj )
+		, Camera const & camera )
 	{
 		CU_Require( m_ubo );
+
+		auto invView = camera.getView().getInverse();
+		auto invProj = camera.getProjection().getInverse();
+		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
+
 		auto & configuration = m_ubo->getData( 0u );
 		configuration.invViewProj = invViewProj;
 		configuration.invView = invView;

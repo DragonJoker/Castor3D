@@ -103,7 +103,7 @@ namespace castor3d
 				, ashes::RenderPass const & blendRenderPass
 				, MatrixUbo & matrixUbo
 				, SceneUbo & sceneUbo
-				, GpInfoUbo & gpInfoUbo
+				, GpInfoUbo const & gpInfoUbo
 				, ModelMatrixUbo * modelMatrixUbo );
 			/**
 			*\~english
@@ -402,7 +402,7 @@ namespace castor3d
 			, ashes::ImageView const & depthView
 			, ashes::ImageView const & diffuseView
 			, ashes::ImageView const & specularView
-			, GpInfoUbo & gpInfoUbo
+			, GpInfoUbo const & gpInfoUbo
 			, bool hasShadows );
 		/**
 		 *\~english
@@ -599,7 +599,7 @@ namespace castor3d
 		SamplerSPtr m_sampler;
 		ashes::VertexBufferPtr< float > m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
-		GpInfoUbo & m_gpInfoUbo;
+		GpInfoUbo const & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
 		ashes::SemaphorePtr m_signalReady;
 		ashes::FencePtr m_fence;

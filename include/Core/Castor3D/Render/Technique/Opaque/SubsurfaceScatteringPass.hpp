@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	lightDiffuse	Le résultat diffus de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( Engine & engine
-			, GpInfoUbo & gpInfoUbo
+			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo & sceneUbo
 			, castor::Size const & textureSize
 			, GeometryPassResult const & gp
@@ -118,7 +118,7 @@ namespace castor3d
 		public:
 			Blur( RenderSystem & renderSystem
 				, castor::Size const & size
-				, GpInfoUbo & gpInfoUbo
+				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
 				, UniformBuffer< BlurConfiguration > const & blurUbo
 				, GeometryPassResult const & gp
@@ -136,7 +136,7 @@ namespace castor3d
 		private:
 			RenderSystem & m_renderSystem;
 			GeometryPassResult const & m_geometryBufferResult;
-			GpInfoUbo & m_gpInfoUbo;
+			GpInfoUbo const & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
 			UniformBuffer< BlurConfiguration > const & m_blurUbo;
 			ashes::RenderPassPtr m_renderPass;
