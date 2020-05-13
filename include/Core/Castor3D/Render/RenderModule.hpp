@@ -240,6 +240,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Holds render buffers of any geometry buffers pass.
+	*\~french
+	*\brief
+	*	Contient les buffer de rendu de n'importe quelle passe de geometry buffers.
+	*/
+	class GBuffer;
+	/**
+	*\~english
+	*\brief
 	*	Picking pass, using FBO.
 	*\~french
 	*\brief

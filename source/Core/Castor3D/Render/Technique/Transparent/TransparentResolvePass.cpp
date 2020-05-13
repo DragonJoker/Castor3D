@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -177,22 +178,20 @@ namespace castor3d
 
 		ashes::DescriptorSetPtr doCreateTexDescriptorSet( Engine & engine
 			, ashes::DescriptorSetPool & pool
-			, ashes::ImageView const & depth
-			, ashes::ImageView const & accumulation
-			, ashes::ImageView const & revealage
+			, TransparentPassResult const & wbResult
 			, Sampler const & sampler )
 		{
 			auto & device = getCurrentRenderDevice( engine );
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "TransparentResolveTex", 1u );
 			result->createBinding( layout.getBinding( depthTexIndex )
-				, depth
+				, wbResult.getViews()[uint32_t( WbTexture::eDepth )]
 				, sampler.getSampler() );
 			result->createBinding( layout.getBinding( accumTexIndex )
-				, accumulation
+				, wbResult.getViews()[uint32_t( WbTexture::eAccumulation )]
 				, sampler.getSampler() );
 			result->createBinding( layout.getBinding( revealTexIndex )
-				, revealage
+				, wbResult.getViews()[uint32_t( WbTexture::eRevealage )]
 				, sampler.getSampler() );
 			result->update();
 			return result;
@@ -527,7 +526,7 @@ namespace castor3d
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, WeightedBlendTextures const & wbResult
+		, TransparentPassResult const & wbResult
 		, ashes::ImageView const & colourView )
 		: m_size{ size }
 		, m_engine{ engine }
@@ -541,7 +540,7 @@ namespace castor3d
 		, m_uboDescriptorSet{ doCreateUboDescriptorSet( engine, *m_uboDescriptorPool, m_sceneUbo, m_gpInfo, hdrConfigUbo ) }
 		, m_texDescriptorLayout{ doCreateTexDescriptorLayout( m_engine ) }
 		, m_texDescriptorPool{ m_texDescriptorLayout->createPool( "TransparentResolveTex", uint32_t( FogType::eCount ) ) }
-		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, wbResult[0], wbResult[1], wbResult[2], *m_sampler ) }
+		, m_texDescriptorSet{ doCreateTexDescriptorSet( engine, *m_texDescriptorPool, wbResult, *m_sampler ) }
 		, m_renderPass{ doCreateRenderPass( m_engine, colourView ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, cuT( "Transparent" ), cuT( "Resolve" ) ) }
 		, m_frameBuffer{ doCreateFrameBuffer( engine, *m_renderPass, m_size, colourView ) }

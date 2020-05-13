@@ -46,7 +46,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo & sceneUbo
 			, castor::Size const & textureSize
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, TextureUnit const & lightDiffuse );
 		/**
 		 *\~english
@@ -82,12 +82,12 @@ namespace castor3d
 		}
 
 	private:
-		void doBlur( GeometryPassResult const & gp
+		void doBlur( OpaquePassResult const & gp
 			, TextureUnit const & source
 			, TextureUnit const & destination
 			//, TextureAttachmentSPtr attach
 			, castor::Point2f const & direction )const;
-		void doCombine( GeometryPassResult const & gp
+		void doCombine( OpaquePassResult const & gp
 			, TextureUnit const & source )const;
 
 	public:
@@ -121,7 +121,7 @@ namespace castor3d
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
 				, UniformBuffer< BlurConfiguration > const & blurUbo
-				, GeometryPassResult const & gp
+				, OpaquePassResult const & gp
 				, TextureUnit const & source
 				, TextureUnit const & destination
 				, bool isVertic
@@ -135,7 +135,7 @@ namespace castor3d
 
 		private:
 			RenderSystem & m_renderSystem;
-			GeometryPassResult const & m_geometryBufferResult;
+			OpaquePassResult const & m_geometryBufferResult;
 			GpInfoUbo const & m_gpInfoUbo;
 			SceneUbo & m_sceneUbo;
 			UniformBuffer< BlurConfiguration > const & m_blurUbo;
@@ -150,7 +150,7 @@ namespace castor3d
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
 				, UniformBuffer< BlurWeights > const & blurUbo
-				, GeometryPassResult const & gp
+				, OpaquePassResult const & gp
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination
@@ -165,7 +165,7 @@ namespace castor3d
 		private:
 			RenderSystem & m_renderSystem;
 			UniformBuffer< BlurWeights > const & m_blurUbo;
-			GeometryPassResult const & m_geometryBufferResult;
+			OpaquePassResult const & m_geometryBufferResult;
 			TextureUnit const & m_source;
 			std::array< TextureUnit, 3u > const & m_blurResults;
 			ashes::RenderPassPtr m_renderPass;

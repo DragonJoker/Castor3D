@@ -24,7 +24,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 
@@ -1033,7 +1033,7 @@ namespace castor3d
 		}
 
 		inline ashes::WriteDescriptorSetArray doCreateTexDescriptorWrites( ashes::DescriptorSetLayout const & layout
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, ashes::ImageView const & lightDiffuse
 			, ashes::ImageView const & lightSpecular
 			, ashes::ImageView const * ssao
@@ -1166,7 +1166,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OpaqueResolvePass::ProgramPipeline::ProgramPipeline( Engine & engine
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, ashes::DescriptorSetLayout const & uboLayout
 		, ashes::DescriptorSetLayout const & texLayout
 		, ashes::RenderPass const & renderPass
@@ -1175,7 +1175,7 @@ namespace castor3d
 		, FogType fogType
 		, MaterialType matType )
 		: m_engine{ engine }
-		, m_geometryPassResult{ gp }
+		, m_opaquePassResult{ gp }
 		, m_renderPass{ &renderPass }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DeferredResolve" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DeferredResolve" }
@@ -1201,7 +1201,7 @@ namespace castor3d
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_geometryPassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_opaquePassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, frameBuffer
 			, { transparentBlackClearColor }
@@ -1226,7 +1226,7 @@ namespace castor3d
 
 	OpaqueResolvePass::OpaqueResolvePass( Engine & engine
 		, Scene & scene
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, ashes::ImageView const & lightDiffuse
 		, ashes::ImageView const & lightSpecular
 		, ashes::ImageView const & result
@@ -1240,7 +1240,7 @@ namespace castor3d
 		, m_ssaoResult{ ssao }
 		, m_size{ result.image->getDimensions().width, result.image->getDimensions().height }
 		, m_sampler{ engine.getDefaultSampler() }
-		, m_geometryPassResult{ gp }
+		, m_opaquePassResult{ gp }
 		, m_lightDiffuse{ lightDiffuse }
 		, m_lightSpecular{ lightSpecular }
 		, m_vertexBuffer{ doCreateVbo( m_device ) }
@@ -1320,7 +1320,7 @@ namespace castor3d
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 		auto texDescriptorWrites = doCreateTexDescriptorWrites( *m_texDescriptorLayout
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_lightDiffuse
 			, m_lightSpecular
 			, m_ssaoResult

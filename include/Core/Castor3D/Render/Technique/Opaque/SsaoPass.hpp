@@ -38,7 +38,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig & ssaoConfig
 			, TextureUnit const & linearisedDepth
-			, GeometryPassResult const & gpResult
+			, OpaquePassResult const & gpResult
 			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english

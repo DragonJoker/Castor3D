@@ -88,7 +88,7 @@ namespace castor3d
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, WeightedBlendTextures const & wbResult
+			, TransparentPassResult const & wbResult
 			, ashes::ImageView const & colourView );
 		/**
 		 *\~english

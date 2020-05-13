@@ -33,9 +33,6 @@ namespace castor3d
 		eVelocity,
 		CU_ScopedEnumBounds( eDepth ),
 	};
-	//!\~english	The weighted blend pass result.
-	//!\~french		Le résultat de la passe de weighted blend.
-	using WeightedBlendTextures = std::array< ashes::ImageView, size_t( WbTexture::eCount ) >;
 	/**
 	*\~english
 	*\brief
@@ -63,6 +60,15 @@ namespace castor3d
 	*	Passe pour les noeuds transparents, utilisant le Weighted Blend OIT.
 	*/
 	class TransparentPass;
+	/**
+	*\~english
+	*\brief
+	*	Result of the transparent accumulation pass.
+	*\~french
+	*\brief
+	*	Résultat de la passe d'accumulation de transparence.
+	*/
+	class TransparentPassResult;
 	/**
 	*\~english
 	*\brief
@@ -106,40 +112,6 @@ namespace castor3d
 	*	Le format de pixels.
 	*/
 	VkFormat getTextureFormat( WbTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the attachment point for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The attachment point.
-	*\~french
-	*\brief
-	*	Récupère le point d'attache pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	Le point d'attache.
-	*/
-	VkImageAspectFlags getTextureAttachmentPoint( WbTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the attachment index for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The attachment index.
-	*\~french
-	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	L'indice d'attache.
-	*/
-	uint32_t getTextureAttachmentIndex( WbTexture texture );
 
 	//@}
 	//@}

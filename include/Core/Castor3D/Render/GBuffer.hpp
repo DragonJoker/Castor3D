@@ -1,12 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_GeometryPassResult_H___
-#define ___C3D_GeometryPassResult_H___
+#ifndef ___C3D_GBuffer_H___
+#define ___C3D_GBuffer_H___
 
-#include "OpaqueModule.hpp"
-
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "RenderModule.hpp"
 
 #include <ashespp/Image/Sampler.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -14,34 +12,32 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class GeometryPassResult
+	class GBuffer
 	{
-		using Textures = std::array< ashes::Image const *, size_t( DsTexture::eCount ) >;
-		using Views = std::array< ashes::ImageView, size_t( DsTexture::eCount ) >;
+	public:
+		using Textures = std::vector< ashes::Image const * >;
+		using Views = std::vector< ashes::ImageView >;
+
 	public:
 		/**
 		*\~english
 		*\brief
-		*	Initialises deferred rendering related stuff.
+		*	Initialises g-buffer related stuff.
+		*	Given depth buffer will be stored at index 0.
 		*\param[in] engine
 		*	The engine.
-		*\param[in] depthTexture
-		*	The depth texture.
-		*\param[in] velocityTexture
-		*	The velocity texture.
+		*\param[in] textures
+		*	The gbuffer's images.
 		*\~french
 		*\brief
-		*	Initialise les données liées au deferred rendering.
+		*	Initialise les données liées au g-buffer.
+		*	La texture de profondeur donnée sera stockée à l'index 0.
 		*\param[in] engine
 		*	Le moteur.
-		*\param[in] depthTexture
-		*	La texture de profondeur.
-		*\param[in] velocityTexture
-		*	La texture de vélocité.
+		*\param[in] textures
+		*	Les images du gbuffer.
 		*/
-		C3D_API GeometryPassResult( Engine & engine
-			, ashes::Image const & depthTexture
-			, ashes::Image const & velocityTexture );
+		C3D_API GBuffer( Engine & engine );
 		/**
 		*\~english
 		*name
@@ -82,10 +78,12 @@ namespace castor3d
 		}
 		/**@}*/
 
-	private:
+	protected:
+		void doInitialise( Textures textures );
+
+	protected:
 		Engine & m_engine;
 		Textures m_result;
-		std::vector< ashes::ImagePtr > m_owned;
 		Views m_samplableViews;
 		ashes::ImageView m_depthStencilView;
 		ashes::SamplerPtr m_sampler;

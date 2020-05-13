@@ -9,7 +9,7 @@
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfigUbo.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -22,7 +22,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig & ssaoConfig
 		, TextureUnit const & linearisedDepth
-		, GeometryPassResult const & gpResult
+		, OpaquePassResult const & gpResult
 		, GpInfoUbo const & gpInfoUbo )
 		: m_engine{ engine }
 		, m_ssaoConfig{ ssaoConfig }

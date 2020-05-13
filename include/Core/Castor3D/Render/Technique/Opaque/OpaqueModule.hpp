@@ -53,7 +53,7 @@ namespace castor3d
 	*\brief
 	*	Résultat de la passe de géométries dans le rendu différé.
 	*/
-	class GeometryPassResult;
+	class OpaquePassResult;
 	/**
 	*\~english
 	*\brief
@@ -202,33 +202,6 @@ namespace castor3d
 	*	Le format de pixels.
 	*/
 	VkFormat getTextureFormat( DsTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the attachment index for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The attachment index.
-	*\~french
-	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	L'indice d'attache.
-	*/
-	/**
-	*\~english
-	*\brief		Retrieve the attachment index for given texture enum value.
-	*\param[in]	texture	The value.
-	*\return		The name.
-	*\~french
-	*\brief		Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	*\param[in]	texture	La valeur.
-	*\return		Le nom.
-	*/
-	uint32_t getTextureAttachmentIndex( DsTexture texture );
 	/**
 	*\~english
 	*\brief

@@ -106,7 +106,7 @@ namespace castor3d
 	LightingPass::LightingPass( Engine & engine
 		, Size const & size
 		, Scene const & scene
-		, GeometryPassResult const & gpResult
+		, OpaquePassResult const & gpResult
 		, ashes::ImageView const & depthView
 		, SceneUbo & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
@@ -264,7 +264,7 @@ namespace castor3d
 
 	ashes::Semaphore const & LightingPass::render( Scene const & scene
 		, Camera const & camera
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, ashes::Semaphore const & toWait )
 	{
 		auto & cache = scene.getLightCache();
@@ -378,7 +378,7 @@ namespace castor3d
 	ashes::Semaphore const & LightingPass::doRenderLights( Scene const & scene
 		, Camera const & camera
 		, LightType type
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, ashes::Semaphore const & toWait
 		, uint32_t & index )
 	{

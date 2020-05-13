@@ -44,7 +44,7 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 */
-		void initialiseRenderPass( GeometryPassResult const & gpResult );
+		void initialiseRenderPass( OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

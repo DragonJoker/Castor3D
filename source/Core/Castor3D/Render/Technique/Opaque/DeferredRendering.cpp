@@ -103,15 +103,17 @@ namespace castor3d
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_geometryPassResult{ m_engine, depthTexture->getTexture(), velocityTexture->getTexture() }
+		, m_opaquePassResult{ m_engine
+			, depthTexture->getTexture()
+			, velocityTexture->getTexture() }
 		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
 			, makeExtent2D( m_size )
-			, m_geometryPassResult.getViews()[size_t( DsTexture::eDepth )] ) }
+			, m_opaquePassResult.getViews()[size_t( DsTexture::eDepth )] ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_size
 			, scene
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, depthTexture->getDefaultView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo ) }
@@ -119,13 +121,13 @@ namespace castor3d
 			, makeExtent2D( m_size )
 			, m_ssaoConfig
 			, m_linearisePass->getResult()
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_gpInfoUbo ) }
 		, m_subsurfaceScattering{ std::make_unique< SubsurfaceScatteringPass >( m_engine
 			, m_gpInfoUbo
 			, m_opaquePass.getSceneUbo()
 			, m_size
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_lightingPass->getDiffuse() ) }
 		, m_ssgi{ std::make_unique< SsgiPass >( m_engine
 			, makeExtent2D( m_size )
@@ -138,7 +140,7 @@ namespace castor3d
 		//	SSSSS Off
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
 			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
 			, resultTexture->getDefaultView()
@@ -149,7 +151,7 @@ namespace castor3d
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
 			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
 			, resultTexture->getDefaultView()
@@ -161,7 +163,7 @@ namespace castor3d
 		//	SSSSS Off
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
 			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
 			, resultTexture->getDefaultView()
@@ -172,7 +174,7 @@ namespace castor3d
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
 			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
 			, resultTexture->getDefaultView()
@@ -180,7 +182,7 @@ namespace castor3d
 			, m_gpInfoUbo
 			, hdrConfigUbo
 			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
-		m_opaquePass.initialiseRenderPass( m_geometryPassResult );
+		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
 	}
 
 	DeferredRendering::~DeferredRendering()
@@ -230,7 +232,7 @@ namespace castor3d
 		result = &m_opaquePass.render( *result );
 		result = &m_lightingPass->render( scene
 			, camera
-			, m_geometryPassResult
+			, m_opaquePassResult
 			, *result );
 
 		if ( m_ssaoConfig.enabled
@@ -262,11 +264,11 @@ namespace castor3d
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Opaque Data1", m_geometryPassResult.getViews()[size_t( DsTexture::eData1 )] );
-		visitor.visit( "Opaque Data2", m_geometryPassResult.getViews()[size_t( DsTexture::eData2 )] );
-		visitor.visit( "Opaque Data3", m_geometryPassResult.getViews()[size_t( DsTexture::eData3 )] );
-		visitor.visit( "Opaque Data4", m_geometryPassResult.getViews()[size_t( DsTexture::eData4 )] );
-		visitor.visit( "Opaque Data5", m_geometryPassResult.getViews()[size_t( DsTexture::eData5 )] );
+		visitor.visit( "Opaque Data1", m_opaquePassResult.getViews()[size_t( DsTexture::eData1 )] );
+		visitor.visit( "Opaque Data2", m_opaquePassResult.getViews()[size_t( DsTexture::eData2 )] );
+		visitor.visit( "Opaque Data3", m_opaquePassResult.getViews()[size_t( DsTexture::eData3 )] );
+		visitor.visit( "Opaque Data4", m_opaquePassResult.getViews()[size_t( DsTexture::eData4 )] );
+		visitor.visit( "Opaque Data5", m_opaquePassResult.getViews()[size_t( DsTexture::eData5 )] );
 
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );

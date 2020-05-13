@@ -103,7 +103,7 @@ namespace castor3d
 		 *\copydoc		castor3d::LightPass::initialise
 		 */
 		void initialise( Scene const & scene
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, SceneUbo & sceneUbo
 			, RenderPassTimer & timer )override;
 		/**

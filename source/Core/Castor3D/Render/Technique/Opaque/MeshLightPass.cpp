@@ -258,7 +258,7 @@ namespace castor3d
 	}
 
 	void MeshLightPass::initialise( Scene const & scene
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, SceneUbo & sceneUbo
 		, RenderPassTimer & timer )
 	{

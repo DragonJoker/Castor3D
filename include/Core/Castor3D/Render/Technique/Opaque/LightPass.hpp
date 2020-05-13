@@ -265,7 +265,7 @@ namespace castor3d
 		 *\param[in]	timer		Le timer de passe.
 		 */
 		virtual void initialise( Scene const & scene
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, SceneUbo & sceneUbo
 			, RenderPassTimer & timer ) = 0;
 		/**
@@ -427,7 +427,7 @@ namespace castor3d
 		 *\param[in]	timer			Le timer de passe.
 		 */
 		void doInitialise( Scene const & scene
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, LightType type
 			, ashes::VertexBufferBase & vbo
 			, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
@@ -603,7 +603,7 @@ namespace castor3d
 		uint32_t m_offset{ 0u };
 		ashes::SemaphorePtr m_signalReady;
 		ashes::FencePtr m_fence;
-		GeometryPassResult const * m_geometryPassResult{};
+		OpaquePassResult const * m_opaquePassResult{};
 	};
 }
 

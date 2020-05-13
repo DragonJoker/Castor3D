@@ -11,7 +11,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -455,7 +455,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, UniformBuffer< BlurConfiguration > const & blurUbo
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, TextureUnit const & source
 		, TextureUnit const & destination
 		, bool isVertic
@@ -563,7 +563,7 @@ namespace castor3d
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
 		, UniformBuffer< BlurWeights > const & blurUbo
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination
@@ -672,7 +672,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, Size const & textureSize
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, TextureUnit const & lightDiffuse )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ textureSize }

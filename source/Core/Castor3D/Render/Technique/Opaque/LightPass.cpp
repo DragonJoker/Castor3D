@@ -6,7 +6,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -46,58 +46,6 @@ using namespace castor3d;
 namespace castor3d
 {
 	//************************************************************************************************
-
-	String getTextureName( DsTexture texture )
-	{
-		static std::array< String, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				"c3d_mapDepth",
-				"c3d_mapData1",
-				"c3d_mapData2",
-				"c3d_mapData3",
-				"c3d_mapData4",
-				"c3d_mapData5",
-			}
-		};
-
-		return Values[size_t( texture )];
-	}
-
-	VkFormat getTextureFormat( DsTexture texture )
-	{
-		static std::array< VkFormat, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				VK_FORMAT_D24_UNORM_S8_UINT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-			}
-		};
-		CU_Require( texture != DsTexture::eDepth
-			&& "You can't use this function for depth texture format" );
-		return Values[size_t( texture )];
-	}
-
-	uint32_t getTextureAttachmentIndex( DsTexture texture )
-	{
-		static std::array< uint32_t, size_t( DsTexture::eCount ) > Values
-		{
-			{
-				0,
-				0,
-				1,
-				2,
-				3,
-				4,
-			}
-		};
-
-		return Values[size_t( texture )];
-	}
 
 	float getMaxDistance( LightCategory const & light
 		, Point3f const & attenuation )
@@ -441,7 +389,7 @@ namespace castor3d
 		, ShadowMap const * shadowMap )
 	{
 		Scene const & scene = *m_scene;
-		GeometryPassResult const & gp = *m_geometryPassResult;
+		OpaquePassResult const & gp = *m_opaquePassResult;
 		ashes::VertexBufferBase & vbo = *m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & vertexLayout = *m_pUsedVertexLayout;
 		SceneUbo & sceneUbo = *m_sceneUbo;
@@ -581,7 +529,7 @@ namespace castor3d
 	}
 
 	void LightPass::doInitialise( Scene const & scene
-		, GeometryPassResult const & gp
+		, OpaquePassResult const & gp
 		, LightType lightType
 		, ashes::VertexBufferBase & vbo
 		, ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
@@ -595,7 +543,7 @@ namespace castor3d
 		m_usedVertexLayout = vertexLayout;
 		m_pUsedVertexLayout = &m_usedVertexLayout;
 		m_timer = &timer;
-		m_geometryPassResult = &gp;
+		m_opaquePassResult = &gp;
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
 		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( m_name

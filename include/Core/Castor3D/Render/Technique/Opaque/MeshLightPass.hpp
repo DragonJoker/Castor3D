@@ -117,7 +117,7 @@ namespace castor3d
 		 *\param[in]	timer		Le timer de la passe de rendu.
 		 */
 		void initialise( Scene const & scene
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, SceneUbo & sceneUbo
 			, RenderPassTimer & timer )override;
 		/**

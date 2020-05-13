@@ -58,7 +58,7 @@ namespace castor3d
 		 */
 		OpaqueResolvePass( Engine & engine
 			, Scene & scene
-			, GeometryPassResult const & gp
+			, OpaquePassResult const & gp
 			, ashes::ImageView const & lightDiffuse
 			, ashes::ImageView const & lightSpecular
 			, ashes::ImageView const & result
@@ -97,7 +97,7 @@ namespace castor3d
 			ProgramPipeline & operator=( ProgramPipeline const & ) = delete;
 			ProgramPipeline & operator=( ProgramPipeline && ) = delete;
 			ProgramPipeline( Engine & engine
-				, GeometryPassResult const & gp
+				, OpaquePassResult const & gp
 				, ashes::DescriptorSetLayout const & uboLayout
 				, ashes::DescriptorSetLayout const & texLayout
 				, ashes::RenderPass const & renderPass
@@ -113,7 +113,7 @@ namespace castor3d
 			void accept( PipelineVisitorBase & visitor );
 
 			Engine & m_engine;
-			GeometryPassResult const & m_geometryPassResult;
+			OpaquePassResult const & m_opaquePassResult;
 			ashes::RenderPass const * m_renderPass;
 			castor3d::ShaderModule m_vertexShader;
 			castor3d::ShaderModule m_pixelShader;
@@ -131,7 +131,7 @@ namespace castor3d
 		VkExtent2D m_size;
 		Viewport m_viewport;
 		SamplerSPtr m_sampler;
-		GeometryPassResult const & m_geometryPassResult;
+		OpaquePassResult const & m_opaquePassResult;
 		ashes::ImageView const & m_lightDiffuse;
 		ashes::ImageView const & m_lightSpecular;
 		ashes::VertexBufferBasePtr m_vertexBuffer;

@@ -47,7 +47,7 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
-		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
+		void initialiseRenderPass( TransparentPassResult const & wbpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */

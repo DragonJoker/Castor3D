@@ -10,6 +10,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -44,40 +45,6 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	String getTextureName( WbTexture texture )
-	{
-		static std::array< String, size_t( WbTexture::eCount ) > Values
-		{
-			{
-				"c3d_mapDepth",
-				"c3d_mapAccumulation",
-				"c3d_mapRevealage",
-				"c3d_mapVelocity",
-			}
-		};
-
-		return Values[size_t( texture )];
-	}
-
-	VkFormat getTextureFormat( WbTexture texture )
-	{
-		static std::array< VkFormat, size_t( WbTexture::eCount ) > Values
-		{
-			{
-				VK_FORMAT_D24_UNORM_S8_UINT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-			}
-		};
-
-		CU_Require( texture != WbTexture::eDepth
-			&& "You can't use this function for depth texture format" );
-		return Values[size_t( texture )];
-	}
-
-	//************************************************************************************************
-
 	TransparentPass::TransparentPass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
@@ -96,13 +63,13 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::initialiseRenderPass( WeightedBlendTextures const & wbpResult )
+	void TransparentPass::initialiseRenderPass( TransparentPassResult const & wbpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
 			{
 				0u,
-				wbpResult[0]->format,
+				wbpResult.getViews()[0]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -113,7 +80,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult[1]->format,
+				wbpResult.getViews()[1]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -124,7 +91,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult[2]->format,
+				wbpResult.getViews()[2]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -135,7 +102,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult[3]->format,
+				wbpResult.getViews()[3]->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -193,13 +160,13 @@ namespace castor3d
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
-		for ( size_t i = 0u; i < wbpResult.size(); ++i )
+		for ( auto & view : wbpResult.getViews() )
 		{
-			fbAttaches.emplace_back( wbpResult[i] );
+			fbAttaches.emplace_back( view );
 		}
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( "TransparentPass"
-			, { wbpResult[0].image->getDimensions().width, wbpResult[0].image->getDimensions().height }
+			, { wbpResult[0].getDimensions().width, wbpResult[0].getDimensions().height }
 			, std::move( fbAttaches ) );
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}

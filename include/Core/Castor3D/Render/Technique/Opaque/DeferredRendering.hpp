@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
@@ -106,7 +106,7 @@ namespace castor3d
 		OpaquePass & m_opaquePass;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		GeometryPassResult m_geometryPassResult;
+		OpaquePassResult m_opaquePassResult;
 		std::unique_ptr< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;
 		std::unique_ptr< SsaoPass > m_ssao;

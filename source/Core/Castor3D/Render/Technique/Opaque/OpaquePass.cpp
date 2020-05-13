@@ -20,7 +20,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -57,7 +57,7 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
+	void OpaquePass::initialiseRenderPass( OpaquePassResult const & gpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attachments
 		{

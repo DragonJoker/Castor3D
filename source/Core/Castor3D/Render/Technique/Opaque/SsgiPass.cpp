@@ -11,7 +11,7 @@
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Ssgi/SsgiRawGIPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 
 using namespace castor;
 using namespace castor3d;
