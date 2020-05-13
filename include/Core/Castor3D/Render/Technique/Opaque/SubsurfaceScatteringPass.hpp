@@ -6,11 +6,11 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -74,7 +74,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		C3D_API void accept( PipelineVisitorBase & visitor );
 
 		inline TextureUnit const & getResult()const
 		{

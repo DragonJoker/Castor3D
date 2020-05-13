@@ -2,9 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -296,7 +296,7 @@ namespace castor3d
 		m_vertexBuffer.reset();
 	}
 
-	void DirectionalLightPass::accept( RenderTechniqueVisitor & visitor )
+	void DirectionalLightPass::accept( PipelineVisitorBase & visitor )
 	{
 		String name = cuT( "DirectionalLight" );
 

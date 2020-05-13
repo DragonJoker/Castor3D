@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
@@ -120,7 +121,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void SsgiPass::accept( RenderTechniqueVisitor & visitor )
+	void SsgiPass::accept( PipelineVisitorBase & visitor )
 	{
 		m_rawSsgi->accept( m_ssgiConfig, visitor );
 #if !C3D_DebugRawPass

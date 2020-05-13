@@ -314,7 +314,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		virtual void accept( RenderTechniqueVisitor & visitor ) = 0;
+		virtual void accept( PipelineVisitorBase & visitor ) = 0;
 		/**
 		*\~english
 		*name

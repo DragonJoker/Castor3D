@@ -1,9 +1,9 @@
 #include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -91,7 +91,7 @@ namespace castor3d
 	{
 	}
 
-	void SpotLightPass::accept( RenderTechniqueVisitor & visitor )
+	void SpotLightPass::accept( PipelineVisitorBase & visitor )
 	{
 		String name = cuT( "SpotLight" );
 

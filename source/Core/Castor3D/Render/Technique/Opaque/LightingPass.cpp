@@ -1,16 +1,19 @@
 #include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/LightCache.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/Opaque/DirectionalLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPassShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/PointLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
-
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Render/RenderPassTimer.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -19,9 +22,6 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -316,7 +316,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void LightingPass::accept( RenderTechniqueVisitor & visitor )
+	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
 			, m_diffuse.getTexture()->getDefaultView() );

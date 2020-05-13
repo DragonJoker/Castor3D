@@ -60,8 +60,19 @@ namespace castor3d
 		eViewports,
 		CU_ScopedEnumBounds( eTexture1DSize )
 	};
-	template< typename AshesType >
-	struct AshesTypeTraits;
+	/**
+	*\~english
+	*\brief
+	*	Factors applied when displaying a debug texture.
+	*\~french
+	*\brief
+	*	Facteurs appliqués lors de l'affichage debug d'une texture.
+	*/
+	struct TextureFactors
+	{
+		castor::Point3f multiply{ 1.0f, 1.0f, 1.0f };
+		castor::Point3f add{};
+	};
 	/**
 	*\~english
 	*\brief

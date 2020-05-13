@@ -4,6 +4,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
@@ -86,7 +87,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void SsaoPass::accept( RenderTechniqueVisitor & visitor )
+	void SsaoPass::accept( PipelineVisitorBase & visitor )
 	{
 		m_rawAoPass->accept( m_ssaoConfig, visitor );
 #if !C3D_DebugRawPass
@@ -98,7 +99,7 @@ namespace castor3d
 	TextureUnit const & SsaoPass::getResult()const
 	{
 #if C3D_DebugRawPass
-		return m_rawSsaoPass->getResult();
+		return m_rawAoPass->getResult();
 #else
 		return m_verticalBlur->getResult();
 #endif
@@ -107,7 +108,7 @@ namespace castor3d
 	TextureUnit const & SsaoPass::getBentNormals()const
 	{
 #if C3D_DebugRawPass
-		return m_rawSsaoPass->getBentResult();
+		return m_rawAoPass->getBentResult();
 #else
 		return m_rawAoPass->getBentResult();
 #endif

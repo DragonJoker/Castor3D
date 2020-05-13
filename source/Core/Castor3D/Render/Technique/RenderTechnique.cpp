@@ -45,9 +45,10 @@ namespace castor3d
 			}
 
 			void visit( castor::String const & name
-				, ashes::ImageView const & view )override
+				, ashes::ImageView const & view
+				, TextureFactors const & factors )override
 			{
-				m_result.push_back( { name, view } );
+				m_result.push_back( { name, view, factors } );
 			}
 
 		private:
@@ -229,7 +230,6 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
-			intermediates.push_back( { "Technique Colour", m_colourTexture->getDefaultView() } );
 
 			m_depthBuffer = doCreateTexture( *getEngine()
 				, m_size
@@ -239,7 +239,6 @@ namespace castor3d
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
-			intermediates.push_back( { "Technique Depth", m_depthBuffer->getDefaultView() } );
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_hdrConfigUbo.initialise();
 			m_matrixUbo.initialise();
@@ -249,7 +248,7 @@ namespace castor3d
 				, m_matrixUbo.getUbo().getAlignedSize() );
 			m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderTechniqueUpload" );
 
-			doInitialiseShadowMaps( intermediates );
+			doInitialiseShadowMaps();
 			doInitialiseBackgroundPass();
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass();
@@ -276,13 +275,13 @@ namespace castor3d
 		m_weightedBlendRendering.reset();
 		m_deferredRendering.reset();
 		doCleanupShadowMaps();
-		m_hdrConfigUbo.cleanup();
 		m_transparentPass->cleanup();
 		m_opaquePass->cleanup();
 #if C3D_UseDepthPrepass
 		m_depthPass->cleanup();
 		m_depthPass.reset();
 #endif
+		m_hdrConfigUbo.cleanup();
 		m_matrixUbo.cleanup();
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
@@ -400,6 +399,9 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
+		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView() );
+		visitor.visit( "Technique Depth", m_depthBuffer->getDefaultView() );
+
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
 #if C3D_UseWeightedBlendedRendering
@@ -415,6 +417,14 @@ namespace castor3d
 #else
 			m_opaquePass->accept( visitor );
 #endif
+		}
+
+		for ( auto & shadowMaps : m_activeShadowMaps )
+		{
+			for ( auto & shadowMap : shadowMaps )
+			{
+				shadowMap.first.get().accept( visitor );
+			}
 		}
 	}
 
@@ -433,11 +443,11 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 	}
 
-	void RenderTechnique::doInitialiseShadowMaps( std::vector< IntermediateView > & intermediates )
+	void RenderTechnique::doInitialiseShadowMaps()
 	{
-		m_directionalShadowMap->initialise( intermediates );
-		m_spotShadowMap->initialise( intermediates );
-		m_pointShadowMap->initialise( intermediates );
+		m_directionalShadowMap->initialise();
+		m_spotShadowMap->initialise();
+		m_pointShadowMap->initialise();
 	}
 
 	void RenderTechnique::doInitialiseBackgroundPass()

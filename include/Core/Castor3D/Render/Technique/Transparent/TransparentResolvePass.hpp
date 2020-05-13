@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Technique/TechniqueModule.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
 
 #include <ShaderAST/Shader.hpp>
@@ -33,7 +33,7 @@ namespace castor3d
 			, ashes::DescriptorSet const & uboDescriptorSet
 			, ashes::DescriptorSet const & texDescriptorSet
 			, ashes::BufferBase const & vbo );
-		void accept( RenderTechniqueVisitor & visitor );
+		void accept( PipelineVisitorBase & visitor );
 		inline ashes::CommandBuffer const & getCommandBuffer()const
 		{
 			CU_Require( m_commandBuffer );

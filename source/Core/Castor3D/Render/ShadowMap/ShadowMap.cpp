@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -34,7 +35,25 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMap::initialise( std::vector< IntermediateView > & intermediates )
+	void ShadowMap::accept( PipelineVisitorBase & visitor )
+	{
+		uint32_t index = 0u;
+
+		for ( auto & view : *m_shadowMap.getTexture() )
+		{
+			visitor.visit( m_name + "Variance" + string::toString( index++ ), view->getView() );
+		}
+
+		index = 0u;
+
+		for ( auto & view : *m_linearMap.getTexture() )
+		{
+			visitor.visit( m_name + "Linear" + string::toString( index++ ), view->getView() );
+		}
+
+	}
+
+	bool ShadowMap::initialise()
 	{
 		bool result = true;
 
@@ -42,20 +61,6 @@ namespace castor3d
 		{
 			m_shadowMap.initialise();
 			m_linearMap.initialise();
-			uint32_t index = 0u;
-
-			for ( auto & view : *m_shadowMap.getTexture() )
-			{
-				intermediates.push_back( { m_name + "Variance" + string::toString( index++ ), view->getView() } );
-			}
-
-			index = 0u;
-
-			for ( auto & view : *m_linearMap.getTexture() )
-			{
-				intermediates.push_back( { m_name + "Linear" + string::toString( index++ ), view->getView() } );
-			}
-
 			auto & device = getCurrentRenderDevice( *this );
 
 			{

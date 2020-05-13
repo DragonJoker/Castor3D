@@ -47,7 +47,8 @@ namespace castor3d
 		**/
 		/**@{*/
 		virtual void visit( castor::String const & name
-			, ashes::ImageView const & view ) = 0;
+			, ashes::ImageView const & view
+			, TextureFactors const & factors = {} ) = 0;
 		/**@}*/
 		/**
 		*\~english
@@ -306,7 +307,8 @@ namespace castor3d
 		**/
 		/**@{*/
 		void visit( castor::String const & name
-			, ashes::ImageView const & view )override
+			, ashes::ImageView const & view
+			, TextureFactors const & factors = TextureFactors{} )override
 		{
 		}
 		/**@}*/

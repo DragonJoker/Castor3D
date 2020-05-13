@@ -101,7 +101,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor )override;
+		void accept( PipelineVisitorBase & visitor )override;
 
 	private:
 		/**

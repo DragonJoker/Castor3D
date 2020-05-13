@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderModule_H___
 #define ___C3D_RenderModule_H___
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
@@ -225,6 +226,7 @@ namespace castor3d
 	{
 		castor::String name;
 		ashes::ImageView view;
+		TextureFactors factors;
 	};
 	/**
 	*\~english

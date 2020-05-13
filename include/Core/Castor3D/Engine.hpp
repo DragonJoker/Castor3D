@@ -26,6 +26,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/ImageLoader.hpp>
 #include <CastorUtils/Graphics/ImageWriter.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 
 #include <ashespp/Core/RendererList.hpp>

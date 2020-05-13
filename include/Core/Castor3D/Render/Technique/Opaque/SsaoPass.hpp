@@ -7,9 +7,9 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 #define C3D_DebugSSAO 0
 
@@ -64,7 +64,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor );
+		void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.

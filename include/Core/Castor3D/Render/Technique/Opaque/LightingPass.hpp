@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
@@ -94,14 +95,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor );
-		/**
-		 *\~english
-		 *\brief		Lists the pass' intermediate views.
-		 *\~french
-		 *\brief		Liste les vues intermédiaires de la passe.
-		 */
-		void listIntermediates( std::vector< IntermediateView > & intermediates )const;
+		void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\return		The light pass diffuse result.

@@ -7,6 +7,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -787,7 +788,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void SubsurfaceScatteringPass::accept( RenderTechniqueVisitor & visitor )
+	void SubsurfaceScatteringPass::accept( PipelineVisitorBase & visitor )
 	{
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{

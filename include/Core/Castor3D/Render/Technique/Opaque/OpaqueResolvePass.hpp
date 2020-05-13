@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
@@ -87,7 +87,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor );
+		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	private:
 		struct ProgramPipeline
@@ -110,7 +110,7 @@ namespace castor3d
 				, ashes::DescriptorSet const & texSet
 				, ashes::FrameBuffer const & frameBuffer
 				, RenderPassTimer & timer );
-			void accept( RenderTechniqueVisitor & visitor );
+			void accept( PipelineVisitorBase & visitor );
 
 			Engine & m_engine;
 			GeometryPassResult const & m_geometryPassResult;

@@ -8,6 +8,7 @@
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Fog.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -512,7 +513,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void TransparentResolveProgram::accept( RenderTechniqueVisitor & visitor )
+	void TransparentResolveProgram::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

@@ -2,6 +2,10 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -23,9 +27,6 @@
 #include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureView.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -1215,7 +1216,7 @@ namespace castor3d
 		m_commandBuffer->end();
 	}
 
-	void OpaqueResolvePass::ProgramPipeline::accept( RenderTechniqueVisitor & visitor )
+	void OpaqueResolvePass::ProgramPipeline::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -1354,7 +1355,7 @@ namespace castor3d
 		return *result;
 	}
 
-	void OpaqueResolvePass::accept( RenderTechniqueVisitor & visitor )
+	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];

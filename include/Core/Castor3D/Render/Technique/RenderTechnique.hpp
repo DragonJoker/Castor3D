@@ -214,6 +214,16 @@ namespace castor3d
 			return m_ssaoConfig;
 		}
 
+		inline SsgiConfig const & getSsgiConfig()const
+		{
+			return m_ssgiConfig;
+		}
+
+		inline SsgiConfig & getSsgiConfig()
+		{
+			return m_ssgiConfig;
+		}
+
 		inline DebugConfig const & getDebugConfig()const
 		{
 			return m_debugConfig;
@@ -230,7 +240,7 @@ namespace castor3d
 
 	private:
 		void doCreateShadowMaps();
-		void doInitialiseShadowMaps( std::vector< IntermediateView > & intermediates );
+		void doInitialiseShadowMaps();
 		void doInitialiseBackgroundPass();
 #if C3D_UseDepthPrepass
 		void doInitialiseDepthPass();

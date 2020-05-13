@@ -65,7 +65,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
-		C3D_API bool initialise( std::vector< IntermediateView > & intermediates );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the frame buffer and light type specific data.
@@ -73,6 +73,15 @@ namespace castor3d
 		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
 		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*/
+		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\brief		Updates the passes, selecting the lights that will project shadows.
