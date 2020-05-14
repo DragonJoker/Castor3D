@@ -109,13 +109,13 @@ namespace castor3d
 			return uint32_t( getBuffers().size() );
 		}
 
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, castor::Path const & folder
 			, castor::Path const & relative );
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, castor::PxBufferBaseSPtr buffer
 			, uint32_t depth );
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, VkExtent3D const & extent
 			, VkFormat format );
 

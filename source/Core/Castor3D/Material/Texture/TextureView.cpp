@@ -33,21 +33,23 @@ namespace castor3d
 
 	TextureView::TextureView( TextureLayout & layout
 		, ashes::ImageViewCreateInfo info
-		, uint32_t index )
+		, uint32_t index
+		, castor::String debugName )
 		: OwnedBy< TextureLayout >{ layout }
 		, m_index{ index }
 		, m_info{ std::move( info ) }
+		, m_debugName{ std::move( debugName ) }
 	{
 	}
 
 	bool TextureView::initialise()
 	{
 		auto & renderSystem = *getOwner()->getRenderSystem();
+		auto & image = getOwner()->getTexture();
 		auto & device = getCurrentRenderDevice( *getOwner() );
 		m_info->subresourceRange.levelCount = std::min( m_info->subresourceRange.levelCount
-			, getOwner()->getTexture().getMipmapLevels() );
-		m_info->image = getOwner()->getTexture();
-		m_view = getOwner()->getTexture().createView( m_info );
+			, image.getMipmapLevels() );
+		m_info->image = image;
 		m_needsMipmapsGeneration = false;
 
 		if ( m_source && m_source->isStatic() )
@@ -58,10 +60,10 @@ namespace castor3d
 			{
 				0u,
 				m_info->image,
-				m_view->viewType,
-				m_view->format,
-				m_view->components,
-				m_view->subresourceRange
+				m_info->viewType,
+				m_info->format,
+				m_info->components,
+				m_info->subresourceRange
 			};
 			viewInfo->subresourceRange.baseMipLevel = 0u;
 			viewInfo->subresourceRange.levelCount = 1u;
@@ -69,7 +71,10 @@ namespace castor3d
 
 			for ( auto & buffer : m_source->getBuffers() )
 			{
-				auto view = m_view.image->createView( viewInfo );
+				auto debugName = m_debugName + "Upload"
+					+ "L(" + string::toString( viewInfo->subresourceRange.baseArrayLayer ) + "x" + string::toString( viewInfo->subresourceRange.layerCount ) + ")"
+					+ "M(" + string::toString( viewInfo->subresourceRange.baseMipLevel ) + "x" + string::toString( viewInfo->subresourceRange.levelCount ) + ")";
+				auto view = image.createView( debugName, viewInfo );
 				staging->uploadTextureData( *device.graphicsQueue
 					, *device.graphicsCommandPool
 					, m_source->getPixelFormat()
@@ -80,19 +85,34 @@ namespace castor3d
 			}
 
 			m_needsMipmapsGeneration = getLevelCount() <= 1u
-				|| ( getLevelCount() > 1
-					&& viewInfo->subresourceRange.baseMipLevel < getLevelCount() );
+				|| viewInfo->subresourceRange.baseMipLevel < getLevelCount();
 		}
 		else
 		{
 			m_needsMipmapsGeneration = m_info->subresourceRange.levelCount > 1u;
 		}
 
-		return m_view != nullptr;
+		return true;
+	}
+
+	void TextureView::update( VkImage image
+		, uint32_t baseArrayLayer
+		, uint32_t layerCount
+		, uint32_t baseMipLevel
+		, uint32_t levelCount )
+	{
+		auto info = m_info;
+		info->image = image;
+		info->subresourceRange.baseArrayLayer = baseArrayLayer;
+		info->subresourceRange.layerCount = layerCount;
+		info->subresourceRange.baseMipLevel = baseMipLevel;
+		info->subresourceRange.levelCount = levelCount;
+		doUpdate( std::move( info ) );
 	}
 
 	void TextureView::cleanup()
 	{
+		m_view = ashes::ImageView{};
 	}
 
 	void TextureView::initialiseSource( Path const & folder
@@ -179,6 +199,22 @@ namespace castor3d
 	uint32_t TextureView::getLevelCount()const
 	{
 		return m_source->getLevelCount();
+	}
+
+	inline ashes::ImageView const & TextureView::getView()const
+	{
+		if ( !m_view )
+		{
+			CU_Require( m_info->image != VK_NULL_HANDLE );
+			auto & image = getOwner()->getTexture();
+			auto debugName = m_debugName
+				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
+				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
+			m_view = image.createView( debugName
+				, m_info );
+		}
+
+		return m_view;
 	}
 
 	void TextureView::doUpdate( ashes::ImageViewCreateInfo info )

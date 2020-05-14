@@ -267,12 +267,12 @@ namespace castor3d
 				, doGetImageCreate( m_2dTexture->getPixelFormat(), { dim, dim }, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackgroundCube" ) );
-			m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
-			m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
-			m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			VkImageSubresourceLayers srcSubresource
@@ -343,7 +343,7 @@ namespace castor3d
 			{
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, m_texture->getImage( index ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+					, m_texture->getLayerCubeFaceView( 0, CubeMapFace( index ) ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 				commandBuffer->copyImage( copyInfo
 					, m_2dTexture->getTexture()
 					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -351,7 +351,7 @@ namespace castor3d
 					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, m_texture->getImage( index ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+					, m_texture->getLayerCubeFaceView( 0, CubeMapFace( index ) ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 				++index;
 			}
 

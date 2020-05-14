@@ -435,7 +435,7 @@ namespace GuiCommon
 					, image
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, path );
-				texture->getImage().initialiseSource( Path{}, path );
+				texture->getDefaultImage().initialiseSource( Path{}, path );
 				unit->setTexture( texture );
 				unit->initialise();
 			}

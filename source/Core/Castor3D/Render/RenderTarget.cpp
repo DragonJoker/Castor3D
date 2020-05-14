@@ -261,7 +261,7 @@ namespace castor3d
 
 				doInitialiseCopyCommands( "HDR"
 					, m_hdrCopyCommands
-					, sourceView->getImage().getView()
+					, sourceView->getDefaultView()
 					, m_renderTechnique->getResult().getDefaultView() );
 				m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
 			}

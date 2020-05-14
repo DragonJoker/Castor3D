@@ -485,10 +485,10 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 
-		for ( auto & image : *getResult().getTexture() )
+		for ( auto & layer : getResult().getTexture()->getArray2D().layers )
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
-				, image->getView() );
+				, layer.view->getView() );
 		}
 
 		visitor.visit( m_lineariseVertexShader );

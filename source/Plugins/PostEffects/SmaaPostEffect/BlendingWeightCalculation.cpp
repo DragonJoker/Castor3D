@@ -1028,6 +1028,19 @@ namespace smaa
 			, depthView );
 	}
 
+	BlendingWeightCalculation::~BlendingWeightCalculation()
+	{
+		m_searchTex->cleanup();
+		m_searchTex.reset();
+		m_areaTex->cleanup();
+		m_areaTex.reset();
+		m_ubo->cleanup();
+		m_ubo.reset();
+		m_pointSampler.reset();
+		m_surface.cleanup();
+		m_renderPass.reset();;
+	}
+
 	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{

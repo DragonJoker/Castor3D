@@ -228,6 +228,8 @@ namespace castor3d
 
 	void Pass::addTextureUnit( TextureUnitSPtr unit )
 	{
+		m_textures |= getUsedImageComponents( unit->getConfiguration() );
+
 		if ( unit->getConfiguration().environment )
 		{
 			auto it = std::find_if( m_textureUnits.begin()
@@ -239,7 +241,7 @@ namespace castor3d
 
 			if ( it == m_textureUnits.end() )
 			{
-				m_textureUnits.push_back( unit );
+				m_textureUnits.push_back( std::move( unit ) );
 			}
 			else
 			{
@@ -267,7 +269,7 @@ namespace castor3d
 					m_heightTextureIndex = uint32_t( m_textureUnits.size() );
 				}
 
-				m_textureUnits.push_back( unit );
+				m_textureUnits.push_back( std::move( unit ) );
 			}
 			else
 			{
@@ -284,7 +286,6 @@ namespace castor3d
 			}
 		}
 
-		m_textures |= getUsedImageComponents( unit->getConfiguration() );
 		m_texturesReduced = false;
 	}
 

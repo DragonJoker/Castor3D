@@ -237,13 +237,13 @@ namespace GuiCommon
 
 	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, bool p_flip, wxBitmap & p_bitmap )
 	{
-		if ( p_pUnit->getTexture()->getImage().getBuffer() )
+		if ( p_pUnit->getTexture()->getDefaultImage().getBuffer() )
 		{
-			CreateBitmapFromBuffer( p_pUnit->getTexture()->getImage().getBuffer(), p_flip, p_bitmap );
+			CreateBitmapFromBuffer( p_pUnit->getTexture()->getDefaultImage().getBuffer(), p_flip, p_bitmap );
 		}
 		else
 		{
-			castor::Path path{ p_pUnit->getTexture()->getImage().toString() };
+			castor::Path path{ p_pUnit->getTexture()->getDefaultImage().toString() };
 
 			if ( !path.empty() )
 			{

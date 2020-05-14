@@ -77,12 +77,12 @@ namespace castor3d
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
 
-		m_texture->getImage( 0u ).initialiseSource();
-		m_texture->getImage( 1u ).initialiseSource();
-		m_texture->getImage( 2u ).initialiseSource();
-		m_texture->getImage( 3u ).initialiseSource();
-		m_texture->getImage( 4u ).initialiseSource();
-		m_texture->getImage( 5u ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 		auto result = m_texture->initialise();
 		m_colour.reset();
 
@@ -96,7 +96,7 @@ namespace castor3d
 			{
 				m_stagingTexture->copyTextureData( *m_cmdCopy
 					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, m_texture->getImage( i ).getView() );
+					, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( i ) ).getView() );
 			}
 
 			m_cmdCopy->end();

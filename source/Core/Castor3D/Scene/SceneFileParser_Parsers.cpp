@@ -4010,11 +4010,12 @@ namespace castor3d
 					|| parsingContext->textureConfiguration.environment != 0u )
 				{
 					parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
-					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+					parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
 				}
 				else if ( parsingContext->folder.empty() && parsingContext->relative.empty() )
 				{
 					CU_ParsingError( cuT( "TextureUnit's image not initialised" ) );
+					parsingContext->textureUnit.reset();
 				}
 				else
 				{
@@ -4034,7 +4035,11 @@ namespace castor3d
 							, parsingContext->relative );
 						parsingContext->textureUnit->setTexture( texture );
 						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
-						parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
+					}
+					else
+					{
+						parsingContext->textureUnit.reset();
 					}
 				}
 

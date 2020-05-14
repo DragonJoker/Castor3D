@@ -158,7 +158,7 @@ namespace castor3d
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
-			attaches.emplace_back( colourTexture->getImage().getView() );
+			attaches.emplace_back( colourTexture->getDefaultView() );
 		}
 
 		if ( depthTexture )

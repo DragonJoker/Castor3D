@@ -389,42 +389,42 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureSourceUPtr TextureSource::create( Engine & engine
+	TextureSourceSPtr TextureSource::create( Engine & engine
 		, castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		return std::make_unique< StaticFileTextureSource >( engine
+		return std::make_shared< StaticFileTextureSource >( engine
 			, folder
 			, relative );
 	}
 
-	TextureSourceUPtr TextureSource::create( Engine & engine
+	TextureSourceSPtr TextureSource::create( Engine & engine
 		, castor::PxBufferBaseSPtr buffer
 		, uint32_t depth )
 	{
 		if ( depth )
 		{
-			return std::make_unique< Static3DTextureSource >( engine
+			return std::make_shared< Static3DTextureSource >( engine
 				, castor::Point3ui{ buffer->getWidth(), buffer->getHeight(), depth }
 				, buffer );
 		}
 
-		return std::make_unique< Static2DTextureSource >( engine
+		return std::make_shared< Static2DTextureSource >( engine
 			, buffer );
 	}
 
-	TextureSourceUPtr TextureSource::create( Engine & engine
+	TextureSourceSPtr TextureSource::create( Engine & engine
 		, VkExtent3D const & extent
 		, VkFormat format )
 	{
 		if ( extent.depth > 1 )
 		{
-			return std::make_unique< Dynamic3DTextureSource >( engine
+			return std::make_shared< Dynamic3DTextureSource >( engine
 				, castor::Point3ui{ extent.width, extent.height, extent.depth }
 				, format );
 		}
 
-		return std::make_unique< Dynamic2DTextureSource >( engine
+		return std::make_shared< Dynamic2DTextureSource >( engine
 			, castor::Size{ extent.width, extent.height }
 			, format );
 	}
