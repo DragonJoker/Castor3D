@@ -169,11 +169,11 @@ namespace castor3d
 			, renderTarget.getName() + cuT( "Colour" ) );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
-		colourTexture.getTexture()->getDefaultImage().initialiseSource();
+		colourTexture.getTexture()->getDefaultView().initialiseSource();
 		colourTexture.getTexture()->initialise();
 
 		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( colourTexture.getTexture()->getDefaultView() );
+		attaches.emplace_back( colourTexture.getTexture()->getDefaultView().getView() );
 		frameBuffer = renderPass.createFrameBuffer( renderTarget.getName()
 			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
@@ -261,8 +261,8 @@ namespace castor3d
 
 				doInitialiseCopyCommands( "HDR"
 					, m_hdrCopyCommands
-					, sourceView->getDefaultView()
-					, m_renderTechnique->getResult().getDefaultView() );
+					, sourceView->getDefaultView().getView()
+					, m_renderTechnique->getResult().getDefaultView().getView() );
 				m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
 			}
 
@@ -286,13 +286,13 @@ namespace castor3d
 
 				doInitialiseCopyCommands( "SRGB"
 					, m_srgbCopyCommands
-					, sourceView->getDefaultView()
-					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+					, sourceView->getDefaultView().getView()
+					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
 				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
 			}
 
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
 			m_overlayRenderer->initialise();
 
 			doInitialiseCombine();
@@ -550,7 +550,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Colour", m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+			addIntermediateView( "Target Colour", m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
 			result = m_overlaysFrameBuffer.initialise( *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, m_size );
@@ -558,7 +558,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Overlays", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+			addIntermediateView( "Target Overlays", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
 			result = m_combinedFrameBuffer.initialise( *m_renderPass
 				, getPixelFormat()
 				, m_size );
@@ -566,7 +566,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			addIntermediateView( "Target Result", m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+			addIntermediateView( "Target Result", m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
 		}
 
 		return result;
@@ -592,12 +592,12 @@ namespace castor3d
 			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
-		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
+		m_velocityTexture.getTexture()->getDefaultView().initialiseSource();
 		bool result = m_velocityTexture.initialise();
 
 		if ( result )
 		{
-			addIntermediateView( "Target Velocity", m_velocityTexture.getTexture()->getDefaultView() );
+			addIntermediateView( "Target Velocity", m_velocityTexture.getTexture()->getDefaultView().getView() );
 		}
 
 		return  result;
@@ -650,7 +650,7 @@ namespace castor3d
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_renderTechnique->getResult().getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
@@ -660,7 +660,7 @@ namespace castor3d
 			// Put render technique image back in colour attachment layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_renderTechnique->getResult().getDefaultView().getView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endDebugBlock();
 			m_toneMappingCommandBuffer->end();
@@ -783,7 +783,7 @@ namespace castor3d
 				, extent
 				, m_combineVtx
 				, m_combinePxl
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView()
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView()
 				, intermediate.view
 				, m_combinedFrameBuffer.colourTexture.getTexture()
 				, RenderQuad::TexcoordConfig{} ) );

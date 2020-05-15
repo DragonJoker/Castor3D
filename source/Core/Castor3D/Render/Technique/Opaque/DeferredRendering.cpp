@@ -71,7 +71,7 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			texture->getDefaultImage().initialiseSource();
+			texture->getDefaultView().initialiseSource();
 			texture->initialise();
 			return texture;
 		}
@@ -114,7 +114,7 @@ namespace castor3d
 			, m_size
 			, scene
 			, m_opaquePassResult
-			, depthTexture->getDefaultView()
+			, depthTexture->getDefaultView().getView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo ) }
 		, m_ssao{ std::make_unique< SsaoPass >( m_engine
@@ -141,9 +141,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
-			, resultTexture->getDefaultView()
+			, m_lightingPass->getDiffuse().getTexture()->getDefaultView().getView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
+			, resultTexture->getDefaultView().getView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -152,9 +152,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
-			, resultTexture->getDefaultView()
+			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
+			, resultTexture->getDefaultView().getView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -164,24 +164,24 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getDiffuse().getTexture()->getDefaultView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
-			, resultTexture->getDefaultView()
+			, m_lightingPass->getDiffuse().getTexture()->getDefaultView().getView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
+			, resultTexture->getDefaultView().getView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
+			, &m_ssao->getResult().getTexture()->getDefaultView().getView() ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView()
-			, resultTexture->getDefaultView()
+			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getView()
+			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
+			, resultTexture->getDefaultView().getView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView() ) );
+			, &m_ssao->getResult().getTexture()->getDefaultView().getView() ) );
 		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
 	}
 

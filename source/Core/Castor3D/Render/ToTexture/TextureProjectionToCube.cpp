@@ -172,7 +172,7 @@ namespace castor3d
 		, TextureLayout const & target )
 		: RenderCube{ device, false }
 		, m_commandBuffer{ m_device.graphicsCommandPool->createCommandBuffer( "TextureProjectionToCube" ) }
-		, m_view{ equiRectangular.getDefaultView() }
+		, m_view{ equiRectangular.getDefaultView().getView() }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };

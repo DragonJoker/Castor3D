@@ -149,7 +149,7 @@ namespace castor3d
 #if !C3D_DebugRawPass
 		, m_gaussianBlur{ std::make_shared< GaussianBlur >( engine
 			, cuT( "SSGI" )
-			, m_rawGiPass->getResult().getTexture()->getDefaultView()
+			, m_rawGiPass->getResult().getTexture()->getDefaultView().getView()
 			, ssgiConfig.blurSize.value().value() ) }
 		, m_combine{ std::make_shared< CombinePass >( engine
 			, cuT( "SSGI" )
@@ -157,14 +157,14 @@ namespace castor3d
 			, VkExtent2D{ scene->getWidth(), scene->getHeight() }
 			, m_combineVtx
 			, m_combinePxl
-			, m_hdrCopy.getTexture()->getDefaultView()
-			, m_rawGiPass->getResult().getTexture()->getDefaultView()
+			, m_hdrCopy.getTexture()->getDefaultView().getView()
+			, m_rawGiPass->getResult().getTexture()->getDefaultView().getView()
 			, scene ) }
 #endif
 	{
 		auto & cmd = *m_hdrCopyCommands.commandBuffer;
-		auto copySrc = scene->getDefaultView();
-		auto copyDst = m_hdrCopy.getTexture()->getDefaultView();
+		auto copySrc = scene->getDefaultView().getView();
+		auto copyDst = m_hdrCopy.getTexture()->getDefaultView().getView();
 		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		cmd.beginDebugBlock(
 			{

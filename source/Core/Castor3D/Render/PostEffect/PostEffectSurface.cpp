@@ -158,7 +158,7 @@ namespace castor3d
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
-			attaches.emplace_back( colourTexture->getDefaultView() );
+			attaches.emplace_back( colourTexture->getDefaultView().getView() );
 		}
 
 		if ( depthTexture )
@@ -202,7 +202,7 @@ namespace castor3d
 				stencilView = texture.createView( m_debugName, view );
 			}
 
-			attaches.emplace_back( depthTexture->getDefaultView() );
+			attaches.emplace_back( depthTexture->getDefaultView().getView() );
 		}
 
 		frameBuffer = renderPass.createFrameBuffer( m_debugName

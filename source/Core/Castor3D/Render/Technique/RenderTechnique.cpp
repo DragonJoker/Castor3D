@@ -143,7 +143,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
-			result->getDefaultImage().initialiseSource();
+			result->getDefaultView().initialiseSource();
 			result->initialise();
 			return result;
 		}
@@ -404,8 +404,8 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView() );
-		visitor.visit( "Technique Depth", m_depthBuffer->getDefaultView() );
+		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView().getView() );
+		visitor.visit( "Technique Depth", m_depthBuffer->getDefaultView().getView() );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -537,8 +537,8 @@ namespace castor3d
 
 		ashes::ImageViewCRefArray attaches
 		{
-			m_depthBuffer->getDefaultView(),
-			m_colourTexture->getDefaultView(),
+			m_depthBuffer->getDefaultView().getView(),
+			m_colourTexture->getDefaultView().getView(),
 		};
 		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( "Background"
 			, { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
@@ -608,8 +608,8 @@ namespace castor3d
 #else
 
 		m_opaquePass->initialise( m_size );
-		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView()
-			, m_depthBuffer->getDefaultView()
+		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
+			, m_depthBuffer->getDefaultView().getView()
 			, m_size
 			, false );
 
@@ -623,8 +623,8 @@ namespace castor3d
 		m_transparentPass->initialise( m_size );
 		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 			, static_cast< TransparentPass & >( *m_transparentPass )
-			, m_depthBuffer->getDefaultView()
-			, m_colourTexture->getDefaultView()
+			, m_depthBuffer->getDefaultView().getView()
+			, m_colourTexture->getDefaultView().getView()
 			, m_renderTarget.getVelocity().getTexture()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
@@ -634,8 +634,8 @@ namespace castor3d
 #else
 
 		m_transparentPass->initialise( m_size );
-		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_colourTexture->getDefaultView()
-			, m_depthBuffer->getDefaultView()
+		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
+			, m_depthBuffer->getDefaultView().getView()
 			, m_size
 			, false );
 

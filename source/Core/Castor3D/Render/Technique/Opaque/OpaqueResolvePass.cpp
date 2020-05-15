@@ -1085,7 +1085,7 @@ namespace castor3d
 			while ( it != envMaps.end() && i < envMapCount )
 			{
 				envWrites.imageInfo.push_back( { it->get().getTexture().getSampler()->getSampler()
-					, it->get().getTexture().getTexture()->getDefaultView()
+					, it->get().getTexture().getTexture()->getDefaultView().getView()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 				++i;
 				++it;

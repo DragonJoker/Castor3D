@@ -62,7 +62,7 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
-			texture->getDefaultImage().initialiseSource();
+			texture->getDefaultView().initialiseSource();
 
 			TextureUnit result{ engine };
 			result.setTexture( texture );
@@ -119,37 +119,37 @@ namespace castor3d
 		, m_srcDepth{ depthView }
 	{
 		m_lightPass[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPass >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo
 			, false );
 		m_lightPass[size_t( LightType::ePoint )] = std::make_unique< PointLightPass >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo
 			, false );
 		m_lightPass[size_t( LightType::eSpot )] = std::make_unique< SpotLightPass >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo
 			, false );
 		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo );
 		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo );
 		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
-			, m_depth.getTexture()->getDefaultView()
-			, m_diffuse.getTexture()->getDefaultView()
-			, m_specular.getTexture()->getDefaultView()
+			, m_depth.getTexture()->getDefaultView().getView()
+			, m_diffuse.getTexture()->getDefaultView().getView()
+			, m_specular.getTexture()->getDefaultView().getView()
 			, gpInfoUbo );
 
 		for ( auto & lightPass : m_lightPass )
@@ -193,7 +193,7 @@ namespace castor3d
 		// Dst depth buffer from unknown to transfer destination
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_depth.getTexture()->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_depth.getTexture()->getDefaultView().getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy Src to Dst
 		m_blitDepthCommandBuffer->copyImage( copy
 			, *m_srcDepth.image
@@ -203,7 +203,7 @@ namespace castor3d
 		// Dst depth buffer from transfer destination to depth attach
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-			, m_depth.getTexture()->getDefaultView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			, m_depth.getTexture()->getDefaultView().getView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		// Src depth buffer from transfer source to depth stencil read only
 		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
@@ -319,9 +319,9 @@ namespace castor3d
 	void LightingPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "Light Diffuse"
-			, m_diffuse.getTexture()->getDefaultView() );
+			, m_diffuse.getTexture()->getDefaultView().getView() );
 		visitor.visit( "Light Specular"
-			, m_specular.getTexture()->getDefaultView() );
+			, m_specular.getTexture()->getDefaultView().getView() );
 
 		m_lightPass[size_t( LightType::eDirectional )]->accept( visitor );
 		m_lightPass[size_t( LightType::ePoint )]->accept( visitor );

@@ -596,7 +596,7 @@ namespace castor3d
 	void TextureLayout::generateMipmaps()const
 	{
 		if ( m_info->mipLevels > 1u
-			&& getDefaultImage().needsMipmapsGeneration() )
+			&& getDefaultView().needsMipmapsGeneration() )
 		{
 			CU_Require( m_texture );
 			auto & device = getCurrentRenderDevice( *this );
@@ -612,18 +612,18 @@ namespace castor3d
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		getDefaultImage().initialiseSource( folder, relative );
+		getDefaultView().initialiseSource( folder, relative );
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		if ( !getDefaultImage().hasSource() )
+		if ( !getDefaultView().hasSource() )
 		{
-			getDefaultImage().initialiseSource( buffer );
+			getDefaultView().initialiseSource( buffer );
 		}
 		else
 		{
-			getDefaultImage().setBuffer( buffer );
+			getDefaultView().setBuffer( buffer );
 		}
 	}
 
@@ -674,8 +674,8 @@ namespace castor3d
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 				m_info->mipLevels = std::min( m_info->mipLevels
-					, ( getDefaultImage().getLevelCount() > 1u
-						? getDefaultImage().getLevelCount()
+					, ( getDefaultView().getLevelCount() > 1u
+						? getDefaultView().getLevelCount()
 						: m_info->mipLevels ) );
 
 				if ( m_info->mipLevels != mipLevels )

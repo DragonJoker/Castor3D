@@ -229,24 +229,19 @@ namespace castor3d
 
 		inline bool needsYInversion()const
 		{
-			return getDefaultImage().needsYInversion();
+			return getDefaultView().needsYInversion();
 		}
 
-		inline TextureView const & getDefaultImage()const
+		inline TextureView const & getDefaultView()const
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
 		}
 
-		inline TextureView & getDefaultImage()
+		inline TextureView & getDefaultView()
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
-		}
-
-		inline ashes::ImageView const & getDefaultView()const
-		{
-			return getDefaultImage().getView();
 		}
 
 		inline ArrayView< MipView > const & getArray2D()const

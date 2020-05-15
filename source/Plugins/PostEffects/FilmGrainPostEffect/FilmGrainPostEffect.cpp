@@ -417,7 +417,7 @@ namespace film_grain
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -444,7 +444,7 @@ namespace film_grain
 			// Put image in the right state for rendering.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

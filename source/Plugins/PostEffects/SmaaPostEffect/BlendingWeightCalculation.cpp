@@ -902,7 +902,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
-		m_areaTex->getDefaultImage().initialiseSource( areaTexBuffer );
+		m_areaTex->getDefaultView().initialiseSource( areaTexBuffer );
 		m_areaTex->initialise();
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
@@ -914,7 +914,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
-		m_searchTex->getDefaultImage().initialiseSource( searchTexBuffer );
+		m_searchTex->getDefaultView().initialiseSource( searchTexBuffer );
 		m_searchTex->initialise();
 
 		// Create the render pass.
@@ -933,7 +933,7 @@ namespace smaa
 			},
 			{
 				0u,
-				depthView->getDefaultView()->format,
+				depthView->getDefaultView().getView()->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -1099,10 +1099,10 @@ namespace smaa
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_ubo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_areaTex->getDefaultView()
+			, m_areaTex->getDefaultView().getView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_searchTex->getDefaultView()
+			, m_searchTex->getDefaultView().getView()
 			, *m_pointSampler );
 	}
 

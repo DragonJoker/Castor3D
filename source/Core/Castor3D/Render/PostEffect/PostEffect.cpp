@@ -101,13 +101,13 @@ namespace castor3d
 		// Put target image in transfer destination layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_target->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_target->getDefaultView().getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy result to target.
 		commandBuffer.copyImage( result
-			, m_target->getDefaultView() );
+			, m_target->getDefaultView().getView() );
 		// Put target image in fragment shader input layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			, m_target->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 	}
 }

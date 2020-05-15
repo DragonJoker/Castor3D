@@ -302,7 +302,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView() );
+			attaches.emplace_back( texture.getTexture()->getDefaultView().getView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( "LineariseDepthPass"
 				, VkExtent2D{ size.width, size.height }

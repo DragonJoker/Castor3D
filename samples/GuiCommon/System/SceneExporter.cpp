@@ -288,7 +288,7 @@ namespace GuiCommon
 
 		if ( unit && unit->getTexture() )
 		{
-			Path path{ unit->getTexture()->getDefaultImage().toString() };
+			Path path{ unit->getTexture()->getDefaultView().toString() };
 
 			if ( !path.empty() )
 			{

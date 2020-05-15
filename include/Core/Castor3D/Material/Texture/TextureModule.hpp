@@ -118,7 +118,7 @@ namespace castor3d
 		eNegativeZ,
 		CU_ScopedEnumBounds( ePositiveX )
 	};
-
+	C3D_API castor::String getName( CubeMapFace value );
 	/**
 	*\~english
 	*\brief

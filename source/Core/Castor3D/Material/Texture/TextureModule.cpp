@@ -46,4 +46,26 @@ namespace castor3d
 			return castor::cuEmptyString;
 		}
 	}
+
+	castor::String getName( CubeMapFace value )
+	{
+		switch ( value )
+		{
+		case castor3d::CubeMapFace::ePositiveX:
+			return cuT( "PositiveX" );
+		case castor3d::CubeMapFace::eNegativeX:
+			return cuT( "NegativeX" );
+		case castor3d::CubeMapFace::ePositiveY:
+			return cuT( "PositiveY" );
+		case castor3d::CubeMapFace::eNegativeY:
+			return cuT( "NegativeY" );
+		case castor3d::CubeMapFace::ePositiveZ:
+			return cuT( "PositiveZ" );
+		case castor3d::CubeMapFace::eNegativeZ:
+			return cuT( "NegativeZ" );
+		default:
+			CU_Failure( "Unsupported CubeMapFace" );
+			return castor::cuEmptyString;
+		}
+	}
 }

@@ -236,14 +236,14 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultView().initialiseSource( folder, relative );
 		setEquiTexture( texture, size );
 	}
 
 	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
 		, uint32_t size )
 	{
-		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_equiTexturePath = castor::Path( texture->getDefaultView().toString() );
 		m_equiTexture = texture;
 		m_equiSize.set( size, size );
 		notifyChanged();
@@ -276,13 +276,13 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultView().initialiseSource( folder, relative );
 		setCrossTexture( texture );
 	}
 
 	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
 	{
-		m_crossTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_crossTexturePath = castor::Path( texture->getDefaultView().toString() );
 		m_crossTexture = texture;
 		notifyChanged();
 	}
@@ -391,14 +391,14 @@ namespace castor3d
 
 		VkImageSubresourceLayers srcSubresource
 		{
-			m_crossTexture->getDefaultView()->subresourceRange.aspectMask,
+			m_crossTexture->getDefaultView().getView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
 		};
 		VkImageSubresourceLayers dstSubresource
 		{
-			m_texture->getDefaultView()->subresourceRange.aspectMask,
+			m_texture->getDefaultView().getView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
@@ -463,7 +463,7 @@ namespace castor3d
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_crossTexture->getDefaultView().getView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		uint32_t index{ 0u };
 
 		for ( auto & copyInfo : copyInfos )

@@ -43,56 +43,6 @@ namespace castor3d
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
 		using shadow_pass_type = ShadowMapDirectional;
-		/**
-		 *\~english
-		 *\return		The shadow map name.
-		 *\~french
-		 *\return		Le nom de la texture d'ombres.
-		 */
-		static castor::String const & getShadowMapName()
-		{
-			static castor::String const name = shader::Shadow::MapShadowDirectional;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\return		The depth map name.
-		 *\~french
-		 *\return		Le nom de la texture de profondeur.
-		 */
-		static castor::String const & getDepthMapName()
-		{
-			static castor::String const name = shader::Shadow::MapDepthDirectional;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	shadowMap	The shadow map.
-		 *\return		The shadow map texture.
-		 *\~french
-		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	shadowMap	La shadow map.
-		 *\return		Le nom de la shadow map.
-		 */
-		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
-		{
-			return shadowMap.getTexture();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	light	The generic light source.
-		 *\return		The typed light source.
-		 *\~french
-		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	light	La source lumineuse générique.
-		 *\return		La source lumineuse typée.
-		 */
-		static light_type const & getTypedLight( Light const & light )
-		{
-			return *light.getDirectionalLight();
-		}
 	};
 	/**
 	\author		Sylvain DOREMUS
@@ -117,56 +67,6 @@ namespace castor3d
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
 		using shadow_pass_type = ShadowMapPoint;
-		/**
-		 *\~english
-		 *\return		The shadow map name.
-		 *\~french
-		 *\return		Le nom de la texture d'ombres.
-		 */
-		static castor::String const & getShadowMapName()
-		{
-			static castor::String const name = shader::Shadow::MapShadowPoint;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\return		The depth map name.
-		 *\~french
-		 *\return		Le nom de la texture de profondeur.
-		 */
-		static castor::String const & getDepthMapName()
-		{
-			static castor::String const name = shader::Shadow::MapDepthPoint;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	shadowMap	The shadow map.
-		 *\return		The shadow map texture.
-		 *\~french
-		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	shadowMap	La shadow map.
-		 *\return		Le nom de la shadow map.
-		 */
-		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
-		{
-			return shadowMap.getTexture();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	light	The generic light source.
-		 *\return		The typed light source.
-		 *\~french
-		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	light	La source lumineuse générique.
-		 *\return		La source lumineuse typée.
-		 */
-		static light_type const & getTypedLight( Light const & light )
-		{
-			return *light.getPointLight();
-		}
 	};
 	/**
 	\author		Sylvain DOREMUS
@@ -191,56 +91,6 @@ namespace castor3d
 		//!\~english	The shadow map type.
 		//!\~french		Le type de map d'ombre.
 		using shadow_pass_type = ShadowMapSpot;
-		/**
-		 *\~english
-		 *\return		The shadow map name.
-		 *\~french
-		 *\return		Le nom de la texture d'ombres.
-		 */
-		static castor::String const & getShadowMapName()
-		{
-			static castor::String const name = shader::Shadow::MapShadowSpot;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\return		The depth map name.
-		 *\~french
-		 *\return		Le nom de la texture de profondeur.
-		 */
-		static castor::String const & getDepthMapName()
-		{
-			static castor::String const name = shader::Shadow::MapDepthSpot;
-			return name;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture from the shadow map.
-		 *\param[in]	shadowMap	The shadow map.
-		 *\return		The shadow map texture.
-		 *\~french
-		 *\brief		Récupère la texture d'une shadow map.
-		 *\param[in]	shadowMap	La shadow map.
-		 *\return		Le nom de la shadow map.
-		 */
-		static TextureUnit & getTexture( shadow_pass_type & shadowMap )
-		{
-			return shadowMap.getTexture();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the typed light source from a generic one.
-		 *\param[in]	light	The generic light source.
-		 *\return		The typed light source.
-		 *\~french
-		 *\brief		Récupère la source lumineuse typée depuis une générique.
-		 *\param[in]	light	La source lumineuse générique.
-		 *\return		La source lumineuse typée.
-		 */
-		static light_type const & getTypedLight( Light const & light )
-		{
-			return *light.getSpotLight();
-		}
 	};
 
 	template< LightType LtType >

@@ -363,7 +363,7 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			texture->getDefaultImage().initialiseSource();
+			texture->getDefaultView().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -467,7 +467,7 @@ namespace castor3d
 		, m_sceneUbo{ sceneUbo }
 		, m_blurUbo{ blurUbo }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringBlur" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), "SubscatteringBlur" ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -496,7 +496,7 @@ namespace castor3d
 		createPipeline( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView()
+			, source.getTexture()->getDefaultView().getView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -575,7 +575,7 @@ namespace castor3d
 		, m_source{ source }
 		, m_blurResults{ blurResults }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringCombine" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView(), "SubscatteringCombine" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), "SubscatteringCombine" ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -603,7 +603,7 @@ namespace castor3d
 		createPipeline( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView()
+			, source.getTexture()->getDefaultView().getView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -649,13 +649,13 @@ namespace castor3d
 			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur1ImgId )
-			, m_blurResults[0].getTexture()->getDefaultView()
+			, m_blurResults[0].getTexture()->getDefaultView().getView()
 			, m_blurResults[0].getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur2ImgId )
-			, m_blurResults[1].getTexture()->getDefaultView()
+			, m_blurResults[1].getTexture()->getDefaultView().getView()
 			, m_blurResults[1].getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur3ImgId )
-			, m_blurResults[2].getTexture()->getDefaultView()
+			, m_blurResults[2].getTexture()->getDefaultView().getView()
 			, m_blurResults[2].getSampler()->getSampler() );
 	}
 
@@ -793,11 +793,11 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + string::toString( i )
-				, m_blurResults[i].getTexture()->getDefaultView() );
+				, m_blurResults[i].getTexture()->getDefaultView().getView() );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_result.getTexture()->getDefaultView() );
+			, m_result.getTexture()->getDefaultView().getView() );
 
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );

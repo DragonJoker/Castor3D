@@ -241,7 +241,7 @@ namespace grayscale
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -264,7 +264,7 @@ namespace grayscale
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

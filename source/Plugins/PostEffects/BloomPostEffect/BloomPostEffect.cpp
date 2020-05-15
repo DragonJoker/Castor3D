@@ -140,7 +140,7 @@ namespace Bloom
 
 		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
 			, m_target->getPixelFormat()
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getView()
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
@@ -162,8 +162,8 @@ namespace Bloom
 			, true );
 		m_combinePass = std::make_unique< CombinePass >( device
 			, m_target->getPixelFormat()
-			, m_target->getDefaultView()
-			, m_hiPass->getResult().getDefaultView()
+			, m_target->getDefaultView().getView()
+			, m_hiPass->getResult().getDefaultView().getView()
 			, size
 			, m_blurPassesCount );
 #endif

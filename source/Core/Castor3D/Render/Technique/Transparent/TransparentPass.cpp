@@ -334,7 +334,7 @@ namespace castor3d
 			if ( node.passNode.pass.hasEnvironmentMapping() )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getView()
 					, envMap.getTexture().getSampler()->getSampler()
 					, writes
 					, index );

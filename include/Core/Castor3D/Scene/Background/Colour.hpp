@@ -79,7 +79,7 @@ namespace castor3d
 		inline ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
-			return m_texture->getDefaultView();
+			return m_texture->getDefaultView().getView();
 		}
 
 		inline castor::HdrRgbColour const & getColour()const

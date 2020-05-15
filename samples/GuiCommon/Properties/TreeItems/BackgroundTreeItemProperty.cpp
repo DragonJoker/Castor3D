@@ -111,8 +111,8 @@ namespace GuiCommon
 			wxPGProperty * doCreateTextureImageProperty( wxString const & name
 				, castor3d::TextureLayout const & texture )
 			{
-				CU_Require( texture.getDefaultImage().isStaticSource() );
-				auto source = texture.getDefaultImage().toString();
+				CU_Require( texture.getDefaultView().isStaticSource() );
+				auto source = texture.getDefaultView().toString();
 				return new wxImageFileProperty{ name
 					, name
 					, make_wxString( source ) };
@@ -257,7 +257,7 @@ namespace GuiCommon
 	{
 		wxPGProperty * property = nullptr;
 
-		if ( texture.getDefaultImage().isStaticSource() )
+		if ( texture.getDefaultView().isStaticSource() )
 		{
 			property = new wxImageFileProperty( name );
 		}

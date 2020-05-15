@@ -67,7 +67,7 @@ namespace castor3d
 
 	bool ImageBackground::TextWriter::operator()( ImageBackground const & obj, TextFile & file )
 	{
-		castor::Path relative = Scene::TextWriter::copyFile( castor::Path{ obj.getTexture().getDefaultImage().toString() }
+		castor::Path relative = Scene::TextWriter::copyFile( castor::Path{ obj.getTexture().getDefaultView().toString() }
 			, file.getFilePath()
 			, castor::Path{ cuT( "Textures" ) } );
 		auto result = file.writeText( m_tabs + cuT( "background_image \"" ) + relative + cuT( "\"\n" ) ) > 0;
@@ -118,7 +118,7 @@ namespace castor3d
 				, cuT( "ImageBackground_Colour" ) );
 			texture->setSource( folder, relative );
 			m_2dTexture = texture;
-			m_2dTexturePath = castor::Path( m_2dTexture->getDefaultImage().toString() );
+			m_2dTexturePath = castor::Path( m_2dTexture->getDefaultView().toString() );
 			notifyChanged();
 			result = true;
 		}
@@ -277,14 +277,14 @@ namespace castor3d
 
 			VkImageSubresourceLayers srcSubresource
 			{
-				m_2dTexture->getDefaultView()->subresourceRange.aspectMask,
+				m_2dTexture->getDefaultView().getView()->subresourceRange.aspectMask,
 				0,
 				0,
 				1,
 			};
 			VkImageSubresourceLayers dstSubresource
 			{
-				m_texture->getDefaultView()->subresourceRange.aspectMask,
+				m_texture->getDefaultView().getView()->subresourceRange.aspectMask,
 				0,
 				0,
 				1,
@@ -336,7 +336,7 @@ namespace castor3d
 			commandBuffer->begin();
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_2dTexture->getDefaultView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_2dTexture->getDefaultView().getView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			uint32_t index{ 0u };
 
 			for ( auto & copyInfo : copyInfos )

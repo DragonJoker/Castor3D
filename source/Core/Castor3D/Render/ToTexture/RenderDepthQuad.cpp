@@ -87,7 +87,7 @@ namespace castor3d
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
-			, texture.getDefaultView()
+			, texture.getDefaultView().getView()
 			, renderPass
 			, {}
 			, {}

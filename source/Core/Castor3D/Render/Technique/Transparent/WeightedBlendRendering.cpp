@@ -30,7 +30,7 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
-		, m_transparentPassResult{ engine, *depthView.image, *velocityTexture->getDefaultView().image }
+		, m_transparentPassResult{ engine, *depthView.image, *velocityTexture->getDefaultView().getView().image }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_transparentPassResult );

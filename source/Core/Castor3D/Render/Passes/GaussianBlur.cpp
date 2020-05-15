@@ -284,7 +284,7 @@ namespace castor3d
 				, std::move( image )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
-			texture->getDefaultImage().initialiseSource();
+			texture->getDefaultView().initialiseSource();
 			TextureUnit unit{ engine };
 			unit.setTexture( texture );
 			unit.setSampler( sampler );
@@ -574,7 +574,7 @@ namespace castor3d
 			engine,
 			m_prefix + cuT( " - GaussianBlur - X Pass" ),
 			texture,
-			m_intermediate.getTexture()->getDefaultView(),
+			m_intermediate.getTexture()->getDefaultView().getView(),
 			*m_blurUbo,
 			m_format,
 			m_size,
@@ -585,7 +585,7 @@ namespace castor3d
 		{
 			engine,
 			m_prefix + cuT( " - GaussianBlur - Y Pass" ),
-			m_intermediate.getTexture()->getDefaultView(),
+			m_intermediate.getTexture()->getDefaultView().getView(),
 			texture,
 			*m_blurUbo,
 			m_format,
@@ -611,7 +611,7 @@ namespace castor3d
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_prefix + " GaussianBlur Intermediate"
-			, m_intermediate.getTexture()->getDefaultView() );
+			, m_intermediate.getTexture()->getDefaultView().getView() );
 
 		visitor.visit( m_blurX.vertexShader );
 		visitor.visit( m_blurX.pixelShader );

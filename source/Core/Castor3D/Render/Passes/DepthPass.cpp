@@ -101,7 +101,7 @@ namespace castor3d
 			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray fbattaches;
-		fbattaches.emplace_back( depthBuffer->getDefaultView() );
+		fbattaches.emplace_back( depthBuffer->getDefaultView().getView() );
 		m_frameBuffer = m_renderPass->createFrameBuffer( "DepthPass"
 			, size
 			, std::move( fbattaches ) );
