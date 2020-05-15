@@ -49,12 +49,7 @@ namespace castor3d
 		void updateDeviceDependent( uint32_t index )override;
 
 	private:
-		void doInitialiseDepth();
 		void doInitialiseFramebuffers();
-		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
-		 */
-		void doInitialiseDepthFormat()override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -95,13 +90,14 @@ namespace castor3d
 		{
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::ImageView depthView;
-			ashes::ImageView varianceView;
 			ashes::ImageView linearView;
+			ashes::ImageView varianceView;
+			ashes::ImageView positionView;
+			ashes::ImageView fluxView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		ashes::CommandBufferPtr m_commandBuffer;
 		CameraSPtr m_camera;
-		ashes::ImagePtr m_depthTexture;
 		std::vector< FrameBuffer > m_frameBuffers;
 		ShadowType m_shadowType{ ShadowType::eRaw };
 		uint32_t m_cascades;

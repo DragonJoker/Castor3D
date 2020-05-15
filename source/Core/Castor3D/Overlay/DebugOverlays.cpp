@@ -44,6 +44,10 @@ namespace castor3d
 					return cuT( "ShadowMap: Spot" );
 				}
 			}
+			else if ( timerName.find( cuT( "UBOs" ) ) != String::npos )
+			{
+				return cuT( "UBOs" );
+			}
 
 			return timerCategory == timerName
 				? timerCategory

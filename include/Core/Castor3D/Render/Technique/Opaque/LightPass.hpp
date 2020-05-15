@@ -365,6 +365,7 @@ namespace castor3d
 		Pipeline createPipeline( LightType lightType
 			, ShadowType shadowType
 			, bool volumetric
+			, bool rsm
 			, ShadowMap const * shadowMap );
 
 	protected:
@@ -499,7 +500,8 @@ namespace castor3d
 		virtual ShaderPtr doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric )const;
+			, bool volumetric
+			, bool rsm )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -519,7 +521,8 @@ namespace castor3d
 		virtual ShaderPtr doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric )const;
+			, bool volumetric
+			, bool rsm )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for this light pass.
@@ -539,7 +542,8 @@ namespace castor3d
 		virtual ShaderPtr doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
-			, bool volumetric )const;
+			, bool volumetric
+			, bool rsm )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source for this light pass.

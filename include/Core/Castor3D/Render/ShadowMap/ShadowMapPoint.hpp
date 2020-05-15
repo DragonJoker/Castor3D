@@ -68,20 +68,17 @@ namespace castor3d
 
 		inline TextureUnit & getTexture()
 		{
-			return m_shadowMap;
+			return m_result[SmTexture::eVariance];
 		}
 
 		inline TextureUnit const & getTexture()const
 		{
-			return m_shadowMap;
+			return m_result[SmTexture::eVariance];
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
-		 */
-		void doInitialiseDepthFormat()override;
+		void doInitialiseFramebuffers();
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -112,28 +109,27 @@ namespace castor3d
 		 */
 		bool isUpToDate( uint32_t index )const override;
 
-	public:
-		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
-		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-		static VkFormat RawDepthFormat;
-
 	private:
 		struct FrameBuffer
 		{
-			ashes::FrameBufferPtr frameBuffer;
-			ashes::ImageView varianceView;
+			ashes::ImageView depthView;
 			ashes::ImageView linearView;
+			ashes::ImageView varianceView;
+			ashes::ImageView positionView;
+			ashes::ImageView fluxView;
+			ashes::FrameBufferPtr frameBuffer;
 		};
 		struct PassData
 		{
 			ashes::CommandBufferPtr commandBuffer;
-			ashes::ImagePtr depthTexture;
-			ashes::ImageView depthView;
 			std::array< FrameBuffer, 6u > frameBuffers;
 			ashes::SemaphorePtr finished;
 			ShadowType shadowType;
-			ashes::ImageView varianceView;
+			ashes::ImageView depthView;
 			ashes::ImageView linearView;
+			ashes::ImageView varianceView;
+			ashes::ImageView positionView;
+			ashes::ImageView fluxView;
 		};
 		std::vector< PassData > m_passesData;
 	};

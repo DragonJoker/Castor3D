@@ -720,8 +720,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
@@ -952,8 +952,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 
@@ -1235,8 +1235,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 

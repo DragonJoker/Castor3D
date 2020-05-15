@@ -35,104 +35,6 @@ namespace castor3d
 {
 	namespace
 	{
-		TextureUnit doInitialiseVariance( Engine & engine
-			, Size const & size )
-		{
-			String const name = cuT( "ShadowMapSpot_Variance" );
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER );
-				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
-			}
-
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				ShadowMapSpot::VarianceFormat,
-				{ size[0], size[1], 1u },
-				1u,
-				shader::getSpotShadowMapCount(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "ShadowMapSpot_Variance" ) );
-			TextureUnit unit{ engine };
-			unit.setTexture( texture );
-			unit.setSampler( sampler );
-
-			for ( auto & image : *texture )
-			{
-				image->initialiseSource();
-			}
-
-			return unit;
-		}
-
-		TextureUnit doInitialiseLinearDepth( Engine & engine
-			, Size const & size )
-		{
-			String const name = cuT( "ShadowMapSpot_Depth" );
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
-			}
-
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				ShadowMapSpot::LinearDepthFormat,
-				{ size[0], size[1], 1u },
-				1u,
-				shader::getSpotShadowMapCount(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-			};
-			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "ShadowMapSpot_Linear" ) );
-			TextureUnit unit{ engine };
-			unit.setTexture( texture );
-			unit.setSampler( sampler );
-
-			for ( auto & image : *texture )
-			{
-				image->initialiseSource();
-			}
-
-			return unit;
-		}
-
 		std::vector< ShadowMap::PassData > createPasses( Engine & engine
 			, Scene & scene
 			, ShadowMap & shadowMap )
@@ -172,8 +74,14 @@ namespace castor3d
 		, Scene & scene )
 		: ShadowMap{ engine
 			, cuT( "ShadowMapSpot" )
-			, doInitialiseVariance( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
-			, doInitialiseLinearDepth( engine, Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize } )
+			, ShadowMapPassResult
+			{
+				engine,
+				cuT( "Spot" ),
+				0u,
+				Size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize },
+				shader::getSpotShadowMapCount(),
+			}
 			, createPasses( engine, scene, *this )
 			, shader::getSpotShadowMapCount() }
 	{
@@ -199,78 +107,46 @@ namespace castor3d
 
 	ashes::ImageView const & ShadowMapSpot::getLinearView( uint32_t index )const
 	{
-		return m_linearMap.getTexture()->getImage( index ).getView();
+		return m_result[SmTexture::eLinearNormal].getTexture()->getLayer2DView( index ).getView();
 	}
 
 	ashes::ImageView const & ShadowMapSpot::getVarianceView( uint32_t index )const
 	{
-		return m_shadowMap.getTexture()->getImage( index ).getView();
-	}
-
-	void ShadowMapSpot::doInitialiseDepthFormat()
-	{
-		auto & device = getCurrentRenderDevice( *this );
-
-		if ( RawDepthFormat == VK_FORMAT_UNDEFINED )
-		{
-			RawDepthFormat = device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
-		}
+		return m_result[SmTexture::eVariance].getTexture()->getLayer2DView( index ).getView();
 	}
 
 	void ShadowMapSpot::doInitialise()
 	{
-		VkExtent2D size{ ShadowMapPassSpot::TextureSize, ShadowMapPassSpot::TextureSize };
-		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( *this );
-
-		ashes::ImageCreateInfo depth
+		VkExtent2D size
 		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			ShadowMapSpot::RawDepthFormat,
-			{ size.width, size.height, 1u },
-			1u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+			ShadowMapPassSpot::TextureSize,
+			ShadowMapPassSpot::TextureSize,
 		};
-		ashes::ImageViewCreateInfo view
-		{
-			0u,
-			VK_NULL_HANDLE,
-			VK_IMAGE_VIEW_TYPE_2D,
-			depth->format,
-			VkComponentMapping{},
-			{ VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u },
-		};
+		auto & depth = *m_result[SmTexture::eDepth].getTexture();
+		auto & linear = *m_result[SmTexture::eLinearNormal].getTexture();
+		auto & variance = *m_result[SmTexture::eVariance].getTexture();
+		auto & position = *m_result[SmTexture::ePosition].getTexture();
+		auto & flux = *m_result[SmTexture::eFlux].getTexture();
 
 		for ( auto i = 0u; i < m_passes.size(); ++i )
 		{
 			std::string debugName = "ShadowMapSpot" + std::to_string( i );
-			auto depthTexture = makeImage( device
-				, depth
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, debugName + "Depth" );
-			view->image = *depthTexture;
-			auto depthView = depthTexture->createView( debugName + "Depth"
-				, view );
-
 			auto & renderPass = m_passes[i].pass->getRenderPass();
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( depthView );
-			attaches.emplace_back( m_linearMap.getTexture()->getImage( i ).getView() );
-			attaches.emplace_back( m_shadowMap.getTexture()->getImage( i ).getView() );
+			attaches.emplace_back( depth.getLayer2DView( i ).getView() );
+			attaches.emplace_back( linear.getLayer2DView( i ).getView() );
+			attaches.emplace_back( variance.getLayer2DView( i ).getView() );
+			attaches.emplace_back( position.getLayer2DView( i ).getView() );
+			attaches.emplace_back( flux.getLayer2DView( i ).getView() );
 			m_passesData.push_back(
 				{
 					device.graphicsCommandPool->createCommandBuffer( debugName ),
 					renderPass.createFrameBuffer( debugName, size, std::move( attaches ) ),
 					device->createSemaphore( debugName ),
-					std::move( depthTexture ),
-					std::move( depthView ),
 					std::make_unique< GaussianBlur >( *getEngine()
 						, debugName
-						, m_shadowMap.getTexture()->getImage( i ).getView()
+						, variance.getLayer2DView( i ).getView()
 						, 5u )
 				} );
 		}
@@ -397,8 +273,16 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		// Outputs
+		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
@@ -409,6 +293,10 @@ namespace castor3d
 		{
 			auto vertexPosition = writer.declLocale( "vertexPosition"
 				, vec4( position.xyz(), 1.0_f ) );
+			auto v4Normal = writer.declLocale( "v4Normal"
+				, vec4( normal, 0.0_f ) );
+			auto v4Tangent = writer.declLocale( "v4Tangent"
+				, vec4( tangent, 0.0_f ) );
 			vtx_texture = uv;
 
 			if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
@@ -439,11 +327,30 @@ namespace castor3d
 			if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 			{
 				vertexPosition = vec4( sdw::mix( vertexPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Normal = vec4( sdw::mix( v4Normal.xyz(), normal2.xyz(), vec3( c3d_time ) ), 1.0_f );
+				v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), tangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
 				vtx_texture = sdw::mix( vtx_texture, texture2, vec3( c3d_time ) );
 			}
 
 			auto mtxModel = writer.getVariable< Mat4 >( "mtxModel" );
+			auto mtxNormal = writer.declLocale( "mtxNormal"
+				, transpose( inverse( mat3( mtxModel ) ) ) );
+
+			if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
+			{
+				vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
+			}
+			else
+			{
+				vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
+			}
+
+			vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
+			vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
+			vtx_bitangent = cross( vtx_normal, vtx_tangent );
+
 			vertexPosition = mtxModel * vertexPosition;
+			vtx_worldPosition = vertexPosition.xyz();
 			vertexPosition = c3d_curView * vertexPosition;
 			vtx_viewPosition = vertexPosition.xyz();
 			out.vtx.position = c3d_projection * vertexPosition;
@@ -461,8 +368,16 @@ namespace castor3d
 		bool hasTextures = flags.texturesCount > 0;
 
 		// Fragment Intputs
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
 		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
 			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
 		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
@@ -486,32 +401,46 @@ namespace castor3d
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
 
 		// Fragment Outputs
-		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", 0u ) );
+		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
 
 		shader::Utils utils{ writer };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
 				auto material = materials->getBaseMaterial( vtx_material );
 				auto alpha = writer.declLocale( "alpha"
 					, material->m_opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
 					, material->m_alphaRef );
-				utils.computeOpacityMapContribution( flags
+				utils.computeOpaNmlMapContribution( flags
 					, textureConfigs
 					, c3d_textureConfig
 					, c3d_maps
 					, vtx_texture
-					, alpha );
+					, alpha
+					, tangent
+					, bitangent
+					, normal );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
-				pxl_linear = in.fragCoord.z();
+				pxl_linearNormal.x() = in.fragCoord.z();
+				pxl_linearNormal.yzw() = normal;
+				pxl_position.xyz() = vtx_worldPosition;
+
 				pxl_variance.x() = depth;
 				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
 

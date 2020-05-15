@@ -52,10 +52,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
-		 */
-		void doInitialiseDepthFormat()override;
-		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
 		void doInitialise()override;
@@ -96,8 +92,6 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::SemaphorePtr finished;
-			ashes::ImagePtr depthTexture;
-			ashes::ImageView depthView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		std::vector< PassData > m_passesData;

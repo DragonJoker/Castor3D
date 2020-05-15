@@ -92,6 +92,15 @@ namespace castor3d
 				, sdw::SampledImageCubeRgba32 const & irradiance
 				, sdw::SampledImageCubeRgba32 const & prefiltered
 				, sdw::SampledImage2DRgba32 const & brdf )const;
+			C3D_API void computeOpaNmlMapContribution( PipelineFlags const & flags
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & texCoords
+				, sdw::Float & opacity
+				, sdw::Vec3 const & tangent
+				, sdw::Vec3 const & bitangent
+				, sdw::Vec3 & normal );
 			C3D_API void computeOpacityMapContribution( PipelineFlags const & flags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig

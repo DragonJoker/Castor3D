@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapPassResult.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <ashespp/Sync/Fence.hpp>
@@ -31,25 +32,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	name		The shadow map name.
-		 *\param[in]	shadowMap	The shadow map.
-		 *\param[in]	linearMap	The linear depth map.
-		 *\param[in]	passes		The passes used to render map.
-		 *\param[in]	count		The passes count.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	name	The shadow map name.
+		 *\param[in]	result	The shadow map pass result.
+		 *\param[in]	passes	The passes used to render map.
+		 *\param[in]	count	The passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	name		Le nom de la shadow map.
-		 *\param[in]	shadowMap	La shadow map.
-		 *\param[in]	linearMap	La texture de profondeur linéaire.
-		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
-		 *\param[in]	count		Le nombre de passes.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	name	Le nom de la shadow map.
+		 *\param[in]	result	Le résultat de la passe de shadow map.
+		 *\param[in]	passes	Les passes utilisées pour rendre cette texture.
+		 *\param[in]	count	Le nombre de passes.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, castor::String name
-			, TextureUnit shadowMap
-			, TextureUnit linearMap
+			, ShadowMapPassResult result
 			, std::vector< PassData > passes
 			, uint32_t count );
 		/**
@@ -148,30 +146,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::Sampler const & getLinearSampler()const;
-		C3D_API ashes::Sampler const & getVarianceSampler()const;
-		C3D_API ashes::ImageView const & getLinearView()const;
-		C3D_API ashes::ImageView const & getVarianceView()const;
-		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index )const;
-		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index )const;
-		inline TextureUnit & getTexture()
-		{
-			return m_shadowMap;
-		}
+		C3D_API ashes::Sampler const & getLinearSampler( uint32_t index = 0u )const;
+		C3D_API ashes::Sampler const & getVarianceSampler( uint32_t index = 0u )const;
+		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index = 0u )const;
+		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index = 0u )const;
 
-		inline TextureUnit const & getTexture()const
+		inline ShadowMapPassResult const & getShadowPassResult()const
 		{
-			return m_shadowMap;
+			return m_result;
 		}
-
-		inline TextureUnit & getLinearDepth()
+		
+		inline ShadowMapPassResult & getShadowPassResult()
 		{
-			return m_linearMap;
-		}
-
-		inline TextureUnit const & getLinearDepth()const
-		{
-			return m_linearMap;
+			return m_result;
 		}
 
 		inline uint32_t getCount()const
@@ -181,13 +168,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the shadow map's depth raw format.
-		 *\~french
-		 *\brief		Initialise le format de profondeur brute de la shadow map.
-		 */
-		C3D_API virtual void doInitialiseDepthFormat() = 0;
 		/**
 		 *\copydoc		castor3d::ShadowMap::initialise
 		 */
@@ -232,8 +212,7 @@ namespace castor3d
 		std::vector< PassData > m_passes;
 		uint32_t m_count;
 		ashes::SemaphorePtr m_finished;
-		TextureUnit m_shadowMap;
-		TextureUnit m_linearMap;
+		ShadowMapPassResult m_result;
 		bool m_initialised{ false };
 	};
 }

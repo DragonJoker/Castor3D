@@ -140,7 +140,7 @@ namespace castor3d
 			{
 				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
 				{
-					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapDepthDirectional );
+					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapDepthNormalDirectional );
 					/**
 					* First we shrink the position inwards the surface to avoid artifacts:
 					* (Note that this can be done once for all the lights)
@@ -184,7 +184,7 @@ namespace castor3d
 				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mtxInvViewProj = m_writer.getVariable< Mat4 >( "c3d_mtxInvViewProj" );
-					auto c3d_mapDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( Shadow::MapDepthPoint );
+					auto c3d_mapDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( Shadow::MapDepthNormalPoint );
 					/**
 					* First we shrink the position inwards the surface to avoid artifacts:
 					* (Note that this can be done once for all the lights)

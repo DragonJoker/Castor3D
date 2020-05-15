@@ -22,21 +22,29 @@ namespace castor3d
 			C3D_API static castor::String const MapShadowDirectional;
 			C3D_API static castor::String const MapShadowSpot;
 			C3D_API static castor::String const MapShadowPoint;
-			C3D_API static castor::String const MapDepthDirectional;
-			C3D_API static castor::String const MapDepthSpot;
-			C3D_API static castor::String const MapDepthPoint;
+			C3D_API static castor::String const MapDepthNormalDirectional;
+			C3D_API static castor::String const MapDepthNormalSpot;
+			C3D_API static castor::String const MapDepthNormalPoint;
+			C3D_API static castor::String const MapPositionDirectional;
+			C3D_API static castor::String const MapPositionSpot;
+			C3D_API static castor::String const MapPositionPoint;
+			C3D_API static castor::String const MapFluxDirectional;
+			C3D_API static castor::String const MapFluxSpot;
+			C3D_API static castor::String const MapFluxPoint;
 
 		public:
 			C3D_API Shadow( sdw::ShaderWriter & writer
 				, Utils & utils );
-			C3D_API void declare( uint32_t & index
-				, uint32_t maxCascades );
+			C3D_API void declare( bool rsm
+				, uint32_t & index );
 			C3D_API void declareDirectional( ShadowType type
-				, uint32_t & index
-				, uint32_t maxCascades );
+				, bool rsm
+				, uint32_t & index );
 			C3D_API void declarePoint( ShadowType type
+				, bool rsm
 				, uint32_t & index );
 			C3D_API void declareSpot( ShadowType type
+				, bool rsm
 				, uint32_t & index );
 			C3D_API sdw::Float computeDirectionalShadow( sdw::Int const & shadowType
 				, sdw::Vec2 const & shadowOffsets
@@ -148,12 +156,12 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayR32
+				, sdw::InSampledImage2DArrayRgba32
 				, sdw::InInt
 				, sdw::InFloat > m_textureProj;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayR32
+				, sdw::InSampledImage2DArrayRgba32
 				, sdw::InInt
 				, sdw::InVec2
 				, sdw::InFloat > m_filterPCF;
@@ -165,12 +173,12 @@ namespace castor3d
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InVec2
-				, sdw::InSampledImage2DArrayR32
+				, sdw::InSampledImage2DArrayRgba32
 				, sdw::InUInt
 				, sdw::InFloat > m_textureProjCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
-				, sdw::InSampledImage2DArrayR32
+				, sdw::InSampledImage2DArrayRgba32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat > m_filterPCFCascade;

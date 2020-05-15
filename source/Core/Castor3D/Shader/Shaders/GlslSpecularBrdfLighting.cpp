@@ -145,12 +145,12 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, bool rsm
 			, uint32_t & index
-			, uint32_t maxCascades
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, isOpaqueProgram );
-			result->declareModel( index, maxCascades );
+			result->declareModel( rsm, index );
 			return result;
 		}
 
@@ -158,14 +158,14 @@ namespace castor3d
 			, Utils & utils
 			, ShadowType shadows
 			, bool volumetric
-			, uint32_t & index
-			, uint32_t maxCascades )
+			, bool rsm
+			, uint32_t & index )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, true );
 			result->declareDirectionalModel( shadows
 				, volumetric
-				, index
-				, maxCascades );
+				, rsm
+				, index );
 			return result;
 		}
 
@@ -174,6 +174,7 @@ namespace castor3d
 			, LightType lightType
 			, ShadowType shadows
 			, bool volumetric
+			, bool rsm
 			, uint32_t & index )
 		{
 			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, true );
@@ -185,11 +186,11 @@ namespace castor3d
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( shadows, volumetric, index );
+				result->declarePointModel( shadows, volumetric, rsm, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( shadows, volumetric, index );
+				result->declareSpotModel( shadows, volumetric, rsm, index );
 				break;
 
 			default:

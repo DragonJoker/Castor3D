@@ -379,6 +379,7 @@ namespace castor3d
 		size_t hash = std::hash< LightType >{}( light.getLightType() );
 		castor::hashCombine( hash, shadowMap ? light.getShadowType() : ShadowType::eNone );
 		castor::hashCombine( hash, shadowMap ? light.getVolumetricSteps() > 0 : false );
+		castor::hashCombine( hash, shadowMap ? light.needsRsmShadowMaps() : false );
 		castor::hashCombine( hash, shadowMap );
 		return hash;
 	}
@@ -386,6 +387,7 @@ namespace castor3d
 	LightPass::Pipeline LightPass::createPipeline( LightType lightType
 		, ShadowType shadowType
 		, bool volumetric
+		, bool rsm
 		, ShadowMap const * shadowMap )
 	{
 		Scene const & scene = *m_scene;
@@ -405,21 +407,24 @@ namespace castor3d
 			m_pixelShader.shader = doGetPbrMRPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric );
+				, volumetric
+				, rsm );
 		}
 		else if ( scene.getMaterialsType() == MaterialType::eSpecularGlossiness )
 		{
 			m_pixelShader.shader = doGetPbrSGPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric );
+				, volumetric
+				, rsm );
 		}
 		else
 		{
 			m_pixelShader.shader = doGetPhongPixelShaderSource( sceneFlags
 				, lightType
 				, shadowType
-				, volumetric );
+				, volumetric
+				, rsm );
 		}
 
 		pipeline.program = doCreateProgram();
@@ -519,6 +524,7 @@ namespace castor3d
 				, ( shadowMap
 					? light.getVolumetricSteps() > 0
 					: false )
+				, light.needsRsmShadowMaps()
 				, shadowMap ) );
 		}
 
@@ -600,7 +606,8 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPhongPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric )const
+		, bool volumetric
+		, bool rsm )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -639,13 +646,14 @@ namespace castor3d
 				, utils
 				, shadowType
 				, volumetric
-				, index
-				, m_scene->getDirectionalShadowCascades() )
+				, rsm
+				, index )
 			: shader::PhongLightingModel::createModel( writer
 				, utils
 				, lightType
 				, shadowType
 				, volumetric
+				, rsm
 				, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -782,7 +790,8 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPbrMRPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric )const
+		, bool volumetric
+		, bool rsm )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -822,13 +831,14 @@ namespace castor3d
 				, utils
 				, shadowType
 				, volumetric
-				, index
-				, m_scene->getDirectionalShadowCascades() )
+				, rsm
+				, index )
 			: shader::MetallicBrdfLightingModel::createModel( writer
 				, utils
 				, lightType
 				, shadowType
 				, volumetric
+				, rsm
 				, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
@@ -1041,7 +1051,8 @@ namespace castor3d
 	ShaderPtr LightPass::doGetPbrSGPixelShaderSource( SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
-		, bool volumetric )const
+		, bool volumetric
+		, bool rsm )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -1077,13 +1088,14 @@ namespace castor3d
 				, utils
 				, shadowType
 				, volumetric
-				, index
-				, m_scene->getDirectionalShadowCascades() )
+				, rsm
+				, index )
 			: shader::SpecularBrdfLightingModel::createModel( writer
 				, utils
 				, lightType
 				, shadowType
 				, volumetric
+				, rsm
 				, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );

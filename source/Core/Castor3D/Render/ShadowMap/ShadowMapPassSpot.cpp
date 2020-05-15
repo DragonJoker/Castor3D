@@ -1,13 +1,15 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
@@ -67,7 +69,7 @@ namespace castor3d
 		{
 			{
 				0u,
-				ShadowMapSpot::RawDepthFormat,
+				m_shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -78,7 +80,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				ShadowMapSpot::LinearDepthFormat,
+				m_shadowMap.getShadowPassResult()[SmTexture::eLinearNormal].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -89,7 +91,29 @@ namespace castor3d
 			},
 			{
 				0u,
-				ShadowMapSpot::VarianceFormat,
+				m_shadowMap.getShadowPassResult()[SmTexture::eVariance].getTexture()->getPixelFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
+			{
+				0u,
+				m_shadowMap.getShadowPassResult()[SmTexture::ePosition].getTexture()->getPixelFormat(),
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_STORE_OP_STORE,
+				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+				VK_ATTACHMENT_STORE_OP_DONT_CARE,
+				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			},
+			{
+				0u,
+				m_shadowMap.getShadowPassResult()[SmTexture::eFlux].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -108,6 +132,8 @@ namespace castor3d
 				{
 					{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+					{ 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 				},
 				{},
 				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },

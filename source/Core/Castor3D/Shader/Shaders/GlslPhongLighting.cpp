@@ -126,12 +126,12 @@ namespace castor3d
 
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, bool rsm
 			, uint32_t & index
-			, uint32_t maxCascades
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer, utils, isOpaqueProgram );
-			result->declareModel( index, maxCascades );
+			result->declareModel( rsm, index );
 			return result;
 		}
 
@@ -139,14 +139,14 @@ namespace castor3d
 			, Utils & utils
 			, ShadowType shadows
 			, bool volumetric
-			, uint32_t & index
-			, uint32_t maxCascades )
+			, bool rsm
+			, uint32_t & index )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer, utils, true );
 			result->declareDirectionalModel( shadows
 				, volumetric
-				, index
-				, maxCascades );
+				, rsm
+				, index );
 			return result;
 		}
 
@@ -155,6 +155,7 @@ namespace castor3d
 			, LightType lightType
 			, ShadowType shadows
 			, bool volumetric
+			, bool rsm
 			, uint32_t & index )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer, utils, true );
@@ -166,11 +167,11 @@ namespace castor3d
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( shadows, volumetric, index );
+				result->declarePointModel( shadows, volumetric, rsm, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( shadows, volumetric, index );
+				result->declareSpotModel( shadows, volumetric, rsm, index );
 				break;
 
 			default:
@@ -209,7 +210,7 @@ namespace castor3d
 			{
 				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
 				{
-					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+					auto name = string::stringCast< char >( string::toString( i ) );
 					auto config = writer.declLocale( "config" + name
 						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = writer.declLocale< Vec4 >( "sampled" + name

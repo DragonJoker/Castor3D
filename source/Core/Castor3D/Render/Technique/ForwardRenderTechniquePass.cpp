@@ -322,7 +322,7 @@ namespace castor3d
 			if ( node.passNode.pass.hasEnvironmentMapping() )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getView()
 					, envMap.getTexture().getSampler()->getSampler()
 					, writes
 					, index );
@@ -641,8 +641,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
@@ -864,8 +864,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
@@ -1150,8 +1150,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 

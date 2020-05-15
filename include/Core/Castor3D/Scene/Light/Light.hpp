@@ -197,6 +197,11 @@ namespace castor3d
 		{
 			return m_shadowMapIndex;
 		}
+
+		inline bool needsRsmShadowMaps()const
+		{
+			return m_shadowMapRsm;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -312,6 +317,11 @@ namespace castor3d
 			m_shadowMap = value;
 			m_shadowMapIndex = index;
 		}
+
+		inline void setRsmShadowMaps( bool value )
+		{
+			m_shadowMapRsm = value;
+		}
 		/**@}*/
 
 	public:
@@ -327,6 +337,7 @@ namespace castor3d
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
+		bool m_shadowMapRsm{ false };
 	};
 }
 
