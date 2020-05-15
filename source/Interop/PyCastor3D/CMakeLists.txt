@@ -44,6 +44,11 @@ target_link_libraries( PyCastor3D
 		${PYTHON_LIBRARY}
 		castor::Castor3D
 )
+set( CASTOR_INSTEXP_LIST
+	${CASTOR_INSTEXP_LIST}
+	${PROJECT_NAME}
+	PARENT_SCOPE
+)
 set_target_properties( PyCastor3D
 	PROPERTIES
 		PREFIX ""

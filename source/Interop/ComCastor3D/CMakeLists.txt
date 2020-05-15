@@ -157,6 +157,11 @@ if ( MSVC )
 				${ATL_LIBRARIES}
 				castor::Castor3D
 		)
+		set( CASTOR_INSTEXP_LIST
+			${CASTOR_INSTEXP_LIST}
+			${PROJECT_NAME}
+			PARENT_SCOPE
+		)
 
 		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )
 		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop Castor3D "Castor3D" )

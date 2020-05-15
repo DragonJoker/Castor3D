@@ -31,6 +31,10 @@ macro( PluginsBuild )
 		GenericBuild()
 		ParticlesBuild()
 		GeneratorBuild()
+		set( CASTOR_INSTEXP_LIST
+			${CASTOR_INSTEXP_LIST}
+			PARENT_SCOPE
+		)
 	endif ()
 endmacro()
 

@@ -572,8 +572,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
-			${CASTOR_SOURCE_DIR}/include
-			${CASTOR_BINARY_DIR}/include
+			$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/include>
+			$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include>
+			$<INSTALL_INTERFACE:include>
 		PRIVATE
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core

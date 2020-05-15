@@ -54,6 +54,11 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 			ARCHIVE_OUTPUT_NAME_RELEASE castor_wx
 			FOLDER "Interop"
 	)
+	set( CASTOR_INSTEXP_LIST
+		${CASTOR_INSTEXP_LIST}
+		${PROJECT_NAME}
+		PARENT_SCOPE
+	)
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

@@ -51,6 +51,10 @@ set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
 		FOLDER "Samples"
 )
+install_target( ${PROJECT_NAME}
+	bin
+	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
+)
 # Copying internationalisation files (french, for now) for CastorViewer
 copy_languages( ${PROJECT_NAME} ${CASTOR_SOURCE_DIR}/internationalisation/${PROJECT_NAME} ${PROJECT_NAME} "fr" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
