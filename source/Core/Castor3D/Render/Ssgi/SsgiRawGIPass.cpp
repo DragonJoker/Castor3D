@@ -368,7 +368,7 @@ namespace castor3d
 		, SsgiConfig const & config
 		, TextureLayout const & hdrResult
 		, TextureLayout const & linearisedDepth )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
+		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_hdrResult{ hdrResult }
 		, m_linearisedDepth{ linearisedDepth }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsgiRawGI", getVertexProgram( m_renderSystem ) }

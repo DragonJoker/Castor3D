@@ -151,15 +151,16 @@ namespace castor3d
 			, cuT( "SSGI" )
 			, m_rawGiPass->getResult().getTexture()->getDefaultView().getView()
 			, ssgiConfig.blurSize.value().value() ) }
-		, m_combine{ std::make_shared< CombinePass >( engine
-			, cuT( "SSGI" )
-			, scene->getPixelFormat()
-			, VkExtent2D{ scene->getWidth(), scene->getHeight() }
-			, m_combineVtx
-			, m_combinePxl
-			, m_hdrCopy.getTexture()->getDefaultView().getView()
-			, m_rawGiPass->getResult().getTexture()->getDefaultView().getView()
-			, scene ) }
+		, m_combine{ CombinePassBuilder{}
+			.resultTexture( scene )
+			.build( engine
+				, cuT( "SSGI" )
+				, scene->getPixelFormat()
+				, VkExtent2D{ scene->getWidth(), scene->getHeight() }
+				, m_combineVtx
+				, m_combinePxl
+				, m_hdrCopy.getTexture()->getDefaultView().getView()
+				, m_rawGiPass->getResult().getTexture()->getDefaultView().getView() ) }
 #endif
 	{
 		auto & cmd = *m_hdrCopyCommands.commandBuffer;

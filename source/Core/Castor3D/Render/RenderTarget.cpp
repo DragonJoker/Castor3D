@@ -775,18 +775,25 @@ namespace castor3d
 			m_combinedFrameBuffer.colourTexture.getTexture()->getHeight(),
 		};
 
+		CombinePassBuilder mainBuilder{};
+		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
+		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
+
 		for ( auto & intermediate : m_intermediates )
 		{
-			m_combineQuads.emplace_back( std::make_unique< CombinePass >( *getEngine()
-				, "Target"
-				, getPixelFormat()
-				, extent
-				, m_combineVtx
-				, m_combinePxl
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView()
-				, intermediate.view
-				, m_combinedFrameBuffer.colourTexture.getTexture()
-				, RenderQuad::TexcoordConfig{} ) );
+			if ( intermediate.view != m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() )
+			{
+				m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
+					.build( *getEngine()
+						, "Target"
+						, getPixelFormat()
+						, extent
+						, m_combineVtx
+						, m_combinePxl
+						, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView()
+						, intermediate.view ) );
+			}
+
 		}
 	}
 

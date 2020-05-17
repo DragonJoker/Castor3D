@@ -28,65 +28,48 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <algorithm>
+
 using namespace castor;
 
 namespace castor3d
 {
 	namespace
 	{
+		uint32_t doGetColourAttachmentCount( ashes::RenderPass const & pass )
+		{
+			return uint32_t( std::count_if( pass.getAttachments().begin()
+				, pass.getAttachments().end()
+				, []( VkAttachmentDescription const & lookup )
+				{
+					return !ashes::isDepthOrStencilFormat( lookup.format );
+				} ) );
+		}
+
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass )
 		{
 			return RenderPass::createBlendState( BlendMode::eNoBlend
 				, BlendMode::eNoBlend
-				, uint32_t( pass.getAttachmentCount() ) );
+				, doGetColourAttachmentCount( pass ) );
 		}
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
 		, VkFilter samplerFilter
-		, VkImageSubresourceRange const * range
-		, TexcoordConfig const * config )
+		, RenderQuadConfig config )
 		: m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
-			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
 		}
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()
 			, cuT( "RenderQuad" )
 			, samplerFilter
-			, range ) }
-		, m_useTexCoords{ config != nullptr }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter
-		, VkImageSubresourceRange const & range
-		, TexcoordConfig const & config )
-		: RenderQuad{ renderSystem, samplerFilter, &range, &config }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter
-		, TexcoordConfig const & config )
-		: RenderQuad{ renderSystem, samplerFilter, nullptr, &config }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter
-		, VkImageSubresourceRange const & range )
-		: RenderQuad{ renderSystem, samplerFilter, &range, nullptr }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter )
-		: RenderQuad{ renderSystem, samplerFilter, nullptr, nullptr }
+			, ( config.range ? &config.range.value() : nullptr) ) }
+		, m_useTexCoords{ bool( config.texcoordConfig ) }
 	{
 	}
 

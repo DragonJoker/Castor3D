@@ -86,8 +86,8 @@ namespace castor3d
 
 #define result pxl_fragColor.r()
 #define keyPassThrough pxl_fragColor.g()
-#define readNormal( normal ) ( transpose( c3d_mtxInvView ) * vec4( normal, 1.0 ) ).xyz()
-#define writeNormal( normal ) ( transpose( c3d_mtxGView ) * vec4( -normal, 1.0 ) ).xyz()
+#define readNormal( normal ) -( transpose( inverse( c3d_mtxGView ) ) * vec4( normal.xyz(), 1.0 ) ).xyz()
+#define writeNormal( normal ) ( inverse( transpose( c3d_mtxGView ) ) * vec4( -normal.xyz(), 1.0 ) ).xyz()
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
@@ -495,7 +495,7 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST }
+		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST, {} }
 		, Named{ prefix + cuT( "SsaoBlur" ) }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }

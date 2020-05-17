@@ -18,9 +18,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RenderQuad
+	struct RenderQuadConfig
 	{
-	public:
 		/**
 		*\~english
 		*\brief
@@ -29,7 +28,7 @@ namespace castor3d
 		*\brief
 		*	Définit comment sont construites les coordonnées de texture du vertex buffer.
 		*/
-		struct TexcoordConfig
+		struct Texcoord
 		{
 			/*
 			*\~english
@@ -48,112 +47,42 @@ namespace castor3d
 			*/
 			bool invertV{ false };
 		};
+		ashes::Optional< VkImageSubresourceRange > range;
+		ashes::Optional< Texcoord > texcoordConfig;
+	};
+
+	class RenderQuad
+	{
+		friend class RenderQuadBuilder;
 
 	protected:
+		/**
+		*\~english
+		*\brief
+		*	Constructor.
+		*\param[in] renderSystem
+		*	The RenderSystem.
+		*\param[in] samplerFilter
+		*	The sampler filter for the source texture.
+		*\param[in] config
+		*	The texture coordinates configuration.
+		*\~french
+		*\brief
+		*	Constructeur.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
+		*\param[in] config
+		*	La configuration des coordonnées de texture.
+		*/
 		C3D_API RenderQuad( RenderSystem & renderSystem
 			, VkFilter samplerFilter
-			, VkImageSubresourceRange const * range
-			, TexcoordConfig const * config );
+			, RenderQuadConfig config );
 
 	public:
 		C3D_API virtual ~RenderQuad();
 		C3D_API explicit RenderQuad( RenderQuad && rhs )noexcept;
-		/**
-		*\~english
-		*\brief
-		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
-		*\param[in] samplerFilter
-		*	The sampler filter for the source texture.
-		*\param[in] range
-		*	Contains mip levels for the sampler.
-		*\param[in] config
-		*	The texture coordinates configuration.
-		*\~french
-		*\brief
-		*	Constructeur.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
-		*\param[in] samplerFilter
-		*	Le filtre d'échantillonnage pour la texture source.
-		*\param[in] range
-		*	Contient les mip levels, pour l'échantillonneur.
-		*\param[in] config
-		*	La configuration des coordonnées de texture.
-		*/
-		C3D_API RenderQuad( RenderSystem & renderSystem
-			, VkFilter samplerFilter
-			, VkImageSubresourceRange const & range
-			, TexcoordConfig const & config );
-		/**
-		*\~english
-		*\brief
-		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
-		*\param[in] samplerFilter
-		*	The sampler filter for the source texture.
-		*\param[in] config
-		*	The texture coordinates configuration.
-		*\~french
-		*\brief
-		*	Constructeur.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
-		*\param[in] samplerFilter
-		*	Le filtre d'échantillonnage pour la texture source.
-		*\param[in] config
-		*	La configuration des coordonnées de texture.
-		*/
-		C3D_API RenderQuad( RenderSystem & renderSystem
-			, VkFilter samplerFilter
-			, TexcoordConfig const & config );
-		/**
-		*\~english
-		*\brief
-		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
-		*\param[in] samplerFilter
-		*	The sampler filter for the souorce texture.
-		*\param[in] range
-		*	Contains mip levels for the sampler.
-		*\~french
-		*\brief
-		*	Constructeur.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
-		*\param[in] samplerFilter
-		*	Le filtre d'échantillonnage pour la texture source.
-		*\param[in] range
-		*	Contient les mip levels, pour l'échantillonneur.
-		*/
-		C3D_API RenderQuad( RenderSystem & renderSystem
-			, VkFilter samplerFilter
-			, VkImageSubresourceRange const & range );
-		/**
-		*\~english
-		*\brief
-		*	Constructor.
-		*\param[in] renderSystem
-		*	The RenderSystem.
-		*\remarks
-		*	Doesn't use the texture coordinates.
-		*\param[in] samplerFilter
-		*	The sampler filter for the source texture.
-		*\~french
-		*\brief
-		*	Constructeur.
-		*\remarks
-		*	N'utilise pas les coordonnées de texture.
-		*\param[in] renderSystem
-		*	Le RenderSystem.
-		*\param[in] samplerFilter
-		*	Le filtre d'échantillonnage pour la texture source.
-		*/
-		C3D_API RenderQuad( RenderSystem & renderSystem
-			, VkFilter samplerFilter );
 		/**
 		*\~english
 		*\brief
@@ -324,6 +253,70 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_descriptorSet;
 		ashes::ImageView const * m_sourceView{ nullptr };
 		bool m_useTexCoords;
+	};
+
+	class RenderQuadBuilder
+	{
+	public:
+		inline RenderQuadBuilder()
+		{
+		}
+		/**
+		*\~english
+		*\param[in] config
+		*	The texture coordinates configuration.
+		*\~french
+		*\param[in] config
+		*	La configuration des coordonnées de texture.
+		*/
+		inline RenderQuadBuilder & texcoordConfig( RenderQuadConfig::Texcoord const & config )
+		{
+			m_config.texcoordConfig = config;
+			return *this;
+		}
+		/**
+		*\~english
+		*\param[in] range
+		*	Contains mip levels for the sampler.
+		*\~french
+		*\brief
+		*\param[in] range
+		*	Contient les mip levels, pour l'échantillonneur.
+		*/
+		inline RenderQuadBuilder & range( VkImageSubresourceRange const & range )
+		{
+			m_config.range = range;
+			return *this;
+		}
+		/**
+		*\~english
+		*\brief
+		*	Creates the RenderQuad.
+		*\param[in] renderSystem
+		*	The RenderSystem.
+		*\param[in] samplerFilter
+		*	The sampler filter for the source texture.
+		*\~french
+		*\brief
+		*	Crée le RenderQuad.
+		*\param[in] renderSystem
+		*	Le RenderSystem.
+		*\param[in] samplerFilter
+		*	Le filtre d'échantillonnage pour la texture source.
+		*/
+		inline RenderQuadUPtr build( RenderSystem & renderSystem
+			, VkFilter samplerFilter )
+		{
+			return std::unique_ptr< RenderQuad >( new RenderQuad
+				{
+					renderSystem,
+					samplerFilter,
+					m_config,
+				} );
+		}
+
+	private:
+		RenderQuadConfig m_config;
 	};
 }
 

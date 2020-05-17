@@ -151,8 +151,8 @@ namespace castor3d
 	CombinePass::CombineQuad::CombineQuad( Engine & engine
 		, castor::String const & prefix
 		, ashes::ImageView const & lhsView
-		, RenderQuad::TexcoordConfig const * config )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, nullptr, config }
+		, RenderQuadConfig const & config )
+		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, config }
 		, m_lhsView{ lhsView }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &lhsView->subresourceRange ) }
 	{
@@ -180,19 +180,22 @@ namespace castor3d
 		, ShaderModule const & pixelShader
 		, ashes::ImageView const & lhsView
 		, ashes::ImageView const & rhsView
-		, TextureLayoutSPtr resultTexture
-		, RenderQuad::TexcoordConfig const * config )
+		, CombinePassConfig config )
 		: m_engine{ engine }
-		, m_prefix{ prefix }
-		, m_image{ resultTexture }
-		, m_view{ doCreateView( m_image->getTexture() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
-		, m_finished{ getCurrentRenderDevice( m_engine )->createSemaphore( cuT( "CombinePass" ) ) }
 		, m_vertexShader{ vertexShader }
 		, m_pixelShader{ pixelShader }
+		, m_lhsView{ lhsView }
+		, m_rhsView{ rhsView }
+		, m_config{ config }
+		, m_prefix{ prefix }
+		, m_image{ ( config.resultTexture
+			? std::move( *config.resultTexture )
+			: doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ) ) }
+		, m_view{ doCreateView( m_image->getTexture() ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
-		, m_quad{ engine, m_prefix, lhsView, config }
+		, m_quad{ engine, m_prefix, lhsView, std::move( config ) }
 	{
 		auto & device = getCurrentRenderDevice( engine );
 		ashes::PipelineShaderStageCreateInfoArray program
@@ -216,106 +219,6 @@ namespace castor3d
 		auto commands = getCommands( *m_timer, 0u );
 		m_commandBuffer = std::move( commands.commandBuffer );
 		m_finished = std::move( commands.semaphore );
-	}
-
-	CombinePass::CombinePass( Engine & engine
-		, castor::String const & prefix
-		, VkFormat outputFormat
-		, VkExtent2D const & outputSize
-		, ShaderModule const & vertexShader
-		, ShaderModule const & pixelShader
-		, ashes::ImageView const & lhsView
-		, ashes::ImageView const & rhsView
-		, TextureLayoutSPtr resultTexture )
-		: CombinePass
-		{
-			engine,
-			prefix,
-			outputFormat,
-			outputSize,
-			vertexShader,
-			pixelShader,
-			lhsView,
-			rhsView,
-			resultTexture,
-			nullptr,
-		}
-	{
-	}
-
-	CombinePass::CombinePass( Engine & engine
-		, castor::String const & prefix
-		, VkFormat outputFormat
-		, VkExtent2D const & outputSize
-		, ShaderModule const & vertexShader
-		, ShaderModule const & pixelShader
-		, ashes::ImageView const & lhsView
-		, ashes::ImageView const & rhsView )
-		: CombinePass
-		{
-			engine,
-			prefix,
-			outputFormat,
-			outputSize,
-			vertexShader,
-			pixelShader,
-			lhsView,
-			rhsView,
-			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),
-			nullptr,
-		}
-	{
-	}
-
-	CombinePass::CombinePass( Engine & engine
-		, castor::String const & prefix
-		, VkFormat outputFormat
-		, VkExtent2D const & outputSize
-		, ShaderModule const & vertexShader
-		, ShaderModule const & pixelShader
-		, ashes::ImageView const & lhsView
-		, ashes::ImageView const & rhsView
-		, TextureLayoutSPtr resultTexture
-		, RenderQuad::TexcoordConfig const & config )
-		: CombinePass
-		{
-			engine,
-			prefix,
-			outputFormat,
-			outputSize,
-			vertexShader,
-			pixelShader,
-			lhsView,
-			rhsView,
-			resultTexture,
-			&config,
-		}
-	{
-	}
-
-	CombinePass::CombinePass( Engine & engine
-		, castor::String const & prefix
-		, VkFormat outputFormat
-		, VkExtent2D const & outputSize
-		, ShaderModule const & vertexShader
-		, ShaderModule const & pixelShader
-		, ashes::ImageView const & lhsView
-		, ashes::ImageView const & rhsView
-		, RenderQuad::TexcoordConfig const & config )
-		: CombinePass
-		{
-			engine,
-			prefix,
-			outputFormat,
-			outputSize,
-			vertexShader,
-			pixelShader,
-			lhsView,
-			rhsView,
-			doCreateTexture( *engine.getRenderSystem(), prefix, outputSize, outputFormat ),
-			&config,
-		}
-	{
 	}
 
 	void CombinePass::accept( PipelineVisitorBase & visitor )
@@ -359,12 +262,54 @@ namespace castor3d
 				m_prefix + " - Combine pass",
 				makeFloatArray( device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
+
+		if ( m_config.lhsLayout )
+		{
+			cmd.memoryBarrier( ashes::getStageMask( *m_config.lhsLayout )
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, m_lhsView.makeLayoutTransition( *m_config.lhsLayout
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+
+		if ( m_config.rhsLayout )
+		{
+			cmd.memoryBarrier( ashes::getStageMask( *m_config.rhsLayout )
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, m_rhsView.makeLayoutTransition( *m_config.rhsLayout
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, { transparentBlackClearColor }
 			, VK_SUBPASS_CONTENTS_INLINE );
 		m_quad.registerFrame( cmd );
 		cmd.endRenderPass();
+
+		if ( m_config.lhsLayout )
+		{
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, ashes::getStageMask( *m_config.lhsLayout )
+				, m_lhsView.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL 
+					, *m_config.lhsLayout
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+
+		if ( m_config.rhsLayout )
+		{
+			cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				, ashes::getStageMask( *m_config.rhsLayout )
+				, m_rhsView.makeLayoutTransition( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, *m_config.rhsLayout
+					, VK_QUEUE_FAMILY_IGNORED
+					, VK_QUEUE_FAMILY_IGNORED ) );
+		}
+		
 		cmd.endDebugBlock();
 		//timer.endPass( cmd, index );
 		cmd.end();

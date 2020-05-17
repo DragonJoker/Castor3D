@@ -106,7 +106,7 @@ namespace motion_blur
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::TextureUnit const & velocity
 		, castor3d::UniformBuffer< Configuration > const & ubo )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
+		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_velocityView{ velocity.getTexture()->getDefaultView().getView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
 		, m_ubo{ ubo }

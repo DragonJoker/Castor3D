@@ -34,6 +34,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Used to build a CombinePass variable.
+	*\~french
+	*\brief
+	*	Utilisé pour construire une variable CombinePass.
+	*/
+	class CombinePassBuilder;
+	/**
+	*\~english
+	*\brief
+	*	The configuration to create a CombinePass.
+	*\~french
+	*\brief
+	*	La configuration pour créer une CombinePass.
+	*/
+	struct CombinePassConfig;
+	/**
+	*\~english
+	*\brief
 	*	Deferred lighting Render technique pass.
 	*\~french
 	*\brief

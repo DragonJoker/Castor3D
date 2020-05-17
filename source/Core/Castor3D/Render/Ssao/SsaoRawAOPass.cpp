@@ -96,8 +96,8 @@ namespace castor3d
 
 #define visibility pxl_fragColor.r()
 #define bilateralKey pxl_fragColor.g()
-#define readNormal( normal ) -( transpose( inverse( c3d_mtxGView ) ) * vec4( normal, 1.0 ) ).xyz()
-#define writeNormal( normal ) ( inverse( transpose( c3d_mtxGView ) ) * vec4( -normal, 1.0 ) ).xyz()
+#define readNormal( normal ) -( transpose( inverse( c3d_mtxGView ) ) * vec4( normal.xyz(), 1.0 ) ).xyz()
+#define writeNormal( normal ) ( inverse( transpose( c3d_mtxGView ) ) * vec4( -normal.xyz(), 1.0 ) ).xyz()
 
 			//////////////////////////////////////////////////
 
@@ -616,9 +616,12 @@ namespace castor3d
 		{
 			*engine.getRenderSystem(),
 			VK_FILTER_NEAREST,
-			( normals
-				? ( *normals )->subresourceRange
-				: depth.getTexture()->getDefaultView().getView()->subresourceRange ),
+			{
+				( normals
+					? ( *normals )->subresourceRange
+					: depth.getTexture()->getDefaultView().getView()->subresourceRange ),
+				ashes::nullopt,
+			},
 		}
 		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsaoRawAO" }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsaoRawAO" }

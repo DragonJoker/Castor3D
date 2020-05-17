@@ -52,6 +52,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Used to create a RenderQuad variable.
+	*\~french
+	*\brief
+	*	Utilisée pour créer une variable RenderQuad.
+	*/
+	class RenderQuadBuilder;
+	/**
+	*\~english
+	*\brief
+	*	The configuration to create a RenderQuad.
+	*\~french
+	*\brief
+	*	La configuration pour créer un RenderQuad.
+	*/
+	struct RenderQuadConfig;
+	/**
+	*\~english
+	*\brief
 	*	Projects a texture in a quad.
 	*\~french
 	*\brief

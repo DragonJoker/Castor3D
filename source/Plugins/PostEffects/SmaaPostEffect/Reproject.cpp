@@ -135,7 +135,7 @@ namespace smaa
 		, ashes::ImageView const & previousColourView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_NEAREST, TexcoordConfig{} }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }

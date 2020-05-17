@@ -465,7 +465,9 @@ namespace smaa
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), VK_FILTER_NEAREST, castor3d::RenderQuad::TexcoordConfig{} );
+		auto copyQuad = castor3d::RenderQuadBuilder{}
+			.texcoordConfig( castor3d::RenderQuadConfig::Texcoord{} )
+			.build( *getRenderSystem(), VK_FILTER_NEAREST );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram
@@ -473,7 +475,6 @@ namespace smaa
 			, *m_copyRenderPass
 			, std::move( bindings )
 			, {} );
-		m_copyQuads.push_back( copyQuad );
 
 		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore copyCommands
@@ -503,6 +504,7 @@ namespace smaa
 		copyCmd.endDebugBlock();
 		copyCmd.end();
 		result.emplace_back( std::move( copyCommands ) );
+		m_copyQuads.emplace_back( std::move( copyQuad ) );
 
 		return result;
 	}

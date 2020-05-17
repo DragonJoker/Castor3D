@@ -79,7 +79,7 @@ namespace smaa
 		ashes::PipelineShaderStageCreateInfoArray m_copyProgram;
 		ashes::RenderPassPtr m_copyRenderPass;
 		ashes::FrameBufferPtr m_copyFrameBuffer;
-		std::vector< castor3d::RenderQuadSPtr > m_copyQuads;
+		std::vector< castor3d::RenderQuadUPtr > m_copyQuads;
 	};
 }
 

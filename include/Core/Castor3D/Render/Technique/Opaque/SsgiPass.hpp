@@ -91,7 +91,7 @@ namespace castor3d
 		std::shared_ptr< GaussianBlur > m_gaussianBlur;
 		ShaderModule m_combineVtx;
 		ShaderModule m_combinePxl;
-		std::shared_ptr< CombinePass > m_combine;
+		CombinePassUPtr m_combine;
 	};
 }
 

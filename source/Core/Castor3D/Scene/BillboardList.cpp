@@ -266,7 +266,7 @@ namespace castor3d
 
 	ProgramFlags BillboardBase::getProgramFlags()const
 	{
-		ProgramFlags result = uint32_t( ProgramFlag::eBillboards );
+		ProgramFlags result = ProgramFlag::eBillboards;
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{
