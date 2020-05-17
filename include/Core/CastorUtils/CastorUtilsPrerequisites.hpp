@@ -240,8 +240,7 @@ namespace castor
 	class File;
 	class FileParser;
 	class FileParserContext;
-	template< typename FlagType
-		, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
+	template< typename FlagType >
 	class FlagCombination;
 	class Font;
 	class FontCache;

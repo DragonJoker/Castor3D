@@ -228,7 +228,7 @@ namespace castor3d
 		, ParticleFormat type
 		, castor::String const & defaultValue )
 	{
-		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride() } );
 	}
 
 	void ComputeParticleSystem::setUpdateProgram( ShaderProgramSPtr program )

@@ -10,6 +10,18 @@ See LICENSE file in root folder
 
 namespace castor
 {
+	template< class IterT >
+	struct IteratorTraits : std::iterator_traits< IterT >
+	{
+		using iterator_category = typename std::iterator_traits< IterT >::iterator_category;
+		static_assert( std::is_convertible< iterator_category, std::random_access_iterator_tag >::value );
+	};
+
+	template< class TypeT >
+	struct IteratorTraits< TypeT * > : std::iterator_traits< TypeT * >
+	{
+		using value_type = TypeT;
+	};
 	/**
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -19,44 +31,41 @@ namespace castor
 	\~french
 	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
 	*/
-	template< typename T >
+	template< typename ValueT, typename IteratorTraitsT = IteratorTraits< ValueT * > >
 	class ArrayView
 	{
+		using my_traits = IteratorTraitsT;
+
 	public:
-		using pointer = T *;
-		using reference = T &;
-		using const_reference = T const &;
-		using iterator = T *;
-		using const_iterator = T const *;
+		using value_type = typename my_traits::value_type;
+		using reference = typename my_traits::reference;
+		using pointer = typename my_traits::pointer;
+		using iterator = typename my_traits::pointer;
+		using const_iterator = const iterator;
 		using reverse_iterator = std::reverse_iterator< iterator >;
 		using const_reverse_iterator = std::reverse_iterator< const_iterator >;
 
 	public:
-		ArrayView( pointer begin, pointer end )noexcept
+		ArrayView()noexcept
+			: m_begin{ nullptr }
+			, m_end{ nullptr }
+		{
+		}
+
+		ArrayView( iterator begin, iterator end )noexcept
 			: m_begin( begin )
 			, m_end( end )
 		{
 		}
 
-		template< size_t N >
-		explicit ArrayView( T( & buffer )[N] )noexcept
-			: ArrayView( buffer, buffer + N )
-		{
-		}
-
-		ArrayView( T * buffer, size_t count )noexcept
-			: ArrayView( buffer, buffer + count )
-		{
-		}
-
 		reference operator[]( size_t index )noexcept
 		{
-			return m_begin[index];
+			return *( m_begin + index );
 		}
 
-		const_reference operator[]( size_t index )const noexcept
+		const reference operator[]( size_t index )const noexcept
 		{
-			return m_begin[index];
+			return *( m_begin + index );
 		}
 
 		bool empty()const noexcept
@@ -71,12 +80,22 @@ namespace castor
 
 		pointer data()noexcept
 		{
-			return m_begin;
+			return &( *m_begin );
 		}
 
 		pointer const data()const noexcept
 		{
-			return m_begin;
+			return &( *m_begin );
+		}
+
+		reference front()noexcept
+		{
+			return *m_begin;
+		}
+
+		const reference front()const noexcept
+		{
+			return *m_begin;
 		}
 
 		iterator begin()noexcept
@@ -140,26 +159,75 @@ namespace castor
 		}
 
 	private:
-		pointer m_begin;
-		pointer m_end;
+		iterator m_begin;
+		iterator m_end;
 	};
 
-	template< typename T >
-	ArrayView< T > makeArrayView( T * begin, size_t size )
+	template< typename IterT >
+	bool operator==( ArrayView< IterT > const & lhs
+		, ArrayView< IterT > const & rhs )
 	{
-		return ArrayView< T >( begin, begin + size );
+		auto result = lhs.size() == rhs.size();
+		auto itLhs = lhs.begin();
+		auto itRhs = rhs.begin();
+
+		while ( result && itLhs != lhs.end() )
+		{
+			result = ( *itLhs == *itRhs );
+			++itLhs;
+			++itRhs;
+		}
+
+		return result;
 	}
 
-	template< typename T >
-	ArrayView< T > makeArrayView( T * begin, T * end )
+	template< typename IterT >
+	bool operator!=( ArrayView< IterT > const & lhs
+		, ArrayView< IterT > const & rhs )
 	{
-		return ArrayView< T >( begin, end );
+		auto result = lhs.size() != rhs.size();
+		auto itLhs = lhs.begin();
+		auto itRhs = rhs.begin();
+
+		while ( !result && itLhs != lhs.end() )
+		{
+			result = ( *itLhs != *itRhs );
+			++itLhs;
+			++itRhs;
+		}
+
+		return result;
 	}
 
-	template< typename T, size_t N >
-	ArrayView< T > makeArrayView( T ( & buffer )[N] )
+	template< typename IterT, typename ValueT = typename IteratorTraits< IterT >::value_type >
+	ArrayView< ValueT > makeArrayView( IterT begin, IterT end )
 	{
-		return ArrayView< T >( buffer );
+		return ArrayView< ValueT >{ &( *begin )
+			, & ( *begin ) + std::distance( begin, end ) };
+	}
+
+	template< typename ValueT >
+	ArrayView< ValueT > makeArrayView( ValueT * begin, ValueT * end )
+	{
+		return ArrayView< ValueT >{ begin, end };
+	}
+
+	template< typename IterT >
+	auto makeArrayView( IterT begin, uint32_t size )
+	{
+		return makeArrayView( begin, begin + size );
+	}
+
+	template< typename IterT >
+	auto makeArrayView( IterT begin, uint64_t size )
+	{
+		return makeArrayView( begin, begin + size );
+	}
+
+	template< typename ValueT, size_t N >
+	auto makeArrayView( ValueT( &buffer )[N] )
+	{
+		return makeArrayView( buffer, buffer + N );
 	}
 }
 

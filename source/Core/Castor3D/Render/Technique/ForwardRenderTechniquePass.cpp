@@ -1232,7 +1232,6 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				lighting->computeCombined( worldEye
-					, albedo
 					, specular
 					, glossiness
 					, c3d_shadowReceiver

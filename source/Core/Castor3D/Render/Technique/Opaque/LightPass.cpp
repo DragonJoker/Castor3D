@@ -641,20 +641,13 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
-		auto lighting = lightType == LightType::eDirectional
-			? shader::PhongLightingModel::createModel( writer
-				, utils
-				, shadowType
-				, volumetric
-				, rsm
-				, index )
-			: shader::PhongLightingModel::createModel( writer
-				, utils
-				, lightType
-				, shadowType
-				, volumetric
-				, rsm
-				, index );
+		auto lighting = shader::PhongLightingModel::createModel( writer
+			, utils
+			, lightType
+			, shadowType
+			, volumetric
+			, rsm
+			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
@@ -826,20 +819,13 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
-		auto lighting = lightType == LightType::eDirectional
-			? shader::MetallicBrdfLightingModel::createModel( writer
-				, utils
-				, shadowType
-				, volumetric
-				, rsm
-				, index )
-			: shader::MetallicBrdfLightingModel::createModel( writer
-				, utils
-				, lightType
-				, shadowType
-				, volumetric
-				, rsm
-				, index );
+		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
+			, utils
+			, lightType
+			, shadowType
+			, volumetric
+			, rsm
+			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
@@ -1083,20 +1069,13 @@ namespace castor3d
 		utils.declareCalcWSPosition();
 		utils.declareDecodeReceiver();
 		utils.declareInvertVec2Y();
-		auto lighting = lightType == LightType::eDirectional
-			? shader::SpecularBrdfLightingModel::createModel( writer
-				, utils
-				, shadowType
-				, volumetric
-				, rsm
-				, index )
-			: shader::SpecularBrdfLightingModel::createModel( writer
-				, utils
-				, lightType
-				, shadowType
-				, volumetric
-				, rsm
-				, index );
+		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+			, utils
+			, lightType
+			, shadowType
+			, volumetric
+			, rsm
+			, index );
 		shader::LegacyMaterials materials{ writer };
 		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
 		shader::SssTransmittance sss{ writer
@@ -1169,7 +1148,6 @@ namespace castor3d
 					auto light = writer.declLocale( "light", c3d_light );
 					lighting->compute( light
 						, eye
-						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
@@ -1192,7 +1170,6 @@ namespace castor3d
 					auto light = writer.declLocale( "light", c3d_light );
 					lighting->compute( light
 						, eye
-						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
@@ -1215,7 +1192,6 @@ namespace castor3d
 					auto light = writer.declLocale( "light", c3d_light );
 					lighting->compute( light
 						, eye
-						, diffuse
 						, specular
 						, glossiness
 						, shadowReceiver
