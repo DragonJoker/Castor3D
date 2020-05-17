@@ -196,7 +196,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -207,7 +207,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void DepthPass::doUpdatePipeline( RenderPipeline & pipeline )const

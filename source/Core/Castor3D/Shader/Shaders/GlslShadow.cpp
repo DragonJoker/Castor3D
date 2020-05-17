@@ -51,18 +51,18 @@ namespace castor3d
 					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
 					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
 				} );
-			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthNormalDirectional, index++, 1u );
+			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalDirectional, index++, 1u );
 			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
 			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthNormalSpot, index++, 1u );
+			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalSpot, index++, 1u );
 			auto c3d_mapShadowSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowSpot, index++, 1u );
 			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayR32 >( MapDepthNormalPoint, index++, 1u );
+			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapDepthNormalPoint, index++, 1u );
 			auto c3d_mapShadowPoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapShadowPoint, index++, 1u );
-			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
+			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
+			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
 			m_utils.declareInvertVec2Y();
 			doDeclareGetRandom();
 			doDeclareTextureProj();
@@ -95,7 +95,7 @@ namespace castor3d
 					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
 					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
 				} );
-			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthNormalDirectional, index++, 1u );
+			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalDirectional, index++, 1u );
 			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
 			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
@@ -135,10 +135,10 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayR32 >( MapDepthNormalPoint, index++, 1u );
+			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapDepthNormalPoint, index++, 1u );
 			auto c3d_mapShadowPoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapShadowPoint, index++, 1u );
-			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
+			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
+			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
 			doDeclareGetRandom();
 
 			switch ( type )
@@ -173,7 +173,7 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayR32 >( MapDepthNormalSpot, index++, 1u );
+			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalSpot, index++, 1u );
 			auto c3d_mapShadowSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowSpot, index++, 1u );
 			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
@@ -899,8 +899,8 @@ namespace castor3d
 						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 							, texture( c3d_mapDepthNormalPoint
 								, vec4( vertexToLight
-									, m_writer.cast< Float >( index ) ) ) );
-						result = step( depth - bias, shadowMapDepth.x() );
+									, m_writer.cast< Float >( index ) ) ).x() );
+						result = step( depth - bias, shadowMapDepth );
 					}
 					FI;
 					m_writer.returnStmt( result );
@@ -1271,8 +1271,8 @@ namespace castor3d
 						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 							, texture( c3d_mapDepthNormalPoint
 								, vec4( vertexToLight
-									, m_writer.cast< Float >( shadowMapIndex ) ) ) );
-						m_writer.returnStmt( step( depth - bias, shadowMapDepth.x() ) );
+									, m_writer.cast< Float >( shadowMapIndex ) ) ).x() );
+						m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
 					}
 				}
 				, InVec2( m_writer, "shadowOffsets" )

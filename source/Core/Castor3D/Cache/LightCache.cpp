@@ -10,6 +10,8 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <ashespp/Core/Device.hpp>
 
 using namespace castor;
@@ -228,18 +230,17 @@ namespace castor3d
 			std::swap( m_dirtyLights, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin()
-				, end
-				, []( Light * light )
-				{
-					light->update();
-				} );
+			for ( auto light : makeArrayView( dirty.begin(), end ) )
+			{
+				light->update();
+			}
 		}
 	}
 
 	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
 		uint32_t index = 0;
+		uint32_t lightIndex = 0;
 		Point4f * data = m_lightsBuffer.data();
 
 		for ( auto lights : m_typeSortedLights )
@@ -250,7 +251,7 @@ namespace castor3d
 					|| camera.isVisible( light->getBoundingBox()
 						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					light->bind( data );
+					light->bind( lightIndex, data );
 					data += shader::getMaxLightComponentsCount();
 					index += shader::getMaxLightComponentsCount();
 				}

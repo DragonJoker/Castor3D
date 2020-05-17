@@ -163,11 +163,9 @@ namespace castor3d
 		m_attenuation.reset();
 	}
 
-	void PointLight::updateShadow( Viewport & viewport
-		, int32_t index )
+	void PointLight::updateShadow( int32_t index )
 	{
 		m_shadowMapIndex = index;
-		viewport.updateFar( m_farPlane );
 	}
 
 	void PointLight::doBind( Point4f * buffer )const

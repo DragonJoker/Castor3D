@@ -247,6 +247,30 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Shadow map data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de shadow map.
+	*/
+	class ShadowMapUbo;
+	/**
+	*\~english
+	*\brief
+	*	Shadow map data.
+	*\~french
+	*\brief
+	*	Données de shadow map.
+	*/
+	struct ShadowMapUboConfiguration
+	{
+		castor::Matrix4x4f lightProjection;
+		castor::Matrix4x4f lightView;
+		castor::Point4f lightPosFarPlane;
+		uint32_t lightIndex;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Skinning data UBO.
 	*\~french
 	*\brief

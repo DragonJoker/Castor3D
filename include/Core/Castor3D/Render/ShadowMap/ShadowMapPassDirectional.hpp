@@ -91,22 +91,7 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static std::string const ShadowMapUbo;
-		C3D_API static std::string const Projection;
-		C3D_API static std::string const View;
-		C3D_API static uint32_t const UboBindingPoint;
 		C3D_API static uint32_t const TextureSize;
-
-		struct Configuration
-		{
-			castor::Matrix4x4f projection;
-			castor::Matrix4x4f view;
-		};
-
-	private:
-		UniformBufferUPtr< Configuration > m_shadowConfig;
-		castor::Matrix4x4f m_projection;
-		castor::Matrix4x4f m_view;
 	};
 }
 

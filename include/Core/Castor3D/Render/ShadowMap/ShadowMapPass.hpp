@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
@@ -158,6 +159,7 @@ namespace castor3d
 		ShadowMap const & m_shadowMap;
 		mutable bool m_initialised{ false };
 		bool m_outOfDate{ true };
+		ShadowMapUbo m_shadowMapUbo;
 	};
 }
 

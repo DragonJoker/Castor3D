@@ -95,21 +95,11 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static castor::String const ShadowMapUbo;
-		C3D_API static castor::String const WorldLightPosition;
 		C3D_API static uint32_t const TextureSize;
-		C3D_API static uint32_t const UboBindingPoint;
-
-		struct Configuration
-		{
-			castor::Point3f worldLightPosition;
-			float farPlane;
-		};
 
 	private:
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		castor::Matrix4x4f m_projection;
-		UniformBufferUPtr< Configuration > m_shadowConfig;
 		Viewport m_viewport;
 		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_matrices;
 	};

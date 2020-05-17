@@ -276,6 +276,8 @@ namespace castor3d
 			, cuT( "HdrConfigUboPool" ) );
 		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
 			, cuT( "ModelMatrixUboPool" ) );
+		m_shadowMapUboPool = std::make_shared< UniformBufferPool< ShadowMapUboConfiguration > >( *m_renderSystem
+			, cuT( "ShadowMapUboPool" ) );
 
 		if ( threaded )
 		{
@@ -325,6 +327,7 @@ namespace castor3d
 			m_matrixUboPool.reset();
 			m_hdrConfigUboPool.reset();
 			m_modelMatrixUboPool.reset();
+			m_shadowMapUboPool.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -545,6 +548,7 @@ namespace castor3d
 		m_matrixUboPool->upload();
 		m_hdrConfigUboPool->upload();
 		m_modelMatrixUboPool->upload();
+		m_shadowMapUboPool->upload();
 	}
 
 	void Engine::doLoadCoreData()

@@ -683,7 +683,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -694,7 +694,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )

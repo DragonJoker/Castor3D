@@ -441,6 +441,11 @@ namespace castor3d
 		{
 			return *m_modelMatrixUboPool;
 		}
+
+		inline UniformBufferPool< ShadowMapUboConfiguration > & getShadowMapUboPool()
+		{
+			return *m_shadowMapUboPool;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -515,6 +520,7 @@ namespace castor3d
 		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
 		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
 		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
+		UniformBufferPoolSPtr< ShadowMapUboConfiguration > m_shadowMapUboPool;
 	};
 }
 

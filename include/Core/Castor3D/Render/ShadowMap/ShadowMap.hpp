@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 
+#include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassResult.hpp"
@@ -166,6 +167,14 @@ namespace castor3d
 			return m_count;
 		}
 		/**@}*/
+	public:
+		static constexpr TextureFlags TextureFlags{ TextureFlag::eOpacity
+			| TextureFlag::eNormal
+			| TextureFlag::eAlbedo
+			| TextureFlag::eSpecular
+			| TextureFlag::eGlossiness
+			| TextureFlag::eEmissive
+			| TextureFlag::eTransmittance };
 
 	private:
 		/**
@@ -194,9 +203,17 @@ namespace castor3d
 		 */
 		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const;
 		/**
-		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::doGetPhongPixelShaderSource
 		 */
-		C3D_API virtual ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const = 0;
+		C3D_API virtual ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const = 0;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPbrMrPixelShaderSource
+		 */
+		C3D_API virtual ShaderPtr doGetPbrMrPixelShaderSource( PipelineFlags const & flags )const = 0;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPbrSgPixelShaderSource
+		 */
+		C3D_API virtual ShaderPtr doGetPbrSgPixelShaderSource( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if all passes for given map index are up to date.

@@ -45,9 +45,6 @@ namespace castor3d
 	}
 
 	uint32_t const ShadowMapPassPoint::TextureSize = 512u;
-	uint32_t const ShadowMapPassPoint::UboBindingPoint = 10u;
-	String const ShadowMapPassPoint::ShadowMapUbo = cuT( "ShadowMap" );
-	String const ShadowMapPassPoint::WorldLightPosition = cuT( "c3d_worldLightPosition" );
 
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & engine
 		, uint32_t index
@@ -73,14 +70,12 @@ namespace castor3d
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAllChanged()
 			|| getCuller().areCulledChanged();
+		m_viewport.updateFar( light.getFarPlane() );
+		light.getPointLight()->updateShadow( index );
 		auto position = light.getParent()->getDerivedPosition();
-		light.getPointLight()->updateShadow( m_viewport
-			, index );
 		doUpdateShadowMatrices( position, m_matrices );
-		auto & config = m_shadowConfig->getData();
-		config.worldLightPosition = position;
-		config.farPlane = m_viewport.getFar();
 		doUpdate( queues );
+		m_shadowMapUbo.update( light, index );
 		return m_outOfDate;
 	}
 
@@ -88,7 +83,6 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_shadowConfig->upload();
 			m_matrixUbo.update( m_matrices[index], m_projection );
 			doUpdateNodes( m_renderQueue.getCulledRenderNodes() );
 		}
@@ -112,77 +106,50 @@ namespace castor3d
 		float const farZ = 2000.0f;
 		m_projection = getEngine()->getRenderSystem()->getPerspective( 90.0_degrees, aspect, nearZ, farZ );
 
-		// Create the render pass.
-		ashes::VkAttachmentDescriptionArray attaches
+		std::array< VkImageLayout, size_t( SmTexture::eCount ) > FinalLayouts
 		{
-			{
-				0u,
-				m_shadowMap.getShadowPassResult()[SmTexture::eDepth].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-			},
-			{
-				0u,
-				m_shadowMap.getShadowPassResult()[SmTexture::eLinearNormal].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-			{
-				0u,
-				m_shadowMap.getShadowPassResult()[SmTexture::eVariance].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-			{
-				0u,
-				m_shadowMap.getShadowPassResult()[SmTexture::ePosition].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
-			{
-				0u,
-				m_shadowMap.getShadowPassResult()[SmTexture::eFlux].getTexture()->getPixelFormat(),
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
-				VK_ATTACHMENT_STORE_OP_STORE,
-				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-			},
+			VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 		};
+
+		// Create the render pass.
+		ashes::VkAttachmentDescriptionArray attaches;
+		ashes::VkAttachmentReferenceArray references;
+		uint32_t index = 0u;
+
+		for ( auto & result : m_shadowMap.getShadowPassResult() )
+		{
+			attaches.push_back(
+				{
+					0u,
+					result.getTexture()->getPixelFormat(),
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					FinalLayouts[index],
+				} );
+
+			if ( index > 0 )
+			{
+				references.push_back( { index, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			}
+
+			++index;
+		}
+
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription
 			{
 				0u,
 				VK_PIPELINE_BIND_POINT_GRAPHICS,
 				{},
-				{
-					{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-					{ 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-				},
+				references,
 				{},
 				VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL },
 				{},
@@ -217,13 +184,6 @@ namespace castor3d
 		};
 		m_renderPass = device->createRenderPass( m_name
 			, std::move( createInfo ) );
-
-		m_shadowConfig = makeUniformBuffer< Configuration >( *getEngine()->getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
-			, m_name + "ShadowConfig" );
-
 		m_viewport.resize( size );
 		m_initialised = true;
 		return m_initialised;
@@ -232,22 +192,25 @@ namespace castor3d
 	void ShadowMapPassPoint::doCleanup()
 	{
 		m_renderQueue.cleanup();
-		m_shadowConfig.reset();
 		m_onNodeChanged.disconnect();
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, BillboardListRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
-			, m_shadowConfig->getBuffer() );
+		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
+			, *m_shadowMapUbo.getUbo().buffer
+			, m_shadowMapUbo.getUbo().offset
+			, 1u );
 	}
 
 	void ShadowMapPassPoint::doFillUboDescriptor( ashes::DescriptorSetLayout const & layout
 		, SubmeshRenderNode & node )
 	{
-		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapPassPoint::UboBindingPoint )
-			, m_shadowConfig->getBuffer() );
+		node.uboDescriptorSet->createSizedBinding( layout.getBinding( ShadowMapUbo::BindingPoint )
+			, *m_shadowMapUbo.getUbo().buffer
+			, m_shadowMapUbo.getUbo().offset
+			, 1u );
 	}
 
 	void ShadowMapPassPoint::doUpdate( RenderQueueArray & queues )
@@ -258,9 +221,9 @@ namespace castor3d
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPassPoint::doCreateUboBindings( PipelineFlags const & flags )const
 	{
 		auto uboBindings = RenderPass::doCreateUboBindings( flags );
-		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapPassPoint::UboBindingPoint
+		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ShadowMapUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_initialised = true;
 		return uboBindings;
 	}

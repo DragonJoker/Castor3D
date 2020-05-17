@@ -101,9 +101,17 @@ namespace castor3d
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
+		 *\copydoc		castor3d::ShadowMap::doGetPhongPixelShaderSource
 		 */
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPbrMrPixelShaderSource
+		 */
+		ShaderPtr doGetPbrMrPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doGetPbrSgPixelShaderSource
+		 */
+		ShaderPtr doGetPbrSgPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
 		 */

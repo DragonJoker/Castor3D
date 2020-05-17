@@ -23,6 +23,7 @@ namespace castor3d
 		, ShadowMap const & shadowMap )
 		: RenderPass{ cuT( "ShadowMap" ), std::move( name ), engine, matrixUbo, culler }
 		, m_shadowMap{ shadowMap }
+		, m_shadowMapUbo{ engine }
 	{
 	}
 
@@ -49,7 +50,7 @@ namespace castor3d
 			RenderPass::doUpdate( nodes.billboardNodes.backCulled );
 		}
 	}
-
+	
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = getMinTextureIndex();
@@ -80,7 +81,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, ShadowMap::TextureFlags );
 	}
 
 	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -91,7 +92,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, ShadowMap::TextureFlags );
 	}
 
 	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const

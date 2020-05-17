@@ -16,9 +16,15 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
 #include <ashespp/Image/Image.hpp>
@@ -318,14 +324,11 @@ namespace castor3d
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
 
-		Ubo shadowMap{ writer, ShadowMapPassDirectional::ShadowMapUbo, ShadowMapPassDirectional::UboBindingPoint, 0u };
-		auto c3d_projection( shadowMap.declMember< Mat4 >( ShadowMapPassDirectional::Projection ) );
-		auto c3d_view( shadowMap.declMember< Mat4 >( ShadowMapPassDirectional::View ) );
-		shadowMap.end();
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0 );
 		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
+		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0 );
 
 		// Outputs
 		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition"
@@ -406,16 +409,16 @@ namespace castor3d
 
 			vertexPosition = mtxModel * vertexPosition;
 			vtx_worldPosition = vertexPosition.xyz();
-			vertexPosition = c3d_view * vertexPosition;
+			vertexPosition = c3d_lightView * vertexPosition;
 			vtx_viewPosition = vertexPosition.xyz();
-			out.vtx.position = c3d_projection * vertexPosition;
+			out.vtx.position = c3d_lightProjection * vertexPosition;
 		};
 
 		writer.implementFunction< sdw::Void >( "main", main );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr ShadowMapDirectional::doGetPixelShaderSource( PipelineFlags const & flags )const
+	ShaderPtr ShadowMapDirectional::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
@@ -436,15 +439,11 @@ namespace castor3d
 			, RenderPass::VertexOutputs::TextureLocation );
 		auto vtx_material = writer.declInput< UInt >( "vtx_material"
 			, RenderPass::VertexOutputs::MaterialLocation );
-		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
-			, getMinTextureIndex()
-			, 1u
-			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
 		auto in = writer.getIn();
 
-		auto materials = shader::createMaterials( writer, flags.passFlags );
-		materials->declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		shader::LegacyMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
 		shader::TextureConfigurations textureConfigs{ writer };
 		bool hasTextures = flags.texturesCount > 0;
 
@@ -454,14 +453,29 @@ namespace castor3d
 		}
 
 		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+
+		auto index = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, getMinTextureIndex()
+			, 1u
+			, std::max( 1u, flags.texturesCount )
+			, flags.texturesCount > 0u ) );
+		index += flags.texturesCount;
+
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+		auto lighting = shader::PhongLightingModel::createModel( writer
+			, utils
+			, false // rsm
+			, index
+			, true );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
-		
-		shader::Utils utils{ writer };
 
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
@@ -472,23 +486,344 @@ namespace castor3d
 					, normalize( vtx_tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( vtx_bitangent ) );
-				auto material = materials->getBaseMaterial( vtx_material );
+				auto material = materials.getMaterial( vtx_material );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto diffuse = writer.declLocale( "diffuse"
+					, utils.removeGamma( gamma, material.m_diffuse() ) );
+				auto specular = writer.declLocale( "specular"
+					, material.m_specular );
+				auto shininess = writer.declLocale( "shininess"
+					, material.m_shininess );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
 				auto alpha = writer.declLocale( "alpha"
-					, material->m_opacity );
+					, material.m_opacity );
 				auto alphaRef = writer.declLocale( "alphaRef"
-					, material->m_alphaRef );
-				utils.computeOpaNmlMapContribution( flags
+					, material.m_alphaRef );
+				shader::PhongLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
 					, textureConfigs
 					, c3d_textureConfig
-					, c3d_maps
-					, vtx_texture
-					, alpha
 					, tangent
 					, bitangent
-					, normal );
+					, c3d_maps
+					, vtx_texture
+					, normal
+					, diffuse
+					, specular
+					, emissive
+					, shininess
+					, alpha
+					, occlusion
+					, transmittance );
 				utils.applyAlphaFunc( flags.alphaFunc
 					, alpha
 					, alphaRef );
+
+				auto lightDiffuse = writer.declLocale( "lightDiffuse"
+					, vec3( 0.0_f ) );
+				auto lightSpecular = writer.declLocale( "lightSpecular"
+					, vec3( 0.0_f ) );
+				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
+					, vec3( 0.0_f ) // TODO
+					, shininess
+					, 0_i
+					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, output );
+				pxl_flux.rgb() = lightDiffuse;
+
+				auto depth = writer.declLocale( "depth"
+					, in.fragCoord.z() );
+				pxl_linearNormal.x() = in.fragCoord.z();
+				pxl_linearNormal.yzw() = normal;
+				pxl_position.xyz() = vtx_worldPosition;
+
+				pxl_variance.x() = depth;
+				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
+
+				auto dx = writer.declLocale( "dx"
+					, dFdx( depth ) );
+				auto dy = writer.declLocale( "dy"
+					, dFdy( depth ) );
+				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr ShadowMapDirectional::doGetPbrMrPixelShaderSource( PipelineFlags const & flags )const
+	{
+		using namespace sdw;
+		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
+
+		// Fragment Intputs
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
+			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto in = writer.getIn();
+
+		shader::PbrMRMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::TextureConfigurations textureConfigs{ writer };
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+
+		auto index = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, getMinTextureIndex()
+			, 1u
+			, std::max( 1u, flags.texturesCount )
+			, flags.texturesCount > 0u ) );
+		index += flags.texturesCount;
+
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
+			, utils
+			, false // rsm
+			, index
+			, true );
+
+		// Fragment Outputs
+		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
+				auto material = materials.getMaterial( vtx_material );
+				auto metallic = writer.declLocale( "metallic"
+					, material.m_metallic );
+				auto roughness = writer.declLocale( "roughness"
+					, material.m_roughness );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto albedo = writer.declLocale( "albedo"
+					, utils.removeGamma( gamma, material.m_albedo ) );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
+				auto alpha = writer.declLocale( "alpha"
+					, material.m_opacity );
+				auto alphaRef = writer.declLocale( "alphaRef"
+					, material.m_alphaRef );
+				shader::MetallicBrdfLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangent
+					, vtx_bitangent
+					, c3d_maps
+					, vtx_texture
+					, normal
+					, albedo
+					, metallic
+					, emissive
+					, roughness
+					, alpha
+					, occlusion
+					, transmittance );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, alphaRef );
+
+				auto lightDiffuse = writer.declLocale( "lightDiffuse"
+					, vec3( 0.0_f ) );
+				auto lightSpecular = writer.declLocale( "lightSpecular"
+					, vec3( 0.0_f ) );
+				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
+					, vec3( 0.0_f ) // TODO
+					, albedo
+					, metallic
+					, roughness
+					, 0_i
+					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, output );
+				pxl_flux.rgb() = lightDiffuse;
+
+				auto depth = writer.declLocale( "depth"
+					, in.fragCoord.z() );
+				pxl_linearNormal.x() = in.fragCoord.z();
+				pxl_linearNormal.yzw() = normal;
+				pxl_position.xyz() = vtx_worldPosition;
+
+				pxl_variance.x() = depth;
+				pxl_variance.y() = pxl_variance.x() * pxl_variance.x();
+
+				auto dx = writer.declLocale( "dx"
+					, dFdx( depth ) );
+				auto dy = writer.declLocale( "dy"
+					, dFdy( depth ) );
+				pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr ShadowMapDirectional::doGetPbrSgPixelShaderSource( PipelineFlags const & flags )const
+	{
+		using namespace sdw;
+		FragmentWriter writer;
+		auto & renderSystem = *getEngine()->getRenderSystem();
+
+		// Fragment Intputs
+		auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto vtx_viewPosition = writer.declInput< Vec3 >( "vtx_viewPosition"
+			, RenderPass::VertexOutputs::ViewPositionLocation );
+		auto vtx_normal = writer.declInput< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto vtx_tangent = writer.declInput< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto vtx_bitangent = writer.declInput< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture"
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto vtx_material = writer.declInput< UInt >( "vtx_material"
+			, RenderPass::VertexOutputs::MaterialLocation );
+		auto in = writer.getIn();
+
+		shader::PbrSGMaterials materials{ writer };
+		materials.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", getLightBufferIndex(), 0u );
+		shader::TextureConfigurations textureConfigs{ writer };
+		bool hasTextures = flags.texturesCount > 0;
+
+		if ( hasTextures )
+		{
+			textureConfigs.declare( renderSystem.getGpuInformations().hasShaderStorageBuffers() );
+		}
+
+		UBO_TEXTURES( writer, TexturesUbo::BindingPoint, 0u, hasTextures );
+		UBO_SHADOWMAP( writer, ShadowMapUbo::BindingPoint, 0u );
+
+		auto index = getMinTextureIndex();
+		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
+			, getMinTextureIndex()
+			, 1u
+			, std::max( 1u, flags.texturesCount )
+			, flags.texturesCount > 0u ) );
+		index += flags.texturesCount;
+
+		shader::Utils utils{ writer };
+		utils.declareRemoveGamma();
+		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
+			, utils
+			, false // rsm
+			, index
+			, true );
+
+		// Fragment Outputs
+		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				auto normal = writer.declLocale( "normal"
+					, normalize( vtx_normal ) );
+				auto tangent = writer.declLocale( "tangent"
+					, normalize( vtx_tangent ) );
+				auto bitangent = writer.declLocale( "bitangent"
+					, normalize( vtx_bitangent ) );
+				auto material = materials.getMaterial( vtx_material );
+				auto specular = writer.declLocale( "specular"
+					, material.m_specular );
+				auto glossiness = writer.declLocale( "glossiness"
+					, material.m_glossiness );
+				auto gamma = writer.declLocale( "gamma"
+					, material.m_gamma );
+				auto albedo = writer.declLocale( "albedo"
+					, utils.removeGamma( gamma, material.m_diffuse() ) );
+				auto emissive = writer.declLocale( "emissive"
+					, vec3( material.m_emissive ) );
+				auto occlusion = writer.declLocale( "occlusion"
+					, 1.0_f );
+				auto transmittance = writer.declLocale( "transmittance"
+					, 0.0_f );
+				auto alpha = writer.declLocale( "alpha"
+					, material.m_opacity );
+				auto alphaRef = writer.declLocale( "alphaRef"
+					, material.m_alphaRef );
+				shader::SpecularBrdfLightingModel::computeMapContributions( writer
+					, utils
+					, flags
+					, gamma
+					, textureConfigs
+					, c3d_textureConfig
+					, vtx_tangent
+					, vtx_bitangent
+					, c3d_maps
+					, vtx_texture
+					, normal
+					, albedo
+					, specular
+					, emissive
+					, glossiness
+					, alpha
+					, occlusion
+					, transmittance );
+				utils.applyAlphaFunc( flags.alphaFunc
+					, alpha
+					, alphaRef );
+
+				auto lightDiffuse = writer.declLocale( "lightDiffuse"
+					, vec3( 0.0_f ) );
+				auto lightSpecular = writer.declLocale( "lightSpecular"
+					, vec3( 0.0_f ) );
+				shader::OutputComponents output{ lightDiffuse, lightSpecular };
+				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
+					, vec3( 0.0_f ) // TODO
+					, specular
+					, glossiness
+					, 0_i
+					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
+					, output );
+				pxl_flux.rgb() = lightDiffuse;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );

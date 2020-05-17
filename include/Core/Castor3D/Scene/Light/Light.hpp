@@ -103,6 +103,21 @@ namespace castor3d
 		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
 		 *\~english
+		 *\brief		Records the light data into given buffer.
+		 *\param[in]	index	The light index inside the lights buffer.
+		 *\param[out]	buffer	The buffer.
+		 *\~french
+		 *\brief		Enregistre les données de l'image dans le tampon donné.
+		 *\param[in]	index	L'indice de la source lumineuse dans le tampon de lumières.
+		 *\param[out]	buffer	Le tampon.
+		 */
+		inline void bind( uint32_t index, castor::Point4f * buffer )
+		{
+			m_bufferIndex = index;
+			bind( buffer );
+		}
+		/**
+		 *\~english
 		 *\brief		Attaches this light to a SceneNode.
 		 *\param[in]	node	The new light's parent node.
 		 *\~french
@@ -196,6 +211,11 @@ namespace castor3d
 		inline uint32_t getShadowMapIndex()const
 		{
 			return m_shadowMapIndex;
+		}
+
+		inline uint32_t getBufferIndex()const
+		{
+			return m_bufferIndex;
 		}
 
 		inline bool needsRsmShadowMaps()const
@@ -338,6 +358,7 @@ namespace castor3d
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
 		bool m_shadowMapRsm{ false };
+		uint32_t m_bufferIndex{ 0u };
 	};
 }
 
