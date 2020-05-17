@@ -947,39 +947,6 @@ namespace castor3d
 				, brdfMap );
 		}
 
-		void Utils::computeOpaNmlMapContribution( PipelineFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
-			, sdw::Vec3 const & texCoords
-			, sdw::Float & opacity
-			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent
-			, sdw::Vec3 & normal )
-		{
-			if ( flags.texturesCount > 0 )
-			{
-				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
-				{
-					auto name = string::stringCast< char >( string::toString( i ) );
-					auto config = m_writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
-					auto sampled = m_writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], config.convertUV( m_writer, texCoords.xy() ) ) );
-
-					if ( checkFlag( flags.textures, TextureFlag::eNormal ) )
-					{
-						normal = config.getNormal( m_writer, sampled, normal, tangent, bitangent );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOpacity ) )
-					{
-						opacity = config.getOpacity( m_writer, sampled, opacity );
-					}
-				}
-			}
-		}
-
 		void Utils::computeOpacityMapContribution( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig

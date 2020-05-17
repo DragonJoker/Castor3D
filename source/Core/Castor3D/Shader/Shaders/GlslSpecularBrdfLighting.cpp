@@ -27,7 +27,6 @@ namespace castor3d
 		}
 
 		void SpecularBrdfLightingModel::computeCombined( Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
@@ -44,7 +43,6 @@ namespace castor3d
 			{
 				m_computeDirectional( getDirectionalLight( dir )
 					, worldEye
-					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
@@ -60,7 +58,6 @@ namespace castor3d
 			{
 				m_computePoint( getPointLight( point )
 					, worldEye
-					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
@@ -76,7 +73,6 @@ namespace castor3d
 			{
 				m_computeSpot( getSpotLight( spot )
 					, worldEye
-					, diffuse
 					, specular
 					, glossiness
 					, receivesShadows
@@ -88,7 +84,6 @@ namespace castor3d
 
 		void SpecularBrdfLightingModel::compute( DirectionalLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
@@ -97,7 +92,6 @@ namespace castor3d
 		{
 			m_computeDirectional( DirectionalLight{ light }
 				, worldEye
-				, diffuse
 				, specular
 				, glossiness
 				, receivesShadows
@@ -107,7 +101,6 @@ namespace castor3d
 
 		void SpecularBrdfLightingModel::compute( PointLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
@@ -116,7 +109,6 @@ namespace castor3d
 		{
 			m_computeOnePoint( PointLight{ light }
 				, worldEye
-				, diffuse
 				, specular
 				, glossiness
 				, receivesShadows
@@ -126,7 +118,6 @@ namespace castor3d
 
 		void SpecularBrdfLightingModel::compute( SpotLight const & light
 			, Vec3 const & worldEye
-			, Vec3 const & diffuse
 			, Vec3 const & specular
 			, Float const & glossiness
 			, Int const & receivesShadows
@@ -135,7 +126,6 @@ namespace castor3d
 		{
 			m_computeOneSpot( SpotLight{ light }
 				, worldEye
-				, diffuse
 				, specular
 				, glossiness
 				, receivesShadows
@@ -156,21 +146,6 @@ namespace castor3d
 
 		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, ShadowType shadows
-			, bool volumetric
-			, bool rsm
-			, uint32_t & index )
-		{
-			auto result = std::make_shared< SpecularBrdfLightingModel >( writer, utils, true );
-			result->declareDirectionalModel( shadows
-				, volumetric
-				, rsm
-				, index );
-			return result;
-		}
-
-		std::shared_ptr< SpecularBrdfLightingModel > SpecularBrdfLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
 			, LightType lightType
 			, ShadowType shadows
 			, bool volumetric
@@ -182,7 +157,7 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				CU_Failure( "Directional light model should use the other overload" );
+				result->declareDirectionalModel( shadows, volumetric, rsm, index );
 				break;
 
 			case LightType::ePoint:
@@ -289,7 +264,6 @@ namespace castor3d
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -346,9 +320,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -410,7 +383,6 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
@@ -424,7 +396,6 @@ namespace castor3d
 			m_computePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this]( PointLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -467,9 +438,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -484,7 +454,6 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
@@ -498,7 +467,6 @@ namespace castor3d
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -539,9 +507,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -559,7 +526,6 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
@@ -574,7 +540,6 @@ namespace castor3d
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( "computeDirectionalLight"
 				, [this, shadowType, volumetric]( DirectionalLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -630,9 +595,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -687,7 +651,6 @@ namespace castor3d
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
@@ -702,7 +665,6 @@ namespace castor3d
 			m_computeOnePoint = m_writer.implementFunction< sdw::Void >( "computePointLight"
 				, [this, shadowType]( PointLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -739,9 +701,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -756,7 +717,6 @@ namespace castor3d
 				}
 				, InPointLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )
@@ -771,7 +731,6 @@ namespace castor3d
 			m_computeOneSpot = m_writer.implementFunction< sdw::Void >( "computeSpotLight"
 				, [this, shadowType]( SpotLight const & light
 					, Vec3 const & worldEye
-					, Vec3 const & diffuse
 					, Vec3 const & specular
 					, Float const & glossiness
 					, Int const & receivesShadows
@@ -810,9 +769,8 @@ namespace castor3d
 					m_cookTorrance.compute( light.m_lightBase
 						, worldEye
 						, lightDirection
-						, diffuse
 						, specular
-						, glossiness
+						, 1.0_f - glossiness
 						, shadowFactor
 						, fragmentIn
 						, output );
@@ -830,7 +788,6 @@ namespace castor3d
 				}
 				, InSpotLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
-				, InVec3( m_writer, "diffuse" )
 				, InVec3( m_writer, "specular" )
 				, InFloat( m_writer, "glossiness" )
 				, InInt( m_writer, "receivesShadows" )

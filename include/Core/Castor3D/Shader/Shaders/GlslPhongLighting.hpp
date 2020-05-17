@@ -49,12 +49,6 @@ namespace castor3d
 				, bool isOpaqueProgram );
 			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
-				, ShadowType shadows
-				, bool volumetric
-				, bool rsm
-				, uint32_t & index );
-			C3D_API static std::shared_ptr< PhongLightingModel > createModel( sdw::ShaderWriter & writer
-				, Utils & utils
 				, LightType light
 				, ShadowType shadows
 				, bool volumetric

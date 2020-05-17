@@ -137,21 +137,6 @@ namespace castor3d
 
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, ShadowType shadows
-			, bool volumetric
-			, bool rsm
-			, uint32_t & index )
-		{
-			auto result = std::make_shared< PhongLightingModel >( writer, utils, true );
-			result->declareDirectionalModel( shadows
-				, volumetric
-				, rsm
-				, index );
-			return result;
-		}
-
-		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
 			, LightType lightType
 			, ShadowType shadows
 			, bool volumetric
@@ -163,7 +148,7 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				CU_Failure( "Directional light model should use the other overload" );
+				result->declareDirectionalModel( shadows, volumetric, rsm, index );
 				break;
 
 			case LightType::ePoint:
