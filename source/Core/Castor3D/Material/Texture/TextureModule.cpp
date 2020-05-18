@@ -14,6 +14,8 @@ namespace castor3d
 			return cuT( "Colour" );
 		case castor3d::TextureSpace::eDepth:
 			return cuT( "Depth" );
+		case castor3d::TextureSpace::eTangentSpace:
+			return cuT( "TangentSpace" );
 		case castor3d::TextureSpace::eObjectSpace:
 			return cuT( "ObjectSpace" );
 		case castor3d::TextureSpace::eWorldSpace:

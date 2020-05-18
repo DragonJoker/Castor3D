@@ -28,31 +28,34 @@ namespace castor3d
 	{
 		//!\~english Modifier: Normalized value (Colour in [-1, 1] range, depth in [0, 1] range).
 		//!\~french Modificateur: Valeur normalisée (Couleur dans l'intervalle [-1, 1], profondeur dans l'intervalle [0, 1]).
-		eNormalised = 0x001,
+		eNormalised = 0x0001 << 0,
 		//!\~english Modifier: Y inverted space.
 		//!\~french Modificateur: Espace Y inversé.
-		eYInverted = 0x002,
+		eYInverted = 0x0001 << 1,
 		//!\~english Colour texture in R.
 		//!\~french Texture couleur dans R.
-		eColour = 0x004,
+		eColour = 0x0001 << 2,
 		//!\~english Depth in [near, far] range.
 		//!\~french Profondeur dans l'intervalle [near, far].
-		eDepth = 0x008,
+		eDepth = 0x0001 << 3,
+		//!\~english Tangent space data.
+		//!\~french Données en espace tangent.
+		eTangentSpace = 0x0001 << 4,
 		//!\~english Object space data.
 		//!\~french Données en espace objet.
-		eObjectSpace = 0x010,
+		eObjectSpace = 0x0001 << 5,
 		//!\~english World space data.
 		//!\~french Données en espace monde.
-		eWorldSpace = 0x020,
+		eWorldSpace = 0x0001 << 6,
 		//!\~english View space data.
 		//!\~french Données en espace vue.
-		eViewSpace = 0x040,
+		eViewSpace = 0x0001 << 7,
 		//!\~english Clip space data.
 		//!\~french Données en espace de clipping.
-		eClipSpace = 0x080,
+		eClipSpace = 0x0001 << 8,
 		//!\~english Stencil data.
 		//!\~french Données de stencil.
-		eStencil = 0x100,
+		eStencil = 0x0001 << 9,
 	};
 	CU_ImplementFlags( TextureSpace )
 	C3D_API castor::String getName( TextureSpace value );

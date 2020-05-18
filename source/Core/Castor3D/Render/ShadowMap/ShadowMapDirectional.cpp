@@ -240,7 +240,7 @@ namespace castor3d
 			timer.beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencil, opaqueWhiteClearColor, opaqueWhiteClearColor }
+				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();

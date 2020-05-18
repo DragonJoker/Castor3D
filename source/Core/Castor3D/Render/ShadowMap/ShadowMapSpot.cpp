@@ -186,7 +186,7 @@ namespace castor3d
 		timer.beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
 			, frameBuffer
-			, { defaultClearDepthStencil, opaqueBlackClearColor, opaqueBlackClearColor }
+			, getClearValues()
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
 		commandBuffer.endRenderPass();

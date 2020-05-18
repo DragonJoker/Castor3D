@@ -284,24 +284,16 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthDirectional
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowDirectional
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthSpot
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowSpot
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthPoint
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowPoint
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
+			{
+				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+		}
+
 		return textureBindings;
 	}
 

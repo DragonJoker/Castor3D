@@ -200,8 +200,6 @@ namespace castor3d
 	ashes::Semaphore const & ShadowMapPoint::doRender( ashes::Semaphore const & toWait
 		, uint32_t index )
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
-		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
 		auto & myTimer = m_passes[0].pass->getTimer();
 		auto timerBlock = myTimer.start();
 		auto * result = &toWait;
@@ -232,7 +230,7 @@ namespace castor3d
 			timer.beginPass( commandBuffer );
 			commandBuffer.beginRenderPass( renderPass
 				, *frameBuffer.frameBuffer
-				, { defaultClearDepthStencil, rgb32fMaxColor, rgb32fMaxColor }
+				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
 			commandBuffer.endRenderPass();

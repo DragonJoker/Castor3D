@@ -35,26 +35,14 @@ namespace castor3d
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
 	{
-		uint32_t index = 0u;
-		m_result[SmTexture::eVariance].getTexture()->forEachView( [&index, &visitor, this]( TextureViewUPtr const & view )
-			{
-				visitor.visit( m_name + "Variance" + string::toString( index++ ), view->getView() );
-			} );
-		index = 0u;
-		m_result[SmTexture::eLinearNormal].getTexture()->forEachView( [&index, &visitor, this]( TextureViewUPtr const & view )
-			{
-				visitor.visit( m_name + "Linear" + string::toString( index++ ), view->getView() );
-			} );
-		index = 0u;
-		m_result[SmTexture::ePosition].getTexture()->forEachView( [&index, &visitor, this]( TextureViewUPtr const & view )
-			{
-				visitor.visit( m_name + "Position" + string::toString( index++ ), view->getView() );
-			} );
-		index = 0u;
-		m_result[SmTexture::eFlux].getTexture()->forEachView( [&index, &visitor, this]( TextureViewUPtr const & view )
-			{
-				visitor.visit( m_name + "Flux" + string::toString( index++ ), view->getView() );
-			} );
+		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
+		{
+			uint32_t index = 0u;
+			m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
+				{
+					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ ), view->getView() );
+				} );
+		}
 	}
 
 	bool ShadowMap::initialise()
@@ -73,7 +61,6 @@ namespace castor3d
 			{
 				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-				static VkClearColorValue const clearColour{ 1.0f, 1.0f, 1.0f, 1.0f };
 				uint32_t index = 0u;
 
 				for ( auto & texture : m_result )
@@ -83,15 +70,28 @@ namespace castor3d
 							m_name + getName( SmTexture( index ) ) + " clear",
 							makeFloatArray( getEngine()->getNextRainbowColour() ),
 						} );
-					texture.getTexture()->forEachLeafView( [&cmdBuffer]( TextureViewUPtr const & view )
+					texture.getTexture()->forEachLeafView( [&cmdBuffer, index]( TextureViewUPtr const & view )
 						{
 							cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 								, VK_PIPELINE_STAGE_TRANSFER_BIT
 								, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-							cmdBuffer->clear( view->getView(), clearColour );
-							cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-								, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-								, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+
+							if ( ashes::isDepthOrStencilFormat( view->getView()->format ) )
+							{
+								cmdBuffer->clear( view->getView()
+									, getClearValue( SmTexture( index ) ).depthStencil );
+								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+									, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+									, view->getView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+							}
+							else
+							{
+								cmdBuffer->clear( view->getView()
+									, getClearValue( SmTexture( index ) ).color );
+								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+									, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+									, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+							}
 						} );
 					cmdBuffer->endDebugBlock();
 					++index;
@@ -184,6 +184,25 @@ namespace castor3d
 		}
 
 		return doGetPhongPixelShaderSource( flags );
+	}
+
+	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
+	{
+		static ashes::VkClearValueArray const result
+		{
+			[]()
+			{
+				ashes::VkClearValueArray result;
+
+				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
+				{
+					result.push_back( getClearValue( SmTexture( i ) ) );
+				}
+
+				return result;
+			}()
+		};
+		return result;
 	}
 
 	ashes::Sampler const & ShadowMap::getLinearSampler( uint32_t index )const

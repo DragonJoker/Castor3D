@@ -36,7 +36,10 @@ namespace castor3d
 	castor::String getTextureName( LightType light
 		, SmTexture texture );
 	VkFormat getTextureFormat( SmTexture texture );
-	class ShadowMapPassResult;
+	VkFormat getTextureFormat( Engine & engine
+		, SmTexture texture );
+	VkClearValue getClearValue( SmTexture texture );
+	VkImageUsageFlags getUsageFlags( SmTexture texture );
 	/**
 	*\~english
 	*\brief
@@ -82,6 +85,15 @@ namespace castor3d
 	*	Implémentation du mappage d'ombres.
 	*/
 	class ShadowMapPass;
+	/**
+	*\~english
+	*\brief
+	*	The textures resulting from a shadow map.
+	*\~french
+	*\brief
+	*	Les textures résultant d'une shadow map.
+	*/
+	class ShadowMapPassResult;
 	/**
 	*\~english
 	*\brief

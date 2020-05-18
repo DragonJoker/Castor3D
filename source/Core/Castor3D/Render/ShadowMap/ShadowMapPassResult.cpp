@@ -32,55 +32,6 @@ namespace castor3d
 			return result;
 		}
 
-		TextureUnit doInitialiseDepth( Engine & engine
-			, castor::String const & prefix
-			, VkImageCreateFlags createFlags
-			, Size const & size
-			, uint32_t layerCount )
-		{
-			String const name = prefix + cuT( "ShadowMapDepth" );
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			}
-
-			ashes::ImageCreateInfo depth
-			{
-				createFlags,
-				VK_IMAGE_TYPE_2D,
-				doGetDepthFormat( engine ),
-				{ size[0], size[1], 1u },
-				1u,
-				layerCount,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-			};
-			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, std::move( depth )
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit unit{ engine };
-			unit.setTexture( texture );
-			unit.setSampler( sampler );
-			texture->forEachView( []( TextureViewUPtr const & view )
-				{
-					view->initialiseSource();
-				} );
-			return unit;
-		}
-
 		TextureUnit doInitialiseTexture( Engine & engine
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -110,13 +61,13 @@ namespace castor3d
 			{
 				createFlags,
 				VK_IMAGE_TYPE_2D,
-				getTextureFormat( texture ),
+				getTextureFormat( engine, texture ),
 				{ size[0], size[1], 1u },
 				1u,
 				layerCount,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_IMAGE_TILING_OPTIMAL,
-				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				getUsageFlags( texture ),
 			};
 			auto layout = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
@@ -139,11 +90,17 @@ namespace castor3d
 			, uint32_t layerCount )
 		{
 			TextureUnitArray result;
-			result.emplace_back( doInitialiseDepth( engine, prefix, createFlags, size, layerCount ) );
-			result.emplace_back( doInitialiseTexture( engine, prefix, createFlags, size, layerCount, SmTexture::eLinearNormal ) );
-			result.emplace_back( doInitialiseTexture( engine, prefix, createFlags, size, layerCount, SmTexture::eVariance ) );
-			result.emplace_back( doInitialiseTexture( engine, prefix, createFlags, size, layerCount, SmTexture::ePosition ) );
-			result.emplace_back( doInitialiseTexture( engine, prefix, createFlags, size, layerCount, SmTexture::eFlux ) );
+
+			for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
+			{
+				result.emplace_back( doInitialiseTexture( engine
+					, prefix
+					, createFlags
+					, size
+					, layerCount
+					, SmTexture( i ) ) );
+			}
+
 			return result;
 		}
 	}
@@ -156,10 +113,10 @@ namespace castor3d
 		{
 			{
 				cuT( "Depth" ),
-				cuT( "Linear" ),
+				cuT( "LinearNormal" ),
 				cuT( "Variance" ),
 				cuT( "Position" ),
-				cuT( "NormalFlux" ),
+				cuT( "Flux" ),
 			}
 		};
 
@@ -172,13 +129,29 @@ namespace castor3d
 		return cuT( "c3d_" ) + getName( light ) + getName( texture );
 	}
 
+	VkFormat getTextureFormat( Engine & engine
+		, SmTexture texture )
+	{
+		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
+		{
+			{
+				doGetDepthFormat( engine ),
+				VK_FORMAT_R32G32B32A32_SFLOAT,
+				VK_FORMAT_R32G32_SFLOAT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
+			}
+		};
+		return Values[size_t( texture )];
+	}
+
 	VkFormat getTextureFormat( SmTexture texture )
 	{
 		static std::array< VkFormat, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				VK_FORMAT_D24_UNORM_S8_UINT,
-				VK_FORMAT_R32_SFLOAT,
+				VK_FORMAT_R32G32B32A32_SFLOAT,
 				VK_FORMAT_R32G32_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
@@ -186,6 +159,38 @@ namespace castor3d
 		};
 		CU_Require( texture != SmTexture::eDepth
 			&& "You can't use this function for depth texture format" );
+		return Values[size_t( texture )];
+	}
+
+	VkClearValue getClearValue( SmTexture texture )
+	{
+		static float constexpr component = std::numeric_limits< float >::max();
+		static auto const rgb32fMaxColor{ ashes::makeClearValue( VkClearColorValue{ component, component, component, component } ) };
+		static std::array< VkClearValue, size_t( SmTexture::eCount ) > Values
+		{
+			{
+				defaultClearDepthStencil,
+				makeClearValue( component, 0.0f, 0.0f, 0.0f ),
+				rgb32fMaxColor,
+				opaqueBlackClearColor,
+				opaqueBlackClearColor
+			}
+		};
+		return Values[size_t( texture )];
+	}
+
+	VkImageUsageFlags getUsageFlags( SmTexture texture )
+	{
+		static std::array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
+		{
+			{
+				VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+			}
+		};
 		return Values[size_t( texture )];
 	}
 
