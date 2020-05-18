@@ -194,6 +194,8 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassSpot::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 2u );
+		return RenderPass::createBlendState( BlendMode::eNoBlend
+			, BlendMode::eNoBlend
+			, uint32_t( SmTexture::eCount ) - 1u );
 	}
 }
