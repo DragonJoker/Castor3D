@@ -615,6 +615,7 @@ namespace castor3d
 		: castor3d::RenderQuad
 		{
 			*engine.getRenderSystem(),
+			cuT( "SsaoRawAO" ),
 			VK_FILTER_NEAREST,
 			{
 				( normals
@@ -623,8 +624,8 @@ namespace castor3d
 				ashes::nullopt,
 			},
 		}
-		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsaoRawAO" }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsaoRawAO" }
+		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 		, m_depthView{ normals ? &depth.getTexture()->getDefaultView().getView() : nullptr }
 		, m_depthSampler{ normals ? depth.getSampler() : nullptr }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }

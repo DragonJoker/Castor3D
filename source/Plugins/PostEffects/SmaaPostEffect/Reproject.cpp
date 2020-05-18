@@ -135,13 +135,13 @@ namespace smaa
 		, ashes::ImageView const & previousColourView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaReproject" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_currentColourView{ currentColourView }
 		, m_previousColourView{ previousColourView }
 		, m_velocityView{ velocityView }
-		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaReproject" ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject" }
+		, m_surface{ *renderTarget.getEngine(), getName() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		VkExtent2D size{ m_currentColourView.image->getDimensions().width, m_currentColourView.image->getDimensions().height };
 
@@ -200,7 +200,7 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( "Reproject"
+		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
@@ -248,8 +248,8 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore reprojectCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "Reproject" ),
-			device->createSemaphore( "Reproject" )
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & reprojectCmd = *reprojectCommands.commandBuffer;
 

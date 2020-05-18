@@ -59,7 +59,7 @@ namespace castor3d
 
 		ashes::ImageView doCreateView( ashes::Image const & texture )
 		{
-			ashes::ImageViewCreateInfo imageView
+			ashes::ImageViewCreateInfo createInfo
 			{
 				0u,
 				texture,
@@ -68,7 +68,31 @@ namespace castor3d
 				VkComponentMapping{},
 				{ ashes::getAspectMask( texture.getFormat() ), 0u, 1u, 0u, 1u },
 			};
-			return texture.createView( imageView );
+			return texture.createView( std::move( createInfo ) );
+		}
+
+		ashes::ImageView doCreateView( ashes::ImageView const & view )
+		{
+			ashes::ImageViewCreateInfo createInfo
+			{
+				view->flags,
+				view->image,
+				view->viewType,
+				view->format,
+				view->components,
+				{
+					VkImageAspectFlags( ( ashes::isDepthFormat( view->format ) || ashes::isDepthOrStencilFormat( view->format ) )
+						? VK_IMAGE_ASPECT_DEPTH_BIT
+						: ( ashes::isStencilFormat( view->format )
+							? VK_IMAGE_ASPECT_STENCIL_BIT
+							: VK_IMAGE_ASPECT_COLOR_BIT ) ),
+					view->subresourceRange.baseMipLevel,
+					view->subresourceRange.levelCount,
+					view->subresourceRange.baseArrayLayer,
+					view->subresourceRange.layerCount,
+				},
+			};
+			return view.image->createView( std::move( createInfo ) );
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderSystem const & renderSystem
@@ -152,7 +176,7 @@ namespace castor3d
 		, castor::String const & prefix
 		, ashes::ImageView const & lhsView
 		, RenderQuadConfig const & config )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, config }
+		: RenderQuad{ *engine.getRenderSystem(), cuT( "Combine" ), VK_FILTER_LINEAR, config }
 		, m_lhsView{ lhsView }
 		, m_lhsSampler{ createSampler( engine, prefix + cuT( "Combine" ), VK_FILTER_LINEAR, &lhsView->subresourceRange ) }
 	{
@@ -184,8 +208,8 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_vertexShader{ vertexShader }
 		, m_pixelShader{ pixelShader }
-		, m_lhsView{ lhsView }
-		, m_rhsView{ rhsView }
+		, m_lhsView{ doCreateView( lhsView ) }
+		, m_rhsView{ doCreateView( rhsView ) }
 		, m_config{ config }
 		, m_prefix{ prefix }
 		, m_image{ ( config.resultTexture
@@ -195,7 +219,7 @@ namespace castor3d
 		, m_timer{ std::make_shared< RenderPassTimer >( m_engine, m_prefix, cuT( "Combine" ) ) }
 		, m_renderPass{ doCreateRenderPass( *m_engine.getRenderSystem(), m_prefix, outputFormat ) }
 		, m_frameBuffer{ doCreateFrameBuffer( m_prefix, *m_renderPass, m_view, outputSize ) }
-		, m_quad{ engine, m_prefix, lhsView, std::move( config ) }
+		, m_quad{ engine, m_prefix, m_lhsView, std::move( config ) }
 	{
 		auto & device = getCurrentRenderDevice( engine );
 		ashes::PipelineShaderStageCreateInfoArray program
@@ -212,7 +236,7 @@ namespace castor3d
 		m_quad.createPipeline( outputSize
 			, Position{}
 			, program
-			, rhsView
+			, m_rhsView
 			, * m_renderPass
 			, bindings
 			, {} );

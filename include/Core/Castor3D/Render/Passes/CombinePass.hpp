@@ -88,8 +88,8 @@ namespace castor3d
 		Engine & m_engine;
 		ShaderModule const & m_vertexShader;
 		ShaderModule const & m_pixelShader;
-		ashes::ImageView const & m_lhsView;
-		ashes::ImageView const & m_rhsView;
+		ashes::ImageView m_lhsView;
+		ashes::ImageView m_rhsView;
 		CombinePassConfig m_config;
 		castor::String m_prefix;
 		TextureLayoutSPtr m_image;

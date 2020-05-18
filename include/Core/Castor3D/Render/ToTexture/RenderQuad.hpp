@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "RenderToTextureModule.hpp"
 
+#include <CastorUtils/Design/Named.hpp>
+
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -52,6 +54,7 @@ namespace castor3d
 	};
 
 	class RenderQuad
+		: public castor::Named
 	{
 		friend class RenderQuadBuilder;
 
@@ -77,6 +80,7 @@ namespace castor3d
 		*	La configuration des coordonnées de texture.
 		*/
 		C3D_API RenderQuad( RenderSystem & renderSystem
+			, castor::String const & name
 			, VkFilter samplerFilter
 			, RenderQuadConfig config );
 
@@ -305,11 +309,13 @@ namespace castor3d
 		*	Le filtre d'échantillonnage pour la texture source.
 		*/
 		inline RenderQuadUPtr build( RenderSystem & renderSystem
+			, castor::String const & name
 			, VkFilter samplerFilter )
 		{
 			return std::unique_ptr< RenderQuad >( new RenderQuad
 				{
 					renderSystem,
+					name,
 					samplerFilter,
 					m_config,
 				} );

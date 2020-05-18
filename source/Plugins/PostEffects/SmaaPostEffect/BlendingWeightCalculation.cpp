@@ -862,12 +862,12 @@ namespace smaa
 		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaBlendingWeightCalculation" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_edgeDetectionView{ edgeDetectionView }
-		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaBlendingWeightCalculation" ) }
+		, m_surface{ *renderTarget.getEngine(), getName() }
 		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeightCalculation" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeightCalculation" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
@@ -878,7 +878,7 @@ namespace smaa
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SmaaBlendingWeightCalculation" );
+			, getName() );
 		
 		ashes::ImageCreateInfo image
 		{
@@ -983,7 +983,7 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( "BlendingWeightCalculation"
+		m_renderPass = device->createRenderPass( getName()
 			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
@@ -1047,8 +1047,8 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "BlendingWeightCalculation" ),
-			device->createSemaphore( "BlendingWeightCalculation" )
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 

@@ -208,7 +208,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) ) }
+		, m_listener{ engine.getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 	{
 		log::debug << "Created render window " << m_index << std::endl;
 	}
@@ -218,7 +218,7 @@ namespace castor3d
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
 		auto listener = getListener();
-		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) );
+		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
 		auto target = m_renderTarget.lock();
 
 		if ( target )
@@ -784,6 +784,7 @@ namespace castor3d
 		m_renderQuad = RenderQuadBuilder{}
 			.texcoordConfig( RenderQuadConfig::Texcoord{} )
 			.build( *getEngine()->getRenderSystem()
+				, "RenderWindow" + getName()
 				, VK_FILTER_LINEAR );
 		doCreateProgram();
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }

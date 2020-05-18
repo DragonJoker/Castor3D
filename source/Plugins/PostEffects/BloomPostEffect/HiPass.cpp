@@ -156,12 +156,12 @@ namespace Bloom
 		, ashes::ImageView const & sceneView
 		, VkExtent2D size
 		, uint32_t blurPassesCount )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, cuT( "BloomHiPass" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_sceneView{ sceneView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", getVertexProgram( renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", getPixelProgram( renderSystem ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( renderSystem ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), format ) }
-		, m_surface{ *renderSystem.getEngine(), cuT( "BloomHiPass" ) }
+		, m_surface{ *renderSystem.getEngine(), getName() }
 	{
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
 		auto & device = getCurrentRenderDevice( m_renderSystem );
@@ -195,8 +195,8 @@ namespace Bloom
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "BloomHiPass" ),
-			device->createSemaphore( "BloomHiPass" )
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 

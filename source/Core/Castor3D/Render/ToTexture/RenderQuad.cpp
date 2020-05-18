@@ -55,9 +55,11 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, castor::String const & name
 		, VkFilter samplerFilter
 		, RenderQuadConfig config )
-		: m_renderSystem{ renderSystem }
+		: castor::Named{ name }
+		, m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
 			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
@@ -66,7 +68,7 @@ namespace castor3d
 			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
 		}
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()
-			, cuT( "RenderQuad" )
+			, getName()
 			, samplerFilter
 			, ( config.range ? &config.range.value() : nullptr) ) }
 		, m_useTexCoords{ bool( config.texcoordConfig ) }
@@ -74,7 +76,8 @@ namespace castor3d
 	}
 
 	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
-		: m_renderSystem{ rhs.m_renderSystem }
+		: castor::Named{ std::forward< castor::Named && >( rhs ) }
+		, m_renderSystem{ rhs.m_renderSystem }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
@@ -140,7 +143,7 @@ namespace castor3d
 			, 4u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "RenderQuad" );
+			, getName() );
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
@@ -188,13 +191,13 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_descriptorSetLayout = device->createDescriptorSetLayout( "RenderQuad"
+		m_descriptorSetLayout = device->createDescriptorSetLayout( getName()
 			, std::move( bindings ) );
-		m_pipelineLayout = device->createPipelineLayout( "RenderQuad"
+		m_pipelineLayout = device->createPipelineLayout( getName()
 			, { *m_descriptorSetLayout }, pushRanges );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( "RenderQuad"
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
 			, 1u );
-		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( "RenderQuad" );
+		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( getName() );
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, *m_sourceView
@@ -212,7 +215,7 @@ namespace castor3d
 			1u,
 			ashes::VkScissorArray{ scissor },
 		};
-		m_pipeline = device->createPipeline( "RenderQuad"
+		m_pipeline = device->createPipeline( getName()
 			, ashes::GraphicsPipelineCreateInfo
 			(
 				0u,
@@ -235,7 +238,7 @@ namespace castor3d
 		, uint32_t subpassIndex )
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderQuad"
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass

@@ -149,12 +149,12 @@ namespace film_grain
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, cuT( "FilmGrain" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_size{ size }
 	{
 		auto & device = getCurrentRenderDevice( renderSystem );
 		auto & engine = *renderSystem.getEngine();
-		auto name = cuT( "FilmGrain_Noise" );
+		auto name = getName() + cuT( "Noise" );
 		castor3d::SamplerSPtr sampler;
 
 		if ( !engine.getSamplerCache().has( name ) )
@@ -189,7 +189,7 @@ namespace film_grain
 		m_noise = castor3d::makeImage( device
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "FilmGrainNoise" );
+			, name );
 
 		ashes::ImageViewCreateInfo imageView
 		{
@@ -240,7 +240,7 @@ namespace film_grain
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "FilmGrainCfg" );
+			, getName() + "Config" );
 		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;

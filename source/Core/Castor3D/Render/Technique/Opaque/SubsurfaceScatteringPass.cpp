@@ -460,7 +460,7 @@ namespace castor3d
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		: RenderQuad{ renderSystem, "SubscatteringBlur", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
 		, m_geometryBufferResult{ gp }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -568,14 +568,14 @@ namespace castor3d
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
-		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
 		, m_geometryBufferResult{ gp }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
-		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringCombine" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), "SubscatteringCombine" ) }
+		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), getName() ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), getName() ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{

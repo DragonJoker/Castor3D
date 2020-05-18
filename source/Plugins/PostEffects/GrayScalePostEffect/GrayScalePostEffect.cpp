@@ -91,7 +91,7 @@ namespace grayscale
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::UniformBuffer< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		: castor3d::RenderQuad{ renderSystem, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_configUbo{ configUbo }
 	{
 	}

@@ -23,7 +23,6 @@ namespace castor3d
 {
 	class SsaoBlurPass
 		: public RenderQuad
-		, public castor::Named
 	{
 	public:
 		/**

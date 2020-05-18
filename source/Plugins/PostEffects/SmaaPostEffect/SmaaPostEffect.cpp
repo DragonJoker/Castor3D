@@ -467,7 +467,9 @@ namespace smaa
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		auto copyQuad = castor3d::RenderQuadBuilder{}
 			.texcoordConfig( castor3d::RenderQuadConfig::Texcoord{} )
-			.build( *getRenderSystem(), VK_FILTER_NEAREST );
+			.build( *getRenderSystem()
+				, cuT( "SmaaCopy" )
+				, VK_FILTER_NEAREST );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram

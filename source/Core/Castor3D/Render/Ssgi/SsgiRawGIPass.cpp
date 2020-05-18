@@ -368,16 +368,16 @@ namespace castor3d
 		, SsgiConfig const & config
 		, TextureLayout const & hdrResult
 		, TextureLayout const & linearisedDepth )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		: RenderQuad{ *engine.getRenderSystem(), "SsgiRawGI", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_hdrResult{ hdrResult }
 		, m_linearisedDepth{ linearisedDepth }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SsgiRawGI", getVertexProgram( m_renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SsgiRawGI", getPixelProgram( m_renderSystem, size.width, size.height ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( m_renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( m_renderSystem, size.width, size.height ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_renderSystem ), ResultFormat ) }
-		, m_result{ doCreateTexture( engine, "SsgiRawGIResult", ResultFormat, size, false ) }
+		, m_result{ doCreateTexture( engine, getName() + "Result", ResultFormat, size, false ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass, m_result ) }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "SSGI" ), cuT( "Raw GI" ) ) }
-		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( "SsgiRawGI" ) }
+		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( getName() ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;
@@ -409,7 +409,7 @@ namespace castor3d
 		auto timerBlock = m_timer->start();
 		m_timer->notifyPassRender();
 		auto * result = &toWait;
-		auto fence = device->createFence( "SsgiRawGI" );
+		auto fence = device->createFence( getName() );
 
 		device.graphicsQueue->submit( *m_commandBuffer
 			, toWait
@@ -428,8 +428,8 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore commands
 		{
-			device.graphicsCommandPool->createCommandBuffer( "SsgiRawGI" ),
-			device->createSemaphore( "SsgiRawGI" )
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & cmd = *commands.commandBuffer;
 

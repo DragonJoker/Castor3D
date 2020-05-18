@@ -17,7 +17,6 @@ namespace castor3d
 {
 	class ToneMapping
 		: public castor::OwnedBy< Engine >
-		, public castor::Named
 		, private RenderQuad
 	{
 	public:
@@ -108,6 +107,7 @@ namespace castor3d
 
 	public:
 		using RenderQuad::registerFrame;
+		using RenderQuad::getName;
 
 	private:
 		/**

@@ -495,8 +495,7 @@ namespace castor3d
 		, Point2i const & axis
 		, TextureUnit const & input
 		, ashes::ImageView const & normals )
-		: RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST, {} }
-		, Named{ prefix + cuT( "SsaoBlur" ) }
+		: RenderQuad{ *engine.getRenderSystem(), prefix + cuT( "SsaoBlur" ), VK_FILTER_NEAREST, {} }
 		, m_engine{ engine }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
