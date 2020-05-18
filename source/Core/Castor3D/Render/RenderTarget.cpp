@@ -46,12 +46,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		static uint32_t constexpr OverlayImgIdx = 0u;
-		static uint32_t constexpr ObjectImgIdx = 1u;
-	}
-
 	//*************************************************************************************************
 
 	RenderTarget::TextWriter::TextWriter( String const & tabs )
@@ -564,11 +558,6 @@ namespace castor3d
 				, m_size );
 		}
 
-		if ( result )
-		{
-			addIntermediateView( "Target Result", m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() );
-		}
-
 		return result;
 	}
 
@@ -708,6 +697,8 @@ namespace castor3d
 
 	void RenderTarget::doInitialiseCombine()
 	{
+		static uint32_t constexpr LhsIdx = 0u;
+		static uint32_t constexpr RhsIdx = 1u;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
 		{
@@ -719,8 +710,8 @@ namespace castor3d
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_textureObjects = writer.declOutput< Vec2 >( "vtx_textureObjects", 0u );
-			auto vtx_textureOverlays = writer.declOutput< Vec2 >( "vtx_textureOverlays", 1u );
+			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", LhsIdx );
+			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", RhsIdx );
 			auto out = writer.getOut();
 
 			shader::Utils utils{ writer };
@@ -729,13 +720,13 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_textureObjects = utils.topDownToBottomUp( uv );
-					vtx_textureOverlays = uv;
+					vtx_textureLhs = utils.topDownToBottomUp( uv );
+					vtx_textureRhs = uv;
 
 					if ( getTargetType() != TargetType::eWindow )
 					{
-						vtx_textureObjects.y() = 1.0_f - vtx_textureObjects.y();
-						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
+						vtx_textureLhs.y() = 1.0_f - vtx_textureLhs.y();
+						vtx_textureRhs.y() = 1.0_f - vtx_textureRhs.y();
 					}
 
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
@@ -747,10 +738,10 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapOverlays", OverlayImgIdx, 0u );
-			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapObjects", ObjectImgIdx, 0u );
-			auto vtx_textureObjects = writer.declInput< Vec2 >( "vtx_textureObjects", 0u );
-			auto vtx_textureOverlays = writer.declInput< Vec2 >( "vtx_textureOverlays", 1u );
+			auto c3d_mapLhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLhs", LhsIdx, 0u );
+			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", RhsIdx, 0u );
+			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", LhsIdx );
+			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", RhsIdx );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
@@ -758,13 +749,12 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto overlayColor = writer.declLocale( "overlayColor"
-						, texture( c3d_mapOverlays, vtx_textureOverlays ) );
-					auto objectsColor = writer.declLocale( "objectsColor"
-						, texture( c3d_mapObjects, vtx_textureObjects ) );
-					objectsColor.rgb() *= 1.0_f - overlayColor.a();
-					//overlayColor.rgb() *= overlayColor.a();
-					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
+					auto lhsColor = writer.declLocale( "lhsColor"
+						, texture( c3d_mapRhs, vtx_textureLhs ) );
+					auto rhsColor = writer.declLocale( "rhsColor"
+						, texture( c3d_mapLhs, vtx_textureRhs ) );
+					lhsColor.rgb() *= 1.0_f - rhsColor.a();
+					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -781,18 +771,15 @@ namespace castor3d
 
 		for ( auto & intermediate : m_intermediates )
 		{
-			if ( intermediate.view != m_combinedFrameBuffer.colourTexture.getTexture()->getDefaultView().getView() )
-			{
-				m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
-					.build( *getEngine()
-						, "Target"
-						, getPixelFormat()
-						, extent
-						, m_combineVtx
-						, m_combinePxl
-						, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView()
-						, intermediate.view ) );
-			}
+			m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
+				.build( *getEngine()
+					, "Target"
+					, getPixelFormat()
+					, extent
+					, m_combineVtx
+					, m_combinePxl
+					, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getView()
+					, intermediate.view ) );
 
 		}
 	}
