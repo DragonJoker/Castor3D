@@ -882,15 +882,17 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
+	TextureFlags PickingPass::getTexturesMask()const
+	{
+		return TextureFlags{ TextureFlag::eOpacity };
+	}
+
 	void PickingPass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.textures, TextureFlag::eAllButOpacity );
 		addFlag( flags.programFlags, ProgramFlag::ePicking );
-		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
-			? 1u
-			: 0u;
+		assert( ( flags.textures & getTexturesMask() ) == flags.textures );
 	}
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const

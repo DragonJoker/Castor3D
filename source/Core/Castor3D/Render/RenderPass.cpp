@@ -218,6 +218,26 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderPass::prepareBackPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+	{
+		doUpdateFlags( flags );
+		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
+		{
+			if ( m_opaque )
+			{
+				flags.alphaBlendMode = BlendMode::eNoBlend;
+			}
+
+			auto program = doGetProgram( flags );
+			doPrepareBackPipeline( program, layouts, flags );
+		}
+	}
+
 	PipelineFlags RenderPass::prepareBackPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
@@ -240,12 +260,19 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc };
-		doUpdateFlags( flags );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		prepareBackPipeline( flags, layouts );
+		return flags;
+	}
 
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
-			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( programFlags ) ) )
+	void RenderPass::prepareFrontPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+	{
+		doUpdateFlags( flags );
+		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
 			if ( m_opaque )
 			{
@@ -253,10 +280,8 @@ namespace castor3d
 			}
 
 			auto program = doGetProgram( flags );
-			doPrepareBackPipeline( program, layouts, flags );
+			doPrepareFrontPipeline( program, layouts, flags );
 		}
-
-		return flags;
 	}
 
 	PipelineFlags RenderPass::prepareFrontPipeline( BlendMode colourBlendMode
@@ -281,22 +306,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc };
-		doUpdateFlags( flags );
-		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
-			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( programFlags ) ) )
-		{
-			if ( m_opaque )
-			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
-			auto program = doGetProgram( flags );
-			doPrepareFrontPipeline( program, layouts, flags );
-		}
-
+		prepareFrontPipeline( flags, layouts );
 		return flags;
 	}
 

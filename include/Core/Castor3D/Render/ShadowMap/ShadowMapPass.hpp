@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
@@ -94,6 +95,11 @@ namespace castor3d
 		inline void setUpToDate()
 		{
 			m_outOfDate = false;
+		}
+
+		C3D_API TextureFlags getTexturesMask()const override
+		{
+			return ShadowMap::TextureFlags;
 		}
 
 	protected:

@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -190,7 +191,15 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool needsGammaCorrection()const;
-		C3D_API uint32_t getNonEnvTextureUnitsCount()const;
+		C3D_API std::set< TextureUnitSPtr > getTextureUnits( TextureFlags mask )const;
+		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask )const;
+
+		inline uint32_t getNonEnvTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const
+		{
+			castor::remFlag( mask, TextureFlag::eReflection );
+			castor::remFlag( mask, TextureFlag::eRefraction );
+			return getTextureUnitsCount( mask );
+		}
 
 		inline TextureFlags const & getTextures()const
 		{

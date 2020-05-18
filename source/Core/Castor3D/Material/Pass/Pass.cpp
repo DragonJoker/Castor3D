@@ -423,14 +423,111 @@ namespace castor3d
 			} );
 	}
 
-	uint32_t Pass::getNonEnvTextureUnitsCount()const
+	std::set< TextureUnitSPtr > Pass::getTextureUnits( TextureFlags mask )const
 	{
-		return uint32_t( std::count_if( m_textureUnits.begin()
-			, m_textureUnits.end()
-			, []( TextureUnitSPtr unit )
+		std::set< TextureUnitSPtr > units;
+		auto listTexture = [this, &units]( std::function< uint32_t( TextureConfiguration const & ) > getMask )
+		{
+			auto it = std::find_if( begin()
+				, end()
+				, [&getMask]( TextureUnitSPtr unit )
+				{
+					return getMask( unit->getConfiguration() ) != 0u;
+				} );
+
+			if ( it != end() )
 			{
-				return unit->getConfiguration().environment == 0u;
-			} ) );
+				units.insert( *it );
+			}
+		};
+
+		if ( checkFlag( mask, TextureFlag::eAlbedo ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.colourMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eSpecular ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.specularMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eGlossiness ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.glossinessMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eOpacity ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.opacityMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eEmissive ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.emissiveMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eNormal ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.normalMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eHeight ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.heightMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eOcclusion ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.occlusionMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eTransmittance ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.transmittanceMask[0];
+				} );
+		}
+
+		if ( checkFlag( mask, TextureFlag::eReflection )
+			|| checkFlag( mask, TextureFlag::eRefraction ) )
+		{
+			listTexture( []( TextureConfiguration const & lookup )
+				{
+					return lookup.environment == 0u;
+				} );
+		}
+
+		return units;
+	}
+
+	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
+	{
+		return uint32_t( getTextureUnits( mask ).size() );
 	}
 
 	void Pass::onSssChanged( SubsurfaceScattering const & sss )

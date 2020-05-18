@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig	La configuration du SSAO.
 		 *\param[in]	depthBuffer	Le tampon de profondeur cible.
 		 */
-		DepthPass( castor::String const & prefix
+		C3D_API DepthPass( castor::String const & prefix
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & ssaoConfig
@@ -41,11 +41,11 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~DepthPass();
+		C3D_API ~DepthPass();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
-		void update( RenderInfo & info
+		C3D_API void update( RenderInfo & info
 			, castor::Point2f const & jitter )override;
 		/**
 		 *\~english
@@ -55,7 +55,9 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores );
+		C3D_API ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores );
+
+		C3D_API TextureFlags getTexturesMask()const override;
 
 	public:
 		using RenderTechniquePass::update;

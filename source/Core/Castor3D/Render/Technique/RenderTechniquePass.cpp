@@ -1,5 +1,8 @@
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -12,6 +15,8 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
+
+#include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -73,14 +78,15 @@ namespace castor3d
 	{
 		for ( auto & shadowMap : shadowMaps )
 		{
-			bindTexture( shadowMap.first.get().getLinearView()
-				, shadowMap.first.get().getLinearSampler()
-				, writes
-				, index );
-			bindTexture( shadowMap.first.get().getVarianceView()
-				, shadowMap.first.get().getVarianceSampler()
-				, writes
-				, index );
+			auto & result = shadowMap.first.get().getShadowPassResult();
+
+			for ( auto & unit : makeArrayView( std::next( result.begin() ), result.end() ) )
+			{
+				bindTexture( unit.getTexture()->getDefaultView().getView()
+					, unit.getSampler()->getSampler()
+					, writes
+					, index );
+			}
 		}
 	}
 

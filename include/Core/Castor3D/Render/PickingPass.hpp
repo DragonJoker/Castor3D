@@ -75,6 +75,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API TextureFlags getTexturesMask()const override;
+
 		inline GeometrySPtr getPickedGeometry()const
 		{
 			return m_geometry.lock();

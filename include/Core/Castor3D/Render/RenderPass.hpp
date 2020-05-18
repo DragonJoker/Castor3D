@@ -236,6 +236,18 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 		/**
 		 *\~english
+		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
+		 *\param[in,out]	flags	The pipeline flags.
+		 *\param[in]		layouts	The vertex buffers layouts.
+		 *\~french
+		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en back face culling.
+		 *\param[in,out]	flags	Les indicateurs de pipeline.
+		 *\param[in]		layouts	Les layouts des tampons de sommets.
+		 */
+		C3D_API void prepareBackPipeline( PipelineFlags & flags
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
+		/**
+		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
 		 *\param[in]		colourBlendMode	The colour blend mode.
 		 *\param[in]		alphaBlendMode	The alpha blend mode.
@@ -272,6 +284,18 @@ namespace castor3d
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
+		/**
+		 *\~english
+		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
+		 *\param[in,out]	flags	The pipeline flags.
+		 *\param[in]		layouts	The vertex buffers layouts.
+		 *\~french
+		 *\brief			Prépare le pipeline qui correspond aux indicateurs donnés, pour les noeuds en front face culling.
+		 *\param[in,out]	flags	Les indicateurs de pipeline.
+		 *\param[in]		layouts	Les layouts des tampons de sommets.
+		 */
+		C3D_API void prepareFrontPipeline( PipelineFlags & flags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts );
 		/**
 		 *\~english
@@ -564,13 +588,13 @@ namespace castor3d
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
 		 *\param[in]	attachesCount	The wanted blend attaches count.
-		 *\return		
+		 *\return
 		 *\~french
 		 *\brief		Crée un état de mélange correspondant aux modes de mélange donnés.
 		 *\param[in]	colourBlendMode	Le mode de mélange couleurs.
 		 *\param[in]	alphaBlendMode	Le mode de mélange alpha.
 		 *\param[in]	attachesCount	Le nombre d'attaches de mélange voulues.
-		 *\return		
+		 *\return
 		 */
 		C3D_API static ashes::PipelineColorBlendStateCreateInfo createBlendState( BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
@@ -643,6 +667,11 @@ namespace castor3d
 		{
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
+		}
+
+		C3D_API virtual TextureFlags getTexturesMask()const
+		{
+			return TextureFlags{ TextureFlag::eAll } & ~TextureFlags{ TextureFlag::eReflection | TextureFlag::eRefraction };
 		}
 		/**@}*/
 

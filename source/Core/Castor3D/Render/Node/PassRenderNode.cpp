@@ -55,101 +55,18 @@ namespace castor3d
 
 		if ( mask )
 		{
-			auto bindTexture = [this
-				, &layout
-				, &descriptorSet
-				, &index
-				, &texIndex]( std::function< uint32_t( TextureConfiguration const & ) > getMask )
-			{
-				auto it = std::find_if( pass.begin()
-					, pass.end()
-					, [&getMask]( TextureUnitSPtr unit )
-					{
-						return getMask( unit->getConfiguration() ) != 0u;
-					} );
+			auto units = pass.getTextureUnits( mask );
 
-				if ( it != pass.end() )
-				{
-					doBindTexture( *( *it )
-						, layout
-						, descriptorSet
-						, index
-						, texIndex );
-					++index;
-				}
-			};
-
-			if ( checkFlag( mask, TextureFlag::eAlbedo ) )
+			for ( auto & unit : units )
 			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.colourMask[0];
-					} );
+				doBindTexture( *unit
+					, layout
+					, descriptorSet
+					, index
+					, texIndex );
 			}
 
-			if ( checkFlag( mask, TextureFlag::eSpecular ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.specularMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eGlossiness ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.glossinessMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eOpacity ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.opacityMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eEmissive ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.emissiveMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eNormal ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.normalMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eHeight ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.heightMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eOcclusion ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.occlusionMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eTransmittance ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.transmittanceMask[0];
-					} );
-			}
+			++index;
 		}
 		else
 		{
@@ -175,107 +92,24 @@ namespace castor3d
 
 		if ( mask )
 		{
-			auto bindTexture = [this
-				, &layout
-				, &writes
-				, &index
-				, &texIndex]( std::function< uint32_t( TextureConfiguration const & ) > getMask )
+			auto units = pass.getTextureUnits( mask );
+			ashes::WriteDescriptorSet write
 			{
-				auto it = std::find_if( pass.begin()
-					, pass.end()
-					, [&getMask]( TextureUnitSPtr unit )
-					{
-						return getMask( unit->getConfiguration() ) != 0u;
-					} );
-
-				if ( it != pass.end() )
-				{
-					ashes::WriteDescriptorSet write
-					{
-						index,
-						0u,
-						1u,
-						VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					};
-					doBindTexture( *( *it )
-						, layout
-						, write );
-					writes.push_back( write );
-					++index;
-				}
+				index,
+				0u,
+				uint32_t( units.size() ),
+				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 			};
 
-			if ( checkFlag( mask, TextureFlag::eAlbedo ) )
+			for ( auto & unit : units )
 			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.colourMask[0];
-					} );
+				doBindTexture( *unit
+					, layout
+					, write );
 			}
 
-			if ( checkFlag( mask, TextureFlag::eSpecular ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.specularMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eGlossiness ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.glossinessMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eOpacity ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.opacityMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eEmissive ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.emissiveMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eNormal ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.normalMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eHeight ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.heightMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eOcclusion ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.occlusionMask[0];
-					} );
-			}
-
-			if ( checkFlag( mask, TextureFlag::eTransmittance ) )
-			{
-				bindTexture( []( TextureConfiguration const & lookup )
-					{
-						return lookup.transmittanceMask[0];
-					} );
-			}
+			writes.push_back( write );
+			index += uint32_t( units.size() );
 		}
 		else
 		{

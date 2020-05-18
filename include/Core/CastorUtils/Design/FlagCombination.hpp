@@ -192,6 +192,12 @@ namespace castor
 			m_value |= rhs;
 			return *this;
 		}
+		
+		inline constexpr FlagCombination & operator^=( BaseType rhs )noexcept
+		{
+			m_value ^= rhs;
+			return *this;
+		}
 
 		inline constexpr FlagCombination & operator&=( FlagType rhs )noexcept
 		{
@@ -204,6 +210,12 @@ namespace castor
 			m_value |= BaseType( rhs );
 			return *this;
 		}
+		
+		inline constexpr FlagCombination & operator^=( FlagType rhs )noexcept
+		{
+			m_value ^= BaseType( rhs );
+			return *this;
+		}
 
 		inline constexpr FlagCombination & operator&=( FlagCombination< FlagType > const & rhs )noexcept
 		{
@@ -214,6 +226,18 @@ namespace castor
 		inline constexpr FlagCombination & operator|=( FlagCombination< FlagType > const & rhs )noexcept
 		{
 			m_value |= BaseType( rhs );
+			return *this;
+		}
+
+		inline constexpr FlagCombination & operator^=( FlagCombination< FlagType > const & rhs )noexcept
+		{
+			m_value ^= BaseType( rhs );
+			return *this;
+		}
+
+		inline constexpr FlagCombination & operator~()noexcept
+		{
+			m_value = ~BaseType( m_value );
 			return *this;
 		}
 		/**\}*/
@@ -287,14 +311,23 @@ namespace castor
 		FlagCombination< FlagType > result{ lhs };
 		return result |= rhs;
 	}
+	
+	template< typename FlagType >
+	inline constexpr FlagCombination< FlagType > operator^
+		( FlagCombination< FlagType > const & lhs
+		, FlagType const & rhs )noexcept
+	{
+		FlagCombination< FlagType > result{ lhs };
+		return result ^= rhs;
+	}
 
 	template< typename FlagType >
 	inline constexpr FlagCombination< FlagType > operator&
 		( FlagCombination< FlagType > const & lhs
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
-		FlagCombination< FlagType > ret{ lhs };
-		return ret &= rhs;
+		FlagCombination< FlagType > result{ lhs };
+		return result &= rhs;
 	}
 
 	template< typename FlagType >
@@ -302,8 +335,44 @@ namespace castor
 		( FlagCombination< FlagType > const & lhs
 		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
 	{
-		FlagCombination< FlagType > ret{ lhs };
-		return ret |= rhs;
+		FlagCombination< FlagType > result{ lhs };
+		return result |= rhs;
+	}
+
+	template< typename FlagType >
+	inline constexpr FlagCombination< FlagType > operator^
+		( FlagCombination< FlagType > const & lhs
+		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
+	{
+		FlagCombination< FlagType > result{ lhs };
+		return result ^= rhs;
+	}
+
+	template< typename FlagType >
+	inline constexpr FlagCombination< FlagType > operator&
+		( FlagCombination< FlagType > const & lhs
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		FlagCombination< FlagType > result{ lhs };
+		return result &= rhs;
+	}
+
+	template< typename FlagType >
+	inline constexpr FlagCombination< FlagType > operator|
+		( FlagCombination< FlagType > const & lhs
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		FlagCombination< FlagType > result{ lhs };
+		return result |= rhs;
+	}
+
+	template< typename FlagType >
+	inline constexpr FlagCombination< FlagType > operator^
+		( FlagCombination< FlagType > const & lhs
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		FlagCombination< FlagType > result{ lhs };
+		return result ^= rhs;
 	}
 	/**\}*/
 	/**

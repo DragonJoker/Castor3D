@@ -176,16 +176,18 @@ namespace castor3d
 		queues.emplace_back( m_renderQueue );
 	}
 
+	TextureFlags DepthPass::getTexturesMask()const
+	{
+		return TextureFlags{ TextureFlag::eOpacity };
+	}
+
 	void DepthPass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.textures, TextureFlag::eAllButOpacity );
-		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
-			? 1u
-			: 0u;
 		addFlag( flags.programFlags, ProgramFlag::eDepthPass );
+		assert( ( flags.textures & getTexturesMask() ) == flags.textures );
 	}
 
 	void DepthPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
