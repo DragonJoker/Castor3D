@@ -93,6 +93,26 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
+		 */
+		void doUpdateFlags( PipelineFlags & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 */
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
+		 */
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
+		 */
+		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static uint32_t const TextureSize;

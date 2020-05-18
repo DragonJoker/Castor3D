@@ -152,40 +152,6 @@ namespace castor3d
 		return doRender( toWait, index );
 	}
 
-	void ShadowMap::updateFlags( PipelineFlags & flags )const
-	{
-		addFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		assert( ( flags.textures & ShadowMap::TextureFlags ) == flags.textures );
-		doUpdateFlags( flags );
-	}
-
-	ShaderPtr ShadowMap::getVertexShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetVertexShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMap::getGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetGeometryShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMap::getPixelShaderSource( PipelineFlags const & flags )const
-	{
-		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness ) )
-		{
-			return doGetPbrMrPixelShaderSource( flags );
-		}
-
-		if ( checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
-		{
-			return doGetPbrSgPixelShaderSource( flags );
-		}
-
-		return doGetPhongPixelShaderSource( flags );
-	}
-
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
 	{
 		static ashes::VkClearValueArray const result
@@ -223,10 +189,5 @@ namespace castor3d
 	ashes::ImageView const & ShadowMap::getVarianceView( uint32_t index )const
 	{
 		return m_result[SmTexture::eVariance].getTexture()->getDefaultView().getView();
-	}
-
-	ShaderPtr ShadowMap::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
 	}
 }

@@ -119,10 +119,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -137,29 +133,13 @@ namespace castor3d
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
-		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	protected:
 		ShadowMap const & m_shadowMap;

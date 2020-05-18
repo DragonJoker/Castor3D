@@ -86,11 +86,6 @@ namespace castor3d
 		return textureBindings;
 	}
 
-	void ShadowMapPass::doUpdateFlags( PipelineFlags & flags )const
-	{
-		m_shadowMap.updateFlags( flags );
-	}
-
 	namespace
 	{
 		template< typename DataTypeT, typename InstanceTypeT >
@@ -149,32 +144,12 @@ namespace castor3d
 		fillTexDescriptor( layout, index, node, shadowMaps );
 	}
 
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
-	{
-	}
-
-	ShaderPtr ShadowMapPass::doGetVertexShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getVertexShaderSource( flags );
-	}
-
 	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
-		return m_shadowMap.getGeometryShaderSource( flags );
+		return ShaderPtr{};
 	}
 
-	ShaderPtr ShadowMapPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		return m_shadowMap.getPixelShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMapPass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getPixelShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMapPass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getPixelShaderSource( flags );
 	}
 }

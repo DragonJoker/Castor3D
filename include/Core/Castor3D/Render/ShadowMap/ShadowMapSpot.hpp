@@ -65,26 +65,6 @@ namespace castor3d
 		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
-		 */
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPhongPixelShaderSource
-		 */
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPbrMrPixelShaderSource
-		 */
-		ShaderPtr doGetPbrMrPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPbrSgPixelShaderSource
-		 */
-		ShaderPtr doGetPbrSgPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
 		 */
 		bool isUpToDate( uint32_t index )const override;
