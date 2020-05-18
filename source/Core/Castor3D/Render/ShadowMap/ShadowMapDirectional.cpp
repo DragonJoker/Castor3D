@@ -467,9 +467,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, LightType::eDirectional
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
@@ -532,8 +535,10 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vec3( 0.0_f ) // TODO
+				auto light = writer.declLocale( "light"
+					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				lighting->compute( light
+					, vtx_worldPosition - light.m_direction
 					, shininess
 					, 0_i
 					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
@@ -608,9 +613,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, LightType::eDirectional
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
@@ -673,8 +681,10 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vec3( 0.0_f ) // TODO
+				auto light = writer.declLocale( "light"
+					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				lighting->compute( light
+					, vtx_worldPosition - light.m_direction
 					, albedo
 					, metallic
 					, roughness
@@ -751,9 +761,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, LightType::eDirectional
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
@@ -816,8 +829,10 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vec3( 0.0_f ) // TODO
+				auto light = writer.declLocale( "light"
+					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				lighting->compute( light
+					, vtx_worldPosition - light.m_direction
 					, specular
 					, glossiness
 					, 0_i

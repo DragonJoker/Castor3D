@@ -95,7 +95,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeDirectional( DirectionalLight{ light }
+			m_computeDirectional( light
 				, worldEye
 				, albedo
 				, metallic
@@ -114,7 +114,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeOnePoint( PointLight{ light }
+			m_computeOnePoint( light
 				, worldEye
 				, albedo
 				, metallic
@@ -133,7 +133,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeOneSpot( SpotLight{ light }
+			m_computeOneSpot( light
 				, worldEye
 				, albedo
 				, metallic
@@ -158,6 +158,7 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
 			, bool rsm
 			, uint32_t & index )
@@ -167,15 +168,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( shadows, volumetric, rsm, index );
+				result->declareDirectionalModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( shadows, volumetric, rsm, index );
+				result->declarePointModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( shadows, volumetric, rsm, index );
+				result->declareSpotModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			default:

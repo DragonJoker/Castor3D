@@ -420,9 +420,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, LightType::eSpot
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
@@ -563,9 +566,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, LightType::eSpot
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
@@ -708,9 +714,12 @@ namespace castor3d
 		utils.declareRemoveGamma();
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, LightType::eSpot
+			, ShadowType::eNone
+			, false // lightUbo
+			, false // volumetric
 			, false // rsm
-			, index
-			, true );
+			, index );
 
 		// Fragment Outputs
 		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );

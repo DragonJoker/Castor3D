@@ -59,6 +59,7 @@ namespace castor3d
 				, Utils & utils
 				, LightType light
 				, ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
 				, bool rsm
 				, uint32_t & index );

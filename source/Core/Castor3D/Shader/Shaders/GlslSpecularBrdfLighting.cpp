@@ -148,6 +148,7 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
 			, bool rsm
 			, uint32_t & index )
@@ -157,15 +158,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				result->declareDirectionalModel( shadows, volumetric, rsm, index );
+				result->declareDirectionalModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( shadows, volumetric, rsm, index );
+				result->declarePointModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( shadows, volumetric, rsm, index );
+				result->declareSpotModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			default:

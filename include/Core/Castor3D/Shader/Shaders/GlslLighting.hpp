@@ -45,16 +45,19 @@ namespace castor3d
 				, Utils & utils
 				, bool isOpaqueProgram );
 			C3D_API void declareModel( bool rsm
-				, uint32_t & index );
+				, uint32_t & index);
 			C3D_API void declareDirectionalModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
 				, bool rsm
 				, uint32_t & index );
 			C3D_API void declarePointModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
 				, bool rsm
 				, uint32_t & index );
 			C3D_API void declareSpotModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
 				, bool rsm
 				, uint32_t & index );

@@ -468,6 +468,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, ShadowType::eNone
+			, false // lightUbo
 			, false // volumetric
 			, false // rsm
 			, index );
@@ -613,6 +614,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, ShadowType::eNone
+			, false // lightUbo
 			, false // volumetric
 			, false // rsm
 			, index );
@@ -760,6 +762,7 @@ namespace castor3d
 			, utils
 			, LightType::ePoint
 			, ShadowType::eNone
+			, false // lightUbo
 			, false // volumetric
 			, false // rsm
 			, index );

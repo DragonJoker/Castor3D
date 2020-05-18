@@ -645,6 +645,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, shadowType
+			, true // lightUbo
 			, volumetric
 			, rsm
 			, index );
@@ -823,6 +824,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, shadowType
+			, true // lightUbo
 			, volumetric
 			, rsm
 			, index );
@@ -1073,6 +1075,7 @@ namespace castor3d
 			, utils
 			, lightType
 			, shadowType
+			, true // lightUbo
 			, volumetric
 			, rsm
 			, index );

@@ -139,6 +139,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declareDirectionalModel( ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
 			, bool rsm
 			, uint32_t & index )
@@ -153,7 +154,17 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareLight();
 			doDeclareDirectionalLight();
-			doDeclareDirectionalLightUbo();
+
+			if ( lightUbo )
+			{
+				doDeclareDirectionalLightUbo();
+			}
+			else
+			{
+				doDeclareGetBaseLight();
+				doDeclareGetDirectionalLight();
+			}
+
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -162,6 +173,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declarePointModel( ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
 			, bool rsm
 			, uint32_t & index )
@@ -176,7 +188,17 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareLight();
 			doDeclarePointLight();
-			doDeclarePointLightUbo();
+
+			if ( lightUbo )
+			{
+				doDeclarePointLightUbo();
+			}
+			else
+			{
+				doDeclareGetBaseLight();
+				doDeclareGetPointLight();
+			}
+
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTING" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
@@ -185,6 +207,7 @@ namespace castor3d
 		}
 
 		void LightingModel::declareSpotModel( ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
 			, bool rsm
 			, uint32_t & index )
@@ -199,6 +222,17 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			doDeclareLight();
 			doDeclareSpotLight();
+
+			if ( lightUbo )
+			{
+				doDeclareSpotLightUbo();
+			}
+			else
+			{
+				doDeclareGetBaseLight();
+				doDeclareGetSpotLight();
+			}
+
 			doDeclareSpotLightUbo();
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// LIGHTING" );
@@ -303,7 +337,6 @@ namespace castor3d
 
 					auto c3d_sLights = m_writer.getVariable< SampledImageBufferRgba32 >( "c3d_sLights" );
 					auto offset = m_writer.declLocale( "offset", index * Int( int( getMaxLightComponentsCount() ) ) + Int( int( getBaseLightComponentsCount() ) ) );
-					auto c3d_maxCascadeCount = m_writer.getVariable< UInt >( "c3d_maxCascadeCount" );
 					result.m_directionCount = texelFetch( c3d_sLights, offset++ );
 					result.m_direction = normalize( result.m_direction );
 					result.m_splitDepths = texelFetch( c3d_sLights, offset++ );
