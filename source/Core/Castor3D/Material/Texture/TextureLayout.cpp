@@ -62,10 +62,10 @@ namespace castor3d
 
 		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
 			, VkImage image
-			, uint32_t baseArrayLayer
-			, uint32_t arrayLayers
 			, uint32_t baseMipLevel
-			, uint32_t levelCount )
+			, uint32_t levelCount
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers )
 		{
 			ashes::ImageViewCreateInfo view
 			{
@@ -96,10 +96,10 @@ namespace castor3d
 			return std::make_unique< TextureView >( layout
 				, getSubviewCreateInfos( info
 					, VK_NULL_HANDLE
-					, baseArrayLayer
-					, arrayLayers
 					, baseMipLevel
-					, levelCount )
+					, levelCount
+					, baseArrayLayer
+					, arrayLayers )
 				, 0u
 				, std::move( debugName ) );
 		}

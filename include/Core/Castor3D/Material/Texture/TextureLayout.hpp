@@ -34,9 +34,16 @@ namespace castor3d
 		template< typename FuncT >
 		void forEachLeafView( FuncT function )const
 		{
-			for ( auto & level : levels )
+			if ( !levels.empty() )
 			{
-				function( level );
+				for ( auto & level : levels )
+				{
+					function( level );
+				}
+			}
+			else
+			{
+				function( view );
 			}
 		}
 	};

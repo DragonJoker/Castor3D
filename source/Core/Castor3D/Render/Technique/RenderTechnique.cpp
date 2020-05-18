@@ -424,13 +424,7 @@ namespace castor3d
 #endif
 		}
 
-		for ( auto & shadowMaps : m_activeShadowMaps )
-		{
-			for ( auto & shadowMap : shadowMaps )
-			{
-				shadowMap.first.get().accept( visitor );
-			}
-		}
+		m_directionalShadowMap->accept( visitor );
 	}
 
 	void RenderTechnique::doCreateShadowMaps()

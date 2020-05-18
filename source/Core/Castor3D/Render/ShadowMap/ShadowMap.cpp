@@ -154,32 +154,10 @@ namespace castor3d
 
 	void ShadowMap::updateFlags( PipelineFlags & flags )const
 	{
-		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eNormal )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eAlbedo )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eSpecular )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eGlossiness )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eEmissive )
-			? 1u
-			: 0u;
-		flags.texturesCount += checkFlag( flags.textures, TextureFlag::eTransmittance )
-			? 1u
-			: 0u;
-
 		addFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.textures, TextureFlag( ~TextureFlags ) );
+		assert( ( flags.textures & ShadowMap::TextureFlags ) == flags.textures );
 		doUpdateFlags( flags );
 	}
 
