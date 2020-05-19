@@ -483,13 +483,22 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vtx_cameraPosition
-					, shininess
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				auto light = writer.declLocale( "light"
+					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				auto lightToVertex = writer.declLocale( "lightToVertex"
+					, light.m_position.xyz() - vtx_worldPosition );
+				auto distance = writer.declLocale( "distance"
+					, length( lightToVertex ) );
+				auto attenuation = writer.declLocale( "attenuation"
+					, sdw::fma( light.m_attenuation.z()
+						, distance * distance
+						, sdw::fma( light.m_attenuation.y()
+							, distance
+							, light.m_attenuation.x() ) ) );
+				pxl_flux.rgb() = ( diffuse
+						* light.m_lightBase.m_colour
+						* light.m_lightBase.m_intensity.x() )
+					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -629,15 +638,22 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vtx_cameraPosition
-					, albedo
-					, metallic
-					, roughness
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				auto light = writer.declLocale( "light"
+					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				auto lightToVertex = writer.declLocale( "lightToVertex"
+					, light.m_position.xyz() - vtx_worldPosition );
+				auto distance = writer.declLocale( "distance"
+					, length( lightToVertex ) );
+				auto attenuation = writer.declLocale( "attenuation"
+					, sdw::fma( light.m_attenuation.z()
+						, distance * distance
+						, sdw::fma( light.m_attenuation.y()
+							, distance
+							, light.m_attenuation.x() ) ) );
+				pxl_flux.rgb() = ( albedo
+						* light.m_lightBase.m_colour
+						* light.m_lightBase.m_intensity.x() )
+					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -777,14 +793,22 @@ namespace castor3d
 				auto lightSpecular = writer.declLocale( "lightSpecular"
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
-				lighting->compute( lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) )
-					, vtx_cameraPosition
-					, specular
-					, glossiness
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				auto light = writer.declLocale( "light"
+					, lighting->getSpotLight( writer.cast< Int >( c3d_lightIndex ) ) );
+				auto lightToVertex = writer.declLocale( "lightToVertex"
+					, light.m_position.xyz() - vtx_worldPosition );
+				auto distance = writer.declLocale( "distance"
+					, length( lightToVertex ) );
+				auto attenuation = writer.declLocale( "attenuation"
+					, sdw::fma( light.m_attenuation.z()
+						, distance * distance
+						, sdw::fma( light.m_attenuation.y()
+							, distance
+							, light.m_attenuation.x() ) ) );
+				pxl_flux.rgb() = ( albedo
+						* light.m_lightBase.m_colour
+						* light.m_lightBase.m_intensity.x() )
+					/ attenuation;
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );

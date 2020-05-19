@@ -476,13 +476,7 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
-				lighting->compute( light
-					, vtx_worldPosition - light.m_direction
-					, shininess
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				pxl_flux.rgb() = diffuse * light.m_lightBase.m_colour * light.m_lightBase.m_intensity.x();
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -622,15 +616,7 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
-				lighting->compute( light
-					, vtx_worldPosition - light.m_direction
-					, albedo
-					, metallic
-					, roughness
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				pxl_flux.rgb() = albedo * light.m_lightBase.m_colour * light.m_lightBase.m_intensity.x();
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -770,14 +756,9 @@ namespace castor3d
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				auto light = writer.declLocale( "light"
 					, lighting->getDirectionalLight( writer.cast< Int >( c3d_lightIndex ) ) );
-				lighting->compute( light
-					, vtx_worldPosition - light.m_direction
-					, specular
-					, glossiness
-					, 0_i
-					, shader::FragmentInput( in.fragCoord.xy(), vtx_viewPosition, vtx_worldPosition, normal )
-					, output );
-				pxl_flux.rgb() = lightDiffuse;
+				pxl_flux.rgb() = albedo
+					* light.m_lightBase.m_colour
+					* light.m_lightBase.m_intensity.x();
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
