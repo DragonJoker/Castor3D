@@ -1,12 +1,16 @@
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -261,19 +265,20 @@ namespace castor3d
 
 	LightPass::RenderPass::RenderPass( std::string const & name
 		, ashes::RenderPassPtr renderPass
-		, ashes::ImageView const & depthView
-		, ashes::ImageView const & diffuseView
-		, ashes::ImageView const & specularView )
+		, LightPassResult const & lpResult )
 		: renderPass{ std::move( renderPass ) }
 	{
 		ashes::ImageViewCRefArray attaches
 		{
-			{ depthView },
-			{ diffuseView },
-			{ specularView },
+			lpResult[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView(),
+			lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
+			lpResult[LpTexture::eSpecular].getTexture()->getDefaultView().getTargetView(),
 		};
 		frameBuffer = this->renderPass->createFrameBuffer( name
-			, { depthView.image->getDimensions().width, depthView.image->getDimensions().height }
+			, {
+				lpResult[LpTexture::eDepth].getTexture()->getWidth(),
+				lpResult[LpTexture::eDepth].getTexture()->getHeight(),
+			}
 			, std::move( attaches ) );
 	}
 
@@ -283,15 +288,13 @@ namespace castor3d
 		, String const & suffix
 		, ashes::RenderPassPtr && firstRenderPass
 		, ashes::RenderPassPtr && blendRenderPass
-		, ashes::ImageView const & depthView
-		, ashes::ImageView const & diffuseView
-		, ashes::ImageView const & specularView
+		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
 		, bool hasShadows )
 		: m_engine{ engine }
 		, m_name{ "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} ) }
-		, m_firstRenderPass{ m_name + "First", std::move( firstRenderPass ), depthView, diffuseView, specularView }
-		, m_blendRenderPass{ m_name + "Blend", std::move( blendRenderPass ), depthView, diffuseView, specularView }
+		, m_firstRenderPass{ m_name + "First", std::move( firstRenderPass ), lpResult }
+		, m_blendRenderPass{ m_name + "Blend", std::move( blendRenderPass ), lpResult }
 		, m_shadows{ hasShadows }
 		, m_matrixUbo{ engine }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -468,12 +471,13 @@ namespace castor3d
 		auto & texLayout = pipeline.program->getTextureDescriptorLayout();
 		auto writeBinding = [&gp, this]( uint32_t index, VkImageLayout layout )
 		{
+			auto & unit = gp[DsTexture( index - getMinBufferIndex() )];
 			return ashes::WriteDescriptorSet
 			{
 				index,
 				0u,
 				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-				{ { gp.getSampler(), gp.getViews()[index - getMinBufferIndex()], layout } }
+				{ { unit.getSampler()->getSampler(), unit.getTexture()->getDefaultView().getSampledView(), layout } }
 			};
 		};
 		uint32_t index = getMinBufferIndex();

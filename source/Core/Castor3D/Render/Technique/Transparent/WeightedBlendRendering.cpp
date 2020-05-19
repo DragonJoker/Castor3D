@@ -20,9 +20,9 @@ namespace castor3d
 {
 	WeightedBlendRendering::WeightedBlendRendering( Engine & engine
 		, TransparentPass & transparentPass
-		, ashes::ImageView const & depthView
+		, TextureUnit const & depthView
 		, ashes::ImageView const & colourView
-		, TextureLayoutSPtr velocityTexture
+		, TextureUnit const & velocityTexture
 		, castor::Size const & size
 		, Scene const & scene
 		, HdrConfigUbo & hdrConfigUbo
@@ -30,7 +30,7 @@ namespace castor3d
 		: m_engine{ engine }
 		, m_transparentPass{ transparentPass }
 		, m_size{ size }
-		, m_transparentPassResult{ engine, *depthView.image, *velocityTexture->getDefaultView().getView().image }
+		, m_transparentPassResult{ engine, depthView, velocityTexture }
 		, m_finalCombinePass{ engine, m_size, m_transparentPass.getSceneUbo(), hdrConfigUbo, gpInfoUbo, m_transparentPassResult, colourView }
 	{
 		m_transparentPass.initialiseRenderPass( m_transparentPassResult );
@@ -64,8 +64,8 @@ namespace castor3d
 
 	void WeightedBlendRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Transparent Accumulation", m_transparentPassResult.getViews()[uint32_t( WbTexture::eAccumulation )] );
-		visitor.visit( "Transparent Revealage", m_transparentPassResult.getViews()[uint32_t( WbTexture::eRevealage )] );
+		visitor.visit( "Transparent Accumulation", m_transparentPassResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Transparent Revealage", m_transparentPassResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView() );
 		m_transparentPass.accept( visitor );
 		m_finalCombinePass.accept( visitor );
 	}

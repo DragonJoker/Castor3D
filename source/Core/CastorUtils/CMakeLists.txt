@@ -419,10 +419,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	source_group( "Source Files\\Math" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/BlueNoise.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/FractalNoise.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/NoiseModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/PerlinNoise.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/SimplexNoise.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/WhiteNoise.hpp
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}

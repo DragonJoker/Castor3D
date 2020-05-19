@@ -7,11 +7,11 @@ See LICENSE file in root folder
 #include "OpaqueModule.hpp"
 
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/SsgiPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SsgiPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 namespace castor3d
@@ -45,8 +45,8 @@ namespace castor3d
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
-			, TextureLayoutSPtr depthTexture
-			, TextureLayoutSPtr velocityTexture
+			, TextureUnit const & depthTexture
+			, TextureUnit const & velocityTexture
 			, TextureLayoutSPtr resultTexture
 			, castor::Size const & size
 			, Scene & scene

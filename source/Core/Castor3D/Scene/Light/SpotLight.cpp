@@ -1,7 +1,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"

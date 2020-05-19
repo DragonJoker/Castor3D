@@ -1,17 +1,17 @@
-#include "Castor3D/Render/Technique/Opaque/SsgiPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SsgiPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
-#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Ssgi/SsgiRawGIPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 
 using namespace castor;
 using namespace castor3d;
@@ -149,7 +149,7 @@ namespace castor3d
 #if !C3D_DebugRawPass
 		, m_gaussianBlur{ std::make_shared< GaussianBlur >( engine
 			, cuT( "SSGI" )
-			, m_rawGiPass->getResult().getTexture()->getDefaultView().getView()
+			, m_rawGiPass->getResult().getTexture()->getDefaultView().getTargetView()
 			, ssgiConfig.blurSize.value().value() ) }
 		, m_combine{ CombinePassBuilder{}
 			.resultTexture( scene )
@@ -159,13 +159,13 @@ namespace castor3d
 				, VkExtent2D{ scene->getWidth(), scene->getHeight() }
 				, m_combineVtx
 				, m_combinePxl
-				, m_hdrCopy.getTexture()->getDefaultView().getView()
-				, m_rawGiPass->getResult().getTexture()->getDefaultView().getView() ) }
+				, m_hdrCopy.getTexture()->getDefaultView().getSampledView()
+				, m_rawGiPass->getResult().getTexture()->getDefaultView().getSampledView() ) }
 #endif
 	{
 		auto & cmd = *m_hdrCopyCommands.commandBuffer;
-		auto copySrc = scene->getDefaultView().getView();
-		auto copyDst = m_hdrCopy.getTexture()->getDefaultView().getView();
+		auto copySrc = scene->getDefaultView().getTargetView();
+		auto copyDst = m_hdrCopy.getTexture()->getDefaultView().getTargetView();
 		cmd.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 		cmd.beginDebugBlock(
 			{

@@ -112,7 +112,8 @@ namespace castor3d
 
 	void TextureView::cleanup()
 	{
-		m_view = ashes::ImageView{};
+		m_sampledView = ashes::ImageView{};
+		m_targetView = ashes::ImageView{};
 	}
 
 	void TextureView::initialiseSource( Path const & folder
@@ -201,29 +202,58 @@ namespace castor3d
 		return m_source->getLevelCount();
 	}
 
-	inline ashes::ImageView const & TextureView::getView()const
+	inline ashes::ImageView const & TextureView::getSampledView()const
 	{
-		if ( !m_view )
+		if ( !m_sampledView )
 		{
 			CU_Require( m_info->image != VK_NULL_HANDLE );
+			CU_Require( m_info->format != VK_FORMAT_UNDEFINED );
 			auto & image = getOwner()->getTexture();
 			auto debugName = m_debugName
 				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
 				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
-			m_view = image.createView( debugName
+			auto createInfo = m_info;
+			createInfo->subresourceRange.aspectMask = ( ( ashes::isDepthStencilFormat( m_info->format ) || ashes::isDepthFormat( m_info->format ) )
+				? VK_IMAGE_ASPECT_DEPTH_BIT
+				: ( ashes::isStencilFormat( m_info->format )
+					? VK_IMAGE_ASPECT_STENCIL_BIT
+					: createInfo->subresourceRange.aspectMask ) );
+			m_sampledView = image.createView( debugName
+				, createInfo );
+		}
+
+		return m_sampledView;
+	}
+
+	inline ashes::ImageView const & TextureView::getTargetView()const
+	{
+		if ( !m_targetView )
+		{
+			CU_Require( m_info->image != VK_NULL_HANDLE );
+			CU_Require( m_info->format != VK_FORMAT_UNDEFINED );
+			auto & image = getOwner()->getTexture();
+			auto debugName = m_debugName
+				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
+				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
+			m_targetView = image.createView( debugName
 				, m_info );
 		}
 
-		return m_view;
+		return m_targetView;
 	}
 
 	void TextureView::doUpdate( ashes::ImageViewCreateInfo info )
 	{
 		m_info = info;
 
-		if ( m_view )
+		if ( m_sampledView )
 		{
-			m_view = getOwner()->getTexture().createView( m_info );
+			m_sampledView = getOwner()->getTexture().createView( m_info );
+		}
+
+		if ( m_targetView )
+		{
+			m_targetView = getOwner()->getTexture().createView( m_info );
 		}
 	}
 }

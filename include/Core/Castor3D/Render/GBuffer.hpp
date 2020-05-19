@@ -6,18 +6,67 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 
-#include <ashespp/Image/Sampler.hpp>
-#include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/ImageView.hpp>
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+
+#include <CastorUtils/Design/Named.hpp>
 
 namespace castor3d
 {
-	class GBuffer
+	class GBufferBase
+		: public castor::Named
 	{
 	public:
-		using Textures = std::vector< ashes::Image const * >;
-		using Views = std::vector< ashes::ImageView >;
+		using Textures = std::vector< TextureUnit const * >;
 
+	public:
+		C3D_API GBufferBase( castor::String name )
+			: castor::Named{ std::move( name ) }
+		{
+		}
+
+	protected:
+		static C3D_API TextureUnit doInitialiseTexture( Engine & engine
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, castor::Size const & size
+			, uint32_t layerCount
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, VkBorderColor const & borderColor );
+		template< typename TextureEnumT >
+		static TextureUnitArray doCreateTextures( Engine & engine
+			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, castor::String const & prefix
+			, VkImageCreateFlags createFlags
+			, castor::Size const & size
+			, uint32_t layerCount )
+		{
+			TextureUnitArray result;
+
+			for ( uint32_t i = 0u; i < inputs.size(); ++i )
+			{
+				if ( !inputs[i] )
+				{
+					auto texture = TextureEnumT( i );
+					result.emplace_back( doInitialiseTexture( engine
+						, prefix + castor3d::getName( texture )
+						, createFlags
+						, size
+						, layerCount
+						, getFormat( texture )
+						, getUsageFlags( texture )
+						, getBorderColor( texture ) ) );
+				}
+			}
+
+			return result;
+		}
+	};
+
+	template< typename TextureEnumT >
+	class GBufferT
+		: private GBufferBase
+	{
 	public:
 		/**
 		*\~english
@@ -37,7 +86,53 @@ namespace castor3d
 		*\param[in] textures
 		*	Les images du gbuffer.
 		*/
-		C3D_API GBuffer( Engine & engine );
+		GBufferT( Engine & engine
+			, castor::String name
+			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, VkImageCreateFlags createFlags
+			, castor::Size const & size
+			, uint32_t layerCount = 1u )
+			: GBufferBase{ std::move( name ) }
+			, m_engine{ engine }
+			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( engine
+				, inputs
+				, getName()
+				, createFlags
+				, size
+				, layerCount ) }
+		{
+			auto & device = getCurrentRenderDevice( m_engine );
+			auto itOwned = m_owned.begin();
+
+			for ( uint32_t i = 0; i < inputs.size(); ++i )
+			{
+				if ( inputs[i] )
+				{
+					m_result.push_back( inputs[i] );
+				}
+				else
+				{
+					m_result.push_back( &( *itOwned ) );
+					++itOwned;
+				}
+			}
+		}
+
+		void initialise()
+		{
+			for ( auto & unit : m_owned )
+			{
+				unit.initialise();
+			}
+		}
+
+		void cleanup()
+		{
+			for ( auto & unit : m_owned )
+			{
+				unit.cleanup();
+			}
+		}
 		/**
 		*\~english
 		*name
@@ -47,9 +142,19 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::Image const & operator[]( size_t index )const
+		inline TextureUnit const & operator[]( TextureEnumT texture )const
 		{
-			return *m_result[index];
+			return *m_result[size_t( texture )];
+		}
+
+		inline Textures::const_iterator cbegin()const
+		{
+			return m_result.begin();
+		}
+
+		inline Textures::const_iterator cend()const
+		{
+			return m_result.end();
 		}
 
 		inline Textures::const_iterator begin()const
@@ -62,31 +167,21 @@ namespace castor3d
 			return m_result.end();
 		}
 
-		inline Views const & getViews()const
+		inline Textures::iterator begin()
 		{
-			return m_samplableViews;
+			return m_result.begin();
 		}
 
-		inline ashes::ImageView const & getDepthStencilView()const
+		inline Textures::iterator end()
 		{
-			return m_depthStencilView;
-		}
-
-		inline ashes::Sampler const & getSampler()const
-		{
-			return *m_sampler;
+			return m_result.end();
 		}
 		/**@}*/
 
 	protected:
-		void doInitialise( Textures textures );
-
-	protected:
 		Engine & m_engine;
+		TextureUnitArray m_owned;
 		Textures m_result;
-		Views m_samplableViews;
-		ashes::ImageView m_depthStencilView;
-		ashes::SamplerPtr m_sampler;
 	};
 }
 

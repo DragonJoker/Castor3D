@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapPassResult.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <ashespp/Sync/Fence.hpp>
@@ -48,7 +48,7 @@ namespace castor3d
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, castor::String name
-			, ShadowMapPassResult result
+			, ShadowMapResult result
 			, std::vector< PassData > passes
 			, uint32_t count );
 		/**
@@ -137,12 +137,12 @@ namespace castor3d
 		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index = 0u )const;
 		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index = 0u )const;
 
-		inline ShadowMapPassResult const & getShadowPassResult()const
+		inline ShadowMapResult const & getShadowPassResult()const
 		{
 			return m_result;
 		}
 		
-		inline ShadowMapPassResult & getShadowPassResult()
+		inline ShadowMapResult & getShadowPassResult()
 		{
 			return m_result;
 		}
@@ -190,7 +190,7 @@ namespace castor3d
 		std::vector< PassData > m_passes;
 		uint32_t m_count;
 		ashes::SemaphorePtr m_finished;
-		ShadowMapPassResult m_result;
+		ShadowMapResult m_result;
 		bool m_initialised{ false };
 	};
 }

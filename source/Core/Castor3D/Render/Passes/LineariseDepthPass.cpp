@@ -197,7 +197,7 @@ namespace castor3d
 		ashes::ImageView doCreateImageView( Engine & engine, ashes::ImageView const & srcView )
 		{
 			auto createInfos = srcView.createInfo;
-			createInfos.subresourceRange.aspectMask = ashes::getAspectMask( createInfos.format );
+			createInfos.subresourceRange.aspectMask = ashes::getAspectMask( srcView->format );
 			auto result = srcView.image->createView( "LineariseDepth"
 				, createInfos );
 			return result;
@@ -302,7 +302,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView().getView() );
+			attaches.emplace_back( texture.getTexture()->getDefaultView().getTargetView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( "LineariseDepthPass"
 				, VkExtent2D{ size.width, size.height }
@@ -488,7 +488,7 @@ namespace castor3d
 		for ( auto & layer : getResult().getTexture()->getArray2D().layers )
 		{
 			visitor.visit( "Linearised Depth " + string::toString( index++ )
-				, layer.view->getView() );
+				, layer.view->getSampledView() );
 		}
 
 		visitor.visit( m_lineariseVertexShader );

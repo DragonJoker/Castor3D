@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class TransparentPassResult
-		: public GBuffer
+		: public GBufferT< WbTexture >
 	{
 	public:
 		/**
@@ -35,11 +35,8 @@ namespace castor3d
 		*	La texture de vélocité.
 		*/
 		C3D_API TransparentPassResult( Engine & engine
-			, ashes::Image const & depthTexture
-			, ashes::Image const & velocityTexture );
-
-	private:
-		std::vector< ashes::ImagePtr > m_owned;
+			, TextureUnit const & depthTexture
+			, TextureUnit const & velocityTexture );
 	};
 }
 

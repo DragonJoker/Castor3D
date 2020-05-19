@@ -1,18 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredLightPassShadow_H___
-#define ___C3D_DeferredLightPassShadow_H___
+#ifndef ___C3D_LightPassShadow_H___
+#define ___C3D_LightPassShadow_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/DirectionalLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/PointLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/SpotLightPass.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPoint.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapSpot.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/PointLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SpotLightPass.hpp"
 
 #include "Castor3D/Scene/Light/Light.hpp"
 
@@ -147,28 +147,20 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	depthView		The target depth view.
-		 *\param[in]	diffuseView		The target diffuse view.
-		 *\param[in]	specularView	The target specular view.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	lpResult	The light pass result.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	depthView		La vue de profondeur cible.
-		 *\param[in]	diffuseView		La vue de diffuse cible.
-		 *\param[in]	specularView	La vue de spéculaire cible.
-		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassShadow( Engine & engine
-			, ashes::ImageView const & depthView
-			, ashes::ImageView const & diffuseView
-			, ashes::ImageView const & specularView
+			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
 			: my_pass_type{ engine
-				, depthView
-				, diffuseView
-				, specularView
+				, lpResult
 				, gpInfoUbo
 				, true }
 		{

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderTechnique_H___
 
 #include "TechniqueModule.hpp"
-#include "Castor3D/Material/Texture/TextureModule.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
@@ -152,13 +152,12 @@ namespace castor3d
 
 		inline TextureLayout const & getDepth()const
 		{
-			CU_Require( m_depthBuffer );
-			return *m_depthBuffer;
+			return *m_depthBuffer.getTexture();
 		}
 
 		inline TextureLayoutSPtr getDepthPtr()const
 		{
-			return m_depthBuffer;
+			return m_depthBuffer.getTexture();
 		}
 
 		inline MatrixUbo const & getMatrixUbo()const
@@ -266,7 +265,7 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		castor::Size m_size;
 		TextureLayoutSPtr m_colourTexture;
-		TextureLayoutSPtr m_depthBuffer;
+		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
 		GpInfoUbo m_gpInfoUbo;

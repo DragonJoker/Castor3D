@@ -1045,12 +1045,21 @@ namespace castor3d
 			uint32_t index = 1u;
 			auto imgLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 			ashes::WriteDescriptorSetArray result;
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eDepth )], imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eData1 )], imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eData2 )], imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eData3 )], imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eData4 )], imgLayout } } } );
-			result.push_back( { index++, 0u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, { { gp.getSampler(), gp.getViews()[size_t( DsTexture::eData5 )], imgLayout } } } );
+
+			for ( auto unit : gp )
+			{
+				result.push_back( {
+					index++,
+					0u,
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+					{
+						{
+							unit->getSampler()->getSampler(),
+							unit->getTexture()->getDefaultView().getSampledView(),
+							imgLayout
+						}
+					} } );
+			}
 
 			if ( ssao )
 			{
@@ -1085,7 +1094,7 @@ namespace castor3d
 			while ( it != envMaps.end() && i < envMapCount )
 			{
 				envWrites.imageInfo.push_back( { it->get().getTexture().getSampler()->getSampler()
-					, it->get().getTexture().getTexture()->getDefaultView().getView()
+					, it->get().getTexture().getTexture()->getDefaultView().getSampledView()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 				++i;
 				++it;
@@ -1201,7 +1210,7 @@ namespace castor3d
 		timer.beginPass( *m_commandBuffer );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_opaquePassResult.getDepthStencilView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_opaquePassResult[DsTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		m_commandBuffer->beginRenderPass( *m_renderPass
 			, frameBuffer
 			, { transparentBlackClearColor }

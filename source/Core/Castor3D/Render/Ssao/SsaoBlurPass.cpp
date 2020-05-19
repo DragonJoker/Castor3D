@@ -475,7 +475,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView().getView() );
+			attaches.emplace_back( texture.getTexture()->getDefaultView().getTargetView() );
 			auto size = texture.getTexture()->getDimensions();
 			auto result = renderPass.createFrameBuffer( name
 				, VkExtent2D{ size.width, size.height }
@@ -539,7 +539,7 @@ namespace castor3d
 		createPipeline( m_size
 			, Position{}
 			, m_program
-			, m_input.getTexture()->getDefaultView().getView()
+			, m_input.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -647,11 +647,11 @@ namespace castor3d
 	{
 		if ( horizontal )
 		{
-			visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getView() );
+			visitor.visit( "SSAO HBlurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
 		}
 		else
 		{
-			visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getView() );
+			visitor.visit( "SSAO Blurred AO", getResult().getTexture()->getDefaultView().getSampledView() );
 		}
 
 		visitor.visit( m_vertexShader );

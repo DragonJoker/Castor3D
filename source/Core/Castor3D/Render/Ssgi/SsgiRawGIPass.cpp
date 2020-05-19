@@ -353,7 +353,7 @@ namespace castor3d
 			, TextureUnit const & texture )
 		{
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( texture.getTexture()->getDefaultView().getView() );
+			attaches.emplace_back( texture.getTexture()->getDefaultView().getTargetView() );
 			auto size = texture.getTexture()->getDimensions();
 			return renderPass.createFrameBuffer( "SsgiRawGI"
 				, VkExtent2D{ size.width, size.height }
@@ -393,7 +393,7 @@ namespace castor3d
 		this->createPipeline( size
 			, {}
 			, shaderStages
-			, linearisedDepth.getDefaultView().getView()
+			, linearisedDepth.getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -458,7 +458,7 @@ namespace castor3d
 		, PipelineVisitorBase & visitor )
 	{
 		visitor.visit( "SSGI Raw GI"
-			, getResult().getTexture()->getDefaultView().getView() );
+			, getResult().getTexture()->getDefaultView().getSampledView() );
 
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );
@@ -469,7 +469,7 @@ namespace castor3d
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( HdrMapIdx )
-			, m_hdrResult.getDefaultView().getView()
+			, m_hdrResult.getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 	}
 

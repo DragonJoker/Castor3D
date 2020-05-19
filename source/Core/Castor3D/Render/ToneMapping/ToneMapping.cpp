@@ -81,7 +81,7 @@ namespace castor3d
 		createPipeline( { size[0], size[1] }
 			, Position{}
 			, program
-			, source.getDefaultView().getView()
+			, source.getDefaultView().getSampledView()
 			, renderPass
 			, std::move( bindings )
 			, {} );

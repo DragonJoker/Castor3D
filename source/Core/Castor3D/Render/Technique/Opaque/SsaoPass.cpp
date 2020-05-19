@@ -34,7 +34,7 @@ namespace castor3d
 			, *m_ssaoConfigUbo
 			, gpInfoUbo
 			, linearisedDepth
-			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
 #if !C3D_DebugRawPass
 		, m_horizontalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, cuT( "Horizontal" )
@@ -44,7 +44,7 @@ namespace castor3d
 			, gpInfoUbo
 			, Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
-			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
 		, m_verticalBlur{ std::make_shared< SsaoBlurPass >( engine
 			, cuT( "Vertical" )
 			, size
@@ -53,7 +53,7 @@ namespace castor3d
 			, gpInfoUbo
 			, Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
-			, gpResult.getViews()[size_t( DsTexture::eData1 )] ) }
+			, gpResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() ) }
 #endif
 	{
 	}

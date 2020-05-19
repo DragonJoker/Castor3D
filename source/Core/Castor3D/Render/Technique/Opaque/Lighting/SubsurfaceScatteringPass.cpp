@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -12,6 +12,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/PassBuffer/PassBuffer.hpp"
@@ -455,19 +456,19 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, UniformBuffer< BlurConfiguration > const & blurUbo
-		, OpaquePassResult const & gp
+		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, TextureUnit const & destination
 		, bool isVertic
 		, ashes::PipelineShaderStageCreateInfoArray const & shaderStages )
 		: RenderQuad{ renderSystem, "SubscatteringBlur", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
-		, m_geometryBufferResult{ gp }
+		, m_geometryBufferResult{ gpResult }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_sceneUbo{ sceneUbo }
 		, m_blurUbo{ blurUbo }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), "SubscatteringBlur" ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), "SubscatteringBlur" ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), "SubscatteringBlur" ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -496,7 +497,7 @@ namespace castor3d
 		createPipeline( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView().getView()
+			, source.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -548,13 +549,13 @@ namespace castor3d
 			, 0u
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurDepthImgId )
-			, m_geometryBufferResult.getViews()[size_t( DsTexture::eDepth )]
+			, m_geometryBufferResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData4ImgId )
-			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
+			, m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( BlurData5ImgId )
-			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
+			, m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 	}
 
@@ -563,7 +564,7 @@ namespace castor3d
 	SubsurfaceScatteringPass::Combine::Combine( RenderSystem & renderSystem
 		, Size const & size
 		, UniformBuffer< BlurWeights > const & blurUbo
-		, OpaquePassResult const & gp
+		, OpaquePassResult const & gpResult
 		, TextureUnit const & source
 		, std::array< TextureUnit, 3u > const & blurResults
 		, TextureUnit const & destination
@@ -571,11 +572,11 @@ namespace castor3d
 		: RenderQuad{ renderSystem, cuT( "SubscatteringCombine" ), VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_renderSystem{ renderSystem }
 		, m_blurUbo{ blurUbo }
-		, m_geometryBufferResult{ gp }
+		, m_geometryBufferResult{ gpResult }
 		, m_source{ source }
 		, m_blurResults{ blurResults }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( renderSystem ), destination.getTexture()->getPixelFormat(), getName() ) }
-		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getView(), getName() ) }
+		, m_frameBuffer{ doCreateFrameBuffer( getCurrentRenderDevice( renderSystem ), *m_renderPass, size, destination.getTexture()->getDefaultView().getTargetView(), getName() ) }
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -603,7 +604,7 @@ namespace castor3d
 		createPipeline( extent
 			, Position{}
 			, shaderStages
-			, source.getTexture()->getDefaultView().getView()
+			, source.getTexture()->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -643,19 +644,19 @@ namespace castor3d
 		m_renderSystem.getEngine()->getMaterialCache().getPassBuffer().createBinding( descriptorSet
 			, descriptorSetLayout.getBinding( getPassBufferIndex() ) );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData4ImgId )
-			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData4 )]
+			, m_geometryBufferResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombData5ImgId )
-			, m_geometryBufferResult.getViews()[size_t( DsTexture::eData5 )]
+			, m_geometryBufferResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur1ImgId )
-			, m_blurResults[0].getTexture()->getDefaultView().getView()
+			, m_blurResults[0].getTexture()->getDefaultView().getSampledView()
 			, m_blurResults[0].getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur2ImgId )
-			, m_blurResults[1].getTexture()->getDefaultView().getView()
+			, m_blurResults[1].getTexture()->getDefaultView().getSampledView()
 			, m_blurResults[1].getSampler()->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( CombBlur3ImgId )
-			, m_blurResults[2].getTexture()->getDefaultView().getView()
+			, m_blurResults[2].getTexture()->getDefaultView().getSampledView()
 			, m_blurResults[2].getSampler()->getSampler() );
 	}
 
@@ -672,8 +673,8 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, SceneUbo & sceneUbo
 		, Size const & textureSize
-		, OpaquePassResult const & gp
-		, TextureUnit const & lightDiffuse )
+		, OpaquePassResult const & gpResult
+		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ engine }
 		, m_size{ textureSize }
 		, m_blurConfigUbo{ makeUniformBuffer< BlurConfiguration >( *engine.getRenderSystem()
@@ -707,17 +708,17 @@ namespace castor3d
 		, m_result{ doCreateTexture( engine, textureSize, "SubsurfaceScattering Result" ) }
 		, m_blurX
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, lightDiffuse, m_intermediate, false, m_blurHorizProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[0], m_intermediate, false, m_blurHorizProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_blurResults[1], m_intermediate, false, m_blurHorizProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, lpResult[LpTexture::eDiffuse], m_intermediate, false, m_blurHorizProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_blurResults[0], m_intermediate, false, m_blurHorizProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_blurResults[1], m_intermediate, false, m_blurHorizProgram },
 		}
 		, m_blurY
 		{
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[0], true, m_blurVerticProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[1], true, m_blurVerticProgram },
-			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gp, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[0], true, m_blurVerticProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[1], true, m_blurVerticProgram },
+			{ *engine.getRenderSystem(), m_size, gpInfoUbo, sceneUbo, *m_blurConfigUbo, gpResult, m_intermediate, m_blurResults[2], true, m_blurVerticProgram },
 		}
-		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gp, lightDiffuse, m_blurResults, m_result, m_combineProgram }
+		, m_combine{ *engine.getRenderSystem(), textureSize, *m_blurWeightsUbo, gpResult, lpResult[LpTexture::eDiffuse], m_blurResults, m_result, m_combineProgram }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "SSSSS pass" ) ) }
 	{
 		auto & configuration = m_blurConfigUbo->getData( 0u );
@@ -793,11 +794,11 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurResults.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + string::toString( i )
-				, m_blurResults[i].getTexture()->getDefaultView().getView() );
+				, m_blurResults[i].getTexture()->getDefaultView().getSampledView() );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, m_result.getTexture()->getDefaultView().getView() );
+			, m_result.getTexture()->getDefaultView().getSampledView() );
 
 		visitor.visit( m_blurHorizVertexShader );
 		visitor.visit( m_blurHorizPixelShader );

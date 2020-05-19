@@ -80,7 +80,7 @@ namespace castor3d
 		, Scene & scene )
 		: ShadowMap{ engine
 			, cuT( "ShadowMapSpot" )
-			, ShadowMapPassResult
+			, ShadowMapResult
 			{
 				engine,
 				cuT( "Spot" ),
@@ -113,12 +113,12 @@ namespace castor3d
 
 	ashes::ImageView const & ShadowMapSpot::getLinearView( uint32_t index )const
 	{
-		return m_result[SmTexture::eNormalLinear].getTexture()->getLayer2DView( index ).getView();
+		return m_result[SmTexture::eNormalLinear].getTexture()->getLayer2DView( index ).getSampledView();
 	}
 
 	ashes::ImageView const & ShadowMapSpot::getVarianceView( uint32_t index )const
 	{
-		return m_result[SmTexture::eVariance].getTexture()->getLayer2DView( index ).getView();
+		return m_result[SmTexture::eVariance].getTexture()->getLayer2DView( index ).getSampledView();
 	}
 
 	void ShadowMapSpot::doInitialise()
@@ -140,11 +140,11 @@ namespace castor3d
 			std::string debugName = "ShadowMapSpot" + std::to_string( i );
 			auto & renderPass = m_passes[i].pass->getRenderPass();
 			ashes::ImageViewCRefArray attaches;
-			attaches.emplace_back( depth.getLayer2DView( i ).getView() );
-			attaches.emplace_back( linear.getLayer2DView( i ).getView() );
-			attaches.emplace_back( variance.getLayer2DView( i ).getView() );
-			attaches.emplace_back( position.getLayer2DView( i ).getView() );
-			attaches.emplace_back( flux.getLayer2DView( i ).getView() );
+			attaches.emplace_back( depth.getLayer2DView( i ).getTargetView() );
+			attaches.emplace_back( linear.getLayer2DView( i ).getTargetView() );
+			attaches.emplace_back( variance.getLayer2DView( i ).getTargetView() );
+			attaches.emplace_back( position.getLayer2DView( i ).getTargetView() );
+			attaches.emplace_back( flux.getLayer2DView( i ).getTargetView() );
 			m_passesData.push_back(
 				{
 					device.graphicsCommandPool->createCommandBuffer( debugName ),
@@ -152,7 +152,7 @@ namespace castor3d
 					device->createSemaphore( debugName ),
 					std::make_unique< GaussianBlur >( *getEngine()
 						, debugName
-						, variance.getLayer2DView( i ).getView()
+						, variance.getLayer2DView( i ).getSampledView()
 						, 5u )
 				} );
 		}

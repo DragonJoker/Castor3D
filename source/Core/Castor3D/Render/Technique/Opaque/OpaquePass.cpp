@@ -1,7 +1,5 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -21,6 +19,7 @@
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -63,7 +62,7 @@ namespace castor3d
 		{
 			{
 				0u,
-				gpResult.getViews()[0]->format,
+				gpResult[DsTexture::eDepth].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -76,12 +75,12 @@ namespace castor3d
 		ashes::VkAttachmentReferenceArray colorAttachments;
 
 		// Colour attachments.
-		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
+		for ( auto index = 1u; index < uint32_t( DsTexture::eCount ); ++index )
 		{
 			attachments.push_back(
 				{
 					0u,
-					gpResult.getViews()[i]->format,
+					gpResult[DsTexture( index )].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -90,7 +89,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				} );
-			colorAttachments.push_back( { uint32_t( i ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			colorAttachments.push_back( { uint32_t( index ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 		}
 		
 		ashes::SubpassDescriptionArray subpasses;
@@ -138,13 +137,16 @@ namespace castor3d
 
 		ashes::ImageViewCRefArray attaches;
 
-		for ( size_t i = 0u; i < gpResult.getViews().size(); ++i )
+		for ( auto & unit : gpResult )
 		{
-			attaches.emplace_back( gpResult.getViews()[i] );
+			attaches.emplace_back( unit->getTexture()->getDefaultView().getTargetView() );
 		}
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( "OpaquePass"
-			, { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
+			, {
+				gpResult[DsTexture::eDepth].getTexture()->getWidth(),
+				gpResult[DsTexture::eDepth].getTexture()->getHeight(),
+			}
 			, std::move( attaches ) );
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "OpaquePass" );
 	}

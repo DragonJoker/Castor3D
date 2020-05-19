@@ -84,7 +84,7 @@ namespace castor3d
 		, Scene & scene )
 		: ShadowMap{ engine
 			, cuT( "ShadowMapDirectional" )
-			, ShadowMapPassResult
+			, ShadowMapResult
 			{
 				engine,
 				cuT( "Directional" ),
@@ -153,11 +153,11 @@ namespace castor3d
 			auto & pass = m_passes[cascade];
 			auto & renderPass = pass.pass->getRenderPass();
 			auto & frameBuffer = m_frameBuffers[cascade];
-			frameBuffer.depthView = depth.layers[cascade].view->getView();
-			frameBuffer.linearView = linear.layers[cascade].view->getView();
-			frameBuffer.varianceView = variance.layers[cascade].view->getView();
-			frameBuffer.positionView = position.layers[cascade].view->getView();
-			frameBuffer.fluxView = flux.layers[cascade].view->getView();
+			frameBuffer.depthView = depth.layers[cascade].view->getTargetView();
+			frameBuffer.linearView = linear.layers[cascade].view->getTargetView();
+			frameBuffer.varianceView = variance.layers[cascade].view->getTargetView();
+			frameBuffer.positionView = position.layers[cascade].view->getTargetView();
+			frameBuffer.fluxView = flux.layers[cascade].view->getTargetView();
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( frameBuffer.depthView );
 			attaches.emplace_back( frameBuffer.linearView );

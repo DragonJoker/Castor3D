@@ -591,7 +591,7 @@ namespace castor3d
 
 			for ( auto & texture : textures )
 			{
-				attaches.emplace_back( texture.get().getTexture()->getDefaultView().getView() );
+				attaches.emplace_back( texture.get().getTexture()->getDefaultView().getTargetView() );
 			}
 
 			auto size = textures.front().get().getTexture()->getDimensions();
@@ -620,13 +620,13 @@ namespace castor3d
 			{
 				( normals
 					? ( *normals )->subresourceRange
-					: depth.getTexture()->getDefaultView().getView()->subresourceRange ),
+					: depth.getTexture()->getDefaultView().getSampledView()->subresourceRange ),
 				ashes::nullopt,
 			},
 		}
 		, vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
-		, m_depthView{ normals ? &depth.getTexture()->getDefaultView().getView() : nullptr }
+		, m_depthView{ normals ? &depth.getTexture()->getDefaultView().getSampledView() : nullptr }
 		, m_depthSampler{ normals ? depth.getSampler() : nullptr }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -640,7 +640,7 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		ashes::ImageView const * view = &depth.getTexture()->getDefaultView().getView();
+		ashes::ImageView const * view = &depth.getTexture()->getDefaultView().getTargetView();
 
 		if ( normals )
 		{
@@ -789,7 +789,7 @@ namespace castor3d
 	void SsaoRawAOPass::accept( SsaoConfig & config
 		, PipelineVisitorBase & visitor )
 	{
-		visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getView() );
+		visitor.visit( "SSAO Raw AO", getResult().getTexture()->getDefaultView().getSampledView() );
 
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u

@@ -10,10 +10,6 @@ namespace castor3d
 {
 	/**@name Render */
 	//@{
-	/**@name Technique */
-	//@{
-	/**@name Opaque */
-	//@{
 	/**@name SSGI */
 	//@{
 
@@ -36,8 +32,6 @@ namespace castor3d
 	*/
 	struct SsgiConfig;
 
-	//@}
-	//@}
 	//@}
 	//@}
 }

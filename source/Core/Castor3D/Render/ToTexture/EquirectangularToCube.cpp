@@ -170,7 +170,7 @@ namespace castor3d
 		: RenderCube{ device, false }
 		, m_device{ device }
 		, m_commandBuffer{ device.graphicsCommandPool->createCommandBuffer( "EquirectangularToCube" ) }
-		, m_view{ equiRectangular.getDefaultView().getView() }
+		, m_view{ equiRectangular.getDefaultView().getSampledView() }
 		, m_renderPass{ doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };

@@ -66,11 +66,6 @@ namespace castor3d
 		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
 		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
 
-		inline TextureUnit & getTexture()
-		{
-			return m_result[SmTexture::eVariance];
-		}
-
 		inline TextureUnit const & getTexture()const
 		{
 			return m_result[SmTexture::eVariance];

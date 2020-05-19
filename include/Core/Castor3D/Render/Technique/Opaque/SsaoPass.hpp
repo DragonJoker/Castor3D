@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #define C3D_DebugSSAO 0

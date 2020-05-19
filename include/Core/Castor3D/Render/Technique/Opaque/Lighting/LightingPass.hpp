@@ -4,11 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightingPass_H___
 #define ___C3D_LightingPass_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -102,19 +103,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Le résultat diffus de la passe d'éclairage.
 		 */
-		inline TextureUnit const & getDiffuse()const
+		inline LightPassResult const & getResult()const
 		{
-			return m_diffuse;
-		}
-		/**
-		 *\~english
-		 *\return		The light pass specular result.
-		 *\~french
-		 *\return		Le résultat spéculaire de la passe d'éclairage.
-		 */
-		inline TextureUnit const & getSpecular()const
-		{
-			return m_specular;
+			return m_result;
 		}
 
 	private:
@@ -133,9 +124,7 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		castor::Size const m_size;
-		TextureUnit m_depth;
-		TextureUnit m_diffuse;
-		TextureUnit m_specular;
+		LightPassResult m_result;
 		LightPasses m_lightPass;
 		LightPasses m_lightPassShadow;
 		RenderPassTimerSPtr m_timer;

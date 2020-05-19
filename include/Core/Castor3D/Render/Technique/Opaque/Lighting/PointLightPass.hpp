@@ -1,12 +1,12 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredPointLightPass_H___
-#define ___C3D_DeferredPointLightPass_H___
+#ifndef ___C3D_PointLightPass_H___
+#define ___C3D_PointLightPass_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/MeshLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/MeshLightPass.hpp"
 
 namespace castor3d
 {
@@ -70,25 +70,19 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	depthView		The target depth view.
-		 *\param[in]	diffuseView		The target diffuse view.
-		 *\param[in]	specularView	The target specular view.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	hasShadows		Tells if shadows are enabled for this light pass.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	lpResult	The light pass result.
+		 *\param[in]	gpInfoUbo	The geometry pass UBO.
+		 *\param[in]	hasShadows	Tells if shadows are enabled for this light pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	depthView		La vue de profondeur cible.
-		 *\param[in]	diffuseView		La vue de diffuse cible.
-		 *\param[in]	specularView	La vue de spéculaire cible.
-		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
-		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	lpResult	Le résultat de la passe d'éclairage.
+		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
+		 *\param[in]	hasShadows	Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
 		PointLightPass( Engine & engine
-			, ashes::ImageView const & depthView
-			, ashes::ImageView const & diffuseView
-			, ashes::ImageView const & specularView
+			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
 			, bool hasShadows );
 		/**

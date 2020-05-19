@@ -188,7 +188,7 @@ namespace light_streaks
 			, debugName );
 		image->initialise();
 
-		ashes::ImageViewCRefArray attachments{ image->getDefaultView().getView() };
+		ashes::ImageViewCRefArray attachments{ image->getDefaultView().getTargetView() };
 		frameBuffer = renderPass.createFrameBuffer( debugName
 			, size
 			, std::move( attachments ) );
@@ -578,7 +578,7 @@ namespace light_streaks
 			surface.descriptorSets.emplace_back( m_pipelines.hiPass.layout.descriptorPool->createDescriptorSet( 0u ) );
 			auto & descriptorSet = *surface.descriptorSets.back();
 			descriptorSet.createBinding( m_pipelines.hiPass.layout.descriptorLayout->getBinding( 0u )
-				, m_target->getDefaultView().getView()
+				, m_target->getDefaultView().getSampledView()
 				, m_linearSampler->getSampler()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			descriptorSet.update();
@@ -645,7 +645,7 @@ namespace light_streaks
 					, m_kawaseUbo.getUbo()
 					, index );
 				descriptorSet.createBinding( m_pipelines.kawase.layout.descriptorLayout->getBinding( 1u )
-					, source->image->getDefaultView().getView()
+					, source->image->getDefaultView().getSampledView()
 					, m_linearSampler->getSampler()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 				descriptorSet.update();
@@ -712,14 +712,14 @@ namespace light_streaks
 		surface.descriptorSets.emplace_back( m_pipelines.combine.layout.descriptorPool->createDescriptorSet( 0u ) );
 		auto & descriptorSet = *surface.descriptorSets.back();
 		descriptorSet.createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( 0u )
-			, m_target->getDefaultView().getView()
+			, m_target->getDefaultView().getSampledView()
 			, m_linearSampler->getSampler()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 
 		for ( uint32_t i = 0u; i < Count; ++i )
 		{
 			descriptorSet.createBinding( m_pipelines.combine.layout.descriptorLayout->getBinding( i + 1u )
-				, m_pipelines.kawase.surfaces[i].image->getDefaultView().getView()
+				, m_pipelines.kawase.surfaces[i].image->getDefaultView().getSampledView()
 				, m_linearSampler->getSampler()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
@@ -755,7 +755,7 @@ namespace light_streaks
 		// Put target image in fragment shader input layout.
 		hiPassCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+			, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 
 		// Hi-pass.
 		hiPassCmd.beginRenderPass( *m_renderPass
@@ -773,7 +773,7 @@ namespace light_streaks
 		// Put source image in transfer source layout
 		hiPassCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, hiPassSurface.image->getDefaultView().getView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, hiPassSurface.image->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		timer.endPass( hiPassCmd, 0u );
 		hiPassCmd.end();
 		m_commands.emplace_back( std::move( hiPassCommands ) );
@@ -792,13 +792,13 @@ namespace light_streaks
 			// Put destination image in transfer destination layout
 			copyCmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			copyCmd.copyImage( hiPassSurface.image->getDefaultView().getView()
-				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getView() );
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			copyCmd.copyImage( hiPassSurface.image->getDefaultView().getTargetView()
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getTargetView() );
 			// Put back destination image in shader input layout
 			copyCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				, m_pipelines.hiPass.surfaces[i].image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		}
 
 		timer.endPass( copyCmd, 1u );
@@ -825,7 +825,7 @@ namespace light_streaks
 				// Put source image in shader input layout
 				kawaseCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, source->image->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+					, source->image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 				kawaseCmd.beginRenderPass( *m_renderPass
 					, *destination->frameBuffer
@@ -845,7 +845,7 @@ namespace light_streaks
 			// Put Kawase surface's general view in fragment shader input layout.
 			kawaseCmd.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, kawaseSurface.image->getDefaultView().getView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, kawaseSurface.image->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		}
 
 		timer.endPass( kawaseCmd, 2u );

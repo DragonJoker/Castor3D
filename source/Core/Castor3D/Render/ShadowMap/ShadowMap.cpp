@@ -18,7 +18,7 @@ namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
 		, castor::String name
-		, ShadowMapPassResult result
+		, ShadowMapResult result
 		, std::vector< PassData > passes
 		, uint32_t count )
 		: OwnedBy< Engine >{ engine }
@@ -40,7 +40,7 @@ namespace castor3d
 			uint32_t index = 0u;
 			m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
 				{
-					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ ), view->getView() );
+					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ ), view->getSampledView() );
 				} );
 		}
 	}
@@ -51,11 +51,7 @@ namespace castor3d
 
 		if ( !m_initialised )
 		{
-			for ( auto & map : m_result )
-			{
-				map.initialise();
-			}
-
+			m_result.initialise();
 			auto & device = getCurrentRenderDevice( *this );
 
 			{
@@ -70,27 +66,27 @@ namespace castor3d
 							m_name + getName( SmTexture( index ) ) + " clear",
 							makeFloatArray( getEngine()->getNextRainbowColour() ),
 						} );
-					texture.getTexture()->forEachLeafView( [&cmdBuffer, index]( TextureViewUPtr const & view )
+					texture->getTexture()->forEachLeafView( [&cmdBuffer, index]( TextureViewUPtr const & view )
 						{
 							cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 								, VK_PIPELINE_STAGE_TRANSFER_BIT
-								, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+								, view->getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
-							if ( ashes::isDepthOrStencilFormat( view->getView()->format ) )
+							if ( ashes::isDepthOrStencilFormat( view->getTargetView()->format ) )
 							{
-								cmdBuffer->clear( view->getView()
+								cmdBuffer->clear( view->getTargetView()
 									, getClearValue( SmTexture( index ) ).depthStencil );
 								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 									, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
-									, view->getView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+									, view->getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 							}
 							else
 							{
-								cmdBuffer->clear( view->getView()
+								cmdBuffer->clear( view->getTargetView()
 									, getClearValue( SmTexture( index ) ).color );
 								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 									, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-									, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+									, view->getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 							}
 						} );
 					cmdBuffer->endDebugBlock();
@@ -134,11 +130,7 @@ namespace castor3d
 
 		m_initialised = false;
 		doCleanup();
-
-		for ( auto & map : m_result )
-		{
-			map.initialise();
-		}
+		m_result.cleanup();
 	}
 
 	ashes::Semaphore const & ShadowMap::render( ashes::Semaphore const & toWait
@@ -183,11 +175,11 @@ namespace castor3d
 
 	ashes::ImageView const & ShadowMap::getLinearView( uint32_t index )const
 	{
-		return m_result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getView();
+		return m_result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView();
 	}
 
 	ashes::ImageView const & ShadowMap::getVarianceView( uint32_t index )const
 	{
-		return m_result[SmTexture::eVariance].getTexture()->getDefaultView().getView();
+		return m_result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView();
 	}
 }

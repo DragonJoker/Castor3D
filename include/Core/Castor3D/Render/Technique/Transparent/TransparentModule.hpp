@@ -33,6 +33,10 @@ namespace castor3d
 		eVelocity,
 		CU_ScopedEnumBounds( eDepth ),
 	};
+	castor::String getTextureName( WbTexture texture );
+	castor::String getName( WbTexture texture );
+	VkFormat getFormat( WbTexture texture );
+	VkClearValue getClearValue( WbTexture texture );
 	/**
 	*\~english
 	*\brief
@@ -78,40 +82,6 @@ namespace castor3d
 	*	Gère le rendu du weighted blend.
 	*/
 	class WeightedBlendRendering;
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the name for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The name.
-	*\~french
-	*\brief
-	*	Récupère le nom pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	Le nom.
-	*/
-	castor::String getTextureName( WbTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the pixel format for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The pixel format.
-	*\~french
-	*\brief
-	*	Récupère le format de pixels pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	Le format de pixels.
-	*/
-	VkFormat getTextureFormat( WbTexture texture );
 
 	//@}
 	//@}

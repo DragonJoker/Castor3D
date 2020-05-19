@@ -356,7 +356,7 @@ namespace fxaa
 		m_fxaaQuad->createPipeline( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView().getView()
+			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -375,7 +375,7 @@ namespace fxaa
 			};
 			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
-			auto & targetView = m_target->getDefaultView().getView();
+			auto & targetView = m_target->getDefaultView().getSampledView();
 
 			cmd.begin();
 			timer.beginPass( cmd );

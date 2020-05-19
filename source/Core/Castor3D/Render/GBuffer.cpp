@@ -1,6 +1,10 @@
 #include "Castor3D/Render/GBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 using namespace castor;
@@ -9,62 +13,83 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	GBuffer::GBuffer( Engine & engine )
-		: m_engine{ engine }
+	namespace
 	{
+		VkFormat getDepthFormat( Engine & engine
+			, VkFormat format )
+		{
+			auto & device = getCurrentRenderDevice( engine );
+			std::vector< VkFormat > depthFormats
+			{
+				format,
+				VK_FORMAT_D24_UNORM_S8_UINT,
+				VK_FORMAT_D16_UNORM_S8_UINT,
+			};
+			return device.selectSuitableFormat( depthFormats
+				, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		}
 	}
 
-	void GBuffer::doInitialise( Textures textures )
+	//*********************************************************************************************
+
+	TextureUnit GBufferBase::doInitialiseTexture( Engine & engine
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, castor::Size const & size
+		, uint32_t layerCount
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, VkBorderColor const & borderColor )
 	{
-		auto & device = getCurrentRenderDevice( m_engine );
-		m_result = std::move( textures );
-		uint32_t index = 0u;
-		ashes::ImageViewCreateInfo view
+		auto getFormat = []( Engine & engine
+			, VkFormat format )
 		{
-			0u,
-			VK_NULL_HANDLE,
-			VK_IMAGE_VIEW_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			VkComponentMapping{},
-			{ 0u, 0u, 1u, 0u, 1u }
+			return ashes::isDepthOrStencilFormat( format )
+				? getDepthFormat( engine, format )
+				: format;
 		};
 
-		for ( auto & texture : m_result )
+		SamplerSPtr sampler;
+
+		if ( engine.getSamplerCache().has( name ) )
 		{
-			view->image = *texture;
-			view->format = texture->getFormat();
-			view->subresourceRange.aspectMask = ashes::getAspectMask( view->format );
-
-			if ( index == 0u )
-			{
-				m_depthStencilView = texture->createView( view );
-				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-			}
-
-			m_samplableViews.push_back( texture->createView( view ) );
-			++index;
+			sampler = engine.getSamplerCache().find( name );
+		}
+		else
+		{
+			sampler = engine.getSamplerCache().add( name );
+			sampler->setMinFilter( VK_FILTER_LINEAR );
+			sampler->setMagFilter( VK_FILTER_LINEAR );
+			sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			sampler->setBorderColour( borderColor );
 		}
 
-		ashes::SamplerCreateInfo sampler
+		ashes::ImageCreateInfo image
 		{
-			0u,
-			VK_FILTER_LINEAR,
-			VK_FILTER_LINEAR,
-			VK_SAMPLER_MIPMAP_MODE_NEAREST,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-			0.0f,
-			VK_FALSE,
-			0.0f,
-			VK_FALSE,
-			VK_COMPARE_OP_NEVER,
-			0.0f,
-			1.0f,
-			VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
-			VK_FALSE,
+			createFlags,
+			VK_IMAGE_TYPE_2D,
+			getFormat( engine, format ),
+			{ size[0], size[1], 1u },
+			1u,
+			layerCount,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			usageFlags,
 		};
-		m_sampler = device->createSampler( std::move( sampler ) );
+		auto layout = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+			, image
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, name );
+		TextureUnit unit{ engine };
+		unit.setTexture( layout );
+		unit.setSampler( sampler );
+		layout->forEachView( []( TextureViewUPtr const & view )
+			{
+				view->initialiseSource();
+			} );
+		return unit;
 	}
 
 	//*********************************************************************************************

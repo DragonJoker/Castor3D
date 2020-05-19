@@ -351,7 +351,7 @@ namespace castor3d
 						, *getDevice().graphicsCommandPool
 						, target->getPixelFormat()
 						, m_saveBuffer->getPtr()
-						, target->getTexture().getTexture()->getDefaultView().getView() );
+						, target->getTexture().getTexture()->getDefaultView().getTargetView() );
 					auto texture = target->getTexture().getTexture();
 					m_toSave = false;
 				}
@@ -793,7 +793,7 @@ namespace castor3d
 #if C3D_DebugPicking
 			, m_pickingPass->getResult()
 #else
-			, getRenderTarget()->getTexture().getTexture()->getDefaultView().getView()
+			, getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
 #endif
 			, *m_renderPass
 			, {}

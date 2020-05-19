@@ -75,7 +75,7 @@ namespace castor3d
 		, Scene & scene )
 		: ShadowMap{ engine
 			, cuT( "ShadowMapPoint" )
-			, ShadowMapPassResult
+			, ShadowMapResult
 			{
 				engine,
 				cuT( "Point" ),
@@ -135,11 +135,11 @@ namespace castor3d
 			std::string debugName = "ShadowMapPoint" + std::to_string( layer );
 			uint32_t passIndex = layer * 6u;
 			PassData data{};
-			data.depthView = depth.getLayerCubeView( layer ).getView();
-			data.linearView = linear.getLayerCubeView( layer ).getView();
-			data.varianceView = variance.getLayerCubeView( layer ).getView();
-			data.positionView = position.getLayerCubeView( layer ).getView();
-			data.fluxView = flux.getLayerCubeView( layer ).getView();
+			data.depthView = depth.getLayerCubeView( layer ).getSampledView();
+			data.linearView = linear.getLayerCubeView( layer ).getSampledView();
+			data.varianceView = variance.getLayerCubeView( layer ).getSampledView();
+			data.positionView = position.getLayerCubeView( layer ).getSampledView();
+			data.fluxView = flux.getLayerCubeView( layer ).getSampledView();
 
 			for ( auto & frameBuffer : data.frameBuffers )
 			{
@@ -147,11 +147,11 @@ namespace castor3d
 				auto fbDebugName = debugName + getName( face );
 				auto & pass = m_passes[passIndex];
 				auto & renderPass = pass.pass->getRenderPass();
-				frameBuffer.depthView = depth.getLayerCubeFaceView( layer, face ).getView();
-				frameBuffer.linearView = linear.getLayerCubeFaceView( layer, face ).getView();
-				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getView();
-				frameBuffer.positionView = position.getLayerCubeFaceView( layer, face ).getView();
-				frameBuffer.fluxView = flux.getLayerCubeFaceView( layer, face ).getView();
+				frameBuffer.depthView = depth.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.linearView = linear.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.positionView = position.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.fluxView = flux.getLayerCubeFaceView( layer, face ).getTargetView();
 				ashes::ImageViewCRefArray attaches;
 				attaches.emplace_back( frameBuffer.depthView );
 				attaches.emplace_back( frameBuffer.linearView );

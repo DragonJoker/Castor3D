@@ -82,8 +82,8 @@ namespace castor3d
 
 			for ( auto & unit : makeArrayView( std::next( result.begin() ), result.end() ) )
 			{
-				bindTexture( unit.getTexture()->getDefaultView().getView()
-					, unit.getSampler()->getSampler()
+				bindTexture( unit->getTexture()->getDefaultView().getSampledView()
+					, unit->getSampler()->getSampler()
 					, writes
 					, index );
 			}

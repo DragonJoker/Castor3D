@@ -6,8 +6,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
 
-#include "Castor3D/Scene/Light/LightModule.hpp"
-
 namespace castor3d
 {
 	/**@name Render */
@@ -20,10 +18,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Enumerator of textures used in deferred rendering.
+	*	Enumerator of textures used by the deferred renderer's GBUffer.
 	*\~french
 	*\brief
-	*	Enumération des textures utilisées lors du rendu différé.
+	*	Enumération des textures utilisées par le GBuffer du rendu différé.
 	*/
 	enum class DsTexture
 		: uint8_t
@@ -36,6 +34,12 @@ namespace castor3d
 		eData5, // RG => Velocity, B => Material Index, A => Unused
 		CU_ScopedEnumBounds( eDepth ),
 	};
+	castor::String getTextureName( DsTexture texture );
+	castor::String getName( DsTexture texture );
+	VkFormat getFormat( DsTexture texture );
+	VkClearValue getClearValue( DsTexture texture );
+	VkImageUsageFlags getUsageFlags( DsTexture texture );
+	VkBorderColor getBorderColor( DsTexture texture );
 	/*
 	*\~english
 	*\brief
@@ -54,84 +58,6 @@ namespace castor3d
 	*	Résultat de la passe de géométries dans le rendu différé.
 	*/
 	class OpaquePassResult;
-	/**
-	*\~english
-	*\brief
-	*	Handles the light passes.
-	*\~french
-	*\brief
-	*	Gère les passes d'éclairage.
-	*/
-	class LightingPass;
-	/**
-	*\~english
-	*\brief
-	*	Base class for all light passes.
-	*\remarks
-	*	The result of each light pass is blended with the previous one.
-	*\~french
-	*\brief
-	*	Classe de base pour toutes les passes d'éclairage.
-	*\remarks
-	*	Le résultat de chaque passe d'éclairage est mélangé avec celui de la précédente.
-	*/
-	class LightPass;
-	/**
-	*\~english
-	*\brief
-	*	Traits structure to specialise light passes with shadows.
-	*\~french
-	*\brief
-	*	Structure de traits pour spécialiser les passes d'éclairage avec des ombres.
-	*/
-	template< LightType LtType >
-	struct LightPassShadowTraits;
-	/**
-	*\~english
-	*\brief
-	*	Base class for all light passes with shadow.
-	*\~french
-	*\brief
-	*	Classe de base pour toutes les passes d'éclairage avec des ombres.
-	*/
-	template< LightType LtType >
-	class LightPassShadow;
-	/**
-	*\~english
-	*\brief
-	*	Directional light pass.
-	*\~french
-	*\brief
-	*	Passe de lumière directionnelle.
-	*/
-	class DirectionalLightPass;
-	/**
-	*\~english
-	*\brief
-	*	Base class for light passes that need a mesh instead of a quad.
-	*\~french
-	*\brief
-	*	Classe de base pour les passes d'éclairage nécessitant un maillage plutôt qu'un quad.
-	*/
-	class MeshLightPass;
-	/**
-	*\~english
-	*\brief
-	*	Point light pass.
-	*\~french
-	*\brief
-	*	Passe de lumière omnidirectionnelle.
-	*/
-	class PointLightPass;
-	/**
-	*\~english
-	*\brief
-	*	Spot light pass.
-	*\~french
-	*\brief
-	*	Passe de lumière projecteur.
-	*/
-	class SpotLightPass;
 	/**
 	*\~english
 	*\brief
@@ -159,98 +85,6 @@ namespace castor3d
 	*	Passe de Occlusion Ambiante en Espace Ecran.
 	*/
 	class SsaoPass;
-	/**
-	*\~english
-	*\brief
-	*	Subsurface scattering pass.
-	*\~french
-	*\brief
-	*	Passe de Subsurface scattering.
-	*/
-	class SubsurfaceScatteringPass;
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the name for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The name.
-	*\~french
-	*\brief
-	*	Récupère le nom pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	Le nom.
-	*/
-	castor::String getTextureName( DsTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the pixel format for given texture enum value.
-	*\param[in] texture
-	*	The value.
-	*\return
-	*	The pixel format.
-	*\~french
-	*\brief
-	*	Récupère le format de pixels pour la valeur d'énumeration de texture.
-	*\param[in] texture
-	*	La valeur.
-	*\return
-	*	Le format de pixels.
-	*/
-	VkFormat getTextureFormat( DsTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the maximum litten distance for given light and attenuation.
-	*\param[in] light
-	*	The light source.
-	*\param[in] attenuation
-	*	The attenuation values.
-	*\return
-	*	The value.
-	*\~french
-	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	*\param[in] light
-	*	La source lumineuse.
-	*\param[in] attenuation
-	*	Les valeurs d'atténuation.
-	*\return
-	*	La valeur.
-	*/
-	float getMaxDistance( LightCategory const & light
-		, castor::Point3f const & attenuation );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the maximum litten distance for given light and attenuation.
-	*\param[in] light
-	*	The light source.
-	*\param[in] attenuation
-	*	The attenuation values.
-	*\param[in] max
-	*	The viewer max value.
-	*\return
-	*	The value.
-	*\~french
-	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
-	*\param[in] light
-	*	La source lumineuse.
-	*\param[in] attenuation
-	*	Les valeurs d'atténuation.
-	*\param[in] max
-	*	La valeur maximale de l'observateur.
-	*\return
-	*	La valeur.
-	*/
-	float getMaxDistance( LightCategory const & light
-		, castor::Point3f const & attenuation
-		, float max );
 
 	//@}
 	//@}

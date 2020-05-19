@@ -96,7 +96,7 @@ namespace castor3d
 			{
 				m_stagingTexture->copyTextureData( *m_cmdCopy
 					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( i ) ).getView() );
+					, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( i ) ).getTargetView() );
 			}
 
 			m_cmdCopy->end();

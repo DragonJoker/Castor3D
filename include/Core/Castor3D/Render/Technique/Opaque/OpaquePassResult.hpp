@@ -6,12 +6,14 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureModule.hpp"
+
 #include "Castor3D/Render/GBuffer.hpp"
 
 namespace castor3d
 {
 	class OpaquePassResult
-		: public GBuffer
+		: public GBufferT< DsTexture >
 	{
 	public:
 		/**
@@ -35,11 +37,8 @@ namespace castor3d
 		*	La texture de vélocité.
 		*/
 		C3D_API OpaquePassResult( Engine & engine
-			, ashes::Image const & depthTexture
-			, ashes::Image const & velocityTexture );
-
-	private:
-		std::vector< ashes::ImagePtr > m_owned;
+			, TextureUnit const & depthTexture
+			, TextureUnit const & velocityTexture );
 	};
 }
 

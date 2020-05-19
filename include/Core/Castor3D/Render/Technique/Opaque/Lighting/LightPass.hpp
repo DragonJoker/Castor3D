@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DeferredLightPass_H___
 #define ___C3D_DeferredLightPass_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -31,9 +31,7 @@ namespace castor3d
 		{
 			RenderPass( std::string const & name
 				, ashes::RenderPassPtr renderPass
-				, ashes::ImageView const & depthView
-				, ashes::ImageView const & diffuseView
-				, ashes::ImageView const & specularView );
+				, LightPassResult const & lpResult );
 			ashes::RenderPassPtr renderPass;
 			ashes::FrameBufferPtr frameBuffer;
 		};
@@ -380,9 +378,7 @@ namespace castor3d
 		 *\param[in]	engine			The engine.
 		 *\param[in]	firstRenderPass	The render pass for a first light source.
 		 *\param[in]	blendRenderPass	The render pass for other light sources.
-		 *\param[in]	depthView		The target depth view.
-		 *\param[in]	diffuseView		The target diffuse view.
-		 *\param[in]	specularView	The target specular view.
+		 *\param[in]	lpResult		The light pass result.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	hasShadows		Tells if shadows are enabled for this light pass.
 		 *\~french
@@ -390,9 +386,7 @@ namespace castor3d
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	firstRenderPass	La passe de rendu pour la première source lumineuse.
 		 *\param[in]	blendRenderPass	La passe de rendu pour les autres sources lumineuses.
-		 *\param[in]	depthView		La vue de profondeur cible.
-		 *\param[in]	diffuseView		La vue de diffuse cible.
-		 *\param[in]	specularView	La vue de spéculaire cible.
+		 *\param[in]	lpResult		Le résultat de la passe d'éclairage.
 		 *\param[in]	gpInfoUbo		L'UBO de la geometry pass.
 		 *\param[in]	hasShadows		Dit si les ombres sont activées pour cette passe d'éclairage.
 		 */
@@ -400,9 +394,7 @@ namespace castor3d
 			, castor::String const & suffix
 			, ashes::RenderPassPtr && firstRenderPass
 			, ashes::RenderPassPtr && blendRenderPass
-			, ashes::ImageView const & depthView
-			, ashes::ImageView const & diffuseView
-			, ashes::ImageView const & specularView
+			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo
 			, bool hasShadows );
 		/**

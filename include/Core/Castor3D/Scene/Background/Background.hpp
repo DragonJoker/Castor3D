@@ -317,7 +317,7 @@ namespace castor3d
 		inline ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
-			return m_texture->getDefaultView().getView();
+			return m_texture->getDefaultView().getSampledView();
 		}
 
 		inline bool hasIbl()const

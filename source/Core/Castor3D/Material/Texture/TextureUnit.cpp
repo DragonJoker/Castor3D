@@ -164,7 +164,7 @@ namespace castor3d
 				{
 					{
 						sampler->getSampler(),
-						m_texture->getDefaultView().getView(),
+						m_texture->getDefaultView().getSampledView(),
 						VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					}
 				}

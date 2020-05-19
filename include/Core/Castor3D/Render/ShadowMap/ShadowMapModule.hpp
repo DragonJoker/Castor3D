@@ -32,12 +32,10 @@ namespace castor3d
 		eFlux, // R16G16B16A16F, RGB => Light flux, used by RSM.
 		CU_ScopedEnumBounds( eDepth ),
 	};
-	castor::String getName( SmTexture texture );
 	castor::String getTextureName( LightType light
 		, SmTexture texture );
-	VkFormat getTextureFormat( SmTexture texture );
-	VkFormat getTextureFormat( Engine & engine
-		, SmTexture texture );
+	castor::String getName( SmTexture texture );
+	VkFormat getFormat( SmTexture texture );
 	VkClearValue getClearValue( SmTexture texture );
 	VkImageUsageFlags getUsageFlags( SmTexture texture );
 	VkBorderColor getBorderColor( SmTexture texture );
@@ -94,7 +92,7 @@ namespace castor3d
 	*\brief
 	*	Les textures résultant d'une shadow map.
 	*/
-	class ShadowMapPassResult;
+	class ShadowMapResult;
 	/**
 	*\~english
 	*\brief

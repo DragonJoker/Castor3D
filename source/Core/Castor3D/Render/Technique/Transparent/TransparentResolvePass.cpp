@@ -185,13 +185,13 @@ namespace castor3d
 			auto & layout = pool.getLayout();
 			auto result = pool.createDescriptorSet( "TransparentResolveTex", 1u );
 			result->createBinding( layout.getBinding( depthTexIndex )
-				, wbResult.getViews()[uint32_t( WbTexture::eDepth )]
+				, wbResult[WbTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 				, sampler.getSampler() );
 			result->createBinding( layout.getBinding( accumTexIndex )
-				, wbResult.getViews()[uint32_t( WbTexture::eAccumulation )]
+				, wbResult[WbTexture::eAccumulation].getTexture()->getDefaultView().getSampledView()
 				, sampler.getSampler() );
 			result->createBinding( layout.getBinding( revealTexIndex )
-				, wbResult.getViews()[uint32_t( WbTexture::eRevealage )]
+				, wbResult[WbTexture::eRevealage].getTexture()->getDefaultView().getSampledView()
 				, sampler.getSampler() );
 			result->update();
 			return result;

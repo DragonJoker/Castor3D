@@ -933,7 +933,7 @@ namespace smaa
 			},
 			{
 				0u,
-				depthView->getDefaultView().getView()->format,
+				depthView->getDefaultView().getTargetView()->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -1099,10 +1099,10 @@ namespace smaa
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_ubo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_areaTex->getDefaultView().getView()
+			, m_areaTex->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_searchTex->getDefaultView().getView()
+			, m_searchTex->getDefaultView().getSampledView()
 			, *m_pointSampler );
 	}
 

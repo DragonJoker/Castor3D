@@ -69,7 +69,7 @@ namespace castor3d
 		{
 			{
 				0u,
-				wbpResult.getViews()[0]->format,
+				wbpResult[WbTexture::eDepth].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -80,7 +80,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult.getViews()[1]->format,
+				wbpResult[WbTexture::eAccumulation].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -91,7 +91,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult.getViews()[2]->format,
+				wbpResult[WbTexture::eRevealage].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -102,7 +102,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult.getViews()[3]->format,
+				wbpResult[WbTexture::eVelocity].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -160,13 +160,16 @@ namespace castor3d
 			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
-		for ( auto & view : wbpResult.getViews() )
+		for ( auto view : wbpResult )
 		{
-			fbAttaches.emplace_back( view );
+			fbAttaches.emplace_back( view->getTexture()->getDefaultView().getTargetView() );
 		}
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( "TransparentPass"
-			, { wbpResult[0].getDimensions().width, wbpResult[0].getDimensions().height }
+			, {
+				wbpResult[WbTexture::eDepth].getTexture()->getWidth(),
+				wbpResult[WbTexture::eDepth].getTexture()->getHeight(),
+			}
 			, std::move( fbAttaches ) );
 		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}
@@ -334,7 +337,7 @@ namespace castor3d
 			if ( node.passNode.pass.hasEnvironmentMapping() )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getView()
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
 					, envMap.getTexture().getSampler()->getSampler()
 					, writes
 					, index );

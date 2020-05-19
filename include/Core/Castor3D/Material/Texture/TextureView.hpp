@@ -149,7 +149,8 @@ namespace castor3d
 		C3D_API castor::PxBufferPtrArray & getBuffers();
 		C3D_API bool isStaticSource()const;
 		C3D_API uint32_t getLevelCount()const;
-		C3D_API ashes::ImageView const & getView()const;
+		C3D_API ashes::ImageView const & getSampledView()const;
+		C3D_API ashes::ImageView const & getTargetView()const;
 
 		inline bool hasSource()const
 		{
@@ -185,7 +186,8 @@ namespace castor3d
 		ashes::ImageViewCreateInfo m_info;
 		castor::String m_debugName;
 		TextureSourceSPtr m_source;
-		mutable ashes::ImageView m_view;
+		mutable ashes::ImageView m_sampledView;
+		mutable ashes::ImageView m_targetView;
 		bool m_needsMipmapsGeneration{ true };
 		bool m_needsYInversion{ false };
 	};

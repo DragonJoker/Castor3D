@@ -1,14 +1,20 @@
-#include "Castor3D/Render/Technique/Opaque/MeshLightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
-#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
@@ -20,6 +26,7 @@
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;
+using namespace castor3d;
 
 namespace castor3d
 {
@@ -27,11 +34,10 @@ namespace castor3d
 
 	namespace
 	{
+		static constexpr uint32_t VertexCount = 6u;
+
 		ashes::RenderPassPtr doCreateRenderPass( Engine & engine
-			, castor::String const & name
-			, ashes::ImageView const & depthView
-			, ashes::ImageView const & diffuseView
-			, ashes::ImageView const & specularView
+			, LightPassResult const & lpResult
 			, bool first )
 		{
 			auto & device = getCurrentRenderDevice( engine );
@@ -41,23 +47,22 @@ namespace castor3d
 			VkAttachmentLoadOp loadOp = first
 				? VK_ATTACHMENT_LOAD_OP_CLEAR
 				: VK_ATTACHMENT_LOAD_OP_LOAD;
-
 			ashes::VkAttachmentDescriptionArray attaches
 			{
 				{
 					0u,
-					depthView.getFormat(),
+					lpResult[LpTexture::eDepth].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_LOAD,
 					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_LOAD,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 					VK_ATTACHMENT_STORE_OP_DONT_CARE,
 					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+					VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				},
 				{
 					0u,
-					diffuseView.getFormat(),
+					lpResult[LpTexture::eDiffuse].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -68,7 +73,7 @@ namespace castor3d
 				},
 				{
 					0u,
-					specularView.getFormat(),
+					lpResult[LpTexture::eSpecular].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					loadOp,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -120,7 +125,7 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( name + ( first ? "First" : "Blend" )
+			auto result = device->createRenderPass( "DirectionalLightPass"
 				, std::move( createInfo ) );
 			return result;
 		}
@@ -128,76 +133,58 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	MeshLightPass::Program::Program( Engine & engine
-		, String const & name
+	DirectionalLightPass::Program::Program( Engine & engine
+		, DirectionalLightPass & pass
 		, ShaderModule const & vtx
 		, ShaderModule const & pxl
 		, bool hasShadows )
-		: LightPass::Program{ engine, name, vtx, pxl, hasShadows }
+		: LightPass::Program{ engine, pass.getName(), vtx, pxl, hasShadows }
+		, m_lightPass{ pass }
 	{
 	}
 
-	MeshLightPass::Program::~Program()
+	DirectionalLightPass::Program::~Program()
 	{
 	}
 
-	ashes::GraphicsPipelinePtr MeshLightPass::Program::doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
+	ashes::GraphicsPipelinePtr DirectionalLightPass::Program::doCreatePipeline( ashes::PipelineVertexInputStateCreateInfo const & vertexLayout
 		, ashes::RenderPass const & renderPass
 		, bool blend )
 	{
 		ashes::PipelineDepthStencilStateCreateInfo dsstate
 		{
 			0u,
-			VK_FALSE,
-			VK_FALSE,
-			VK_COMPARE_OP_LESS,
-			VK_FALSE,
-			VK_FALSE,
-			{
-				VK_STENCIL_OP_KEEP,
-				VK_STENCIL_OP_KEEP,
-				VK_STENCIL_OP_KEEP,
-				VK_COMPARE_OP_NOT_EQUAL,
-				0xFFFFFFFFu,
-				0xFFFFFFFFu,
-				0x0u,
-			},
+			false,
+			false
 		};
-
-		ashes::VkPipelineColorBlendAttachmentStateArray blattaches;
+		ashes::VkPipelineColorBlendAttachmentStateArray attachs;
+		ashes::PipelineColorBlendStateCreateInfo blstate;
 
 		if ( blend )
 		{
-			blattaches.push_back( VkPipelineColorBlendAttachmentState
-			{
-				true,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_OP_ADD,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_OP_ADD,
-				defaultColorWriteMask,
-			} );
-		}
-		else
-		{
-			blattaches.push_back( VkPipelineColorBlendAttachmentState
+			attachs.push_back( VkPipelineColorBlendAttachmentState
 				{
 					true,
 					VK_BLEND_FACTOR_ONE,
-					VK_BLEND_FACTOR_ZERO,
+					VK_BLEND_FACTOR_ONE,
 					VK_BLEND_OP_ADD,
 					VK_BLEND_FACTOR_ONE,
-					VK_BLEND_FACTOR_ZERO,
+					VK_BLEND_FACTOR_ONE,
 					VK_BLEND_OP_ADD,
 					defaultColorWriteMask,
 				} );
+			blstate = ashes::PipelineColorBlendStateCreateInfo
+			{ 
+				0u,
+				VK_FALSE,
+				VK_LOGIC_OP_COPY,
+				std::move( attachs )
+			};
 		}
 
-		blattaches.push_back( blattaches.back() );
+		blstate.attachments.push_back( blstate.attachments.back() );
 		auto & device = getCurrentRenderDevice( m_engine );
-		auto result = device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
+		return device->createPipeline( m_name + ( blend ? std::string{ "Blend" } : std::string{ "First" } )
 			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
@@ -206,151 +193,152 @@ namespace castor3d
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo{},
-				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT },
+				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				std::move( dsstate ),
-				ashes::PipelineColorBlendStateCreateInfo{ 0u, VK_FALSE, VK_LOGIC_OP_COPY, std::move( blattaches ) },
+				std::move( blstate ),
 				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 				*m_pipelineLayout,
-				renderPass,
+				renderPass
 			} );
-		return result;
+	}
+
+	void DirectionalLightPass::Program::doBind( Light const & light )
+	{
+		auto & data = m_lightPass.m_ubo->getData( 0u );
+		light.bind( &data.base.colourIndex );
+		m_lightPass.m_ubo->upload();
 	}
 
 	//*********************************************************************************************
 
-	MeshLightPass::MeshLightPass( Engine & engine
-		, castor::String const & suffix
-		, ashes::ImageView const & depthView
-		, ashes::ImageView const & diffuseView
-		, ashes::ImageView const & specularView
+	DirectionalLightPass::DirectionalLightPass( Engine & engine
+		, LightPassResult const & lpResult
 		, GpInfoUbo const & gpInfoUbo
-		, LightType type
 		, bool hasShadows )
 		: LightPass{ engine
-			, suffix
-			, doCreateRenderPass( engine
-				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
-				, depthView
-				, diffuseView
-				, specularView
-				, true )
-			, doCreateRenderPass( engine
-				, "LightPass" + suffix + ( hasShadows ? String{ "Shadow" } : String{} )
-				, depthView
-				, diffuseView
-				, specularView
-				, false )
-			, depthView
-			, diffuseView
-			, specularView
+			, "Directional"
+			, doCreateRenderPass( engine, lpResult, true )
+			, doCreateRenderPass( engine, lpResult, false )
+			, lpResult
 			, gpInfoUbo
 			, hasShadows }
-		, m_modelMatrixUbo{ engine }
-		, m_stencilPass{ engine, getName(), depthView, m_matrixUbo, m_modelMatrixUbo }
-		, m_type{ type }
+		, m_ubo{ makeUniformBuffer< Config >( *engine.getRenderSystem()
+			, 1u
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "SsaoConfigUbo" ) }
+		, m_viewport{ engine }
 	{
+		m_baseUbo = m_ubo.get();
+		m_viewport.setOrtho( -1, 1, -1, 1, -1, 1 );
+		log::trace << cuT( "Created DirectionalLightPass" ) << ( hasShadows ? castor::String{ cuT( "Shadow" ) } : cuEmptyString ) << std::endl;
 	}
 
-	MeshLightPass::~MeshLightPass()
-	{
-		m_vertexBuffer.reset();
-	}
-
-	void MeshLightPass::initialise( Scene const & scene
+	void DirectionalLightPass::initialise( Scene const & scene
 		, OpaquePassResult const & gp
 		, SceneUbo & sceneUbo
 		, RenderPassTimer & timer )
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-
-		ashes::PipelineVertexInputStateCreateInfo declaration
-		{
-			0u,
-			ashes::VkVertexInputBindingDescriptionArray
-			{
-				{ 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX },
-			},
-			ashes::VkVertexInputAttributeDescriptionArray
-			{
-				{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u },
-			}
-		};
-
-		auto data = doGenerateVertices();
-		m_count = uint32_t( data.size() );
 		m_vertexBuffer = makeVertexBuffer< float >( device
-			, uint32_t( data.size() * 3u )
+			, 12u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "MeshLightPassVbo" );
+			, "DirectionalLightPassVbo" );
 
-		if ( auto * buffer = m_vertexBuffer->lock( 0u, m_vertexBuffer->getCount(), 0u ) )
+		if ( auto buffer = m_vertexBuffer->getBuffer().lock( 0u
+			, ~( 0ull )
+			, 0u ) )
 		{
-			std::memcpy( buffer, data.data()->constPtr(), m_vertexBuffer->getSize() );
-			m_vertexBuffer->flush( 0u, m_vertexBuffer->getCount() );
-			m_vertexBuffer->unlock();
+			float data[] =
+			{
+				-1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, -1.0f,
+				+1.0f, -1.0f,
+				-1.0f, +1.0f,
+				+1.0f, +1.0f,
+			};
+			std::memcpy( buffer, data, sizeof( data ) );
+			m_vertexBuffer->getBuffer().flush( 0u, ~( 0ull ) );
+			m_vertexBuffer->getBuffer().unlock();
 		}
-
-		m_stencilPass.initialise( declaration, *m_vertexBuffer );
-
+		
+		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
+			, ashes::VkVertexInputBindingDescriptionArray
+			{
+				{ 0u, sizeof( Point2f ), VK_VERTEX_INPUT_RATE_VERTEX },
+			}
+			, ashes::VkVertexInputAttributeDescriptionArray
+			{
+				{ 0u, 0u, VK_FORMAT_R32G32_SFLOAT, 0u },
+			} );
 		doInitialise( scene
 			, gp
-			, m_type
+			, LightType::eDirectional
 			, *m_vertexBuffer
-			, declaration
+			, *m_vertexLayout
 			, sceneUbo
-			, &m_modelMatrixUbo
+			, nullptr
 			, timer );
+		m_viewport.update();
 	}
 
-	void MeshLightPass::cleanup()
+	void DirectionalLightPass::cleanup()
 	{
 		doCleanup();
-		m_stencilPass.cleanup();
+		m_vertexLayout.reset();
 		m_vertexBuffer.reset();
-		m_modelMatrixUbo.cleanup();
-		m_matrixUbo.cleanup();
 	}
 
-	ashes::Semaphore const & MeshLightPass::render( uint32_t index
-		, ashes::Semaphore const & toWait )
+	void DirectionalLightPass::accept( PipelineVisitorBase & visitor )
 	{
-		auto * result = &toWait;
-		result = &m_stencilPass.render( *result );
-		result = &LightPass::render( index, *result );
-		return *result;
+		String name = cuT( "DirectionalLight" );
+
+		if ( m_shadows )
+		{
+			name += cuT( " Shadow" );
+		}
+
+		if ( m_vertexShader.shader )
+		{
+			visitor.visit( m_vertexShader );
+		}
+
+		if ( m_pixelShader.shader )
+		{
+			visitor.visit( m_pixelShader );
+		}
 	}
 
-	uint32_t MeshLightPass::getCount()const
+	uint32_t DirectionalLightPass::getCount()const
 	{
-		return m_count;
+		return VertexCount;
 	}
 
-	void MeshLightPass::doUpdate( bool first
+	void DirectionalLightPass::doUpdate( bool first
 		, Size const & size
 		, Light const & light
 		, Camera const & camera
 		, ShadowMap const * shadowMap
 		, uint32_t shadowMapIndex )
 	{
-		auto model = doComputeModelMatrix( light, camera );
-		m_matrixUbo.update( camera.getView(), camera.getProjection() );
-		m_modelMatrixUbo.update( model );
+		m_viewport.resize( size );
+		m_matrixUbo.update( camera.getView(), m_viewport.getProjection() );
 		m_pipeline->program->bind( light );
 	}
 
-	ShaderPtr MeshLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
+	ShaderPtr DirectionalLightPass::doGetVertexShaderSource( SceneFlags const & sceneFlags )const
 	{
 		using namespace sdw;
 		VertexWriter writer;
 
 		// Shader inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
-		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
 		UBO_GPINFO( writer, GpInfoUbo::BindingPoint, 0u );
-		auto vertex = writer.declInput< Vec3 >( "position", 0u );
+		auto position = writer.declInput< Vec2 >( "position", 0u );
 
 		// Shader outputs
 		auto out = writer.getOut();
@@ -358,11 +346,18 @@ namespace castor3d
 		writer.implementFunction< sdw::Void >( "main"
 			, [&]()
 			{
-				out.vtx.position = c3d_projection * c3d_curView * c3d_curMtxModel * vec4( vertex, 1.0_f );
+				out.vtx.position = c3d_projection * vec4( position, 0.0_f, 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	//*********************************************************************************************
+	LightPass::ProgramPtr DirectionalLightPass::doCreateProgram()
+	{
+		return std::make_unique< Program >( m_engine
+			, *this
+			, m_vertexShader
+			, m_pixelShader
+			, m_shadows );
+	}
 }

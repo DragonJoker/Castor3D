@@ -192,6 +192,7 @@ namespace castor3d
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
 		, m_ssgiConfig{ ssgiConfig }
+		, m_depthBuffer{ *renderSystem.getEngine() }
 	{
 		doCreateShadowMaps();
 	}
@@ -232,7 +233,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Colour" ) );
 
-			m_depthBuffer = doCreateTexture( *getEngine()
+			auto depthBuffer = doCreateTexture( *getEngine()
 				, m_size
 				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
 					| VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -240,6 +241,13 @@ namespace castor3d
 					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 				, cuT( "RenderTechnique_Depth" ) );
+			m_depthBuffer.setTexture( depthBuffer );
+			VkImageSubresourceRange range{ 0u, 0u, 1u, 0u, 1u };
+			m_depthBuffer.setSampler( createSampler( *getEngine()
+				, cuT( "RenderTechnique_Depth" )
+				, VK_FILTER_LINEAR
+				, &range ) );
+			m_depthBuffer.initialise();
 			m_signalFinished = device->createSemaphore( "RenderTechnique" );
 			m_gpInfoUbo.initialise();
 			m_hdrConfigUbo.initialise();
@@ -289,12 +297,7 @@ namespace castor3d
 		m_uploadCommandBuffer.reset();
 		m_stagingBuffer.reset();
 		m_initialised = false;
-
-		if ( m_depthBuffer )
-		{
-			m_depthBuffer->cleanup();
-			m_depthBuffer.reset();
-		}
+		m_depthBuffer.cleanup();
 
 		if ( m_colourTexture )
 		{
@@ -404,8 +407,8 @@ namespace castor3d
 
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView().getView() );
-		visitor.visit( "Technique Depth", m_depthBuffer->getDefaultView().getView() );
+		visitor.visit( "Technique Colour", m_colourTexture->getDefaultView().getSampledView() );
+		visitor.visit( "Technique Depth", m_depthBuffer.getTexture()->getDefaultView().getSampledView() );
 
 		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
 		{
@@ -466,7 +469,7 @@ namespace castor3d
 		{
 			{
 				0u,
-				m_depthBuffer->getPixelFormat(),
+				m_depthBuffer.getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				depthLoadOp,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -531,11 +534,11 @@ namespace castor3d
 
 		ashes::ImageViewCRefArray attaches
 		{
-			m_depthBuffer->getDefaultView().getView(),
-			m_colourTexture->getDefaultView().getView(),
+			m_depthBuffer.getTexture()->getDefaultView().getTargetView(),
+			m_colourTexture->getDefaultView().getTargetView(),
 		};
 		m_bgFrameBuffer = m_bgRenderPass->createFrameBuffer( "Background"
-			, { m_depthBuffer->getDimensions().width, m_depthBuffer->getDimensions().height }
+			, { m_depthBuffer.getTexture()->getWidth(), m_depthBuffer.getTexture()->getHeight() }
 			, std::move( attaches ) );
 
 		auto & background = *m_renderTarget.getScene()->getBackground();
@@ -576,7 +579,7 @@ namespace castor3d
 			, m_matrixUbo
 			, m_renderTarget.getCuller()
 			, m_ssaoConfig
-			, m_depthBuffer );
+			, m_depthBuffer.getTexture() );
 		m_depthPass->initialise( m_size );
 	}
 
@@ -590,7 +593,7 @@ namespace castor3d
 		m_deferredRendering = std::make_unique< DeferredRendering >( *getEngine()
 			, static_cast< OpaquePass & >( *m_opaquePass )
 			, m_depthBuffer
-			, m_renderTarget.getVelocity().getTexture()
+			, m_renderTarget.getVelocity()
 			, m_colourTexture
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
@@ -603,7 +606,7 @@ namespace castor3d
 
 		m_opaquePass->initialise( m_size );
 		static_cast< ForwardRenderTechniquePass & >( *m_opaquePass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
-			, m_depthBuffer->getDefaultView().getView()
+			, m_depthBuffer.getTexture()->getDefaultView().getView()
 			, m_size
 			, false );
 
@@ -617,9 +620,9 @@ namespace castor3d
 		m_transparentPass->initialise( m_size );
 		m_weightedBlendRendering = std::make_unique< WeightedBlendRendering >( *getEngine()
 			, static_cast< TransparentPass & >( *m_transparentPass )
-			, m_depthBuffer->getDefaultView().getView()
-			, m_colourTexture->getDefaultView().getView()
-			, m_renderTarget.getVelocity().getTexture()
+			, m_depthBuffer
+			, m_colourTexture->getDefaultView().getTargetView()
+			, m_renderTarget.getVelocity()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo
@@ -629,7 +632,7 @@ namespace castor3d
 
 		m_transparentPass->initialise( m_size );
 		static_cast< ForwardRenderTechniquePass & >( *m_transparentPass ).initialiseRenderPass( m_colourTexture->getDefaultView().getView()
-			, m_depthBuffer->getDefaultView().getView()
+			, m_depthBuffer.getTexture()->getDefaultView().getView()
 			, m_size
 			, false );
 

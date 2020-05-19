@@ -4,13 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_SubsurfaceScatteringPass_H___
 #define ___C3D_SubsurfaceScatteringPass_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -31,23 +31,23 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	textureSize		The render area dimensions.
-		 *\param[in]	gp				The geometry pass result.
-		 *\param[in]	lightDiffuse	The light pass diffuse result.
+		 *\param[in]	gpResult		The geometry pass result.
+		 *\param[in]	lpResult		The light pass result.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	textureSize		Les dimensions de la zone de rendu.
-		 *\param[in]	gp				Le résultat de la geometry pass.
-		 *\param[in]	lightDiffuse	Le résultat diffus de la light pass.
+		 *\param[in]	gpResult		Le résultat de la geometry pass.
+		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */
 		C3D_API SubsurfaceScatteringPass( Engine & engine
 			, GpInfoUbo const & gpInfoUbo
 			, SceneUbo & sceneUbo
 			, castor::Size const & textureSize
-			, OpaquePassResult const & gp
-			, TextureUnit const & lightDiffuse );
+			, OpaquePassResult const & gpResult
+			, LightPassResult const & lpResult );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -82,12 +82,11 @@ namespace castor3d
 		}
 
 	private:
-		void doBlur( OpaquePassResult const & gp
+		void doBlur( OpaquePassResult const & gpResult
 			, TextureUnit const & source
 			, TextureUnit const & destination
-			//, TextureAttachmentSPtr attach
 			, castor::Point2f const & direction )const;
-		void doCombine( OpaquePassResult const & gp
+		void doCombine( OpaquePassResult const & gpResult
 			, TextureUnit const & source )const;
 
 	public:
@@ -121,7 +120,7 @@ namespace castor3d
 				, GpInfoUbo const & gpInfoUbo
 				, SceneUbo & sceneUbo
 				, UniformBuffer< BlurConfiguration > const & blurUbo
-				, OpaquePassResult const & gp
+				, OpaquePassResult const & gpResult
 				, TextureUnit const & source
 				, TextureUnit const & destination
 				, bool isVertic
@@ -150,7 +149,7 @@ namespace castor3d
 			explicit Combine( RenderSystem & renderSystem
 				, castor::Size const & size
 				, UniformBuffer< BlurWeights > const & blurUbo
-				, OpaquePassResult const & gp
+				, OpaquePassResult const & gpResult
 				, TextureUnit const & source
 				, std::array< TextureUnit, 3u > const & blurResults
 				, TextureUnit const & destination

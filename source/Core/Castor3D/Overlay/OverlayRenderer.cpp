@@ -683,7 +683,7 @@ namespace castor3d
 				|| config.opacityMask[0] )
 			{
 				result->createBinding( pipeline.descriptorLayout->getBinding( MapsBinding )
-					, unit->getTexture()->getDefaultView().getView()
+					, unit->getTexture()->getDefaultView().getSampledView()
 					, unit->getSampler()->getSampler()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, texIndex++ );
@@ -715,7 +715,7 @@ namespace castor3d
 			, index
 			, false );
 		result->createBinding( pipeline.descriptorLayout->getBinding( TextMapBinding )
-			, texture.getDefaultView().getView()
+			, texture.getDefaultView().getSampledView()
 			, sampler.getSampler() );
 		result->update();
 		return result;

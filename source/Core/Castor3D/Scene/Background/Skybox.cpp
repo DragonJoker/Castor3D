@@ -391,14 +391,14 @@ namespace castor3d
 
 		VkImageSubresourceLayers srcSubresource
 		{
-			m_crossTexture->getDefaultView().getView()->subresourceRange.aspectMask,
+			m_crossTexture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
 		};
 		VkImageSubresourceLayers dstSubresource
 		{
-			m_texture->getDefaultView().getView()->subresourceRange.aspectMask,
+			m_texture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
@@ -463,14 +463,14 @@ namespace castor3d
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultView().getView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_crossTexture->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		uint32_t index{ 0u };
 
 		for ( auto & copyInfo : copyInfos )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->copyImage( copyInfo
 				, m_crossTexture->getTexture()
 				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -478,7 +478,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			++index;
 		}
 

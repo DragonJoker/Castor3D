@@ -574,7 +574,7 @@ namespace castor3d
 			engine,
 			m_prefix + cuT( " - GaussianBlur - X Pass" ),
 			texture,
-			m_intermediate.getTexture()->getDefaultView().getView(),
+			m_intermediate.getTexture()->getDefaultView().getTargetView(),
 			*m_blurUbo,
 			m_format,
 			m_size,
@@ -585,7 +585,7 @@ namespace castor3d
 		{
 			engine,
 			m_prefix + cuT( " - GaussianBlur - Y Pass" ),
-			m_intermediate.getTexture()->getDefaultView().getView(),
+			m_intermediate.getTexture()->getDefaultView().getTargetView(),
 			texture,
 			*m_blurUbo,
 			m_format,
@@ -611,7 +611,7 @@ namespace castor3d
 	void GaussianBlur::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_prefix + " GaussianBlur Intermediate"
-			, m_intermediate.getTexture()->getDefaultView().getView() );
+			, m_intermediate.getTexture()->getDefaultView().getSampledView() );
 
 		visitor.visit( m_blurX.vertexShader );
 		visitor.visit( m_blurX.pixelShader );

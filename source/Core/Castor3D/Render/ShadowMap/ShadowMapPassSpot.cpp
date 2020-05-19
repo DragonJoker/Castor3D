@@ -94,7 +94,7 @@ namespace castor3d
 			attaches.push_back(
 				{
 					0u,
-					result.getTexture()->getPixelFormat(),
+					result->getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,

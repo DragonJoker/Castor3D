@@ -39,9 +39,9 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, ashes::ImageView const & depthView
+			, TextureUnit const & depthView
 			, ashes::ImageView const & colourView
-			, TextureLayoutSPtr velocityTexture
+			, TextureUnit const & velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
 			, HdrConfigUbo & hdrConfigUbo

@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ashespp/Buffer/VertexBuffer.hpp>

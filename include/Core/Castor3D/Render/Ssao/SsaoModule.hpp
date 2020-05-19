@@ -10,10 +10,6 @@ namespace castor3d
 {
 	/**@name Render */
 	//@{
-	/**@name Technique */
-	//@{
-	/**@name Opaque */
-	//@{
 	/**@name SSAO */
 	//@{
 
@@ -54,8 +50,6 @@ namespace castor3d
 	*/
 	class SsaoRawAOPass;
 
-	//@}
-	//@}
 	//@}
 	//@}
 }

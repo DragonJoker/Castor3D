@@ -33,6 +33,24 @@ namespace castor
 	*/
 	template< typename NoiseT >
 	class FractalNoiseT;
+	/**
+	*\~english
+	*\brief
+	*	Blue noise texture generator.
+	*\~french
+	*\brief
+	*	Générateur texture de blue noise.
+	*/
+	class BlueNoise;
+	/**
+	*\~english
+	*\brief
+	*	White noise texture generator.
+	*\~french
+	*\brief
+	*	Générateur texture de white noise.
+	*/
+	class WhiteNoise;
 }
 
 #endif

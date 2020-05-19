@@ -88,8 +88,8 @@ namespace castor3d
 
 	DeferredRendering::DeferredRendering( Engine & engine
 		, OpaquePass & opaquePass
-		, TextureLayoutSPtr depthTexture
-		, TextureLayoutSPtr velocityTexture
+		, TextureUnit const & depthTexture
+		, TextureUnit const & velocityTexture
 		, TextureLayoutSPtr resultTexture
 		, Size const & size
 		, Scene & scene
@@ -104,17 +104,17 @@ namespace castor3d
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_opaquePassResult{ m_engine
-			, depthTexture->getTexture()
-			, velocityTexture->getTexture() }
+			, depthTexture
+			, velocityTexture }
 		, m_linearisePass{ std::make_unique< LineariseDepthPass >( m_engine
 			, cuT( "Deferred" )
 			, makeExtent2D( m_size )
-			, m_opaquePassResult.getViews()[size_t( DsTexture::eDepth )] ) }
+			, depthTexture.getTexture()->getDefaultView().getSampledView() ) }
 		, m_lightingPass{ std::make_unique< LightingPass >( m_engine
 			, m_size
 			, scene
 			, m_opaquePassResult
-			, depthTexture->getDefaultView().getView()
+			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo ) }
 		, m_ssao{ std::make_unique< SsaoPass >( m_engine
@@ -128,7 +128,7 @@ namespace castor3d
 			, m_opaquePass.getSceneUbo()
 			, m_size
 			, m_opaquePassResult
-			, m_lightingPass->getDiffuse() ) }
+			, m_lightingPass->getResult() ) }
 		, m_ssgi{ std::make_unique< SsgiPass >( m_engine
 			, makeExtent2D( m_size )
 			, m_ssaoConfig
@@ -141,9 +141,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getDiffuse().getTexture()->getDefaultView().getView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
-			, resultTexture->getDefaultView().getView()
+			, m_lightingPass->getResult()[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
+			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, resultTexture->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -152,9 +152,9 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
-			, resultTexture->getDefaultView().getView()
+			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getSampledView()
+			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, resultTexture->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
@@ -164,24 +164,24 @@ namespace castor3d
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_lightingPass->getDiffuse().getTexture()->getDefaultView().getView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
-			, resultTexture->getDefaultView().getView()
+			, m_lightingPass->getResult()[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView()
+			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, resultTexture->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView().getView() ) );
+			, &m_ssao->getResult().getTexture()->getDefaultView().getSampledView() ) );
 		//	SSSSS On
 		m_resolve.emplace_back( std::make_unique< OpaqueResolvePass >( m_engine
 			, scene
 			, m_opaquePassResult
-			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getView()
-			, m_lightingPass->getSpecular().getTexture()->getDefaultView().getView()
-			, resultTexture->getDefaultView().getView()
+			, m_subsurfaceScattering->getResult().getTexture()->getDefaultView().getSampledView()
+			, m_lightingPass->getResult()[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView()
+			, resultTexture->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo
 			, hdrConfigUbo
-			, &m_ssao->getResult().getTexture()->getDefaultView().getView() ) );
+			, &m_ssao->getResult().getTexture()->getDefaultView().getSampledView() ) );
 		m_opaquePass.initialiseRenderPass( m_opaquePassResult );
 	}
 
@@ -264,11 +264,11 @@ namespace castor3d
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Opaque Data1", m_opaquePassResult.getViews()[size_t( DsTexture::eData1 )] );
-		visitor.visit( "Opaque Data2", m_opaquePassResult.getViews()[size_t( DsTexture::eData2 )] );
-		visitor.visit( "Opaque Data3", m_opaquePassResult.getViews()[size_t( DsTexture::eData3 )] );
-		visitor.visit( "Opaque Data4", m_opaquePassResult.getViews()[size_t( DsTexture::eData4 )] );
-		visitor.visit( "Opaque Data5", m_opaquePassResult.getViews()[size_t( DsTexture::eData5 )] );
+		visitor.visit( "Opaque Data1", m_opaquePassResult[DsTexture::eData1].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Opaque Data2", m_opaquePassResult[DsTexture::eData2].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Opaque Data3", m_opaquePassResult[DsTexture::eData3].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Opaque Data4", m_opaquePassResult[DsTexture::eData4].getTexture()->getDefaultView().getSampledView() );
+		visitor.visit( "Opaque Data5", m_opaquePassResult[DsTexture::eData5].getTexture()->getDefaultView().getSampledView() );
 
 		m_opaquePass.accept( visitor );
 		m_lightingPass->accept( visitor );

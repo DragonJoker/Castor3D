@@ -220,7 +220,7 @@ namespace castor3d
 			, *hdrConfigUbo.getUbo().buffer
 			, hdrConfigUbo.getUbo().offset );
 		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
-			, m_texture->getDefaultView().getView()
+			, m_texture->getDefaultView().getSampledView()
 			, m_sampler.lock()->getSampler() );
 	}
 

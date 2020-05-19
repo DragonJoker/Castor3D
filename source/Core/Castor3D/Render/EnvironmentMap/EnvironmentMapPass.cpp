@@ -41,7 +41,7 @@ namespace castor3d
 				0u,
 				image.getOwner()->getTexture(),
 				VK_IMAGE_VIEW_TYPE_2D,
-				image.getView().getFormat(),
+				image.getTargetView().getFormat(),
 				VkComponentMapping{},
 				{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, face, 1u }
 			};
@@ -107,7 +107,7 @@ namespace castor3d
 		m_modelMatrixUbo.initialise();
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
-		m_envView = environmentLayout->getLayerCubeFaceView( 0u, CubeMapFace( face ) ).getView();
+		m_envView = environmentLayout->getLayerCubeFaceView( 0u, CubeMapFace( face ) ).getTargetView();
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.

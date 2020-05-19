@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredSsgiPass_H___
-#define ___C3D_DeferredSsgiPass_H___
+#ifndef ___C3D_SsgiPass_H___
+#define ___C3D_SsgiPass_H___
 
-#include "OpaqueModule.hpp"
+#include "LightingModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Ssgi/SsgiModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #define C3D_DebugSSGI 0
