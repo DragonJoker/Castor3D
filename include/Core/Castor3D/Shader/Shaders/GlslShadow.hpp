@@ -19,12 +19,12 @@ namespace castor3d
 		class Shadow
 		{
 		public:
-			C3D_API static castor::String const MapShadowDirectional;
-			C3D_API static castor::String const MapShadowSpot;
-			C3D_API static castor::String const MapShadowPoint;
-			C3D_API static castor::String const MapDepthNormalDirectional;
-			C3D_API static castor::String const MapDepthNormalSpot;
-			C3D_API static castor::String const MapDepthNormalPoint;
+			C3D_API static castor::String const MapVarianceDirectional;
+			C3D_API static castor::String const MapVarianceSpot;
+			C3D_API static castor::String const MapVariancePoint;
+			C3D_API static castor::String const MapNormalDepthDirectional;
+			C3D_API static castor::String const MapNormalDepthSpot;
+			C3D_API static castor::String const MapNormalDepthPoint;
 			C3D_API static castor::String const MapPositionDirectional;
 			C3D_API static castor::String const MapPositionSpot;
 			C3D_API static castor::String const MapPositionPoint;

@@ -15,12 +15,12 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const Shadow::MapShadowDirectional = "c3d_mapShadowDirectional";
-		castor::String const Shadow::MapShadowSpot = "c3d_mapShadowSpot";
-		castor::String const Shadow::MapShadowPoint = "c3d_mapShadowPoint";
-		castor::String const Shadow::MapDepthNormalDirectional = "c3d_mapDepthNormalDirectional";
-		castor::String const Shadow::MapDepthNormalSpot = "c3d_mapDepthNormalSpot";
-		castor::String const Shadow::MapDepthNormalPoint = "c3d_mapDepthNormalPoint";
+		castor::String const Shadow::MapVarianceDirectional = "c3d_mapVarianceDirectional";
+		castor::String const Shadow::MapVarianceSpot = "c3d_mapVarianceSpot";
+		castor::String const Shadow::MapVariancePoint = "c3d_mapVariancePoint";
+		castor::String const Shadow::MapNormalDepthDirectional = "c3d_mapNormalDepthDirectional";
+		castor::String const Shadow::MapNormalDepthSpot = "c3d_mapNormalDepthSpot";
+		castor::String const Shadow::MapNormalDepthPoint = "c3d_mapNormalDepthPoint";
 		castor::String const Shadow::MapPositionDirectional = "c3d_mapPositionDirectional";
 		castor::String const Shadow::MapPositionSpot = "c3d_mapPositionSpot";
 		castor::String const Shadow::MapPositionPoint = "c3d_mapPositionPoint";
@@ -51,16 +51,16 @@ namespace castor3d
 					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
 					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
 				} );
-			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalDirectional, index++, 1u );
-			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
+			auto c3d_mapNormalDepthDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
+			auto c3d_mapVarianceDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
 			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalSpot, index++, 1u );
-			auto c3d_mapShadowSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowSpot, index++, 1u );
+			auto c3d_mapNormalDepthSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
+			auto c3d_mapVarianceSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
 			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapDepthNormalPoint, index++, 1u );
-			auto c3d_mapShadowPoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapShadowPoint, index++, 1u );
+			auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
+			auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
 			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
 			m_utils.declareInvertVec2Y();
@@ -95,8 +95,8 @@ namespace castor3d
 					vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f ),
 					vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ),
 				} );
-			auto c3d_mapDepthNormalDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalDirectional, index++, 1u );
-			auto c3d_mapShadowDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowDirectional, index++, 1u );
+			auto c3d_mapNormalDepthDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
+			auto c3d_mapVarianceDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
 			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
 			m_utils.declareInvertVec2Y();
@@ -135,8 +135,8 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			auto c3d_mapDepthNormalPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapDepthNormalPoint, index++, 1u );
-			auto c3d_mapShadowPoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapShadowPoint, index++, 1u );
+			auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
+			auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
 			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
 			doDeclareGetRandom();
@@ -173,8 +173,8 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			m_writer.inlineComment( "// SHADOWS" );
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
-			auto c3d_mapDepthNormalSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapDepthNormalSpot, index++, 1u );
-			auto c3d_mapShadowSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapShadowSpot, index++, 1u );
+			auto c3d_mapNormalDepthSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
+			auto c3d_mapVarianceSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
 			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
 			doDeclareGetRandom();
@@ -467,7 +467,7 @@ namespace castor3d
 
 						IF( m_writer, shadowCoord.w() > 0.0_f )
 						{
-							shadow = step( shadowCoord.z() - bias, dist.x() );
+							shadow = step( shadowCoord.z() - bias, dist.w() );
 						}
 						FI;
 					}
@@ -544,12 +544,12 @@ namespace castor3d
 						auto uv = m_writer.declLocale( "uv"
 							, shadowCoord.st() + offset );
 						auto dist = m_writer.declLocale( "dist"
-							, texture( shadowMap, vec3( uv
-								, m_writer.cast< Float >( cascadeIndex ) ) ) );
+							, texture( shadowMap
+								, vec3( uv, m_writer.cast< Float >( cascadeIndex ) ) ) );
 
 						IF( m_writer, shadowCoord.w() > 0 )
 						{
-							shadow = step( shadowCoord.z() - bias, dist.x() );
+							shadow = step( shadowCoord.z() - bias, dist.w() );
 						}
 						FI;
 					}
@@ -638,8 +638,8 @@ namespace castor3d
 					, UInt const & maxCascade
 					, Vec3 const & normal )
 				{
-					auto c3d_mapDepthNormalDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapDepthNormalDirectional );
-					auto c3d_mapShadowDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapShadowDirectional );
+					auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+					auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto result = m_writer.declLocale( "result"
@@ -648,7 +648,7 @@ namespace castor3d
 					IF( m_writer, shadowType == Int( int( ShadowType::eVariance ) ) )
 					{
 						auto moments = m_writer.declLocale( "moments"
-							, texture( c3d_mapShadowDirectional
+							, texture( c3d_mapVarianceDirectional
 								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( cascadeIndex ) ) ) );
 						result = m_chebyshevUpperBound( moments
@@ -667,7 +667,7 @@ namespace castor3d
 						IF( m_writer, shadowType == Int( int( ShadowType::ePCF ) ) )
 						{
 							result = m_filterPCFCascade( lightSpacePosition
-								, c3d_mapDepthNormalDirectional
+								, c3d_mapNormalDepthDirectional
 								, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
 								, cascadeIndex
 								, bias );
@@ -676,7 +676,7 @@ namespace castor3d
 						{
 							result = m_textureProjCascade( lightSpacePosition
 								, vec2( 0.0_f )
-								, c3d_mapDepthNormalDirectional
+								, c3d_mapNormalDepthDirectional
 								, cascadeIndex
 								, bias );
 						}
@@ -709,8 +709,8 @@ namespace castor3d
 					, Vec3 const & normal
 					, Int const & index )
 				{
-					auto c3d_mapDepthNormalSpot = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapDepthNormalSpot );
-					auto c3d_mapShadowSpot = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapShadowSpot );
+					auto c3d_mapNormalDepthSpot = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthSpot );
+					auto c3d_mapVarianceSpot = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceSpot );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					lightSpacePosition.xy() += vec2( 0.5_f );
@@ -725,7 +725,7 @@ namespace castor3d
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
 						result = m_filterPCF( lightSpacePosition
-							, c3d_mapDepthNormalSpot
+							, c3d_mapNormalDepthSpot
 							, index
 							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
 							, bias );
@@ -733,7 +733,7 @@ namespace castor3d
 					ELSEIF( shadowType == Int( int( ShadowType::eVariance ) ) )
 					{
 						auto moments = m_writer.declLocale( "moments"
-							, texture( c3d_mapShadowSpot
+							, texture( c3d_mapVarianceSpot
 								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( index ) ) ) );
 						result = m_chebyshevUpperBound( moments
@@ -755,7 +755,7 @@ namespace castor3d
 
 					result = m_textureProj( lightSpacePosition
 						, vec2( 0.0_f )
-						, c3d_mapDepthNormalSpot
+						, c3d_mapNormalDepthSpot
 						, index
 						, bias );
 
@@ -786,8 +786,8 @@ namespace castor3d
 					, Float const & farPlane
 					, Int const & index )
 				{
-					auto c3d_mapDepthNormalPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( Shadow::MapDepthNormalPoint );
-					auto c3d_mapShadowPoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( Shadow::MapShadowPoint );
+					auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( Shadow::MapNormalDepthPoint );
+					auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( Shadow::MapVariancePoint );
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, worldSpacePosition - lightPosition );
 					auto depth = m_writer.declLocale( "depth"
@@ -825,9 +825,9 @@ namespace castor3d
 							{
 								for ( int k = 0; k < samples; ++k )
 								{
-									shadowMapDepth = texture( c3d_mapDepthNormalPoint
+									shadowMapDepth = texture( c3d_mapNormalDepthPoint
 										, vec4( vertexToLight + vec3( x, y, z )
-											, m_writer.cast< Float >( index ) ) ).x();
+											, m_writer.cast< Float >( index ) ) ).w();
 									shadowFactor += step( depth - bias, shadowMapDepth );
 									numSamplesUsed += 1.0_f;
 									z += inc;
@@ -868,7 +868,7 @@ namespace castor3d
 							{
 								for ( int k = 0; k < samples; ++k )
 								{
-									moments = texture( c3d_mapShadowPoint
+									moments = texture( c3d_mapVariancePoint
 										, vec4( vertexToLight + vec3( x, y, z )
 											, m_writer.cast< Float >( index ) ) );
 									shadowFactor += m_chebyshevUpperBound( moments
@@ -897,9 +897,9 @@ namespace castor3d
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
 						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-							, texture( c3d_mapDepthNormalPoint
+							, texture( c3d_mapNormalDepthPoint
 								, vec4( vertexToLight
-									, m_writer.cast< Float >( index ) ) ).x() );
+									, m_writer.cast< Float >( index ) ) ).w() );
 						result = step( depth - bias, shadowMapDepth );
 					}
 					FI;
@@ -1018,8 +1018,8 @@ namespace castor3d
 					, UInt const & maxCascade
 					, Vec3 const & normal )
 				{
-					auto c3d_mapDepthNormalDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapDepthNormalDirectional );
-					auto c3d_mapShadowDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapShadowDirectional );
+					auto c3d_mapNormalDepthDirectional = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthDirectional );
+					auto c3d_mapVarianceDirectional = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					auto result = m_writer.declLocale( "result"
@@ -1028,7 +1028,7 @@ namespace castor3d
 					if ( type == ShadowType::eVariance )
 					{
 						auto moments = m_writer.declLocale( "moments"
-							, texture( c3d_mapShadowDirectional
+							, texture( c3d_mapVarianceDirectional
 								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( cascadeIndex ) ) ) );
 						result = m_chebyshevUpperBound( moments
@@ -1047,7 +1047,7 @@ namespace castor3d
 						if ( type == ShadowType::ePCF )
 						{
 							result = m_filterPCFCascade( lightSpacePosition
-								, c3d_mapDepthNormalDirectional
+								, c3d_mapNormalDepthDirectional
 								, vec2( Float( 1.0f / float( ShadowMapPassDirectional::TextureSize ) ) )
 								, cascadeIndex
 								, bias );
@@ -1056,7 +1056,7 @@ namespace castor3d
 						{
 							result = m_textureProjCascade( lightSpacePosition
 								, vec2( 0.0_f )
-								, c3d_mapDepthNormalDirectional
+								, c3d_mapNormalDepthDirectional
 								, cascadeIndex
 								, bias );
 						}
@@ -1085,8 +1085,8 @@ namespace castor3d
 					, Vec3 const & normal
 					, Int shadowMapIndex )
 				{
-					auto c3d_mapDepthNormalSpot = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapDepthNormalSpot );
-					auto c3d_mapShadowSpot = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapShadowSpot );
+					auto c3d_mapNormalDepthSpot = m_writer.getVariable< SampledImage2DArrayRgba32 >( Shadow::MapNormalDepthSpot );
+					auto c3d_mapVarianceSpot = m_writer.getVariable< SampledImage2DArrayRg32 >( Shadow::MapVarianceSpot );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, getLightSpacePosition( lightMatrix, worldSpacePosition ) );
 					lightSpacePosition.xy() += vec2( 0.5_f );
@@ -1101,7 +1101,7 @@ namespace castor3d
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
 						result = m_filterPCF( lightSpacePosition
-							, c3d_mapDepthNormalSpot
+							, c3d_mapNormalDepthSpot
 							, shadowMapIndex
 							, vec2( Float( 1.0f / float( ShadowMapPassSpot::TextureSize ) ) )
 							, bias );
@@ -1109,7 +1109,7 @@ namespace castor3d
 					else if ( type == ShadowType::eVariance )
 					{
 						auto moments = m_writer.declLocale( "moments"
-							, texture( c3d_mapShadowSpot
+							, texture( c3d_mapVarianceSpot
 								, vec3( lightSpacePosition.xy()
 									, m_writer.cast< Float >( shadowMapIndex ) ) ) );
 						result = m_chebyshevUpperBound( moments
@@ -1131,7 +1131,7 @@ namespace castor3d
 								, shadowOffsets.y() ) );
 						result = m_textureProj( lightSpacePosition
 							, vec2( 0.0_f )
-							, c3d_mapDepthNormalSpot
+							, c3d_mapNormalDepthSpot
 							, shadowMapIndex
 							, bias );
 
@@ -1160,8 +1160,8 @@ namespace castor3d
 					, Float const & farPlane
 					, Int shadowMapIndex )
 				{
-					auto c3d_mapDepthNormalPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( MapDepthNormalPoint );
-					auto c3d_mapShadowPoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( MapShadowPoint );
+					auto c3d_mapNormalDepthPoint = m_writer.getVariable< SampledImageCubeArrayRgba32 >( MapNormalDepthPoint );
+					auto c3d_mapVariancePoint = m_writer.getVariable< SampledImageCubeArrayRg32 >( MapVariancePoint );
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, worldSpacePosition - lightPosition );
 					auto depth = m_writer.declLocale( "depth"
@@ -1197,9 +1197,9 @@ namespace castor3d
 							{
 								for ( int k = 0; k < samples; ++k )
 								{
-									shadowMapDepth = texture( c3d_mapDepthNormalPoint
+									shadowMapDepth = texture( c3d_mapNormalDepthPoint
 										, vec4( vertexToLight + vec3( x, y, z )
-											, m_writer.cast< Float >( shadowMapIndex ) ) ).x();
+											, m_writer.cast< Float >( shadowMapIndex ) ) ).w();
 									shadowFactor += step( depth - bias, shadowMapDepth );
 									numSamplesUsed += 1.0_f;
 									z += inc;
@@ -1240,7 +1240,7 @@ namespace castor3d
 							{
 								for ( int k = 0; k < samples; ++k )
 								{
-									moments = texture( c3d_mapShadowPoint
+									moments = texture( c3d_mapVariancePoint
 										, vec4( vertexToLight + vec3( x, y, z )
 											, m_writer.cast< Float >( shadowMapIndex ) ) );
 									shadowFactor += m_chebyshevUpperBound( moments
@@ -1269,9 +1269,9 @@ namespace castor3d
 								, shadowOffsets.x()
 								, shadowOffsets.y() ) );
 						auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-							, texture( c3d_mapDepthNormalPoint
+							, texture( c3d_mapNormalDepthPoint
 								, vec4( vertexToLight
-									, m_writer.cast< Float >( shadowMapIndex ) ) ).x() );
+									, m_writer.cast< Float >( shadowMapIndex ) ) ).w() );
 						m_writer.returnStmt( step( depth - bias, shadowMapDepth ) );
 					}
 				}

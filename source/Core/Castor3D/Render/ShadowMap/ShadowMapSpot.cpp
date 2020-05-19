@@ -113,7 +113,7 @@ namespace castor3d
 
 	ashes::ImageView const & ShadowMapSpot::getLinearView( uint32_t index )const
 	{
-		return m_result[SmTexture::eLinearNormal].getTexture()->getLayer2DView( index ).getView();
+		return m_result[SmTexture::eNormalLinear].getTexture()->getLayer2DView( index ).getView();
 	}
 
 	ashes::ImageView const & ShadowMapSpot::getVarianceView( uint32_t index )const
@@ -130,7 +130,7 @@ namespace castor3d
 			ShadowMapPassSpot::TextureSize,
 		};
 		auto & depth = *m_result[SmTexture::eDepth].getTexture();
-		auto & linear = *m_result[SmTexture::eLinearNormal].getTexture();
+		auto & linear = *m_result[SmTexture::eNormalLinear].getTexture();
 		auto & variance = *m_result[SmTexture::eVariance].getTexture();
 		auto & position = *m_result[SmTexture::ePosition].getTexture();
 		auto & flux = *m_result[SmTexture::eFlux].getTexture();

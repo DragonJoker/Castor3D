@@ -464,7 +464,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -533,17 +533,17 @@ namespace castor3d
 
 			auto depth = writer.declLocale( "depth"
 				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) );
-			pxl_linearNormal.x() = depth / c3d_lightPosFarPlane.w();
-			pxl_linearNormal.yzw() = normal;
+			pxl_normalLinear.w() = depth / c3d_lightPosFarPlane.w();
+			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;
 
-			pxl_variance.x() = pxl_linearNormal.x();
-			pxl_variance.y() = pxl_linearNormal.x() * pxl_linearNormal.x();
+			pxl_variance.x() = pxl_normalLinear.x();
+			pxl_variance.y() = pxl_normalLinear.x() * pxl_normalLinear.x();
 
 			auto dx = writer.declLocale( "dx"
-				, dFdx( pxl_linearNormal.x() ) );
+				, dFdx( pxl_normalLinear.x() ) );
 			auto dy = writer.declLocale( "dy"
-				, dFdy( pxl_linearNormal.x() ) );
+				, dFdy( pxl_normalLinear.x() ) );
 			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 		};
 
@@ -610,7 +610,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -681,17 +681,17 @@ namespace castor3d
 
 			auto depth = writer.declLocale( "depth"
 				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) );
-			pxl_linearNormal.x() = depth / c3d_lightPosFarPlane.w();
-			pxl_linearNormal.yzw() = normal;
+			pxl_normalLinear.w() = depth / c3d_lightPosFarPlane.w();
+			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;
 
-			pxl_variance.x() = pxl_linearNormal.x();
-			pxl_variance.y() = pxl_linearNormal.x() * pxl_linearNormal.x();
+			pxl_variance.x() = pxl_normalLinear.x();
+			pxl_variance.y() = pxl_normalLinear.x() * pxl_normalLinear.x();
 
 			auto dx = writer.declLocale( "dx"
-				, dFdx( pxl_linearNormal.x() ) );
+				, dFdx( pxl_normalLinear.x() ) );
 			auto dy = writer.declLocale( "dy"
-				, dFdy( pxl_linearNormal.x() ) );
+				, dFdy( pxl_normalLinear.x() ) );
 			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 		};
 
@@ -758,7 +758,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -828,17 +828,17 @@ namespace castor3d
 
 			auto depth = writer.declLocale( "depth"
 				, length( vtx_worldPosition - c3d_lightPosFarPlane.xyz() ) );
-			pxl_linearNormal.x() = depth / c3d_lightPosFarPlane.w();
-			pxl_linearNormal.yzw() = normal;
+			pxl_normalLinear.w() = depth / c3d_lightPosFarPlane.w();
+			pxl_normalLinear.xyz() = normal;
 			pxl_position.xyz() = vtx_worldPosition;
 
-			pxl_variance.x() = pxl_linearNormal.x();
-			pxl_variance.y() = pxl_linearNormal.x() * pxl_linearNormal.x();
+			pxl_variance.x() = pxl_normalLinear.x();
+			pxl_variance.y() = pxl_normalLinear.x() * pxl_normalLinear.x();
 
 			auto dx = writer.declLocale( "dx"
-				, dFdx( pxl_linearNormal.x() ) );
+				, dFdx( pxl_normalLinear.x() ) );
 			auto dy = writer.declLocale( "dy"
-				, dFdy( pxl_linearNormal.x() ) );
+				, dFdy( pxl_normalLinear.x() ) );
 			pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 		};
 

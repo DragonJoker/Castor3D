@@ -54,7 +54,7 @@ namespace castor3d
 				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				sampler->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE );
+				sampler->setBorderColour( getBorderColor( texture ) );
 			}
 
 			ashes::ImageCreateInfo image
@@ -189,6 +189,21 @@ namespace castor3d
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+			}
+		};
+		return Values[size_t( texture )];
+	}
+
+	VkBorderColor getBorderColor( SmTexture texture )
+	{
+		static std::array< VkBorderColor, size_t( SmTexture::eCount ) > Values
+		{
+			{
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 			}
 		};
 		return Values[size_t( texture )];

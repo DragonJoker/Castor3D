@@ -142,7 +142,7 @@ namespace castor3d
 			ShadowMapPassDirectional::TextureSize,
 		};
 		auto & depth = m_result[SmTexture::eDepth].getTexture()->getArray2D();
-		auto & linear = m_result[SmTexture::eLinearNormal].getTexture()->getArray2D();
+		auto & linear = m_result[SmTexture::eNormalLinear].getTexture()->getArray2D();
 		auto & variance = m_result[SmTexture::eVariance].getTexture()->getArray2D();
 		auto & position = m_result[SmTexture::ePosition].getTexture()->getArray2D();
 		auto & flux = m_result[SmTexture::eFlux].getTexture()->getArray2D();

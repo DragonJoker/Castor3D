@@ -125,7 +125,7 @@ namespace castor3d
 			ShadowMapPassPoint::TextureSize,
 		};
 		auto & depth = *m_result[SmTexture::eDepth].getTexture();
-		auto & linear = *m_result[SmTexture::eLinearNormal].getTexture();
+		auto & linear = *m_result[SmTexture::eNormalLinear].getTexture();
 		auto & variance = *m_result[SmTexture::eVariance].getTexture();
 		auto & position = *m_result[SmTexture::ePosition].getTexture();
 		auto & flux = *m_result[SmTexture::eFlux].getTexture();

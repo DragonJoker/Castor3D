@@ -423,7 +423,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -493,8 +493,8 @@ namespace castor3d
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
-				pxl_linearNormal.x() = in.fragCoord.z();
-				pxl_linearNormal.yzw() = normal;
+				pxl_normalLinear.w() = depth;
+				pxl_normalLinear.xyz() = normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
@@ -569,7 +569,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -641,8 +641,8 @@ namespace castor3d
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
-				pxl_linearNormal.x() = in.fragCoord.z();
-				pxl_linearNormal.yzw() = normal;
+				pxl_normalLinear.w() = depth;
+				pxl_normalLinear.xyz() = normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
@@ -717,7 +717,7 @@ namespace castor3d
 			, index );
 
 		// Fragment Outputs
-		auto pxl_linearNormal( writer.declOutput< Vec4 >( "pxl_linearNormal", 0u ) );
+		auto pxl_normalLinear( writer.declOutput< Vec4 >( "pxl_normalLinear", 0u ) );
 		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", 1u ) );
 		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", 2u ) );
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", 3u ) );
@@ -788,8 +788,8 @@ namespace castor3d
 
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
-				pxl_linearNormal.x() = in.fragCoord.z();
-				pxl_linearNormal.yzw() = normal;
+				pxl_normalLinear.w() = depth;
+				pxl_normalLinear.xyz() = normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
