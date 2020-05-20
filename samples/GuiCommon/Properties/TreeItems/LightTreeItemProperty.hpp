@@ -79,6 +79,10 @@ namespace GuiCommon
 		void onShadowVarianceBiasChange( double value );
 		void onShadowVolumetricStepsChange( long value );
 		void onShadowVolumetricScatteringFactorChange( double value );
+		void onRsmEnableChange( bool value );
+		void onRsmIntensityChange( double value );
+		void onRsmMaxRadiusChange( double value );
+		void onRsmSampleCountChange( long value );
 
 	private:
 		castor3d::Light & m_light;

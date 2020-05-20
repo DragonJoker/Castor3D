@@ -1,5 +1,6 @@
 #include "Castor3D/Cache/LightCache.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -110,20 +111,28 @@ namespace castor3d
 	void ObjectCache< Light, castor::String >::initialise()
 	{
 		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
-		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+		getScene()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
 				auto & device = getCurrentRenderDevice( *getScene() );
-				m_textureBuffer = makeBuffer< castor::Point4f >( device
-					, uint32_t( m_lightsBuffer.size() )
-					, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, "LightsBuffer" );
-				m_textureView = device->createBufferView( "LightsBufferView"
-					, m_textureBuffer->getBuffer()
-					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, 0u
-					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
+
+				if ( !m_textureBuffer )
+				{
+					m_textureBuffer = makeBuffer< castor::Point4f >( device
+						, uint32_t( m_lightsBuffer.size() )
+						, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+						, "LightsBuffer" );
+				}
+
+				if ( !m_textureView )
+				{
+					m_textureView = device->createBufferView( "LightsBufferView"
+						, m_textureBuffer->getBuffer()
+						, VK_FORMAT_R32G32B32A32_SFLOAT
+						, 0u
+						, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
+				}
 			} ) );
 	}
 

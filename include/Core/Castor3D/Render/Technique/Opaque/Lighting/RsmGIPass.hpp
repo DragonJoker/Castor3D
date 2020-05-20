@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderAST/Shader.hpp>
 
@@ -30,21 +31,21 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine			The engine.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	config			The SSGI configuration.
 		 *\param[in]	linearisedDepth	The linearised depth buffer.
 		 *\param[in]	scene			The scene buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine			Le moteur.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	config			La configuration du SSGI.
 		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API RsmGIPass( Engine & engine
+			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size
-			, RsmConfig const & config
+			, GpInfoUbo const & gpInfo
+			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
 			, LightPassResult const & lpResult );
 		/**
@@ -61,11 +62,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( SsgiConfig & config
+		C3D_API void accept( RsmConfig & config
 			, PipelineVisitorBase & visitor );
-
-	public:
-		static VkFormat constexpr ResultFormat = VK_FORMAT_R32G32B32A32_SFLOAT;
+		C3D_API void update( Light const & light );
 
 	private:
 		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -73,9 +72,11 @@ namespace castor3d
 		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
 
 	private:
-		RsmConfig const & m_config;
+		LightCache const & m_lightCache;
+		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
 		LightPassResult const & m_lpResult;
+		GpInfoUbo const & m_gpInfo;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		UniformBufferUPtr< Configuration > m_rsmConfigUbo;

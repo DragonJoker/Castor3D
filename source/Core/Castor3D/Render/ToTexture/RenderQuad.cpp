@@ -46,10 +46,11 @@ namespace castor3d
 				} ) );
 		}
 
-		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass )
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
+			, BlendMode blendMode )
 		{
-			return RenderPass::createBlendState( BlendMode::eNoBlend
-				, BlendMode::eNoBlend
+			return RenderPass::createBlendState( blendMode
+				, blendMode
 				, doGetColourAttachmentCount( pass ) );
 		}
 	}
@@ -72,6 +73,7 @@ namespace castor3d
 			, samplerFilter
 			, ( config.range ? &config.range.value() : nullptr) ) }
 		, m_useTexCoords{ bool( config.texcoordConfig ) }
+		, m_blendMode{ config.blendMode ? *config.blendMode : BlendMode::eNoBlend }
 	{
 	}
 
@@ -89,6 +91,7 @@ namespace castor3d
 		, m_descriptorSet{ std::move( rhs.m_descriptorSet ) }
 		, m_sourceView{ std::move( rhs.m_sourceView ) }
 		, m_useTexCoords{ std::move( rhs.m_useTexCoords ) }
+		, m_blendMode{ std::move( rhs.m_blendMode ) }
 	{
 	}
 
@@ -227,7 +230,7 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				doCreateBlendState( renderPass ),
+				doCreateBlendState( renderPass, m_blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
 				static_cast< VkRenderPass const & >( renderPass )

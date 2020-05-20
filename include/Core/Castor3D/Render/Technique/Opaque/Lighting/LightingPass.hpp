@@ -8,8 +8,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/RsmConfig.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -45,8 +47,11 @@ namespace castor3d
 		 */
 		LightingPass( Engine & engine
 			, castor::Size const & size
-			, Scene const & scene
+			, Scene & scene
 			, OpaquePassResult const & gpResult
+			, ShadowMapResult const & smDirectionalResult
+			, ShadowMapResult const & smPointResult
+			, ShadowMapResult const & smSpotResult
 			, ashes::ImageView const & depthView
 			, SceneUbo & sceneUbo
 			, GpInfoUbo const & gpInfoUbo );
@@ -127,6 +132,7 @@ namespace castor3d
 		LightPassResult m_result;
 		LightPasses m_lightPass;
 		LightPasses m_lightPassShadow;
+		LightPasses m_lightPassRsm;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
 		ashes::ImageView const & m_srcDepth;

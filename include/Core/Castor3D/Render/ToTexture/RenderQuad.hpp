@@ -51,6 +51,7 @@ namespace castor3d
 		};
 		ashes::Optional< VkImageSubresourceRange > range;
 		ashes::Optional< Texcoord > texcoordConfig;
+		ashes::Optional< BlendMode > blendMode;
 	};
 
 	class RenderQuad
@@ -257,6 +258,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr m_descriptorSet;
 		ashes::ImageView const * m_sourceView{ nullptr };
 		bool m_useTexCoords;
+		BlendMode m_blendMode;
 	};
 
 	class RenderQuadBuilder
@@ -290,6 +292,20 @@ namespace castor3d
 		inline RenderQuadBuilder & range( VkImageSubresourceRange const & range )
 		{
 			m_config.range = range;
+			return *this;
+		}
+		/**
+		*\~english
+		*\param[in] blend
+		*	Contains blend to destination status.
+		*\~french
+		*\brief
+		*\param[in] blend
+		*	Contient le statut de mélange à la destination.
+		*/
+		inline RenderQuadBuilder & blendMode( BlendMode blendMode )
+		{
+			m_config.blendMode = blendMode;
 			return *this;
 		}
 		/**

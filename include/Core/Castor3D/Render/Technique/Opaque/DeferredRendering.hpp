@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
@@ -48,6 +49,9 @@ namespace castor3d
 			, TextureUnit const & depthTexture
 			, TextureUnit const & velocityTexture
 			, TextureLayoutSPtr resultTexture
+			, ShadowMapResult const & smDirectionalResult
+			, ShadowMapResult const & smPointResult
+			, ShadowMapResult const & smSpotResult
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo & hdrConfigUbo

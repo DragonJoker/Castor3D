@@ -1709,23 +1709,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsRsm )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else if ( !params.empty() )
-		{
-			bool value;
-			params[0]->get( value );
-			parsingContext->light->setRsmShadowMaps( value );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserShadowsVolumetricSteps )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -1840,6 +1823,74 @@ namespace castor3d
 			float value;
 			params[0]->get( value );
 			parsingContext->light->setShadowVarianceBias( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsRsm )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setRsmShadowMaps( true );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
+	CU_ImplementAttributeParser( parserRsmIntensity )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0.0f };
+			params[0]->get( value );
+			parsingContext->light->getRsmConfig().intensity = value;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRsmMaxRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0.0f };
+			params[0]->get( value );
+			parsingContext->light->getRsmConfig().maxRadius = value;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRsmSampleCount )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			uint32_t value{ 0u };
+			params[0]->get( value );
+			auto range = parsingContext->light->getRsmConfig().sampleCount.value();
+			range = value;
+			parsingContext->light->getRsmConfig().sampleCount = range;
 		}
 	}
 	CU_EndAttribute()

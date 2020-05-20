@@ -104,13 +104,18 @@ namespace castor3d
 	// Shadows parsers
 	CU_DeclareAttributeParser( parserShadowsProducer )
 	CU_DeclareAttributeParser( parserShadowsFilter )
-	CU_DeclareAttributeParser( parserShadowsRsm )
 	CU_DeclareAttributeParser( parserShadowsVolumetricSteps )
 	CU_DeclareAttributeParser( parserShadowsVolumetricScatteringFactor )
 	CU_DeclareAttributeParser( parserShadowsMinOffset )
 	CU_DeclareAttributeParser( parserShadowsMaxSlopeOffset )
 	CU_DeclareAttributeParser( parserShadowsVarianceMax )
 	CU_DeclareAttributeParser( parserShadowsVarianceBias )
+	CU_DeclareAttributeParser( parserShadowsRsm )
+
+	// RSM parsers
+	CU_DeclareAttributeParser( parserRsmIntensity )
+	CU_DeclareAttributeParser( parserRsmMaxRadius )
+	CU_DeclareAttributeParser( parserRsmSampleCount )
 
 	// Scene node parsers
 	CU_DeclareAttributeParser( parserNodeParent )

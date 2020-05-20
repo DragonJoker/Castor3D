@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include "Castor3D/Render/Technique/Opaque/Lighting/RsmConfig.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
@@ -222,6 +223,16 @@ namespace castor3d
 		{
 			return m_shadowMapRsm;
 		}
+
+		inline RsmConfig const & getRsmConfig()const
+		{
+			return m_rsmConfig;
+		}
+
+		inline RsmConfig & getRsmConfig()
+		{
+			return m_rsmConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -359,6 +370,7 @@ namespace castor3d
 		uint32_t m_shadowMapIndex{ 0u };
 		bool m_shadowMapRsm{ false };
 		uint32_t m_bufferIndex{ 0u };
+		RsmConfig m_rsmConfig;
 	};
 }
 

@@ -91,6 +91,9 @@ namespace castor3d
 		, TextureUnit const & depthTexture
 		, TextureUnit const & velocityTexture
 		, TextureLayoutSPtr resultTexture
+		, ShadowMapResult const & smDirectionalResult
+		, ShadowMapResult const & smPointResult
+		, ShadowMapResult const & smSpotResult
 		, Size const & size
 		, Scene & scene
 		, HdrConfigUbo & hdrConfigUbo
@@ -114,6 +117,9 @@ namespace castor3d
 			, m_size
 			, scene
 			, m_opaquePassResult
+			, smDirectionalResult
+			, smPointResult
+			, smSpotResult
 			, depthTexture.getTexture()->getDefaultView().getTargetView()
 			, m_opaquePass.getSceneUbo()
 			, m_gpInfoUbo ) }

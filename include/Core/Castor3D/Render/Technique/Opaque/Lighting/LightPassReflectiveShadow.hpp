@@ -6,6 +6,9 @@ See LICENSE file in root folder
 
 #include "LightPassShadow.hpp"
 
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/RsmGIPass.hpp"
 
 namespace castor3d
@@ -34,14 +37,52 @@ namespace castor3d
 		 *\param[in]	gpInfoUbo	L'UBO de la geometry pass.
 		 */
 		LightPassReflectiveShadow( Engine & engine
+			, LightCache const & lightCache
+			, OpaquePassResult const & gpResult
+			, ShadowMapResult const & smResult
 			, LightPassResult const & lpResult
 			, GpInfoUbo const & gpInfoUbo )
-			: my_shadow_pass_type{ engine
+			: LightPassShadow< LtType >{ engine
 				, lpResult
+				, gpInfoUbo }
+			, m_rsmGiPass{ engine
+				, lightCache
+				, LtType
+				, {
+					lpResult[LpTexture::eDepth].getTexture()->getWidth(),
+					lpResult[LpTexture::eDepth].getTexture()->getHeight(),
+				}
 				, gpInfoUbo
-				, true }
-			, m_rsmGiPass{ }
+				, gpResult
+				, smResult
+				, lpResult }
 		{
+		}
+
+		ashes::Semaphore const & render( uint32_t index
+			, ashes::Semaphore const & toWait )override
+		{
+			auto result = &toWait;
+			result = &my_pass_type::render( index, *result );
+			result = &m_rsmGiPass.compute( *result );
+			return *result;
+		}
+
+	protected:
+		void doUpdate( bool first
+			, castor::Size const & size
+			, Light const & light
+			, Camera const & camera
+			, ShadowMap const * shadowMap
+			, uint32_t shadowMapIndex )override
+		{
+			my_pass_type::doUpdate( first
+				, size
+				, light
+				, camera
+				, shadowMap
+				, shadowMapIndex );
+			m_rsmGiPass.update( light );
 		}
 
 	private:

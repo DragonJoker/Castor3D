@@ -60,9 +60,11 @@ namespace castor3d
 	*/
 	struct RsmGIConfig
 	{
+		castor::Matrix4x4f lightViewProj;
 		float intensity;
 		float maxRadius;
-		float sampleCount;
+		uint32_t sampleCount;
+		uint32_t index;
 	};
 	/**
 	*\~english

@@ -595,6 +595,9 @@ namespace castor3d
 			, m_depthBuffer
 			, m_renderTarget.getVelocity()
 			, m_colourTexture
+			, m_directionalShadowMap->getShadowPassResult()
+			, m_pointShadowMap->getShadowPassResult()
+			, m_spotShadowMap->getShadowPassResult()
 			, m_renderTarget.getSize()
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo

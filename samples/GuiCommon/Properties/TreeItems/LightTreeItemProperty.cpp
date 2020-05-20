@@ -23,12 +23,12 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
 		static wxString PROPERTY_LIGHT_COLOUR = _( "Colour" );
-		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensity" );
+		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 		static wxString PROPERTY_CATEGORY_SHADOW = _( "Shadow:" );
-		static wxString PROPERTY_SHADOW_ENABLED = _( "Enabled" );
+		static wxString PROPERTY_SHADOW_ENABLED = _( "Enable Shadows" );
 		static wxString PROPERTY_SHADOW_TYPE = _( "Type" );
 		static wxString PROPERTY_SHADOW_TYPE_NONE = _( "None" );
 		static wxString PROPERTY_SHADOW_TYPE_RAW = _( "Raw" );
@@ -40,6 +40,11 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
 		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
 		static wxString PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
+		static wxString PROPERTY_CATEGORY_RSM = _( "Reflective Shadow Maps" );
+		static wxString PROPERTY_SHADOW_RSM_ENABLED = _( "Enable RSM" );
+		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
+		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
+		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool editable, Light & light )
@@ -50,7 +55,7 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
 		PROPERTY_LIGHT_COLOUR = _( "Colour" );
-		PROPERTY_LIGHT_INTENSITY = _( "Intensity" );
+		PROPERTY_LIGHT_INTENSITY = _( "Intensities" );
 		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
@@ -67,6 +72,11 @@ namespace GuiCommon
 		PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
 		PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
 		PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR = _( "Volumetric Scattering Factor" );
+		PROPERTY_CATEGORY_RSM = _( "Reflective Shadow Maps" );
+		PROPERTY_SHADOW_RSM_ENABLED = _( "Enable RSM" );
+		PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
+		PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
+		PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
 
 		CreateTreeItemMenu();
 	}
@@ -181,6 +191,22 @@ namespace GuiCommon
 					, "Only for directional light types" );
 				onShadowVolumetricScatteringFactorChange( property->GetValue() );
 			}
+			else if ( property->GetName() == PROPERTY_SHADOW_RSM_ENABLED )
+			{
+				onRsmEnableChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_RSM_INTENSITY )
+			{
+				onRsmIntensityChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_RSM_MAX_RADIUS )
+			{
+				onRsmMaxRadiusChange( property->GetValue() );
+			}
+			else if ( property->GetName() == PROPERTY_SHADOW_RSM_SAMPLE_COUNT )
+			{
+				onRsmSampleCountChange( property->GetValue() );
+			}
 		}
 	}
 
@@ -224,6 +250,13 @@ namespace GuiCommon
 			grid->Append( new wxIntProperty( PROPERTY_SHADOW_VOLUMETRIC_STEPS ) )->SetValue( long( m_light.getCategory()->getVolumetricSteps() ) );
 			grid->Append( new wxFloatProperty( PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR ) )->SetValue( m_light.getCategory()->getVolumetricScatteringFactor() );
 		}
+
+		auto & rsmConfig = m_light.getRsmConfig();
+		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RSM ) );
+		grid->Append( new wxBoolProperty( PROPERTY_SHADOW_RSM_ENABLED, PROPERTY_SHADOW_RSM_ENABLED ) )->SetValue( m_light.needsRsmShadowMaps() );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_RSM_INTENSITY, PROPERTY_SHADOW_RSM_INTENSITY ) )->SetValue( rsmConfig.intensity.value() );
+		grid->Append( new wxFloatProperty( PROPERTY_SHADOW_RSM_MAX_RADIUS, PROPERTY_SHADOW_RSM_MAX_RADIUS ) )->SetValue( rsmConfig.maxRadius.value() );
+		grid->Append( new wxIntProperty( PROPERTY_SHADOW_RSM_SAMPLE_COUNT, PROPERTY_SHADOW_RSM_SAMPLE_COUNT ) )->SetValue( int32_t( rsmConfig.sampleCount.value().value() ) );
 	}
 
 	void LightTreeItemProperty::onColourChange( RgbColour const & value )
@@ -336,6 +369,40 @@ namespace GuiCommon
 		doApplyChange( [value, this]()
 			{
 				m_light.setVolumetricScatteringFactor( float( value ) );
+			} );
+	}
+
+	void LightTreeItemProperty::onRsmEnableChange( bool value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.setRsmShadowMaps( value );
+			} );
+	}
+
+	void LightTreeItemProperty::onRsmIntensityChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.getRsmConfig().intensity = float( value );
+			} );
+	}
+
+	void LightTreeItemProperty::onRsmMaxRadiusChange( double value )
+	{
+		doApplyChange( [value, this]()
+			{
+				m_light.getRsmConfig().maxRadius = float( value );
+			} );
+	}
+
+	void LightTreeItemProperty::onRsmSampleCountChange( long value )
+	{
+		doApplyChange( [value, this]()
+			{
+				auto range = m_light.getRsmConfig().sampleCount.value();
+				range = value;
+				m_light.getRsmConfig().sampleCount = range;
 			} );
 	}
 }

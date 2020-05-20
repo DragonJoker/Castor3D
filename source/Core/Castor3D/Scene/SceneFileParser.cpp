@@ -462,13 +462,17 @@ namespace castor3d
 
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( m_mapShadowFilters ) } );
-		addParser( uint32_t( CSCNSection::eShadows ), cuT( "reflective" ), parserShadowsRsm, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "min_offset" ), parserShadowsMinOffset, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "max_slope_offset" ), parserShadowsMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_max" ), parserShadowsVarianceMax, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "variance_bias" ), parserShadowsVarianceBias, { makeParameter< ParameterType::eFloat >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eShadows ), cuT( "rsm" ), parserShadowsRsm );
+
+		addParser( uint32_t( CSCNSection::eRsm ), cuT( "intensity" ), parserRsmIntensity, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eRsm ), cuT( "max_radius" ), parserRsmMaxRadius, { makeParameter< ParameterType::eFloat >() } );
+		addParser( uint32_t( CSCNSection::eRsm ), cuT( "sample_count" ), parserRsmSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
 
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 		addParser( uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
@@ -870,6 +874,10 @@ namespace castor3d
 
 		case CSCNSection::eSsgi:
 			result = cuT( "ssgi" );
+			break;
+
+		case CSCNSection::eRsm:
+			result = cuT( "rsm" );
 			break;
 
 		default:
