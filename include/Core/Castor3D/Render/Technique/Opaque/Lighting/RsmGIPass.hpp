@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
 
 #include <ShaderAST/Shader.hpp>
 
@@ -22,9 +22,6 @@ namespace castor3d
 	class RsmGIPass
 		: public RenderQuad
 	{
-	public:
-		using Configuration = RsmGIConfig;
-
 	public:
 		/**
 		 *\~english
@@ -80,7 +77,7 @@ namespace castor3d
 		LightType m_lightType;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
-		UniformBufferUPtr< Configuration > m_rsmConfigUbo;
+		RsmConfigUbo m_rsmConfigUbo;
 		ashes::BufferPtr< castor::Point2f > m_rsmSamplesSsbo;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;

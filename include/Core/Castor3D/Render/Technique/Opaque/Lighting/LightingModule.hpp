@@ -53,22 +53,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Reflective Shadow Maps based GI UBO configuration.
-	*\~french
-	*\brief
-	*	Configuration de l'UBO du GI basé sur les Reflective Shadow Maps.
-	*/
-	struct RsmGIConfig
-	{
-		castor::Matrix4x4f lightViewProj;
-		float intensity;
-		float maxRadius;
-		uint32_t sampleCount;
-		uint32_t index;
-	};
-	/**
-	*\~english
-	*\brief
 	*	SSGI pass based on Reflective Shadow Maps.
 	*\~french
 	*\brief

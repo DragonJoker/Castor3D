@@ -83,6 +83,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 */
+		void upload( ashes::CommandBuffer const & cb )const;
+		/**
+		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
 		 *\param[in]	timer	The render pass timer.
 		 *\param[in]	index	The render pass index.
 		 *\~french
@@ -91,6 +98,19 @@ namespace castor3d
 		 *\param[in]	index	L'indice de passe de rendu.
 		 */
 		void upload( RenderPassTimer & timer
+			, uint32_t index )const;
+		/**
+		 *\~english
+		 *\brief		Uploads all GPU buffers to VRAM.
+		 *\param[in]	timer	The render pass timer.
+		 *\param[in]	index	The render pass index.
+		 *\~french
+		 *\brief		Met à jour tous les tampons GPU en VRAM.
+		 *\param[in]	timer	Le timer de passe de rendu.
+		 *\param[in]	index	L'indice de passe de rendu.
+		 */
+		void upload( ashes::CommandBuffer const & cb
+			, RenderPassTimer & timer
 			, uint32_t index )const;
 		/**
 		 *\~english

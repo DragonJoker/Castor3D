@@ -192,7 +192,8 @@ namespace castor3d
 		, VkPipelineStageFlags flags )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
 			, *commandBuffer
 			, data
@@ -256,7 +257,8 @@ namespace castor3d
 		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
 			, *commandBuffer
 			, data
@@ -328,7 +330,8 @@ namespace castor3d
 		CU_Require( size >= size_t( m_elemCount ) * m_elemSize
 			&& "Need a large enough buffer" );
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferDownload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		copyBuffer( getBuffer().getBuffer()
 			, stagingBuffer
 			, &getBuffer().getBuffer()

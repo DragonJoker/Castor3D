@@ -29,11 +29,13 @@
 #include "Castor3D/Shader/Shaders/GlslMetallicBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslSpecularBrdfLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -89,7 +91,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr get2DPixelShaderSource( RenderSystem const & renderSystem
+		ShaderPtr getDirectionalPixelShaderSource( RenderSystem const & renderSystem
 			, LightType lightType
 			, uint32_t width
 			, uint32_t height )
@@ -98,14 +100,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo rsmConfig{ writer, "RsmConfig", RsmCfgUboIdx, 0u };
-			auto c3d_lightViewProj = rsmConfig.declMember< Mat4 >( "c3d_lightViewProj" );
-			auto c3d_rsmIntensity = rsmConfig.declMember< Float >( "c3d_rsmIntensity" );
-			auto c3d_rsmRMax = rsmConfig.declMember< Float >( "c3d_rsmRMax" );
-			auto c3d_rsmSampleCount = rsmConfig.declMember< UInt >( "c3d_rsmSampleCount" );
-			auto c3d_rsmIndex = rsmConfig.declMember< UInt >( "c3d_rsmIndex" );
-			rsmConfig.end();
-
+			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
 			ArraySsboT< Vec2 > c3d_rsmSamples
 			{
 				writer,
@@ -115,7 +110,155 @@ namespace castor3d
 				RsmSamplesIdx,
 				0u
 			};
+			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
+			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
+			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
+			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
+			auto c3d_rsmNormalMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eNormalLinear ), RsmNormalsIdx, 0u );
+			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::ePosition ), RsmPositionIdx, 0u );
+			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( lightType, SmTexture::eFlux ), RsmFluxIdx, 0u );
+			auto in = writer.getIn();
 
+			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+
+			// Shader outputs
+			auto pxl_rsmGI = writer.declOutput< Vec3 >( "pxl_rsmGI", 0 );
+
+			// Utility functions
+			shader::Utils utils{ writer };
+			utils.declareCalcWSPosition();
+			utils.declareCalcVSPosition();
+
+			uint32_t index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+					, utils
+					, LightType::eDirectional
+					, ShadowType::eNone
+					, false // lightUbo
+					, false // volumetric
+					, true // rsm
+					, index );
+
+			auto reflectiveShadowMapping = writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
+				, [&]( Vec3 const & viewPosition
+					, Vec3 const & worldPosition
+					, Vec3 const & worldNormal )
+				{
+					auto cascadeIndex = writer.declLocale( "cascadeIndex"
+						, 0_u );
+					auto light = writer.declLocale( "light"
+						, lightingModel->getDirectionalLight( 0_i ) );
+					auto maxCount = writer.declLocale( "maxCount"
+						, max( light.m_cascadeCount, 1_u ) - 1_u );
+
+						// Get cascade index for the current fragment's view position
+					FOR( writer, UInt, i, 0u, i < maxCount, ++i )
+					{
+						IF( writer, viewPosition.z() < light.m_splitDepths[i] )
+						{
+							cascadeIndex = i + 1_u;
+						}
+						FI;
+					}
+					ROF;
+
+					auto indirectIllumination = writer.declLocale( "indirectIllumination"
+						, vec3( 0.0_f ) );
+					auto rMax = writer.declLocale< Float >( "rMax"
+						, c3d_rsmRMax );
+					auto textureSpacePosition = writer.declLocale< Vec4 >( "textureSpacePosition"
+						, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );
+					textureSpacePosition.x() = sdw::fma( textureSpacePosition.x(), 0.5_f, 0.5_f );
+					textureSpacePosition.y() = sdw::fma( textureSpacePosition.y(), 0.5_f, 0.5_f );
+					textureSpacePosition /= textureSpacePosition.w();
+
+					FOR( writer, UInt, i, 0_u, i < c3d_rsmSampleCount, ++i )
+					{
+						auto rnd = writer.declLocale( "rnd"
+							, c3d_rsmSamples[i].xy() );
+
+						auto coords = writer.declLocale( "coords"
+							, vec3( textureSpacePosition.xy() + rMax * rnd
+								, writer.cast< Float >( cascadeIndex ) ) );
+
+						auto vplPositionWS = writer.declLocale( "vplPositionWS"
+							, texture( c3d_rsmPositionMap, coords ).xyz() );
+						auto vplNormalWS = writer.declLocale( "vplNormalWS"
+							, texture( c3d_rsmNormalMap, coords ).xyz() );
+						auto vplFlux = writer.declLocale( "vplFlux"
+							, texture( c3d_rsmFluxMap, coords ).xyz() );
+						auto dot1 = writer.declLocale( "dot1"
+							, max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) ) );
+						auto dot2 = writer.declLocale( "dot2"
+							, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
+						auto diff = writer.declLocale( "diff"
+							, worldPosition - vplPositionWS );
+						auto sqdist = writer.declLocale( "sqdist"
+							, dot( diff, diff ) );
+
+						auto result = writer.declLocale( "result"
+							, vplFlux * ( dot1 * dot2 ) / ( sqdist * sqdist ) );
+
+						result *= rnd.x() * rnd.x();
+						indirectIllumination += result;
+					}
+					ROF;
+
+					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
+						, vec3( 0.0_f )
+						, vec3( light.m_lightBase.m_intensity.x() ) ) );
+				}
+				, InVec3{ writer, "viewPosition" }
+				, InVec3{ writer, "worldPosition" }
+				, InVec3{ writer, "worldNormal" } );
+
+			writer.implementFunction< sdw::Void >( "main"
+				, [&]()
+				{
+					auto texCoord = writer.declLocale( "texCoord"
+						, vtx_texture );
+					auto depth = writer.declLocale( "depth"
+						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+
+					IF( writer, depth == 1.0_f )
+					{
+						writer.discard();
+					}
+					FI;
+
+					auto data1 = writer.declLocale( "data1"
+						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, utils.calcVSPosition( texCoord, depth, c3d_mtxInvProj ) );
+					auto wsPosition = writer.declLocale( "wsPosition"
+						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
+					auto wsNormal = writer.declLocale( "wsNormal"
+						, data1.xyz() );
+					pxl_rsmGI = reflectiveShadowMapping( vsPosition, wsPosition, wsNormal );
+				} );
+
+			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
+		ShaderPtr getSpotPixelShaderSource( RenderSystem const & renderSystem
+			, LightType lightType
+			, uint32_t width
+			, uint32_t height )
+		{
+			using namespace sdw;
+			FragmentWriter writer;
+
+			// Shader inputs
+			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
+			ArraySsboT< Vec2 > c3d_rsmSamples
+			{
+				writer,
+				"c3d_rsmSamples",
+				writer.getTypesCache().getVec2F(),
+				type::MemoryLayout::eStd430,
+				RsmSamplesIdx,
+				0u
+			};
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
@@ -134,26 +277,31 @@ namespace castor3d
 			shader::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 
+			uint32_t index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+				, utils
+				, LightType::eSpot
+				, ShadowType::eNone
+				, false // lightUbo
+				, false // volumetric
+				, true // rsm
+				, index );
+
 			auto reflectiveShadowMapping = writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
 				, [&]( Vec3 const & worldPosition
 					, Vec3 const & worldNormal )
 				{
-					auto textureSpacePosition = writer.declLocale< Vec4 >( "textureSpacePosition"
+					auto light = writer.declLocale( "light"
+						, lightingModel->getSpotLight( 0_i ) );
+					auto textureSpacePosition = writer.declLocale( "textureSpacePosition"
 						, c3d_lightViewProj * vec4( worldPosition, 1.0 ) );
-
-					if ( lightType != LightType::eDirectional )
-					{
-						textureSpacePosition.xyz() /= textureSpacePosition.w();
-					}
-
-					auto ssCenter = writer.declLocale( "ssCenter"
-						, ivec2( in.fragCoord.xy() ) );
-					auto randomPatternRotationAngle = writer.declLocale( "randomPatternRotationAngle"
-						, 10.0_f * writer.cast< Float >( ( 3 * ssCenter.x() ) ^ ( ssCenter.y() + ssCenter.x() * ssCenter.y() ) ) );
+					textureSpacePosition.x() = sdw::fma( textureSpacePosition.x(), 0.5_f, 0.5_f );
+					textureSpacePosition.y() = sdw::fma( textureSpacePosition.y(), 0.5_f, 0.5_f );
+					textureSpacePosition /= textureSpacePosition.w();
 					auto indirectIllumination = writer.declLocale( "indirectIllumination"
 						, vec3( 0.0_f ) );
-					auto rMax = writer.declLocale< Float >( "rMax"
-						, c3d_rsmRMax );
+					auto rMax = writer.declLocale( "rMax"
+						, vec2( c3d_rsmRMax ) );
 
 					FOR( writer, UInt, i, 0_u, i < c3d_rsmSampleCount, ++i )
 					{
@@ -161,20 +309,25 @@ namespace castor3d
 							, c3d_rsmSamples[i].xy() );
 
 						auto coords = writer.declLocale( "coords"
-							, textureSpacePosition.xy() + rMax * rnd );
+							, vec3( sdw::fma( rnd, rMax, textureSpacePosition.xy() ), c3d_rsmIndex ) );
 
 						auto vplPositionWS = writer.declLocale( "vplPositionWS"
-							, texture( c3d_rsmPositionMap, vec3( coords, c3d_rsmIndex ) ).xyz() );
+							, texture( c3d_rsmPositionMap, coords ).xyz() );
 						auto vplNormalWS = writer.declLocale( "vplNormalWS"
-							, texture( c3d_rsmNormalMap, vec3( coords, c3d_rsmIndex ) ).xyz() );
-						auto flux = writer.declLocale( "flux"
-							, texture( c3d_rsmFluxMap, vec3( coords, c3d_rsmIndex ) ).xyz() );
+							, texture( c3d_rsmNormalMap, coords ).xyz() );
+						auto vplFlux = writer.declLocale( "vplFlux"
+							, texture( c3d_rsmFluxMap, coords ).xyz() );
+						auto dot1 = writer.declLocale( "dot1"
+							, max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) ) );
+						auto dot2 = writer.declLocale( "dot2"
+							, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
+						auto diff = writer.declLocale( "diff"
+							, worldPosition - vplPositionWS );
+						auto sqdist = writer.declLocale( "sqdist"
+							, dot( diff, diff ) );
 
 						auto result = writer.declLocale( "result"
-							, flux
-							* ( ( max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) )
-								* max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) )
-								/ pow( length( worldPosition - vplPositionWS ), 4.0_f ) ) );
+							, vplFlux * ( dot1 * dot2 ) / ( sqdist * sqdist ) );
 
 						result *= rnd.x() * rnd.x();
 						indirectIllumination += result;
@@ -183,7 +336,7 @@ namespace castor3d
 
 					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
 						, vec3( 0.0_f )
-						, vec3( 1.0_f ) ) );
+						, vec3( light.m_lightBase.m_intensity.x() ) ) );
 				}
 				, InVec3{ writer, "worldPosition" }
 				, InVec3{ writer, "worldNormal" } );
@@ -193,21 +346,35 @@ namespace castor3d
 				{
 					auto texCoord = writer.declLocale( "texCoord"
 						, vtx_texture );
-					auto data1 = writer.declLocale( "data1"
-						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 					auto depth = writer.declLocale( "depth"
 						, textureLod( c3d_mapDepth, texCoord, 0.0_f ).x() );
+
+					IF( writer, depth == 1.0_f )
+					{
+						writer.discard();
+					}
+					FI;
+
+					auto data1 = writer.declLocale( "data1"
+						, textureLod( c3d_mapData1, texCoord, 0.0_f ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, utils.calcWSPosition( texCoord, depth, c3d_mtxInvViewProj ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, data1.xyz() );
+
+					IF( writer, dot( wsNormal, wsNormal ) == 0 )
+					{
+						writer.discard();
+					}
+					FI;
+
 					pxl_rsmGI = reflectiveShadowMapping( wsPosition, wsNormal );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getCubePixelShaderSource( RenderSystem const & renderSystem
+		ShaderPtr getPointPixelShaderSource( RenderSystem const & renderSystem
 			, LightType lightType
 			, uint32_t width
 			, uint32_t height )
@@ -216,14 +383,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
-			Ubo rsmConfig{ writer, "RsmConfig", RsmCfgUboIdx, 0u };
-			auto c3d_lightViewProj = rsmConfig.declMember< Mat4 >( "c3d_lightViewProj" );
-			auto c3d_rsmIntensity = rsmConfig.declMember< Float >( "c3d_rsmIntensity" );
-			auto c3d_rsmRMax = rsmConfig.declMember< Float >( "c3d_rsmRMax" );
-			auto c3d_rsmSampleCount = rsmConfig.declMember< UInt >( "c3d_rsmSampleCount" );
-			auto c3d_rsmIndex = rsmConfig.declMember< UInt >( "c3d_rsmIndex" );
-			rsmConfig.end();
-
+			UBO_RSM_CONFIG( writer, RsmCfgUboIdx, 0u );
 			ArraySsboT< Vec2 > c3d_rsmSamples
 			{
 				writer,
@@ -233,7 +393,6 @@ namespace castor3d
 				RsmSamplesIdx,
 				0u
 			};
-
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
 			auto c3d_sLights = writer.declSampledImage< FImgBufferRgba32 >( "c3d_sLights", LightsMapIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
@@ -251,18 +410,22 @@ namespace castor3d
 			shader::Utils utils{ writer };
 			utils.declareCalcWSPosition();
 
+			uint32_t index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+				, utils
+				, LightType::ePoint
+				, ShadowType::eNone
+				, false // lightUbo
+				, false // volumetric
+				, true // rsm
+				, index );
+
 			auto reflectiveShadowMapping = writer.implementFunction< Vec3 >( "reflectiveShadowMapping"
 				, [&]( Vec3 const & worldPosition
 					, Vec3 const & worldNormal )
 				{
-					auto textureSpacePosition = writer.declLocale< Vec4 >( "textureSpacePosition"
-						, c3d_lightViewProj * vec4( worldPosition, 1.0 ) );
-
-					if ( lightType != LightType::eDirectional )
-					{
-						textureSpacePosition.xyz() /= textureSpacePosition.w();
-					}
-
+					auto light = writer.declLocale( "light"
+						, lightingModel->getPointLight( 0_i ) );
 					auto indirectIllumination = writer.declLocale( "indirectIllumination"
 						, vec3( 0.0_f ) );
 					auto rMax = writer.declLocale< Float >( "rMax"
@@ -270,33 +433,35 @@ namespace castor3d
 
 					FOR( writer, UInt, i, 0_u, i < c3d_rsmSampleCount, ++i )
 					{
-						//auto rnd = writer.declLocale( "rnd"
-						//	, c3d_rsmSamples[i].xy() );
+						auto rnd = writer.declLocale( "rnd"
+							, c3d_rsmSamples[i].xy() );
+						auto vertexToLight = writer.declLocale( "vertexToLight"
+							, worldPosition - light.m_position );
+						auto coords = writer.declLocale( "coords"
+							, vec4( vec3( vertexToLight.xy() + rMax * rnd, vertexToLight.z() )
+								, writer.cast< Float >( c3d_rsmIndex ) ) );
 
-						//auto coords = writer.declLocale( "coords"
-						//	, textureSpacePosition.xy() + rMax * rnd );
+						auto vplPositionWS = writer.declLocale( "vplPositionWS"
+							, texture( c3d_rsmPositionMap, coords ).xyz() );
+						auto vplNormalWS = writer.declLocale( "vplNormalWS"
+							, texture( c3d_rsmNormalMap, coords ).xyz() );
+						auto flux = writer.declLocale( "flux"
+							, texture( c3d_rsmFluxMap, coords ).xyz() );
 
-						//auto vplPositionWS = writer.declLocale( "vplPositionWS"
-						//	, texture( c3d_rsmPositionMap, vec4( coords, c3d_rsmIndex ) ).xyz() );
-						//auto vplNormalWS = writer.declLocale( "vplNormalWS"
-						//	, texture( c3d_rsmNormalMap, vec4( coords, c3d_rsmIndex ) ).xyz() );
-						//auto flux = writer.declLocale( "flux"
-						//	, texture( c3d_rsmFluxMap, vec4( coords, c3d_rsmIndex ) ).xyz() );
+						auto result = writer.declLocale( "result"
+							, flux
+							* ( ( max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) )
+								* max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) )
+								/ pow( length( worldPosition - vplPositionWS ), 4.0_f ) ) );
 
-						//auto result = writer.declLocale( "result"
-						//	, flux
-						//	* ( ( max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) )
-						//		* max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) )
-						//		/ pow( length( worldPosition - vplPositionWS ), 4.0_f ) ) );
-
-						//result *= rnd.x() * rnd.x();
-						//indirectIllumination += result;
+						result *= rnd.x() * rnd.x();
+						indirectIllumination += result;
 					}
 					ROF;
 
 					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
 						, vec3( 0.0_f )
-						, vec3( 1.0_f ) ) );
+						, vec3( light.m_lightBase.m_intensity.x() ) ) );
 				}
 				, InVec3{ writer, "worldPosition" }
 				, InVec3{ writer, "worldNormal" } );
@@ -328,13 +493,17 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
+				return getDirectionalPixelShaderSource( *engine.getRenderSystem()
+					, lightType
+					, width
+					, height );
 			case LightType::eSpot:
-				return get2DPixelShaderSource( *engine.getRenderSystem()
+				return getSpotPixelShaderSource( *engine.getRenderSystem()
 					, lightType
 					, width
 					, height );
 			case LightType::ePoint:
-				return getCubePixelShaderSource( *engine.getRenderSystem()
+				return getPointPixelShaderSource( *engine.getRenderSystem()
 					, lightType
 					, width
 					, height );
@@ -491,11 +660,7 @@ namespace castor3d
 		, m_gpInfo{ gpInfo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( engine, lightType, size.width, size.height ) }
-		, m_rsmConfigUbo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
-			, 1u
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "RsmConfig" ) }
+		, m_rsmConfigUbo{ engine }
 		, m_rsmSamplesSsbo{ makeBuffer< castor::Point2f >( getCurrentRenderDevice( engine )
 			, RsmConfig::MaxRange
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -510,12 +675,12 @@ namespace castor3d
 		{
 			std::random_device rd;
 			std::mt19937 rng( rd() );
-			std::uniform_int_distribution< int > dist( 0, 255 );
+			std::uniform_int_distribution< int > dist( 0, 512 );
 
 			for ( auto & point : makeArrayView( buffer, buffer + RsmConfig::MaxRange ) )
 			{
-				point[0] = dist( rng ) / 255.0f;
-				point[1] = dist( rng ) / 255.0f;
+				point[0] = ( dist( rng ) / 256.0f ) - 1.0f;
+				point[1] = ( dist( rng ) / 256.0f ) - 1.0f;
 			}
 
 			m_rsmSamplesSsbo->flush( 0u, RsmConfig::MaxRange );
@@ -633,35 +798,15 @@ namespace castor3d
 
 	void RsmGIPass::update( Light const & light )
 	{
-		auto & config = light.getRsmConfig();
-		auto & data = m_rsmConfigUbo->getData();
-
-		switch ( light.getLightType() )
-		{
-		case LightType::eDirectional:
-			data.lightViewProj = light.getDirectionalLight()->getLightSpaceTransform( 0u );
-			break;
-		case LightType::ePoint:
-			//data.lightViewProj = light.getPointLight()->getLightSpaceTransform( 0u );
-			break;
-		case LightType::eSpot:
-			data.lightViewProj = light.getSpotLight()->getLightSpaceTransform();
-			break;
-		}
-
-		data.intensity = config.intensity;
-		data.maxRadius = config.maxRadius;
-		data.sampleCount = config.sampleCount.value().value();
-		data.index = light.getShadowMapIndex();
-		m_rsmConfigUbo->upload();
+		m_rsmConfigUbo.update( light );
 	}
 
 	void RsmGIPass::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
 		, ashes::DescriptorSet & descriptorSet )
 	{
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( RsmCfgUboIdx )
-			, m_rsmConfigUbo->getBuffer()
-			, 0u
+			, *m_rsmConfigUbo.getUbo().buffer
+			, m_rsmConfigUbo.getUbo().offset
 			, 1u );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( RsmSamplesIdx )
 			, m_rsmSamplesSsbo->getBuffer()

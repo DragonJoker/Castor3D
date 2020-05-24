@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -437,6 +438,11 @@ namespace castor3d
 			return *m_hdrConfigUboPool;
 		}
 
+		inline UniformBufferPool< RsmUboConfiguration > & getRsmConfigUboPool()
+		{
+			return *m_rsmConfigUboPool;
+		}
+
 		inline UniformBufferPool< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
 		{
 			return *m_modelMatrixUboPool;
@@ -517,8 +523,10 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
+		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
 		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
+		UniformBufferPoolSPtr< RsmUboConfiguration > m_rsmConfigUboPool;
 		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
 		UniformBufferPoolSPtr< ShadowMapUboConfiguration > m_shadowMapUboPool;
 	};
