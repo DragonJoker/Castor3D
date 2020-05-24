@@ -316,9 +316,6 @@ namespace castor3d
 	{
 		if ( !m_texturesReduced )
 		{
-			TextureUnitSPtr opacitySource;
-			PxBufferBaseSPtr opacityImage;
-
 			for ( auto & unit : m_textureUnits )
 			{
 				auto configuration = unit->getConfiguration();
@@ -423,106 +420,31 @@ namespace castor3d
 			} );
 	}
 
-	std::set< TextureUnitSPtr > Pass::getTextureUnits( TextureFlags mask )const
+	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
-		std::set< TextureUnitSPtr > units;
-		auto listTexture = [this, &units]( std::function< uint32_t( TextureConfiguration const & ) > getMask )
-		{
-			auto it = std::find_if( begin()
-				, end()
-				, [&getMask]( TextureUnitSPtr unit )
-				{
-					return getMask( unit->getConfiguration() ) != 0u;
-				} );
+		TextureUnitPtrArray result;
 
-			if ( it != end() )
+		for ( auto & unit : m_textureUnits )
+		{
+			auto & config = unit->getConfiguration();
+
+			if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] ) 
+				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eRefraction ) && config.environment )
+				|| ( checkFlag( mask, TextureFlag::eReflection ) && config.environment ) )
 			{
-				units.insert( *it );
+				result.push_back( unit );
 			}
-		};
-
-		if ( checkFlag( mask, TextureFlag::eAlbedo ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.colourMask[0];
-				} );
 		}
 
-		if ( checkFlag( mask, TextureFlag::eSpecular ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.specularMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eGlossiness ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.glossinessMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eOpacity ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.opacityMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eEmissive ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.emissiveMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eNormal ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.normalMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eHeight ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.heightMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eOcclusion ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.occlusionMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eTransmittance ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.transmittanceMask[0];
-				} );
-		}
-
-		if ( checkFlag( mask, TextureFlag::eReflection )
-			|| checkFlag( mask, TextureFlag::eRefraction ) )
-		{
-			listTexture( []( TextureConfiguration const & lookup )
-				{
-					return lookup.environment == 0u;
-				} );
-		}
-
-		return units;
+		return result;
 	}
 
 	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const

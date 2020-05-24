@@ -111,16 +111,6 @@ namespace castor3d
 		m_passes[index].pass->updateDeviceDependent();
 	}
 
-	ashes::ImageView const & ShadowMapSpot::getLinearView( uint32_t index )const
-	{
-		return m_result[SmTexture::eNormalLinear].getTexture()->getLayer2DView( index ).getSampledView();
-	}
-
-	ashes::ImageView const & ShadowMapSpot::getVarianceView( uint32_t index )const
-	{
-		return m_result[SmTexture::eVariance].getTexture()->getLayer2DView( index ).getSampledView();
-	}
-
 	void ShadowMapSpot::doInitialise()
 	{
 		auto & device = getCurrentRenderDevice( *this );

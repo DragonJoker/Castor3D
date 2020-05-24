@@ -106,7 +106,7 @@ namespace castor3d
 			, size
 			, std::move( fbattaches ) );
 
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "DeptyhPass" );
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "DepthPass" );
 	}
 
 	DepthPass::~DepthPass()

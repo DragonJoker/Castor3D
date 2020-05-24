@@ -44,7 +44,7 @@
 using namespace castor;
 using namespace castor3d;
 
-#define C3D_UseLightPassFence 0
+#define C3D_UseLightPassFence 1
 #define C3D_DisableSSSTransmittance 1
 
 namespace castor3d
@@ -333,6 +333,11 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( m_engine );
 
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		m_commandBuffer->beginDebugBlock(
+			{
+				"Deferred - " + m_name,
+				makeFloatArray( m_engine.getNextRainbowColour() ),
+			} );
 		m_timer->beginPass( *m_commandBuffer, index );
 		m_timer->notifyPassRender( index );
 
@@ -355,6 +360,7 @@ namespace castor3d
 
 		m_commandBuffer->endRenderPass();
 		m_timer->endPass( *m_commandBuffer, index );
+		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
 #if C3D_UseLightPassFence
@@ -490,19 +496,32 @@ namespace castor3d
 
 		if ( shadowMap )
 		{
+			auto & smResult = shadowMap->getShadowPassResult();
 			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
 				{
 					index++,
 					0u,
 					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{ { shadowMap->getLinearSampler(), shadowMap->getLinearView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
+					{
+						{
+							shadowMap->getSampler( SmTexture::eNormalLinear ),
+							shadowMap->getView( SmTexture::eNormalLinear ),
+							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						}
+					}
 				} );
 			pipeline.textureWrites.push_back( ashes::WriteDescriptorSet
 				{
 					index++,
 					0u,
 					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-					{ { shadowMap->getVarianceSampler(), shadowMap->getVarianceView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } }
+					{
+						{
+							shadowMap->getSampler( SmTexture::eVariance ),
+							shadowMap->getView( SmTexture::eVariance ),
+							VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						}
+					}
 				} );
 		}
 
@@ -589,17 +608,11 @@ namespace castor3d
 					, VkBool32( VK_FALSE )
 					, 0u
 					, 0u ) );
-			commandBuffer.beginDebugBlock(
-				{
-					"Deferred - " + m_name,
-					makeFloatArray( m_engine.getNextRainbowColour() ),
-				} );
 			commandBuffer.setViewport( ashes::makeViewport( dimensions ) );
 			commandBuffer.setScissor( ashes::makeScissor( dimensions ) );
 			commandBuffer.bindDescriptorSets( { *pipeline.uboDescriptorSet, *pipeline.textureDescriptorSet }, pipeline.program->getPipelineLayout() );
 			commandBuffer.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 			pipeline.program->render( commandBuffer, getCount(), first, m_offset );
-			commandBuffer.endDebugBlock();
 			commandBuffer.end();
 
 			pipeline.isFirstSet = pipeline.isFirstSet || first;

@@ -603,7 +603,8 @@ namespace castor3d
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardUbo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -621,7 +622,8 @@ namespace castor3d
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -639,7 +641,8 @@ namespace castor3d
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -667,7 +670,8 @@ namespace castor3d
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -707,7 +711,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -718,7 +723,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -729,7 +735,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -740,7 +747,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -1172,8 +1180,10 @@ namespace castor3d
 					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = device->createDescriptorSetLayout( getName()
+						, std::move( uboBindings ) );
+					auto texLayout = device->createDescriptorSetLayout( getName()
+						, std::move( texBindings ) );
 					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );

@@ -163,23 +163,15 @@ namespace castor3d
 		return result;
 	}
 
-	ashes::Sampler const & ShadowMap::getLinearSampler( uint32_t index )const
+	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture
+		, uint32_t index )const
 	{
-		return m_result[SmTexture::eNormalLinear].getSampler()->getSampler();
+		return m_result[texture].getSampler()->getSampler();
 	}
 
-	ashes::Sampler const & ShadowMap::getVarianceSampler( uint32_t index )const
+	ashes::ImageView const & ShadowMap::getView( SmTexture texture
+		, uint32_t index )const
 	{
-		return m_result[SmTexture::eVariance].getSampler()->getSampler();
-	}
-
-	ashes::ImageView const & ShadowMap::getLinearView( uint32_t index )const
-	{
-		return m_result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView();
-	}
-
-	ashes::ImageView const & ShadowMap::getVarianceView( uint32_t index )const
-	{
-		return m_result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView();
+		return m_result[texture].getTexture()->getDefaultView().getSampledView();
 	}
 }

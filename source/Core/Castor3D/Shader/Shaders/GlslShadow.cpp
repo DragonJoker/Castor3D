@@ -53,16 +53,10 @@ namespace castor3d
 				} );
 			auto c3d_mapNormalDepthDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
 			auto c3d_mapVarianceDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
-			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapNormalDepthSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
-			auto c3d_mapVarianceSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
-			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
 			auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
 			auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
-			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
+			auto c3d_mapNormalDepthSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
+			auto c3d_mapVarianceSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
 			m_utils.declareInvertVec2Y();
 			doDeclareGetRandom();
 			doDeclareTextureProj();
@@ -97,8 +91,6 @@ namespace castor3d
 				} );
 			auto c3d_mapNormalDepthDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthDirectional, index++, 1u );
 			auto c3d_mapVarianceDirectional = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceDirectional, index++, 1u );
-			auto c3d_mapPositionDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionDirectional, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxDirectional = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxDirectional, rsm ? index++ : 0u, 1u, rsm );
 			m_utils.declareInvertVec2Y();
 			doDeclareGetRandom();
 
@@ -137,8 +129,6 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			auto c3d_mapNormalDepthPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapNormalDepthPoint, index++, 1u );
 			auto c3d_mapVariancePoint = m_writer.declSampledImage< FImgCubeArrayRg32 >( MapVariancePoint, index++, 1u );
-			auto c3d_mapPositionPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapPositionPoint, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxPoint = m_writer.declSampledImage< FImgCubeArrayRgba32 >( MapFluxPoint, rsm ? index++ : 0u, 1u, rsm );
 			doDeclareGetRandom();
 
 			switch ( type )
@@ -175,8 +165,6 @@ namespace castor3d
 			m_writer.inlineComment( "//////////////////////////////////////////////////////////////////////////////" );
 			auto c3d_mapNormalDepthSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapNormalDepthSpot, index++, 1u );
 			auto c3d_mapVarianceSpot = m_writer.declSampledImage< FImg2DArrayRg32 >( MapVarianceSpot, index++, 1u );
-			auto c3d_mapPositionSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapPositionSpot, rsm ? index++ : 0u, 1u, rsm );
-			auto c3d_mapFluxSpot = m_writer.declSampledImage< FImg2DArrayRgba32 >( MapFluxSpot, rsm ? index++ : 0u, 1u, rsm );
 			doDeclareGetRandom();
 
 			switch ( type )

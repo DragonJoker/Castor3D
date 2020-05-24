@@ -495,6 +495,15 @@ namespace castor3d
 						, sdw::fma( light.m_attenuation.y()
 							, distance
 							, light.m_attenuation.x() ) ) );
+				auto lightDirection = writer.declLocale( "lightDirection"
+					, lightToVertex / distance );
+				auto spotFactor = writer.declLocale( "spotFactor"
+					, dot( lightDirection, -light.m_direction ) );
+				spotFactor = max( 0.0_f
+					, sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
+						, 1.0_f ) );
+				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( diffuse
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x() )
@@ -503,7 +512,7 @@ namespace castor3d
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
-				pxl_normalLinear.xyz() = normal;
+				pxl_normalLinear.xyz() = spotFactor * normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
@@ -650,6 +659,15 @@ namespace castor3d
 						, sdw::fma( light.m_attenuation.y()
 							, distance
 							, light.m_attenuation.x() ) ) );
+				auto lightDirection = writer.declLocale( "lightDirection"
+					, lightToVertex / distance );
+				auto spotFactor = writer.declLocale( "spotFactor"
+					, dot( lightDirection, -light.m_direction ) );
+				spotFactor = max( 0.0_f
+					, sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
+						, 1.0_f ) );
+				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x() )
@@ -658,7 +676,7 @@ namespace castor3d
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
-				pxl_normalLinear.xyz() = normal;
+				pxl_normalLinear.xyz() = spotFactor * normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;
@@ -805,6 +823,15 @@ namespace castor3d
 						, sdw::fma( light.m_attenuation.y()
 							, distance
 							, light.m_attenuation.x() ) ) );
+				auto lightDirection = writer.declLocale( "lightDirection"
+					, lightToVertex / distance );
+				auto spotFactor = writer.declLocale( "spotFactor"
+					, dot( lightDirection, -light.m_direction ) );
+				spotFactor = max( 0.0_f
+					, sdw::fma( ( spotFactor - 1.0_f )
+						, 1.0_f / ( 1.0_f - light.m_cutOff )
+						, 1.0_f ) );
+				spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 				pxl_flux.rgb() = ( albedo
 						* light.m_lightBase.m_colour
 						* light.m_lightBase.m_intensity.x() )
@@ -813,7 +840,7 @@ namespace castor3d
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
 				pxl_normalLinear.w() = depth;
-				pxl_normalLinear.xyz() = normal;
+				pxl_normalLinear.xyz() = spotFactor * normal;
 				pxl_position.xyz() = vtx_worldPosition;
 
 				pxl_variance.x() = depth;

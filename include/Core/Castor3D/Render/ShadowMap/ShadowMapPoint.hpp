@@ -63,8 +63,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
+		C3D_API ashes::ImageView const & getView( SmTexture texture
+			, uint32_t index )const override;
 
 		inline TextureUnit const & getTexture()const
 		{
@@ -95,11 +95,7 @@ namespace castor3d
 	private:
 		struct FrameBuffer
 		{
-			ashes::ImageView depthView;
-			ashes::ImageView linearView;
-			ashes::ImageView varianceView;
-			ashes::ImageView positionView;
-			ashes::ImageView fluxView;
+			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 			ashes::FrameBufferPtr frameBuffer;
 		};
 		struct PassData
@@ -108,11 +104,7 @@ namespace castor3d
 			std::array< FrameBuffer, 6u > frameBuffers;
 			ashes::SemaphorePtr finished;
 			ShadowType shadowType;
-			ashes::ImageView depthView;
-			ashes::ImageView linearView;
-			ashes::ImageView varianceView;
-			ashes::ImageView positionView;
-			ashes::ImageView fluxView;
+			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 		};
 		std::vector< PassData > m_passesData;
 	};

@@ -23,7 +23,7 @@ namespace castor3d
 		{
 			{
 				cuT( "Depth" ),
-				cuT( "LinearNormal" ),
+				cuT( "NormalDepth" ),
 				cuT( "Variance" ),
 				cuT( "Position" ),
 				cuT( "Flux" ),

@@ -107,14 +107,10 @@ namespace castor3d
 		}
 	}
 
-	ashes::ImageView const & ShadowMapPoint::getLinearView( uint32_t index )const
+	ashes::ImageView const & ShadowMapPoint::getView( SmTexture texture
+		, uint32_t index )const
 	{
-		return m_passesData[index].linearView;
-	}
-
-	ashes::ImageView const & ShadowMapPoint::getVarianceView( uint32_t index )const
-	{
-		return m_passesData[index].varianceView;
+		return m_passesData[index].views[size_t( texture )];
 	}
 
 	void ShadowMapPoint::doInitialiseFramebuffers()
@@ -135,11 +131,14 @@ namespace castor3d
 			std::string debugName = "ShadowMapPoint" + std::to_string( layer );
 			uint32_t passIndex = layer * 6u;
 			PassData data{};
-			data.depthView = depth.getLayerCubeView( layer ).getSampledView();
-			data.linearView = linear.getLayerCubeView( layer ).getSampledView();
-			data.varianceView = variance.getLayerCubeView( layer ).getSampledView();
-			data.positionView = position.getLayerCubeView( layer ).getSampledView();
-			data.fluxView = flux.getLayerCubeView( layer ).getSampledView();
+			data.views =
+			{
+				depth.getLayerCubeView( layer ).getSampledView(),
+				linear.getLayerCubeView( layer ).getSampledView(),
+				variance.getLayerCubeView( layer ).getSampledView(),
+				position.getLayerCubeView( layer ).getSampledView(),
+				flux.getLayerCubeView( layer ).getSampledView(),
+			};
 
 			for ( auto & frameBuffer : data.frameBuffers )
 			{
@@ -147,17 +146,21 @@ namespace castor3d
 				auto fbDebugName = debugName + getName( face );
 				auto & pass = m_passes[passIndex];
 				auto & renderPass = pass.pass->getRenderPass();
-				frameBuffer.depthView = depth.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.linearView = linear.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.varianceView = variance.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.positionView = position.getLayerCubeFaceView( layer, face ).getTargetView();
-				frameBuffer.fluxView = flux.getLayerCubeFaceView( layer, face ).getTargetView();
+				frameBuffer.views =
+				{
+					depth.getLayerCubeFaceView( layer, face ).getTargetView(),
+					linear.getLayerCubeFaceView( layer, face ).getTargetView(),
+					variance.getLayerCubeFaceView( layer, face ).getTargetView(),
+					position.getLayerCubeFaceView( layer, face ).getTargetView(),
+					flux.getLayerCubeFaceView( layer, face ).getTargetView(),
+				};
 				ashes::ImageViewCRefArray attaches;
-				attaches.emplace_back( frameBuffer.depthView );
-				attaches.emplace_back( frameBuffer.linearView );
-				attaches.emplace_back( frameBuffer.varianceView );
-				attaches.emplace_back( frameBuffer.positionView );
-				attaches.emplace_back( frameBuffer.fluxView );
+
+				for ( auto & view : frameBuffer.views )
+				{
+					attaches.emplace_back( view );
+				}
+
 				frameBuffer.frameBuffer = renderPass.createFrameBuffer( fbDebugName
 					, size
 					, std::move( attaches ) );

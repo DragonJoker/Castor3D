@@ -79,14 +79,14 @@ namespace castor3d
 		for ( auto & shadowMap : shadowMaps )
 		{
 			auto & result = shadowMap.first.get().getShadowPassResult();
-
-			for ( auto & unit : makeArrayView( std::next( result.begin() ), result.end() ) )
-			{
-				bindTexture( unit->getTexture()->getDefaultView().getSampledView()
-					, unit->getSampler()->getSampler()
-					, writes
-					, index );
-			}
+			bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+				, result[SmTexture::eNormalLinear].getSampler()->getSampler()
+				, writes
+				, index );
+			bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
+				, result[SmTexture::eVariance].getSampler()->getSampler()
+				, writes
+				, index );
 		}
 	}
 

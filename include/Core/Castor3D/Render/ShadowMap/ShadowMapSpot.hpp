@@ -47,8 +47,6 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
-		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
 
 	private:
 		/**

@@ -55,7 +55,7 @@ namespace castor3d
 
 		if ( mask )
 		{
-			auto units = pass.getTextureUnits( mask );
+			auto units = pass.getTextureUnits();
 
 			for ( auto & unit : units )
 			{
@@ -92,24 +92,28 @@ namespace castor3d
 
 		if ( mask )
 		{
-			auto units = pass.getTextureUnits( mask );
-			ashes::WriteDescriptorSet write
-			{
-				index,
-				0u,
-				uint32_t( units.size() ),
-				VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-			};
+			auto units = pass.getTextureUnits();
 
-			for ( auto & unit : units )
+			if ( !units.empty() )
 			{
-				doBindTexture( *unit
-					, layout
-					, write );
+				ashes::WriteDescriptorSet write
+				{
+					index,
+					0u,
+					uint32_t( units.size() ),
+					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+				};
+
+				for ( auto & unit : units )
+				{
+					doBindTexture( *unit
+						, layout
+						, write );
+				}
+
+				writes.push_back( write );
+				index += uint32_t( units.size() );
 			}
-
-			writes.push_back( write );
-			index += uint32_t( units.size() );
 		}
 		else
 		{

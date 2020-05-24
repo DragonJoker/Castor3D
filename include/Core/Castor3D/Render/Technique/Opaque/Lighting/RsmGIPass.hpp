@@ -77,6 +77,7 @@ namespace castor3d
 		ShadowMapResult const & m_smResult;
 		LightPassResult const & m_lpResult;
 		GpInfoUbo const & m_gpInfo;
+		LightType m_lightType;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
 		UniformBufferUPtr< Configuration > m_rsmConfigUbo;

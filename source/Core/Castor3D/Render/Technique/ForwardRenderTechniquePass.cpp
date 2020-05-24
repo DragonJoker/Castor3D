@@ -286,12 +286,14 @@ namespace castor3d
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
-			for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
-			{
-				textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
+			// Depth
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Variance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		return textureBindings;
@@ -342,15 +344,13 @@ namespace castor3d
 				}
 			}
 
-			bindShadowMaps( shadowMaps[size_t( LightType::eDirectional )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::eSpot )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::ePoint )]
-				, writes
-				, index );
+			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+			{
+				bindShadowMaps( shadowMaps[i]
+					, writes
+					, index );
+			}
+
 			node.texDescriptorSet->setBindings( writes );
 		}
 	}

@@ -600,7 +600,7 @@ namespace castor3d
 		{
 			CU_Require( m_texture );
 			auto & device = getCurrentRenderDevice( *this );
-			auto commandBuffer = device.transferCommandPool->createCommandBuffer();
+			auto commandBuffer = device.transferCommandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
 			m_texture->generateMipmaps( *commandBuffer );
 			commandBuffer->end();

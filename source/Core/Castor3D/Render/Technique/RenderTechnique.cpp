@@ -428,6 +428,8 @@ namespace castor3d
 		}
 
 		m_directionalShadowMap->accept( visitor );
+		m_spotShadowMap->accept( visitor );
+		m_pointShadowMap->accept( visitor );
 	}
 
 	void RenderTechnique::doCreateShadowMaps()

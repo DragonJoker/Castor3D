@@ -132,10 +132,10 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API ashes::VkClearValueArray const & getClearValues()const;
-		C3D_API ashes::Sampler const & getLinearSampler( uint32_t index = 0u )const;
-		C3D_API ashes::Sampler const & getVarianceSampler( uint32_t index = 0u )const;
-		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index = 0u )const;
-		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index = 0u )const;
+		C3D_API ashes::Sampler const & getSampler( SmTexture texture
+			, uint32_t index = 0u )const;
+		C3D_API virtual ashes::ImageView const & getView( SmTexture texture
+			, uint32_t index = 0u )const;
 
 		inline ShadowMapResult const & getShadowPassResult()const
 		{

@@ -347,7 +347,7 @@ namespace castor3d
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
 						auto textures = pass->getTextures() & renderPass.getTexturesMask();
-						auto texturesCount = pass->getNonEnvTextureUnitsCount( renderPass.getTexturesMask() );
+						auto texturesCount = pass->getNonEnvTextureUnitsCount();
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
 							, textures
