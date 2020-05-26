@@ -237,7 +237,6 @@ namespace castor3d
 	*/
 	struct RsmUboConfiguration
 	{
-		castor::Matrix4x4f lightViewProj;
 		float intensity;
 		float maxRadius;
 		uint32_t sampleCount;

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderQuad_H___
 
 #include "RenderToTextureModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 

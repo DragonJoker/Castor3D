@@ -85,7 +85,6 @@ namespace castor3d
 
 	public:
 		C3D_API static std::string const BufferRsmConfig;
-		C3D_API static std::string const LightViewProj;
 		C3D_API static std::string const Intensity;
 		C3D_API static std::string const RMax;
 		C3D_API static std::string const SampleCount;
@@ -102,7 +101,6 @@ namespace castor3d
 		, castor3d::RsmConfigUbo::BufferRsmConfig\
 		, binding\
 		, set };\
-	auto c3d_lightViewProj = rsmConfig.declMember< sdw::Mat4 >( castor3d::RsmConfigUbo::LightViewProj );\
 	auto c3d_rsmIntensity = rsmConfig.declMember< sdw::Float >( castor3d::RsmConfigUbo::Intensity );\
 	auto c3d_rsmRMax = rsmConfig.declMember< sdw::Float >( castor3d::RsmConfigUbo::RMax );\
 	auto c3d_rsmSampleCount = rsmConfig.declMember< sdw::UInt >( castor3d::RsmConfigUbo::SampleCount );\

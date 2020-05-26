@@ -8,8 +8,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Passes/DownscalePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/RsmGIPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/RsmInterpolatePass.hpp"
 
 namespace castor3d
 {
@@ -45,17 +48,41 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
+			, m_downscalePass{ engine
+				, {
+					lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
+					gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
+				}
+				, {
+					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
+					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
+				} }
 			, m_rsmGiPass{ engine
 				, lightCache
 				, LtType
 				, {
-					lpResult[LpTexture::eDepth].getTexture()->getWidth(),
-					lpResult[LpTexture::eDepth].getTexture()->getHeight(),
+					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
+					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				}
 				, gpInfoUbo
 				, gpResult
 				, smResult
-				, lpResult }
+				, m_downscalePass.getResult() }
+			, m_interpolatePass{ engine
+				, lightCache
+				, LtType
+				, {
+					lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
+					lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
+				}
+				, gpInfoUbo
+				, gpResult
+				, smResult
+				, m_rsmGiPass.getConfigUbo()
+				, m_rsmGiPass.getSamplesSsbo()
+				, m_rsmGiPass.getResult()[0]
+				, m_rsmGiPass.getResult()[1]
+				, lpResult[LpTexture::eDiffuse] }
 		{
 		}
 
@@ -64,8 +91,17 @@ namespace castor3d
 		{
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
+			result = &m_downscalePass.compute( *result );
 			result = &m_rsmGiPass.compute( *result );
+			result = &m_interpolatePass.compute( *result );
 			return *result;
+		}
+
+		void accept( PipelineVisitorBase & visitor )override
+		{
+			LightPassShadow< LtType >::accept( visitor );
+			m_rsmGiPass.accept( visitor );
+			m_downscalePass.accept( visitor );
 		}
 
 	protected:
@@ -86,7 +122,9 @@ namespace castor3d
 		}
 
 	private:
+		DownscalePass m_downscalePass;
 		RsmGIPass m_rsmGiPass;
+		RsmInterpolatePass m_interpolatePass;
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

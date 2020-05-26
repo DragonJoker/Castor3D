@@ -11,7 +11,6 @@
 namespace castor3d
 {
 	std::string const RsmConfigUbo::BufferRsmConfig = "RsmConfig";
-	std::string const RsmConfigUbo::LightViewProj = "c3d_lightViewProj";
 	std::string const RsmConfigUbo::Intensity = "c3d_rsmIntensity";
 	std::string const RsmConfigUbo::RMax = "c3d_rsmRMax";
 	std::string const RsmConfigUbo::SampleCount = "c3d_rsmSampleCount";
@@ -51,20 +50,6 @@ namespace castor3d
 		CU_Require( m_ubo );
 		auto & config = light.getRsmConfig();
 		auto & data = m_ubo.getData();
-
-		switch ( light.getLightType() )
-		{
-		case LightType::eDirectional:
-			data.lightViewProj = light.getDirectionalLight()->getLightSpaceTransform( 0u );
-			break;
-		case LightType::ePoint:
-			//data.lightViewProj = light.getPointLight()->getLightSpaceTransform( 0u );
-			break;
-		case LightType::eSpot:
-			data.lightViewProj = light.getSpotLight()->getLightSpaceTransform();
-			break;
-		}
-
 		data.intensity = config.intensity;
 		data.maxRadius = config.maxRadius;
 		data.sampleCount = config.sampleCount.value().value();
