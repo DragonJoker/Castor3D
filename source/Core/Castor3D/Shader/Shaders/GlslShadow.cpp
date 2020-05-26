@@ -603,11 +603,9 @@ namespace castor3d
 				{
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, lightMatrix * vec4( worldSpacePosition, 1.0_f ) );
-					auto projCoords = m_writer.declLocale( "projCoords"
-						, lightSpacePosition );
-					projCoords.x() = sdw::fma( projCoords.x(), 0.5_f, 0.5_f );
-					projCoords.y() = sdw::fma( projCoords.y(), 0.5_f, 0.5_f );
-					m_writer.returnStmt( projCoords / lightSpacePosition.w() );
+					lightSpacePosition.x() = sdw::fma( lightSpacePosition.x(), 0.5_f, 0.5_f );
+					lightSpacePosition.y() = sdw::fma( lightSpacePosition.y(), 0.5_f, 0.5_f );
+					m_writer.returnStmt( lightSpacePosition / lightSpacePosition.w() );
 				}
 				, InMat4( m_writer, "lightMatrix" )
 				, InVec3( m_writer, "worldSpacePosition" ) );

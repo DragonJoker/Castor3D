@@ -151,7 +151,7 @@ namespace castor3d
 					auto maxCount = writer.declLocale( "maxCount"
 						, max( light.m_cascadeCount, 1_u ) - 1_u );
 
-						// Get cascade index for the current fragment's view position
+					// Get cascade index for the current fragment's view position
 					FOR( writer, UInt, i, 0u, i < maxCount, ++i )
 					{
 						IF( writer, viewPosition.z() < light.m_splitDepths[i] )
@@ -166,11 +166,11 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto rMax = writer.declLocale< Float >( "rMax"
 						, c3d_rsmRMax );
-					auto textureSpacePosition = writer.declLocale< Vec4 >( "textureSpacePosition"
+					auto lightSpacePosition = writer.declLocale< Vec4 >( "lightSpacePosition"
 						, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );
-					textureSpacePosition.x() = sdw::fma( textureSpacePosition.x(), 0.5_f, 0.5_f );
-					textureSpacePosition.y() = sdw::fma( textureSpacePosition.y(), 0.5_f, 0.5_f );
-					textureSpacePosition /= textureSpacePosition.w();
+					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
+						, vec2( 0.5_f )
+						, vec2( 0.5_f ) );
 
 					FOR( writer, UInt, i, 0_u, i < c3d_rsmSampleCount, ++i )
 					{
@@ -178,7 +178,7 @@ namespace castor3d
 							, c3d_rsmSamples[i].xy() );
 
 						auto coords = writer.declLocale( "coords"
-							, vec3( textureSpacePosition.xy() + rMax * rnd
+							, vec3( lightSpacePosition.xy() + rMax * rnd
 								, writer.cast< Float >( cascadeIndex ) ) );
 
 						auto vplPositionWS = writer.declLocale( "vplPositionWS"
@@ -206,7 +206,7 @@ namespace castor3d
 
 					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
 						, vec3( 0.0_f )
-						, vec3( light.m_lightBase.m_intensity.x() ) ) );
+						, vec3( 1.0_f ) ) );
 				}
 				, InVec3{ writer, "viewPosition" }
 				, InVec3{ writer, "worldPosition" }
@@ -293,11 +293,13 @@ namespace castor3d
 				{
 					auto light = writer.declLocale( "light"
 						, lightingModel->getSpotLight( 0_i ) );
-					auto textureSpacePosition = writer.declLocale( "textureSpacePosition"
+					auto lightSpacePosition = writer.declLocale( "lightSpacePosition"
 						, c3d_lightViewProj * vec4( worldPosition, 1.0 ) );
-					textureSpacePosition.x() = sdw::fma( textureSpacePosition.x(), 0.5_f, 0.5_f );
-					textureSpacePosition.y() = sdw::fma( textureSpacePosition.y(), 0.5_f, 0.5_f );
-					textureSpacePosition /= textureSpacePosition.w();
+					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
+						, vec2( 0.5_f )
+						, vec2( 0.5_f ) );
+					lightSpacePosition /= lightSpacePosition.w();
+					lightSpacePosition.xy() += vec2( 0.5_f );
 					auto indirectIllumination = writer.declLocale( "indirectIllumination"
 						, vec3( 0.0_f ) );
 					auto rMax = writer.declLocale( "rMax"
@@ -309,7 +311,7 @@ namespace castor3d
 							, c3d_rsmSamples[i].xy() );
 
 						auto coords = writer.declLocale( "coords"
-							, vec3( sdw::fma( rnd, rMax, textureSpacePosition.xy() ), c3d_rsmIndex ) );
+							, vec3( sdw::fma( rnd, rMax, lightSpacePosition.xy() ), c3d_rsmIndex ) );
 
 						auto vplPositionWS = writer.declLocale( "vplPositionWS"
 							, texture( c3d_rsmPositionMap, coords ).xyz() );
@@ -317,12 +319,12 @@ namespace castor3d
 							, texture( c3d_rsmNormalMap, coords ).xyz() );
 						auto vplFlux = writer.declLocale( "vplFlux"
 							, texture( c3d_rsmFluxMap, coords ).xyz() );
-						auto dot1 = writer.declLocale( "dot1"
-							, max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) ) );
-						auto dot2 = writer.declLocale( "dot2"
-							, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
 						auto diff = writer.declLocale( "diff"
 							, worldPosition - vplPositionWS );
+						auto dot1 = writer.declLocale( "dot1"
+							, max( 0.0_f, dot( vplNormalWS, diff ) ) );
+						auto dot2 = writer.declLocale( "dot2"
+							, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
 						auto sqdist = writer.declLocale( "sqdist"
 							, dot( diff, diff ) );
 
@@ -336,7 +338,7 @@ namespace castor3d
 
 					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
 						, vec3( 0.0_f )
-						, vec3( light.m_lightBase.m_intensity.x() ) ) );
+						, vec3( 1.0_f ) ) );
 				}
 				, InVec3{ writer, "worldPosition" }
 				, InVec3{ writer, "worldNormal" } );
@@ -445,14 +447,19 @@ namespace castor3d
 							, texture( c3d_rsmPositionMap, coords ).xyz() );
 						auto vplNormalWS = writer.declLocale( "vplNormalWS"
 							, texture( c3d_rsmNormalMap, coords ).xyz() );
-						auto flux = writer.declLocale( "flux"
+						auto vplFlux = writer.declLocale( "vplFlux"
 							, texture( c3d_rsmFluxMap, coords ).xyz() );
+						auto diff = writer.declLocale( "diff"
+							, worldPosition - vplPositionWS );
+						auto dot1 = writer.declLocale( "dot1"
+							, max( 0.0_f, dot( vplNormalWS, diff ) ) );
+						auto dot2 = writer.declLocale( "dot2"
+							, max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) );
+						auto sqdist = writer.declLocale( "sqdist"
+							, dot( diff, diff ) );
 
 						auto result = writer.declLocale( "result"
-							, flux
-							* ( ( max( 0.0_f, dot( vplNormalWS, worldPosition - vplPositionWS ) )
-								* max( 0.0_f, dot( worldNormal, vplPositionWS - worldPosition ) ) )
-								/ pow( length( worldPosition - vplPositionWS ), 4.0_f ) ) );
+							, vplFlux * ( dot1 * dot2 ) / ( sqdist * sqdist ) );
 
 						result *= rnd.x() * rnd.x();
 						indirectIllumination += result;
@@ -461,7 +468,7 @@ namespace castor3d
 
 					writer.returnStmt( clamp( indirectIllumination * c3d_rsmIntensity
 						, vec3( 0.0_f )
-						, vec3( light.m_lightBase.m_intensity.x() ) ) );
+						, vec3( 1.0_f ) ) );
 				}
 				, InVec3{ writer, "worldPosition" }
 				, InVec3{ writer, "worldNormal" } );
@@ -675,12 +682,15 @@ namespace castor3d
 		{
 			std::random_device rd;
 			std::mt19937 rng( rd() );
-			std::uniform_int_distribution< int > dist( 0, 512 );
+			std::uniform_real_distribution< float > dist( 0.0f, 1.0f );
 
 			for ( auto & point : makeArrayView( buffer, buffer + RsmConfig::MaxRange ) )
 			{
-				point[0] = ( dist( rng ) / 256.0f ) - 1.0f;
-				point[1] = ( dist( rng ) / 256.0f ) - 1.0f;
+				auto rnd = dist( rng );
+				auto twoPIy = PiMult2< float > * rnd;
+				rnd = dist( rng );
+				point[0] = rnd * sin( twoPIy );
+				point[1] = rnd * cos( twoPIy );
 			}
 
 			m_rsmSamplesSsbo->flush( 0u, RsmConfig::MaxRange );
