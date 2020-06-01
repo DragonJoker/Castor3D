@@ -11,7 +11,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightingPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/SsgiPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
@@ -56,8 +55,7 @@ namespace castor3d
 			, Scene & scene
 			, HdrConfigUbo & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, SsaoConfig & ssaoConfig
-			, SsgiConfig & ssgiConfig );
+			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.
@@ -106,7 +104,6 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
-		SsgiConfig & m_ssgiConfig;
 		OpaquePass & m_opaquePass;
 		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
@@ -116,7 +113,6 @@ namespace castor3d
 		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
 		std::vector< std::unique_ptr< OpaqueResolvePass > > m_resolve;
-		std::unique_ptr< SsgiPass > m_ssgi;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

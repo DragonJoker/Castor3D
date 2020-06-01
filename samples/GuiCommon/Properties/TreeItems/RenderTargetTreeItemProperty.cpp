@@ -31,8 +31,6 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
 		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
-		static wxString PROPERTY_RENDER_TARGET_SSGI = _( "SSGI" );
-		static wxString PROPERTY_RENDER_TARGET_SSGI_ENABLED = _( "Enable SSGI" );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
@@ -56,8 +54,6 @@ namespace GuiCommon
 		PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
 		PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
 		PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
-		PROPERTY_RENDER_TARGET_SSGI = _( "SSGI" );
-		PROPERTY_RENDER_TARGET_SSGI_ENABLED = _( "Enable SSGI" );
 
 		CreateTreeItemMenu();
 	}
@@ -110,10 +106,6 @@ namespace GuiCommon
 			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY, ssaoConfig.blurHighQuality ) );
 			grid->Append( new wxUIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE, ssaoConfig.blurStepSize ) );
 			grid->Append( new wxIntProperty( PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS, ssaoConfig.blurRadius->value() ) );
-
-			auto & ssgiConfig = target->getTechnique()->getSsgiConfig();
-			grid->Append( new wxPropertyCategory( PROPERTY_RENDER_TARGET_SSGI ) );
-			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSGI_ENABLED, PROPERTY_RENDER_TARGET_SSGI_ENABLED, ssgiConfig.enabled ) );
 		}
 	}
 
@@ -125,7 +117,6 @@ namespace GuiCommon
 		if ( property && target )
 		{
 			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
-			auto & ssgiConfig = target->getTechnique()->getSsgiConfig();
 			auto & debugConfig = target->getTechnique()->getDebugConfig();
 
 			if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_ENABLED )
@@ -175,10 +166,6 @@ namespace GuiCommon
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_DEBUG_VIEW )
 			{
 				onValueChange( uint32_t( property->GetChoiceSelection() ), &debugConfig.debugIndex );
-			}
-			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSGI_ENABLED )
-			{
-				onValueChange( bool( property->GetValue() ), &ssgiConfig.enabled );
 			}
 		}
 	}

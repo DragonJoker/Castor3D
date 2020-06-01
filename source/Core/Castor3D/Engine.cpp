@@ -161,15 +161,13 @@ namespace castor3d
 				, String const & type
 				, RenderTarget & renderTarget
 				, Parameters const & parameters
-				, SsaoConfig const & ssaoConfig
-				, SsgiConfig const & ssgiConfig )
+				, SsaoConfig const & ssaoConfig )
 			{
 				return std::make_shared< RenderTechnique >( name
 					, renderTarget
 					, *getRenderSystem()
 					, parameters
-					, ssaoConfig
-					, ssgiConfig );
+					, ssaoConfig );
 			}
 			, dummy
 			, dummy

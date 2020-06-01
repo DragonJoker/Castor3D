@@ -17,7 +17,6 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
@@ -67,7 +66,6 @@ namespace castor3d
 		eParticleSystem = CU_MakeSectionName( 'P', 'L', 'S', 'M' ),
 		eParticle = CU_MakeSectionName( 'P', 'T', 'C', 'L' ),
 		eSsao = CU_MakeSectionName( 'S', 'S', 'A', 'O' ),
-		eSsgi = CU_MakeSectionName( 'S', 'S', 'G', 'I' ),
 		eSubsurfaceScattering = CU_MakeSectionName( 'S', 'S', 'S', 'G' ),
 		eTransmittanceProfile = CU_MakeSectionName( 'T', 'R', 'P', 'R' ),
 		eHdrConfig = CU_MakeSectionName( 'H', 'D', 'R', 'C' ),
@@ -167,7 +165,6 @@ namespace castor3d
 		SceneBackgroundSPtr pBackground;
 		ParticleSystemSPtr particleSystem;
 		SsaoConfig ssaoConfig{};
-		SsgiConfig ssgiConfig{};
 		SubsurfaceScatteringUPtr subsurfaceScattering;
 		std::shared_ptr< SkyboxBackground > skybox;
 		TextureConfiguration textureConfiguration;

@@ -910,26 +910,6 @@ source_group( "Header Files\\Render\\SSAO" FILES ${${PROJECT_NAME}_FOLDER_HDR_FI
 source_group( "Source Files\\Render\\SSAO" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssgi/SsgiConfig.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ssgi/SsgiRawGIPass.cpp
-)
-set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssgi/SsgiConfig.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssgi/SsgiModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ssgi/SsgiRawGIPass.hpp
-)
-set( ${PROJECT_NAME}_SRC_FILES
-	${${PROJECT_NAME}_SRC_FILES}
-	${${PROJECT_NAME}_FOLDER_SRC_FILES}
-)
-set( ${PROJECT_NAME}_HDR_FILES
-	${${PROJECT_NAME}_HDR_FILES}
-	${${PROJECT_NAME}_FOLDER_HDR_FILES}
-)
-source_group( "Header Files\\Render\\SSGI" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Render\\SSGI" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-
-set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/ForwardRenderTechniquePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/RenderTechnique.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/RenderTechniquePass.cpp
@@ -990,7 +970,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/RsmGIPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/RsmInterpolatePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SpotLightPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SsgiPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -1008,7 +987,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/RsmGIPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/RsmInterpolatePass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SpotLightPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SsgiPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

@@ -10,7 +10,6 @@
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
-#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -98,11 +97,9 @@ namespace castor3d
 		, Scene & scene
 		, HdrConfigUbo & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, SsaoConfig & ssaoConfig
-		, SsgiConfig & ssgiConfig )
+		, SsaoConfig & ssaoConfig )
 		: m_engine{ engine }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_ssgiConfig{ ssgiConfig }
 		, m_opaquePass{ opaquePass }
 		, m_size{ size }
 		, m_gpInfoUbo{ gpInfoUbo }
@@ -135,12 +132,6 @@ namespace castor3d
 			, m_size
 			, m_opaquePassResult
 			, m_lightingPass->getResult() ) }
-		, m_ssgi{ std::make_unique< SsgiPass >( m_engine
-			, makeExtent2D( m_size )
-			, m_ssaoConfig
-			, m_ssgiConfig
-			, *m_linearisePass->getResult().getTexture()
-			, resultTexture ) }
 	{
 		//SSAO Off
 		//	SSSSS Off
@@ -207,8 +198,7 @@ namespace castor3d
 		m_opaquePass.getSceneUbo().update( scene, &camera );
 		m_opaquePass.update( info, jitter );
 
-		if ( m_ssaoConfig.enabled
-			|| m_ssgiConfig.enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			m_linearisePass->update( camera.getViewport() );
 		}
@@ -222,11 +212,6 @@ namespace castor3d
 
 		auto index = getIndex( m_ssaoConfig, scene );
 		m_resolve[index]->update( camera );
-
-		if ( m_ssgiConfig.enabled )
-		{
-			m_ssgi->update( camera );
-		}
 	}
 
 	ashes::Semaphore const & DeferredRendering::render( Scene const & scene
@@ -240,8 +225,7 @@ namespace castor3d
 			, m_opaquePassResult
 			, *result );
 
-		if ( m_ssaoConfig.enabled
-			|| m_ssgiConfig.enabled )
+		if ( m_ssaoConfig.enabled )
 		{
 			result = &m_linearisePass->linearise( *result );
 		}
@@ -259,11 +243,6 @@ namespace castor3d
 		auto index = getIndex( m_ssaoConfig, scene );
 		result = &m_resolve[index]->render( *result );
 
-		if ( m_ssgiConfig.enabled )
-		{
-			result = &m_ssgi->render( *result );
-		}
-
 		return *result;
 	}
 
@@ -279,7 +258,6 @@ namespace castor3d
 		m_lightingPass->accept( visitor );
 
 		if ( m_ssaoConfig.enabled
-			|| m_ssgiConfig.enabled
 			|| visitor.forceSubPassesVisit )
 		{
 			m_linearisePass->accept( visitor );
@@ -299,11 +277,5 @@ namespace castor3d
 
 		auto index = getIndex( m_ssaoConfig, visitor.getScene() );
 		m_resolve[index]->accept( visitor );
-
-		if ( m_ssgiConfig.enabled
-			|| visitor.forceSubPassesVisit )
-		{
-			m_ssgi->accept( visitor );
-		}
 	}
 }

@@ -30,7 +30,7 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		return setupMemory( device, resource, flags, name );
+		return setupMemory( *device, resource, flags, name );
 	}
 }
 

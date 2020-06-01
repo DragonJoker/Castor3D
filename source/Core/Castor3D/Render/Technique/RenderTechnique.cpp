@@ -155,8 +155,7 @@ namespace castor3d
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & parameters
-		, SsaoConfig const & ssaoConfig
-		, SsgiConfig const & ssgiConfig )
+		, SsaoConfig const & ssaoConfig )
 		: OwnedBy< Engine >{ *renderSystem.getEngine() }
 		, Named{ name }
 		, m_renderTarget{ renderTarget }
@@ -191,7 +190,6 @@ namespace castor3d
 #endif
 		, m_initialised{ false }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_ssgiConfig{ ssgiConfig }
 		, m_depthBuffer{ *renderSystem.getEngine() }
 	{
 		doCreateShadowMaps();
@@ -614,8 +612,7 @@ namespace castor3d
 			, *m_renderTarget.getScene()
 			, m_hdrConfigUbo
 			, m_gpInfoUbo
-			, m_ssaoConfig
-			, m_ssgiConfig );
+			, m_ssaoConfig );
 
 #else
 

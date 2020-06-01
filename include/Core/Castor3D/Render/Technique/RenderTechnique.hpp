@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
 #include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
@@ -54,8 +53,7 @@ namespace castor3d
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
-			, SsaoConfig const & ssaoConfig
-			, SsgiConfig const & ssgiConfig );
+			, SsaoConfig const & ssaoConfig );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -215,16 +213,6 @@ namespace castor3d
 			return m_ssaoConfig;
 		}
 
-		inline SsgiConfig const & getSsgiConfig()const
-		{
-			return m_ssgiConfig;
-		}
-
-		inline SsgiConfig & getSsgiConfig()
-		{
-			return m_ssgiConfig;
-		}
-
 		inline DebugConfig const & getDebugConfig()const
 		{
 			return m_debugConfig;
@@ -279,7 +267,6 @@ namespace castor3d
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
-		SsgiConfig m_ssgiConfig;
 		std::unique_ptr< DeferredRendering > m_deferredRendering;
 		std::unique_ptr< WeightedBlendRendering > m_weightedBlendRendering;
 		RenderPassTimerSPtr m_particleTimer;

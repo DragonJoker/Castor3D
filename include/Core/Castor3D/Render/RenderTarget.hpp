@@ -13,7 +13,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CombinePass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
@@ -356,11 +355,6 @@ namespace castor3d
 			m_ssaoConfig = config;
 		}
 
-		inline void setSsgiConfig( SsgiConfig const & config )
-		{
-			m_ssgiConfig = config;
-		}
-
 		inline void setPixelFormat( VkFormat value )
 		{
 			m_pixelFormat = value;
@@ -446,7 +440,6 @@ namespace castor3d
 		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
 		std::vector< std::unique_ptr< CombinePass > > m_combineQuads;
 		SsaoConfig m_ssaoConfig;
-		SsgiConfig m_ssgiConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
 		OverlayRendererSPtr m_overlayRenderer;
