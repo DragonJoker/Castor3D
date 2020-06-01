@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 
+#include "Castor3D/Render/RenderDevice.hpp"
+
 namespace castor3d
 {
 	template< typename ResT >
@@ -28,7 +30,7 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		return setupMemory( *device, resource, flags, name );
+		return setupMemory( device, resource, flags, name );
 	}
 }
 

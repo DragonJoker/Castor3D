@@ -55,7 +55,7 @@ namespace castor3d
 		 *\brief		Dessine les noeuds.
 		 *\param[out]	toWait	Le sémaphore à attendre.
 		 */
-		C3D_API ashes::Semaphore const & DepthPass::render( ashes::SemaphoreCRefArray const & semaphores );
+		C3D_API ashes::Semaphore const & render( ashes::SemaphoreCRefArray const & semaphores );
 
 		C3D_API TextureFlags getTexturesMask()const override;
 

@@ -153,7 +153,7 @@ namespace castor3d
 		}
 		/**@}*/
 	public:
-		static constexpr TextureFlags TextureFlags{ TextureFlag::eOpacity
+		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
 			| TextureFlag::eNormal
 			| TextureFlag::eAlbedo
 			| TextureFlag::eSpecular

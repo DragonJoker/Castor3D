@@ -25,8 +25,6 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 

@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/Size.hpp>
 
 namespace castor3d
 {

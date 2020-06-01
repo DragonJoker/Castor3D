@@ -14,10 +14,9 @@ namespace castor
 	template< PixelFormat PF >
 	struct ConstPixelIterator
 	{
-		template< PixelFormat PF >
+		template< PixelFormat PiF >
 		friend struct PixelIterator;
 
-		using iterator_category = typename std::random_access_iterator_tag;
 		using value_type = Pixel< PF >;
 		using difference_type = std::ptrdiff_t;
 		using pointer = Pixel< PF > const *;

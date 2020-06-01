@@ -59,7 +59,7 @@ namespace castor3d
 		TextureUnit( TextureUnit const & ) = delete;
 		TextureUnit( TextureUnit && ) = default;
 		TextureUnit & operator=( TextureUnit const & ) = delete;
-		TextureUnit & operator=( TextureUnit && ) = default;
+		TextureUnit & operator=( TextureUnit && ) = delete;
 		/**
 		 *\~english
 		 *\brief		Constructor.

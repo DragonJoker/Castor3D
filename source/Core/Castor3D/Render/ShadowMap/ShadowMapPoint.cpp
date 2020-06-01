@@ -30,8 +30,6 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
-#include <ShaderWriter/Source.hpp>
-
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Miscellaneous/BlockTracker.hpp>
 

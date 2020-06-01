@@ -99,7 +99,7 @@ namespace castor3d
 
 		C3D_API TextureFlags getTexturesMask()const override
 		{
-			return ShadowMap::TextureFlags;
+			return ShadowMap::textureFlags;
 		}
 
 	protected:

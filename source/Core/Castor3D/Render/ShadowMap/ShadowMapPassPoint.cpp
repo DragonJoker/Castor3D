@@ -25,11 +25,12 @@
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
 
-#include <ashespp/Buffer/VertexBuffer.hpp>
-
 #include <CastorUtils/Graphics/Image.hpp>
 
+#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
+
+#include <ShaderWriter/Source.hpp>
 
 using namespace castor;
 
@@ -255,7 +256,7 @@ namespace castor3d
 		addFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		assert( ( flags.textures & ShadowMap::TextureFlags ) == flags.textures );
+		assert( ( flags.textures & ShadowMap::textureFlags ) == flags.textures );
 		addFlag( flags.programFlags, ProgramFlag::eShadowMapPoint );
 	}
 

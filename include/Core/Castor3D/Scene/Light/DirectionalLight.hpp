@@ -143,12 +143,12 @@ namespace castor3d
 			return m_cascades[cascadeIndex].splitDepth;
 		}
 
-		inline castor::Matrix4x4f getProjMatrix( uint32_t cascadeIndex )const
+		inline castor::Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].projMatrix;
 		}
 
-		inline castor::Matrix4x4f getViewMatrix( uint32_t cascadeIndex )const
+		inline castor::Matrix4x4f const & getViewMatrix( uint32_t cascadeIndex )const
 		{
 			return m_cascades[cascadeIndex].viewMatrix;
 		}

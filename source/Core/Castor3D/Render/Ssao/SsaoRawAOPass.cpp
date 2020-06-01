@@ -294,7 +294,7 @@ namespace castor3d
 					, Int const & tapIndex
 					, Float const & randomPatternRotationAngle
 					, Float const & invCszBufferScale
-					, Float & occlusion )
+					, Float occlusion )
 				{
 					// Offset on the unit disk, spun for this pixel
 					auto ssRadius = writer.declLocale< Float >( "ssRadius" );

@@ -18,21 +18,21 @@ namespace castor3d
 		C3D_API ReflectiveShadowMapping( sdw::ShaderWriter & writer
 			, sdw::ArraySsboT< sdw::Vec2 > & rsmSamples
 			, LightType lightType );
-		C3D_API sdw::Vec3 ReflectiveShadowMapping::directional( shader::DirectionalLight const & light
+		C3D_API sdw::Vec3 directional( shader::DirectionalLight const & light
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Float const & rsmRMax
 			, sdw::Float const & rsmIntensity
 			, sdw::UInt const & rsmSampleCount );
-		C3D_API sdw::Vec3 ReflectiveShadowMapping::point( shader::PointLight const & light
+		C3D_API sdw::Vec3 point( shader::PointLight const & light
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Float const & rsmRMax
 			, sdw::Float const & rsmIntensity
 			, sdw::UInt const & rsmSampleCount
 			, sdw::UInt const & rsmIndex );
-		C3D_API sdw::Vec3 ReflectiveShadowMapping::spot( shader::SpotLight const & light
+		C3D_API sdw::Vec3 spot( shader::SpotLight const & light
 			, sdw::Vec3 const & worldPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Float const & rsmRMax

@@ -13,6 +13,8 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 using namespace castor;
 using namespace castor3d;
 

@@ -99,7 +99,7 @@ namespace castor3d
 			node.passNode.fillDescriptor( layout
 				, index
 				, writes
-				, ShadowMap::TextureFlags );
+				, ShadowMap::textureFlags );
 
 			if ( checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eMetallicRoughness )
 				|| checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eSpecularGlossiness ) )

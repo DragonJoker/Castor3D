@@ -491,10 +491,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		set( _PLATFORM Win32 )
 	elseif ( APPLE )
 		set( _PLATFORM MacOS )
-		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-			${${PROJECT_NAME}_FOLDER_SRC_FILES}
-			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/DisplaySize.mm
-		)
 	else ()
 		set( _PLATFORM Linux )
 	endif ()
@@ -507,6 +503,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/LoggerConsole.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/Utils.cpp
 	)
+	if ( APPLE )
+		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/DisplaySize.mm
+		)
+	endif ()
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}

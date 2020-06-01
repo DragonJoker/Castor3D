@@ -1017,7 +1017,7 @@ namespace castor3d
 		Point3f max{ fmax, fmax, fmax };
 		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
 			{
-				auto & bbox = geometry.getMesh()->getBoundingBox().getAxisAligned( geometry.getParent()->getDerivedTransformationMatrix() );
+				auto bbox = geometry.getMesh()->getBoundingBox().getAxisAligned( geometry.getParent()->getDerivedTransformationMatrix() );
 
 				for ( auto i = 0u; i < 3u; ++i )
 				{

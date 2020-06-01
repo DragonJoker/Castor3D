@@ -4,6 +4,7 @@
 #include "Castor3D/Cache/SamplerCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 using namespace castor;
 

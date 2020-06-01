@@ -1,5 +1,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/ReflectiveShadowMapping.hpp"
 
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
+
 #include <ShaderWriter/Source.hpp>
 
 using namespace castor;
