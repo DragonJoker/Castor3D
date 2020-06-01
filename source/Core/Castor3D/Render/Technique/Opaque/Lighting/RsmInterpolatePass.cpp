@@ -139,8 +139,10 @@ namespace castor3d
 						, data1.xyz() );
 					auto giNormal = writer.declLocale( "giNormal"
 						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+					auto areEqual = writer.declLocale( "areEqual"
+						, giNormal == wsNormal );
 
-					IF( writer, giNormal == wsNormal )
+					IF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );
@@ -248,8 +250,10 @@ namespace castor3d
 
 					auto giNormal = writer.declLocale( "giNormal"
 						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+					auto areEqual = writer.declLocale( "areEqual"
+						, giNormal == wsNormal );
 
-					IF( writer, giNormal == wsNormal )
+					IF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );
@@ -343,8 +347,10 @@ namespace castor3d
 
 					auto giNormal = writer.declLocale( "giNormal"
 						, textureLod( c3d_mapNml, texCoord, 0.0_f ).xyz() );
+					auto areEqual = writer.declLocale( "areEqual"
+						, giNormal == wsNormal );
 
-					IF( writer, giNormal == wsNormal )
+					IF( writer, areEqual.x() && areEqual.y() && areEqual.z() )
 					{
 						auto offset = writer.declLocale( "offset"
 							, vec2( Float{ 1.0f / width }, Float{ 1.0f / height } ) );

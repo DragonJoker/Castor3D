@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_RenderTechnique_H___
 
 #include "TechniqueModule.hpp"
+
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
@@ -12,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssgi/SsgiConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
+#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
@@ -273,6 +275,7 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		std::unique_ptr< DepthPass > m_depthPass;
 #endif
+		std::unique_ptr< Voxelizer > m_voxelizer;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;

@@ -117,9 +117,12 @@ namespace castor3d
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
 		eInvertNormals = 0x2000,
+		//!\~english	Vertex shader inverts normals (for front culling).
+		//\~french		Le vertex shader inverse les normales (pour le front culling).
+		eHasGeometry = 0x4000,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = 0x3FFF,
+		eAll = 0x7FFF,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**

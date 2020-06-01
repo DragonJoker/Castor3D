@@ -353,11 +353,6 @@ namespace castor3d
 			return *m_renderLoop;
 		}
 
-		inline bool getPerObjectLighting()
-		{
-			return m_perObjectLighting;
-		}
-
 		inline bool isThreaded()
 		{
 			return m_threaded;
@@ -467,11 +462,6 @@ namespace castor3d
 			m_userInputListener = listener;
 		}
 
-		inline void setPerObjectLighting( bool value )
-		{
-			m_perObjectLighting = value;
-		}
-
 		inline void setMaterialsType( MaterialType type )
 		{
 			m_materialType = type;
@@ -492,7 +482,6 @@ namespace castor3d
 		RenderSystemUPtr m_renderSystem;
 		bool m_cleaned{ true };
 		bool m_threaded{ false };
-		bool m_perObjectLighting{ true };
 		SamplerSPtr m_defaultSampler;
 		SamplerSPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;

@@ -54,7 +54,6 @@ namespace castor3d
 	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene
 		, ashes::Semaphore const & toWait )
 	{
-		m_engine.setPerObjectLighting( true );
 		auto * result = &toWait;
 		result = &m_transparentPass.render( *result );
 		result = &m_finalCombinePass.render( scene.getFog().getType()

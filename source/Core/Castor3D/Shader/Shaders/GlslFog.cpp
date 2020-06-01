@@ -17,13 +17,12 @@ namespace castor3d
 					, [&writer, flags]( Vec4 const & bgColour
 						, Vec4 const & colour
 						, Float const & dist
-						, Float const & y )
+						, Float const & y
+						, Vec4 const & fogInfo
+						, Vec4 const & cameraPosition )
 					{
-						auto c3d_fogInfo = writer.getVariable< Vec4 >( "c3d_fogInfo" );
-						auto c3d_cameraPosition = writer.getVariable< Vec4 >( "c3d_cameraPosition" );
-
 						auto z = writer.declLocale( "z", dist / 100.0_f );
-						auto density = writer.declLocale( "density", c3d_fogInfo.y() );
+						auto density = writer.declLocale( "density", fogInfo.y() );
 
 						if ( flags == FogType::eLinear )
 						{
@@ -62,9 +61,9 @@ namespace castor3d
 							// Ground
 							//my camera y is 10.0. you can change it or pass it as a uniform
 							auto be = writer.declLocale( "be"
-								, ( c3d_cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
+								, ( cameraPosition.y() - y ) * 0.004_f );// 0.004 is just a factor; change it if you want
 							auto bi = writer.declLocale( "bi"
-								, ( c3d_cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
+								, ( cameraPosition.y() - y ) * 0.001_f );// 0.001 is just a factor; change it if you want
 							auto extinction = writer.declLocale( "ext"
 								, exp( -z * be ) );
 							auto inscattering = writer.declLocale( "insc"
@@ -77,19 +76,25 @@ namespace castor3d
 					, InVec4( writer, "bgColour" )
 					, InVec4( writer, "colour" )
 					, InFloat( writer, "dist" )
-					, InFloat( writer, "y" ) );
+					, InFloat( writer, "y" )
+					, InVec4( writer, "fogInfo" )
+					, InVec4( writer, "cameraPosition" ) );
 			}
 		}
 
 		Vec4 Fog::apply( Vec4 const & bgColour
 			, Vec4 const & colour
 			, Float const & dist
-			, Float const & y )
+			, Float const & y
+			, Vec4 const & fogInfo
+			, Vec4 const & cameraPosition )
 		{
 			return m_fog( bgColour
 				, colour
 				, dist
-				, y );
+				, y
+				, fogInfo 
+				, cameraPosition );
 		}
 }
 }

@@ -128,7 +128,6 @@ namespace castor3d
 			opaqueBlackClearColor,
 		};
 
-		getEngine()->setPerObjectLighting( true );
 		auto timerBlock = getTimer().start();
 		auto & device = getCurrentRenderDevice( *this );
 

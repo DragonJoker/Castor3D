@@ -588,13 +588,17 @@ namespace castor3d
 					, 1u );
 			}
 
+			if ( node.pipeline.getFlags().texturesCount )
+			{
+				uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
+					, *node.texturesUbo.buffer
+					, node.texturesUbo.offset
+					, 1u );
+			}
+
 			uboDescriptorSet.createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
 				, *node.modelUbo.buffer
 				, node.modelUbo.offset
-				, 1u );
-			uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-				, *node.texturesUbo.buffer
-				, node.texturesUbo.offset
 				, 1u );
 		}
 	}
@@ -1255,21 +1259,31 @@ namespace castor3d
 
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
+			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT )  );
@@ -1284,7 +1298,9 @@ namespace castor3d
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
@@ -1298,7 +1314,9 @@ namespace castor3d
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		return uboBindings;

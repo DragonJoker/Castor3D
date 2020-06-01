@@ -617,7 +617,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/Plugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/PluginException.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/PostFxPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/TechniquePlugin.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Plugin/ToneMappingPlugin.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -630,7 +629,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PluginException.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PluginModule.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/PostFxPlugin.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/TechniquePlugin.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Plugin/ToneMappingPlugin.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
@@ -1047,6 +1045,26 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Technique\\Transparent" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Technique\\Transparent" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizeModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/VoxelizePass.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Technique/Voxelize/Voxelizer.hpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Render\\Technique\\Voxelize" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\Technique\\Voxelize" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/ToneMapping/HdrConfig.cpp

@@ -234,7 +234,6 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		m_engine.setPerObjectLighting( false );
 		result = &m_opaquePass.render( *result );
 		result = &m_lightingPass->render( scene
 			, camera

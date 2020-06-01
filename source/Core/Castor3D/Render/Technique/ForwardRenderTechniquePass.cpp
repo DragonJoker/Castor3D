@@ -208,7 +208,6 @@ namespace castor3d
 				opaqueBlackClearColor,
 			};
 
-			getEngine()->setPerObjectLighting( true );
 			auto timerBlock = getTimer().start();
 			auto & device = getCurrentRenderDevice( *this );
 
@@ -765,7 +764,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 
@@ -1051,7 +1052,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 
@@ -1335,7 +1338,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 

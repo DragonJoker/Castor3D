@@ -9,7 +9,6 @@
 #include "Castor3D/Plugin/ParticlePlugin.hpp"
 #include "Castor3D/Plugin/PluginException.hpp"
 #include "Castor3D/Plugin/PostFxPlugin.hpp"
-#include "Castor3D/Plugin/TechniquePlugin.hpp"
 #include "Castor3D/Plugin/ToneMappingPlugin.hpp"
 #include "Castor3D/Miscellaneous/VersionException.hpp"
 
@@ -198,10 +197,6 @@ namespace castor3d
 
 			case PluginType::eGeneric:
 				result = std::make_shared< GenericPlugin >( library, getEngine() );
-				break;
-
-			case PluginType::eTechnique:
-				result = std::make_shared< TechniquePlugin >( library, getEngine() );
 				break;
 
 			case PluginType::eToneMapping:

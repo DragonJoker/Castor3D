@@ -308,7 +308,9 @@ namespace castor3d
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( position )
-							, position.z() );
+							, position.z()
+							, c3d_fogInfo
+							, c3d_cameraPosition );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -558,7 +560,9 @@ namespace castor3d
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( position )
-							, position.z() );
+							, position.z()
+							, c3d_fogInfo
+							, c3d_cameraPosition );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -808,7 +812,9 @@ namespace castor3d
 						pxl_fragColor = fog.apply( vec4( utils.removeGamma( c3d_gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 							, pxl_fragColor
 							, length( position )
-							, position.z() );
+							, position.z()
+							, c3d_fogInfo
+							, c3d_cameraPosition );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
