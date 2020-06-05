@@ -20,7 +20,7 @@ namespace castor3d
 		using Textures = std::vector< TextureUnit const * >;
 
 	public:
-		C3D_API GBufferBase( castor::String name )
+		C3D_API explicit GBufferBase( castor::String name )
 			: castor::Named{ std::move( name ) }
 		{
 		}

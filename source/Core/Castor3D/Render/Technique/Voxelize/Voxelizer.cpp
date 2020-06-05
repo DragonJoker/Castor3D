@@ -26,7 +26,7 @@ namespace castor3d
 			{
 				VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT,
 				VK_IMAGE_TYPE_3D,
-				VK_FORMAT_R8_UINT,
+				VK_FORMAT_R8_UNORM,
 				size,
 				1u,
 				1u,

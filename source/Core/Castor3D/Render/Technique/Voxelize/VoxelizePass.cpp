@@ -209,7 +209,7 @@ namespace castor3d
 		fbAttaches.emplace_back( m_colourView );
 
 		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
-			, { m_colourView.image->getDimensions().width, m_colourView.image->getDimensions().height }
+			, { m_result->getWidth(), m_result->getHeight() }
 			, std::move( fbAttaches ) );
 
 		m_commands =
@@ -327,18 +327,11 @@ namespace castor3d
 		// Inputs
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_MODEL_MATRIX( writer, ModelMatrixUbo::BindingPoint, 0u );
-		UBO_MODEL( writer, ModelUbo::BindingPoint, 0 );
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		auto position = writer.declInput< Vec4 >( "position"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto normal = writer.declInput< Vec3 >( "normal"
-			, RenderPass::VertexInputs::NormalLocation );
-		auto tangent = writer.declInput< Vec3 >( "tangent"
-			, RenderPass::VertexInputs::TangentLocation );
-		auto uv = writer.declInput< Vec3 >( "uv"
-			, RenderPass::VertexInputs::TextureLocation );
 		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
@@ -354,35 +347,12 @@ namespace castor3d
 		auto transform = writer.declInput< Mat4 >( "transform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( "material"
-			, RenderPass::VertexInputs::MaterialLocation
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
 		auto position2 = writer.declInput< Vec4 >( "position2"
 			, RenderPass::VertexInputs::Position2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto normal2 = writer.declInput< Vec3 >( "normal2"
-			, RenderPass::VertexInputs::Normal2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto tangent2 = writer.declInput< Vec3 >( "tangent2"
-			, RenderPass::VertexInputs::Tangent2Location
-			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( "texture2"
-			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
 
 		// Outputs
-		uint32_t index = 0u;
-		auto vtx_position = writer.declOutput< Vec3 >( "vtx_position", index++ );
-		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal", index++ );
-		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent", index++ );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent", index++ );
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", index++ );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material", index++ );
-		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance", index++ );
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", index++ );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition", index++ );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition", index++ );
 		auto out = writer.getOut();
 
 		writer.implementFunction< sdw::Void >( "main"
@@ -390,12 +360,6 @@ namespace castor3d
 			{
 				auto curPosition = writer.declLocale( "curPosition"
 					, vec4( position.xyz(), 1.0_f ) );
-				auto v4Normal = writer.declLocale( "v4Normal"
-					, vec4( normal, 0.0_f ) );
-				auto v4Tangent = writer.declLocale( "v4Tangent"
-					, vec4( tangent, 0.0_f ) );
-				auto v3Texture = writer.declLocale( "v3Texture"
-					, uv );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
@@ -414,59 +378,13 @@ namespace castor3d
 				}
 
 				auto curMtxModel = writer.getVariable< Mat4 >( "curMtxModel" );
-				auto mtxNormal = writer.declLocale( "mtxNormal"
-					, transpose( inverse( mat3( curMtxModel ) ) ) );
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
-				{
-					vtx_material = writer.cast< UInt >( material );
-				}
-				else
-				{
-					vtx_material = writer.cast< UInt >( c3d_materialIndex );
-				}
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
 					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v4Normal = vec4( sdw::mix( v4Normal.xyz(), normal2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v4Tangent = vec4( sdw::mix( v4Tangent.xyz(), tangent2.xyz(), vec3( c3d_time ) ), 1.0_f );
-					v3Texture = sdw::mix( v3Texture, texture2, vec3( c3d_time ) );
 				}
 
-				vtx_texture = v3Texture;
-				curPosition = curMtxModel * curPosition;
-				vtx_worldPosition = curPosition.xyz();
-				vtx_viewPosition = curPosition.xyz();
-
-				if ( checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) )
-				{
-					vtx_normal = normalize( mtxNormal * -v4Normal.xyz() );
-				}
-				else
-				{
-					vtx_normal = normalize( mtxNormal * v4Normal.xyz() );
-				}
-
-				vtx_tangent = normalize( mtxNormal * v4Tangent.xyz() );
-				vtx_tangent = normalize( sdw::fma( -vtx_normal, vec3( dot( vtx_tangent, vtx_normal ) ), vtx_tangent ) );
-				vtx_bitangent = cross( vtx_normal, vtx_tangent );
-				vtx_instance = writer.cast< UInt >( in.instanceIndex );
-				curPosition = c3d_projection * curPosition;
-
-				// Convert the jitter from non-homogeneous coordiantes to homogeneous
-				// coordinates and add it:
-				// (note that for providing the jitter in non-homogeneous projection space,
-				//  pixel coordinates (screen space) need to multiplied by two in the C++
-				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
-				out.vtx.position = curPosition;
-
-				vtx_curPosition = curPosition.xyw();
-				// Positions in projection space are in [-1, 1] range, while texture
-				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				out.vtx.position = c3d_projection * curMtxModel * curPosition;
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -488,17 +406,6 @@ namespace castor3d
 		auto in = writer.getIn();
 
 		// Outputs
-		uint32_t index = 0u;
-		auto vtx_position = writer.declOutput< Vec3 >( "vtx_position", index++ );
-		auto vtx_normal = writer.declOutput< Vec3 >( "vtx_normal", index++ );
-		auto vtx_tangent = writer.declOutput< Vec3 >( "vtx_tangent", index++ );
-		auto vtx_bitangent = writer.declOutput< Vec3 >( "vtx_bitangent", index++ );
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", index++ );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material", index++ );
-		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance", index++ );
-		auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", index++ );
-		auto vtx_viewPosition = writer.declOutput< Vec3 >( "vtx_viewPosition", index++ );
-		auto vtx_curPosition = writer.declOutput< Vec3 >( "vtx_curPosition", index++ );
 		auto out = writer.getOut();
 
 		writer.implementFunction< Void >( "main"
@@ -526,10 +433,6 @@ namespace castor3d
 				}
 
 				auto up = writer.getVariable< Vec3 >( "up" );
-				vtx_material = writer.cast< UInt >( c3d_materialIndex );
-				vtx_normal = curToCamera;
-				vtx_tangent = up;
-				vtx_bitangent = right;
 
 				auto width = writer.declLocale( "width"
 					, c3d_dimensions.x() );
@@ -542,30 +445,13 @@ namespace castor3d
 					height = c3d_dimensions.y() / c3d_clipInfo.y();
 				}
 
-				vtx_worldPosition = curBbcenter
-					+ right * position.x() * width
-					+ up * position.y() * height;
-
-				vtx_texture = vec3( uv, 0.0_f );
-				vtx_instance = writer.cast< UInt >( in.instanceIndex );
-				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_curView * vec4( vtx_worldPosition, 1.0_f ) );
-				curPosition = c3d_projection * curPosition;
-				vtx_viewPosition = curPosition.xyz();
-
-				// Convert the jitter from non-homogeneous coordiantes to homogeneous
-				// coordinates and add it:
-				// (note that for providing the jitter in non-homogeneous projection space,
-				//  pixel coordinates (screen space) need to multiplied by two in the C++
-				//  code)
-				curPosition.xy() -= c3d_jitter * curPosition.w();
-				out.vtx.position = curPosition;
-
-				vtx_curPosition = curPosition.xyw();
-				// Positions in projection space are in [-1, 1] range, while texture
-				// coordinates are in [0, 1] range. So, we divide by 2 to get velocities in
-				// the scale (and flip the y axis):
-				vtx_curPosition.xy() *= vec2( 0.5_f, -0.5_f );
+				auto outPosition = writer.declLocale( "outPosition"
+					, vec4( curBbcenter
+						+ right * position.x() * width
+						+ up * position.y() * height
+						, 1.0_f ) );
+				outPosition = c3d_projection * outPosition;
+				out.vtx.position = outPosition;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -578,29 +464,14 @@ namespace castor3d
 		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
 		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
 
-		auto pxl_voxelVisibility = writer.declImage< WUImg3DR8 >( "pxl_voxelVisibility", 0u, 1u );
+		auto pxl_voxelVisibility = writer.declImage< WFImg3DR32 >( "pxl_voxelVisibility", 0u, 1u );
 
-		uint32_t index = 0u;
-		auto vtx_position = writer.declInputArray< Vec3 >( "vtx_position", index++, 3u );
-		auto vtx_normal = writer.declInputArray< Vec3 >( "vtx_normal", index++, 3u );
-		auto vtx_tangent = writer.declInputArray< Vec3 >( "vtx_tangent", index++, 3u );
-		auto vtx_bitangent = writer.declInputArray< Vec3 >( "vtx_bitangent", index++, 3u );
-		auto vtx_texture = writer.declInputArray< Vec3 >( "vtx_texture", index++, 3u );
-		auto vtx_material = writer.declInputArray< UInt >( "vtx_material", index++, 3u );
-		auto vtx_instance = writer.declInputArray< UInt >( "vtx_instance", index++, 3u );
-		auto vtx_worldPosition = writer.declInputArray< Vec3 >( "vtx_worldPosition", index++, 3u );
-		auto vtx_viewPosition = writer.declInputArray< Vec3 >( "vtx_viewPosition", index++, 3u );
-		auto vtx_curPosition = writer.declInputArray< Vec3 >( "vtx_curPosition", index++, 3u );
+		// Shader inputs
 		auto in = writer.getIn();
 
-		index = 0u;
+		// Outputs
+		uint32_t index = 0u;
 		auto geo_position = writer.declOutput< Vec4 >( "geo_position", index++ );
-		auto geo_normal = writer.declOutput< Vec3 >( "geo_normal", index++ );
-		auto geo_tangent = writer.declOutput< Vec3 >( "geo_tangent", index++ );
-		auto geo_bitangent = writer.declOutput< Vec3 >( "geo_bitangent", index++ );
-		auto geo_texture = writer.declOutput< Vec3 >( "geo_texture", index++ );
-		auto geo_material = writer.declOutput< UInt >( "geo_material", index++ );
-		auto geo_instance = writer.declOutput< UInt >( "geo_instance", index++ );
 		auto geo_minAabb = writer.declOutput< Vec3 >( "geo_minAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
 		auto geo_maxAabb = writer.declOutput< Vec3 >( "geo_maxAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
 		auto out = writer.getOut();
@@ -619,7 +490,7 @@ namespace castor3d
 				auto pixelSize = writer.declLocale( "pixelSize"
 					, vec3( 1.0_f ) / imgSize );
 				auto pixelDiagonal = writer.declLocale< Float >( "pixelDiagonal"
-					, Float{ sqrt( 3.0f ) } / imgSize.x() );
+					, Float{ sqrt( 3.0f ) } * pixelSize.x() );
 
 				auto vertPosition = writer.declLocaleArray< Vec4 >( "vertPosition", 3u );
 				auto edges = writer.declLocaleArray< Vec3 >( "edges", 3u );
@@ -629,14 +500,16 @@ namespace castor3d
 				auto maxAABB = writer.declLocale< Vec3 >( "maxAABB"
 					, vec3( -2.0_f, -2.0f, -2.0f ) );
 
-				for ( uint32_t i = 0u; i < 3u; ++i )
+				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
 					vertPosition[i] = in.vtx[i].position;
-					edges[i] = normalize( in.vtx[( i + 1 ) % 3].position.xyz() / in.vtx[( i + 1 ) % 3].position.w() - in.vtx[i].position.xyz() / in.vtx[i].position.w() );
+					edges[i] = normalize( ( in.vtx[( i + 1 ) % 3].position.xyz() / vec3( in.vtx[( i + 1 ) % 3].position.w() ) )
+						- ( in.vtx[i].position.xyz() / vec3( in.vtx[i].position.w() ) ) );
 					edgeNormals[i] = normalize( cross( edges[i], faceNormal ) );
 					minAABB = min( minAABB, vertPosition[i].xyz() );
 					maxAABB = max( maxAABB, vertPosition[i].xyz() );
 				}
+				ROF;
 
 				// calculating on which plane this triangle will be projected. Which value is maximum ? x=0, y=1, z=2
 				auto maxIndex = writer.declLocale( "maxIndex"
@@ -647,22 +520,13 @@ namespace castor3d
 				minAABB -= pixelSize;
 				maxAABB += pixelSize;
 
-				geo_minAabb = minAABB;
-				geo_maxAabb = maxAABB;
-
 				auto biSector = writer.declLocale< Vec3 >( "biSector" );
 				// project triangle on xy, yz or yz plane where it's visible most
 				// also - calculate data for conservative rasterization
-				for ( uint32_t i = 0u; i < 3u; ++i )
+				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
 				  // calculate bisector for conservative rasterization
 					biSector = pixelDiagonal * ( ( edges[( i + 2 ) % 3] / dot( edges[( i + 2 ) % 3], edgeNormals[i] ) ) + ( edges[i] / dot( edges[i], edgeNormals[( i + 2 ) % 3] ) ) );
-					geo_normal = vtx_normal[i];
-					geo_tangent = vtx_tangent[i];
-					geo_bitangent = vtx_bitangent[i];
-					geo_texture = vtx_texture[i];
-					geo_material = vtx_material[i];
-					geo_instance = vtx_instance[i];
 					geo_position = vec4( vertPosition[i].xyz() / vertPosition[i].w() + biSector, 1 );
 
 					SWITCH( writer, maxIndex )
@@ -688,8 +552,11 @@ namespace castor3d
 					}
 					HCTIWS;
 
+					geo_minAabb = minAABB;
+					geo_maxAabb = maxAABB;
 					EmitVertex( writer );
 				}
+				ROF;
 
 				EndPrimitive( writer );
 			} );
@@ -703,16 +570,10 @@ namespace castor3d
 		FragmentWriter writer;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		auto pxl_voxelVisibility = writer.declImage< WUImg3DR8 >( "pxl_voxelVisibility", 0u, 1u );
+		auto pxl_voxelVisibility = writer.declImage< WFImg3DR32 >( "pxl_voxelVisibility", 0u, 1u );
 
 		uint32_t index = 0u;
 		auto geo_position = writer.declInput< Vec3 >( "geo_position", index++ );
-		auto geo_normal = writer.declInput< Vec3 >( "geo_normal", index++ );
-		auto geo_tangent = writer.declInput< Vec3 >( "geo_tangent", index++ );
-		auto geo_bitangent = writer.declInput< Vec3 >( "geo_bitangent", index++ );
-		auto geo_texture = writer.declInput< Vec3 >( "geo_texture", index++ );
-		auto geo_material = writer.declInput< UInt >( "geo_material", index++ );
-		auto geo_instance = writer.declInput< UInt >( "geo_instance", index++ );
 		auto geo_minAabb = writer.declInput< Vec3 >( "geo_minAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
 		auto geo_maxAabb = writer.declInput< Vec3 >( "geo_maxAabb", index++, uint32_t( sdw::var::Flag::eFlat ) );
 		auto in = writer.getIn();
@@ -734,7 +595,7 @@ namespace castor3d
 					, geo_position * 0.5 + vec3( 0.5_f ) );
 				imageStore( pxl_voxelVisibility
 					, imageSize( pxl_voxelVisibility ) * ivec3( texcoord )
-					, 255_u );
+					, 1.0_f );
 				pxl_fragColor = vec4( 1.0_f );
 			} );
 

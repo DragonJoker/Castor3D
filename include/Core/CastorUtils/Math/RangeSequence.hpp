@@ -40,7 +40,7 @@ namespace castor
 		using SequenceType = std::vector< RangeType >;
 
 	public:
-		inline RangeSequenceT( std::vector< T > const & sequence )
+		inline explicit RangeSequenceT( std::vector< T > const & sequence )
 			: Range{ sequence.front(), sequence.back() }
 			, m_sequence{ convert( sequence ) }
 		{

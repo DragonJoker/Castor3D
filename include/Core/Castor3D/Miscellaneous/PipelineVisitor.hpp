@@ -16,7 +16,7 @@ namespace castor3d
 	class PipelineVisitorBase
 	{
 	protected:
-		inline PipelineVisitorBase( bool forceSubPassesVisit )
+		inline explicit PipelineVisitorBase( bool forceSubPassesVisit )
 			: forceSubPassesVisit{ forceSubPassesVisit }
 		{
 		}

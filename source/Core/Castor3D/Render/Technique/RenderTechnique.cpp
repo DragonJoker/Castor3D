@@ -257,7 +257,7 @@ namespace castor3d
 			m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderTechniqueUpload" );
 
 			m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
-				, VkExtent3D{ 512u, 512u, 512u }
+				, VkExtent3D{ 64u, 64u, 64u }
 				, *m_renderTarget.getScene()
 				, m_renderTarget.getCuller()
 				, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );

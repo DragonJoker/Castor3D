@@ -30,10 +30,10 @@ namespace castor3d
 		Point2f doCalcSpotLightBCone( const castor3d::SpotLight & light
 			, float max )
 		{
-			auto length = getMaxDistance( light
+			float length{ getMaxDistance( light
 				, light.getAttenuation()
-				, max );
-			auto width = light.getCutOff().degrees() / ( 45.0f );
+				, max ) };
+			float width{ light.getCutOff().degrees() / ( 45.0f ) };
 			return Point2f{ length * width, length };
 		}
 	}
@@ -89,13 +89,6 @@ namespace castor3d
 
 	void SpotLightPass::accept( PipelineVisitorBase & visitor )
 	{
-		String name = cuT( "SpotLight" );
-
-		if ( m_shadows )
-		{
-			name += cuT( " Shadow" );
-		}
-
 		if ( m_vertexShader.shader )
 		{
 			visitor.visit( m_vertexShader );

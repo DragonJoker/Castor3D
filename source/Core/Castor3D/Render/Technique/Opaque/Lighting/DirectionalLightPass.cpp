@@ -295,13 +295,6 @@ namespace castor3d
 
 	void DirectionalLightPass::accept( PipelineVisitorBase & visitor )
 	{
-		String name = cuT( "DirectionalLight" );
-
-		if ( m_shadows )
-		{
-			name += cuT( " Shadow" );
-		}
-
 		if ( m_vertexShader.shader )
 		{
 			visitor.visit( m_vertexShader );

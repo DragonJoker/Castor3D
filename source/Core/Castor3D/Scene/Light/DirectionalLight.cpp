@@ -11,6 +11,8 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include <CastorUtils/Math/TransformationMatrix.hpp>
+
 #include <ashespp/Core/Device.hpp>
 
 using namespace castor;
@@ -76,8 +78,8 @@ namespace castor3d
 				// Project frustum corners into world space
 				for ( auto & frustumCorner : frustumCorners )
 				{
-					auto invCorner = invCameraVP * Point4f{ frustumCorner[0], frustumCorner[1], frustumCorner[2], 1.0f };
-					frustumCorner = Point3f{ invCorner / invCorner[3] };
+					auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
+					frustumCorner = Point3f{ invCorner / invCorner->w };
 				}
 
 				for ( uint32_t i = 0; i < 4; ++i )
@@ -108,7 +110,18 @@ namespace castor3d
 				Point3f maxExtents{ radius, radius, radius };
 				Point3f minExtents = -maxExtents;
 
+				Point3f lightDir = light.getDirection();
+
+				auto & cascade = result[cascadeIdx];
+				cascade.viewMatrix = matrix::lookAt( frustumCenter - lightDir * -minExtents->z, frustumCenter, { 0.0f, 1.0f, 0.0f } );
+				cascade.projMatrix = matrix::ortho( minExtents->x, maxExtents->x, minExtents->y, maxExtents->y, 0.0f, maxExtents->z - minExtents->z );
+
+				// Store split distance and matrix in cascade
+				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
+#if 0
 				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
+
 				Point3f up{ 0.0f, 1.0f, 0.0f };
 				Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
 				up = point::getNormalised( point::cross( lightDirection, right ) );
@@ -138,6 +151,7 @@ namespace castor3d
 				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
 				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+#endif
 				prevSplitDist = splitDist;
 			}
 
@@ -223,6 +237,7 @@ namespace castor3d
 	{
 		m_direction = Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( m_direction, m_direction );
+		point::normalise( m_direction );
 	}
 
 	void DirectionalLight::doBind( Point4f * buffer )const

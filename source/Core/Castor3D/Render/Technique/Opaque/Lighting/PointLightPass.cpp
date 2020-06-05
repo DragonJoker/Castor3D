@@ -85,13 +85,6 @@ namespace castor3d
 
 	void PointLightPass::accept( PipelineVisitorBase & visitor )
 	{
-		String name = cuT( "PointLight" );
-
-		if ( m_shadows )
-		{
-			name += cuT( " Shadow" );
-		}
-
 		if ( m_vertexShader.shader )
 		{
 			visitor.visit( m_vertexShader );
