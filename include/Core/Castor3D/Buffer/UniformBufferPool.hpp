@@ -13,7 +13,7 @@ namespace castor3d
 	template< typename T >
 	struct UniformBufferOffset
 	{
-		UniformBuffer< T > * buffer{ nullptr };
+		PoolUniformBuffer< T > * buffer{ nullptr };
 		VkMemoryPropertyFlags flags{ 0u };
 		uint32_t offset{ 0u };
 
@@ -44,7 +44,12 @@ namespace castor3d
 		: public castor::OwnedBy< RenderSystem >
 	{
 	public:
-		using BufferArray = std::vector< UniformBufferUPtr< T > >;
+		struct Buffer
+		{
+			uint32_t index;
+			PoolUniformBufferUPtr< T > buffer;
+		};
+		using BufferArray = std::vector< Buffer >;
 
 	public:
 		/**
@@ -79,26 +84,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 */
-		void upload()const;
-		/**
-		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 */
 		void upload( ashes::CommandBuffer const & cb )const;
-		/**
-		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	timer	The render pass timer.
-		 *\param[in]	index	The render pass index.
-		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	timer	Le timer de passe de rendu.
-		 *\param[in]	index	L'indice de passe de rendu.
-		 */
-		void upload( RenderPassTimer & timer
-			, uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
@@ -144,9 +130,12 @@ namespace castor3d
 		typename BufferArray::iterator doFindBuffer( BufferArray & array );
 
 	private:
-		uint32_t m_maxCount{ 0u };
-		uint32_t m_maxSize{ 0u };
+		uint32_t m_maxUboElemCount{ 0u };
+		uint32_t m_maxUboSize{ 0u };
+		uint32_t m_maxPoolUboCount{ 10u };
+		uint32_t m_currentUboIndex{ 0u };
 		ashes::StagingBufferPtr m_stagingBuffer;
+		T * m_stagingData;
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
 	};

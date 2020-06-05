@@ -554,13 +554,13 @@ namespace castor3d
 		}
 	}
 
-	void Engine::uploadUbos()
+	void Engine::uploadUbos( ashes::CommandBuffer const & commandBuffer )
 	{
-		m_matrixUboPool->upload();
-		m_hdrConfigUboPool->upload();
-		m_rsmConfigUboPool->upload();
-		m_modelMatrixUboPool->upload();
-		m_shadowMapUboPool->upload();
+		m_matrixUboPool->upload( commandBuffer );
+		m_hdrConfigUboPool->upload( commandBuffer );
+		m_rsmConfigUboPool->upload( commandBuffer );
+		m_modelMatrixUboPool->upload( commandBuffer );
+		m_shadowMapUboPool->upload( commandBuffer );
 	}
 
 	void Engine::doLoadCoreData()

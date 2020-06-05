@@ -8,9 +8,11 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+
+#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
-#include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <chrono>
 
@@ -250,6 +252,12 @@ namespace castor3d
 		//!\~english	The pool used to update the render queues.
 		//!\~french		Le pool de mise à jour des files de rendu.
 		castor::ThreadPool m_queueUpdater;
+		//!\~english	The command buffer and semaphore used for UBO uploads.
+		//!\~french		Le command buffer et le semaphore utilisé pour l'upload des UBO.
+		CommandsSemaphore m_uploadCommand;
+		//!\~english	The fence and semaphore used for UBO uploads.
+		//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
+		ashes::FencePtr m_uploadFence;
 
 	private:
 		bool m_first = true;

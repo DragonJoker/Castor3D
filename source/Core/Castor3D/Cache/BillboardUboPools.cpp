@@ -65,7 +65,7 @@ namespace castor3d
 		}
 	}
 
-	void BillboardUboPools::uploadUbos()
+	void BillboardUboPools::uploadUbos( ashes::CommandBuffer const & commandBuffer )
 	{
 		auto count = m_modelUboPool.getBufferCount()
 			+ m_modelMatrixUboPool.getBufferCount()
@@ -78,15 +78,15 @@ namespace castor3d
 		{
 			auto timerBlock = m_updateTimer->start();
 			uint32_t index = 0u;
-			m_modelUboPool.upload( *m_updateTimer, index );
+			m_modelUboPool.upload( commandBuffer, *m_updateTimer, index );
 			index += std::max( m_modelUboPool.getBufferCount(), 1u );
-			m_modelMatrixUboPool.upload( *m_updateTimer, index );
+			m_modelMatrixUboPool.upload( commandBuffer, *m_updateTimer, index );
 			index += std::max( m_modelMatrixUboPool.getBufferCount(), 1u );
-			m_billboardUboPool.upload( *m_updateTimer, index );
+			m_billboardUboPool.upload( commandBuffer, *m_updateTimer, index );
 			index += std::max( m_billboardUboPool.getBufferCount(), 1u );
-			m_pickingUboPool.upload( *m_updateTimer, index );
+			m_pickingUboPool.upload( commandBuffer, *m_updateTimer, index );
 			index += std::max( m_pickingUboPool.getBufferCount(), 1u );
-			m_texturesUboPool.upload( *m_updateTimer, index );
+			m_texturesUboPool.upload( commandBuffer, *m_updateTimer, index );
 		}
 	}
 

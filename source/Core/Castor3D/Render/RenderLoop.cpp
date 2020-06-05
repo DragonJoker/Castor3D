@@ -33,6 +33,7 @@ namespace castor3d
 		, m_renderSystem{ *engine.getRenderSystem() }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_queueUpdater{ std::max( 2u, engine.getCpuInformations().getCoreCount() - ( isAsync ? 2u : 1u ) ) }
+		, m_uploadCommand{ nullptr, nullptr }
 	{
 		m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 	}
@@ -64,6 +65,8 @@ namespace castor3d
 				{
 					listener.fireEvents( EventType::eQueueRender );
 				} );
+			m_uploadCommand = { nullptr, nullptr };
+			m_uploadFence.reset();
 		}
 		else
 		{
@@ -184,16 +187,38 @@ namespace castor3d
 				{
 					m_renderSystem.setCurrentRenderDevice( nullptr );
 				} );
-			doProcessEvents( EventType::ePreRender );
-			getEngine()->getSceneCache().forEach( []( Scene & scene )
+			auto & device = getCurrentRenderDevice( m_renderSystem );
+
+			if ( !m_uploadCommand.commandBuffer )
+			{
+				m_uploadCommand =
 				{
-					scene.getGeometryCache().uploadUbos();
-					scene.getBillboardPools().uploadUbos();
-					scene.getAnimatedObjectGroupCache().uploadUbos();
+					device.graphicsCommandPool->createCommandBuffer( "RenderLoopUboUpload" ),
+					device->createSemaphore( "RenderLoopUboUpload" ),
+				};
+				m_uploadFence = device->createFence( "RenderLoopUboUpload" );
+			}
+
+			doProcessEvents( EventType::ePreRender );
+			m_uploadCommand.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			getEngine()->getSceneCache().forEach( [this, &device]( Scene & scene )
+				{
+					scene.getGeometryCache().uploadUbos( *m_uploadCommand.commandBuffer );
+					scene.getBillboardPools().uploadUbos( *m_uploadCommand.commandBuffer );
+					scene.getAnimatedObjectGroupCache().uploadUbos( *m_uploadCommand.commandBuffer );
+
 				} );
+			getEngine()->uploadUbos( *m_uploadCommand.commandBuffer );
+			m_uploadCommand.commandBuffer->end();
+			device.graphicsQueue->submit( { *m_uploadCommand.commandBuffer }
+				, {}
+				, { VK_PIPELINE_STAGE_TRANSFER_BIT }
+				, { *m_uploadCommand.semaphore }
+				, m_uploadFence.get() );
+			m_uploadFence->wait( ashes::MaxTimeout );
+			m_uploadFence->reset();
 			getEngine()->getMaterialCache().update();
 			getEngine()->getRenderTargetCache().update( info );
-			getEngine()->uploadUbos();
 			getEngine()->getRenderTargetCache().render( info );
 			doProcessEvents( EventType::eQueueRender );
 		}

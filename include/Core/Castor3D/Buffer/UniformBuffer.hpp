@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
@@ -34,8 +36,8 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		C3D_API UniformBufferBase( RenderSystem const & renderSystem
-			, uint32_t elemCount
-			, uint32_t elemSize
+			, VkDeviceSize elemCount
+			, VkDeviceSize elemSize
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
 			, castor::String debugName
@@ -451,18 +453,11 @@ namespace castor3d
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 */
 		inline UniformBuffer( RenderSystem const & renderSystem
-			, uint32_t count
+			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
 			, castor::String debugName
 			, ashes::QueueShare sharingMode = {} );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~UniformBuffer() = default;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -661,6 +656,102 @@ namespace castor3d
 	{
 		return std::make_unique< UniformBuffer< T > >( renderSystem
 			, uint32_t( count )
+			, usage
+			, flags
+			, std::move( name )
+			, std::move( sharingMode ) );
+	}
+
+	template< typename T >
+	class PoolUniformBuffer
+		: public UniformBufferBase
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem	The RenderSystem.
+		 *\param[in]	count			The elements count.
+		 *\param[in]	usage			The buffer usage flags.
+		 *\param[in]	flags			The buffer memory flags.
+		 *\param[in]	debugName		The buffer debug name.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem	Le RenderSystem.
+		 *\param[in]	count			Le nombre d'éléments.
+		 *\param[in]	usage			Les indicateurs d'utilisation du tampon.
+		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
+		 *\param[in]	debugName		Le nom debug du tampon.
+		 */
+		inline PoolUniformBuffer( RenderSystem const & renderSystem
+			, castor::ArrayView< T > data
+			, VkBufferUsageFlags usage
+			, VkMemoryPropertyFlags flags
+			, castor::String debugName
+			, ashes::QueueShare sharingMode = {} );
+		/**
+		*\~english
+		*\return
+		*	The N-th instance of the data.
+		*\~french
+		*\return
+		*	La n-ème instance des données.
+		*/
+		inline T const & getData( VkDeviceSize index = 0 )const
+		{
+			return m_data[index];
+		}
+		/**
+		*\~english
+		*\return
+		*	The N-th instance of the data.
+		*\~french
+		*\return
+		*	La n-ème instance des données.
+		*/
+		inline T & getData( VkDeviceSize index = 0 )
+		{
+			return m_data[index];
+		}
+		/**
+		*\~english
+		*\return
+		*	The data.
+		*\~french
+		*\return
+		*	Les données.
+		*/
+		inline castor::ArrayView< T > const & getDatas( VkDeviceSize index = 0 )const
+		{
+			return m_data;
+		}
+		/**
+		*\~english
+		*\return
+		*	The data.
+		*\~french
+		*\return
+		*	Les données.
+		*/
+		inline castor::ArrayView< T > & getDatas( VkDeviceSize index = 0 )
+		{
+			return m_data;
+		}
+
+	private:
+		castor::ArrayView< T > m_data;
+	};
+
+	template< typename T >
+	inline PoolUniformBufferUPtr< T > makePoolUniformBuffer( RenderSystem const & renderSystem
+		, castor::ArrayView< T > data
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags flags
+		, std::string name
+		, ashes::QueueShare sharingMode = {} )
+	{
+		return std::make_unique< PoolUniformBuffer< T > >( renderSystem
+			, std::move( data )
 			, usage
 			, flags
 			, std::move( name )

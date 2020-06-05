@@ -118,14 +118,14 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO en VRAM.
 		 */
-		C3D_API void uploadUbos()const;
+		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Updates the picking UBO pools in VRAM.
 		 *\~french
 		 *\brief		Met à jour les pools d'UBO de picking en VRAM.
 		 */
-		C3D_API void uploadPickingUbos()const;
+		C3D_API void uploadPickingUbos( ashes::CommandBuffer const & commandBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Cleans up the UBO pools.

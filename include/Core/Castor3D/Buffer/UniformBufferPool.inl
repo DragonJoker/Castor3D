@@ -10,6 +10,38 @@
 
 namespace castor3d
 {
+	namespace  details
+	{
+		inline void copyBuffer( ashes::CommandBuffer const & commandBuffer
+			, ashes::BufferBase const & src
+			, ashes::BufferBase const & dst
+			, VkDeviceSize offset
+			, VkDeviceSize size
+			, VkPipelineStageFlags flags )
+		{
+			auto srcSrcStage = src.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( srcSrcStage
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, src.makeTransferSource() );
+			auto dstSrcStage = dst.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( dstSrcStage
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, dst.makeTransferDestination() );
+			commandBuffer.copyBuffer( src
+				, dst
+				, uint32_t( size )
+				, uint32_t( offset ) );
+			srcSrcStage = src.getCompatibleStageFlags();
+			dstSrcStage = dst.getCompatibleStageFlags();
+			commandBuffer.memoryBarrier( srcSrcStage
+				, VK_PIPELINE_STAGE_HOST_BIT
+				, src.makeHostWrite() );
+			commandBuffer.memoryBarrier( dstSrcStage
+				, flags
+				, dst.makeUniformBufferInput() );
+		}
+	}
+
 	template< typename T >
 	UniformBufferPool< T >::UniformBufferPool( RenderSystem & renderSystem
 		, castor::String debugName )
@@ -27,24 +59,31 @@ namespace castor3d
 	void UniformBufferPool< T >::cleanup()
 	{
 		m_buffers.clear();
-		m_stagingBuffer.reset();
+
+		if ( m_stagingBuffer )
+		{
+			m_stagingBuffer->getBuffer().unlock();
+			m_stagingBuffer.reset();
+		}
 	}
 
 	template< typename T >
-	void UniformBufferPool< T >::upload()const
+	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & commandBuffer )const
 	{
 		if ( m_stagingBuffer )
 		{
 			auto & device = getCurrentRenderDevice( *this );
+			m_stagingBuffer->getBuffer().flush( 0u, m_currentUboIndex * m_maxUboSize );
 
 			for ( auto & bufferIt : m_buffers )
 			{
 				for ( auto & buffer : bufferIt.second )
 				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, *device.transferQueue
-						, *device.transferCommandPool
-						, 0u
+					details::copyBuffer( commandBuffer
+						, m_stagingBuffer->getBuffer()
+						, buffer.buffer->getBuffer().getBuffer()
+						, buffer.index * m_maxUboElemCount
+						, m_maxUboElemCount
 						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 				}
 			}
@@ -52,53 +91,7 @@ namespace castor3d
 	}
 
 	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & cb )const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, cb
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload( RenderPassTimer & timer
-		, uint32_t index )const
-	{
-		if ( m_stagingBuffer )
-		{
-			auto & device = getCurrentRenderDevice( *this );
-
-			for ( auto & bufferIt : m_buffers )
-			{
-				for ( auto & buffer : bufferIt.second )
-				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, *device.transferQueue
-						, *device.transferCommandPool
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-						, timer
-						, index );
-					timer.notifyPassRender( index );
-					++index;
-				}
-			}
-		}
-	}
-
-	template< typename T >
-	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & cb
+	void UniformBufferPool< T >::upload( ashes::CommandBuffer const & commandBuffer
 		, RenderPassTimer & timer
 		, uint32_t index )const
 	{
@@ -110,12 +103,12 @@ namespace castor3d
 			{
 				for ( auto & buffer : bufferIt.second )
 				{
-					buffer->upload( m_stagingBuffer->getBuffer()
-						, cb
-						, 0u
-						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-						, timer
-						, index );
+					details::copyBuffer( commandBuffer
+						, m_stagingBuffer->getBuffer()
+						, buffer.buffer->getBuffer().getBuffer()
+						, buffer.index * m_maxUboElemCount
+						, m_maxUboElemCount
+						, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 					timer.notifyPassRender( index );
 					++index;
 				}
@@ -129,27 +122,22 @@ namespace castor3d
 		UniformBufferOffset< T > result;
 
 		auto key = uint32_t( flags );
-		auto it = m_buffers.find( key );
-
-		if ( it == m_buffers.end() )
-		{
-			it = m_buffers.emplace( key, BufferArray{} ).first;
-		}
-
+		auto it = m_buffers.emplace( key, BufferArray{} ).first;
 		auto itB = doFindBuffer( it->second );
 
 		if ( itB == it->second.end() )
 		{
+			assert( m_currentUboIndex < m_maxPoolUboCount - 1u );
 			auto & renderSystem = *getRenderSystem();
 
-			if ( !m_maxCount )
+			if ( !m_maxUboElemCount )
 			{
 				auto & properties = renderSystem.getProperties();
 				auto maxSize = std::min( 65536u, properties.limits.maxUniformBufferRange );
 				auto elementSize = ashes::getAlignedSize( sizeof( T )
 					, properties.limits.minUniformBufferOffsetAlignment );
-				m_maxCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
-				m_maxSize = uint32_t( m_maxCount * elementSize );
+				m_maxUboElemCount = uint32_t( std::floor( float( maxSize ) / elementSize ) );
+				m_maxUboSize = uint32_t( m_maxUboElemCount * elementSize );
 
 				renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 					, [this]()
@@ -157,7 +145,7 @@ namespace castor3d
 						auto & device = getCurrentRenderDevice( *this );
 						m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
 							, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-							, m_maxSize
+							, m_maxUboSize * m_maxPoolUboCount
 							, ashes::QueueShare
 							{
 								{
@@ -166,6 +154,10 @@ namespace castor3d
 									device.queueFamiliesIndex[RenderDevice::TransferIdx],
 								}
 							} );
+						m_stagingData = reinterpret_cast< T * >( m_stagingBuffer->getBuffer().lock( 0u
+							, m_maxUboSize * m_maxPoolUboCount
+							, 0u ) );
+						assert( m_stagingData );
 					} ) );
 			}
 
@@ -184,20 +176,23 @@ namespace castor3d
 				};
 			}
 
-			auto buffer = makeUniformBuffer< T >( renderSystem
-				, m_maxCount
+			auto index = m_maxUboElemCount * m_currentUboIndex;
+			auto buffer = makePoolUniformBuffer( renderSystem
+				, castor::makeArrayView( m_stagingData + index
+					, m_stagingData + index + m_maxUboElemCount )
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, flags
 				, m_debugName );
-			it->second.emplace_back( std::move( buffer ) );
+			it->second.push_back( { m_currentUboIndex, std::move( buffer ) } );
+			++m_currentUboIndex;
 			itB = it->second.begin() + it->second.size() - 1;
-			auto & ubuffer = *it->second.back();
+			auto & ubuffer = it->second.back();
 
 			renderSystem.getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 				, [&ubuffer, sharingMode, this]()
 				{
 					auto & device = getCurrentRenderDevice( *this );
-					m_maxSize = ubuffer.initialise( 
+					m_maxUboSize = ubuffer.buffer->initialise(
 						{
 							{
 								device.queueFamiliesIndex[RenderDevice::GraphicsIdx],
@@ -208,8 +203,8 @@ namespace castor3d
 				} ) );
 		}
 
-		result.buffer = itB->get();
-		result.offset = ( *itB )->allocate();
+		result.buffer = itB->buffer.get();
+		result.offset = itB->buffer->allocate();
 		result.flags = flags;
 		return result;
 	}
@@ -222,12 +217,12 @@ namespace castor3d
 		CU_Require( it != m_buffers.end() );
 		auto itB = std::find_if( it->second.begin()
 			, it->second.end()
-			, [&bufferOffset]( UniformBufferUPtr< T > const & lookup )
+			, [&bufferOffset]( Buffer const & lookup )
 			{
-				return lookup.get() == bufferOffset.buffer;
+				return lookup.buffer.get() == bufferOffset.buffer;
 			} );
 		CU_Require( itB != it->second.end() );
-		( *itB )->deallocate( bufferOffset.offset );
+		itB->buffer->deallocate( bufferOffset.offset );
 	}
 
 	template< typename T >
@@ -248,7 +243,7 @@ namespace castor3d
 	{
 		auto it = array.begin();
 
-		while ( it != array.end() && !( *it )->hasAvailable() )
+		while ( it != array.end() && !it->buffer->hasAvailable() )
 		{
 			++it;
 		}

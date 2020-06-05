@@ -74,6 +74,21 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A uniform typed buffer, than can contain multiple sub-buffers.
+	*\remarks
+	*	Allocated from a pool.
+	*\~french
+	*\brief
+	*	Un tampon typé d'uniformes, pouvant contenir de multiples sous-tampons.
+	*\remarks
+	*	Alloué depuis un pool.
+	*\remark
+	*/
+	template< typename T >
+	class PoolUniformBuffer;
+	/**
+	*\~english
+	*\brief
 	*	A UniformBuffer and an offset from the GpuBuffer.
 	*\~french
 	*\brief
@@ -94,6 +109,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( UniformBufferBase );
 	CU_DeclareTemplateSmartPtr( UniformBuffer );
+	CU_DeclareTemplateSmartPtr( PoolUniformBuffer );
 	CU_DeclareTemplateSmartPtr( UniformBufferPool );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;

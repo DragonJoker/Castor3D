@@ -2,9 +2,11 @@
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	template< typename T >
 	inline UniformBuffer< T >::UniformBuffer( RenderSystem const & renderSystem
-		, uint32_t count
+		, VkDeviceSize count
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName
@@ -132,4 +134,29 @@ namespace castor3d
 			, timer
 			, index );
 	}
+
+	//*********************************************************************************************
+
+	template< typename T >
+	inline PoolUniformBuffer< T >::PoolUniformBuffer( RenderSystem const & renderSystem
+		, castor::ArrayView< T > data
+		, VkBufferUsageFlags usage
+		, VkMemoryPropertyFlags flags
+		, castor::String debugName
+		, ashes::QueueShare sharingMode )
+		: UniformBufferBase
+		{
+			renderSystem,
+			data.size(),
+			sizeof( T ),
+			usage,
+			flags,
+			std::move( debugName ),
+			std::move( sharingMode ),
+		}
+		, m_data{ std::move( data ) }
+	{
+	}
+
+	//*********************************************************************************************
 }

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderPass.hpp"
 
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -255,6 +256,7 @@ namespace castor3d
 		std::vector< castor::Point4f > m_buffer;
 		ashes::FencePtr m_transferFence;
 		PickNodeType m_pickNodeType{ PickNodeType::eNone };
+		CommandsSemaphore m_uploadCommand;
 	};
 }
 

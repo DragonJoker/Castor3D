@@ -215,7 +215,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Transfère en VRAM les données des pools d'UBO.
 		 */
-		C3D_API void uploadUbos();
+		C3D_API void uploadUbos( ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves plug-ins path
