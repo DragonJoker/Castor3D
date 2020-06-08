@@ -125,7 +125,6 @@ namespace castor3d
 		static ashes::VkClearValueArray const clearValues
 		{
 			defaultClearDepthStencil,
-			opaqueBlackClearColor,
 		};
 
 		auto timerBlock = getTimer().start();

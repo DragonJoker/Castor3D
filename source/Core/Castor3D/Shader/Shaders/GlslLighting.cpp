@@ -278,21 +278,21 @@ namespace castor3d
 		void LightingModel::doDeclareDirectionalLightUbo()
 		{
 			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
-			lightUbo.declMember( "c3d_light", *m_directionalLightType );
+			lightUbo.declStructMember( "c3d_light", *m_directionalLightType );
 			lightUbo.end();
 		}
 
 		void LightingModel::doDeclarePointLightUbo()
 		{
 			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
-			lightUbo.declMember( "c3d_light", *m_pointLightType );
+			lightUbo.declStructMember( "c3d_light", *m_pointLightType );
 			lightUbo.end();
 		}
 
 		void LightingModel::doDeclareSpotLightUbo()
 		{
 			Ubo lightUbo{ m_writer, "LightUbo", UboBindingPoint, 0u };
-			lightUbo.declMember( "c3d_light", *m_spotLightType );
+			lightUbo.declStructMember( "c3d_light", *m_spotLightType );
 			lightUbo.end();
 		}
 

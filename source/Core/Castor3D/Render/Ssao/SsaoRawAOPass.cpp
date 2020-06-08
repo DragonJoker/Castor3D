@@ -747,7 +747,7 @@ namespace castor3d
 			m_timer->beginPass( cmd );
 			cmd.beginRenderPass( *m_renderPass
 				, *m_frameBuffer
-				, { opaqueWhiteClearColor, opaqueBlackClearColor }
+				, { opaqueWhiteClearColor }
 				, VK_SUBPASS_CONTENTS_INLINE );
 			quad.registerFrame( cmd );
 			cmd.endRenderPass();
