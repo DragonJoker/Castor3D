@@ -90,6 +90,10 @@ namespace castor3d
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		/**
+		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
+		 */
+		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
+		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */
 		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;

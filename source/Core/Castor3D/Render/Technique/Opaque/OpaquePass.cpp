@@ -31,6 +31,8 @@
 using namespace castor;
 using namespace castor3d;
 
+#define C3D_DebugGeometryShaders 0
+
 namespace castor3d
 {
 	String const OpaquePass::Output1 = "c3d_output1";
@@ -448,6 +450,94 @@ namespace castor3d
 
 		writer.implementFunction< Void >( "main", main );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr OpaquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
+	{
+#if C3D_DebugGeometryShaders
+		using namespace sdw;
+		GeometryWriter writer;
+		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
+		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
+
+		auto in = writer.getIn();
+		auto out = writer.getOut();
+
+		// Geometry Inputs
+		auto vtx_worldPosition = writer.declInputArray< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation, 3u );
+		auto vtx_curPosition = writer.declInputArray< Vec3 >( "vtx_curPosition"
+			, RenderPass::VertexOutputs::CurPositionLocation, 3u );
+		auto vtx_prvPosition = writer.declInputArray< Vec3 >( "vtx_prvPosition"
+			, RenderPass::VertexOutputs::PrvPositionLocation, 3u );
+		auto vtx_tangentSpaceFragPosition = writer.declInputArray< Vec3 >( "vtx_tangentSpaceFragPosition"
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation, 3u );
+		auto vtx_tangentSpaceViewPosition = writer.declInputArray< Vec3 >( "vtx_tangentSpaceViewPosition"
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation, 3u );
+		auto vtx_normal = writer.declInputArray< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation, 3u );
+		auto vtx_tangent = writer.declInputArray< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation, 3u );
+		auto vtx_bitangent = writer.declInputArray< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation, 3u );
+		auto vtx_texture = writer.declInputArray< Vec3 >( "vtx_texture"
+			, RenderPass::VertexOutputs::TextureLocation, 3u );
+		auto vtx_instance = writer.declInputArray< UInt >( "vtx_instance"
+			, RenderPass::VertexOutputs::InstanceLocation, 3u );
+		auto vtx_material = writer.declInputArray< UInt >( "vtx_material"
+			, RenderPass::VertexOutputs::MaterialLocation, 3u );
+
+		// Geometry Outputs
+		auto geo_worldPosition = writer.declOutput< Vec3 >( "geo_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto geo_curPosition = writer.declOutput< Vec3 >( "geo_curPosition"
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto geo_prvPosition = writer.declOutput< Vec3 >( "geo_prvPosition"
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto geo_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "geo_tangentSpaceFragPosition"
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto geo_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "geo_tangentSpaceViewPosition"
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto geo_normal = writer.declOutput< Vec3 >( "geo_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto geo_tangent = writer.declOutput< Vec3 >( "geo_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto geo_bitangent = writer.declOutput< Vec3 >( "geo_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto geo_texture = writer.declOutput< Vec3 >( "geo_texture"
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto geo_instance = writer.declOutput< UInt >( "geo_instance"
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto geo_material = writer.declOutput< UInt >( "geo_material"
+			, RenderPass::VertexOutputs::MaterialLocation );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				for ( uint32_t i = 0; i < 3u; ++i )
+				{
+					geo_worldPosition = vtx_worldPosition[i];
+					geo_curPosition = vtx_curPosition[i];
+					geo_prvPosition = vtx_prvPosition[i];
+					geo_tangentSpaceFragPosition = vtx_tangentSpaceFragPosition[i];
+					geo_tangentSpaceViewPosition = vtx_tangentSpaceViewPosition[i];
+					geo_normal = vtx_normal[i];
+					geo_tangent = vtx_tangent[i];
+					geo_bitangent = vtx_bitangent[i];
+					geo_texture = vtx_texture[i];
+					geo_instance = vtx_instance[i];
+					geo_material = vtx_material[i];
+					out.vtx.position = in.vtx[i].position;
+					EmitVertex( writer );
+				}
+
+				EndPrimitive( writer );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+#else
+		return nullptr;
+#endif
 	}
 
 	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const

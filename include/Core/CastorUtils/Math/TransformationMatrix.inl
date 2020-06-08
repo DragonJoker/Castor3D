@@ -389,18 +389,18 @@ namespace castor
 			Point3< T > s( point::getNormalised( castor::point::cross( f, up ) ) );
 			Point3< T > u( castor::point::cross( s, f ) );
 			matrix.setIdentity();
-			matrix[0][0] = s[0];
-			matrix[0][1] = u[0];
-			matrix[0][2] = -f[0];
-			matrix[1][0] = s[1];
-			matrix[1][1] = u[1];
-			matrix[1][2] = -f[1];
-			matrix[2][0] = s[2];
-			matrix[2][1] = u[2];
-			matrix[2][2] = -f[2];
+			matrix[0][0] = s->x;
+			matrix[1][0] = s->y;
+			matrix[2][0] = s->z;
+			matrix[0][1] = u->x;
+			matrix[1][1] = u->y;
+			matrix[2][1] = u->z;
+			matrix[0][2] = -f->x;
+			matrix[1][2] = -f->y;
+			matrix[2][2] = -f->z;
 			matrix[3][0] = -point::dot( s, eye );
 			matrix[3][1] = -point::dot( u, eye );
-			matrix[3][2] =  point::dot( f, eye );
+			matrix[3][2] = point::dot( f, eye );
 			return matrix;
 		}
 

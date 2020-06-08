@@ -27,7 +27,8 @@ namespace castor3d
 			, DirectionalLight const & light
 			, uint32_t cascades )
 		{
-			auto & renderSystem = *light.getLight().getScene()->getEngine()->getRenderSystem();
+			auto & scene = *light.getLight().getScene();
+			auto & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
 
 			// Compute camera inverse view transform.
@@ -41,6 +42,15 @@ namespace castor3d
 			float maxZ = nearClip + clipRange;
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
+
+			float ar = camera.getHeight() / float( camera.getWidth() );
+			float tanHalfHFOV = ( camera.getFovY() / 2.0f ).tan();
+			float tanHalfVFOV = ( ( camera.getFovY() * ar ) / 2.0f ).tan();
+			auto front = light.getDirection();
+			Point3f up{ 0.0f, 1.0f, 0.0f };
+			auto right = point::getNormalised( point::cross( up, front ) );
+			up = point::getNormalised( point::cross( front, right ) );
+			auto lightMatrix = matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, front, up );
 
 			// Calculate split depths based on view camera frustum
 			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
@@ -62,7 +72,6 @@ namespace castor3d
 			for ( uint32_t cascadeIdx = 0; cascadeIdx < cascades; ++cascadeIdx )
 			{
 				float splitDist = cascadeSplits[cascadeIdx];
-
 				Point3f frustumCorners[8]
 				{
 					Point3f( -1.0f, 1.0f, -1.0f ),
@@ -110,16 +119,19 @@ namespace castor3d
 				Point3f maxExtents{ radius, radius, radius };
 				Point3f minExtents = -maxExtents;
 
+#	if 0
 				Point3f lightDir = light.getDirection();
-
+				auto aabb = scene.getBoundingBox();
 				auto & cascade = result[cascadeIdx];
 				cascade.viewMatrix = matrix::lookAt( frustumCenter - lightDir * -minExtents->z, frustumCenter, { 0.0f, 1.0f, 0.0f } );
-				cascade.projMatrix = matrix::ortho( minExtents->x, maxExtents->x, minExtents->y, maxExtents->y, 0.0f, maxExtents->z - minExtents->z );
+				cascade.projMatrix = matrix::ortho( minExtents->x, maxExtents->x
+					, minExtents->y, maxExtents->y
+					, 0.0f, maxExtents->z - minExtents->z );
 
 				// Store split distance and matrix in cascade
 				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-#if 0
+#	else
 				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
 
 				Point3f up{ 0.0f, 1.0f, 0.0f };
@@ -151,7 +163,7 @@ namespace castor3d
 				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
 				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
-#endif
+#	endif
 				prevSplitDist = splitDist;
 			}
 
