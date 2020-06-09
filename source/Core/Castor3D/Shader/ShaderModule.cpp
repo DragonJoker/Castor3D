@@ -109,10 +109,10 @@ namespace castor3d
 			static constexpr uint32_t SpotShadowMapCount = 10u;
 			static constexpr uint32_t PointShadowMapCount = 6u;
 			static constexpr uint32_t BaseLightComponentsCount = 4u;
-			// DirectionalLight => BaseLightComponentsCount + 18
+			// DirectionalLight => BaseLightComponentsCount + 19
 			// PointLight => BaseLightComponentsCount + 2
 			// SpotLight => BaseLightComponentsCount + 8
-			static constexpr uint32_t MaxLightComponentsCount = 22u;
+			static constexpr uint32_t MaxLightComponentsCount = 23u;
 		}
 
 		uint32_t getSpotShadowMapCount()

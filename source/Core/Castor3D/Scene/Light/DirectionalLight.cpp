@@ -162,7 +162,8 @@ namespace castor3d
 				shadowProj[3] += roundOffset;
 				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.splitDepthScale->x = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.splitDepthScale->y = -cascade.splitDepthScale->x / clipRange;
 #	endif
 				prevSplitDist = splitDist;
 			}
@@ -178,7 +179,7 @@ namespace castor3d
 	{
 		return lhs.viewMatrix == rhs.viewMatrix
 			&& lhs.projMatrix == rhs.projMatrix
-			&& lhs.splitDepth == rhs.splitDepth;
+			&& lhs.splitDepthScale == rhs.splitDepthScale;
 	}
 
 	//*************************************************************************************************
@@ -256,13 +257,16 @@ namespace castor3d
 	{
 		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
 		Point4f splitDepths;
+		Point4f splitScales;
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			splitDepths[i] = m_cascades[i].splitDepth;
+			splitDepths[i] = m_cascades[i].splitDepthScale->x;
+			splitScales[i] = m_cascades[i].splitDepthScale->y;
 		}
 
 		doCopyComponent( splitDepths, buffer );
+		doCopyComponent( splitScales, buffer );
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{

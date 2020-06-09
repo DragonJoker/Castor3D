@@ -339,6 +339,7 @@ namespace castor3d
 					result.m_directionCount = texelFetch( c3d_sLights, offset++ );
 					result.m_direction = normalize( result.m_direction );
 					result.m_splitDepths = texelFetch( c3d_sLights, offset++ );
+					result.m_splitScales = texelFetch( c3d_sLights, offset++ );
 					auto col0 = m_writer.declLocale< Vec4 >( "col0" );
 					auto col1 = m_writer.declLocale< Vec4 >( "col1" );
 					auto col2 = m_writer.declLocale< Vec4 >( "col2" );

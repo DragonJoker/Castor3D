@@ -116,7 +116,7 @@ namespace castor3d
 				auto indirectIllumination = m_writer.declLocale( "indirectIllumination"
 					, vec3( 0.0_f ) );
 				auto rMax = m_writer.declLocale< Float >( "rMax"
-					, rsmRMax );
+					, rsmRMax / light.m_splitScales[cascadeIndex] );
 				auto lightSpacePosition = m_writer.declLocale< Vec4 >( "lightSpacePosition"
 					, light.m_transforms[cascadeIndex] * vec4( worldPosition, 1.0 ) );
 				lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()

@@ -89,6 +89,7 @@ namespace castor3d
 			, m_directionCount{ getMember< Vec4 >( "m_directionCount" ) }
 			, m_transforms{ getMemberArray< Mat4 >( "m_transforms" ) }
 			, m_splitDepths{ getMember< Vec4 >( "m_splitDepths" ) }
+			, m_splitScales{ getMember< Vec4 >( "m_splitScales" ) }
 			, m_direction{ getShader()
 				, makeSwizzle( makeExpr( m_directionCount )
 					, ast::expr::SwizzleKind::e012 ) }
@@ -110,6 +111,7 @@ namespace castor3d
 				result->declMember( "m_lightBase", Light::makeType( cache ) );
 				result->declMember( "m_directionCount", ast::type::Kind::eVec4F );
 				result->declMember( "m_splitDepths", ast::type::Kind::eVec4F );
+				result->declMember( "m_splitScales", ast::type::Kind::eVec4F );
 				result->declMember( "m_transforms", ast::type::Kind::eMat4x4F, DirectionalMaxCascadesCount );
 			}
 

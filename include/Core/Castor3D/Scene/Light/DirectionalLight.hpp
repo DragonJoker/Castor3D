@@ -15,7 +15,7 @@ namespace castor3d
 		castor::Matrix4x4f viewMatrix;
 		castor::Matrix4x4f projMatrix;
 		castor::Matrix4x4f viewProjMatrix;
-		float splitDepth;
+		castor::Point2f splitDepthScale;
 	};
 
 	C3D_API bool operator==( DirectionalLightCascade const & lhs
@@ -140,7 +140,12 @@ namespace castor3d
 
 		inline float getSplitDepth( uint32_t cascadeIndex )const
 		{
-			return m_cascades[cascadeIndex].splitDepth;
+			return m_cascades[cascadeIndex].splitDepthScale->x;
+		}
+
+		inline float getSplitScale( uint32_t cascadeIndex )const
+		{
+			return m_cascades[cascadeIndex].splitDepthScale->y;
 		}
 
 		inline castor::Matrix4x4f const & getProjMatrix( uint32_t cascadeIndex )const
