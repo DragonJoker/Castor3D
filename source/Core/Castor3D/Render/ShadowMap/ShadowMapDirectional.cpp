@@ -58,7 +58,7 @@ namespace castor3d
 					std::make_shared< Camera >( cuT( "ShadowMapDirectional_" ) + string::toString( cascade + 1, std::locale{ "C" } )
 						, scene
 						, *scene.getCameraRootNode()
-						, std::move( viewport )
+						, viewport
 						, true ),
 					nullptr,
 					nullptr,
@@ -124,8 +124,7 @@ namespace castor3d
 				lightCamera.setView( directional.getViewMatrix( m_cascades - 1u ) );
 				lightCamera.updateFrustum();
 
-				m_passes[cascade].pass->update( camera
-					, queues
+				m_passes[cascade].pass->update( queues
 					, light
 					, cascade );
 			}

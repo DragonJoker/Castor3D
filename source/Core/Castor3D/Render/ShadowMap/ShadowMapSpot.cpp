@@ -101,7 +101,7 @@ namespace castor3d
 		, Light & light
 		, uint32_t index )
 	{
-		m_passes[index].pass->update( camera, queues, light, index );
+		m_passes[index].pass->update( queues, light, index );
 	}
 
 	void ShadowMapSpot::updateDeviceDependent( uint32_t index )

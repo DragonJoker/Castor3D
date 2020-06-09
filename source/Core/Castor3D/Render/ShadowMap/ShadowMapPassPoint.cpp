@@ -72,8 +72,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassPoint::update( Camera const & camera
-		, RenderQueueArray & queues
+	bool ShadowMapPassPoint::update( RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{

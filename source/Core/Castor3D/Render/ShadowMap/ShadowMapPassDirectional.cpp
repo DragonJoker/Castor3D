@@ -52,8 +52,7 @@ namespace castor3d
 	{
 	}
 
-	bool ShadowMapPassDirectional::update( Camera const & camera
-		, RenderQueueArray & queues
+	bool ShadowMapPassDirectional::update( RenderQueueArray & queues
 		, Light & light
 		, uint32_t index )
 	{

@@ -45,8 +45,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		C3D_API bool update( Camera const & camera
-			, RenderQueueArray & queues
+		C3D_API bool update( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
 		/**

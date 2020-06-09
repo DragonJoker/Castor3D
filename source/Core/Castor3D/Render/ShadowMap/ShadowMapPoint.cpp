@@ -101,7 +101,7 @@ namespace castor3d
 		for ( size_t face = index * 6u; face < ( index * 6u ) + 6u; ++face )
 		{
 			auto & pass = m_passes[face];
-			pass.pass->update( camera, queues, light, index );
+			pass.pass->update( queues, light, index );
 		}
 	}
 

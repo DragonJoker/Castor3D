@@ -54,7 +54,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	camera	The viewer camera.
 		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\param[out]	light	The light source.
 		 *\param[out]	index	The pass index.
@@ -62,14 +61,12 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	camera	La caméra de l'observateur.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 *\param[out]	light	La source lumineuse.
 		 *\param[out]	index	L'indice de la passe.
 		 *\return		\p true si la passe a changé.
 		 */
-		C3D_API virtual bool update( Camera const & camera
-			, RenderQueueArray & queues
+		C3D_API virtual bool update( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index ) = 0;
 		/**
