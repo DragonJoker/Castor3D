@@ -256,11 +256,11 @@ namespace castor3d
 				, m_matrixUbo.getUbo().getAlignedSize() );
 			m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderTechniqueUpload" );
 
-			m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
-				, VkExtent3D{ 64u, 64u, 64u }
-				, *m_renderTarget.getScene()
-				, m_renderTarget.getCuller()
-				, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
+			//m_voxelizer = std::make_unique< Voxelizer >( *m_renderSystem.getEngine()
+			//	, VkExtent3D{ 64u, 64u, 64u }
+			//	, *m_renderTarget.getScene()
+			//	, m_renderTarget.getCuller()
+			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
 
 			doInitialiseShadowMaps();
 			doInitialiseBackgroundPass();
@@ -326,7 +326,7 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( queues );
 #endif
-		m_voxelizer->update( queues );
+		//m_voxelizer->update( queues );
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );
 		doUpdateShadowMaps( queues );
@@ -356,7 +356,7 @@ namespace castor3d
 #if C3D_UseDepthPrepass
 		m_depthPass->update( info, jitter );
 #endif
-		m_voxelizer->update( info, jitter );
+		//m_voxelizer->update( info, jitter );
 #if C3D_UseDeferredRendering
 		m_deferredRendering->update( info, scene, camera, jitter );
 #else
@@ -402,7 +402,7 @@ namespace castor3d
 		semaphore = &doRenderShadowMaps( *semaphore );
 
 		// Render part
-		semaphore = &m_voxelizer->render( *semaphore );
+		//semaphore = &m_voxelizer->render( *semaphore );
 		semaphore = &doRenderOpaque( *semaphore );
 		semaphore = &doRenderTransparent( *semaphore );
 		return *semaphore;

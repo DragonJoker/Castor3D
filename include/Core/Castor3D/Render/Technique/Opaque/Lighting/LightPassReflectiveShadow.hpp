@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Passes/DownscalePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/RsmGIPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/RsmInterpolatePass.hpp"
@@ -48,6 +49,13 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
+			, m_lightInjectionPass{ ( ( LtType == LightType::ePoint )
+				? nullptr
+				: std::make_unique< LightInjectionPass >( engine
+					, lightCache
+					, LtType
+					, smResult
+					, gpInfoUbo ) ) }
 			, m_downscalePass{ engine
 				, {
 					lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
@@ -91,6 +99,12 @@ namespace castor3d
 		{
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
+
+			if constexpr ( LtType != LightType::ePoint )
+			{
+				result = &m_lightInjectionPass->compute( *result );
+			}
+
 			result = &m_downscalePass.compute( *result );
 			result = &m_rsmGiPass.compute( *result );
 			result = &m_interpolatePass.compute( *result );
@@ -100,6 +114,12 @@ namespace castor3d
 		void accept( PipelineVisitorBase & visitor )override
 		{
 			LightPassShadow< LtType >::accept( visitor );
+
+			if constexpr ( LtType != LightType::ePoint )
+			{
+				m_lightInjectionPass->accept( visitor );
+			}
+
 			m_rsmGiPass.accept( visitor );
 			m_downscalePass.accept( visitor );
 		}
@@ -118,10 +138,17 @@ namespace castor3d
 				, camera
 				, shadowMap
 				, shadowMapIndex );
+
+			if constexpr ( LtType != LightType::ePoint )
+			{
+				m_lightInjectionPass->update( light, camera );
+			}
+
 			m_rsmGiPass.update( light );
 		}
 
 	private:
+		std::unique_ptr< LightInjectionPass > m_lightInjectionPass;
 		DownscalePass m_downscalePass;
 		RsmGIPass m_rsmGiPass;
 		RsmInterpolatePass m_interpolatePass;

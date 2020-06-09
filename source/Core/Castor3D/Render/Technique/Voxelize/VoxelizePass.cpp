@@ -31,10 +31,10 @@ namespace castor3d
 		, TextureLayoutSPtr result
 		, ashes::ImageView colourView )
 		: RenderPass{ "Voxelize"
-		, "Voxelization"
-		, engine
-		, matrixUbo
-		, culler }
+			, "Voxelization"
+			, engine
+			, matrixUbo
+			, culler }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_commands{ nullptr, nullptr }
