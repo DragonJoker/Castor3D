@@ -1460,7 +1460,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/BillboardUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/GpInfoUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/HdrConfigUbo.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LightInjectionUbo.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/LpvConfigUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelMatrixUbo.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.cpp
@@ -1478,7 +1478,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/DebugConfig.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/GpInfoUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/HdrConfigUbo.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LightInjectionUbo.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/LpvConfigUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/MatrixUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelMatrixUbo.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Ubos/ModelUbo.hpp
