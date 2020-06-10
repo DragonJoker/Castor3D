@@ -50,6 +50,33 @@ namespace castor3d
 	*\brief
 	*	Passe d'injection de l'éclairage.
 	*/
+	class LayeredLightInjectionPass;
+	/**
+	*\~english
+	*\brief
+	*	Lighting propagation pass.
+	*\~french
+	*\brief
+	*	Passe de propagation de l'éclairage.
+	*/
+	class LayeredLightPropagationPass;
+	/**
+	*\~english
+	*\brief
+	*	Lighting propagation volumes resolution pass.
+	*\~french
+	*\brief
+	*	Passe de résolution du light propagation volumes.
+	*/
+	class LayeredLightVolumeGIPass;
+	/**
+	*\~english
+	*\brief
+	*	Lighting injection pass.
+	*\~french
+	*\brief
+	*	Passe d'injection de l'éclairage.
+	*/
 	class LightInjectionPass;
 	/**
 	*\~english
@@ -88,6 +115,16 @@ namespace castor3d
 	*/
 	template< LightType LtType >
 	class LightPassVolumePropagationShadow;
+	/**
+	*\~english
+	*\brief
+	*	Base class for all light passes with light propagation volumes.
+	*\~french
+	*\brief
+	*	Classe de base pour toutes les passes d'éclairage avec du light propagation volumes.
+	*/
+	template< LightType LtType >
+	class LightPassLayeredVolumePropagationShadow;
 
 	//@}
 	//@}

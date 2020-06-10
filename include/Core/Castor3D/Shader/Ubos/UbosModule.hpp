@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShaderUbosModule_H___
 
 #include "Castor3D/Shader/ShaderModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -102,7 +103,7 @@ namespace castor3d
 	*\brief
 	*	UBO de light propagation.
 	*/
-	class LightPropagationUbo;
+	class LayeredLpvConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -111,11 +112,12 @@ namespace castor3d
 	*\brief
 	*	Données de light propagation.
 	*/
-	struct LightPropagationUboConfiguration
+	struct LayeredLpvConfigUboConfiguration
 	{
-		castor::Matrix4x4f lightTransform;
-		castor::Point4f lightPosition;
-		castor::Point4f tanFovTexelModif;
+		std::array< castor::Point4f, shader::DirectionalMaxCascadesCount > allMinVolumeCorners;
+		castor::Point4f allCellSizes;
+		castor::Point4ui gridSize;
+		castor::Point4f config;
 	};
 	/**
 	*\brief

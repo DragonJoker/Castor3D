@@ -45,6 +45,7 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
 		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
+		static wxString PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
 		static wxString PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
 		static wxString PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
 		static wxString PROPERTY_SHADOW_RSM_SAMPLE_COUNT = _( "Sample Count" );
@@ -79,6 +80,7 @@ namespace GuiCommon
 		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE = _( "None" );
 		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM = _( "RSM" );
 		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV = _( "LPV" );
+		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV = _( "Layered LPV" );
 		PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE = _( "GI Type" );
 		PROPERTY_SHADOW_RSM_INTENSITY = _( "Intensity" );
 		PROPERTY_SHADOW_RSM_MAX_RADIUS = _( "Max. Radius" );
@@ -211,6 +213,10 @@ namespace GuiCommon
 				{
 					onGiTypeChange( GlobalIlluminationType::eLpv );
 				}
+				else if ( property->GetValueAsString() == PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV )
+				{
+					onGiTypeChange( GlobalIlluminationType::eLayeredLpv );
+				}
 			}
 			else if ( property->GetName() == PROPERTY_SHADOW_RSM_INTENSITY )
 			{
@@ -253,6 +259,10 @@ namespace GuiCommon
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_RAW );
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_PCF );
 		shadowChoices.Add( PROPERTY_SHADOW_TYPE_VSM );
+		wxPGChoices giChoices;
+		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE );
+		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
+		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
 		selected = shadowChoices.GetLabels()[size_t( m_light.getShadowType() )];
 
 		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SHADOW ) );
@@ -266,13 +276,11 @@ namespace GuiCommon
 		{
 			grid->Append( new wxIntProperty( PROPERTY_SHADOW_VOLUMETRIC_STEPS ) )->SetValue( long( m_light.getCategory()->getVolumetricSteps() ) );
 			grid->Append( new wxFloatProperty( PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR ) )->SetValue( m_light.getCategory()->getVolumetricScatteringFactor() );
+
+			giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LAYERED_LPV );
 		}
 
 		auto & rsmConfig = m_light.getRsmConfig();
-		wxPGChoices giChoices;
-		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_NONE );
-		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_RSM );
-		giChoices.Add( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
 		selected = giChoices.GetLabels()[size_t( m_light.getGlobalIlluminationType() )];
 		grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_GLOBAL_ILLUM ) );
 		grid->Append( new wxEnumProperty( PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices ) )->SetValue( selected );

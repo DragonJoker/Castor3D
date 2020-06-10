@@ -78,14 +78,14 @@ namespace castor3d
 }
 
 #define UBO_LPVCONFIG( writer, binding, set )\
-	sdw::Ubo billboard{ writer\
+	sdw::Ubo lpvConfig{ writer\
 		, castor3d::LpvConfigUbo::LpvConfig\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_minVolumeCorner = billboard.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
-	auto c3d_gridSizes = billboard.declMember< UVec4 >( castor3d::LpvConfigUbo::GridSizes );\
-	auto c3d_config = billboard.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
-	billboard.end()
+	auto c3d_minVolumeCorner = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
+	auto c3d_gridSizes = lpvConfig.declMember< UVec4 >( castor3d::LpvConfigUbo::GridSizes );\
+	auto c3d_config = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
+	lpvConfig.end()
 
 #endif

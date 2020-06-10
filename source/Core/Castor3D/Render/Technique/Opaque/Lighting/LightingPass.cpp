@@ -13,6 +13,7 @@
 #include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassLayeredVolumePropagationShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/PointLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SpotLightPass.hpp"
@@ -108,6 +109,14 @@ namespace castor3d
 			, smSpotResult
 			, m_result
 			, gpInfoUbo );
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassLayeredVolumePropagationShadow >( engine
+			, lightCache
+			, gpResult
+			, smDirectionalResult
+			, m_result
+			, gpInfoUbo );
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::ePoint )] = nullptr;
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLayeredLpv )][size_t( LightType::eSpot )] = nullptr;
 
 		for ( auto & lightPass : m_lightPass )
 		{
@@ -319,9 +328,8 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( type ) )
 			{
-				auto lightPassShadow = ( light->getLightType() == LightType::ePoint && light->getGlobalIlluminationType() == GlobalIlluminationType::eLpv )
-					? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( type )].get()
-					: m_lightPassShadow[size_t( light->getGlobalIlluminationType() )][size_t( type )].get();
+				auto lightPassShadow = doGetShadowLightPass( type
+					, light->getGlobalIlluminationType() );
 
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
@@ -368,9 +376,8 @@ namespace castor3d
 
 			for ( auto & light : cache.getLights( type ) )
 			{
-				auto lightPassShadow = ( light->getLightType() == LightType::ePoint && light->getGlobalIlluminationType() == GlobalIlluminationType::eLpv )
-					? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( type )].get()
-					: m_lightPassShadow[size_t( light->getGlobalIlluminationType() )][size_t( type )].get();
+				auto lightPassShadow = doGetShadowLightPass( type
+					, light->getGlobalIlluminationType() );
 
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
@@ -394,5 +401,15 @@ namespace castor3d
 		}
 
 		return *result;
+	}
+
+	LightPass * LightingPass::doGetShadowLightPass( LightType lightType
+		, GlobalIlluminationType giType )const
+	{
+		return ( ( lightType == LightType::ePoint && giType >= GlobalIlluminationType::eLpv )
+			? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( lightType )].get()
+			: ( ( lightType != LightType::eDirectional && giType == GlobalIlluminationType::eLayeredLpv )
+				? m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( lightType )].get()
+				: m_lightPassShadow[size_t( giType )][size_t( lightType )].get() ) );
 	}
 }

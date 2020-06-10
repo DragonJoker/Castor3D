@@ -126,6 +126,8 @@ namespace castor3d
 			, OpaquePassResult const & gp
 			, ashes::Semaphore const & toWait
 			, uint32_t & index );
+		LightPass * doGetShadowLightPass( LightType lightType
+			, GlobalIlluminationType giType )const;
 
 	private:
 		Engine & m_engine;
