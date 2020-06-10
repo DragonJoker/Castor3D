@@ -16,7 +16,10 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
-#include "Castor3D/Shader/Ubos/LightInjectionUbo.hpp"
+#include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 
 namespace castor3d
 {
@@ -54,21 +57,21 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
-			, m_lpvUbo{ engine }
+			, m_lpvConfigUbo{ engine }
 			, m_lightInjectionPass{ engine
 				, lightCache
 				, LtType
 				, smResult
 				, gpInfoUbo
-				, m_lpvUbo
+				, m_lpvConfigUbo
 				, GridSize }
 			, m_lightPropagationPass{ engine
 				, m_lightInjectionPass.getResult()
-				, m_lpvUbo }
+				, m_lpvConfigUbo }
 			, m_lightVolumeGIPass{ engine
 				, LtType
 				, gpInfoUbo
-				, m_lpvUbo
+				, m_lpvConfigUbo
 				, gpResult
 				, m_lightPropagationPass.getResult()
 				, lpResult[LpTexture::eDiffuse] }
@@ -133,7 +136,7 @@ namespace castor3d
 				m_grid = Grid{ GridSize, cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
 				m_grid.transform( m_cameraPos, m_cameraDir );
 
-				m_lpvUbo.update( m_grid.getMin()
+				m_lpvConfigUbo.update( m_grid.getMin()
 					, m_grid.getDimensions()
 					, m_lightIndex
 					, m_grid.getCellSize() );
@@ -141,7 +144,7 @@ namespace castor3d
 		}
 
 	private:
-		LightInjectionUbo m_lpvUbo;
+		LpvConfigUbo m_lpvConfigUbo;
 		LightInjectionPass m_lightInjectionPass;
 		LightPropagationPass m_lightPropagationPass;
 		LightVolumeGIPass m_lightVolumeGIPass;

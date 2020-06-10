@@ -40,7 +40,7 @@ namespace castor3d
 		C3D_API LightVolumeGIPass( Engine & engine
 			, LightType lightType
 			, GpInfoUbo const & gpInfo
-			, LightInjectionUbo const & liUbo
+			, LpvConfigUbo const & lpvConfigUbo
 			, OpaquePassResult const & gpResult
 			, LightVolumePassResult const & lpResult
 			, TextureUnit const & dst );
@@ -67,7 +67,7 @@ namespace castor3d
 
 	private:
 		GpInfoUbo const & m_gpInfo;
-		LightInjectionUbo const & m_liUbo;
+		LpvConfigUbo const & m_lpvConfigUbo;
 		OpaquePassResult const & m_gpResult;
 		LightVolumePassResult const & m_lpResult;
 		TextureUnit const & m_result;

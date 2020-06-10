@@ -22,7 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LightInjectionUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -58,7 +58,7 @@ namespace castor3d
 			auto outCellIndex = writer.declOutput< IVec3 >( "outCellIndex", 0u );
 			auto out = writer.getOut();
 
-			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
+			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
@@ -148,7 +148,7 @@ namespace castor3d
 					ivec2( 0_i, -1 ),
 				} );
 
-			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
+			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			auto c3d_lpvGridR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Grid" ), RLpvGridIdx, 0u );
 			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), GLpvGridIdx, 0u );
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
@@ -522,7 +522,7 @@ namespace castor3d
 
 		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool & descriptorSetPool
 			, LightVolumePassResult const & lightInjectionResult
-			, UniformBuffer< LightInjectionUboConfiguration > const & ubo )
+			, UniformBuffer< LpvConfigUboConfiguration > const & ubo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
 			auto result = descriptorSetPool.createDescriptorSet( "LightPropagation" );
@@ -601,10 +601,10 @@ namespace castor3d
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
 		, LightVolumePassResult const & lightInjectionResult
-		, LightInjectionUbo const & lightInjectionUbo )
+		, LpvConfigUbo const & lpvConfigUbo )
 		: Named{ "LightPropagation" }
 		, m_engine{ engine }
-		, m_lightInjectionUbo{ lightInjectionUbo }
+		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_result{ engine
 			, getName()
 			, lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() }
@@ -616,7 +616,7 @@ namespace castor3d
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
 			, lightInjectionResult
-			, m_lightInjectionUbo.getUbo() ) }
+			, m_lpvConfigUbo.getUbo() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }

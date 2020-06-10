@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_LightInjectionUbo_H___
-#define ___C3D_LightInjectionUbo_H___
+#ifndef ___C3D_LpvConfigUbo_H___
+#define ___C3D_LpvConfigUbo_H___
 
 #include "UbosModule.hpp"
 
@@ -10,10 +10,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class LightInjectionUbo
+	class LpvConfigUbo
 	{
 	public:
-		using Configuration = LightInjectionUboConfiguration;
+		using Configuration = LpvConfigUboConfiguration;
 
 	public:
 		/**
@@ -23,10 +23,10 @@ namespace castor3d
 		 *\name			Constructeurs/Opérateurs d'affectation par copie/déplacement.
 		 */
 		/**@{*/
-		C3D_API LightInjectionUbo( LightInjectionUbo const & ) = delete;
-		C3D_API LightInjectionUbo & operator=( LightInjectionUbo const & ) = delete;
-		C3D_API LightInjectionUbo( LightInjectionUbo && ) = default;
-		C3D_API LightInjectionUbo & operator=( LightInjectionUbo && ) = delete;
+		C3D_API LpvConfigUbo( LpvConfigUbo const & ) = delete;
+		C3D_API LpvConfigUbo & operator=( LpvConfigUbo const & ) = delete;
+		C3D_API LpvConfigUbo( LpvConfigUbo && ) = default;
+		C3D_API LpvConfigUbo & operator=( LpvConfigUbo && ) = delete;
 		/**@}*/
 		/**
 		 *\~english
@@ -36,7 +36,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		explicit LightInjectionUbo( Engine & engine );
+		explicit LpvConfigUbo( Engine & engine );
 		/**
 		 *\~english
 		 *\brief		Updates UBO data.
@@ -66,7 +66,7 @@ namespace castor3d
 		/**@}*/
 
 	public:
-		C3D_API static const std::string LightInjection;
+		C3D_API static const std::string LpvConfig;
 		C3D_API static const std::string MinVolumeCorner;
 		C3D_API static const std::string GridSizes;
 		C3D_API static const std::string Config;
@@ -77,15 +77,15 @@ namespace castor3d
 	};
 }
 
-#define UBO_LIGHTINJECTION( writer, binding, set )\
+#define UBO_LPVCONFIG( writer, binding, set )\
 	sdw::Ubo billboard{ writer\
-		, castor3d::LightInjectionUbo::LightInjection\
+		, castor3d::LpvConfigUbo::LpvConfig\
 		, binding\
 		, set\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_minVolumeCorner = billboard.declMember< Vec4 >( castor3d::LightInjectionUbo::MinVolumeCorner );\
-	auto c3d_gridSizes = billboard.declMember< UVec4 >( castor3d::LightInjectionUbo::GridSizes );\
-	auto c3d_config = billboard.declMember< Vec4 >( castor3d::LightInjectionUbo::Config );\
+	auto c3d_minVolumeCorner = billboard.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
+	auto c3d_gridSizes = billboard.declMember< UVec4 >( castor3d::LpvConfigUbo::GridSizes );\
+	auto c3d_config = billboard.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
 	billboard.end()
 
 #endif

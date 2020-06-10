@@ -54,7 +54,7 @@ namespace castor3d
 		 */
 		C3D_API LightPropagationPass( Engine & engine
 			, LightVolumePassResult const & lightInjectionResult
-			, LightInjectionUbo const & lightInjectionUbo );
+			, LpvConfigUbo const & lpvConfigUbo );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -78,7 +78,7 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		LightInjectionUbo const & m_lightInjectionUbo;
+		LpvConfigUbo const & m_lpvConfigUbo;
 		LightVolumePassResult m_result;
 		RenderPassTimerSPtr m_timer;
 		uint32_t m_count;

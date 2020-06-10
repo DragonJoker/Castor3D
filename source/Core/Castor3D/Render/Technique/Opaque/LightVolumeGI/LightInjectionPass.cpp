@@ -22,7 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/LightInjectionUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -68,7 +68,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
+			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -149,7 +149,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
+			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -247,12 +247,6 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
-
-			/*Spherical harmonics coefficients - precomputed*/
-			auto SH_C0 = writer.declConstant( "SH_C0"
-				, 0.282094792_f );// 1 / (2 * sqrt(pi))
-			auto SH_C1 = writer.declConstant( "SH_C1"
-				, 0.488602512_f ); // sqrt(3 / pi) / 2
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
@@ -488,7 +482,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBuffer< LightInjectionUboConfiguration > const & ubo
+			, UniformBuffer< LpvConfigUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
@@ -576,7 +570,7 @@ namespace castor3d
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, GpInfoUbo const & gpInfoUbo
-		, LightInjectionUbo const & lpvUbo
+		, LpvConfigUbo const & lpvConfigUbo
 		, uint32_t size )
 		: Named{ "LightInjection" }
 		, m_engine{ engine }
@@ -586,7 +580,7 @@ namespace castor3d
 		, m_result{ engine
 			, getName()
 			, size }
-		, m_lpvUbo{ lpvUbo }
+		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Light Injection" ) ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
@@ -596,7 +590,7 @@ namespace castor3d
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
 			, m_lightCache
 			, m_smResult
-			, m_lpvUbo.getUbo()
+			, m_lpvConfigUbo.getUbo()
 			, m_gpInfoUbo ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }

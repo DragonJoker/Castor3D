@@ -35,7 +35,7 @@
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelMatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/LightInjectionUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -102,7 +102,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GPINFO( writer, GpInfoUboIdx, 0u );
-			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
+			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			auto c3d_mapDepth = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eDepth ), DepthMapIdx, 0u );
 			auto c3d_mapData1 = writer.declSampledImage< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), Data1MapIdx, 0u );
 			auto c3d_lpvAccumulatorR = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), RLpvAccumIdx, 0u );
@@ -275,7 +275,7 @@ namespace castor3d
 	LightVolumeGIPass::LightVolumeGIPass( Engine & engine
 		, LightType lightType
 		, GpInfoUbo const & gpInfo
-		, LightInjectionUbo const & liUbo
+		, LpvConfigUbo const & lpvConfigUbo
 		, OpaquePassResult const & gpResult
 		, LightVolumePassResult const & lpResult
 		, TextureUnit const & dst )
@@ -284,7 +284,7 @@ namespace castor3d
 			, VK_FILTER_LINEAR
 			, { ashes::nullopt, RenderQuadConfig::Texcoord{}, BlendMode::eAdditive } }
 		, m_gpInfo{ gpInfo }
-		, m_liUbo{ liUbo }
+		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_result{ dst }
@@ -401,7 +401,7 @@ namespace castor3d
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( GpInfoUboIdx )
 			, m_gpInfo.getUbo() );
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
-			, m_liUbo.getUbo() );
+			, m_lpvConfigUbo.getUbo() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( DepthMapIdx )
 			, m_gpResult[DsTexture::eDepth].getTexture()->getDefaultView().getSampledView()
 			, m_gpResult[DsTexture::eDepth].getSampler()->getSampler() );

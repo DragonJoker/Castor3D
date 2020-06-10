@@ -57,7 +57,7 @@ namespace castor3d
 			, LightType lightType
 			, ShadowMapResult const & smResult
 			, GpInfoUbo const & gpInfoUbo
-			, LightInjectionUbo const & lpvUbo
+			, LpvConfigUbo const & lpvConfigUbo
 			, uint32_t size );
 		/**
 		 *\~english
@@ -85,7 +85,7 @@ namespace castor3d
 		LightCache const & m_lightCache;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;
-		LightInjectionUbo const & m_lpvUbo;
+		LpvConfigUbo const & m_lpvConfigUbo;
 		LightVolumePassResult m_result;
 		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
