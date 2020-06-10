@@ -235,8 +235,16 @@ namespace castor3d
 			auto debugName = m_debugName
 				+ "L(" + string::toString( m_info->subresourceRange.baseArrayLayer ) + "x" + string::toString( m_info->subresourceRange.layerCount ) + ")"
 				+ "M(" + string::toString( m_info->subresourceRange.baseMipLevel ) + "x" + string::toString( m_info->subresourceRange.levelCount ) + ")";
+			auto createInfo = m_info;
+
+			if ( createInfo->viewType == VK_IMAGE_VIEW_TYPE_3D )
+			{
+				createInfo->viewType = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+				createInfo->subresourceRange.layerCount = image.getDimensions().depth;
+			}
+
 			m_targetView = image.createView( debugName
-				, m_info );
+				, createInfo );
 		}
 
 		return m_targetView;

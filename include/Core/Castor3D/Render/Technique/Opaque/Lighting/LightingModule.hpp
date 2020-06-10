@@ -22,6 +22,23 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Enumerator of supported global illumination algorithms.
+	*\~french
+	*\brief
+	*	Enumération des algorithmes de global illumination supportés.
+	*/
+	enum class GlobalIlluminationType
+		: uint8_t
+	{
+		eNone,
+		eRsm,
+		eLpv,
+		CU_ScopedEnumBounds( eNone ),
+	};
+	castor::String getName( GlobalIlluminationType giType );
+	/**
+	*\~english
+	*\brief
 	*	Enumerator of textures used by the lighting pass in deferred rendering.
 	*\~french
 	*\brief
@@ -41,24 +58,6 @@ namespace castor3d
 	VkClearValue getClearValue( LpTexture texture );
 	VkImageUsageFlags getUsageFlags( LpTexture texture );
 	VkBorderColor getBorderColor( LpTexture texture );
-	/**
-	*\~english
-	*\brief
-	*	Reflective Shadow Maps configuration values.
-	*\~french
-	*\brief
-	*	Valeurs de configuration des Reflective Shadow Maps.
-	*/
-	struct RsmConfig;
-	/**
-	*\~english
-	*\brief
-	*	SSGI pass based on Reflective Shadow Maps.
-	*\~french
-	*\brief
-	*	Passe de SSGI basée sur les Reflective Shadow Maps.
-	*/
-	class RsmGIPass;
 	/**
 	*\~english
 	*\brief
@@ -110,16 +109,6 @@ namespace castor3d
 	*/
 	template< LightType LtType >
 	class LightPassShadow;
-	/**
-	*\~english
-	*\brief
-	*	Base class for all light passes with reflective shadow maps.
-	*\~french
-	*\brief
-	*	Classe de base pour toutes les passes d'éclairage avec des reflective shadow maps.
-	*/
-	template< LightType LtType >
-	class LightPassReflectiveShadow;
 	/**
 	*\~english
 	*\brief

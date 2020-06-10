@@ -11,7 +11,8 @@
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/DirectionalLightPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassReflectiveShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/LightPassReflectiveShadow.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPassVolumePropagationShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/PointLightPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/SpotLightPass.hpp"
@@ -67,28 +68,41 @@ namespace castor3d
 			, m_result
 			, gpInfoUbo
 			, false );
-		m_lightPassShadow[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassShadow >( engine
 			, m_result
 			, gpInfoUbo );
-		m_lightPassShadow[size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( LightType::ePoint )] = std::make_unique< PointLightPassShadow >( engine
 			, m_result
 			, gpInfoUbo );
-		m_lightPassShadow[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
 			, m_result
 			, gpInfoUbo );
-		m_lightPassRsm[size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassReflectiveShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassReflectiveShadow >( engine
 			, lightCache
 			, gpResult
 			, smDirectionalResult
 			, m_result
 			, gpInfoUbo );
-		m_lightPassRsm[size_t( LightType::ePoint )] = std::make_unique< PointLightPassReflectiveShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::ePoint )] = std::make_unique< PointLightPassReflectiveShadow >( engine
 			, lightCache
 			, gpResult
 			, smPointResult
 			, m_result
 			, gpInfoUbo );
-		m_lightPassRsm[size_t( LightType::eSpot )] = std::make_unique< SpotLightPassReflectiveShadow >( engine
+		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassReflectiveShadow >( engine
+			, lightCache
+			, gpResult
+			, smSpotResult
+			, m_result
+			, gpInfoUbo );
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassVolumePropagationShadow >( engine
+			, lightCache
+			, gpResult
+			, smDirectionalResult
+			, m_result
+			, gpInfoUbo );
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::ePoint )] = nullptr;
+		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassVolumePropagationShadow >( engine
 			, lightCache
 			, gpResult
 			, smSpotResult
@@ -103,20 +117,18 @@ namespace castor3d
 				, *m_timer );
 		}
 
-		for ( auto & lightPass : m_lightPassShadow )
+		for ( auto & lightPasses : m_lightPassShadow )
 		{
-			lightPass->initialise( scene
-				, gpResult
-				, sceneUbo
-				, *m_timer );
-		}
-
-		for ( auto & lightPass : m_lightPassRsm )
-		{
-			lightPass->initialise( scene
-				, gpResult
-				, sceneUbo
-				, *m_timer );
+			for ( auto & lightPass : lightPasses )
+			{
+				if ( lightPass )
+				{
+					lightPass->initialise( scene
+						, gpResult
+						, sceneUbo
+						, *m_timer );
+				}
+			}
 		}
 
 		auto & device = getCurrentRenderDevice( engine );
@@ -174,16 +186,16 @@ namespace castor3d
 			lightPass.reset();
 		}
 
-		for ( auto & lightPass : m_lightPassShadow )
+		for ( auto & lightPasses : m_lightPassShadow )
 		{
-			lightPass->cleanup();
-			lightPass.reset();
-		}
-
-		for ( auto & lightPass : m_lightPassRsm )
-		{
-			lightPass->cleanup();
-			lightPass.reset();
+			for ( auto & lightPass : lightPasses )
+			{
+				if ( lightPass )
+				{
+					lightPass->cleanup();
+					lightPass.reset();
+				}
+			}
 		}
 
 		m_result.cleanup();
@@ -281,12 +293,16 @@ namespace castor3d
 		m_lightPass[size_t( LightType::eDirectional )]->accept( visitor );
 		m_lightPass[size_t( LightType::ePoint )]->accept( visitor );
 		m_lightPass[size_t( LightType::eSpot )]->accept( visitor );
-		m_lightPassShadow[size_t( LightType::eDirectional )]->accept( visitor );
-		m_lightPassShadow[size_t( LightType::ePoint )]->accept( visitor );
-		m_lightPassShadow[size_t( LightType::eSpot )]->accept( visitor );
-		m_lightPassRsm[size_t( LightType::eDirectional )]->accept( visitor );
-		m_lightPassRsm[size_t( LightType::ePoint )]->accept( visitor );
-		m_lightPassRsm[size_t( LightType::eSpot )]->accept( visitor );
+		for ( auto & lightPasses : m_lightPassShadow )
+		{
+			for ( auto & lightPass : lightPasses )
+			{
+				if ( lightPass )
+				{
+					lightPass->accept( visitor );
+				}
+			}
+		}
 	}
 
 	void LightingPass::doUpdateLights( Scene const & scene
@@ -300,11 +316,13 @@ namespace castor3d
 		if ( cache.getLightsCount( type ) )
 		{
 			auto lightPass = m_lightPass[size_t( type )].get();
-			auto lightPassShadow = m_lightPassShadow[size_t( type )].get();
-			auto lightPassRsm = m_lightPassRsm[size_t( type )].get();
 
 			for ( auto & light : cache.getLights( type ) )
 			{
+				auto lightPassShadow = ( light->getLightType() == LightType::ePoint && light->getGlobalIlluminationType() == GlobalIlluminationType::eLpv )
+					? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( type )].get()
+					: m_lightPassShadow[size_t( light->getGlobalIlluminationType() )][size_t( type )].get();
+
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
@@ -312,14 +330,7 @@ namespace castor3d
 
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						if ( light->needsRsmShadowMaps() )
-						{
-							pass = lightPassRsm;
-						}
-						else
-						{
-							pass = lightPassShadow;
-						}
+						pass = lightPassShadow;
 					}
 					else
 					{
@@ -354,11 +365,13 @@ namespace castor3d
 		if ( cache.getLightsCount( type ) )
 		{
 			auto lightPass = m_lightPass[size_t( type )].get();
-			auto lightPassShadow = m_lightPassShadow[size_t( type )].get();
-			auto lightPassRsm = m_lightPassRsm[size_t( type )].get();
 
 			for ( auto & light : cache.getLights( type ) )
 			{
+				auto lightPassShadow = ( light->getLightType() == LightType::ePoint && light->getGlobalIlluminationType() == GlobalIlluminationType::eLpv )
+					? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( type )].get()
+					: m_lightPassShadow[size_t( light->getGlobalIlluminationType() )][size_t( type )].get();
+
 				if ( light->getLightType() == LightType::eDirectional
 					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 				{
@@ -366,14 +379,7 @@ namespace castor3d
 
 					if ( light->isShadowProducer() && light->getShadowMap() )
 					{
-						if ( light->needsRsmShadowMaps() )
-						{
-							pass = lightPassRsm;
-						}
-						else
-						{
-							pass = lightPassShadow;
-						}
+						pass = lightPassShadow;
 					}
 					else
 					{

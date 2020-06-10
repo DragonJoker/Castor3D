@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Lighting/RsmConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"

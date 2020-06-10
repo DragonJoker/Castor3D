@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Lighting/ReflectiveShadowMapping.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/ReflectiveShadowMapping.hpp"
 
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 

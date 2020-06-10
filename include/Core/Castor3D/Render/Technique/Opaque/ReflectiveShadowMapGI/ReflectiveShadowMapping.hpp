@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ReflectiveShadowMapping_HPP___
 #define ___C3D_ReflectiveShadowMapping_HPP___
 
-#include "LightingModule.hpp"
+#include "ReflectiveShadowMapGIModule.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 

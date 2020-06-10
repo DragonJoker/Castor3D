@@ -29,7 +29,7 @@ namespace castor3d
 		static C3D_API TextureUnit doInitialiseTexture( Engine & engine
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
-			, castor::Size const & size
+			, VkExtent3D const & size
 			, uint32_t layerCount
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
@@ -52,8 +52,35 @@ namespace castor3d
 					result.emplace_back( doInitialiseTexture( engine
 						, prefix + castor3d::getName( texture )
 						, createFlags
-						, size
+						, { size.getWidth(), size.getHeight(), 1u }
 						, layerCount
+						, getFormat( texture )
+						, getUsageFlags( texture )
+						, getBorderColor( texture ) ) );
+				}
+			}
+
+			return result;
+		}
+		template< typename TextureEnumT >
+		static TextureUnitArray doCreateTextures( Engine & engine
+			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, castor::String const & prefix
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size )
+		{
+			TextureUnitArray result;
+
+			for ( uint32_t i = 0u; i < inputs.size(); ++i )
+			{
+				if ( !inputs[i] )
+				{
+					auto texture = TextureEnumT( i );
+					result.emplace_back( doInitialiseTexture( engine
+						, prefix + castor3d::getName( texture )
+						, createFlags
+						, size
+						, 1u
 						, getFormat( texture )
 						, getUsageFlags( texture )
 						, getBorderColor( texture ) ) );
@@ -72,16 +99,14 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Initialises g-buffer related stuff.
-		*	Given depth buffer will be stored at index 0.
+		*	Initialises 2D g-buffer related stuff.
 		*\param[in] engine
 		*	The engine.
 		*\param[in] textures
 		*	The gbuffer's images.
 		*\~french
 		*\brief
-		*	Initialise les données liées au g-buffer.
-		*	La texture de profondeur donnée sera stockée à l'index 0.
+		*	Initialise les données liées au g-buffer 2D.
 		*\param[in] engine
 		*	Le moteur.
 		*\param[in] textures
@@ -101,6 +126,51 @@ namespace castor3d
 				, createFlags
 				, size
 				, layerCount ) }
+		{
+			auto & device = getCurrentRenderDevice( m_engine );
+			auto itOwned = m_owned.begin();
+
+			for ( uint32_t i = 0; i < inputs.size(); ++i )
+			{
+				if ( inputs[i] )
+				{
+					m_result.push_back( inputs[i] );
+				}
+				else
+				{
+					m_result.push_back( &( *itOwned ) );
+					++itOwned;
+				}
+			}
+		}
+		/**
+		*\~english
+		*\brief
+		*	Initialises 3D g-buffer related stuff.
+		*\param[in] engine
+		*	The engine.
+		*\param[in] textures
+		*	The gbuffer's images.
+		*\~french
+		*\brief
+		*	Initialise les données liées au g-buffer 3D.
+		*\param[in] engine
+		*	Le moteur.
+		*\param[in] textures
+		*	Les images du gbuffer.
+		*/
+		GBufferT( Engine & engine
+			, castor::String name
+			, std::array< TextureUnit const *, size_t( TextureEnumT::eCount ) > const & inputs
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size )
+			: GBufferBase{ std::move( name ) }
+			, m_engine{ engine }
+			, m_owned{ GBufferBase::doCreateTextures< TextureEnumT >( engine
+				, inputs
+				, getName()
+				, createFlags
+				, size ) }
 		{
 			auto & device = getCurrentRenderDevice( m_engine );
 			auto itOwned = m_owned.begin();

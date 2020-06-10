@@ -1,26 +1,41 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RsmGIPass_HPP___
-#define ___C3D_RsmGIPass_HPP___
+#ifndef ___C3D_LightPropagationPass_HPP___
+#define ___C3D_LightPropagationPass_HPP___
 
-#include "LightingModule.hpp"
+#include "LightVolumeGIModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
-#include "Castor3D/Shader/Ubos/RsmConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+
+#include <CastorUtils/Design/Named.hpp>
+#include <CastorUtils/Graphics/Grid.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
+#include <ashespp/Descriptor/DescriptorSetPool.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
+#include <ashespp/RenderPass/FrameBuffer.hpp>
+
 namespace castor3d
 {
-	class RsmGIPass
-		: public RenderQuad
+	class LightPropagationPass
+		: public castor::Named
 	{
 	public:
 		/**
@@ -37,14 +52,9 @@ namespace castor3d
 		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
 		 *\param[in]	scene			Le tampon de scène.
 		 */
-		C3D_API RsmGIPass( Engine & engine
-			, LightCache const & lightCache
-			, LightType lightType
-			, VkExtent2D const & size
-			, GpInfoUbo const & gpInfo
-			, OpaquePassResult const & gpResult
-			, ShadowMapResult const & smResult
-			, TextureUnitArray const & downscaleResult );
+		C3D_API LightPropagationPass( Engine & engine
+			, LightVolumePassResult const & lightInjectionResult
+			, LightInjectionUbo const & lightInjectionUbo );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -60,43 +70,31 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
-		C3D_API void update( Light const & light );
 
-		TextureUnitArray const & getResult()const
+		LightVolumePassResult const & getResult()const
 		{
 			return m_result;
 		}
 
-		RsmConfigUbo const & getConfigUbo()const
-		{
-			return m_rsmConfigUbo;
-		}
-
-		ashes::Buffer< castor::Point2f > const & getSamplesSsbo()const
-		{
-			return *m_rsmSamplesSsbo;
-		}
-
 	private:
-		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-			, ashes::DescriptorSet & descriptorSet )override;
-		void doRegisterFrame( ashes::CommandBuffer & commandBuffer )const override;
-
-	private:
-		LightCache const & m_lightCache;
-		OpaquePassResult const & m_gpResult;
-		ShadowMapResult const & m_smResult;
-		GpInfoUbo const & m_gpInfo;
-		TextureUnitArray m_result;
-		LightType m_lightType;
-		ShaderModule m_vertexShader;
-		ShaderModule m_pixelShader;
-		RsmConfigUbo m_rsmConfigUbo;
-		ashes::BufferPtr< castor::Point2f > m_rsmSamplesSsbo;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_frameBuffer;
+		Engine & m_engine;
+		LightInjectionUbo const & m_lightInjectionUbo;
+		LightVolumePassResult m_result;
 		RenderPassTimerSPtr m_timer;
-		ashes::SemaphorePtr m_finished;
+		uint32_t m_count;
+
+		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
+		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
+		ashes::PipelineLayoutPtr m_pipelineLayout;
+		ashes::DescriptorSetPoolPtr m_descriptorSetPool;
+		ashes::DescriptorSetPtr m_descriptorSet;
+		ShaderModule m_vertexShader;
+		ShaderModule m_geometryShader;
+		ShaderModule m_pixelShader;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::GraphicsPipelinePtr m_pipeline;
+		ashes::FrameBufferPtr m_frameBuffer;
+		CommandsSemaphore m_commands;
 	};
 }
 

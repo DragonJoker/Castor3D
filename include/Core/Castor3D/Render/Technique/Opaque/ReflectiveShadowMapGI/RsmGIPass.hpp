@@ -1,10 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_RsmInterpolatePass_HPP___
-#define ___C3D_RsmInterpolatePass_HPP___
+#ifndef ___C3D_RsmGIPass_HPP___
+#define ___C3D_RsmGIPass_HPP___
 
-#include "LightingModule.hpp"
+#include "ReflectiveShadowMapGIModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -19,36 +19,32 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class RsmInterpolatePass
+	class RsmGIPass
 		: public RenderQuad
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine	The engine.
-		 *\param[in]	src		The source RSM GI view.
-		 *\param[in]	src		The source Normals view.
-		 *\param[in]	dst		The destination view.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	linearisedDepth	The linearised depth buffer.
+		 *\param[in]	scene			The scene buffer.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	src		La vue RSM GI source.
-		 *\param[in]	src		La vue Normales source.
-		 *\param[in]	dst		La vue destination.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
+		 *\param[in]	scene			Le tampon de scène.
 		 */
-		C3D_API RsmInterpolatePass( Engine & engine
+		C3D_API RsmGIPass( Engine & engine
 			, LightCache const & lightCache
 			, LightType lightType
 			, VkExtent2D const & size
-			, GpInfoUbo const & gpInfoUbo
+			, GpInfoUbo const & gpInfo
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smResult
-			, RsmConfigUbo const & rsmConfigUbo
-			, ashes::Buffer< castor::Point2f > const & rsmSamplesSsbo
-			, TextureUnit const & gi
-			, TextureUnit const & nml
-			, TextureUnit const & dst );
+			, TextureUnitArray const & downscaleResult );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -64,6 +60,22 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
+		C3D_API void update( Light const & light );
+
+		TextureUnitArray const & getResult()const
+		{
+			return m_result;
+		}
+
+		RsmConfigUbo const & getConfigUbo()const
+		{
+			return m_rsmConfigUbo;
+		}
+
+		ashes::Buffer< castor::Point2f > const & getSamplesSsbo()const
+		{
+			return *m_rsmSamplesSsbo;
+		}
 
 	private:
 		void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
@@ -72,15 +84,15 @@ namespace castor3d
 
 	private:
 		LightCache const & m_lightCache;
-		GpInfoUbo const & m_gpInfo;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smResult;
-		TextureUnit const & m_gi;
-		TextureUnit const & m_nml;
-		RsmConfigUbo const & m_rsmConfigUbo;
-		ashes::Buffer< castor::Point2f > const & m_rsmSamplesSsbo;
+		GpInfoUbo const & m_gpInfo;
+		TextureUnitArray m_result;
+		LightType m_lightType;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
+		RsmConfigUbo m_rsmConfigUbo;
+		ashes::BufferPtr< castor::Point2f > m_rsmSamplesSsbo;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_frameBuffer;
 		RenderPassTimerSPtr m_timer;

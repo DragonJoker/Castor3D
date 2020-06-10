@@ -4,16 +4,17 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightPassReflectiveShadow_H___
 #define ___C3D_LightPassReflectiveShadow_H___
 
-#include "LightPassShadow.hpp"
+#include "ReflectiveShadowMapGIModule.hpp"
+
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPassShadow.hpp"
 
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Passes/DownscalePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/RsmGIPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/RsmInterpolatePass.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmGIPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmInterpolatePass.hpp"
 
 namespace castor3d
 {
@@ -49,26 +50,22 @@ namespace castor3d
 			: LightPassShadow< LtType >{ engine
 				, lpResult
 				, gpInfoUbo }
-			, m_lightInjectionPass{ ( ( LtType == LightType::ePoint )
-				? nullptr
-				: std::make_unique< LightInjectionPass >( engine
-					, lightCache
-					, LtType
-					, smResult
-					, gpInfoUbo ) ) }
 			, m_downscalePass{ engine
-				, {
+				, ashes::ImageViewArray
+				{
 					lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),
 					gpResult[DsTexture::eData1].getTexture()->getDefaultView().getTargetView(),
 				}
-				, {
+				, VkExtent2D
+				{
 					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
 					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				} }
 			, m_rsmGiPass{ engine
 				, lightCache
 				, LtType
-				, {
+				, VkExtent2D
+				{
 					lpResult[LpTexture::eDiffuse].getTexture()->getWidth() >> 2,
 					lpResult[LpTexture::eDiffuse].getTexture()->getHeight() >> 2,
 				}
@@ -77,20 +74,21 @@ namespace castor3d
 				, smResult
 				, m_downscalePass.getResult() }
 			, m_interpolatePass{ engine
-				, lightCache
-				, LtType
-				, {
-					lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
-					lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
-				}
-				, gpInfoUbo
-				, gpResult
-				, smResult
-				, m_rsmGiPass.getConfigUbo()
-				, m_rsmGiPass.getSamplesSsbo()
-				, m_rsmGiPass.getResult()[0]
-				, m_rsmGiPass.getResult()[1]
-				, lpResult[LpTexture::eDiffuse] }
+					, lightCache
+					, LtType
+					, VkExtent2D
+					{
+						lpResult[LpTexture::eDiffuse].getTexture()->getWidth(),
+						lpResult[LpTexture::eDiffuse].getTexture()->getHeight(),
+					}
+					, gpInfoUbo
+					, gpResult
+					, smResult
+					, m_rsmGiPass.getConfigUbo()
+					, m_rsmGiPass.getSamplesSsbo()
+					, m_rsmGiPass.getResult()[0]
+					, m_rsmGiPass.getResult()[1]
+					, lpResult[LpTexture::eDiffuse] }
 		{
 		}
 
@@ -99,27 +97,16 @@ namespace castor3d
 		{
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
-
-			if constexpr ( LtType != LightType::ePoint )
-			{
-				result = &m_lightInjectionPass->compute( *result );
-			}
-
 			result = &m_downscalePass.compute( *result );
 			result = &m_rsmGiPass.compute( *result );
 			result = &m_interpolatePass.compute( *result );
+
 			return *result;
 		}
 
 		void accept( PipelineVisitorBase & visitor )override
 		{
 			LightPassShadow< LtType >::accept( visitor );
-
-			if constexpr ( LtType != LightType::ePoint )
-			{
-				m_lightInjectionPass->accept( visitor );
-			}
-
 			m_rsmGiPass.accept( visitor );
 			m_downscalePass.accept( visitor );
 		}
@@ -138,17 +125,10 @@ namespace castor3d
 				, camera
 				, shadowMap
 				, shadowMapIndex );
-
-			if constexpr ( LtType != LightType::ePoint )
-			{
-				m_lightInjectionPass->update( light, camera );
-			}
-
 			m_rsmGiPass.update( light );
 		}
 
 	private:
-		std::unique_ptr< LightInjectionPass > m_lightInjectionPass;
 		DownscalePass m_downscalePass;
 		RsmGIPass m_rsmGiPass;
 		RsmInterpolatePass m_interpolatePass;

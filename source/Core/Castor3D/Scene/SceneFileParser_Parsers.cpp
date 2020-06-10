@@ -1837,7 +1837,22 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->light->setRsmShadowMaps( true );
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eRsm );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
+	CU_ImplementAttributeParser( parserShadowsLpv )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLpv );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eRsm )

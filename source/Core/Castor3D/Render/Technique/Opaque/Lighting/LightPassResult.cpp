@@ -12,6 +12,19 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	castor::String getName( GlobalIlluminationType giType )
+	{
+		static std::array< String, size_t( GlobalIlluminationType::eCount ) > Values
+		{
+			{
+				cuT( "none" ),
+				cuT( "rsm" ),
+				cuT( "lpv" ),
+			}
+		};
+		return Values[size_t( giType )];
+	}
+	
 	castor::String getTextureName( LpTexture texture )
 	{
 		return cuT( "c3d_mapLight" ) + getName( texture );
@@ -27,7 +40,6 @@ namespace castor3d
 				cuT( "Specular" ),
 			}
 		};
-
 		return Values[size_t( texture )];
 	}
 

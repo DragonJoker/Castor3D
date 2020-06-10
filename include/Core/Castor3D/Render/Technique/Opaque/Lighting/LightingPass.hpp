@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/Lighting/LightPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/RsmConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -23,6 +23,7 @@ namespace castor3d
 	{
 	private:
 		using LightPasses = std::array< std::unique_ptr< LightPass >, size_t( LightType::eCount ) >;
+		using ShadowLightPasses = std::array< LightPasses, size_t( GlobalIlluminationType::eCount ) >;
 
 	public:
 		/**
@@ -131,8 +132,7 @@ namespace castor3d
 		castor::Size const m_size;
 		LightPassResult m_result;
 		LightPasses m_lightPass;
-		LightPasses m_lightPassShadow;
-		LightPasses m_lightPassRsm;
+		ShadowLightPasses m_lightPassShadow;
 		RenderPassTimerSPtr m_timer;
 		ashes::FencePtr m_fence;
 		ashes::ImageView const & m_srcDepth;

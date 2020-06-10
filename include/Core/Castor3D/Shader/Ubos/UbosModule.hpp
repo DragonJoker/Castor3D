@@ -72,6 +72,52 @@ namespace castor3d
 		castor::Point2f renderSize;
 	};
 	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LightInjectionUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LightInjectionUboConfiguration
+	{
+		castor::Point4f minVolumeCorner;
+		castor::Point4ui gridSizes;
+		castor::Point4f config;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LightPropagationUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LightPropagationUboConfiguration
+	{
+		castor::Matrix4x4f lightTransform;
+		castor::Point4f lightPosition;
+		castor::Point4f tanFovTexelModif;
+	};
+	/**
 	*\brief
 	*	HDR configuration data UBO.
 	*\~french

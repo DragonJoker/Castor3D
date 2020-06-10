@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightInjectionPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/LightInjectionUbo.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
 
@@ -42,9 +43,6 @@ namespace castor3d
 {
 	namespace
 	{
-		static constexpr uint32_t GridSize = 128u;
-		static constexpr float CellSize = 2.5f;
-
 		static constexpr uint32_t LightsIdx = 0u;
 		static constexpr uint32_t RsmNormalsIdx = 1u;
 		static constexpr uint32_t RsmPositionIdx = 2u;
@@ -52,9 +50,7 @@ namespace castor3d
 		static constexpr uint32_t LIUboIdx = 4u;
 		static constexpr uint32_t GpUboIdx = 5u;
 
-		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
-			, uint32_t lpvTexSize
-			, uint32_t cellSize )
+		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -72,10 +68,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			Ubo ubo{ writer, "LightInjectionUbo", LIUboIdx, 0u };
-			auto c3d_minVolumeCorner = ubo.declMember< Vec4 >( "c3d_minVolumeCorner" );
-			auto c3d_gridSizes = ubo.declMember< UVec4 >( "c3d_gridSizes" );
-			ubo.end();
+			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -138,9 +131,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize
-			, uint32_t lpvTexSize
-			, uint32_t cellSize )
+		std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize )
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -158,10 +149,7 @@ namespace castor3d
 			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
 				, RsmFluxIdx
 				, 0u );
-			Ubo ubo{ writer, "LightInjectionUbo", LIUboIdx, 0u };
-			auto c3d_minVolumeCorner = ubo.declMember< Vec4 >( "c3d_minVolumeCorner" );
-			auto c3d_gridSizes = ubo.declMember< UVec4 >( "c3d_gridSizes" );
-			ubo.end();
+			UBO_LIGHTINJECTION( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
 
@@ -180,8 +168,6 @@ namespace castor3d
 				}
 				, InVec3{ writer, "pos" }
 				, InVec3{ writer, "normal" } );
-
-			auto gridSize = float( lpvTexSize );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
@@ -205,16 +191,14 @@ namespace castor3d
 		}
 
 		ShaderPtr getVertexProgram( LightType lightType
-			, uint32_t rsmTexSize
-			, uint32_t lpvTexSize
-			, uint32_t cellSize )
+			, uint32_t rsmTexSize )
 		{
 			switch ( lightType )
 			{
 			case castor3d::LightType::eDirectional:
-				return getDirectionalVertexProgram( rsmTexSize, lpvTexSize, cellSize );
+				return getDirectionalVertexProgram( rsmTexSize );
 			case castor3d::LightType::eSpot:
-				return getSpotVertexProgram( rsmTexSize, lpvTexSize, cellSize );
+				return getSpotVertexProgram( rsmTexSize );
 			default:
 				CU_Failure( "Unsupported light type" );
 				return nullptr;
@@ -343,50 +327,6 @@ namespace castor3d
 			return sampler;
 		}
 
-		TextureUnit doCreateTexture( Engine & engine
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-			ashes::ImageCreateInfo image
-			{
-				VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_3D,
-				format,
-				{ size, size, size },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ engine };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise();
-			return result;
-		}
-
-		TextureUnitArray doCreateTextures( Engine & engine
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size )
-		{
-			TextureUnitArray result;
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			return result;
-		}
-
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
 			, VkFormat format )
 		{
@@ -505,7 +445,12 @@ namespace castor3d
 
 			if ( auto buffer = result->lock( 0u, vplCount, 0u ) )
 			{
-				*buffer = vtx;
+				for ( auto i = 0u; i < vplCount; ++i )
+				{
+					*buffer = vtx;
+					++buffer;
+				}
+
 				result->flush( 0u, vplCount );
 				result->unlock();
 			}
@@ -543,7 +488,7 @@ namespace castor3d
 		ashes::DescriptorSetPtr doCreateDescriptorSet( ashes::DescriptorSetPool & descriptorSetPool
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
-			, UniformBuffer< LightInjectionConfiguration > const & ubo
+			, UniformBuffer< LightInjectionUboConfiguration > const & ubo
 			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
@@ -630,25 +575,20 @@ namespace castor3d
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
-		, GpInfoUbo const & gpInfoUbo )
+		, GpInfoUbo const & gpInfoUbo
+		, LightInjectionUbo const & lpvUbo
+		, uint32_t size )
 		: Named{ "LightInjection" }
 		, m_engine{ engine }
 		, m_lightCache{ lightCache }
 		, m_smResult{ smResult }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_result{ doCreateTextures( engine
-			, getName() + "Result"
-			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, GridSize ) }
-		, m_ubo{ makeUniformBuffer< Configuration >( *engine.getRenderSystem()
-			, 1u
-			, 0u
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "LightInjection" ) }
+		, m_result{ engine
+			, getName()
+			, size }
+		, m_lpvUbo{ lpvUbo }
 		, m_lightType{ lightType }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Light Injection" ) ) }
-		, m_aabb{ lightCache.getScene()->getBoundingBox() }
-		, m_grid{ GridSize, CellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 }
 		, m_vertexBuffer{ doCreateVertexBuffer( engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( engine ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
@@ -656,25 +596,25 @@ namespace castor3d
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
 			, m_lightCache
 			, m_smResult
-			, *m_ubo
+			, m_lpvUbo.getUbo()
 			, m_gpInfoUbo ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth(), GridSize, 4u ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_engine )
-			, m_result[0].getTexture()->getPixelFormat() ) }
+			, m_result[LpvTexture::eR].getTexture()->getPixelFormat() ) }
 		, m_pipeline{ doCreatePipeline( m_engine
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
-			, GridSize ) }
+			, size ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
-			, GridSize
-			, m_result[0].getTexture()->getDefaultView().getTargetView()
-			, m_result[1].getTexture()->getDefaultView().getTargetView()
-			, m_result[2].getTexture()->getDefaultView().getTargetView() ) }
+			, size
+			, m_result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+			, m_result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+			, m_result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}
@@ -737,35 +677,5 @@ namespace castor3d
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_geometryShader );
 		visitor.visit( m_pixelShader );
-	}
-
-	void LightInjectionPass::update( Light const & light
-		, Camera const & camera )
-	{
-		auto & scene = *light.getScene();
-		auto aabb = scene.getBoundingBox();
-		auto camPos = camera.getParent()->getDerivedPosition();
-		Point3f camDir{ 0, 0, 1 };
-		camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
-
-		if ( m_aabb != aabb
-			|| m_lightIndex != light.getShadowMapIndex()
-			|| m_cameraPos != camPos
-			|| m_cameraDir != camDir )
-		{
-			m_lightIndex = light.getShadowMapIndex();
-			m_aabb = aabb;
-			m_cameraPos = camPos;
-			m_cameraDir = camDir;
-			m_grid = Grid{ GridSize, CellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
-			m_grid.transform( m_cameraPos, m_cameraDir );
-
-			auto min = m_grid.getMin();
-			auto size = m_grid.getDimensions();
-			auto & data = m_ubo->getData();
-			data.minVolumeCorner = Point4f{ min->x, min->y, min->z, m_grid.getCellSize() };
-			data.gridSizes = Point4ui{ size->x, size->y, size->z, m_lightIndex };
-			m_ubo->upload();
-		}
 	}
 }

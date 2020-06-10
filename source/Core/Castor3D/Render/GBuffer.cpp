@@ -35,7 +35,7 @@ namespace castor3d
 	TextureUnit GBufferBase::doInitialiseTexture( Engine & engine
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
-		, castor::Size const & size
+		, VkExtent3D const & size
 		, uint32_t layerCount
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
@@ -68,12 +68,18 @@ namespace castor3d
 
 		ashes::ImageCreateInfo image
 		{
-			createFlags,
-			VK_IMAGE_TYPE_2D,
+			createFlags | ( size.depth > 1u
+				? VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
+				: 0u ),
+			( size.depth > 1u
+				? VK_IMAGE_TYPE_3D
+				: VK_IMAGE_TYPE_2D ),
 			getFormat( engine, format ),
-			{ size[0], size[1], 1u },
+			size,
 			1u,
-			layerCount,
+			( size.depth > 1u
+				? 1u
+				: layerCount ),
 			VK_SAMPLE_COUNT_1_BIT,
 			VK_IMAGE_TILING_OPTIMAL,
 			usageFlags,

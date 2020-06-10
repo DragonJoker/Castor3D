@@ -7,7 +7,8 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/Lighting/RsmConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
@@ -221,7 +222,12 @@ namespace castor3d
 
 		inline bool needsRsmShadowMaps()const
 		{
-			return m_shadowMapRsm;
+			return getGlobalIlluminationType() != GlobalIlluminationType::eNone;
+		}
+
+		inline GlobalIlluminationType getGlobalIlluminationType()const
+		{
+			return m_globalIllumination;
 		}
 
 		inline RsmConfig const & getRsmConfig()const
@@ -349,9 +355,9 @@ namespace castor3d
 			m_shadowMapIndex = index;
 		}
 
-		inline void setRsmShadowMaps( bool value )
+		inline void setGlobalIlluminationType( GlobalIlluminationType value )
 		{
-			m_shadowMapRsm = value;
+			m_globalIllumination = value;
 		}
 		/**@}*/
 
@@ -368,7 +374,7 @@ namespace castor3d
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
-		bool m_shadowMapRsm{ false };
+		GlobalIlluminationType m_globalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t m_bufferIndex{ 0u };
 		RsmConfig m_rsmConfig;
 	};

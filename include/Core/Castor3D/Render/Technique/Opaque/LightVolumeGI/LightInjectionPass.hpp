@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightInjectionPass_HPP___
 #define ___C3D_LightInjectionPass_HPP___
 
-#include "LightingModule.hpp"
+#include "LightVolumeGIModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -33,12 +34,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct LightInjectionConfiguration
-	{
-		castor::Point4f minVolumeCorner;
-		castor::Point4ui gridSizes;
-	};
-
 	class LightInjectionPass
 		: public castor::Named
 	{
@@ -61,7 +56,9 @@ namespace castor3d
 			, LightCache const & lightCache
 			, LightType lightType
 			, ShadowMapResult const & smResult
-			, GpInfoUbo const & gpInfoUbo );
+			, GpInfoUbo const & gpInfoUbo
+			, LightInjectionUbo const & lpvUbo
+			, uint32_t size );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -77,31 +74,21 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
-		C3D_API void update( Light const & light
-			, Camera const & camera );
 
-		TextureUnitArray const & getResult()const
+		LightVolumePassResult const & getResult()const
 		{
 			return m_result;
 		}
-
-	private:
-		using Configuration = LightInjectionConfiguration;
 
 	private:
 		Engine & m_engine;
 		LightCache const & m_lightCache;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;
-		TextureUnitArray m_result;
-		UniformBufferUPtr< Configuration > m_ubo;
+		LightInjectionUbo const & m_lpvUbo;
+		LightVolumePassResult m_result;
 		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
-		castor::BoundingBox m_aabb;
-		castor::Point3f m_cameraPos;
-		castor::Point3f m_cameraDir;
-		uint32_t m_lightIndex{};
-		castor::Grid m_grid;
 
 		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;

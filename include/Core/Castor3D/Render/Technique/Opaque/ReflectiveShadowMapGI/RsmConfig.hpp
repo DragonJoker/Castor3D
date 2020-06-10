@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RsmConfig_H___
 #define ___C3D_RsmConfig_H___
 
-#include "LightingModule.hpp"
+#include "ReflectiveShadowMapGIModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 
