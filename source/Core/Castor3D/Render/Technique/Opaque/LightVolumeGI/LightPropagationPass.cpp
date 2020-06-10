@@ -153,9 +153,13 @@ namespace castor3d
 			auto c3d_lpvGridG = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Grid" ), GLpvGridIdx, 0u );
 			auto c3d_lpvGridB = writer.declSampledImage< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), BLpvGridIdx, 0u );
 
-			auto c3d_RAccumulatorLPV = writer.declOutput< Vec4 >( "c3d_RAccumulatorLPV", 0u );
-			auto c3d_GAccumulatorLPV = writer.declOutput< Vec4 >( "c3d_GAccumulatorLPV", 1u );
-			auto c3d_BAccumulatorLPV = writer.declOutput< Vec4 >( "c3d_BAccumulatorLPV", 2u );
+			auto outRAccumulatorLPV = writer.declOutput< Vec4 >( "outRAccumulatorLPV", 0u );
+			auto outGAccumulatorLPV = writer.declOutput< Vec4 >( "outGAccumulatorLPV", 1u );
+			auto outBAccumulatorLPV = writer.declOutput< Vec4 >( "outBAccumulatorLPV", 2u );
+			
+			auto outRLightGridForNextStep = writer.declOutput< Vec4 >( "outRLightGridForNextStep", 3u );
+			auto outGLightGridForNextStep = writer.declOutput< Vec4 >( "outGLightGridForNextStep", 4u );
+			auto outBLightGridForNextStep = writer.declOutput< Vec4 >( "outBLightGridForNextStep", 5u );
 
 			auto inCellIndex = writer.declInput< IVec3 >( "inCellIndex", 0u );
 
@@ -288,78 +292,16 @@ namespace castor3d
 					auto B = writer.declLocale< Vec4 >( "B" );
 					propagate( R, G, B );
 
-					c3d_RAccumulatorLPV = R;
-					c3d_GAccumulatorLPV = G;
-					c3d_BAccumulatorLPV = B;
+					outRAccumulatorLPV = R;
+					outGAccumulatorLPV = G;
+					outBAccumulatorLPV = B;
+
+					outRLightGridForNextStep = R;
+					outGLightGridForNextStep = G;
+					outBLightGridForNextStep = B;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		SamplerSPtr doCreateSampler( Engine & engine
-			, String const & name
-			, VkSamplerAddressMode mode )
-		{
-			SamplerSPtr sampler;
-
-			if ( engine.getSamplerCache().has( name ) )
-			{
-				sampler = engine.getSamplerCache().find( name );
-			}
-			else
-			{
-				sampler = engine.getSamplerCache().add( name );
-				sampler->setMinFilter( VK_FILTER_LINEAR );
-				sampler->setMagFilter( VK_FILTER_LINEAR );
-				sampler->setWrapS( mode );
-				sampler->setWrapT( mode );
-			}
-
-			return sampler;
-		}
-
-		TextureUnit doCreateTexture( Engine & engine
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size )
-		{
-			auto & renderSystem = *engine.getRenderSystem();
-			auto sampler = doCreateSampler( engine, name, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-
-			ashes::ImageCreateInfo image
-			{
-				VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT,
-				VK_IMAGE_TYPE_3D,
-				format,
-				{ size, size, size },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT ),
-			};
-			auto ssaoResult = std::make_shared< TextureLayout >( renderSystem
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit result{ engine };
-			result.setTexture( ssaoResult );
-			result.setSampler( sampler );
-			result.initialise();
-			return result;
-		}
-
-		TextureUnitArray doCreateTextures( Engine & engine
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size )
-		{
-			TextureUnitArray result;
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			result.emplace_back( doCreateTexture( engine, name, format, size ) );
-			return result;
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
@@ -367,6 +309,39 @@ namespace castor3d
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
+				{
+					0u,
+					format,
+					VK_SAMPLE_COUNT_1_BIT,
+					VK_ATTACHMENT_LOAD_OP_CLEAR,
+					VK_ATTACHMENT_STORE_OP_STORE,
+					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+					VK_ATTACHMENT_STORE_OP_DONT_CARE,
+					VK_IMAGE_LAYOUT_UNDEFINED,
+					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+				},
 				{
 					0u,
 					format,
@@ -411,6 +386,9 @@ namespace castor3d
 						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
+						{ 5u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					ashes::nullopt,
@@ -453,12 +431,18 @@ namespace castor3d
 			, uint32_t size
 			, ashes::ImageView const & img1
 			, ashes::ImageView const & img2
-			, ashes::ImageView const & img3 )
+			, ashes::ImageView const & img3
+			, ashes::ImageView const & img4
+			, ashes::ImageView const & img5
+			, ashes::ImageView const & img6 )
 		{
 			ashes::ImageViewCRefArray attaches;
 			attaches.emplace_back( img1 );
 			attaches.emplace_back( img2 );
 			attaches.emplace_back( img3 );
+			attaches.emplace_back( img4 );
+			attaches.emplace_back( img5 );
+			attaches.emplace_back( img6 );
 			return renderPass.createFrameBuffer( "LightPropagation"
 				, VkExtent2D{ size, size }
 				, std::move( attaches )
@@ -589,7 +573,7 @@ namespace castor3d
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u ),
+					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 6u ),
 					ashes::nullopt,
 					pipelineLayout,
 					renderPass,
@@ -600,40 +584,43 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightPropagationPass::LightPropagationPass( Engine & engine
-		, LightVolumePassResult const & lightInjectionResult
+		, uint32_t gridSize
+		, LightVolumePassResult const & injection
+		, LightVolumePassResult const & accumulator
+		, LightVolumePassResult const & propagate
 		, LpvConfigUbo const & lpvConfigUbo )
 		: Named{ "LightPropagation" }
 		, m_engine{ engine }
 		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_result{ engine
-			, getName()
-			, lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "Light Propagation" ) ) }
-		, m_count{ lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() * lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() * lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() }
-		, m_vertexBuffer{ doCreateVertexBuffer( engine, lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() ) }
+		, m_count{ gridSize * gridSize * gridSize }
+		, m_vertexBuffer{ doCreateVertexBuffer( engine, gridSize ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( engine ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( getName(), 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( *m_descriptorSetPool
-			, lightInjectionResult
+			, injection
 			, m_lpvConfigUbo.getUbo() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_engine )
-			, m_result[LpvTexture::eR].getTexture()->getPixelFormat() ) }
+			, accumulator[LpvTexture::eR].getTexture()->getPixelFormat() ) }
 		, m_pipeline{ doCreatePipeline( m_engine
 			, *m_pipelineLayout
 			, *m_renderPass
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
-			, lightInjectionResult[LpvTexture::eR].getTexture()->getWidth() ) }
+			, gridSize ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
-			, lightInjectionResult[LpvTexture::eR].getTexture()->getWidth()
-			, m_result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
-			, m_result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
-			, m_result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() ) }
+			, gridSize
+			, accumulator[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+			, accumulator[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+			, accumulator[LpvTexture::eB].getTexture()->getDefaultView().getTargetView()
+			, propagate[LpvTexture::eR].getTexture()->getDefaultView().getTargetView()
+			, propagate[LpvTexture::eG].getTexture()->getDefaultView().getTargetView()
+			, propagate[LpvTexture::eB].getTexture()->getDefaultView().getTargetView() ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}
@@ -675,7 +662,14 @@ namespace castor3d
 			} );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
-			, { castor3d::transparentBlackClearColor, castor3d::transparentBlackClearColor, castor3d::transparentBlackClearColor }
+			, {
+				castor3d::transparentBlackClearColor,
+				castor3d::transparentBlackClearColor,
+				castor3d::transparentBlackClearColor,
+				castor3d::transparentBlackClearColor,
+				castor3d::transparentBlackClearColor,
+				castor3d::transparentBlackClearColor,
+			}
 		, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );

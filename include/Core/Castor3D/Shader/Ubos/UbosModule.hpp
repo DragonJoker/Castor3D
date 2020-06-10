@@ -79,7 +79,7 @@ namespace castor3d
 	*\brief
 	*	UBO de light propagation.
 	*/
-	class LightInjectionUbo;
+	class LpvConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -88,7 +88,7 @@ namespace castor3d
 	*\brief
 	*	Données de light propagation.
 	*/
-	struct LightInjectionUboConfiguration
+	struct LpvConfigUboConfiguration
 	{
 		castor::Point4f minVolumeCorner;
 		castor::Point4ui gridSizes;

@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -58,7 +59,9 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, GpInfoUbo const & gpInfoUbo
 			, LpvConfigUbo const & lpvConfigUbo
-			, uint32_t size );
+			, LightVolumePassResult const & result
+			, uint32_t size
+			, uint32_t layerIndex = shader::DirectionalMaxCascadesCount - 1u );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -75,18 +78,12 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		LightVolumePassResult const & getResult()const
-		{
-			return m_result;
-		}
-
 	private:
 		Engine & m_engine;
 		LightCache const & m_lightCache;
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvConfigUbo const & m_lpvConfigUbo;
-		LightVolumePassResult m_result;
 		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
 

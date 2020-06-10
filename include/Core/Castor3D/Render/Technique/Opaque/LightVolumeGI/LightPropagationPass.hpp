@@ -53,7 +53,10 @@ namespace castor3d
 		 *\param[in]	scene			Le tampon de scène.
 		 */
 		C3D_API LightPropagationPass( Engine & engine
-			, LightVolumePassResult const & lightInjectionResult
+			, uint32_t gridSize
+			, LightVolumePassResult const & injection
+			, LightVolumePassResult const & accumulation
+			, LightVolumePassResult const & propagate
 			, LpvConfigUbo const & lpvConfigUbo );
 		/**
 		 *\~english
@@ -71,15 +74,9 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
-		LightVolumePassResult const & getResult()const
-		{
-			return m_result;
-		}
-
 	private:
 		Engine & m_engine;
 		LpvConfigUbo const & m_lpvConfigUbo;
-		LightVolumePassResult m_result;
 		RenderPassTimerSPtr m_timer;
 		uint32_t m_count;
 
