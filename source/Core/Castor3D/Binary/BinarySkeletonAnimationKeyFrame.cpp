@@ -45,7 +45,7 @@ namespace castor3d
 		castor::Matrix4x4f matrix;
 		double time{ 0.0 };
 		castor::String name;
-		uint8_t type;
+		uint8_t type{};
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )

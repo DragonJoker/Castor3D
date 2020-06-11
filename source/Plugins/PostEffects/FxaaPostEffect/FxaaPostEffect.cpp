@@ -152,7 +152,7 @@ namespace fxaa
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, Size const & size )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
+		: castor3d::RenderQuad{ renderSystem, cuT( "Fxaa" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_fxaaUbo{ *renderSystem.getEngine(), size }
 	{
 	}
@@ -185,7 +185,8 @@ namespace fxaa
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, parameters }
+			, parameters
+			, 1u }
 		, m_surface{ *renderSystem.getEngine(), cuT( "Fxaa" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa" }
@@ -237,25 +238,21 @@ namespace fxaa
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "FXAA" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "FXAA" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "SubPixShift" )
 			, m_subpixShift );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "SpanMax" )
 			, m_spanMax );
-		visitor.visit( cuT( "FXAA" )
+		visitor.visit( cuT( "Fxaa" )
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "FXAA" )
+			, cuT( "Fxaa" )
 			, cuT( "ReduceMul" )
 			, m_reduceMul );
 	}
@@ -337,8 +334,8 @@ namespace fxaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "Fxaa" );
+		m_renderPass = device->createRenderPass( "Fxaa"
+			, std::move( createInfo ) );
 
 		// Create the FXAA quad renderer.
 		ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -359,7 +356,7 @@ namespace fxaa
 		m_fxaaQuad->createPipeline( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -373,12 +370,12 @@ namespace fxaa
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "Fxaa" ),
+				device->createSemaphore( "Fxaa" )
 			};
 			auto & cmd = *commands.commandBuffer;
 			// Initialise the command buffer.
-			auto & targetView = m_target->getDefaultView();
+			auto & targetView = m_target->getDefaultView().getSampledView();
 
 			cmd.begin();
 			timer.beginPass( cmd );

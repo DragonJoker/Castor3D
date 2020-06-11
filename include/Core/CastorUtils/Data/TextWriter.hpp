@@ -88,6 +88,19 @@ namespace castor
 				Logger::logError( makeStringStream() << m_name << action << " writing failed." );
 			}
 		}
+		/**
+		 *\~english
+		 *\brief		Reports eventual error.
+		 *\~french
+		 *\brief		Rapporte une erreur éventuelle.
+		 */
+		inline void checkError( bool error, std::string const & action )const
+		{
+			if ( !error )
+			{
+				Logger::logError( makeStringStream() << m_name << action << " writing failed." );
+			}
+		}
 
 		struct WriterBlock
 		{

@@ -44,7 +44,7 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	gpResult	Les tampons de la geometry pass.
 		 */
-		void initialiseRenderPass( GeometryPassResult const & gpResult );
+		void initialiseRenderPass( OpaquePassResult const & gpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -89,6 +89,10 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
 		 */
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetGeometryShaderSource
+		 */
+		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
 		 */

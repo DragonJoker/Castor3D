@@ -17,6 +17,31 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Enumerator of textures used in deferred rendering.
+	*\~french
+	*\brief
+	*	Enumération des textures utilisées lors du rendu différé.
+	*/
+	enum class SmTexture
+		: uint8_t
+	{
+		eDepth, // D24S8 Depth stencil buffer
+		eNormalLinear, // R32G32B32A32F, RGB => World space normal used by RSM, A => Shadow map used for raw and PCF shadow maps
+		eVariance, // R32G32F Shadow map used by VSM.
+		ePosition, // R16G16B16A16F, RGB => World space position used by RSM.
+		eFlux, // R16G16B16A16F, RGB => Light flux, used by RSM.
+		CU_ScopedEnumBounds( eDepth ),
+	};
+	castor::String getTextureName( LightType light
+		, SmTexture texture );
+	castor::String getName( SmTexture texture );
+	VkFormat getFormat( SmTexture texture );
+	VkClearValue getClearValue( SmTexture texture );
+	VkImageUsageFlags getUsageFlags( SmTexture texture );
+	VkBorderColor getBorderColor( SmTexture texture );
+	/**
+	*\~english
+	*\brief
 	*	Shadow mapping implementation.
 	*\~french
 	*\brief
@@ -59,6 +84,15 @@ namespace castor3d
 	*	Implémentation du mappage d'ombres.
 	*/
 	class ShadowMapPass;
+	/**
+	*\~english
+	*\brief
+	*	The textures resulting from a shadow map.
+	*\~french
+	*\brief
+	*	Les textures résultant d'une shadow map.
+	*/
+	class ShadowMapResult;
 	/**
 	*\~english
 	*\brief

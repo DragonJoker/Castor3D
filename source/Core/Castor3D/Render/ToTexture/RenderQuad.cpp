@@ -2,8 +2,10 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/SamplerCache.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 
@@ -26,67 +28,58 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#include <algorithm>
+
 using namespace castor;
 
 namespace castor3d
 {
 	namespace
 	{
-		SamplerSPtr doCreateSampler( RenderSystem const & renderSystem
-			, VkFilter filter )
+		uint32_t doGetColourAttachmentCount( ashes::RenderPass const & pass )
 		{
-			String const name = String{ cuT( "RenderQuad_" ) + ashes::getName( filter ) };
-			auto & cache = renderSystem.getEngine()->getSamplerCache();
-			SamplerSPtr sampler;
+			return uint32_t( std::count_if( pass.getAttachments().begin()
+				, pass.getAttachments().end()
+				, []( VkAttachmentDescription const & lookup )
+				{
+					return !ashes::isDepthOrStencilFormat( lookup.format );
+				} ) );
+		}
 
-			if ( cache.has( name ) )
-			{
-				sampler = cache.find( name );
-			}
-			else
-			{
-				sampler = cache.add( name );
-				sampler->setMinFilter( filter );
-				sampler->setMagFilter( filter );
-				sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-			}
-
-			return sampler;
+		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( ashes::RenderPass const & pass
+			, BlendMode blendMode )
+		{
+			return RenderPass::createBlendState( blendMode
+				, blendMode
+				, doGetColourAttachmentCount( pass ) );
 		}
 	}
 
 	RenderQuad::RenderQuad( RenderSystem & renderSystem
+		, castor::String const & name
 		, VkFilter samplerFilter
-		, TexcoordConfig const * config )
-		: m_renderSystem{ renderSystem }
+		, RenderQuadConfig config )
+		: castor::Named{ name }
+		, m_renderSystem{ renderSystem }
 		, m_vertexData
 		{
-			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 1.0 : 0.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 1.0 : 0.0 ) } : Point2f{} },
-			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config ? Point2f{ ( config->invertU ? 0.0 : 1.0 ), ( config->invertV ? 0.0 : 1.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ -1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ -1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 1.0 : 0.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, -1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 1.0 : 0.0 ) } : Point2f{} },
+			TexturedQuad::Vertex{ Point2f{ +1.0, +1.0 }, config.texcoordConfig ? Point2f{ ( config.texcoordConfig->invertU ? 0.0 : 1.0 ), ( config.texcoordConfig->invertV ? 0.0 : 1.0 ) } : Point2f{} },
 		}
-		, m_sampler{ doCreateSampler( m_renderSystem, samplerFilter ) }
-		, m_useTexCoords{ config != nullptr }
+		, m_sampler{ createSampler( *m_renderSystem.getEngine()
+			, getName()
+			, samplerFilter
+			, ( config.range ? &config.range.value() : nullptr) ) }
+		, m_useTexCoords{ bool( config.texcoordConfig ) }
+		, m_blendMode{ config.blendMode ? *config.blendMode : BlendMode::eNoBlend }
 	{
 	}
 
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter
-		, TexcoordConfig const & config )
-		: RenderQuad{ renderSystem, samplerFilter, &config }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderSystem & renderSystem
-		, VkFilter samplerFilter )
-		: RenderQuad{ renderSystem, samplerFilter, nullptr }
-	{
-	}
-
-	RenderQuad::RenderQuad( RenderQuad && rhs )
-		: m_renderSystem{ rhs.m_renderSystem }
+	RenderQuad::RenderQuad( RenderQuad && rhs )noexcept
+		: castor::Named{ std::forward< castor::Named && >( rhs ) }
+		, m_renderSystem{ rhs.m_renderSystem }
 		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_pipeline{ std::move( rhs.m_pipeline ) }
 		, m_pipelineLayout{ std::move( rhs.m_pipelineLayout ) }
@@ -98,6 +91,7 @@ namespace castor3d
 		, m_descriptorSet{ std::move( rhs.m_descriptorSet ) }
 		, m_sourceView{ std::move( rhs.m_sourceView ) }
 		, m_useTexCoords{ std::move( rhs.m_useTexCoords ) }
+		, m_blendMode{ std::move( rhs.m_blendMode ) }
 	{
 	}
 
@@ -152,7 +146,7 @@ namespace castor3d
 			, 4u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "RenderQuad" );
+			, getName() );
 
 		if ( auto buffer = m_vertexBuffer->lock( 0u, 4u, 0u ) )
 		{
@@ -200,10 +194,13 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( textureBindingPoint
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_descriptorSetLayout = device->createDescriptorSetLayout( std::move( bindings ) );
-		m_pipelineLayout = device->createPipelineLayout( { *m_descriptorSetLayout }, pushRanges );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorSetPool->createDescriptorSet();
+		m_descriptorSetLayout = device->createDescriptorSetLayout( getName()
+			, std::move( bindings ) );
+		m_pipelineLayout = device->createPipelineLayout( getName()
+			, { *m_descriptorSetLayout }, pushRanges );
+		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
+			, 1u );
+		m_descriptorSet = m_descriptorSetPool->createDescriptorSet( getName() );
 		doFillDescriptorSet( *m_descriptorSetLayout, *m_descriptorSet );
 		m_descriptorSet->createBinding( m_descriptorSetLayout->getBinding( textureBindingPoint )
 			, *m_sourceView
@@ -221,7 +218,8 @@ namespace castor3d
 			1u,
 			ashes::VkScissorArray{ scissor },
 		};
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipeline = device->createPipeline( getName()
+			, ashes::GraphicsPipelineCreateInfo
 			(
 				0u,
 				program,
@@ -232,7 +230,7 @@ namespace castor3d
 				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::Optional< ashes::PipelineDepthStencilStateCreateInfo >( std::move( dsState ) ),
-				ashes::PipelineColorBlendStateCreateInfo{},
+				doCreateBlendState( renderPass, m_blendMode ),
 				ashes::nullopt,
 				*m_pipelineLayout,
 				static_cast< VkRenderPass const & >( renderPass )
@@ -243,7 +241,8 @@ namespace castor3d
 		, uint32_t subpassIndex )
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName()
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, makeVkType< VkCommandBufferInheritanceInfo >( renderPass
 				, subpassIndex

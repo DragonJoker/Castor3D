@@ -74,11 +74,11 @@ namespace smaa
 
 	EdgeDetection::EdgeDetection( castor3d::RenderTarget & renderTarget
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaEdgeDetection" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_config{ config }
-		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaEdgeDetection" ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdgeDetection" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdgeDetection" }
+		, m_surface{ *renderTarget.getEngine(), getName() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
 		static const VkFormat depthFormat = renderTarget.getEngine()->getRenderSystem()->getMainRenderDevice()->selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT );
@@ -152,8 +152,8 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "EdgeDetection" );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 
 		m_surface.initialise( *m_renderPass
 			, renderTarget.getSize()
@@ -168,11 +168,7 @@ namespace smaa
 
 	void EdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "EdgeDetection" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "EdgeDetection" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 }

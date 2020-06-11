@@ -19,15 +19,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Holds a command buffer and its semaphore.
-	*\~french
-	*\brief
-	*	Contient un command buffer et son semaphore.
-	*/
-	struct CommandsSemaphore;
-	/**
-	*\~english
-	*\brief
 	*	Post render effect base class.
 	*\remarks
 	*	A post render effect is an effect applied after 3D rendering and before 2D rendering.
@@ -68,7 +59,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( PostEffect );
 
-	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
 	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
 
 	//@}

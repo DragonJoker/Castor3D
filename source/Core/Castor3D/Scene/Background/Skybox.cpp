@@ -121,12 +121,12 @@ namespace castor3d
 					&& result;
 			}
 		}
-		else if ( castor::File::fileExists( Path{ obj.m_texture->getImage( 0u ).toString() } )
-			&& castor::File::fileExists( Path{ obj.m_texture->getImage( 1u ).toString() } )
-			&& castor::File::fileExists( Path{ obj.m_texture->getImage( 2u ).toString() } )
-			&& castor::File::fileExists( Path{ obj.m_texture->getImage( 3u ).toString() } )
-			&& castor::File::fileExists( Path{ obj.m_texture->getImage( 4u ).toString() } )
-			&& castor::File::fileExists( Path{ obj.m_texture->getImage( 5u ).toString() } ) )
+		else if ( castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 1u ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 2u ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 3u ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 4u ) ).toString() } )
+			&& castor::File::fileExists( Path{ obj.m_texture->getLayerCubeFaceView( 0, CubeMapFace( 5u ) ).toString() } ) )
 		{
 			result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 				&& file.writeText( m_tabs + cuT( "{\n" ) ) > 0;
@@ -134,7 +134,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i < 6 && result; ++i )
 			{
-				String relative = Scene::TextWriter::copyFile( Path{ obj.m_texture->getImage( size_t( CubeMapFace( i ) ) ).toString() }
+				String relative = Scene::TextWriter::copyFile( Path{ obj.m_texture->getLayerCubeFaceView( 0u, CubeMapFace( i ) ).toString() }
 					, file.getFilePath()
 					, subfolder );
 				string::replace( relative, cuT( "\\" ), cuT( "/" ) );
@@ -176,42 +176,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeX ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveX ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeY ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveY ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::eNegativeZ ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getImage( uint32_t( CubeMapFace::ePositiveZ ) ).initialiseSource( folder, relative );
+		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource( folder, relative );
 		notifyChanged();
 	}
 
@@ -236,14 +236,14 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultView().initialiseSource( folder, relative );
 		setEquiTexture( texture, size );
 	}
 
 	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
 		, uint32_t size )
 	{
-		m_equiTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_equiTexturePath = castor::Path( texture->getDefaultView().toString() );
 		m_equiTexture = texture;
 		m_equiSize.set( size, size );
 		notifyChanged();
@@ -276,13 +276,13 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
-		texture->getDefaultImage().initialiseSource( folder, relative );
+		texture->getDefaultView().initialiseSource( folder, relative );
 		setCrossTexture( texture );
 	}
 
 	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
 	{
-		m_crossTexturePath = castor::Path( texture->getDefaultImage().toString() );
+		m_crossTexturePath = castor::Path( texture->getDefaultView().toString() );
 		m_crossTexture = texture;
 		notifyChanged();
 	}
@@ -345,12 +345,12 @@ namespace castor3d
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackgroundEquiCube" ) );
-			m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
-			m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
-			m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
-			m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
+			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
@@ -381,24 +381,24 @@ namespace castor3d
 			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCrossCube" ) );
-		m_texture->getImage( CubeMapFace::ePositiveX ).initialiseSource();
-		m_texture->getImage( CubeMapFace::eNegativeX ).initialiseSource();
-		m_texture->getImage( CubeMapFace::ePositiveY ).initialiseSource();
-		m_texture->getImage( CubeMapFace::eNegativeY ).initialiseSource();
-		m_texture->getImage( CubeMapFace::ePositiveZ ).initialiseSource();
-		m_texture->getImage( CubeMapFace::eNegativeZ ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 		m_texture->initialise();
 
 		VkImageSubresourceLayers srcSubresource
 		{
-			m_crossTexture->getDefaultView()->subresourceRange.aspectMask,
+			m_crossTexture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
 		};
 		VkImageSubresourceLayers dstSubresource
 		{
-			m_texture->getDefaultView()->subresourceRange.aspectMask,
+			m_texture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
@@ -459,18 +459,18 @@ namespace castor3d
 		copyInfos[uint32_t( CubeMapFace::eNegativeZ )].dstOffset = { 0u, 0u, 0u };
 
 		auto & device = getCurrentRenderDevice( renderSystem );
-		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		auto commandBuffer = device.graphicsCommandPool->createCommandBuffer( "SkyboxBackground" );
 		commandBuffer->begin();
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_crossTexture->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		uint32_t index{ 0u };
 
 		for ( auto & copyInfo : copyInfos )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_texture->getImage( index ).getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->copyImage( copyInfo
 				, m_crossTexture->getTexture()
 				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -478,7 +478,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_texture->getImage( index ).getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+				, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( index ) ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 			++index;
 		}
 

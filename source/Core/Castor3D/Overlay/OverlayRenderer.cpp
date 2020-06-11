@@ -501,8 +501,8 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
-			m_finished = device->createSemaphore();
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "OverlayRenderer" );
+			m_finished = device->createSemaphore( "OverlayRenderer" );
 		}
 
 
@@ -650,7 +650,7 @@ namespace castor3d
 		, bool update )
 	{
 		remFlag( textures, TextureFlag::eAllButColourAndOpacity );
-		auto result = pipeline.descriptorPool->createDescriptorSet();
+		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + string::toString( index ) );
 
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
@@ -683,7 +683,7 @@ namespace castor3d
 				|| config.opacityMask[0] )
 			{
 				result->createBinding( pipeline.descriptorLayout->getBinding( MapsBinding )
-					, unit->getTexture()->getDefaultView()
+					, unit->getTexture()->getDefaultView().getSampledView()
 					, unit->getSampler()->getSampler()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 					, texIndex++ );
@@ -715,7 +715,7 @@ namespace castor3d
 			, index
 			, false );
 		result->createBinding( pipeline.descriptorLayout->getBinding( TextMapBinding )
-			, texture.getDefaultView()
+			, texture.getDefaultView().getSampledView()
 			, sampler.getSampler() );
 		result->update();
 		return result;
@@ -777,11 +777,13 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( "OverlayRenderer"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray fbAttaches;
 		fbAttaches.emplace_back( m_target );
-		m_frameBuffer = m_renderPass->createFrameBuffer( { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "OverlayRenderer"
+			, { m_target.image->getDimensions().width, m_target.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 	}
 

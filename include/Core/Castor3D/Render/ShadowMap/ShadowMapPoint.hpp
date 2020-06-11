@@ -55,12 +55,6 @@ namespace castor3d
 		 */
 		C3D_API void updateDeviceDependent( uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::debugDisplay
-		 */
-		C3D_API void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size, uint32_t index )override;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -69,25 +63,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
-
-		inline TextureUnit & getTexture()
-		{
-			return m_shadowMap;
-		}
+		C3D_API ashes::ImageView const & getView( SmTexture texture
+			, uint32_t index )const override;
 
 		inline TextureUnit const & getTexture()const
 		{
-			return m_shadowMap;
+			return m_result[SmTexture::eVariance];
 		}
 		/**@}*/
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
-		 */
-		void doInitialiseDepthFormat()override;
+		void doInitialiseFramebuffers();
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -102,44 +88,23 @@ namespace castor3d
 		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
 			, uint32_t index )override;
 		/**
-		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
-		 */
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
-		 */
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
 		 */
 		bool isUpToDate( uint32_t index )const override;
 
-	public:
-		static VkFormat constexpr VarianceFormat = VK_FORMAT_R32G32_SFLOAT;
-		static VkFormat constexpr LinearDepthFormat = VK_FORMAT_R32_SFLOAT;
-		static VkFormat RawDepthFormat;
-
 	private:
 		struct FrameBuffer
 		{
+			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 			ashes::FrameBufferPtr frameBuffer;
-			ashes::ImageView varianceView;
-			ashes::ImageView linearView;
 		};
 		struct PassData
 		{
 			ashes::CommandBufferPtr commandBuffer;
-			ashes::ImagePtr depthTexture;
-			ashes::ImageView depthView;
 			std::array< FrameBuffer, 6u > frameBuffers;
 			ashes::SemaphorePtr finished;
 			ShadowType shadowType;
-			ashes::ImageView varianceView;
-			ashes::ImageView linearView;
+			std::array< ashes::ImageView, size_t( SmTexture::eCount ) > views;
 		};
 		std::vector< PassData > m_passesData;
 	};

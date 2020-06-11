@@ -46,12 +46,6 @@ using namespace castor;
 
 namespace castor3d
 {
-	namespace
-	{
-		static uint32_t constexpr OverlayImgIdx = 0u;
-		static uint32_t constexpr ObjectImgIdx = 1u;
-	}
-
 	//*************************************************************************************************
 
 	RenderTarget::TextWriter::TextWriter( String const & tabs )
@@ -63,18 +57,18 @@ namespace castor3d
 	{
 		log::info << m_tabs << cuT( "Writing RenderTarget" ) << std::endl;
 		bool result = file.writeText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
-		castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget name" );
+		castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " name" );
 
 		if ( result && target.getScene() )
 		{
 			result = file.writeText( m_tabs + cuT( "\tscene \"" ) + target.getScene()->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget scene" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " scene" );
 		}
 
 		if ( result && target.getCamera() )
 		{
 			result = file.writeText( m_tabs + cuT( "\tcamera \"" ) + target.getCamera()->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget camera" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " camera" );
 		}
 
 		if ( result )
@@ -82,19 +76,19 @@ namespace castor3d
 			result = file.writeText( m_tabs + cuT( "\tsize " )
 				+ string::toString( target.getSize().getWidth(), std::locale{ "C" } ) + cuT( " " )
 				+ string::toString( target.getSize().getHeight(), std::locale{ "C" } ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget size" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " size" );
 		}
 
 		if ( result )
 		{
 			result = file.writeText( m_tabs + cuT( "\tformat " ) + PF::getFormatName( convert( target.getPixelFormat() ) ) + cuT( "\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget format" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " format" );
 		}
 
 		if ( result )
 		{
 			result = file.writeText( m_tabs + cuT( "\ttone_mapping \"" ) + target.m_toneMapping->getName() + cuT( "\"\n" ) ) > 0;
-			castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget tone mapping" );
+			castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " tone mapping" );
 		}
 
 		if ( result )
@@ -102,7 +96,7 @@ namespace castor3d
 			for ( auto const & effect : target.m_hdrPostEffects )
 			{
 				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
-				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
+				castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " post effect" );
 			}
 		}
 
@@ -111,7 +105,7 @@ namespace castor3d
 			for ( auto const & effect : target.m_srgbPostEffects )
 			{
 				result = effect->writeInto( file, m_tabs + cuT( "\t" ) ) && file.writeText( cuT( "\n" ) ) > 0;
-				castor::TextWriter< RenderTarget >::checkError( result, "RenderTarget post effect" );
+				castor::TextWriter< RenderTarget >::checkError( result, target.getName() + " post effect" );
 			}
 		}
 
@@ -143,7 +137,7 @@ namespace castor3d
 	{
 		auto & renderSystem = *renderTarget.getEngine()->getRenderSystem();
 
-		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( renderTarget.m_index ) );
+		SamplerSPtr sampler = renderTarget.getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + renderTarget.getName() );
 		ashes::ImageCreateInfo createInfo
 		{
 			0u,
@@ -166,15 +160,16 @@ namespace castor3d
 		auto texture = std::make_shared< TextureLayout >( renderSystem
 			, createInfo
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "RenderTarget_Colour" ) );
+			, renderTarget.getName() + cuT( "Colour" ) );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
-		colourTexture.getTexture()->getDefaultImage().initialiseSource();
+		colourTexture.getTexture()->getDefaultView().initialiseSource();
 		colourTexture.getTexture()->initialise();
 
 		ashes::ImageViewCRefArray attaches;
-		attaches.emplace_back( colourTexture.getTexture()->getDefaultView() );
-		frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+		attaches.emplace_back( colourTexture.getTexture()->getDefaultView().getTargetView() );
+		frameBuffer = renderPass.createFrameBuffer( renderTarget.getName()
+			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 
 		return true;
@@ -184,23 +179,6 @@ namespace castor3d
 	{
 		colourTexture.cleanup();
 		frameBuffer.reset();
-	}
-
-	//*************************************************************************************************
-
-	RenderTarget::CombineQuad::CombineQuad( RenderSystem & renderSystem
-		, ashes::ImageView const & ovView )
-		: RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
-		, m_ovView{ ovView }
-	{
-	}
-
-	void RenderTarget::CombineQuad::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-		, ashes::DescriptorSet & descriptorSet )
-	{
-		descriptorSet.createBinding( descriptorSetLayout.getBinding( 0u )
-			, m_ovView
-			, m_sampler->getSampler() );
 	}
 
 	//*************************************************************************************************
@@ -216,6 +194,7 @@ namespace castor3d
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
 		, m_index{ ++sm_uiCount }
+		, m_name{ cuT( "Target" ) + string::toString( m_index ) }
 		, m_objectsFrameBuffer{ *this }
 		, m_overlaysFrameBuffer{ *this }
 		, m_combinedFrameBuffer{ *this }
@@ -225,11 +204,11 @@ namespace castor3d
 			, *getEngine()
 			, m_hdrConfig
 			, Parameters{} );
-		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) );
+		SamplerSPtr sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ) );
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
 
-		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) );
+		sampler = getEngine()->getSamplerCache().add( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) );
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 	}
@@ -274,10 +253,11 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( m_hdrCopyCommands
-					, sourceView->getImage().getView()
-					, m_renderTechnique->getResult().getDefaultView() );
-				m_hdrCopyFinished = device->createSemaphore();
+				doInitialiseCopyCommands( "HDR"
+					, m_hdrCopyCommands
+					, sourceView->getDefaultView().getSampledView()
+					, m_renderTechnique->getResult().getDefaultView().getTargetView() );
+				m_hdrCopyFinished = device->createSemaphore( getName() + "HDRCopy" );
 			}
 
 			if ( m_initialised )
@@ -298,18 +278,20 @@ namespace castor3d
 					}
 				}
 
-				doInitialiseCopyCommands( m_srgbCopyCommands
-					, sourceView->getDefaultView()
-					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView() );
-				m_srgbCopyFinished = device->createSemaphore();
+				doInitialiseCopyCommands( "SRGB"
+					, m_srgbCopyCommands
+					, sourceView->getDefaultView().getSampledView()
+					, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
+				m_srgbCopyFinished = device->createSemaphore( getName() + "SRGBCopy" );
 			}
 
-			doInitialiseFlip();
 			m_overlayRenderer = std::make_shared< OverlayRenderer >( *getEngine()->getRenderSystem()
-				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
+				, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getTargetView() );
 			m_overlayRenderer->initialise();
 
-			m_signalReady = device->createSemaphore();
+			doInitialiseCombine();
+
+			m_signalReady = device->createSemaphore( getName() + "Ready" );
 		}
 	}
 
@@ -321,10 +303,7 @@ namespace castor3d
 			m_culler.reset();
 
 			m_signalReady.reset();
-
-			m_combineQuad.reset();
-			m_combineCommands.reset();
-			m_combineFinished.reset();
+			m_combineQuads.clear();
 
 			m_toneMappingCommandBuffer.reset();
 
@@ -369,7 +348,7 @@ namespace castor3d
 			m_combinedFrameBuffer.cleanup();
 			m_renderTechnique.reset();
 			m_renderPass.reset();
-			getEngine()->getRenderTechniqueCache().remove( cuT( "RenderTargetTechnique_" ) + string::toString( m_index ) );
+			getEngine()->getRenderTechniqueCache().remove( getName() + cuT( "Technique" ) );
 		}
 	}
 
@@ -551,8 +530,8 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "RenderTargetRenderPass" );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 	}
 
 	bool RenderTarget::doInitialiseFrameBuffer()
@@ -565,6 +544,7 @@ namespace castor3d
 
 		if ( result )
 		{
+			addIntermediateView( "Target Colour", m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView() );
 			result = m_overlaysFrameBuffer.initialise( *m_renderPass
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, m_size );
@@ -572,6 +552,7 @@ namespace castor3d
 
 		if ( result )
 		{
+			addIntermediateView( "Target Overlays", m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView() );
 			result = m_combinedFrameBuffer.initialise( *m_renderPass
 				, getPixelFormat()
 				, m_size );
@@ -597,11 +578,18 @@ namespace castor3d
 		auto velocityTexture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "RenderTargetVelocity" ) );
+			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
-		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + string::toString( m_index ) + cuT( "_Point" ) ) );
-		m_velocityTexture.getTexture()->getDefaultImage().initialiseSource();
-		return m_velocityTexture.initialise();
+		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
+		m_velocityTexture.getTexture()->getDefaultView().initialiseSource();
+		bool result = m_velocityTexture.initialise();
+
+		if ( result )
+		{
+			addIntermediateView( "Target Velocity", m_velocityTexture.getTexture()->getDefaultView().getSampledView() );
+		}
+
+		return  result;
 	}
 
 	bool RenderTarget::doInitialiseTechnique()
@@ -610,7 +598,7 @@ namespace castor3d
 		{
 			try
 			{
-				auto name = cuT( "RenderTargetTechnique_" ) + string::toString( m_index );
+				auto name = getName() + cuT( "Technique" );
 				m_renderTechnique = getEngine()->getRenderTechniqueCache().add( name
 					, std::make_shared< RenderTechnique >( name
 						, *this
@@ -625,7 +613,7 @@ namespace castor3d
 			}
 		}
 
-		return m_renderTechnique->initialise();
+		return m_renderTechnique->initialise( m_intermediates );
 	}
 
 	bool RenderTarget::doInitialiseToneMapping()
@@ -635,7 +623,7 @@ namespace castor3d
 			, m_renderTechnique->getResult()
 			, *m_renderPass );
 
-		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_toneMappingCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "ToneMapping" );
 		auto const clear{ makeClearValue( 0.0f, 0.0f, 1.0f, 1.0f ) };
 
 		if ( result )
@@ -650,7 +638,7 @@ namespace castor3d
 			// Put render technique image in shader input layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_renderTechnique->getResult().getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingCommandBuffer->beginRenderPass( *m_renderPass
 				, *m_objectsFrameBuffer.frameBuffer
 				, { clear }
@@ -660,7 +648,7 @@ namespace castor3d
 			// Put render technique image back in colour attachment layout.
 			m_toneMappingCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, m_renderTechnique->getResult().getDefaultView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_renderTechnique->getResult().getDefaultView().getTargetView().makeColourAttachment( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			m_toneMappingTimer->endPass( *m_toneMappingCommandBuffer );
 			m_toneMappingCommandBuffer->endDebugBlock();
 			m_toneMappingCommandBuffer->end();
@@ -669,21 +657,22 @@ namespace castor3d
 		return result;
 	}
 
-	void RenderTarget::doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+	void RenderTarget::doInitialiseCopyCommands( castor::String const & name
+		, ashes::CommandBufferPtr & commandBuffer
 		, ashes::ImageView const & source
 		, ashes::ImageView const & target )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		commandBuffer = device.graphicsCommandPool->createCommandBuffer( getName() + name + "Copy" );
 
 		commandBuffer->begin();
 		commandBuffer->beginDebugBlock(
 			{
-				"Image Copy",
+				getName() + " - " + name + " Copy",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
 
-		if ( &source != &target )
+		if ( source->image != target->image )
 		{
 			// Put source image in transfer source layout.
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
@@ -705,11 +694,12 @@ namespace castor3d
 		commandBuffer->end();
 	}
 
-	void RenderTarget::doInitialiseFlip()
+	void RenderTarget::doInitialiseCombine()
 	{
+		static uint32_t constexpr LhsIdx = 0u;
+		static uint32_t constexpr RhsIdx = 1u;
 		auto & renderSystem = *getEngine()->getRenderSystem();
 
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Combine" };
 		{
 			using namespace sdw;
 			VertexWriter writer;
@@ -719,8 +709,8 @@ namespace castor3d
 			auto uv = writer.declInput< Vec2 >( "uv", 1u );
 
 			// Shader outputs
-			auto vtx_textureObjects = writer.declOutput< Vec2 >( "vtx_textureObjects", 0u );
-			auto vtx_textureOverlays = writer.declOutput< Vec2 >( "vtx_textureOverlays", 1u );
+			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", LhsIdx );
+			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", RhsIdx );
 			auto out = writer.getOut();
 
 			shader::Utils utils{ writer };
@@ -729,30 +719,28 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					vtx_textureObjects = utils.topDownToBottomUp( uv );
-					vtx_textureOverlays = uv;
+					vtx_textureLhs = utils.topDownToBottomUp( uv );
+					vtx_textureRhs = uv;
 
 					if ( getTargetType() != TargetType::eWindow )
 					{
-						vtx_textureObjects.y() = 1.0_f - vtx_textureObjects.y();
-						vtx_textureOverlays.y() = 1.0_f - vtx_textureOverlays.y();
+						vtx_textureLhs.y() = 1.0_f - vtx_textureLhs.y();
+						vtx_textureRhs.y() = 1.0_f - vtx_textureRhs.y();
 					}
 
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			m_combineVtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Combine" };
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			auto c3d_mapOverlays = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapOverlays", OverlayImgIdx, 0u );
-			auto c3d_mapObjects = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapObjects", ObjectImgIdx, 0u );
-			auto vtx_textureObjects = writer.declInput< Vec2 >( "vtx_textureObjects", 0u );
-			auto vtx_textureOverlays = writer.declInput< Vec2 >( "vtx_textureOverlays", 1u );
+			auto c3d_mapLhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapLhs", LhsIdx, 0u );
+			auto c3d_mapRhs = writer.declSampledImage< FImg2DRgba32 >( "c3d_mapRhs", RhsIdx, 0u );
+			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", LhsIdx );
+			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", RhsIdx );
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
@@ -760,56 +748,39 @@ namespace castor3d
 			writer.implementFunction< sdw::Void >( "main"
 				, [&]()
 				{
-					auto overlayColor = writer.declLocale( "overlayColor"
-						, texture( c3d_mapOverlays, vtx_textureOverlays ) );
-					auto objectsColor = writer.declLocale( "objectsColor"
-						, texture( c3d_mapObjects, vtx_textureObjects ) );
-					objectsColor.rgb() *= 1.0_f - overlayColor.a();
-					//overlayColor.rgb() *= overlayColor.a();
-					pxl_fragColor = vec4( objectsColor.rgb() + overlayColor.rgb(), 1.0_f );
+					auto lhsColor = writer.declLocale( "lhsColor"
+						, texture( c3d_mapRhs, vtx_textureLhs ) );
+					auto rhsColor = writer.declLocale( "rhsColor"
+						, texture( c3d_mapLhs, vtx_textureRhs ) );
+					lhsColor.rgb() *= 1.0_f - rhsColor.a();
+					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		auto & device = getCurrentRenderDevice( *this );
-		auto program = ashes::PipelineShaderStageCreateInfoArray
+		VkExtent2D extent
 		{
-			makeShaderState( device, vtx ),
-			makeShaderState( device, pxl ),
+			m_combinedFrameBuffer.colourTexture.getTexture()->getWidth(),
+			m_combinedFrameBuffer.colourTexture.getTexture()->getHeight(),
 		};
 
-		m_combineCommands = device.graphicsCommandPool->createCommandBuffer();
-		m_combineFinished = device->createSemaphore();
-		m_combineQuad = std::make_unique< CombineQuad >( *getEngine()->getRenderSystem()
-			, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView() );
-		ashes::VkDescriptorSetLayoutBindingArray bindings
-		{
-			makeDescriptorSetLayoutBinding( OverlayImgIdx
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT )
-		};
-		m_combineQuad->createPipeline( { m_size.getWidth(), m_size.getHeight() }
-			, Position{}
-			, std::move( program )
-			, m_objectsFrameBuffer.colourTexture.getTexture()->getDefaultView()
-			, *m_renderPass
-			, std::move( bindings )
-			, {} );
+		CombinePassBuilder mainBuilder{};
+		mainBuilder.resultTexture( m_combinedFrameBuffer.colourTexture.getTexture() );
+		mainBuilder.texcoordConfig( RenderQuadConfig::Texcoord{} );
 
-		m_combineCommands->begin();
-		m_combineCommands->beginDebugBlock(
-			{
-				"Combine 3D-2D",
-				makeFloatArray( getEngine()->getNextRainbowColour() ),
-			} );
-		m_combineCommands->beginRenderPass( *m_renderPass
-			, *m_combinedFrameBuffer.frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-		m_combineQuad->registerFrame( *m_combineCommands );
-		m_combineCommands->endRenderPass();
-		m_combineCommands->endDebugBlock();
-		m_combineCommands->end();
+		for ( auto & intermediate : m_intermediates )
+		{
+			m_combineQuads.emplace_back( CombinePassBuilder{ mainBuilder }
+				.build( *getEngine()
+					, "Target"
+					, getPixelFormat()
+					, extent
+					, m_combineVtx
+					, m_combinePxl
+					, m_overlaysFrameBuffer.colourTexture.getTexture()->getDefaultView().getSampledView()
+					, intermediate.view ) );
+
+		}
 	}
 
 	void RenderTarget::doRender( RenderInfo & info
@@ -819,7 +790,7 @@ namespace castor3d
 		auto elapsedTime = m_timer.getElapsed();
 		SceneSPtr scene = getScene();
 		ashes::SemaphoreCRefArray signalsToWait;
-		
+
 		if ( m_type == TargetType::eWindow )
 		{
 			signalsToWait = scene->getRenderTargetsSemaphores();
@@ -851,12 +822,6 @@ namespace castor3d
 
 		// Combine objects and overlays framebuffers, flipping them if necessary.
 		m_signalFinished = &doCombine( *m_signalFinished );
-
-#if DISPLAY_DEBUG
-
-		m_renderTechnique->debugDisplay( Size{ camera->getWidth(), camera->getHeight() } );
-
-#endif
 	}
 
 	ashes::Semaphore const & RenderTarget::doApplyPostEffects( ashes::Semaphore const & toWait
@@ -879,7 +844,7 @@ namespace castor3d
 
 				for ( auto & commands : effect->getCommands() )
 				{
-					effect->notifyPassRender();
+					timerBlock->notifyPassRender();
 
 					queue.submit( *commands.commandBuffer
 						, *result
@@ -906,7 +871,7 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		auto timerBlock = m_toneMappingTimer->start();
-		m_toneMappingTimer->notifyPassRender();
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		queue.submit( *m_toneMappingCommandBuffer
@@ -952,17 +917,8 @@ namespace castor3d
 
 	ashes::Semaphore const & RenderTarget::doCombine( ashes::Semaphore const & toWait )
 	{
-		auto & device = getCurrentRenderDevice( *this );
-		auto & queue = *device.graphicsQueue;
-		auto * result = &toWait;
-
-		queue.submit( *m_combineCommands
-			, *result
-			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, *m_combineFinished
-			, nullptr );
-		result = m_combineFinished.get();
-
-		return *result;
+		auto technique = this->getTechnique();
+		auto & debugConfig = technique->getDebugConfig();
+		return m_combineQuads[debugConfig.debugIndex]->combine( toWait );
 	}
 }

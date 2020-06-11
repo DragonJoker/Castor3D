@@ -22,7 +22,7 @@ namespace castor3d
 			, uint32_t & texIndex )
 		{
 			descriptorSet.createBinding( layout.getBinding( index )
-				, texture.getTexture()->getDefaultView()
+				, texture.getTexture()->getDefaultView().getSampledView()
 				, texture.getSampler()->getSampler()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, texIndex++ );
@@ -35,7 +35,7 @@ namespace castor3d
 			write.imageInfo.push_back( 
 				{
 					texture.getSampler()->getSampler(),
-					texture.getTexture()->getDefaultView(),
+					texture.getTexture()->getDefaultView().getSampledView(),
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				} );
 		}
@@ -49,28 +49,24 @@ namespace castor3d
 	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, ashes::DescriptorSet & descriptorSet
-		, bool opacityOnly )
+		, TextureFlags mask )
 	{
 		uint32_t texIndex = 0u;
 
-		if ( opacityOnly )
+		if ( mask )
 		{
-			auto it = std::find_if( pass.begin()
-				, pass.end()
-				, []( TextureUnitSPtr unit )
-				{
-					return unit->getConfiguration().opacityMask[0] != 0u;
-				} );
+			auto units = pass.getTextureUnits();
 
-			if ( it != pass.end() )
+			for ( auto & unit : units )
 			{
-				doBindTexture( *( *it )
+				doBindTexture( *unit
 					, layout
 					, descriptorSet
 					, index
 					, texIndex );
-				++index;
 			}
+
+			++index;
 		}
 		else
 		{
@@ -90,33 +86,33 @@ namespace castor3d
 	void PassRenderNode::fillDescriptor( ashes::DescriptorSetLayout const & layout
 		, uint32_t & index
 		, ashes::WriteDescriptorSetArray & writes
-		, bool opacityOnly )
+		, TextureFlags mask )
 	{
 		uint32_t texIndex = 0u;
 
-		if ( opacityOnly )
+		if ( mask )
 		{
-			auto it = std::find_if( pass.begin()
-				, pass.end()
-				, []( TextureUnitSPtr unit )
-				{
-					return unit->getConfiguration().opacityMask[0] != 0u;
-				} );
+			auto units = pass.getTextureUnits();
 
-			if ( it != pass.end() )
+			if ( !units.empty() )
 			{
 				ashes::WriteDescriptorSet write
 				{
 					index,
 					0u,
-					1u,
+					uint32_t( units.size() ),
 					VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 				};
-				doBindTexture( *( *it )
-					, layout
-					, write );
+
+				for ( auto & unit : units )
+				{
+					doBindTexture( *unit
+						, layout
+						, write );
+				}
+
 				writes.push_back( write );
-				++index;
+				index += uint32_t( units.size() );
 			}
 		}
 		else

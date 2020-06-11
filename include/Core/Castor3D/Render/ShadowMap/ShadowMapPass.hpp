@@ -6,11 +6,13 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderPass.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
 
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
@@ -52,7 +54,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the render pass.
 		 *\remarks		Gather the render queues, for further update.
-		 *\param[in]	camera	The viewer camera.
 		 *\param[out]	queues	Receives the render queues needed for the rendering of the frame.
 		 *\param[out]	light	The light source.
 		 *\param[out]	index	The pass index.
@@ -60,14 +61,12 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour la passe de rendu.
 		 *\remarks		Récupère les files de rendu, pour mise à jour ultérieure.
-		 *\param[in]	camera	La caméra de l'observateur.
 		 *\param[out]	queues	Reçoit les files de rendu nécessaires pour le dessin de la frame.
 		 *\param[out]	light	La source lumineuse.
 		 *\param[out]	index	L'indice de la passe.
 		 *\return		\p true si la passe a changé.
 		 */
-		C3D_API virtual bool update( Camera const & camera
-			, RenderQueueArray & queues
+		C3D_API virtual bool update( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index ) = 0;
 		/**
@@ -95,6 +94,11 @@ namespace castor3d
 			m_outOfDate = false;
 		}
 
+		C3D_API TextureFlags getTexturesMask()const override
+		{
+			return ShadowMap::textureFlags;
+		}
+
 	protected:
 		/**
 		 *\~english
@@ -112,10 +116,6 @@ namespace castor3d
 
 	private:
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdateFlags
-		 */
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
 		 *\copydoc		castor3d::RenderPass::doFillTextureDescriptor
 		 */
 		void doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -130,34 +130,19 @@ namespace castor3d
 			, SubmeshRenderNode & nodes
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doUpdatePipeline
-		 */
-		void doUpdatePipeline( RenderPipeline & pipeline )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetGeometryShaderSource
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
 		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
 		/**
-		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
 		 */
-		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
-		 */
-		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
-		 */
-		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
+		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	protected:
 		ShadowMap const & m_shadowMap;
 		mutable bool m_initialised{ false };
 		bool m_outOfDate{ true };
+		ShadowMapUbo m_shadowMapUbo;
 	};
 }
 

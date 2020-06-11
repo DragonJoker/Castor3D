@@ -86,7 +86,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeDirectional( DirectionalLight{ light }
+			m_computeDirectional( light
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -101,7 +101,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeOnePoint( PointLight{ light }
+			m_computeOnePoint( light
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -116,7 +116,7 @@ namespace castor3d
 			, FragmentInput const & fragmentIn
 			, OutputComponents & parentOutput )const
 		{
-			m_computeOneSpot( SpotLight{ light }
+			m_computeOneSpot( light
 				, worldEye
 				, shininess
 				, receivesShadows
@@ -126,27 +126,12 @@ namespace castor3d
 
 		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, bool rsm
 			, uint32_t & index
-			, uint32_t maxCascades
 			, bool isOpaqueProgram )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer, utils, isOpaqueProgram );
-			result->declareModel( index, maxCascades );
-			return result;
-		}
-
-		std::shared_ptr< PhongLightingModel > PhongLightingModel::createModel( sdw::ShaderWriter & writer
-			, Utils & utils
-			, ShadowType shadows
-			, bool volumetric
-			, uint32_t & index
-			, uint32_t maxCascades )
-		{
-			auto result = std::make_shared< PhongLightingModel >( writer, utils, true );
-			result->declareDirectionalModel( shadows
-				, volumetric
-				, index
-				, maxCascades );
+			result->declareModel( rsm, index );
 			return result;
 		}
 
@@ -154,7 +139,9 @@ namespace castor3d
 			, Utils & utils
 			, LightType lightType
 			, ShadowType shadows
+			, bool lightUbo
 			, bool volumetric
+			, bool rsm
 			, uint32_t & index )
 		{
 			auto result = std::make_shared< PhongLightingModel >( writer, utils, true );
@@ -162,15 +149,15 @@ namespace castor3d
 			switch ( lightType )
 			{
 			case LightType::eDirectional:
-				CU_Failure( "Directional light model should use the other overload" );
+				result->declareDirectionalModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::ePoint:
-				result->declarePointModel( shadows, volumetric, index );
+				result->declarePointModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			case LightType::eSpot:
-				result->declareSpotModel( shadows, volumetric, index );
+				result->declareSpotModel( shadows, lightUbo, volumetric, rsm, index );
 				break;
 
 			default:
@@ -209,7 +196,7 @@ namespace castor3d
 			{
 				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
 				{
-					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+					auto name = string::stringCast< char >( string::toString( i ) );
 					auto config = writer.declLocale( "config" + name
 						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
 					auto sampled = writer.declLocale< Vec4 >( "sampled" + name

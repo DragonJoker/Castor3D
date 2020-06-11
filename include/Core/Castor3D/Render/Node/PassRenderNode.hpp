@@ -15,11 +15,11 @@ namespace castor3d
 		void fillDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, ashes::DescriptorSet & descriptorSet
-			, bool opacityOnly = false );
+			, TextureFlags mask = TextureFlags{ 0u } );
 		void fillDescriptor( ashes::DescriptorSetLayout const & layout
 			, uint32_t & index
 			, ashes::WriteDescriptorSetArray & writes
-			, bool opacityOnly = false );
+			, TextureFlags mask = TextureFlags{ 0u } );
 
 		//!\~english	The pass.
 		//!\~french		La passe.

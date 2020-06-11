@@ -13,9 +13,9 @@ set( CastorBinLibraries
 )
 
 set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Common GUI tools" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	GuiCommonPrerequisites.hpp
@@ -177,7 +177,8 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Shader/LanguageFileParser.cpp
 	Shader/LanguageInfo.cpp
 	Shader/ShaderDialog.cpp
-	Shader/ShaderEditorPage.cpp
+	Shader/ShaderEditor.cpp
+	Shader/ShaderProgramPage.cpp
 	Shader/ShaderSource.cpp
 	Shader/StcContext.cpp
 	Shader/StcTextEditor.cpp
@@ -189,7 +190,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Shader/LanguageFileParser.hpp
 	Shader/LanguageInfo.hpp
 	Shader/ShaderDialog.hpp
-	Shader/ShaderEditorPage.hpp
+	Shader/ShaderEditor.hpp
+	Shader/ShaderProgramPage.hpp
 	Shader/ShaderSource.hpp
 	Shader/StcContext.hpp
 	Shader/StcTextEditor.hpp
@@ -278,6 +280,8 @@ target_link_libraries( ${PROJECT_NAME}
 		${GTK2_LIBRARIES}
 		${X11_LIBRARIES}
 		sdw::CompilerGlsl
+		sdw::CompilerHlsl
+		sdw::CompilerSpirV
 	PRIVATE
 		${FFMPEG_LIBRARIES}
 )

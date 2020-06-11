@@ -228,6 +228,11 @@ namespace castor3d
 		/**@{*/
 		C3D_API MaterialType getMaterialsType()const;
 
+		inline castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_boundingBox;
+		}
+
 		inline SceneBackgroundSPtr getBackground()const
 		{
 			return m_background;
@@ -372,6 +377,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doUpdateBoundingBox();
 		void doUpdateAnimations();
 		void doUpdateMaterials();
 		void onMaterialChanged( Material const & material );
@@ -419,6 +425,7 @@ namespace castor3d
 		std::map< MaterialSPtr, OnMaterialChangedConnection > m_materialsListeners;
 		bool m_dirtyMaterials{ true };
 		uint32_t m_directionalShadowCascades{ 4u };
+		castor::BoundingBox m_boundingBox;
 
 	public:
 		//!\~english	The cameras root node name.

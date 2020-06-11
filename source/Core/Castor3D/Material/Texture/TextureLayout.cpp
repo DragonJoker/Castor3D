@@ -1,8 +1,10 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureSource.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ashes/ashes.hpp>
@@ -60,10 +62,10 @@ namespace castor3d
 
 		ashes::ImageViewCreateInfo getSubviewCreateInfos( ashes::ImageCreateInfo const & info
 			, VkImage image
-			, uint32_t baseArrayLayer
-			, uint32_t arrayLayers
 			, uint32_t baseMipLevel
-			, uint32_t levelCount )
+			, uint32_t levelCount
+			, uint32_t baseArrayLayer
+			, uint32_t arrayLayers )
 		{
 			ashes::ImageViewCreateInfo view
 			{
@@ -84,41 +86,389 @@ namespace castor3d
 		}
 
 		TextureViewUPtr createSubview( TextureLayout & layout
+			, castor::String debugName
 			, ashes::ImageCreateInfo const & info
+			, uint32_t baseMipLevel
+			, uint32_t levelCount
 			, uint32_t baseArrayLayer
 			, uint32_t arrayLayers )
 		{
 			return std::make_unique< TextureView >( layout
 				, getSubviewCreateInfos( info
 					, VK_NULL_HANDLE
+					, baseMipLevel
+					, levelCount
 					, baseArrayLayer
-					, arrayLayers
-					, 0u
-					, std::max( info->mipLevels, 1u ) )
-				, 0u );
+					, arrayLayers )
+				, 0u
+				, std::move( debugName ) );
 		}
 
-		TextureViewUPtr createMipSubview( TextureLayout & layout
-			, ashes::ImageCreateInfo const & info
+		uint32_t getMinMipLevels( uint32_t mipLevels
+			, VkExtent3D const & extent )
+		{
+			return std::min( getMipLevels( extent ), mipLevels );
+		}
+
+		bool eraseViews( uint32_t mipLevels
+			, MipView & views )
+		{
+			auto itLevel = views.levels.begin();
+
+			while ( itLevel != views.levels.end() )
+			{
+				auto & level = *itLevel;
+
+				if ( level->getBaseMipLevel() >= mipLevels )
+				{
+					itLevel = views.levels.erase( itLevel );
+				}
+				else
+				{
+					++itLevel;
+				}
+			}
+
+			return views.levels.empty();
+		}
+		
+		bool eraseViews( uint32_t mipLevels
+			, CubeView & views )
+		{
+			auto itFace = views.faces.begin();
+
+			while ( itFace != views.faces.end() )
+			{
+				auto & face = *itFace;
+
+				if ( eraseViews( mipLevels, face ) )
+				{
+					itFace = views.faces.erase( itFace );
+				}
+				else
+				{
+					++itFace;
+				}
+			}
+
+			return views.faces.empty();
+		}
+
+		template< typename ViewT >
+		void eraseViews( uint32_t mipLevels
+			, ArrayView< ViewT > & views )
+		{
+			auto itLayer = views.layers.begin();
+
+			while ( itLayer != views.layers.end() )
+			{
+				auto & layer = *itLayer;
+
+				if ( eraseViews( mipLevels, layer ) )
+				{
+					itLayer = views.layers.erase( itLayer );
+				}
+				else
+				{
+					++itLayer;
+				}
+			}
+		}
+
+		template< typename ViewT >
+		void eraseViews( uint32_t mipLevels
+			, SliceView< ViewT > & views )
+		{
+			auto itSlice = views.slices.begin();
+
+			while ( itSlice != views.slices.end() )
+			{
+				auto & slice = *itSlice;
+
+				if ( eraseViews( mipLevels, slice ) )
+				{
+					itSlice = views.slices.erase( itSlice );
+				}
+				else
+				{
+					++itSlice;
+				}
+			}
+		}
+
+		void createViews( ashes::ImageCreateInfo const & info
+			, castor::String debugName
+			, TextureLayout & layout
+			, MipView & view
+			, uint32_t baseArrayLayer
+			, uint32_t layerCount )
+		{
+			view.view = createSubview( layout
+				, debugName
+				, info
+				, 0u
+				, info->mipLevels
+				, baseArrayLayer
+				, layerCount );
+
+			if ( info->mipLevels > 1 )
+			{
+				uint32_t levelIndex = 0u;
+				view.levels.resize( info->mipLevels );
+
+				for ( auto & level : view.levels )
+				{
+					level = createSubview( layout
+						, debugName
+						, info
+						, levelIndex++
+						, 1u
+						, baseArrayLayer
+						, layerCount );
+				}
+			}
+		}
+
+		void createViews( ashes::ImageCreateInfo const & info
+			, castor::String debugName
+			, TextureLayout & layout
+			, MipView & view
+			, uint32_t & baseArrayLayer )
+		{
+			createViews( info
+				, debugName
+				, layout
+				, view
+				, baseArrayLayer++
+				, 1u );
+		}
+
+		void createViews( ashes::ImageCreateInfo const & info
+			, castor::String debugName
+			, TextureLayout & layout
+			, CubeView & view
+			, uint32_t & baseArrayLayer )
+		{
+			createViews( info
+				, debugName
+				, layout
+				, view.view
+				, baseArrayLayer
+				, 6u );
+			view.faces.resize( 6u );
+
+			for ( auto & face : view.faces )
+			{
+				createViews( info
+					, debugName
+					, layout
+					, face
+					, baseArrayLayer );
+			}
+		}
+
+		template< typename ViewT >
+		void createViews( ashes::ImageCreateInfo const & info
+			, TextureLayout & layout
+			, castor::String debugName
+			, ArrayView< ViewT > & view )
+		{
+			uint32_t baseArrayLayer = 0u;
+
+			for ( auto & layer : view.layers )
+			{
+				createViews( info
+					, debugName
+					, layout
+					, layer
+					, baseArrayLayer );
+			}
+		}
+
+		template< typename ViewT >
+		void createViews( ashes::ImageCreateInfo const & info
+			, TextureLayout & layout
+			, castor::String debugName
+			, SliceView< ViewT > & view )
+		{
+			uint32_t baseSlice = 0u;
+
+			for ( auto & slice : view.slices )
+			{
+				createViews( info
+					, debugName
+					, layout
+					, slice
+					, baseSlice );
+			}
+		}
+
+		MipView createViews( ashes::ImageCreateInfo const & info
+			, TextureLayout & layout
+			, castor::String debugName )
+		{
+			MipView result;
+			createViews( info
+				, debugName
+				, layout
+				, result
+				, 0u
+				, info->arrayLayers );
+			return result;
+		}
+
+		void update( MipView & view
+			, VkImage image
+			, uint32_t baseArrayLayer
+			, uint32_t layerCount
 			, uint32_t baseMipLevel
 			, uint32_t levelCount )
 		{
-			return std::make_unique< TextureView >( layout
-				, getSubviewCreateInfos( info
-					, VK_NULL_HANDLE
-					, 0u
-					, info->arrayLayers
-					, baseMipLevel, levelCount )
-				, 0u );
+			view.view->update( image
+				, baseArrayLayer
+				, layerCount
+				, baseMipLevel
+				, levelCount );
+
+			for ( auto & level : view.levels )
+			{
+				level->update( image
+					, baseArrayLayer
+					, layerCount
+					, baseMipLevel++
+					, 1u );
+			}
 		}
 
-		uint32_t getMaxMipLevels( uint32_t mipLevels
-			, VkExtent3D const & extent )
+		void update( MipView & view
+			, VkImage image
+			, uint32_t & baseArrayLayer
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
 		{
-			auto min = std::min( extent.width, extent.height );
-			auto bitSize = uint32_t( castor::getBitSize( min ) );
-			return std::min( bitSize, mipLevels );
+			update( view
+				, image
+				, baseArrayLayer++
+				, 1u
+				, baseMipLevel
+				, levelCount );
 		}
+
+		void update( CubeView & view
+			, VkImage image
+			, uint32_t & baseArrayLayer
+			, uint32_t baseMipLevel
+			, uint32_t levelCount )
+		{
+			update( view.view
+				, image
+				, baseArrayLayer
+				, 6u
+				, baseMipLevel
+				, levelCount );
+
+			for ( auto & face : view.faces )
+			{
+				update( face
+					, image
+					, baseArrayLayer
+					, baseMipLevel
+					, levelCount );
+			}
+		}
+
+		template< typename ViewT >
+		void update( ArrayView< ViewT > & view
+			, VkImage image
+			, uint32_t levelCount )
+		{
+			uint32_t baseArrayLayer = 0u;
+
+			for ( auto & layer : view.layers )
+			{
+				update( layer
+					, image
+					, baseArrayLayer
+					, 0u
+					, levelCount );
+			}
+		}
+
+		template< typename ViewT >
+		void update( SliceView< ViewT > & view
+			, VkImage image
+			, uint32_t levelCount )
+		{
+			uint32_t baseSlice = 0u;
+
+			for ( auto & layer : view.slices )
+			{
+				update( layer
+					, image
+					, baseSlice
+					, 0u
+					, levelCount );
+			}
+		}
+	}
+
+	//************************************************************************************************
+
+	TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, Path const & relative
+		, Path const & folder )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_UNDEFINED,
+			{ 1u, 1u, 1u },
+			20u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		auto texture = std::make_shared < TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, relative );
+		texture->setSource( folder
+			, relative );
+		return texture;
+	}
+
+	TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, String const & name
+		, PxBufferBaseSPtr buffer )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			( buffer->getHeight() > 1u
+				? VK_IMAGE_TYPE_2D
+				: VK_IMAGE_TYPE_1D ),
+			VK_FORMAT_UNDEFINED,
+			{ buffer->getWidth(), buffer->getHeight(), 1u },
+			uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) ),
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		auto texture = std::make_shared < TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, name );
+		texture->setSource( buffer );
+		return texture;
+	}
+
+	uint32_t getMipLevels( VkExtent3D const & extent )
+	{
+		auto min = std::min( extent.width, extent.height );
+		return uint32_t( castor::getBitSize( min ) );
 	}
 
 	//************************************************************************************************
@@ -130,43 +480,43 @@ namespace castor3d
 		: OwnedBy< RenderSystem >{ renderSystem }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
-		, m_defaultView{ createSubview( *this, m_info, 0u, m_info->arrayLayers ) }
+		, m_defaultView{ createViews( m_info, *this, debugName ) }
+		, m_cubeView{ &m_defaultView }
+		, m_arrayView{ &m_defaultView }
+		, m_sliceView{ &m_defaultView }
 		, m_debugName{ std::move( debugName ) }
 	{
 		m_info->mipLevels = std::max( 1u, m_info->mipLevels );
-		uint32_t max = std::max( m_info->arrayLayers, m_info->extent.depth );
 
-		if ( max > 1u )
+		if ( m_info->arrayLayers > 1u )
 		{
-			m_views.resize( max );
-			uint32_t index = 0u;
-
-			for ( auto & view : m_views )
+			if ( m_info->arrayLayers >= 6u
+				&& ( m_info->arrayLayers % 6u ) == 0u
+				&& checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) )
 			{
-				view = createSubview( *this, m_info, index, 1u );
-				++index;
+				m_cubeView.layers.resize( m_info->arrayLayers / 6u );
+				createViews( m_info, *this, m_debugName, m_cubeView );
+			}
+			else
+			{
+				m_arrayView.layers.resize( m_info->arrayLayers );
+				createViews( m_info, *this, m_debugName, m_arrayView );
 			}
 		}
-		else if ( info->mipLevels > 1u )
+		else if ( m_info->extent.depth > 1u )
 		{
-			m_views.resize( info->mipLevels );
-			uint32_t index = 0u;
-
-			for ( auto & view : m_views )
-			{
-				view = createMipSubview( *this, m_info, index, 1u );
-				++index;
-			}
-		}
-		else
-		{
-			m_views.resize( 1u );
-			m_views.back() = createSubview( *this, m_info, 0u, 1u );
+			m_sliceView.slices.resize( m_info->extent.depth );
+			createViews( m_info, *this, m_debugName, m_sliceView );
 		}
 	}
 
 	TextureLayout::~TextureLayout()
 	{
+		m_sliceView.slices.clear();
+		m_arrayView.layers.clear();
+		m_cubeView.layers.clear();
+		m_defaultView.levels.clear();
+		m_defaultView.view.reset();
 	}
 
 	bool TextureLayout::initialise()
@@ -195,13 +545,22 @@ namespace castor3d
 				, m_info
 				, m_properties
 				, m_debugName );
-			m_defaultView->initialise();
-
-			for ( auto & view : m_views )
-			{
-				view->initialise();
-			}
-
+			m_defaultView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->initialise();
+				} );
+			m_arrayView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->initialise();
+				} );
+			m_cubeView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->initialise();
+				} );
+			m_sliceView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->initialise();
+				} );
 			m_initialised = m_texture != nullptr;
 		}
 
@@ -212,12 +571,22 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			for ( auto & view : m_views )
-			{
-				view->cleanup();
-			}
-
-			m_defaultView->cleanup();
+			m_sliceView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->cleanup();
+				} );
+			m_cubeView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->cleanup();
+				} );
+			m_arrayView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->cleanup();
+				} );
+			m_defaultView.forEachView( []( TextureViewUPtr const & view )
+				{
+					view->cleanup();
+				} );
 			m_texture.reset();
 		}
 
@@ -227,11 +596,11 @@ namespace castor3d
 	void TextureLayout::generateMipmaps()const
 	{
 		if ( m_info->mipLevels > 1u
-			&& m_defaultView->needsMipmapsGeneration() )
+			&& getDefaultView().needsMipmapsGeneration() )
 		{
 			CU_Require( m_texture );
 			auto & device = getCurrentRenderDevice( *this );
-			auto commandBuffer = device.transferCommandPool->createCommandBuffer();
+			auto commandBuffer = device.transferCommandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
 			m_texture->generateMipmaps( *commandBuffer );
 			commandBuffer->end();
@@ -243,18 +612,18 @@ namespace castor3d
 	void TextureLayout::setSource( Path const & folder
 		, Path const & relative )
 	{
-		m_defaultView->initialiseSource( folder, relative );
+		getDefaultView().initialiseSource( folder, relative );
 	}
 
 	void TextureLayout::setSource( PxBufferBaseSPtr buffer )
 	{
-		if ( !m_defaultView->hasSource() )
+		if ( !getDefaultView().hasSource() )
 		{
-			m_defaultView->initialiseSource( buffer );
+			getDefaultView().initialiseSource( buffer );
 		}
 		else
 		{
-			m_defaultView->setBuffer( buffer );
+			getDefaultView().setBuffer( buffer );
 		}
 	}
 
@@ -288,75 +657,44 @@ namespace castor3d
 
 			if ( m_info->mipLevels > 1u )
 			{
-				m_info->mipLevels = getMaxMipLevels( m_info->mipLevels
+				m_info->mipLevels = getMinMipLevels( m_info->mipLevels
 					, m_info->extent );
 			}
 
-			m_defaultView->doUpdate( getSubviewCreateInfos( m_info
+			eraseViews( m_info->mipLevels, m_defaultView );
+			update( m_defaultView
 				, texture
 				, 0u
 				, m_info->arrayLayers
 				, 0u
-				, m_info->mipLevels ) );
+				, m_info->mipLevels );
 
-			if ( m_views.size() == 1 )
-			{
-				m_views.back()->doUpdate( getSubviewCreateInfos( m_info
-					, texture
-					, 0u
-					, 1u
-					, 0u
-					, 1u ) );
-			}
-			else if ( mipLevels > 1u )
+			if ( mipLevels > 1u )
 			{
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 				m_info->usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 				m_info->mipLevels = std::min( m_info->mipLevels
-					, ( m_defaultView->getLevelCount() > 1u
-						? m_defaultView->getLevelCount()
+					, ( getDefaultView().getLevelCount() > 1u
+						? getDefaultView().getLevelCount()
 						: m_info->mipLevels ) );
 
 				if ( m_info->mipLevels != mipLevels )
 				{
-					auto it = m_views.begin();
-					uint32_t index = 0u;
-
-					while ( it != m_views.end() )
-					{
-						auto & view = *it;
-
-						if ( view->getBaseMipLevel() >= m_info->mipLevels )
-						{
-							it = m_views.erase( it );
-						}
-						else
-						{
-							view->doUpdate( getSubviewCreateInfos( m_info
-								, texture
-								, 0u
-								, 1u
-								, index++
-								, 1u ) );
-							++it;
-						}
-					}
-				}
-				else
-				{
-					uint32_t index = 0u;
-
-					for ( auto & view : m_views )
-					{
-						view->doUpdate( getSubviewCreateInfos( m_info
-							, texture
-							, 0u
-							, 1u
-							, index++
-							, 1u ) );
-					}
+					eraseViews( m_info->mipLevels, m_arrayView );
+					eraseViews( m_info->mipLevels, m_cubeView );
+					eraseViews( m_info->mipLevels, m_sliceView );
 				}
 			}
+
+			update( m_arrayView
+				, texture
+				, m_info->mipLevels );
+			update( m_cubeView
+				, texture
+				, m_info->mipLevels );
+			update( m_sliceView
+				, texture
+				, m_info->mipLevels );
 		}
 	}
 

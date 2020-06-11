@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
@@ -71,6 +71,7 @@ namespace castor3d
 		eHdrConfig = CU_MakeSectionName( 'H', 'D', 'R', 'C' ),
 		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
 		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),
+		eRsm = CU_MakeSectionName( 'R', 'F', 'S', 'M' ),
 	};
 
 	class SceneFileContext
@@ -107,50 +108,50 @@ namespace castor3d
 		LightSPtr light;
 		CameraSPtr camera;
 		MaterialSPtr material;
-		bool createMaterial;
-		uint32_t passIndex;
+		bool createMaterial{};
+		uint32_t passIndex{};
 		SamplerSPtr sampler;
 		RenderTargetSPtr renderTarget;
 		PhongPassSPtr phongPass;
 		MetallicRoughnessPbrPassSPtr pbrMRPass;
 		SpecularGlossinessPbrPassSPtr pbrSGPass;
 		PassSPtr pass;
-		bool createPass;
-		uint32_t unitIndex;
+		bool createPass{};
+		uint32_t unitIndex{};
 		ashes::ImageCreateInfo imageInfo;
 		TextureUnitSPtr textureUnit;
-		bool createUnit;
+		bool createUnit{};
 		ShaderProgramSPtr shaderProgram;
 		castor::PxBufferBaseSPtr buffer;
 		castor::Path folder;
 		castor::Path relative;
-		VkShaderStageFlagBits shaderStage;
+		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer;
 		OverlaySPtr overlay;
 		BillboardListSPtr billboards;
-		int face1;
-		int face2;
-		LightType lightType;
-		VkPrimitiveTopology primitiveType;
+		int face1{};
+		int face2{};
+		LightType lightType{};
+		VkPrimitiveTopology primitiveType{};
 		ViewportSPtr viewport;
 		castor::String strName;
 		castor::String strName2;
 		castor::Path path;
 		castor::Size size;
 		castor::Point2f point2f;
-		uint8_t uiUInt8;
-		uint16_t uiUInt16;
-		uint32_t uiUInt32;
-		uint64_t uiUInt64;
-		int8_t iInt8;
-		int16_t iInt16;
-		int32_t iInt32;
-		int64_t iInt64;
-		bool bBool1;
-		bool bBool2;
+		uint8_t uiUInt8{};
+		uint16_t uiUInt16{};
+		uint32_t uiUInt32{};
+		uint64_t uiUInt64{};
+		int8_t iInt8{};
+		int16_t iInt16{};
+		int32_t iInt32{};
+		int64_t iInt64{};
+		bool bBool1{};
+		bool bBool2{};
 		SceneNodeSPtr m_pGeneralParentMaterial;
 		ScenePtrStrMap mapScenes;
-		SceneFileParser * m_pParser;
+		SceneFileParser * m_pParser{};
 		FloatArray vertexPos;
 		FloatArray vertexNml;
 		FloatArray vertexTan;
@@ -160,10 +161,10 @@ namespace castor3d
 		AnimatedObjectSPtr pAnimSkeleton;
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
-		AnimationInstanceRPtr pAnimation;
+		AnimationInstanceRPtr pAnimation{};
 		SceneBackgroundSPtr pBackground;
 		ParticleSystemSPtr particleSystem;
-		SsaoConfig ssaoConfig;
+		SsaoConfig ssaoConfig{};
 		SubsurfaceScatteringUPtr subsurfaceScattering;
 		std::shared_ptr< SkyboxBackground > skybox;
 		TextureConfiguration textureConfiguration;

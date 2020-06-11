@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
+#define C3D_UseDepthPrepass 1
+
 namespace castor3d
 {
 	/**@name Render */
@@ -31,6 +33,15 @@ namespace castor3d
 	*	Classe de passe de technique de rendu de type forward.
 	*/
 	class ForwardRenderTechniquePass;
+	/**
+	*\~english
+	*\brief
+	*	Depth linearisation pass, with mipmaps generation.
+	*\~french
+	*\brief
+	*	Passe linéarisation de profondeur, avec génération des mipmaps.
+	*/
+	class LineariseDepthPass;
 	/**
 	*\~english
 	*\brief

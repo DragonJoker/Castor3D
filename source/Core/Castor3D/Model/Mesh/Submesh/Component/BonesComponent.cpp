@@ -93,7 +93,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_bones.size() );
 
-		if ( count )
+		if ( count && m_bonesBuffer )
 		{
 			if ( auto * buffer = m_bonesBuffer->lock( 0, count, 0u ) )
 			{

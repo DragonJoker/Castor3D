@@ -43,7 +43,6 @@ namespace castor3d
 			m_computeCookTorrance( light
 				, worldEye
 				, direction
-				, albedo
 				, mix( vec3( 0.04_f ), albedo, vec3( metallic ) )
 				, metallic
 				, roughness
@@ -55,7 +54,6 @@ namespace castor3d
 		void CookTorranceBRDF::compute( Light const & light
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
-			, sdw::Vec3 const & albedo
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
 			, sdw::Float const & shadowFactor
@@ -65,7 +63,6 @@ namespace castor3d
 			m_computeCookTorrance( light
 				, worldEye
 				, direction
-				, albedo
 				, specular
 				, length( specular )
 				, roughness
@@ -169,7 +166,6 @@ namespace castor3d
 				, [this]( Light const & light
 					, Vec3 const & worldEye
 					, Vec3 const & direction
-					, Vec3 const & albedo
 					, Vec3 const & f0
 					, Float const & metallic
 					, Float const & roughness
@@ -222,13 +218,12 @@ namespace castor3d
 
 					kD *= 1.0_f - metallic;
 
-					output.m_diffuse = shadowFactor * ( radiance * NdotL * kD / Float{ castor::Pi< float > } );
-					output.m_specular = shadowFactor * ( specReflectance * radiance * NdotL );
+					output.m_diffuse = shadowFactor * ( radiance * light.m_intensity.r() * NdotL * kD / Float{ castor::Pi< float > } );
+					output.m_specular = shadowFactor * ( specReflectance * radiance * light.m_intensity.g() * NdotL );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )
 				, InVec3( m_writer, "direction" )
-				, InVec3( m_writer, "albedo" )
 				, InVec3( m_writer, "f0" )
 				, InFloat( m_writer, "metallic" )
 				, InFloat( m_writer, "roughness" )

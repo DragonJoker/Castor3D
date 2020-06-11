@@ -4,10 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderModule_H___
 #define ___C3D_RenderModule_H___
 
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
+
+#include <ashespp/Image/ImageView.hpp>
 
 namespace castor3d
 {
@@ -214,6 +217,20 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Holds minimal data for an intermediate view.
+	*\~french
+	*\brief
+	*	Contient les données minimales pour une vue intermédiaire.
+	*/
+	struct IntermediateView
+	{
+		castor::String name;
+		ashes::ImageView view;
+		TextureFactors factors;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief
@@ -223,12 +240,12 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Gaussian blur pass.
+	*	Holds render buffers of any geometry buffers pass.
 	*\~french
 	*\brief
-	*	Passe flou gaussien.
+	*	Contient les buffer de rendu de n'importe quelle passe de geometry buffers.
 	*/
-	class GaussianBlur;
+	class GBuffer;
 	/**
 	*\~english
 	*\brief
@@ -414,7 +431,6 @@ namespace castor3d
 	*/
 	class Viewport;
 
-	CU_DeclareSmartPtr( GaussianBlur );
 	CU_DeclareSmartPtr( PickingPass );
 	CU_DeclareSmartPtr( RenderDevice );
 	CU_DeclareSmartPtr( RenderLoop );

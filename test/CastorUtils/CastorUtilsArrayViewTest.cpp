@@ -27,7 +27,7 @@ namespace Testing
 		{
 			size_t const size = 8;
 			int * tmp = new int[size];
-			ArrayView< int > view1{ tmp, size };
+			ArrayView< int > view1 = makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -50,7 +50,7 @@ namespace Testing
 		{
 			static size_t const size = 8;
 			int tmp[size];
-			ArrayView< int > view1{ tmp };
+			ArrayView< int > view1 = makeArrayView( tmp );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( !view1.empty() );
 			CT_CHECK( view1.begin() == tmp );
@@ -72,7 +72,7 @@ namespace Testing
 		{
 			size_t const size = 0;
 			int * tmp = new int[size + 1];
-			ArrayView< int > view1{ tmp, size };
+			ArrayView< int > view1 = makeArrayView( tmp, size );
 			CT_CHECK( view1.size() == size );
 			CT_CHECK( view1.empty() );
 			CT_CHECK( view1.begin() == tmp );

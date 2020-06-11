@@ -26,19 +26,19 @@ namespace CastorGui
 	struct ParserContext
 	{
 		std::stack< ControlSPtr > m_parents;
-		Engine * m_engine;
+		Engine * m_engine{};
 		ButtonCtrlSPtr m_button;
 		ComboBoxCtrlSPtr m_combo;
 		EditCtrlSPtr m_edit;
 		ListBoxCtrlSPtr m_listbox;
 		SliderCtrlSPtr m_slider;
 		StaticCtrlSPtr m_static;
-		uint32_t m_flags = 0;
-		uint32_t m_ctrlId = 0;
+		uint32_t m_flags{};
+		uint32_t m_ctrlId{};
 
 		ControlRPtr getTop()const
 		{
-			ControlRPtr result = NULL;
+			ControlRPtr result{};
 
 			if ( !m_parents.empty() )
 			{

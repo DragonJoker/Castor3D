@@ -33,7 +33,7 @@ namespace castor3d
 			, uint32_t levelCount )
 		{
 			static uint32_t id = 0u;
-			String const name = cuT( "EnvironmentMap_" ) + string::toString( id++, 10, std::locale{ "C" } );
+			String const name = cuT( "EnvironmentMap_" ) + string::toString( id++ );
 			SamplerSPtr sampler;
 
 			if ( engine.getSamplerCache().has( name ) )
@@ -65,7 +65,7 @@ namespace castor3d
 		TextureUnitSPtr doCreateTexture( Engine & engine
 			, Size const & size )
 		{
-			ashes::ImageCreateInfo colour
+			ashes::ImageCreateInfo createInfo
 			{
 				VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
 				VK_IMAGE_TYPE_2D,
@@ -81,17 +81,16 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ),
 			};
 			auto texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, colour
+				, createInfo
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "EnvironmentMap" ) );
 			auto result = std::make_shared< TextureUnit >( engine );
 			result->setTexture( texture );
 			result->setSampler( doCreateSampler( engine, texture->getMipmapCount() ) );
-
-			for ( auto & image : *texture )
-			{
-				image->initialiseSource();
-			}
+			texture->getArrayCube().forEachView( []( TextureViewUPtr const & view )
+				{
+					view->initialiseSource();
+				} );
 
 			return result;
 		}
@@ -178,9 +177,9 @@ namespace castor3d
 			, std::move( depthStencil )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "EnvironmentMapImage" );
-		m_depthBufferView = m_depthBuffer->createView( VK_IMAGE_VIEW_TYPE_2D
+		m_depthBufferView = m_depthBuffer->createView( "EnvironmentMap"
+			, VK_IMAGE_VIEW_TYPE_2D
 			, m_depthBuffer->getFormat() );
-		setDebugObjectName( device, m_depthBufferView, "EnvironmentMapImageView" );
 
 		ashes::VkAttachmentDescriptionArray attaches
 		{
@@ -246,24 +245,21 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "EnvironmentMapRenderPass" );
+		m_renderPass = device->createRenderPass( "EnvironmentMap"
+			, std::move( createInfo ) );
 		auto & background = *m_node.getScene()->getBackground();
-		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( 6u );
-		setDebugObjectName( device, m_backgroundUboDescriptorPool->getPool(), "EnvironmentMapUboDescriptorPool" );
-		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( 6u );
-		setDebugObjectName( device, m_backgroundTexDescriptorPool->getPool(), "EnvironmentMapTexDescriptorPool" );
+		m_backgroundUboDescriptorPool = background.getUboDescriptorLayout().createPool( "EnvironmentMapUbo", 6u );
+		m_backgroundTexDescriptorPool = background.getTexDescriptorLayout().createPool( "EnvironmentMapTex", 6u );
 		uint32_t face = 0u;
 
 		for ( auto & pass : m_passes )
 		{
 			pass->initialise( MapSize
-				, face
+				, face++
 				, *m_renderPass
 				, background
 				, *m_backgroundUboDescriptorPool
 				, *m_backgroundTexDescriptorPool );
-			++face;
 		}
 
 		return true;

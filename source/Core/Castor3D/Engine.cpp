@@ -161,9 +161,13 @@ namespace castor3d
 				, String const & type
 				, RenderTarget & renderTarget
 				, Parameters const & parameters
-				, SsaoConfig const & config )
+				, SsaoConfig const & ssaoConfig )
 			{
-				return std::make_shared< RenderTechnique >( name, renderTarget, *getRenderSystem(), parameters, config );
+				return std::make_shared< RenderTechnique >( name
+					, renderTarget
+					, *getRenderSystem()
+					, parameters
+					, ssaoConfig );
 			}
 			, dummy
 			, dummy
@@ -264,12 +268,22 @@ namespace castor3d
 			postEvent( makeInitialiseEvent( *m_defaultSampler ) );
 		}
 
+		postEvent( makeFunctorEvent( EventType::ePreRender
+			, [this]()
+			{
+				auto & device = getCurrentRenderDevice( *this );
+				m_uploadCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "UboPoolsUpload" );
+			} ) );
 		m_matrixUboPool = std::make_shared< UniformBufferPool< MatrixUboConfiguration > >( *m_renderSystem
 			, cuT( "MatrixUboPool" ) );
 		m_hdrConfigUboPool = std::make_shared< UniformBufferPool< HdrConfig > >( *m_renderSystem
 			, cuT( "HdrConfigUboPool" ) );
 		m_modelMatrixUboPool = std::make_shared< UniformBufferPool< ModelMatrixUboConfiguration > >( *m_renderSystem
 			, cuT( "ModelMatrixUboPool" ) );
+		m_shadowMapUboPool = std::make_shared< UniformBufferPool< ShadowMapUboConfiguration > >( *m_renderSystem
+			, cuT( "ShadowMapUboPool" ) );
+		m_rsmConfigUboPool = std::make_shared< UniformBufferPool< RsmUboConfiguration > >( *m_renderSystem
+			, cuT( "RsmConfigUboPool" ) );
 
 		if ( threaded )
 		{
@@ -303,6 +317,15 @@ namespace castor3d
 			m_materialCache->cleanup();
 			m_shaderCache->cleanup();
 
+			if ( m_uploadCommandBuffer )
+			{
+				postEvent( makeFunctorEvent( EventType::ePreRender
+					, [this]()
+					{
+						m_uploadCommandBuffer.reset();
+					} ) );
+			}
+
 			if ( m_lightsSampler )
 			{
 				postEvent( makeCleanupEvent( *m_lightsSampler ) );
@@ -316,9 +339,11 @@ namespace castor3d
 			m_techniqueCache->cleanup();
 
 			m_renderLoop.reset();
+			m_rsmConfigUboPool.reset();
 			m_matrixUboPool.reset();
 			m_hdrConfigUboPool.reset();
 			m_modelMatrixUboPool.reset();
+			m_shadowMapUboPool.reset();
 
 			m_targetCache->clear();
 			m_samplerCache->clear();
@@ -538,7 +563,9 @@ namespace castor3d
 	{
 		m_matrixUboPool->upload();
 		m_hdrConfigUboPool->upload();
+		m_rsmConfigUboPool->upload();
 		m_modelMatrixUboPool->upload();
+		m_shadowMapUboPool->upload();
 	}
 
 	void Engine::doLoadCoreData()

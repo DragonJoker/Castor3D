@@ -217,32 +217,32 @@ typedef wchar_t ychar;
 
 #define CU_ImplementFlags( FlagType )\
 	using FlagType##s = castor::FlagCombination< FlagType >;\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType lhs, FlagType rhs )\
+	inline constexpr FlagType##s operator|( FlagType lhs, FlagType rhs )\
 	{\
-		return typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( lhs ) | typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( rhs );\
+		return FlagType##s( lhs ) | rhs;\
 	}\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type lhs, FlagType rhs )\
+	inline constexpr FlagType##s operator|( FlagType##s::BaseType lhs, FlagType rhs )\
 	{\
-		return lhs | typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( rhs );\
+		return FlagType##s( lhs ) | rhs;\
 	}\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType lhs, typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type rhs )\
+	inline constexpr FlagType##s operator|( FlagType lhs, FlagType##s::BaseType rhs )\
 	{\
-		return typename castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( lhs ) | rhs;\
+		return FlagType##s( lhs ) | rhs;\
 	}
 
 #define CU_ImplementClassFlags( Class, FlagType )\
 	using Class##FlagType##s = castor::FlagCombination< Class::FlagType >;\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType lhs, Class::FlagType rhs )\
+	inline constexpr Class##FlagType##s operator|( Class::FlagType lhs, Class::FlagType rhs )\
 	{\
-		return typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( lhs ) | typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( rhs );\
+		return Class##FlagType##s( lhs ) | rhs;\
 	}\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type lhs, Class::FlagType rhs )\
+	inline constexpr Class##FlagType##s operator|( Class##FlagType##s::BaseType lhs, Class::FlagType rhs )\
 	{\
-		return lhs | typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( rhs );\
+		return Class##FlagType##s( lhs ) | rhs;\
 	}\
-	inline constexpr typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type operator|( Class::FlagType lhs, typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type rhs )\
+	inline constexpr Class##FlagType##s operator|( Class::FlagType lhs, Class##FlagType##s::BaseType rhs )\
 	{\
-		return typename castor::BaseTypeFromSize< sizeof( Class::FlagType ) >::Type( lhs ) | rhs;\
+		return Class##FlagType##s( lhs ) | rhs;\
 	}
 
 #endif

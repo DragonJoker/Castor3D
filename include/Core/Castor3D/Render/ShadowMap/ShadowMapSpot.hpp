@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 
-#include "Castor3D/Render/GaussianBlur.hpp"
+#include "Castor3D/Render/Passes/GaussianBlur.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 
 #include <ashespp/Image/ImageView.hpp>
@@ -47,20 +47,8 @@ namespace castor3d
 		 *\copydoc		castor3d::ShadowMap::updateDeviceDependent
 		 */
 		void updateDeviceDependent( uint32_t index )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::debugDisplay
-		 */
-		void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size, uint32_t index )override;
-		C3D_API ashes::ImageView const & getLinearView( uint32_t index )const override;
-		C3D_API ashes::ImageView const & getVarianceView( uint32_t index )const override;
 
 	private:
-		/**
-		 *\copydoc		castor3d::ShadowMap::doInitialiseDepthFormat
-		 */
-		void doInitialiseDepthFormat()override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::doInitialise
 		 */
@@ -74,18 +62,6 @@ namespace castor3d
 		 */
 		ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
 			, uint32_t index )override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
-		 */
-		void doUpdateFlags( PipelineFlags & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::getVertexShaderSource
-		 */
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		/**
-		 *\copydoc		castor3d::ShadowMap::doGetPixelShaderSource
-		 */
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		/**
 		 *\copydoc		castor3d::ShadowMap::isUpToDate
 		 */
@@ -102,8 +78,6 @@ namespace castor3d
 			ashes::CommandBufferPtr commandBuffer;
 			ashes::FrameBufferPtr frameBuffer;
 			ashes::SemaphorePtr finished;
-			ashes::ImagePtr depthTexture;
-			ashes::ImageView depthView;
 			std::unique_ptr< GaussianBlur > blur;
 		};
 		std::vector< PassData > m_passesData;

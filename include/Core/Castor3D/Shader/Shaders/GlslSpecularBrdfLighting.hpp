@@ -20,7 +20,6 @@ namespace castor3d
 				, Utils & utils
 				, bool isOpaqueProgram );
 			C3D_API void computeCombined( sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & diffuse
 				, sdw::Vec3 const & specular
 				, sdw::Float const & glossiness
 				, sdw::Int const & receivesShadows
@@ -28,7 +27,6 @@ namespace castor3d
 				, OutputComponents & output )const;
 			C3D_API void compute( DirectionalLight const & light
 				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & diffuse
 				, sdw::Vec3 const & specular
 				, sdw::Float const & glossiness
 				, sdw::Int const & receivesShadows
@@ -36,7 +34,6 @@ namespace castor3d
 				, OutputComponents & output )const;
 			C3D_API void compute( PointLight const & light
 				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & diffuse
 				, sdw::Vec3 const & specular
 				, sdw::Float const & glossiness
 				, sdw::Int const & receivesShadows
@@ -44,7 +41,6 @@ namespace castor3d
 				, OutputComponents & output )const;
 			C3D_API void compute( SpotLight const & light
 				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & diffuse
 				, sdw::Vec3 const & specular
 				, sdw::Float const & glossiness
 				, sdw::Int const & receivesShadows
@@ -52,20 +48,16 @@ namespace castor3d
 				, OutputComponents & output )const;
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
+				, bool rsm
 				, uint32_t & index
-				, uint32_t maxCascades
 				, bool isOpaqueProgram );
-			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
-				, Utils & utils
-				, ShadowType shadows
-				, bool volumetric
-				, uint32_t & index
-				, uint32_t maxCascades );
 			C3D_API static std::shared_ptr< SpecularBrdfLightingModel > createModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, LightType light
 				, ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
+				, bool rsm
 				, uint32_t & index );
 			C3D_API static void computeMapContributions( sdw::ShaderWriter & writer
 				, shader::Utils const & utils
@@ -105,14 +97,12 @@ namespace castor3d
 				, InDirectionalLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeDirectional;
 			sdw::Function< sdw::Void
 				, InPointLight
-				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat
@@ -123,7 +113,6 @@ namespace castor3d
 				, InSpotLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
 				, FragmentInput
@@ -132,14 +121,12 @@ namespace castor3d
 				, InPointLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InInt
 				, FragmentInput
 				, OutputComponents & > m_computeOnePoint;
 			sdw::Function< sdw::Void
 				, InSpotLight
-				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InFloat

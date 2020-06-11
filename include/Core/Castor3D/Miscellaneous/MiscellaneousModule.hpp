@@ -60,8 +60,19 @@ namespace castor3d
 		eViewports,
 		CU_ScopedEnumBounds( eTexture1DSize )
 	};
-	template< typename AshesType >
-	struct AshesTypeTraits;
+	/**
+	*\~english
+	*\brief
+	*	Factors applied when displaying a debug texture.
+	*\~french
+	*\brief
+	*	Facteurs appliqués lors de l'affichage debug d'une texture.
+	*/
+	struct TextureFactors
+	{
+		castor::Point3f multiply{ 1.0f, 1.0f, 1.0f };
+		castor::Point3f add{};
+	};
 	/**
 	*\~english
 	*\brief
@@ -161,11 +172,10 @@ namespace castor3d
 	using Parameters = ParametersT< castor::String >;
 
 	struct RenderDevice;
-	C3D_API void setDebugObjectName( RenderDevice const & device
-		, uint64_t object
-		, uint32_t type
-		, std::string const & name
-		, std::string const & typeName );
+	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
+		, VkMemoryRequirements const & requirements
+		, VkMemoryPropertyFlags flags
+		, std::string const & name );
 	C3D_API ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
 		, VkMemoryRequirements const & requirements
 		, VkMemoryPropertyFlags flags

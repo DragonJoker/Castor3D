@@ -58,6 +58,7 @@ namespace castor3d
 			sdw::Vec4 m_directionCount;
 			sdw::Array< sdw::Mat4 > m_transforms;
 			sdw::Vec4 m_splitDepths;
+			sdw::Vec4 m_splitScales;
 			// Specific values
 			sdw::Vec3 m_direction;
 			sdw::UInt m_cascadeCount;

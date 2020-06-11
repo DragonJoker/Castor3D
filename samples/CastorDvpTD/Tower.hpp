@@ -132,7 +132,7 @@ namespace castortd
 			Kind m_kind;
 			PaidAbility< uint32_t > m_damage;
 			PaidAbility< castor::Milliseconds > m_cooldown;
-			castor::Milliseconds m_initialCooldown;
+			castor::Milliseconds m_initialCooldown{};
 			PaidAbility< float > m_range;
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };

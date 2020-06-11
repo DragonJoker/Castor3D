@@ -75,6 +75,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API TextureFlags getTexturesMask()const override;
+
 		inline GeometrySPtr getPickedGeometry()const
 		{
 			return m_geometry.lock();
@@ -242,7 +244,7 @@ namespace castor3d
 		ashes::ImageView m_colourView;
 		ashes::ImageView m_depthView;
 		ashes::FrameBufferPtr m_frameBuffer;
-		VkBufferImageCopy m_copyRegion;
+		VkBufferImageCopy m_copyRegion{};
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::BufferPtr< castor::Point4f > m_stagingBuffer;
 		std::map< Scene const *, CameraQueueMap > m_scenes;

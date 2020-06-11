@@ -39,7 +39,8 @@ namespace castor3d
 	bool SceneBackground::initialise( ashes::RenderPass const & renderPass
 		, HdrConfigUbo const & hdrConfigUbo )
 	{
-		m_semaphore = getCurrentRenderDevice( *this )->createSemaphore();
+		auto & device = getCurrentRenderDevice( *this );
+		m_semaphore = device->createSemaphore( "SceneBackground" );
 		m_initialised = doInitialiseVertexBuffer()
 			&& doInitialise( renderPass );
 		castor::String const name = cuT( "Skybox" );
@@ -219,18 +220,13 @@ namespace castor3d
 			, *hdrConfigUbo.getUbo().buffer
 			, hdrConfigUbo.getUbo().offset );
 		texDescriptorSet.createBinding( m_texDescriptorLayout->getBinding( SkyBoxImgIdx )
-			, m_texture->getDefaultView()
+			, m_texture->getDefaultView().getSampledView()
 			, m_sampler.lock()->getSampler() );
 	}
 
 	RenderPassTimerBlock SceneBackground::start()
 	{
 		return m_timer->start();
-	}
-
-	void SceneBackground::notifyPassRender()
-	{
-		m_timer->notifyPassRender();
 	}
 
 	void SceneBackground::notifyChanged()
@@ -346,14 +342,16 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_uboDescriptorLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
+		m_uboDescriptorLayout = device->createDescriptorSetLayout( "SceneBackgroundUbo"
+			, std::move( uboBindings ) );
 		ashes::VkDescriptorSetLayoutBindingArray texBindings
 		{
 			makeDescriptorSetLayoutBinding( SkyBoxImgIdx
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_texDescriptorLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
+		m_texDescriptorLayout = device->createDescriptorSetLayout( "SceneBackgroundTex"
+			, std::move( texBindings ) );
 	}
 
 	bool SceneBackground::doInitialiseVertexBuffer()
@@ -430,17 +428,22 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *this );
 		m_pipelineLayout.reset();
 		doInitialiseDescriptorLayouts();
-		m_pipelineLayout = device->createPipelineLayout( { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
+		m_pipelineLayout = device->createPipelineLayout( "SceneBackground"
+		, { *m_uboDescriptorLayout, *m_texDescriptorLayout } );
 
 		m_matrixUbo.initialise();
 		m_modelMatrixUbo.initialise();
 
 		m_uboDescriptorSet.reset();
-		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( 1u );
-		m_uboDescriptorSet = m_uboDescriptorPool->createDescriptorSet( 0u );
+		m_uboDescriptorPool = m_uboDescriptorLayout->createPool( "SceneBackgroundUbo"
+			, 1u );
+		m_uboDescriptorSet = m_uboDescriptorPool->createDescriptorSet( "SceneBackgroundUbo"
+			, 0u );
 		m_texDescriptorSet.reset();
-		m_texDescriptorPool = m_texDescriptorLayout->createPool( 1u );
-		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( 0u );
+		m_texDescriptorPool = m_texDescriptorLayout->createPool( "SceneBackgroundTex"
+			, 1u );
+		m_texDescriptorSet = m_texDescriptorPool->createDescriptorSet( "SceneBackgroundTex"
+			, 0u );
 		initialiseDescriptorSets( m_matrixUbo
 			, m_modelMatrixUbo
 			, hdrConfigUbo
@@ -455,7 +458,8 @@ namespace castor3d
 			{ 1u, { 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } },
 		};
 
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
+		m_pipeline = device->createPipeline( "SceneBackground"
+			, ashes::GraphicsPipelineCreateInfo
 			{
 				0u,
 				std::move( program ),
@@ -463,9 +467,9 @@ namespace castor3d
 				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
 				ashes::nullopt,
 				ashes::PipelineViewportStateCreateInfo{},
-				ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
+				ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 				ashes::PipelineMultisampleStateCreateInfo{},
-				ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false, VK_COMPARE_OP_LESS_OR_EQUAL },
+				ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL },
 				ashes::PipelineColorBlendStateCreateInfo{},
 				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
 				*m_pipelineLayout,

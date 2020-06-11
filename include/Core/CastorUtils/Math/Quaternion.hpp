@@ -127,7 +127,7 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 */
-		inline QuaternionT( QuaternionT && rhs );
+		inline QuaternionT( QuaternionT && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -192,7 +192,7 @@ namespace castor
 		 *\param[in]	rhs	L'objet Quaternion à déplacer
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		inline QuaternionT< T > & operator=( QuaternionT< T > && rhs );
+		inline QuaternionT< T > & operator=( QuaternionT< T > && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		addition assignment operator

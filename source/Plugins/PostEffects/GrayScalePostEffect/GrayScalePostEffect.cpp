@@ -91,7 +91,7 @@ namespace grayscale
 
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::UniformBuffer< castor::Point3f > const & configUbo )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
+		: castor3d::RenderQuad{ renderSystem, cuT( "GrayScale" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_configUbo{ configUbo }
 	{
 	}
@@ -115,8 +115,7 @@ namespace grayscale
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params
-			, false }
+			, params }
 		, m_surface{ *renderSystem.getEngine(), cuT( "GrayScale" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale" }
@@ -146,12 +145,8 @@ namespace grayscale
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "GrayScale" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "GrayScale" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 		visitor.visit( cuT( "GrayScale" )
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "Configuration" )
@@ -233,8 +228,8 @@ namespace grayscale
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "GrayScale" );
+		m_renderPass = device->createRenderPass( "GrayScale"
+			, std::move( createInfo ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -246,7 +241,7 @@ namespace grayscale
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -259,8 +254,8 @@ namespace grayscale
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "GrayScale" ),
+				device->createSemaphore( "GrayScale" )
 			};
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
@@ -269,7 +264,7 @@ namespace grayscale
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

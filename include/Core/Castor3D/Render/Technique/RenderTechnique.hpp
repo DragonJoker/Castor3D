@@ -5,16 +5,22 @@ See LICENSE file in root folder
 #define ___C3D_RenderTechnique_H___
 
 #include "TechniqueModule.hpp"
-#include "Castor3D/Material/Texture/TextureModule.hpp"
-#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
-#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Technique/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Technique/Transparent/WeightedBlendRendering.hpp"
+#include "Castor3D/Render/Technique/Voxelize/Voxelizer.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Shader/Ubos/DebugConfig.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+
+#if C3D_UseDepthPrepass
+#	include "Castor3D/Render/Passes/DepthPass.hpp"
+#endif
 
 #include <CastorUtils/Design/Named.hpp>
 
@@ -47,7 +53,7 @@ namespace castor3d
 			, RenderTarget & renderTarget
 			, RenderSystem & renderSystem
 			, Parameters const & parameters
-			, SsaoConfig const & config );
+			, SsaoConfig const & ssaoConfig );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,7 +69,7 @@ namespace castor3d
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool initialise();
+		C3D_API bool initialise( std::vector< IntermediateView > & intermediates );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -116,15 +122,6 @@ namespace castor3d
 		 */
 		C3D_API bool writeInto( castor::TextFile & file );
 		/**
-		 *\~english
-		 *\brief		Displays debug dumps.
-		 *\param[in]	size	The rendering size.
-		 *\~french
-		 *\brief		Affiche les dumps de debug.
-		 *\param[in]	size	Les dimensions du rendu.
-		 */
-		C3D_API void debugDisplay( castor::Size const & size )const;
-		/**
 		*\~english
 		*\brief
 		*	Visitor acceptance function.
@@ -155,8 +152,12 @@ namespace castor3d
 
 		inline TextureLayout const & getDepth()const
 		{
-			CU_Require( m_depthBuffer );
-			return *m_depthBuffer;
+			return *m_depthBuffer.getTexture();
+		}
+
+		inline TextureLayoutSPtr getDepthPtr()const
+		{
+			return m_depthBuffer.getTexture();
 		}
 
 		inline MatrixUbo const & getMatrixUbo()const
@@ -211,6 +212,16 @@ namespace castor3d
 		{
 			return m_ssaoConfig;
 		}
+
+		inline DebugConfig const & getDebugConfig()const
+		{
+			return m_debugConfig;
+		}
+
+		inline DebugConfig & getDebugConfig()
+		{
+			return m_debugConfig;
+		}
 		/**@}*/
 
 	public:
@@ -220,14 +231,20 @@ namespace castor3d
 		void doCreateShadowMaps();
 		void doInitialiseShadowMaps();
 		void doInitialiseBackgroundPass();
+#if C3D_UseDepthPrepass
+		void doInitialiseDepthPass();
+#endif
 		void doInitialiseOpaquePass();
 		void doInitialiseTransparentPass();
-		void doInitialiseDebugPass();
 		void doCleanupShadowMaps();
 		void doUpdateShadowMaps( RenderQueueArray & queues );
 		void doUpdateParticles( RenderInfo & info );
 		ashes::Semaphore const & doRenderShadowMaps( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderEnvironmentMaps( ashes::Semaphore const & semaphore );
+#if C3D_UseDepthPrepass
+		ashes::Semaphore const & doRenderDepth( ashes::SemaphoreCRefArray const & semaphores );
+		ashes::Semaphore const & doRenderBackground( ashes::Semaphore const & semaphore );
+#endif
 		ashes::Semaphore const & doRenderBackground( ashes::SemaphoreCRefArray const & semaphores );
 		ashes::Semaphore const & doRenderOpaque( ashes::Semaphore const & semaphore );
 		ashes::Semaphore const & doRenderTransparent( ashes::Semaphore const & semaphore );
@@ -238,9 +255,15 @@ namespace castor3d
 		RenderSystem & m_renderSystem;
 		castor::Size m_size;
 		TextureLayoutSPtr m_colourTexture;
-		TextureLayoutSPtr m_depthBuffer;
+		TextureUnit m_depthBuffer;
 		MatrixUbo m_matrixUbo;
 		HdrConfigUbo m_hdrConfigUbo;
+		GpInfoUbo m_gpInfoUbo;
+		DebugConfig m_debugConfig;
+#if C3D_UseDepthPrepass
+		std::unique_ptr< DepthPass > m_depthPass;
+#endif
+		std::unique_ptr< Voxelizer > m_voxelizer;
 		std::unique_ptr< RenderTechniquePass > m_opaquePass;
 		std::unique_ptr< RenderTechniquePass > m_transparentPass;
 		SsaoConfig m_ssaoConfig;
@@ -257,8 +280,6 @@ namespace castor3d
 		ashes::FrameBufferPtr m_bgFrameBuffer;
 		ashes::CommandBufferPtr m_bgCommandBuffer;
 		ashes::CommandBufferPtr m_cbgCommandBuffer;
-		ashes::RenderPassPtr m_debugRenderPass;
-		ashes::FrameBufferPtr m_debugFrameBuffer;
 		ashes::StagingBufferPtr m_stagingBuffer;
 		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		OnBackgroundChangedConnection m_onBgChanged;

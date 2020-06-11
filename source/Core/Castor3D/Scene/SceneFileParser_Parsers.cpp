@@ -1432,7 +1432,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext->particleSystem->getName(), true );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eShaderProgram )
@@ -1823,6 +1823,104 @@ namespace castor3d
 			float value;
 			params[0]->get( value );
 			parsingContext->light->setShadowVarianceBias( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsRsm )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eRsm );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
+	CU_ImplementAttributeParser( parserShadowsLpv )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLpv );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
+	CU_ImplementAttributeParser( parserShadowsLayeredLpv )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eLayeredLpv );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eRsm )
+
+	CU_ImplementAttributeParser( parserRsmIntensity )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0.0f };
+			params[0]->get( value );
+			parsingContext->light->getRsmConfig().intensity = value;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRsmMaxRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			float value{ 0.0f };
+			params[0]->get( value );
+			parsingContext->light->getRsmConfig().maxRadius = value;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRsmSampleCount )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else
+		{
+			uint32_t value{ 0u };
+			params[0]->get( value );
+			auto range = parsingContext->light->getRsmConfig().sampleCount.value();
+			range = value;
+			parsingContext->light->getRsmConfig().sampleCount = range;
 		}
 	}
 	CU_EndAttribute()
@@ -2332,7 +2430,7 @@ namespace castor3d
 					MeshAnimation & animation{ static_cast< MeshAnimation & >( parsingContext->mesh->getAnimation( animName ) ) };
 					uint32_t index = 0u;
 					MeshAnimationKeyFrameUPtr keyFrame = std::make_unique< MeshAnimationKeyFrame >( animation
-						, Milliseconds{ int64_t( timeIndex * 1000 ) } );
+						, Milliseconds{ int64_t( timeIndex * 1000ll ) } );
 
 					for ( auto & submesh : mesh )
 					{
@@ -3272,7 +3370,8 @@ namespace castor3d
 
 		if ( parsingContext->pass )
 		{
-			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( true );
+			parsingContext->shaderProgram = parsingContext->m_pParser->getEngine()->getShaderProgramCache().getNewProgram( parsingContext->material->getName() + castor::string::toString( parsingContext->pass->getId() )
+				, true );
 		}
 		else
 		{
@@ -3428,6 +3527,8 @@ namespace castor3d
 		{
 			parsingContext->pass.reset();
 			parsingContext->phongPass.reset();
+			parsingContext->pbrMRPass.reset();
+			parsingContext->pbrSGPass.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -4007,11 +4108,12 @@ namespace castor3d
 					|| parsingContext->textureConfiguration.environment != 0u )
 				{
 					parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
-					parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+					parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
 				}
 				else if ( parsingContext->folder.empty() && parsingContext->relative.empty() )
 				{
 					CU_ParsingError( cuT( "TextureUnit's image not initialised" ) );
+					parsingContext->textureUnit.reset();
 				}
 				else
 				{
@@ -4031,7 +4133,11 @@ namespace castor3d
 							, parsingContext->relative );
 						parsingContext->textureUnit->setTexture( texture );
 						parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
-						parsingContext->pass->addTextureUnit( parsingContext->textureUnit );
+						parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );
+					}
+					else
+					{
+						parsingContext->textureUnit.reset();
 					}
 				}
 
@@ -5458,6 +5564,30 @@ namespace castor3d
 				float value;
 				params[0]->get( value );
 				parsingContext->ssaoConfig.radius = value;
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No render target initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSsaoMinRadius )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( parsingContext->renderTarget )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				parsingContext->ssaoConfig.minRadius = value;
 			}
 		}
 		else

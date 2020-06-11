@@ -238,13 +238,6 @@ namespace castor3d
 		 */
 		C3D_API RenderPassTimerBlock start();
 		/**
-		 *\~english
-		 *\brief		Notifies the given pass render.
-		 *\~french
-		 *\brief		Notifie le rendu de la passe donnée.
-		 */
-		C3D_API void notifyPassRender();
-		/**
 		*\~english
 		*\return
 		*	Notifies a change to apply on GPU for the background.
@@ -317,7 +310,7 @@ namespace castor3d
 		inline ashes::ImageView const & getView()const
 		{
 			CU_Require( m_texture );
-			return m_texture->getDefaultView();
+			return m_texture->getDefaultView().getSampledView();
 		}
 
 		inline bool hasIbl()const

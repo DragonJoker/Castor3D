@@ -6,8 +6,9 @@ See LICENSE file in root folder
 
 #include "TransparentModule.hpp"
 
-#include "Castor3D/Render/Technique/Transparent/FinalCombinePass.hpp"
 #include "Castor3D/Render/Technique/Transparent/TransparentPass.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentResolvePass.hpp"
 
 namespace castor3d
 {
@@ -38,12 +39,13 @@ namespace castor3d
 		 */
 		WeightedBlendRendering( Engine & engine
 			, TransparentPass & transparentPass
-			, ashes::ImageView const & depthView
+			, TextureUnit const & depthView
 			, ashes::ImageView const & colourView
-			, TextureLayoutSPtr velocityTexture
+			, TextureUnit const & velocityTexture
 			, castor::Size const & size
 			, Scene const & scene
-			, HdrConfigUbo & hdrConfigUbo );
+			, HdrConfigUbo & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Renders opaque nodes.
@@ -76,11 +78,11 @@ namespace castor3d
 			, ashes::Semaphore const & toWait );
 		/**
 		 *\~english
-		 *\brief		Displays debug data on screen.
+		 *\brief		Lists the pass' intermediate views.
 		 *\~french
-		 *\brief		Dessine les données de débogage sur l'écran.
+		 *\brief		Liste les vues intermédiaires de la passe.
 		 */
-		void debugDisplay();
+		void listIntermediates( std::vector< IntermediateView > & intermediates )const;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -90,13 +92,8 @@ namespace castor3d
 		Engine & m_engine;
 		TransparentPass & m_transparentPass;
 		castor::Size m_size;
-		ashes::ImageView m_depthView;
-		ashes::ImagePtr m_accumulation;
-		ashes::ImageView m_accumulationView;
-		ashes::ImagePtr m_revealage;
-		ashes::ImageView m_revealageView;
-		WeightedBlendTextures m_weightedBlendPassResult;
-		FinalCombinePass m_finalCombinePass;
+		TransparentPassResult m_transparentPassResult;
+		TransparentResolvePass m_finalCombinePass;
 	};
 }
 

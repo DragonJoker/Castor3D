@@ -97,7 +97,7 @@ namespace castor3d
 
 			ashes::StagingBuffer stagingBuffer{ *device.device
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, 6u * result->getAlignedSize() };
+				, 6ull * result->getAlignedSize() };
 			stagingBuffer.uploadUniformData( queue
 				, pool
 				, result->getDatas()
@@ -207,17 +207,17 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
 		doFillDescriptorLayoutBindings( bindings );
-		m_descriptorLayout = m_device->createDescriptorSetLayout( std::move( bindings ) );
-		setDebugObjectName( m_device, *m_descriptorLayout, "RenderCubeDescriptorSetLayout" );
-		m_pipelineLayout = m_device->createPipelineLayout( { *m_descriptorLayout }, pushRanges );
-		setDebugObjectName( m_device, *m_pipelineLayout,"RenderCubePipelineLayout" );
-		m_descriptorPool = m_descriptorLayout->createPool( 6u );
-		setDebugObjectName( m_device, m_descriptorPool->getPool(), "RenderCubeDescriptorPool" );
+		m_descriptorLayout = m_device->createDescriptorSetLayout( "RenderCube"
+			, std::move( bindings ) );
+		m_pipelineLayout = m_device->createPipelineLayout( "RenderCube"
+			, { *m_descriptorLayout }, pushRanges );
+		m_descriptorPool = m_descriptorLayout->createPool( "RenderCube", 6u );
 		uint32_t face = 0u;
 
 		for ( auto & facePipeline : m_faces )
 		{
-			facePipeline.pipeline = m_device->createPipeline( ashes::GraphicsPipelineCreateInfo
+			facePipeline.pipeline = m_device->createPipeline( "RenderCubeFace" + castor::string::toString( face )
+				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
 					program,
@@ -233,10 +233,7 @@ namespace castor3d
 					*m_pipelineLayout,
 					renderPass,
 				} );
-			setDebugObjectName( m_device, *facePipeline.pipeline, "RenderCubeFace" + castor::string::toString( face ) + "Pipeline" );
-
-			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet();
-			setDebugObjectName( m_device, *facePipeline.descriptorSet, "RenderCubeFace" + castor::string::toString( face ) + "DescriptorSet" );
+			facePipeline.descriptorSet = m_descriptorPool->createDescriptorSet( "RenderCubeFace" + castor::string::toString( face ) );
 			facePipeline.descriptorSet->createSizedBinding( m_descriptorLayout->getBinding( 0u )
 				, m_matrixUbo->getBuffer()
 				, face
@@ -271,8 +268,8 @@ namespace castor3d
 		, uint32_t subpassIndex
 		, uint32_t face )
 	{
-		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		setDebugObjectName( m_device, *m_commandBuffer, "RenderCubeCommandBuffer" );
+		m_commandBuffer = m_device.graphicsCommandPool->createCommandBuffer( "RenderCube"
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 			, VkCommandBufferInheritanceInfo
 			{

@@ -48,9 +48,9 @@ namespace castor3d
 		if ( unit.isTextured() && unit.getTexture() )
 		{
 			auto texture = unit.getTexture();
-			auto image = texture->getDefaultImage().toString();
+			auto image = texture->getDefaultView().toString();
 
-			if ( !image.empty() || !texture->getDefaultImage().isStaticSource() )
+			if ( !image.empty() || !texture->getDefaultView().isStaticSource() )
 			{
 				if ( result )
 				{
@@ -68,7 +68,7 @@ namespace castor3d
 
 						if ( result )
 						{
-							if ( !texture->getDefaultImage().isStaticSource() )
+							if ( !texture->getDefaultView().isStaticSource() )
 							{
 								if ( unit.getRenderTarget() )
 								{
@@ -164,7 +164,7 @@ namespace castor3d
 				{
 					{
 						sampler->getSampler(),
-						m_texture->getDefaultView(),
+						m_texture->getDefaultView().getSampledView(),
 						VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 					}
 				}
@@ -217,7 +217,7 @@ namespace castor3d
 		}
 
 		CU_Require( m_texture );
-		return m_texture->getDefaultImage().toString();
+		return m_texture->getDefaultView().toString();
 	}
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )

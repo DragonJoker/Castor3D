@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "CacheModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Technique/TechniqueModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 
 namespace castor3d
 {

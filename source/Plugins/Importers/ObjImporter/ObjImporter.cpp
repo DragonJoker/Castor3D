@@ -196,9 +196,9 @@ namespace Obj
 					, static_cast< castor3d::PhongPass & >( pass ) );
 			}
 
-			for ( auto & texture : desc.textures )
+			for ( auto texture : desc.textures )
 			{
-				pass.addTextureUnit( std::move( texture ) );
+				pass.addTextureUnit( texture );
 			}
 		}
 
@@ -415,7 +415,7 @@ namespace Obj
 		std::cout << "    Normal count: " << allnml.size() << std::endl;
 		std::cout << "    Group count: " << faces.size() << std::endl;
 
-		InterleavedVertexArray vertex{ nf * 3 };
+		InterleavedVertexArray vertex{ nf * 3ull };
 		std::vector< FaceIndices > index{ nf };
 		auto vit = vertex.begin();
 		auto fit = index.begin();

@@ -2,7 +2,7 @@
 
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
 using namespace castor;
@@ -163,11 +163,9 @@ namespace castor3d
 		m_attenuation.reset();
 	}
 
-	void PointLight::updateShadow( Viewport & viewport
-		, int32_t index )
+	void PointLight::updateShadow( int32_t index )
 	{
 		m_shadowMapIndex = index;
-		viewport.updateFar( m_farPlane );
 	}
 
 	void PointLight::doBind( Point4f * buffer )const

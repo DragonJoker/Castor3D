@@ -139,8 +139,10 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( RenderSystem & renderSystem )
-		: OwnedBy< RenderSystem >( renderSystem )
+	ShaderProgram::ShaderProgram( castor::String const & name
+		, RenderSystem & renderSystem )
+		: Named( name )
+		, OwnedBy< RenderSystem >( renderSystem )
 	{
 	}
 
@@ -214,7 +216,7 @@ namespace castor3d
 	void ShaderProgram::setFile( VkShaderStageFlagBits target, Path const & pathFile )
 	{
 		m_files[target] = pathFile;
-		doAddModule( target, "", m_modules );
+		doAddModule( target, getName(), m_modules );
 	}
 
 	Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
@@ -234,7 +236,7 @@ namespace castor3d
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, String const & source )
 	{
 		m_files[target].clear();
-		auto it = doAddModule( target, "", m_modules );
+		auto it = doAddModule( target, getName(), m_modules );
 		it->second.source = source;
 		it->second.shader = nullptr;
 	}
@@ -242,7 +244,7 @@ namespace castor3d
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
 	{
 		m_files[target].clear();
-		auto it = doAddModule( target, "", m_modules );
+		auto it = doAddModule( target, getName(), m_modules );
 		it->second.source.clear();
 		it->second.shader = std::move( shader );
 	}

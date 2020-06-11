@@ -2,7 +2,7 @@ project( PyGuiCommon )
 
 set( ${PROJECT_NAME}_DESCRIPTION "GuiCommon Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 11 )
+set( ${PROJECT_NAME}_VERSION_MINOR 4 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 #we look for wxWidgets
@@ -53,6 +53,11 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 			RUNTIME_OUTPUT_NAME_RELEASE castor_wx
 			ARCHIVE_OUTPUT_NAME_RELEASE castor_wx
 			FOLDER "Interop"
+	)
+	set( CASTOR_INSTEXP_LIST
+		${CASTOR_INSTEXP_LIST}
+		${PROJECT_NAME}
+		PARENT_SCOPE
 	)
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

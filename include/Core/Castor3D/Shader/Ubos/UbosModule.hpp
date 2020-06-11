@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShaderUbosModule_H___
 
 #include "Castor3D/Shader/ShaderModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -39,6 +40,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Debug switchs.
+	*\~french
+	*\brief
+	*	Les switchs de debug.
+	*/
+	struct DebugConfig;
+	/**
+	*\~english
+	*\brief
 	*	Geometry pass UBO.
 	*\~french
 	*\brief
@@ -61,6 +71,53 @@ namespace castor3d
 		castor::Matrix4x4f gView;
 		castor::Matrix4x4f gProj;
 		castor::Point2f renderSize;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LpvConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LpvConfigUboConfiguration
+	{
+		castor::Point4f minVolumeCorner;
+		castor::Point4ui gridSizes;
+		castor::Point4f config;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LayeredLpvConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation data.
+	*\~french
+	*\brief
+	*	Données de light propagation.
+	*/
+	struct LayeredLpvConfigUboConfiguration
+	{
+		std::array< castor::Point4f, shader::DirectionalMaxCascadesCount > allMinVolumeCorners;
+		castor::Point4f allCellSizes;
+		castor::Point4ui gridSize;
+		castor::Point4f config;
 	};
 	/**
 	*\brief
@@ -212,6 +269,30 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Reflective Shadow Maps based GI UBO
+	*\~french
+	*\brief
+	*	UBO du GI basé sur les Reflective Shadow Maps.
+	*/
+	class RsmConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Reflective Shadow Maps based GI UBO configuration.
+	*\~french
+	*\brief
+	*	Configuration de l'UBO du GI basé sur les Reflective Shadow Maps.
+	*/
+	struct RsmUboConfiguration
+	{
+		float intensity;
+		float maxRadius;
+		uint32_t sampleCount;
+		uint32_t index;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Scene data UBO.
 	*\~french
 	*\brief
@@ -234,6 +315,30 @@ namespace castor3d
 		castor::Point4f cameraPos;
 		castor::Point4f clipInfo;
 		castor::Point4f fogInfo;
+	};
+	/**
+	*\~english
+	*\brief
+	*	Shadow map data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de shadow map.
+	*/
+	class ShadowMapUbo;
+	/**
+	*\~english
+	*\brief
+	*	Shadow map data.
+	*\~french
+	*\brief
+	*	Données de shadow map.
+	*/
+	struct ShadowMapUboConfiguration
+	{
+		castor::Matrix4x4f lightProjection;
+		castor::Matrix4x4f lightView;
+		castor::Point4f lightPosFarPlane;
+		uint32_t lightIndex;
 	};
 	/**
 	*\~english

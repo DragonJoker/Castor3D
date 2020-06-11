@@ -326,9 +326,12 @@ namespace castor3d
 		inline castor::BoundingSphere & getBoundingSphere();
 		inline InterleavedVertexArray const & getPoints()const;
 		inline InterleavedVertexArray & getPoints();
+		inline bool hasVertexBuffer()const;
 		inline ashes::VertexBuffer< InterleavedVertex > const & getVertexBuffer()const;
 		inline ashes::VertexBuffer< InterleavedVertex > & getVertexBuffer();
+		inline bool hasVertexLayout()const;
 		inline ashes::PipelineVertexInputStateCreateInfo const & getVertexLayout()const;
+		inline bool hasIndexBuffer()const;
 		inline ashes::Buffer< uint32_t > const & getIndexBuffer()const;
 		inline ashes::Buffer< uint32_t > & getIndexBuffer();
 		inline bool isInitialised()const;

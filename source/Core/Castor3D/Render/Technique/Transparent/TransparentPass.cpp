@@ -10,6 +10,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
+#include "Castor3D/Render/Technique/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -44,40 +45,6 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	String getTextureName( WbTexture texture )
-	{
-		static std::array< String, size_t( WbTexture::eCount ) > Values
-		{
-			{
-				"c3d_mapDepth",
-				"c3d_mapAccumulation",
-				"c3d_mapRevealage",
-				"c3d_mapVelocity",
-			}
-		};
-
-		return Values[size_t( texture )];
-	}
-
-	VkFormat getTextureFormat( WbTexture texture )
-	{
-		static std::array< VkFormat, size_t( WbTexture::eCount ) > Values
-		{
-			{
-				VK_FORMAT_D24_UNORM_S8_UINT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16_SFLOAT,
-				VK_FORMAT_R16G16B16A16_SFLOAT,
-			}
-		};
-
-		CU_Require( texture != WbTexture::eDepth
-			&& "You can't use this function for depth texture format" );
-		return Values[size_t( texture )];
-	}
-
-	//************************************************************************************************
-
 	TransparentPass::TransparentPass( MatrixUbo & matrixUbo
 		, SceneCuller & culler
 		, SsaoConfig const & config )
@@ -96,24 +63,24 @@ namespace castor3d
 	{
 	}
 
-	void TransparentPass::initialiseRenderPass( WeightedBlendTextures const & wbpResult )
+	void TransparentPass::initialiseRenderPass( TransparentPassResult const & wbpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attaches
 		{
 			{
 				0u,
-				wbpResult[0]->format,
+				wbpResult[WbTexture::eDepth].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 			},
 			{
 				0u,
-				wbpResult[1]->format,
+				wbpResult[WbTexture::eAccumulation].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -124,7 +91,7 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult[2]->format,
+				wbpResult[WbTexture::eRevealage].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_CLEAR,
 				VK_ATTACHMENT_STORE_OP_STORE,
@@ -135,13 +102,13 @@ namespace castor3d
 			},
 			{
 				0u,
-				wbpResult[3]->format,
+				wbpResult[WbTexture::eVelocity].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			},
 		};
@@ -189,18 +156,22 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( "TransparentPass"
+			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 
-		for ( size_t i = 0u; i < wbpResult.size(); ++i )
+		for ( auto view : wbpResult )
 		{
-			fbAttaches.emplace_back( wbpResult[i] );
+			fbAttaches.emplace_back( view->getTexture()->getDefaultView().getTargetView() );
 		}
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { wbpResult[0].image->getDimensions().width, wbpResult[0].image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "TransparentPass"
+			, {
+				wbpResult[WbTexture::eDepth].getTexture()->getWidth(),
+				wbpResult[WbTexture::eDepth].getTexture()->getHeight(),
+			}
 			, std::move( fbAttaches ) );
-
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "TransparentPass" );
 	}
 
 	void TransparentPass::update( RenderInfo & info
@@ -237,8 +208,7 @@ namespace castor3d
 		};
 
 		auto * result = &toWait;
-		auto & timer = getTimer();
-		auto timerBlock = timer.start();
+		auto timerBlock = getTimer().start();
 
 		m_nodesCommands->begin();
 		m_nodesCommands->beginDebugBlock(
@@ -246,8 +216,8 @@ namespace castor3d
 				"Weighted Blended - Transparent accumulation",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		timer.beginPass( *m_nodesCommands );
-		timer.notifyPassRender();
+		timerBlock->beginPass( *m_nodesCommands );
+		timerBlock->notifyPassRender();
 		auto & view = m_frameBuffer->begin()->get();
 		auto subresource = view->subresourceRange;
 		subresource.aspectMask = ashes::getAspectMask( view->format );
@@ -267,7 +237,7 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
-		timer.endPass( *m_nodesCommands );
+		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
@@ -286,17 +256,14 @@ namespace castor3d
 	{
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	bool TransparentPass::doInitialise( Size const & size )
 	{
-		m_finished = getCurrentRenderDevice( *this )->createSemaphore();
+		auto & device = getCurrentRenderDevice( *this );
+		m_finished = device->createSemaphore( "TransparentPass" );
 		return true;
 	}
 
@@ -369,7 +336,7 @@ namespace castor3d
 			if ( node.passNode.pass.hasEnvironmentMapping() )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
 					, envMap.getTexture().getSampler()->getSampler()
 					, writes
 					, index );
@@ -397,15 +364,13 @@ namespace castor3d
 				}
 			}
 
-			bindShadowMaps( shadowMaps[size_t( LightType::eDirectional )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::eSpot )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::ePoint )]
-				, writes
-				, index );
+			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+			{
+				bindShadowMaps( shadowMaps[i]
+					, writes
+					, index );
+			}
+
 			node.texDescriptorSet->setBindings( writes );
 		}
 	}
@@ -470,24 +435,17 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Directional linear shadow map.
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Directional VSM shadow map.
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Spot linear shadow map.
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Spot VSM shadow map.
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Point linear shadow map.
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// Point VSM shadow map.
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			// Depth
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Variance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 
 		return textureBindings;
 	}
@@ -755,8 +713,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
@@ -987,8 +945,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 
@@ -1270,8 +1228,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
@@ -1346,7 +1304,6 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				lighting->computeCombined( worldEye
-					, albedo
 					, specular
 					, glossiness
 					, c3d_shadowReceiver

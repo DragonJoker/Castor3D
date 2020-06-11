@@ -1,12 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_POINT_H___
-#define ___CASTOR_POINT_H___
+#ifndef ___CU_Point_H___
+#define ___CU_Point_H___
 
 #include "CastorUtils/Data/TextLoader.hpp"
 #include "CastorUtils/Data/TextWriter.hpp"
 #include "CastorUtils/Align/Aligned.hpp"
+#include "CastorUtils/Math/PointData.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -121,14 +122,14 @@ namespace castor
 	public:
 		/**
 		 *\~english
-		 *name Construction / Destruction.
+		 *\name Construction / Destruction.
 		 *\~french
-		 *name Construction / Destruction.
+		 *\name Construction / Destruction.
 		 **/
 		/**@{*/
 		Point();
 		Point( Point const & rhs );
-		Point( Point && rhs );
+		Point( Point && rhs )noexcept;
 		explicit Point( T const * rhs );
 		template< typename U, uint32_t UCount >
 		explicit Point( Point< U, UCount > const & rhs );
@@ -145,19 +146,19 @@ namespace castor
 		/**@}*/
 		/**
 		 *\~english
-		 *name Assignment operators.
+		 *\name Assignment operators.
 		 *\~french
-		 *name Opérateurs d'affectation.
+		 *\name Opérateurs d'affectation.
 		 **/
 		/**@{*/
 		Point & operator=( Point const & rhs );
-		Point & operator=( Point && rhs );
+		Point & operator=( Point && rhs )noexcept;
 		/**@}*/
 		/**
 		 *\~english
-		 *name Arithmetic operators.
+		 *\name Arithmetic operators.
 		 *\~french
-		 *name Opérateurs arithmétiques.
+		 *\name Opérateurs arithmétiques.
 		**/
 		/**@{*/
 		template< typename U, uint32_t UCount >
@@ -265,7 +266,7 @@ namespace castor
 		 */
 		inline T * ptr()
 		{
-			return m_coords.data();
+			return m_data.coords.data();
 		}
 		/**
 		 *\~english
@@ -277,7 +278,7 @@ namespace castor
 		 */
 		inline T const * constPtr()const
 		{
-			return m_coords.data();
+			return m_data.coords.data();
 		}
 		/**
 		 *\~english
@@ -288,40 +289,54 @@ namespace castor
 		/**@{*/
 		inline T const & operator[]( uint32_t index )const
 		{
-			return m_coords[index];
+			return m_data.coords[index];
 		}
 
 		inline T & operator[]( uint32_t index )
 		{
-			return m_coords[index];
+			return m_data.coords[index];
 		}
 
 		inline iterator begin()
 		{
-			return &m_coords[0];
+			return &m_data.coords[0];
 		}
 
 		inline const_iterator begin()const
 		{
-			return &m_coords[0];
+			return &m_data.coords[0];
 		}
 
 		inline const_iterator end()const
 		{
-			return &m_coords[0] + TCount;
+			return &m_data.coords[0] + TCount;
 		}
 
 		inline iterator end()
 		{
-			return &m_coords[0] + TCount;
+			return &m_data.coords[0] + TCount;
 		}
 
 		T const & at( uint32_t index )const;
 		T & at( uint32_t index );
+
+		inline PointData< T, TCount > * operator->()
+		{
+			return &m_data.data;
+		}
+
+		inline PointData< T, TCount > const * operator->()const
+		{
+			return &m_data.data;
+		}
 		/**@}*/
 
 	private:
-		std::array< T, TCount > m_coords;
+		union
+		{
+			std::array< T, TCount > coords;
+			PointData< T, TCount > data;
+		} m_data;
 	};
 	/**
 	 *\~english

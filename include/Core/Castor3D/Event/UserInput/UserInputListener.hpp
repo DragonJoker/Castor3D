@@ -465,7 +465,7 @@ namespace castor3d
 	private:
 		MouseState m_mouse;
 		KeyboardState m_keyboard;
-		bool m_enabled;
+		bool m_enabled{};
 		EventHandlerWPtr m_activeHandler;
 		EventHandlerWPtr m_lastMouseTarget;
 		std::map< castor::String, OnMouseMoveActionFunction > m_onMouseMoveActions;

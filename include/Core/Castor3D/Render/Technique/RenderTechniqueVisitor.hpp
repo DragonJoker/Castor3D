@@ -25,8 +25,10 @@ namespace castor3d
 	{
 	protected:
 		inline RenderTechniqueVisitor( PipelineFlags flags
-			, Scene const & scene )
-			: m_flags{ std::move( flags ) }
+			, Scene const & scene
+			, bool forceSubPassesVisit = false )
+			: PipelineVisitor{ forceSubPassesVisit }
+			, m_flags{ std::move( flags ) }
 			, m_scene{ scene }
 		{
 		}
@@ -35,6 +37,7 @@ namespace castor3d
 		virtual inline ~RenderTechniqueVisitor()
 		{
 		}
+
 		/**
 		*\~english
 		*name
@@ -44,9 +47,7 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		virtual void visit( castor::String const & name
-			, VkShaderStageFlagBits type
-			, castor::String const & shader )
+		void visit( ShaderModule const & shader )override
 		{
 		}
 		/**@}*/

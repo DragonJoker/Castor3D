@@ -52,7 +52,7 @@ namespace castor3d
 
 	bool BinaryChunk::checkAvailable( uint32_t p_size )const
 	{
-		return m_index + p_size <= m_data.size();
+		return size_t( m_index ) + p_size <= m_data.size();
 	}
 
 	uint32_t BinaryChunk::getRemaining()const
@@ -75,7 +75,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = m_index + size <= m_data.size();
+			result = size_t( m_index ) + size <= m_data.size();
 		}
 
 		if ( result )

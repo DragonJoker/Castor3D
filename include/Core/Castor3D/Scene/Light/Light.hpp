@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "LightModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
+#include "Castor3D/Render/Technique/Opaque/ReflectiveShadowMapGI/RsmConfig.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
@@ -103,6 +105,21 @@ namespace castor3d
 		C3D_API void bind( castor::Point4f * buffer )const;
 		/**
 		 *\~english
+		 *\brief		Records the light data into given buffer.
+		 *\param[in]	index	The light index inside the lights buffer.
+		 *\param[out]	buffer	The buffer.
+		 *\~french
+		 *\brief		Enregistre les données de l'image dans le tampon donné.
+		 *\param[in]	index	L'indice de la source lumineuse dans le tampon de lumières.
+		 *\param[out]	buffer	Le tampon.
+		 */
+		inline void bind( uint32_t index, castor::Point4f * buffer )
+		{
+			m_bufferIndex = index;
+			bind( buffer );
+		}
+		/**
+		 *\~english
 		 *\brief		Attaches this light to a SceneNode.
 		 *\param[in]	node	The new light's parent node.
 		 *\~french
@@ -196,6 +213,31 @@ namespace castor3d
 		inline uint32_t getShadowMapIndex()const
 		{
 			return m_shadowMapIndex;
+		}
+
+		inline uint32_t getBufferIndex()const
+		{
+			return m_bufferIndex;
+		}
+
+		inline bool needsRsmShadowMaps()const
+		{
+			return getGlobalIlluminationType() != GlobalIlluminationType::eNone;
+		}
+
+		inline GlobalIlluminationType getGlobalIlluminationType()const
+		{
+			return m_globalIllumination;
+		}
+
+		inline RsmConfig const & getRsmConfig()const
+		{
+			return m_rsmConfig;
+		}
+
+		inline RsmConfig & getRsmConfig()
+		{
+			return m_rsmConfig;
 		}
 		/**@}*/
 		/**
@@ -312,6 +354,11 @@ namespace castor3d
 			m_shadowMap = value;
 			m_shadowMapIndex = index;
 		}
+
+		inline void setGlobalIlluminationType( GlobalIlluminationType value )
+		{
+			m_globalIllumination = value;
+		}
 		/**@}*/
 
 	public:
@@ -327,6 +374,9 @@ namespace castor3d
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
+		GlobalIlluminationType m_globalIllumination{ GlobalIlluminationType::eNone };
+		uint32_t m_bufferIndex{ 0u };
+		RsmConfig m_rsmConfig;
 	};
 }
 

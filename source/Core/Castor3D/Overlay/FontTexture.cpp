@@ -42,7 +42,7 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "FontTexture_" ) + font->getFaceName() );
-		m_texture->getDefaultImage().initialiseSource();
+		m_texture->getDefaultView().initialiseSource();
 	}
 
 	FontTexture::~FontTexture()
@@ -66,7 +66,7 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 			Size size{ maxWidth * 16, maxHeight * count };
-			auto & image = m_texture->getDefaultImage();
+			auto & image = m_texture->getDefaultView();
 			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eR8_UNORM ) );
 
 			auto it = font->begin();
@@ -90,7 +90,7 @@ namespace castor3d
 
 					for ( uint32_t i = 0; i < size.getHeight(); ++i )
 					{
-						CU_Ensure( dstLineIndex + size.getWidth() <= bufsize );
+						CU_Ensure( size_t( dstLineIndex ) + size.getWidth() <= bufsize );
 						std::memcpy( dstLineBuffer, &buffer[i * size.getWidth()], size.getWidth() );
 						dstLineBuffer += uiTotalWidth;
 					}

@@ -456,7 +456,7 @@ namespace castor
 				, 0.0
 				, []( double a, T const & b )
 				{
-					return a + double( b * b );
+					return a + ( double( b ) * b );
 				} );
 		}
 

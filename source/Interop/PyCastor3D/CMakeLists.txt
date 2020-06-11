@@ -1,9 +1,9 @@
 project( PyCastor3D )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Python binding DLL." )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 5 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 if (MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
@@ -43,6 +43,11 @@ target_link_libraries( PyCastor3D
 		${Boost_PYTHON_LIBRARY}
 		${PYTHON_LIBRARY}
 		castor::Castor3D
+)
+set( CASTOR_INSTEXP_LIST
+	${CASTOR_INSTEXP_LIST}
+	${PROJECT_NAME}
+	PARENT_SCOPE
 )
 set_target_properties( PyCastor3D
 	PROPERTIES

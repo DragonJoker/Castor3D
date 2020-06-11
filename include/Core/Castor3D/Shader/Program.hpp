@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderDevice.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/Named.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -29,7 +30,8 @@ namespace castor3d
 	\brief		Implémentation de base d'un programme de shader, utilisé afin d'exposer les fonctions communes aux langages de shader.
 	*/
 	class ShaderProgram
-		: public castor::OwnedBy< RenderSystem >
+		: public castor::Named
+		, public castor::OwnedBy< RenderSystem >
 		, public std::enable_shared_from_this< ShaderProgram >
 	{
 		friend class castor::TextWriter< castor3d::ShaderProgram >;
@@ -80,7 +82,8 @@ namespace castor3d
 		 *\brief		Constructeur
 		 *\param[in]	renderSystem	L'instance du RenderSystem.
 		 */
-		C3D_API explicit ShaderProgram( RenderSystem & renderSystem );
+		C3D_API explicit ShaderProgram( castor::String const & name
+			, RenderSystem & renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -340,8 +343,8 @@ namespace castor3d
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{
-		auto module = device->createShaderModule( code.spirv );
-		setDebugObjectName( device, *module, name + "ShdMod" + "_" + ashes::getName( stage ) );
+		auto module = device->createShaderModule( name + "ShdMod" + "_" + ashes::getName( stage )
+			, code.spirv );
 		return ashes::PipelineShaderStageCreateInfo
 		{
 			0u,

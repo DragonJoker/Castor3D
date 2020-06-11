@@ -19,7 +19,7 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
 		static wxString PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
 		static wxString PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
-		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enabled" );
+		static wxString PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
@@ -30,6 +30,7 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
 		static wxString PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
+		static wxString PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable
@@ -40,6 +41,19 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 		PROPERTY_RENDER_TARGET_SHADER = _( "Shader" );
 		PROPERTY_RENDER_TARGET_EDIT_SHADER = _( "View Shaders..." );
+		PROPERTY_RENDER_TARGET_SSAO = _( "SSAO" );
+		PROPERTY_RENDER_TARGET_SSAO_ENABLED = _( "Enable SSAO" );
+		PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY = _( "High Quality" );
+		PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER = _( "Normals Buffer" );
+		PROPERTY_RENDER_TARGET_SSAO_RADIUS = _( "Radius" );
+		PROPERTY_RENDER_TARGET_SSAO_BIAS = _( "Bias" );
+		PROPERTY_RENDER_TARGET_SSAO_INTENSITY = _( "Intensity" );
+		PROPERTY_RENDER_TARGET_SSAO_SAMPLES = _( "Samples" );
+		PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS = _( "Edge Sharpness" );
+		PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY = _( "High Quality Blur" );
+		PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE = _( "Blur Step Size" );
+		PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS = _( "Blur Radius" );
+		PROPERTY_RENDER_TARGET_DEBUG_VIEW = _( "Debug View" );
 
 		CreateTreeItemMenu();
 	}
@@ -68,8 +82,19 @@ namespace GuiCommon
 				grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target->getTargetType() )] ) );
 			}
 
-			grid->Append( new wxPropertyCategory( PROPERTY_RENDER_TARGET_SSAO ) );
+			auto & debugConfig = target->getTechnique()->getDebugConfig();
+			wxPGChoices choices;
+
+			for ( auto & intermediate : target->getIntermediateViews() )
+			{
+				choices.Add( make_wxString( intermediate.name ) );
+			}
+
+			auto selected = choices.GetLabels()[size_t( debugConfig.debugIndex )];
+			grid->Append( new wxEnumProperty( PROPERTY_RENDER_TARGET_DEBUG_VIEW, PROPERTY_RENDER_TARGET_DEBUG_VIEW, choices ) )->SetValue( selected );
+
 			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
+			grid->Append( new wxPropertyCategory( PROPERTY_RENDER_TARGET_SSAO ) );
 			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_ENABLED, PROPERTY_RENDER_TARGET_SSAO_ENABLED, ssaoConfig.enabled ) );
 			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY, ssaoConfig.highQuality ) );
 			grid->Append( new wxBoolProperty( PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER, ssaoConfig.useNormalsBuffer ) );
@@ -91,162 +116,57 @@ namespace GuiCommon
 
 		if ( property && target )
 		{
+			auto & ssaoConfig = target->getTechnique()->getSsaoConfig();
+			auto & debugConfig = target->getTechnique()->getDebugConfig();
+
 			if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_ENABLED )
 			{
-				OnSsaoEnable( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.enabled );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_HIGH_QUALITY )
 			{
-				OnSsaoHighQuality( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.highQuality );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_NORMALS_BUFFER )
 			{
-				OnSsaoNormalsBuffer( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.useNormalsBuffer );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_RADIUS )
 			{
-				OnSsaoRadius( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.radius );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BIAS )
 			{
-				OnSsaoBias( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.bias );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_INTENSITY )
 			{
-				OnSsaoIntensity( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.intensity );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_SAMPLES )
 			{
-				OnSsaoSamples( uint32_t( property->GetValue().GetLong() ) );
+				onValueChange( uint32_t( property->GetValue().GetLong() ), &ssaoConfig.numSamples );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_EDGE_SHARPNESS )
 			{
-				OnSsaoEdgeSharpness( float( property->GetValue().GetDouble() ) );
+				onValueChange( float( property->GetValue().GetDouble() ), &ssaoConfig.edgeSharpness );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_HIGH_QUALITY )
 			{
-				OnSsaoBlurHighQuality( property->GetValue() );
+				onValueChange( bool( property->GetValue() ), &ssaoConfig.blurHighQuality );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_STEP_SIZE )
 			{
-				OnSsaoBlurStepSize( uint32_t( property->GetValue().GetLong() ) );
+				onValueChange( uint32_t( property->GetValue().GetLong() ), &ssaoConfig.blurStepSize );
 			}
 			else if ( property->GetName() == PROPERTY_RENDER_TARGET_SSAO_BLUR_RADIUS )
 			{
-				OnSsaoBlurRadius( int32_t( property->GetValue().GetLong() ) );
+				onValueChange( int32_t( property->GetValue().GetLong() ), &ssaoConfig.blurRadius );
+			}
+			else if ( property->GetName() == PROPERTY_RENDER_TARGET_DEBUG_VIEW )
+			{
+				onValueChange( uint32_t( property->GetChoiceSelection() ), &debugConfig.debugIndex );
 			}
 		}
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoEnable( bool value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().enabled = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoHighQuality( bool value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().highQuality = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoNormalsBuffer( bool value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().useNormalsBuffer = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoRadius( float value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().radius = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoBias( float value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().bias = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoIntensity( float value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().intensity = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoSamples( uint32_t value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().numSamples = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoEdgeSharpness( float value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().edgeSharpness = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoBlurHighQuality( bool value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().blurHighQuality = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoBlurStepSize( uint32_t value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				target.getTechnique()->getSsaoConfig().blurStepSize = value;
-			} );
-	}
-
-	void RenderTargetTreeItemProperty::OnSsaoBlurRadius( int32_t value )
-	{
-		RenderTarget & target = *getRenderTarget();
-
-		doApplyChange( [value, &target]()
-			{
-				auto radius = target.getTechnique()->getSsaoConfig().blurRadius.value();
-				radius = value;
-				target.getTechnique()->getSsaoConfig().blurRadius = radius;
-			} );
 	}
 }

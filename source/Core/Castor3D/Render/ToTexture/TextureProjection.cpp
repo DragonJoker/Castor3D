@@ -125,8 +125,8 @@ namespace castor3d
 		};
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "TextureProjectionRenderPass" );
+		m_renderPass = device->createRenderPass( "TextureProjection"
+			, std::move( createInfo ) );
 
 		m_sampler->initialise();
 		auto program = doInitialiseShader();
@@ -154,8 +154,9 @@ namespace castor3d
 
 		if ( !m_commandBuffer )
 		{
-			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-			m_finished = device->createSemaphore();
+			m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "TextureProjection"
+				, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+			m_finished = device->createSemaphore( "TextureProjection" );
 		}
 		else
 		{
@@ -332,29 +333,32 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ),
 		};
-		m_descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
+		m_descriptorLayout = device->createDescriptorSetLayout( "TextureProjection"
+			, std::move( bindings ) );
 		VkPushConstantRange pushRange{ VK_SHADER_STAGE_FRAGMENT_BIT, m_sizePushConstant.getOffset(), m_sizePushConstant.getSize() };
-		m_pipelineLayout = device->createPipelineLayout( *m_descriptorLayout, pushRange );
+		m_pipelineLayout = device->createPipelineLayout( "TextureProjection" 
+			, *m_descriptorLayout, pushRange );
 
-		m_pipeline = device->createPipeline( ashes::GraphicsPipelineCreateInfo
-		{
-			0u,
-			program,
-			*vertexLayout,
-			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
-			ashes::nullopt,
-			ashes::PipelineViewportStateCreateInfo{},
-			std::move( rsState ),
-			ashes::PipelineMultisampleStateCreateInfo{},
-			std::move( dsState ),
-			std::move( blState ),
-			ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
-			*m_pipelineLayout,
-			renderPass,
-		} );
+		m_pipeline = device->createPipeline( "TextureProjection"
+			, ashes::GraphicsPipelineCreateInfo
+			{
+				0u,
+				program,
+				*vertexLayout,
+				ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST },
+				ashes::nullopt,
+				ashes::PipelineViewportStateCreateInfo{},
+				std::move( rsState ),
+				ashes::PipelineMultisampleStateCreateInfo{},
+				std::move( dsState ),
+				std::move( blState ),
+				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				*m_pipelineLayout,
+				renderPass,
+			} );
 
-		m_descriptorPool = m_descriptorLayout->createPool( 1u );
-		m_descriptorSet = m_descriptorPool->createDescriptorSet( 0u );
+		m_descriptorPool = m_descriptorLayout->createPool( "TextureProjection", 1u );
+		m_descriptorSet = m_descriptorPool->createDescriptorSet( "TextureProjection", 0u );
 		m_descriptorSet->createBinding( m_descriptorLayout->getBinding( 0u )
 			, *m_matrixUbo.getUbo().buffer
 			, m_matrixUbo.getUbo().offset

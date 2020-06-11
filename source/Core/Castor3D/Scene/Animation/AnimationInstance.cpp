@@ -19,7 +19,7 @@ namespace castor3d
 	void AnimationInstance::update( Milliseconds const & elapsed )
 	{
 		auto length = m_animation.getLength();
-		auto scale = m_scale;
+		double scale = m_scale;
 		auto looped = m_looped;
 
 		if ( m_state != AnimationState::eStopped && length > 0_ms )

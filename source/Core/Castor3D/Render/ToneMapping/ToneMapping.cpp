@@ -24,8 +24,7 @@ namespace castor3d
 		, HdrConfig & config
 		, Parameters const & parameters )
 		: OwnedBy< Engine >{ engine }
-		, Named{ name }
-		, RenderQuad{ *engine.getRenderSystem(), VK_FILTER_NEAREST, TexcoordConfig{} }
+		, RenderQuad{ *engine.getRenderSystem(), name, VK_FILTER_NEAREST, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
 		, m_config{ config }
 		, m_fullName{ fullName }
 		, m_hdrConfigUbo{ engine }
@@ -43,7 +42,8 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass )
 	{
 		m_hdrConfigUbo.initialise();
-		m_signalFinished = getCurrentRenderDevice( m_renderSystem )->createSemaphore();
+		auto & device = getCurrentRenderDevice( m_renderSystem );
+		m_signalFinished = device->createSemaphore( m_fullName );
 
 		{
 			VertexWriter writer;
@@ -67,7 +67,6 @@ namespace castor3d
 		}
 
 		m_pixelShader.shader = doCreate();
-		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray program
 		{
 			makeShaderState( device, m_vertexShader ),
@@ -82,7 +81,7 @@ namespace castor3d
 		createPipeline( { size[0], size[1] }
 			, Position{}
 			, program
-			, source.getDefaultView()
+			, source.getDefaultView().getSampledView()
 			, renderPass
 			, std::move( bindings )
 			, {} );
@@ -103,13 +102,9 @@ namespace castor3d
 
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
-		visitor.visit( cuT( "ToneMapping" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "ToneMapping" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "ToneMapping" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( m_vertexShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, m_config );
 	}

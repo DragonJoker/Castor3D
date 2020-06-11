@@ -8,8 +8,6 @@
 
 #include <ShaderAST/Shader.hpp>
 
-#include <CompilerGlsl/compileGlsl.hpp>
-
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;
@@ -28,7 +26,7 @@ namespace GuiCommon
 		{
 		private:
 			explicit PostEffectShaderGatherer( ShaderSources & sources )
-				: castor3d::PipelineVisitor{}
+				: castor3d::PipelineVisitor{ false }
 				, m_sources{ sources }
 			{
 			}
@@ -42,23 +40,9 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( castor::String const & name
-				, VkShaderStageFlagBits type
-				, ast::Shader const & shader )override
+			void visit( castor3d::ShaderModule const & module )override
 			{
-				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
-					, ast::SpecialisationInfo{}
-					, glsl::GlslConfig
-					{
-						convert( type ),
-						430,
-						false,
-						false,
-						true,
-						true,
-						true,
-						true,
-					} );
+				doGetSource( module.name ).sources[module.stage] = &module;
 			}
 
 			void visit( castor::String const & name

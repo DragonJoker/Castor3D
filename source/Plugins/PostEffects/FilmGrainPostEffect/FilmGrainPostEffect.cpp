@@ -149,12 +149,12 @@ namespace film_grain
 
 	RenderQuad::RenderQuad( castor3d::RenderSystem & renderSystem
 		, VkExtent2D const & size )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
+		: castor3d::RenderQuad{ renderSystem, cuT( "FilmGrain" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_size{ size }
 	{
 		auto & device = getCurrentRenderDevice( renderSystem );
 		auto & engine = *renderSystem.getEngine();
-		auto name = cuT( "FilmGrain_Noise" );
+		auto name = getName() + cuT( "Noise" );
 		castor3d::SamplerSPtr sampler;
 
 		if ( !engine.getSamplerCache().has( name ) )
@@ -189,7 +189,7 @@ namespace film_grain
 		m_noise = castor3d::makeImage( device
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "FilmGrainNoise" );
+			, name );
 
 		ashes::ImageViewCreateInfo imageView
 		{
@@ -240,7 +240,7 @@ namespace film_grain
 			, 1u
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "FilmGrainCfg" );
+			, getName() + "Config" );
 		m_configUbo->getData( 0 ).m_pixelSize = Point2f{ m_size.width, m_size.height };
 		m_configUbo->getData( 0 ).m_noiseIntensity = 1.0f;
 		m_configUbo->getData( 0 ).m_exposure = 1.0f;
@@ -277,8 +277,7 @@ namespace film_grain
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params
-			, false }
+			, params }
 		, m_surface{ *renderSystem.getEngine(), cuT( "FilmGrain" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "FilmGrain" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "FilmGrain" }
@@ -315,18 +314,14 @@ namespace film_grain
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "FilmGrain" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "FilmGrain" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
-		visitor.visit( cuT( "FilmGrain" )
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
+		visitor.visit( m_pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "Exposure" )
 			, m_quad->getUbo().getData().m_exposure );
-		visitor.visit( cuT( "FilmGrain" )
+		visitor.visit( m_pixelShader.name
 			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, cuT( "FilmGrain" )
 			, cuT( "NoiseIntensity" )
@@ -405,8 +400,8 @@ namespace film_grain
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "FilmGrain" );
+		m_renderPass = device->createRenderPass( "FilmGrain"
+			, std::move( createInfo ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings
 		{
@@ -422,7 +417,7 @@ namespace film_grain
 		m_quad->createPipeline( size
 			, Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
 			, std::move( bindings )
 			, {} );
@@ -435,8 +430,8 @@ namespace film_grain
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "FilmGrain" ),
+				device->createSemaphore( "FilmGrain" )
 			};
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
@@ -449,7 +444,7 @@ namespace film_grain
 			// Put image in the right state for rendering.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

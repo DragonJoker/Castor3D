@@ -204,8 +204,9 @@ namespace castor3d
 			, sdw::Vec4 const & sampled
 			, sdw::Vec2 const & mask )const
 		{
-			return ( sampled.rgb() * ( 1.0_f - writer.cast< sdw::Float >( mask.y() ) ) )
-				+ ( sampled.gba() * writer.cast< sdw::Float >( mask.y() ) );
+			return writer.ternary( mask.y() == 0.0_f
+				, sampled.rgb()
+				, sampled.gba() );
 		}
 
 		sdw::Vec3 TextureConfigData::removeGamma( sdw::ShaderWriter & writer
@@ -281,10 +282,8 @@ namespace castor3d
 			{
 				return ( *m_ssbo )[index - 1_u];
 			}
-			else
-			{
-				return m_getTextureConfiguration( index - 1_u );
-			}
+
+			return m_getTextureConfiguration( index - 1_u );
 		}
 
 		//*********************************************************************************************

@@ -73,6 +73,16 @@ namespace castor
 		}
 		/**
 		 *\~english
+		 *\return		\p true if \p value is inside the range.
+		 *\~french
+		 *\return		\p true si \p value est dans l'intervalle.
+		 */
+		bool has( T const & value )const noexcept
+		{
+			return value >= m_min && value <= m_max;
+		}
+		/**
+		 *\~english
 		 *\brief		Gives the percentage matching the given value.
 		 *\param[in]	value	The value.
 		 *\return		0.0 if \p value <= \p m_min.\n

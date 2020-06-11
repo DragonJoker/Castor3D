@@ -96,15 +96,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Updates the shadow informations.
-		 *\param[in,out]	viewport	The viewport that receives the far plane value.
 		 *\param[in]		index		The shadow map index.
 		 *\~french
 		 *\brief			Met à jour les information d'ombre.
-		 *\param[in,out]	viewport	Le viewport qui reçoit la valeur du far plane.
 		 *\param[in]		index		L'indice de la shadow map.
 		 */
-		C3D_API void updateShadow( Viewport & viewport
-			, int32_t index = -1 );
+		C3D_API void updateShadow( int32_t index = -1 );
 		/**
 		 *\copydoc		castor3d::LightCategory::createTextWriter
 		 */

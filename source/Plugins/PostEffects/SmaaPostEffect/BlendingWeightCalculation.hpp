@@ -23,6 +23,7 @@ namespace smaa
 			, ashes::ImageView const & edgeDetectionView
 			, castor3d::TextureLayoutSPtr depthView
 			, SmaaConfig const & config );
+		~BlendingWeightCalculation();
 		castor3d::CommandsSemaphore prepareCommands( castor3d::RenderPassTimer const & timer
 			, uint32_t passIndex );
 		void update( castor::Point4f const & subsampleIndices );

@@ -16,8 +16,6 @@
 #include <Castor3D/Render/Technique/RenderTechnique.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
-#include <CompilerGlsl/compileGlsl.hpp>
-
 #include <wx/propgrid/advprops.h>
 
 using namespace castor3d;
@@ -97,30 +95,9 @@ namespace GuiCommon
 			}
 
 		private:
-			void visit( castor::String const & name
-				, VkShaderStageFlagBits type
-				, castor::String const & shader )override
+			void visit( castor3d::ShaderModule const & module )override
 			{
-				doGetSource( name ).sources[type] = shader;
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlagBits type
-				, ast::Shader const & shader )override
-			{
-				doGetSource( name ).sources[type] = glsl::compileGlsl( shader
-					, ast::SpecialisationInfo{}
-					, glsl::GlslConfig
-					{
-						convert( type ),
-						430,
-						false,
-						false,
-						true,
-						true,
-						true,
-						true,
-					} );
+				doGetSource( module.name ).sources[module.stage] = &module;
 			}
 
 			void visit( castor::String const & name

@@ -819,6 +819,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_rootNode->update();
+			doUpdateBoundingBox();
 			doUpdateAnimations();
 			doUpdateMaterials();
 			getLightCache().update();
@@ -1006,6 +1007,25 @@ namespace castor3d
 	{
 		CU_Require( value <= shader::DirectionalMaxCascadesCount );
 		m_directionalShadowCascades = value;
+	}
+
+	void Scene::doUpdateBoundingBox()
+	{
+		float fmin = std::numeric_limits< float >::max();
+		float fmax = std::numeric_limits< float >::lowest();
+		Point3f min{ fmin, fmin, fmin };
+		Point3f max{ fmax, fmax, fmax };
+		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
+			{
+				auto bbox = geometry.getMesh()->getBoundingBox().getAxisAligned( geometry.getParent()->getDerivedTransformationMatrix() );
+
+				for ( auto i = 0u; i < 3u; ++i )
+				{
+					min[i] = std::min( min[i], bbox.getMin()[i] );
+					max[i] = std::max( max[i], bbox.getMax()[i] );
+				}
+			} );
+		m_boundingBox.load( min, max );
 	}
 
 	void Scene::doUpdateAnimations()

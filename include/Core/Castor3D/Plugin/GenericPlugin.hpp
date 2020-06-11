@@ -42,7 +42,7 @@ namespace castor3d
 		C3D_API virtual ~GenericPlugin();
 
 	private:
-		PAddOptionalParsersFunction m_pfnAddOptionalParsers;
+		PAddOptionalParsersFunction m_pfnAddOptionalParsers{};
 	};
 }
 

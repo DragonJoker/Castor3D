@@ -73,6 +73,13 @@ namespace GuiCommon
 		eBMP_COUNT,
 	}	eBMP;
 
+	enum class ShaderLanguage
+	{
+		GLSL,
+		HLSL,
+		SPIRV,
+	};
+
 	static const int GC_IMG_SIZE = 16;
 
 	class CastorApplication;
@@ -96,7 +103,8 @@ namespace GuiCommon
 	class MaterialsList;
 	class RendererSelector;
 	class ShaderDialog;
-	class ShaderEditorPage;
+	class ShaderEditor;
+	class ShaderProgramPage;
 	class SplashScreen;
 	class StcTextEditor;
 	class TreeHolder;

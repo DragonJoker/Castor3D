@@ -149,13 +149,13 @@ namespace castor3d
 		m_buffer.reset();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		m_buffer = ashes::makeUniformBuffer( *device.device
+			, m_debugName + "Ubo"
 			, m_elemCount
 			, m_elemSize
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, m_sharingMode );
-		setDebugObjectName( device, *m_buffer, m_debugName + "Ubo" );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
-		m_transferFence = device.device->createFence();
+		m_transferFence = device.device->createFence( m_debugName + "Transfer" );
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
@@ -192,7 +192,8 @@ namespace castor3d
 		, VkPipelineStageFlags flags )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
 			, *commandBuffer
 			, data
@@ -256,7 +257,8 @@ namespace castor3d
 		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		upload( stagingBuffer
 			, *commandBuffer
 			, data
@@ -325,10 +327,11 @@ namespace castor3d
 		, RenderPassTimer const & timer
 		, uint32_t index )const
 	{
-		CU_Require( size >= m_elemCount * m_elemSize
+		CU_Require( size >= size_t( m_elemCount ) * m_elemSize
 			&& "Need a large enough buffer" );
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
-		auto commandBuffer = commandPool.createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferDownload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		copyBuffer( getBuffer().getBuffer()
 			, stagingBuffer
 			, &getBuffer().getBuffer()

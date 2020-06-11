@@ -80,7 +80,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	# ShaderWriter external library
 	set( SDW_BUILD_EXPORTERS ON )
 	set( SDW_BUILD_STATIC_EXPORTERS OFF )
-	set( SDW_BUILD_EXPORTER_HLSL OFF )
+	set( SDW_BUILD_EXPORTER_HLSL ${CASTOR_BUILDGRP_SAMPLE} )
 	set( SDW_BUILD_EXPORTER_GLSL ${CASTOR_BUILDGRP_SAMPLE} )
 	set( SDW_BUILD_EXPORTER_SPIRV ON )
 	set( SDW_BUILD_TESTS OFF )
@@ -109,6 +109,24 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	InteropSummary( ${msg} )
 endif ()
 message( STATUS "${msg}\n" )
+
+install(
+	TARGETS CastorUtils Castor3D ${CASTOR_INSTEXP_LIST}
+	EXPORT Castor3D
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+)
+install( EXPORT Castor3D
+	FILE Castor3DConfig.cmake
+	NAMESPACE castor::
+	DESTINATION lib/cmake/castor3d
+)
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file( Castor3DConfigVersion.cmake
+	VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}
+	COMPATIBILITY AnyNewerVersion
+)
 
 set( CastorBinsDependencies
 	${CastorBinsDependencies}

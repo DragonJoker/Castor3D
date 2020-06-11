@@ -175,28 +175,48 @@ namespace castor3d
 		return m_points;
 	}
 
+	inline bool Submesh::hasVertexBuffer()const
+	{
+		return ( m_vertexBuffer != nullptr );
+	}
+
 	inline ashes::VertexBuffer< InterleavedVertex > const & Submesh::getVertexBuffer()const
 	{
+		CU_Require( hasVertexBuffer() );
 		return *m_vertexBuffer;
 	}
 
 	inline ashes::VertexBuffer< InterleavedVertex > & Submesh::getVertexBuffer()
 	{
+		CU_Require( hasVertexBuffer() );
 		return *m_vertexBuffer;
+	}
+
+	inline bool Submesh::hasVertexLayout()const
+	{
+		return ( m_vertexLayout != nullptr );
 	}
 
 	inline ashes::PipelineVertexInputStateCreateInfo const & Submesh::getVertexLayout()const
 	{
+		CU_Require( hasVertexLayout() );
 		return *m_vertexLayout;
+	}
+
+	inline bool Submesh::hasIndexBuffer()const
+	{
+		return ( m_indexBuffer != nullptr );
 	}
 
 	inline ashes::Buffer< uint32_t > const & Submesh::getIndexBuffer()const
 	{
+		CU_Require( hasIndexBuffer() );
 		return *m_indexBuffer;
 	}
 
 	inline ashes::Buffer< uint32_t > & Submesh::getIndexBuffer()
 	{
+		CU_Require( hasIndexBuffer() );
 		return *m_indexBuffer;
 	}
 

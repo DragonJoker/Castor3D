@@ -140,7 +140,7 @@ namespace castor3d
 			{
 				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
 				{
-					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapDepthDirectional );
+					auto c3d_mapDepthDirectional = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthDirectional );
 					/**
 					* First we shrink the position inwards the surface to avoid artifacts:
 					* (Note that this can be done once for all the lights)
@@ -151,7 +151,7 @@ namespace castor3d
 						, m_shadow.getLightSpacePosition( light.m_transforms[0_u]
 							, shrinkedPos ) );
 					auto shadowDepth = m_writer.declLocale( "d1"
-						, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).r() );
+						, texture( c3d_mapDepthDirectional, lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
 						, material.m_transmittanceProfileSize
 						, material.m_transmittanceProfile
@@ -184,7 +184,7 @@ namespace castor3d
 				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
 				{
 					auto c3d_mtxInvViewProj = m_writer.getVariable< Mat4 >( "c3d_mtxInvViewProj" );
-					auto c3d_mapDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( Shadow::MapDepthPoint );
+					auto c3d_mapDepthPoint = m_writer.getVariable< SampledImageCubeRgba32 >( Shadow::MapNormalDepthPoint );
 					/**
 					* First we shrink the position inwards the surface to avoid artifacts:
 					* (Note that this can be done once for all the lights)
@@ -197,7 +197,7 @@ namespace castor3d
 					auto direction = m_writer.declLocale( "direction"
 						, vertexToLight );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, texture( c3d_mapDepthPoint, direction ).r() );
+						, texture( c3d_mapDepthPoint, direction ).w() );
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, m_utils.calcWSPosition( uv
 							, shadowDepth
@@ -233,7 +233,7 @@ namespace castor3d
 			{
 				IF( m_writer, material.m_subsurfaceScatteringEnabled != 0_i )
 				{
-					auto c3d_mapDepthSpot = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapShadowSpot );
+					auto c3d_mapDepthSpot = m_writer.getVariable< SampledImage2DRgba32 >( Shadow::MapNormalDepthSpot );
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, position - normal * 0.005_f );
@@ -241,7 +241,7 @@ namespace castor3d
 						, m_shadow.getLightSpacePosition( light.m_transform
 							, shrinkedPos ) );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
-						, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).r() );
+						, texture( c3d_mapDepthSpot, lightSpacePosition.xy() ).w() );
 					ssstResult = m_compute( shadowDepth
 						, material.m_transmittanceProfileSize
 						, material.m_transmittanceProfile

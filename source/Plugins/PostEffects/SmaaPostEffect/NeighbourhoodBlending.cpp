@@ -219,12 +219,12 @@ namespace smaa
 		, ashes::ImageView const & blendView
 		, ashes::ImageView const * velocityView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), "SmaaNeighbourhoodBlending", VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhoodBlending" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhoodBlending" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_SRGB;
 
@@ -286,8 +286,8 @@ namespace smaa
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "NeighbourhoodBlending" );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doGetNeighbourhoodBlendingVP( *renderTarget.getEngine()->getRenderSystem()
@@ -327,7 +327,7 @@ namespace smaa
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
 			m_surfaces.emplace_back( *renderTarget.getEngine()
-				, cuT( "SmaaNeighbourhoodBlending" ) );
+				, getName() );
 			m_surfaces.back().initialise( *m_renderPass
 				, castor::Size{ size.width, size.height }
 				, colourFormat );
@@ -341,8 +341,8 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore neighbourhoodBlendingCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & neighbourhoodBlendingCmd = *neighbourhoodBlendingCommands.commandBuffer;
 
@@ -381,12 +381,8 @@ namespace smaa
 
 	void NeighbourhoodBlending::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "NeighbourhoodBlending" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "NeighbourhoodBlending" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	void NeighbourhoodBlending::doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout

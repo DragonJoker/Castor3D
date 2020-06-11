@@ -2,9 +2,9 @@ project( CastorViewer )
 
 set( ${PROJECT_NAME}_WXWIDGET 1 )
 set( ${PROJECT_NAME}_DESCRIPTION "Scene Viewer for ${MAIN_PROJECT_NAME}" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 8 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}/CastorViewer.hpp
@@ -50,6 +50,10 @@ target_link_libraries( ${PROJECT_NAME}
 set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
 		FOLDER "Samples"
+)
+install_target( ${PROJECT_NAME}
+	bin
+	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
 )
 # Copying internationalisation files (french, for now) for CastorViewer
 copy_languages( ${PROJECT_NAME} ${CASTOR_SOURCE_DIR}/internationalisation/${PROJECT_NAME} ${PROJECT_NAME} "fr" )

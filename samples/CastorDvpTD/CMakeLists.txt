@@ -64,6 +64,10 @@ set_property( TARGET ${PROJECT_NAME}
 	PROPERTY
 		FOLDER "Samples"
 )
+install_target( ${PROJECT_NAME}
+	bin
+	${CASTOR_SOURCE_DIR}/samples/${PROJECT_NAME}
+)
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 

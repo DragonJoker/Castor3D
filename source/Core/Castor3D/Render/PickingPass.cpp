@@ -247,8 +247,8 @@ namespace castor3d
 					1u
 				}
 			};
-			auto result = texture.createView( view );
-			setDebugObjectName( device, result, "PickingPass" + name + "View" );
+			auto result = texture.createView( "PickingPass" + name + "View"
+				, view );
 			return result;
 		}
 
@@ -273,7 +273,7 @@ namespace castor3d
 			, [this]()
 			{
 				auto & device = getCurrentRenderDevice( *this );
-				m_transferFence = device->createFence();
+				m_transferFence = device->createFence( "PickingPass" );
 			} ) );
 	}
 
@@ -525,7 +525,7 @@ namespace castor3d
 	bool PickingPass::doInitialise( Size const & size )
 	{
 		auto & device = getCurrentRenderDevice( *this );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "PickingPass" );
 
 		m_colourTexture = createTexture( device
 			, size
@@ -634,13 +634,14 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "PickingPassRenderPass" );
+		m_renderPass = device->createRenderPass( "PickingPass"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attachments;
 		attachments.emplace_back( m_colourView );
 		attachments.emplace_back( m_depthView );
-		m_frameBuffer = m_renderPass->createFrameBuffer( { size.getWidth(), size.getHeight() }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "PickingPass"
+			, { size.getWidth(), size.getHeight() }
 			, std::move( attachments ) );
 
 		return true;
@@ -682,7 +683,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -693,7 +694,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, true );
+			, TextureFlag::eOpacity );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
@@ -881,15 +882,17 @@ namespace castor3d
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
+	TextureFlags PickingPass::getTexturesMask()const
+	{
+		return TextureFlags{ TextureFlag::eOpacity };
+	}
+
 	void PickingPass::doUpdateFlags( PipelineFlags & flags )const
 	{
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.textures, TextureFlag::eAllButOpacity );
 		addFlag( flags.programFlags, ProgramFlag::ePicking );
-		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
-			? 1u
-			: 0u;
+		assert( ( flags.textures & getTexturesMask() ) == flags.textures );
 	}
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const

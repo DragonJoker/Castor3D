@@ -259,12 +259,12 @@ namespace castor3d
 #else
 		static const uint32_t FRAME_SAMPLES_COUNT = 20;
 #endif
-		castor::PreciseTimer m_taskTimer;
-		castor::PreciseTimer m_frameTimer;
-		castor::PreciseTimer m_debugTimer;
+		castor::PreciseTimer m_taskTimer{};
+		castor::PreciseTimer m_frameTimer{};
+		castor::PreciseTimer m_debugTimer{};
 		std::unique_ptr< MainDebugPanel > m_debugPanel;
 		RenderPassOverlaysArray m_renderPasses;
-		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes;
+		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		bool m_visible{ false };
 		castor::Nanoseconds m_cpuTime{ 0 };
@@ -276,7 +276,7 @@ namespace castor3d
 		float m_fps{ 0.0f };
 		float m_averageFps{ 0.0f };
 		castor::Nanoseconds m_averageTime{ 0 };
-		std::locale m_timesLocale;
+		std::locale m_timesLocale{};
 		RenderInfo m_renderInfo;
 		ashes::QueryPoolPtr m_queries;
 		uint32_t m_queriesCount{ 0u };

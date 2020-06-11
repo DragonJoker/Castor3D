@@ -19,13 +19,13 @@ namespace castor3d
 	{
 	}
 
-	RenderPassTimerBlock::RenderPassTimerBlock( RenderPassTimerBlock && rhs )
+	RenderPassTimerBlock::RenderPassTimerBlock( RenderPassTimerBlock && rhs )noexcept
 		: m_timer{ rhs.m_timer }
 	{
 		rhs.m_timer = nullptr;
 	}
 
-	RenderPassTimerBlock & RenderPassTimerBlock::operator=( RenderPassTimerBlock && rhs )
+	RenderPassTimerBlock & RenderPassTimerBlock::operator=( RenderPassTimerBlock && rhs )noexcept
 	{
 		if ( this != &rhs )
 		{

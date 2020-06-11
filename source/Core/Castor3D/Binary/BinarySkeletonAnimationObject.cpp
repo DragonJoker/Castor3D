@@ -18,7 +18,7 @@ namespace castor3d
 		template< typename T >
 		struct KeyFrameT
 		{
-			castor::Milliseconds m_timeIndex;
+			castor::Milliseconds m_timeIndex{};
 			castor::SquareMatrix< T, 4u > m_transform;
 		};
 

@@ -8,21 +8,40 @@
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
-using namespace castor;
-
 namespace castor3d
 {
-	PostEffect::PostEffect( String const & name
+	namespace
+	{
+		castor::String getKindName( PostEffect::Kind kind )
+		{
+			switch ( kind )
+			{
+			case castor3d::PostEffect::Kind::eHDR:
+				return cuT( "HDR" );
+			case castor3d::PostEffect::Kind::eSRGB:
+				return cuT( "sRGB" );
+			case castor3d::PostEffect::Kind::eOverlay:
+				return cuT( "Overlay" );
+			default:
+				CU_Failure( "Unexpected PostEffect::Kind." );
+				return cuT( "Unknown" );
+			}
+		}
+	}
+
+	PostEffect::PostEffect( castor::String const & name
 		, castor::String const & fullName
 		, RenderTarget & renderTarget
 		, RenderSystem & renderSystem
 		, Parameters const & CU_UnusedParam( parameters )
-		, bool postToneMapping )
-		: OwnedBy< RenderSystem >{ renderSystem }
-		, Named{ name }
+		, uint32_t passesCount
+		, Kind kind )
+		: castor::OwnedBy< RenderSystem >{ renderSystem }
+		, castor::Named{ name }
 		, m_fullName{ fullName }
 		, m_renderTarget{ renderTarget }
-		, m_postToneMapping{ postToneMapping }
+		, m_passesCount{ passesCount }
+		, m_kind{ kind }
 	{
 	}
 
@@ -42,9 +61,7 @@ namespace castor3d
 		name = castor::string::replace( name, cuT( "PostEffect" ), castor::String{} );
 		name = castor::string::replace( name, cuT( "Post Effect" ), castor::String{} );
 		m_timer = std::make_unique< RenderPassTimer >( *getRenderSystem()->getEngine()
-			, ( m_postToneMapping
-				? String{ cuT( "sRGB PostEffect" ) }
-				: String{ cuT( "HDR PostEffect" ) } )
+			, getKindName( m_kind ) + cuT( " PostEffect" )
 			, name
 			, m_passesCount );
 		auto result = doInitialise( *m_timer );
@@ -65,11 +82,6 @@ namespace castor3d
 		return m_timer->start();
 	}
 
-	void PostEffect::notifyPassRender()
-	{
-		m_timer->notifyPassRender( m_currentPass++ );
-	}
-
 	void PostEffect::update( castor::Nanoseconds const & elapsedTime )
 	{
 	}
@@ -84,13 +96,13 @@ namespace castor3d
 		// Put target image in transfer destination layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_target->getDefaultView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_target->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy result to target.
 		commandBuffer.copyImage( result
-			, m_target->getDefaultView() );
+			, m_target->getDefaultView().getTargetView() );
 		// Put target image in fragment shader input layout.
 		commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+			, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 	}
 }

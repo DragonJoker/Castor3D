@@ -40,7 +40,7 @@ namespace castor3d
 
 	void CpuParticleSystem::addParticleVariable( castor::String const & name, ParticleFormat type, castor::String const & defaultValue )
 	{
-		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride() } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride() } );
 	}
 
 	void CpuParticleSystem::onEmit( Particle const & particle )

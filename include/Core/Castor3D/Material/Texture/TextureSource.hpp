@@ -109,13 +109,13 @@ namespace castor3d
 			return uint32_t( getBuffers().size() );
 		}
 
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, castor::Path const & folder
 			, castor::Path const & relative );
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, castor::PxBufferBaseSPtr buffer
 			, uint32_t depth );
-		C3D_API static TextureSourceUPtr create( Engine & engine
+		C3D_API static TextureSourceSPtr create( Engine & engine
 			, VkExtent3D const & extent
 			, VkFormat format );
 
@@ -138,10 +138,10 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The source's pixel format.
 		//!\~french		Le format des pixels de la source.
-		VkFormat m_format;
+		VkFormat m_format{};
 		//!\~english	The source's dimensions.
 		//!\~french		Les dimensions de la source.
-		VkExtent3D m_size;
+		VkExtent3D m_size{};
 	};
 }
 

@@ -299,7 +299,7 @@ namespace castor3d
 			, RenderPassTimer const & timer
 			, uint32_t index )const
 		{
-			data.resize( m_elemCount * m_elemSize );
+			data.resize( size_t( m_elemCount ) * m_elemSize );
 			return download( stagingBuffer
 				, queue
 				, commandPool

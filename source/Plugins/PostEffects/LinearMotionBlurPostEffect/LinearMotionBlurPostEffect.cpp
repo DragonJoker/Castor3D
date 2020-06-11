@@ -106,8 +106,8 @@ namespace motion_blur
 	PostEffect::Quad::Quad( castor3d::RenderSystem & renderSystem
 		, castor3d::TextureUnit const & velocity
 		, castor3d::UniformBuffer< Configuration > const & ubo )
-		: castor3d::RenderQuad{ renderSystem, VK_FILTER_NEAREST, TexcoordConfig{} }
-		, m_velocityView{ velocity.getTexture()->getDefaultView() }
+		: castor3d::RenderQuad{ renderSystem, cuT( "LinearMotionBlur" ), VK_FILTER_NEAREST, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
+		, m_velocityView{ velocity.getTexture()->getDefaultView().getSampledView() }
 		, m_velocitySampler{ velocity.getSampler()->getSampler() }
 		, m_ubo{ ubo }
 	{
@@ -137,7 +137,7 @@ namespace motion_blur
 			, renderTarget
 			, renderSystem
 			, parameters
-			, false }
+			, 1u }
 		, m_surface{ *renderSystem.getEngine(), cuT( "LinearMotionBlur" ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur" }
@@ -178,12 +178,8 @@ namespace motion_blur
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "MotionBlur" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "MotionBlur" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
@@ -251,8 +247,8 @@ namespace motion_blur
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "LinearMotionBlur" );
+		m_renderPass = device->createRenderPass( "LinearMotionBlur"
+			, std::move( createInfo ) );
 
 		m_ubo = castor3d::makeUniformBuffer< Configuration >( renderSystem
 			, 1u
@@ -279,7 +275,7 @@ namespace motion_blur
 		m_quad->createPipeline( size
 			, castor::Position{}
 			, stages
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getSampledView()
 			, *m_renderPass
 			, bindings
 			, {} );
@@ -292,8 +288,8 @@ namespace motion_blur
 		{
 			castor3d::CommandsSemaphore commands
 			{
-				device.graphicsCommandPool->createCommandBuffer(),
-				device->createSemaphore()
+				device.graphicsCommandPool->createCommandBuffer( "LinearMotionBlur" ),
+				device->createSemaphore( "LinearMotionBlur" )
 			};
 			auto & cmd = *commands.commandBuffer;
 			cmd.begin();
@@ -302,7 +298,7 @@ namespace motion_blur
 			// Put target image in shader input layout.
 			cmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, m_target->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, m_target->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 			cmd.beginRenderPass( *m_renderPass
 				, *m_surface.frameBuffer

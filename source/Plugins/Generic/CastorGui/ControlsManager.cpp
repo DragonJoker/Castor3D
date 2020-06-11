@@ -301,8 +301,8 @@ namespace CastorGui
 
 		std::sort( m_controlsByZIndex.begin(), m_controlsByZIndex.end(), []( ControlSPtr p_a, ControlSPtr p_b )
 		{
-			uint64_t a = p_a->getBackground()->getIndex() + p_a->getBackground()->getLevel() * 1000;
-			uint64_t b = p_b->getBackground()->getIndex() + p_b->getBackground()->getLevel() * 1000;
+			uint64_t a = p_a->getBackground()->getIndex() + p_a->getBackground()->getLevel() * 1000ull;
+			uint64_t b = p_b->getBackground()->getIndex() + p_b->getBackground()->getLevel() * 1000ull;
 			return a < b;
 		} );
 	}

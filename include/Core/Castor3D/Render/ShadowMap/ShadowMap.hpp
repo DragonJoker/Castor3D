@@ -6,8 +6,10 @@ See LICENSE file in root folder
 
 #include "ShadowMapModule.hpp"
 
+#include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <ashespp/Sync/Fence.hpp>
@@ -31,25 +33,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	name		The shadow map name.
-		 *\param[in]	shadowMap	The shadow map.
-		 *\param[in]	linearMap	The linear depth map.
-		 *\param[in]	passes		The passes used to render map.
-		 *\param[in]	count		The passes count.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	name	The shadow map name.
+		 *\param[in]	result	The shadow map pass result.
+		 *\param[in]	passes	The passes used to render map.
+		 *\param[in]	count	The passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	name		Le nom de la shadow map.
-		 *\param[in]	shadowMap	La shadow map.
-		 *\param[in]	linearMap	La texture de profondeur linéaire.
-		 *\param[in]	passes		Les passes utilisées pour rendre cette texture.
-		 *\param[in]	count		Le nombre de passes.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	name	Le nom de la shadow map.
+		 *\param[in]	result	Le résultat de la passe de shadow map.
+		 *\param[in]	passes	Les passes utilisées pour rendre cette texture.
+		 *\param[in]	count	Le nombre de passes.
 		 */
 		C3D_API ShadowMap( Engine & engine
 			, castor::String name
-			, TextureUnit shadowMap
-			, TextureUnit linearMap
+			, ShadowMapResult result
 			, std::vector< PassData > passes
 			, uint32_t count );
 		/**
@@ -73,6 +72,15 @@ namespace castor3d
 		 *\brief		Nettoie le frame buffer et les données spécifiques au type de source lumineuse.
 		 */
 		C3D_API void cleanup();
+		/**
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*/
+		C3D_API void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\brief		Updates the passes, selecting the lights that will project shadows.
@@ -115,40 +123,6 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait
 			, uint32_t index );
 		/**
-		 *\~english
-		 *\brief		Dumps the shadow map on screen.
-		 *\param[in]	renderPass	The render pass to use.
-		 *\param[in]	frameBuffer	The framebuffer receiving the render.
-		 *\param[in]	size		The dump dimensions.
-		 *\param[in]	index		The shadow map index (to compute its position).
-		 *\~french
-		 *\brief		Dumpe la texture d'ombres sur l'écran.
-		 *\param[in]	renderPass	La passe de rendu à utiliser.
-		 *\param[in]	frameBuffer	Le framebuffer recevant le rendu.
-		 *\param[in]	size		Les dimensions d'affichage.
-		 *\param[in]	index		L'indice de la texture d'ombres (pour calculer sa position).
-		 */
-		C3D_API virtual void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer
-			, castor::Size const & size
-			, uint32_t index ) = 0;
-		/**
-		 *\copydoc		castor3d::RenderPass::updateFlags
-		 */
-		C3D_API void updateFlags( PipelineFlags & flags )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
-		 */
-		C3D_API ShaderPtr getVertexShaderSource( PipelineFlags const & flags )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
-		 */
-		C3D_API ShaderPtr getGeometryShaderSource( PipelineFlags const & flags )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
-		 */
-		C3D_API ShaderPtr getPixelShaderSource( PipelineFlags const & flags )const;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -157,30 +131,20 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ashes::Sampler const & getLinearSampler()const;
-		C3D_API ashes::Sampler const & getVarianceSampler()const;
-		C3D_API ashes::ImageView const & getLinearView()const;
-		C3D_API ashes::ImageView const & getVarianceView()const;
-		C3D_API virtual ashes::ImageView const & getLinearView( uint32_t index )const;
-		C3D_API virtual ashes::ImageView const & getVarianceView( uint32_t index )const;
-		inline TextureUnit & getTexture()
-		{
-			return m_shadowMap;
-		}
+		C3D_API ashes::VkClearValueArray const & getClearValues()const;
+		C3D_API ashes::Sampler const & getSampler( SmTexture texture
+			, uint32_t index = 0u )const;
+		C3D_API virtual ashes::ImageView const & getView( SmTexture texture
+			, uint32_t index = 0u )const;
 
-		inline TextureUnit const & getTexture()const
+		inline ShadowMapResult const & getShadowPassResult()const
 		{
-			return m_shadowMap;
+			return m_result;
 		}
-
-		inline TextureUnit & getLinearDepth()
+		
+		inline ShadowMapResult & getShadowPassResult()
 		{
-			return m_linearMap;
-		}
-
-		inline TextureUnit const & getLinearDepth()const
-		{
-			return m_linearMap;
+			return m_result;
 		}
 
 		inline uint32_t getCount()const
@@ -188,15 +152,16 @@ namespace castor3d
 			return m_count;
 		}
 		/**@}*/
+	public:
+		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
+			| TextureFlag::eNormal
+			| TextureFlag::eAlbedo
+			| TextureFlag::eSpecular
+			| TextureFlag::eGlossiness
+			| TextureFlag::eEmissive
+			| TextureFlag::eTransmittance };
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the shadow map's depth raw format.
-		 *\~french
-		 *\brief		Initialise le format de profondeur brute de la shadow map.
-		 */
-		C3D_API virtual void doInitialiseDepthFormat() = 0;
 		/**
 		 *\copydoc		castor3d::ShadowMap::initialise
 		 */
@@ -210,22 +175,6 @@ namespace castor3d
 		 */
 		C3D_API virtual ashes::Semaphore const & doRender( ashes::Semaphore const & toWait
 			, uint32_t index ) = 0;
-		/**
-		 *\copydoc		castor3d::RenderPass::updateFlags
-		 */
-		C3D_API virtual void doUpdateFlags( PipelineFlags & flags )const = 0;
-		/**
-		 *\copydoc		castor3d::RenderPass::getVertexShaderSource
-		 */
-		C3D_API virtual ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const = 0;
-		/**
-		 *\copydoc		castor3d::RenderPass::getGeometryShaderSource
-		 */
-		C3D_API virtual ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const;
-		/**
-		 *\copydoc		castor3d::RenderPass::getPixelShaderSource
-		 */
-		C3D_API virtual ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if all passes for given map index are up to date.
@@ -241,8 +190,7 @@ namespace castor3d
 		std::vector< PassData > m_passes;
 		uint32_t m_count;
 		ashes::SemaphorePtr m_finished;
-		TextureUnit m_shadowMap;
-		TextureUnit m_linearMap;
+		ShadowMapResult m_result;
 		bool m_initialised{ false };
 	};
 }

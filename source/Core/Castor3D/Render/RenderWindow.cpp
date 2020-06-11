@@ -208,7 +208,7 @@ namespace castor3d
 		, castor::Named{ name }
 		, MouseEventHandler{}
 		, m_index{ s_nbRenderWindows++ }
-		, m_listener{ engine.getFrameListenerCache().add( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) ) }
+		, m_listener{ engine.getFrameListenerCache().add( getName() + castor::string::toString( m_index ) ) }
 	{
 		log::debug << "Created render window " << m_index << std::endl;
 	}
@@ -218,7 +218,7 @@ namespace castor3d
 		log::debug << "Destroyed render window " << m_index << std::endl;
 		auto & engine = *getEngine();
 		auto listener = getListener();
-		engine.getFrameListenerCache().remove( cuT( "RenderWindow_" ) + castor::string::toString( m_index ) );
+		engine.getFrameListenerCache().remove( getName() + castor::string::toString( m_index ) );
 		auto target = m_renderTarget.lock();
 
 		if ( target )
@@ -351,7 +351,7 @@ namespace castor3d
 						, *getDevice().graphicsCommandPool
 						, target->getPixelFormat()
 						, m_saveBuffer->getPtr()
-						, target->getTexture().getTexture()->getDefaultView() );
+						, target->getTexture().getTexture()->getDefaultView().getTargetView() );
 					auto texture = target->getTexture().getTexture();
 					m_toSave = false;
 				}
@@ -365,27 +365,8 @@ namespace castor3d
 				{
 					try
 					{
-						getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
-							, { *resources->imageAvailableSemaphore, target->getSemaphore() }
-							, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
-							, { *resources->finishedRenderingSemaphore }
-							, resources->fence.get() );
-						resources->fence->wait( ashes::MaxTimeout );
-
-						try
-						{
-							getDevice().presentQueue->present( *m_swapChain
-								, resources->imageIndex
-								, *resources->finishedRenderingSemaphore );
-						}
-						catch ( ashes::Exception & exc )
-						{
-							doCheckNeedReset( exc.getResult()
-								, false
-								, "Image presentation" );
-						}
-
-						resources->imageIndex = ~0u;
+						submitFrame( resources );
+						presentFrame( resources );
 					}
 					catch ( ashes::Exception & exc )
 					{
@@ -628,10 +609,10 @@ namespace castor3d
 	{
 		for ( uint32_t i = 0u; i < uint32_t( m_swapChainImages.size() ); ++i )
 		{
-			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore()
-				, getDevice()->createSemaphore()
-				, getDevice()->createFence( VK_FENCE_CREATE_SIGNALED_BIT )
-				, getDevice().graphicsCommandPool->createCommandBuffer()
+			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
+				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
+				, getDevice()->createFence( getName() + castor::string::toString( i ), VK_FENCE_CREATE_SIGNALED_BIT )
+				, getDevice().graphicsCommandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
 		}
 	}
@@ -691,7 +672,8 @@ namespace castor3d
 			std::move( subpasses ),
 			std::move( dependencies ),
 		};
-		m_renderPass = getDevice()->createRenderPass( std::move( createInfo ) );
+		m_renderPass = getDevice()->createRenderPass( "RenderPass"
+			, std::move( createInfo ) );
 	}
 
 	void RenderWindow::doCreateFrameBuffers()
@@ -701,7 +683,8 @@ namespace castor3d
 		for ( size_t i = 0u; i < m_frameBuffers.size(); ++i )
 		{
 			auto attaches = doPrepareAttaches( uint32_t( i ) );
-			m_frameBuffers[i] = m_renderPass->createFrameBuffer( m_swapChain->getDimensions()
+			m_frameBuffers[i] = m_renderPass->createFrameBuffer( "RenderPass"
+				, m_swapChain->getDimensions()
 				, std::move( attaches ) );
 		}
 	}
@@ -709,10 +692,11 @@ namespace castor3d
 	void RenderWindow::doCreateCommandBuffers()
 	{
 		m_commandBuffers.resize( m_swapChainImages.size() );
+		uint32_t index = 0u;
 
 		for ( auto & commandBuffer : m_commandBuffers )
 		{
-			commandBuffer = m_commandPool->createCommandBuffer();
+			commandBuffer = m_commandPool->createCommandBuffer( getName() + castor::string::toString( index++ ) );
 		}
 	}
 
@@ -797,7 +781,11 @@ namespace castor3d
 	void RenderWindow::doCreateSwapChainDependent()
 	{
 		doCreateRenderingResources();
-		m_renderQuad = std::make_unique< RenderQuad >( *getEngine()->getRenderSystem(), VK_FILTER_LINEAR, RenderQuad::TexcoordConfig{} );
+		m_renderQuad = RenderQuadBuilder{}
+			.texcoordConfig( RenderQuadConfig::Texcoord{} )
+			.build( *getEngine()->getRenderSystem()
+				, "RenderWindow" + getName()
+				, VK_FILTER_LINEAR );
 		doCreateProgram();
 		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
 			, castor::Position{}
@@ -805,7 +793,7 @@ namespace castor3d
 #if C3D_DebugPicking
 			, m_pickingPass->getResult()
 #else
-			, getRenderTarget()->getTexture().getTexture()->getDefaultView()
+			, getRenderTarget()->getTexture().getTexture()->getDefaultView().getSampledView()
 #endif
 			, *m_renderPass
 			, {}
@@ -859,29 +847,50 @@ namespace castor3d
 	{
 		auto & resources = *m_renderingResources[m_resourceIndex];
 		m_resourceIndex = ( m_resourceIndex + 1 ) % m_renderingResources.size();
-		bool res = resources.fence->wait( ashes::MaxTimeout ) == ashes::WaitResult::eSuccess;
+		uint32_t imageIndex{ 0u };
+		auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
+			, *resources.imageAvailableSemaphore
+			, imageIndex );
 
-		if ( res )
+		if ( doCheckNeedReset( VkResult( res )
+			, true
+			, "Swap chain image acquisition" ) )
 		{
-			resources.fence->reset();
-			uint32_t imageIndex{ 0u };
-			auto res = m_swapChain->acquireNextImage( ashes::MaxTimeout
-				, *resources.imageAvailableSemaphore
-				, imageIndex );
-
-			if ( doCheckNeedReset( VkResult( res )
-				, true
-				, "Swap chain image acquisition" ) )
-			{
-				resources.imageIndex = imageIndex;
-				return &resources;
-			}
-
-			return nullptr;
+			resources.imageIndex = imageIndex;
+			return &resources;
 		}
 
-		log::error << "Couldn't retrieve rendering resources" << std::endl;
 		return nullptr;
+	}
+
+	void RenderWindow::submitFrame( RenderingResources * resources )
+	{
+		RenderTargetSPtr target = getRenderTarget();
+		resources->fence->reset();
+		getDevice().graphicsQueue->submit( { *m_commandBuffers[resources->imageIndex] }
+			, { *resources->imageAvailableSemaphore, target->getSemaphore() }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, { *resources->finishedRenderingSemaphore }
+			, resources->fence.get() );
+		resources->fence->wait( ashes::MaxTimeout );
+	}
+
+	void RenderWindow::presentFrame( RenderingResources * resources )
+	{
+		try
+		{
+			getDevice().graphicsQueue->present( *m_swapChain
+				, resources->imageIndex
+				, *resources->finishedRenderingSemaphore );
+		}
+		catch ( ashes::Exception & exc )
+		{
+			doCheckNeedReset( exc.getResult()
+				, false
+				, "Image presentation" );
+		}
+
+		resources->imageIndex = ~0u;
 	}
 
 	bool RenderWindow::doCheckNeedReset( VkResult errCode

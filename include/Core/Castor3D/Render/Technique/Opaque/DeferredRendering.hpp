@@ -6,11 +6,12 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightingPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/ReflectionPass.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/SsaoPass.hpp"
-#include "Castor3D/Render/Technique/Opaque/SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 namespace castor3d
@@ -44,13 +45,17 @@ namespace castor3d
 		 */
 		DeferredRendering( Engine & engine
 			, OpaquePass & opaquePass
-			, TextureLayoutSPtr depthTexture
-			, TextureLayoutSPtr velocityTexture
+			, TextureUnit const & depthTexture
+			, TextureUnit const & velocityTexture
 			, TextureLayoutSPtr resultTexture
+			, ShadowMapResult const & smDirectionalResult
+			, ShadowMapResult const & smPointResult
+			, ShadowMapResult const & smSpotResult
 			, castor::Size const & size
 			, Scene & scene
 			, HdrConfigUbo & hdrConfigUbo
-			, SsaoConfig & config );
+			, GpInfoUbo const & gpInfoUbo
+			, SsaoConfig & ssaoConfig );
 		/**
 		 *\~english
 		 *\brief		Destroys deferred rendering related stuff.
@@ -92,14 +97,6 @@ namespace castor3d
 			, Camera const & camera
 			, ashes::Semaphore const & toWait );
 		/**
-		 *\~english
-		 *\brief		Displays debug data on screen.
-		 *\~french
-		 *\brief		Dessine les données de débogage sur l'écran.
-		 */
-		void debugDisplay( ashes::RenderPass const & renderPass
-			, ashes::FrameBuffer const & frameBuffer )const;
-		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		void accept( RenderTechniqueVisitor & visitor );
@@ -108,13 +105,14 @@ namespace castor3d
 		Engine & m_engine;
 		SsaoConfig & m_ssaoConfig;
 		OpaquePass & m_opaquePass;
+		GpInfoUbo const & m_gpInfoUbo;
 		castor::Size m_size;
-		GpInfoUbo m_gpInfoUbo;
+		OpaquePassResult m_opaquePassResult;
+		std::unique_ptr< LineariseDepthPass > m_linearisePass;
 		std::unique_ptr< LightingPass > m_lightingPass;
 		std::unique_ptr< SsaoPass > m_ssao;
 		std::unique_ptr< SubsurfaceScatteringPass > m_subsurfaceScattering;
-		std::vector< std::unique_ptr< ReflectionPass > > m_reflection;
-		GeometryPassResult m_geometryPassResult;
+		std::vector< std::unique_ptr< OpaqueResolvePass > > m_resolve;
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

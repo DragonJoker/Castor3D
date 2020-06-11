@@ -346,7 +346,7 @@ namespace castor3d
 					{
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
-						auto textures = pass->getTextures();
+						auto textures = pass->getTextures() & renderPass.getTexturesMask();
 						auto texturesCount = pass->getNonEnvTextureUnitsCount();
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
@@ -553,8 +553,8 @@ namespace castor3d
 		, Submesh & submesh
 		, RenderPass & renderPass )
 	{
-		if ( !isShadowMapProgram( flags.programFlags )
-			|| instance.isShadowCaster() )
+		if ( instance.isShadowCaster()
+			|| ( !isShadowMapProgram( flags.programFlags ) ) )
 		{
 			if ( animated.skeleton )
 			{

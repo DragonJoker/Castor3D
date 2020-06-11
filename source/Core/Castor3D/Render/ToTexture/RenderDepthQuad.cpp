@@ -15,8 +15,8 @@ using namespace castor;
 namespace castor3d
 {
 	RenderDepthQuad::RenderDepthQuad( RenderSystem & renderSystem )
-		: RenderQuad{ renderSystem, VK_FILTER_LINEAR, TexcoordConfig{} }
-		, m_program{ renderSystem }
+		: RenderQuad{ renderSystem, "RenderDepthQuad", VK_FILTER_LINEAR, { ashes::nullopt, RenderQuadConfig::Texcoord{} } }
+		, m_program{ "RenderDepthQuad", renderSystem }
 	{
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RenderDepthQuad" };
 		{
@@ -83,11 +83,11 @@ namespace castor3d
 	{
 		cleanup();
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer();
+		m_commandBuffer = device.graphicsCommandPool->createCommandBuffer( "RenderDepthQuad" );
 		createPipeline( { size.getWidth(), size.getHeight() }
 			, position
 			, m_program.getStates()
-			, texture.getDefaultView()
+			, texture.getDefaultView().getSampledView()
 			, renderPass
 			, {}
 			, {}

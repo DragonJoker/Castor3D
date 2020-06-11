@@ -1,7 +1,5 @@
 #include "Castor3D/Render/Technique/Opaque/OpaquePass.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -20,7 +18,8 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/TextureConfigurationBuffer/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Ubos/TexturesUbo.hpp"
-#include "Castor3D/Render/Technique/Opaque/GeometryPassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -31,6 +30,8 @@
 
 using namespace castor;
 using namespace castor3d;
+
+#define C3D_DebugGeometryShaders 0
 
 namespace castor3d
 {
@@ -57,31 +58,31 @@ namespace castor3d
 	{
 	}
 
-	void OpaquePass::initialiseRenderPass( GeometryPassResult const & gpResult )
+	void OpaquePass::initialiseRenderPass( OpaquePassResult const & gpResult )
 	{
 		ashes::VkAttachmentDescriptionArray attachments
 		{
 			{
 				0u,
-				gpResult.getViews()[0]->format,
+				gpResult[DsTexture::eDepth].getTexture()->getPixelFormat(),
 				VK_SAMPLE_COUNT_1_BIT,
-				VK_ATTACHMENT_LOAD_OP_CLEAR,
+				VK_ATTACHMENT_LOAD_OP_LOAD,
 				VK_ATTACHMENT_STORE_OP_STORE,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
-				VK_IMAGE_LAYOUT_UNDEFINED,
+				VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
 				VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
 			}
 		};
 		ashes::VkAttachmentReferenceArray colorAttachments;
 
 		// Colour attachments.
-		for ( size_t i = 1u; i < gpResult.getViews().size(); ++i )
+		for ( auto index = 1u; index < uint32_t( DsTexture::eCount ); ++index )
 		{
 			attachments.push_back(
 				{
 					0u,
-					gpResult.getViews()[i]->format,
+					gpResult[DsTexture( index )].getTexture()->getPixelFormat(),
 					VK_SAMPLE_COUNT_1_BIT,
 					VK_ATTACHMENT_LOAD_OP_CLEAR,
 					VK_ATTACHMENT_STORE_OP_STORE,
@@ -90,7 +91,7 @@ namespace castor3d
 					VK_IMAGE_LAYOUT_UNDEFINED,
 					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 				} );
-			colorAttachments.push_back( { uint32_t( i ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			colorAttachments.push_back( { uint32_t( index ), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 		}
 		
 		ashes::SubpassDescriptionArray subpasses;
@@ -133,18 +134,23 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( "OpaquePass"
+			, std::move( createInfo ) );
 
 		ashes::ImageViewCRefArray attaches;
 
-		for ( size_t i = 0u; i < gpResult.getViews().size(); ++i )
+		for ( auto & unit : gpResult )
 		{
-			attaches.emplace_back( gpResult.getViews()[i] );
+			attaches.emplace_back( unit->getTexture()->getDefaultView().getTargetView() );
 		}
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { gpResult[0].getDimensions().width, gpResult[0].getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( "OpaquePass"
+			, {
+				gpResult[DsTexture::eDepth].getTexture()->getWidth(),
+				gpResult[DsTexture::eDepth].getTexture()->getHeight(),
+			}
 			, std::move( attaches ) );
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( "OpaquePass" );
 	}
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
@@ -152,12 +158,8 @@ namespace castor3d
 		auto & flags = visitor.getFlags();
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, flags );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	void OpaquePass::update( RenderInfo & info, castor::Point2f const & jitter )
@@ -195,9 +197,8 @@ namespace castor3d
 		};
 
 		auto * result = &toWait;
-		auto & timer = getTimer();
 		auto & device = getCurrentRenderDevice( *this );
-		auto timerBlock = timer.start();
+		auto timerBlock = getTimer().start();
 
 		m_nodesCommands->begin();
 		m_nodesCommands->beginDebugBlock(
@@ -205,15 +206,15 @@ namespace castor3d
 				"Deferred - Geometry",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		timer.beginPass( *m_nodesCommands );
-		timer.notifyPassRender();
+		timerBlock->beginPass( *m_nodesCommands );
+		timerBlock->notifyPassRender();
 		m_nodesCommands->beginRenderPass( getRenderPass()
 			, *m_frameBuffer
 			, clearValues
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
-		timer.endPass( *m_nodesCommands );
+		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 
@@ -243,7 +244,22 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo OpaquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+#if C3D_UseDepthPrepass
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, VK_FALSE
+			, VK_COMPARE_OP_LESS_OR_EQUAL
+		};
+#else
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, VK_TRUE
+		};
+#endif
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
@@ -433,6 +449,94 @@ namespace castor3d
 
 		writer.implementFunction< Void >( "main", main );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr OpaquePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
+	{
+#if C3D_DebugGeometryShaders
+		using namespace sdw;
+		GeometryWriter writer;
+		writer.inputLayout( ast::stmt::InputLayout::eTriangleList );
+		writer.outputLayout( ast::stmt::OutputLayout::eTriangleStrip, 3u );
+
+		auto in = writer.getIn();
+		auto out = writer.getOut();
+
+		// Geometry Inputs
+		auto vtx_worldPosition = writer.declInputArray< Vec3 >( "vtx_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation, 3u );
+		auto vtx_curPosition = writer.declInputArray< Vec3 >( "vtx_curPosition"
+			, RenderPass::VertexOutputs::CurPositionLocation, 3u );
+		auto vtx_prvPosition = writer.declInputArray< Vec3 >( "vtx_prvPosition"
+			, RenderPass::VertexOutputs::PrvPositionLocation, 3u );
+		auto vtx_tangentSpaceFragPosition = writer.declInputArray< Vec3 >( "vtx_tangentSpaceFragPosition"
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation, 3u );
+		auto vtx_tangentSpaceViewPosition = writer.declInputArray< Vec3 >( "vtx_tangentSpaceViewPosition"
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation, 3u );
+		auto vtx_normal = writer.declInputArray< Vec3 >( "vtx_normal"
+			, RenderPass::VertexOutputs::NormalLocation, 3u );
+		auto vtx_tangent = writer.declInputArray< Vec3 >( "vtx_tangent"
+			, RenderPass::VertexOutputs::TangentLocation, 3u );
+		auto vtx_bitangent = writer.declInputArray< Vec3 >( "vtx_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation, 3u );
+		auto vtx_texture = writer.declInputArray< Vec3 >( "vtx_texture"
+			, RenderPass::VertexOutputs::TextureLocation, 3u );
+		auto vtx_instance = writer.declInputArray< UInt >( "vtx_instance"
+			, RenderPass::VertexOutputs::InstanceLocation, 3u );
+		auto vtx_material = writer.declInputArray< UInt >( "vtx_material"
+			, RenderPass::VertexOutputs::MaterialLocation, 3u );
+
+		// Geometry Outputs
+		auto geo_worldPosition = writer.declOutput< Vec3 >( "geo_worldPosition"
+			, RenderPass::VertexOutputs::WorldPositionLocation );
+		auto geo_curPosition = writer.declOutput< Vec3 >( "geo_curPosition"
+			, RenderPass::VertexOutputs::CurPositionLocation );
+		auto geo_prvPosition = writer.declOutput< Vec3 >( "geo_prvPosition"
+			, RenderPass::VertexOutputs::PrvPositionLocation );
+		auto geo_tangentSpaceFragPosition = writer.declOutput< Vec3 >( "geo_tangentSpaceFragPosition"
+			, RenderPass::VertexOutputs::TangentSpaceFragPositionLocation );
+		auto geo_tangentSpaceViewPosition = writer.declOutput< Vec3 >( "geo_tangentSpaceViewPosition"
+			, RenderPass::VertexOutputs::TangentSpaceViewPositionLocation );
+		auto geo_normal = writer.declOutput< Vec3 >( "geo_normal"
+			, RenderPass::VertexOutputs::NormalLocation );
+		auto geo_tangent = writer.declOutput< Vec3 >( "geo_tangent"
+			, RenderPass::VertexOutputs::TangentLocation );
+		auto geo_bitangent = writer.declOutput< Vec3 >( "geo_bitangent"
+			, RenderPass::VertexOutputs::BitangentLocation );
+		auto geo_texture = writer.declOutput< Vec3 >( "geo_texture"
+			, RenderPass::VertexOutputs::TextureLocation );
+		auto geo_instance = writer.declOutput< UInt >( "geo_instance"
+			, RenderPass::VertexOutputs::InstanceLocation );
+		auto geo_material = writer.declOutput< UInt >( "geo_material"
+			, RenderPass::VertexOutputs::MaterialLocation );
+
+		writer.implementFunction< sdw::Void >( "main"
+			, [&]()
+			{
+				for ( uint32_t i = 0; i < 3u; ++i )
+				{
+					geo_worldPosition = vtx_worldPosition[i];
+					geo_curPosition = vtx_curPosition[i];
+					geo_prvPosition = vtx_prvPosition[i];
+					geo_tangentSpaceFragPosition = vtx_tangentSpaceFragPosition[i];
+					geo_tangentSpaceViewPosition = vtx_tangentSpaceViewPosition[i];
+					geo_normal = vtx_normal[i];
+					geo_tangent = vtx_tangent[i];
+					geo_bitangent = vtx_bitangent[i];
+					geo_texture = vtx_texture[i];
+					geo_instance = vtx_instance[i];
+					geo_material = vtx_material[i];
+					out.vtx.position = in.vtx[i].position;
+					EmitVertex( writer );
+				}
+
+				EndPrimitive( writer );
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+#else
+		return nullptr;
+#endif
 	}
 
 	ShaderPtr OpaquePass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
@@ -712,8 +816,8 @@ namespace castor3d
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, vtx_prvPosition.xy() / vtx_prvPosition.z() );
 				out_c3dOutput1 = vec4( normal, matFlags );
-				out_c3dOutput2 = vec4( albedo, 0.0_f );
-				out_c3dOutput3 = vec4( metallic, roughness, 0.0_f, occlusion );
+				out_c3dOutput2 = vec4( albedo, roughness );
+				out_c3dOutput3 = vec4( metallic, 0.0_f, 0.0_f, occlusion );
 				out_c3dOutput4 = vec4( emissive, transmittance );
 				out_c3dOutput5 = vec4( curPosition - prvPosition, writer.cast< Float >( vtx_material ), 0.0_f );
 			} );

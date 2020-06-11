@@ -12,10 +12,10 @@ namespace castor3d
 	{
 		C3D_API VertexBoneData();
 		C3D_API VertexBoneData( VertexBoneData const & rhs );
-		C3D_API VertexBoneData( VertexBoneData && rhs );
+		C3D_API VertexBoneData( VertexBoneData && rhs )noexcept;
 		C3D_API ~VertexBoneData();
 		C3D_API VertexBoneData & operator=( VertexBoneData const & rhs );
-		C3D_API VertexBoneData & operator=( VertexBoneData && rhs );
+		C3D_API VertexBoneData & operator=( VertexBoneData && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		adds bone informations to the vertex
@@ -47,7 +47,7 @@ namespace castor3d
 				: data{ rhs.data }
 			{
 			}
-			Ids( Ids && rhs )
+			Ids( Ids && rhs )noexcept
 				: data{ std::move( rhs.data ) }
 			{
 			}
@@ -59,7 +59,7 @@ namespace castor3d
 				data = rhs.data;
 				return *this;
 			}
-			Ids & operator=( Ids && rhs )
+			Ids & operator=( Ids && rhs )noexcept
 			{
 				if ( this != &rhs )
 				{
@@ -116,7 +116,7 @@ namespace castor3d
 				: data{ rhs.data }
 			{
 			}
-			Weights( Weights && rhs )
+			Weights( Weights && rhs )noexcept
 				: data{ std::move( rhs.data ) }
 			{
 			}
@@ -128,7 +128,7 @@ namespace castor3d
 				data = rhs.data;
 				return *this;
 			}
-			Weights & operator=( Weights && rhs )
+			Weights & operator=( Weights && rhs )noexcept
 			{
 				if ( this != &rhs )
 				{

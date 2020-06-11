@@ -33,9 +33,6 @@ namespace castor3d
 		//!\~english	Procedural generator.
 		//!\~french		Plug-in de génération procédurale.
 		eGenerator,
-		//!\~english	Render technique plug-in.
-		//!\~french		Plug-in de technique de rendu.
-		eTechnique,
 		//!\~english	Tone mapping plug-in.
 		//!\~french		Plug-in d'effet de mappage de tons.
 		eToneMapping,

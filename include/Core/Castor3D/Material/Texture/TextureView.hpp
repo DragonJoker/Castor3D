@@ -68,7 +68,8 @@ namespace castor3d
 		 */
 		C3D_API TextureView( TextureLayout & layout
 			, ashes::ImageViewCreateInfo info
-			, uint32_t index );
+			, uint32_t index
+			, castor::String debugName );
 		/**
 		 *\~english
 		 *\brief		Initialises the view.
@@ -78,6 +79,17 @@ namespace castor3d
 		 *\return		\p true si la vue est inversée.
 		 */
 		C3D_API bool initialise();
+		/**
+		 *\~english
+		 *\brief		Updates the view range.
+		 *\~french
+		 *\brief		Met à jour l'étendue de la vue.
+		 */
+		C3D_API void update( VkImage image
+			, uint32_t baseArrayLayer
+			, uint32_t layerCount
+			, uint32_t baseMipLevel
+			, uint32_t levelCount );
 		/**
 		 *\~english
 		 *\brief		Cleans up the view.
@@ -137,6 +149,8 @@ namespace castor3d
 		C3D_API castor::PxBufferPtrArray & getBuffers();
 		C3D_API bool isStaticSource()const;
 		C3D_API uint32_t getLevelCount()const;
+		C3D_API ashes::ImageView const & getSampledView()const;
+		C3D_API ashes::ImageView const & getTargetView()const;
 
 		inline bool hasSource()const
 		{
@@ -162,11 +176,6 @@ namespace castor3d
 		{
 			return m_needsYInversion;
 		}
-
-		inline ashes::ImageView const & getView()const
-		{
-			return m_view;
-		}
 		/**@}*/
 
 	private:
@@ -175,8 +184,10 @@ namespace castor3d
 	private:
 		uint32_t m_index;
 		ashes::ImageViewCreateInfo m_info;
-		std::unique_ptr< TextureSource > m_source;
-		ashes::ImageView m_view;
+		castor::String m_debugName;
+		TextureSourceSPtr m_source;
+		mutable ashes::ImageView m_sampledView;
+		mutable ashes::ImageView m_targetView;
 		bool m_needsMipmapsGeneration{ true };
 		bool m_needsYInversion{ false };
 	};

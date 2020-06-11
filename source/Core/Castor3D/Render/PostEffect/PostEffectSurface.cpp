@@ -158,7 +158,7 @@ namespace castor3d
 		{
 			this->colourTexture = colourTexture;
 			this->colourTexture->initialise();
-			attaches.emplace_back( colourTexture->getImage().getView() );
+			attaches.emplace_back( colourTexture->getDefaultView().getTargetView() );
 		}
 
 		if ( depthTexture )
@@ -187,25 +187,26 @@ namespace castor3d
 			if ( ashes::isDepthStencilFormat( format ) )
 			{
 				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-				depthView = texture.createView( view );
+				depthView = texture.createView( m_debugName + "Depth", view );
 				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-				stencilView = texture.createView( view );
+				stencilView = texture.createView( m_debugName + "Stencil", view );
 			}
 			else if ( ashes::isDepthFormat( format ) )
 			{
 				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-				depthView = texture.createView( view );
+				depthView = texture.createView( m_debugName, view );
 			}
 			else if ( ashes::isStencilFormat( format ) )
 			{
 				view->subresourceRange.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
-				stencilView = texture.createView( view );
+				stencilView = texture.createView( m_debugName, view );
 			}
 
-			attaches.emplace_back( depthTexture->getDefaultView() );
+			attaches.emplace_back( depthTexture->getDefaultView().getTargetView() );
 		}
 
-		frameBuffer = renderPass.createFrameBuffer( VkExtent2D{ size.getWidth(), size.getHeight() }
+		frameBuffer = renderPass.createFrameBuffer( m_debugName
+			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( attaches ) );
 		return true;
 	}

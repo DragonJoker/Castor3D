@@ -5,6 +5,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
 #include <CastorUtils/Log/Logger.hpp>
 
@@ -13,19 +14,16 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	void setDebugObjectName( RenderDevice const & device
-		, uint64_t object
-		, uint32_t type
-		, std::string const & name
-		, std::string const & typeName )
+	ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device
+		, VkMemoryRequirements const & requirements
+		, VkMemoryPropertyFlags flags
+		, std::string const & name )
 	{
-		log::trace << "Created " << typeName << " [" << name << "]" << std::endl;
-		device.device->setDebugObjectName(
-			{
-				VkObjectType( type ),
-				object,
-				name.c_str()
-			} );
+		uint32_t deduced = device.deduceMemoryType( requirements.memoryTypeBits
+			, flags );
+		auto memory = device.allocateMemory( name + "Mem"
+			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
+		return memory;
 	}
 
 	ashes::DeviceMemoryPtr setupMemory( RenderDevice const & device
@@ -33,10 +31,6 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		uint32_t deduced = device.device->deduceMemoryType( requirements.memoryTypeBits
-			, flags );
-		auto memory = device.device->allocateMemory( VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		setDebugObjectName( device, *memory, name + "Mem" );
-		return memory;
+		return setupMemory( *device, requirements, flags, name );
 	}
 }

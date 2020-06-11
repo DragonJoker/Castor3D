@@ -229,7 +229,7 @@ wxString StcTextEditor::determinePrefs( wxString const & filename )
 	{
 		if ( result.empty() )
 		{
-			wxString filepattern = make_wxString( currInfo->getFilePattern() );
+			wxString filepattern = make_wxString( currInfo->filePattern );
 			filepattern.Lower();
 
 			while ( !filepattern.empty() && result.empty() )
@@ -240,7 +240,7 @@ wxString StcTextEditor::determinePrefs( wxString const & filename )
 					|| ( strCur == ( filename.BeforeLast( '.' ) + wxT( ".*" ) ) )
 					|| ( strCur == ( wxT( "*." ) + filename.AfterLast( '.' ) ) ) )
 				{
-					result = currInfo->getName();
+					result = currInfo->name;
 				}
 				else
 				{
@@ -258,13 +258,12 @@ bool StcTextEditor::initializePrefs( wxString const & name )
 	// Set margin for line numbers
 	SetMarginType( m_lineNrID, wxSTC_MARGIN_NUMBER );
 	SetMarginWidth( m_lineNrID, 50 );
-	SetLexer( wxSTC_LEX_CPP );
 
 	auto it = std::find_if( m_context.begin()
 		, m_context.end()
 		, [&name]( LanguageInfoPtr lookup )
 		{
-			return lookup->getName().c_str() == name;
+			return lookup->name.c_str() == name;
 		} );
 
 	if ( it == m_context.end() )
@@ -280,14 +279,24 @@ bool StcTextEditor::initializePrefs( wxString const & name )
 	else
 	{
 		m_language = *it;
+
+		if ( m_language->isCLike )
+		{
+			SetLexer( wxSTC_LEX_CPP );
+		}
+		else
+		{
+			SetLexer( wxSTC_LEX_ASM );
+		}
+
 		auto defaultFgColour = m_language->getStyle( wxSTC_C_DEFAULT ).foreground;
 		auto defaultBgColour = m_language->getStyle( wxSTC_C_DEFAULT ).background;
-		wxFont font( m_language->getFontSize()
+		wxFont font( m_language->fontSize
 			, wxFONTFAMILY_MODERN
 			, wxFONTSTYLE_NORMAL
 			, wxFONTWEIGHT_NORMAL
 			, false
-			, make_wxString( m_language->getFontName() ) );
+			, make_wxString( m_language->fontName ) );
 		StyleSetFont( wxSTC_STYLE_DEFAULT, font );
 		doInitialiseBaseColours( defaultBgColour, defaultFgColour );
 
@@ -351,16 +360,16 @@ bool StcTextEditor::initializePrefs( wxString const & name )
 
 		if ( m_context.foldEnable )
 		{
-			SetMarginWidth( m_foldingID, ( ( m_language->getFoldFlags() != 0 ) ? m_foldingMargin : 0 ) );
-			SetMarginSensitive( m_foldingID, ( ( m_language->getFoldFlags() != 0 ) ) );
-			SetProperty( wxT( "fold" ), ( ( m_language->getFoldFlags() != 0 ) ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.comment" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMMENT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.compact" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMPACT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.preprocessor" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_PREPROC ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.html" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_HTML ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.html.preprocessor" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_HTMLPREP ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.comment.python" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_COMMENTPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
-			SetProperty( wxT( "fold.quotes.python" ), ( ( m_language->getFoldFlags() & eSTC_FOLD_QUOTESPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetMarginWidth( m_foldingID, ( ( m_language->foldFlags != 0 ) ? m_foldingMargin : 0 ) );
+			SetMarginSensitive( m_foldingID, ( ( m_language->foldFlags != 0 ) ) );
+			SetProperty( wxT( "fold" ), ( ( m_language->foldFlags != 0 ) ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.comment" ), ( ( m_language->foldFlags & eSTC_FOLD_COMMENT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.compact" ), ( ( m_language->foldFlags & eSTC_FOLD_COMPACT ) > 0 ? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.preprocessor" ), ( ( m_language->foldFlags & eSTC_FOLD_PREPROC ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.html" ), ( ( m_language->foldFlags & eSTC_FOLD_HTML ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.html.preprocessor" ), ( ( m_language->foldFlags & eSTC_FOLD_HTMLPREP ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.comment.python" ), ( ( m_language->foldFlags & eSTC_FOLD_COMMENTPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
+			SetProperty( wxT( "fold.quotes.python" ), ( ( m_language->foldFlags & eSTC_FOLD_QUOTESPY ) > 0	? wxT( "1" ) : wxT( "0" ) ) );
 		}
 
 		SetFoldFlags( wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED );
@@ -616,7 +625,7 @@ void StcTextEditor::onEditSelectLine( wxCommandEvent & WXUNUSED( event ) )
 
 void StcTextEditor::onHighlightLang( wxCommandEvent & event )
 {
-	initializePrefs( ( *( m_context.begin() + ( event.GetId() - gcID_HILIGHTFIRST ) ) )->getName() );
+	initializePrefs( ( *( m_context.begin() + ( event.GetId() - gcID_HILIGHTFIRST ) ) )->name );
 }
 
 void StcTextEditor::onDisplayEOL( wxCommandEvent & WXUNUSED( event ) )

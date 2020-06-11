@@ -218,6 +218,26 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderPass::prepareBackPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+	{
+		doUpdateFlags( flags );
+		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
+		{
+			if ( m_opaque )
+			{
+				flags.alphaBlendMode = BlendMode::eNoBlend;
+			}
+
+			auto program = doGetProgram( flags );
+			doPrepareBackPipeline( program, layouts, flags );
+		}
+	}
+
 	PipelineFlags RenderPass::prepareBackPipeline( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, VkCompareOp alphaFunc
@@ -240,12 +260,19 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc };
-		doUpdateFlags( flags );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+		prepareBackPipeline( flags, layouts );
+		return flags;
+	}
 
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
-			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( programFlags ) ) )
+	void RenderPass::prepareFrontPipeline( PipelineFlags & flags
+		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & layouts )
+	{
+		doUpdateFlags( flags );
+		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
+
+		if ( checkFlag( flags.passFlags, PassFlag::eAlphaBlending ) != m_opaque
+			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+				|| !isShadowMapProgram( flags.programFlags ) ) )
 		{
 			if ( m_opaque )
 			{
@@ -253,10 +280,8 @@ namespace castor3d
 			}
 
 			auto program = doGetProgram( flags );
-			doPrepareBackPipeline( program, layouts, flags );
+			doPrepareFrontPipeline( program, layouts, flags );
 		}
-
-		return flags;
 	}
 
 	PipelineFlags RenderPass::prepareFrontPipeline( BlendMode colourBlendMode
@@ -281,22 +306,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, alphaFunc };
-		doUpdateFlags( flags );
-		addFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) != m_opaque
-			&& ( !checkFlag( programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( programFlags ) ) )
-		{
-			if ( m_opaque )
-			{
-				flags.alphaBlendMode = BlendMode::eNoBlend;
-			}
-
-			auto program = doGetProgram( flags );
-			doPrepareFrontPipeline( program, layouts, flags );
-		}
-
+		prepareFrontPipeline( flags, layouts );
 		return flags;
 	}
 
@@ -578,13 +588,17 @@ namespace castor3d
 					, 1u );
 			}
 
+			if ( node.pipeline.getFlags().texturesCount )
+			{
+				uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
+					, *node.texturesUbo.buffer
+					, node.texturesUbo.offset
+					, 1u );
+			}
+
 			uboDescriptorSet.createSizedBinding( layout.getBinding( ModelUbo::BindingPoint )
 				, *node.modelUbo.buffer
 				, node.modelUbo.offset
-				, 1u );
-			uboDescriptorSet.createSizedBinding( layout.getBinding( TexturesUbo::BindingPoint )
-				, *node.texturesUbo.buffer
-				, node.texturesUbo.offset
 				, 1u );
 		}
 	}
@@ -593,7 +607,8 @@ namespace castor3d
 		, BillboardRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardUbo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -611,7 +626,8 @@ namespace castor3d
 		, MorphingRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -629,7 +645,8 @@ namespace castor3d
 		, SkinningRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -657,7 +674,8 @@ namespace castor3d
 		, StaticRenderNode & node )
 	{
 		auto & layout = descriptorPool.getLayout();
-		node.uboDescriptorSet = descriptorPool.createDescriptorSet( 0u );
+		node.uboDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Ubo"
+			, 0u );
 		initialiseCommonUboDescriptor( *getEngine()
 			, layout
 			, node
@@ -697,7 +715,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_BillboardTex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -708,7 +727,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -719,7 +739,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -730,7 +751,8 @@ namespace castor3d
 	{
 		auto & layout = descriptorPool.getLayout();
 		uint32_t index = getMinTextureIndex();
-		node.texDescriptorSet = descriptorPool.createDescriptorSet( 1u );
+		node.texDescriptorSet = descriptorPool.createDescriptorSet( getName() + "_" + node.instance.getName() + "Tex"
+			, 1u );
 		doFillTextureDescriptor( layout, index, node, shadowMaps );
 		node.texDescriptorSet->update();
 	}
@@ -883,7 +905,7 @@ namespace castor3d
 		, ShaderBuffer & bonesBuffer )const
 	{
 		uint32_t const mtxSize = sizeof( float ) * 16;
-		uint32_t const stride = mtxSize * 400u;
+		VkDeviceSize const stride = mtxSize * 400u;
 		auto const count = std::min( uint32_t( bonesBuffer.getSize() / stride ), uint32_t( renderNodes.size() ) );
 		CU_Require( count <= renderNodes.size() );
 		auto buffer = bonesBuffer.getPtr();
@@ -1162,8 +1184,10 @@ namespace castor3d
 					auto & device = getCurrentRenderDevice( *this );
 					auto uboBindings = doCreateUboBindings( flags );
 					auto texBindings = doCreateTextureBindings( flags );
-					auto uboLayout = device->createDescriptorSetLayout( std::move( uboBindings ) );
-					auto texLayout = device->createDescriptorSetLayout( std::move( texBindings ) );
+					auto uboLayout = device->createDescriptorSetLayout( getName()
+						, std::move( uboBindings ) );
+					auto texLayout = device->createDescriptorSetLayout( getName()
+						, std::move( texBindings ) );
 					std::vector< ashes::DescriptorSetLayoutPtr > layouts;
 					layouts.emplace_back( std::move( uboLayout ) );
 					layouts.emplace_back( std::move( texLayout ) );
@@ -1235,21 +1259,31 @@ namespace castor3d
 
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MatrixUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
+			, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+				? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+				: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( SceneUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 
 		if ( !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelMatrixUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( ModelUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, ( VK_SHADER_STAGE_FRAGMENT_BIT
+				| ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) ) );
 		uboBindings.emplace_back( makeDescriptorSetLayoutBinding( TexturesUbo::BindingPoint
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT )  );
@@ -1264,7 +1298,9 @@ namespace castor3d
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( MorphingUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		if ( checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
@@ -1278,7 +1314,9 @@ namespace castor3d
 		{
 			uboBindings.emplace_back( makeDescriptorSetLayoutBinding( BillboardUbo::BindingPoint
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, VK_SHADER_STAGE_VERTEX_BIT ) );
+				, ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry )
+					? VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_VERTEX_BIT
+					: VK_SHADER_STAGE_VERTEX_BIT ) ) );
 		}
 
 		return uboBindings;
@@ -1442,8 +1480,6 @@ namespace castor3d
 
 	ShaderPtr RenderPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
-		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( *getEngine()->getRenderSystem() );
-		auto & engine = *getEngine();
 		using namespace sdw;
 		VertexWriter writer;
 

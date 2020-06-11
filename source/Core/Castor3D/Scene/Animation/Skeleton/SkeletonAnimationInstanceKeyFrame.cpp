@@ -24,8 +24,8 @@ namespace castor3d
 			, Submesh const & submesh
 			, SkeletonAnimationKeyFrame const & keyFrame )
 		{
-			float rmax = std::numeric_limits< float >::max();
-			float rmin = std::numeric_limits< float >::lowest();
+			float constexpr rmax = std::numeric_limits< float >::max();
+			float constexpr rmin = std::numeric_limits< float >::lowest();
 			castor::Point3f min{ rmax, rmax, rmax };
 			castor::Point3f max{ rmin, rmin, rmin };
 

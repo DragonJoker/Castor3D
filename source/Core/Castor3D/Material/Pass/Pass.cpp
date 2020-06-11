@@ -228,6 +228,8 @@ namespace castor3d
 
 	void Pass::addTextureUnit( TextureUnitSPtr unit )
 	{
+		m_textures |= getUsedImageComponents( unit->getConfiguration() );
+
 		if ( unit->getConfiguration().environment )
 		{
 			auto it = std::find_if( m_textureUnits.begin()
@@ -239,7 +241,7 @@ namespace castor3d
 
 			if ( it == m_textureUnits.end() )
 			{
-				m_textureUnits.push_back( unit );
+				m_textureUnits.push_back( std::move( unit ) );
 			}
 			else
 			{
@@ -267,7 +269,7 @@ namespace castor3d
 					m_heightTextureIndex = uint32_t( m_textureUnits.size() );
 				}
 
-				m_textureUnits.push_back( unit );
+				m_textureUnits.push_back( std::move( unit ) );
 			}
 			else
 			{
@@ -284,7 +286,6 @@ namespace castor3d
 			}
 		}
 
-		m_textures |= getUsedImageComponents( unit->getConfiguration() );
 		m_texturesReduced = false;
 	}
 
@@ -315,9 +316,6 @@ namespace castor3d
 	{
 		if ( !m_texturesReduced )
 		{
-			TextureUnitSPtr opacitySource;
-			PxBufferBaseSPtr opacityImage;
-
 			for ( auto & unit : m_textureUnits )
 			{
 				auto configuration = unit->getConfiguration();
@@ -422,14 +420,36 @@ namespace castor3d
 			} );
 	}
 
-	uint32_t Pass::getNonEnvTextureUnitsCount()const
+	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
-		return uint32_t( std::count_if( m_textureUnits.begin()
-			, m_textureUnits.end()
-			, []( TextureUnitSPtr unit )
+		TextureUnitPtrArray result;
+
+		for ( auto & unit : m_textureUnits )
+		{
+			auto & config = unit->getConfiguration();
+
+			if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] ) 
+				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eRefraction ) && config.environment )
+				|| ( checkFlag( mask, TextureFlag::eReflection ) && config.environment ) )
 			{
-				return unit->getConfiguration().environment == 0u;
-			} ) );
+				result.push_back( unit );
+			}
+		}
+
+		return result;
+	}
+
+	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
+	{
+		return uint32_t( getTextureUnits( mask ).size() );
 	}
 
 	void Pass::onSssChanged( SubsurfaceScattering const & sss )

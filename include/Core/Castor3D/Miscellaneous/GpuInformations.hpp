@@ -264,7 +264,7 @@ namespace castor3d
 		std::string m_shaderLanguageVersion{ 0 };
 		std::map< VkShaderStageFlagBits, bool > m_useShader;
 		std::map< GpuMax, int32_t > m_maxValues;
-		uint32_t m_totalMemorySize;
+		uint32_t m_totalMemorySize{};
 		castor::String m_vendor;
 		castor::String m_renderer;
 		castor::String m_version;

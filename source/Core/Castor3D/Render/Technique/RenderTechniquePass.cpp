@@ -1,5 +1,8 @@
 #include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
 
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -12,6 +15,8 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
+
+#include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -73,12 +78,13 @@ namespace castor3d
 	{
 		for ( auto & shadowMap : shadowMaps )
 		{
-			bindTexture( shadowMap.first.get().getLinearView()
-				, shadowMap.first.get().getLinearSampler()
+			auto & result = shadowMap.first.get().getShadowPassResult();
+			bindTexture( result[SmTexture::eNormalLinear].getTexture()->getDefaultView().getSampledView()
+				, result[SmTexture::eNormalLinear].getSampler()->getSampler()
 				, writes
 				, index );
-			bindTexture( shadowMap.first.get().getVarianceView()
-				, shadowMap.first.get().getVarianceSampler()
+			bindTexture( result[SmTexture::eVariance].getTexture()->getDefaultView().getSampledView()
+				, result[SmTexture::eVariance].getSampler()->getSampler()
 				, writes
 				, index );
 		}
@@ -193,7 +199,8 @@ namespace castor3d
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
 	{
-		m_finished = getCurrentRenderDevice( *this )->createSemaphore();
+		auto & device = getCurrentRenderDevice( *this );
+		m_finished = device->createSemaphore( getName() );
 		return true;
 	}
 
@@ -230,7 +237,12 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, m_opaque };
+		return ashes::PipelineDepthStencilStateCreateInfo
+		{
+			0u
+			, VK_TRUE
+			, m_opaque
+		};
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const

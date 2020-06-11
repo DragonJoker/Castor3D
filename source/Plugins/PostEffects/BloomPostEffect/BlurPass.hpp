@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_Bloom_BlurPass_HPP___
 #define ___C3D_Bloom_BlurPass_HPP___
 
-#include <Castor3D/Render/GaussianBlur.hpp>
+#include <Castor3D/Render/Passes/GaussianBlur.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 
 namespace Bloom
@@ -22,6 +22,7 @@ namespace Bloom
 			, bool isVertical );
 		castor3d::CommandsSemaphoreArray getCommands( castor3d::RenderPassTimer const & timer
 			, ashes::VertexBuffer< castor3d::NonTexturedQuad > const & vertexBuffer )const;
+		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		inline castor3d::ShaderModule const & getVertexShader()const
 		{

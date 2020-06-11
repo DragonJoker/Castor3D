@@ -1,9 +1,9 @@
 project( CastorTest )
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} library" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 10 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 3 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/include/Core

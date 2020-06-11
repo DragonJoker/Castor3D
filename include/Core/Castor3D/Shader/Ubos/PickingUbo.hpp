@@ -14,6 +14,8 @@ namespace castor3d
 	{
 	public:
 		using Configuration = PickingUboConfiguration;
+		explicit PickingUbo( Engine & engine );
+		void initialise();
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

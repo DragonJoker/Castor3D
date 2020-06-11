@@ -144,8 +144,8 @@ namespace smaa
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore edgeDetectionCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "DepthEdgeDetection" ),
+			device->createSemaphore( "DepthEdgeDetection" )
 		};
 		auto & edgeDetectionCmd = *edgeDetectionCommands.commandBuffer;
 

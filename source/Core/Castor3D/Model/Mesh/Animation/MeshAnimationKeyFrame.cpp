@@ -23,7 +23,7 @@ namespace castor3d
 
 			if ( points.size() > 1 )
 			{
-				for ( auto & vertex : castor::makeArrayView( &points[1], points.size() - 1u ) )
+				for ( auto & vertex : castor::makeArrayView( &points[1], points.data() + points.size() ) )
 				{
 					castor::Point3f cur{ vertex.pos };
 					max[0] = std::max( cur[0], max[0] );

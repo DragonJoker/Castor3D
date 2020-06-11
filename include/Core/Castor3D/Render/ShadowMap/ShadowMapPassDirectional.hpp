@@ -45,8 +45,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		C3D_API bool update( Camera const & camera
-			, RenderQueueArray & queues
+		C3D_API bool update( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
 		/**
@@ -89,24 +88,29 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
+		 */
+		void doUpdateFlags( PipelineFlags & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 */
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
+		 */
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
+		 */
+		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
-		C3D_API static std::string const ShadowMapUbo;
-		C3D_API static std::string const Projection;
-		C3D_API static std::string const View;
-		C3D_API static uint32_t const UboBindingPoint;
 		C3D_API static uint32_t const TextureSize;
-
-		struct Configuration
-		{
-			castor::Matrix4x4f projection;
-			castor::Matrix4x4f view;
-		};
-
-	private:
-		UniformBufferUPtr< Configuration > m_shadowConfig;
-		castor::Matrix4x4f m_projection;
-		castor::Matrix4x4f m_view;
 	};
 }
 

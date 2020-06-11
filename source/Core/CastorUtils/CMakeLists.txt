@@ -281,6 +281,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Font.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/FontCache.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Glyph.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Grid.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Image.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageCache.cpp
@@ -307,6 +308,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Font.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/FontCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Glyph.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Grid.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Image.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageCache.hpp
@@ -391,11 +393,13 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PlaneEquation.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Point.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Point.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointData.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointOperators.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PointOperators.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Quaternion.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Range.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/RangeSequence.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/RangedValue.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Simd.inl
@@ -415,6 +419,20 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	source_group( "Header Files\\Math" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 	source_group( "Source Files\\Math" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/BlueNoise.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/FractalNoise.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/NoiseModule.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/PerlinNoise.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/SimplexNoise.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Noise/WhiteNoise.hpp
+	)
+	set( ${PROJECT_NAME}_HDR_FILES
+		${${PROJECT_NAME}_HDR_FILES}
+		${${PROJECT_NAME}_FOLDER_HDR_FILES}
+	)
+	source_group( "Header Files\\Noise" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 
 	set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/BlockTimer.cpp
@@ -475,10 +493,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		set( _PLATFORM Win32 )
 	elseif ( APPLE )
 		set( _PLATFORM MacOS )
-		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-			${${PROJECT_NAME}_FOLDER_SRC_FILES}
-			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/MacOS/DisplaySize.mm
-		)
 	else ()
 		set( _PLATFORM Linux )
 	endif ()
@@ -491,6 +505,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/LoggerConsole.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/Utils.cpp
 	)
+	if ( APPLE )
+		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${${PROJECT_NAME}_FOLDER_SRC_FILES}
+			${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Platform/${_PLATFORM}/DisplaySize.mm
+		)
+	endif ()
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}
 		${${PROJECT_NAME}_FOLDER_SRC_FILES}
@@ -558,8 +578,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
-			${CASTOR_SOURCE_DIR}/include
-			${CASTOR_BINARY_DIR}/include
+			$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/include>
+			$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include>
+			$<INSTALL_INTERFACE:include>
 		PRIVATE
 			${CASTOR_SOURCE_DIR}/include/Core
 			${CASTOR_BINARY_DIR}/include/Core

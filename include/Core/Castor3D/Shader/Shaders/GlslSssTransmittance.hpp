@@ -8,8 +8,6 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-#define C3D_DebugSSSTransmittance 0
-
 namespace castor3d
 {
 	namespace shader

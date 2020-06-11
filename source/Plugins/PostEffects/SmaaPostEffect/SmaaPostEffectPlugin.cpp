@@ -134,6 +134,7 @@ extern "C"
 
 	C3D_Smaa_API void OnUnload( castor3d::Engine * engine )
 	{
+		engine->unregisterSections( smaa::PostEffect::Type );
 		engine->unregisterParsers( smaa::PostEffect::Type );
 		engine->getRenderTargetCache().getPostEffectFactory().unregisterType( smaa::PostEffect::Type );
 	}

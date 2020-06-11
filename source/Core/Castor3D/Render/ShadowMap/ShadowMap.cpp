@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -17,14 +18,12 @@ namespace castor3d
 {
 	ShadowMap::ShadowMap( Engine & engine
 		, castor::String name
-		, TextureUnit shadowMap
-		, TextureUnit linearMap
+		, ShadowMapResult result
 		, std::vector< PassData > passes
 		, uint32_t count )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ std::move( name ) }
-		, m_shadowMap{ std::move( shadowMap ) }
-		, m_linearMap{ std::move( linearMap ) }
+		, m_result{ std::move( result ) }
 		, m_passes{ std::move( passes ) }
 		, m_count{ count }
 	{
@@ -34,64 +33,73 @@ namespace castor3d
 	{
 	}
 
+	void ShadowMap::accept( PipelineVisitorBase & visitor )
+	{
+		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
+		{
+			uint32_t index = 0u;
+			m_result[SmTexture( i )].getTexture()->forEachLeafView( [&index, &visitor, this, i]( TextureViewUPtr const & view )
+				{
+					visitor.visit( m_name + getName( SmTexture( i ) ) + cuT( "L" ) + string::toString( index++ ), view->getSampledView() );
+				} );
+		}
+	}
+
 	bool ShadowMap::initialise()
 	{
 		bool result = true;
 
 		if ( !m_initialised )
 		{
-			m_shadowMap.initialise();
-			m_linearMap.initialise();
+			m_result.initialise();
 			auto & device = getCurrentRenderDevice( *this );
 
 			{
-				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer();
+				auto cmdBuffer = device.graphicsCommandPool->createCommandBuffer( m_name + "Clear" );
 				cmdBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-				static VkClearColorValue const clearColour{ 1.0f, 1.0f, 1.0f, 1.0f };
-				cmdBuffer->beginDebugBlock(
-					{
-						m_name + " variance clear",
-						makeFloatArray( getEngine()->getNextRainbowColour() ),
-					} );
+				uint32_t index = 0u;
 
-				for ( auto & view : *m_shadowMap.getTexture() )
+				for ( auto & texture : m_result )
 				{
-					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-						, VK_PIPELINE_STAGE_TRANSFER_BIT
-						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-					cmdBuffer->clear( view->getView(), clearColour );
-					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+					cmdBuffer->beginDebugBlock(
+						{
+							m_name + getName( SmTexture( index ) ) + " clear",
+							makeFloatArray( getEngine()->getNextRainbowColour() ),
+						} );
+					texture->getTexture()->forEachLeafView( [&cmdBuffer, index]( TextureViewUPtr const & view )
+						{
+							cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+								, VK_PIPELINE_STAGE_TRANSFER_BIT
+								, view->getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+
+							if ( ashes::isDepthOrStencilFormat( view->getTargetView()->format ) )
+							{
+								cmdBuffer->clear( view->getTargetView()
+									, getClearValue( SmTexture( index ) ).depthStencil );
+								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+									, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
+									, view->getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+							}
+							else
+							{
+								cmdBuffer->clear( view->getTargetView()
+									, getClearValue( SmTexture( index ) ).color );
+								cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+									, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+									, view->getTargetView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+							}
+						} );
+					cmdBuffer->endDebugBlock();
+					++index;
 				}
 
-				cmdBuffer->endDebugBlock();
-				cmdBuffer->beginDebugBlock(
-					{
-						m_name + " linear clear",
-						makeFloatArray( getEngine()->getNextRainbowColour() ),
-					} );
-
-				for ( auto & view : *m_linearMap.getTexture() )
-				{
-					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-						, VK_PIPELINE_STAGE_TRANSFER_BIT
-						, view->getView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-					cmdBuffer->clear( view->getView(), clearColour );
-					cmdBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, view->getView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-				}
-
-				cmdBuffer->endDebugBlock();
 				cmdBuffer->end();
-				auto fence = device->createFence();
+				auto fence = device->createFence( m_name + "Clear" );
 				device.graphicsQueue->submit( *cmdBuffer, fence.get() );
 				fence->wait( ashes::MaxTimeout );
 			}
 
-			doInitialiseDepthFormat();
-			auto size = m_shadowMap.getTexture()->getDimensions();
+			auto size = m_result[SmTexture::eVariance].getTexture()->getDimensions();
 
 			for ( auto & pass : m_passes )
 			{
@@ -101,7 +109,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				m_finished = device->createSemaphore();
+				m_finished = device->createSemaphore( m_name );
 				doInitialise();
 				m_initialised = true;
 			}
@@ -122,8 +130,7 @@ namespace castor3d
 
 		m_initialised = false;
 		doCleanup();
-		m_shadowMap.cleanup();
-		m_linearMap.cleanup();
+		m_result.cleanup();
 	}
 
 	ashes::Semaphore const & ShadowMap::render( ashes::Semaphore const & toWait
@@ -137,65 +144,34 @@ namespace castor3d
 		return doRender( toWait, index );
 	}
 
-	void ShadowMap::updateFlags( PipelineFlags & flags )const
+	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
 	{
-		remFlag( flags.programFlags, ProgramFlag::eLighting );
-		remFlag( flags.programFlags, ProgramFlag::eInvertNormals );
-		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
-		remFlag( flags.textures, TextureFlag::eAllButOpacity );
-		flags.texturesCount = checkFlag( flags.textures, TextureFlag::eOpacity )
-			? 1u
-			: 0u;
-		doUpdateFlags( flags );
+		static ashes::VkClearValueArray const result
+		{
+			[]()
+			{
+				ashes::VkClearValueArray result;
+
+				for ( uint32_t i = 0u; i < uint32_t( SmTexture::eCount ); ++i )
+				{
+					result.push_back( getClearValue( SmTexture( i ) ) );
+				}
+
+				return result;
+			}()
+		};
+		return result;
 	}
 
-	ShaderPtr ShadowMap::getVertexShaderSource( PipelineFlags const & flags )const
+	ashes::Sampler const & ShadowMap::getSampler( SmTexture texture
+		, uint32_t index )const
 	{
-		return doGetVertexShaderSource( flags );
+		return m_result[texture].getSampler()->getSampler();
 	}
 
-	ShaderPtr ShadowMap::getGeometryShaderSource( PipelineFlags const & flags )const
+	ashes::ImageView const & ShadowMap::getView( SmTexture texture
+		, uint32_t index )const
 	{
-		return doGetGeometryShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMap::getPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return doGetPixelShaderSource( flags );
-	}
-
-	ashes::Sampler const & ShadowMap::getLinearSampler()const
-	{
-		return m_linearMap.getSampler()->getSampler();
-	}
-
-	ashes::Sampler const & ShadowMap::getVarianceSampler()const
-	{
-		return m_shadowMap.getSampler()->getSampler();
-	}
-
-	ashes::ImageView const & ShadowMap::getLinearView()const
-	{
-		return m_linearMap.getTexture()->getDefaultView();
-	}
-
-	ashes::ImageView const & ShadowMap::getVarianceView()const
-	{
-		return m_shadowMap.getTexture()->getDefaultView();
-	}
-
-	ashes::ImageView const & ShadowMap::getLinearView( uint32_t index )const
-	{
-		return m_linearMap.getTexture()->getDefaultView();
-	}
-
-	ashes::ImageView const & ShadowMap::getVarianceView( uint32_t index )const
-	{
-		return m_shadowMap.getTexture()->getDefaultView();
-	}
-
-	ShaderPtr ShadowMap::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return ShaderPtr{};
+		return m_result[texture].getTexture()->getDefaultView().getSampledView();
 	}
 }

@@ -44,17 +44,22 @@ namespace castor3d
 			C3D_API LightingModel( sdw::ShaderWriter & writer
 				, Utils & utils
 				, bool isOpaqueProgram );
-			C3D_API void declareModel( uint32_t & index
-				, uint32_t maxCascades );
+			C3D_API void declareModel( bool rsm
+				, uint32_t & index);
 			C3D_API void declareDirectionalModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
-				, uint32_t & index
-				, uint32_t maxCascades );
+				, bool rsm
+				, uint32_t & index );
 			C3D_API void declarePointModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
+				, bool rsm
 				, uint32_t & index );
 			C3D_API void declareSpotModel( ShadowType shadows
+				, bool lightUbo
 				, bool volumetric
+				, bool rsm
 				, uint32_t & index );
 			// Calls
 			C3D_API DirectionalLight getDirectionalLight( sdw::Int const & index )const;

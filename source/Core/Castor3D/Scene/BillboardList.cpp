@@ -169,7 +169,7 @@ namespace castor3d
 		if ( m_count )
 		{
 			auto & device = getCurrentRenderDevice( getParentScene() );
-			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count * m_vertexStride )
+			auto mappedSize = ashes::getAlignedSize( VkDeviceSize( m_count ) * m_vertexStride
 				, device.properties.limits.nonCoherentAtomSize );
 
 			if ( auto gpuBuffer = m_vertexBuffer->getBuffer().lock( 0
@@ -198,7 +198,7 @@ namespace castor3d
 					{
 					}
 
-					Element( Element && rhs )
+					Element( Element && rhs )noexcept
 						: m_buffer{ rhs.m_buffer }
 						, m_position{ std::move( rhs.m_position ) }
 						, m_stride{ rhs.m_stride }
@@ -212,7 +212,7 @@ namespace castor3d
 						return *this;
 					}
 
-					Element & operator=( Element && rhs )
+					Element & operator=( Element && rhs )noexcept
 					{
 						if ( &rhs != this )
 						{
@@ -225,7 +225,7 @@ namespace castor3d
 					}
 				};
 
-				ByteArray copy{ gpuBuffer, gpuBuffer + ( m_vertexStride * m_count ) };
+				ByteArray copy{ gpuBuffer, gpuBuffer + ( size_t( m_vertexStride ) * m_count ) };
 				std::vector< Element > elements;
 				auto buffer = copy.data();
 				elements.reserve( m_count );
@@ -266,7 +266,7 @@ namespace castor3d
 
 	ProgramFlags BillboardBase::getProgramFlags()const
 	{
-		ProgramFlags result = uint32_t( ProgramFlag::eBillboards );
+		ProgramFlags result = ProgramFlag::eBillboards;
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{

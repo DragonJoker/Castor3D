@@ -11,6 +11,8 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include <CastorUtils/Math/TransformationMatrix.hpp>
+
 #include <ashespp/Core/Device.hpp>
 
 using namespace castor;
@@ -25,7 +27,8 @@ namespace castor3d
 			, DirectionalLight const & light
 			, uint32_t cascades )
 		{
-			auto & renderSystem = *light.getLight().getScene()->getEngine()->getRenderSystem();
+			auto & scene = *light.getLight().getScene();
+			auto & renderSystem = *scene.getEngine()->getRenderSystem();
 			std::vector< DirectionalLight::Cascade > result( cascades );
 
 			// Compute camera inverse view transform.
@@ -60,7 +63,6 @@ namespace castor3d
 			for ( uint32_t cascadeIdx = 0; cascadeIdx < cascades; ++cascadeIdx )
 			{
 				float splitDist = cascadeSplits[cascadeIdx];
-
 				Point3f frustumCorners[8]
 				{
 					Point3f( -1.0f, 1.0f, -1.0f ),
@@ -76,8 +78,8 @@ namespace castor3d
 				// Project frustum corners into world space
 				for ( auto & frustumCorner : frustumCorners )
 				{
-					auto invCorner = invCameraVP * Point4f{ frustumCorner[0], frustumCorner[1], frustumCorner[2], 1.0f };
-					frustumCorner = Point3f{ invCorner / invCorner[3] };
+					auto invCorner = invCameraVP * Point4f{ frustumCorner->x, frustumCorner->y, frustumCorner->z, 1.0f };
+					frustumCorner = Point3f{ invCorner / invCorner->w };
 				}
 
 				for ( uint32_t i = 0; i < 4; ++i )
@@ -108,7 +110,21 @@ namespace castor3d
 				Point3f maxExtents{ radius, radius, radius };
 				Point3f minExtents = -maxExtents;
 
+#	if 0
+				Point3f lightDir = light.getDirection();
+				auto aabb = scene.getBoundingBox();
+				auto & cascade = result[cascadeIdx];
+				cascade.viewMatrix = matrix::lookAt( frustumCenter - lightDir * -minExtents->z, frustumCenter, { 0.0f, 1.0f, 0.0f } );
+				cascade.projMatrix = matrix::ortho( minExtents->x, maxExtents->x
+					, minExtents->y, maxExtents->y
+					, 0.0f, maxExtents->z - minExtents->z );
+
+				// Store split distance and matrix in cascade
+				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
+#	else
 				Point3f lightDirection = frustumCenter - light.getDirection() * -minExtents[2];
+
 				Point3f up{ 0.0f, 1.0f, 0.0f };
 				Point3f right( point::getNormalised( point::cross( up, lightDirection ) ) );
 				up = point::getNormalised( point::cross( lightDirection, right ) );
@@ -137,7 +153,9 @@ namespace castor3d
 				shadowProj[3] += roundOffset;
 				cascade.projMatrix = shadowProj;
 				cascade.viewProjMatrix = cascade.projMatrix * cascade.viewMatrix;
-				cascade.splitDepth = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.splitDepthScale->x = ( nearClip + splitDist * clipRange ) * -1.0f;
+				cascade.splitDepthScale->y = -cascade.splitDepthScale->x / clipRange;
+#	endif
 				prevSplitDist = splitDist;
 			}
 
@@ -152,7 +170,7 @@ namespace castor3d
 	{
 		return lhs.viewMatrix == rhs.viewMatrix
 			&& lhs.projMatrix == rhs.projMatrix
-			&& lhs.splitDepth == rhs.splitDepth;
+			&& lhs.splitDepthScale == rhs.splitDepthScale;
 	}
 
 	//*************************************************************************************************
@@ -223,19 +241,23 @@ namespace castor3d
 	{
 		m_direction = Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( m_direction, m_direction );
+		point::normalise( m_direction );
 	}
 
 	void DirectionalLight::doBind( Point4f * buffer )const
 	{
 		doCopyComponent( m_direction, float( m_cascades.size() ), buffer );
 		Point4f splitDepths;
+		Point4f splitScales;
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
-			splitDepths[i] = m_cascades[i].splitDepth;
+			splitDepths[i] = m_cascades[i].splitDepthScale->x;
+			splitScales[i] = m_cascades[i].splitDepthScale->y;
 		}
 
 		doCopyComponent( splitDepths, buffer );
+		doCopyComponent( splitScales, buffer );
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{

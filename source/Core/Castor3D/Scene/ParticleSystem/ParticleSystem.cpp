@@ -238,7 +238,7 @@ namespace castor3d
 				, attributes )
 			, stride
 			, makeVertexBufferBase( device
-				, stride * m_particlesCount
+				, VkDeviceSize( stride ) * m_particlesCount
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, "ParticleSystemBillboards" ) );
@@ -357,7 +357,7 @@ namespace castor3d
 	{
 		m_csImpl->addParticleVariable( name, type, defaultValue );
 		m_cpuImpl->addParticleVariable( name, type, defaultValue );
-		m_inputs.push_back( ParticleElementDeclaration{ name, 0u, type, m_inputs.stride(), 1u } );
+		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride(), 1u } );
 		m_defaultValues[cuT ("out_") + name] = defaultValue;
 	}
 

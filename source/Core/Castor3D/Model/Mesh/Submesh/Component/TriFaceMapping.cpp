@@ -208,7 +208,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
 
-		if ( count )
+		if ( count && getOwner()->hasIndexBuffer() )
 		{
 			auto & indexBuffer = getOwner()->getIndexBuffer();
 

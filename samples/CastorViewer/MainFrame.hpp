@@ -115,6 +115,7 @@ namespace CastorViewer
 		castor::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
+		wxString m_debugPerspective;
 		wxTimer * m_timerErr{ nullptr };
 		std::vector< std::pair< wxString, bool > > m_errLogList;
 		std::mutex m_errLogListMtx;

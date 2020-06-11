@@ -76,16 +76,19 @@ namespace castor3d
 
 	void MorphComponent::doUpload()
 	{
-		auto & vertexBuffer = getOwner()->getVertexBuffer();
-		auto count = uint32_t( vertexBuffer.getCount() );
-
-		if ( count )
+		if ( getOwner()->hasVertexBuffer() )
 		{
-			if ( auto * buffer = m_animBuffer->lock( 0, count, 0u ) )
+			auto & vertexBuffer = getOwner()->getVertexBuffer();
+			auto count = uint32_t( vertexBuffer.getCount() );
+
+			if ( count )
 			{
-				std::copy( m_data.begin(), m_data.end(), buffer );
-				m_animBuffer->flush( 0u, count );
-				m_animBuffer->unlock();
+				if ( auto * buffer = m_animBuffer->lock( 0, count, 0u ) )
+				{
+					std::copy( m_data.begin(), m_data.end(), buffer );
+					m_animBuffer->flush( 0u, count );
+					m_animBuffer->unlock();
+				}
 			}
 		}
 	}

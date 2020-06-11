@@ -122,8 +122,8 @@ namespace castor3d
 		SceneRenderNodesPtr m_renderNodes;
 		SceneCulledRenderNodesPtr m_culledRenderNodes;
 		ashes::CommandBufferPtr m_commandBuffer;
-		bool m_allChanged;
-		bool m_culledChanged;
+		bool m_allChanged{};
+		bool m_culledChanged{};
 		castor::ChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::ChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
 		enum class Preparation

@@ -148,8 +148,8 @@ namespace smaa
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( std::move( createInfo ) );
-			setDebugObjectName( device, *result, "LineariseDepth" );
+			auto result = device->createRenderPass( "SMAA"
+				, std::move( createInfo ) );
 			return result;
 		}
 
@@ -158,9 +158,10 @@ namespace smaa
 		{
 			ashes::ImageViewCRefArray attaches
 			{
-				{ texture.getDefaultView() }
+				{ texture.getDefaultView().getSampledView() }
 			};
-			return renderPass.createFrameBuffer( { texture.getWidth(), texture.getHeight() }
+			return renderPass.createFrameBuffer( "SMAA"
+				, { texture.getWidth(), texture.getHeight() }
 				, std::move( attaches ) );
 		}
 	}
@@ -258,11 +259,10 @@ namespace smaa
 			, renderTarget
 			, renderSystem
 			, parameters
-			, true }
+			, 5u
+			, Kind::eSRGB }
 		, m_config{ parameters }
 	{
-		m_passesCount = 5u;
-
 		if ( m_config.data.mode == Mode::eT2X )
 		{
 			m_passesCount += m_config.maxSubsampleIndices;
@@ -324,14 +324,14 @@ namespace smaa
 
 	bool PostEffect::doInitialise( castor3d::RenderPassTimer const & timer )
 	{
-		m_srgbTextureView = &m_target->getDefaultView();
-		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView();
+		m_srgbTextureView = &m_target->getDefaultView().getSampledView();
+		m_hdrTextureView = &m_renderTarget.getTechnique()->getResult().getDefaultView().getSampledView();
 
 		switch ( m_config.data.edgeDetection )
 		{
 		case EdgeDetectionType::eDepth:
 			m_edgeDetection = std::make_unique< DepthEdgeDetection >( m_renderTarget
-				, m_renderTarget.getTechnique()->getDepth().getDefaultView()
+				, m_renderTarget.getTechnique()->getDepth().getDefaultView().getSampledView()
 				, m_config );
 			break;
 
@@ -352,7 +352,7 @@ namespace smaa
 
 #if !C3D_DebugEdgeDetection
 		m_blendingWeightCalculation = std::make_unique< BlendingWeightCalculation >( m_renderTarget
-			, m_edgeDetection->getSurface()->getDefaultView()
+			, m_edgeDetection->getSurface()->getDefaultView().getSampledView()
 			, m_edgeDetection->getDepth()
 			, m_config );
 
@@ -360,7 +360,7 @@ namespace smaa
 		auto * velocityView = doGetVelocityView();
 		m_neighbourhoodBlending = std::make_unique< NeighbourhoodBlending >( m_renderTarget
 			, *m_srgbTextureView
-			, m_blendingWeightCalculation->getSurface()->getDefaultView()
+			, m_blendingWeightCalculation->getSurface()->getDefaultView().getSampledView()
 			, velocityView
 			, m_config );
 
@@ -370,9 +370,9 @@ namespace smaa
 			for ( uint32_t i = 0u; i < m_config.maxSubsampleIndices; ++i )
 			{
 				auto & previous = i == 0u
-					? m_neighbourhoodBlending->getSurface( m_config.maxSubsampleIndices - 1 )->getDefaultView()
-					: m_neighbourhoodBlending->getSurface( i - 1 )->getDefaultView();
-				auto & current = m_neighbourhoodBlending->getSurface( i )->getDefaultView();
+					? m_neighbourhoodBlending->getSurface( m_config.maxSubsampleIndices - 1 )->getDefaultView().getSampledView()
+					: m_neighbourhoodBlending->getSurface( i - 1 )->getDefaultView().getSampledView();
+				auto & current = m_neighbourhoodBlending->getSurface( i )->getDefaultView().getSampledView();
 				m_reproject.emplace_back( std::make_unique< Reproject >( m_renderTarget
 					, current
 					, previous
@@ -465,21 +465,24 @@ namespace smaa
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		auto copyQuad = std::make_shared< castor3d::RenderQuad >( *getRenderSystem(), VK_FILTER_NEAREST, castor3d::RenderQuad::TexcoordConfig{} );
+		auto copyQuad = castor3d::RenderQuadBuilder{}
+			.texcoordConfig( castor3d::RenderQuadConfig::Texcoord{} )
+			.build( *getRenderSystem()
+				, cuT( "SmaaCopy" )
+				, VK_FILTER_NEAREST );
 		copyQuad->createPipeline( { m_renderTarget.getSize().getWidth(), m_renderTarget.getSize().getHeight() }
 			, {}
 			, m_copyProgram
-			, m_smaaResult->getDefaultView()
+			, m_smaaResult->getDefaultView().getSampledView()
 			, *m_copyRenderPass
 			, std::move( bindings )
 			, {} );
-		m_copyQuads.push_back( copyQuad );
 
 		auto & device = getCurrentRenderDevice( *this );
 		castor3d::CommandsSemaphore copyCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( "SMAA Copy" ),
+			device->createSemaphore( "SMAA Copy" )
 		};
 		auto & copyCmd = *copyCommands.commandBuffer;
 
@@ -492,7 +495,7 @@ namespace smaa
 		timer.beginPass( copyCmd, passIndex );
 		copyCmd.memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_smaaResult->getDefaultView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_smaaResult->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		copyCmd.beginRenderPass( *m_copyRenderPass
 			, *m_copyFrameBuffer
 			, { castor3d::transparentBlackClearColor }
@@ -503,6 +506,7 @@ namespace smaa
 		copyCmd.endDebugBlock();
 		copyCmd.end();
 		result.emplace_back( std::move( copyCommands ) );
+		m_copyQuads.emplace_back( std::move( copyQuad ) );
 
 		return result;
 	}
@@ -610,7 +614,7 @@ namespace smaa
 		case Mode::eT2X:
 			if ( m_config.data.enableReprojection )
 			{
-				velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView();
+				velocityView = &m_renderTarget.getVelocity().getTexture()->getDefaultView().getSampledView();
 			}
 			break;
 

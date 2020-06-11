@@ -5,9 +5,9 @@ if ( MSVC )
 
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
-		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-		set( ${PROJECT_NAME}_VERSION_MINOR 11 )
-		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+		set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+		set( ${PROJECT_NAME}_VERSION_MINOR 5 )
+		set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 		configure_file( 
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Win32/ComCastorUtils.hpp.in
@@ -156,6 +156,11 @@ if ( MSVC )
 			PRIVATE
 				${ATL_LIBRARIES}
 				castor::Castor3D
+		)
+		set( CASTOR_INSTEXP_LIST
+			${CASTOR_INSTEXP_LIST}
+			${PROJECT_NAME}
+			PARENT_SCOPE
 		)
 
 		c3d_parse_subdir_files( ${CASTOR_SOURCE_DIR} Interop CastorUtils "CastorUtils" )

@@ -31,6 +31,7 @@ namespace GuiCommon
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "keywords" ), Language_Keywords, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_name" ), Language_FontName, { makeParameter< ParameterType::eText >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
+		addParser( uint32_t( LANGSection::eLanguage ), cuT( "is_c_like" ), Language_CLike, { makeParameter< ParameterType::eBool >() } );
 		addParser( uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
 		addParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { makeParameter< ParameterType::eCheckedText>( langContext->mapTypes ) } );
 		addParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
@@ -110,9 +111,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			String name;
-			params[0]->get( name );
-			langContext->currentLanguage->setName( name );
+			params[0]->get( langContext->currentLanguage->name );
 		}
 	}
 	CU_EndAttributePush( LANGSection::eLanguage )
@@ -133,17 +132,17 @@ namespace GuiCommon
 			if ( !strParams.empty() )
 			{
 				StringArray array = string::split( strParams, cuT( "\t ,;" ), 100, false );
-				String strPatterns;
-				std::for_each( array.begin(), array.end(), [&]( String const & p_strPattern )
-					{
-						if ( !strPatterns.empty() )
-						{
-							strPatterns += cuT( ";" );
-						}
+				langContext->currentLanguage->filePattern.clear();
 
-						strPatterns += p_strPattern;
-					} );
-				langContext->currentLanguage->setFilePattern( strPatterns );
+				for ( auto & pattern : array )
+				{
+					if ( !langContext->currentLanguage->filePattern.empty() )
+					{
+						langContext->currentLanguage->filePattern += cuT( ";" );
+					}
+
+					langContext->currentLanguage->filePattern += pattern;
+				}
 			}
 			else
 			{
@@ -169,12 +168,12 @@ namespace GuiCommon
 			if ( !strParams.empty() )
 			{
 				StringArray array = string::split( strParams, cuT( "\t ,;" ), 100, false );
-				unsigned long ulFoldFlags = 0;
-				std::for_each( array.begin(), array.end(), [&]( String const & p_strFoldFlag )
-					{
-						ulFoldFlags |= langContext->mapFoldFlags[p_strFoldFlag];
-					} );
-				langContext->currentLanguage->setFoldFlags( ulFoldFlags );
+				langContext->currentLanguage->foldFlags = 0u;
+
+				for ( auto & flag : array )
+				{
+					langContext->currentLanguage->foldFlags |= langContext->mapFoldFlags[flag];
+				}
 			}
 			else
 			{
@@ -216,9 +215,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			String name;
-			params[0]->get( name );
-			langContext->currentLanguage->setFontName( name );
+			params[0]->get( langContext->currentLanguage->fontName );
 		}
 	}
 	CU_EndAttribute()
@@ -233,9 +230,22 @@ namespace GuiCommon
 		}
 		else
 		{
-			int32_t size;
-			params[0]->get( size );
-			langContext->currentLanguage->setFontSize( size );
+			params[0]->get( langContext->currentLanguage->fontSize );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( Language_CLike )
+	{
+		LanguageFileContextPtr langContext = std::static_pointer_cast< LanguageFileContext >( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			params[0]->get( langContext->currentLanguage->isCLike );
 		}
 	}
 	CU_EndAttribute()

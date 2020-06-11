@@ -44,7 +44,8 @@ namespace Bloom
 			, PostEffect::Name
 			, renderTarget
 			, renderSystem
-			, params }
+			, params
+			, 3u }
 		, m_blurKernelSize{ BaseKernelSize }
 		, m_blurPassesCount{ BaseFilterCount }
 	{
@@ -74,34 +75,11 @@ namespace Bloom
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_hiPass->getVertexShader().shader );
-		visitor.visit( cuT( "HiPass" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_hiPass->getPixelShader().shader );
-
+		m_hiPass->accept( visitor );
 #if !Bloom_DebugHiPass
-		visitor.visit( cuT( "BlurX" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurXPass->getVertexShader().shader );
-		visitor.visit( cuT( "BlurX" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurXPass->getPixelShader().shader );
-
-		visitor.visit( cuT( "BlurY" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_blurYPass->getVertexShader().shader );
-		visitor.visit( cuT( "BlurY" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_blurYPass->getPixelShader().shader );
-
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_combinePass->getVertexShader().shader );
-		visitor.visit( cuT( "Combine" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_combinePass->getPixelShader().shader );
+		m_blurXPass->accept( visitor );
+		m_blurYPass->accept( visitor );
+		m_combinePass->accept( visitor );
 
 		visitor.visit( cuT( "Kernel Size" )
 			, m_blurKernelSize );
@@ -162,7 +140,7 @@ namespace Bloom
 
 		m_hiPass = std::make_unique< HiPass >( *getRenderSystem()
 			, m_target->getPixelFormat()
-			, m_target->getDefaultView()
+			, m_target->getDefaultView().getSampledView()
 			, size
 			, m_blurPassesCount );
 #if !Bloom_DebugHiPass
@@ -184,12 +162,12 @@ namespace Bloom
 			, true );
 		m_combinePass = std::make_unique< CombinePass >( device
 			, m_target->getPixelFormat()
-			, m_target->getDefaultView()
-			, m_hiPass->getResult().getDefaultView()
+			, m_target->getDefaultView().getSampledView()
+			, m_hiPass->getResult().getDefaultView().getSampledView()
 			, size
 			, m_blurPassesCount );
 #endif
-		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer ) ) );
+		m_commands.emplace_back( std::move( m_hiPass->getCommands( timer, 0u ) ) );
 
 #if !Bloom_DebugHiPass
 		for ( auto & command : m_blurXPass->getCommands( timer, *m_vertexBuffer ) )

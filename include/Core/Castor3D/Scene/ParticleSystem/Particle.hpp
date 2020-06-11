@@ -53,7 +53,7 @@ namespace castor3d
 		 *\brief		Constructeur par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Particle( Particle && rhs );
+		C3D_API Particle( Particle && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator.
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Opérateur d'affectation par déplacement.
 		 *\param[in]	rhs	L'objet à déplacer.
 		 */
-		C3D_API Particle & operator=( Particle && rhs );
+		C3D_API Particle & operator=( Particle && rhs )noexcept;
 		/**
 		 *\~english
 		 *\brief		Sets the particle variable's value at given index.

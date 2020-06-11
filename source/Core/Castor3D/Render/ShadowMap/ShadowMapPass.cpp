@@ -1,10 +1,14 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneNode.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
@@ -23,6 +27,7 @@ namespace castor3d
 		, ShadowMap const & shadowMap )
 		: RenderPass{ cuT( "ShadowMap" ), std::move( name ), engine, matrixUbo, culler }
 		, m_shadowMap{ shadowMap }
+		, m_shadowMapUbo{ engine }
 	{
 	}
 
@@ -49,7 +54,7 @@ namespace castor3d
 			RenderPass::doUpdate( nodes.billboardNodes.backCulled );
 		}
 	}
-
+	
 	ashes::VkDescriptorSetLayoutBindingArray ShadowMapPass::doCreateTextureBindings( PipelineFlags const & flags )const
 	{
 		auto index = getMinTextureIndex();
@@ -64,12 +69,63 @@ namespace castor3d
 			index += flags.texturesCount;
 		}
 
+		if ( checkFlag( flags.passFlags, PassFlag::eMetallicRoughness )
+			|| checkFlag( flags.passFlags, PassFlag::eSpecularGlossiness ) )
+		{
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+		}
+
 		return textureBindings;
 	}
 
-	void ShadowMapPass::doUpdateFlags( PipelineFlags & flags )const
+	namespace
 	{
-		m_shadowMap.updateFlags( flags );
+		template< typename DataTypeT, typename InstanceTypeT >
+		void fillTexDescriptor( ashes::DescriptorSetLayout const & layout
+			, uint32_t & index
+			, ObjectRenderNode< DataTypeT, InstanceTypeT > & node
+			, ShadowMapLightTypeArray const & shadowMaps )
+		{
+			index = getMinTextureIndex();
+			ashes::WriteDescriptorSetArray writes;
+			node.passNode.fillDescriptor( layout
+				, index
+				, writes
+				, ShadowMap::textureFlags );
+
+			if ( checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eMetallicRoughness )
+				|| checkFlag( node.pipeline.getFlags().passFlags, PassFlag::eSpecularGlossiness ) )
+			{
+				auto & background = *node.sceneNode.getScene()->getBackground();
+
+				if ( background.hasIbl() )
+				{
+					auto & ibl = background.getIbl();
+					bindTexture( ibl.getIrradianceTexture()
+						, ibl.getIrradianceSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredEnvironmentTexture()
+						, ibl.getPrefilteredEnvironmentSampler()
+						, writes
+						, index );
+					bindTexture( ibl.getPrefilteredBrdfTexture()
+						, ibl.getPrefilteredBrdfSampler()
+						, writes
+						, index );
+				}
+			}
+
+			node.texDescriptorSet->setBindings( writes );
+		}
 	}
 
 	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -77,10 +133,7 @@ namespace castor3d
 		, BillboardListRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.texDescriptorSet
-			, true );
+		fillTexDescriptor( layout, index, node, shadowMaps );
 	}
 
 	void ShadowMapPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -88,38 +141,15 @@ namespace castor3d
 		, SubmeshRenderNode & node
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		node.passNode.fillDescriptor( layout
-			, index
-			, *node.texDescriptorSet
-			, true );
-	}
-
-	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
-	{
-	}
-
-	ShaderPtr ShadowMapPass::doGetVertexShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getVertexShaderSource( flags );
+		fillTexDescriptor( layout, index, node, shadowMaps );
 	}
 
 	ShaderPtr ShadowMapPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
-		return m_shadowMap.getGeometryShaderSource( flags );
+		return ShaderPtr{};
 	}
 
-	ShaderPtr ShadowMapPass::doGetPhongPixelShaderSource( PipelineFlags const & flags )const
+	void ShadowMapPass::doUpdatePipeline( RenderPipeline & pipeline )const
 	{
-		return m_shadowMap.getPixelShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMapPass::doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getPixelShaderSource( flags );
-	}
-
-	ShaderPtr ShadowMapPass::doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const
-	{
-		return m_shadowMap.getPixelShaderSource( flags );
 	}
 }

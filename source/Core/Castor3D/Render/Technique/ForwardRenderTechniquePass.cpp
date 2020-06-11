@@ -4,13 +4,14 @@
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderPassTimer.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/RenderNode_Render.hpp"
+#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -167,27 +168,25 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( *this );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 		ashes::ImageViewCRefArray fbAttaches;
 		fbAttaches.emplace_back( depthView );
 		fbAttaches.emplace_back( colourView );
 
-		m_frameBuffer = m_renderPass->createFrameBuffer( { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
+		m_frameBuffer = m_renderPass->createFrameBuffer( getName()
+			, { colourView.image->getDimensions().width, colourView.image->getDimensions().height }
 			, std::move( fbAttaches ) );
 
-		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer();
+		m_nodesCommands = device.graphicsCommandPool->createCommandBuffer( getName() );
 	}
 
 	void ForwardRenderTechniquePass::accept( RenderTechniqueVisitor & visitor )
 	{
 		auto shaderProgram = getEngine()->getShaderProgramCache().getAutomaticProgram( *this
 			, visitor.getFlags() );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ).shader );
-		visitor.visit( cuT( "Object" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ).shader );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
+		visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	void ForwardRenderTechniquePass::update( RenderInfo & info
@@ -209,8 +208,7 @@ namespace castor3d
 				opaqueBlackClearColor,
 			};
 
-			getEngine()->setPerObjectLighting( true );
-			auto timerBlock = getTimer().start();
+			RenderPassTimerBlock timerBlock{ getTimer().start() };
 			auto & device = getCurrentRenderDevice( *this );
 
 			m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -219,15 +217,15 @@ namespace castor3d
 					"Forward Pass",
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
-			getTimer().beginPass( *m_nodesCommands );
-			getTimer().notifyPassRender();
+			timerBlock->beginPass( *m_nodesCommands );
+			timerBlock->notifyPassRender();
 			m_nodesCommands->beginRenderPass( getRenderPass()
 				, *m_frameBuffer
 				, clearValues
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
 			m_nodesCommands->endRenderPass();
-			getTimer().endPass( *m_nodesCommands );
+			timerBlock->endPass( *m_nodesCommands );
 			m_nodesCommands->endDebugBlock();
 			m_nodesCommands->end();
 
@@ -285,24 +283,18 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 		}
 
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthDirectional
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowDirectional
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthSpot
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowSpot
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthPoint
-		textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapShadowPoint
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			// Depth
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Variance
+			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
 		return textureBindings;
 	}
 
@@ -323,7 +315,7 @@ namespace castor3d
 			if ( node.passNode.pass.hasEnvironmentMapping() )
 			{
 				auto & envMap = scene.getEnvironmentMap( node.sceneNode );
-				bindTexture( envMap.getTexture().getTexture()->getDefaultView()
+				bindTexture( envMap.getTexture().getTexture()->getDefaultView().getSampledView()
 					, envMap.getTexture().getSampler()->getSampler()
 					, writes
 					, index );
@@ -351,15 +343,13 @@ namespace castor3d
 				}
 			}
 
-			bindShadowMaps( shadowMaps[size_t( LightType::eDirectional )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::eSpot )]
-				, writes
-				, index );
-			bindShadowMaps( shadowMaps[size_t( LightType::ePoint )]
-				, writes
-				, index );
+			for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+			{
+				bindShadowMaps( shadowMaps[i]
+					, writes
+					, index );
+			}
+
 			node.texDescriptorSet->setBindings( writes );
 		}
 	}
@@ -642,8 +632,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::PhongLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::PhongReflectionModel reflections{ writer, utils };
 
@@ -774,7 +764,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 
@@ -865,8 +857,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::MetallicBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::MetallicPbrReflectionModel reflections{ writer, utils };
 		shader::Fog fog{ getFogType( flags.sceneFlags ), writer };
@@ -1060,7 +1052,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 
@@ -1151,8 +1145,8 @@ namespace castor3d
 		utils.declareParallaxMappingFunc( flags );
 		auto lighting = shader::SpecularBrdfLightingModel::createModel( writer
 			, utils
+			, false // rsm
 			, index
-			, getCuller().getScene().getDirectionalShadowCascades()
 			, m_opaque );
 		shader::SpecularPbrReflectionModel reflections{ writer, utils };
 
@@ -1233,7 +1227,6 @@ namespace castor3d
 					, vec3( 0.0_f ) );
 				shader::OutputComponents output{ lightDiffuse, lightSpecular };
 				lighting->computeCombined( worldEye
-					, albedo
 					, specular
 					, glossiness
 					, c3d_shadowReceiver
@@ -1345,7 +1338,9 @@ namespace castor3d
 					pxl_fragColor = fog.apply( vec4( utils.removeGamma( gamma, c3d_backgroundColour.rgb() ), c3d_backgroundColour.a() )
 						, pxl_fragColor
 						, length( vtx_viewPosition )
-						, vtx_viewPosition.y() );
+						, vtx_viewPosition.y()
+						, c3d_fogInfo
+						, c3d_cameraPosition );
 				}
 			} );
 

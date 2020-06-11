@@ -6,14 +6,13 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
-#include "Castor3D/Overlay/OverlayModule.hpp"
-#include "Castor3D/Render/Culling/CullingModule.hpp"
-#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
-#include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
-
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Passes/CombinePass.hpp"
+#include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 
@@ -94,28 +93,6 @@ namespace castor3d
 
 		private:
 			RenderTarget & renderTarget;
-		};
-		/**
-		\version	0.11.0
-		\date		01/10/2018
-		\~english
-		\brief		Combines objects and overlays textures.
-		\~french
-		\brief		Combine les textures des incrustations et des objets.
-		*/
-		class CombineQuad
-			: public RenderQuad
-		{
-		public:
-			explicit CombineQuad( RenderSystem & renderSystem
-				, ashes::ImageView const & ovView );
-
-		private:
-			void doFillDescriptorSet( ashes::DescriptorSetLayout & descriptorSetLayout
-				, ashes::DescriptorSet & descriptorSet )override;
-
-		private:
-			ashes::ImageView const & m_ovView;
 		};
 
 	public:
@@ -348,6 +325,16 @@ namespace castor3d
 		{
 			return m_hdrConfig;
 		}
+
+		inline castor::String const & getName()const
+		{
+			return m_name;
+		}
+
+		inline std::vector< IntermediateView > const & getIntermediateViews()const
+		{
+			return m_intermediates;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -395,10 +382,11 @@ namespace castor3d
 		C3D_API bool doInitialiseVelocityTexture();
 		C3D_API bool doInitialiseTechnique();
 		C3D_API bool doInitialiseToneMapping();
-		C3D_API void doInitialiseCopyCommands( ashes::CommandBufferPtr & commandBuffer
+		C3D_API void doInitialiseCopyCommands( castor::String const & name
+			, ashes::CommandBufferPtr & commandBuffer
 			, ashes::ImageView const & source
 			, ashes::ImageView const & target );
-		C3D_API void doInitialiseFlip();
+		C3D_API void doInitialiseCombine();
 		C3D_API void doRender( RenderInfo & info
 			, TargetFbo & fbo
 			, CameraSPtr camera );
@@ -410,6 +398,12 @@ namespace castor3d
 		C3D_API ashes::Semaphore const & doApplyToneMapping( ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doRenderOverlays( ashes::Semaphore const & toWait );
 		C3D_API ashes::Semaphore const & doCombine( ashes::Semaphore const & toWait );
+
+		inline void addIntermediateView( castor::String name
+			, ashes::ImageView view )
+		{
+			m_intermediates.push_back( { std::move( name ), std::move( view ) } );
+		}
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -430,6 +424,7 @@ namespace castor3d
 		TargetFbo m_combinedFrameBuffer;
 		VkFormat m_pixelFormat;
 		uint32_t m_index;
+		castor::String m_name;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
 		ashes::CommandBufferPtr m_hdrCopyCommands;
@@ -441,9 +436,9 @@ namespace castor3d
 		ashes::SemaphorePtr m_srgbCopyFinished;
 		RenderPassTimerSPtr m_toneMappingTimer;
 		RenderPassTimerSPtr m_overlaysTimer;
-		std::unique_ptr< CombineQuad > m_combineQuad;
-		ashes::CommandBufferPtr m_combineCommands;
-		ashes::SemaphorePtr m_combineFinished;
+		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
+		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
+		std::vector< std::unique_ptr< CombinePass > > m_combineQuads;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
 		TextureUnit m_velocityTexture;
@@ -452,6 +447,7 @@ namespace castor3d
 		ashes::Semaphore const * m_signalFinished{ nullptr };
 		castor::PreciseTimer m_timer;
 		SceneCullerUPtr m_culler;
+		std::vector< IntermediateView > m_intermediates;
 	};
 }
 

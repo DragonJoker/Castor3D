@@ -29,6 +29,7 @@ namespace castor3d
 		 *\param[in]	shadowMap	La shadow map parente.
 		 */
 		C3D_API ShadowMapPassSpot( Engine & engine
+			, uint32_t index
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap );
@@ -42,8 +43,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::ShadowMapPass::update
 		 */
-		bool update( Camera const & camera
-			, RenderQueueArray & queues
+		bool update( RenderQueueArray & queues
 			, Light & light
 			, uint32_t index )override;
 		/**
@@ -100,12 +100,32 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderPass::doCreateBlendState
 		 */
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::ShadowMap::doUpdateFlags
+		 */
+		void doUpdateFlags( PipelineFlags & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetVertexShaderSource
+		 */
+		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPhongPixelShaderSource
+		 */
+		ShaderPtr doGetPhongPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrMRPixelShaderSource
+		 */
+		ShaderPtr doGetPbrMRPixelShaderSource( PipelineFlags const & flags )const override;
+		/**
+		 *\copydoc		castor3d::RenderPass::doGetPbrSGPixelShaderSource
+		 */
+		ShaderPtr doGetPbrSGPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static uint32_t const TextureSize;
 
 	private:
-		ShadowType m_shadowType;
+		ShadowType m_shadowType{ ShadowType::eRaw };
 		castor::Matrix4x4f m_view;
 	};
 }

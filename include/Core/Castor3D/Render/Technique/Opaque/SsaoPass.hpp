@@ -6,10 +6,10 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 
-#include "Castor3D/Render/Technique/Opaque/Ssao/SsaoModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/LightPass.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
 
 #define C3D_DebugSSAO 0
 
@@ -21,21 +21,25 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine		The engine.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	config		The SSAO configuration.
-		 *\param[in]	gpResult	The geometry pass result.
+		 *\param[in]	engine			The engine.
+		 *\param[in]	size			The render area dimensions.
+		 *\param[in]	ssaoConfig		The SSAO configuration.
+		 *\param[in]	linearisedDepth	The linearised depth buffer.
+		 *\param[in]	gpResult		The geometry pass result.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine		Le moteur.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	config		La configuration du SSAO.
-		 *\param[in]	gpResult	Le résultat de la geometry pass.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	size			Les dimensions de la zone de rendu.
+		 *\param[in]	ssaoConfig		La configuration du SSAO.
+		 *\param[in]	linearisedDepth	Le depth buffer linéarisé.
+		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 */
 		SsaoPass( Engine & engine
 			, VkExtent2D const & size
-			, SsaoConfig & config
-			, GeometryPassResult const & gpResult );
+			, SsaoConfig & ssaoConfig
+			, TextureUnit const & linearisedDepth
+			, OpaquePassResult const & gpResult
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -60,7 +64,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor );
+		void accept( PipelineVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\return		The SSAO pass result.
@@ -71,11 +75,10 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		SsaoConfig & m_config;
+		SsaoConfig & m_ssaoConfig;
 		MatrixUbo m_matrixUbo;
 		std::shared_ptr< SsaoConfigUbo > m_ssaoConfigUbo;
-		std::shared_ptr< LineariseDepthPass > m_linearisePass;
-		std::shared_ptr< RawSsaoPass > m_rawSsaoPass;
+		std::shared_ptr< SsaoRawAOPass > m_rawAoPass;
 		std::shared_ptr< SsaoBlurPass > m_horizontalBlur;
 		std::shared_ptr< SsaoBlurPass > m_verticalBlur;
 	};

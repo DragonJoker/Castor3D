@@ -73,28 +73,30 @@ namespace castor3d
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
 		auto & device = getCurrentRenderDevice( *this );
-		m_stagingTexture = device->createStagingTexture( VK_FORMAT_R32G32B32A32_SFLOAT 
+		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
+			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
 
-		m_texture->getImage( 0u ).initialiseSource();
-		m_texture->getImage( 1u ).initialiseSource();
-		m_texture->getImage( 2u ).initialiseSource();
-		m_texture->getImage( 3u ).initialiseSource();
-		m_texture->getImage( 4u ).initialiseSource();
-		m_texture->getImage( 5u ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
+		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 		auto result = m_texture->initialise();
 		m_colour.reset();
 
 		if ( result )
 		{
-			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+			m_cmdCopy = device.graphicsCommandPool->createCommandBuffer( "ColourBackgroundCopy"
+				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 			m_cmdCopy->begin();
 
 			for ( uint32_t i = 0; i < 6u; ++i )
 			{
 				m_stagingTexture->copyTextureData( *m_cmdCopy
 					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, m_texture->getImage( i ).getView() );
+					, m_texture->getLayerCubeFaceView( 0u, CubeMapFace( i ) ).getTargetView() );
 			}
 
 			m_cmdCopy->end();

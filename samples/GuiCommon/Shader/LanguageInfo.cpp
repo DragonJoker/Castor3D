@@ -14,8 +14,7 @@ namespace GuiCommon
 	static wxColour const PreprocColour{ wxT( "SIENNA" ) };
 
 	LanguageInfo::LanguageInfo()
-		: m_name( DEFAULT_LANGUAGE )
-		, m_foldFlags( 0 )
+		: name( DEFAULT_LANGUAGE )
 		, m_styles
 		{
 			{ wxSTC_C_DEFAULT, StyleInfo{ PANEL_FOREGROUND_COLOUR, PANEL_BACKGROUND_COLOUR, 0, 0 } },

@@ -862,12 +862,12 @@ namespace smaa
 		, ashes::ImageView const & edgeDetectionView
 		, castor3d::TextureLayoutSPtr depthView
 		, SmaaConfig const & config )
-		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), VK_FILTER_LINEAR, TexcoordConfig{} }
+		: castor3d::RenderQuad{ *renderTarget.getEngine()->getRenderSystem(), cuT( "SmaaBlendingWeightCalculation" ), VK_FILTER_LINEAR, { ashes::nullopt, castor3d::RenderQuadConfig::Texcoord{} } }
 		, m_edgeDetectionView{ edgeDetectionView }
-		, m_surface{ *renderTarget.getEngine(), cuT( "SmaaBlendingWeightCalculation" ) }
+		, m_surface{ *renderTarget.getEngine(), getName() }
 		, m_pointSampler{ doCreateSampler( *renderTarget.getEngine(), cuT( "SMAA_Point" ) ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeightCalculation" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeightCalculation" }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() }
 	{
 		static constexpr VkFormat colourFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
@@ -878,7 +878,7 @@ namespace smaa
 			, 1u
 			, 0u
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "SmaaBlendingWeightCalculation" );
+			, getName() );
 		
 		ashes::ImageCreateInfo image
 		{
@@ -902,7 +902,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaAreaTex" ) );
-		m_areaTex->getDefaultImage().initialiseSource( areaTexBuffer );
+		m_areaTex->getDefaultView().initialiseSource( areaTexBuffer );
 		m_areaTex->initialise();
 
 		auto searchTexBuffer = PxBufferBase::create( Size{ SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT }
@@ -914,7 +914,7 @@ namespace smaa
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SmaaSearchTex" ) );
-		m_searchTex->getDefaultImage().initialiseSource( searchTexBuffer );
+		m_searchTex->getDefaultView().initialiseSource( searchTexBuffer );
 		m_searchTex->initialise();
 
 		// Create the render pass.
@@ -933,7 +933,7 @@ namespace smaa
 			},
 			{
 				0u,
-				depthView->getDefaultView()->format,
+				depthView->getDefaultView().getTargetView()->format,
 				VK_SAMPLE_COUNT_1_BIT,
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
@@ -983,8 +983,8 @@ namespace smaa
 			std::move( dependencies ),
 		};
 		auto & device = getCurrentRenderDevice( m_renderSystem );
-		m_renderPass = device->createRenderPass( std::move( createInfo ) );
-		setDebugObjectName( device, *m_renderPass, "BlendingWeightCalculation" );
+		m_renderPass = device->createRenderPass( getName()
+			, std::move( createInfo ) );
 
 		auto pixelSize = Point4f{ 1.0f / size.width, 1.0f / size.height, float( size.width ), float( size.height ) };
 		m_vertexShader.shader = doBlendingWeightCalculationVP( *renderTarget.getEngine()->getRenderSystem()
@@ -1028,14 +1028,27 @@ namespace smaa
 			, depthView );
 	}
 
+	BlendingWeightCalculation::~BlendingWeightCalculation()
+	{
+		m_searchTex->cleanup();
+		m_searchTex.reset();
+		m_areaTex->cleanup();
+		m_areaTex.reset();
+		m_ubo->cleanup();
+		m_ubo.reset();
+		m_pointSampler.reset();
+		m_surface.cleanup();
+		m_renderPass.reset();;
+	}
+
 	castor3d::CommandsSemaphore BlendingWeightCalculation::prepareCommands( castor3d::RenderPassTimer const & timer
 		, uint32_t passIndex )
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		castor3d::CommandsSemaphore blendingWeightCommands
 		{
-			device.graphicsCommandPool->createCommandBuffer(),
-			device->createSemaphore()
+			device.graphicsCommandPool->createCommandBuffer( getName() ),
+			device->createSemaphore( getName() )
 		};
 		auto & blendingWeightCmd = *blendingWeightCommands.commandBuffer;
 
@@ -1069,12 +1082,8 @@ namespace smaa
 
 	void BlendingWeightCalculation::accept( castor3d::PipelineVisitorBase & visitor )
 	{
-		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, *m_vertexShader.shader );
-		visitor.visit( cuT( "BlendingWeightCalculation" )
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, *m_pixelShader.shader );
+		visitor.visit( m_vertexShader );
+		visitor.visit( m_pixelShader );
 	}
 
 	void BlendingWeightCalculation::update( castor::Point4f const & subsampleIndices )
@@ -1090,10 +1099,10 @@ namespace smaa
 		descriptorSet.createSizedBinding( descriptorSetLayout.getBinding( 0u )
 			, *m_ubo );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 1u )
-			, m_areaTex->getDefaultView()
+			, m_areaTex->getDefaultView().getSampledView()
 			, m_sampler->getSampler() );
 		descriptorSet.createBinding( descriptorSetLayout.getBinding( 2u )
-			, m_searchTex->getDefaultView()
+			, m_searchTex->getDefaultView().getSampledView()
 			, *m_pointSampler );
 	}
 

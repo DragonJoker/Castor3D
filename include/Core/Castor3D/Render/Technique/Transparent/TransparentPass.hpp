@@ -47,7 +47,11 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
-		void initialiseRenderPass( WeightedBlendTextures const & wbpResult );
+		void initialiseRenderPass( TransparentPassResult const & wbpResult );
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
@@ -62,10 +66,6 @@ namespace castor3d
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
-		 */
-		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		*\~english
 		*name
@@ -134,7 +134,7 @@ namespace castor3d
 		void doUpdatePipeline( RenderPipeline & pipeline )const override;
 
 	private:
-		VkFormat m_depthFormat;
+		VkFormat m_depthFormat{};
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
 	};

@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -26,6 +27,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/ImageCache.hpp>
 #include <CastorUtils/Graphics/ImageLoader.hpp>
 #include <CastorUtils/Graphics/ImageWriter.hpp>
+#include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 
 #include <ashespp/Core/RendererList.hpp>
@@ -351,11 +353,6 @@ namespace castor3d
 			return *m_renderLoop;
 		}
 
-		inline bool getPerObjectLighting()
-		{
-			return m_perObjectLighting;
-		}
-
 		inline bool isThreaded()
 		{
 			return m_threaded;
@@ -436,9 +433,19 @@ namespace castor3d
 			return *m_hdrConfigUboPool;
 		}
 
+		inline UniformBufferPool< RsmUboConfiguration > & getRsmConfigUboPool()
+		{
+			return *m_rsmConfigUboPool;
+		}
+
 		inline UniformBufferPool< ModelMatrixUboConfiguration > & getModelMatrixUboPool()
 		{
 			return *m_modelMatrixUboPool;
+		}
+
+		inline UniformBufferPool< ShadowMapUboConfiguration > & getShadowMapUboPool()
+		{
+			return *m_shadowMapUboPool;
 		}
 		/**@}*/
 		/**
@@ -453,11 +460,6 @@ namespace castor3d
 		inline void setUserInputListener( UserInputListenerSPtr listener )
 		{
 			m_userInputListener = listener;
-		}
-
-		inline void setPerObjectLighting( bool value )
-		{
-			m_perObjectLighting = value;
 		}
 
 		inline void setMaterialsType( MaterialType type )
@@ -480,7 +482,6 @@ namespace castor3d
 		RenderSystemUPtr m_renderSystem;
 		bool m_cleaned{ true };
 		bool m_threaded{ false };
-		bool m_perObjectLighting{ true };
 		SamplerSPtr m_defaultSampler;
 		SamplerSPtr m_lightsSampler;
 		castor::ImageLoader m_imageLoader;
@@ -511,9 +512,12 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		RenderDepthQuadSPtr m_renderDepth;
+		ashes::CommandBufferPtr m_uploadCommandBuffer;
 		UniformBufferPoolSPtr< MatrixUboConfiguration > m_matrixUboPool;
 		UniformBufferPoolSPtr< HdrConfig > m_hdrConfigUboPool;
+		UniformBufferPoolSPtr< RsmUboConfiguration > m_rsmConfigUboPool;
 		UniformBufferPoolSPtr< ModelMatrixUboConfiguration > m_modelMatrixUboPool;
+		UniformBufferPoolSPtr< ShadowMapUboConfiguration > m_shadowMapUboPool;
 	};
 }
 

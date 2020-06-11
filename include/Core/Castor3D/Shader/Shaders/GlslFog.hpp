@@ -21,14 +21,18 @@ namespace castor3d
 			C3D_API sdw::Vec4 apply( sdw::Vec4 const & bgColour
 				, sdw::Vec4 const & colour
 				, sdw::Float const & dist
-				, sdw::Float const & y );
+				, sdw::Float const & y
+				, sdw::Vec4 const & fogInfo
+				, sdw::Vec4 const & cameraPosition );
 
 		protected:
 			sdw::Function< sdw::Vec4
 				, sdw::InVec4
 				, sdw::InVec4
 				, sdw::InFloat
-				, sdw::InFloat > m_fog;
+				, sdw::InFloat
+				, sdw::InVec4
+				, sdw::InVec4 > m_fog;
 		};
 	}
 }

@@ -1,5 +1,6 @@
 #include "Castor3D/Cache/LightCache.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/FunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -9,6 +10,8 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+
+#include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
@@ -107,21 +110,29 @@ namespace castor3d
 
 	void ObjectCache< Light, castor::String >::initialise()
 	{
-		m_lightsBuffer.resize( 300u * shader::getMaxLightComponentsCount() );
-		m_scene.getListener().postEvent( makeFunctorEvent( EventType::ePreRender
+		m_lightsBuffer.resize( 300ull * shader::getMaxLightComponentsCount() );
+		getScene()->getEngine()->sendEvent( makeFunctorEvent( EventType::ePreRender
 			, [this]()
 			{
 				auto & device = getCurrentRenderDevice( *getScene() );
-				m_textureBuffer = makeBuffer< castor::Point4f >( device
-					, uint32_t( m_lightsBuffer.size() )
-					, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, "LightsBuffer" );
-				m_textureView = device->createBufferView( m_textureBuffer->getBuffer()
-					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, 0u
-					, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
-				setDebugObjectName( device, *m_textureView, "LightsBufferView" );
+
+				if ( !m_textureBuffer )
+				{
+					m_textureBuffer = makeBuffer< castor::Point4f >( device
+						, uint32_t( m_lightsBuffer.size() )
+						, VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+						, "LightsBuffer" );
+				}
+
+				if ( !m_textureView )
+				{
+					m_textureView = device->createBufferView( "LightsBufferView"
+						, m_textureBuffer->getBuffer()
+						, VK_FORMAT_R32G32B32A32_SFLOAT
+						, 0u
+						, uint32_t( m_lightsBuffer.size() * sizeof( Point4f ) ) );
+				}
 			} ) );
 	}
 
@@ -228,18 +239,17 @@ namespace castor3d
 			std::swap( m_dirtyLights, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin()
-				, end
-				, []( Light * light )
-				{
-					light->update();
-				} );
+			for ( auto light : makeArrayView( dirty.begin(), end ) )
+			{
+				light->update();
+			}
 		}
 	}
 
 	void ObjectCache< Light, castor::String >::updateLightsTexture( Camera const & camera )const
 	{
 		uint32_t index = 0;
+		uint32_t lightIndex = 0;
 		Point4f * data = m_lightsBuffer.data();
 
 		for ( auto lights : m_typeSortedLights )
@@ -250,7 +260,7 @@ namespace castor3d
 					|| camera.isVisible( light->getBoundingBox()
 						, light->getParent()->getDerivedTransformationMatrix() ) )
 				{
-					light->bind( data );
+					light->bind( lightIndex, data );
 					data += shader::getMaxLightComponentsCount();
 					index += shader::getMaxLightComponentsCount();
 				}

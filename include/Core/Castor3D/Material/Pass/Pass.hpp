@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/PassBuffer/PassBufferModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/Signal.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -190,7 +191,15 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool needsGammaCorrection()const;
-		C3D_API uint32_t getNonEnvTextureUnitsCount()const;
+		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
+		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
+
+		inline uint32_t getNonEnvTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const
+		{
+			castor::remFlag( mask, TextureFlag::eReflection );
+			castor::remFlag( mask, TextureFlag::eRefraction );
+			return getTextureUnitsCount( mask );
+		}
 
 		inline TextureFlags const & getTextures()const
 		{
@@ -200,11 +209,6 @@ namespace castor3d
 		inline bool hasAutomaticShader()const
 		{
 			return m_automaticShader;
-		}
-
-		inline uint32_t getTextureUnitsCount()const
-		{
-			return uint32_t( m_textureUnits.size() );
 		}
 
 		inline bool IsTwoSided()const

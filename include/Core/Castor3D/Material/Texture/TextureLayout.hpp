@@ -15,6 +15,123 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct MipView
+	{
+		TextureViewUPtr view;
+		std::vector< TextureViewUPtr > levels;
+
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			function( view );
+
+			for ( auto & level : levels )
+			{
+				function( level );
+			}
+		}
+
+		template< typename FuncT >
+		void forEachLeafView( FuncT function )const
+		{
+			if ( !levels.empty() )
+			{
+				for ( auto & level : levels )
+				{
+					function( level );
+				}
+			}
+			else
+			{
+				function( view );
+			}
+		}
+	};
+
+	struct CubeView
+	{
+		MipView view;
+		std::vector< MipView > faces;
+
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			view.forEachView( function );
+
+			for ( auto & face : faces )
+			{
+				face.forEachView( function );
+			}
+		}
+
+		template< typename FuncT >
+		void forEachLeafView( FuncT function )const
+		{
+			for ( auto & face : faces )
+			{
+				face.forEachLeafView( function );
+			}
+		}
+	};
+
+	template< typename ViewT >
+	struct ArrayView
+	{
+		MipView * view;
+		std::vector< ViewT > layers;
+
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			for ( auto & layer : layers )
+			{
+				layer.forEachView( function );
+			}
+		}
+
+		template< typename FuncT >
+		void forEachLeafView( FuncT function )const
+		{
+			for ( auto & layer : layers )
+			{
+				layer.forEachLeafView( function );
+			}
+		}
+	};
+
+	template< typename ViewT >
+	struct SliceView
+	{
+		MipView * view;
+		std::vector< ViewT > slices;
+
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			for ( auto & slice : slices )
+			{
+				slice.forEachView( function );
+			}
+		}
+
+		template< typename FuncT >
+		void forEachLeafView( FuncT function )const
+		{
+			for ( auto & slice : slices )
+			{
+				slice.forEachLeafView( function );
+			}
+		}
+	};
+
+	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, castor::Path const & relative
+		, castor::Path const & folder );
+	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+		, castor::String const & name
+		, castor::PxBufferBaseSPtr buffer );
+	C3D_API uint32_t getMipLevels( VkExtent3D const & extent );
+
 	class TextureLayout
 		: public castor::OwnedBy< RenderSystem >
 	{
@@ -119,52 +236,150 @@ namespace castor3d
 
 		inline bool needsYInversion()const
 		{
-			CU_Require( m_defaultView );
-			return m_defaultView->needsYInversion();
+			return getDefaultView().needsYInversion();
 		}
 
-		inline TextureView const & getView( size_t index = 0u )const
+		inline TextureView const & getDefaultView()const
 		{
-			return getImage( index );
+			CU_Require( m_defaultView.view );
+			return *m_defaultView.view;
 		}
 
-		inline TextureView const & getImage( size_t index = 0u )const
+		inline TextureView & getDefaultView()
 		{
-			CU_Require( index < m_views.size() && m_views[index] );
-			return *m_views[index];
+			CU_Require( m_defaultView.view );
+			return *m_defaultView.view;
 		}
 
-		inline TextureView & getImage( size_t index = 0u )
+		inline ArrayView< MipView > const & getArray2D()const
 		{
-			CU_Require( index < m_views.size() && m_views[index] );
-			return *m_views[index];
+			return m_arrayView;
 		}
 
-		inline TextureView const & getImage( CubeMapFace index )const
+		inline MipView const & getLayer2D( size_t layer )const
 		{
-			return getImage( size_t( index ) );
+			CU_Require( m_cubeView.layers.empty() );
+			CU_Require( m_sliceView.slices.empty() );
+			CU_Require( getLayersCount() > 1u );
+			CU_Require( layer < m_arrayView.layers.size() );
+			return m_arrayView.layers[layer];
 		}
 
-		inline TextureView & getImage( CubeMapFace index )
+		inline MipView & getLayer2D( size_t layer )
 		{
-			return getImage( size_t( index ) );
+			CU_Require( m_cubeView.layers.empty() );
+			CU_Require( m_sliceView.slices.empty() );
+			CU_Require( getLayersCount() > 1u );
+			CU_Require( layer < m_arrayView.layers.size() );
+			return m_arrayView.layers[layer];
 		}
 
-		inline TextureView const & getDefaultImage()const
+		inline TextureView const & getLayer2DView( size_t layer )const
 		{
-			CU_Require( m_defaultView );
-			return *m_defaultView;
+			CU_Require( getLayer2D( layer ).view );
+			return *getLayer2D( layer ).view;
 		}
 
-		inline TextureView & getDefaultImage()
+		inline TextureView & getLayer2DView( size_t layer )
 		{
-			CU_Require( m_defaultView );
-			return *m_defaultView;
+			CU_Require( getLayer2D( layer ).view );
+			return *getLayer2D( layer ).view;
 		}
 
-		inline ashes::ImageView const & getDefaultView()const
+		inline SliceView< MipView > const & getSlices3D()const
 		{
-			return m_defaultView->getView();
+			return m_sliceView;
+		}
+
+		inline MipView const & getSlice( size_t slice )const
+		{
+			CU_Require( m_cubeView.layers.empty() );
+			CU_Require( m_arrayView.layers.empty() );
+			CU_Require( getDepth() > 1u );
+			CU_Require( slice < m_sliceView.slices.size() );
+			return m_sliceView.slices[slice];
+		}
+
+		inline MipView & getSlice( size_t slice )
+		{
+			CU_Require( m_cubeView.layers.empty() );
+			CU_Require( m_arrayView.layers.empty() );
+			CU_Require( getDepth() > 1u );
+			CU_Require( slice < m_sliceView.slices.size() );
+			return m_sliceView.slices[slice];
+		}
+
+		inline TextureView const & getSliceView( size_t slice )const
+		{
+			CU_Require( getSlice( slice ).view );
+			return *getSlice( slice ).view;
+		}
+
+		inline TextureView & getSliceView( size_t slice )
+		{
+			CU_Require( getSlice( slice ).view );
+			return *getSlice( slice ).view;
+		}
+
+		inline ArrayView< CubeView > const & getArrayCube()const
+		{
+			return m_cubeView;
+		}
+
+		inline CubeView const & getLayerCube( size_t layer )const
+		{
+			CU_Require( m_arrayView.layers.empty() );
+			CU_Require( m_sliceView.slices.empty() );
+			CU_Require( isCube() );
+			CU_Require( layer < m_cubeView.layers.size() );
+			return m_cubeView.layers[layer];
+		}
+
+		inline CubeView & getLayerCube( size_t layer )
+		{
+			CU_Require( m_arrayView.layers.empty() );
+			CU_Require( m_sliceView.slices.empty() );
+			CU_Require( isCube() );
+			CU_Require( layer < m_cubeView.layers.size() );
+			return m_cubeView.layers[layer];
+		}
+
+		inline TextureView const & getLayerCubeView( size_t layer )const
+		{
+			CU_Require( getLayerCube( layer ).view.view );
+			return *getLayerCube( layer ).view.view;
+		}
+
+		inline TextureView & getLayerCubeView( size_t layer )
+		{
+			CU_Require( getLayerCube( layer ).view.view );
+			return *getLayerCube( layer ).view.view;
+		}
+
+		inline MipView const & getLayerCubeFace( size_t layer
+			, CubeMapFace face )const
+		{
+			return getLayerCube( layer ).faces[size_t( face )];
+		}
+
+		inline MipView & getLayerCubeFace( size_t layer
+			, CubeMapFace face )
+		{
+			return getLayerCube( layer ).faces[size_t( face )];
+		}
+
+		inline TextureView const & getLayerCubeFaceView( size_t layer
+			, CubeMapFace face )const
+		{
+			CU_Require( getLayerCubeFace( layer, face ).view );
+			return *getLayerCubeFace( layer, face ).view;
+		}
+
+		inline TextureView & getLayerCubeFaceView( size_t layer
+			, CubeMapFace face )
+		{
+			CU_Require( getLayerCubeFace( layer, face ).view );
+			return *getLayerCubeFace( layer, face ).view;
 		}
 
 		inline uint32_t getWidth()const
@@ -202,24 +417,56 @@ namespace castor3d
 			return m_info->arrayLayers;
 		}
 
-		inline auto begin()
+		inline uint32_t isCube()const
 		{
-			return m_views.begin();
+			return getLayersCount() >= 6u
+				&& ( getLayersCount() % 6u ) == 0u
+				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Views parsing.
+		*\~french
+		*name
+		*	Parsing des vues.
+		**/
+		/**@{*/
+		template< typename FuncT >
+		void forEachView( FuncT function )const
+		{
+			m_defaultView.forEachView( function );
+
+			if ( !m_cubeView.layers.empty() )
+			{
+				m_cubeView.forEachView( function );
+			}
+			else if ( !m_arrayView.layers.empty() )
+			{
+				m_arrayView.forEachView( function );
+			}
+			else if ( !m_sliceView.slices.empty() )
+			{
+				m_sliceView.forEachView( function );
+			}
 		}
 
-		inline auto begin()const
+		template< typename FuncT >
+		void forEachLeafView( FuncT function )const
 		{
-			return m_views.begin();
-		}
-
-		inline auto end()
-		{
-			return m_views.end();
-		}
-
-		inline auto end()const
-		{
-			return m_views.end();
+			if ( !m_cubeView.layers.empty() )
+			{
+				m_cubeView.forEachLeafView( function );
+			}
+			else if ( !m_arrayView.layers.empty() )
+			{
+				m_arrayView.forEachLeafView( function );
+			}
+			else if ( !m_sliceView.slices.empty() )
+			{
+				m_sliceView.forEachLeafView( function );
+			}
 		}
 		/**@}*/
 
@@ -230,8 +477,10 @@ namespace castor3d
 		bool m_initialised{ false };
 		ashes::ImageCreateInfo m_info;
 		VkMemoryPropertyFlags m_properties;
-		std::vector< TextureViewUPtr > m_views;
-		TextureViewUPtr m_defaultView;
+		MipView m_defaultView;
+		ArrayView< MipView > m_arrayView;
+		ArrayView< CubeView > m_cubeView;
+		SliceView< MipView > m_sliceView;
 		ashes::ImagePtr m_texture;
 		castor::String m_debugName;
 	};
@@ -241,13 +490,12 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name )
 	{
-		auto result = device->createImage( std::move( createInfo ) );
-		setDebugObjectName( device, *result, name + "Map" );
+		auto result = device->createImage( name + "Map", std::move( createInfo ) );
 		auto requirements = result->getMemoryRequirements();
 		uint32_t deduced = device->deduceMemoryType( requirements.memoryTypeBits
 			, flags );
-		auto memory = device->allocateMemory( VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
-		setDebugObjectName( device, *memory, name + "MapMem" );
+		auto memory = device->allocateMemory( name + "MapMem"
+			, VkMemoryAllocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO, nullptr, requirements.size, deduced } );
 		result->bindMemory( std::move( memory ) );
 		return result;
 	}

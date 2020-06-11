@@ -48,14 +48,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a new program.
+		 *\param[in]	name		The program name.
 		 *\param[in]	initialise	Tells if we want the program to be initialised.
 		 *\return		The newly created program.
 		 *\~french
 		 *\brief		Crée un nouveau programme.
+		 *\param[in]	name		Le nom du programme.
 		 *\param[in]	initialise	Dit si on veut que le programme soit initialisé.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr getNewProgram( bool initialise );
+		C3D_API ShaderProgramSPtr getNewProgram( castor::String const & name
+			, bool initialise );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.

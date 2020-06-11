@@ -27,7 +27,6 @@ namespace castor3d
 			C3D_API void compute( Light const & light
 				, sdw::Vec3 const & worldEye
 				, sdw::Vec3 const & direction
-				, sdw::Vec3 const & albedo
 				, sdw::Vec3 const & specular
 				, sdw::Float const & roughness
 				, sdw::Float const & shadowFactor
@@ -62,7 +61,6 @@ namespace castor3d
 				, sdw::InVec3 > m_schlickFresnel;
 			sdw::Function< sdw::Void
 				, InLight
-				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
