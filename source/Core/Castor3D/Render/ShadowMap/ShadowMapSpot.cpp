@@ -170,15 +170,15 @@ namespace castor3d
 				m_name + " generation " + std::to_string( index ),
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		timer.notifyPassRender();
-		timer.beginPass( commandBuffer );
+		timerBlock->notifyPassRender();
+		timerBlock->beginPass( commandBuffer );
 		commandBuffer.beginRenderPass( pass.pass->getRenderPass()
 			, frameBuffer
 			, getClearValues()
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		commandBuffer.executeCommands( { pass.pass->getCommandBuffer() } );
 		commandBuffer.endRenderPass();
-		timer.endPass( commandBuffer );
+		timerBlock->endPass( commandBuffer );
 		commandBuffer.endDebugBlock();
 		commandBuffer.end();
 

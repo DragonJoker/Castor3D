@@ -558,8 +558,8 @@ namespace castor3d
 		, ashes::Semaphore const & toWait )
 	{
 		auto & program = *doGetProgram( fogType );
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		getCurrentRenderDevice( m_engine ).graphicsQueue->submit( program.getCommandBuffer()

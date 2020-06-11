@@ -225,15 +225,15 @@ namespace castor3d
 					m_name + " " + std::to_string( index ) + " cascade " + std::to_string( cascade ),
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
-			timer.notifyPassRender();
-			timer.beginPass( *m_commandBuffer );
+			timerBlock->notifyPassRender();
+			timerBlock->beginPass( *m_commandBuffer );
 			m_commandBuffer->beginRenderPass( pass.pass->getRenderPass()
 				, *frameBuffer.frameBuffer
 				, getClearValues()
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			m_commandBuffer->executeCommands( { pass.pass->getCommandBuffer() } );
 			m_commandBuffer->endRenderPass();
-			timer.endPass( *m_commandBuffer );
+			timerBlock->endPass( *m_commandBuffer );
 			m_commandBuffer->endDebugBlock();
 			pass.pass->setUpToDate();
 		}

@@ -235,7 +235,6 @@ namespace castor3d
 				, shadowMapIndex );
 
 			auto & scene = *light.getScene();
-			auto & directional = *light.getDirectionalLight();
 			auto aabb = scene.getBoundingBox();
 			auto camPos = camera.getParent()->getDerivedPosition();
 			castor::Point3f camDir{ 0, 0, 1 };
@@ -246,6 +245,7 @@ namespace castor3d
 				|| m_cameraPos != camPos
 				|| m_cameraDir != camDir )
 			{
+				auto & directional = *light.getDirectionalLight();
 				m_lightIndex = light.getShadowMapIndex();
 				m_aabb = aabb;
 				m_cameraPos = camPos;

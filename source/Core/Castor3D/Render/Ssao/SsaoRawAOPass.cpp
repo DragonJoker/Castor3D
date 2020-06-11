@@ -771,8 +771,8 @@ namespace castor3d
 	{
 		auto & renderSystem = *m_engine.getRenderSystem();
 		auto & device = getCurrentRenderDevice( renderSystem );
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 		auto index = m_ssaoConfig.useNormalsBuffer
 			? 1u

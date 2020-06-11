@@ -628,8 +628,8 @@ namespace castor3d
 	ashes::Semaphore const & LightPropagationPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commands.commandBuffer

@@ -127,7 +127,7 @@ namespace castor3d
 			defaultClearDepthStencil,
 		};
 
-		auto timerBlock = getTimer().start();
+		RenderPassTimerBlock timerBlock{ getTimer().start() };
 		auto & device = getCurrentRenderDevice( *this );
 
 		m_nodesCommands->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
@@ -136,8 +136,8 @@ namespace castor3d
 				"Depth Pass",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		getTimer().beginPass( *m_nodesCommands );
-		getTimer().notifyPassRender();
+		timerBlock->beginPass( *m_nodesCommands );
+		timerBlock->notifyPassRender();
 		m_nodesCommands->beginRenderPass( getRenderPass()
 			, *m_frameBuffer
 			, clearValues
@@ -147,7 +147,7 @@ namespace castor3d
 			m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		}
 		m_nodesCommands->endRenderPass();
-		getTimer().endPass( *m_nodesCommands );
+		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 

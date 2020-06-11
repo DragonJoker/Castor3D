@@ -229,11 +229,6 @@ namespace castor3d
 		return m_timer->start();
 	}
 
-	void SceneBackground::notifyPassRender()
-	{
-		m_timer->notifyPassRender();
-	}
-
 	void SceneBackground::notifyChanged()
 	{
 		if ( m_initialised )

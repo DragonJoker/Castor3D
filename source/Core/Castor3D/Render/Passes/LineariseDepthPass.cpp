@@ -452,8 +452,8 @@ namespace castor3d
 
 	ashes::Semaphore const & LineariseDepthPass::linearise( ashes::Semaphore const & toWait )const
 	{
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto & device = getCurrentRenderDevice( m_engine );
 		auto * result = &toWait;
 

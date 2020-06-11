@@ -271,7 +271,7 @@ namespace castor3d
 		: public PipelineVisitorBase
 	{
 	protected:
-		inline PipelineVisitor( bool forceSubPassesVisit )
+		inline explicit PipelineVisitor( bool forceSubPassesVisit )
 			: PipelineVisitorBase{ forceSubPassesVisit }
 		{
 		}

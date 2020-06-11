@@ -776,7 +776,7 @@ namespace castor3d
 			auto & background = m_renderTarget.getScene()->getColourBackground();
 			auto & bgSemaphore = background.getSemaphore();
 			auto timerBlock = background.start();
-			background.notifyPassRender();
+			timerBlock->notifyPassRender();
 			queue.submit( { *m_cbgCommandBuffer }
 				, semaphores
 				, stages
@@ -788,7 +788,7 @@ namespace castor3d
 		auto & background = *m_renderTarget.getScene()->getBackground();
 		auto & bgSemaphore = background.getSemaphore();
 		auto timerBlock = background.start();
-		background.notifyPassRender();
+		timerBlock->notifyPassRender();
 		queue.submit( { *m_bgCommandBuffer }
 			, semaphores
 			, stages

@@ -1355,8 +1355,8 @@ namespace castor3d
 	ashes::Semaphore const & OpaqueResolvePass::render( ashes::Semaphore const & toWait )const
 	{
 		auto * result = &toWait;
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto index = size_t( m_scene.getFog().getType() );
 		auto & program = m_programs[index];
 

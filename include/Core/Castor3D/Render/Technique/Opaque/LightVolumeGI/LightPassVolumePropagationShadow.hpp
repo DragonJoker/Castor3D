@@ -99,7 +99,6 @@ namespace castor3d
 				, m_accumulation
 				, lpResult[LpTexture::eDiffuse] }
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
-			, m_grid{ GridSize, 2.5f, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 }
 		{
 		}
 
@@ -151,7 +150,7 @@ namespace castor3d
 			auto & scene = *light.getScene();
 			auto aabb = scene.getBoundingBox();
 			auto camPos = camera.getParent()->getDerivedPosition();
-			Point3f camDir{ 0, 0, 1 };
+			castor::Point3f camDir{ 0, 0, 1 };
 			camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
 
 			if ( m_aabb != aabb
@@ -166,13 +165,13 @@ namespace castor3d
 				auto cellSize = std::max( std::max( m_aabb.getDimensions()->x
 					, m_aabb.getDimensions()->y )
 					, m_aabb.getDimensions()->z ) / GridSize;
-				m_grid = Grid{ GridSize, cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
-				m_grid.transform( m_cameraPos, m_cameraDir );
+				castor::Grid grid{ GridSize, cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
+				grid.transform( m_cameraPos, m_cameraDir );
 
-				m_lpvConfigUbo.update( m_grid.getMin()
-					, m_grid.getDimensions()
+				m_lpvConfigUbo.update( grid.getMin()
+					, grid.getDimensions()
 					, m_lightIndex
-					, m_grid.getCellSize() );
+					, grid.getCellSize() );
 			}
 		}
 
@@ -189,7 +188,6 @@ namespace castor3d
 		castor::Point3f m_cameraPos;
 		castor::Point3f m_cameraDir;
 		uint32_t m_lightIndex{};
-		castor::Grid m_grid;
 	};
 	//!\~english	The directional lights light pass with shadows.
 	//!\~french		La passe d'éclairage avec ombres pour les lumières directionnelles.

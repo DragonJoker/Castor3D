@@ -28,6 +28,8 @@
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
+#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/RenderPass/SubpassDescription.hpp>
@@ -615,8 +617,8 @@ namespace castor3d
 	ashes::Semaphore const & LightInjectionPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commands.commandBuffer

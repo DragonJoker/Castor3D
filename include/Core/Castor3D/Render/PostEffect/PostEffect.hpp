@@ -102,13 +102,6 @@ namespace castor3d
 		C3D_API RenderPassTimerBlock start();
 		/**
 		 *\~english
-		 *\brief		Notifies a pass render.
-		 *\~french
-		 *\brief		Notifie le rendu d'une passe.
-		 */
-		C3D_API void notifyPassRender();
-		/**
-		 *\~english
 		 *\brief		Updated needed data.
 		 *\param[in]	elapsedTime	The time elapsed since last frame.
 		 *\~french

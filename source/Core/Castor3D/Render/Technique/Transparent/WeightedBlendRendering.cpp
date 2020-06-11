@@ -42,13 +42,8 @@ namespace castor3d
 		, Camera const & camera
 		, castor::Point2f const & jitter )
 	{
-		auto invView = camera.getView().getInverse().getTransposed();
-		auto invProj = camera.getProjection().getInverse();
-		auto invViewProj = ( camera.getProjection() * camera.getView() ).getInverse();
-
 		m_transparentPass.getSceneUbo().update( scene, &camera );
-		m_transparentPass.update( info
-			, jitter );
+		m_transparentPass.update( info, jitter );
 	}
 
 	ashes::Semaphore const & WeightedBlendRendering::render( Scene const & scene

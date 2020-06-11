@@ -844,7 +844,7 @@ namespace castor3d
 
 				for ( auto & commands : effect->getCommands() )
 				{
-					effect->notifyPassRender();
+					timerBlock->notifyPassRender();
 
 					queue.submit( *commands.commandBuffer
 						, *result
@@ -871,7 +871,7 @@ namespace castor3d
 		auto & device = getCurrentRenderDevice( *this );
 		auto & queue = *device.graphicsQueue;
 		auto timerBlock = m_toneMappingTimer->start();
-		m_toneMappingTimer->notifyPassRender();
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		queue.submit( *m_toneMappingCommandBuffer

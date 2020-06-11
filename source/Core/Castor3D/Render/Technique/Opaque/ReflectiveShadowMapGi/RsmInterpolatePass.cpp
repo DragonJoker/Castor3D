@@ -564,8 +564,8 @@ namespace castor3d
 	{
 		auto & renderSystem = m_renderSystem;
 		auto & device = getCurrentRenderDevice( renderSystem );
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 		auto fence = device->createFence( getName() );
 

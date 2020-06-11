@@ -21,6 +21,11 @@ namespace castor3d
 		C3D_API RenderPassTimerBlock & operator=( RenderPassTimerBlock const & ) = delete;
 		C3D_API ~RenderPassTimerBlock();
 
+		inline RenderPassTimer * operator->()const
+		{
+			return m_timer;
+		}
+
 	private:
 		RenderPassTimer * m_timer;
 	};

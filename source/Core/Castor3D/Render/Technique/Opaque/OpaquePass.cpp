@@ -197,9 +197,8 @@ namespace castor3d
 		};
 
 		auto * result = &toWait;
-		auto & timer = getTimer();
 		auto & device = getCurrentRenderDevice( *this );
-		auto timerBlock = timer.start();
+		auto timerBlock = getTimer().start();
 
 		m_nodesCommands->begin();
 		m_nodesCommands->beginDebugBlock(
@@ -207,15 +206,15 @@ namespace castor3d
 				"Deferred - Geometry",
 				makeFloatArray( getEngine()->getNextRainbowColour() ),
 			} );
-		timer.beginPass( *m_nodesCommands );
-		timer.notifyPassRender();
+		timerBlock->beginPass( *m_nodesCommands );
+		timerBlock->notifyPassRender();
 		m_nodesCommands->beginRenderPass( getRenderPass()
 			, *m_frameBuffer
 			, clearValues
 			, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 		m_nodesCommands->executeCommands( { getCommandBuffer() } );
 		m_nodesCommands->endRenderPass();
-		timer.endPass( *m_nodesCommands );
+		timerBlock->endPass( *m_nodesCommands );
 		m_nodesCommands->endDebugBlock();
 		m_nodesCommands->end();
 

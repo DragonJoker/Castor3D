@@ -626,8 +626,8 @@ namespace castor3d
 
 	ashes::Semaphore const & SsaoBlurPass::blur( ashes::Semaphore const & toWait )const
 	{
-		auto timerBlock = m_timer->start();
-		m_timer->notifyPassRender();
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		auto & device = getCurrentRenderDevice( m_renderSystem );

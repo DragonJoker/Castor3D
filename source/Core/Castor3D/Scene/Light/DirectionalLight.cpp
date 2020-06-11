@@ -43,15 +43,6 @@ namespace castor3d
 			float range = maxZ - minZ;
 			float ratio = maxZ / minZ;
 
-			float ar = camera.getHeight() / float( camera.getWidth() );
-			float tanHalfHFOV = ( camera.getFovY() / 2.0f ).tan();
-			float tanHalfVFOV = ( ( camera.getFovY() * ar ) / 2.0f ).tan();
-			auto front = light.getDirection();
-			Point3f up{ 0.0f, 1.0f, 0.0f };
-			auto right = point::getNormalised( point::cross( up, front ) );
-			up = point::getNormalised( point::cross( front, right ) );
-			auto lightMatrix = matrix::lookAt( Point3f{ 0.0f, 0.0f, 0.0f }, front, up );
-
 			// Calculate split depths based on view camera frustum
 			// Based on method presented in https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html
 			std::vector< float > cascadeSplits( cascades, 0.0f );

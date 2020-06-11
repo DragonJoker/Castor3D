@@ -110,7 +110,7 @@ namespace castor3d
 
 		if ( hasNodes() )
 		{
-			auto timerBlock = getTimer().start();
+			RenderPassTimerBlock timerBlock{ getTimer().start() };
 			auto & device = getCurrentRenderDevice( *this );
 
 			auto & cmd = *m_commands.commandBuffer;
@@ -124,15 +124,15 @@ namespace castor3d
 					"Voxelization Pass",
 					makeFloatArray( getEngine()->getNextRainbowColour() ),
 				} );
-			getTimer().beginPass( cmd );
-			getTimer().notifyPassRender();
+			timerBlock->beginPass( cmd );
+			timerBlock->notifyPassRender();
 			cmd.beginRenderPass( getRenderPass()
 				, *m_frameBuffer
 				, { opaqueBlackClearColor }
 				, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS );
 			cmd.executeCommands( { getCommandBuffer() } );
 			cmd.endRenderPass();
-			getTimer().endPass( cmd );
+			timerBlock->endPass( cmd );
 			cmd.endDebugBlock();
 			cmd.end();
 

@@ -248,16 +248,16 @@ namespace castor3d
 
 		if ( !cache.isEmpty() )
 		{
-			auto timerBlock = m_timer->start();
+			RenderPassTimerBlock timerBlock{ m_timer->start() };
 			using LockType = std::unique_lock< LightCache const >;
 			LockType lock{ castor::makeUniqueLock( cache ) };
 			auto count = cache.getLightsCount( LightType::eDirectional )
 				+ cache.getLightsCount( LightType::ePoint )
 				+ cache.getLightsCount( LightType::eSpot );
 
-			if ( m_timer->getCount() != count )
+			if ( timerBlock->getCount() != count )
 			{
-				m_timer->updateCount( count );
+				timerBlock->updateCount( count );
 			}
 
 			auto & device = getCurrentRenderDevice( m_engine );
