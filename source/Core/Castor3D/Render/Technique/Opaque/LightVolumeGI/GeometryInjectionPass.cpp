@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -48,9 +48,8 @@ namespace castor3d
 		static constexpr uint32_t LightsIdx = 0u;
 		static constexpr uint32_t RsmNormalsIdx = 1u;
 		static constexpr uint32_t RsmPositionIdx = 2u;
-		static constexpr uint32_t RsmFluxIdx = 3u;
-		static constexpr uint32_t LIUboIdx = 4u;
-		static constexpr uint32_t GpUboIdx = 5u;
+		static constexpr uint32_t LIUboIdx = 3u;
+		static constexpr uint32_t GpUboIdx = 4u;
 
 		std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
 			, uint32_t layerIndex )
@@ -68,9 +67,6 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
-				, RsmFluxIdx
-				, 0u );
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
@@ -79,7 +75,8 @@ namespace castor3d
 			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
+			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
 			auto out = writer.getOut();
 
 			// Utility functions
@@ -95,19 +92,25 @@ namespace castor3d
 				, index );
 
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
-				, [&]( Vec3 pos
-					, Vec3 normal )
+				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) - vec3( 0.5_f ) ) );
 				}
-				, InVec3{ writer, "pos" }
-				, InVec3{ writer, "normal" } );
+				, InVec3{ writer, "pos" } );
+
+			//Sample from camera
+			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
+				, [&]( Vec3 viewPos )
+				{
+					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvConfig.y() * c3d_lpvConfig.y() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+				}
+				, InVec3{ writer, "viewPos" } );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getDirectionalLight( 0_i ) );
+						, lightingModel->getDirectionalLight( writer.cast< Int >( c3d_gridSizes.w() ) ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
 						, min( UInt{ layerIndex }, max( 1_u, light.m_cascadeCount ) - 1_u ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
@@ -115,11 +118,14 @@ namespace castor3d
 							, in.vertexIndex / rsmTexSize
 							, cascadeIndex ) );
 
+					outLightPos = light.m_direction;
 					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
 					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
-					outVolumeCellIndex = convertPointToGridIndex( outRsmPos
-						, outRsmNormal );
+					auto viewPos = writer.declLocale( "viewPos"
+						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvConfig.z();
+
+					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
@@ -144,9 +150,6 @@ namespace castor3d
 			auto c3d_rsmPositionMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::ePosition )
 				, RsmPositionIdx
 				, 0u );
-			auto c3d_rsmFluxMap = writer.declSampledImage< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eFlux )
-				, RsmFluxIdx
-				, 0u );
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 			UBO_GPINFO( writer, GpUboIdx, 0u );
 			auto in = writer.getIn();
@@ -155,30 +158,55 @@ namespace castor3d
 			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
+			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
 			auto out = writer.getOut();
 
+			// Utility functions
+			shader::Utils utils{ writer };
+			index = 0;
+			auto lightingModel = shader::PhongLightingModel::createModel( writer
+				, utils
+				, LightType::eSpot
+				, ShadowType::eNone
+				, false // lightUbo
+				, false // volumetric
+				, true // rsm
+				, index );
+
 			auto convertPointToGridIndex = writer.implementFunction< IVec3 >( "convertPointToGridIndex"
-				, [&]( Vec3 pos
-					, Vec3 normal )
+				, [&]( Vec3 pos )
 				{
-					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) + 0.5_f * normal ) );
+					writer.returnStmt( ivec3( ( pos - c3d_minVolumeCorner.xyz() ) / vec3( c3d_minVolumeCorner.w() ) - vec3( 0.5_f ) ) );
 				}
-				, InVec3{ writer, "pos" }
-				, InVec3{ writer, "normal" } );
+				, InVec3{ writer, "pos" } );
+
+			//Sample from camera
+			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
+				, [&]( Vec3 viewPos )
+				{
+					writer.returnStmt( ( 4.0 * viewPos.z() * viewPos.z() * c3d_lpvConfig.y() * c3d_lpvConfig.y() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+				}
+				, InVec3{ writer, "viewPos" } );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
+					auto light = writer.declLocale( "light"
+						, lightingModel->getSpotLight( writer.cast< Int >( c3d_gridSizes.w() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % rsmTexSize
 							, in.vertexIndex / rsmTexSize
 							, writer.cast< Int >( c3d_gridSizes.w() ) ) );
 
+					outLightPos = light.m_position;
 					outRsmPos = texelFetch( c3d_rsmPositionMap, rsmCoords, 0_i ).rgb();
 					outRsmNormal = texelFetch( c3d_rsmNormalMap, rsmCoords, 0_i ).rgb();
-					outRsmFlux = texelFetch( c3d_rsmFluxMap, rsmCoords, 0_i );
-					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
+					auto viewPos = writer.declLocale( "viewPos"
+						, c3d_lightView * vec4( outRsmPos, 1.0 ) );
+					outSurfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvConfig.w();
+
+					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
 						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
@@ -215,27 +243,29 @@ namespace castor3d
 			auto inVolumeCellIndex = writer.declInputArray< IVec3 >( "inVolumeCellIndex", index++, 1u );
 			auto inRsmPos = writer.declInputArray< Vec3 >( "inRsmPos", index++, 1u );
 			auto inRsmNormal = writer.declInputArray< Vec3 >( "inRsmNormal", index++, 1u );
-			auto inRsmFlux = writer.declInputArray< Vec4 >( "inRsmFlux", index++, 1u );
+			auto inSurfelArea = writer.declInputArray< Float >( "inSurfelArea", index++, 1u );
+			auto inLightPos = writer.declInputArray< Vec3 >( "inLightPos", index++, 1u );
 			auto in = writer.getIn();
 
 			index = 0u;
 			auto outVolumeCellIndex = writer.declOutput< Int >( "outVolumeCellIndex", index++ );
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
-			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
+			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
+			auto outLightPos = writer.declOutput< Vec3 >( "outLightPos", index++, uint32_t( sdw::var::Flag::eFlat ) );
 			auto out = writer.getOut();
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					out.vtx.position = in.vtx[0].position;
-					outVolumeCellIndex = inVolumeCellIndex[0].z();
-					out.layer = inVolumeCellIndex[0].z();
 					out.vtx.pointSize = 1.0f;
+					outVolumeCellIndex = inVolumeCellIndex[0].z();
 
 					outRsmPos = inRsmPos[0];
 					outRsmNormal = inRsmNormal[0];
-					outRsmFlux = inRsmFlux[0];
+					outSurfelArea = inSurfelArea[0];
+					outLightPos = inLightPos[0];
 
 					EmitVertex( writer );
 					EndPrimitive( writer );
@@ -244,7 +274,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		ShaderPtr getPixelProgram()
+		ShaderPtr getPixelProgram( LightType lightType )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -258,10 +288,6 @@ namespace castor3d
 			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
 			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
 
-			auto outLpvGridR = writer.declOutput< Vec4 >( "outLpvGridR", 0u );
-			auto outLpvGridG = writer.declOutput< Vec4 >( "outLpvGridG", 1u );
-			auto outLpvGridB = writer.declOutput< Vec4 >( "outLpvGridB", 2u );
-
 			//layout( early_fragment_tests )in;//turn on early depth tests
 
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
@@ -270,8 +296,11 @@ namespace castor3d
 			auto inVolumeCellIndex = writer.declInput< Int >( "inVolumeCellIndex", index++ );
 			auto inRsmPos = writer.declInput< Vec3 >( "inRsmPos", index++ );
 			auto inRsmNormal = writer.declInput< Vec3 >( "inRsmNormal", index++ );
-			auto inRsmFlux = writer.declInput< Vec4 >( "inRsmFlux", index++ );
+			auto inSurfelArea = writer.declInput< Float >( "inSurfelArea", index++ );
+			auto inLightPos = writer.declInput< Vec3 >( "inLightPos", index++ );
 			auto in = writer.getIn();
+
+			auto outGeometryVolume = writer.declOutput< Vec4 >( "outGeometryVolume", 0u );
 
 			//Should I normalize the dir vector?
 			auto evalCosineLobeToDir = writer.implementFunction< Vec4 >( "evalCosineLobeToDir"
@@ -284,24 +313,79 @@ namespace castor3d
 						, SH_cosLobe_C1 * dir.z()
 						, -SH_cosLobe_C1 * dir.x() ) );
 				}
-			, InVec3{ writer, "dir" } );
+				, InVec3{ writer, "dir" } );
+
+			//(As * clamp(dot(ns,w),0.0,1.0))/(cellsize * cellsize)
+			auto calculateBlockingPotential = writer.implementFunction< Float >( "calculateBlockingPotential"
+				, [&]( Vec3 dir
+					, Vec3 normal )
+				{
+					writer.returnStmt( clamp( ( inSurfelArea * clamp( dot( normal, dir ), 0.0_f, 1.0_f ) ) / ( c3d_minVolumeCorner.w() * c3d_minVolumeCorner.w() )
+						, 0.0_f
+						, 1.0_f ) ); //It is probability so 0.0 - 1.0
+				}
+				, InVec3{ writer, "dir" }
+				, InVec3{ writer, "normal" } );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
-					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.r() );
-					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.g() );
-					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, evalCosineLobeToDir( inRsmNormal ) / Float{ Pi< float > } *inRsmFlux.b() );
+					//Discard pixels with really small normal
+					IF( writer, length( inRsmNormal ) < 0.01_f )
+					{
+						writer.discard();
+					}
+					FI;
 
-					outLpvGridR = SHCoeffsR;
-					outLpvGridG = SHCoeffsG;
-					outLpvGridB = SHCoeffsB;
+					if ( lightType == LightType::eDirectional )
+					{
+						auto lightDir = writer.declLocale( "lightDir"
+							, normalize( -inLightPos ) );
+						auto blockingPotential = writer.declLocale( "blockingPotential"
+							, calculateBlockingPotential( lightDir, inRsmNormal ) );
+
+						auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
+							, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
+
+						outGeometryVolume = SHCoeffGV;
+					}
+					else
+					{
+						auto lightDir = writer.declLocale( "lightDir"
+							, normalize( inLightPos - inRsmPos ) );
+						auto blockingPotential = writer.declLocale( "blockingPotential"
+							, calculateBlockingPotential( lightDir, inRsmNormal ) );
+
+						auto SHCoeffGV = writer.declLocale( "SHCoeffGV"
+							, evalCosineLobeToDir( inRsmNormal ) * blockingPotential );
+
+						outGeometryVolume = SHCoeffGV;
+					}
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
+
+		SamplerSPtr doCreateSampler( Engine & engine
+			, String const & name
+			, VkSamplerAddressMode mode )
+		{
+			SamplerSPtr sampler;
+
+			if ( engine.getSamplerCache().has( name ) )
+			{
+				sampler = engine.getSamplerCache().find( name );
+			}
+			else
+			{
+				sampler = engine.getSamplerCache().add( name );
+				sampler->setMinFilter( VK_FILTER_LINEAR );
+				sampler->setMagFilter( VK_FILTER_LINEAR );
+				sampler->setWrapS( mode );
+				sampler->setWrapT( mode );
+			}
+
+			return sampler;
 		}
 
 		ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
@@ -309,28 +393,6 @@ namespace castor3d
 		{
 			ashes::VkAttachmentDescriptionArray attaches
 			{
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
-				{
-					0u,
-					format,
-					VK_SAMPLE_COUNT_1_BIT,
-					VK_ATTACHMENT_LOAD_OP_CLEAR,
-					VK_ATTACHMENT_STORE_OP_STORE,
-					VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-					VK_ATTACHMENT_STORE_OP_DONT_CARE,
-					VK_IMAGE_LAYOUT_UNDEFINED,
-					VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-				},
 				{
 					0u,
 					format,
@@ -351,8 +413,6 @@ namespace castor3d
 					{},
 					{
 						{ 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
-						{ 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL },
 					},
 					{},
 					ashes::nullopt,
@@ -386,7 +446,7 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "LightInjection"
+			auto result = device->createRenderPass( "GeometryInjection"
 				, std::move( createInfo ) );
 			return result;
 		}
@@ -401,7 +461,7 @@ namespace castor3d
 				, vplCount
 				, 0u
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, "LightInjection" );
+				, "GeometryInjection" );
 			NonTexturedQuad::Vertex vtx;
 
 			if ( auto buffer = result->lock( 0u, vplCount, 0u ) )
@@ -432,9 +492,6 @@ namespace castor3d
 				makeDescriptorSetLayoutBinding( RsmPositionIdx
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
-				makeDescriptorSetLayoutBinding( RsmFluxIdx
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_VERTEX_BIT ),
 				makeDescriptorSetLayoutBinding( LIUboIdx
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ),
@@ -442,7 +499,7 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT ),
 			};
-			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( "LightInjection"
+			return getCurrentRenderDevice( engine )->createDescriptorSetLayout( "GeometryInjection"
 				, std::move( bindings ) );
 		}
 
@@ -450,11 +507,10 @@ namespace castor3d
 			, LightCache const & lightCache
 			, ShadowMapResult const & smResult
 			, UniformBuffer< LpvConfigUboConfiguration > const & ubo
-			, GpInfoUbo const & gpInfoUbo
-			, LightVolumePassResult const & lpvResult )
+			, GpInfoUbo const & gpInfoUbo )
 		{
 			auto & descriptorSetLayout = descriptorSetPool.getLayout();
-			auto result = descriptorSetPool.createDescriptorSet( "LightInjection" );
+			auto result = descriptorSetPool.createDescriptorSet( "GeometryInjection" );
 			result->createBinding( descriptorSetLayout.getBinding( LightsIdx )
 				, lightCache.getBuffer()
 				, lightCache.getView() );
@@ -464,9 +520,6 @@ namespace castor3d
 			result->createBinding( descriptorSetLayout.getBinding( RsmPositionIdx )
 				, smResult[SmTexture::ePosition].getTexture()->getDefaultView().getSampledView()
 				, smResult[SmTexture::ePosition].getSampler()->getSampler() );
-			result->createBinding( descriptorSetLayout.getBinding( RsmFluxIdx )
-				, smResult[SmTexture::eFlux].getTexture()->getDefaultView().getSampledView()
-				, smResult[SmTexture::eFlux].getSampler()->getSampler() );
 			result->createSizedBinding( descriptorSetLayout.getBinding( LIUboIdx )
 				, ubo );
 			result->createSizedBinding( descriptorSetLayout.getBinding( GpUboIdx )
@@ -511,7 +564,7 @@ namespace castor3d
 			shaderStages.push_back( makeShaderState( device, vertexShader ) );
 			shaderStages.push_back( makeShaderState( device, geometryShader ) );
 			shaderStages.push_back( makeShaderState( device, pixelShader ) );
-			return device->createPipeline( "LightInjection"
+			return device->createPipeline( "GeometryInjection"
 				, ashes::GraphicsPipelineCreateInfo
 				{
 					0u,
@@ -523,7 +576,7 @@ namespace castor3d
 					ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE },
 					ashes::PipelineMultisampleStateCreateInfo{},
 					ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE },
-					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 3u ),
+					RenderPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ),
 					ashes::nullopt,
 					pipelineLayout,
 					renderPass,
@@ -533,16 +586,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightInjectionPass::LightInjectionPass( Engine & engine
+	GeometryInjectionPass::GeometryInjectionPass( Engine & engine
 		, LightCache const & lightCache
 		, LightType lightType
 		, ShadowMapResult const & smResult
 		, GpInfoUbo const & gpInfoUbo
 		, LpvConfigUbo const & lpvConfigUbo
-		, LightVolumePassResult const & result
+		, TextureUnit const & result
 		, uint32_t size
 		, uint32_t layerIndex )
-		: Named{ "LightInjection" }
+		: Named{ "GeometryInjection" }
 		, m_engine{ engine }
 		, m_lightCache{ lightCache }
 		, m_smResult{ smResult }
@@ -550,7 +603,7 @@ namespace castor3d
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_lightType{ lightType }
 		, m_result{ result }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Light Injection" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "Geometry Injection" ) ) }
 		, m_vertexBuffer{ doCreateVertexBuffer( engine, m_smResult[SmTexture::eDepth].getTexture()->getWidth() ) }
 		, m_descriptorSetLayout{ doCreateDescriptorLayout( engine ) }
 		, m_pipelineLayout{ getCurrentRenderDevice( m_engine )->createPipelineLayout( getName(), *m_descriptorSetLayout ) }
@@ -559,11 +612,10 @@ namespace castor3d
 			, m_lightCache
 			, m_smResult
 			, m_lpvConfigUbo.getUbo()
-			, m_gpInfoUbo
-			, result ) }
+			, m_gpInfoUbo ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), getVertexProgram( lightType, smResult[SmTexture::eDepth].getTexture()->getWidth(), layerIndex ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram() }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), getPixelProgram( lightType ) }
 		, m_renderPass{ doCreateRenderPass( getCurrentRenderDevice( m_engine )
 			, getFormat( LpvTexture::eR ) ) }
 		, m_pipeline{ doCreatePipeline( m_engine
@@ -573,19 +625,17 @@ namespace castor3d
 			, m_geometryShader
 			, m_pixelShader
 			, size ) }
-		, m_frameBuffer{ m_renderPass->createFrameBuffer( "LightInjection"
+		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
 			, VkExtent2D{ size, size }
 			, {
-				result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
-				result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
+				m_result.getTexture()->getDefaultView().getTargetView(),
 			}
 			, size ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}
 
-	ashes::Semaphore const & LightInjectionPass::compute( ashes::Semaphore const & toWait )const
+	ashes::Semaphore const & GeometryInjectionPass::compute( ashes::Semaphore const & toWait )const
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
 		RenderPassTimerBlock timerBlock{ m_timer->start() };
@@ -602,7 +652,7 @@ namespace castor3d
 		return *result;
 	}
 
-	CommandsSemaphore LightInjectionPass::getCommands( RenderPassTimer const & timer
+	CommandsSemaphore GeometryInjectionPass::getCommands( RenderPassTimer const & timer
 		, uint32_t index )const
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
@@ -619,17 +669,15 @@ namespace castor3d
 		timer.beginPass( cmd, index );
 		cmd.beginDebugBlock(
 			{
-				"Lighting - Light Injection",
+				"Lighting - Geometry Injection",
 				castor3d::makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		cmd.beginRenderPass( *m_renderPass
 			, *m_frameBuffer
 			, {
-				getClearValue( LpvTexture::eR ),
-				getClearValue( LpvTexture::eG ),
-				getClearValue( LpvTexture::eB )
+				getClearValue( LpvTexture::eR )
 			}
-		, VK_SUBPASS_CONTENTS_INLINE );
+			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u, m_vertexBuffer->getBuffer(), 0u );
 		cmd.bindDescriptorSet( *m_descriptorSet, *m_pipelineLayout );
@@ -642,10 +690,21 @@ namespace castor3d
 		return commands;
 	}
 
-	void LightInjectionPass::accept( PipelineVisitorBase & visitor )
+	void GeometryInjectionPass::accept( PipelineVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_geometryShader );
 		visitor.visit( m_pixelShader );
+	}
+
+	TextureUnit GeometryInjectionPass::createResult( Engine & engine
+		, uint32_t gridSize )
+	{
+		return TextureUnit::create( engine
+			, cuT( "GeometryInjectionResult" )
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, { gridSize, gridSize, gridSize }
+			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT );
 	}
 }

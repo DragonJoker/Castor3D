@@ -22,7 +22,6 @@ namespace castor3d
 	}
 
 	void LayeredLpvConfigUbo::update( std::array< castor::Grid, shader::DirectionalMaxCascadesCount > const & grids
-		, uint32_t lightIndex
 		, float indirectAttenuation )
 	{
 		CU_Require( m_ubo );

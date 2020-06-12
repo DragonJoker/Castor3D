@@ -140,6 +140,11 @@ namespace castor3d
 		C3D_API PointLightSPtr getPointLight()const;
 		C3D_API SpotLightSPtr getSpotLight()const;
 
+		inline bool Light::hasChanged()const
+		{
+			return m_dirty;
+		}
+
 		inline LightType getLightType()const
 		{
 			return m_category->getLightType();
@@ -370,6 +375,7 @@ namespace castor3d
 	protected:
 		bool m_enabled{ false };
 		bool m_shadowCaster{ false };
+		bool m_dirty{ true };
 		ShadowType m_shadowType{ ShadowType::eNone };
 		LightCategorySPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };

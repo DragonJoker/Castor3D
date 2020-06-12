@@ -245,6 +245,7 @@ namespace castor
 	class Font;
 	class FontCache;
 	class Glyph;
+	class Grid;
 	class Image;
 	class ImageCache;
 	class ImageLoader;

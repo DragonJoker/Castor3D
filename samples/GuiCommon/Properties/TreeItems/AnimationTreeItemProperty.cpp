@@ -22,11 +22,15 @@ namespace GuiCommon
 		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
 	}
 
-	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * engine, bool p_editable, AnimatedObjectGroupSPtr p_group, castor::String const & p_name, GroupAnimation const & p_anim )
-		: TreeItemProperty( engine, p_editable, ePROPERTY_DATA_TYPE_LIGHT )
-		, m_name( p_name )
-		, m_group( p_group )
-		, m_groupAnim( p_anim )
+	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * engine
+		, bool editable
+		, AnimatedObjectGroup & group
+		, castor::String const & name
+		, GroupAnimation const & anim )
+		: TreeItemProperty( engine, editable, ePROPERTY_DATA_TYPE_LIGHT )
+		, m_name( name )
+		, m_group( group )
+		, m_groupAnim( anim )
 	{
 		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		PROPERTY_ANIMATION_SPEED = _( "Speed" );

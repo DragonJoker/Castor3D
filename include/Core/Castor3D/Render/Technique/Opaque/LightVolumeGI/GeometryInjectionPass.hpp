@@ -1,13 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_LightPropagationPass_HPP___
-#define ___C3D_LightPropagationPass_HPP___
+#ifndef ___C3D_GeometryInjectionPass_HPP___
+#define ___C3D_GeometryInjectionPass_HPP___
 
 #include "LightVolumeGIModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
@@ -15,6 +15,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumePassResult.hpp"
 #include "Castor3D/Render/ToTexture/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -22,30 +24,20 @@ See LICENSE file in root folder
 
 #include <ShaderAST/Shader.hpp>
 
-#include <ashespp/Command/CommandBuffer.hpp>
+#include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
-#include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
+#include <ashespp/RenderPass/RenderPass.hpp>
 
 namespace castor3d
 {
-	class LightPropagationPass
+	class GeometryInjectionPass
 		: public castor::Named
 	{
-	private:
-		LightPropagationPass( Engine & engine
-			, uint32_t gridSize
-			, TextureUnit const * geometry
-			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
-
 	public:
 		/**
 		 *\~english
@@ -61,33 +53,15 @@ namespace castor3d
 		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
 		 *\param[in]	scene			Le tampon de scène.
 		 */
-		C3D_API LightPropagationPass( Engine & engine
-			, uint32_t gridSize
-			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	linearisedDepth	The linearised depth buffer.
-		 *\param[in]	scene			The scene buffer.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	linearisedDepth	Le tampon de profondeur linéarisé.
-		 *\param[in]	scene			Le tampon de scène.
-		 */
-		C3D_API LightPropagationPass( Engine & engine
-			, uint32_t gridSize
-			, TextureUnit const & geometry
-			, LightVolumePassResult const & injection
-			, LightVolumePassResult const & accumulation
-			, LightVolumePassResult const & propagate
-			, LpvConfigUbo const & lpvConfigUbo );
+		C3D_API GeometryInjectionPass( Engine & engine
+			, LightCache const & lightCache
+			, LightType lightType
+			, ShadowMapResult const & smResult
+			, GpInfoUbo const & gpInfoUbo
+			, LpvConfigUbo const & lpvConfigUbo
+			, TextureUnit const & result
+			, uint32_t size
+			, uint32_t layerIndex = shader::DirectionalMaxCascadesCount - 1u );
 		/**
 		 *\~english
 		 *\brief		Renders the SSGI pass.
@@ -104,15 +78,20 @@ namespace castor3d
 		 */
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
+		static TextureUnit createResult( Engine & engine
+			, uint32_t gridSize );
+
 	private:
 		Engine & m_engine;
+		LightCache const & m_lightCache;
+		ShadowMapResult const & m_smResult;
+		GpInfoUbo const & m_gpInfoUbo;
 		LpvConfigUbo const & m_lpvConfigUbo;
-		LightVolumePassResult const & m_accumulation;
-		LightVolumePassResult const & m_propagate;
+		TextureUnit const & m_result;
+		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
-		uint32_t m_count;
 
-		ashes::VertexBufferPtr< castor::Point3f > m_vertexBuffer;
+		ashes::VertexBufferPtr< NonTexturedQuad::Vertex > m_vertexBuffer;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPool;

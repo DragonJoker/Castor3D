@@ -51,6 +51,7 @@ namespace castor3d
 				, lpResult
 				, gpInfoUbo }
 			, m_downscalePass{ engine
+				, cuT( "Reflective Shadow Maps" )
 				, ashes::ImageViewArray
 				{
 					lpResult[LpTexture::eDiffuse].getTexture()->getDefaultView().getTargetView(),

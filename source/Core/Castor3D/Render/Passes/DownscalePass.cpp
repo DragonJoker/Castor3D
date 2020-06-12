@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Render/RenderPassTimer.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -91,14 +92,17 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DownscalePass::DownscalePass( Engine & engine
+		, castor::String const & category
 		, ashes::ImageViewArray const & srcViews
 		, VkExtent2D const & dstSize )
 		: m_engine{ engine }
 		, m_result{ doCreateTextures( engine, "Downscaled", srcViews, dstSize ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, category, cuT( "Downscale" ) ) }
 		, m_commandBuffer{ getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "Downscale", VK_COMMAND_BUFFER_LEVEL_PRIMARY ) }
 		, m_finished{ getCurrentRenderDevice( engine )->createSemaphore( "Downscale" ) }
 	{
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+		m_timer->beginPass( *m_commandBuffer, 0u );
 		m_commandBuffer->beginDebugBlock(
 			{
 				"Downscale",
@@ -157,12 +161,15 @@ namespace castor3d
 		}
 
 		m_commandBuffer->endDebugBlock();
+		m_timer->endPass( *m_commandBuffer, 0u );
 		m_commandBuffer->end();
 	}
 
 	ashes::Semaphore const & DownscalePass::compute( ashes::Semaphore const & toWait )
 	{
 		auto & device = getCurrentRenderDevice( m_engine );
+		RenderPassTimerBlock timerBlock{ m_timer->start() };
+		timerBlock->notifyPassRender();
 		auto * result = &toWait;
 
 		device.graphicsQueue->submit( *m_commandBuffer

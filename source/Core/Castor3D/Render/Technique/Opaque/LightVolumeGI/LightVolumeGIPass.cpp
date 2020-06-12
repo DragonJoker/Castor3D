@@ -166,7 +166,7 @@ namespace castor3d
 					);
 
 					auto finalLPVRadiance = writer.declLocale( "finalLPVRadiance"
-						, ( c3d_config.x() / Float{ castor::Pi< float > } ) * max( lpvIntensity, vec3( 0.0_f ) ) );
+						, ( c3d_lpvConfig.x() / Float{ castor::Pi< float > } ) * max( lpvIntensity, vec3( 0.0_f ) ) );
 					pxl_lpvGI = finalLPVRadiance;
 				} );
 
@@ -294,7 +294,7 @@ namespace castor3d
 			, m_result.getTexture()->getPixelFormat() ) }
 		, m_frameBuffer{ doCreateFrameBuffer( *m_renderPass
 			, m_result.getTexture()->getDefaultView().getTargetView() ) }
-		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Lighting" ), cuT( "LPV GI" ) ) }
+		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Light Propagation Volumes" ), cuT( "GI Resolve" ) ) }
 	{
 		auto & device = getCurrentRenderDevice( m_renderSystem );
 		ashes::PipelineShaderStageCreateInfoArray shaderStages;

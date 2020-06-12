@@ -31,7 +31,8 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_target	L'objet cible
 		 */
-		RenderWindowTreeItemProperty( bool p_editable, castor3d::RenderWindowSPtr p_target );
+		RenderWindowTreeItemProperty( bool editable
+			, castor3d::RenderWindow & target );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -47,9 +48,9 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::RenderWindowSPtr getRenderWindow()
+		inline castor3d::RenderWindowRPtr getRenderWindow()
 		{
-			return m_window.lock();
+			return &m_window;
 		}
 
 	private:
@@ -63,7 +64,7 @@ namespace GuiCommon
 		virtual void doPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		castor3d::RenderWindowWPtr m_window;
+		castor3d::RenderWindow & m_window;
 	};
 }
 

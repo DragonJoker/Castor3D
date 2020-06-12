@@ -241,7 +241,7 @@ namespace castor3d
 			camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
 
 			if ( m_aabb != aabb
-				|| m_lightIndex != light.getShadowMapIndex()
+				|| light.hasChanged()
 				|| m_cameraPos != camPos
 				|| m_cameraDir != camDir )
 			{
@@ -260,16 +260,11 @@ namespace castor3d
 				{
 					castor::Grid levelGrid{ grid, directional.getSplitScale( i ), i };
 					levelGrid.transform( m_cameraPos, m_cameraDir );
-
-					m_lpvConfigUbos[i].update( levelGrid.getMin()
-						, levelGrid.getDimensions()
-						, m_lightIndex
-						, levelGrid.getCellSize() );
+					m_lpvConfigUbos[i].update( levelGrid, light, i );
 					grids[i] = levelGrid;
 				}
 
-				m_lpvConfigUbo.update( grids
-					, m_lightIndex );
+				m_lpvConfigUbo.update( grids );
 			}
 		}
 

@@ -84,6 +84,7 @@ namespace castor3d
 		ShadowMapResult const & m_smResult;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvConfigUbo const & m_lpvConfigUbo;
+		LightVolumePassResult const & m_result;
 		LightType m_lightType;
 		RenderPassTimerSPtr m_timer;
 

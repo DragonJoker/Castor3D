@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
@@ -20,18 +21,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	engine			The engine.
-		 *\param[in]	depthView		The depth buffer view.
-		 *\param[in]	matrixUbo		The matrix UBO.
-		 *\param[in]	modelMatrixUbo	The model matrix UBO.
+		 *\param[in]	engine		The engine.
+		 *\param[in]	srcViews	The source views (must be of same dimensions).
+		 *\param[in]	dstSize		The wanted size.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	engine			Le moteur.
-		 *\param[in]	depthView		L'attache du tampon de profondeur.
-		 *\param[in]	matrixUbo		L'UBO des matrices.
-		 *\param[in]	modelMatrixUbo	L'UBO des matrices modèle.
+		 *\param[in]	engine		Le moteur.
+		 *\param[in]	srcViews	Les vues source (devant avoir le mêmes dimensions).
+		 *\param[in]	dstSize		La taille voulue.
 		 */
 		C3D_API DownscalePass( Engine & engine
+			, castor::String const & category
 			, ashes::ImageViewArray const & srcViews
 			, VkExtent2D const & dstSize );
 		/**
@@ -65,6 +65,7 @@ namespace castor3d
 	private:
 		Engine const & m_engine;
 		TextureUnitArray m_result;
+		RenderPassTimerSPtr m_timer;
 		ashes::CommandBufferPtr m_commandBuffer;
 		ashes::SemaphorePtr m_finished;
 	};

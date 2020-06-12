@@ -25,7 +25,7 @@ namespace castor3d
 		String getFullName( RenderPassTimer & timer )
 		{
 			auto timerName = timer.getName();
-			auto timerCategory = timer.getName();
+			auto timerCategory = timer.getCategory();
 
 			if ( timerName.find( cuT( "ShadowMap" ) ) != String::npos )
 			{
@@ -44,9 +44,17 @@ namespace castor3d
 					return cuT( "ShadowMap: Spot" );
 				}
 			}
-			else if ( timerName.find( cuT( "UBOs" ) ) != String::npos )
+
+			if ( timerName.find( cuT( "UBOs" ) ) != String::npos )
 			{
 				return cuT( "UBOs" );
+			}
+
+			if ( timerCategory == cuT( "Light Propagation Volumes" )
+				|| timerCategory == cuT( "Reflective Shadow Maps" )
+				|| timerCategory == cuT( "Scalable Ambient Obscurance" ) )
+			{
+				return timerCategory;
 			}
 
 			return timerCategory == timerName

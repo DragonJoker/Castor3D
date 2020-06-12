@@ -16,9 +16,10 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );
 	}
 
-	AnimatedObjectGroupTreeItemProperty::AnimatedObjectGroupTreeItemProperty( bool p_editable, AnimatedObjectGroupSPtr p_group )
-		: TreeItemProperty( p_group->getScene()->getEngine(), p_editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT_GROUP )
-		, m_group( p_group )
+	AnimatedObjectGroupTreeItemProperty::AnimatedObjectGroupTreeItemProperty( bool editable
+		, AnimatedObjectGroup & group )
+		: TreeItemProperty( group.getScene()->getEngine(), editable, ePROPERTY_DATA_TYPE_ANIMATED_OBJECT_GROUP )
+		, m_group( group )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );
 

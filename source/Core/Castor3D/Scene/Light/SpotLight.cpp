@@ -182,7 +182,9 @@ namespace castor3d
 			, 0.5f
 			, m_farPlane );
 		lightCamera.update();
-		m_lightSpace = lightCamera.getProjection() * lightCamera.getView();
+		m_lightView = lightCamera.getView();
+		m_lightProj = lightCamera.getProjection();
+		m_lightSpace = m_lightProj * m_lightView;
 		m_shadowMapIndex = index;
 	}
 

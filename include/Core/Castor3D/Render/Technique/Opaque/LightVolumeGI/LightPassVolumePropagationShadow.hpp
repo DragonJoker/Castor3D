@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Passes/DownscalePass.hpp"
 #include "Castor3D/Render/Technique/Opaque/OpaquePassResult.hpp"
+#include "Castor3D/Render/Technique/Opaque/LightVolumeGI/GeometryInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightInjectionPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightPropagationPass.hpp"
 #include "Castor3D/Render/Technique/Opaque/LightVolumeGI/LightVolumeGIPass.hpp"
@@ -60,17 +61,12 @@ namespace castor3d
 				, gpInfoUbo }
 			, m_lpvConfigUbo{ engine }
 			, m_injection{ engine, "LightInjection", GridSize }
+			, m_geometry{ GeometryInjectionPass::createResult( engine, GridSize ) }
 			, m_accumulation{ engine, "LightAccumulation", GridSize }
 			, m_propagate
 			{
 				LightVolumePassResult{ engine, "LightPropagate0", GridSize },
 				LightVolumePassResult{ engine, "LightPropagate1", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate2", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate3", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate4", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate5", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate6", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate7", GridSize },
 			}
 			, m_lightInjectionPass{ engine
 				, lightCache
@@ -80,17 +76,14 @@ namespace castor3d
 				, m_lpvConfigUbo
 				, m_injection
 				, GridSize }
-			, m_lightPropagationPasses
-			{
-				LightPropagationPass{ engine, GridSize, m_injection, m_accumulation, m_propagate[0], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[0], m_accumulation, m_propagate[1], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[1], m_accumulation, m_propagate[2], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[2], m_accumulation, m_propagate[3], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[3], m_accumulation, m_propagate[4], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[4], m_accumulation, m_propagate[5], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[5], m_accumulation, m_propagate[6], m_lpvConfigUbo },
-				LightPropagationPass{ engine, GridSize, m_propagate[6], m_accumulation, m_propagate[7], m_lpvConfigUbo },
-			}
+			, m_geometryInjectionPass{ engine
+				, lightCache
+				, LtType
+				, smResult
+				, gpInfoUbo
+				, m_lpvConfigUbo
+				, m_geometry
+				, GridSize }
 			, m_lightVolumeGIPass{ engine
 				, LtType
 				, gpInfoUbo
@@ -100,6 +93,14 @@ namespace castor3d
 				, lpResult[LpTexture::eDiffuse] }
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
+			uint32_t propIndex = 0u;
+			m_lightPropagationPasses.emplace_back( engine, GridSize, m_injection, m_accumulation, m_propagate[propIndex], m_lpvConfigUbo );
+
+			for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+			{
+				m_lightPropagationPasses.emplace_back( engine, GridSize, m_geometry, m_propagate[propIndex], m_accumulation, m_propagate[1u - propIndex], m_lpvConfigUbo );
+				propIndex = 1u - propIndex;
+			}
 		}
 
 		ashes::Semaphore const & render( uint32_t index
@@ -108,6 +109,7 @@ namespace castor3d
 			auto result = &toWait;
 			result = &my_pass_type::render( index, *result );
 			result = &m_lightInjectionPass.compute( *result );
+			result = &m_geometryInjectionPass.compute( *result );
 
 			for ( auto & pass : m_lightPropagationPasses )
 			{
@@ -123,6 +125,7 @@ namespace castor3d
 		{
 			LightPassShadow< LtType >::accept( visitor );
 			m_lightInjectionPass.accept( visitor );
+			m_geometryInjectionPass.accept( visitor );
 
 			for ( auto & pass : m_lightPropagationPasses )
 			{
@@ -154,11 +157,10 @@ namespace castor3d
 			camera.getParent()->getDerivedOrientation().transform( camDir, camDir );
 
 			if ( m_aabb != aabb
-				|| m_lightIndex != light.getShadowMapIndex()
 				|| m_cameraPos != camPos
-				|| m_cameraDir != camDir )
+				|| m_cameraDir != camDir
+				|| light.hasChanged() )
 			{
-				m_lightIndex = light.getShadowMapIndex();
 				m_aabb = aabb;
 				m_cameraPos = camPos;
 				m_cameraDir = camDir;
@@ -168,20 +170,26 @@ namespace castor3d
 				castor::Grid grid{ GridSize, cellSize, m_aabb.getMax(), m_aabb.getMin(), 1.0f, 0 };
 				grid.transform( m_cameraPos, m_cameraDir );
 
-				m_lpvConfigUbo.update( grid.getMin()
-					, grid.getDimensions()
-					, m_lightIndex
-					, grid.getCellSize() );
+				if constexpr ( LtType == LightType::eDirectional )
+				{
+					m_lpvConfigUbo.update( grid, light, 3u );
+				}
+				else
+				{
+					m_lpvConfigUbo.update( grid, light );
+				}
 			}
 		}
 
 	private:
 		LpvConfigUbo m_lpvConfigUbo;
 		LightVolumePassResult m_injection;
+		TextureUnit m_geometry;
 		LightVolumePassResult m_accumulation;
-		std::array< LightVolumePassResult, MaxPropagationSteps > m_propagate;
+		std::array< LightVolumePassResult, 2u > m_propagate;
+		GeometryInjectionPass m_geometryInjectionPass;
 		LightInjectionPass m_lightInjectionPass;
-		std::array< LightPropagationPass, MaxPropagationSteps >  m_lightPropagationPasses;
+		std::vector< LightPropagationPass >  m_lightPropagationPasses;
 		LightVolumeGIPass m_lightVolumeGIPass;
 
 		castor::BoundingBox m_aabb;

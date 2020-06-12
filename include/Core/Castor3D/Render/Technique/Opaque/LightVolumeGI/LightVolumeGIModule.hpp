@@ -45,6 +45,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Geometry injection pass.
+	*\~french
+	*\brief
+	*	Passe d'injection des géométries.
+	*/
+	class GeometryInjectionPass;
+	/**
+	*\~english
+	*\brief
 	*	Lighting injection pass.
 	*\~french
 	*\brief

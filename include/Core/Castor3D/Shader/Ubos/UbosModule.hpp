@@ -91,6 +91,7 @@ namespace castor3d
 	*/
 	struct LpvConfigUboConfiguration
 	{
+		castor::Matrix4x4f lightView;
 		castor::Point4f minVolumeCorner;
 		castor::Point4ui gridSizes;
 		castor::Point4f config;

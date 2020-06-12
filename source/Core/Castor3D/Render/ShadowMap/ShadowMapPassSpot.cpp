@@ -29,7 +29,7 @@ using namespace castor;
 
 namespace castor3d
 {
-	uint32_t const ShadowMapPassSpot::TextureSize = 256u;
+	uint32_t const ShadowMapPassSpot::TextureSize = 512u;
 
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & engine
 		, uint32_t index
