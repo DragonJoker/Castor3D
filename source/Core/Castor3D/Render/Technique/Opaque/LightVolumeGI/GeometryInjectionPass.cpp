@@ -593,7 +593,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, LpvConfigUbo const & lpvConfigUbo
 		, TextureUnit const & result
-		, uint32_t size
+		, uint32_t gridSize
 		, uint32_t layerIndex )
 		: Named{ "GeometryInjection" }
 		, m_engine{ engine }
@@ -624,13 +624,13 @@ namespace castor3d
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
-			, size ) }
+			, gridSize ) }
 		, m_frameBuffer{ m_renderPass->createFrameBuffer( getName()
-			, VkExtent2D{ size, size }
+			, VkExtent2D{ gridSize, gridSize }
 			, {
 				m_result.getTexture()->getDefaultView().getTargetView(),
 			}
-			, size ) }
+			, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}

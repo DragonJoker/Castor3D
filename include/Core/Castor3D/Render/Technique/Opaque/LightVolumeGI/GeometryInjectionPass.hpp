@@ -60,7 +60,7 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, LpvConfigUbo const & lpvConfigUbo
 			, TextureUnit const & result
-			, uint32_t size
+			, uint32_t gridSize
 			, uint32_t layerIndex = shader::DirectionalMaxCascadesCount - 1u );
 		/**
 		 *\~english
