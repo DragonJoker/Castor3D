@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEMPLATES_H___
 #define ___CASTOR_TEMPLATES_H___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Math/Math.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
@@ -13,15 +15,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Struct used to select best way to put type in parameter : 'value' or 'const reference'
-	\~french
-	\brief		Structure utilisée pour récupéerer la meilleure façon de passer T en paramètre : valeur ou référence constante
-	*/
 	template< typename T >
 	struct CallTraits
 	{
@@ -59,17 +52,6 @@ namespace castor
 	\date		17/09/2015
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
-	\~french
-	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
-	*/
-	template< uint32_t A, uint32_t B, typename Enable = void >
-	struct MinValue;
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
-	\~english
-	\brief		Used to have the minimum value of two, at compile time.
 	\remarks	MinValue specialisation for A <= B.
 	\~french
 	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
@@ -96,17 +78,6 @@ namespace castor
 	{
 		static const uint32_t value = B;
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		17/09/2015
-	\~english
-	\brief		Used to have the maximum value of two, at compile time.
-	\~french
-	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
-	*/
-	template< uint32_t A, uint32_t B, typename Enable = void >
-	struct MaxValue;
 	/**
 	\author		Sylvain DOREMUS
 	\version	0.8.0

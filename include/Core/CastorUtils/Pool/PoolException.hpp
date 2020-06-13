@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_PoolException_H___
 #define ___CU_PoolException_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Pool/PoolModule.hpp"
+
 #include "CastorUtils/Exception/Exception.hpp"
 
 #include <exception>
@@ -13,36 +14,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\~english
-	\brief		Pool errors enumeration.
-	\~french
-	\brief		Enumération des erreurs de pool.
-	*/
-	enum class PoolErrorType
-	{
-		eCommonOutOfMemory,
-		eCommonPoolIsFull,
-		eCommonMemoryLeaksDetected,
-		eCommonNotFromRange,
-		eMarkedLeakAddress,
-		eMarkedDoubleDelete,
-		eMarkedNotFromPool,
-		eGrowingNotFromRanges,
-		eSTLAllocatorUnique,
-		CU_ScopedEnumBounds( eCommonOutOfMemory )
-	};
-
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2015
-	\~english
-	\brief		Error text and report function.
-	\~french
-	\brief		Texte et fonction de report d'erreur.
-	*/
-	template< PoolErrorType ErrorType > struct Error;
 	using CommonOutOfMemoryPoolError = Error< PoolErrorType::eCommonOutOfMemory >;
 	using CommonPoolIsFullPoolError = Error< PoolErrorType::eCommonPoolIsFull >;
 	using CommonMemoryLeaksDetectedPoolError = Error< PoolErrorType::eCommonMemoryLeaksDetected >;
@@ -262,15 +233,7 @@ namespace castor
 		std::cerr << "*** " << name << " *** ";
 		Error< ErrorType >::report( params... );
 	}
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/01/2015
-	\~english
-	\brief		Pool exception.
-	\~french
-	\brief		Exception de pool.
-	*/
+
 	template< PoolErrorType ErrorType >
 	class PoolMemoryException
 		: public Exception

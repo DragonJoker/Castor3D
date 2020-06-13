@@ -8,17 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Log management class
-	\remarks	Implements log facilities. Create a Log with a filename, then write logs into that file
-	\~french
-	\brief		Classe de gestion de logs
-	\remarks	Implémente les fonctions de logging. Initialise un log avec un nom de fichier puis écrit dedans
-	*/
 	class Logger
 	{
 	private:

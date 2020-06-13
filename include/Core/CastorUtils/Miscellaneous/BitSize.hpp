@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_BitSize_HPP___
 #define ___CU_BitSize_HPP___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
 namespace castor
 {

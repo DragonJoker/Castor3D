@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CU_WorkerThread_H___
 #define ___CU_WorkerThread_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Multithreading/MultithreadingModule.hpp"
+
 #include "CastorUtils/Design/Signal.hpp"
 
 #include <thread>
@@ -14,15 +15,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Implementation of a worker thread to place in a thread pool.
-	\~french
-	\brief		Implàmentation d'un thread de travail à placer dans un pool de threads.
-	*/
 	class WorkerThread
 	{
 	public:
@@ -94,7 +86,6 @@ namespace castor
 		std::atomic_bool m_start{ false };
 		std::atomic_bool m_terminate{ false };
 		Job m_currentJob;
-		
 	};
 }
 

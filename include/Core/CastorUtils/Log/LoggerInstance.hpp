@@ -6,21 +6,14 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Log/LoggerImpl.hpp"
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include <mutex>
 #include <atomic>
 #include <thread>
 
 namespace castor
 {
-	/**
-	\version	0.11.0
-	\~english
-	\brief		Logger instance class.
-	\remarks	Implements log facilities. Create a Log with a filename, then write logs into that file.
-	\~french
-	\brief		Instance de logger.
-	\remarks	Implémente les fonctions de logging. Initialise un log avec un nom de fichier puis écrit dedans
-	*/
 	class LoggerInstance
 	{
 	public:

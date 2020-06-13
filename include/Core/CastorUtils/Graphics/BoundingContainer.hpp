@@ -4,22 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CU_BoundingContainer_H___
 #define ___CU_BoundingContainer_H___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Box container class.
-	\remark		A container will be a simple object which surrounds a graphic object (2D or 3D).
-				<br />It can be a parallelepiped, a sphere or other.
-	\~french
-	\brief		Classe de conteneur boîte.
-	\remark		Un conteneur boîte est un simple objet encadrant un objet graphique (2D ou 3D).
-				<br />Ce peut être un parallélépipède, une sphère ou autre.
-	*/
 	template< uint8_t Dimension >
 	class BoundingContainer
 	{
@@ -89,20 +79,6 @@ namespace castor
 		//!\~french		Le centre de ce conteneur.
 		MyPoint m_center;
 	};
-	/**
-	\~english
-	\brief		Typedef on a 2 dimensions BoundingContainer.
-	\~french
-	\brief		Typedef sur une BoundingContainer à 2 dimensions.
-	*/
-	using BoundingContainer2D = BoundingContainer< 2 >;
-	/**
-	\~english
-	\brief		Typedef on a 3 dimensions BoundingContainer.
-	\~french
-	\brief		Typedef sur une BoundingContainer à 3 dimensions.
-	*/
-	using BoundingContainer3D = BoundingContainer< 3 >;
 }
 
 #endif

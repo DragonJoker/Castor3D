@@ -1,25 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_ASSERTION_H___
-#define ___CASTOR_ASSERTION_H___
+#ifndef ___CU_Assertion_H___
+#define ___CU_Assertion_H___
+
+#include "CastorUtils/Exception/ExceptionModule.hpp"
 
 #include "CastorUtils/CastorUtils.hpp"
 
+#if CU_UseAssert
+
 #include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Log/Logger.hpp"
-
-#ifndef CU_UseAssert
-#	ifndef NDEBUG
-#		define CU_UseAssert 1
-#		define CU_ExceptAssert 0
-#	else
-#		define CU_UseAssert 0
-#		define CU_ExceptAssert 0
-#	endif
-#endif
-
-#if CU_UseAssert
 
 #	if defined( CU_Assert )
 #		undef CU_Assert

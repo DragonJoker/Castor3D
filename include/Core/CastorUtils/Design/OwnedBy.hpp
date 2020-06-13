@@ -4,19 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_OWNED_BY_H___
 #define ___CASTOR_OWNED_BY_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		08/10/2015
-	\~english
-	\brief		Class used to have an object owned by another one.
-	\~french
-	\brief		Classe permettant d'avoir un objet controlé par un autre.
-	*/
 	template< class Owner >
 	class OwnedBy
 	{

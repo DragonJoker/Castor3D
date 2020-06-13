@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_IMAGE_CACHE_H___
 #define ___CASTOR_IMAGE_CACHE_H___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Design/Collection.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		15/10/2015
-	\~english
-	\brief		Image manager.
-	\remark		Holds the loaded images, and helps their loading.
-	\~french
-	\brief		Gestionnaire d'images.
-	\remark		Détient les images, et simplifie leur création.
-	*/
 	class ImageCache
 		: private Collection< Image, String >
 	{

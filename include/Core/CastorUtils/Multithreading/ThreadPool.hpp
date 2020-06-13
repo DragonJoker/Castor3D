@@ -8,15 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		02/12/2016
-	\~english
-	\brief		Thread pool implementation, using WorkerThreads.
-	\~french
-	\brief		Implémentation de pool de thread, utilisant des WorkerThread.
-	*/
 	class ThreadPool
 	{
 		using WorkerPtr = std::unique_ptr< WorkerThread >;

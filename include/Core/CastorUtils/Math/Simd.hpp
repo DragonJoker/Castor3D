@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_SIMD_H___
 #define ___CU_SIMD_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Math/MathModule.hpp"
 
 #	if CU_UseSSE2
 

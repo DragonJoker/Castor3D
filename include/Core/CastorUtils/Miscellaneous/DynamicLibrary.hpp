@@ -4,22 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_DYNAMIC_LIBRARY_H___
 #define ___CASTOR_DYNAMIC_LIBRARY_H___
 
-#include "CastorUtils/CastorUtils.hpp"
 #include "CastorUtils/Data/Path.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Platform independant library
-	\remark		Loads a library and gives access to it's functions in a platform independant way
-	\~french
-	\brief		Bibliothèque dynamique (Dll, shared lib)
-	\remark		Charge une bibliothèque et permet l'accès a ses fonction de manière indépendante de l'OS
-	*/
 	class DynamicLibrary
 	{
 	public:
@@ -226,15 +214,6 @@ namespace castor
 		void * m_library;
 		Path m_pathLibrary;
 	};
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		03/01/2011
-	\~english
-	\brief		Typedef on a pointer to a DynamicLibrary
-	\~french
-	\brief		Typedef d'un pointeur sur une DynamicLibrary
-	*/
-	CU_DeclareSmartPtr( DynamicLibrary );
 }
 
 #endif

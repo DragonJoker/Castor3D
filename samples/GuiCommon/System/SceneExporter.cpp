@@ -439,7 +439,7 @@ namespace GuiCommon
 					Path path{ base / it.first + cuT( ".cmsh" ) };
 					{
 						BinaryFile file{ path, File::OpenMode::eWrite };
-						result = BinaryWriter< Mesh >{}.write( *mesh, file );
+						result = castor3d::BinaryWriter< Mesh >{}.write( *mesh, file );
 					}
 
 					auto skeleton = mesh->getSkeleton();
@@ -447,7 +447,7 @@ namespace GuiCommon
 					if ( result && skeleton )
 					{
 						BinaryFile file{ base / ( it.first + cuT( ".cskl" ) ), File::OpenMode::eWrite };
-						result = BinaryWriter< Skeleton >{}.write( *skeleton, file );
+						result = castor3d::BinaryWriter< Skeleton >{}.write( *skeleton, file );
 					}
 				}
 			}

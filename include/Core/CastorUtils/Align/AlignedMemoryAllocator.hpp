@@ -1,24 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
-#define ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
+#ifndef ___CU_AlignedMemoryAllocator_H___
+#define ___CU_AlignedMemoryAllocator_H___
 
 #include "CastorUtils/Align/Aligned.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		14/01/2016
-	\~english
-	\brief		Memory allocator.
-	\remarks	Allocates aligned memory.
-	\~french
-	\brief		Allocateur de mémoire.
-	\remarks	Alloue de la mémoire alignée.
-	*/
 	template< size_t Align >
 	class AlignedMemoryAllocator
 	{

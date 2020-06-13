@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_PixelFormat___
 #define ___CU_PixelFormat___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 #include "CastorUtils/Exception/Exception.hpp"
 
@@ -14,103 +14,23 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\~english
-	\brief Pixel PixelComponents enumeration.
-	\~french
-	\brief Enumération des composantes de Pixel.
-	*/
-	enum class PixelComponent
-		: uint8_t
-	{
-		//!\~english	Red.
-		//!\~french		Rouge.
-		eRed,
-		//!\~english	Green.
-		//!\~french		Vert.
-		eGreen,
-		//!\~english	Blue.
-		//!\~french		Bleu.
-		eBlue,
-		//!\~english	Alpha.
-		//!\~french		Alpha.
-		eAlpha,
-		//!\~english	Luminance.
-		//!\~french		Luminance.
-		eLuminance,
-		//!\~english	Depth.
-		//!\~french		Profondeur.
-		eDepth,
-		//!\~english	Stencil.
-		//!\~french		Stencil.
-		eStencil,
-		CU_ScopedEnumBounds( eRed )
-	};
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		27/05/2013
-	\~english
-	\brief		Holds colour/depth/stencil PixelComponents helper functions
-	\~french
-	\brief		Contient des fonctions d'aides à la conversion de composantes couleur/profondeur/stencil
-	*/
-	template< PixelFormat PF > struct PixelComponents;
-	/**
-	 *\~english
-	 *\brief		Helper struct that holds pixel size, toString and converion functions
-	 *\~french
-	 *\brief		Structure d'aide contenant la taille d'un pixel ainsi que sa fonction toString et les fonction de conversion vers d'autres formats
-	 */
-	template< PixelFormat format > struct PixelDefinitions;
-	/**
-	 *\~english
-	 *\brief		Helper struct to tell if a pixel format represents a colour
-	 *\~french
-	 *\brief		Structure d'aide permettant de dire si un format de pixels représente une couleur
-	 */
-	template< PixelFormat PF > struct IsColourFormat : public std::true_type {};
-
 	template<> struct IsColourFormat< PixelFormat::eD16_UNORM > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::false_type {};
-	template<> struct IsColourFormat< PixelFormat::eD32_UNORM > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::false_type {};
 	template<> struct IsColourFormat< PixelFormat::eS8_UINT > : public std::false_type {};
-	/**
-	 *\~english
-	 *\brief		Helper struct to tell if a pixel format represents a depth pixel
-	 *\~french
-	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de profondeur
-	 */
-	template< PixelFormat PF > struct IsDepthFormat : public std::false_type {};
 
 	template<> struct IsDepthFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
 	template<> struct IsDepthFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthFormat< PixelFormat::eD32_UNORM > : public std::true_type {};
 	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
 	template<> struct IsDepthFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
-	/**
-	 *\~english
-	 *\brief		Helper struct to tell if a pixel format represents a stencil pixel
-	 *\~french
-	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de stencil
-	 */
-	template< PixelFormat PF > struct IsStencilFormat : public std::false_type {};
 
 	template<> struct IsStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
 	template<> struct IsStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
 	template<> struct IsStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};
-	/**
-	 *\~english
-	 *\brief		Helper struct to tell if a pixel format represents a depth or stencil pixel
-	 *\~french
-	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de profondeur ou de stencil
-	 */
-	template< PixelFormat PF > struct IsDepthStencilFormat : public std::false_type {};
 
 	template<> struct IsDepthStencilFormat< PixelFormat::eD16_UNORM > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eD24_UNORM_S8_UINT > : public std::true_type {};
-	template<> struct IsDepthStencilFormat< PixelFormat::eD32_UNORM > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eD32_SFLOAT_S8_UINT > : public std::true_type {};
 	template<> struct IsDepthStencilFormat< PixelFormat::eS8_UINT > : public std::true_type {};

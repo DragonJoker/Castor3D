@@ -13,15 +13,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Pixel buffer class, with pixel format as a template param
-	\~french
-	\brief		Buffer de pixels avec le format de pixel en argument template
-	*/
 	template< PixelFormat PF >
 	class PxBuffer
 		: public PxBufferBase

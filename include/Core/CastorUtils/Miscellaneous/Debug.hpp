@@ -4,10 +4,14 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_DEBUG_H___
 #define ___CASTOR_DEBUG_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include <ostream>
+#include <sstream>
+#include <string>
 
 namespace castor
 {
+	class DynamicLibrary;
+
 	namespace Debug
 	{
 		struct Backtrace

@@ -4,22 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_RESOURCE_H___
 #define ___CASTOR_RESOURCE_H___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Design/Collection.hpp"
 #include "CastorUtils/Design/Named.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		External resource representation
-	\remark		A resource is a collectionnable object. You can change it's name, the Collection is noticed of the change
-	\~french
-	\brief		Représentation d'une ressource externe
-	\remark		Une ressource est un objet collectionnable. Si le nom de la ressource est changé, la Collection est notifiée du changement
-	*/
 	template< class ResType >
 	class Resource
 		: public Named

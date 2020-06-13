@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FACTORY_H___
 #define ___CASTOR_FACTORY_H___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Exception/Exception.hpp"
 
@@ -13,19 +15,7 @@ See LICENSE file in root folder
 namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Factory concept implementation
-	\remark		The classes that can be registered must implement a function of the following form :
-				<br />static std::shared_ptr< Obj > create();
-	\~french
-	\brief		Implémentation du concept de fabrique
-	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
-				<br />static std::shared_ptr< Obj > create();
-	*/
+
 	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
 	{

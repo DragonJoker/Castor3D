@@ -4,20 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_LINE_2D_H___
 #define ___CASTOR_LINE_2D_H___
 
-#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Math/MathModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/08/2010
-	\~english
-	\brief		2D line equation
-	\remark		do you remember y = ax + b ?
-	\~french
-	\brief		Equation d'une ligne 2D
-	\remark		Vous connaissez y = ax + b ?
-	*/
 	template< typename T >
 	class Line2D
 	{

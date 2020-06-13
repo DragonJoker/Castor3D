@@ -4,19 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CU_LoggerConsole_H___
 #define ___CU_LoggerConsole_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Log/LogModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Console info class, platform dependent.
-	\~french
-	\brief		Classe d'informations de console, dépendante de la plateforme.
-	*/
 	class ConsoleImpl
 	{
 	public:
@@ -55,15 +46,7 @@ namespace castor
 		 */
 		virtual void print( String const & toLog, bool newLine ) = 0;
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Console base class.
-	\~french
-	\brief		Classe de base d'une console.
-	*/
+
 	class ProgramConsole
 	{
 	public:

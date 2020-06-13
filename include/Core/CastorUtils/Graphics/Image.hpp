@@ -12,14 +12,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Image resource
-	\~french
-	\brief		Ressource Image
-	*/
 	class Image
 		: public Resource< Image >
 	{

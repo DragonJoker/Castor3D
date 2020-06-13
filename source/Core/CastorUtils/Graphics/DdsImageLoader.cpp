@@ -733,13 +733,13 @@ namespace castor
 
 	void DdsImageLoader::registerLoader( ImageLoader & reg )
 	{
-		reg.registerLoader( listExtensions()
-			, std::make_unique< DdsImageLoader >() );
+		//reg.registerLoader( listExtensions()
+			//, std::make_unique< DdsImageLoader >() );
 	}
 
 	void DdsImageLoader::unregisterLoader( ImageLoader & reg )
 	{
-		reg.unregisterLoader( listExtensions() );
+		//reg.unregisterLoader( listExtensions() );
 	}
 
 	PxBufferPtrArray DdsImageLoader::load( String const & imageFormat

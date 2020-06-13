@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_TEXT_WRITER_H___
 #define ___CASTOR_TEXT_WRITER_H___
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Data/TextFile.hpp"
@@ -13,15 +15,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		31/05/2016
-	\~english
-	\brief		Partial castor::Writer specialisation for text files
-	\~french
-	\brief		Spécialisation partielle de castor::Writer, pour les fichiers texte
-	*/
 	template< class T >
 	class TextWriter
 		: public Writer< T, FileType::eText >

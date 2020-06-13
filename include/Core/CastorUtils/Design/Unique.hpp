@@ -4,22 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_UNIQUE_H___
 #define ___CASTOR_UNIQUE_H___
 
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Design/UnicityException.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		08/12/2011
-	\~english
-	\brief		Representation of a Unique instance class
-	\remarks	If another instance is to be created, an exception is thrown
-	\~french
-	\brief		Représentation d'un classe à instance unique
-	\remarks	Si une seconde instance est créée, une exception est lancée
-	*/
 	template< class T >
 	class Unique
 		: private NonCopyable

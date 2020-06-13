@@ -5,21 +5,9 @@ See LICENSE file in root folder
 #define ___CASTOR_BLOCK_TIMER___
 
 #include "CastorUtils/Miscellaneous/PreciseTimer.hpp"
-#include "CastorUtils/CastorUtils.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.5.0
-	\date		24/04/2012
-	\~english
-	\brief		Helper class, used to time a block's execution time
-	\remark		Call the macro CU_Time() at the beginning of a block to have a console output when leaving that block
-	\~french
-	\brief		Classe permettant de mesurer le temps d'exécution d'un bloc
-	\remark		Appelez la macro CU_Time() au début d'un bloc pour avoir une entrée dans la console en sortie du bloc
-	*/
 	class BlockTimer
 	{
 	public:

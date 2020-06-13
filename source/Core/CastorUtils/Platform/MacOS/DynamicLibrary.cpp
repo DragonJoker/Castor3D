@@ -5,6 +5,8 @@
 #include <dlfcn.h>
 
 #include "CastorUtils/Exception/Assertion.hpp"
+#include "CastorUtils/Exception/Exception.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 
 namespace castor
 {

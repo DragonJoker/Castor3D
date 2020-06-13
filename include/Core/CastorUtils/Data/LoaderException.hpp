@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_LOADER_EXCEPTION___
 #define ___CASTOR_LOADER_EXCEPTION___
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include "CastorUtils/Exception/Exception.hpp"
 
 namespace castor

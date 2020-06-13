@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_LOGGER_IMPL_H___
 #define ___CU_LOGGER_IMPL_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Log/LogModule.hpp"
 
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
@@ -12,16 +12,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	class LoggerInstance;
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		27/08/2012
-	\version	0.7.0.0
-	\~english
-	\brief		Helper class for Logger, level dependant
-	\~french
-	\brief		Classe d'aide pour Logger, dépendante du niveau de log
-	*/
 	class LoggerImpl
 	{
 	private:

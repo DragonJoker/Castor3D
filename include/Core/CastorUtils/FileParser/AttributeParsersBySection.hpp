@@ -4,24 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CU_AttributeParsersBySection_H___
 #define ___CU_AttributeParsersBySection_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/FileParser/FileParserModule.hpp"
 
 namespace castor
 {
-	/**
-	 *\~english
-	 *\brief		Parser function definition.
-	 *\param[in]	parser	The file parser.
-	 *\param[in]	params	The params contained in the line.
-	 *\return		\p true if a brace is to be opened on next line.
-	 *\~french
-	 *\brief		Définition d'une fonction d'analyse.
-	 *\param[in]	parser	L'analyseur de fichier.
-	 *\param[in]	params	Les paramètres contenus dans la ligne.
-	 *\return		\p true si une accolade doit être ouverte à la ligne suivante.
-	 */
-	using ParserFunction = std::function< bool( FileParser * parser, ParserParameterArray const & params ) >;
-
 	struct ParserFunctionAndParams
 	{
 		ParserFunction m_function;
@@ -30,14 +16,6 @@ namespace castor
 
 #if defined( CU_CompilerMSVC )
 
-	/**
-	\~english
-	\brief		Helper class used with MSVC to avoid warning 4503.
-	\remark		It forwards few functions and typedefs of the original map.
-	\~french
-	\brief		Classe d'aide à la disparition du warning 4503 pour MSVC.
-	\remark		Elle expose quelques fonctions et types de la map originale.
-	*/
 	class AttributeParserMap
 	{
 	private:
@@ -92,13 +70,7 @@ namespace castor
 		}
 	};
 
-#else
-
-	CU_DeclareMap( String, ParserFunctionAndParams, AttributeParser );
-
 #endif
-
-	typedef std::map< uint32_t, AttributeParserMap > AttributeParsersBySection;
 }
 
 #endif

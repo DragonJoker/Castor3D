@@ -6,16 +6,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		08/12/2011
-	\~english
-	\brief		The non-copyable concept implementation
-	\remark		Forbids a class which derivates from this one to be copied, either way
-	\~french
-	\brief		Implémentation du concept de non-copiable
-	\remark		Interdit la copie des classes dérivant de celle-ci, de quelque manière que ce soit
-	*/
 	class NonCopyable
 	{
 	protected:

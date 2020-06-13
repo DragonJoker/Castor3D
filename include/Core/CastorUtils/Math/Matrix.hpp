@@ -4,23 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_MATRIX_H___
 #define ___CASTOR_MATRIX_H___
 
-#include "CastorUtils/CastorUtils.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.1.0.0
-	\date		09/02/2010
-	\~english
-	\brief		Templated column major matrix representation.
-	\remark		Can hold any type which has a defined Policy.
-	\~french
-	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template.
-	\remark		Peut contenir n'importe quel élément qui a une castor::Policy.
-	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix
 	{

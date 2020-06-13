@@ -1,4 +1,4 @@
-#include "CastorUtils/Miscellaneous/Debug.hpp"
+#include "CastorUtils/Miscellaneous/MiscellaneousModule.hpp"
 
 namespace castor
 {

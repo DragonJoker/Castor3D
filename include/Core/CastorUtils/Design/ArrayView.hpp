@@ -4,34 +4,13 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ARRAY_VIEW_H___
 #define ___CASTOR_ARRAY_VIEW_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 #include <vector>
 
 namespace castor
 {
-	template< class IterT >
-	struct IteratorTraits : std::iterator_traits< IterT >
-	{
-		using iterator_category = typename std::iterator_traits< IterT >::iterator_category;
-		static_assert( std::is_convertible< iterator_category, std::random_access_iterator_tag >::value );
-	};
-
-	template< class TypeT >
-	struct IteratorTraits< TypeT * > : std::iterator_traits< TypeT * >
-	{
-		using value_type = TypeT;
-	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		21/06/2016
-	\~english
-	\brief		Templated class that provide std::array style buffer view.
-	\~french
-	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
-	*/
-	template< typename ValueT, typename IteratorTraitsT = IteratorTraits< ValueT * > >
+	template< typename ValueT, typename IteratorTraitsT >
 	class ArrayView
 	{
 		using my_traits = IteratorTraitsT;

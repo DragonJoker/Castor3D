@@ -4,21 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_SIZE_H___
 #define ___CASTOR_SIZE_H___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Math/Coords.hpp"
 
 namespace castor
 {
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		20/02/2013
-	\version	0.7.0
-	\~english
-	\brief		Size class
-	\remark		Kind of specialisation of Coords< 2, uint32_t >
-	\~french
-	\brief		Classe de taille
-	\remark		Sorte de spécialisation de Coords< 2, uint32_t >
-	*/
 	class Size
 		: public Coords< uint32_t, 2 >
 	{

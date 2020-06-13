@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___CastorUtils_Range_HPP___
 #pragma once
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Math/MathModule.hpp"
 
 #include <cmath>
 #include <limits>
@@ -17,14 +17,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		16/02/2017
-	\~english
-	\brief		A range class.
-	\~french
-	\brief		Une classe d'intervalle.
-	*/
 	template< typename T >
 	class Range
 	{

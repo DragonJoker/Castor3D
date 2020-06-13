@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Main resource loader class.
-	\remarks	Holds the two functions needed for a resource loader : Load and Save.
-	\~french
-	\brief		Classe de base pour les loaders de ressource.
-	\remarks	Contient les 2 fonctions nécessaire a un loader : Load et Save.
-	*/
 	template< class T, FileType FT >
 	class Loader
 		: public castor::NonCopyable

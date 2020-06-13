@@ -4,25 +4,14 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COLLECTION_H___
 #define ___CASTOR_COLLECTION_H___
 
-#include "CastorUtils/Config/MultiThreadConfig.hpp"
-#include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
+
 #include "CastorUtils/Design/Templates.hpp"
 #include "CastorUtils/Design/NonCopyable.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Element collection class
-	\remark		A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
-	\~french
-	\brief		Classe de collection d'éléments
-	\remark		Une classe de collection, permettant de stocker des éléments nommés, les enlever, les rechercher.
-	*/
 	template< typename TObj, typename TKey >
 	class Collection
 		: public castor::NonCopyable

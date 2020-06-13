@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_FONT_CACHE_H___
 #define ___CASTOR_FONT_CACHE_H___
 
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
 #include "CastorUtils/Design/Collection.hpp"
 
 #if defined( CreateFont )
@@ -12,17 +14,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		29/09/2015
-	\~english
-	\brief		Font manager.
-	\remark		Holds the loaded fonts, and also the paths to font files.
-	\~french
-	\brief		Gestionnaire de polices.
-	\remark		Détient les polices, et aussi les chemins d'accès aux fichiers des polices.
-	*/
 	class FontCache
 		: private Collection< Font, String >
 	{

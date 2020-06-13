@@ -15,100 +15,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Predefined colours enumeration
-	\~french
-	\brief		Enumération de couleurs prédéfinies
-	*/
-	enum class PredefinedRgbaColour
-		: uint32_t
-	{
-		eTransparentBlack = 0x00000000,
-		eLowAlphaBlack = 0x00000040,
-		eMedAlphaBlack = 0x0000007F,
-		eHighAlphaBlack = 0x000000BF,
-		eOpaqueBlack = 0x000000FF,
-		eTransparentDarkBlue = 0x00007F00,
-		eLowAlphaDarkBlue = 0x00007F40,
-		eMedAlphaDarkBlue = 0x00007F7F,
-		eHighAlphaDarkBlue = 0x00007FBF,
-		eOpaqueDarkBlue = 0x00007FFF,
-		eTransparentBlue = 0x0000FF00,
-		eLowAlphaBlue = 0x0000FF40,
-		eMedAlphaBlue = 0x0000FF7F,
-		eHighAlphaBlue = 0x0000FFBF,
-		eOpaqueBlue = 0x0000FFFF,
-		eTransparentDarkGreen = 0x007F0000,
-		eLowAlphaDarkGreen = 0x007F0040,
-		eMedAlphaDarkGreen = 0x007F007F,
-		eHighAlphaDarkGreen = 0x007F00BF,
-		eOpaqueDarkGreen = 0x007F00FF,
-		eTransparentGreen = 0x00FF0000,
-		eLowAlphaGreen = 0x00FF0040,
-		eMedAlphaGreen = 0x00FF007F,
-		eHighAlphaGreen = 0x00FF00BF,
-		eOpaqueGreen = 0x00FF00FF,
-		eTransparentDarkRed = 0x7F000000,
-		eLowAlphaDarkRed = 0x7F000040,
-		eMedAlphaDarkRed = 0x7F00007F,
-		eHighAlphaDarkRed = 0x7F0000BF,
-		eOpaqueDarkRed = 0x7F0000FF,
-		eTransparentRed = 0xFF000000,
-		eLowAlphaRed = 0xFF000040,
-		eMedAlphaRed = 0xFF00007F,
-		eHighAlphaRed = 0xFF0000BF,
-		eOpaqueRed = 0xFF0000FF,
-		eTransparentLightBlue = 0x7F7FFF00,
-		eLowAlphaLightBlue = 0x7F7FFF40,
-		eMedAlphaLightBlue = 0x7F7FFF7F,
-		eHighAlphaLightBlue = 0x7F7FFFBF,
-		eOpaqueLightBlue = 0x7F7FFFFF,
-		eTransparentLightGreen = 0x7FFF7F00,
-		eLowAlphaLightGreen = 0x7FFF7F40,
-		eMedAlphaLightGreen = 0x7FFF7F7F,
-		eHighAlphaLightGreen = 0x7FFF7FBF,
-		eOpaqueLightGreen = 0x7FFF7FFF,
-		eTransparentLightRed = 0xFF7F7F00,
-		eLowAlphaLightRed = 0xFF7F7F40,
-		eMedAlphaLightRed = 0xFF7F7F7F,
-		eHighAlphaLightRed = 0xFF7F7FBF,
-		eOpaqueLightRed = 0xFF7F7FFF,
-		eTransparentWhite = 0xFFFFFF00,
-		eLowAlphaWhite = 0xFFFFFF40,
-		eMedAlphaWhite = 0xFFFFFF7F,
-		eHighAlphaWhite = 0xFFFFFFBF,
-		eOpaqueWhite = 0xFFFFFFFF,
-	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		RgbaColourT components enumeration
-	\~french
-	\brief		Enumération des composantes d'une couleur
-	*/
-	enum class RgbaComponent
-		: uint8_t
-	{
-		//!\~english	Red PixelComponents
-		//!\~french		Composante rouge
-		eRed,
-		//!\~english	Green PixelComponents
-		//!\~french		Composante verte
-		eGreen,
-		//!\~english	Blue PixelComponents
-		//!\~french		Composante bleue
-		eBlue,
-		//!\~english	Alpha PixelComponents
-		//!\~french		Composante alpha
-		eAlpha,
-		CU_ScopedEnumBounds( eRed )
-	};
-	/**
 	 *\~english
 	 *\brief		Retrieves predefined colour name
 	 *\param[in]	predefined	The predefined colour
@@ -130,18 +36,7 @@ namespace castor
 	 *\return		La couleur prédéfinie
 	 */
 	inline static PredefinedRgbaColour getPredefinedRgba( String const & name );
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/08/2010
-	\~english
-	\brief		RGBA colour representation
-	\remark		Predefines numerous colours
-				<br />Allows conversion to different colour formats (RGB, ARGB, BGR, ...) and different data types (long, float, char, ...)
-	\~french
-	\brief		Représentation d'une couleur RGBA
-	\remark		Prédéfinit differentes couleurs
-				<br />Permet la conversion entre différents types de couleurs (RGB, ARGB, BGR, ...) et différents types de données (long, float, char, ...)
-	*/
+
 	template< typename ComponentType >
 	class RgbaColourT
 	{

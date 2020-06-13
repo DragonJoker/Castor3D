@@ -2,6 +2,8 @@
 
 #include "CastorUtils/Miscellaneous/Utils.hpp"
 
+#include "CastorUtils/Log/Logger.hpp"
+
 namespace castor
 {
 	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )

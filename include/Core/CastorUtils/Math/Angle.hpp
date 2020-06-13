@@ -4,27 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ANGLE_H___
 #define ___CASTOR_ANGLE_H___
 
-#include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Math/MathModule.hpp"
 
 namespace castor
 {
-	template< typename Type >
-	static constexpr Type Pi{ Type( 3.1415926535897932384626433832795028841968 ) };
-	template< typename Type >
-	static constexpr Type PiMult2{ Type( 3.1415926535897932384626433832795028841968 * 2.0 ) };
-	template< typename Type >
-	static constexpr Type PiDiv2{ Type( 3.1415926535897932384626433832795028841968 / 2.0 ) };
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Angle helper class
-	\remark		Used to manage angles without taking care of degrees or radians
-	\~french
-	\brief		Classe d'angle
-	\remark		Utilisée pour gérer les angles sans avoir à se préoccuper des convertions degré / radian / gradient
-	*/
 	template< typename Type >
 	class AngleT
 	{

@@ -4,16 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CU_ImageWriter_H___
 #define ___CU_ImageWriter_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Data/DataModule.hpp"
 
 namespace castor
 {
-	/**
-	\~english
-	\brief		An image writer.
-	\~french
-	\brief		Un writer d'image.
-	*/
 	class ImageWriterImpl
 	{
 	public:
@@ -34,13 +29,6 @@ namespace castor
 			, PxBufferBase const & buffer )const = 0;
 	};
 
-	using ImageWriterPtr = std::unique_ptr< ImageWriterImpl >;
-	/**
-	\~english
-	\brief		Registers the image writers, per file extension.
-	\~french
-	\brief		Enregistre les writers d'image, par extension de fichier.
-	*/
 	class ImageWriter
 	{
 	public:

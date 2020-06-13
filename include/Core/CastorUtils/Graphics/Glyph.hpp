@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		18/08/2011
-	\~english
-	\brief		Font character (glyph) representation
-	\remark		Holds position, size and data of a character
-	\~french
-	\brief		Représentation d'un caractère d'une Font (glyphe)
-	\remark		Contient la position, taille et pixels d'un caractère
-	*/
 	class Glyph
 	{
 	public:

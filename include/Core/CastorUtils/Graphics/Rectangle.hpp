@@ -9,18 +9,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	//!
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Rectangle class
-	\remark		Rectangle class, inherits from Point, holds the intersection functions and specific accessors
-	\~french
-	\brief		Classe représentant un rectangle
-	\remark		Dérive de Point, gère les intersections entre rectangles et les accesseurs spécifiques
-	*/
 	class Rectangle
 		: public Coords4i
 	{

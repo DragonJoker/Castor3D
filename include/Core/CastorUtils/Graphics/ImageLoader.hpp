@@ -4,16 +4,22 @@ See LICENSE file in root folder
 #ifndef ___CU_ImageLoader_H___
 #define ___CU_ImageLoader_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+
+#include "CastorUtils/Math/Point.hpp"
 
 namespace castor
 {
-	/**
-	\~english
-	\brief		An image loader.
-	\~french
-	\brief		Un loader d'image.
-	*/
+	struct ImageLayout
+	{
+		PixelFormat format;
+		Point3ui extent;
+		uint32_t baseLayer;
+		uint32_t layers;
+		uint32_t baseLevel;
+		uint32_t levels;
+	};
+
 	class ImageLoaderImpl
 	{
 	public:
@@ -37,13 +43,6 @@ namespace castor
 			, uint32_t size )const = 0;
 	};
 
-	using ImageLoaderPtr = std::unique_ptr< ImageLoaderImpl >;
-	/**
-	\~english
-	\brief		Registers the image loaders, per file extension.
-	\~french
-	\brief		Enregistre les loaders d'image, par extension de fichier.
-	*/
 	class ImageLoader
 	{
 	public:

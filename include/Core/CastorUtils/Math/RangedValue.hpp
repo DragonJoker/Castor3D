@@ -9,16 +9,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		16/02/2017
-	\~english
-	\brief		A value inside a range.
-	\remarks	The value can't get out of its range.
-	\~french
-	\brief		Représente une valeur dans un intervalle.
-	\remarks	La valeur ne peut pas sortir de son intervalle.
-	*/
 	template< typename T >
 	class RangedValue
 	{

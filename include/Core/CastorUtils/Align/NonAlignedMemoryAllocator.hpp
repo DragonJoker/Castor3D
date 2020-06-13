@@ -1,24 +1,13 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_NON_ALIGNED_MEMORY_ALLOCATOR_H___
-#define ___CU_NON_ALIGNED_MEMORY_ALLOCATOR_H___
+#ifndef ___CU_NonAlignedMemoryAllocator_H___
+#define ___CU_NonAlignedMemoryAllocator_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Align/AlignModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		14/01/2016
-	\~english
-	\brief		Memory allocator.
-	\remarks	Allocates non aligned memory.
-	\~french
-	\brief		Allocateur de mémoire.
-	\remarks	Alloue de la mémoire non alignée.
-	*/
 	class NonAlignedMemoryAllocator
 	{
 	public:

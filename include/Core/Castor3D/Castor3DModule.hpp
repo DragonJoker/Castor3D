@@ -5,8 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_Castor3DModule_H___
 
 #undef RGB
-#include <CastorUtils/CastorUtilsPrerequisites.hpp>
-#include <CastorUtils/Config/MultiThreadConfig.hpp>
+#include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 #include <CastorUtils/Design/FlagCombination.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Exception/Assertion.hpp>
@@ -37,6 +36,9 @@ namespace castor3d
 {
 	static uint32_t constexpr InvalidIndex = ~( 0u );
 	static VkColorComponentFlags const defaultColorWriteMask{ VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT };
+
+	using castor::xchar;
+	using castor::ychar;
 
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;

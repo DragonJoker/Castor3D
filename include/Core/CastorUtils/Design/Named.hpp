@@ -4,22 +4,11 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_NAMED_H___
 #define ___CASTOR_NAMED_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Class for named elements
-	\remark		The name type is a template argument so anything can be a name for this class (default is castor::String)
-	\~french
-	\brief		Classe de base pour les éléments nommés
-	\remark		Le nom est un argument template, ainsi n'importe quoi peut être un nom pour cette classe (même si c'est castor::String par défaut)
-	*/
-	template< typename T = String >
+	template< typename T >
 	class NamedBase
 	{
 	public:
@@ -106,9 +95,6 @@ namespace castor
 	protected:
 		T m_name;
 	};
-	//!\~english	A typedef for NamedBase with String as a name
-	//!\~french		Un typedef pour NamedBase avec String comme type de nom (le plus classique, quoi)
-	using Named = NamedBase< String >;
 }
 
 #endif

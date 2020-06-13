@@ -14,24 +14,11 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\date		14/02/2010
-	\~english
-	\brief		Templated static dimensions point representation
-	\remark		Can hold any type which has a defined Policy
-	\~french
-	\brief		Classe de points à dimensions statiques
-	\remark		Peut recevoir les types de données qui ont une Policy créée
-	*/
 	template< typename T, uint32_t TCount >
 	class Point
 	{
 	public:
 		/**
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 03/01/2011
 		\~english
 		\brief Coords< T, TCount > loader
 		\~french
@@ -416,9 +403,6 @@ namespace castor
 	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs );
 	/**@}*/
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		10/07/2012
-	\version	0.7.0
 	\~english
 	\brief		Point helper functions
 	\~french

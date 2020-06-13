@@ -13,19 +13,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		17/01/2011
-	\~english
-	\brief		Font resource
-	\remark		Representation of a font: face, precision, and others
-				<br />The generated font will be put in an image
-	\~french
-	\brief		Ressource Font
-	\remark		Représentation d'une font : face, précision, et autres
-				<br />La font chargée sera placée dans une image
-	*/
 	class Font
 		: public Resource< Font >
 	{

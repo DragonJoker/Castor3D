@@ -1,4 +1,5 @@
 #include "CastorUtils/Graphics/ImageWriter.hpp"
+
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
 

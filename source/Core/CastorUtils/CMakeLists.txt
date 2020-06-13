@@ -114,6 +114,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Align/AlignModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Align/Aligned.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Align/AlignedMemoryAllocator.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Align/NonAlignedMemoryAllocator.hpp
@@ -133,6 +134,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/CompilerConfig.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/ConfigModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/Macros.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/MultiThreadConfig.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/PlatformConfig.hpp
@@ -156,7 +158,9 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/BinaryFile.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/BinaryLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/BinaryWriter.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/DataModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Endianness.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/File.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Loader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/LoaderException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Data/Path.hpp
@@ -211,6 +215,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ChangeTracked.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DesignModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DynamicBitset.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Factory.hpp
@@ -236,6 +241,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Exception/Assertion.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Exception/Exception.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Exception/ExceptionModule.hpp
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${${PROJECT_NAME}_HDR_FILES}
@@ -254,6 +260,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/AttributeParsersBySection.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/FileParser.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/FileParserContext.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/FileParserModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/ParserParameter.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/ParserParameter.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/FileParser/ParserParameterBase.hpp
@@ -287,6 +294,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageCache.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageWriter.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/KtxImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelBufferBase.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/PixelFormat.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Position.cpp
@@ -308,12 +316,14 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Font.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/FontCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Glyph.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/GraphicsModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Grid.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Image.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageCache.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageWriter.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/KtxImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Pixel.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Pixel.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/PixelBuffer.hpp
@@ -364,6 +374,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerInstance.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerStream.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LoggerStreambuf.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Log/LogModule.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${${PROJECT_NAME}_SRC_FILES}
@@ -388,6 +399,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line2D.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line3D.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Math.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/MathModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Matrix.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Matrix.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/PlaneEquation.hpp
@@ -452,6 +464,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Debug.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/DynamicLibrary.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Hash.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/MiscellaneousModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/PreciseTimer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/StringUtils.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/StringUtils.inl
@@ -473,6 +486,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Multithreading/WorkerThread.cpp
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/MultithreadingModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/ThreadPool.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Multithreading/WorkerThread.hpp
 	)
@@ -531,6 +545,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/ObjectPool.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolException.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolManagedObject.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolException.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/PoolModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Pool/UniqueObjectPool.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
@@ -549,6 +565,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamIndentBuffer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamIndentBufferManager.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamIndentManipulators.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamModule.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamPrefixBuffer.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamPrefixBufferManager.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Stream/StreamPrefixManipulators.hpp
@@ -588,6 +605,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${CASTOR_BINARY_DIR}/source/Core
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
+			${EXTERNAL_SOURCE_DIR}/gli
 	)
 
 	if ( WIN32 )

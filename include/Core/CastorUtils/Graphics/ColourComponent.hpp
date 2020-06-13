@@ -4,23 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_COLOUR_COMPONENT_H___
 #define ___CASTOR_COLOUR_COMPONENT_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
 
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
 	\todo		Remove accessors, create traits
-	\~english
-	\brief		Defines a colour PixelComponents (R, G, B or A) to be used in castor::RgbColour or castor::RgbaColour.
-	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations.
-				<br />A colour PixelComponents value is a floating number between 0.0 and 1.0.
-	\~french
-	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans castor::RgbColour ou castor::RgbaColour.
-	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes.
-				<br />La valeur d'une composante de couleur est un nombre flottant compris entre 0.0 et 1.0.
 	*/
 	class ColourComponent
 	{

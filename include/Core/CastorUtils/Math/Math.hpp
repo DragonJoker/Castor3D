@@ -4,32 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_MATH_H___
 #define ___CASTOR_MATH_H___
 
-//In case someone tries to create macros for these -_- template versions are better...
-#ifdef min
-#	undef min
-#endif
-
-#ifdef max
-#	undef max
-#endif
-
-#ifdef abs
-#	undef abs
-#endif
-
-#ifdef nabs
-#	undef nabs
-#endif
-
-#ifdef abs
-#	undef abs
-#endif
-
 namespace castor
 {
 	//************************************************************************************************
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Factorial recursive case
 	\~french
@@ -43,7 +21,6 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Factorial end case
 	\~french
@@ -58,7 +35,6 @@ namespace castor
 	};
 	//************************************************************************************************
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power recursive case
 	\~french
@@ -72,7 +48,6 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power end case
 	\~french
@@ -86,7 +61,6 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Power end case
 	\~french
@@ -101,7 +75,6 @@ namespace castor
 	};
 	//************************************************************************************************
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm recursive case
 	\~french
@@ -115,7 +88,6 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm end case
 	\~french
@@ -129,7 +101,6 @@ namespace castor
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
 	\~english
 	\brief		Neperian Logarithm using template implementation
 	\~french

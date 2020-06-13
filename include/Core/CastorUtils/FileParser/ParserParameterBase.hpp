@@ -4,68 +4,15 @@ See LICENSE file in root folder
 #ifndef ___CU_ParserParameterBase_H___
 #define ___CU_ParserParameterBase_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/FileParser/FileParserModule.hpp"
+
+#include "CastorUtils/Data/DataModule.hpp"
+#include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Log/LogModule.hpp"
+#include "CastorUtils/Math/MathModule.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		04/02/2013
-	\~english
-	\brief		Parser function parameter types enumeration.
-	\~french
-	\brief		Enumération des types de paramètres pour une fonction d'analyse.
-	*/
-	enum class ParameterType
-		: uint8_t
-	{
-		eText,
-		eName,
-		ePath,
-		eCheckedText,
-		eBitwiseOred32BitsCheckedText,
-		eBitwiseOred64BitsCheckedText,
-		eBool,
-		eInt8,
-		eInt16,
-		eInt32,
-		eInt64,
-		eUInt8,
-		eUInt16,
-		eUInt32,
-		eUInt64,
-		eFloat,
-		eDouble,
-		eLongDouble,
-		ePixelFormat,
-		ePoint2I,
-		ePoint3I,
-		ePoint4I,
-		ePoint2F,
-		ePoint3F,
-		ePoint4F,
-		ePoint2D,
-		ePoint3D,
-		ePoint4D,
-		eSize,
-		ePosition,
-		eRectangle,
-		eRgbColour,
-		eRgbaColour,
-		eHdrRgbColour,
-		eHdrRgbaColour,
-		CU_ScopedEnumBounds( eText )
-	};
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		Template structure holding parameter specific data.
-	\~french
-	\brief		Structure template contenant les données spécifiques du paramètre.
-	*/
 	class ParserParameterBase
 	{
 	public:

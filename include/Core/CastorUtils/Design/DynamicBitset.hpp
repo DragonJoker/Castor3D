@@ -4,18 +4,10 @@ See LICENSE file in root folder
 #ifndef ___CU_DynamicBitset_H___
 #define ___CU_DynamicBitset_H___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Design/DesignModule.hpp"
 
 namespace castor
 {
-	/**
-	*\~english
-	*\brief
-	*	Dynamic bitset class, with configurable block type.
-	*\~french
-	*\brief
-	*	Classe de bitset dynamique, avec un type de bloc configurable.
-	*/
 	template< typename BlockType >
 	class DynamicBitsetT
 	{

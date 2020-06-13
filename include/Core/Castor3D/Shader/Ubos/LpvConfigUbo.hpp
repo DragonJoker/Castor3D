@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 
+#include <CastorUtils/Graphics/GraphicsModule.hpp>
+
 namespace castor3d
 {
 	class LpvConfigUbo

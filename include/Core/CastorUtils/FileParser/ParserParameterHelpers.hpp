@@ -13,16 +13,6 @@ namespace castor
 	\version	0.8.0
 	\date		16/02/2016
 	\~english
-	\brief		Gives the regex format for given type.
-	\~french
-	\brief		donne le format de regex pour le type donné.
-	*/
-	template< typename T > struct RegexFormat;
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
-	\~english
 	\brief		RegexFormat specialisation for uint8_t.
 	\~french
 	\brief		Spécialisation de RegexFormat pour uint8_t.
@@ -228,16 +218,6 @@ namespace castor
 	{
 		CU_API static xchar const * const Value;
 	};
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Parser parameter helper structure.
-	\~french
-	\brief		Structure d'aide pour les paramètres de parseur.
-	*/
-	template< ParameterType Type > struct ParserParameterHelper;
 	/**
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
@@ -875,20 +855,6 @@ namespace castor
 		CU_API static const ParameterType ParamType = ParameterType::eHdrRgbaColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
-	};
-	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Structure used to tell if an ParameterType has a base parameter type.
-	\~french
-	\brief		Structure utilisée pour déterminer si un ParameterType a un type de paramètre de base.
-	*/
-	template< ParameterType Type >
-	struct HasBaseParameterType
-		: public std::false_type
-	{
 	};
 	/**
 	\author 	Sylvain DOREMUS

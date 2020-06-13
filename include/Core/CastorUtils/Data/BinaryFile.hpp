@@ -8,17 +8,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		24/05/2016
-	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from FileType.
-	\remarks	Specialisation for FileType::eBinary.
-	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un FileType.
-	\remarks	Spécialisation pour FileType::eBinary.
-	*/
 	template<>
 	struct FileTyper< FileType::eBinary >
 	{

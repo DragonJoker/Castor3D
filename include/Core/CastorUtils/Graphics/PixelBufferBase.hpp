@@ -10,17 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		29/08/2011
-	\~english
-	\brief		Pixel buffer base definition
-	\remark		It has 2 dimensions
-	\~french
-	\brief		Définition de la classe de base d'un buffer de Pixel
-	\remark		Il a 2 dimensions
-	*/
 	class PxBufferBase
 	{
 	public:

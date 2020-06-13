@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_BuddyAllocator_HPP___
 #define ___CU_BuddyAllocator_HPP___
 
-#include "CastorUtils/CastorUtilsPrerequisites.hpp"
+#include "CastorUtils/Pool/PoolModule.hpp"
 
 namespace castor
 {
@@ -90,15 +90,7 @@ namespace castor
 	private:
 		std::vector< uint8_t > m_memory;
 	};
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.10.0
-	\date		22/08/2017
-	\~english
-	\brief		Buddy allocator implementation.
-	\~french
-	\brief		Implémentation d'un buddy allocator.
-	*/
+
 	template< typename Traits >
 	class BuddyAllocatorT
 		: public Traits

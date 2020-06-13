@@ -4,20 +4,14 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_ZIP_ARCHIVE_H___
 #define ___CASTOR_ZIP_ARCHIVE_H___
 
+#include "CastorUtils/Data/DataModule.hpp"
+
 #include "CastorUtils/Data/File.hpp"
+
 #include <list>
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.7.1
-	\date		04/12/2014
-	\~english
-	\brief		Zip archive class
-	\~french
-	\brief		Classe de gestion d'archive zip
-	*/
 	class ZipArchive
 	{
 	public:

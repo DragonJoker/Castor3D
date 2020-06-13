@@ -68,7 +68,7 @@ bool doParseArgs( int argc
 
 	auto fileIt = it;
 	++fileIt;
-	auto file = castor::Path{ castor::string::stringCast< xchar >( *fileIt ) };
+	auto file = castor::Path{ castor::string::stringCast< castor::xchar >( *fileIt ) };
 	options.input = file.getPath() / ( file.getFileName() + cuT( "_ref.png" ) );
 	args.erase( fileIt );
 	args.erase( it );
