@@ -178,12 +178,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\param[in]	force	Forces the rendering.
+		 *\param[in]	waitOnly	\p true to only wait for the semaphores.
 		 *\~french
 		 *\brief		Renders one frame.
-		 *\param[in]	force	Dit si on force le rendu.
+		 *\param[in]	waitOnly	\p true pour ne faire qu'attendre les semaphores.
 		 */
-		C3D_API void render( bool force );
+		C3D_API void render( bool signalOnly );
 		/**
 		 *\~english
 		 *\brief		Resizes the window.
@@ -438,6 +438,7 @@ namespace castor3d
 		bool doPrepareFrames();
 		void doResetSwapChain();
 		RenderingResources * getResources();
+		void waitFrame();
 		void submitFrame( RenderingResources * resources );
 		void presentFrame( RenderingResources * resources );
 		bool doCheckNeedReset( VkResult errCode

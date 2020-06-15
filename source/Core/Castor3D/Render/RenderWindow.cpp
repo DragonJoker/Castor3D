@@ -324,7 +324,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::render( bool force )
+	void RenderWindow::render( bool waitOnly )
 	{
 		if ( m_initialised )
 		{
@@ -356,31 +356,39 @@ namespace castor3d
 					m_toSave = false;
 				}
 
-				auto resources = getResources();
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_pickingPass->pick( convertToTopDown( m_mousePosition, m_size ), *target->getCamera() );
 #endif
 
-				if ( resources )
+				if ( waitOnly )
 				{
-					try
-					{
-						submitFrame( resources );
-						presentFrame( resources );
-					}
-					catch ( ashes::Exception & exc )
-					{
-						std::cerr << "Can't render: " << exc.what() << std::endl;
-
-						if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
-						{
-							m_initialised = false;
-						}
-					}
+					waitFrame();
 				}
 				else
 				{
-					std::cerr << "Can't render" << std::endl;
+					auto resources = getResources();
+
+					if ( resources )
+					{
+						try
+						{
+							submitFrame( resources );
+							presentFrame( resources );
+						}
+						catch ( ashes::Exception & exc )
+						{
+							std::cerr << "Can't render: " << exc.what() << std::endl;
+
+							if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
+							{
+								m_initialised = false;
+							}
+						}
+					}
+					else
+					{
+						std::cerr << "Can't render" << std::endl;
+					}
 				}
 			}
 		}
@@ -861,6 +869,15 @@ namespace castor3d
 		}
 
 		return nullptr;
+	}
+
+	void RenderWindow::waitFrame()
+	{
+		getDevice().graphicsQueue->submit( {}
+			, { getRenderTarget()->getSemaphore() }
+			, { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT }
+			, {}
+			, nullptr );
 	}
 
 	void RenderWindow::submitFrame( RenderingResources * resources )
