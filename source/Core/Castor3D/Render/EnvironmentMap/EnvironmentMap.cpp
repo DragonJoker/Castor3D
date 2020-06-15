@@ -87,11 +87,6 @@ namespace castor3d
 			auto result = std::make_shared< TextureUnit >( engine );
 			result->setTexture( texture );
 			result->setSampler( doCreateSampler( engine, texture->getMipmapCount() ) );
-			texture->getArrayCube().forEachView( []( TextureViewUPtr const & view )
-				{
-					view->initialiseSource();
-				} );
-
 			return result;
 		}
 

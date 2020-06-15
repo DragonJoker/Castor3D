@@ -73,10 +73,6 @@ namespace GuiCommon
 
 	void NodeState::setMaxSpeed( float speed )
 	{
-		m_angularVelocityX.updateRange( makeRange( Angle::fromDegrees( -speed * 2 )
-			, Angle::fromDegrees( speed * 2 ) ) );
-		m_angularVelocityY.updateRange( makeRange( Angle::fromDegrees( -speed * 2 )
-			, Angle::fromDegrees( speed * 2 ) ) );
 		m_scalarVelocityX.updateRange( makeRange( -speed, speed ) );
 		m_scalarVelocityY.updateRange( makeRange( -speed, speed ) );
 		m_scalarVelocityZ.updateRange( makeRange( -speed, speed ) );

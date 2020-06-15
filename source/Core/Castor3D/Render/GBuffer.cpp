@@ -91,10 +91,6 @@ namespace castor3d
 		TextureUnit unit{ engine };
 		unit.setTexture( layout );
 		unit.setSampler( sampler );
-		layout->forEachView( []( TextureViewUPtr const & view )
-			{
-				view->initialiseSource();
-			} );
 		return unit;
 	}
 
