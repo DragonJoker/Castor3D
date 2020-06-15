@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_KtxImageLoader_H___
-#define ___CU_KtxImageLoader_H___
+#ifndef ___CU_GliImageLoader_H___
+#define ___CU_GliImageLoader_H___
 
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
@@ -10,11 +10,11 @@ namespace castor
 {
 	/**
 	\~english
-	\brief		Image loader based on stb_image.
+	\brief		Image loader based on gli.
 	\~french
-	\brief		Loader d'image basé sur stb_image.
+	\brief		Loader d'image basé sur gli.
 	*/
-	class KtxImageLoader
+	class GliImageLoader
 		: public ImageLoaderImpl
 	{
 	public:

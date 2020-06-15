@@ -1,4 +1,4 @@
-#include "CastorUtils/Graphics/KtxImageLoader.hpp"
+#include "CastorUtils/Graphics/GliImageLoader.hpp"
 
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
@@ -55,18 +55,18 @@ namespace castor
 
 	//************************************************************************************************
 
-	void KtxImageLoader::registerLoader( ImageLoader & reg )
+	void GliImageLoader::registerLoader( ImageLoader & reg )
 	{
 		reg.registerLoader( listExtensions()
-			, std::make_unique< KtxImageLoader >() );
+			, std::make_unique< GliImageLoader >() );
 	}
 
-	void KtxImageLoader::unregisterLoader( ImageLoader & reg )
+	void GliImageLoader::unregisterLoader( ImageLoader & reg )
 	{
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	ImageLayout KtxImageLoader::load( String const & imageFormat
+	ImageLayout GliImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
 		, PxBufferBaseSPtr & buffer )const
