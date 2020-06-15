@@ -22,3 +22,6 @@
 [submodule "external/FreeType"]
 	path = external/FreeType
 	url = https://github.com/DragonJoker/FreeType.git
+[submodule "external/gli"]
+	path = external/gli
+	url = https://github.com/g-truc/gli.git

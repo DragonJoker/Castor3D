@@ -109,7 +109,7 @@ struct Config
 DiffResult doCompareImages( Config const & config
 	, castor::Path const & compFile )
 {
-	castor::Image toTest{ castor::cuEmptyString, compFile, config.loader };
+	castor::Image toTest = config.loader.load( castor::cuEmptyString, compFile );
 	bool carryOn = config.reference->getDimensions() == toTest.getDimensions();
 
 	if ( carryOn )
@@ -295,9 +295,8 @@ int main( int argc, char * argv[] )
 
 		try
 		{
-			config.reference = std::make_unique< castor::Image >( castor::cuEmptyString
-				, options.input
-				, config.loader );
+			config.reference = std::make_unique< castor::Image >( config.loader.load( castor::cuEmptyString
+				, options.input ) );
 			castor::ThreadPool pool{ options.outputs.size() };
 
 			for ( auto & output : options.outputs )

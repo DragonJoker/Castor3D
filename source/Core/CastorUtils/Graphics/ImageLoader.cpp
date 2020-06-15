@@ -3,6 +3,7 @@
 #include "CastorUtils/Data/BinaryFile.hpp"
 #include "CastorUtils/Data/LoaderException.hpp"
 #include "CastorUtils/Data/Path.hpp"
+#include "CastorUtils/Graphics/ImageLayout.hpp"
 
 namespace castor
 {
@@ -42,7 +43,8 @@ namespace castor
 		}
 	}
 
-	PxBufferPtrArray ImageLoader::load( Path const & path )const
+	Image ImageLoader::load( String const & name
+		, Path const & path )const
 	{
 		if ( path.empty() )
 		{
@@ -69,7 +71,8 @@ namespace castor
 
 		try
 		{
-			return load( path.getExtension()
+			return load( name
+				, path.getExtension()
 				, data.data()
 				, uint32_t( data.size() ) );
 		}
@@ -80,7 +83,8 @@ namespace castor
 		}
 	}
 
-	PxBufferPtrArray ImageLoader::load( String const & imageFormat
+	Image ImageLoader::load( String const & name
+		, String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size )const
 	{
@@ -101,6 +105,6 @@ namespace castor
 			CU_LoaderError( "Can't load image: Unsupported image file format (no loader registered for it)" );
 		}
 
-		return it->second->load( imageFormat, data, size );
+		return it->second->load( name, imageFormat, data, size );
 	}
 }

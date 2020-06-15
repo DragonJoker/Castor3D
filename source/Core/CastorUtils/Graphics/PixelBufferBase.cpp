@@ -1,31 +1,64 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
+#include "CastorUtils/Miscellaneous/BitSize.hpp"
+
+#include <ashes/common/Format.hpp>
+
 namespace castor
 {
-	PxBufferBase::PxBufferBase( Size const & size, PixelFormat p_format )
-		: m_pixelFormat( p_format )
-		, m_size( size )
-		, m_buffer( 0 )
+	namespace details
 	{
+		VkDeviceSize getDataAt( VkFormat format
+			, uint32_t x
+			, uint32_t y
+			, uint32_t index
+			, uint32_t level
+			, uint32_t levels
+			, PxBufferBase const & buffer )
+		{
+			return VkDeviceSize( ( index * ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, levels ) )
+				+ ashes::getLevelsSize( VkExtent2D{ x, y }, format, 0u, level ) )
+				+ ( size_t( ( y * buffer.getWidth() + x ) * ashes::getMinimalSize( format ) ) );
+		}
 	}
 
-	PxBufferBase::PxBufferBase( PxBufferBase const & pixelBuffer )
-		: m_pixelFormat( pixelBuffer.m_pixelFormat )
-		, m_size( pixelBuffer.m_size )
-		, m_buffer( 0 )
+	PxBufferBase::PxBufferBase( Size const & size
+		, PixelFormat format
+		, uint32_t layers
+		, uint32_t levels
+		, uint8_t const * buffer
+		, PixelFormat bufferFormat )
+		: m_format{ format == PixelFormat::eUNDEFINED ? bufferFormat : format }
+		, m_size{ size }
+		, m_layers{ layers }
+		, m_levels{ levels }
+		, m_buffer{ 0 }
 	{
+		initialise( buffer, bufferFormat );
+	}
+
+	PxBufferBase::PxBufferBase( PxBufferBase const & rhs )
+		: m_format{ rhs.m_format }
+		, m_size{ rhs.m_size }
+		, m_layers{ rhs.m_layers }
+		, m_levels{ rhs.m_levels }
+		, m_buffer{ 0 }
+	{
+		initialise( rhs.getConstPtr(), rhs.getFormat() );
 	}
 
 	PxBufferBase::~PxBufferBase()
 	{
 	}
 
-	PxBufferBase & PxBufferBase::operator=( PxBufferBase const & pixelBuffer )
+	PxBufferBase & PxBufferBase::operator=( PxBufferBase const & rhs )
 	{
 		clear();
-		m_size = pixelBuffer.m_size;
-		m_pixelFormat = pixelBuffer.m_pixelFormat;
-		initialise( pixelBuffer.m_buffer.data(), pixelBuffer.m_pixelFormat );
+		m_size = rhs.m_size;
+		m_format = rhs.m_format;
+		m_layers = rhs.m_layers;
+		m_levels = rhs.m_levels;
+		initialise( rhs.m_buffer.data(), rhs.m_format );
 		return * this;
 	}
 
@@ -37,23 +70,12 @@ namespace castor
 	void PxBufferBase::initialise( uint8_t const * buffer
 		, PixelFormat bufferFormat )
 	{
-		if ( PF::isCompressed( getFormat() ) )
-		{
-			uint8_t bpp = PF::getBytesPerPixel( getFormat() );
-			uint32_t newSize = getCount();
-			CU_Require( newSize % 16u == 0 );
-			newSize *= bpp;
-			newSize /= 16u;
-			m_buffer.resize( newSize );
-		}
-		else
-		{
-			uint8_t bpp = PF::getBytesPerPixel( getFormat() );
-			uint32_t newSize = getCount() * bpp;
-			m_buffer.resize( newSize );
-		}
-
-		auto newSize = m_buffer.size();
+		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
+		auto newSize = m_layers * ashes::getLevelsSize( extent
+			, VkFormat( getFormat() )
+			, 0u
+			, 1u );
+		m_buffer.resize( newSize );
 
 		if ( !buffer )
 		{
@@ -61,7 +83,7 @@ namespace castor
 		}
 		else
 		{
-			if ( bufferFormat == m_pixelFormat )
+			if ( bufferFormat == m_format )
 			{
 				memcpy( m_buffer.data(), buffer, newSize );
 			}
@@ -72,7 +94,7 @@ namespace castor
 					, getCount() * PF::getBytesPerPixel( bufferFormat )
 					, getFormat()
 					, m_buffer.data()
-					, getSize() );
+					, uint32_t( getSize() ) );
 			}
 		}
 	}
@@ -86,158 +108,119 @@ namespace castor
 	void PxBufferBase::swap( PxBufferBase & pixelBuffer )
 	{
 		std::swap( m_size, pixelBuffer.m_size );
-		std::swap( m_pixelFormat, pixelBuffer.m_pixelFormat );
+		std::swap( m_format, pixelBuffer.m_format );
 		std::swap( m_buffer, pixelBuffer.m_buffer );
+	}
+
+	void PxBufferBase::assign( std::vector< uint8_t > const & buffer
+		, PixelFormat pixelFormat )
+	{
+		uint8_t newSize = PF::getBytesPerPixel( m_format );
+		uint32_t dstMax = getCount();
+		uint32_t srcMax = uint32_t( buffer.size() / newSize );
+
+		if ( buffer.size() > 0 && srcMax == dstMax )
+		{
+			PF::convertBuffer( m_format
+				, buffer.data()
+				, uint32_t( buffer.size() )
+				, getFormat()
+				, m_buffer.data()
+				, uint32_t( getSize() ) );
+		}
+	}
+
+	uint32_t getMipLevels( VkExtent3D const & extent )
+	{
+		auto min = std::min( extent.width, extent.height );
+		return uint32_t( castor::getBitSize( min ) );
+	}
+
+	uint32_t getMinMipLevels( uint32_t mipLevels
+		, VkExtent3D const & extent )
+	{
+		return std::min( getMipLevels( extent ), mipLevels );
+	}
+
+	void PxBufferBase::update( uint32_t layers
+		, uint32_t levels )
+	{
+		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), 1u };
+		levels = getMinMipLevels( levels, extent );
+
+		if ( layers != m_layers
+			|| levels != m_levels )
+		{
+			auto buffer = m_buffer;
+			auto srcLayers = m_layers;
+			auto srcLevels = m_levels;
+			m_layers = layers;
+			m_levels = levels;
+
+			auto newSize = m_layers * ashes::getLevelsSize( extent
+				, VkFormat( getFormat() )
+				, 0u
+				, m_levels );
+			m_buffer.resize( newSize );
+
+			auto srcBuffer = buffer.data();
+			auto srcLayerSize = ashes::getLevelsSize( extent
+				, VkFormat( getFormat() )
+				, 0u
+				, srcLevels );
+			auto dstBuffer = m_buffer.data();
+			auto dstLayerSize = ashes::getLevelsSize( extent
+				, VkFormat( getFormat() )
+				, 0u
+				, m_levels );
+
+			for ( uint32_t layer = 0u; layer < std::min( srcLevels, m_layers ); ++layer )
+			{
+				memcpy( dstBuffer, srcBuffer, std::min( srcLayerSize, dstLayerSize ) );
+				srcBuffer += srcLayerSize;
+				dstBuffer += dstLayerSize;
+			}
+		}
 	}
 
 	void PxBufferBase::flip()
 	{
-		if ( !PF::isCompressed( m_pixelFormat ) )
-		{
-			uint32_t fullHeight = getHeight();
-			uint32_t linePitch = getSize() / fullHeight;
-			uint32_t halfHeight = fullHeight / 2;
-			uint8_t * bufferTop = &m_buffer[0];
-			uint8_t * bufferBot = &m_buffer[( fullHeight - 1 ) * linePitch];
-			std::vector< uint8_t > buffer( linePitch );
-
-			for ( uint32_t i = 0; i < halfHeight; i++ )
-			{
-				std::memcpy( buffer.data(), bufferTop, linePitch );
-				std::memcpy( bufferTop, bufferBot, linePitch );
-				std::memcpy( bufferBot, buffer.data(), linePitch );
-				bufferTop += linePitch;
-				bufferBot -= linePitch;
-			}
-		}
-		else
-		{
-			m_flipped = !m_flipped;
-		}
+		m_flipped = !m_flipped;
 	}
 
+	PxBufferBase::PixelData PxBufferBase::getAt( uint32_t x
+		, uint32_t y
+		, uint32_t index
+		, uint32_t level )
+	{
+		CU_Require( x < getWidth() && y < getHeight() );
+		return m_buffer.begin()
+			+ details::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+	}
+
+	PxBufferBase::ConstPixelData PxBufferBase::getAt( uint32_t x
+		, uint32_t y
+		, uint32_t index
+		, uint32_t level )const
+	{
+		CU_Require( x < getWidth() && y < getHeight() );
+		return m_buffer.begin()
+			+ details::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, *this );
+	}
+
+
 	PxBufferBaseSPtr PxBufferBase::create( Size const & size
+		, uint32_t layers
+		, uint32_t levels
 		, PixelFormat wantedFormat
 		, uint8_t const * buffer
 		, PixelFormat bufferFormat )
 	{
-		PxBufferBaseSPtr result;
-
-		switch ( wantedFormat )
-		{
-		case PixelFormat::eR8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR32_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR32_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR8A8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8A8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR32A32_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR32A32_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR5G5B5A1_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR5G5B5A1_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR5G6B5_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR5G6B5_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR8G8B8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8G8B8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eB8G8R8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eB8G8R8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR8G8B8_SRGB:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8G8B8_SRGB > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eB8G8R8_SRGB:
-			result = std::make_shared< PxBuffer< PixelFormat::eB8G8R8_SRGB > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR8G8B8A8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8G8B8A8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eA8B8G8R8_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eA8B8G8R8_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR8G8B8A8_SRGB:
-			result = std::make_shared< PxBuffer< PixelFormat::eR8G8B8A8_SRGB > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eA8B8G8R8_SRGB:
-			result = std::make_shared< PxBuffer< PixelFormat::eA8B8G8R8_SRGB > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR16G16B16_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR16G16B16_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR16G16B16A16_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR16G16B16A16_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR32G32B32_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR32G32B32_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eR32G32B32A32_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eR32G32B32A32_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			result = std::make_shared< PxBuffer< PixelFormat::eBC1_RGB_UNORM_BLOCK > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eBC3_UNORM_BLOCK:
-			result = std::make_shared< PxBuffer< PixelFormat::eBC3_UNORM_BLOCK > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eBC5_UNORM_BLOCK:
-			result = std::make_shared< PxBuffer< PixelFormat::eBC5_UNORM_BLOCK > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eD16_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eD16_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eD24_UNORM_S8_UINT:
-			result = std::make_shared< PxBuffer< PixelFormat::eD24_UNORM_S8_UINT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eD32_UNORM:
-			result = std::make_shared< PxBuffer< PixelFormat::eD32_UNORM > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eD32_SFLOAT:
-			result = std::make_shared< PxBuffer< PixelFormat::eD32_SFLOAT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eD32_SFLOAT_S8_UINT:
-			result = std::make_shared< PxBuffer< PixelFormat::eD32_SFLOAT_S8_UINT > >( size, buffer, bufferFormat );
-			break;
-
-		case PixelFormat::eS8_UINT:
-			result = std::make_shared< PxBuffer< PixelFormat::eS8_UINT > >( size, buffer, bufferFormat );
-			break;
-
-		default:
-			CU_Failure( "Unsupported PixelFormat" );
-			break;
-		}
-
-		return result;
+		return std::make_shared< PxBufferBase >( size
+			, wantedFormat
+			, layers
+			, levels
+			, buffer
+			, bufferFormat );
 	}
 }

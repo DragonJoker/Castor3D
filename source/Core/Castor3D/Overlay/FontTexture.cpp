@@ -42,7 +42,6 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "FontTexture_" ) + font->getFaceName() );
-		m_texture->getDefaultView().initialiseSource();
 	}
 
 	FontTexture::~FontTexture()
@@ -52,7 +51,6 @@ namespace castor3d
 	void FontTexture::initialise()
 	{
 		m_texture->initialise();
-		m_texture->generateMipmaps();
 		onChanged( *this );
 	}
 
@@ -66,41 +64,44 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( std::distance( font->begin(), font->end() ) / 16.0 ) );
 			Size size{ maxWidth * 16, maxHeight * count };
-			auto & image = m_texture->getDefaultView();
-			image.initialiseSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eR8_UNORM ) );
+			m_texture->setSource( PxBufferBase::create( Size( maxWidth * 16, maxHeight * count ), PixelFormat::eR8_UNORM ), true );
+			auto & image = m_texture->getImage();
 
 			auto it = font->begin();
 			Size const & sizeImg = size;
-			uint32_t const uiTotalWidth = sizeImg.getWidth();
-			uint32_t uiOffY = sizeImg.getHeight() - maxHeight;
-			uint8_t * pBuffer = image.getBuffer()->getPtr();
-			size_t const bufsize = image.getBuffer()->getSize();
+			uint32_t const imgLineSize = sizeImg.getWidth();
+			uint32_t offY = sizeImg.getHeight() - maxHeight;
+			auto buffer = image.getBuffer();
+			uint8_t * dstBuffer = buffer.data();
+			size_t const bufsize = buffer.size();
 
 			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
-				uint32_t uiOffX = 0;
+				uint32_t offX = 0;
 
 				for ( uint32_t x = 0; x < 16 && it != font->end(); ++x )
 				{
 					Glyph const & glyph = *it;
-					Size const & size = glyph.getSize();
-					ByteArray const & buffer = glyph.getBitmap();
-					uint32_t const dstLineIndex = ( uiTotalWidth * uiOffY ) + uiOffX;
-					uint8_t * dstLineBuffer = &pBuffer[dstLineIndex];
+					Size const & glyphSize = glyph.getSize();
+					auto srcGlyphBuffer = glyph.getBitmap().data();
+					uint32_t dstGlyphIndex = ( imgLineSize * offY ) + offX;
+					uint8_t * dstGlyphBuffer = &dstBuffer[dstGlyphIndex];
 
-					for ( uint32_t i = 0; i < size.getHeight(); ++i )
+					for ( uint32_t i = 0; i < glyphSize.getHeight(); ++i )
 					{
-						CU_Ensure( size_t( dstLineIndex ) + size.getWidth() <= bufsize );
-						std::memcpy( dstLineBuffer, &buffer[i * size.getWidth()], size.getWidth() );
-						dstLineBuffer += uiTotalWidth;
+						CU_Ensure( size_t( dstGlyphIndex ) + glyphSize.getWidth() <= bufsize );
+						std::memcpy( dstGlyphBuffer, srcGlyphBuffer, glyphSize.getWidth() );
+						dstGlyphBuffer += imgLineSize;
+						dstGlyphIndex += imgLineSize;
+						srcGlyphBuffer += glyphSize.getWidth();
 					}
 
-					m_glyphsPositions[glyph.getCharacter()] = Position( uiOffX, uiOffY );
-					uiOffX += maxWidth;
+					m_glyphsPositions[glyph.getCharacter()] = Position( offX, offY );
+					offX += maxWidth;
 					++it;
 				}
 
-				uiOffY -= maxHeight;
+				offY -= maxHeight;
 			}
 		}
 

@@ -204,18 +204,18 @@ namespace film_grain
 
 		auto & loader = engine.getImageLoader();
 		//XpmLoader loader;
-		std::array< PxBufferBaseSPtr, NoiseMapCount > buffers
+		std::array< castor::Image, NoiseMapCount > images
 		{
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ) ).front(),
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ) ).front(),
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ) ).front(),
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ) ).front(),
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ) ).front(),
-			loader.load( "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ) ).front(),
+			loader.load( cuT( "FilmGrainNoise0" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer1_xpm ), uint32_t( castor::getCountOf( NoiseLayer1_xpm ) ) ),
+			loader.load( cuT( "FilmGrainNoise1" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer2_xpm ), uint32_t( castor::getCountOf( NoiseLayer2_xpm ) ) ),
+			loader.load( cuT( "FilmGrainNoise2" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer3_xpm ), uint32_t( castor::getCountOf( NoiseLayer3_xpm ) ) ),
+			loader.load( cuT( "FilmGrainNoise3" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer4_xpm ), uint32_t( castor::getCountOf( NoiseLayer4_xpm ) ) ),
+			loader.load( cuT( "FilmGrainNoise4" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer5_xpm ), uint32_t( castor::getCountOf( NoiseLayer5_xpm ) ) ),
+			loader.load( cuT( "FilmGrainNoise5" ), "xpm", reinterpret_cast< uint8_t const * >( NoiseLayer6_xpm ), uint32_t( castor::getCountOf( NoiseLayer6_xpm ) ) ),
 		};
 
-		auto dim = buffers[0]->getDimensions();
-		auto format = castor3d::convert( buffers[0]->getFormat() );
+		auto dim = images[0].getDimensions();
+		auto format = castor3d::convert( images[0].getPixelFormat() );
 		auto staging = device->createStagingTexture( format
 			, VkExtent2D{ dim.getWidth(), dim.getHeight() } );
 
@@ -232,7 +232,7 @@ namespace film_grain
 				, format
 				, { 0, 0, int32_t( i ) }
 				, { image->extent.width, image->extent.height }
-				, buffers[i]->getConstPtr()
+				, images[i].getBuffer().data()
 				, m_noiseView );
 		}
 

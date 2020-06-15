@@ -143,7 +143,6 @@ namespace castor3d
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( debugName ) );
-			result->getDefaultView().initialiseSource();
 			result->initialise();
 			return result;
 		}

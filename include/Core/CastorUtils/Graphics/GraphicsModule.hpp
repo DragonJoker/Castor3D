@@ -416,6 +416,13 @@ namespace castor
 	};
 	/**
 	\~english
+	\brief		The memory layout for an image.
+	\~french
+	\brief		Le layout mémoire d'une image.
+	*/
+	struct ImageLayout;
+	/**
+	\~english
 	\brief		Box container class.
 	\remark		A container will be a simple object which surrounds a graphic object (2D or 3D).
 				<br />It can be a parallelepiped, a sphere or other.
@@ -767,7 +774,6 @@ namespace castor
 	CU_DeclareSmartPtr( Image );
 	CU_DeclareSmartPtr( Font );
 	CU_DeclareSmartPtr( PxBufferBase );
-	CU_DeclareVector( PxBufferBaseSPtr, PxBufferPtr );
 
 	using RgbColour = RgbColourT< ColourComponent >;
 	using RgbaColour = RgbaColourT< ColourComponent >;

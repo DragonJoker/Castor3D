@@ -13,9 +13,9 @@ namespace castor
 	class PxBufferBase
 	{
 	public:
-		typedef std::vector< uint8_t > px_array;
-		typedef px_array::iterator pixel_data;
-		typedef px_array::const_iterator const_pixel_data;
+		typedef std::vector< uint8_t > PxArray;
+		typedef PxArray::iterator PixelData;
+		typedef PxArray::const_iterator ConstPixelData;
 
 	public:
 		/**
@@ -28,7 +28,12 @@ namespace castor
 		 *\param[in]	size		Dimensions du buffer.
 		 *\param[in]	pixelFormat	Format des pixels du buffer.
 		 */
-		CU_API PxBufferBase( Size const & size, PixelFormat pixelFormat );
+		CU_API PxBufferBase( Size const & size
+			, PixelFormat pixelFormat
+			, uint32_t layers = 1u
+			, uint32_t levels = 1u
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -44,7 +49,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~PxBufferBase();
+		CU_API ~PxBufferBase();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -114,7 +119,8 @@ namespace castor
 		 *\param[in]	pixelFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		CU_API virtual void assign( std::vector< uint8_t > const & buffer, PixelFormat pixelFormat ) = 0;
+		CU_API void assign( std::vector< uint8_t > const & buffer, PixelFormat pixelFormat );
+		CU_API void update( uint32_t layers, uint32_t levels );
 		/**
 		 *\~english
 		 *\brief		Creates a new buffer with same values as this one
@@ -123,14 +129,10 @@ namespace castor
 		 *\brief		Crée un nouveau buffer avec les mêmes valeurs
 		 *\return		Le buffer créé
 		 */
-		CU_API virtual std::shared_ptr< PxBufferBase > clone()const = 0;
-		/**
-		 *\~english
-		 *\brief		Makes a horizontal swap of pixels
-		 *\~french
-		 *\brief		Effectue un échange horizontal des pixels
-		 */
-		CU_API virtual void mirror() = 0;
+		inline std::shared_ptr< PxBufferBase > clone()const
+		{
+			return std::make_shared< PxBufferBase >( *this );
+		}
 		/**
 		*\~english
 		*name
@@ -140,17 +142,34 @@ namespace castor
 		*	Accesseurs.
 		*/
 		/**@{*/
+		CU_API PixelData getAt( uint32_t x
+			, uint32_t y
+			, uint32_t index = 0u
+			, uint32_t level = 0u );
+		CU_API ConstPixelData getAt( uint32_t x
+			, uint32_t y
+			, uint32_t index = 0u
+			, uint32_t level = 0u )const;
 		/**
 		 *\~english
 		 *\return		count() * (size of a pixel)
 		 *\~french
 		 *\return		count() * (size of a pixel)
 		 */
-		CU_API virtual uint32_t getSize()const = 0;
-		CU_API virtual uint8_t const * getConstPtr()const = 0;
-		CU_API virtual uint8_t * getPtr() = 0;
-		CU_API virtual pixel_data getAt( uint32_t x, uint32_t y ) = 0;
-		CU_API virtual const_pixel_data getAt( uint32_t x, uint32_t y )const = 0;
+		inline uint64_t getSize()const
+		{
+			return m_buffer.size();
+		}
+
+		inline uint8_t const * getConstPtr()const
+		{
+			return m_buffer.data();
+		}
+
+		inline uint8_t * getPtr()
+		{
+			return m_buffer.data();
+		}
 
 		inline bool isFlipped()const
 		{
@@ -159,7 +178,7 @@ namespace castor
 		
 		inline PixelFormat getFormat()const
 		{
-			return m_pixelFormat;
+			return m_format;
 		}
 
 		inline uint32_t getWidth()const
@@ -172,6 +191,16 @@ namespace castor
 			return m_size.getHeight();
 		}
 
+		inline uint32_t getLayers()const
+		{
+			return m_layers;
+		}
+
+		inline uint32_t getLevels()const
+		{
+			return m_levels;
+		}
+
 		inline Size const & getDimensions()const
 		{
 			return m_size;
@@ -182,16 +211,42 @@ namespace castor
 			return getWidth() * getHeight();
 		}
 
-		inline pixel_data getAt( Position const & position )
+		inline PixelData getAt( Position const & position )
 		{
 			return getAt( position.x(), position.y() );
 		}
 
-		inline const_pixel_data getAt( Position const & position )const
+		inline ConstPixelData getAt( Position const & position )const
 		{
 			return getAt( position.x(), position.y() );
 		}
 		/**@}*/
+		/**
+		 *\~english
+		 *\brief		Creates a buffer with the given data
+		 *\param[in]	size			Buffer dimensions
+		 *\param[in]	layers			Buffer layers (or slices)
+		 *\param[in]	levels			Buffer mip levels
+		 *\param[in]	wantedFormat	Pixels format
+		 *\param[in]	buffer			Data buffer
+		 *\param[in]	bufferFormat	Data buffer's pixels format
+		 *\return		The created buffer
+		 *\~french
+		 *\brief		Crée un buffer avec les données voulues
+		 *\param[in]	size			Dimensions du buffer
+		 *\param[in]	layers			Couches du buffer (layers ou slices)
+		 *\param[in]	levels			Niveaux de mip du buffer
+		 *\param[in]	wantedFormat	Format des pixels du buffer
+		 *\param[in]	buffer			Buffer de données
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données
+		 *\return		Le buffer créé
+		 */
+		CU_API static PxBufferBaseSPtr create( Size const & size
+			, uint32_t layers
+			, uint32_t levels
+			, PixelFormat wantedFormat
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data
@@ -208,22 +263,34 @@ namespace castor
 		 *\param[in]	bufferFormat	Format des pixels du buffer de données
 		 *\return		Le buffer créé
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & size
+		inline static PxBufferBaseSPtr create( Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM );
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM )
+		{
+			return create( size
+				, 1u
+				, 1u
+				, wantedFormat
+				, buffer
+				, bufferFormat );
+		}
+
+	protected:
+		inline uint32_t doConvert( uint32_t x, uint32_t y )const
+		{
+			return y * getWidth() + x;
+		}
 
 	private:
-		PixelFormat m_pixelFormat;
+		PixelFormat m_format;
 		bool m_flipped{ false };
 
 	protected:
-		//!\~english	Buffer dimensions.
-		//!\~french		Dimensions du buffer
 		Size m_size;
-		//!\~english	Buffer data.
-		//!\~french		Données du buffer.
-		px_array m_buffer;
+		uint32_t m_layers;
+		uint32_t m_levels;
+		mutable PxArray m_buffer;
 	};
 }
 

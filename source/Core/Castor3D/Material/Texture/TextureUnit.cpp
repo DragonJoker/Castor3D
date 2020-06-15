@@ -79,10 +79,6 @@ namespace castor3d
 			TextureUnit unit{ engine };
 			unit.setTexture( layout );
 			unit.setSampler( sampler );
-			layout->forEachView( []( TextureViewUPtr const & view )
-				{
-					view->initialiseSource();
-				} );
 			unit.initialise();
 			return unit;
 		}
@@ -103,7 +99,7 @@ namespace castor3d
 			auto texture = unit.getTexture();
 			auto image = texture->getDefaultView().toString();
 
-			if ( !image.empty() || !texture->getDefaultView().isStaticSource() )
+			if ( !image.empty() || !texture->isStatic() )
 			{
 				if ( result )
 				{
@@ -121,7 +117,7 @@ namespace castor3d
 
 						if ( result )
 						{
-							if ( !texture->getDefaultView().isStaticSource() )
+							if ( !texture->isStatic() )
 							{
 								if ( unit.getRenderTarget() )
 								{
@@ -318,7 +314,7 @@ namespace castor3d
 		}
 
 		CU_Require( m_texture );
-		return m_texture->getDefaultView().toString();
+		return m_texture->getImage().getName();
 	}
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )

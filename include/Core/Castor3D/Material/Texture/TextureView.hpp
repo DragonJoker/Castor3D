@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "TextureModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureSource.hpp"
+
 #include <CastorUtils/Data/Path.hpp>
 #include <CastorUtils/Data/TextWriter.hpp>
 
@@ -90,6 +92,10 @@ namespace castor3d
 			, uint32_t layerCount
 			, uint32_t baseMipLevel
 			, uint32_t levelCount );
+		C3D_API void update( VkExtent3D const & extent
+			, VkFormat format
+			, uint32_t mipLevels
+			, uint32_t arrayLayers );
 		/**
 		 *\~english
 		 *\brief		Cleans up the view.
@@ -97,43 +103,6 @@ namespace castor3d
 		 *\brief		Nettoie la vue.
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	folder		The folder containing the image.
-		 *\param[in]	relative	The image file path, relative to folder.
-		 *\~french
-		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	folder		Le dossier contenant l'image.
-		 *\param[in]	relative	Le chemin d'accès à l'image, relatif à folder.
-		 */
-		C3D_API void initialiseSource( castor::Path const & folder
-			, castor::Path const & relative );
-		/**
-		 *\~english
-		 *\brief		Initialises the texture buffer.
-		 *\param[in]	buffer	The buffer.
-		 *\~french
-		 *\brief		Initialise le tampon de la texture.
-		 *\param[in]	buffer	Le tampon.
-		 */
-		C3D_API void initialiseSource( castor::PxBufferBaseSPtr buffer );
-		/**
-		 *\~english
-		 *\brief		Initialises the texture buffer.
-		 *\~french
-		 *\brief		Initialise le tampon de la texture.
-		 */
-		C3D_API void initialiseSource();
-		/**
-		 *\~english
-		 *\brief		Sets the texture buffer.
-		 *\param[in]	buffer	The texture buffer.
-		 *\~french
-		 *\brief		Définit le tampon de la texture.
-		 *\param[in]	buffer	Le tampon de la texture.
-		 */
-		C3D_API void setBuffer( castor::PxBufferBaseSPtr buffer );
 		/**
 		*\~english
 		*name
@@ -144,18 +113,12 @@ namespace castor3d
 		**/
 		/**@{*/
 		C3D_API castor::String toString()const;
-		C3D_API castor::PxBufferBaseSPtr getBuffer()const;
-		C3D_API castor::PxBufferPtrArray const & getBuffers()const;
-		C3D_API castor::PxBufferPtrArray & getBuffers();
-		C3D_API bool isStaticSource()const;
+		C3D_API bool hasBuffer()const;
+		C3D_API castor::ImageLayout::ConstBuffer getBuffer()const;
+		C3D_API castor::ImageLayout::Buffer getBuffer();
 		C3D_API uint32_t getLevelCount()const;
 		C3D_API ashes::ImageView const & getSampledView()const;
 		C3D_API ashes::ImageView const & getTargetView()const;
-
-		inline bool hasSource()const
-		{
-			return m_source != nullptr;
-		}
 
 		inline uint32_t getIndex()const
 		{
@@ -185,7 +148,7 @@ namespace castor3d
 		uint32_t m_index;
 		ashes::ImageViewCreateInfo m_info;
 		castor::String m_debugName;
-		TextureSourceSPtr m_source;
+		TextureSource m_source;
 		mutable ashes::ImageView m_sampledView;
 		mutable ashes::ImageView m_targetView;
 		bool m_needsMipmapsGeneration{ true };

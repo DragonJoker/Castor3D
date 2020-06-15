@@ -31,9 +31,10 @@ namespace castor
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	PxBufferPtrArray XpmImageLoader::load( String const & imageFormat
+	ImageLayout XpmImageLoader::load( String const & imageFormat
 		, uint8_t const * input
-		, uint32_t size )const
+		, uint32_t size
+		, PxBufferBaseSPtr & outbuffer )const
 	{
 		auto data = reinterpret_cast< char * const * >( input );
 		uint32_t coloursCount = 0;
@@ -109,9 +110,10 @@ namespace castor
 			}
 		}
 
-		return { PxBufferBase::create( pixels->getDimensions()
+		outbuffer = PxBufferBase::create( pixels->getDimensions()
 			, PixelFormat::eR8G8B8A8_UNORM
 			, pixels->getConstPtr()
-			, pixels->getFormat() ) };
+			, pixels->getFormat() );
+		return ImageLayout{ *outbuffer };
 	}
 }

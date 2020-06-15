@@ -142,6 +142,20 @@ namespace castor
 		 */
 		CU_API void grow( int32_t cx, int32_t cy );
 
+		inline Size & operator<<=( uint32_t rhs )
+		{
+			m_data.size.cx <<= rhs;
+			m_data.size.cy <<= rhs;
+			return *this;
+		}
+
+		inline Size & operator>>=( uint32_t rhs )
+		{
+			m_data.size.cx >>= rhs;
+			m_data.size.cy >>= rhs;
+			return *this;
+		}
+
 		using BaseType::ptr;
 		using BaseType::constPtr;
 
@@ -178,6 +192,20 @@ namespace castor
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
 	CU_API bool operator!=( Size const & a, Size const & b );
+
+	inline Size operator<<( Size const & lhs, uint32_t rhs )
+	{
+		Size tmp{ lhs };
+		tmp <<= rhs;
+		return tmp;
+	}
+
+	inline Size operator>>( Size const & lhs, uint32_t rhs )
+	{
+		Size tmp{ lhs };
+		tmp >>= rhs;
+		return tmp;
+	}
 }
 
 #endif

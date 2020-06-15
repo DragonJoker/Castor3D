@@ -106,11 +106,9 @@ namespace
 
 			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & column = buffer[x];
-
 				for ( uint32_t y = 0; y < height; ++y )
 				{
-					typename PxBuffer< PF >::pixel const & pixel = column[y];
+					auto const & pixel = buffer.at( x, y );
 					stream << "0x";
 					stream.width( 2 );
 					stream << std::hex << int( PF::getByteAlpha( pixel ) );
@@ -142,11 +140,9 @@ namespace
 
 			for ( uint32_t x = 0; x < width; ++x )
 			{
-				typename PxBuffer< PF >::column const & column = buffer[x];
-
 				for ( uint32_t y = 0; y < height; ++y )
 				{
-					typename PxBuffer< PF >::pixel const & pixel = column[y];
+					auto const & pixel = buffer.at( x, y );
 					stream << "0x";
 					stream.width( 6 );
 					stream << std::hex << int( PF::getUInt24Depth( pixel ) );
@@ -188,7 +184,7 @@ namespace
 		void operator()( Pixel< PFSrc > const & p_source )
 		{
 			Pixel< PFDst > dest( p_source );
-			StringStream stream;
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Converted pixel : " << dest;
 			Logger::logTrace( stream );
@@ -221,7 +217,7 @@ namespace
 			PF::setByteGreen( source, 0x80 );
 			PF::setByteBlue( source, 0xBF );
 			PF::setByteAlpha( source, 0xFF );
-			StringStream stream;
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source pixel : " << source;
 			Logger::logTrace( stream );
@@ -247,7 +243,7 @@ namespace
 			Pixel< PFSrc > source( true );
 			PF::setUInt32Depth( source, 0x10204080 );
 			PF::setByteStencil( source, 0x80 );
-			StringStream stream;
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source pixel : " << source;
 			Logger::logTrace( stream );
@@ -273,8 +269,8 @@ namespace
 			std::shared_ptr< PxBuffer< PFDst > > dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( source->getDimensions()
 				, PixelFormat( PFDst )
 				, source->getPtr()
-				, PixelFormat( PFSrc ) ) );
-			StringStream stream;
+				, PFSrc ) );
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Converted buffer : " << *dest;
 			Logger::logTrace( stream );
@@ -321,8 +317,11 @@ namespace
 				PF::setByteBlue( pixel, value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream stream;
+			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+				, PFSrc
+				, buffer.data()
+				, PFSrc ) );
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
@@ -362,8 +361,11 @@ namespace
 				stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream stream;
+			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+				, PFSrc
+				, buffer.data()
+				, PFSrc ) );
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
@@ -396,8 +398,11 @@ namespace
 				stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream stream;
+			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+				, PFSrc
+				, buffer.data()
+				, PFSrc ) );
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );
@@ -428,8 +433,11 @@ namespace
 				PF::setByteStencil( pixel, value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size, PixelFormat( PFSrc ), buffer.data(), PixelFormat( PFSrc ) ) );
-			StringStream stream;
+			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+				, PFSrc
+				, buffer.data()
+				, PFSrc ) );
+			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Source buffer : " << *source;
 			Logger::logTrace( stream );

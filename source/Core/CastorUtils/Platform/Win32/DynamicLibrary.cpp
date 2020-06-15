@@ -24,7 +24,10 @@ namespace castor
 
 				if ( !m_library )
 				{
-					CU_Exception( System::getLastErrorText() );
+					String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
+					strError += System::getLastErrorText();
+					Logger::logError( strError );
+					m_pathLibrary.clear();
 				}
 			}
 			catch ( std::exception & p_exc )

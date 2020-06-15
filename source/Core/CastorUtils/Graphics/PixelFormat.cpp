@@ -1,6 +1,8 @@
 #include "CastorUtils/Graphics/PixelFormat.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
+#include <ashes/common/Format.hpp>
+
 namespace castor
 {
 	namespace PF
@@ -1391,254 +1393,12 @@ namespace castor
 
 		uint8_t getBytesPerPixel( PixelFormat format )
 		{
-			uint8_t result = 0;
-
-			switch ( format )
-			{
-			case PixelFormat::eR8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR16_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR16_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8A8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR5G5B5A1_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR5G6B5_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR8G8B8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eB8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR8G8B8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Size;
-				break;
-
-			case PixelFormat::eB8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Size;
-				break;
-
-			case PixelFormat::eR8G8B8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eA8B8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::Size;
-				break;
-
-			case PixelFormat::eR8G8B8A8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::Size;
-				break;
-
-			case PixelFormat::eA8B8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Size;
-				break;
-
-			case PixelFormat::eR16G16B16_SFLOAT:
-				result = PixelDefinitions<	PixelFormat::eR16G16B16_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				result = PixelDefinitions<	PixelFormat::eR16G16B16A16_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR32G32B32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC1_RGB_UNORM_BLOCK >::Size;
-				break;
-
-			case PixelFormat::eBC3_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC3_UNORM_BLOCK >::Size;
-				break;
-
-			case PixelFormat::eBC5_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC5_UNORM_BLOCK >::Size;
-				break;
-
-			case PixelFormat::eD16_UNORM:
-				result = PixelDefinitions< PixelFormat::eD16_UNORM >::Size;
-				break;
-
-			case PixelFormat::eD24_UNORM_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::Size;
-				break;
-
-			case PixelFormat::eD32_UNORM:
-				result = PixelDefinitions< PixelFormat::eD32_UNORM >::Size;
-				break;
-
-			case PixelFormat::eD32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT >::Size;
-				break;
-
-			case PixelFormat::eD32_SFLOAT_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::Size;
-				break;
-
-			case PixelFormat::eS8_UINT:
-				result = PixelDefinitions< PixelFormat::eS8_UINT >::Size;
-				break;
-
-			default:
-				CU_Failure( "Unsupported pixel format" );
-				break;
-			}
-
-			return result;
+			return uint8_t( ashes::getSize( ashes::getMinimalExtent2D( VkFormat( format ) ), VkFormat( format ) ) );
 		}
 
 		uint8_t getComponentsCount( PixelFormat format )
 		{
-			uint8_t result = 0;
-
-			switch ( format )
-			{
-			case PixelFormat::eR8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR16_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR16_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8A8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR5G5B5A1_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR5G6B5_UNORM:
-				result = PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR8G8B8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eB8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR8G8B8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::Count;
-				break;
-
-			case PixelFormat::eB8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::Count;
-				break;
-
-			case PixelFormat::eR8G8B8A8_UNORM:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eA8B8G8R8_UNORM:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::Count;
-				break;
-
-			case PixelFormat::eR8G8B8A8_SRGB:
-				result = PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::Count;
-				break;
-
-			case PixelFormat::eA8B8G8R8_SRGB:
-				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::Count;
-				break;
-
-			case PixelFormat::eR16G16B16_SFLOAT:
-				result = PixelDefinitions<	PixelFormat::eR16G16B16_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR16G16B16A16_SFLOAT:
-				result = PixelDefinitions<	PixelFormat::eR16G16B16A16_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR32G32B32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eR32G32B32A32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC1_RGB_UNORM_BLOCK >::Count;
-				break;
-
-			case PixelFormat::eBC3_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC3_UNORM_BLOCK >::Count;
-				break;
-
-			case PixelFormat::eBC5_UNORM_BLOCK:
-				result = PixelDefinitions<	PixelFormat::eBC5_UNORM_BLOCK >::Count;
-				break;
-
-			case PixelFormat::eD16_UNORM:
-				result = PixelDefinitions< PixelFormat::eD16_UNORM >::Count;
-				break;
-
-			case PixelFormat::eD24_UNORM_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::Count;
-				break;
-
-			case PixelFormat::eD32_UNORM:
-				result = PixelDefinitions< PixelFormat::eD32_UNORM >::Count;
-				break;
-
-			case PixelFormat::eD32_SFLOAT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT >::Count;
-				break;
-
-			case PixelFormat::eD32_SFLOAT_S8_UINT:
-				result = PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::Count;
-				break;
-
-			case PixelFormat::eS8_UINT:
-				result = PixelDefinitions< PixelFormat::eS8_UINT >::Count;
-				break;
-
-			default:
-				CU_Failure( "Unsupported pixel format" );
-				break;
-			}
-
-			return result;
+			return uint8_t( ashes::getCount( VkFormat( format ) ) );
 		}
 
 		void convertPixel( PixelFormat srcFormat
@@ -1897,130 +1657,105 @@ namespace castor
 		{
 			PixelFormat result = PixelFormat::eCount;
 
-			for ( int i = 0; i < int( result ); ++i )
+			for ( int i = 0u; i < int( result ) && result == PixelFormat::eCount; ++i )
 			{
 				switch ( PixelFormat( i ) )
 				{
 				case PixelFormat::eR8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR16_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR16_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR32_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR32_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR8A8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8A8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR16A16_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR16_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR32A32_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR5G5B5A1_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR5G6B5_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR8G8B8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eB8G8R8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR8G8B8_SRGB:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eB8G8R8_SRGB:
 					result = ( formatName == PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR8G8B8A8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eA8B8G8R8_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR8G8B8A8_SRGB:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eA8B8G8R8_SRGB:
 					result = ( formatName == PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR16G16B16_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR16G16B16A16_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR32G32B32_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eR32G32B32A32_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 					result = ( formatName == PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eBC3_UNORM_BLOCK:
 					result = ( formatName == PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eBC5_UNORM_BLOCK:
 					result = ( formatName == PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eD16_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eD16_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eD24_UNORM_S8_UINT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eD32_UNORM:
 					result = ( formatName == PixelDefinitions< PixelFormat::eD32_UNORM >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eD32_SFLOAT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eD32_SFLOAT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eD32_SFLOAT_S8_UINT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				case PixelFormat::eS8_UINT:
 					result = ( formatName == PixelDefinitions< PixelFormat::eS8_UINT >::toStr() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
-
 				default:
-					CU_Failure( "Unsupported pixel format" );
 					break;
 				}
+			}
+
+			if ( result == PixelFormat::eCount )
+			{
+				CU_Failure( "Unsupported pixel format" );
 			}
 
 			return result;
@@ -2035,115 +1770,87 @@ namespace castor
 			case PixelFormat::eR8_UNORM:
 				result = PixelDefinitions< PixelFormat::eR8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR16_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR32_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR8A8_UNORM:
 				result = PixelDefinitions< PixelFormat::eR8A8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR32A32_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR32A32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR5G5B5A1_UNORM:
 				result = PixelDefinitions< PixelFormat::eR5G5B5A1_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR5G6B5_UNORM:
 				result = PixelDefinitions< PixelFormat::eR5G6B5_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR8G8B8_UNORM:
 				result = PixelDefinitions< PixelFormat::eR8G8B8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eB8G8R8_UNORM:
 				result = PixelDefinitions< PixelFormat::eB8G8R8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR8G8B8_SRGB:
 				result = PixelDefinitions< PixelFormat::eR8G8B8_SRGB >::toStr();
 				break;
-
 			case PixelFormat::eB8G8R8_SRGB:
 				result = PixelDefinitions< PixelFormat::eB8G8R8_SRGB >::toStr();
 				break;
-
 			case PixelFormat::eR8G8B8A8_UNORM:
 				result = PixelDefinitions< PixelFormat::eR8G8B8A8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eA8B8G8R8_UNORM:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eR8G8B8A8_SRGB:
 				result = PixelDefinitions< PixelFormat::eR8G8B8A8_SRGB >::toStr();
 				break;
-
 			case PixelFormat::eA8B8G8R8_SRGB:
 				result = PixelDefinitions< PixelFormat::eA8B8G8R8_SRGB >::toStr();
 				break;
-
 			case PixelFormat::eR16G16B16_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR16G16B16_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR16G16B16A16_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR16G16B16A16_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR32G32B32_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR32G32B32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eR32G32B32A32_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eR32G32B32A32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eBC1_RGB_UNORM_BLOCK:
 				result = PixelDefinitions< PixelFormat::eBC1_RGB_UNORM_BLOCK >::toStr();
 				break;
-
 			case PixelFormat::eBC3_UNORM_BLOCK:
 				result = PixelDefinitions< PixelFormat::eBC3_UNORM_BLOCK >::toStr();
 				break;
-
 			case PixelFormat::eBC5_UNORM_BLOCK:
 				result = PixelDefinitions< PixelFormat::eBC5_UNORM_BLOCK >::toStr();
 				break;
-
 			case PixelFormat::eD16_UNORM:
 				result = PixelDefinitions< PixelFormat::eD16_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eD24_UNORM_S8_UINT:
 				result = PixelDefinitions< PixelFormat::eD24_UNORM_S8_UINT >::toStr();
 				break;
-
 			case PixelFormat::eD32_UNORM:
 				result = PixelDefinitions< PixelFormat::eD32_UNORM >::toStr();
 				break;
-
 			case PixelFormat::eD32_SFLOAT:
 				result = PixelDefinitions< PixelFormat::eD32_SFLOAT >::toStr();
 				break;
-
 			case PixelFormat::eD32_SFLOAT_S8_UINT:
 				result = PixelDefinitions< PixelFormat::eD32_SFLOAT_S8_UINT >::toStr();
 				break;
-
 			case PixelFormat::eS8_UINT:
 				result = PixelDefinitions< PixelFormat::eS8_UINT >::toStr();
 				break;
-
 			default:
 				CU_Failure( "Unsupported pixel format" );
 				break;

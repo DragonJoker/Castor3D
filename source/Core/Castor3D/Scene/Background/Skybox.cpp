@@ -176,42 +176,42 @@ namespace castor3d
 	void SkyboxBackground::loadLeftImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeX ), folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadRightImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveX ), folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadTopImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeY ), folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBottomImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveY ), folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadFrontImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::eNegativeZ ), folder, relative );
 		notifyChanged();
 	}
 
 	void SkyboxBackground::loadBackImage( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		getTexture().getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource( folder, relative );
+		getTexture().setLayerSource( uint32_t( CubeMapFace::ePositiveZ ), folder, relative );
 		notifyChanged();
 	}
 
@@ -236,7 +236,7 @@ namespace castor3d
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
-		texture->getDefaultView().initialiseSource( folder, relative );
+		texture->setSource( folder, relative );
 		setEquiTexture( texture, size );
 	}
 
@@ -276,7 +276,7 @@ namespace castor3d
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
-		texture->getDefaultView().initialiseSource( folder, relative );
+		texture->setSource( folder, relative );
 		setCrossTexture( texture );
 	}
 
@@ -345,12 +345,6 @@ namespace castor3d
 				, doGetImageCreate( m_equiTexture->getPixelFormat(), m_equiSize, true )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "SkyboxBackgroundEquiCube" ) );
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
-			m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 			m_texture->initialise();
 
 			EquirectangularToCube equiToCube{ *m_equiTexture
@@ -381,12 +375,6 @@ namespace castor3d
 			, doGetImageCreate( m_crossTexture->getPixelFormat(), Size{ width, width }, true )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCrossCube" ) );
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 		m_texture->initialise();
 
 		VkImageSubresourceLayers srcSubresource

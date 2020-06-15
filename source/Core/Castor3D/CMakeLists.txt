@@ -299,7 +299,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureConfiguration.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureLayout.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureModule.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureSource.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureUnit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Texture/TextureView.cpp
 )
@@ -1527,7 +1526,6 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		$<BUILD_INTERFACE:${Vulkan_INCLUDE_DIRS}>
 		$<BUILD_INTERFACE:${ASHES_SOURCE_DIR}/include>
 		$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}/include>
 		$<INSTALL_INTERFACE:include>
@@ -1547,7 +1545,6 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
 		sdw::ShaderWriter
-		ashes::ashespp
 	PRIVATE
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}

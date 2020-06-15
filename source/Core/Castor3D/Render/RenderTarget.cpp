@@ -163,7 +163,6 @@ namespace castor3d
 			, renderTarget.getName() + cuT( "Colour" ) );
 		colourTexture.setTexture( texture );
 		colourTexture.setSampler( sampler );
-		colourTexture.getTexture()->getDefaultView().initialiseSource();
 		colourTexture.getTexture()->initialise();
 
 		ashes::ImageViewCRefArray attaches;
@@ -581,7 +580,6 @@ namespace castor3d
 			, getName() + cuT( "Velocity" ) );
 		m_velocityTexture.setTexture( std::move( velocityTexture ) );
 		m_velocityTexture.setSampler( getEngine()->getSamplerCache().find( RenderTarget::DefaultSamplerName + getName() + cuT( "Nearest" ) ) );
-		m_velocityTexture.getTexture()->getDefaultView().initialiseSource();
 		bool result = m_velocityTexture.initialise();
 
 		if ( result )

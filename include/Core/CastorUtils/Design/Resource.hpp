@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CASTOR_RESOURCE_H___
-#define ___CASTOR_RESOURCE_H___
+#ifndef ___CU_Resource_HPP___
+#define ___CU_Resource_HPP___
 
 #include "CastorUtils/Design/DesignModule.hpp"
 
@@ -16,79 +16,33 @@ namespace castor
 		: public Named
 	{
 	protected:
-		typedef Collection< ResType, String > collection;
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	name	The name
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	name	Le nom
-		 */
+		using Collection = Collection< ResType, String >;
+
+		Resource( Collection & collection
+			, String const & name );
 		explicit Resource( String const & name );
-		/**
-		*\~english
-		*\brief		Destructor
-		*\~french
-		*\brief		Destructeur
-		*/
-		~Resource();
+		~Resource() = default;
 
 	public:
+		Resource( Resource const & other ) = default;
+		Resource( Resource && other ) = default;
+		Resource & operator=( Resource const & other ) = default;
+		Resource & operator=( Resource && other ) = default;
 		/**
 		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	other	The Resource to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	other	La Resource à copier
-		 */
-		Resource( Resource const & other );
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	other	The Resource to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	other	La Resource à déplacer
-		 */
-		Resource( Resource && other );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	other	The Resource to copy
-		 *\return		A reference to this Resource
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	other	La Resource à copier
-		 *\return		Une référence sur ce Resource
-		 */
-		Resource & operator=( Resource const & other );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	other	The Resource to move
-		 *\return		A reference to this Resource
-		 *\~french
-		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	other	La Resource à déplacer
-		 *\return		Une référence sur ce Resource
-		 */
-		Resource & operator=( Resource && other );
-		/**
-		 *\~english
-		 *\brief		Defines the resource name
-		 *\remarks		Also tells the collection the new resource name
+		 *\remarks		Tells the collection the new resource name
 		 *\param[in]	name	The new name
 		 *\~french
-		 *\brief		Définit le nom de la ressource
-		 *\remarks		Dit aussi à la collection le nouveau de la ressource
+		 *\remarks		Dit à la collection le nouveau de la ressource
 		 *\param[in]	name	Le nouveau nom
 		 */
 		void changeName( String const & name );
-	};
 
-#	include "Resource.inl"
+	private:
+		Collection * m_collection;
+	};
 }
+
+#include "Resource.inl"
 
 #endif

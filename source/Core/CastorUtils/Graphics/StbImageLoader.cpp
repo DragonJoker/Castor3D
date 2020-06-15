@@ -204,21 +204,20 @@ namespace castor
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	PxBufferPtrArray StbImageLoader::load( String const & imageFormat
+	ImageLayout StbImageLoader::load( String const & imageFormat
 		, uint8_t const * data
-		, uint32_t size )const
+		, uint32_t size
+		, PxBufferBaseSPtr & buffer )const
 	{
-		PxBufferBaseSPtr result;
-
 		if ( string::upperCase( imageFormat ).find( cuT( "HDR" ) ) != String::npos )
 		{
-			result = doLoad32BitsPerChannel( data, size );
+			buffer = doLoad32BitsPerChannel( data, size );
 		}
 		else
 		{
-			result = doLoad8BitsPerChannel( data, size );
+			buffer = doLoad8BitsPerChannel( data, size );
 		}
 
-		return { result };
+		return ImageLayout{ *buffer };
 	}
 }

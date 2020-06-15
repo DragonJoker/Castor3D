@@ -17,22 +17,22 @@ set( VERSION_YEAR 2019 )
 # Setup lookup for external modules
 if ( VCPKG_TOOLCHAIN )
 	set( CMAKE_MODULE_PATH
-		${CMAKE_SOURCE_DIR}/CMake
-		${CMAKE_SOURCE_DIR}/CMake/Modules
-		${CMAKE_SOURCE_DIR}/CMake/Toolchains
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
 	)
 	set( CMAKE_MAP_IMPORTED_CONFIG_MINSIZEREL Release )
 	set( CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release )
 else ()
 	set( CMAKE_MODULE_PATH
-		${CMAKE_SOURCE_DIR}/CMake
-		${CMAKE_SOURCE_DIR}/CMake/Modules
-		${CMAKE_SOURCE_DIR}/CMake/Modules/Traditional
-		${CMAKE_SOURCE_DIR}/CMake/Toolchains
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
 	)
 endif ()
 
-set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
+set( CMAKE_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Templates )
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 include( PrecompiledHeaders )
@@ -72,7 +72,7 @@ endif ()
 option( CASTOR_USE_GLSLANG "Use glslang to convert GLSL shaders to SPIR-V" ON )
 option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
-set( DEPENDENCIES_DIR ${CMAKE_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
+set( DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
 if ( CASTOR_USE_SYSTEM_LIBS AND WIN32 AND NOT VCPKG_TOOLCHAIN )
 	message( STATUS "Fetching system libraries from dependencies submodule." )
@@ -167,7 +167,7 @@ if( MSVC )
 	endif()
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
 	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
-	file( COPY ${CMAKE_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
+	file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/data/VS/Rebracer.xml DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 	# add_definitions( -D_CRT_SECURE_NO_WARNINGS )
 	set( PROJECTS_COMPILE_DEFINITIONS
 		${PROJECTS_COMPILE_DEFINITIONS}
@@ -255,9 +255,12 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		endif ()
 	endif ()
 
+	set( EXTERNAL_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external )
+	set( EXTERNAL_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/external )
+
 	set( Ashes_BASE_DIR "External/Ashes" )
-	set( Ashes_SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/Ashes )
-	set( Ashes_BINARY_DIR ${CMAKE_BINARY_DIR}/external/Ashes )
+	set( Ashes_SOURCE_DIR ${EXTERNAL_SOURCE_DIR}/Ashes )
+	set( Ashes_BINARY_DIR ${EXTERNAL_BINARY_DIR}/Ashes )
 
 	add_subdirectory( source )
 
@@ -283,8 +286,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			set( CPACK_PACKAGE_VENDOR "DragonJoker" )
 			set( CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${PROJECTS_PLATFORM}" )
 			set( CPACK_OUTPUT_FILE_PREFIX "${PROJECTS_SETUP_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}" )
-			configure_file( ${CMAKE_SOURCE_DIR}/LICENSE ${CMAKE_BINARY_DIR}/LICENSE.txt COPYONLY )
-			set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt" )
+			configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE ${CMAKE_CURRENT_BINARY_DIR}/LICENSE.txt COPYONLY )
+			set( CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/LICENSE.txt" )
 			set( CMAKE_SYSTEM_ARCHITECTURE ${PROJECTS_PLATFORM} )
 
 			if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
@@ -292,9 +295,9 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
 				set( CPACK_WIX_UPGRADE_GUID "42BDC578-D000-4995-A2F7-3C94B618CBF3" )
 				set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
-				set( CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/install/castor.ico" )
-				set( CPACK_WIX_UI_DIALOG "${CMAKE_SOURCE_DIR}/install/dialog.bmp" )
-				set( CPACK_WIX_UI_BANNER "${CMAKE_SOURCE_DIR}/install/banner.bmp" )
+				set( CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/install/castor.ico" )
+				set( CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/install/dialog.bmp" )
+				set( CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/install/banner.bmp" )
 				set( CPACK_WIX_PROGRAM_MENU_FOLDER "Castor3D" )
 				set( CPACK_WIX_CULTURES "fr-FR;en-EN" )
 				include(CPack)
@@ -309,7 +312,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				set( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
 				include(CPack)
 			elseif ( "${PROJECTS_PACKAGE_RPM}" STREQUAL "ON" )
-				set( ${Castor_PACKAGE_DIR} ${CMAKE_BINARY_DIR}/_CPack_Packages/Linux/RPM )
+				set( ${Castor_PACKAGE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/_CPack_Packages/Linux/RPM )
 				set( CPACK_RPM_COMPONENT_INSTALL ON )
 				set( CPACK_RPM_PACKAGE_SUMMARY "Castor3D" )
 				set( CPACK_RPM_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_ARCHITECTURE}" )

@@ -466,19 +466,9 @@ namespace castor
 			return stream;
 		}
 
-		enum class ImageType
-		{
-			e1D,
-			e2D,
-			e3D,
-			e1DArray,
-			e2DArray,
-			eCube
-		};
-
 		bool identifyImageType( DDSHeader const & header
 			, DDSHeaderDX10Ext const & headerExt
-			, ImageType & type )
+			, castor::ImageLayout::Type & type )
 		{
 			if ( headerExt.arraySize > 1 )
 			{
@@ -488,11 +478,11 @@ namespace castor
 				}
 				else if ( header.flags & DDSD_HEIGHT )
 				{
-					type = ImageType::e2DArray;
+					type = castor::ImageLayout::e2DArray;
 				}
 				else
 				{
-					type = ImageType::e1DArray;
+					type = castor::ImageLayout::e1DArray;
 				}
 			}
 			else
@@ -504,7 +494,7 @@ namespace castor
 						CU_LoaderError( "Can't load DDS image: Partial cubemap are not yet supported, sorry" );
 					}
 
-					type = ImageType::eCube;
+					type = castor::ImageLayout::eCube;
 				}
 				else if ( headerExt.resourceDimension == D3D10_RESOURCE_DIMENSION_BUFFER )
 				{
@@ -512,15 +502,15 @@ namespace castor
 				}
 				else if ( headerExt.resourceDimension == D3D10_RESOURCE_DIMENSION_TEXTURE1D )
 				{
-					type = ImageType::e1D;
+					type = castor::ImageLayout::e1D;
 				}
 				else if ( header.ddsCaps[1] & DDSCAPS2_VOLUME || header.flags & DDSD_DEPTH || headerExt.resourceDimension == D3D10_RESOURCE_DIMENSION_TEXTURE3D )
 				{
-					type = ImageType::e3D;
+					type = castor::ImageLayout::e3D;
 				}
 				else
 				{
-					type = ImageType::e2D;
+					type = castor::ImageLayout::e2D;
 				}
 			}
 
@@ -742,9 +732,10 @@ namespace castor
 		//reg.unregisterLoader( listExtensions() );
 	}
 
-	PxBufferPtrArray DdsImageLoader::load( String const & imageFormat
+	ImageLayout DdsImageLoader::load( String const & imageFormat
 		, uint8_t const * data
-		, uint32_t size )const
+		, uint32_t size
+		, PxBufferBaseSPtr & buffer )const
 	{
 		auto end = data + size;
 		uint32_t magic;
@@ -772,87 +763,76 @@ namespace castor
 			Logger::logWarning( "Can't load DDS image: Ill-formed file, doesn't have a width flag" );
 		}
 
-		uint32_t width = std::max( header.width, 1U );
-		uint32_t height = 1U;
+		castor::ImageLayout result;
+		result.extent->x = std::max( header.width, 1U );
 
 		if ( header.flags & DDSD_HEIGHT )
 		{
-			height = std::max( header.height, 1U );
+			result.extent->y = std::max( header.height, 1U );
 		}
-
-		uint32_t depth = 1U;
 
 		if ( header.flags & DDSD_DEPTH )
 		{
-			depth = std::max( header.depth, 1U );
+			result.extent->z = std::max( header.depth, 1U );
 		}
 
-		auto levelCount = header.levelCount;
+		result.levels = header.levelCount;
 
 		// First, identify the type
-		ImageType type;
-		PxBufferPtrArray result;
-
-		if ( !identifyImageType( header, headerDX10, type ) )
+		if ( !identifyImageType( header, headerDX10, result.type ) )
 		{
-			return result;
+			return {};
 		}
 
 		// Then the format
-		PixelFormat format;
-
-		if ( !identifyPixelFormat( header, headerDX10, format ) )
+		if ( !identifyPixelFormat( header, headerDX10, result.format ) )
 		{
-			return result;
+			return {};
 		}
 
 		// Read all mipmap levels
-		for ( uint32_t i = 0u; i < levelCount; i++ )
-		{
-			if ( !PF::isCompressed( format )
-				|| ( width >= 4u && height >= 4u ) )
-			{
-				result.emplace_back( PxBufferBase::create( Size{ width, height }, format ) );
-				auto & buffer = result.back();
-				std::size_t byteCount = buffer->getSize();
-				auto ptr = buffer->getPtr();
+		auto width = result.extent->x;
+		auto height = result.extent->y;
+		auto depth = result.extent->z;
+		buffer = PxBufferBase::create( result.dimensions(), result.depthLayers(), result.levels, result.format );
+		buffer->flip();
 
-				if ( data + byteCount > end )
+		for ( uint32_t layer = 0u; layer < result.depthLayers(); layer++ )
+		{
+			width = result.extent->x;
+			height = result.extent->y;
+			depth = result.extent->z;
+
+			for ( uint32_t level = result.baseLevel; level < result.baseLevel + result.levels; level++ )
+			{
+				if ( width >= 4u && width >= 4u )
 				{
-					CU_LoaderError( "Can't load DDS image: Failed to read level #" + string::toString( i ) );
+					auto & dst = result.sliceMipBuffer( *buffer, layer, level );
+					std::size_t byteCount = buffer->getSize();
+
+					if ( data + byteCount > end )
+					{
+						CU_LoaderError( "Can't load DDS image: Failed to read level #" + string::toString( level ) );
+					}
+
+					std::memcpy( dst.data(), data, byteCount );
+					data += byteCount;
 				}
 
-				std::memcpy( ptr, data, byteCount );
-				data += byteCount;
-				buffer->flip();
-			}
+				if ( width > 1 )
+				{
+					width >>= 1;
+				}
 
-			if ( width > 1 )
-			{
-				width >>= 1;
-			}
+				if ( height > 1 )
+				{
+					height >>= 1;
+				}
 
-			if ( height > 1 )
-			{
-				height >>= 1;
-			}
-
-			if ( depth > 1 )
-			{
-				depth >>= 1;
-			}
-		}
-
-		if ( !levelCount )
-		{
-			if ( !PF::isCompressed( format )
-				|| ( width >= 4u && height >= 4u ) )
-			{
-				result.emplace_back( PxBufferBase::create( Size{ width, height }, format ) );
-			}
-			else if ( PF::isCompressed( format ) )
-			{
-				result.emplace_back( PxBufferBase::create( Size{ 4u, 4u }, format ) );
+				if ( depth > 1 )
+				{
+					depth >>= 1;
+				}
 			}
 		}
 

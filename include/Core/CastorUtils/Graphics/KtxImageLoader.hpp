@@ -1,14 +1,20 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___CU_XpmImageLoader_H___
-#define ___CU_XpmImageLoader_H___
+#ifndef ___CU_KtxImageLoader_H___
+#define ___CU_KtxImageLoader_H___
 
 #include "CastorUtils/Graphics/ImageLoader.hpp"
 
 namespace castor
 {
-	class XpmImageLoader
+	/**
+	\~english
+	\brief		Image loader based on stb_image.
+	\~french
+	\brief		Loader d'image basé sur stb_image.
+	*/
+	class KtxImageLoader
 		: public ImageLoaderImpl
 	{
 	public:

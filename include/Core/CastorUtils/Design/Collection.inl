@@ -8,76 +8,76 @@ namespace castor
 		static const xchar * WARNING_COLLECTION_DUPLICATE_OBJECT = cuT( "Collection::create - Duplicate object: " );
 	}
 
-	template< typename TObj, typename TKey >
-	Collection< TObj, TKey >::Collection()
+	template< typename ObjectT, typename KeyT >
+	Collection< ObjectT, KeyT >::Collection()
 		: m_locked( false )
 	{
 	}
 
-	template< typename TObj, typename TKey >
-	Collection< TObj, TKey >::~Collection()
+	template< typename ObjectT, typename KeyT >
+	Collection< ObjectT, KeyT >::~Collection()
 	{
 	}
 
-	template< typename TObj, typename TKey >
-	inline void Collection< TObj, TKey >::lock()const
+	template< typename ObjectT, typename KeyT >
+	inline void Collection< ObjectT, KeyT >::lock()const
 	{
 		m_mutex.lock();
 		m_locked = true;
 	}
 
-	template< typename TObj, typename TKey >
-	inline void Collection< TObj, TKey >::unlock()const
+	template< typename ObjectT, typename KeyT >
+	inline void Collection< ObjectT, KeyT >::unlock()const
 	{
 		m_locked = false;
 		m_mutex.unlock();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::begin()
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::begin()
 	{
 		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjPtrMapConstIt Collection< TObj, TKey >::begin()const
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapConstIt Collection< ObjectT, KeyT >::begin()const
 	{
 		CU_Require( m_locked );
 		return m_objects.begin();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::end()
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::end()
 	{
 		return m_objects.end();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjPtrMapConstIt Collection< TObj, TKey >::end()const
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectPtrTMapConstIt Collection< ObjectT, KeyT >::end()const
 	{
 		return m_objects.end();
 	}
 
-	template< typename TObj, typename TKey >
-	inline bool Collection< TObj, TKey >::empty()const
+	template< typename ObjectT, typename KeyT >
+	inline bool Collection< ObjectT, KeyT >::empty()const
 	{
 		return m_objects.empty();
 	}
 
-	template< typename TObj, typename TKey >
-	inline void Collection< TObj, TKey >::clear() throw( )
+	template< typename ObjectT, typename KeyT >
+	inline void Collection< ObjectT, KeyT >::clear() throw( )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		m_objects.clear();
-		m_last.key = std::move( TKey() );
+		doInitLast();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( KeyParamType key )const
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectTSPtr Collection< ObjectT, KeyT >::find( KeyParamType key )const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		TObjSPtr result;
+		ObjectTSPtr result;
 		doUpdateLast( key );
 
 		if ( m_last.result != m_objects.end() )
@@ -92,25 +92,23 @@ namespace castor
 		return result;
 	}
 
-	template< typename TObj, typename TKey >
-	inline std::size_t Collection< TObj, TKey >::size()const
+	template< typename ObjectT, typename KeyT >
+	inline std::size_t Collection< ObjectT, KeyT >::size()const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		return m_objects.size();
 	}
 
-	template< typename TObj, typename TKey >
-	inline bool Collection< TObj, TKey >::insert( KeyParamType key, TObjSPtr element )
+	template< typename ObjectT, typename KeyT >
+	inline bool Collection< ObjectT, KeyT >::insert( KeyParamType key, ObjectTSPtr element )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		TObjPtrMapIt it = m_objects.find( key );
+		doUpdateLast( key );
 		bool result = false;
 
-		if ( it == m_objects.end() )
+		if ( m_last.result == m_objects.end() )
 		{
-			m_last.key = std::move( TKey() );
-			m_objects.emplace( key, element );
-			doInitLast();
+			m_last.result = m_objects.emplace( key, element ).first;
 			result = true;
 		}
 		else
@@ -121,47 +119,46 @@ namespace castor
 		return result;
 	}
 
-	template< typename TObj, typename TKey >
-	inline bool Collection< TObj, TKey >::has( KeyParamType key )const
+	template< typename ObjectT, typename KeyT >
+	inline bool Collection< ObjectT, KeyT >::has( KeyParamType key )const
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		doUpdateLast( key );
 		return m_last.result != m_objects.end();
 	}
 
-	template< typename TObj, typename TKey >
-	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::erase( KeyParamType key )
+	template< typename ObjectT, typename KeyT >
+	inline typename Collection< ObjectT, KeyT >::ObjectTSPtr Collection< ObjectT, KeyT >::erase( KeyParamType key )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
-		TObjSPtr ret;
-		TObjPtrMapIt ifind = m_objects.find( key );
+		doUpdateLast( key );
+		ObjectTSPtr ret;
 
-		if ( ifind != m_objects.end() )
+		if ( m_last.result != m_objects.end() )
 		{
+			ret = m_last.result->second;
 			doInitLast();
-			ret = ifind->second;
-			m_objects.erase( key );
 		}
 
 		return ret;
 	}
 
-	template< typename TObj, typename TKey >
-	typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::erase( typename Collection< TObj, TKey >::TObjPtrMapIt it )
+	template< typename ObjectT, typename KeyT >
+	typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt Collection< ObjectT, KeyT >::erase( typename Collection< ObjectT, KeyT >::ObjectPtrTMapIt it )
 	{
 		CU_Require( m_locked );
 		return m_objects.erase( it );
 	}
 
-	template< typename TObj, typename TKey >
-	void Collection< TObj, TKey >::doInitLast()const
+	template< typename ObjectT, typename KeyT >
+	void Collection< ObjectT, KeyT >::doInitLast()const
 	{
-		m_last.key = std::move( TKey() );
+		m_last.key = std::move( KeyT() );
 		m_last.result = m_objects.end();
 	}
 
-	template< typename TObj, typename TKey >
-	void Collection< TObj, TKey >::doUpdateLast( KeyParamType key )const
+	template< typename ObjectT, typename KeyT >
+	void Collection< ObjectT, KeyT >::doUpdateLast( KeyParamType key )const
 	{
 		if ( m_last.key != key )
 		{

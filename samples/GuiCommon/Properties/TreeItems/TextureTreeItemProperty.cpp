@@ -268,7 +268,7 @@ namespace GuiCommon
 			addProperty( grid, PROPERTY_FLAG_HEIGHT, PROPERTY_IS_HEIGHT, PROPERTY_COMP_HEIGHT, TextureFlag::eHeight, m_configuration.heightMask, 1u );
 			grid->Append( new wxFloatProperty( PROPERTY_FACTOR_HEIGHT, PROPERTY_FACTOR_HEIGHT ) )->SetValue( m_configuration.heightFactor );
 
-			if ( unit->getTexture()->getDefaultView().isStaticSource() )
+			if ( unit->getTexture()->isStatic() )
 			{
 				Path path{ unit->getTexture()->getDefaultView().toString() };
 				grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( path );
@@ -435,7 +435,7 @@ namespace GuiCommon
 					, image
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 					, path );
-				texture->getDefaultView().initialiseSource( Path{}, path );
+				texture->setSource( Path{}, path );
 				unit->setTexture( texture );
 				unit->initialise();
 			}

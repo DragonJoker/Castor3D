@@ -292,6 +292,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/Image.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageCache.cpp
+		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLayout.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageLoader.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/ImageWriter.cpp
 		${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Graphics/KtxImageLoader.cpp
@@ -321,6 +322,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/HdrColourComponent.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/Image.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageCache.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLayout.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageLoader.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/ImageWriter.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Graphics/KtxImageLoader.hpp
@@ -595,6 +597,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	target_include_directories( ${PROJECT_NAME}
 		PUBLIC
+			$<BUILD_INTERFACE:${Vulkan_INCLUDE_DIRS}>
 			$<BUILD_INTERFACE:${CASTOR_SOURCE_DIR}/include>
 			$<BUILD_INTERFACE:${CASTOR_BINARY_DIR}/include>
 			$<INSTALL_INTERFACE:include>
@@ -607,24 +610,24 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${FREETYPE_INCLUDE_DIR_freetype2}
 			${EXTERNAL_SOURCE_DIR}/gli
 	)
+	target_link_libraries( ${PROJECT_NAME}
+		PUBLIC
+			ashes::ashespp
+		PRIVATE
+			${PLATFORM_LIBRARIES}
+			${Freetype_LIBRARIES}
+			ZLIB::ZLIB
+	)
 
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
 				Dbghelp
-			PRIVATE
-				${PLATFORM_LIBRARIES}
-				${Freetype_LIBRARIES}
-				ZLIB::ZLIB
 		)
 	else ()
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
 				${CMAKE_DL_LIBRARY}
-			PRIVATE
-				${PLATFORM_LIBRARIES}
-				${Freetype_LIBRARIES}
-				ZLIB::ZLIB
 		)
 	endif ()
 

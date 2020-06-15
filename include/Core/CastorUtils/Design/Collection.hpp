@@ -12,23 +12,23 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< typename TObj, typename TKey >
+	template< typename ObjectT, typename KeyT >
 	class Collection
 		: public castor::NonCopyable
 	{
 	public:
-		CU_DeclareSmartPtr( TObj );
-		CU_DeclareTemplateMap( TKey, TObjSPtr, TObjPtr );
-		typedef typename TObjPtrMap::value_type ValueType;
+		CU_DeclareSmartPtr( ObjectT );
+		CU_DeclareTemplateMap( KeyT, ObjectTSPtr, ObjectPtrT );
+		typedef typename ObjectPtrTMap::value_type ValueType;
 		//!\~english	Typedef over the key param type.
 		//!\~french		Typedef sur le type de la clef en paramètre de fonction
-		typedef typename CallTraits< TKey >::ConstParamType KeyParamType;
+		typedef typename CallTraits< KeyT >::ConstParamType KeyParamType;
 
 	private:
 		struct Search
 		{
-			TKey key;
-			TObjPtrMapConstIt result;
+			KeyT key;
+			ObjectPtrTMapConstIt result;
 		};
 
 	public:
@@ -68,7 +68,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline TObjPtrMapIt begin();
+		inline ObjectPtrTMapIt begin();
 		/**
 		 *\~english
 		 *\brief		Returns an constant iterator to the first element of the collection
@@ -77,7 +77,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline TObjPtrMapConstIt begin()const;
+		inline ObjectPtrTMapConstIt begin()const;
 		/**
 		 *\~english
 		 *\brief		Returns an iterator to the after last element of the collection
@@ -86,7 +86,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline TObjPtrMapIt end();
+		inline ObjectPtrTMapIt end();
 		/**
 		 *\~english
 		 *\brief		Returns an constant iterator to the after last element of the collection
@@ -95,7 +95,7 @@ namespace castor
 		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline TObjPtrMapConstIt end()const;
+		inline ObjectPtrTMapConstIt end()const;
 		/**
 		 *\~english
 		 *\return		\p true if the collection is empty.
@@ -120,7 +120,7 @@ namespace castor
 		 *\param[in]	key	La clef
 		 *\return		L'objet trouvé s'il existe, \p null_ptr sinon
 		 */
-		inline TObjSPtr find( KeyParamType key )const;
+		inline ObjectTSPtr find( KeyParamType key )const;
 		/**
 		 *\~english
 		 *\brief		Gives the collected objects count
@@ -142,7 +142,7 @@ namespace castor
 		 *\param[in]	element	L'élément à insérer
 		 *\return		\p false si un élément est déjà associé à la clef
 		 */
-		inline bool insert( KeyParamType key, TObjSPtr element );
+		inline bool insert( KeyParamType key, ObjectTSPtr element );
 		/**
 		 *\~english
 		 *\brief		Tests if there is an element associated to the key
@@ -164,7 +164,7 @@ namespace castor
 		 *\param[in]	key	La clef
 		 *\return		L'élément associé, null_ptr sinon
 		 */
-		inline TObjSPtr erase( KeyParamType key );
+		inline ObjectTSPtr erase( KeyParamType key );
 		/**
 		 *\~english
 		 *\brief		Removes the element at given iterator.
@@ -175,7 +175,7 @@ namespace castor
 		 *\param[in]	it	L'itérateur
 		 *\return		L'itérateur après l'élément enlevé.
 		 */
-		inline TObjPtrMapIt erase( TObjPtrMapIt it );
+		inline ObjectPtrTMapIt erase( ObjectPtrTMapIt it );
 
 	protected:
 		/**
@@ -196,7 +196,7 @@ namespace castor
 		inline void doUpdateLast( KeyParamType key )const;
 
 	private:
-		TObjPtrMap m_objects;
+		ObjectPtrTMap m_objects;
 		mutable std::recursive_mutex m_mutex;
 		mutable bool m_locked;
 		mutable Search m_last;

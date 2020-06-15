@@ -118,17 +118,16 @@ namespace castor
 		reg.unregisterLoader( listExtensions() );
 	}
 
-	PxBufferPtrArray ExrImageLoader::load( String const & imageFormat
+	ImageLayout ExrImageLoader::load( String const & imageFormat
 		, uint8_t const * data
-		, uint32_t size )const
+		, uint32_t size
+		, PxBufferBaseSPtr & buffer )const
 	{
-		PxBufferBaseSPtr result;
-
 		if ( string::upperCase( imageFormat ).find( cuT( "EXR" ) ) != String::npos )
 		{
-			result = doLoad32BitsPerChannel( data, size );
+			buffer = doLoad32BitsPerChannel( data, size );
 		}
 
-		return { result };
+		return ImageLayout{ *buffer };
 	}
 }

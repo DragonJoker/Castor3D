@@ -216,34 +216,28 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( castor::PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( castor::PxBufferBaseSPtr buffer, bool flip, wxBitmap & bitmap )
 	{
-		castor::PxBufferBaseSPtr buffer;
-
-		if ( p_buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 		{
-			buffer = castor::PxBufferBase::create( castor::Size( p_buffer->getWidth(), p_buffer->getHeight() )
+			buffer = castor::PxBufferBase::create( buffer->getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, p_buffer->getConstPtr()
-				, p_buffer->getFormat() );
-		}
-		else
-		{
-			buffer = p_buffer;
+				, buffer->getConstPtr()
+				, buffer->getFormat() );
 		}
 
-		CreateBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), p_flip, p_bitmap );
+		CreateBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), flip, bitmap );
 	}
 
-	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, bool p_flip, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
 	{
-		if ( p_pUnit->getTexture()->getDefaultView().getBuffer() )
+		if ( unit->getTexture()->getDefaultView().hasBuffer() )
 		{
-			CreateBitmapFromBuffer( p_pUnit->getTexture()->getDefaultView().getBuffer(), p_flip, p_bitmap );
+			CreateBitmapFromBuffer( unit->getTexture()->getImage().getPixels(), flip, bitmap );
 		}
 		else
 		{
-			castor::Path path{ p_pUnit->getTexture()->getDefaultView().toString() };
+			castor::Path path{ unit->getTexture()->getDefaultView().toString() };
 
 			if ( !path.empty() )
 			{
@@ -255,7 +249,7 @@ namespace GuiCommon
 
 					if ( image.LoadFile( path, pHandler->GetType() ) && image.IsOk() )
 					{
-						p_bitmap = wxBitmap( image );
+						bitmap = wxBitmap( image );
 					}
 					else
 					{

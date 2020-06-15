@@ -76,13 +76,6 @@ namespace castor3d
 		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, { Dim, Dim } );
-
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveX ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeX ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveY ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeY ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::ePositiveZ ).initialiseSource();
-		m_texture->getLayerCubeFaceView( 0u, CubeMapFace::eNegativeZ ).initialiseSource();
 		auto result = m_texture->initialise();
 		m_colour.reset();
 

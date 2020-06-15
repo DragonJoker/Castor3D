@@ -12,7 +12,6 @@
 /doc/CastorUtils/EN
 /source/Samples/CastorViewerSharp/Src/obj
 /CMake
-/external
 /.gitattributes
 /package
 *.csproj
