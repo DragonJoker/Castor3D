@@ -270,6 +270,8 @@ namespace castor3d
 						, normalize( light.m_direction ) );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
+					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u );
 
@@ -282,24 +284,47 @@ namespace castor3d
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
-							IF( m_writer, -fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
+							auto factors = m_writer.declLocale( "factors"
+								, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, light.m_splitDepths
+									, i ) );
+
+							IF( m_writer, factors.x() != 0.0_f )
 							{
-								cascadeIndex = i + 1_u;
+								cascadeFactors = factors;
 							}
 							FI;
 						}
 						ROF;
 
-						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
-								, light.m_lightBase.m_shadowOffsets
-								, light.m_lightBase.m_shadowVariance
-								, light.m_transforms[cascadeIndex]
-								, fragmentIn.m_worldVertex
-								, lightDirection
-								, cascadeIndex
-								, light.m_cascadeCount
-								, fragmentIn.m_worldNormal ) );
+						cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+						shadowFactor = cascadeFactors.y()
+							* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
+									, light.m_lightBase.m_shadowOffsets
+									, light.m_lightBase.m_shadowVariance
+									, light.m_transforms[cascadeIndex]
+									, fragmentIn.m_worldVertex
+									, lightDirection
+									, cascadeIndex
+									, light.m_cascadeCount
+									, fragmentIn.m_worldNormal ) );
+
+						IF( m_writer, cascadeIndex > 0_u )
+						{
+							shadowFactor += cascadeFactors.z()
+								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowType
+										, light.m_lightBase.m_shadowOffsets
+										, light.m_lightBase.m_shadowVariance
+										, light.m_transforms[cascadeIndex - 1u]
+										, fragmentIn.m_worldVertex
+										, -lightDirection
+										, cascadeIndex - 1u
+										, light.m_cascadeCount
+										, fragmentIn.m_worldNormal ) );
+						}
+						FI;
 					}
 					FI;
 
@@ -539,6 +564,9 @@ namespace castor3d
 						, normalize( light.m_direction ) );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, 1.0_f );
+					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+						, vec3( 0.0_f, 1.0_f, 0.0_f )
+						, shadowType != ShadowType::eNone );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u
 						, shadowType != ShadowType::eNone );
@@ -552,23 +580,45 @@ namespace castor3d
 						// Get cascade index for the current fragment's view position
 						FOR( m_writer, UInt, i, 0u, i < maxCount, ++i )
 						{
-							IF( m_writer, fragmentIn.m_viewVertex.z() < light.m_splitDepths[i] )
+							auto factors = m_writer.declLocale( "factors"
+								, m_getCascadeFactors( Vec3{ fragmentIn.m_viewVertex }
+									, light.m_splitDepths
+									, i ) );
+
+							IF( m_writer, factors.x() != 0.0_f )
 							{
-								cascadeIndex = i + 1_u;
+								cascadeFactors = factors;
 							}
 							FI;
 						}
 						ROF;
 
-						shadowFactor = max( 1.0_f - m_writer.cast< Float >( receivesShadows )
-							, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
-								, light.m_lightBase.m_shadowVariance
-								, light.m_transforms[cascadeIndex]
-								, fragmentIn.m_worldVertex
-								, lightDirection
-								, cascadeIndex
-								, light.m_cascadeCount
-								, fragmentIn.m_worldNormal ) );
+						cascadeIndex = m_writer.cast< UInt >( cascadeFactors.x() );
+						shadowFactor = cascadeFactors.y()
+							* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+								, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
+									, light.m_lightBase.m_shadowVariance
+									, light.m_transforms[cascadeIndex]
+									, fragmentIn.m_worldVertex
+									, lightDirection
+									, cascadeIndex
+									, light.m_cascadeCount
+									, fragmentIn.m_worldNormal ) );
+
+						IF( m_writer, cascadeIndex > 0_u )
+						{
+							shadowFactor += cascadeFactors.z()
+								* max( 1.0_f - m_writer.cast< Float >( receivesShadows )
+									, m_shadowModel->computeDirectionalShadow( light.m_lightBase.m_shadowOffsets
+										, light.m_lightBase.m_shadowVariance
+										, light.m_transforms[cascadeIndex - 1u]
+										, fragmentIn.m_worldVertex
+										, -lightDirection
+										, cascadeIndex - 1u
+										, light.m_cascadeCount
+										, fragmentIn.m_worldNormal ) );
+						}
+						FI;
 					}
 
 					doComputeLight( light.m_lightBase

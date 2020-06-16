@@ -84,6 +84,7 @@ namespace castor3d
 			C3D_API void doDeclareGetDirectionalLight();
 			C3D_API void doDeclareGetPointLight();
 			C3D_API void doDeclareGetSpotLight();
+			C3D_API void doDeclareGetCascadeFactors();
 
 			virtual void doDeclareModel() = 0;
 			virtual void doDeclareComputeDirectionalLight() = 0;
@@ -103,6 +104,10 @@ namespace castor3d
 			sdw::ShaderWriter & m_writer;
 			bool m_isOpaqueProgram;
 			std::shared_ptr< Shadow > m_shadowModel;
+			sdw::Function< sdw::Vec3
+				, sdw::InVec3
+				, sdw::InVec4
+				, sdw::InUInt > m_getCascadeFactors;
 			sdw::Function< shader::Light
 				, sdw::InInt > m_getBaseLight;
 			sdw::Function< shader::DirectionalLight

@@ -16,7 +16,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Scene/Light/Light.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 namespace castor3d
 {
