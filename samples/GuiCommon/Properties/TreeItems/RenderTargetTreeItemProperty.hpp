@@ -32,7 +32,7 @@ namespace GuiCommon
 		 *\param[in]	p_target	L'objet cible
 		 */
 		RenderTargetTreeItemProperty( bool editable
-			, castor3d::RenderTargetSPtr target );
+			, castor3d::RenderTarget & target );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -48,9 +48,9 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::RenderTargetSPtr getRenderTarget()
+		inline castor3d::RenderTarget & getRenderTarget()
 		{
-			return m_target.lock();
+			return m_target;
 		}
 
 	private:
@@ -120,8 +120,13 @@ namespace GuiCommon
 		}
 
 	private:
-		castor3d::RenderTargetWPtr m_target;
+		castor3d::RenderTarget & m_target;
 	};
+
+	void AppendRenderTarget( wxTreeCtrlBase * list
+		, bool editable
+		, wxTreeItemId id
+		, castor3d::RenderTarget & target );
 }
 
 #endif

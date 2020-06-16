@@ -72,6 +72,8 @@ namespace castor3d
 
 	void RenderTargetCache::clear()
 	{
+		LockType lock{ castor::makeUniqueLock( *this ) };
+
 		for ( auto & array : m_renderTargets )
 		{
 			array.clear();

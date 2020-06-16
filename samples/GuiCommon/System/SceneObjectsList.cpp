@@ -12,14 +12,12 @@
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/OverlayTreeItemProperty.hpp"
-#include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderWindowTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SceneTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
-#include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
 #include "GuiCommon/System/ImagesLoader.hpp"
 
@@ -32,6 +30,7 @@
 #include <Castor3D/Cache/GeometryCache.hpp>
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
+#include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Animation/Animation.hpp>
 #include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Material/Material.hpp>
@@ -177,6 +176,18 @@ namespace GuiCommon
 				} );
 
 			catId = AppendItem( sceneId
+				, _( "Render Targets" )
+				, eBMP_RENDER_TARGET
+				, eBMP_RENDER_TARGET_SEL );
+			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( RenderTarget & elem )
+				{
+					AppendRenderTarget( this
+						, m_propertiesHolder->IsEditable()
+						, catId
+						, elem );
+				} );
+
+			catId = AppendItem( sceneId
 				, _( "Cameras" )
 				, eBMP_CAMERA
 				, eBMP_CAMERA_SEL );
@@ -309,7 +320,7 @@ namespace GuiCommon
 		, RenderWindow & window )
 	{
 		wxTreeItemId windowId = AppendItem( id
-			, window.getName()
+			, make_wxString( window.getName() )
 			, eBMP_RENDER_WINDOW
 			, eBMP_RENDER_WINDOW_SEL
 			, new RenderWindowTreeItemProperty( m_propertiesHolder->IsEditable(), window ) );
@@ -317,47 +328,10 @@ namespace GuiCommon
 
 		if ( target )
 		{
-			wxString name = _( "Render Target" );
-			auto targetId = AppendItem( windowId
-				, name
-				, eBMP_RENDER_TARGET
-				, eBMP_RENDER_TARGET_SEL
-				, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable(), target ) );
-
-			for ( auto postEffect : target->getHDRPostEffects() )
-			{
-				wxTreeItemId idPostEffect = AppendItem( targetId
-					, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new PostEffectTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *postEffect
-						, this ) );
-			}
-
-			for ( auto postEffect : target->getSRGBPostEffects() )
-			{
-				wxTreeItemId idPostEffect = AppendItem( targetId
-					, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
-					, eBMP_POST_EFFECT
-					, eBMP_POST_EFFECT_SEL
-					, new PostEffectTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *postEffect
-						, this ) );
-			}
-
-			auto toneMapping = target->getToneMapping();
-
-			if ( toneMapping )
-			{
-				wxTreeItemId idToneMapping = AppendItem( targetId
-					, make_wxString( toneMapping->getFullName() )
-					, eBMP_TONE_MAPPING
-					, eBMP_TONE_MAPPING_SEL
-					, new ToneMappingTreeItemProperty( m_propertiesHolder->IsEditable()
-						, *toneMapping
-						, this ) );
-			}
+			AppendRenderTarget( this
+				, m_propertiesHolder->IsEditable()
+				, id
+				, *target );
 		}
 	}
 
