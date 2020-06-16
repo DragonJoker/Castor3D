@@ -98,7 +98,7 @@ namespace castor3d
 		, ast::type::MemoryLayout::eStd140 };\
 	auto c3d_lightView = lpvConfig.declMember< Mat4 >( castor3d::LpvConfigUbo::LightView );\
 	auto c3d_minVolumeCorner = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::MinVolumeCorner );\
-	auto c3d_gridSizes = lpvConfig.declMember< UVec4 >( castor3d::LpvConfigUbo::GridSizes );\
+	auto c3d_gridSizes = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::GridSizes );\
 	auto c3d_lpvConfig = lpvConfig.declMember< Vec4 >( castor3d::LpvConfigUbo::Config );\
 	lpvConfig.end()
 

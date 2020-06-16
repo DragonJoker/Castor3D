@@ -122,7 +122,7 @@ namespace castor3d
 						, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -181,9 +181,8 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos, outRsmNormal );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
-
-					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
+					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -219,7 +218,7 @@ namespace castor3d
 			auto in = writer.getIn();
 
 			index = 0u;
-			auto outVolumeCellIndex = writer.declOutput< Int >( "outVolumeCellIndex", index++ );
+			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outRsmFlux = writer.declOutput< Vec4 >( "outRsmFlux", index++ );
@@ -229,7 +228,7 @@ namespace castor3d
 				, [&]()
 				{
 					out.vtx.position = in.vtx[0].position;
-					outVolumeCellIndex = inVolumeCellIndex[0].z();
+					outVolumeCellIndex = inVolumeCellIndex[0];
 					out.layer = inVolumeCellIndex[0].z();
 					out.vtx.pointSize = 1.0f;
 
@@ -267,7 +266,7 @@ namespace castor3d
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 
 			uint32_t index = 0u;
-			auto inVolumeCellIndex = writer.declInput< Int >( "inVolumeCellIndex", index++ );
+			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );
 			auto inRsmPos = writer.declInput< Vec3 >( "inRsmPos", index++ );
 			auto inRsmNormal = writer.declInput< Vec3 >( "inRsmNormal", index++ );
 			auto inRsmFlux = writer.declInput< Vec4 >( "inRsmFlux", index++ );
@@ -284,7 +283,7 @@ namespace castor3d
 						, SH_cosLobe_C1 * dir.z()
 						, -SH_cosLobe_C1 * dir.x() ) );
 				}
-			, InVec3{ writer, "dir" } );
+				, InVec3{ writer, "dir" } );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()

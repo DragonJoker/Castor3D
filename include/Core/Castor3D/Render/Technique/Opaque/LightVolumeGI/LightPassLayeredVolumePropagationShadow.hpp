@@ -71,6 +71,13 @@ namespace castor3d
 				LightVolumePassResult{ engine, "LightInjection2", GridSize },
 				LightVolumePassResult{ engine, "LightInjection3", GridSize },
 			}
+			, m_geometry
+			{
+				GeometryInjectionPass::createResult( engine, 0u, GridSize ),
+				GeometryInjectionPass::createResult( engine, 1u, GridSize ),
+				GeometryInjectionPass::createResult( engine, 2u, GridSize ),
+				GeometryInjectionPass::createResult( engine, 3u, GridSize ),
+			}
 			, m_accumulation
 			{
 				LightVolumePassResult{ engine, "LightAccumulation0", GridSize },
@@ -82,36 +89,6 @@ namespace castor3d
 			{
 				LightVolumePassResult{ engine, "LightPropagate00", GridSize },
 				LightVolumePassResult{ engine, "LightPropagate01", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate02", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate03", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate04", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate05", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate06", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate07", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate10", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate11", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate12", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate13", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate14", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate15", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate16", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate17", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate20", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate21", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate22", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate23", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate24", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate25", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate26", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate27", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate30", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate31", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate32", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate33", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate34", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate35", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate36", GridSize },
-				LightVolumePassResult{ engine, "LightPropagate37", GridSize },
 			}
 			, m_lpvConfigUbos
 			{
@@ -127,43 +104,12 @@ namespace castor3d
 				LightInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[2u], m_injection[2], GridSize, 2u },
 				LightInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[3u], m_injection[3], GridSize, 3u },
 			}
-			, m_lightPropagationPasses
+			, m_geometryInjectionPasses
 			{
-				LightPropagationPass{ engine, GridSize, m_injection[0], m_accumulation[0], m_propagate[0], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[0], m_accumulation[0], m_propagate[1], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[1], m_accumulation[0], m_propagate[2], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[2], m_accumulation[0], m_propagate[3], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[3], m_accumulation[0], m_propagate[4], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[4], m_accumulation[0], m_propagate[5], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[5], m_accumulation[0], m_propagate[6], m_lpvConfigUbos[0] },
-				LightPropagationPass{ engine, GridSize, m_propagate[6], m_accumulation[0], m_propagate[7], m_lpvConfigUbos[0] },
-
-				LightPropagationPass{ engine, GridSize, m_injection[1], m_accumulation[1], m_propagate[8], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[8], m_accumulation[1], m_propagate[9], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[9], m_accumulation[1], m_propagate[10], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[10], m_accumulation[1], m_propagate[11], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[11], m_accumulation[1], m_propagate[12], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[12], m_accumulation[1], m_propagate[13], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[13], m_accumulation[1], m_propagate[14], m_lpvConfigUbos[1] },
-				LightPropagationPass{ engine, GridSize, m_propagate[14], m_accumulation[1], m_propagate[15], m_lpvConfigUbos[1] },
-
-				LightPropagationPass{ engine, GridSize, m_injection[2], m_accumulation[2], m_propagate[16], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[16], m_accumulation[2], m_propagate[17], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[17], m_accumulation[2], m_propagate[18], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[18], m_accumulation[2], m_propagate[19], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[19], m_accumulation[2], m_propagate[20], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[20], m_accumulation[2], m_propagate[21], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[21], m_accumulation[2], m_propagate[22], m_lpvConfigUbos[2] },
-				LightPropagationPass{ engine, GridSize, m_propagate[22], m_accumulation[2], m_propagate[23], m_lpvConfigUbos[2] },
-
-				LightPropagationPass{ engine, GridSize, m_injection[3], m_accumulation[3], m_propagate[24], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[24], m_accumulation[3], m_propagate[25], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[25], m_accumulation[3], m_propagate[26], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[26], m_accumulation[3], m_propagate[27], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[27], m_accumulation[3], m_propagate[28], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[28], m_accumulation[3], m_propagate[29], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[29], m_accumulation[3], m_propagate[30], m_lpvConfigUbos[3] },
-				LightPropagationPass{ engine, GridSize, m_propagate[30], m_accumulation[3], m_propagate[31], m_lpvConfigUbos[3] },
+				GeometryInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[0u], m_geometry[0], GridSize, 0u },
+				GeometryInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[1u], m_geometry[1], GridSize, 1u },
+				GeometryInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[2u], m_geometry[2], GridSize, 2u },
+				GeometryInjectionPass{ engine, lightCache, LightType::eDirectional, smResult, gpInfoUbo, m_lpvConfigUbos[3u], m_geometry[3], GridSize, 3u },
 			}
 			, m_lightVolumeGIPass
 			{
@@ -179,6 +125,18 @@ namespace castor3d
 			}
 			, m_aabb{ lightCache.getScene()->getBoundingBox() }
 		{
+			uint32_t propIndex = 0u;
+
+			for ( uint32_t cascade = 0; cascade < shader::DirectionalMaxCascadesCount; ++cascade )
+			{
+				m_lightPropagationPasses.emplace_back( engine, GridSize, m_injection[cascade], m_accumulation[cascade], m_propagate[propIndex], m_lpvConfigUbos[cascade] );
+
+				for ( uint32_t i = 1u; i < MaxPropagationSteps; ++i )
+				{
+					m_lightPropagationPasses.emplace_back( engine, GridSize, m_geometry[cascade], m_propagate[propIndex], m_accumulation[cascade], m_propagate[1u - propIndex], m_lpvConfigUbos[cascade] );
+					propIndex = 1u - propIndex;
+				}
+			}
 		}
 
 		ashes::Semaphore const & render( uint32_t index
@@ -188,6 +146,11 @@ namespace castor3d
 			result = &my_pass_type::render( index, *result );
 
 			for ( auto & pass : m_lightInjectionPasses )
+			{
+				result = &pass.compute( *result );
+			}
+
+			for ( auto & pass : m_geometryInjectionPasses )
 			{
 				result = &pass.compute( *result );
 			}
@@ -207,6 +170,11 @@ namespace castor3d
 			LightPassShadow< LightType::eDirectional >::accept( visitor );
 
 			for ( auto & pass : m_lightInjectionPasses )
+			{
+				pass.accept( visitor );
+			}
+
+			for ( auto & pass : m_geometryInjectionPasses )
 			{
 				pass.accept( visitor );
 			}
@@ -270,12 +238,14 @@ namespace castor3d
 
 	private:
 		LayeredLpvConfigUbo m_lpvConfigUbo;
-		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_injection;
-		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_accumulation;
-		std::array< LightVolumePassResult, MaxPropagationSteps * shader::DirectionalMaxCascadesCount > m_propagate;
 		std::array< LpvConfigUbo, shader::DirectionalMaxCascadesCount > m_lpvConfigUbos;
+		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_injection;
+		std::array< TextureUnit, shader::DirectionalMaxCascadesCount > m_geometry;
+		std::array< LightVolumePassResult, shader::DirectionalMaxCascadesCount > m_accumulation;
+		std::array< LightVolumePassResult, 2u > m_propagate;
 		std::array< LightInjectionPass, shader::DirectionalMaxCascadesCount > m_lightInjectionPasses;
-		std::array< LightPropagationPass, MaxPropagationSteps * shader::DirectionalMaxCascadesCount > m_lightPropagationPasses;
+		std::array< GeometryInjectionPass, shader::DirectionalMaxCascadesCount > m_geometryInjectionPasses;
+		std::vector< LightPropagationPass > m_lightPropagationPasses;
 		LayeredLightVolumeGIPass m_lightVolumeGIPass;
 
 		castor::BoundingBox m_aabb;

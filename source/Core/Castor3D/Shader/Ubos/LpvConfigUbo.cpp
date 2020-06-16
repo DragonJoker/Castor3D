@@ -42,7 +42,7 @@ namespace castor3d
 
 		auto & data = m_ubo->getData();
 		data.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		data.gridSizes = castor::Point4ui{ gridSize->x, gridSize->y, gridSize->z, light.getBufferIndex() };
+		data.gridSizes = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, light.getBufferIndex() };
 		data.lightView = light.getDirectionalLight()->getViewMatrix( cascadeIndex );
 		data.config = castor::Point4f{ indirectAttenuation, 1.0f, texelAreaModifier, 0.0f };
 		m_ubo->upload();
@@ -62,7 +62,7 @@ namespace castor3d
 
 		auto & data = m_ubo->getData();
 		data.minVolumeCorner = castor::Point4f{ minVolumeCorner->x, minVolumeCorner->y, minVolumeCorner->z, cellSize };
-		data.gridSizes = castor::Point4ui{ gridSize->x, gridSize->y, gridSize->z, light.getBufferIndex() };
+		data.gridSizes = castor::Point4f{ gridSize->x, gridSize->y, gridSize->z, light.getBufferIndex() };
 
 		switch ( light.getLightType() )
 		{

@@ -209,7 +209,7 @@ namespace castor3d
 					outVolumeCellIndex = convertPointToGridIndex( outRsmPos );
 
 					auto screenPos = writer.declLocale( "screenPos"
-						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / vec2( c3d_gridSizes.xy() ) * 2.0_f - 1.0_f );
+						, ( vec2( outVolumeCellIndex.xy() ) + 0.5_f ) / c3d_gridSizes.xy() * 2.0_f - 1.0_f );
 
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 				} );
@@ -248,7 +248,7 @@ namespace castor3d
 			auto in = writer.getIn();
 
 			index = 0u;
-			auto outVolumeCellIndex = writer.declOutput< Int >( "outVolumeCellIndex", index++ );
+			auto outVolumeCellIndex = writer.declOutput< IVec3 >( "outVolumeCellIndex", index++ );
 			auto outRsmPos = writer.declOutput< Vec3 >( "outRsmPos", index++ );
 			auto outRsmNormal = writer.declOutput< Vec3 >( "outRsmNormal", index++ );
 			auto outSurfelArea = writer.declOutput< Float >( "outSurfelArea", index++ );
@@ -260,7 +260,7 @@ namespace castor3d
 				{
 					out.vtx.position = in.vtx[0].position;
 					out.vtx.pointSize = 1.0f;
-					outVolumeCellIndex = inVolumeCellIndex[0].z();
+					outVolumeCellIndex = inVolumeCellIndex[0];
 
 					outRsmPos = inRsmPos[0];
 					outRsmNormal = inRsmNormal[0];
@@ -293,7 +293,7 @@ namespace castor3d
 			UBO_LPVCONFIG( writer, LIUboIdx, 0u );
 
 			uint32_t index = 0u;
-			auto inVolumeCellIndex = writer.declInput< Int >( "inVolumeCellIndex", index++ );
+			auto inVolumeCellIndex = writer.declInput< IVec3 >( "inVolumeCellIndex", index++ );
 			auto inRsmPos = writer.declInput< Vec3 >( "inRsmPos", index++ );
 			auto inRsmNormal = writer.declInput< Vec3 >( "inRsmNormal", index++ );
 			auto inSurfelArea = writer.declInput< Float >( "inSurfelArea", index++ );
@@ -326,12 +326,35 @@ namespace castor3d
 				}
 				, InVec3{ writer, "dir" }
 				, InVec3{ writer, "normal" } );
+			
+			auto isInside = writer.implementFunction< Boolean >( "isInside"
+				, [&]( IVec3 i )
+				{
+					IF( writer, i.x() < 0 || i.x() > writer.cast< Int >( c3d_gridSizes.x() ) )
+					{
+						writer.returnStmt( Boolean{ false } );
+					}
+					FI;
+					IF( writer, i.y() < 0 || i.y() > writer.cast< Int >( c3d_gridSizes.y() ) )
+					{
+						writer.returnStmt( Boolean{ false } );
+					}
+					FI;
+					IF( writer, i.z() < 0 || i.z() > writer.cast< Int >( c3d_gridSizes.z() ) )
+					{
+						writer.returnStmt( Boolean{ false } );
+					}
+					FI;
+					writer.returnStmt( Boolean{ true } );
+				}
+				, InIVec3{ writer, "i" } );
 
 			writer.implementFunction< Void >( "main"
 				, [&]()
 				{
 					//Discard pixels with really small normal
-					IF( writer, length( inRsmNormal ) < 0.01_f )
+					IF( writer, length( inRsmNormal ) < 0.01_f
+						|| !isInside( inVolumeCellIndex ) )
 					{
 						writer.discard();
 					}
@@ -698,10 +721,11 @@ namespace castor3d
 	}
 
 	TextureUnit GeometryInjectionPass::createResult( Engine & engine
+		, uint32_t index
 		, uint32_t gridSize )
 	{
 		return TextureUnit::create( engine
-			, cuT( "GeometryInjectionResult" )
+			, cuT( "GeometryInjectionResult" ) + string::toString( index )
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, { gridSize, gridSize, gridSize }
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT

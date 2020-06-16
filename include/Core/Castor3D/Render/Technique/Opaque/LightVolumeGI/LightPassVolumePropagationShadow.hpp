@@ -61,7 +61,7 @@ namespace castor3d
 				, gpInfoUbo }
 			, m_lpvConfigUbo{ engine }
 			, m_injection{ engine, "LightInjection", GridSize }
-			, m_geometry{ GeometryInjectionPass::createResult( engine, GridSize ) }
+			, m_geometry{ GeometryInjectionPass::createResult( engine, 0u , GridSize ) }
 			, m_accumulation{ engine, "LightAccumulation", GridSize }
 			, m_propagate
 			{

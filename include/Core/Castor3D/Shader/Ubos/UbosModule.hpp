@@ -93,7 +93,7 @@ namespace castor3d
 	{
 		castor::Matrix4x4f lightView;
 		castor::Point4f minVolumeCorner;
-		castor::Point4ui gridSizes;
+		castor::Point4f gridSizes;
 		castor::Point4f config;
 	};
 	/**

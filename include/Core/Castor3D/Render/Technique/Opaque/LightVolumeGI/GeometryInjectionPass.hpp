@@ -79,6 +79,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 		static TextureUnit createResult( Engine & engine
+			, uint32_t index
 			, uint32_t gridSize );
 
 	private:
