@@ -85,11 +85,8 @@ namespace castor3d
 
 			for ( auto & unit : pass )
 			{
-				if ( unit->getConfiguration().environment == 0u )
-				{
-					texturesData.indices[texIndex / 4u][texIndex % 4] = unit->getId();
-					++texIndex;
-				}
+				texturesData.indices[texIndex / 4u][texIndex % 4] = unit->getId();
+				++texIndex;
 			}
 		}
 

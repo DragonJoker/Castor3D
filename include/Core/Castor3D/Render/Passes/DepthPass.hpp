@@ -43,11 +43,6 @@ namespace castor3d
 		 */
 		C3D_API ~DepthPass();
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
-		 */
-		C3D_API void update( RenderInfo & info
-			, castor::Point2f const & jitter )override;
-		/**
 		 *\~english
 		 *\brief		Renders nodes.
 		 *\param[out]	toWait	The semaphore to wait for.

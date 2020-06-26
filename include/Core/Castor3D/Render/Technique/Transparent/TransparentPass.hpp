@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	config		La configuration du SSAO.
 		 */
-		TransparentPass( MatrixUbo & matrixUbo
+		C3D_API TransparentPass( MatrixUbo & matrixUbo
 			, SceneCuller & culler
 			, SsaoConfig const & config );
 		/**
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TransparentPass();
+		C3D_API ~TransparentPass();
 		/**
 		 *\~english
 		 *\brief		Initialises the render pass.
@@ -47,16 +47,11 @@ namespace castor3d
 		 *\brief		Initialise la passe de rendu.
 		 *\param[in]	wbpResult	Les tampons de la passe d'accumulation.
 		 */
-		void initialiseRenderPass( TransparentPassResult const & wbpResult );
+		C3D_API void initialiseRenderPass( TransparentPassResult const & wbpResult );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( RenderTechniqueVisitor & visitor )override;
-		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
-		 */
-		void update( RenderInfo & info
-			, castor::Point2f const & jitter )override;
+		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
@@ -65,7 +60,9 @@ namespace castor3d
 		 *\brief		Dessine les noeuds transparents.
 		 *\param[in]	toWait	Le sémaphore à attendre.
 		 */
-		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+		C3D_API ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+
+		C3D_API TextureFlags getTexturesMask()const override;
 		/**
 		*\~english
 		*name

@@ -168,79 +168,61 @@ namespace castor3d
 			return result;
 		}
 
-		void PhongLightingModel::computeMapContributions( sdw::ShaderWriter & writer
-			, shader::Utils const & utils
-			, PipelineFlags const & flags
+		void PhongLightingModel::computeMapContributions( PipelineFlags const & flags
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & normal
-			, sdw::Vec3 & diffuse
-			, sdw::Vec3 & specular
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
-			, sdw::Float & shininess
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, sdw::Float & transmittance )
+			, sdw::Float & transmittance
+			, sdw::Vec3 & diffuse
+			, sdw::Vec3 & specular
+			, sdw::Float & shininess
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			if ( ( flags.texturesCount > 1
-					&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-					&& checkFlag( flags.textures, TextureFlag::eHeight ) )
-				|| ( flags.texturesCount > 0
-					&& ( !checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-						|| !checkFlag( flags.textures, TextureFlag::eHeight ) ) ) )
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
 			{
-				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
+				auto name = string::stringCast< char >( string::toString( i ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				auto sampled = m_writer.declLocale( "sampled" + name
+					, m_utils.computeCommonMapContribution( flags.textures[i].flags
+						, flags.passFlags
+						, name
+						, config
+						, maps[i]
+						, gamma
+						, texCoords
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, opacity
+						, occlusion
+						, transmittance
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition ) );
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eDiffuse ) )
 				{
-					auto name = string::stringCast< char >( string::toString( i ) );
-					auto config = writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
-					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], config.convertUV( writer, texCoords.xy() ) ) );
+					diffuse = config.getDiffuse( m_writer, sampled, diffuse, gamma );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eDiffuse ) )
-					{
-						diffuse = config.getDiffuse( writer, sampled, diffuse, gamma );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eSpecular ) )
+				{
+					specular = config.getSpecular( m_writer, sampled, specular );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eSpecular ) )
-					{
-						specular = config.getSpecular( writer, sampled, specular );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eShininess ) )
-					{
-						shininess = config.getShininess( writer, sampled, shininess );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOpacity ) )
-					{
-						opacity = config.getOpacity( writer, sampled, opacity );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eEmissive ) )
-					{
-						emissive = config.getEmissive( writer, sampled, emissive, gamma );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOcclusion ) )
-					{
-						occlusion = config.getOcclusion( writer, sampled, occlusion );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eNormal ) )
-					{
-						normal = config.getNormal( writer, sampled, normal, tangent, bitangent );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eTransmittance ) )
-					{
-						transmittance = config.getTransmittance( writer, sampled, transmittance );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eShininess ) )
+				{
+					shininess = config.getShininess( m_writer, sampled, shininess );
 				}
 			}
 		}
@@ -848,18 +830,24 @@ namespace castor3d
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
 						, dot( fragmentIn.m_worldNormal, -lightDirection ) );
-					auto stepFactor = m_writer.declLocale( "stepFactor"
+					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
-					output.m_diffuse = stepFactor * shadowFactor * light.m_colour * light.m_intensity.x() * diffuseFactor;
+					output.m_diffuse = isLit * shadowFactor * light.m_colour * light.m_intensity.x() * diffuseFactor;
 
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
 						, normalize( worldEye - fragmentIn.m_worldVertex ) );
-					auto lightReflect = m_writer.declLocale( "lightReflect"
-						, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
+					// Blinn Phong
+					auto halfwayDir = m_writer.declLocale( "halfwayDir"
+						, normalize( vertexToEye - lightDirection ) );
 					auto specularFactor = m_writer.declLocale( "specularFactor"
-						, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-					output.m_specular = stepFactor * shadowFactor * light.m_colour * light.m_intensity.y() * pow( specularFactor, max( shininess, 0.1_f ) );
+						, max( dot( fragmentIn.m_worldNormal, halfwayDir ), 0.0_f ) );
+					// Phong
+					//auto lightReflect = m_writer.declLocale( "lightReflect"
+					//	, normalize( reflect( lightDirection, fragmentIn.m_worldNormal ) ) );
+					//auto specularFactor = m_writer.declLocale( "specularFactor"
+					//	, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
+					output.m_specular = isLit * shadowFactor * light.m_colour * light.m_intensity.y() * pow( specularFactor, max( shininess, 0.1_f ) );
 				}
 				, InLight( m_writer, "light" )
 				, InVec3( m_writer, "worldEye" )

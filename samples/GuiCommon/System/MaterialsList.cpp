@@ -137,10 +137,7 @@ namespace GuiCommon
 
 		for ( auto unit : *pass )
 		{
-			if ( unit->getConfiguration().environment == 0u )
-			{
-				doAddTexture( passId, ++unitIndex, unit, pass->getType() );
-			}
+			doAddTexture( passId, ++unitIndex, unit, pass->getType() );
 		}
 	}
 

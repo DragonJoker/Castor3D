@@ -113,7 +113,9 @@ namespace castor3d
 						{
 							for ( auto & pass : *material )
 							{
-								if ( pass->hasAlphaBlending() )
+								auto passFlags = pass->getPassFlags();
+
+								if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 								{
 									m_allTransparentSubmeshes.emplace_back( CulledSubmesh{ geometry
 										, *submesh
@@ -182,7 +184,9 @@ namespace castor3d
 
 					for ( auto & pass : *material )
 					{
-						if ( pass->hasAlphaBlending() )
+						auto passFlags = pass->getPassFlags();
+
+						if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
 						{
 							m_allTransparentBillboards.emplace_back( CulledBillboard{ billboards
 								, billboards

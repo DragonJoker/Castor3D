@@ -161,7 +161,8 @@ namespace castor3d
 		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
 			, doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SkyboxBackground_Colour" ) );
+			, cuT( "SkyboxBackground_Colour" )
+			, true /* isStatic */ );
 	}
 
 	SkyboxBackground::~SkyboxBackground()

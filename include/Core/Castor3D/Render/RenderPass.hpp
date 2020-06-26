@@ -203,7 +203,6 @@ namespace castor3d
 		 *\param[in]		alphaFunc		The alpha test function.
 		 *\param[in,out]	passFlags		A combination of PassFlag.
 		 *\param[in,out]	textures		The textures configuration.
-		 *\param[in,out]	texturesCount	The textures count.
 		 *\param[in,out]	heightMapIndex	The height map index.
 		 *\param[in,out]	programFlags	A combination of ProgramFlag.
 		 *\param[in,out]	sceneFlags		Scene related flags.
@@ -216,7 +215,6 @@ namespace castor3d
 		 *\param[in]		alphaFunc		La fonction de test alpha.
 		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
 		 *\param[in,out]	textures		La configuration des textures.
-		 *\param[in,out]	texturesCount	Le nombre de textures.
 		 *\param[in,out]	heightMapIndex	L'indice de la texture contenant de hauteur.
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -227,8 +225,7 @@ namespace castor3d
 			, BlendMode alphaBlendMode
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, uint32_t texturesCount
+			, TextureFlagsArray const & textures
 			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -254,7 +251,6 @@ namespace castor3d
 		 *\param[in]		alphaFunc		The alpha test function.
 		 *\param[in,out]	passFlags		A combination of PassFlag.
 		 *\param[in,out]	textures		The textures configuration.
-		 *\param[in,out]	texturesCount	The textures count.
 		 *\param[in,out]	heightMapIndex	The height map index.
 		 *\param[in,out]	programFlags	A combination of ProgramFlag.
 		 *\param[in,out]	sceneFlags		Scene related flags.
@@ -267,7 +263,6 @@ namespace castor3d
 		 *\param[in]		alphaFunc		La fonction de test alpha.
 		 *\param[in,out]	passFlags		Une combinaison de PassFlag.
 		 *\param[in,out]	textures		La configuration des textures.
-		 *\param[in,out]	texturesCount	Le nombre de textures.
 		 *\param[in,out]	heightMapIndex	L'indice de la texture contenant de hauteur.
 		 *\param[in,out]	programFlags	Une combinaison de ProgramFlag.
 		 *\param[in,out]	sceneFlags		Les indicateurs relatifs à la scène.
@@ -278,8 +273,7 @@ namespace castor3d
 			, BlendMode alphaBlendMode
 			, VkCompareOp alphaFunc
 			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, uint32_t texturesCount
+			, TextureFlagsArray const & textures
 			, uint32_t heightMapIndex
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -608,6 +602,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API virtual TextureFlags getTexturesMask()const;
+
 		inline bool isOrderIndependent()const
 		{
 			return m_oit;
@@ -667,11 +663,6 @@ namespace castor3d
 		{
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
-		}
-
-		C3D_API virtual TextureFlags getTexturesMask()const
-		{
-			return TextureFlags{ TextureFlag::eAll } & ~TextureFlags{ TextureFlag::eReflection | TextureFlag::eRefraction };
 		}
 		/**@}*/
 
@@ -936,7 +927,7 @@ namespace castor3d
 		 *\param[in]	camera	La caméra.
 		 *\param[in]	jitter	Les données de jittering.
 		 */
-		void doUpdateUbos( Camera const & camera
+		C3D_API virtual void doUpdateUbos( Camera const & camera
 			, castor::Point2f const & jitter );
 		/**
 		*\~english

@@ -71,6 +71,8 @@ namespace castor3d
 			dstPass->setRefractionRatio( srcPass->getRefractionRatio() );
 			dstPass->setParallaxOcclusion( srcPass->hasParallaxOcclusion() );
 			dstPass->setColourBlendMode( srcPass->getColourBlendMode() );
+			dstPass->enableReflections( srcPass->hasReflections() );
+			dstPass->enableRefractions( srcPass->hasRefraction() );
 
 			if ( srcPass->hasSubsurfaceScattering() )
 			{
@@ -89,7 +91,7 @@ namespace castor3d
 			auto dstPass = std::static_pointer_cast< PhongPass >( material->createPass() );
 			dstPass->setAmbient( srcPass->getAmbient() );
 			dstPass->setDiffuse( srcPass->getDiffuse() );
-			dstPass->setShininess( srcPass->getShininess() );
+			dstPass->setShininess( srcPass->getShininess().value() );
 			dstPass->setSpecular( srcPass->getSpecular() );
 			createAlphaRejectionPass( srcPass, dstPass );
 		}
@@ -1827,21 +1829,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsRsm )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->light )
-		{
-			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
-		}
-		else
-		{
-			parsingContext->light->setGlobalIlluminationType( GlobalIlluminationType::eRsm );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eRsm )
-
 	CU_ImplementAttributeParser( parserShadowsLpv )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -3055,7 +3042,7 @@ namespace castor3d
 
 				if ( pass->hasAlphaBlending()
 					&& parsingContext->bBool1
-					&& checkFlag( pass->getTextures(), TextureFlag::eOpacity ) )
+					&& !pass->getTextures( TextureFlag::eOpacity ).empty() )
 				{
 					parsingContext->bBool1 = false;
 
@@ -3390,7 +3377,8 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			parsingContext->bBool1 = true;
+			params[0]->get( parsingContext->bBool1 );
+
 		}
 	}
 	CU_EndAttribute()
@@ -3511,6 +3499,48 @@ namespace castor3d
 			uint32_t value = 0u;
 			params[0]->get( value );
 			parsingContext->pass->setBWAccumulationOperator( uint8_t( value ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPassReflections )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool value{ false };
+			params[0]->get( value );
+			parsingContext->pass->enableReflections( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPassRefractions )
+	{
+		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
+
+		if ( !parsingContext->pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool value{ false };
+			params[0]->get( value );
+			parsingContext->pass->enableRefractions( value );
 		}
 	}
 	CU_EndAttribute()
@@ -3660,16 +3690,6 @@ namespace castor3d
 			if ( checkFlag( textures, TextureFlag::eEmissive ) )
 			{
 				parsingContext->textureConfiguration.emissiveMask[0] = 0x00FFFFFF;
-			}
-
-			if ( checkFlag( textures, TextureFlag::eReflection ) )
-			{
-				parsingContext->textureConfiguration.environment |= TextureConfiguration::ReflectionMask;
-			}
-
-			if ( checkFlag( textures, TextureFlag::eRefraction ) )
-			{
-				parsingContext->textureConfiguration.environment |= TextureConfiguration::RefractionMask;
 			}
 
 			if ( checkFlag( textures, TextureFlag::eOcclusion ) )
@@ -4021,52 +4041,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserUnitReflection )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->textureUnit )
-		{
-			CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			bool value;
-			params[0]->get( value );
-			parsingContext->textureConfiguration.environment = value
-				? TextureConfiguration::ReflectionMask
-				: 0x00u;
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserUnitRefraction )
-	{
-		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
-
-		if ( !parsingContext->textureUnit )
-		{
-			CU_ParsingError( cuT( "No TextureUnit initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			bool value;
-			params[0]->get( value );
-			parsingContext->textureConfiguration.environment = value
-				? TextureConfiguration::RefractionMask
-				: 0x00u;
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserUnitSampler )
 	{
 		SceneFileContextSPtr parsingContext = std::static_pointer_cast< SceneFileContext >( context );
@@ -4104,8 +4078,7 @@ namespace castor3d
 			}
 			else
 			{
-				if ( parsingContext->textureUnit->getRenderTarget()
-					|| parsingContext->textureConfiguration.environment != 0u )
+				if ( parsingContext->textureUnit->getRenderTarget() )
 				{
 					parsingContext->textureUnit->setConfiguration( parsingContext->textureConfiguration );
 					parsingContext->pass->addTextureUnit( std::move( parsingContext->textureUnit ) );

@@ -59,11 +59,8 @@ namespace castor3d
 
 			for ( auto & unit : entry.pass )
 			{
-				if ( unit->getConfiguration().environment == 0u )
-				{
-					texturesData.indices[index / 4u][index % 4] = unit->getId();
-					++index;
-				}
+				texturesData.indices[index / 4u][index % 4] = unit->getId();
+				++index;
 			}
 		}
 	}

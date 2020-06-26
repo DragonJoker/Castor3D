@@ -711,8 +711,10 @@ namespace castor3d
 	TextureLayout::TextureLayout( RenderSystem & renderSystem
 		, ashes::ImageCreateInfo info
 		, VkMemoryPropertyFlags memoryProperties
-		, castor::String debugName )
+		, castor::String debugName
+		, bool isStatic )
 		: OwnedBy< RenderSystem >{ renderSystem }
+		, m_static{ isStatic }
 		, m_info{ std::move( info ) }
 		, m_properties{ memoryProperties }
 		, m_image{ debugName, convert( info ) }
@@ -791,11 +793,12 @@ namespace castor3d
 						: VK_IMAGE_VIEW_TYPE_1D ),
 					m_info->format,
 					{},
-					{ ashes::getAspectMask( m_info->format ), 0u, m_info->mipLevels, 0u, m_info->arrayLayers },
+					{ ashes::getAspectMask( m_info->format ), 0u, m_info->mipLevels, 0u, 1u },
 				};
 
 				for ( auto index = 0u; index < m_image.getLayout().depthLayers(); ++index )
 				{
+					viewInfo->subresourceRange.baseArrayLayer = index;
 					auto buffer = m_image.getLayout().layerBuffer( m_image.getPxBuffer(), index );
 					auto debugName = m_image.getName() + "Upload"
 						+ "L(" + string::toString( index ) + "x1)"
@@ -871,7 +874,10 @@ namespace castor3d
 			auto & device = getCurrentRenderDevice( *this );
 			auto commandBuffer = device.transferCommandPool->createCommandBuffer( "TextureGenMipmaps" );
 			commandBuffer->begin();
+			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
+				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
 			m_texture->generateMipmaps( *commandBuffer );
+			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			device.transferQueue->submit( *commandBuffer, nullptr );
 			device.transferQueue->waitIdle();
@@ -915,8 +921,8 @@ namespace castor3d
 		buffer = adaptBuffer( buffer, buffer->getLevels() );
 		castor::Image srcImage{ getBufferName( *buffer ), ImageLayout{ *buffer }, buffer };
 		auto & srcLayout = srcImage.getLayout();
-		auto & dstLayout = m_image.getLayout();
 		doUpdateFromFirstImage( srcLayout );
+		auto & dstLayout = m_image.getLayout();
 		auto src = srcLayout.buffer( *buffer );
 		auto dst = dstLayout.layerBuffer( m_image.getPxBuffer(), index );
 		CU_Require( src.size() == dst.size() );

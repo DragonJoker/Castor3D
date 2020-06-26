@@ -52,6 +52,16 @@ namespace castor3d
 		, m_result{ engine, size }
 		, m_timer{ std::make_shared< RenderPassTimer >( engine, cuT( "Opaque" ), cuT( "Lighting pass" ) ) }
 		, m_srcDepth{ depthView }
+		, m_blitDepth
+		{
+			getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "LPBlitDepth", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
+			getCurrentRenderDevice( engine )->createSemaphore( "LPBlitDepth" ),
+		}
+		, m_lpResultBarrier
+		{
+			getCurrentRenderDevice( engine ).graphicsCommandPool->createCommandBuffer( "LPResultBarrier", VK_COMMAND_BUFFER_LEVEL_PRIMARY ),
+			getCurrentRenderDevice( engine )->createSemaphore( "LPResultBarrier" ),
+		}
 	{
 		auto & lightCache = scene.getLightCache();
 		lightCache.initialise();
@@ -75,24 +85,6 @@ namespace castor3d
 			, m_result
 			, gpInfoUbo );
 		m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassShadow >( engine
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassReflectiveShadow >( engine
-			, lightCache
-			, gpResult
-			, smDirectionalResult
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::ePoint )] = std::make_unique< PointLightPassReflectiveShadow >( engine
-			, lightCache
-			, gpResult
-			, smPointResult
-			, m_result
-			, gpInfoUbo );
-		m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( LightType::eSpot )] = std::make_unique< SpotLightPassReflectiveShadow >( engine
-			, lightCache
-			, gpResult
-			, smSpotResult
 			, m_result
 			, gpInfoUbo );
 		m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( LightType::eDirectional )] = std::make_unique< DirectionalLightPassVolumePropagationShadow >( engine
@@ -148,45 +140,61 @@ namespace castor3d
 			VkOffset3D{ 0, 0, 0 },
 			m_srcDepth.image->getDimensions(),
 		};
-		m_blitDepthSemaphore = device->createSemaphore( "LightingPass" );
-		m_blitDepthCommandBuffer = device.graphicsCommandPool->createCommandBuffer( "LightingPass"
-			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		m_blitDepthCommandBuffer->begin();
-		m_blitDepthCommandBuffer->beginDebugBlock(
+		m_blitDepth.commandBuffer->begin();
+		m_blitDepth.commandBuffer->beginDebugBlock(
 			{
 				"Deferred - Ligth Depth Blit",
 				makeFloatArray( m_engine.getNextRainbowColour() ),
 			} );
 		// Src depth buffer from depth attach to transfer source
-		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_srcDepth.makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Dst depth buffer from unknown to transfer destination
-		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		// Copy Src to Dst
-		m_blitDepthCommandBuffer->copyImage( copy
+		m_blitDepth.commandBuffer->copyImage( copy
 			, *m_srcDepth.image
 			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, m_result[LpTexture::eDepth].getTexture()->getTexture()
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 		// Dst depth buffer from transfer destination to depth attach
-		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_result[LpTexture::eDepth].getTexture()->getDefaultView().getTargetView().makeDepthStencilAttachment( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		// Src depth buffer from transfer source to depth stencil read only
-		m_blitDepthCommandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+		m_blitDepth.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT
 			, m_srcDepth.makeDepthStencilReadOnly( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
-		m_blitDepthCommandBuffer->endDebugBlock();
-		m_blitDepthCommandBuffer->end();
+		m_blitDepth.commandBuffer->endDebugBlock();
+		m_blitDepth.commandBuffer->end();
+
+		m_lpResultBarrier.commandBuffer->begin();
+		m_lpResultBarrier.commandBuffer->beginDebugBlock(
+			{
+				"Deferred - Ligth Pass Result Barrier",
+				makeFloatArray( m_engine.getNextRainbowColour() ),
+			} );
+		// Diffuse view to shader read only
+		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_result[LpTexture::eDiffuse].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		// Specular view to shader read only
+		m_lpResultBarrier.commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, m_result[LpTexture::eSpecular].getTexture()->getDefaultView().getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+		m_lpResultBarrier.commandBuffer->endDebugBlock();
+		m_lpResultBarrier.commandBuffer->end();
 	}
 
 	LightingPass::~LightingPass()
 	{
-		m_blitDepthSemaphore.reset();
-		m_blitDepthCommandBuffer.reset();
+		m_lpResultBarrier.semaphore.reset();
+		m_lpResultBarrier.commandBuffer.reset();
+		m_blitDepth.semaphore.reset();
+		m_blitDepth.commandBuffer.reset();
 
 		for ( auto & lightPass : m_lightPass )
 		{
@@ -207,34 +215,6 @@ namespace castor3d
 		}
 
 		m_result.cleanup();
-	}
-
-	void LightingPass::update( RenderInfo & info
-		, Scene const & scene
-		, Camera const & camera
-		, castor::Point2f const & jitter )
-	{
-		auto & cache = scene.getLightCache();
-
-		if ( !cache.isEmpty() )
-		{
-			uint32_t index = 0;
-			doUpdateLights( scene
-				, camera
-				, LightType::eDirectional
-				, index
-				, info );
-			doUpdateLights( scene
-				, camera
-				, LightType::ePoint
-				, index
-				, info );
-			doUpdateLights( scene
-				, camera
-				, LightType::eSpot
-				, index
-				, info );
-		}
 	}
 
 	ashes::Semaphore const & LightingPass::render( Scene const & scene
@@ -260,12 +240,12 @@ namespace castor3d
 			}
 
 			auto & device = getCurrentRenderDevice( m_engine );
-			device.graphicsQueue->submit( *m_blitDepthCommandBuffer
+			device.graphicsQueue->submit( *m_blitDepth.commandBuffer
 				, *result
 				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, *m_blitDepthSemaphore
+				, *m_blitDepth.semaphore
 				, nullptr );
-			result = m_blitDepthSemaphore.get();
+			result = m_blitDepth.semaphore.get();
 
 			uint32_t index = 0;
 			result = &doRenderLights( scene
@@ -286,6 +266,16 @@ namespace castor3d
 				, gp
 				, *result
 				, index );
+		}
+		else
+		{
+			auto & device = getCurrentRenderDevice( m_engine );
+			device.graphicsQueue->submit( *m_lpResultBarrier.commandBuffer
+				, *result
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				, *m_lpResultBarrier.semaphore
+				, nullptr );
+			result = m_lpResultBarrier.semaphore.get();
 		}
 
 		return *result;
@@ -309,52 +299,6 @@ namespace castor3d
 				{
 					lightPass->accept( visitor );
 				}
-			}
-		}
-	}
-
-	void LightingPass::doUpdateLights( Scene const & scene
-		, Camera const & camera
-		, LightType type
-		, uint32_t & index
-		, RenderInfo & info )
-	{
-		auto & cache = scene.getLightCache();
-
-		if ( cache.getLightsCount( type ) )
-		{
-			auto lightPass = m_lightPass[size_t( type )].get();
-
-			for ( auto & light : cache.getLights( type ) )
-			{
-				auto lightPassShadow = doGetShadowLightPass( type
-					, light->getGlobalIlluminationType() );
-
-				if ( light->getLightType() == LightType::eDirectional
-					|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
-				{
-					LightPass * pass = nullptr;
-
-					if ( light->isShadowProducer() && light->getShadowMap() )
-					{
-						pass = lightPassShadow;
-					}
-					else
-					{
-						pass = lightPass;
-					}
-
-					pass->update( !index
-						, camera.getSize()
-						, *light
-						, camera
-						, light->getShadowMap()
-						, light->getShadowMapIndex() );
-					++index;
-					info.m_visibleLightsCount++;
-				}
-
-				info.m_totalLightsCount++;
 			}
 		}
 	}
@@ -392,6 +336,12 @@ namespace castor3d
 						pass = lightPass;
 					}
 
+					pass->update( index == 0u
+						, camera.getSize()
+						, *light
+						, camera
+						, light->getShadowMap()
+						, light->getShadowMapIndex() );
 					result = &pass->render( index
 						, *result );
 					++index;
@@ -406,7 +356,7 @@ namespace castor3d
 		, GlobalIlluminationType giType )const
 	{
 		return ( ( lightType == LightType::ePoint && giType >= GlobalIlluminationType::eLpv )
-			? m_lightPassShadow[size_t( GlobalIlluminationType::eRsm )][size_t( lightType )].get()
+			? m_lightPassShadow[size_t( GlobalIlluminationType::eNone )][size_t( lightType )].get()
 			: ( ( lightType != LightType::eDirectional && giType == GlobalIlluminationType::eLayeredLpv )
 				? m_lightPassShadow[size_t( GlobalIlluminationType::eLpv )][size_t( lightType )].get()
 				: m_lightPassShadow[size_t( giType )][size_t( lightType )].get() ) );

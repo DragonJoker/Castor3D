@@ -59,7 +59,12 @@ function( SamplesBuild )
 			endif ()
 
 			#we look for wxWidgets
-			find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
+			if ( WIN32 )
+				set( wxWidgets_IGNORE_VCPKG ON )
+				find_package( wxWidgets COMPONENTS core base scintilla stc aui adv propgrid )
+			else ()
+				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
+			endif ()
 
 			if( wxWidgets_FOUND AND GTK2_FOUND )
 				set( Castor3DIncludeDirs

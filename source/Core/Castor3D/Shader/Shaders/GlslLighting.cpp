@@ -3,6 +3,8 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderAST/Expr/ExprComma.hpp>
 #include <ShaderWriter/Source.hpp>
@@ -109,6 +111,7 @@ namespace castor3d
 			, Utils & utils
 			, bool isOpaqueProgram )
 			: m_writer{ writer }
+			, m_utils{ utils }
 			, m_isOpaqueProgram{ isOpaqueProgram }
 			, m_shadowModel{ std::make_shared< Shadow >( writer, utils ) }
 		{
@@ -255,6 +258,11 @@ namespace castor3d
 		SpotLight LightingModel::getSpotLight( Int const & index )const
 		{
 			return m_getSpotLight( index );
+		}
+
+		Light LightingModel::getBaseLight( sdw::Int const & value )const
+		{
+			return m_getBaseLight( value );
 		}
 
 		void LightingModel::doDeclareLight()
@@ -436,11 +444,6 @@ namespace castor3d
 				, InVec3( m_writer, "viewVertex" )
 					, InVec4( m_writer, "splitDepths" )
 					, InUInt( m_writer, "index" ) );
-		}
-
-		Light LightingModel::getBaseLight( sdw::Int const & value )const
-		{
-			return m_getBaseLight( value );
 		}
 	}
 }

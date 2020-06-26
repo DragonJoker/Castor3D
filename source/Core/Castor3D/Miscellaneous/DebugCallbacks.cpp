@@ -2,6 +2,8 @@
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
 #include <ashespp/Core/Instance.hpp>
 #include <ashespp/Core/RendererList.hpp>
 
@@ -9,6 +11,30 @@ namespace castor3d
 {
 	namespace
 	{
+		std::string formatMessage( std::string_view prefix
+			, std::string_view message )
+		{
+			auto split = castor::string::split( message.data(), "|", ~( 0u ), false );
+			std::stringstream stream;
+
+			if ( !split.empty() )
+			{
+				auto first = split[0];
+				auto end = first.find( "]" );
+				stream << "\n" << prefix << first.substr( 0, end );
+
+				if ( split.size() > 1u )
+				{
+					for ( auto & str : castor::makeArrayView( split.begin() + 1u, split.end() ) )
+					{
+						stream << "\n" << prefix << castor::string::trim( str );
+					}
+				}
+			}
+
+			return stream.str();
+		}
+
 #if VK_EXT_debug_utils
 
 		std::ostream & operator<<( std::ostream & stream, VkDebugUtilsObjectNameInfoEXT const & value )
@@ -107,7 +133,7 @@ namespace castor3d
 			stream << lineEnd;
 			stream << lineBegin << "Message ID: " << pCallbackData->pMessageIdName << lineEnd;
 			stream << lineBegin << "Code: 0x" << std::hex << pCallbackData->messageIdNumber << lineEnd;
-			stream << lineBegin << "Message: " << pCallbackData->pMessage << lineEnd;
+			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pCallbackData->pMessage ) << lineEnd;
 			print( stream, "Objects", pCallbackData->objectCount, pCallbackData->pObjects, lineEnd, lineBegin );
 			print( stream, "Queue Labels", pCallbackData->queueLabelCount, pCallbackData->pQueueLabels, lineEnd, lineBegin );
 			print( stream, "CommmandBuffer Labels", pCallbackData->cmdBufLabelCount, pCallbackData->pCmdBufLabels, lineEnd, lineBegin );
@@ -224,7 +250,7 @@ namespace castor3d
 			stream << "Layer: " << pLayerPrefix << lineEnd;
 			stream << lineBegin << "Code: 0x" << std::hex << messageCode << lineEnd;
 			stream << lineBegin << "Object: (" << std::hex << object << ") " << ashes::getName( objectType ) << lineEnd;
-			stream << lineBegin << "Message: " << pMessage;
+			stream << lineBegin << "Message: " << formatMessage( lineBegin + "  ", pMessage );
 
 			VkBool32 result = VK_FALSE;
 

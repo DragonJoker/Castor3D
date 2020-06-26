@@ -273,8 +273,7 @@ namespace castor3d
 
 		SceneRenderNodes::AnimatedObjects doAdjustFlags( RenderSystem const & renderSystem
 			, ProgramFlags & programFlags
-			, TextureFlags & textures
-			, uint32_t & texturesCount
+			, TextureFlagsArray & textures
 			, PassFlags const & passFlags
 			, SceneFlags const & sceneFlags
 			, Scene const & scene
@@ -346,12 +345,10 @@ namespace castor3d
 					{
 						auto programFlags = submesh.getProgramFlags( material );
 						auto sceneFlags = scene.getFlags();
-						auto textures = pass->getTextures() & renderPass.getTexturesMask();
-						auto texturesCount = pass->getNonEnvTextureUnitsCount();
+						auto textures = pass->getTextures( renderPass.getTexturesMask() );
 						auto animated = doAdjustFlags( *renderPass.getEngine()->getRenderSystem()
 							, programFlags
 							, textures
-							, texturesCount
 							, passFlags
 							, sceneFlags
 							, scene
@@ -363,7 +360,6 @@ namespace castor3d
 							, pass->getAlphaFunc()
 							, passFlags
 							, textures
-							, texturesCount
 							, pass->getHeightTextureIndex()
 							, programFlags
 							, sceneFlags
@@ -379,7 +375,7 @@ namespace castor3d
 
 						auto needsFront = !opaque
 							|| pass->IsTwoSided()
-							|| checkFlag( textures, TextureFlag::eOpacity );
+							|| checkFlags( textures, TextureFlag::eOpacity ) != textures.end();
 
 						if ( needsFront )
 						{
@@ -388,7 +384,6 @@ namespace castor3d
 								, pass->getAlphaFunc()
 								, passFlags
 								, textures
-								, texturesCount
 								, pass->getHeightTextureIndex()
 								, programFlags
 								, sceneFlags
@@ -415,15 +410,13 @@ namespace castor3d
 				auto sceneFlags = scene.getFlags();
 				auto passFlags = pass->getPassFlags();
 				auto programFlags = billboard.getProgramFlags();
-				auto textures = pass->getTextures();
-				auto texturesCount = pass->getNonEnvTextureUnitsCount();
+				auto textures = pass->getTextures( renderPass.getTexturesMask() );
 				addFlag( programFlags, ProgramFlag::eBillboards );
 				auto flags = renderPass.prepareBackPipeline( pass->getColourBlendMode()
 					, pass->getAlphaBlendMode()
 					, pass->getAlphaFunc()
 					, passFlags
 					, textures
-					, texturesCount
 					, pass->getHeightTextureIndex()
 					, programFlags
 					, sceneFlags

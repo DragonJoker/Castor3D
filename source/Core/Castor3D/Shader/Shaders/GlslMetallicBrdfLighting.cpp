@@ -187,79 +187,61 @@ namespace castor3d
 			return result;
 		}
 
-		void MetallicBrdfLightingModel::computeMapContributions( sdw::ShaderWriter & writer
-			, shader::Utils const & utils
-			, PipelineFlags const & flags
+		void MetallicBrdfLightingModel::computeMapContributions( PipelineFlags const & flags
 			, sdw::Float const & gamma
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
-			, sdw::Vec3 const & tangent
-			, sdw::Vec3 const & bitangent
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 const & texCoords
 			, sdw::Vec3 & normal
-			, sdw::Vec3 & albedo
-			, sdw::Float & metallic
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
 			, sdw::Vec3 & emissive
-			, sdw::Float & roughness
 			, sdw::Float & opacity
 			, sdw::Float & occlusion
-			, sdw::Float & transmittance )
+			, sdw::Float & transmittance
+			, sdw::Vec3 & albedo
+			, sdw::Float & metallic
+			, sdw::Float & roughness
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
 		{
-			if ( ( flags.texturesCount > 1
-				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlag( flags.textures, TextureFlag::eHeight ) )
-				|| ( flags.texturesCount > 0
-					&& ( !checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-						|| !checkFlag( flags.textures, TextureFlag::eHeight ) ) ) )
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
 			{
-				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
+				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				auto sampled = m_writer.declLocale( "sampled" + name
+					, m_utils.computeCommonMapContribution( flags.textures[i].flags
+						, flags.passFlags
+						, name
+						, config
+						, maps[i]
+						, gamma
+						, texCoords
+						, normal
+						, tangent
+						, bitangent
+						, emissive
+						, opacity
+						, occlusion
+						, transmittance
+						, tangentSpaceViewPosition
+						, tangentSpaceFragPosition ) );
+
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eAlbedo ) )
 				{
-					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
-					auto config = writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
-					auto sampled = writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], config.convertUV( writer, texCoords.xy() ) ) );
+					albedo = config.getAlbedo( m_writer, sampled, albedo, gamma );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eAlbedo ) )
-					{
-						albedo = config.getAlbedo( writer, sampled, albedo, gamma );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eMetalness ) )
+				{
+					metallic = config.getMetalness( m_writer, sampled, metallic );
+				}
 
-					if ( checkFlag( flags.textures, TextureFlag::eMetalness ) )
-					{
-						metallic = config.getMetalness( writer, sampled, metallic );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eRoughness ) )
-					{
-						roughness = config.getRoughness( writer, sampled, roughness );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOpacity ) )
-					{
-						opacity = config.getOpacity( writer, sampled, opacity );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eEmissive ) )
-					{
-						emissive = config.getEmissive( writer, sampled, emissive, gamma );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eOcclusion ) )
-					{
-						occlusion = config.getOcclusion( writer, sampled, occlusion );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eTransmittance ) )
-					{
-						transmittance = config.getTransmittance( writer, sampled, transmittance );
-					}
-
-					if ( checkFlag( flags.textures, TextureFlag::eNormal ) )
-					{
-						normal = config.getNormal( writer, sampled, normal, tangent, bitangent );
-					}
+				if ( checkFlag( flags.textures[i].flags, TextureFlag::eRoughness ) )
+				{
+					roughness = config.getRoughness( m_writer, sampled, roughness );
 				}
 			}
 		}

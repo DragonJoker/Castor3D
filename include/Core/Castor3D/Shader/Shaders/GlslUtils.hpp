@@ -41,6 +41,7 @@ namespace castor3d
 			C3D_API void declareDecodeReceiver();
 			C3D_API void declareParallaxMappingFunc( PipelineFlags const & flags );
 			C3D_API void declareParallaxShadowFunc( PipelineFlags const & flags );
+
 			C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const & texCoord )const;
 			C3D_API sdw::Vec3 topDownToBottomUp( sdw::Vec3 const & texCoord )const;
 			C3D_API sdw::Vec4 topDownToBottomUp( sdw::Vec4 const & texCoord )const;
@@ -74,6 +75,9 @@ namespace castor3d
 			C3D_API sdw::Vec3 fresnelSchlick( sdw::Float const & product
 				, sdw::Vec3 const & f0
 				, sdw::Float const & roughness )const;
+			C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
+				, sdw::Vec3 const & tangent
+				, sdw::Vec3 const & bitangent );
 			C3D_API sdw::Vec3 computeMetallicIBL( sdw::Vec3 const & normal
 				, sdw::Vec3 const & position
 				, sdw::Vec3 const & albedo
@@ -98,6 +102,16 @@ namespace castor3d
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 const & texCoords
 				, sdw::Float & opacity );
+			C3D_API void computeNormalMapContribution( PipelineFlags const & flags
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 & texCoords );
 			C3D_API void computeHeightMapContribution( PipelineFlags const & flags
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -105,6 +119,58 @@ namespace castor3d
 				, sdw::Vec3 const & tangentSpaceFragPosition
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 & texCoords );
+			C3D_API sdw::Vec4 computeGeometryMapContribution( TextureFlags const & textureFlags
+				, PassFlags const & passFlags
+				, std::string const & name
+				, shader::TextureConfigData const & config
+				, sdw::SampledImage2DRgba32 const & map
+				, sdw::Vec3 const & texCoords
+				, sdw::Float & opacity
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API void computeGeometryMapsContributions( PipelineFlags const & flags
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & cameraPosition
+				, sdw::Float & opacity
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API sdw::Vec4 computeCommonMapContribution( TextureFlags const & textureFlags
+				, PassFlags const & passFlags
+				, std::string const & name
+				, shader::TextureConfigData const & config
+				, sdw::SampledImage2DRgba32 const & map
+				, sdw::Float const & gamma
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Float & transmittance
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API void computeCommonMapsContributions( PipelineFlags const & flags
+				, sdw::Float const & gamma
+				, TextureConfigurations const & textureConfigs
+				, sdw::Array< sdw::UVec4 > const & textureConfig
+				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+				, sdw::Vec3 const & texCoords
+				, sdw::Vec3 & normal
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
+				, sdw::Vec3 & emissive
+				, sdw::Float & opacity
+				, sdw::Float & occlusion
+				, sdw::Float & transmittance
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+			C3D_API sdw::Vec2 parallaxMapping( sdw::Vec2 const & texCoords
+				, sdw::Vec3 const & viewDir
+				, sdw::SampledImage2DRgba32 const & heightMap
+				, TextureConfigData const & textureConfig );
 			/**
 			 *\~english
 			 *\brief		Calls the GLSL function used to encode the material specifics into a vec4.

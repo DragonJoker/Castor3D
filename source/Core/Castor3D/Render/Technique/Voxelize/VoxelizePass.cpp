@@ -234,8 +234,7 @@ namespace castor3d
 
 	void VoxelizePass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		flags.textures = TextureFlag::eNone;
-		flags.texturesCount = 0u;
+		flags.textures.clear();
 		addFlag( flags.programFlags, ProgramFlag::eHasGeometry );
 	}
 
@@ -330,24 +329,24 @@ namespace castor3d
 		auto skinningData = SkinningUbo::declare( writer, SkinningUbo::BindingPoint, 0, flags.programFlags );
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
-		auto position = writer.declInput< Vec4 >( "position"
+		auto inPosition = writer.declInput< Vec4 >( "inPosition"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
+		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
+		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( "weights0"
+		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( "weights1"
+		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( "transform"
+		auto inTransform = writer.declInput< Mat4 >( "inTransform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( "position2"
+		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -359,7 +358,7 @@ namespace castor3d
 			, [&]()
 			{
 				auto curPosition = writer.declLocale( "curPosition"
-					, vec4( position.xyz(), 1.0_f ) );
+					, vec4( inPosition.xyz(), 1.0_f ) );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
 				{
@@ -369,7 +368,7 @@ namespace castor3d
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
 					auto curMtxModel = writer.declLocale( "curMtxModel"
-						, transform );
+						, inTransform );
 				}
 				else
 				{
@@ -381,7 +380,7 @@ namespace castor3d
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
-					curPosition = vec4( sdw::mix( curPosition.xyz(), position2.xyz(), vec3( c3d_time ) ), 1.0_f );
+					curPosition = vec4( sdw::mix( curPosition.xyz(), inPosition2.xyz(), vec3( c3d_time ) ), 1.0_f );
 				}
 
 				out.vtx.position = c3d_projection * curMtxModel * curPosition;
@@ -395,8 +394,7 @@ namespace castor3d
 		VertexWriter writer;
 
 		// Shader inputs
-		auto position = writer.declInput< Vec4 >( "position", 0u );
-		auto uv = writer.declInput< Vec2 >( "uv", 1u );
+		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 		UBO_MATRIX( writer, MatrixUbo::BindingPoint, 0u );
 		UBO_SCENE( writer, SceneUbo::BindingPoint, 0u );
@@ -447,8 +445,8 @@ namespace castor3d
 
 				auto outPosition = writer.declLocale( "outPosition"
 					, vec4( curBbcenter
-						+ right * position.x() * width
-						+ up * position.y() * height
+						+ right * inPosition.x() * width
+						+ up * inPosition.y() * height
 						, 1.0_f ) );
 				outPosition = c3d_projection * outPosition;
 				out.vtx.position = outPosition;

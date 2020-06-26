@@ -10,6 +10,8 @@
 
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 
+#include <algorithm>
+
 using namespace castor;
 
 namespace castor3d
@@ -18,41 +20,6 @@ namespace castor3d
 
 	namespace
 	{
-		void mergeMasks( uint32_t toMerge
-			, TextureFlag flag
-			, TextureFlags & result )
-		{
-			result |= toMerge
-				? flag
-				: TextureFlag::eNone;
-		}
-
-		TextureFlags getUsedImageComponents( TextureConfiguration const & config )
-		{
-			TextureFlags result = TextureFlag::eNone;
-			mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
-			mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
-			mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
-			mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
-			mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
-			mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
-			mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
-			mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
-			mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
-
-			if ( checkFlag( config.environment, TextureConfiguration::ReflectionMask ) )
-			{
-				result |= TextureFlag::eReflection;
-			}
-
-			if ( checkFlag( config.environment, TextureConfiguration::RefractionMask ) )
-			{
-				result |= TextureFlag::eRefraction;
-			}
-
-			return result;
-		}
-
 		void mergeMasks( uint32_t lhs
 			, uint32_t & rhs )
 		{
@@ -83,7 +50,6 @@ namespace castor3d
 			mergeMasks( lhs.heightMask[0], rhs.heightMask[0] );
 			mergeMasks( lhs.occlusionMask[0], rhs.occlusionMask[0] );
 			mergeMasks( lhs.transmittanceMask[0], rhs.transmittanceMask[0] );
-			mergeMasks( lhs.environment, rhs.environment );
 			mergeMasks( lhs.needsGammaCorrection, rhs.needsGammaCorrection );
 			mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
 			mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
@@ -156,7 +122,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			if ( pass.getAlphaFunc() != VK_COMPARE_OP_ALWAYS )
+			if ( pass.hasAlphaTest() )
 			{
 				result = file.writeText( m_tabs + cuT( "\talpha_func " )
 					+ strAlphaFuncs[pass.getAlphaFunc()] + cuT( " " )
@@ -172,6 +138,11 @@ namespace castor3d
 		}
 
 		if ( result && pass.hasParallaxOcclusion() )
+		{
+			result = file.writeText( m_tabs + cuT( "\tparallax_occlusion true\n" ) ) > 0;
+		}
+
+		if ( result && pass.hasEnvironmentMapping() )
 		{
 			result = file.writeText( m_tabs + cuT( "\tparallax_occlusion true\n" ) ) > 0;
 		}
@@ -196,6 +167,11 @@ namespace castor3d
 
 	Pass::Pass( Material & parent )
 		: OwnedBy< Material >{ parent }
+		, m_flags{ ( getType() == MaterialType::eMetallicRoughness
+			? PassFlag::eMetallicRoughness 
+			: ( getType() == MaterialType::eSpecularGlossiness
+				? PassFlag::eSpecularGlossiness
+				: PassFlag::eNone ) ) }
 	{
 	}
 
@@ -228,64 +204,39 @@ namespace castor3d
 
 	void Pass::addTextureUnit( TextureUnitSPtr unit )
 	{
-		m_textures |= getUsedImageComponents( unit->getConfiguration() );
+		m_textures |= unit->getFlags();
+		auto image = unit->toString();
+		auto it = std::find_if( m_textureUnits.begin()
+			, m_textureUnits.end()
+			, [&image]( TextureUnitSPtr lookup )
+			{
+				return lookup->toString() == image;
+			} );
 
-		if ( unit->getConfiguration().environment )
+		if ( it == m_textureUnits.end() )
 		{
-			auto it = std::find_if( m_textureUnits.begin()
-				, m_textureUnits.end()
-				, []( TextureUnitSPtr lookup )
-				{
-					return lookup->getConfiguration().environment != 0u;
-				} );
+			if ( unit->getConfiguration().heightMask[0] )
+			{
+				m_heightTextureIndex = uint32_t( m_textureUnits.size() );
+			}
 
-			if ( it == m_textureUnits.end() )
-			{
-				m_textureUnits.push_back( std::move( unit ) );
-			}
-			else
-			{
-				auto lhsConfig = unit->getConfiguration();
-				unit = *it;
-				auto rhsConfig = unit->getConfiguration();
-				mergeConfigs( std::move( lhsConfig ), rhsConfig );
-				unit->setConfiguration( std::move( rhsConfig ) );
-			}
+			m_textureUnits.push_back( std::move( unit ) );
 		}
 		else
 		{
-			auto image = unit->toString();
-			auto it = std::find_if( m_textureUnits.begin()
-				, m_textureUnits.end()
-				, [&image]( TextureUnitSPtr lookup )
-				{
-					return lookup->toString() == image;
-				} );
+			auto lhsConfig = unit->getConfiguration();
+			unit = *it;
+			auto rhsConfig = unit->getConfiguration();
+			mergeConfigs( std::move( lhsConfig ), rhsConfig );
+			unit->setConfiguration( std::move( rhsConfig ) );
 
-			if ( it == m_textureUnits.end() )
+			if ( unit->getConfiguration().heightMask[0] )
 			{
-				if ( unit->getConfiguration().heightMask[0] )
-				{
-					m_heightTextureIndex = uint32_t( m_textureUnits.size() );
-				}
-
-				m_textureUnits.push_back( std::move( unit ) );
-			}
-			else
-			{
-				auto lhsConfig = unit->getConfiguration();
-				unit = *it;
-				auto rhsConfig = unit->getConfiguration();
-				mergeConfigs( std::move( lhsConfig ), rhsConfig );
-				unit->setConfiguration( std::move( rhsConfig ) );
-
-				if ( unit->getConfiguration().heightMask[0] )
-				{
-					m_heightTextureIndex = uint32_t( std::distance( m_textureUnits.begin(), it ) );
-				}
+				m_heightTextureIndex = uint32_t( std::distance( m_textureUnits.begin(), it ) );
 			}
 		}
 
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		m_texturesReduced = false;
 	}
 
@@ -296,7 +247,8 @@ namespace castor3d
 		auto it = m_textureUnits.begin() + index;
 		auto config = ( *it )->getConfiguration();
 		m_textureUnits.erase( it );
-		remFlag( m_textures, TextureFlag( uint16_t( getUsedImageComponents( config ) ) ) );
+		remFlag( m_textures, TextureFlag( uint16_t( getFlags( config ) ) ) );
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 		m_texturesReduced = false;
 	}
 
@@ -309,7 +261,12 @@ namespace castor3d
 	bool Pass::hasAlphaBlending()const
 	{
 		return ( checkFlag( m_textures, TextureFlag::eOpacity ) || m_opacity < 1.0f )
-			&& getAlphaFunc() == VK_COMPARE_OP_ALWAYS;
+			&& !hasAlphaTest();
+	}
+
+	bool Pass::hasAlphaTest()const
+	{
+		return getAlphaFunc() != VK_COMPARE_OP_ALWAYS;
 	}
 
 	void Pass::prepareTextures()
@@ -334,6 +291,13 @@ namespace castor3d
 				unit->setConfiguration( configuration );
 			}
 
+			std::sort( m_textureUnits.begin()
+				, m_textureUnits.end()
+				, []( TextureUnitSPtr const & lhs, TextureUnitSPtr const & rhs )
+				{
+					return lhs->getFlags() < rhs->getFlags();
+				} );
+
 			m_texturesReduced = true;
 		}
 	}
@@ -346,10 +310,10 @@ namespace castor3d
 	void Pass::setOpacity( float value )
 	{
 		m_opacity = value;
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
 
-		if ( m_opacity < 1.0f
-			&& m_alphaBlendMode == BlendMode::eNoBlend
-			&& m_alphaFunc == VK_COMPARE_OP_ALWAYS )
+		if ( hasAlphaBlending()
+			&& m_alphaBlendMode == BlendMode::eNoBlend )
 		{
 			m_alphaBlendMode = BlendMode::eInterpolative;
 		}
@@ -360,49 +324,13 @@ namespace castor3d
 
 	PassFlags Pass::getPassFlags()const
 	{
-		PassFlags result;
-
-		if ( hasAlphaBlending()
-			&& !checkFlag( m_textures, TextureFlag::eRefraction ) )
-		{
-			result |= PassFlag::eAlphaBlending;
-		}
-
-		if ( getAlphaFunc() != VK_COMPARE_OP_ALWAYS )
-		{
-			result |= PassFlag::eAlphaTest;
-		}
-
-		switch ( getType() )
-		{
-		case MaterialType::eMetallicRoughness:
-			result |= PassFlag::eMetallicRoughness;
-			break;
-
-		case MaterialType::eSpecularGlossiness:
-			result |= PassFlag::eSpecularGlossiness;
-			break;
-
-		default:
-			break;
-		}
-
-		if ( hasSubsurfaceScattering() )
-		{
-			result |= PassFlag::eSubsurfaceScattering;
-		}
-
-		if ( hasParallaxOcclusion() )
-		{
-			result |= PassFlag::eParallaxOcclusionMapping;
-		}
-
-		return result;
+		return m_flags;
 	}
 
-	void Pass::setSubsurfaceScattering( SubsurfaceScatteringUPtr && value )
+	void Pass::setSubsurfaceScattering( SubsurfaceScatteringUPtr value )
 	{
 		m_subsurfaceScattering = std::move( value );
+		updateFlag( PassFlag::eSubsurfaceScattering, m_subsurfaceScattering != nullptr );
 		m_sssConnection = m_subsurfaceScattering->onChanged.connect( [this]( SubsurfaceScattering const & sss )
 			{
 				onSssChanged( sss );
@@ -436,12 +364,23 @@ namespace castor3d
 				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
 				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] ) 
-				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eRefraction ) && config.environment )
-				|| ( checkFlag( mask, TextureFlag::eReflection ) && config.environment ) )
+				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] ) )
 			{
 				result.push_back( unit );
 			}
+		}
+
+		return result;
+	}
+
+	TextureFlagsArray Pass::getTextures( TextureFlags mask )const
+	{
+		auto units = getTextureUnits( mask );
+		TextureFlagsArray result;
+
+		for ( auto & unit : units )
+		{
+			result.push_back( { unit->getFlags(), unit->getId() } );
 		}
 
 		return result;

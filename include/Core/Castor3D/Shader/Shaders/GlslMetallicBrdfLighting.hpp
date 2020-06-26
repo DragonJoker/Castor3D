@@ -64,24 +64,24 @@ namespace castor3d
 				, bool volumetric
 				, bool rsm
 				, uint32_t & index );
-			C3D_API static void computeMapContributions( sdw::ShaderWriter & writer
-				, shader::Utils const & utils
-				, PipelineFlags const & flags
+			C3D_API void computeMapContributions( PipelineFlags const & flags
 				, sdw::Float const & gamma
 				, TextureConfigurations const & textureConfigs
 				, sdw::Array< sdw::UVec4 > const & textureConfig
-				, sdw::Vec3 const & tangent
-				, sdw::Vec3 const & bitangent
 				, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 				, sdw::Vec3 const & texCoords
 				, sdw::Vec3 & normal
-				, sdw::Vec3 & albedo
-				, sdw::Float & metallic
+				, sdw::Vec3 & tangent
+				, sdw::Vec3 & bitangent
 				, sdw::Vec3 & emissive
-				, sdw::Float & roughness
 				, sdw::Float & opacity
 				, sdw::Float & occlusion
-				, sdw::Float & transmittance );
+				, sdw::Float & transmittance
+				, sdw::Vec3 & albedo
+				, sdw::Float & metallic
+				, sdw::Float & roughness
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
 
 		protected:
 			void doDeclareModel()override;

@@ -539,7 +539,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, LpvConfigUbo const & lpvConfigUbo
 		, LightVolumePassResult const & result
-		, uint32_t size
+		, uint32_t gridSize
 		, uint32_t layerIndex )
 		: Named{ "LightInjection" }
 		, m_engine{ engine }
@@ -571,15 +571,15 @@ namespace castor3d
 			, m_vertexShader
 			, m_geometryShader
 			, m_pixelShader
-			, size ) }
+			, gridSize ) }
 		, m_frameBuffer{ m_renderPass->createFrameBuffer( "LightInjection"
-			, VkExtent2D{ size, size }
+			, VkExtent2D{ gridSize, gridSize }
 			, {
 				result[LpvTexture::eR].getTexture()->getDefaultView().getTargetView(),
 				result[LpvTexture::eG].getTexture()->getDefaultView().getTargetView(),
 				result[LpvTexture::eB].getTexture()->getDefaultView().getTargetView(),
 			}
-			, size ) }
+			, gridSize ) }
 		, m_commands{ getCommands( *m_timer, 0u ) }
 	{
 	}

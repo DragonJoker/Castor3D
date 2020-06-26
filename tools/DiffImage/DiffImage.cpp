@@ -90,120 +90,102 @@ bool doParseArgs( int argc
 
 enum class DiffResult
 {
+	eUnprocessed,
 	eNegligible,
 	eAcceptable,
 	eUnacceptable,
+	eCount,
 };
 
 struct Config
 {
 	castor::ImageUPtr reference;
-	castor::Path unprocessedDir;
-	castor::Path unacceptableDir;
-	castor::Path acceptableDir;
-	castor::Path negligibleDir;
+	std::array< castor::Path, size_t( DiffResult::eCount ) > dirs;
 	castor::ImageLoader loader;
 	castor::ImageWriter writer;
 };
 
-DiffResult doCompareImages( Config const & config
+DiffResult doCompareImages( Options const & options
+	, Config const & config
 	, castor::Path const & compFile )
 {
 	castor::Image toTest = config.loader.load( castor::cuEmptyString, compFile );
 	bool carryOn = config.reference->getDimensions() == toTest.getDimensions();
 
-	if ( carryOn )
-	{
-		carryOn = config.reference->getPixelFormat() == toTest.getPixelFormat();
-
-		if ( !carryOn )
-		{
-			std::cerr << "Output image [" << compFile << "]'s format don't match reference image's format." << std::endl;
-		}
-	}
-	else
+	if ( !carryOn )
 	{
 		std::cerr << "Output image [" << compFile << "]'s dimensions don't match reference image's dimensions." << std::endl;
+		return DiffResult::eUnacceptable;
+	}
+
+	carryOn = config.reference->getPixelFormat() == toTest.getPixelFormat();
+
+	if ( !carryOn )
+	{
+		std::cerr << "Output image [" << compFile << "]'s format don't match reference image's format." << std::endl;
+		return DiffResult::eUnacceptable;
 	}
 
 	DiffResult result = DiffResult::eUnacceptable;
-
-	if ( carryOn )
+	auto src = castor::PxBufferBase::create( config.reference->getDimensions()
+		, castor::PixelFormat::eR8G8B8A8_UNORM
+		, config.reference->getPixels()->getConstPtr()
+		, config.reference->getPixels()->getFormat() );
+	auto dst = castor::PxBufferBase::create( toTest.getDimensions()
+		, castor::PixelFormat::eR8G8B8A8_UNORM
+		, toTest.getPixels()->getConstPtr()
+		, toTest.getPixels()->getFormat() );
+	auto diffBuffer = castor::PxBufferBase::create( toTest.getDimensions()
+		, castor::PixelFormat::eR8G8B8A8_UNORM );
+	struct Pixel
 	{
-		auto src = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( config.reference->getDimensions()
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, config.reference->getPixels()->getConstPtr()
-			, config.reference->getPixels()->getFormat() ) );
-		auto dst = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( toTest.getDimensions()
-			, castor::PixelFormat::eR8G8B8A8_UNORM
-			, toTest.getPixels()->getConstPtr()
-			, toTest.getPixels()->getFormat() ) );
-		auto diffBuffer = std::static_pointer_cast< castor::PxBuffer< castor::PixelFormat::eR8G8B8A8_UNORM > >( castor::PxBufferBase::create( toTest.getDimensions()
-			, castor::PixelFormat::eR8G8B8A8_UNORM ) );
-		auto srcIt = src->begin();
-		auto dstIt = dst->begin();
-		auto diffIt = diffBuffer->begin();
-		uint32_t diff{ 0u };
-		static castor::Pixel< castor::PixelFormat::eR8G8B8A8_UNORM > const diffPixel = []()
+		uint8_t r, g, b, a;
+	};
+	auto srcIt = reinterpret_cast< Pixel const* >( src->getConstPtr() );
+	auto end = reinterpret_cast< Pixel const * >( src->getConstPtr() + src->getSize() );
+	auto dstIt = reinterpret_cast< Pixel * >( dst->getPtr() );
+	auto diffIt = reinterpret_cast< Pixel * >( diffBuffer->getPtr() );
+	uint32_t diff{ 0u };
+
+	while ( srcIt != end )
+	{
+		int16_t dr = int16_t( dstIt->r - srcIt->r );
+		int16_t dg = int16_t( dstIt->g - srcIt->g );
+		int16_t db = int16_t( dstIt->b - srcIt->b );
+		int16_t da = int16_t( dstIt->a - srcIt->a );
+
+		if ( dr || dg || db || da )
 		{
-			std::array< uint8_t, 4u > data{ 0xFF, 0x00, 0xFF, 0xFF };
-			castor::Pixel< castor::PixelFormat::eR8G8B8A8_UNORM > result{ true };
-			auto it = result.begin();
-			*it = data[0]; ++it;
-			*it = data[1]; ++it;
-			*it = data[2]; ++it;
-			*it = data[3]; ++it;
-			return result;
-		}();
-
-		while ( srcIt != src->end() )
-		{
-			carryOn = *srcIt == *dstIt;
-
-			if ( !carryOn )
-			{
-				++diff;
-				*diffIt = diffPixel;
-			}
-			else
-			{
-				*diffIt = *srcIt;
-			}
-
-			++srcIt;
-			++dstIt;
-			++diffIt;
+			++diff;
 		}
 
-		auto ratio = ( double( diff ) / src->getSize() );
-		result = ( ratio < acceptableThreshold
-			? ( ratio < negligibleThreshold
-				? DiffResult::eNegligible
-				: DiffResult::eAcceptable )
-			: DiffResult::eUnacceptable );
-		auto buffer = castor::PxBufferBase::create( toTest.getDimensions()
-			, toTest.getPixelFormat()
-			, diffBuffer->getConstPtr()
-			, diffBuffer->getFormat() );
-		castor::Image const diffImage{ castor::cuEmptyString, *buffer };
+		*diffIt = { uint8_t( std::min( 255, ( dr * 4 + srcIt->r / 4 ) / 2 ) )
+			, uint8_t( std::min( 255, ( dg * 4 + srcIt->g / 4 ) / 2 ) )
+			, uint8_t( std::min( 255, ( db * 4 + srcIt->b / 4 ) / 2 ) )
+			, uint8_t( std::min( 255, ( da * 4 + srcIt->a / 4 ) / 2 ) ) };
 
-		switch ( result )
-		{
-		case DiffResult::eAcceptable:
-			config.writer.write( config.acceptableDir / ( compFile.getFileName() + cuT( ".diff.png" ) )
-				, *diffImage.getPixels() );
-			break;
-		case DiffResult::eUnacceptable:
-			config.writer.write( config.unacceptableDir / ( compFile.getFileName() + cuT( ".diff.png" ) )
-				, *diffImage.getPixels() );
-			break;
-		case DiffResult::eNegligible:
-			config.writer.write( config.negligibleDir / ( compFile.getFileName() + cuT( ".diff.png" ) )
-				, *diffImage.getPixels() );
-			break;
-		default:
-			break;
-		}
+		++srcIt;
+		++dstIt;
+		++diffIt;
+	}
+
+	auto ratio = ( double( diff ) / src->getSize() );
+	result = ( ratio < acceptableThreshold
+		? ( ratio < negligibleThreshold
+			? DiffResult::eNegligible
+			: DiffResult::eAcceptable )
+		: DiffResult::eUnacceptable );
+	auto buffer = castor::PxBufferBase::create( toTest.getDimensions()
+		, toTest.getPixelFormat()
+		, diffBuffer->getConstPtr()
+		, diffBuffer->getFormat() );
+	castor::Image const diffImage{ castor::cuEmptyString, *buffer };
+	config.writer.write( config.dirs[size_t( result )] / ( compFile.getFileName() + cuT( ".diff.png" ) )
+		, *diffImage.getPixels() );
+
+	if ( result == DiffResult::eUnacceptable )
+	{
+		std::cerr << "Output image [" << compFile.getFileName( true ) << "] doesn't match reference image [" << options.input.getFileName( true ) << "]." << std::endl;
 	}
 
 	return result;
@@ -268,78 +250,74 @@ castor::Path doInitialiseDir( castor::Path const & basePath
 
 int main( int argc, char * argv[] )
 {
-	int result = EXIT_SUCCESS;
 	Options options;
 
-	if ( doParseArgs( argc, argv, options ) )
+	if ( !doParseArgs( argc, argv, options ) )
 	{
-		Config config;
-		config.unprocessedDir = doInitialiseDir( options.input.getPath(), cuT( "Unprocessed" ) );
-		config.unacceptableDir = doInitialiseDir( options.input.getPath(), cuT( "Unacceptable" ) );
-		config.acceptableDir = doInitialiseDir( options.input.getPath(), cuT( "Acceptable" ) );
-		config.negligibleDir = doInitialiseDir( options.input.getPath(), cuT( "Negligible" ) );
-		castor::StbImageLoader::registerLoader( config.loader );
-		castor::StbImageWriter::registerWriter( config.writer );
-
-		if ( !castor::File::fileExists( options.input ) )
-		{
-			std::cout << "Reference image [" << options.input << "] does not exist." << std::endl << std::endl;
-
-			for ( auto & output : options.outputs )
-			{
-				doMoveOutput( output, config.unprocessedDir, false );
-			}
-
-			return result;
-		}
-
-		try
-		{
-			config.reference = std::make_unique< castor::Image >( config.loader.load( castor::cuEmptyString
-				, options.input ) );
-			castor::ThreadPool pool{ options.outputs.size() };
-
-			for ( auto & output : options.outputs )
-			{
-				pool.pushJob( [&options, &output, &config]()
-					{
-						if ( !castor::File::fileExists( output ) )
-						{
-							std::cerr << "Output image [" << output << "] does not exist." << std::endl;
-							doProcessLog( output, config.unacceptableDir, true );
-						}
-						else
-						{
-							auto compare = doCompareImages( config, output );
-
-							switch ( compare )
-							{
-							case DiffResult::eNegligible:
-								doMoveOutput( output, config.negligibleDir, false );
-								break;
-							case DiffResult::eAcceptable:
-								doMoveOutput( output, config.acceptableDir, false );
-								break;
-							case DiffResult::eUnacceptable:
-								std::cerr << "Output image [" << output.getFileName( true ) << "] doesn't match reference image [" << options.input.getFileName( true ) << "]." << std::endl;
-								doMoveOutput( output, config.unacceptableDir, true );
-								break;
-							default:
-								break;
-							}
-						}
-					} );
-			}
-
-			pool.waitAll( castor::Milliseconds::max() );
-		}
-		catch ( std::exception & exc )
-		{
-			std::cerr << "Failure " << exc.what() << std::endl;
-		}
+		return -1;
 	}
 
-	return result;
+	Config config;
+	config.dirs[size_t( DiffResult::eUnprocessed )] = doInitialiseDir( options.input.getPath(), cuT( "Unprocessed" ) );
+	config.dirs[size_t( DiffResult::eUnacceptable )] = doInitialiseDir( options.input.getPath(), cuT( "Unacceptable" ) );
+	config.dirs[size_t( DiffResult::eAcceptable )] = doInitialiseDir( options.input.getPath(), cuT( "Acceptable" ) );
+	config.dirs[size_t( DiffResult::eNegligible )] = doInitialiseDir( options.input.getPath(), cuT( "Negligible" ) );
+	castor::StbImageLoader::registerLoader( config.loader );
+	castor::StbImageWriter::registerWriter( config.writer );
+
+	if ( !castor::File::fileExists( options.input ) )
+	{
+		std::cout << "Reference image [" << options.input << "] does not exist." << std::endl << std::endl;
+
+		for ( auto & output : options.outputs )
+		{
+			doMoveOutput( output, config.dirs[size_t( DiffResult::eUnprocessed )], false );
+		}
+
+		return EXIT_SUCCESS;
+	}
+
+	try
+	{
+		config.reference = std::make_unique< castor::Image >( config.loader.load( castor::cuEmptyString
+			, options.input ) );
+		castor::ThreadPool pool{ options.outputs.size() };
+		std::atomic_int failures = 0;
+
+		for ( auto & output : options.outputs )
+		{
+			pool.pushJob( [&options, &output, &config, &failures]()
+				{
+					if ( !castor::File::fileExists( output ) )
+					{
+						std::cerr << "Output image [" << output << "] does not exist." << std::endl;
+						doProcessLog( output, config.dirs[size_t( DiffResult::eUnacceptable )], true );
+					}
+					else
+					{
+						auto compare = doCompareImages( options, config, output );
+						doMoveOutput( output, config.dirs[size_t( compare )]
+							, compare == DiffResult::eUnacceptable );
+						failures += ( compare == DiffResult::eUnacceptable
+							? 1
+							: 0 );
+					}
+				} );
+		}
+
+		pool.waitAll( castor::Milliseconds::max() );
+		return failures;
+	}
+	catch ( std::exception & exc )
+	{
+		std::cerr << "Failure " << exc.what() << std::endl;
+		return -1;
+	}
+	catch ( ... )
+	{
+		std::cerr << "Unknown Failure" << std::endl;
+		return -1;
+	}
 }
 
 //******************************************************************************

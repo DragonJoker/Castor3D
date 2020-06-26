@@ -107,7 +107,7 @@ namespace castor3d
 		m_modelMatrixUbo.initialise();
 		m_hdrConfigUbo.initialise();
 		auto const & environmentLayout = getOwner()->getTexture().getTexture();
-		m_envView = environmentLayout->getLayerCubeFaceView( 0u, CubeMapFace( face ) ).getTargetView();
+		m_envView = environmentLayout->getLayerCubeFaceMipView( 0u, CubeMapFace( face ), 0u ).getTargetView();
 		auto const & depthView = getOwner()->getDepthView();
 
 		// Initialise opaque pass.

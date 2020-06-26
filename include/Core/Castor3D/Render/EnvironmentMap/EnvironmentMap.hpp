@@ -148,7 +148,8 @@ namespace castor3d
 		castor::Size m_size;
 		uint32_t m_index{ 0u };
 		EnvironmentMapPasses m_passes;
-		uint32_t m_render{ 4u };
+		bool m_first{ true };
+		uint32_t m_render{ 0u };
 		std::shared_ptr< IblTextures > m_ibl;
 	};
 }

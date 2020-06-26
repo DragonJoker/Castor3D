@@ -50,11 +50,6 @@ namespace castor3d
 		 */
 		void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
-		 */
-		void update( RenderInfo & info
-			, castor::Point2f const & jitter )override;
-		/**
 		 *\~english
 		 *\brief		Renders transparent nodes.
 		 *\param[in]	toWait	The semaphore from the previous render pass.
@@ -63,6 +58,8 @@ namespace castor3d
 		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
 		 */
 		ashes::Semaphore const & render( ashes::Semaphore const & toWait );
+
+		C3D_API TextureFlags getTexturesMask()const override;
 
 	private:
 		/**

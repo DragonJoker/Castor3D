@@ -102,6 +102,7 @@ namespace castor3d
 
 		protected:
 			sdw::ShaderWriter & m_writer;
+			Utils & m_utils;
 			bool m_isOpaqueProgram;
 			std::shared_ptr< Shadow > m_shadowModel;
 			sdw::Function< sdw::Vec3

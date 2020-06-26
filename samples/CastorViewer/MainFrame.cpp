@@ -43,6 +43,7 @@ using namespace castor3d;
 using namespace castor;
 using namespace GuiCommon;
 
+#define CV_DefaultDebugPerspective 0
 
 namespace CastorViewer
 {
@@ -609,8 +610,7 @@ namespace CastorViewer
 		m_auiManager.GetPane( m_renderPanel ).Show();
 		m_debugPerspective = m_auiManager.SavePerspective();
 
-#if 1
-//#ifndef NDEBUG
+#if CV_DefaultDebugPerspective
 		m_auiManager.LoadPerspective( m_debugPerspective );
 #else
 		m_auiManager.LoadPerspective( m_currentPerspective );

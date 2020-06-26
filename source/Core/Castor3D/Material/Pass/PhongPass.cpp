@@ -44,7 +44,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = p_file.writeText( m_tabs + cuT( "\tshininess " ) + string::toString( p_pass.getShininess() ) + cuT( "\n" ) ) > 0;
+			result = p_file.writeText( m_tabs + cuT( "\tshininess " ) + string::toString( p_pass.getShininess().value() ) + cuT( "\n" ) ) > 0;
 			castor::TextWriter< PhongPass >::checkError( result, "PhongPass shininess" );
 		}
 

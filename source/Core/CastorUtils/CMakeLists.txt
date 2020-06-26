@@ -607,6 +607,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
 			${EXTERNAL_SOURCE_DIR}/gli
+			${EXTERNAL_SOURCE_DIR}/gli/external
 	)
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC

@@ -262,10 +262,10 @@ namespace castor3d
 			//	, m_renderTarget.getTexture().getTexture()->getDefaultView().getTargetView() );
 
 			doInitialiseShadowMaps();
-			doInitialiseBackgroundPass();
 #if C3D_UseDepthPrepass
 			doInitialiseDepthPass();
 #endif
+			doInitialiseBackgroundPass();
 			doInitialiseOpaquePass();
 			doInitialiseTransparentPass();
 			IntermediatesLister::submit( *this, intermediates );
@@ -321,10 +321,10 @@ namespace castor3d
 
 	void RenderTechnique::update( RenderQueueArray & queues )
 	{
-		m_renderTarget.update();
 #if C3D_UseDepthPrepass
 		m_depthPass->update( queues );
 #endif
+		m_renderTarget.update();
 		//m_voxelizer->update( queues );
 		m_opaquePass->update( queues );
 		m_transparentPass->update( queues );

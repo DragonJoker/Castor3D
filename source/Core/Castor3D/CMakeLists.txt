@@ -1547,6 +1547,7 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::ShaderWriter
 	PRIVATE
 		sdw::CompilerSpirV
+		sdw::CompilerGlsl
 		${glslang_LIBRARIES}
 )
 

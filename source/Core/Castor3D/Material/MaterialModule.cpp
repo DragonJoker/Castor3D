@@ -49,10 +49,6 @@ namespace castor3d
 			: castor::String{ cuT( "shininess" ) } ) );
 		case TextureFlag::eEmissive:
 			return cuT( "emissive" );
-		case TextureFlag::eReflection:
-			return cuT( "reflection" );
-		case TextureFlag::eRefraction:
-			return cuT( "refraction" );
 		case TextureFlag::eOcclusion:
 			return cuT( "occlusion" );
 		case TextureFlag::eTransmittance:

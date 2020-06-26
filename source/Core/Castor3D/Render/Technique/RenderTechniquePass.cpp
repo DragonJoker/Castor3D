@@ -149,7 +149,8 @@ namespace castor3d
 	{
 		node.passNode.fillDescriptor( layout
 			, index
-			, *node.texDescriptorSet );
+			, *node.texDescriptorSet
+			, node.pipeline.getFlags().textures );
 	}
 
 	void RenderTechniquePass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -160,11 +161,12 @@ namespace castor3d
 		ashes::WriteDescriptorSetArray writes;
 		node.passNode.fillDescriptor( layout
 			, index
-			, writes );
+			, writes
+			, node.pipeline.getFlags().textures );
 		node.texDescriptorSet->setBindings( writes );
 	}
 
-	void RenderTechniquePass::doUpdate( RenderInfo & info
+	void RenderTechniquePass::update( RenderInfo & info
 		, castor::Point2f const & jitter )
 	{
 		doUpdateNodes( m_renderQueue.getCulledRenderNodes()
@@ -194,6 +196,12 @@ namespace castor3d
 			RenderPass::doUpdate( nodes.morphingNodes.backCulled, info );
 			RenderPass::doUpdate( nodes.billboardNodes.backCulled, info );
 		}
+	}
+
+	void RenderTechniquePass::doUpdateUbos( Camera const & camera
+		, castor::Point2f const & jitter )
+	{
+		m_sceneUbo.update( *camera.getScene(), &camera );
 	}
 
 	bool RenderTechniquePass::doInitialise( Size const & CU_UnusedParam( size ) )
@@ -236,12 +244,9 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniquePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo
-		{
-			0u
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 			, VK_TRUE
-			, m_opaque
-		};
+			, m_opaque };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniquePass::doCreateBlendState( PipelineFlags const & flags )const
@@ -254,13 +259,13 @@ namespace castor3d
 		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
-		if ( flags.texturesCount )
+		if ( !flags.textures.empty() )
 		{
 			textureBindings.emplace_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, flags.texturesCount ) );
-			index += flags.texturesCount;
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
 		}
 
 		return textureBindings;

@@ -66,13 +66,12 @@ namespace GuiCommon
 						pass.getColourBlendMode(),
 						pass.getAlphaBlendMode(),
 						pass.getPassFlags(),
-						pass.getTextures(),
-						pass.getNonEnvTextureUnitsCount(),
 						pass.getHeightTextureIndex(),
 						ProgramFlags{},
 						scene.getFlags(),
 						VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
 						pass.getAlphaFunc(),
+						pass.getTextures( castor3d::TextureFlag::eAll ),
 					}
 					, scene
 					, result };
@@ -531,7 +530,7 @@ namespace GuiCommon
 					grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( phong->getDiffuse() ) ) ) );
 					grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( toBGRPacked( phong->getSpecular() ) ) ) );
 					grid->Append( new wxFloatProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( phong->getAmbient() );
-					grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( phong->getShininess() );
+					grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( phong->getShininess().value() );
 				}
 				break;
 
@@ -559,7 +558,7 @@ namespace GuiCommon
 			grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( pass->getOpacity() );
 			grid->Append( new wxUIntProperty( PROPERTY_PASS_BWACCUM ) )->SetValue( int( pass->getBWAccumulationOperator() ) );
 
-			if ( checkFlag( pass->getTextures(), TextureFlag::eRefraction ) )
+			if ( pass->hasRefraction() )
 			{
 				grid->Append( new wxFloatProperty( PROPERTY_PASS_REFRACTION ) )->SetValue( pass->getRefractionRatio() );
 			}

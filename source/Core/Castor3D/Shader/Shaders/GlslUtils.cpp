@@ -545,9 +545,8 @@ namespace castor3d
 
 		void Utils::declareParallaxMappingFunc( PipelineFlags const & flags )
 		{
-			if ( flags.texturesCount > 0
-				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlag( flags.textures, TextureFlag::eHeight ) )
+			if ( checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
+				&& checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end() )
 			{
 				using namespace sdw;
 
@@ -629,9 +628,9 @@ namespace castor3d
 
 		void Utils::declareParallaxShadowFunc( PipelineFlags const & flags )
 		{
-			if ( flags.texturesCount > 1
+			if ( flags.textures.size() > 1u
 				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlag( flags.textures, TextureFlag::eHeight ) )
+				&& checkFlags( flags.textures, TextureFlag::eHeight ) != flags.textures.end() )
 			{
 				using namespace sdw;
 
@@ -947,6 +946,13 @@ namespace castor3d
 				, brdfMap );
 		}
 
+		sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
+			, sdw::Vec3 const & tangent
+			, sdw::Vec3 const & bitangent )
+		{
+			return mat3( normalize( tangent ), normalize( bitangent ), normal );
+		}
+
 		void Utils::computeOpacityMapContribution( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, sdw::Array< sdw::UVec4 > const & textureConfig
@@ -954,18 +960,42 @@ namespace castor3d
 			, sdw::Vec3 const & texCoords
 			, sdw::Float & opacity )
 		{
-			if ( flags.texturesCount > 0
-				&& checkFlag( flags.textures, TextureFlag::eOpacity ) )
+			auto it = checkFlags( flags.textures, TextureFlag::eOpacity );
+
+			if ( it != flags.textures.end() )
 			{
-				for ( uint32_t i = 0u; i < flags.texturesCount; ++i )
-				{
-					auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
-					auto config = m_writer.declLocale( "config" + name
-						, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( textureConfig[i / 4u][i % 4u] ) ) );
-					auto sampled = m_writer.declLocale< Vec4 >( "sampled" + name
-						, texture( maps[i], config.convertUV( m_writer, texCoords.xy() ) ) );
-						opacity = config.getOpacity( m_writer, sampled, opacity );
-				}
+				auto i = size_t( std::distance( flags.textures.begin(), it ) );
+				auto opacityMapConfig = m_writer.declLocale( "opacityMapConfig"
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+				auto sampledOpacity = m_writer.declLocale< Vec4 >( "sampledOpacity"
+					, texture( maps[i], opacityMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
+				opacity = opacityMapConfig.getOpacity( m_writer, sampledOpacity, opacity );
+			}
+		}
+
+		void Utils::computeNormalMapContribution( PipelineFlags const & flags
+			, TextureConfigurations const & textureConfigs
+			, sdw::Array< sdw::UVec4 > const & textureConfig
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition
+			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Vec3 & texCoords )
+		{
+			auto it = checkFlags( flags.textures, TextureFlag::eNormal );
+
+			if ( it != flags.textures.end() )
+			{
+				auto i = size_t( std::distance( flags.textures.begin(), it ) );
+				auto normalMapConfig = m_writer.declLocale( "normalMapConfig"
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+				auto sampledNormal = m_writer.declLocale< Vec4 >( "sampledNormal"
+					, texture( maps[i], normalMapConfig.convertUV( m_writer, texCoords.xy() ) ) );
+				auto tbn = m_writer.declLocale( "tbn"
+					, shader::Utils::getTBN( normal, tangent, bitangent ) );
+				normal = normalMapConfig.getNormal( m_writer, sampledNormal, tbn );
 			}
 		}
 
@@ -977,18 +1007,178 @@ namespace castor3d
 			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
 			, sdw::Vec3 & texCoords )
 		{
-			if ( flags.texturesCount > 1
-				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping )
-				&& checkFlag( flags.textures, TextureFlag::eHeight )
-				&& flags.heightMapIndex != InvalidIndex )
+			auto it = checkFlags( flags.textures, TextureFlag::eHeight );
+
+			if ( it != flags.textures.end()
+				&& checkFlag( flags.passFlags, PassFlag::eParallaxOcclusionMapping ) )
 			{
+				auto i = size_t( std::distance( flags.textures.begin(), it ) );
 				auto heightMapConfig = m_writer.declLocale( "heightMapConfig"
-					, textureConfigs.getTextureConfiguration( textureConfig[flags.heightMapIndex / 4u][flags.heightMapIndex % 4u] ) );
-				texCoords.xy() = m_parallaxMapping( heightMapConfig.convertUV( m_writer, texCoords.xy() )
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( it->id ) ) );
+				texCoords.xy() = parallaxMapping( texCoords.xy()
 					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
 					, maps[flags.heightMapIndex]
 					, heightMapConfig );
 			}
+		}
+
+		sdw::Vec4 Utils::computeGeometryMapContribution( TextureFlags const & textureFlags
+			, PassFlags const & passFlags
+			, std::string const & name
+			, shader::TextureConfigData const & config
+			, sdw::SampledImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			auto result = m_writer.declLocale< Vec4 >( "result" + name
+				, texture( map, config.convertUV( m_writer, texCoords.xy() ) ) );
+
+			if ( checkFlag( textureFlags, TextureFlag::eHeight )
+				&& checkFlag( passFlags, PassFlag::eParallaxOcclusionMapping ) )
+			{
+				texCoords.xy() = parallaxMapping( texCoords.xy()
+					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+					, map
+					, config );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			{
+				opacity = config.getOpacity( m_writer, result, opacity );
+			}
+
+			return result;
+		}
+
+		void Utils::computeGeometryMapsContributions( PipelineFlags const & flags
+			, TextureConfigurations const & textureConfigs
+			, sdw::Array< sdw::UVec4 > const & textureConfig
+			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Vec3 const & texCoords
+			, sdw::Float & opacity
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			{
+				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				computeGeometryMapContribution( flags.textures[i].flags
+					, flags.passFlags
+					, name
+					, config
+					, maps[i]
+					, texCoords
+					, opacity
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
+			}
+		}
+
+		sdw::Vec4 Utils::computeCommonMapContribution( TextureFlags const & textureFlags
+			, PassFlags const & passFlags
+			, std::string const & name
+			, shader::TextureConfigData const & config
+			, sdw::SampledImage2DRgba32 const & map
+			, sdw::Float const & gamma
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion
+			, sdw::Float & transmittance
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			auto result = computeGeometryMapContribution( textureFlags
+				, passFlags
+				, name
+				, config
+				, map
+				, texCoords
+				, opacity
+				, tangentSpaceViewPosition
+				, tangentSpaceFragPosition );
+
+			if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+			{
+				auto tbn = m_writer.declLocale( "tbn"
+					, shader::Utils::getTBN( normal, tangent, bitangent ) );
+				normal = config.getNormal( m_writer, result, tbn );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
+			{
+				emissive = config.getEmissive( m_writer, result, emissive, gamma );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
+			{
+				occlusion = config.getOcclusion( m_writer, result, occlusion );
+			}
+
+			if ( checkFlag( textureFlags, TextureFlag::eTransmittance ) )
+			{
+				transmittance = config.getTransmittance( m_writer, result, transmittance );
+			}
+
+			return result;
+		}
+
+		void Utils::computeCommonMapsContributions( PipelineFlags const & flags
+			, sdw::Float const & gamma
+			, TextureConfigurations const & textureConfigs
+			, sdw::Array< sdw::UVec4 > const & textureConfig
+			, sdw::Array< sdw::SampledImage2DRgba32 > const & maps
+			, sdw::Vec3 const & texCoords
+			, sdw::Vec3 & normal
+			, sdw::Vec3 & tangent
+			, sdw::Vec3 & bitangent
+			, sdw::Vec3 & emissive
+			, sdw::Float & opacity
+			, sdw::Float & occlusion
+			, sdw::Float & transmittance
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			for ( uint32_t i = 0u; i < flags.textures.size(); ++i )
+			{
+				auto name = string::stringCast< char >( string::toString( i, std::locale{ "C" } ) );
+				auto config = m_writer.declLocale( "config" + name
+					, textureConfigs.getTextureConfiguration( m_writer.cast< UInt >( flags.textures[i].id ) ) );
+				computeCommonMapContribution( flags.textures[i].flags
+					, flags.passFlags
+					, name
+					, config
+					, maps[i]
+					, gamma
+					, texCoords
+					, normal
+					, tangent
+					, bitangent
+					, emissive
+					, opacity
+					, occlusion
+					, transmittance
+					, tangentSpaceViewPosition
+					, tangentSpaceFragPosition );
+			}
+		}
+
+		sdw::Vec2 Utils::parallaxMapping( sdw::Vec2 const & texCoords
+			, sdw::Vec3 const & viewDir
+			, sdw::SampledImage2DRgba32 const & heightMap
+			, TextureConfigData const & textureConfig )
+		{
+			return m_parallaxMapping( textureConfig.convertUV( m_writer, texCoords.xy() )
+				, viewDir
+				, heightMap
+				, textureConfig );
 		}
 
 		void Utils::encodeMaterial( Int const & receiver

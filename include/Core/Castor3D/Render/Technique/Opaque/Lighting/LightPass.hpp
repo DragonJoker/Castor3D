@@ -332,8 +332,8 @@ namespace castor3d
 
 		inline ashes::Semaphore const & getSemaphore()const
 		{
-			CU_Require( m_signalReady );
-			return *m_signalReady;
+			CU_Require( m_signalImgFinished );
+			return *m_signalImgFinished;
 		}
 
 		inline castor::String const & getName()const
@@ -589,7 +589,8 @@ namespace castor3d
 		RenderPass m_blendRenderPass;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
-		ashes::CommandBufferPtr m_commandBuffer;
+		std::array< ashes::CommandBufferPtr, 2u > m_commandBuffers;
+		uint32_t m_commandBufferIndex{ 0u };
 		PipelineMap m_pipelines;
 		Pipeline * m_pipeline{ nullptr };
 		SamplerSPtr m_sampler;
@@ -597,7 +598,8 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		GpInfoUbo const & m_gpInfoUbo;
 		uint32_t m_offset{ 0u };
-		ashes::SemaphorePtr m_signalReady;
+		ashes::SemaphorePtr m_signalImgReady;
+		ashes::SemaphorePtr m_signalImgFinished;
 		ashes::FencePtr m_fence;
 		OpaquePassResult const * m_opaquePassResult{};
 	};

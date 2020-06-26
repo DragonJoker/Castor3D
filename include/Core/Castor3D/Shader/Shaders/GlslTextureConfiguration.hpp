@@ -59,6 +59,9 @@ namespace castor3d
 				, sdw::Float const & opacity )const;
 			C3D_API sdw::Vec3 getNormal( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
+				, sdw::Mat3 const & tbn )const;
+			C3D_API sdw::Vec3 getNormal( sdw::ShaderWriter & writer
+				, sdw::Vec4 const & sampled
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & tangent
 				, sdw::Vec3 const & bitangent )const;
@@ -77,8 +80,6 @@ namespace castor3d
 				, sdw::Vec3 const & uvw )const;
 
 		private:
-			sdw::Float getMix( sdw::ShaderWriter & writer
-				, sdw::Vec2 const & mask )const;
 			sdw::Float getFloat( sdw::ShaderWriter & writer
 				, sdw::Vec4 const & sampled
 				, sdw::Vec2 const & mask )const;
@@ -115,7 +116,6 @@ namespace castor3d
 			sdw::Float heightFactor;
 			sdw::Vec2 occlusionMask;
 			sdw::Vec2 transmittanceMask;
-			sdw::UInt environment;
 			sdw::UInt needsGammaCorrection;
 			sdw::UInt needsYInversion;
 		};

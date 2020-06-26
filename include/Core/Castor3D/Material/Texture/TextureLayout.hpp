@@ -157,7 +157,8 @@ namespace castor3d
 		C3D_API TextureLayout( RenderSystem & renderSystem
 			, ashes::ImageCreateInfo info
 			, VkMemoryPropertyFlags memoryProperties
-			, castor::String debugName );
+			, castor::String debugName
+			, bool isStatic = false );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -443,6 +444,24 @@ namespace castor3d
 		{
 			CU_Require( getLayerCubeFace( layer, face ).view );
 			return *getLayerCubeFace( layer, face ).view;
+		}
+
+		inline TextureView const & getLayerCubeFaceMipView( size_t layer
+			, CubeMapFace face
+			, uint32_t level )const
+		{
+			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
+			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
+			return *getLayerCubeFace( layer, face ).levels[level];
+		}
+
+		inline TextureView & getLayerCubeFaceMipView( size_t layer
+			, CubeMapFace face
+			, uint32_t level )
+		{
+			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
+			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
+			return *getLayerCubeFace( layer, face ).levels[level];
 		}
 
 		inline uint32_t getWidth()const

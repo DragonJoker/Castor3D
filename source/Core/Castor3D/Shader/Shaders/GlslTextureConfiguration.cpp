@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/StructuredSsbo.hpp>
 
@@ -33,9 +35,8 @@ namespace castor3d
 			, emissiveMask{ emisOccl.xy() }
 			, occlusionMask{ emisOccl.zw() }
 			, transmittanceMask{ trnsDumm.xy() }
-			, environment{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.x() ) ) }
-			, needsGammaCorrection{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.y() ) ) }
-			, needsYInversion{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.z() ) ) }
+			, needsGammaCorrection{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.x() ) ) }
+			, needsYInversion{ shader, sdw::makeCast( shader->getTypesCache().getUInt(), makeExpr( *shader, miscVals.y() ) ) }
 		{
 		}
 
@@ -67,9 +68,9 @@ namespace castor3d
 			, sdw::Vec3 const & diffuse
 			, sdw::Float gamma )const
 		{
-			return mix( diffuse
-				, diffuse * removeGamma( writer, getVec3( writer, sampled, colourMask ), gamma )
-				, vec3( getMix( writer, colourMask ) ) );
+			return diffuse * removeGamma( writer
+				, getVec3( writer, sampled, colourMask )
+				, gamma );
 		}
 
 		sdw::Vec3 TextureConfigData::getAlbedo( sdw::ShaderWriter & writer
@@ -77,9 +78,9 @@ namespace castor3d
 			, sdw::Vec3 const & albedo
 			, sdw::Float gamma )const
 		{
-			return mix( albedo
-				, albedo * removeGamma( writer, getVec3( writer, sampled, colourMask ), gamma )
-				, vec3( getMix( writer, colourMask ) ) );
+			return albedo * removeGamma( writer
+				, getVec3( writer, sampled, colourMask )
+				, gamma );
 		}
 
 		sdw::Vec3 TextureConfigData::getEmissive( sdw::ShaderWriter & writer
@@ -87,63 +88,64 @@ namespace castor3d
 			, sdw::Vec3 const & emissive
 			, sdw::Float gamma )const
 		{
-			return mix( emissive
-				, emissive * removeGamma( writer, getVec3( writer, sampled, emissiveMask ), gamma )
-				, vec3( getMix( writer, emissiveMask ) ) );
+			return emissive * removeGamma( writer
+				, getVec3( writer, sampled, emissiveMask )
+				, gamma );
 		}
 
 		sdw::Vec3 TextureConfigData::getSpecular( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 const & specular )const
 		{
-			return mix( specular
-				, specular * getVec3( writer, sampled, specularMask )
-				, vec3( getMix( writer, specularMask ) ) );
+			return specular * getVec3( writer, sampled, specularMask );
 		}
 
 		sdw::Float TextureConfigData::getMetalness( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & metalness )const
 		{
-			return mix( metalness
-				, metalness * getFloat( writer, sampled, specularMask )
-				, getMix( writer, specularMask ) );
+			return metalness * getFloat( writer, sampled, specularMask );
 		}
 
 		sdw::Float TextureConfigData::getShininess( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & shininess )const
 		{
-			return mix( shininess
-				, shininess * 255.0_f * getFloat( writer, sampled, glossinessMask )
-				, getMix( writer, glossinessMask ) );
+			return shininess
+				* clamp( getFloat( writer, sampled, glossinessMask )
+					, 0.0001_f
+					, 1.0_f );
 		}
 
 		sdw::Float TextureConfigData::getGlossiness( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & glossiness )const
 		{
-			return mix( glossiness
-				, glossiness * getFloat( writer, sampled, glossinessMask )
-				, getMix( writer, glossinessMask ) );
+			return glossiness * getFloat( writer, sampled, glossinessMask );
 		}
 
 		sdw::Float TextureConfigData::getRoughness( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & roughness )const
 		{
-			return mix( roughness
-				, roughness * getFloat( writer, sampled, glossinessMask )
-				, getMix( writer, glossinessMask ) );
+			return roughness * getFloat( writer, sampled, glossinessMask );
 		}
 
 		sdw::Float TextureConfigData::getOpacity( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & opacity )const
 		{
-			return mix( opacity
-				, opacity * getFloat( writer, sampled, opacityMask )
-				, getMix( writer, opacityMask ) );
+			return opacity * getFloat( writer, sampled, opacityMask );
+		}
+
+		sdw::Vec3 TextureConfigData::getNormal( sdw::ShaderWriter & writer
+			, sdw::Vec4 const & sampled
+			, sdw::Mat3 const & tbn )const
+		{
+			return normalize( tbn
+				* fma( getVec3( writer, sampled, normalMask )
+					, vec3( 2.0_f )
+					, -vec3( 1.0_f ) ) );
 		}
 
 		sdw::Vec3 TextureConfigData::getNormal( sdw::ShaderWriter & writer
@@ -152,45 +154,30 @@ namespace castor3d
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent )const
 		{
-			return mix( normal
-				, normalize( mat3( normalize( tangent ), normalize( bitangent ), normal )
-					* fma( getVec3( writer, sampled, normalMask )
-						, vec3( 2.0_f )
-						, -vec3( 1.0_f ) ) )
-				, vec3( getMix( writer, normalMask ) ) );
+			return getNormal( writer
+				, sampled
+				, shader::Utils::getTBN( normal, tangent, bitangent ) );
 		}
 
 		sdw::Float TextureConfigData::getHeight( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & height )const
 		{
-			return mix( height
-				, heightFactor * getFloat( writer, sampled, heightMask )
-				, getMix( writer, heightMask ) );
+			return heightFactor * getFloat( writer, sampled, heightMask );
 		}
 
 		sdw::Float TextureConfigData::getOcclusion( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & occlusion )const
 		{
-			return mix( occlusion
-				, getFloat( writer, sampled, occlusionMask )
-				, getMix( writer, occlusionMask ) );
+			return getFloat( writer, sampled, occlusionMask );
 		}
 
 		sdw::Float TextureConfigData::getTransmittance( sdw::ShaderWriter & writer
 			, sdw::Vec4 const & sampled
 			, sdw::Float const & transmittance )const
 		{
-			return mix( transmittance
-				, getFloat( writer, sampled, transmittanceMask )
-				, getMix( writer, transmittanceMask ) );
-		}
-
-		sdw::Float TextureConfigData::getMix( sdw::ShaderWriter & writer
-			, sdw::Vec2 const & mask )const
-		{
-			return ( 1.0_f - step( mask.x(), 0.0_f ) );
+			return getFloat( writer, sampled, transmittanceMask );
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::ShaderWriter & writer

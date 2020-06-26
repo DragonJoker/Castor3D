@@ -202,8 +202,6 @@ namespace castor3d
 			m_linearisePass->update( camera.getViewport() );
 		}
 
-		m_lightingPass->update( info, scene, camera, jitter );
-
 		if ( m_ssaoConfig.enabled )
 		{
 			m_ssao->update( camera );

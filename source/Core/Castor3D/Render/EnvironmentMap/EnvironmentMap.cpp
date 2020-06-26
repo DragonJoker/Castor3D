@@ -143,6 +143,7 @@ namespace castor3d
 		, m_environmentMap{ doCreateTexture( engine, MapSize ) }
 		, m_node{ node }
 		, m_index{ ++m_count }
+		, m_render{ ( m_count % 5u ) }
 		, m_passes( doCreatePasses( *this, node ) )
 	{
 		log::trace << "Created EnvironmentMap" << node.getName() << std::endl;
@@ -278,26 +279,34 @@ namespace castor3d
 	
 	void EnvironmentMap::update( RenderQueueArray & queues )
 	{
-		for ( auto & pass : m_passes )
+		// Compute for next frame (or first)
+		if ( m_first || ( m_render % 5u ) == 4u )
 		{
-			pass->update( m_node, queues );
+			for ( auto & pass : m_passes )
+			{
+				pass->update( m_node, queues );
+			}
 		}
 	}
 
 	void EnvironmentMap::update()
 	{
-		for ( auto & pass : m_passes )
+		// Compute for next frame (or first)
+		if ( m_first || ( m_render % 5u ) == 4u )
 		{
-			pass->update();
+			for ( auto & pass : m_passes )
+			{
+				pass->update();
+			}
 		}
 	}
 
 	ashes::Semaphore const & EnvironmentMap::render( ashes::Semaphore const & toWait )
 	{
 		ashes::Semaphore const * result = &toWait;
-		m_render++;
 
-		if ( m_render >= 5u )
+		// Render current frame (or first)
+		if ( m_first || ( m_render % 5u ) == 0u )
 		{
 			for ( auto & pass : m_passes )
 			{
@@ -308,6 +317,10 @@ namespace castor3d
 			m_render = 0u;
 		}
 
+		m_render = m_first
+			? m_render
+			: m_render + 1u;
+		m_first = false;
 		return *result;
 	}
 

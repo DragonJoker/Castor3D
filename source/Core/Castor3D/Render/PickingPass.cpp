@@ -6,6 +6,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/Node/SceneCulledRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -683,7 +684,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, TextureFlag::eOpacity );
+			, node.pipeline.getFlags().textures );
 	}
 
 	void PickingPass::doFillTextureDescriptor( ashes::DescriptorSetLayout const & layout
@@ -694,7 +695,7 @@ namespace castor3d
 		node.passNode.fillDescriptor( layout
 			, index
 			, *node.texDescriptorSet
-			, TextureFlag::eOpacity );
+			, node.pipeline.getFlags().textures );
 	}
 
 	void PickingPass::doUpdate( RenderQueueArray & CU_UnusedParam( queues ) )
@@ -706,32 +707,32 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 		// Vertex inputs
-		auto position = writer.declInput< Vec4 >( "position"
+		auto inPosition = writer.declInput< Vec4 >( "inPosition"
 			, RenderPass::VertexInputs::PositionLocation );
-		auto uv = writer.declInput< Vec3 >( "uv"
+		auto inTexture = writer.declInput< Vec3 >( "inTexture"
 			, RenderPass::VertexInputs::TextureLocation );
-		auto bone_ids0 = writer.declInput< IVec4 >( "bone_ids0"
+		auto inBoneIds0 = writer.declInput< IVec4 >( "inBoneIds0"
 			, RenderPass::VertexInputs::BoneIds0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto bone_ids1 = writer.declInput< IVec4 >( "bone_ids1"
+		auto inBoneIds1 = writer.declInput< IVec4 >( "inBoneIds1"
 			, RenderPass::VertexInputs::BoneIds1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights0 = writer.declInput< Vec4 >( "weights0"
+		auto inWeights0 = writer.declInput< Vec4 >( "inWeights0"
 			, RenderPass::VertexInputs::Weights0Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto weights1 = writer.declInput< Vec4 >( "weights1"
+		auto inWeights1 = writer.declInput< Vec4 >( "inWeights1"
 			, RenderPass::VertexInputs::Weights1Location
 			, checkFlag( flags.programFlags, ProgramFlag::eSkinning ) );
-		auto transform = writer.declInput< Mat4 >( "transform"
+		auto inTransform = writer.declInput< Mat4 >( "inTransform"
 			, RenderPass::VertexInputs::TransformLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto material = writer.declInput< Int >( "material"
+		auto inMaterial = writer.declInput< Int >( "inMaterial"
 			, RenderPass::VertexInputs::MaterialLocation
 			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
-		auto position2 = writer.declInput< Vec4 >( "position2"
+		auto inPosition2 = writer.declInput< Vec4 >( "inPosition2"
 			, RenderPass::VertexInputs::Position2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
-		auto texture2 = writer.declInput< Vec3 >( "texture2"
+		auto inTexture2 = writer.declInput< Vec3 >( "inTexture2"
 			, RenderPass::VertexInputs::Texture2Location
 			, checkFlag( flags.programFlags, ProgramFlag::eMorphing ) );
 		auto in = writer.getIn();
@@ -743,11 +744,11 @@ namespace castor3d
 		UBO_MORPHING( writer, MorphingUbo::BindingPoint, 0, flags.programFlags );
 
 		// Outputs
-		auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture"
+		auto outTexture = writer.declOutput< Vec3 >( "outTexture"
 			, RenderPass::VertexOutputs::TextureLocation );
-		auto vtx_instance = writer.declOutput< UInt >( "vtx_instance"
+		auto outInstance = writer.declOutput< UInt >( "outInstance"
 			, RenderPass::VertexOutputs::InstanceLocation );
-		auto vtx_material = writer.declOutput< UInt >( "vtx_material"
+		auto outMaterial = writer.declOutput< UInt >( "outMaterial"
 			, RenderPass::VertexOutputs::MaterialLocation );
 		auto out = writer.getOut();
 
@@ -755,9 +756,9 @@ namespace castor3d
 			,[&] ()
 			{
 				auto v4Vertex = writer.declLocale( "v4Vertex"
-					, vec4( position.xyz(), 1.0_f ) );
+					, vec4( inPosition.xyz(), 1.0_f ) );
 				auto v3Texture = writer.declLocale( "v3Texture"
-					, uv );
+					, inTexture );
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel" );
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eSkinning ) )
@@ -766,7 +767,7 @@ namespace castor3d
 				}
 				else if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
-					mtxModel = transform;
+					mtxModel = inTransform;
 				}
 				else
 				{
@@ -775,25 +776,25 @@ namespace castor3d
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) )
 				{
-					vtx_material = writer.cast< UInt >( material );
+					outMaterial = writer.cast< UInt >( inMaterial );
 				}
 				else
 				{
-					vtx_material = writer.cast< UInt >( c3d_materialIndex );
+					outMaterial = writer.cast< UInt >( c3d_materialIndex );
 				}
 
 				if ( checkFlag( flags.programFlags, ProgramFlag::eMorphing ) )
 				{
 					auto time = writer.declLocale( "time"
 						, vec3( 1.0_f - c3d_time ) );
-					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, position2.xyz() * c3d_time ), 1.0_f );
-					v3Texture = sdw::fma( v3Texture, time, texture2 * c3d_time );
+					v4Vertex = vec4( sdw::fma( v4Vertex.xyz(), time, inPosition2.xyz() * c3d_time ), 1.0_f );
+					v3Texture = sdw::fma( v3Texture, time, inTexture2 * c3d_time );
 				}
 
-				vtx_texture = v3Texture;
+				outTexture = v3Texture;
 				v4Vertex = mtxModel * v4Vertex;
 				v4Vertex = c3d_curView * v4Vertex;
-				vtx_instance = writer.cast< UInt >( in.instanceIndex );
+				outInstance = writer.cast< UInt >( in.instanceIndex );
 				out.vtx.position = c3d_projection * v4Vertex;
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -828,7 +829,7 @@ namespace castor3d
 		auto materials = shader::createMaterials( writer, flags.passFlags );
 		materials->declare( getEngine()->getRenderSystem()->getGpuInformations().hasShaderStorageBuffers() );
 		shader::TextureConfigurations textureConfigs{ writer };
-		bool hasTextures = flags.texturesCount > 0;
+		bool hasTextures = !flags.textures.empty();
 
 		if ( hasTextures )
 		{
@@ -850,8 +851,8 @@ namespace castor3d
 		auto c3d_maps( writer.declSampledImageArray< FImg2DRgba32 >( "c3d_maps"
 			, getMinTextureIndex()
 			, 0u
-			, std::max( 1u, flags.texturesCount )
-			, flags.texturesCount > 0u ) );
+			, std::max( 1u, uint32_t( flags.textures.size() ) )
+			, hasTextures ) );
 
 		// Fragment Outputs
 		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
@@ -892,7 +893,6 @@ namespace castor3d
 		remFlag( flags.programFlags, ProgramFlag::eLighting );
 		remFlag( flags.passFlags, PassFlag::eAlphaBlending );
 		addFlag( flags.programFlags, ProgramFlag::ePicking );
-		assert( ( flags.textures & getTexturesMask() ) == flags.textures );
 	}
 
 	void PickingPass::doUpdatePipeline( RenderPipeline & pipeline )const
@@ -921,13 +921,13 @@ namespace castor3d
 		auto index = getMinTextureIndex();
 		ashes::VkDescriptorSetLayoutBindingArray textureBindings;
 
-		if ( flags.texturesCount )
+		if ( !flags.textures.empty() )
 		{
 			textureBindings.push_back( makeDescriptorSetLayoutBinding( index
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, flags.texturesCount ) );
-			index += flags.texturesCount;
+				, uint32_t( flags.textures.size() ) ) );
+			index += uint32_t( flags.textures.size() );
 		}
 
 		return textureBindings;

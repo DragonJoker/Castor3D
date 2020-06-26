@@ -153,7 +153,7 @@ namespace GuiCommon
 				strReturn << cuT( "	Kd " ) << diffuse.red().value() << cuT( " " ) << diffuse.green().value() << cuT( " " ) << diffuse.blue().value() << cuT( "\n" );
 				auto specular = pass->getSpecular();
 				strReturn << cuT( "	Ks " ) << specular.red().value() << cuT( " " ) << specular.green().value() << cuT( " " ) << specular.blue().value() << cuT( "\n" );
-				strReturn << cuT( "	Ns " ) << pass->getShininess() << cuT( "\n" );
+				strReturn << cuT( "	Ns " ) << pass->getShininess().value() << cuT( "\n" );
 				strReturn << cuT( "	d " ) << pass->getOpacity() << cuT( "\n" );
 
 				for ( auto & unit : *pass )

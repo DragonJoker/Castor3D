@@ -135,7 +135,6 @@ namespace GuiCommon
 		, m_configuration{ texture->getConfiguration()}
 		, m_materialType{ type }
 	{
-		CU_Ensure( m_configuration.environment == 0u );
 		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
 		PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		PROPERTY_FLAG_DIFFUSE = _( "Diffuse" );

@@ -95,11 +95,6 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
-		 */
-		C3D_API void update( RenderInfo & info
-			, castor::Point2f const & jitter )override;
-		/**
 		 *\~english
 		 *\brief		Renders nodes.
 		 *\param[out]	toWait	The semaphore to wait for.
@@ -111,9 +106,14 @@ namespace castor3d
 
 	protected:
 		/**
+		 *\copydoc		castor3d::RenderPass::doUpdateUbos
+		 */
+		C3D_API void doUpdateUbos( Camera const & camera
+			, castor::Point2f const & jitter )override;
+		/**
 		 *\copydoc		castor3d::RenderTechniquePass::doCleanup
 		 */
-		C3D_API virtual void doCleanup()override;
+		C3D_API void doCleanup()override;
 
 	private:
 		/**

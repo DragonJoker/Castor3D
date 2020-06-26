@@ -71,7 +71,7 @@ namespace castor
 		, PixelFormat bufferFormat )
 	{
 		auto extent = VkExtent3D{ m_size.getWidth(), m_size.getHeight(), m_layers };
-		auto newSize = m_layers * ashes::getLevelsSize( extent
+		auto newSize = ashes::getLevelsSize( extent
 			, VkFormat( getFormat() )
 			, 0u
 			, 1u );
